@@ -92,8 +92,8 @@ UcbContentProviderProxy::UcbContentProviderProxy(
                         const Reference< XMultiServiceFactory >& rxSMgr,
                         const OUString& Service )
 : m_aService( Service ),
-  m_bReplace( sal_False ),
-  m_bRegister( sal_False ),
+  m_bReplace( false ),
+  m_bRegister( false ),
   m_xSMgr( rxSMgr )
 {
 }
@@ -255,7 +255,7 @@ UcbContentProviderProxy::registerInstance( const OUString& Template,
         m_aArguments = Arguments;
         m_bReplace   = ReplaceExisting;
 
-        m_bRegister  = sal_True;
+        m_bRegister  = true;
     }
     return this;
 }
@@ -273,7 +273,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
     // registerInstance called at proxy and at original?
     if ( m_bRegister && m_xTargetProvider.is() )
     {
-        m_bRegister       = sal_False;
+        m_bRegister       = false;
         m_xTargetProvider = 0;
 
         Reference< XParameterizedContentProvider >

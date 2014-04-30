@@ -192,7 +192,7 @@ public:
     void
     COPY( const OUString & rSourcePath,
           const OUString & rDestinationURI,
-          sal_Bool bOverwrite,
+          bool bOverwrite,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
@@ -200,7 +200,7 @@ public:
     void
     MOVE( const OUString & rSourcePath,
           const OUString & rDestinationURI,
-          sal_Bool bOverwrite,
+          bool bOverwrite,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
@@ -246,9 +246,9 @@ public:
 
 private:
     const OUString & getRequestURI() const;
-    sal_Bool detectRedirectCycle( const OUString& rRedirectURL )
+    bool detectRedirectCycle( const OUString& rRedirectURL )
         throw ( DAVException );
-    sal_Bool handleException( const DAVException & e, int errorCount )
+    bool handleException( const DAVException & e, int errorCount )
         throw ( DAVException );
     void initialize()
         throw ( DAVException );

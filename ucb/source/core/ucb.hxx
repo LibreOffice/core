@@ -190,7 +190,7 @@ public:
 private:
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
     queryContentProvider( const OUString& Identifier,
-                          sal_Bool bResolved );
+                          bool bResolved );
 
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
     getCommandInfo();

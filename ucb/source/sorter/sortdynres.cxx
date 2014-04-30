@@ -75,9 +75,9 @@ SortedDynamicResultSet::SortedDynamicResultSet(
     mpOne = NULL;
     mpTwo = NULL;
 
-    mbGotWelcome    = sal_False;
-    mbUseOne        = sal_True;
-    mbStatic        = sal_False;
+    mbGotWelcome    = false;
+    mbUseOne        = true;
+    mbStatic        = false;
 }
 
 
@@ -148,7 +148,7 @@ void SAL_CALL SortedDynamicResultSet::dispose()
 
     mpOne = NULL;
     mpTwo = NULL;
-    mbUseOne = sal_True;
+    mbUseOne = true;
 }
 
 void SAL_CALL SortedDynamicResultSet::addEventListener(
@@ -186,7 +186,7 @@ SortedDynamicResultSet::getStaticResultSet()
     if ( mxListener.is() )
         throw ListenerAlreadySetException();
 
-    mbStatic = sal_True;
+    mbStatic = true;
 
     if ( mxOriginal.is() )
     {
@@ -292,8 +292,8 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
-    sal_Bool bHasNew = sal_False;
-    sal_Bool bHasModified = sal_False;
+    bool bHasNew = false;
+    bool bHasModified = false;
 
     SortedResultSet *pCurSet = NULL;
 
@@ -303,13 +303,13 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     {
         if ( mbUseOne )
         {
-            mbUseOne = sal_False;
+            mbUseOne = false;
             mpTwo->CopyData( mpOne );
             pCurSet = mpTwo;
         }
         else
         {
-            mbUseOne = sal_True;
+            mbUseOne = true;
             mpOne->CopyData( mpTwo );
             pCurSet = mpOne;
         }
@@ -327,7 +327,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     catch (const WrappedTargetException&) {}
 
     long nOldCount = pCurSet->GetCount();
-    sal_Bool bWasFinal = false;
+    bool bWasFinal = false;
 
     aRet >>= bWasFinal;
 
@@ -347,8 +347,8 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                         mpOne = new SortedResultSet( aWelcome.New );
                         mxOne = mpOne;
                         mpOne->Initialize( maOptions, mxCompFac );
-                        mbGotWelcome = sal_True;
-                        mbUseOne = sal_True;
+                        mbGotWelcome = true;
+                        mbUseOne = true;
                         pCurSet = mpOne;
 
                         aWelcome.Old = mxTwo;
@@ -371,7 +371,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
             case ListActionType::INSERTED:
                 {
                     pCurSet->InsertNew( aAction.Position, aAction.Count );
-                    bHasNew = sal_True;
+                    bHasNew = true;
                     break;
                 }
             case ListActionType::REMOVED:
@@ -395,7 +395,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
             case ListActionType::PROPERTIES_CHANGED:
                 {
                     pCurSet->SetChanged( aAction.Position, aAction.Count );
-                    bHasModified = sal_True;
+                    bHasModified = true;
                     break;
                 }
             default: break;

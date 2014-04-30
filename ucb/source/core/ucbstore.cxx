@@ -251,13 +251,13 @@ struct PropertySetRegistry_Impl
     Reference< XInterface >           m_xRootReadAccess;
     Reference< XInterface >           m_xRootWriteAccess;
     osl::Mutex                        m_aMutex;
-    sal_Bool                          m_bTriedToGetRootReadAccess;  // #82494#
-    sal_Bool                          m_bTriedToGetRootWriteAccess; // #82494#
+    bool                          m_bTriedToGetRootReadAccess;  // #82494#
+    bool                          m_bTriedToGetRootWriteAccess; // #82494#
 
     PropertySetRegistry_Impl( const Sequence< Any > &rInitArgs )
     : m_aInitArgs( rInitArgs ),
-      m_bTriedToGetRootReadAccess( sal_False ),
-      m_bTriedToGetRootWriteAccess( sal_False )
+      m_bTriedToGetRootReadAccess( false ),
+      m_bTriedToGetRootWriteAccess( false )
     {
     }
 };
@@ -1000,7 +1000,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
                     <<= OUString( STORE_CONTENTPROPERTIES_KEY  );
                 aArguments[ 0 ] <<= aProperty;
 
-                m_pImpl->m_bTriedToGetRootReadAccess = sal_True;
+                m_pImpl->m_bTriedToGetRootReadAccess = true;
 
                 m_pImpl->m_xRootReadAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(
@@ -1062,7 +1062,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 aProperty.Value <<= sal_True;
                 aArguments[ 1 ] <<= aProperty;
 
-                m_pImpl->m_bTriedToGetRootWriteAccess = sal_True;
+                m_pImpl->m_bTriedToGetRootWriteAccess = true;
 
                 m_pImpl->m_xRootWriteAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(

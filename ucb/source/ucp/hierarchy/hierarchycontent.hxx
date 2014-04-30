@@ -85,10 +85,10 @@ public:
 
     const OUString & getContentType() const { return m_aContentType; }
 
-    sal_Bool getIsFolder() const
+    bool getIsFolder() const
     { return m_aData.getType() == HierarchyEntryData::FOLDER; }
 
-    sal_Bool getIsDocument() const { return !getIsFolder(); }
+    bool getIsDocument() const { return !getIsFolder(); }
 
     com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
     getCreatableContentsInfo() const;
@@ -145,36 +145,36 @@ private:
                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
     virtual OUString getParentURL() SAL_OVERRIDE;
 
-    static sal_Bool hasData(
+    static bool hasData(
             const com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );
-    sal_Bool hasData(
+    bool hasData(
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier )
     { return hasData( m_xContext, m_pProvider, Identifier ); }
-    static sal_Bool loadData(
+    static bool loadData(
             const com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties& rProps );
-    sal_Bool storeData();
-    sal_Bool renameData( const com::sun::star::uno::Reference<
+    bool storeData();
+    bool renameData( const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XContentIdentifier >& xOldId,
                          const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XContentIdentifier >& xNewId );
-    sal_Bool removeData();
+    bool removeData();
 
     void setKind( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& Identifier );
 
     bool isReadOnly();
 
-    sal_Bool isFolder() const { return ( m_eKind > LINK ); }
+    bool isFolder() const { return ( m_eKind > LINK ); }
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentIdentifier >
@@ -184,7 +184,7 @@ private:
     typedef std::list< HierarchyContentRef > HierarchyContentRefList;
     void queryChildren( HierarchyContentRefList& rChildren );
 
-    sal_Bool exchangeIdentity(
+    bool exchangeIdentity(
                 const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
@@ -204,7 +204,7 @@ private:
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );
 
-    void destroy( sal_Bool bDeletePhysical,
+    void destroy( bool bDeletePhysical,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );

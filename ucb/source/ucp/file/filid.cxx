@@ -28,7 +28,7 @@ using namespace com::sun::star::ucb;
 FileContentIdentifier::FileContentIdentifier(
     shell* pMyShell,
     const OUString& aUnqPath,
-    sal_Bool IsNormalized )
+    bool IsNormalized )
     : m_pMyShell( pMyShell )
 {
     if( IsNormalized )

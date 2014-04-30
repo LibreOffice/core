@@ -257,7 +257,7 @@ namespace ucb { namespace ucp { namespace ext
                 // unreachable
             }
 
-            sal_Bool bOpenFolder =
+            bool bOpenFolder =
                 ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
                   ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
                   ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );

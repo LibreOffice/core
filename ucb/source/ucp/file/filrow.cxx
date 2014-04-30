@@ -36,13 +36,13 @@ using namespace com::sun::star::uno;
 // Function for TypeConverting
 
 template< class _type_ >
-sal_Bool convert( shell* pShell,
+bool convert( shell* pShell,
                   uno::Reference< script::XTypeConverter >& xConverter,
                   uno::Any& rValue,
                   _type_& aReturn  )
 {
     // Try first without converting
-    sal_Bool no_success = ! ( rValue >>= aReturn );
+    bool no_success = ! ( rValue >>= aReturn );
 
     if ( no_success )
     {
@@ -60,15 +60,15 @@ sal_Bool convert( shell* pShell,
                 no_success = ! ( aConvertedValue >>= aReturn );
             }
             else
-                no_success = sal_True;
+                no_success = true;
         }
         catch (const lang::IllegalArgumentException&)
         {
-            no_success = sal_True;
+            no_success = true;
         }
         catch (const script::CannotConvertException&)
         {
-            no_success = sal_True;
+            no_success = true;
         }
     }
     return no_success;
@@ -121,9 +121,9 @@ XRow_impl::getBoolean(
 {
     if( columnIndex < 1 || columnIndex > m_aValueMap.getLength() )
         throw sdbc::SQLException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
-    sal_Bool  Value( false );
+    bool  Value( false );
     osl::MutexGuard aGuard( m_aMutex );
-    m_nWasNull = ::convert<sal_Bool>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
+    m_nWasNull = ::convert<bool>( m_pMyShell,m_xTypeConverter,m_aValueMap[ --columnIndex ],Value );
     return Value;
 }
 

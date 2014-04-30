@@ -66,7 +66,7 @@ class CachedContentResultSet
 
 
         void SAL_CALL remindMapped( sal_Int32 nRow );
-        sal_Bool SAL_CALL isRowMapped( sal_Int32 nRow );
+        bool SAL_CALL isRowMapped( sal_Int32 nRow );
         void SAL_CALL clearMappedReminder();
         com::sun::star::uno::Sequence< sal_Bool >* SAL_CALL getMappedReminder();
 
@@ -78,16 +78,16 @@ class CachedContentResultSet
         void SAL_CALL loadData(
             const com::sun::star::ucb::FetchResult& rResult );
 
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         hasRow( sal_Int32 nRow );
 
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         hasCausedException( sal_Int32 nRow );
 
         sal_Int32 SAL_CALL
         getMaxRow();
 
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         hasKnownLast();
 
 
@@ -135,19 +135,19 @@ class CachedContentResultSet
 
     //some Properties and helping variables
     sal_Int32               m_nRow;
-    sal_Bool                m_bAfterLast; // TRUE, if m_nRow is after final count; can be TRUE without knowing the exact final count
+    bool                m_bAfterLast; // TRUE, if m_nRow is after final count; can be TRUE without knowing the exact final count
 
     sal_Int32               m_nLastAppliedPos;
-    sal_Bool                m_bAfterLastApplied;
+    bool                m_bAfterLastApplied;
 
     sal_Int32               m_nKnownCount; // count we know from the Origin
-    sal_Bool                m_bFinalCount; // TRUE if the Origin has reached final count and we got that count in m_nKnownCount
+    bool                m_bFinalCount; // TRUE if the Origin has reached final count and we got that count in m_nKnownCount
 
     sal_Int32               m_nFetchSize;
     sal_Int32               m_nFetchDirection;
 
-    sal_Bool                m_bLastReadWasFromCache;
-    sal_Bool                m_bLastCachedReadWasNull;
+    bool                m_bLastReadWasFromCache;
+    bool                m_bLastCachedReadWasNull;
 
     //cache:
     CCRS_Cache              m_aCache;
@@ -163,7 +163,7 @@ private:
 
 
 
-    sal_Bool SAL_CALL
+    bool SAL_CALL
     applyPositionToOrigin( sal_Int32 nRow )
         throw( com::sun::star::sdbc::SQLException,
         com::sun::star::uno::RuntimeException );
@@ -173,17 +173,17 @@ private:
                     , sal_Int32 nFetchDirection )
         throw( com::sun::star::uno::RuntimeException );
 
-    sal_Bool SAL_CALL
+    bool SAL_CALL
     impl_isKnownValidPosition( sal_Int32 nRow );
 
-    sal_Bool SAL_CALL
+    bool SAL_CALL
     impl_isKnownInvalidPosition( sal_Int32 nRow );
 
     void SAL_CALL
     impl_changeRowCount( sal_Int32 nOld, sal_Int32 nNew );
 
     void SAL_CALL
-    impl_changeIsRowCountFinal( sal_Bool bOld, sal_Bool bNew );
+    impl_changeIsRowCountFinal( bool bOld, bool bNew );
 
 public:
     CachedContentResultSet(
@@ -469,7 +469,7 @@ public:
 
 
 private:
-    sal_Bool m_bTriedToGetTypeConverter;
+    bool m_bTriedToGetTypeConverter;
     com::sun::star::uno::Reference<
         com::sun::star::script::XTypeConverter > m_xTypeConverter;
 

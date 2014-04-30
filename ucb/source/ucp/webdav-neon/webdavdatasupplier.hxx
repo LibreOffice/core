@@ -45,7 +45,7 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
     boost::scoped_ptr<DataSupplier_Impl> m_pImpl;
 
 private:
-    sal_Bool getData();
+    bool getData();
 
 public:
     DataSupplier( const com::sun::star::uno::Reference<

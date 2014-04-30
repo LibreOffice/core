@@ -76,7 +76,7 @@ namespace fileaccess {
         // A special creator for inserted contents; Creates an ugly object
         BaseContent( shell* pMyShell,
                      const OUString& parentName,
-                     sal_Bool bFolder );
+                     bool bFolder );
 
     public:
         BaseContent(
@@ -277,7 +277,7 @@ namespace fileaccess {
                      Deleted = 4,
                      FullFeatured = 8,
                      Connected = 16 };
-        sal_Bool                                                                    m_bFolder;
+        bool                                                                    m_bFolder;
         sal_uInt16                                                                  m_nState;
 
         osl::Mutex                         m_aMutex;

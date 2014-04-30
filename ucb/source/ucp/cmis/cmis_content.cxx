@@ -233,7 +233,7 @@ namespace cmis
 
     Content::Content( const uno::Reference< uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        sal_Bool bIsFolder )
+        bool bIsFolder )
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
@@ -621,10 +621,10 @@ namespace cmis
                 else if ( rProp.Name == "IsReadOnly" )
                 {
                     boost::shared_ptr< libcmis::AllowableActions > allowableActions = getObject( xEnv )->getAllowableActions( );
-                    sal_Bool bReadOnly = sal_False;
+                    bool bReadOnly = false;
                     if ( !allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) &&
                          !allowableActions->isAllowed( libcmis::ObjectAction::CheckIn ) )
-                        bReadOnly = sal_True;
+                        bReadOnly = true;
 
                     xRow->appendBoolean( rProp, bReadOnly );
                 }
@@ -763,7 +763,7 @@ namespace cmis
                     try
                     {
                         libcmis::ObjectPtr object = getObject( xEnv );
-                        sal_Bool bIsVersionable = object->getTypeDescription( )->isVersionable( );
+                        bool bIsVersionable = object->getTypeDescription( )->isVersionable( );
                         xRow->appendBoolean( rProp, bIsVersionable );
                     }
                     catch ( const libcmis::Exception& )
@@ -859,7 +859,7 @@ namespace cmis
 
         uno::Any aRet;
 
-        sal_Bool bOpenFolder = (
+        bool bOpenFolder = (
             ( rOpenCommand.Mode == ucb::OpenMode::ALL ) ||
             ( rOpenCommand.Mode == ucb::OpenMode::FOLDERS ) ||
             ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENTS )
@@ -1135,7 +1135,7 @@ namespace cmis
     }
 
     void Content::insert( const uno::Reference< io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const OUString& rMimeType,
+        bool bReplaceExisting, const OUString& rMimeType,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
             throw( uno::Exception )
     {
@@ -1389,18 +1389,18 @@ namespace cmis
         return aRet;
     }
 
-    sal_Bool Content::feedSink( uno::Reference< uno::XInterface> xSink,
+    bool Content::feedSink( uno::Reference< uno::XInterface> xSink,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         if ( !xSink.is() )
-            return sal_False;
+            return false;
 
         uno::Reference< io::XOutputStream > xOut = uno::Reference< io::XOutputStream >(xSink, uno::UNO_QUERY );
         uno::Reference< io::XActiveDataSink > xDataSink = uno::Reference< io::XActiveDataSink >(xSink, uno::UNO_QUERY );
         uno::Reference< io::XActiveDataStreamer > xDataStreamer = uno::Reference< io::XActiveDataStreamer >( xSink, uno::UNO_QUERY );
 
         if ( !xOut.is() && !xDataSink.is() && ( !xDataStreamer.is() || !xDataStreamer->getStream().is() ) )
-            return sal_False;
+            return false;
 
         if ( xDataStreamer.is() && !xOut.is() )
             xOut = xDataStreamer->getStream()->getOutputStream();
@@ -1410,13 +1410,13 @@ namespace cmis
             libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( xEnv ).get() );
 
             if (!document)
-                return sal_False;
+                return false;
 
             boost::shared_ptr< istream > aIn = document->getContentStream( );
 
             uno::Reference< io::XInputStream > xIn = new ucbhelper::StdInputStream( aIn );
             if( !xIn.is( ) )
-                return sal_False;
+                return false;
 
             if ( xDataSink.is() )
                 xDataSink->setInputStream( xIn );
@@ -1433,7 +1433,7 @@ namespace cmis
                                 OUString::createFromAscii( e.what() ) );
         }
 
-        return sal_True;
+        return true;
     }
 
     uno::Sequence< beans::Property > Content::getProperties(

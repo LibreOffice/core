@@ -378,9 +378,9 @@ bool UCBDeadPropertyValue::createFromXML( const OString & rInData,
                 {
                     if ( aStringValue.equalsIgnoreAsciiCase(
                             OUString("true") ) )
-                        rOutData <<= sal_Bool( sal_True );
+                        rOutData <<= true;
                     else
-                        rOutData <<= sal_Bool( sal_False );
+                        rOutData <<= false;
                 }
                 else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeChar ) )
                 {
@@ -455,7 +455,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == getCppuBooleanType() )
     {
         // boolean
-        sal_Bool bValue = false;
+        bool bValue = false;
         rInData >>= bValue;
         aStringValue = OUString::boolean( bValue );
         aStringType = aTypeBoolean;

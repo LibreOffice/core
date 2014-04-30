@@ -587,7 +587,7 @@ bool OfficeDocumentsManager::isDocumentPreview(
 
     ::comphelper::NamedValueCollection aArgs(
         xModel->getArgs() );
-    sal_Bool bIsPreview = aArgs.getOrDefault( "Preview", sal_False );
+    bool bIsPreview = aArgs.getOrDefault( "Preview", sal_False );
     return bIsPreview;
 }
 

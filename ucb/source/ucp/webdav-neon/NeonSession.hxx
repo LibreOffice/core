@@ -78,10 +78,10 @@ public:
         throw ( std::exception );
 
     // DAVSession methods
-    virtual sal_Bool CanUse( const OUString & inPath,
-                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags ) SAL_OVERRIDE;
+    virtual bool CanUse( const OUString & inPath,
+                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags ) SAL_OVERRIDE;
 
-    virtual sal_Bool UsesProxy() SAL_OVERRIDE;
+    virtual bool UsesProxy() SAL_OVERRIDE;
 
     const DAVRequestEnvironment & getRequestEnvironment() const
     { return m_aEnv; }
@@ -227,7 +227,7 @@ public:
 
     const void * getRequestData() const { return m_pRequestData; }
 
-    sal_Bool isDomainMatch( const OUString& certHostName );
+    bool isDomainMatch( const OUString& certHostName );
 
 private:
     friend class NeonLockStore;

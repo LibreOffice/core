@@ -80,8 +80,8 @@ struct DataSupplier_Impl
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< container::XEnumeration >    m_xFolderEnum;
     sal_Int32                                    m_nOpenMode;
-    sal_Bool                                     m_bCountFinal;
-    sal_Bool                                     m_bThrowException;
+    bool                                     m_bCountFinal;
+    bool                                     m_bThrowException;
 
     DataSupplier_Impl(
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -282,18 +282,18 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
         }
         catch ( container::NoSuchElementException const & )
         {
-            m_pImpl->m_bThrowException = sal_True;
+            m_pImpl->m_bThrowException = true;
             break;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            m_pImpl->m_bThrowException = sal_True;
+            m_pImpl->m_bThrowException = true;
             break;
         }
     }
 
     if ( !bFound )
-        m_pImpl->m_bCountFinal = sal_True;
+        m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
@@ -351,17 +351,17 @@ sal_uInt32 DataSupplier::totalCount()
         }
         catch ( container::NoSuchElementException const & )
         {
-            m_pImpl->m_bThrowException = sal_True;
+            m_pImpl->m_bThrowException = true;
             break;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            m_pImpl->m_bThrowException = sal_True;
+            m_pImpl->m_bThrowException = true;
             break;
         }
     }
 
-    m_pImpl->m_bCountFinal = sal_True;
+    m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )

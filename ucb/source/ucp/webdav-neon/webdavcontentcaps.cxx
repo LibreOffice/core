@@ -298,7 +298,7 @@ bool ContentProvider::getProperty(
 uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
-    sal_Bool bTransient;
+    bool bTransient;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
     std::auto_ptr< ContentProperties > xCachedProps;
@@ -340,21 +340,21 @@ uno::Sequence< beans::Property > Content::getProperties(
     }
 
     // Add DAV properties, map DAV properties to UCB properties.
-    sal_Bool bHasCreationDate     = sal_False; // creationdate     <-> DateCreated
-    sal_Bool bHasGetLastModified  = sal_False; // getlastmodified  <-> DateModified
-    sal_Bool bHasGetContentType   = sal_False; // getcontenttype   <-> MediaType
-    sal_Bool bHasGetContentLength = sal_False; // getcontentlength <-> Size
+    bool bHasCreationDate     = false; // creationdate     <-> DateCreated
+    bool bHasGetLastModified  = false; // getlastmodified  <-> DateModified
+    bool bHasGetContentType   = false; // getcontenttype   <-> MediaType
+    bool bHasGetContentLength = false; // getcontentlength <-> Size
 
-    sal_Bool bHasContentType      = sal_False;
-    sal_Bool bHasIsDocument       = sal_False;
-    sal_Bool bHasIsFolder         = sal_False;
-    sal_Bool bHasTitle            = sal_False;
-    sal_Bool bHasBaseURI          = sal_False;
-    sal_Bool bHasDateCreated      = sal_False;
-    sal_Bool bHasDateModified     = sal_False;
-    sal_Bool bHasMediaType        = sal_False;
-    sal_Bool bHasSize             = sal_False;
-    sal_Bool bHasCreatableInfos   = sal_False;
+    bool bHasContentType      = false;
+    bool bHasIsDocument       = false;
+    bool bHasIsFolder         = false;
+    bool bHasTitle            = false;
+    bool bHasBaseURI          = false;
+    bool bHasDateCreated      = false;
+    bool bHasDateModified     = false;
+    bool bHasMediaType        = false;
+    bool bHasSize             = false;
+    bool bHasCreatableInfos   = false;
 
     {
         std::set< OUString >::const_iterator it  = aPropSet.begin();
@@ -364,62 +364,62 @@ uno::Sequence< beans::Property > Content::getProperties(
             if ( !bHasCreationDate &&
                  ( (*it) == DAVProperties::CREATIONDATE ) )
             {
-                bHasCreationDate = sal_True;
+                bHasCreationDate = true;
             }
             else if ( !bHasGetLastModified &&
                       ( (*it) == DAVProperties::GETLASTMODIFIED ) )
             {
-                bHasGetLastModified = sal_True;
+                bHasGetLastModified = true;
             }
             else if ( !bHasGetContentType &&
                       ( (*it) == DAVProperties::GETCONTENTTYPE ) )
             {
-                bHasGetContentType = sal_True;
+                bHasGetContentType = true;
             }
             else if ( !bHasGetContentLength &&
                       ( (*it) == DAVProperties::GETCONTENTLENGTH ) )
             {
-                bHasGetContentLength = sal_True;
+                bHasGetContentLength = true;
             }
             else if ( !bHasContentType && (*it) == "ContentType" )
             {
-                bHasContentType = sal_True;
+                bHasContentType = true;
             }
             else if ( !bHasIsDocument && (*it) == "IsDocument" )
             {
-                bHasIsDocument = sal_True;
+                bHasIsDocument = true;
             }
             else if ( !bHasIsFolder && (*it) == "IsFolder" )
             {
-                bHasIsFolder = sal_True;
+                bHasIsFolder = true;
             }
             else if ( !bHasTitle && (*it) == "Title" )
             {
-                bHasTitle = sal_True;
+                bHasTitle = true;
             }
             else if ( !bHasBaseURI && (*it) == "BaseURI" )
             {
-                bHasBaseURI = sal_True;
+                bHasBaseURI = true;
             }
             else if ( !bHasDateCreated && (*it) == "DateCreated" )
             {
-                bHasDateCreated = sal_True;
+                bHasDateCreated = true;
             }
             else if ( !bHasDateModified && (*it) == "DateModified" )
             {
-                bHasDateModified = sal_True;
+                bHasDateModified = true;
             }
             else if ( !bHasMediaType && (*it) == "MediaType" )
             {
-                bHasMediaType = sal_True;
+                bHasMediaType = true;
             }
             else if ( !bHasSize && (*it) == "Size" )
             {
-                bHasSize = sal_True;
+                bHasSize = true;
             }
             else if ( !bHasCreatableInfos && (*it) == "CreatableContentsInfo" )
             {
-                bHasCreatableInfos = sal_True;
+                bHasCreatableInfos = true;
             }
             ++it;
         }
@@ -595,7 +595,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 getCppuType( static_cast<
                     rtl::OUString * >( 0 ) ) );
 
-    sal_Bool bFolder = sal_False;
+    bool bFolder = false;
 
     try
     {
@@ -606,7 +606,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         return aCmdInfo;
     }
 
-    sal_Bool bSupportsLocking = supportsExclusiveWriteLock( xEnv );
+    bool bSupportsLocking = supportsExclusiveWriteLock( xEnv );
 
     sal_Int32 nPos = aCmdInfo.getLength();
     sal_Int32 nMoreCmds = ( bFolder ? 2 : 0 ) + ( bSupportsLocking ? 2 : 0 );

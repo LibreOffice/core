@@ -38,7 +38,7 @@ namespace fileaccess {
     public:
         FileContentIdentifier( shell* pMyShell,
                                const OUString& aUnqPath,
-                               sal_Bool IsNormalized = true );
+                               bool IsNormalized = true );
 
         virtual ~FileContentIdentifier();
 

@@ -595,11 +595,11 @@ class XResultSet_impl : public Notifier,
 
         shell*                              m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >  m_xProvider;
-        sal_Bool                            m_nIsOpen;
+        bool                            m_nIsOpen;
         sal_Int32                           m_nRow;
-        sal_Bool                            m_nWasNull;
+        bool                            m_nWasNull;
         sal_Int32                           m_nOpenMode;
-        sal_Bool                            m_bRowCountFinal;
+        bool                            m_bRowCountFinal;
 
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > >         ItemSet;
@@ -622,13 +622,13 @@ class XResultSet_impl : public Notifier,
         cppu::OInterfaceContainerHelper*    m_pIsFinalListeners;
 
         com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >       m_xListener;
-        sal_Bool                            m_bStatic;
+        bool                            m_bStatic;
 
         sal_Int32                                          m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;
 
         // Methods
-        sal_Bool SAL_CALL OneMore( void )
+        bool SAL_CALL OneMore( void )
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException );
 

@@ -68,10 +68,10 @@ public:
         }
     }
 
-    virtual sal_Bool CanUse( const OUString & inPath,
+    virtual bool CanUse( const OUString & inPath,
                              const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags ) = 0;
 
-    virtual sal_Bool UsesProxy() = 0;
+    virtual bool UsesProxy() = 0;
 
     // DAV methods
 

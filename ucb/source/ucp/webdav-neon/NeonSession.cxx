@@ -798,8 +798,8 @@ void NeonSession::Init()
     }
 }
 
-sal_Bool NeonSession::CanUse( const OUString & inUri,
-                              const uno::Sequence< beans::NamedValue >& rFlags )
+bool NeonSession::CanUse( const OUString & inUri,
+                          const uno::Sequence< beans::NamedValue >& rFlags )
 {
     try
     {
@@ -808,16 +808,16 @@ sal_Bool NeonSession::CanUse( const OUString & inUri,
              ( theUri.GetHost() == m_aHostName ) &&
              ( theUri.GetScheme() == m_aScheme ) &&
              ( rFlags == m_aFlags ) )
-            return sal_True;
+            return true;
     }
     catch ( DAVException const & )
     {
-        return sal_False;
+        return false;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool NeonSession::UsesProxy()
+bool NeonSession::UsesProxy()
 {
     Init();
     return  !m_aProxyName.isEmpty() ;
@@ -2022,13 +2022,13 @@ NeonSession::getDataFromInputStream(
     return false;
 }
 
-sal_Bool
+bool
 NeonSession::isDomainMatch( const OUString& certHostName )
 {
     OUString hostName = getHostName();
 
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
-        return sal_True;
+        return true;
 
     if ( certHostName.startsWith( "*" ) &&
          hostName.getLength() >= certHostName.getLength()  )
@@ -2037,9 +2037,9 @@ NeonSession::isDomainMatch( const OUString& certHostName )
 
         if ( hostName.matchIgnoreAsciiCase(
                 cmpStr, hostName.getLength() -  cmpStr.getLength() ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 OUString NeonSession::makeAbsoluteURL( OUString const & rURL ) const

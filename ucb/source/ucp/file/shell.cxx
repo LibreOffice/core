@@ -121,8 +121,8 @@ shell::MyProperty::MyProperty( const OUString&                         __Propert
     // empty
 }
 
-shell::MyProperty::MyProperty( const sal_Bool&                              __isNative,
-                               const OUString&                         __PropertyName,
+shell::MyProperty::MyProperty( const bool&                                  __isNative,
+                               const OUString&                              __PropertyName,
                                const sal_Int32&                             __Handle,
                                const com::sun::star::uno::Type&              __Typ,
                                const com::sun::star::uno::Any&              __Value,
@@ -149,7 +149,7 @@ shell::MyProperty::~MyProperty()
 
 
 shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
-              FileProvider* pProvider, sal_Bool bWithConfig )
+              FileProvider* pProvider, bool bWithConfig )
     : TaskManager(),
       m_bWithConfig( bWithConfig ),
       m_pProvider( pProvider ),
@@ -660,7 +660,7 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 uno::Reference< io::XInputStream > SAL_CALL
 shell::open( sal_Int32 CommandId,
              const OUString& aUnqPath,
-             sal_Bool bLock )
+             bool bLock )
     throw()
 {
     XInputStream_impl* xInputStream = new XInputStream_impl( this, aUnqPath, bLock ); // from filinpstr.hxx
@@ -697,7 +697,7 @@ shell::open( sal_Int32 CommandId,
 uno::Reference< io::XStream > SAL_CALL
 shell::open_rw( sal_Int32 CommandId,
                 const OUString& aUnqPath,
-                sal_Bool bLock )
+                bool bLock )
     throw()
 {
     XStream_impl* xStream = new XStream_impl( this, aUnqPath, bLock );  // from filstr.hxx
@@ -912,7 +912,7 @@ shell::setv( const OUString& aUnqPath,
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
             {
-                sal_Bool value = sal_False;
+                bool value = false;
                 if( values[i].Value >>= value )
                 {
                     osl::DirectoryItem aDirItem;
@@ -1266,7 +1266,7 @@ shell::move( sal_Int32 CommandId,
                       nError );
         return;
     }
-    sal_Bool isDocument = ( aStatus.getFileType() == osl::FileStatus::Regular );
+    bool isDocument = ( aStatus.getFileType() == osl::FileStatus::Regular );
 
 
     copyPersistentSet( srcUnqPath,dstUnqPath,!isDocument );
@@ -1355,7 +1355,7 @@ shell::copy(
         rslvdSrcUnqPath = srcUnqPath;
     }
 
-    sal_Bool isDocument
+    bool isDocument
         = type != osl::FileStatus::Directory && type != osl::FileStatus::Volume;
     sal_Int32 IsWhat = isDocument ? -1 : 1;
 
@@ -1376,7 +1376,7 @@ shell::copy(
         case NameClash::OVERWRITE:
         {
             // remove (..., MustExist = sal_False).
-            remove( CommandId, dstUnqPath, IsWhat, sal_False );
+            remove( CommandId, dstUnqPath, IsWhat, false );
 
             // copy.
             nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,false );
@@ -1492,11 +1492,11 @@ shell::copy(
 
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 shell::remove( sal_Int32 CommandId,
                const OUString& aUnqPath,
                sal_Int32 IsWhat,
-               sal_Bool  MustExist )
+               bool  MustExist )
     throw()
 {
     sal_Int32 nMask = osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL;
@@ -1525,7 +1525,7 @@ shell::remove( sal_Int32 CommandId,
             installError( CommandId,
                           TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE,
                           nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
-            return sal_False;
+            return false;
         }
 
         if( aStatus.getFileType() == osl::FileStatus::Regular ||
@@ -1572,7 +1572,7 @@ shell::remove( sal_Int32 CommandId,
             return (!MustExist);
         }
 
-        sal_Bool whileSuccess = sal_True;
+        bool whileSuccess = true;
         sal_Int32 recurse = 0;
         OUString name;
 
@@ -1585,7 +1585,7 @@ shell::remove( sal_Int32 CommandId,
                 installError( CommandId,
                               TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE,
                               nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
-                whileSuccess = sal_False;
+                whileSuccess = false;
                 break;
             }
 
@@ -1608,14 +1608,14 @@ shell::remove( sal_Int32 CommandId,
         aDirectory.close();
 
         if( ! whileSuccess )
-            return sal_False;     // error code is installed
+            return false;     // error code is installed
 
         if( nError != osl::FileBase::E_NOENT )
         {
             installError( CommandId,
                           TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE,
                           nError );
-            return sal_False;
+            return false;
         }
 
         nError = osl::Directory::remove( aUnqPath );
@@ -1639,10 +1639,10 @@ shell::remove( sal_Int32 CommandId,
     {
         installError( CommandId,
                       TASKHANDLING_FILETYPE_FOR_REMOVE );
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1656,10 +1656,10 @@ shell::remove( sal_Int32 CommandId,
 //  Return:: success of operation
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 shell::mkdir( sal_Int32 CommandId,
               const OUString& rUnqPath,
-              sal_Bool OverWrite )
+              bool OverWrite )
     throw()
 {
     OUString aUnqPath;
@@ -1680,22 +1680,22 @@ shell::mkdir( sal_Int32 CommandId,
             {
                 installError( CommandId,
                               TASKHANDLING_FOLDER_EXISTS_MKDIR );
-                return sal_False;
+                return false;
             }
             else
-                return sal_True;
+                return true;
         }
         case osl::FileBase::E_INVAL:
         {
             installError(CommandId,
                          TASKHANDLING_INVALID_NAME_MKDIR);
-            return sal_False;
+            return false;
         }
         case osl::FileBase::E_None:
         {
             OUString aPrtPath = getParentName( aUnqPath );
             notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
-            return sal_True;
+            return true;
         }
         default:
             return ensuredir(
@@ -1717,15 +1717,15 @@ shell::mkdir( sal_Int32 CommandId,
 //  Return:: success of operation
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 shell::mkfil( sal_Int32 CommandId,
               const OUString& aUnqPath,
-              sal_Bool Overwrite,
+              bool Overwrite,
               const uno::Reference< io::XInputStream >& aInputStream )
     throw()
 {
     // return value unimportant
-    sal_Bool bSuccess = write( CommandId,
+    bool bSuccess = write( CommandId,
                                aUnqPath,
                                Overwrite,
                                aInputStream );
@@ -1749,10 +1749,10 @@ shell::mkfil( sal_Int32 CommandId,
 //  Return:: success of operation
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 shell::write( sal_Int32 CommandId,
               const OUString& aUnqPath,
-              sal_Bool OverWrite,
+              bool OverWrite,
               const uno::Reference< io::XInputStream >& aInputStream )
     throw()
 {
@@ -1760,14 +1760,14 @@ shell::write( sal_Int32 CommandId,
     {
         installError( CommandId,
                       TASKHANDLING_INPUTSTREAM_FOR_WRITE );
-        return sal_False;
+        return false;
     }
 
     // Create parent path, if necessary.
     if ( ! ensuredir( CommandId,
                       getParentName( aUnqPath ),
                       TASKHANDLING_ENSUREDIR_FOR_WRITE ) )
-        return sal_False;
+        return false;
 
     osl::FileBase::RC err;
     osl::File aFile( aUnqPath );
@@ -1786,7 +1786,7 @@ shell::write( sal_Int32 CommandId,
                 installError( CommandId,
                               TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
                               err );
-                return sal_False;
+                return false;
             }
 
             // the existing file was just opened and should be overwritten now,
@@ -1798,7 +1798,7 @@ shell::write( sal_Int32 CommandId,
                 installError( CommandId,
                               TASKHANDLING_FILESIZE_FOR_WRITE,
                               err );
-                return sal_False;
+                return false;
             }
         }
     }
@@ -1812,7 +1812,7 @@ shell::write( sal_Int32 CommandId,
                           err );
 
             aFile.close();
-            return sal_False;
+            return false;
         }
 
         // as a temporary solution the creation does not lock the file at all
@@ -1825,11 +1825,11 @@ shell::write( sal_Int32 CommandId,
             installError( CommandId,
                           TASKHANDLING_NO_OPEN_FILE_FOR_WRITE,
                           err );
-            return sal_False;
+            return false;
         }
     }
 
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
 
     sal_uInt64 nWrittenBytes;
     sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
@@ -1846,21 +1846,21 @@ shell::write( sal_Int32 CommandId,
         {
             installError( CommandId,
                           TASKHANDLING_NOTCONNECTED_FOR_WRITE );
-            bSuccess = sal_False;
+            bSuccess = false;
             break;
         }
         catch( const io::BufferSizeExceededException& )
         {
             installError( CommandId,
                           TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE );
-            bSuccess = sal_False;
+            bSuccess = false;
             break;
         }
         catch( const io::IOException& )
         {
             installError( CommandId,
                           TASKHANDLING_IOEXCEPTION_FOR_WRITE );
-            bSuccess = sal_False;
+            bSuccess = false;
             break;
         }
 
@@ -1877,14 +1877,14 @@ shell::write( sal_Int32 CommandId,
                 installError( CommandId,
                               TASKHANDLING_FILEIOERROR_FOR_WRITE,
                               err );
-                bSuccess = sal_False;
+                bSuccess = false;
                 break;
             }
             else if( nWrittenBytes != sal_uInt64( nReadBytes ) )
             {
                 installError( CommandId,
                               TASKHANDLING_FILEIOERROR_FOR_NO_SPACE );
-                bSuccess = sal_False;
+                bSuccess = false;
                 break;
             }
         }
@@ -1896,7 +1896,7 @@ shell::write( sal_Int32 CommandId,
         installError( CommandId,
                       TASKHANDLING_FILEIOERROR_FOR_WRITE,
                       err );
-        bSuccess = sal_False;
+        bSuccess = false;
     }
 
     return bSuccess;
@@ -1923,7 +1923,7 @@ void SAL_CALL shell::insertDefaultProperties( const OUString& aUnqPath )
     MyProperty ContentTProperty( ContentType );
 
     PropertySet& properties = *(it->second.properties);
-    sal_Bool ContentNotDefau = properties.find( ContentTProperty ) != properties.end();
+    bool ContentNotDefau = properties.find( ContentTProperty ) != properties.end();
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.begin();
     while( it1 != m_aDefaultProperties.end() )
@@ -1949,7 +1949,7 @@ void SAL_CALL shell::insertDefaultProperties( const OUString& aUnqPath )
 /******************************************************************************/
 
 
-sal_Bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
+bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
 {
     if ( Url == "file:///" || Url == "file://localhost/" || Url == "file://127.0.0.1/" )
     {
@@ -1957,7 +1957,7 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
         return false;
     }
 
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Url,Unq );
+    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Url,Unq );
 
     Unq = Url;
 
@@ -1971,9 +1971,9 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const OUString& Url, OUString& Unq )
 
 
 
-sal_Bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
+bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
 {
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
+    bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
 
     Url = Unq;
 
@@ -1988,7 +1988,7 @@ osl::FileBase::RC SAL_CALL
 shell::copy_recursive( const OUString& srcUnqPath,
                        const OUString& dstUnqPath,
                        sal_Int32 TypeToCopy,
-                       sal_Bool testExistBeforeCopy )
+                       bool testExistBeforeCopy )
     throw()
 {
     osl::FileBase::RC err = osl::FileBase::E_None;
@@ -2012,7 +2012,7 @@ shell::copy_recursive( const OUString& srcUnqPath,
 
             while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
             {
-                sal_Bool IsDoc = false;
+                bool IsDoc = false;
                 osl::FileStatus aFileStatus( n_Mask );
                 aDirItem.getFileStatus( aFileStatus );
                 if( aFileStatus.isValid( osl_FileStatus_Mask_Type ) )
@@ -2058,7 +2058,7 @@ shell::copy_recursive( const OUString& srcUnqPath,
 // returns success of the operation
 
 
-sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
+bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
                                     const OUString& rUnqPath,
                                     sal_Int32 errorCode )
     throw()
@@ -2066,7 +2066,7 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
     OUString aPath;
 
     if ( rUnqPath.isEmpty() )
-        return sal_False;
+        return false;
 
     if ( rUnqPath.endsWith("/") )
         aPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
@@ -2098,14 +2098,14 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
     aDirectory.close();
 
     if( nError == osl::File::E_None )
-        return sal_True;
+        return true;
 
     nError = osl::Directory::create( aPath );
 
     if( nError == osl::File::E_None )
         notifyInsert( getContentEventListeners( getParentName( aPath ) ),aPath );
 
-    sal_Bool  bSuccess = ( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
+    bool  bSuccess = ( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
 
     if( ! bSuccess )
     {
@@ -2194,7 +2194,7 @@ shell::getMaskFromProperties(
 
 
 void SAL_CALL
-shell::load( const ContentMap::iterator& it, sal_Bool create )
+shell::load( const ContentMap::iterator& it, bool create )
 {
     if( ! it->second.properties )
         it->second.properties = new PropertySet;
@@ -2289,7 +2289,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     }
 
 
-    sal_Bool isDirectory,isFile,isVolume,isRemoveable,isRemote,isFloppy,isCompactDisc;
+    bool isDirectory,isFile,isVolume,isRemoveable,isRemote,isFloppy,isCompactDisc;
 
     sal_Int64 dirSize = 0;
 
@@ -2381,7 +2381,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
         else
         {
-            sal_Bool dummy = false;
+            bool dummy = false;
             aAny <<= dummy;
             it1 = properties.find( MyProperty( IsRemote ) );
             if( it1 != properties.end() )
@@ -2402,7 +2402,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     }
     else
     {
-        isDirectory = sal_False;
+        isDirectory = false;
     }
 
     it1 = properties.find( MyProperty( Size ) );
@@ -2415,7 +2415,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( aFileStatus.isValid( osl_FileStatus_Mask_Attributes ) )
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
-            sal_Bool readonly = ( Attr & osl_File_Attribute_ReadOnly ) != 0;
+            bool readonly = ( Attr & osl_File_Attribute_ReadOnly ) != 0;
             it1->setValue( uno::makeAny( readonly ) );
         }
     }
@@ -2426,7 +2426,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( aFileStatus.isValid( osl_FileStatus_Mask_Attributes ) )
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
-            sal_Bool ishidden = ( Attr & osl_File_Attribute_Hidden ) != 0;
+            bool ishidden = ( Attr & osl_File_Attribute_Hidden ) != 0;
             it1->setValue( uno::makeAny( ishidden ) );
         }
     }
@@ -2476,7 +2476,7 @@ shell::getv(
     const uno::Sequence< beans::Property >& properties,
     osl::DirectoryItem& aDirItem,
     OUString& aUnqPath,
-    sal_Bool& aIsRegular )
+    bool& aIsRegular )
 {
     uno::Sequence< uno::Any > seq( properties.getLength() );
 
@@ -2709,7 +2709,7 @@ shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* liste
 std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
 shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
                                           const OUString& aNewPrefix,
-                                          sal_Bool withChildren )
+                                          bool withChildren )
 {
 
     std::vector< std::list< ContentEventNotifier* >* >* aVectorOnHeap =
@@ -2879,7 +2879,7 @@ void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >
 
 void SAL_CALL
 shell::erasePersistentSet( const OUString& aUnqPath,
-                           sal_Bool withChildren )
+                           bool withChildren )
 {
     if( ! m_xFileRegistry.is() )
     {
@@ -2942,7 +2942,7 @@ shell::erasePersistentSet( const OUString& aUnqPath,
 void SAL_CALL
 shell::copyPersistentSet( const OUString& srcUnqPath,
                           const OUString& dstUnqPath,
-                          sal_Bool withChildren )
+                          bool withChildren )
 {
     if( ! m_xFileRegistry.is() )
     {

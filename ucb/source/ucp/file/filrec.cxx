@@ -25,20 +25,20 @@ namespace fileaccess {
 void ReconnectingFile::disconnect()
 {
     m_aFile.close();
-    m_bDisconnect = sal_True;
+    m_bDisconnect = true;
 }
 
-sal_Bool ReconnectingFile::reconnect()
+bool ReconnectingFile::reconnect()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     if ( m_bFlagsSet )
     {
         disconnect();
         if ( m_aFile.open( m_nFlags ) == ::osl::FileBase::E_None
           || m_aFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None )
         {
-            m_bDisconnect = sal_False;
-            bResult = sal_True;
+            m_bDisconnect = false;
+            bResult = true;
         }
     }
 
@@ -55,7 +55,7 @@ sal_Bool ReconnectingFile::reconnect()
         else
             m_nFlags = uFlags;
 
-        m_bFlagsSet = sal_True;
+        m_bFlagsSet = true;
     }
 
     return nResult;
@@ -64,8 +64,8 @@ sal_Bool ReconnectingFile::reconnect()
 ::osl::FileBase::RC ReconnectingFile::close()
 {
     m_nFlags = 0;
-    m_bFlagsSet = sal_False;
-    m_bDisconnect = sal_False;
+    m_bFlagsSet = false;
+    m_bDisconnect = false;
 
     return m_aFile.close();
 }

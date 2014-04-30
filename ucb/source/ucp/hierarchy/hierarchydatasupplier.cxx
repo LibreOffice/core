@@ -76,7 +76,7 @@ struct DataSupplier_Impl
     HierarchyEntry                                  m_aFolder;
     HierarchyEntry::iterator                        m_aIterator;
     sal_Int32                                       m_nOpenMode;
-    sal_Bool                                        m_bCountFinal;
+    bool                                        m_bCountFinal;
 
     DataSupplier_Impl(
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -87,7 +87,7 @@ struct DataSupplier_Impl
                  static_cast< HierarchyContentProvider * >(
                      rContent->getProvider().get() ),
                  rContent->getIdentifier()->getContentIdentifier() ),
-      m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
+      m_nOpenMode( nOpenMode ), m_bCountFinal( false ) {}
     ~DataSupplier_Impl();
 };
 
@@ -269,7 +269,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     }
 
     if ( !bFound )
-        m_pImpl->m_bCountFinal = sal_True;
+        m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
@@ -306,7 +306,7 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
             m_pImpl->m_aResults.push_back( new ResultListEntry( rResult ) );
     }
 
-    m_pImpl->m_bCountFinal = sal_True;
+    m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
@@ -400,7 +400,7 @@ void HierarchyResultSetDataSupplier::validate()
 }
 
 
-sal_Bool HierarchyResultSetDataSupplier::checkResult(
+bool HierarchyResultSetDataSupplier::checkResult(
                                     const HierarchyEntryData& rResult )
 {
     switch ( m_pImpl->m_nOpenMode )
@@ -409,7 +409,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
             if ( rResult.getType() == HierarchyEntryData::LINK )
             {
                 // Entry is a link.
-                return sal_False;
+                return false;
             }
             break;
 
@@ -417,7 +417,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
             if ( rResult.getType() == HierarchyEntryData::FOLDER )
             {
                 // Entry is a folder.
-                return sal_False;
+                return false;
             }
             break;
 
@@ -426,7 +426,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
             break;
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

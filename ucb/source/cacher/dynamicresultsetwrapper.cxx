@@ -43,12 +43,12 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
                     Reference< XDynamicResultSet > xOrigin
                     , const Reference< XComponentContext > & rxContext )
 
-                : m_bDisposed( sal_False )
-                , m_bInDispose( sal_False )
+                : m_bDisposed( false )
+                , m_bInDispose( false )
                 , m_pDisposeEventListeners( NULL )
                 , m_xContext( rxContext )
-                , m_bStatic( sal_False )
-                , m_bGotWelcome( sal_False )
+                , m_bStatic( false )
+                , m_bGotWelcome( false )
                 , m_xSource( xOrigin )
                 , m_xSourceResultOne( NULL )
                 , m_xSourceResultTwo( NULL )
@@ -147,7 +147,7 @@ void SAL_CALL DynamicResultSetWrapper
         osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
         if( m_bInDispose || m_bDisposed )
             return;
-        m_bInDispose = sal_True;
+        m_bInDispose = true;
 
         xSourceComponent = Reference< XComponent >(m_xSource, UNO_QUERY);
 
@@ -167,8 +167,8 @@ void SAL_CALL DynamicResultSetWrapper
     */
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    m_bDisposed = sal_True;
-    m_bInDispose = sal_False;
+    m_bDisposed = true;
+    m_bInDispose = false;
 }
 
 
@@ -257,7 +257,7 @@ void SAL_CALL DynamicResultSetWrapper
                     {
                         impl_InitResultSetOne( aWelcome.Old );
                         impl_InitResultSetTwo( aWelcome.New );
-                        m_bGotWelcome = sal_True;
+                        m_bGotWelcome = true;
 
                         aWelcome.Old = m_xMyResultOne;
                         aWelcome.New = m_xMyResultTwo;
@@ -313,7 +313,7 @@ void SAL_CALL DynamicResultSetWrapper
     Reference< XDynamicResultSetListener > xListener = NULL;
     Reference< XDynamicResultSetListener > xMyListenerImpl = NULL;
 
-    sal_Bool bStatic = sal_False;
+    bool bStatic = false;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         m_xSource = xSourceDynamic;
@@ -349,7 +349,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
             throw ListenerAlreadySetException();
 
         xSource = m_xSource;
-        m_bStatic = sal_True;
+        m_bStatic = true;
         xMyListenerImpl = Reference< XEventListener > ::query( m_xMyListenerImpl );
     }
 

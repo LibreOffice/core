@@ -51,7 +51,7 @@ public:
     PackageUri( const OUString & rPackageUri )
     : m_aUri( rPackageUri ), m_bValid( false ) {}
 
-    sal_Bool isValid() const
+    bool isValid() const
     { init(); return m_bValid; }
 
     const OUString & getUri() const
@@ -78,10 +78,10 @@ public:
     const OUString & getScheme() const
     { init(); return m_aScheme; }
 
-    inline sal_Bool isRootFolder() const;
+    inline bool isRootFolder() const;
 };
 
-inline sal_Bool PackageUri::isRootFolder() const
+inline bool PackageUri::isRootFolder() const
 {
     init();
     return ( ( m_aPath.getLength() == 1 ) &&

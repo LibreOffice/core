@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILINL_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILINL_HXX
 
-inline const sal_Bool& SAL_CALL shell::MyProperty::IsNative() const
+inline const bool& SAL_CALL shell::MyProperty::IsNative() const
 {
     return isNative;
 }

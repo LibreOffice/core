@@ -539,7 +539,7 @@ uno::Any SAL_CALL Content::execute(
             }
         }
 
-        sal_Bool bDeletePhysical = sal_False;
+        bool bDeletePhysical = false;
         aCommand.Argument >>= bDeletePhysical;
         destroy( bDeletePhysical, Environment );
 
@@ -694,7 +694,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
 
-        sal_Bool bCreateFolder = Info.Type == TDOC_FOLDER_CONTENT_TYPE;
+        bool bCreateFolder = Info.Type == TDOC_FOLDER_CONTENT_TYPE;
 
 #ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
         // streams cannot be created as direct children of document root
@@ -818,11 +818,11 @@ void Content::queryChildren( ContentRefList& rChildren )
 }
 
 
-sal_Bool Content::exchangeIdentity(
+bool Content::exchangeIdentity(
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
-        return sal_False;
+        return false;
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -832,7 +832,7 @@ sal_Bool Content::exchangeIdentity(
     if ( m_eState != PERSISTENT )
     {
         OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
-        return sal_False;
+        return false;
     }
 
     // Only folders and streams can be renamed -> exchange identity.
@@ -841,7 +841,7 @@ sal_Bool Content::exchangeIdentity(
     {
         OSL_FAIL( "Content::exchangeIdentity - "
                                "Not supported by root or document!" );
-        return sal_False;
+        return false;
     }
 
     // Exchange own identitity.
@@ -882,18 +882,18 @@ sal_Bool Content::exchangeIdentity(
                         = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
-                        return sal_False;
+                        return false;
 
                     ++it;
                 }
             }
-            return sal_True;
+            return true;
         }
     }
 
     OSL_FAIL( "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
-    return sal_False;
+    return false;
 }
 
 
@@ -945,7 +945,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     if ( nCount )
     {
         uno::Reference< beans::XPropertySet > xAdditionalPropSet;
-        sal_Bool bTriedToGetAdditionalPropSet = sal_False;
+        bool bTriedToGetAdditionalPropSet = false;
 
         const beans::Property* pProps = rProperties.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -1010,7 +1010,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                             pProvider->getAdditionalPropertySet( rContentId,
                                                                  false ),
                             uno::UNO_QUERY );
-                    bTriedToGetAdditionalPropSet = sal_True;
+                    bTriedToGetAdditionalPropSet = true;
                 }
 
                 if ( xAdditionalPropSet.is() )
@@ -1150,9 +1150,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     sal_Int32 nCount = rValues.getLength();
 
     uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
-    sal_Bool bTriedToGetAdditionalPropSet = sal_False;
+    bool bTriedToGetAdditionalPropSet = false;
 
-    sal_Bool bExchange = sal_False;
+    bool bExchange = false;
     OUString aOldTitle;
     sal_Int32 nTitlePos = -1;
 
@@ -1210,7 +1210,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         {
                             // modified title -> modified URL -> exchange !
                             if ( m_eState == PERSISTENT )
-                                bExchange = sal_True;
+                                bExchange = true;
 
                             aOldTitle = m_aProps.getTitle();
                             m_aProps.setTitle( aNewValue );
@@ -1280,7 +1280,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
             {
                 xAdditionalPropSet = getAdditionalPropertySet( false );
-                bTriedToGetAdditionalPropSet = sal_True;
+                bTriedToGetAdditionalPropSet = true;
             }
 
             if ( xAdditionalPropSet.is() )
@@ -1722,7 +1722,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     }
 
     // Identifier changed?
-    sal_Bool bNewId = ( aUri != aNewUri );
+    bool bNewId = ( aUri != aNewUri );
 
     if ( bNewId )
     {
@@ -1760,7 +1760,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
 }
 
 
-void Content::destroy( sal_Bool bDeletePhysical,
+void Content::destroy( bool bDeletePhysical,
                        const uno::Reference<
                            ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
@@ -2203,7 +2203,7 @@ void Content::transfer(
         }
 
         // Propagate destruction (recursively).
-        xSource->destroy( sal_True, xEnv );
+        xSource->destroy( true, xEnv );
 
         // Remove all persistent data of source and its children.
         if ( !xSource->removeData() )

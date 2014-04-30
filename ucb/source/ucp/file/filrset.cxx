@@ -207,8 +207,8 @@ void XResultSet_impl::isFinalChanged()
     aEv.PropertyName = "IsRowCountFinal";
     aEv.Further = false;
     aEv.PropertyHandle = -1;
-    sal_Bool fval = false;
-    sal_Bool tval = true;
+    bool fval = false;
+    bool tval = true;
     aEv.OldValue <<= fval;
     aEv.NewValue <<= tval;
     for( sal_Int32 i = 0; i < seq.getLength(); ++i )
@@ -221,7 +221,7 @@ void XResultSet_impl::isFinalChanged()
 }
 
 
-sal_Bool SAL_CALL
+bool SAL_CALL
 XResultSet_impl::OneMore(
     void )
     throw( sdbc::SQLException,
@@ -231,7 +231,7 @@ XResultSet_impl::OneMore(
         return false;
 
     osl::FileBase::RC err;
-    sal_Bool IsRegular;
+    bool IsRegular;
     OUString aUnqPath;
     osl::DirectoryItem  m_aDirIte;
     uno::Reference< sdbc::XRow > aRow;
@@ -308,7 +308,7 @@ XResultSet_impl::next(
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
-    sal_Bool test;
+    bool test;
     if( ++m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) ) test = true;
     else
         test = OneMore();
@@ -712,7 +712,7 @@ XResultSet_impl::getMetaData(
              == 0 )
         {
             // @@@ #82177# - Determine correct value!
-            sal_Bool bCaseSensitiveChildren = sal_False;
+            bool bCaseSensitiveChildren = false;
 
             std::vector< ::ucbhelper::ResultSetColumnData >
                                     aColumnData( m_sProperty.getLength() );

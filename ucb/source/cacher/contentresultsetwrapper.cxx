@@ -51,8 +51,8 @@ ContentResultSetWrapper::ContentResultSetWrapper(
                 , m_xPropertySetInfo( NULL )
                 , m_nForwardOnly( 2 )
                 , m_xMetaDataFromOrigin( NULL )
-                , m_bDisposed( sal_False )
-                , m_bInDispose( sal_False )
+                , m_bDisposed( false )
+                , m_bInDispose( false )
                 , m_pDisposeEventListeners( NULL )
                 , m_pPropertyChangeListeners( NULL )
                 , m_pVetoableChangeListeners( NULL )
@@ -283,7 +283,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-sal_Bool SAL_CALL ContentResultSetWrapper
+bool SAL_CALL ContentResultSetWrapper
     ::impl_isForwardOnly()
 {
     //m_nForwardOnly == 2 -> don't know
@@ -365,7 +365,7 @@ void SAL_CALL ContentResultSetWrapper
     ReacquireableGuard aGuard( m_aMutex );
     if( m_bInDispose || m_bDisposed )
         return;
-    m_bInDispose = sal_True;
+    m_bInDispose = true;
 
     if( m_xPropertySetOrigin.is() )
     {
@@ -425,8 +425,8 @@ void SAL_CALL ContentResultSetWrapper
     }
 
     aGuard.reacquire();
-    m_bDisposed = sal_True;
-    m_bInDispose = sal_False;
+    m_bDisposed = true;
+    m_bInDispose = false;
 }
 
 
@@ -583,7 +583,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 
     impl_getPropertyChangeListenerContainer();
-    sal_Bool bNeedRegister = !m_pPropertyChangeListeners->
+    bool bNeedRegister = !m_pPropertyChangeListeners->
                         getContainedTypes().getLength();
     m_pPropertyChangeListeners->addInterface( aPropertyName, xListener );
     if( bNeedRegister )
@@ -634,7 +634,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 
     impl_getVetoableChangeListenerContainer();
-    sal_Bool bNeedRegister = !m_pVetoableChangeListeners->
+    bool bNeedRegister = !m_pVetoableChangeListeners->
                         getContainedTypes().getLength();
     m_pVetoableChangeListeners->addInterface( rPropertyName, xListener );
     if( bNeedRegister )

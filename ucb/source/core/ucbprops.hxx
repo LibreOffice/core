@@ -47,7 +47,7 @@ class UcbPropertiesManager : public cppu::WeakImplHelper2 <
     osl::Mutex m_aMutex;
 
 private:
-    sal_Bool queryProperty( const OUString& rName,
+    bool queryProperty( const OUString& rName,
                             com::sun::star::beans::Property& rProp );
 
 public:

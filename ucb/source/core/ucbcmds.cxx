@@ -525,9 +525,9 @@ bool setTitle(
 uno::Reference< ucb::XContent > createNew(
                     const TransferCommandContext & rContext,
                     const uno::Reference< ucb::XContent > & xTarget,
-                    sal_Bool bSourceIsFolder,
-                    sal_Bool bSourceIsDocument,
-                    sal_Bool bSourceIsLink )
+                    bool bSourceIsFolder,
+                    bool bSourceIsDocument,
+                    bool bSourceIsLink )
     throw( uno::Exception )
 {
 
@@ -640,7 +640,7 @@ uno::Reference< ucb::XContent > createNew(
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         sal_Int32 nAttribs = aTypesInfo[ n ].Attributes;
-        sal_Bool  bMatch   = sal_False;
+        bool  bMatch   = false;
 
         if ( rContext.aArg.Operation == ucb::TransferCommandOperation_LINK )
         {
@@ -649,7 +649,7 @@ uno::Reference< ucb::XContent > createNew(
             if ( nAttribs & ucb::ContentInfoAttribute::KIND_LINK )
             {
                 // Match!
-                bMatch = sal_True;
+                bMatch = true;
             }
         }
         else if ( ( rContext.aArg.Operation
@@ -665,7 +665,7 @@ uno::Reference< ucb::XContent > createNew(
                 if ( nAttribs & ucb::ContentInfoAttribute::KIND_LINK )
                 {
                     // Match!
-                    bMatch = sal_True;
+                    bMatch = true;
                 }
             }
             else
@@ -683,7 +683,7 @@ uno::Reference< ucb::XContent > createNew(
                    )
                 {
                     // Match!
-                    bMatch = sal_True;
+                    bMatch = true;
                 }
             }
         }
@@ -817,8 +817,8 @@ void transferProperties(
     uno::Sequence< beans::PropertyValue > aPropValues(
                                                 aAllProps.getLength() + 2 );
 
-    sal_Bool bHasTitle = rContext.aArg.NewTitle.isEmpty();
-    sal_Bool bHasTargetURL = ( rContext.aArg.Operation
+    bool bHasTitle = rContext.aArg.NewTitle.isEmpty();
+    bool bHasTargetURL = ( rContext.aArg.Operation
                                 != ucb::TransferCommandOperation_LINK );
 
     sal_Int32 nWritePos = 0;
@@ -834,7 +834,7 @@ void transferProperties(
             // Supply new title, if given.
             if ( !bHasTitle )
             {
-                bHasTitle = sal_True;
+                bHasTitle = true;
                 aValue <<= rContext.aArg.NewTitle;
             }
         }
@@ -843,7 +843,7 @@ void transferProperties(
             // Supply source URL as link target for the new link to create.
             if ( !bHasTargetURL )
             {
-                bHasTargetURL = sal_True;
+                bHasTargetURL = true;
                 aValue <<= rContext.aArg.SourceURL;
             }
         }
@@ -1108,7 +1108,7 @@ void handleNameClashRename(
     if ( nPos > 0 )
         aOldTitlePre += "_";
 
-    sal_Bool bContinue = sal_True;
+    bool bContinue = true;
     do
     {
         nTry++;
@@ -1185,7 +1185,7 @@ void handleNameClashRename(
             xCommandProcessorN->execute( aInsertCommand, 0, rContext.xEnv );
 
             // Success!
-            bContinue = sal_False;
+            bContinue = false;
         }
         catch ( uno::RuntimeException const & )
         {
@@ -1219,7 +1219,7 @@ void globalTransfer_(
     throw( uno::Exception )
 {
     // IsFolder: property is required.
-    sal_Bool bSourceIsFolder = xSourceProps->getBoolean( 1 );
+    bool bSourceIsFolder = xSourceProps->getBoolean( 1 );
     if ( !bSourceIsFolder && xSourceProps->wasNull() )
     {
         ucbhelper::cancelCommandExecution(
@@ -1232,7 +1232,7 @@ void globalTransfer_(
     }
 
     // IsDocument: property is required.
-    sal_Bool bSourceIsDocument = xSourceProps->getBoolean( 2 );
+    bool bSourceIsDocument = xSourceProps->getBoolean( 2 );
     if ( !bSourceIsDocument && xSourceProps->wasNull() )
     {
         ucbhelper::cancelCommandExecution(
@@ -1245,7 +1245,7 @@ void globalTransfer_(
     }
 
     // TargetURL: property is optional.
-    sal_Bool bSourceIsLink = !xSourceProps->getString( 3 ).isEmpty();
+    bool bSourceIsLink = !xSourceProps->getString( 3 ).isEmpty();
 
 
 
@@ -2017,7 +2017,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::Command aCommand(
                 OUString("delete"), // Name
                 -1,                                         // Handle
-                uno::makeAny( sal_Bool( sal_True ) ) );     // Argument
+                uno::makeAny( true ) );     // Argument
 
             xCommandProcessor->execute( aCommand, 0, xLocalEnv );
         }

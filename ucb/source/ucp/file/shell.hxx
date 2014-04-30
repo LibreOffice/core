@@ -81,16 +81,16 @@ namespace fileaccess {
         private:
             OUString                          PropertyName;
             sal_Int32                              Handle;
-            sal_Bool                               isNative;
+            bool                               isNative;
             com::sun::star::uno::Type              Typ;        // Duplicates information in Value
             com::sun::star::uno::Any               Value;
             com::sun::star::beans::PropertyState   State;
             sal_Int16                              Attributes;
         public:
             MyProperty();
-            MyProperty( const OUString&                         __PropertyName );
-            MyProperty( const sal_Bool&                              __isNative,
-                        const OUString&                         __PropertyName,
+            MyProperty( const OUString&                              __PropertyName );
+            MyProperty( const bool&                                  __isNative,
+                        const OUString&                              __PropertyName,
                         const sal_Int32&                             __Handle,
                         const com::sun::star::uno::Type&             __Typ,
                         const com::sun::star::uno::Any&              __Value,
@@ -98,7 +98,7 @@ namespace fileaccess {
                         const sal_Int16&                             __Attributes );
 
             ~MyProperty();
-            inline const sal_Bool& SAL_CALL IsNative() const;
+            inline const bool& SAL_CALL IsNative() const;
             inline const OUString& SAL_CALL getPropertyName() const { return PropertyName; }
             inline const sal_Int32& SAL_CALL getHandle() const;
             inline const com::sun::star::uno::Type& SAL_CALL getType() const;
@@ -157,7 +157,7 @@ namespace fileaccess {
 
         // MethodenDefinitionen
         shell( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-               FileProvider* pProvider,sal_Bool bWithConfig );
+               FileProvider* pProvider, bool bWithConfig );
 
         virtual ~shell();
 
@@ -221,7 +221,7 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
         open( sal_Int32 CommandId,
               const OUString& aUnqPath,
-              sal_Bool bLock )
+              bool bLock )
             throw();
 
 
@@ -233,7 +233,7 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
         open_rw( sal_Int32 CommandId,
                  const OUString& aUnqPath,
-                 sal_Bool bLock )
+                 bool bLock )
             throw();
 
 
@@ -322,11 +322,11 @@ namespace fileaccess {
          *  Deletes the content belonging to fileURL aUnqPath( recursively in case of directory )
          */
 
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         remove( sal_Int32 CommandId,
                 const OUString& aUnqPath,
                 sal_Int32 TypeToMove = RemoveUnknown,
-                sal_Bool  MustExist  = sal_True )
+                bool  MustExist  = true )
             throw();
 
 #undef RemoveUnknown
@@ -343,10 +343,10 @@ namespace fileaccess {
          *  Return:: success of operation
          */
 
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         mkdir( sal_Int32 CommandId,
                const OUString& aDirectoryName,
-               sal_Bool OverWrite )
+               bool OverWrite )
             throw();
 
 
@@ -356,10 +356,10 @@ namespace fileaccess {
          *  Return:: success of operation
          */
 
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         mkfil( sal_Int32 CommandId,
                const OUString& aFileName,
-               sal_Bool OverWrite,
+               bool OverWrite,
                const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream )
             throw();
 
@@ -369,10 +369,10 @@ namespace fileaccess {
          *  The content of aInputStream becomes the content of the file
          *  Return:: success of operation
          */
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         write( sal_Int32 CommandId,
                const OUString& aUnqPath,
-               sal_Bool OverWrite,
+               bool OverWrite,
                const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream )
             throw();
 
@@ -391,12 +391,12 @@ namespace fileaccess {
         /*                                                                            */
         /******************************************************************************/
 
-        sal_Bool SAL_CALL getUnqFromUrl( const OUString& Url, OUString& Unq );
+        bool SAL_CALL getUnqFromUrl( const OUString& Url, OUString& Unq );
 
-        sal_Bool SAL_CALL getUrlFromUnq( const OUString& Unq, OUString& Url );
+        bool SAL_CALL getUrlFromUnq( const OUString& Unq, OUString& Url );
 
 
-        sal_Bool m_bWithConfig;
+        bool m_bWithConfig;
         FileProvider*                                                                   m_pProvider;
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
         com::sun::star::uno::Reference< com::sun::star::ucb::XPropertySetRegistry >     m_xFileRegistry;
@@ -416,7 +416,7 @@ namespace fileaccess {
         std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
         getContentExchangedEventListeners( const OUString& aOldPrefix,
                                            const OUString& aNewPrefix,
-                                           sal_Bool withChildren );
+                                           bool withChildren );
 
         std::list< PropertyChangeNotifier* >* SAL_CALL
         getPropertyChangeNotifier( const OUString& aName );
@@ -460,7 +460,7 @@ namespace fileaccess {
         /********************************************************************************/
 
         void SAL_CALL erasePersistentSet( const OUString& aUnqPath,
-                                          sal_Bool withChildren = false );
+                                          bool withChildren = false );
 
         /********************************************************************************/
         /*                       copy persistent propertyset                            */
@@ -469,7 +469,7 @@ namespace fileaccess {
 
         void SAL_CALL copyPersistentSet( const OUString& srcUnqPath,
                                          const OUString& dstUnqPath,
-                                         sal_Bool withChildren = false );
+                                         bool withChildren = false );
 
 
         // Special optimized method for getting the properties of a directoryitem, which
@@ -480,7 +480,7 @@ namespace fileaccess {
               const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& properties,
               osl::DirectoryItem& DirItem,
               OUString& aUnqPath,
-              sal_Bool&      bIsRegular );
+              bool&      bIsRegular );
 
 
         /**
@@ -489,7 +489,7 @@ namespace fileaccess {
          */
 
         void SAL_CALL load( const shell::ContentMap::iterator& it,
-                            sal_Bool create );
+                            bool create );
 
         /**
          *  Commit inserts the determined properties in the filestatus object into
@@ -528,7 +528,7 @@ namespace fileaccess {
             const OUString& srcUnqPath,
             const OUString& dstUnqPath,
             sal_Int32 TypeToCopy,
-            sal_Bool  testExistence )
+            bool  testExistence )
             throw();
 
 
@@ -538,7 +538,7 @@ namespace fileaccess {
         // The calle determines the errorCode, which should be used to install
         // any error
 
-        sal_Bool SAL_CALL
+        bool SAL_CALL
         ensuredir( sal_Int32 CommandId,
                    const OUString& aDirectoryName,
                    sal_Int32 errorCode )

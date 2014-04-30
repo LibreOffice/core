@@ -29,9 +29,9 @@ class ReconnectingFile
     ::osl::File     m_aFile;
 
     sal_uInt32      m_nFlags;
-    sal_Bool        m_bFlagsSet;
+    bool        m_bFlagsSet;
 
-    sal_Bool        m_bDisconnect;
+    bool        m_bDisconnect;
 
     ReconnectingFile( ReconnectingFile& );
 
@@ -42,8 +42,8 @@ public:
     ReconnectingFile( const OUString& aFileURL )
         : m_aFile( aFileURL )
         , m_nFlags( 0 )
-        , m_bFlagsSet( sal_False )
-        , m_bDisconnect( sal_False )
+        , m_bFlagsSet( false )
+        , m_bDisconnect( false )
     {}
 
     ~ReconnectingFile()
@@ -52,7 +52,7 @@ public:
     }
 
     void disconnect();
-    sal_Bool reconnect();
+    bool reconnect();
 
     ::osl::FileBase::RC open( sal_uInt32 uFlags );
 

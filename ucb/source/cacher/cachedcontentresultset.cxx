@@ -71,7 +71,7 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
         aGuard.reacquire();
         if( !m_aCache.hasRow( nRow ) )
         {
-            m_bLastReadWasFromCache = sal_False;
+            m_bLastReadWasFromCache = false;
             aGuard.clear();
             applyPositionToOrigin( nRow );
             impl_init_xRowOrigin();
@@ -80,7 +80,7 @@ template<typename T> T CachedContentResultSet::rowOriginGet(
     }
     const Any& rValue = m_aCache.getAny( nRow, columnIndex );
     T aRet = T();
-    m_bLastReadWasFromCache = sal_True;
+    m_bLastReadWasFromCache = true;
     m_bLastCachedReadWasNull = !( rValue >>= aRet );
     /* Last chance. Try type converter service... */
     if ( m_bLastCachedReadWasNull && rValue.hasValue() )
@@ -144,11 +144,11 @@ void SAL_CALL CachedContentResultSet::CCRS_Cache
     m_pResult = new FetchResult( rResult );
 }
 
-sal_Bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool SAL_CALL CachedContentResultSet::CCRS_Cache
     ::hasRow( sal_Int32 row )
 {
     if( !m_pResult )
-        return sal_False;
+        return false;
     long nStart = m_pResult->StartIndex;
     long nEnd = nStart;
     if( m_pResult->Orientation )
@@ -171,27 +171,27 @@ sal_Int32 SAL_CALL CachedContentResultSet::CCRS_Cache
         return nEnd;
 }
 
-sal_Bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool SAL_CALL CachedContentResultSet::CCRS_Cache
     ::hasKnownLast()
 {
     if( !m_pResult )
-        return sal_False;
+        return false;
 
     if( ( m_pResult->FetchError & FetchError::ENDOFDATA )
         && m_pResult->Orientation
         && m_pResult->Rows.getLength() )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool SAL_CALL CachedContentResultSet::CCRS_Cache
     ::hasCausedException( sal_Int32 nRow )
 {
     if( !m_pResult )
-        return sal_False;
+        return false;
     if( !( m_pResult->FetchError & FetchError::EXCEPTION ) )
-        return sal_False;
+        return false;
 
     long nEnd = m_pResult->StartIndex;
     if( m_pResult->Orientation )
@@ -233,17 +233,17 @@ void SAL_CALL CachedContentResultSet::CCRS_Cache
         (*pMappedReminder)[nDiff] = sal_True;
 }
 
-sal_Bool SAL_CALL CachedContentResultSet::CCRS_Cache
+bool SAL_CALL CachedContentResultSet::CCRS_Cache
     ::isRowMapped( sal_Int32 nRow )
 {
     if( !m_pMappedReminder || !m_pResult )
-        return sal_False;
+        return false;
     long nDiff = nRow - m_pResult->StartIndex;
     if( nDiff < 0 )
         nDiff *= -1;
     if( nDiff < m_pMappedReminder->getLength() )
         return (*m_pMappedReminder)[nDiff];
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL CachedContentResultSet::CCRS_Cache
@@ -394,14 +394,14 @@ private:
     sal_Int32 SAL_CALL
     impl_getRemainedHandle() const;
 
-    sal_Bool SAL_CALL
+    bool SAL_CALL
     impl_queryProperty(
             const OUString& rName
             , com::sun::star::beans::Property& rProp ) const;
     sal_Int32 SAL_CALL
     impl_getPos( const OUString& rName ) const;
 
-    static sal_Bool SAL_CALL
+    static bool SAL_CALL
     impl_isMyPropertyName( const OUString& rName );
 
 public:
@@ -602,7 +602,7 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
     return -1;
 }
 
-sal_Bool SAL_CALL CCRS_PropertySetInfo
+bool SAL_CALL CCRS_PropertySetInfo
         ::impl_queryProperty( const OUString& rName, Property& rProp ) const
 {
     for( sal_Int32 nN = m_pProperties->getLength(); nN--; )
@@ -615,14 +615,14 @@ sal_Bool SAL_CALL CCRS_PropertySetInfo
             rProp.Type = rMyProp.Type;
             rProp.Attributes = rMyProp.Attributes;
 
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 //static
-sal_Bool SAL_CALL CCRS_PropertySetInfo
+bool SAL_CALL CCRS_PropertySetInfo
         ::impl_isMyPropertyName( const OUString& rPropertyName )
 {
     return ( rPropertyName == m_aPropertyNameForCount
@@ -641,15 +641,15 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
         OSL_FAIL( "Properties not initialized yet" );
         return nHandle;
     }
-    sal_Bool bFound = sal_True;
+    bool bFound = true;
     while( bFound )
     {
-        bFound = sal_False;
+        bFound = false;
         for( sal_Int32 nN = m_pProperties->getLength(); nN--; )
         {
             if( nHandle == (*m_pProperties)[nN].Handle )
             {
-                bFound = sal_True;
+                bFound = true;
                 nHandle++;
                 break;
             }
@@ -680,23 +680,23 @@ CachedContentResultSet::CachedContentResultSet(
 
                 , m_xContentIdentifierMapping( xContentIdentifierMapping )
                 , m_nRow( 0 ) // Position is one-based. Zero means: before first element.
-                , m_bAfterLast( sal_False )
+                , m_bAfterLast( false )
                 , m_nLastAppliedPos( 0 )
-                , m_bAfterLastApplied( sal_False )
+                , m_bAfterLastApplied( false )
                 , m_nKnownCount( 0 )
-                , m_bFinalCount( sal_False )
+                , m_bFinalCount( false )
                 , m_nFetchSize(
                     COMSUNSTARUCBCCRS_DEFAULT_FETCH_SIZE )
                 , m_nFetchDirection(
                     COMSUNSTARUCBCCRS_DEFAULT_FETCH_DIRECTION )
 
-                , m_bLastReadWasFromCache( sal_False )
-                , m_bLastCachedReadWasNull( sal_True )
+                , m_bLastReadWasFromCache( false )
+                , m_bLastCachedReadWasNull( true )
                 , m_aCache( m_xContentIdentifierMapping )
                 , m_aCacheContentIdentifierString( m_xContentIdentifierMapping )
                 , m_aCacheContentIdentifier( m_xContentIdentifierMapping )
                 , m_aCacheContent( m_xContentIdentifierMapping )
-                , m_bTriedToGetTypeConverter( sal_False )
+                , m_bTriedToGetTypeConverter( false )
                 , m_xTypeConverter( NULL )
 {
     m_xFetchProvider = Reference< XFetchProvider >( m_xResultSetOrigin, UNO_QUERY );
@@ -718,7 +718,7 @@ CachedContentResultSet::~CachedContentResultSet()
 // impl_ methods.
 
 
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::applyPositionToOrigin( sal_Int32 nRow )
     throw( SQLException,
            RuntimeException )
@@ -736,13 +736,13 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( !m_xResultSetOrigin.is() )
     {
         OSL_FAIL( "broadcaster was disposed already" );
-        return sal_False;
+        return false;
     }
 //  OSL_ENSURE( nRow <= m_nKnownCount, "don't step into regions you don't know with this method" );
 
     sal_Int32 nLastAppliedPos = m_nLastAppliedPos;
-    sal_Bool bAfterLastApplied = m_bAfterLastApplied;
-    sal_Bool bAfterLast = m_bAfterLast;
+    bool bAfterLastApplied = m_bAfterLastApplied;
+    bool bAfterLast = m_bAfterLast;
     sal_Int32 nForwardOnly = m_nForwardOnly;
 
     aGuard.clear();
@@ -774,8 +774,8 @@ sal_Bool SAL_CALL CachedContentResultSet
 
             aGuard.reacquire();
             m_nLastAppliedPos = 0;
-            m_bAfterLastApplied = sal_False;
-            return sal_False;
+            m_bAfterLastApplied = false;
+            return false;
         }
         try
         {
@@ -783,7 +783,7 @@ sal_Bool SAL_CALL CachedContentResultSet
             //because move relative would throw exception
             if( !nLastAppliedPos || bAfterLast || bAfterLastApplied )
             {
-                sal_Bool bValid = m_xResultSetOrigin->absolute( nRow );
+                bool bValid = m_xResultSetOrigin->absolute( nRow );
 
                 aGuard.reacquire();
                 m_nLastAppliedPos = nRow;
@@ -792,7 +792,7 @@ sal_Bool SAL_CALL CachedContentResultSet
             }
             else
             {
-                sal_Bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
+                bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
 
                 aGuard.reacquire();
                 m_nLastAppliedPos += ( nRow - nLastAppliedPos );
@@ -822,7 +822,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
         return nRow == m_nLastAppliedPos;
     }
-    return sal_True;
+    return true;
 };
 
 
@@ -832,7 +832,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
 
 #define FETCH_XXX( aCache, fetchInterface, fetchMethod )            \
-sal_Bool bDirection = !!(                                           \
+bool bDirection = !!(                                           \
     nFetchDirection != FetchDirection::REVERSE );                   \
 FetchResult aResult =                                               \
     fetchInterface->fetchMethod( nRow, nFetchSize, bDirection );    \
@@ -840,8 +840,8 @@ osl::ClearableGuard< osl::Mutex > aGuard2( m_aMutex );              \
 aCache.loadData( aResult );                                         \
 sal_Int32 nMax = aCache.getMaxRow();                                \
 sal_Int32 nCurCount = m_nKnownCount;                                \
-sal_Bool bIsFinalCount = aCache.hasKnownLast();                     \
-sal_Bool bCurIsFinalCount = m_bFinalCount;                          \
+bool bIsFinalCount = aCache.hasKnownLast();                     \
+bool bCurIsFinalCount = m_bFinalCount;                          \
 aGuard2.clear();                                                    \
 if( nMax > nCurCount )                                              \
     impl_changeRowCount( nCurCount, nMax );                         \
@@ -880,7 +880,7 @@ void SAL_CALL CachedContentResultSet
 }
 
 void SAL_CALL CachedContentResultSet
-    ::impl_changeIsRowCountFinal( sal_Bool bOld, sal_Bool bNew )
+    ::impl_changeIsRowCountFinal( bool bOld, bool bNew )
 {
     OSL_ENSURE( !bOld && bNew, "This change is not allowed for IsRowCountFinal" );
     if( ! (!bOld && bNew ) )
@@ -902,20 +902,20 @@ void SAL_CALL CachedContentResultSet
     impl_notifyPropertyChangeListeners( aEvt );
 }
 
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::impl_isKnownValidPosition( sal_Int32 nRow )
 {
     return m_nKnownCount && nRow
             && nRow <= m_nKnownCount;
 }
 
-sal_Bool SAL_CALL CachedContentResultSet
+bool SAL_CALL CachedContentResultSet
     ::impl_isKnownInvalidPosition( sal_Int32 nRow )
 {
     if( !nRow )
-        return sal_True;
+        return true;
     if( !m_bFinalCount )
-        return sal_False;
+        return false;
     return nRow > m_nKnownCount;
 }
 
@@ -1232,7 +1232,7 @@ void SAL_CALL CachedContentResultSet
         {//IsRowCountFinal changed
 
             //check value
-            sal_Bool bNew = sal_False;
+            bool bNew = false;
             if( !( aEvt.NewValue >>= bNew ) )
             {
                 OSL_FAIL( "PropertyChangeEvent contains wrong data" );
@@ -1358,7 +1358,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     {
         aGuard.reacquire();
         m_nRow++;
-        m_bAfterLast = sal_True;
+        m_bAfterLast = true;
         return sal_False;
     }
     aGuard.reacquire();
@@ -1373,7 +1373,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     sal_Int32 nRow = m_nRow;
     aGuard.clear();
 
-    sal_Bool bValid = applyPositionToOrigin( nRow + 1 );
+    bool bValid = applyPositionToOrigin( nRow + 1 );
 
     aGuard.reacquire();
     m_nRow = nRow + 1;
@@ -1400,25 +1400,25 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( !m_bAfterLast && m_nKnownCount && m_nRow == 1 )
     {
         m_nRow--;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return sal_False;
     }
     //known valid position ?:
     if( impl_isKnownValidPosition( m_nRow - 1 ) )
     {
         m_nRow--;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return sal_True;
     }
     //unknown position:
     sal_Int32 nRow = m_nRow;
     aGuard.clear();
 
-    sal_Bool bValid = applyPositionToOrigin( nRow - 1  );
+    bool bValid = applyPositionToOrigin( nRow - 1  );
 
     aGuard.reacquire();
     m_nRow = nRow - 1;
-    m_bAfterLast = sal_False;
+    m_bAfterLast = false;
     return bValid;
 }
 
@@ -1448,14 +1448,14 @@ sal_Bool SAL_CALL CachedContentResultSet
         if( m_bFinalCount )
         {
             sal_Int32 nNewRow = m_nKnownCount + 1 + row;
-            sal_Bool bValid = sal_True;
+            bool bValid = true;
             if( nNewRow <= 0 )
             {
                 nNewRow = 0;
-                bValid = sal_False;
+                bValid = false;
             }
             m_nRow = nNewRow;
-            m_bAfterLast = sal_False;
+            m_bAfterLast = false;
             return bValid;
         }
         //unknown final count:
@@ -1464,7 +1464,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         // Solaris has problems catching or propagating derived exceptions
         // when only the base class is known, so make ResultSetException
         // (derived from SQLException) known here:
-        sal_Bool bValid;
+        bool bValid;
         try
         {
             bValid = m_xResultSetOrigin->absolute( row );
@@ -1482,7 +1482,7 @@ sal_Bool SAL_CALL CachedContentResultSet
                 nNewRow = 0;
             m_nLastAppliedPos = nNewRow;
             m_nRow = nNewRow;
-            m_bAfterLastApplied = m_bAfterLast = sal_False;
+            m_bAfterLastApplied = m_bAfterLast = false;
             return bValid;
         }
         aGuard.clear();
@@ -1492,7 +1492,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         aGuard.reacquire();
         m_nLastAppliedPos = nCurRow;
         m_nRow = nCurRow;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return nCurRow != 0;
     }
     //row > 0:
@@ -1501,17 +1501,17 @@ sal_Bool SAL_CALL CachedContentResultSet
         if( row > m_nKnownCount )
         {
             m_nRow = m_nKnownCount + 1;
-            m_bAfterLast = sal_True;
+            m_bAfterLast = true;
             return sal_False;
         }
         m_nRow = row;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return sal_True;
     }
     //unknown new position:
     aGuard.clear();
 
-    sal_Bool bValid = m_xResultSetOrigin->absolute( row );
+    bool bValid = m_xResultSetOrigin->absolute( row );
 
     aGuard.reacquire();
     if( m_bFinalCount )
@@ -1520,10 +1520,10 @@ sal_Bool SAL_CALL CachedContentResultSet
         if( nNewRow > m_nKnownCount )
         {
             nNewRow = m_nKnownCount + 1;
-            m_bAfterLastApplied = m_bAfterLast = sal_True;
+            m_bAfterLastApplied = m_bAfterLast = true;
         }
         else
-            m_bAfterLastApplied = m_bAfterLast = sal_False;
+            m_bAfterLastApplied = m_bAfterLast = false;
 
         m_nLastAppliedPos = nNewRow;
         m_nRow = nNewRow;
@@ -1532,7 +1532,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     aGuard.clear();
 
     sal_Int32 nCurRow = m_xResultSetOrigin->getRow();
-    sal_Bool bIsAfterLast = m_xResultSetOrigin->isAfterLast();
+    bool bIsAfterLast = m_xResultSetOrigin->isAfterLast();
 
     aGuard.reacquire();
     m_nLastAppliedPos = nCurRow;
@@ -1566,7 +1566,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( impl_isKnownValidPosition( nNewRow ) )
     {
         m_nRow = nNewRow;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return sal_True;
     }
     else
@@ -1574,19 +1574,19 @@ sal_Bool SAL_CALL CachedContentResultSet
         //known invalid new position:
         if( nNewRow == 0 )
         {
-            m_bAfterLast = sal_False;
+            m_bAfterLast = false;
             m_nRow = 0;
             return sal_False;
         }
         if( m_bFinalCount && nNewRow > m_nKnownCount )
         {
-            m_bAfterLast = sal_True;
+            m_bAfterLast = true;
             m_nRow = m_nKnownCount + 1;
             return sal_False;
         }
         //unknown new position:
         aGuard.clear();
-        sal_Bool bValid = applyPositionToOrigin( nNewRow );
+        bool bValid = applyPositionToOrigin( nNewRow );
 
         aGuard.reacquire();
         m_nRow = nNewRow;
@@ -1611,23 +1611,23 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( impl_isKnownValidPosition( 1 ) )
     {
         m_nRow = 1;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return sal_True;
     }
     if( impl_isKnownInvalidPosition( 1 ) )
     {
         m_nRow = 1;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return sal_False;
     }
     //unknown position
     aGuard.clear();
 
-    sal_Bool bValid = applyPositionToOrigin( 1 );
+    bool bValid = applyPositionToOrigin( 1 );
 
     aGuard.reacquire();
     m_nRow = 1;
-    m_bAfterLast = sal_False;
+    m_bAfterLast = false;
     return bValid;
 }
 
@@ -1646,7 +1646,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     if( m_bFinalCount )
     {
         m_nRow = m_nKnownCount;
-        m_bAfterLast = sal_False;
+        m_bAfterLast = false;
         return m_nKnownCount != 0;
     }
     //unknown position
@@ -1657,10 +1657,10 @@ sal_Bool SAL_CALL CachedContentResultSet
     }
     aGuard.clear();
 
-    sal_Bool bValid = m_xResultSetOrigin->last();
+    bool bValid = m_xResultSetOrigin->last();
 
     aGuard.reacquire();
-    m_bAfterLastApplied = m_bAfterLast = sal_False;
+    m_bAfterLastApplied = m_bAfterLast = false;
     if( m_bFinalCount )
     {
         m_nLastAppliedPos = m_nKnownCount;
@@ -1676,7 +1676,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     m_nRow = nCurRow;
     OSL_ENSURE( nCurRow >= m_nKnownCount, "position of last row < known Count, that could not be" );
     m_nKnownCount = nCurRow;
-    m_bFinalCount = sal_True;
+    m_bFinalCount = true;
     return nCurRow != 0;
 }
 
@@ -1693,7 +1693,7 @@ void SAL_CALL CachedContentResultSet
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nRow = 0;
-    m_bAfterLast = sal_False;
+    m_bAfterLast = false;
 }
 
 //virtual
@@ -1709,7 +1709,7 @@ void SAL_CALL CachedContentResultSet
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nRow = 1;
-    m_bAfterLast = sal_True;
+    m_bAfterLast = true;
 }
 
 //virtual
@@ -1739,7 +1739,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     m_xResultSetOrigin->afterLast();
 
     aGuard.reacquire();
-    m_bAfterLastApplied = sal_True;
+    m_bAfterLastApplied = true;
     aGuard.clear();
 
     return m_xResultSetOrigin->isAfterLast();
@@ -1774,7 +1774,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     m_xResultSetOrigin->beforeFirst();
 
     aGuard.reacquire();
-    m_bAfterLastApplied = sal_False;
+    m_bAfterLastApplied = false;
     m_nLastAppliedPos = 0;
     aGuard.clear();
 
@@ -2111,7 +2111,7 @@ Any SAL_CALL CachedContentResultSet
         aGuard.reacquire();
         if( !m_aCache.hasRow( nRow ) )
         {
-            m_bLastReadWasFromCache = sal_False;
+            m_bLastReadWasFromCache = false;
             aGuard.clear();
             applyPositionToOrigin( nRow );
             impl_init_xRowOrigin();
@@ -2121,7 +2121,7 @@ Any SAL_CALL CachedContentResultSet
     //@todo: pay attention to typeMap
     const Any& rValue = m_aCache.getAny( nRow, columnIndex );
     Any aRet;
-    m_bLastReadWasFromCache = sal_True;
+    m_bLastReadWasFromCache = true;
     m_bLastCachedReadWasNull = !( rValue >>= aRet );
     return aRet;
 }
@@ -2176,7 +2176,7 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
 
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
-        m_bTriedToGetTypeConverter = sal_True;
+        m_bTriedToGetTypeConverter = true;
         m_xTypeConverter = Reference< XTypeConverter >( Converter::create(m_xContext) );
 
         OSL_ENSURE( m_xTypeConverter.is(),

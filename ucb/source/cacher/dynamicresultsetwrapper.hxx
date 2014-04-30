@@ -46,8 +46,8 @@ class DynamicResultSetWrapper
 {
 private:
     //management of listeners
-    sal_Bool                m_bDisposed; ///Dispose call ready.
-    sal_Bool                m_bInDispose;///In dispose call
+    bool                m_bDisposed; ///Dispose call ready.
+    bool                m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
     cppu::OInterfaceContainerHelper*
                             m_pDisposeEventListeners;
@@ -61,8 +61,8 @@ protected:
                             m_xContext;
 
     osl::Mutex              m_aMutex;
-    sal_Bool                m_bStatic;
-    sal_Bool                m_bGotWelcome;
+    bool                m_bStatic;
+    bool                m_bGotWelcome;
 
     //different Interfaces from Origin:
     com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet >

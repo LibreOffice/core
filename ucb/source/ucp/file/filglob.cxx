@@ -62,7 +62,7 @@ namespace {
     {
         OUString aResourceName;
         OUString aResourceType;
-        sal_Bool      bRemovable;
+        bool      bRemovable;
         bool bResourceName = false;
         bool bResourceType = false;
         bool bRemoveProperty = false;
@@ -153,7 +153,7 @@ namespace {
 namespace fileaccess {
 
 
-    sal_Bool isChild( const OUString& srcUnqPath,
+    bool isChild( const OUString& srcUnqPath,
                       const OUString& dstUnqPath )
     {
         static sal_Unicode slash = '/';
@@ -211,7 +211,7 @@ namespace fileaccess {
 
     osl::FileBase::RC osl_File_copy( const OUString& strPath,
                                      const OUString& strDestPath,
-                                     sal_Bool test )
+                                     bool test )
     {
         if( test )
         {
@@ -226,7 +226,7 @@ namespace fileaccess {
 
     osl::FileBase::RC osl_File_move( const OUString& strPath,
                                      const OUString& strDestPath,
-                                     sal_Bool test )
+                                     bool test )
     {
         if( test )
         {

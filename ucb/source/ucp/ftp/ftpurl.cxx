@@ -492,8 +492,7 @@ std::vector<FTPDirentry> FTPURL::list(
         if( osKind != int(FTP_UNKNOWN) && aDirEntry.m_aName != ".." && aDirEntry.m_aName != "." ) {
             aDirEntry.m_aURL = viewurl + encodePathSegment(aDirEntry.m_aName);
 
-            sal_Bool isDir =
-                sal_Bool(aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR);
+            bool isDir = (aDirEntry.m_nMode & INETCOREFTP_FILEMODE_ISDIR) == INETCOREFTP_FILEMODE_ISDIR;
             switch(nMode) {
                 case OpenMode::DOCUMENTS:
                     if(!isDir)

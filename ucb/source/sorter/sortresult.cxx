@@ -65,9 +65,9 @@ static osl::Mutex& getContainerMutex()
 
 struct SortInfo
 {
-    sal_Bool    mbUseOwnCompare;
-    sal_Bool    mbAscending;
-    sal_Bool    mbCaseSensitive;
+    bool    mbUseOwnCompare;
+    bool    mbAscending;
+    bool    mbCaseSensitive;
     sal_Int32   mnColumn;
     sal_Int32   mnType;
     SortInfo*   mpNext;
@@ -78,11 +78,11 @@ struct SortInfo
 
 struct SortListData
 {
-    sal_Bool    mbModified;
+    bool    mbModified;
     sal_IntPtr  mnCurPos;
     sal_IntPtr  mnOldPos;
 
-    SortListData( sal_IntPtr nPos, sal_Bool bModified = sal_False );
+    SortListData( sal_IntPtr nPos, bool bModified = false );
 };
 
 
@@ -134,7 +134,7 @@ SortedResultSet::SortedResultSet( Reference< XResultSet > aResult )
     mnLastSort  = 0;
     mnCurEntry  = 0;
     mnCount     = 0;
-    mbIsCopy    = sal_False;
+    mbIsCopy    = false;
 }
 
 
@@ -881,10 +881,10 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
     }
     else if ( PropertyName.equalsAscii( "IsRowCountFinal" ) )
     {
-        sal_Bool    bOrgFinal = false;
+        bool    bOrgFinal = false;
         Any         aOrgRet;
 
-        aRet <<= (sal_Bool) sal_False;
+        aRet <<= false;
 
         aOrgRet = Reference< XPropertySet >::query(mxOriginal)->
                         getPropertyValue( PropertyName );
@@ -897,7 +897,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
             sal_uInt32  nOrgCount = 0;
             aOrgRet >>= nOrgCount;
             if ( nOrgCount == maS2O.Count() )
-                aRet <<= (sal_Bool) sal_True;
+                aRet <<= true;
         }
     }
     else
@@ -1373,7 +1373,7 @@ void SortedResultSet::CopyData( SortedResultSet *pSource )
     if ( !mpSortInfo )
     {
         mpSortInfo = pSource->GetSortInfo();
-        mbIsCopy = sal_True;
+        mbIsCopy = true;
     }
 }
 
@@ -1426,7 +1426,7 @@ void SortedResultSet::Initialize(
 }
 
 
-void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal )
+void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, bool bWasFinal )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -1437,7 +1437,7 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal 
         // check for propertyChangeEvents
         if ( nOldCount != GetCount() )
         {
-            sal_Bool bIsFinal = sal_False;
+            bool bIsFinal = false;
             PropertyChangeEvent aEvt;
 
             aEvt.PropertyName = "RowCount";
@@ -1455,8 +1455,8 @@ void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal 
                 aEvt.PropertyName = aName;
                 aEvt.Further = sal_False;
                 aEvt.PropertyHandle = -1;
-                aEvt.OldValue <<= (sal_Bool) bWasFinal;
-                aEvt.NewValue <<= (sal_Bool) bIsFinal;
+                aEvt.OldValue <<= bWasFinal;
+                aEvt.NewValue <<= bIsFinal;
                 PropertyChanged( aEvt );
             }
         }
@@ -1662,12 +1662,12 @@ void SortedResultSet::BuildSortInfo(
 
         if ( pInfo->mxCompareFunction.is() )
         {
-            pInfo->mbUseOwnCompare = sal_False;
+            pInfo->mbUseOwnCompare = false;
             pInfo->mnType = 0;
         }
         else
         {
-            pInfo->mbUseOwnCompare = sal_True;
+            pInfo->mbUseOwnCompare = true;
             pInfo->mnType = xData->getColumnType( nColumn );
         }
 
@@ -1690,7 +1690,7 @@ void SortedResultSet::SetChanged( sal_IntPtr nPos, sal_IntPtr nCount )
             SortListData *pData = maS2O.GetData( nSortPos );
             if ( ! pData->mbModified )
             {
-                pData->mbModified = sal_True;
+                pData->mbModified = true;
                 maModList.Append( pData );
             }
         }
@@ -1713,7 +1713,7 @@ void SortedResultSet::ResortModified( EventList* pList )
             pData = (SortListData*) maModList.GetObject( i );
             nCompare = CompareImpl( mxOther, mxOriginal,
                                     pData->mnOldPos, pData->mnCurPos );
-            pData->mbModified = sal_False;
+            pData->mbModified = false;
             if ( nCompare != 0 )
             {
                 nCurPos = (sal_IntPtr) maO2S.GetObject( (sal_uInt32) pData->mnCurPos );
@@ -1808,7 +1808,7 @@ void SortedResultSet::ResortNew( EventList* pList )
 // SortListData
 
 
-SortListData::SortListData( sal_IntPtr nPos, sal_Bool bModified )
+SortListData::SortListData( sal_IntPtr nPos, bool bModified )
 {
     mbModified = bModified;
     mnCurPos = nPos;
@@ -1905,14 +1905,14 @@ void SimpleList::Remove( sal_uInt32 nPos )
 
 void SimpleList::Remove( void* pData )
 {
-    sal_Bool    bFound = sal_False;
+    bool    bFound = false;
     sal_uInt32  i;
 
     for ( i = 0; i < (sal_uInt32) maData.size(); i++ )
     {
         if ( maData[ i ] == pData )
         {
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }

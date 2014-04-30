@@ -37,7 +37,7 @@ namespace fileaccess {
 
     // Returns true if dstUnqPath is a child from srcUnqPath or both are equal
 
-    extern sal_Bool isChild( const OUString& srcUnqPath,
+    extern bool isChild( const OUString& srcUnqPath,
                                       const OUString& dstUnqPath );
 
 
@@ -63,7 +63,7 @@ namespace fileaccess {
 
     extern osl::FileBase::RC osl_File_copy( const OUString& strPath,
                                             const OUString& strDestPath,
-                                            sal_Bool test = false );
+                                            bool test = false );
 
     /**
      *  special move:
@@ -74,7 +74,7 @@ namespace fileaccess {
 
     extern osl::FileBase::RC osl_File_move( const OUString& strPath,
                                             const OUString& strDestPath,
-                                            sal_Bool test = false );
+                                            bool test = false );
 
     // This function implements the global exception handler of the file_ucp;
     // It never returns;

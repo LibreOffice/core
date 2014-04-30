@@ -41,13 +41,13 @@ class CachedContentResultSetStub
 {
 private:
     sal_Int32       m_nColumnCount;
-    sal_Bool        m_bColumnCountCached;
+    bool        m_bColumnCountCached;
 
     //members to propagate fetchsize and direction:
-    sal_Bool        m_bNeedToPropagateFetchSize;
-    sal_Bool        m_bFirstFetchSizePropagationDone;
+    bool        m_bNeedToPropagateFetchSize;
+    bool        m_bFirstFetchSizePropagationDone;
     sal_Int32       m_nLastFetchSize;
-    sal_Bool        m_bLastFetchDirection;
+    bool        m_bLastFetchDirection;
     const OUString     m_aPropertyNameForFetchSize;
     const OUString     m_aPropertyNameForFetchDirection;
 
@@ -85,7 +85,7 @@ private:
             throw ( com::sun::star::uno::RuntimeException );
 
     void SAL_CALL
-    impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, sal_Bool bFetchDirection )
+    impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
         throw ( com::sun::star::uno::RuntimeException );
 
 public:

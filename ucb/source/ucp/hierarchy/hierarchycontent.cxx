@@ -475,7 +475,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         //  ( Not available at root folder )
 
 
-        sal_Bool bDeletePhysical = sal_False;
+        bool bDeletePhysical = false;
         aCommand.Argument >>= bDeletePhysical;
         destroy( bDeletePhysical, Environment );
 
@@ -598,7 +598,7 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
         if ( Info.Type.isEmpty() )
             return uno::Reference< ucb::XContent >();
 
-        sal_Bool bCreateFolder = Info.Type == HIERARCHY_FOLDER_CONTENT_TYPE;
+        bool bCreateFolder = Info.Type == HIERARCHY_FOLDER_CONTENT_TYPE;
 
         if ( !bCreateFolder && Info.Type != HIERARCHY_LINK_CONTENT_TYPE )
             return uno::Reference< ucb::XContent >();
@@ -638,7 +638,7 @@ OUString HierarchyContent::getParentURL()
 
 
 //static
-sal_Bool HierarchyContent::hasData(
+bool HierarchyContent::hasData(
             const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
@@ -651,7 +651,7 @@ sal_Bool HierarchyContent::hasData(
     {
         // hasData must always return 'true' for root folder
         // even if no persistent data exist!!!
-        return sal_True;
+        return true;
     }
 
     return HierarchyEntry( rxContext, pProvider, aURL ).hasData();
@@ -659,7 +659,7 @@ sal_Bool HierarchyContent::hasData(
 
 
 //static
-sal_Bool HierarchyContent::loadData(
+bool HierarchyContent::loadData(
             const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
@@ -678,23 +678,23 @@ sal_Bool HierarchyContent::loadData(
         HierarchyEntry aEntry( rxContext, pProvider, aURL );
         HierarchyEntryData aData;
         if ( !aEntry.getData( aData ) )
-            return sal_False;
+            return false;
 
         rProps = HierarchyContentProperties( aData );
     }
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool HierarchyContent::storeData()
+bool HierarchyContent::storeData()
 {
     HierarchyEntry aEntry(
             m_xContext, m_pProvider, m_xIdentifier->getContentIdentifier() );
-    return aEntry.setData( m_aProps.getHierarchyEntryData(), sal_True );
+    return aEntry.setData( m_aProps.getHierarchyEntryData(), true );
 }
 
 
-sal_Bool HierarchyContent::renameData(
+bool HierarchyContent::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -705,7 +705,7 @@ sal_Bool HierarchyContent::renameData(
 }
 
 
-sal_Bool HierarchyContent::removeData()
+bool HierarchyContent::removeData()
 {
     HierarchyEntry aEntry(
         m_xContext, m_pProvider, m_xIdentifier->getContentIdentifier() );
@@ -833,11 +833,11 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
 }
 
 
-sal_Bool HierarchyContent::exchangeIdentity(
+bool HierarchyContent::exchangeIdentity(
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
-        return sal_False;
+        return false;
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -847,7 +847,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
     if ( m_eState != PERSISTENT )
     {
         OSL_FAIL( "HierarchyContent::exchangeIdentity - Not persistent!" );
-        return sal_False;
+        return false;
     }
 
     // Am I the root folder?
@@ -855,7 +855,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
     {
         OSL_FAIL( "HierarchyContent::exchangeIdentity - "
                                "Not supported by root folder!" );
-        return sal_False;
+        return false;
     }
 
     // Exchange own identitity.
@@ -896,18 +896,18 @@ sal_Bool HierarchyContent::exchangeIdentity(
                         = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
-                        return sal_False;
+                        return false;
 
                     ++it;
                 }
             }
-            return sal_True;
+            return true;
         }
     }
 
     OSL_FAIL( "HierarchyContent::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
-    return sal_False;
+    return false;
 }
 
 
@@ -928,7 +928,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
     if ( nCount )
     {
         uno::Reference< beans::XPropertySet > xAdditionalPropSet;
-        sal_Bool bTriedToGetAdditionalPropSet = sal_False;
+        bool bTriedToGetAdditionalPropSet = false;
 
         const beans::Property* pProps = rProperties.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -978,7 +978,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                             pProvider->getAdditionalPropertySet( rContentId,
                                                                  false ),
                             uno::UNO_QUERY );
-                    bTriedToGetAdditionalPropSet = sal_True;
+                    bTriedToGetAdditionalPropSet = true;
                 }
 
                 if ( xAdditionalPropSet.is() )
@@ -1097,9 +1097,9 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     sal_Int32 nCount = rValues.getLength();
 
     uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
-    sal_Bool bTriedToGetAdditionalPropSet = sal_False;
+    bool bTriedToGetAdditionalPropSet = false;
 
-    sal_Bool bExchange = sal_False;
+    bool bExchange = false;
     OUString aOldTitle;
     OUString aOldName;
     sal_Int32 nTitlePos = -1;
@@ -1156,7 +1156,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                         {
                             // modified title -> modified URL -> exchange !
                             if ( m_eState == PERSISTENT )
-                                bExchange = sal_True;
+                                bExchange = true;
 
                             aOldTitle = m_aProps.getTitle();
                             aOldName  = m_aProps.getName();
@@ -1253,7 +1253,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
             {
                 xAdditionalPropSet = getAdditionalPropertySet( false );
-                bTriedToGetAdditionalPropSet = sal_True;
+                bTriedToGetAdditionalPropSet = true;
             }
 
             if ( xAdditionalPropSet.is() )
@@ -1494,7 +1494,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     }
 
     // Identifier changed?
-    sal_Bool bNewId = ( xId->getContentIdentifier()
+    bool bNewId = ( xId->getContentIdentifier()
                             != m_xIdentifier->getContentIdentifier() );
     m_xIdentifier = xId;
 
@@ -1526,7 +1526,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 }
 
 
-void HierarchyContent::destroy( sal_Bool bDeletePhysical,
+void HierarchyContent::destroy( bool bDeletePhysical,
                                 const uno::Reference<
                                     ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
@@ -1723,7 +1723,7 @@ void HierarchyContent::transfer(
 
     if ( nCount )
     {
-        sal_Bool bHadTitle = rInfo.NewTitle.isEmpty();
+        bool bHadTitle = rInfo.NewTitle.isEmpty();
 
         // Get all source values.
         uno::Reference< sdbc::XRow > xRow
@@ -1744,7 +1744,7 @@ void HierarchyContent::transfer(
             if ( !bHadTitle && rProp.Name == "Title" )
             {
                 // Set new title instead of original.
-                bHadTitle = sal_True;
+                bHadTitle = true;
                 rValue.Value <<= rInfo.NewTitle;
             }
             else
@@ -1822,7 +1822,7 @@ void HierarchyContent::transfer(
 
     if ( rInfo.MoveData )
     {
-        xSource->destroy( sal_True, xEnv );
+        xSource->destroy( true, xEnv );
 
         // Remove all persistent data of source and its children.
         if ( !xSource->removeData() )

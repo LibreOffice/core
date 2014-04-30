@@ -63,9 +63,9 @@ class SortedDynamicResultSet: public cppu::WeakImplHelper2 <
 
     EventList                           maActions;
     osl::Mutex                          maMutex;
-    sal_Bool                            mbGotWelcome:1;
-    sal_Bool                            mbUseOne:1;
-    sal_Bool                            mbStatic:1;
+    bool                            mbGotWelcome:1;
+    bool                            mbUseOne:1;
+    bool                            mbStatic:1;
 
 private:
     void                SendNotify();

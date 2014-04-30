@@ -160,7 +160,7 @@ namespace fileaccess {
     private:
         osl::Mutex                                                              m_aMutex;
         com::sun::star::uno::Sequence< com::sun::star::uno::Any >                m_aValueMap;
-        sal_Bool                                                                 m_nWasNull;
+        bool                                                                 m_nWasNull;
         shell*                                                                   m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >  m_xProvider;
         com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > m_xTypeConverter;

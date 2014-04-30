@@ -94,10 +94,10 @@ private:
             throw( com::sun::star::uno::Exception );
 
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        bool bReplaceExisting, const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
             throw( com::sun::star::uno::Exception );
 
-    void destroy( sal_Bool bDeletePhysical ) throw( com::sun::star::uno::Exception );
+    void destroy( bool bDeletePhysical ) throw( com::sun::star::uno::Exception );
 
     void copyData( com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xIn,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOut );
@@ -108,14 +108,14 @@ private:
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-    sal_Bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
+    bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
         createInputStream(const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
             throw( com::sun::star::uno::Exception );
 
-    sal_Bool exchangeIdentity(const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >&  xNewId);
+    bool exchangeIdentity(const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >&  xNewId);
 
 public:
     Content( const com::sun::star::uno::Reference<
@@ -126,7 +126,7 @@ public:
     Content( const com::sun::star::uno::Reference<
         com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
-        sal_Bool bIsFolder)
+        bool bIsFolder)
             throw ( com::sun::star::ucb::ContentCreationException );
 
     virtual ~Content();

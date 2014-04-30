@@ -97,7 +97,7 @@ Content::Content(
     const uno::Reference< uno::XComponentContext >& rxContext,
     ContentProvider* pProvider,
     const uno::Reference< ucb::XContentIdentifier >& Identifier,
-    sal_Bool bIsFolder)
+    bool bIsFolder)
         throw ( ucb::ContentCreationException )
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(true)
@@ -578,17 +578,17 @@ void Content::queryChildren( ContentRefList& rChildren )
     }
 }
 
-sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >& xNewId )
+bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
-        return sal_False;
+        return false;
 
     uno::Reference< ucb::XContent > xThis = this;
 
     if ( mbTransient )
     {
         m_xIdentifier = xNewId;
-        return sal_False;
+        return false;
     }
 
     OUString aOldURL = m_xIdentifier->getContentIdentifier();
@@ -617,14 +617,14 @@ sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifie
                 = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
             if ( !xChild->exchangeIdentity( xNewChildId ) )
-                return sal_False;
+                return false;
 
             ++it;
          }
-         return sal_True;
+         return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 uno::Sequence< uno::Any > Content::setPropertyValues(
@@ -809,17 +809,17 @@ void Content::copyData( uno::Reference< io::XInputStream > xIn,
     xOut->closeOutput();
 }
 
-sal_Bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
+bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
     const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
 {
     if ( !xSink.is() )
-        return sal_False;
+        return false;
 
     uno::Reference< io::XOutputStream > xOut = uno::Reference< io::XOutputStream >(xSink, uno::UNO_QUERY );
     uno::Reference< io::XActiveDataSink > xDataSink = uno::Reference< io::XActiveDataSink >(xSink, uno::UNO_QUERY );
 
     if ( !xOut.is() && !xDataSink.is() )
-        return sal_False;
+        return false;
 
     GError *pError=NULL;
     GFileInputStream *pStream = g_file_read(getGFile(), NULL, &pError);
@@ -828,7 +828,7 @@ sal_Bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
 
     uno::Reference< io::XInputStream > xIn = new ::gio::InputStream(pStream);
     if ( !xIn.is() )
-        return sal_False;
+        return false;
 
     if ( xOut.is() )
         copyData( xIn, xOut );
@@ -836,7 +836,7 @@ sal_Bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
     if ( xDataSink.is() )
         xDataSink->setInputStream( xIn );
 
-    return sal_True;
+    return true;
 }
 
 uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
@@ -860,7 +860,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
 
     uno::Any aRet;
 
-    sal_Bool bOpenFolder = (
+    bool bOpenFolder = (
         ( rOpenCommand.Mode == ucb::OpenMode::ALL ) ||
         ( rOpenCommand.Mode == ucb::OpenMode::FOLDERS ) ||
         ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENTS )
@@ -970,7 +970,7 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "delete" )
     {
-        sal_Bool bDeletePhysical = sal_False;
+        bool bDeletePhysical = false;
         aCommand.Argument >>= bDeletePhysical;
 
         //If no delete physical, try and trashcan it, if that doesn't work go
@@ -1004,7 +1004,7 @@ uno::Any SAL_CALL Content::execute(
     return aRet;
 }
 
-void Content::destroy( sal_Bool bDeletePhysical )
+void Content::destroy( bool bDeletePhysical )
     throw( uno::Exception )
 {
     uno::Reference< ucb::XContent > xThis = this;
@@ -1025,7 +1025,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
 }
 
 void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
-    sal_Bool bReplaceExisting, const uno::Reference< ucb::XCommandEnvironment > &xEnv )
+    bool bReplaceExisting, const uno::Reference< ucb::XCommandEnvironment > &xEnv )
         throw( uno::Exception )
 {
     GError *pError = NULL;

@@ -87,9 +87,9 @@ using namespace package_ucp;
 ContentProperties::ContentProperties( const OUString& rContentType )
 : aContentType( rContentType ),
   nSize( 0 ),
-  bCompressed( sal_True ),
-  bEncrypted( sal_False ),
-  bHasEncryptedEntries( sal_False )
+  bCompressed( true ),
+  bEncrypted( false ),
+  bHasEncryptedEntries( false )
 {
     bIsFolder = rContentType == PACKAGE_FOLDER_CONTENT_TYPE || rContentType == PACKAGE_ZIP_FOLDER_CONTENT_TYPE;
     bIsDocument = !bIsFolder;
@@ -116,14 +116,14 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
 
         // Folder.
         aSeq.getArray()[ 0 ].Type
-            = Content::getContentType( rUri.getScheme(), sal_True );
+            = Content::getContentType( rUri.getScheme(), true );
         aSeq.getArray()[ 0 ].Attributes
             = ucb::ContentInfoAttribute::KIND_FOLDER;
         aSeq.getArray()[ 0 ].Properties = aProps;
 
         // Stream.
         aSeq.getArray()[ 1 ].Type
-            = Content::getContentType( rUri.getScheme(), sal_False );
+            = Content::getContentType( rUri.getScheme(), false );
         aSeq.getArray()[ 1 ].Attributes
             = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
               | ucb::ContentInfoAttribute::KIND_DOCUMENT;
@@ -176,21 +176,21 @@ Content* Content::create(
     {
         // resource doesn't exist
 
-        sal_Bool bFolder = sal_False;
+        bool bFolder = false;
 
         // Guess type according to URI.
         sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
         if ( ( nLastSlash + 1 ) == aURL.getLength() )
-            bFolder = sal_True;
+            bFolder = true;
 
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
 
         ucb::ContentInfo aInfo;
         if ( bFolder || aURI.isRootFolder() )
-            aInfo.Type = getContentType( aURI.getScheme(), sal_True );
+            aInfo.Type = getContentType( aURI.getScheme(), true );
         else
-            aInfo.Type = getContentType( aURI.getScheme(), sal_False );
+            aInfo.Type = getContentType( aURI.getScheme(), false );
 
         return new Content( rxContext, pProvider, xId, xPackage, aURI, aInfo );
     }
@@ -210,9 +210,9 @@ Content* Content::create(
     PackageUri aURI( Identifier->getContentIdentifier() );
 
     if ( !Info.Type.equalsIgnoreAsciiCase(
-                getContentType( aURI.getScheme(), sal_True ) ) &&
+                getContentType( aURI.getScheme(), true ) ) &&
          !Info.Type.equalsIgnoreAsciiCase(
-                getContentType( aURI.getScheme(), sal_False ) ) )
+                getContentType( aURI.getScheme(), false ) ) )
         return 0;
 
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
@@ -227,7 +227,7 @@ Content* Content::create(
 
 // static
 OUString Content::getContentType(
-    const OUString& aScheme, sal_Bool bFolder )
+    const OUString& aScheme, bool bFolder )
 {
     return ( OUString("application/")
              + aScheme
@@ -572,7 +572,7 @@ uno::Any SAL_CALL Content::execute(
         // delete
 
 
-        sal_Bool bDeletePhysical = sal_False;
+        bool bDeletePhysical = false;
         aCommand.Argument >>= bDeletePhysical;
         destroy( bDeletePhysical, Environment );
 
@@ -722,16 +722,16 @@ Content::createNewContent( const ucb::ContentInfo& Info )
             return uno::Reference< ucb::XContent >();
 
         if ( !Info.Type.equalsIgnoreAsciiCase(
-                getContentType( m_aUri.getScheme(), sal_True ) ) &&
+                getContentType( m_aUri.getScheme(), true ) ) &&
              !Info.Type.equalsIgnoreAsciiCase(
-                getContentType( m_aUri.getScheme(), sal_False ) ) )
+                getContentType( m_aUri.getScheme(), false ) ) )
             return uno::Reference< ucb::XContent >();
 
         OUString aURL = m_aUri.getUri();
         aURL += "/";
 
         if ( Info.Type.equalsIgnoreAsciiCase(
-                getContentType( m_aUri.getScheme(), sal_True ) ) )
+                getContentType( m_aUri.getScheme(), true ) ) )
             aURL += "New_Folder";
         else
             aURL += "New_Stream";
@@ -816,7 +816,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     if ( nCount )
     {
         uno::Reference< beans::XPropertySet > xAdditionalPropSet;
-        sal_Bool bTriedToGetAdditionalPropSet = sal_False;
+        bool bTriedToGetAdditionalPropSet = false;
 
         const beans::Property* pProps = rProperties.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -896,7 +896,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                             rProvider->getAdditionalPropertySet( rContentId,
                                                                  false ),
                             uno::UNO_QUERY );
-                    bTriedToGetAdditionalPropSet = sal_True;
+                    bTriedToGetAdditionalPropSet = true;
                 }
 
                 if ( xAdditionalPropSet.is() )
@@ -1061,9 +1061,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     sal_Int32 nCount = rValues.getLength();
 
     uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
-    sal_Bool bTriedToGetAdditionalPropSet = sal_False;
-    sal_Bool bExchange = sal_False;
-    sal_Bool bStore    = sal_False;
+    bool bTriedToGetAdditionalPropSet = false;
+    bool bExchange = false;
+    bool bStore    = false;
     OUString aNewTitle;
     sal_Int32 nTitlePos = -1;
 
@@ -1125,7 +1125,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         {
                             // modified title -> modified URL -> exchange !
                             if ( m_eState == PERSISTENT )
-                                bExchange = sal_True;
+                                bExchange = true;
 
                             // new value will be set later...
                             aNewTitle = aNewValue;
@@ -1168,7 +1168,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
                     m_aProps.aMediaType = aNewValue;
                     nChanged++;
-                    bStore = sal_True;
+                    bStore = true;
                     m_nModifiedProps |= MEDIATYPE_MODIFIED;
                 }
             }
@@ -1193,7 +1193,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Property only available for streams.
             if ( m_aProps.bIsDocument )
             {
-                sal_Bool bNewValue;
+                bool bNewValue;
                 if ( rValue.Value >>= bNewValue )
                 {
                     if ( bNewValue != m_aProps.bCompressed )
@@ -1204,7 +1204,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
                         m_aProps.bCompressed = bNewValue;
                         nChanged++;
-                        bStore = sal_True;
+                        bStore = true;
                         m_nModifiedProps |= COMPRESSED_MODIFIED;
                     }
                 }
@@ -1229,7 +1229,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Property only available for streams.
             if ( m_aProps.bIsDocument )
             {
-                sal_Bool bNewValue;
+                bool bNewValue;
                 if ( rValue.Value >>= bNewValue )
                 {
                     if ( bNewValue != m_aProps.bEncrypted )
@@ -1240,7 +1240,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
                         m_aProps.bEncrypted = bNewValue;
                         nChanged++;
-                        bStore = sal_True;
+                        bStore = true;
                         m_nModifiedProps |= ENCRYPTED_MODIFIED;
                     }
                 }
@@ -1289,7 +1289,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
                         m_aProps.aEncryptionKey = aNewValue;
                         nChanged++;
-                        bStore = sal_True;
+                        bStore = true;
                         m_nModifiedProps |= ENCRYPTIONKEY_MODIFIED;
                     }
                 }
@@ -1316,7 +1316,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
             {
                 xAdditionalPropSet = getAdditionalPropertySet( false );
-                bTriedToGetAdditionalPropSet = sal_True;
+                bTriedToGetAdditionalPropSet = true;
             }
 
             if ( xAdditionalPropSet.is() )
@@ -1713,7 +1713,7 @@ void Content::insert(
     }
 
     // Identifier changed?
-    sal_Bool bNewId = ( m_aUri.getUri() != aNewUri.getUri() );
+    bool bNewId = ( m_aUri.getUri() != aNewUri.getUri() );
 
     if ( bNewId )
     {
@@ -1757,7 +1757,7 @@ void Content::insert(
 
 
 void Content::destroy(
-                sal_Bool bDeletePhysical,
+                bool bDeletePhysical,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
@@ -1901,8 +1901,8 @@ void Content::transfer(
 
 
     OUString aType = xSource->isFolder()
-            ? getContentType( m_aUri.getScheme(), sal_True )
-            : getContentType( m_aUri.getScheme(), sal_False );
+            ? getContentType( m_aUri.getScheme(), true )
+            : getContentType( m_aUri.getScheme(), false );
     ucb::ContentInfo aContentInfo;
     aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;
@@ -1938,7 +1938,7 @@ void Content::transfer(
 
     if ( nCount )
     {
-        sal_Bool bHadTitle = rInfo.NewTitle.isEmpty();
+        bool bHadTitle = rInfo.NewTitle.isEmpty();
 
         // Get all source values.
         uno::Reference< sdbc::XRow > xRow
@@ -1959,7 +1959,7 @@ void Content::transfer(
             if ( !bHadTitle && rProp.Name == "Title" )
             {
                 // Set new title instead of original.
-                bHadTitle = sal_True;
+                bHadTitle = true;
                 rValue.Value <<= rInfo.NewTitle;
             }
             else
@@ -2064,7 +2064,7 @@ void Content::transfer(
 
     if ( rInfo.MoveData )
     {
-        xSource->destroy( sal_True, xEnv );
+        xSource->destroy( true, xEnv );
 
         // Remove all persistent data of source and its children.
         if ( !xSource->removeData() )
@@ -2093,11 +2093,11 @@ void Content::transfer(
 }
 
 
-sal_Bool Content::exchangeIdentity(
+bool Content::exchangeIdentity(
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
-        return sal_False;
+        return false;
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2107,7 +2107,7 @@ sal_Bool Content::exchangeIdentity(
     if ( m_eState != PERSISTENT )
     {
         OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
-        return sal_False;
+        return false;
     }
 
     // Exchange own identitity.
@@ -2150,17 +2150,17 @@ sal_Bool Content::exchangeIdentity(
                         = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
-                        return sal_False;
+                        return false;
 
                     ++it;
                 }
             }
-            return sal_True;
+            return true;
         }
     }
 
     OSL_FAIL( "Content::exchangeIdentity - Panic! Cannot exchange identity!" );
-    return sal_False;
+    return false;
 }
 
 
@@ -2233,7 +2233,7 @@ uno::Reference< container::XHierarchicalNameAccess > Content::getPackage()
 
 
 // static
-sal_Bool Content::hasData(
+bool Content::hasData(
             ContentProvider* pProvider,
             const PackageUri& rURI,
             uno::Reference< container::XHierarchicalNameAccess > & rxPackage )
@@ -2243,7 +2243,7 @@ sal_Bool Content::hasData(
 }
 
 
-sal_Bool Content::hasData( const PackageUri& rURI )
+bool Content::hasData( const PackageUri& rURI )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2259,7 +2259,7 @@ sal_Bool Content::hasData( const PackageUri& rURI )
 
 
 //static
-sal_Bool Content::loadData(
+bool Content::loadData(
             ContentProvider* pProvider,
             const PackageUri& rURI,
             ContentProperties& rProps,
@@ -2289,26 +2289,26 @@ sal_Bool Content::loadData(
                 {
                     OSL_FAIL( "Content::loadData - "
                                 "Got no HasEncryptedEntries value!" );
-                    return sal_False;
+                    return false;
                 }
             }
             catch ( beans::UnknownPropertyException const & )
             {
                 OSL_FAIL( "Content::loadData - "
                             "Got no HasEncryptedEntries value!" );
-                return sal_False;
+                return false;
             }
             catch ( lang::WrappedTargetException const & )
             {
                 OSL_FAIL( "Content::loadData - "
                             "Got no HasEncryptedEntries value!" );
-                return sal_False;
+                return false;
             }
         }
     }
 
     if ( !rxPackage->hasByHierarchicalName( rURI.getPath() ) )
-        return sal_False;
+        return false;
 
     try
     {
@@ -2321,7 +2321,7 @@ sal_Bool Content::loadData(
             if ( !xPropSet.is() )
             {
                 OSL_FAIL( "Content::loadData - Got no XPropertySet interface!" );
-                return sal_False;
+                return false;
             }
 
             // Title
@@ -2336,18 +2336,18 @@ sal_Bool Content::loadData(
                 if ( !( aMediaType >>= rProps.aMediaType ) )
                 {
                     OSL_FAIL( "Content::loadData - Got no MediaType value!" );
-                    return sal_False;
+                    return false;
                 }
             }
             catch ( beans::UnknownPropertyException const & )
             {
                 OSL_FAIL( "Content::loadData - Got no MediaType value!" );
-                return sal_False;
+                return false;
             }
             catch ( lang::WrappedTargetException const & )
             {
                 OSL_FAIL( "Content::loadData - Got no MediaType value!" );
-                return sal_False;
+                return false;
             }
 
             uno::Reference< container::XEnumerationAccess > xEnumAccess;
@@ -2357,16 +2357,16 @@ sal_Bool Content::loadData(
             if ( xEnumAccess.is() )
             {
                 // folder
-                rProps.aContentType = getContentType( rURI.getScheme(), sal_True );
-                rProps.bIsDocument = sal_False;
-                rProps.bIsFolder = sal_True;
+                rProps.aContentType = getContentType( rURI.getScheme(), true );
+                rProps.bIsDocument = false;
+                rProps.bIsFolder = true;
             }
             else
             {
                 // stream
-                rProps.aContentType = getContentType( rURI.getScheme(), sal_False );
-                rProps.bIsDocument = sal_True;
-                rProps.bIsFolder = sal_False;
+                rProps.aContentType = getContentType( rURI.getScheme(), false );
+                rProps.bIsDocument = true;
+                rProps.bIsFolder = false;
             }
 
             if ( rProps.bIsDocument )
@@ -2380,18 +2380,18 @@ sal_Bool Content::loadData(
                     if ( !( aSize >>= rProps.nSize ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Size value!" );
-                        return sal_False;
+                        return false;
                     }
                 }
                 catch ( beans::UnknownPropertyException const & )
                 {
                     OSL_FAIL( "Content::loadData - Got no Size value!" );
-                    return sal_False;
+                    return false;
                 }
                 catch ( lang::WrappedTargetException const & )
                 {
                     OSL_FAIL( "Content::loadData - Got no Size value!" );
-                    return sal_False;
+                    return false;
                 }
 
                 // Compressed ( only available for streams )
@@ -2403,18 +2403,18 @@ sal_Bool Content::loadData(
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Compressed value!" );
-                        return sal_False;
+                        return false;
                     }
                 }
                 catch ( beans::UnknownPropertyException const & )
                 {
                     OSL_FAIL( "Content::loadData - Got no Compressed value!" );
-                    return sal_False;
+                    return false;
                 }
                 catch ( lang::WrappedTargetException const & )
                 {
                     OSL_FAIL( "Content::loadData - Got no Compressed value!" );
-                    return sal_False;
+                    return false;
                 }
 
                 // Encrypted ( only available for streams )
@@ -2426,21 +2426,21 @@ sal_Bool Content::loadData(
                     if ( !( aEncrypted >>= rProps.bEncrypted ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
-                        return sal_False;
+                        return false;
                     }
                 }
                 catch ( beans::UnknownPropertyException const & )
                 {
                     OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
-                    return sal_False;
+                    return false;
                 }
                 catch ( lang::WrappedTargetException const & )
                 {
                     OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
-                    return sal_False;
+                    return false;
                 }
             }
-            return sal_True;
+            return true;
         }
     }
     catch ( container::NoSuchElementException const & )
@@ -2448,11 +2448,11 @@ sal_Bool Content::loadData(
         // getByHierarchicalName
     }
 
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool Content::renameData(
+bool Content::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -2463,7 +2463,7 @@ sal_Bool Content::renameData(
                                                                         aURI );
 
     if ( !xNA->hasByHierarchicalName( aURI.getPath() ) )
-        return sal_False;
+        return false;
 
     try
     {
@@ -2474,7 +2474,7 @@ sal_Bool Content::renameData(
         if ( !xNamed.is() )
         {
             OSL_FAIL( "Content::renameData - Got no XNamed interface!" );
-            return sal_False;
+            return false;
         }
 
         PackageUri aNewURI( xNewId->getContentIdentifier() );
@@ -2482,18 +2482,18 @@ sal_Bool Content::renameData(
         // No success indicator!? No return value / exceptions specified.
         xNamed->setName( aNewURI.getName() );
 
-        return sal_True;
+        return true;
     }
     catch ( container::NoSuchElementException const & )
     {
         // getByHierarchicalName
     }
 
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
+bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2506,7 +2506,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
                 "Got no XPropertySet interface from package!" );
 
     if ( !xPackagePropSet.is() )
-        return sal_False;
+        return false;
 
     if ( m_nModifiedProps & ENCRYPTIONKEY_MODIFIED )
     {
@@ -2553,7 +2553,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             {
                 OSL_FAIL( "Content::storeData - "
                             "Got no XSingleServiceFactory interface!" );
-                return sal_False;
+                return false;
             }
 
             uno::Sequence< uno::Any > aArgs( 1 );
@@ -2565,7 +2565,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             if ( !xNew.is() )
             {
                 OSL_FAIL( "Content::storeData - createInstance failed!" );
-                return sal_False;
+                return false;
             }
 
             PackageUri aParentUri( getParentURL() );
@@ -2578,7 +2578,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             {
                 OSL_FAIL( "Content::storeData - "
                             "Got no XNameContainer interface!" );
-                return sal_False;
+                return false;
             }
 
             xParentContainer->insertByName( m_aProps.aTitle,
@@ -2588,7 +2588,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             // insertByName
             OSL_FAIL( "Content::storeData - insertByName failed!" );
-            return sal_False;
+            return false;
         }
         catch ( uno::RuntimeException const & )
         {
@@ -2598,30 +2598,30 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             // insertByName
             OSL_FAIL( "Content::storeData - insertByName failed!" );
-            return sal_False;
+            return false;
         }
         catch ( lang::WrappedTargetException const & )
         {
             // insertByName
             OSL_FAIL( "Content::storeData - insertByName failed!" );
-            return sal_False;
+            return false;
         }
         catch ( container::NoSuchElementException const & )
         {
             // getByHierarchicalName
             OSL_FAIL( "Content::storeData - getByHierarchicalName failed!" );
-            return sal_False;
+            return false;
         }
         catch ( uno::Exception const & )
         {
             // createInstanceWithArguments
             OSL_FAIL( "Content::storeData - Error!" );
-            return sal_False;
+            return false;
         }
     }
 
     if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
-        return sal_False;
+        return false;
 
     try
     {
@@ -2631,7 +2631,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         if ( !xPropSet.is() )
         {
             OSL_FAIL( "Content::storeData - Got no XPropertySet interface!" );
-            return sal_False;
+            return false;
         }
 
 
@@ -2689,13 +2689,13 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             {
                 OSL_FAIL( "Content::storeData - "
                             "Got no XActiveDataSink interface!" );
-                return sal_False;
+                return false;
             }
 
             xSink->setInputStream( xStream );
         }
 
-        return sal_True;
+        return true;
     }
     catch ( container::NoSuchElementException const & )
     {
@@ -2719,11 +2719,11 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
     }
 
     OSL_FAIL( "Content::storeData - Error!" );
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool Content::removeData()
+bool Content::removeData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2731,7 +2731,7 @@ sal_Bool Content::removeData()
 
     PackageUri aParentUri( getParentURL() );
     if ( !xNA->hasByHierarchicalName( aParentUri.getPath() ) )
-        return sal_False;
+        return false;
 
     try
     {
@@ -2743,11 +2743,11 @@ sal_Bool Content::removeData()
         {
             OSL_FAIL( "Content::removeData - "
                         "Got no XNameContainer interface!" );
-            return sal_False;
+            return false;
         }
 
         xContainer->removeByName( m_aUri.getName() );
-        return sal_True;
+        return true;
     }
     catch ( container::NoSuchElementException const & )
     {
@@ -2759,11 +2759,11 @@ sal_Bool Content::removeData()
     }
 
     OSL_FAIL( "Content::removeData - Error!" );
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool Content::flushData()
+bool Content::flushData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2776,20 +2776,20 @@ sal_Bool Content::flushData()
     if ( !xBatch.is() )
     {
         OSL_FAIL( "Content::flushData - Got no XChangesBatch interface!" );
-        return sal_False;
+        return false;
     }
 
     try
     {
         xBatch->commitChanges();
-        return sal_True;
+        return true;
     }
     catch ( lang::WrappedTargetException const & )
     {
     }
 
     OSL_FAIL( "Content::flushData - Error!" );
-    return sal_False;
+    return false;
 }
 
 

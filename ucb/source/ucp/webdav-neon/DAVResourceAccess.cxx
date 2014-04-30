@@ -96,7 +96,7 @@ int DAVAuthListener_Impl::authenticate(
                         ucbhelper::InteractionSupplyAuthentication > & xSupp
                         = xRequest->getAuthenticationSupplier();
 
-                    sal_Bool bUseSystemCredentials = sal_False;
+                    bool bUseSystemCredentials = false;
 
                     if ( bCanUseSystemCredentials )
                         bUseSystemCredentials
@@ -798,7 +798,7 @@ void DAVResourceAccess::MKCOL(
 void DAVResourceAccess::COPY(
     const OUString & rSourcePath,
     const OUString & rDestinationURI,
-    sal_Bool bOverwrite,
+    bool bOverwrite,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
 {
@@ -840,7 +840,7 @@ void DAVResourceAccess::COPY(
 void DAVResourceAccess::MOVE(
     const OUString & rSourcePath,
     const OUString & rDestinationURI,
-    sal_Bool bOverwrite,
+    bool bOverwrite,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
 {
@@ -1155,7 +1155,7 @@ void DAVResourceAccess::getUserRequestHeaders(
 }
 
 
-sal_Bool DAVResourceAccess::detectRedirectCycle(
+bool DAVResourceAccess::detectRedirectCycle(
                                 const OUString& rRedirectURL )
     throw ( DAVException )
 {
@@ -1169,12 +1169,12 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
     while ( it != end )
     {
         if ( aUri == (*it) )
-            return sal_True;
+            return true;
 
         ++it;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1193,7 +1193,7 @@ void DAVResourceAccess::resetUri()
 }
 
 
-sal_Bool DAVResourceAccess::handleException( const DAVException & e, int errorCount )
+bool DAVResourceAccess::handleException( const DAVException & e, int errorCount )
     throw ( DAVException )
 {
     switch ( e.getError() )
@@ -1204,9 +1204,9 @@ sal_Bool DAVResourceAccess::handleException( const DAVException & e, int errorCo
             // set new URL and path.
             setURL( e.getData() );
             initialize();
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     // #67048# copy & paste images doesn't display.
     // if we have a bad connection try again. Up to three times.
     case DAVException::DAV_HTTP_ERROR:
@@ -1214,14 +1214,14 @@ sal_Bool DAVResourceAccess::handleException( const DAVException & e, int errorCo
         if ( ( e.getStatus() < 400 || e.getStatus() >= 500 ) &&
              errorCount < 3 )
         {
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     // if connection has said retry then retry!
     case DAVException::DAV_HTTP_RETRY:
-        return sal_True;
+        return true;
     default:
-        return sal_False; // Abort
+        return false; // Abort
     }
 }
 

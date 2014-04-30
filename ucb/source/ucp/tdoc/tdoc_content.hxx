@@ -161,7 +161,7 @@ private:
     typedef std::list< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren );
 
-    sal_Bool exchangeIdentity(
+    bool exchangeIdentity(
                 const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
@@ -189,7 +189,7 @@ private:
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );
 
-    void destroy( sal_Bool bDeletePhysical,
+    void destroy( bool bDeletePhysical,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );

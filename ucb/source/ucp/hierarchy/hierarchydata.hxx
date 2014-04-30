@@ -91,7 +91,7 @@ class HierarchyEntry
     ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XOfficeInstallationDirectories >
                                                            m_xOfficeInstDirs;
-    sal_Bool m_bTriedToGetRootReadAccess;  // #82494#
+    bool m_bTriedToGetRootReadAccess;  // #82494#
 
 private:
     OUString createPathFromHierarchyURL( const HierarchyUri & rURI );
@@ -105,16 +105,16 @@ public:
                     HierarchyContentProvider* pProvider,
                     const OUString& rURL );
 
-    sal_Bool hasData();
+    bool hasData();
 
-    sal_Bool getData( HierarchyEntryData& rData );
+    bool getData( HierarchyEntryData& rData );
 
-    sal_Bool setData( const HierarchyEntryData& rData, sal_Bool bCreate );
+    bool setData( const HierarchyEntryData& rData, bool bCreate );
 
-    sal_Bool move( const OUString& rNewURL,
+    bool move( const OUString& rNewURL,
                    const HierarchyEntryData& rData );
 
-    sal_Bool remove();
+    bool remove();
 
     // Iteration.
 
@@ -133,8 +133,8 @@ public:
         const HierarchyEntryData& operator*() const;
     };
 
-    sal_Bool first( iterator& it );
-    sal_Bool next ( iterator& it );
+    bool first( iterator& it );
+    bool next ( iterator& it );
 };
 
 } // namespace hierarchy_ucp

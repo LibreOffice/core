@@ -857,12 +857,12 @@ Reference< XRow > FTPContent::getPropertyValues(
                                     : 1 );
             else if(Name.equalsAscii("IsDocument"))
                 xRow->appendBoolean(seqProp[i],
-                                    ! sal_Bool(aDirEntry.m_nMode &
-                                               INETCOREFTP_FILEMODE_ISDIR));
+                                    (aDirEntry.m_nMode &
+                                               INETCOREFTP_FILEMODE_ISDIR) != INETCOREFTP_FILEMODE_ISDIR);
             else if(Name.equalsAscii("IsFolder"))
                 xRow->appendBoolean(seqProp[i],
-                                    sal_Bool(aDirEntry.m_nMode &
-                                             INETCOREFTP_FILEMODE_ISDIR));
+                                    (aDirEntry.m_nMode &
+                                             INETCOREFTP_FILEMODE_ISDIR) == INETCOREFTP_FILEMODE_ISDIR);
             else if(Name.equalsAscii("Size"))
                 xRow->appendLong(seqProp[i],
                                  aDirEntry.m_nSize);

@@ -35,11 +35,11 @@ using namespace cppu;
 CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > xOrigin )
                 : ContentResultSetWrapper( xOrigin )
                 , m_nColumnCount( 0 )
-                , m_bColumnCountCached( sal_False )
-                , m_bNeedToPropagateFetchSize( sal_True )
-                , m_bFirstFetchSizePropagationDone( sal_False )
+                , m_bColumnCountCached( false )
+                , m_bNeedToPropagateFetchSize( true )
+                , m_bFirstFetchSizePropagationDone( false )
                 , m_nLastFetchSize( 1 )//this value is not important at all
-                , m_bLastFetchDirection( sal_True )//this value is not important at all
+                , m_bLastFetchDirection( true )//this value is not important at all
                 , m_aPropertyNameForFetchSize( OUString("FetchSize") )
                 , m_aPropertyNameForFetchDirection( OUString("FetchDirection") )
 {
@@ -217,11 +217,11 @@ if( impl_isForwardOnly() ) \
     return aRet; \
 } \
 aRet.Rows.realloc( nRowCount ); \
-sal_Bool bOldOriginal_AfterLast = sal_False; \
+bool bOldOriginal_AfterLast = false; \
 if( !nOldOriginal_Pos ) \
     bOldOriginal_AfterLast = m_xResultSetOrigin->isAfterLast(); \
 sal_Int32 nN = 1; \
-sal_Bool bValidNewPos = sal_False; \
+bool bValidNewPos = false; \
 try \
 { \
     try \
@@ -304,7 +304,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
     ::impl_getColumnCount()
 {
     sal_Int32 nCount;
-    sal_Bool bCached;
+    bool bCached;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         nCount = m_nColumnCount;
@@ -326,7 +326,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
     }
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nColumnCount = nCount;
-    m_bColumnCountCached = sal_True;
+    m_bColumnCountCached = true;
     return m_nColumnCount;
 }
 
@@ -347,7 +347,7 @@ void SAL_CALL CachedContentResultSetStub
 }
 
 void SAL_CALL CachedContentResultSetStub
-    ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, sal_Bool bFetchDirection )
+    ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
         throw ( RuntimeException )
 {
     //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResulSets
@@ -360,10 +360,10 @@ void SAL_CALL CachedContentResultSetStub
     if( !m_bNeedToPropagateFetchSize )
         return;
 
-    sal_Bool bNeedAction;
+    bool bNeedAction;
     sal_Int32 nLastSize;
-    sal_Bool bLastDirection;
-    sal_Bool bFirstPropagationDone;
+    bool bLastDirection;
+    bool bFirstPropagationDone;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         bNeedAction             = m_bNeedToPropagateFetchSize;
@@ -375,7 +375,7 @@ void SAL_CALL CachedContentResultSetStub
     {
         if( nLastSize == nFetchSize
             && bLastDirection == bFetchDirection
-            && bFirstPropagationDone == sal_True )
+            && bFirstPropagationDone )
             return;
 
         if(!bFirstPropagationDone)
@@ -383,23 +383,23 @@ void SAL_CALL CachedContentResultSetStub
             //check whether the properties 'FetchSize' and 'FetchDirection' do exist
 
             Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
-            sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
-            sal_Bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
+            bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
+            bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
 
             if(!bHasSize || !bHasDirection)
             {
                 osl::Guard< osl::Mutex > aGuard( m_aMutex );
-                m_bNeedToPropagateFetchSize = sal_False;
+                m_bNeedToPropagateFetchSize = false;
                 return;
             }
         }
 
-        sal_Bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
-        sal_Bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
+        bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
+        bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_bFirstFetchSizePropagationDone = sal_True;
+            m_bFirstFetchSizePropagationDone = true;
             m_nLastFetchSize        = nFetchSize;
             m_bLastFetchDirection   = bFetchDirection;
         }

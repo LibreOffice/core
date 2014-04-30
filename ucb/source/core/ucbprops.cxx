@@ -406,7 +406,7 @@ sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name 
 
 
 
-sal_Bool UcbPropertiesManager::queryProperty(
+bool UcbPropertiesManager::queryProperty(
                                 const OUString& rName, Property& rProp )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -421,11 +421,11 @@ sal_Bool UcbPropertiesManager::queryProperty(
         if ( rCurrProp.Name == rName )
         {
             rProp = rCurrProp;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

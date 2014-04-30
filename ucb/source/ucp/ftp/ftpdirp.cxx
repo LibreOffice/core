@@ -31,7 +31,7 @@ using namespace ftp;
 
 typedef sal_uInt32 ULONG;
 
-inline sal_Bool ascii_isWhitespace( sal_Unicode ch )
+inline bool ascii_isWhitespace( sal_Unicode ch )
 {
     return ((ch <= 0x20) && ch);
 }
@@ -59,11 +59,11 @@ inline sal_Bool ascii_isWhitespace( sal_Unicode ch )
  *    interpreted as: size attribs DIR mm-dd-yy hh:mm name
  */
 
-sal_Bool FTPDirectoryParser::parseDOS (
+bool FTPDirectoryParser::parseDOS (
     FTPDirentry &rEntry,
     const sal_Char  *pBuffer)
 {
-    sal_Bool   bDirectory = false;
+    bool   bDirectory = false;
     sal_uInt32 nSize = 0;
     sal_uInt16 nYear = 0;
     sal_uInt16 nMonth = 0;
@@ -505,7 +505,7 @@ sal_Bool FTPDirectoryParser::parseDOS (
                     rEntry.m_aDate.SetHour(nHour);
                     rEntry.m_aDate.SetMin(nMinute);
 
-                    return sal_True;
+                    return true;
                 }
                 break;
             case STATE_ERROR:
@@ -513,7 +513,7 @@ sal_Bool FTPDirectoryParser::parseDOS (
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 /*
@@ -556,14 +556,14 @@ sal_Bool FTPDirectoryParser::parseDOS (
  * order bits truncated to fit into a ULONG.
  *
  */
-sal_Bool FTPDirectoryParser::parseVMS (
+bool FTPDirectoryParser::parseVMS (
     FTPDirentry &rEntry,
     const sal_Char  *pBuffer)
 {
     static OUString aFirstLineName;
-    static sal_Bool bFirstLineDir = sal_False;
+    static bool bFirstLineDir = false;
 
-    for (sal_Bool bFirstLine = sal_True;; bFirstLine = sal_False)
+    for (bool bFirstLine = true;; bFirstLine = false)
     {
         const sal_Char *p = pBuffer;
         if (bFirstLine)
@@ -585,7 +585,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 if (!aFirstLineName.isEmpty())
                     continue;
                 else
-                    return sal_False;
+                    return false;
             }
 
             // Parse <filetype ";"> part:
@@ -601,7 +601,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 if (!aFirstLineName.isEmpty())
                     continue;
                 else
-                    return sal_False;
+                    return false;
             }
             ++p;
 
@@ -626,14 +626,14 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 if (!aFirstLineName.isEmpty())
                     continue;
                 else
-                    return sal_False;
+                    return false;
             }
             ++p;
             while (*p >= '0' && *p <= '9')
                 ++p;
 
             // Parse <1*lws> or <*lws <NEWLINE>> part:
-            sal_Bool bLWS = false;
+            bool bLWS = false;
             while (*p == '\t' || *p == ' ')
             {
                 bLWS = true;
@@ -646,7 +646,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
                     if (!aFirstLineName.isEmpty())
                         continue;
                     else
-                        return sal_False;
+                        return false;
                 }
             }
             else
@@ -658,7 +658,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 aFirstLineName = rEntry.m_aName;
                 bFirstLineDir =
                     ((rEntry.m_nMode & INETCOREFTP_FILEMODE_ISDIR) != 0);
-                return sal_False;
+                return false;
             }
         }
         else
@@ -672,7 +672,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
             // Skip <1*lws> part:
             if (*p != '\t' && *p != ' ')
-                return sal_False;
+                return false;
             ++p;
             while (*p == '\t' || *p == ' ')
                 ++p;
@@ -680,7 +680,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
         // Parse <size> part and set entry's size:
         if (*p < '0' || *p > '9')
-            return sal_False;
+            return false;
         ULONG nSize = *p - '0';
         if (*p++ != '0')
             while (*p >= '0' && *p <= '9')
@@ -689,7 +689,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
         // Skip <1*lws> part:
         if (*p != '\t' && *p != ' ')
-            return sal_False;
+            return false;
         ++p;
         while (*p == '\t' || *p == ' ')
             ++p;
@@ -700,7 +700,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
         {
             ++p;
             if (*p < '1' || *p > '9')
-                return sal_False;
+                return false;
             nDay = *p++ - '0';
         }
         else if (*p == '1' || *p == '2')
@@ -717,11 +717,11 @@ sal_Bool FTPDirectoryParser::parseVMS (
         else if (*p >= '4' && *p <= '9')
             nDay = *p++ - '0';
         else
-            return sal_False;
+            return false;
 
         rEntry.m_aDate.SetDay(nDay);
         if (*p++ != '-')
-            return sal_False;
+            return false;
 
         // Parse <month "-"> part and set entry date's month:
         sal_Char const * pMonth = p;
@@ -729,7 +729,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
         for (int i = 0; i < monthLen; ++i)
         {
             if (!((*p >= 'A' && *p <= 'Z') || (*p >= 'a' && *p <= 'z')))
-                return sal_False;
+                return false;
             ++p;
         }
         if (rtl_str_compareIgnoreAsciiCase_WithLength(
@@ -769,30 +769,30 @@ sal_Bool FTPDirectoryParser::parseVMS (
                      pMonth, monthLen, "DEC", monthLen) == 0)
             rEntry.m_aDate.SetMonth(12);
         else
-            return sal_False;
+            return false;
         if (*p++ != '-')
-            return sal_False;
+            return false;
 
         // Parse <year> part and set entry date's year:
         sal_uInt16 nYear = 0;
         for (int i = 0; i < 2; ++i)
         {
             if (*p < '0' || *p > '9')
-                return sal_False;
+                return false;
             nYear = 10 * nYear + (*p++ - '0');
         }
         if (*p >= '0' && *p <= '9')
         {
             nYear = 10 * nYear + (*p++ - '0');
             if (*p < '0' || *p > '9')
-                return sal_False;
+                return false;
             nYear = 10 * nYear + (*p++ - '0');
         }
         setYear (rEntry.m_aDate, nYear);
 
         // Skip <1*lws> part:
         if (*p != '\t' && *p != ' ')
-            return sal_False;
+            return false;
         ++p;
         while (*p == '\t' || *p == ' ')
             ++p;
@@ -813,22 +813,22 @@ sal_Bool FTPDirectoryParser::parseVMS (
         else if (*p >= '3' && *p <= '9')
             nHour = *p++ - '0';
         else
-            return sal_False;
+            return false;
 
         rEntry.m_aDate.SetHour(nHour);
         if (*p++ != ':')
-            return sal_False;
+            return false;
 
         /*
          * Parse <minute> part and set entry time's minutes,
          * seconds (0), and nanoseconds (0).
          */
         if (*p < '0' || *p > '5')
-            return sal_False;
+            return false;
 
         sal_uInt16 nMinute = *p++ - '0';
         if (*p < '0' || *p > '9')
-            return sal_False;
+            return false;
 
         nMinute = 10 * nMinute + (*p++ - '0');
         rEntry.m_aDate.SetMin(nMinute);
@@ -837,16 +837,16 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
         // Skip <rest> part:
         if (*p && (*p != '\t' && *p != ' '))
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 }
 
 /*
  * parseUNIX
  */
-sal_Bool FTPDirectoryParser::parseUNIX (
+bool FTPDirectoryParser::parseUNIX (
     FTPDirentry &rEntry,
     const sal_Char  *pBuffer)
 {
@@ -854,7 +854,7 @@ sal_Bool FTPDirectoryParser::parseUNIX (
     p1 = p2 = pBuffer;
 
     if (!((*p1 == '-') || (*p1 == 'd') || (*p1 == 'l')))
-        return sal_False;
+        return false;
 
     // 1st column: FileMode.
     if (*p1 == 'd')
@@ -946,21 +946,21 @@ sal_Bool FTPDirectoryParser::parseUNIX (
         setPath (rEntry.m_aName, p1);
 
         // Done.
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*
  * parseUNIX_isSizeField.
  */
-sal_Bool FTPDirectoryParser::parseUNIX_isSizeField (
+bool FTPDirectoryParser::parseUNIX_isSizeField (
     const sal_Char *pStart,
     const sal_Char *pEnd,
     sal_uInt32     &rSize)
 {
     if (!*pStart || !*pEnd || pStart == pEnd)
-        return sal_False;
+        return false;
 
     rSize = 0;
     if (*pStart >= '0' && *pStart <= '9')
@@ -969,8 +969,8 @@ sal_Bool FTPDirectoryParser::parseUNIX_isSizeField (
             if ((*pStart >= '0') && (*pStart <= '9'))
                 rSize = 10 * rSize + (*pStart - '0');
             else
-                return sal_False;
-        return sal_True;
+                return false;
+        return true;
     }
     else
     {
@@ -999,7 +999,7 @@ sal_Bool FTPDirectoryParser::parseUNIX_isSizeField (
                 rSize = 0;
             }
             else
-                return sal_False;
+                return false;
         return ((nNonDigits >= 9) && (nDigits >= 7));
     }
 }
@@ -1007,179 +1007,179 @@ sal_Bool FTPDirectoryParser::parseUNIX_isSizeField (
 /*
  * parseUNIX_isMonthField.
  */
-sal_Bool FTPDirectoryParser::parseUNIX_isMonthField (
+bool FTPDirectoryParser::parseUNIX_isMonthField (
     const sal_Char *pStart,
     const sal_Char *pEnd,
     DateTime       &rDateTime)
 {
     if (!*pStart || !*pEnd || pStart + 3 != pEnd)
-        return sal_False;
+        return false;
 
     if ((pStart[0] == 'j' || pStart[0] == 'J') &&
         (pStart[1] == 'a' || pStart[1] == 'A') &&
         (pStart[2] == 'n' || pStart[2] == 'N')    )
     {
         rDateTime.SetMonth(1);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'f' || pStart[0] == 'F') &&
         (pStart[1] == 'e' || pStart[1] == 'E') &&
         (pStart[2] == 'b' || pStart[2] == 'B')    )
     {
         rDateTime.SetMonth(2);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'm' || pStart[0] == 'M') &&
         (pStart[1] == 'a' || pStart[1] == 'A') &&
         (pStart[2] == 'r' || pStart[2] == 'R')    )
     {
         rDateTime.SetMonth(3);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'a' || pStart[0] == 'A') &&
         (pStart[1] == 'p' || pStart[1] == 'P') &&
         (pStart[2] == 'r' || pStart[2] == 'R')    )
     {
         rDateTime.SetMonth(4);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'm' || pStart[0] == 'M') &&
         (pStart[1] == 'a' || pStart[1] == 'A') &&
         (pStart[2] == 'y' || pStart[2] == 'Y')    )
     {
         rDateTime.SetMonth(5);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'j' || pStart[0] == 'J') &&
         (pStart[1] == 'u' || pStart[1] == 'U') &&
         (pStart[2] == 'n' || pStart[2] == 'N')    )
     {
         rDateTime.SetMonth(6);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'j' || pStart[0] == 'J') &&
         (pStart[1] == 'u' || pStart[1] == 'U') &&
         (pStart[2] == 'l' || pStart[2] == 'L')    )
     {
         rDateTime.SetMonth(7);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'a' || pStart[0] == 'A') &&
         (pStart[1] == 'u' || pStart[1] == 'U') &&
         (pStart[2] == 'g' || pStart[2] == 'G')    )
     {
         rDateTime.SetMonth(8);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 's' || pStart[0] == 'S') &&
         (pStart[1] == 'e' || pStart[1] == 'E') &&
         (pStart[2] == 'p' || pStart[2] == 'P')    )
     {
         rDateTime.SetMonth(9);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'o' || pStart[0] == 'O') &&
         (pStart[1] == 'c' || pStart[1] == 'C') &&
         (pStart[2] == 't' || pStart[2] == 'T')    )
     {
         rDateTime.SetMonth(10);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'n' || pStart[0] == 'N') &&
         (pStart[1] == 'o' || pStart[1] == 'O') &&
         (pStart[2] == 'v' || pStart[2] == 'V')    )
     {
         rDateTime.SetMonth(11);
-        return sal_True;
+        return true;
     }
     if ((pStart[0] == 'd' || pStart[0] == 'D') &&
         (pStart[1] == 'e' || pStart[1] == 'E') &&
         (pStart[2] == 'c' || pStart[2] == 'C')    )
     {
         rDateTime.SetMonth(12);
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*
  * parseUNIX_isDayField.
  */
-sal_Bool FTPDirectoryParser::parseUNIX_isDayField (
+bool FTPDirectoryParser::parseUNIX_isDayField (
     const sal_Char *pStart,
     const sal_Char *pEnd,
     DateTime       &rDateTime)
 {
     if (!*pStart || !*pEnd || pStart == pEnd)
-        return sal_False;
+        return false;
     if (*pStart < '0' || *pStart > '9')
-        return sal_False;
+        return false;
 
     sal_uInt16 nDay = *pStart - '0';
     if (pStart + 1 < pEnd)
     {
         if (pStart + 2 != pEnd || pStart[1] < '0' || pStart[1] > '9')
-            return sal_False;
+            return false;
         nDay = 10 * nDay + (pStart[1] - '0');
     }
     if (!nDay || nDay > 31)
-        return sal_False;
+        return false;
 
     rDateTime.SetDay(nDay);
-    return sal_True;
+    return true;
 }
 
 /*
  * parseUNIX_isYearTimeField.
  */
-sal_Bool FTPDirectoryParser::parseUNIX_isYearTimeField (
+bool FTPDirectoryParser::parseUNIX_isYearTimeField (
     const sal_Char *pStart,
     const sal_Char *pEnd,
     DateTime       &rDateTime)
 {
     if (!*pStart || !*pEnd || pStart == pEnd ||
         *pStart < '0' || *pStart > '9')
-        return sal_False;
+        return false;
 
     sal_uInt16 nNumber = *pStart - '0';
     ++pStart;
 
     if (pStart == pEnd)
-        return sal_False;
+        return false;
     if (*pStart == ':')
         return parseUNIX_isTime (pStart, pEnd, nNumber, rDateTime);
     if (*pStart < '0' || *pStart > '9')
-        return sal_False;
+        return false;
 
     nNumber = 10 * nNumber + (*pStart - '0');
     ++pStart;
 
     if (pStart == pEnd)
-        return sal_False;
+        return false;
     if (*pStart == ':')
         return parseUNIX_isTime (pStart, pEnd, nNumber, rDateTime);
     if (*pStart < '0' || *pStart > '9')
-        return sal_False;
+        return false;
 
     nNumber = 10 * nNumber + (*pStart - '0');
     ++pStart;
 
     if (pStart == pEnd || *pStart < '0' || *pStart > '9')
-        return sal_False;
+        return false;
 
     nNumber = 10 * nNumber + (*pStart - '0');
     if (pStart + 1 != pEnd || nNumber < 1970)
-        return sal_False;
+        return false;
 
     rDateTime.SetYear(nNumber);
     rDateTime.SetTime(0);
-    return sal_True;
+    return true;
 }
 
 /*
  * parseUNIX_isTime.
  */
-sal_Bool FTPDirectoryParser::parseUNIX_isTime (
+bool FTPDirectoryParser::parseUNIX_isTime (
     const sal_Char *pStart,
     const sal_Char *pEnd,
     sal_uInt16      nHour,
@@ -1188,7 +1188,7 @@ sal_Bool FTPDirectoryParser::parseUNIX_isTime (
     if ((nHour     > 23 ) || (pStart + 3 != pEnd) ||
         (pStart[1] < '0') || (pStart[1] > '5')    ||
         (pStart[2] < '0') || (pStart[2] > '9')       )
-        return sal_False;
+        return false;
 
     sal_uInt16 nMin = 10 * (pStart[1] - '0') + (pStart[2] - '0');
 
@@ -1213,7 +1213,7 @@ sal_Bool FTPDirectoryParser::parseUNIX_isTime (
         rDateTime.SetYear(aCurrDateTime.Year - 1);
     else
         rDateTime.SetYear(aCurrDateTime.Year);
-    return sal_True;
+    return true;
 }
 
 /*
@@ -1224,7 +1224,7 @@ sal_Bool FTPDirectoryParser::parseUNIX_isTime (
  * checked for validity of the given day in the given month and year.
  *
  */
-sal_Bool FTPDirectoryParser::setYear (
+bool FTPDirectoryParser::setYear (
     DateTime &rDateTime, sal_uInt16 nYear)
 {
     if (nYear < 100)
@@ -1254,13 +1254,13 @@ sal_Bool FTPDirectoryParser::setYear (
     }
 
     rDateTime.SetYear(nYear);
-    return sal_True;
+    return true;
 }
 
 /*
  * setPath.
  */
-sal_Bool FTPDirectoryParser::setPath (
+bool FTPDirectoryParser::setPath (
     OUString &rPath, const sal_Char *value, sal_Int32 length)
 {
     if (value)

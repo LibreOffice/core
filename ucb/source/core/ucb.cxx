@@ -526,7 +526,7 @@ Reference< XContentProvider > SAL_CALL
                                                           Identifier )
     throw( com::sun::star::uno::RuntimeException, std::exception )
 {
-    return queryContentProvider( Identifier, sal_False );
+    return queryContentProvider( Identifier, false );
 }
 
 
@@ -549,7 +549,7 @@ Reference< XContent > SAL_CALL UniversalContentBroker::queryContent(
         return Reference< XContent >();
 
     Reference< XContentProvider > xProv =
-        queryContentProvider( Identifier->getContentIdentifier(), sal_True );
+        queryContentProvider( Identifier->getContentIdentifier(), true );
     if ( xProv.is() )
         return  xProv->queryContent( Identifier );
 
@@ -567,9 +567,9 @@ sal_Int32 SAL_CALL UniversalContentBroker::compareContentIds(
     OUString aURI2( Id2->getContentIdentifier() );
 
     Reference< XContentProvider > xProv1
-                            = queryContentProvider( aURI1, sal_True );
+                            = queryContentProvider( aURI1, true );
     Reference< XContentProvider > xProv2
-                            = queryContentProvider( aURI2, sal_True );
+                            = queryContentProvider( aURI2, true );
 
     // When both identifiers belong to the same provider, let that provider
     // compare them; otherwise, simply compare the URI strings (which must
@@ -602,7 +602,7 @@ Reference< XContentIdentifier > SAL_CALL
     Reference< XContentIdentifier > xIdentifier;
 
     Reference< XContentProvider > xProv
-                            = queryContentProvider( ContentId, sal_True );
+                            = queryContentProvider( ContentId, true );
     if ( xProv.is() )
     {
         Reference< XContentIdentifierFactory > xFac( xProv, UNO_QUERY );
@@ -812,7 +812,7 @@ void SAL_CALL UniversalContentBroker::disposing(const lang::EventObject&)
 
 Reference< XContentProvider > UniversalContentBroker::queryContentProvider(
                                 const OUString& Identifier,
-                                sal_Bool bResolved )
+                                bool bResolved )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

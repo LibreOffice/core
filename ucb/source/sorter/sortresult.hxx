@@ -139,7 +139,7 @@ class SortedResultSet: public cppu::WeakImplHelper8 <
     sal_IntPtr                mnLastSort;     // index of the last sorted entry;
     sal_IntPtr                mnCurEntry;     // index of the current entry
     sal_IntPtr                mnCount;        // total count of the elements
-    sal_Bool            mbIsCopy;
+    bool            mbIsCopy;
 
 
 private:
@@ -176,7 +176,7 @@ public:
     void                CopyData( SortedResultSet* pSource );
     void                Initialize( const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                     const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
-    void                CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal );
+    void                CheckProperties( sal_IntPtr nOldCount, bool bWasFinal );
 
     void                InsertNew( sal_IntPtr nPos, sal_IntPtr nCount );
     void                SetChanged( sal_IntPtr nPos, sal_IntPtr nCount );

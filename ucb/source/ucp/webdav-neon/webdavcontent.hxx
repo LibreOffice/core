@@ -104,7 +104,7 @@ private:
                      com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
     virtual OUString getParentURL() SAL_OVERRIDE;
 
-    sal_Bool isFolder( const ::com::sun::star::uno::Reference<
+    bool isFolder( const ::com::sun::star::uno::Reference<
                            ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::uno::Exception );
 
@@ -126,7 +126,7 @@ private:
     typedef std::list< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren);
 
-    sal_Bool
+    bool
     exchangeIdentity( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
@@ -165,7 +165,7 @@ private:
     // Command "insert"
     void insert( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::io::XInputStream > & xInputStream,
-                 sal_Bool bReplaceExisting,
+                 bool bReplaceExisting,
                  const com::sun::star::uno::Reference<
                      com::sun::star::ucb::XCommandEnvironment >& Environment )
         throw( ::com::sun::star::uno::Exception );
@@ -177,7 +177,7 @@ private:
         throw( ::com::sun::star::uno::Exception );
 
     // Command "delete"
-    void destroy( sal_Bool bDeletePhysical )
+    void destroy( bool bDeletePhysical )
         throw( ::com::sun::star::uno::Exception );
 
     // Command "lock"
@@ -191,12 +191,12 @@ private:
         throw( ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Any MapDAVException( const DAVException & e,
-                                                sal_Bool bWrite );
+                                                bool bWrite );
     void cancelCommandExecution(
                     const DAVException & e,
                     const ::com::sun::star::uno::Reference<
                         com::sun::star::ucb::XCommandEnvironment > & xEnv,
-                    sal_Bool bWrite = sal_False )
+                    bool bWrite = false )
         throw( ::com::sun::star::uno::Exception );
 
     static bool shouldAccessNetworkAfterException( const DAVException & e );
@@ -234,7 +234,7 @@ public:
              const ::com::sun::star::uno::Reference<
                  ::com::sun::star::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory,
-             sal_Bool isCollection )
+             bool isCollection )
         throw ( ::com::sun::star::ucb::ContentCreationException );
     virtual ~Content();
 

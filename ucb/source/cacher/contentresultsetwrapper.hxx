@@ -129,8 +129,8 @@ private:
                             m_xMetaDataFromOrigin; //XResultSetMetaData from m_xOrigin
 
     //management of listeners
-    sal_Bool                m_bDisposed; ///Dispose call ready.
-    sal_Bool                m_bInDispose;///In dispose call
+    bool                m_bDisposed; ///Dispose call ready.
+    bool                m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
     cppu::OInterfaceContainerHelper*
                             m_pDisposeEventListeners;
@@ -184,7 +184,7 @@ protected:
             throw( com::sun::star::beans::PropertyVetoException,
                    com::sun::star::uno::RuntimeException );
 
-    sal_Bool SAL_CALL impl_isForwardOnly();
+    bool SAL_CALL impl_isForwardOnly();
 
 public:
 

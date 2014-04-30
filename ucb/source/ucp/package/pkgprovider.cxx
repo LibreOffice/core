@@ -290,7 +290,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
 }
 
 
-sal_Bool ContentProvider::removePackage( const OUString & rName )
+bool ContentProvider::removePackage( const OUString & rName )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -300,10 +300,10 @@ sal_Bool ContentProvider::removePackage( const OUString & rName )
         if ( it != m_pPackages->end() )
         {
             m_pPackages->erase( it );
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

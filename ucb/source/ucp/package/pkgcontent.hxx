@@ -71,20 +71,20 @@ struct ContentProperties
 {
     OUString  aTitle;                // Title
     OUString  aContentType;          // ContentType
-    sal_Bool         bIsDocument;           // IsDocument
-    sal_Bool         bIsFolder;             // IsFolder
+    bool         bIsDocument;           // IsDocument
+    bool         bIsFolder;             // IsFolder
     OUString  aMediaType;            // MediaType
     com::sun::star::uno::Sequence <
         sal_Int8 >   aEncryptionKey;        // EncryptionKey
     sal_Int64        nSize;                 // Size
-    sal_Bool         bCompressed;           // Compressed
-    sal_Bool         bEncrypted;            // Encrypted
-    sal_Bool         bHasEncryptedEntries;  // HasEncryptedEntries
+    bool         bCompressed;           // Compressed
+    bool         bEncrypted;            // Encrypted
+    bool         bHasEncryptedEntries;  // HasEncryptedEntries
 
     ContentProperties()
-    : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ),
-      bCompressed( sal_True ), bEncrypted( sal_False ),
-      bHasEncryptedEntries( sal_False ) {}
+    : bIsDocument( true ), bIsFolder( false ), nSize( 0 ),
+      bCompressed( true ), bEncrypted( false ),
+      bHasEncryptedEntries( false ) {}
 
     ContentProperties( const OUString& rContentType );
 
@@ -168,41 +168,41 @@ private:
         com::sun::star::container::XHierarchicalNameAccess >
     getPackage();
 
-    static sal_Bool
+    static bool
     loadData( ContentProvider* pProvider,
               const PackageUri& rURI,
               ContentProperties& rProps,
               com::sun::star::uno::Reference<
                 com::sun::star::container::XHierarchicalNameAccess > &
                     rxPackage );
-    static sal_Bool
+    static bool
     hasData( ContentProvider* pProvider,
              const PackageUri& rURI,
              com::sun::star::uno::Reference<
                 com::sun::star::container::XHierarchicalNameAccess > &
                     rxPackage );
 
-    sal_Bool
+    bool
     hasData( const PackageUri& rURI );
-    sal_Bool
+    bool
     renameData( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& xOldId,
                 const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XContentIdentifier >& xNewId );
-    sal_Bool
+    bool
     storeData( const com::sun::star::uno::Reference<
                     com::sun::star::io::XInputStream >& xStream );
-    sal_Bool
+    bool
     removeData();
 
-    sal_Bool
+    bool
     flushData();
 
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren );
 
-    sal_Bool
+    bool
     exchangeIdentity( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
@@ -219,7 +219,7 @@ private:
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );
 
-    void destroy( sal_Bool bDeletePhysical,
+    void destroy( bool bDeletePhysical,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );
@@ -232,7 +232,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     getInputStream();
 
-    sal_Bool isFolder() const { return m_aProps.bIsFolder; }
+    bool isFolder() const { return m_aProps.bIsFolder; }
 
 public:
     // Create existing content. Fail, if not already exists.
@@ -327,7 +327,7 @@ public:
     getIterator();
 
     static OUString
-    getContentType( const OUString& aScheme,  sal_Bool bFolder );
+    getContentType( const OUString& aScheme,  bool bFolder );
 };
 
 }

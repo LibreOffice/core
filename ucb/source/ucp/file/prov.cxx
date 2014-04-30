@@ -101,7 +101,7 @@ FileProvider::~FileProvider()
 void SAL_CALL FileProvider::init()
 {
     if( ! m_pMyShell )
-        m_pMyShell = new shell( m_xContext, this, sal_True );
+        m_pMyShell = new shell( m_xContext, this, true );
 }
 
 
@@ -115,9 +115,9 @@ FileProvider::initialize(
         if( aArguments.getLength() > 0 &&
             (aArguments[0] >>= config) &&
             config.equalsAscii("NoConfig") )
-            m_pMyShell = new shell( m_xContext, this, sal_False );
+            m_pMyShell = new shell( m_xContext, this, false );
         else
-            m_pMyShell = new shell( m_xContext, this, sal_True );
+            m_pMyShell = new shell( m_xContext, this, true );
     }
 }
 
@@ -201,7 +201,7 @@ FileProvider::queryContent(
 {
     init();
     OUString aUnc;
-    sal_Bool err = m_pMyShell->getUnqFromUrl( xIdentifier->getContentIdentifier(),
+    bool err = m_pMyShell->getUnqFromUrl( xIdentifier->getContentIdentifier(),
                                               aUnc );
 
     if(  err )

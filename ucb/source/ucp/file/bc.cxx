@@ -79,7 +79,7 @@ public:
 
 BaseContent::BaseContent( shell* pMyShell,
                           const OUString& parentName,
-                          sal_Bool bFolder )
+                          bool bFolder )
     : m_pMyShell( pMyShell ),
       m_xContentIdentifier( 0 ),
       m_aUncPath( parentName ),
@@ -510,7 +510,7 @@ BaseContent::getContentType()
                                           getCppuType( static_cast< sal_Bool* >(0) ),
                                           0 );
                 Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
-                sal_Bool IsDocument = xRow->getBoolean( 1 );
+                bool IsDocument = xRow->getBoolean( 1 );
 
                 if ( !xRow->wasNull() )
                 {
@@ -625,7 +625,7 @@ BaseContent::createNewContent(
     if ( Info.Type.isEmpty() )
         return Reference< XContent >();
 
-    sal_Bool bFolder
+    bool bFolder
         = ( Info.Type.compareTo( m_pMyShell->FolderContentType ) == 0 );
     if ( !bFolder )
     {
@@ -637,7 +637,7 @@ BaseContent::createNewContent(
     }
 
     // Who am I ?
-    sal_Bool IsDocument = false;
+    bool IsDocument = false;
 
     try
     {
@@ -720,7 +720,7 @@ BaseContent::getParent(
     OUString ParentUrl;
 
 
-    sal_Bool err = m_pMyShell->getUrlFromUnq( ParentUnq, ParentUrl );
+    bool err = m_pMyShell->getUrlFromUnq( ParentUnq, ParentUrl );
     if( err )
         return Reference< XInterface >( 0 );
 
@@ -817,7 +817,7 @@ BaseContent::getPropertyValues(
             }
             else if ( rProp.Name == "IsDocument" )
             {
-                rValue <<= sal_Bool( !m_bFolder );
+                rValue <<= !m_bFolder;
             }
         }
 
@@ -1000,7 +1000,7 @@ BaseContent::open(
                                   outputStream );
             }
 
-            sal_Bool bLock = ( aCommandArgument.Mode != OpenMode::DOCUMENT_SHARE_DENY_NONE );
+            bool bLock = ( aCommandArgument.Mode != OpenMode::DOCUMENT_SHARE_DENY_NONE );
 
             Reference< io::XActiveDataSink > activeDataSink( aCommandArgument.Sink,UNO_QUERY );
             if( activeDataSink.is() )
@@ -1104,7 +1104,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                               getCppuType( static_cast< sal_Bool* >(0) ),
                               0 );
     Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,seq );
-    sal_Bool IsDocument = xRow->getBoolean( 1 );
+    bool IsDocument = xRow->getBoolean( 1 );
     if( xRow->wasNull() )
     {   // Destination file type could not be determined
         m_pMyShell->installError( nMyCommandIdentifier,
@@ -1165,7 +1165,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
 
     // Inserting a document or a file?
-    sal_Bool bDocument = false;
+    bool bDocument = false;
 
     Sequence< beans::Property > seq(1);
     seq[0] = beans::Property( OUString("IsDocument"),
@@ -1197,7 +1197,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
 
 
-    sal_Bool success = false;
+    bool success = false;
     if( bDocument )
         success = m_pMyShell->mkfil( nMyCommandIdentifier,
                                      m_aUncPath,

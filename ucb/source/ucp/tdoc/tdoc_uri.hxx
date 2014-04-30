@@ -58,7 +58,7 @@ public:
     bool operator!= ( const Uri & rOther ) const
     { return !operator==( rOther ); }
 
-    sal_Bool isValid() const
+    bool isValid() const
     { init(); return m_eState == VALID; }
 
     const OUString & getUri() const
@@ -84,11 +84,11 @@ public:
     const OUString & getDecodedName() const
     { init(); return m_aDecodedName; }
 
-    inline sal_Bool isRoot() const;
+    inline bool isRoot() const;
 
-    inline sal_Bool isDocument() const;
+    inline bool isDocument() const;
 
-    inline sal_Bool isFolder() const;
+    inline bool isFolder() const;
 };
 
 inline void Uri::setUri( const OUString & rUri )
@@ -99,20 +99,20 @@ inline void Uri::setUri( const OUString & rUri )
         = m_aDecodedName = OUString();
 }
 
-inline sal_Bool Uri::isRoot() const
+inline bool Uri::isRoot() const
 {
     init();
     return ( m_aPath.getLength() == 1 );
 }
 
-inline sal_Bool Uri::isDocument() const
+inline bool Uri::isDocument() const
 {
     init();
     return ( ( !m_aDocId.isEmpty() ) /* not root */
              && ( m_aPath.copy( m_aDocId.getLength() + 1 ).getLength() < 2 ) );
 }
 
-inline sal_Bool Uri::isFolder() const
+inline bool Uri::isFolder() const
 {
     init();
     return m_aPath.isEmpty() || m_aPath.endsWith( "/" );

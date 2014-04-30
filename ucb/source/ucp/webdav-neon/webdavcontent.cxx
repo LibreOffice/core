@@ -138,7 +138,7 @@ Content::Content(
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             rtl::Reference< DAVSessionFactory > const & rSessionFactory,
-            sal_Bool isCollection )
+            bool isCollection )
   throw ( ucb::ContentCreationException )
 : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
@@ -241,7 +241,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
-    sal_Bool bFolder = sal_False;
+    bool bFolder = false;
     try
     {
         bFolder
@@ -359,7 +359,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException, std::exception )
 {
-    sal_Bool bFolder = sal_False;
+    bool bFolder = false;
     try
     {
         bFolder
@@ -531,7 +531,7 @@ uno::Any SAL_CALL Content::execute(
         // delete
 
 
-        sal_Bool bDeletePhysical = sal_False;
+        bool bDeletePhysical = false;
         aCommand.Argument >>= bDeletePhysical;
 
 //  KSO: Ignore parameter and destroy the content, if you don't support
@@ -556,7 +556,7 @@ uno::Any SAL_CALL Content::execute(
         }
         catch ( DAVException const & e )
         {
-            cancelCommandExecution( e, Environment, sal_True );
+            cancelCommandExecution( e, Environment, true );
             // Unreachable
         }
 //      }
@@ -1075,16 +1075,16 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
         aURL += "/";
 
-    sal_Bool isCollection;
+    bool isCollection;
     if ( Info.Type == WEBDAV_COLLECTION_TYPE )
     {
         aURL += "New_Collection";
-        isCollection = sal_True;
+        isCollection = true;
     }
     else
     {
         aURL += "New_Content";
-        isCollection = sal_False;
+        isCollection = false;
     }
 
     uno::Reference< ucb::XContentIdentifier > xId(
@@ -1158,7 +1158,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     if ( nCount )
     {
         uno::Reference< beans::XPropertySet > xAdditionalPropSet;
-        sal_Bool bTriedToGetAdditionalPropSet = sal_False;
+        bool bTriedToGetAdditionalPropSet = false;
 
         const beans::Property* pProps = rProperties.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -1181,7 +1181,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                             rProvider->getAdditionalPropertySet( rContentId,
                                                                  false ),
                             uno::UNO_QUERY );
-                    bTriedToGetAdditionalPropSet = sal_True;
+                    bTriedToGetAdditionalPropSet = true;
                 }
 
                 if ( !xAdditionalPropSet.is() ||
@@ -1501,7 +1501,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         else if ( rName == "CreatableContentsInfo" )
         {
             // Add CreatableContentsInfo property, if requested.
-            sal_Bool bFolder = sal_False;
+            bool bFolder = false;
             xProps->getValue(
                 OUString(  "IsFolder"  ) )
                     >>= bFolder;
@@ -1544,7 +1544,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 {
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     rtl::Reference< ContentProvider >            xProvider;
-    sal_Bool bTransient;
+    bool bTransient;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -1574,9 +1574,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     std::vector< sal_Int32 > aProppatchPropsPositions;
 
     uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
-    sal_Bool bTriedToGetAdditionalPropSet = sal_False;
+    bool bTriedToGetAdditionalPropSet = false;
 
-    sal_Bool bExchange = sal_False;
+    bool bExchange = false;
     OUString aNewTitle;
     OUString aOldTitle;
     sal_Int32 nTitlePos = -1;
@@ -1644,7 +1644,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         {
                             // modified title -> modified URL -> exchange !
                             if ( !bTransient )
-                                bExchange = sal_True;
+                                bExchange = true;
 
                             // new value will be set later...
                             aNewTitle = aNewValue;
@@ -1759,7 +1759,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     {
                         xAdditionalPropSet
                             = getAdditionalPropertySet( false );
-                        bTriedToGetAdditionalPropSet = sal_True;
+                        bTriedToGetAdditionalPropSet = true;
                     }
 
                     if ( xAdditionalPropSet.is() )
@@ -1863,7 +1863,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             targetURI.SetScheme( sourceURI.GetScheme() );
 
             xResAccess->MOVE(
-                sourceURI.GetPath(), targetURI.GetURI(), sal_False, xEnv );
+                sourceURI.GetPath(), targetURI.GetURI(), false, xEnv );
             // @@@ Should check for resources that could not be moved
             //     (due to source access or target overwrite) and send
             //     this information through the interaction handler.
@@ -1901,7 +1901,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aNewTitle = "";
 
             // Set error .
-            aRet[ nTitlePos ] <<= MapDAVException( e, sal_True );
+            aRet[ nTitlePos ] <<= MapDAVException( e, true );
         }
     }
 
@@ -1941,7 +1941,7 @@ uno::Any Content::open(
 {
     uno::Any aRet;
 
-    sal_Bool bOpenFolder = ( ( rArg.Mode == ucb::OpenMode::ALL ) ||
+    bool bOpenFolder = ( ( rArg.Mode == ucb::OpenMode::ALL ) ||
                              ( rArg.Mode == ucb::OpenMode::FOLDERS ) ||
                              ( rArg.Mode == ucb::OpenMode::DOCUMENTS ) );
     if ( bOpenFolder )
@@ -2154,7 +2154,7 @@ void Content::post(
         }
         catch ( DAVException const & e )
         {
-            cancelCommandExecution( e, xEnv, sal_True );
+            cancelCommandExecution( e, xEnv, true );
             // Unreachable
         }
     }
@@ -2188,7 +2188,7 @@ void Content::post(
             }
             catch ( DAVException const & e )
             {
-                cancelCommandExecution( e, xEnv, sal_True );
+                cancelCommandExecution( e, xEnv, true );
                 // Unreachable
             }
         }
@@ -2260,11 +2260,11 @@ void Content::queryChildren( ContentRefList& rChildren )
 
 void Content::insert(
         const uno::Reference< io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting,
+        bool bReplaceExisting,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
 {
-    sal_Bool bTransient, bCollection;
+    bool bTransient, bCollection;
     OUString aEscapedTitle;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
@@ -2348,7 +2348,7 @@ void Content::insert(
 
                     case ucbhelper::CONTINUATION_APPROVE:
                         // Continue -> Overwrite.
-                        bReplaceExisting = sal_True;
+                        bReplaceExisting = true;
                         break;
 
                     case ucbhelper::CONTINUATION_DISAPPROVE:
@@ -2414,7 +2414,7 @@ void Content::insert(
                         }
                         catch ( DAVException const & e )
                         {
-                            cancelCommandExecution( e, Environment, sal_True );
+                            cancelCommandExecution( e, Environment, true );
                             // Unreachable
                         }
 
@@ -2455,7 +2455,7 @@ void Content::insert(
                 }
             }
 
-            cancelCommandExecution( except, Environment, sal_True );
+            cancelCommandExecution( except, Environment, true );
             // Unreachable
         }
 
@@ -2490,7 +2490,7 @@ void Content::insert(
         }
         catch ( DAVException const & e )
         {
-            cancelCommandExecution( e, Environment, sal_True );
+            cancelCommandExecution( e, Environment, true );
             // Unreachable
         }
     }
@@ -2638,7 +2638,7 @@ void Content::transfer(
             if ( xSource.is() )
             {
                 // Propagate destruction to listeners.
-                xSource->destroy( sal_True );
+                xSource->destroy( true );
             }
 
 // DAV resources store all additional props on server!
@@ -2727,7 +2727,7 @@ void Content::transfer(
             }
         }
 
-        cancelCommandExecution( e, Environment, sal_True );
+        cancelCommandExecution( e, Environment, true );
         // Unreachable
     }
 
@@ -2738,7 +2738,7 @@ void Content::transfer(
 }
 
 
-void Content::destroy( sal_Bool bDeletePhysical )
+void Content::destroy( bool bDeletePhysical )
     throw( uno::Exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
@@ -2826,7 +2826,7 @@ void Content::lock(
     }
     catch ( DAVException const & e )
     {
-        cancelCommandExecution( e, Environment, sal_False );
+        cancelCommandExecution( e, Environment, false );
         // Unreachable
     }
 }
@@ -2855,17 +2855,17 @@ void Content::unlock(
     }
     catch ( DAVException const & e )
     {
-        cancelCommandExecution( e, Environment, sal_False );
+        cancelCommandExecution( e, Environment, false );
         // Unreachable
     }
 }
 
 
-sal_Bool Content::exchangeIdentity(
+bool Content::exchangeIdentity(
     const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
     if ( !xNewId.is() )
-        return sal_False;
+        return false;
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2875,7 +2875,7 @@ sal_Bool Content::exchangeIdentity(
     if ( m_bTransient )
     {
         OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
-        return sal_False;
+        return false;
     }
 
     // Exchange own identitity.
@@ -2914,21 +2914,21 @@ sal_Bool Content::exchangeIdentity(
                     = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                 if ( !xChild->exchangeIdentity( xNewChildId ) )
-                    return sal_False;
+                    return false;
 
                 ++it;
             }
-            return sal_True;
+            return true;
         }
     }
 
     OSL_FAIL( "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool Content::isFolder(
+bool Content::isFolder(
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
@@ -2954,11 +2954,11 @@ sal_Bool Content::isFolder(
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
-uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
+uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 {
     // Map DAVException...
     uno::Any aException;
@@ -3135,7 +3135,7 @@ bool Content::shouldAccessNetworkAfterException( const DAVException & e )
 void Content::cancelCommandExecution(
                 const DAVException & e,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv,
-                sal_Bool bWrite /* = sal_False */ )
+                bool bWrite /* = sal_False */ )
     throw ( uno::Exception )
 {
     ucbhelper::cancelCommandExecution( MapDAVException( e, bWrite ), xEnv );

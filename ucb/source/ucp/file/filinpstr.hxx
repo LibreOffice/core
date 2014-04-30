@@ -45,7 +45,7 @@ namespace fileaccess {
     {
     public:
 
-        XInputStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock );
+        XInputStream_impl( shell* pMyShell,const OUString& aUncPath, bool bLock );
 
         virtual ~XInputStream_impl();
 
@@ -142,7 +142,7 @@ namespace fileaccess {
 
         com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentProvider >            m_xProvider;
-        sal_Bool                                           m_nIsOpen;
+        bool                                           m_nIsOpen;
 
         ReconnectingFile                                   m_aFile;
 

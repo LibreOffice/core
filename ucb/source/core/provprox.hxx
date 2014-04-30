@@ -98,8 +98,8 @@ class UcbContentProviderProxy :
     OUString m_aService;
     OUString m_aTemplate;
     OUString m_aArguments;
-    sal_Bool        m_bReplace;
-    sal_Bool        m_bRegister;
+    bool        m_bReplace;
+    bool        m_bRegister;
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;

@@ -48,7 +48,7 @@ public:
     HierarchyUri( const OUString & rUri )
     : m_aUri( rUri ), m_bValid( false ) {}
 
-    sal_Bool isValid() const
+    bool isValid() const
     { init(); return m_bValid; }
 
     const OUString & getUri() const
@@ -69,10 +69,10 @@ public:
     const OUString & getName() const
     { init(); return m_aName; }
 
-    inline sal_Bool isRootFolder() const;
+    inline bool isRootFolder() const;
 };
 
-inline sal_Bool HierarchyUri::isRootFolder() const
+inline bool HierarchyUri::isRootFolder() const
 {
     init();
     return ( ( m_aPath.getLength() == 1 ) &&

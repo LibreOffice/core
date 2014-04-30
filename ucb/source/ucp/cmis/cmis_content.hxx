@@ -94,7 +94,7 @@ private:
             throw( com::sun::star::uno::Exception );
 
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const OUString & rMimeType,
+        bool bReplaceExisting, const OUString & rMimeType,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
             throw( com::sun::star::uno::Exception );
 
@@ -124,7 +124,7 @@ private:
             throw(com::sun::star::uno::Exception,
                   std::exception);
 
-    sal_Bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
+    bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
 public:
@@ -137,7 +137,7 @@ public:
     Content( const com::sun::star::uno::Reference<
         com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
-        sal_Bool bIsFolder)
+        bool bIsFolder)
             throw ( com::sun::star::ucb::ContentCreationException );
 
     virtual ~Content();

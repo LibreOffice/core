@@ -124,52 +124,52 @@ namespace ftp {
     class FTPDirectoryParser
     {
     public:
-        static sal_Bool parseDOS (
+        static bool parseDOS (
             FTPDirentry &rEntry,
             const sal_Char  *pBuffer );
 
-        static sal_Bool parseVMS (
+        static bool parseVMS (
             FTPDirentry &rEntry,
             const sal_Char  *pBuffer );
 
-        static sal_Bool parseUNIX (
+        static bool parseUNIX (
             FTPDirentry &rEntry,
             const sal_Char  *pBuffer );
 
 
     private:
 
-        static sal_Bool parseUNIX_isSizeField (
+        static bool parseUNIX_isSizeField (
             const sal_Char *pStart,
             const sal_Char *pEnd,
             sal_uInt32     &rSize);
 
-        static sal_Bool parseUNIX_isMonthField (
+        static bool parseUNIX_isMonthField (
             const sal_Char *pStart,
             const sal_Char *pEnd,
             DateTime& rDateTime);
 
-        static sal_Bool parseUNIX_isDayField (
+        static bool parseUNIX_isDayField (
             const sal_Char *pStart,
             const sal_Char *pEnd,
             DateTime& rDateTime);
 
-        static sal_Bool parseUNIX_isYearTimeField (
+        static bool parseUNIX_isYearTimeField (
             const sal_Char *pStart,
             const sal_Char *pEnd,
             DateTime& rDateTime);
 
-        static sal_Bool parseUNIX_isTime (
+        static bool parseUNIX_isTime (
             const sal_Char *pStart,
             const sal_Char *pEnd,
             sal_uInt16      nHour,
             DateTime& rDateTime);
 
-        static sal_Bool setYear (
+        static bool setYear (
             DateTime& rDateTime,
             sal_uInt16  nYear);
 
-        static sal_Bool setPath (
+        static bool setPath (
             OUString& rPath,
             const sal_Char *value,
             sal_Int32       length = -1);

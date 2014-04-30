@@ -40,7 +40,7 @@ using namespace com::sun::star::ucb;
 /*                                                                            */
 /******************************************************************************/
 
-XStream_impl::XStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock )
+XStream_impl::XStream_impl( shell* pMyShell,const OUString& aUncPath, bool bLock )
     : m_bInputStreamCalled( false ),
       m_bOutputStreamCalled( false ),
       m_pMyShell( pMyShell ),

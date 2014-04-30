@@ -49,7 +49,7 @@ class XStream_impl :  public cppu::WeakImplHelper6<
 
     public:
 
-        XStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock );
+        XStream_impl( shell* pMyShell,const OUString& aUncPath, bool bLock );
 
         /**
          *  Returns an error code as given by filerror.hxx
@@ -181,7 +181,7 @@ class XStream_impl :  public cppu::WeakImplHelper6<
 
         shell*       m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider > m_xProvider;
-        sal_Bool     m_nIsOpen;
+        bool     m_nIsOpen;
 
         ReconnectingFile    m_aFile;
 

@@ -36,7 +36,7 @@ class HierarchyResultSetDataSupplier :
     DataSupplier_Impl*  m_pImpl;
 
 private:
-    sal_Bool checkResult( const HierarchyEntryData& rResult );
+    bool checkResult( const HierarchyEntryData& rResult );
 
 public:
     HierarchyResultSetDataSupplier(
