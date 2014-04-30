@@ -193,8 +193,8 @@ void OpenGL3DRenderer::SetVertex(PackedVertex &packed,
     { // If not, it needs to be added in the output data.
         vertex.push_back(packed.position);
         normal.push_back(packed.normal);
-        unsigned short newindex = (unsigned short)vertex.size() - 1;
-        indeices .push_back( newindex );
+        size_t newindex = vertex.size() - 1;
+        indeices.push_back( newindex );
         VertexToOutIndex[ packed ] = newindex;
     }
 }
@@ -224,7 +224,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     {
         m_RoundBarMesh.iElementStartIndices[k] = indeices[k].size();
     }
-    for (unsigned int i = 0; i < vertices.size(); i += 3)
+    for (size_t i = 0; i < vertices.size(); i += 3)
     {
         for (int k = 0; k < 3; k++)
         {
@@ -538,7 +538,6 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
     return iFacesAdded;
 }
 
-
 void OpenGL3DRenderer::GetFreq()
 {
 #if 0
@@ -560,10 +559,9 @@ double OpenGL3DRenderer::GetTime()
 
 int OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 {
-    int listNum;
-    listNum = polygon.verticesList.size();
+    size_t listNum = polygon.verticesList.size();
     glUseProgram(m_CommonProID);
-    for (int i = 0; i < listNum; i++)
+    for (size_t i = 0; i < listNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         Vertices3D *pointList = polygon.verticesList.front();
@@ -607,9 +605,8 @@ int OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 
 int OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
 {
-    int verticesNum, normalsNum;
-    verticesNum = polygon.verticesList.size();
-    normalsNum = polygon.normalsList.size();
+    size_t verticesNum = polygon.verticesList.size();
+    size_t normalsNum = polygon.normalsList.size();
     //check whether the number of vertices and normals are equal
     if (verticesNum != normalsNum)
     {
@@ -624,7 +621,7 @@ int OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     glUseProgram(m_3DProID);
     glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
     glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
-    for (int i = 0; i < verticesNum; i++)
+    for (size_t i = 0; i < verticesNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         Vertices3D *pointList = polygon.verticesList.front();
@@ -689,8 +686,8 @@ int OpenGL3DRenderer::RenderPolygon3DObject()
         return 0;
     }
     glDepthMask(GL_FALSE);
-    int polygonNum = m_Polygon3DInfoList.size();
-    for (int i = 0; i < polygonNum; i++)
+    size_t polygonNum = m_Polygon3DInfoList.size();
+    for (size_t i = 0; i < polygonNum; i++)
     {
         Polygon3DInfo &polygon = m_Polygon3DInfoList.front();
         if (polygon.lineOnly || (!polygon.fillStyle))
@@ -737,7 +734,6 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::ve
         m_LightsInfo.light[m_LightsInfo.lightNum].lightPower = 1.0;
         m_LightsInfo.lightNum++;
     }
-
 }
 
 void OpenGL3DRenderer::AddShapePolygon3DObject(sal_Int32 color,bool lineOnly,sal_Int32 lineColor,long fillStyle,sal_Int32 specular)
@@ -822,7 +818,7 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
 {
     m_Polygon3DInfo.verticesList.push_back(m_Polygon3DInfo.vertices);
     //get the buttom surface to calc the camera org, just for the demo
-    if ((m_Polygon3DInfo.vertices->size()) && (!m_bCameraUpdated))
+    if (m_Polygon3DInfo.vertices->size() && !m_bCameraUpdated)
     {
         float minX = m_Polygon3DInfo.vertices->at(0).x;
         float maxX = m_Polygon3DInfo.vertices->at(0).x;
@@ -830,7 +826,7 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
         float maxZ = m_Polygon3DInfo.vertices->at(0).z;
         float maxY = m_Polygon3DInfo.vertices->at(0).y;
         float minY = m_Polygon3DInfo.vertices->at(0).y;
-        for (unsigned int i = 1; i < m_Polygon3DInfo.vertices->size(); i++)
+        for (size_t i = 1; i < m_Polygon3DInfo.vertices->size(); i++)
         {
             minX = std::min(minX, m_Polygon3DInfo.vertices->at(i).x);
             maxX = std::max(maxX, m_Polygon3DInfo.vertices->at(i).x);
@@ -1150,8 +1146,8 @@ int OpenGL3DRenderer::RenderExtrude3DObject()
                             (void*)0            // array buffer offset
                             );
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
-    int extrude3DNum = m_Extrude3DList.size();
-    for (int i = 0; i < extrude3DNum; i++)
+    size_t extrude3DNum = m_Extrude3DList.size();
+    for (size_t i = 0; i < extrude3DNum; i++)
     {
         Extrude3DInfo extrude3DInfo = m_Extrude3DList[i];
         glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
@@ -1244,9 +1240,9 @@ int OpenGL3DRenderer::ProcessUnrenderedShape()
 
 glm::vec4 OpenGL3DRenderer::GetColorByIndex(int index)
 {
-    int r = index & 0xFF;
-    int g = (index >> 8) & 0xFF;
-    int b = (index >> 16) & 0xFF;
+    sal_uInt8 r = index & 0xFF;
+    sal_uInt8 g = (index >> 8) & 0xFF;
+    sal_uInt8 b = (index >> 16) & 0xFF;
     return glm::vec4(((float)r) / 255.0, ((float)g) / 255.0, ((float)b) / 255.0, 1.0);
 }
 
