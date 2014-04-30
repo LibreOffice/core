@@ -32,13 +32,15 @@
 namespace chart
 {
 
-SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
-    SfxTabPage(pWindow,
+SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
+    : SfxTabPage(pWindow,
                "TP_OPTIONS",
                "modules/schart/ui/tp_SeriesToAxis.ui",
-               rInAttrs),
-    m_bProvidesSecondaryYAxis(true),
-    m_bProvidesOverlapAndGapWidth(false)
+               rInAttrs)
+    , m_nAllSeriesAxisIndex(0)
+    , m_bProvidesSecondaryYAxis(true)
+    , m_bProvidesOverlapAndGapWidth(false)
+    , m_bProvidesBarConnectors(false)
 {
     get(m_pGrpAxis,"frameGrpAxis");
     get(m_pRbtAxis1,"RBT_OPT_AXIS_1");
