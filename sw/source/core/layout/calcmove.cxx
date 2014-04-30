@@ -1377,7 +1377,8 @@ void SwCntntFrm::MakeAll()
                         }
                         if( GetFollow() )
                             Prepare( PREP_WIDOWS_ORPHANS, 0, false );
-                        mbValidSize = bFormatted = sal_True;
+                        mbValidSize = true;
+                        bFormatted = sal_True;
                         Format();
                     }
                 }
