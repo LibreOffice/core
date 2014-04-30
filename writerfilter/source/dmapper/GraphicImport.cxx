@@ -656,6 +656,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             xShapeProps->getPropertyValue("ShadowTransparence") >>= m_pImpl->nShadowTransparence;
                         }
 
+                        xShapeProps->getPropertyValue("GraphicColorMode") >>= m_pImpl->eColorMode;
+                        xShapeProps->getPropertyValue("AdjustLuminance") >>= m_pImpl->nBrightness;
+                        xShapeProps->getPropertyValue("AdjustContrast") >>= m_pImpl->nContrast;
+
                         // fdo#70457: transform XShape into a SwXTextGraphicObject only if there's no rotation
                         if ( nRotation == 0 )
                             m_xGraphicObject = createGraphicObject( aMediaProperties );
