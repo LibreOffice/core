@@ -24,11 +24,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
+#if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))
+#include <exception>
+#endif
+
 #include <stdio.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <hash_map>
-#include <sys/param.h>
+#include <hash_map>#include <sys/param.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
