@@ -1517,7 +1517,7 @@ void ScCheckListMenuWindow::initMembers()
     {
         if (maMembers[i].mbDate)
         {
-            maChecks.InsertEntry(maMembers[i].maName, NULL, sal_False, LISTBOX_APPEND, NULL,
+            maChecks.InsertEntry(maMembers[i].maName, NULL, sal_False, LIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox );
 
             maChecks.CheckEntry(maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
@@ -1532,7 +1532,7 @@ void ScCheckListMenuWindow::initMembers()
         else
         {
             SvTreeListEntry* pEntry = maChecks.InsertEntry(
-                maMembers[i].maName, NULL, false, LISTBOX_APPEND, NULL,
+                maMembers[i].maName, NULL, false, LIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox);
 
             maChecks.SetCheckButtonState(
