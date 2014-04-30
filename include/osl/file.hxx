@@ -680,16 +680,15 @@ public:
         @param nMask
         Set of flags decribing the demanded information.
     */
-
-    FileStatus( sal_uInt32 nMask ): _nMask( nMask )
+    FileStatus(sal_uInt32 nMask)
+        : _nMask(nMask)
     {
-        _aStatus.uStructSize = sizeof( oslFileStatus );
-        memset( &_aStatus.uValidFields, 0, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ) );
+        memset(&_aStatus, 0, sizeof(_aStatus));
+        _aStatus.uStructSize = sizeof(_aStatus);
     }
 
     /** Destructor.
     */
-
     ~FileStatus()
     {
         if ( _aStatus.ustrFileURL )
