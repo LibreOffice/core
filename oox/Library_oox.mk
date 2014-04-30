@@ -153,6 +153,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/linepropertiescontext \
     oox/source/drawingml/lineproperties \
     oox/source/drawingml/objectdefaultcontext \
+    oox/source/drawingml/scene3dcontext \
     oox/source/drawingml/shapecontext \
     oox/source/drawingml/shape \
     oox/source/drawingml/shape3dproperties \

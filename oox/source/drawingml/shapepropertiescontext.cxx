@@ -96,7 +96,7 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
 
     // todo
     case A_TOKEN( scene3d ):    // CT_Scene3D
-//      return new Scene3DContext( *this, rAttribs, *(mrShape.get3DShapeProperties()) );
+        return new Scene3DPropertiesContext( *this, mrShape.get3DProperties() );
         break;
 
     // todo
