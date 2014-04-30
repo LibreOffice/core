@@ -102,6 +102,7 @@ public:
     inline OWeakObject() SAL_THROW(())
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
+        , m_pReserved(0)
         {}
 #endif
     /** Dummy copy constructor.  Set the reference count to zero.
