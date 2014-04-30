@@ -501,12 +501,16 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
         // we have beautiful scaling algorithms, let's use them
         if (aDestSizePixel != rSrcSizePixel && rSrcSizePixel.Width() != 0 && rSrcSizePixel.Height() != 0)
         {
-            double fScaleX = double(aDestSizePixel.Width()) / rSrcSizePixel.Width();
-            double fScaleY = double(aDestSizePixel.Height()) / rSrcSizePixel.Height();
+            double fScaleX = std::abs(aDestSizePixel.Width()  / double(rSrcSizePixel.Width()));
+            double fScaleY = std::abs(aDestSizePixel.Height() / double(rSrcSizePixel.Height()));
 
             aScaledBitmapEx.Scale(fScaleX, fScaleY);
 
-            aSrcSizePixel = aDestSizePixel;
+            // Negative size values are used for mirroring, but Scale already takes
+            // care of mirroring so convert all negative values to positive.
+            aSrcSizePixel = Size(std::abs(aDestSizePixel.Width()),
+                                 std::abs(aDestSizePixel.Height()));
+
             aSrcPtPixel.X() = rSrcPtPixel.X() * fScaleX;
             aSrcPtPixel.Y() = rSrcPtPixel.Y() * fScaleY;
         }
