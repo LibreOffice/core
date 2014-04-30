@@ -31,14 +31,40 @@ protected:
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx);
 
     xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
+    /**
+     * Same as the assertXPath(), but don't assert: return the string instead.
+     */
     OUString      getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
+    /**
+     * Same as the assertXPathContent(), but don't assert: return the string instead.
+     */
     OUString      getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath);
+    /**
+     * Get the position of the child named rName of the parent node specified by rXPath.
+     * Useful for checking relative order of elements.
+     */
     int           getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName);
+    /**
+     * Assert that rXPath exists, and returns exactly one node.
+     * In case rAttribute is provided, the rXPath's attribute's value must
+     * equal to the rExpected value.
+     */
     void          assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath,
                               const OString& rAttribute = OString(),
                               const OUString& rExpectedValue = OUString());
+    /**
+     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
+     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
+     */
     void          assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
+    /**
+     * Assert that rXPath exists, and its content equals rContent.
+     */
     void          assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent);
+    /**
+     * Assert that rXPath exists, and has exactly nNumberOfChildNodes child nodes.
+     * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).
+     */
     void          assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes);
 
 };
