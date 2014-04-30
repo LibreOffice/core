@@ -23,7 +23,6 @@
 #define GL_PI 3.14159f
 #define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
 
-using namespace std;
 using namespace com::sun::star;
 
 namespace chart {
@@ -180,9 +179,9 @@ bool OpenGL3DRenderer::GetSimilarVertexIndex(PackedVertex & packed,
 
 void OpenGL3DRenderer::SetVertex(PackedVertex &packed,
     std::map<PackedVertex,unsigned short> &VertexToOutIndex,
-    vector<glm::vec3> &vertex,
-    vector<glm::vec3> &normal,
-    vector<unsigned short> &indeices)
+    std::vector<glm::vec3> &vertex,
+    std::vector<glm::vec3> &normal,
+    std::vector<unsigned short> &indeices)
 {
     unsigned short index;
     bool found = GetSimilarVertexIndex(packed, VertexToOutIndex, index);
@@ -209,13 +208,13 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     float topThreshold = height - 2 * fRadius;
     float bottomThreshold = fRadius;
 
-    vector<glm::vec3> vertices;
-    vector<glm::vec3> normals;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
     GenerateRoundCornerBar(vertices, normals, fRadius, iSubDivY, iSubDivZ, width, height, depth);
     std::map<PackedVertex,unsigned short> VertexToOutIndex;
     glm::vec3 actualVerteices[3];
     glm::vec3 actualNormals[3];
-    vector<unsigned short> indeices[5];
+    std::vector<unsigned short> indeices[5];
     glm::vec3 externSurNormal;
     glm::mat4 corrctCoord = glm::translate(glm::vec3(width / 2.0f, height / 2.0f  - fRadius, depth / 2.0f));
     m_RoundBarMesh.topThreshold = topThreshold;
@@ -232,8 +231,8 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
             actualVerteices[k] = glm::vec3(corrctCoord * glm::vec4(vertices[i + k], 1.0));
             actualNormals[k] = normals[i + k];
         }
-        float maxY = max(max(actualVerteices[0].y, actualVerteices[1].y), actualVerteices[2].y);
-        float minY = min(min(actualVerteices[0].y, actualVerteices[1].y), actualVerteices[2].y);
+        float maxY = std::max(std::max(actualVerteices[0].y, actualVerteices[1].y), actualVerteices[2].y);
+        float minY = std::min(std::min(actualVerteices[0].y, actualVerteices[1].y), actualVerteices[2].y);
         int surfaceIndex = (minY >= topThreshold - 0.001) ? TOP_SURFACE : ((maxY <= bottomThreshold + 0.001) ? BOTTOM_SURFACE : MIDDLE_SURFACE);
         for (int k = 0; k < 3; k++)
         {
@@ -269,7 +268,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     VertexToOutIndex.clear();
 }
 
-int OpenGL3DRenderer::GenerateRoundCornerBar(vector<glm::vec3> &vertices, vector<glm::vec3> &normals, float fRadius, int iSubDivY, int iSubDivZ, float width, float height, float depth)
+int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY, int iSubDivZ, float width, float height, float depth)
 {
     //float fAddAngleY = 360.0f/float(iSubDivY), fAddAngleZ = 180.0f/float(iSubDivZ);
     float fAddAngleY = 360.0f/float(iSubDivY), fAddAngleZ = 180.0f/float(iSubDivZ);
@@ -814,8 +813,8 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
     float actualX = x - (float)m_iWidth / 2;
     float actualY = y  - (float)m_iHeight / 2;
     float actualZ = z;
-    float maxCoord = max(actualX, max(actualY, actualZ));
-    m_fZmax = max(maxCoord, m_fZmax);
+    float maxCoord = std::max(actualX, std::max(actualY, actualZ));
+    m_fZmax = std::max(maxCoord, m_fZmax);
     m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, -actualY, actualZ));
 }
 
@@ -833,12 +832,12 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
         float minY = m_Polygon3DInfo.vertices->at(0).y;
         for (unsigned int i = 1; i < m_Polygon3DInfo.vertices->size(); i++)
         {
-            minX = min(minX, m_Polygon3DInfo.vertices->at(i).x);
-            maxX = max(maxX, m_Polygon3DInfo.vertices->at(i).x);
-            minZ = min(minZ, m_Polygon3DInfo.vertices->at(i).z);
-            maxZ = max(maxZ, m_Polygon3DInfo.vertices->at(i).z);
-            minY = min(minY, m_Polygon3DInfo.vertices->at(i).y);
-            maxY = max(maxY, m_Polygon3DInfo.vertices->at(i).y);
+            minX = std::min(minX, m_Polygon3DInfo.vertices->at(i).x);
+            maxX = std::max(maxX, m_Polygon3DInfo.vertices->at(i).x);
+            minZ = std::min(minZ, m_Polygon3DInfo.vertices->at(i).z);
+            maxZ = std::max(maxZ, m_Polygon3DInfo.vertices->at(i).z);
+            minY = std::min(minY, m_Polygon3DInfo.vertices->at(i).y);
+            maxY = std::max(maxY, m_Polygon3DInfo.vertices->at(i).y);
         }
 
         if (maxY == minY)
@@ -920,10 +919,10 @@ void OpenGL3DRenderer::AddExtrude3DObjectPoint(float x, float y, float z)
         m_Extrude3DInfo.yRange[0] = y;
         m_Extrude3DInfo.yRange[1] = y;
     }
-    m_Extrude3DInfo.xRange[0] = min(m_Extrude3DInfo.xRange[0], x);
-    m_Extrude3DInfo.xRange[1] = max(m_Extrude3DInfo.xRange[1], x);
-    m_Extrude3DInfo.yRange[0] = min(m_Extrude3DInfo.yRange[0], y);
-    m_Extrude3DInfo.yRange[1] = max(m_Extrude3DInfo.yRange[1], y);
+    m_Extrude3DInfo.xRange[0] = std::min(m_Extrude3DInfo.xRange[0], x);
+    m_Extrude3DInfo.xRange[1] = std::max(m_Extrude3DInfo.xRange[1], x);
+    m_Extrude3DInfo.yRange[0] = std::min(m_Extrude3DInfo.yRange[0], y);
+    m_Extrude3DInfo.yRange[1] = std::max(m_Extrude3DInfo.yRange[1], y);
     m_iPointNum++;
 }
 
@@ -950,7 +949,7 @@ int OpenGL3DRenderer::Init3DUniformBlock()
     glGenBuffers(1, &m_3DUBOBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
     CHECK_GL_ERROR();
-    m_3DActualSizeLight = ((nBlockDataSizeLight / nUniformBufferAlignSize) + min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize;
+    m_3DActualSizeLight = ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize;
 //    cout << "nBlockDataSizeMertrial = " << nBlockDataSizeMertrial << ", nBlockDataSizeLight = " << nBlockDataSizeLight << ", m_3DActualSizeLight = " << m_3DActualSizeLight << endl;
     int dataSize = m_3DActualSizeLight + nBlockDataSizeMertrial;
     glBufferData(GL_UNIFORM_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
@@ -958,7 +957,7 @@ int OpenGL3DRenderer::Init3DUniformBlock()
     CHECK_GL_ERROR();
     glUniformBlockBinding(m_3DProID, a3DLightBlockIndex, 0);
 
-    glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_3DUBOBuffer, ((nBlockDataSizeLight / nUniformBufferAlignSize) + min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize, nBlockDataSizeMertrial);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_3DUBOBuffer, ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize, nBlockDataSizeMertrial);
     glUniformBlockBinding(m_3DProID, a3DMaterialBlockIndex, 1);
     //for the light source uniform, we must calc the offset of each element
     CHECK_GL_ERROR();
