@@ -710,7 +710,7 @@ int OpenGL3DRenderer::RenderPolygon3DObject()
     return 0;
 }
 
-void OpenGL3DRenderer::Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,bool twoSidesLighting,sal_Int32 color)
+void OpenGL3DRenderer::Set3DSenceInfo(const glm::vec3& cameraUp, const glm::mat4& D3DTrasform, bool twoSidesLighting, sal_Int32 color)
 {
 
     m_CameraInfo.cameraUp = cameraUp;
@@ -727,7 +727,7 @@ void OpenGL3DRenderer::Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,b
     m_LightsInfo.lightNum = 0;
 }
 
-void OpenGL3DRenderer::SetLightInfo(bool lightOn,sal_Int32 color,glm::vec4 direction)
+void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction)
 {
     if (lightOn)
     {
@@ -984,7 +984,7 @@ int OpenGL3DRenderer::Update3DUniformBlock()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     return 0;
 }
-int OpenGL3DRenderer::RenderExtrudeFlatSurface(Extrude3DInfo extrude3D, int surIndex)
+int OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
@@ -1001,7 +1001,7 @@ int OpenGL3DRenderer::RenderExtrudeFlatSurface(Extrude3DInfo extrude3D, int surI
     return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeBottomSurface(Extrude3DInfo extrude3D)
+int OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     float yScale = extrude3D.yRange[1] - extrude3D.yRange[0];
@@ -1033,7 +1033,7 @@ int OpenGL3DRenderer::RenderExtrudeBottomSurface(Extrude3DInfo extrude3D)
     return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeMiddleSurface(Extrude3DInfo extrude3D)
+int OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     float yScale = extrude3D.yRange[1] - extrude3D.yRange[0];
@@ -1068,7 +1068,7 @@ int OpenGL3DRenderer::RenderExtrudeMiddleSurface(Extrude3DInfo extrude3D)
     return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeTopSurface(Extrude3DInfo extrude3D)
+int OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
     float yScale = extrude3D.yRange[1] - extrude3D.yRange[0];
@@ -1105,7 +1105,7 @@ int OpenGL3DRenderer::RenderExtrudeTopSurface(Extrude3DInfo extrude3D)
     return 0;
 }
 
-int OpenGL3DRenderer::RenderExtrudeSurface(Extrude3DInfo extrude3D)
+int OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
 {
     glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
     glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
@@ -1184,7 +1184,7 @@ void OpenGL3DRenderer::SetClickPos(Point aMPos)
     m_aMPos = aMPos;
 }
 
-int OpenGL3DRenderer::RenderText(::rtl::OUString &, awt::Point )
+int OpenGL3DRenderer::RenderText(const ::rtl::OUString& , awt::Point )
 {
     //TODO: moggi: disabled for now
     /*

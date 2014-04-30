@@ -149,15 +149,18 @@ public:
     void LoadShaders();
     void init();
 
-    void Set3DSenceInfo(glm::vec3 cameraUp,glm::mat4 D3DTrasform,bool twoSidesLighting,sal_Int32 color);
-    void SetLightInfo(bool lightOn,sal_Int32 color,glm::vec4 direction);
-    void AddShapePolygon3DObject(sal_Int32 color,bool lineOnly,sal_Int32 lineColor,long fillStyle,sal_Int32 specular);
+    void Set3DSenceInfo(const glm::vec3& cameraUp, const glm::mat4& D3DTrasform,
+            bool twoSidesLighting, sal_Int32 color);
+    void SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction);
+    void AddShapePolygon3DObject(sal_Int32 color, bool lineOnly, sal_Int32 lineColor,
+            long fillStyle, sal_Int32 specular);
     void EndAddShapePolygon3DObject();
     void AddPolygon3DObjectNormalPoint(float x, float y, float z);
     void EndAddPolygon3DObjectNormalPoint();
     void AddPolygon3DObjectPoint(float x, float y, float z);
     void EndAddPolygon3DObjectPoint();
-    void AddShape3DExtrudeObject(sal_Int32 color,sal_Int32 specular,float xTransform,float yTransform,float zTransform);
+    void AddShape3DExtrudeObject(sal_Int32 color, sal_Int32 specular, float xTransform,
+            float yTransform, float zTransform);
     void EndAddShape3DExtrudeObject();
     void AddExtrude3DObjectPoint(float x, float y, float z);
     void EndAddExtrude3DObjectPoint();
@@ -177,12 +180,12 @@ private:
     int Update3DUniformBlock();
     int RenderExtrude3DObject();
     int RenderFPS(float fps);
-    int RenderText(::rtl::OUString &string, com::sun::star::awt::Point aPos);
-    int RenderExtrudeSurface(Extrude3DInfo extrude3D);
-    int RenderExtrudeTopSurface(Extrude3DInfo extrude3D);
-    int RenderExtrudeMiddleSurface(Extrude3DInfo extrude3D);
-    int RenderExtrudeBottomSurface(Extrude3DInfo extrude3D);
-    int RenderExtrudeFlatSurface(Extrude3DInfo extrude3D, int surIndex);
+    int RenderText(const ::rtl::OUString& string, com::sun::star::awt::Point aPos);
+    int RenderExtrudeSurface(const Extrude3DInfo& extrude3D);
+    int RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D);
+    int RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D);
+    int RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D);
+    int RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex);
     int ProcessUnrenderedShape();
     glm::vec4 GetColorByIndex(int index);
     int GetIndexByColor(int r, int g, int b);
