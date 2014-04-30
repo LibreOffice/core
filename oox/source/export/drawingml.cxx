@@ -2102,7 +2102,7 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
     {
         if( aEffectProps[i].Name == "outerShdw" || aEffectProps[i].Name == "innerShdw"
                 || aEffectProps[i].Name == "glow" || aEffectProps[i].Name == "softEdge"
-                || aEffectProps[i].Name == "reflection" )
+                || aEffectProps[i].Name == "reflection" || aEffectProps[i].Name == "blur" )
         {
             // assign the proper tag and enable bContainsColor if necessary
             if( aEffectProps[i].Name == "outerShdw" )
@@ -2124,6 +2124,8 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
                 nEffectToken = FSNS( XML_a, XML_softEdge );
             else if( aEffectProps[i].Name == "reflection" )
                 nEffectToken = FSNS( XML_a, XML_reflection );
+            else if( aEffectProps[i].Name == "blur" )
+                nEffectToken = FSNS( XML_a, XML_blur );
 
             // read tag attributes
             uno::Sequence< beans::PropertyValue > aOuterShdwProps;
@@ -2219,6 +2221,12 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
                     aOuterShdwAttrList->add( XML_stPos, OString::number( nVal ).getStr() );
+                }
+                else if( aOuterShdwProps[j].Name == "grow" )
+                {
+                    sal_Int32 nVal = 0;
+                    aOuterShdwProps[j].Value >>= nVal;
+                    aOuterShdwAttrList->add( XML_grow, OString::number( nVal ).getStr() );
                 }
             }
         }

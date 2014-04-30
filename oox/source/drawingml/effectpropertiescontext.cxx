@@ -80,6 +80,9 @@ void EffectPropertiesContext::saveUnsupportedAttribs( const AttributeList& rAttr
     if( rAttribs.hasAttribute( XML_stPos ) )
         mrEffectProperties.appendUnsupportedEffectAttrib( "stPos",
                                                           makeAny( rAttribs.getInteger( XML_stPos, 0 ) ) );
+    if( rAttribs.hasAttribute( XML_grow ) )
+        mrEffectProperties.appendUnsupportedEffectAttrib( "grow",
+                                                          makeAny( rAttribs.getInteger( XML_grow, 0 ) ) );
 }
 
 ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -109,6 +112,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         case A_TOKEN( glow ):
         case A_TOKEN( softEdge ):
         case A_TOKEN( reflection ):
+        case A_TOKEN( blur ):
         {
             if( nElement == A_TOKEN( glow ) )
                 mrEffectProperties.msUnsupportedEffectName = "glow";
@@ -116,6 +120,8 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
                 mrEffectProperties.msUnsupportedEffectName = "softEdge";
             else if( nElement == A_TOKEN( reflection ) )
                 mrEffectProperties.msUnsupportedEffectName = "reflection";
+            else if( nElement == A_TOKEN( blur ) )
+                mrEffectProperties.msUnsupportedEffectName = "blur";
             saveUnsupportedAttribs( rAttribs );
             return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
         }
