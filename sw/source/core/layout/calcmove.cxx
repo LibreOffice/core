@@ -1317,7 +1317,8 @@ void SwCntntFrm::MakeAll()
         }
         if ( !mbValidSize )
         {
-            mbValidSize = bFormatted = sal_True;
+            mbValidSize = true;
+            bFormatted = sal_True;
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( true );
