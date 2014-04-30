@@ -69,9 +69,9 @@ namespace
 {
 
 template<class T>
-sal_Bool lcl_queryIsPackage( const Sequence<T> &lComponentData )
+bool lcl_queryIsPackage( const Sequence<T> &lComponentData )
 {
-    sal_Bool bIsPackage = sal_False;
+    bool bIsPackage = false;
 
     const sal_Int32 nLength = lComponentData.getLength();
     const T *pValue = lComponentData.getConstArray();
@@ -87,7 +87,7 @@ sal_Bool lcl_queryIsPackage( const Sequence<T> &lComponentData )
     return bIsPackage;
 }
 
-sal_Bool lcl_isPackage( const Any &rComponentData )
+bool lcl_isPackage( const Any &rComponentData )
 {
     Sequence < beans::NamedValue > lComponentDataNV;
     Sequence < beans::PropertyValue > lComponentDataPV;
@@ -109,7 +109,7 @@ throw (RuntimeException, std::exception)
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
     Reference < ucb::XContent > xContent;
-    sal_Bool bIsPackage = sal_False;
+    bool bIsPackage = false;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name == "ComponentData" )

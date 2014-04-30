@@ -41,7 +41,7 @@ protected:
     OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+    bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (::com::sun::star::uno::RuntimeException);
 
 public:
@@ -80,7 +80,7 @@ public:
 OUString WordPerfectImportFilter_getImplementationName()
 throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const OUString &ServiceName )
+bool SAL_CALL WordPerfectImportFilter_supportsService( const OUString &ServiceName )
 throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  )
@@ -136,7 +136,7 @@ public:
 OUString WordPerfectImportFilterDialog_getImplementationName()
 throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const OUString &ServiceName )
+bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const OUString &ServiceName )
 throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames(  )

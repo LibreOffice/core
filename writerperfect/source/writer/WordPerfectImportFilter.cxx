@@ -85,7 +85,7 @@ static bool handleEmbeddedWPGImage(const WPXBinaryData &input, WPXBinaryData &ou
     return true;
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
     SAL_INFO("writerperfect", "WordPerfectImportFilter::importImpl");
@@ -101,7 +101,7 @@ throw (RuntimeException)
     if ( !xInputStream.is() )
     {
         OSL_ASSERT( false );
-        return sal_False;
+        return false;
     }
 
     WPXSvInputStream input( xInputStream );
@@ -118,7 +118,7 @@ throw (RuntimeException)
             SfxPasswordDialog aPasswdDlg( 0 );
             aPasswdDlg.SetMinLen(0);
             if(!aPasswdDlg.Execute())
-                return sal_False;
+                return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
             if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
@@ -126,7 +126,7 @@ throw (RuntimeException)
             else
                 unsuccessfulAttempts++;
             if (unsuccessfulAttempts == 3) // timeout after 3 password atempts
-                return sal_False;
+                return false;
         }
     }
 
@@ -148,8 +148,8 @@ throw (RuntimeException)
 	collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
 	collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
     if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? 0 : aUtf8Passwd.getStr()))
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
