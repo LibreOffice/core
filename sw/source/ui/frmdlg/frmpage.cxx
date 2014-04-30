@@ -2351,6 +2351,7 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "PicturePage",
         "modules/swriter/ui/picturepage.ui", rSet)
     , pGrfDlg(0)
+    , bHtmlMode(false)
 {
     get(m_pMirror, "flipframe");
     get(m_pMirrorVertBox, "vert");
