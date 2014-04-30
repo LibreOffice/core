@@ -21,7 +21,6 @@
 #include "glm/gtc/matrix_inverse.hpp"
 
 #define GL_PI 3.14159f
-#define OPENGL_SCALE_VALUE 20
 #define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
 
 using namespace std;
@@ -812,9 +811,9 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
     {
         m_Polygon3DInfo.vertices = new Vertices3D;
     }
-    float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
-    float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
-    float actualZ = z / OPENGL_SCALE_VALUE;
+    float actualX = x - (float)m_iWidth / 2;
+    float actualY = y  - (float)m_iHeight / 2;
+    float actualZ = z;
     float maxCoord = max(actualX, max(actualY, actualZ));
     m_fZmax = max(maxCoord, m_fZmax);
     m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, -actualY, actualZ));
@@ -899,9 +898,9 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(sal_Int32 color,sal_Int32 specula
 
     m_Extrude3DInfo.material.shininess = 1.0f;
 
-    m_Extrude3DInfo.xTransform = xTransform / OPENGL_SCALE_VALUE - ((float)m_iWidth / 2);
-    m_Extrude3DInfo.yTransform = yTransform / OPENGL_SCALE_VALUE - ((float)m_iHeight / 2);
-    m_Extrude3DInfo.zTransform = zTransform / OPENGL_SCALE_VALUE;
+    m_Extrude3DInfo.xTransform = xTransform - ((float)m_iWidth / 2);
+    m_Extrude3DInfo.yTransform = yTransform - ((float)m_iHeight / 2);
+    m_Extrude3DInfo.zTransform = zTransform;
 }
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
@@ -912,22 +911,19 @@ void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
 
 void OpenGL3DRenderer::AddExtrude3DObjectPoint(float x, float y, float z)
 {
-    float actualX = (x / OPENGL_SCALE_VALUE);
-    float actualY = (y / OPENGL_SCALE_VALUE);
-    float actualZ = z / OPENGL_SCALE_VALUE;
-    float maxCoord = max(actualX, max(actualY, actualZ));
-    m_fZmax = max(maxCoord, m_fZmax);
+    float maxCoord = std::max(x, std::max(y, z));
+    m_fZmax = std::max(maxCoord, m_fZmax);
     if (m_iPointNum == 0)
     {
-        m_Extrude3DInfo.xRange[0] = actualX;
-        m_Extrude3DInfo.xRange[1] = actualX;
-        m_Extrude3DInfo.yRange[0] = actualY;
-        m_Extrude3DInfo.yRange[1] = actualY;
+        m_Extrude3DInfo.xRange[0] = x;
+        m_Extrude3DInfo.xRange[1] = x;
+        m_Extrude3DInfo.yRange[0] = y;
+        m_Extrude3DInfo.yRange[1] = y;
     }
-    m_Extrude3DInfo.xRange[0] = min(m_Extrude3DInfo.xRange[0], actualX);
-    m_Extrude3DInfo.xRange[1] = max(m_Extrude3DInfo.xRange[1], actualX);
-    m_Extrude3DInfo.yRange[0] = min(m_Extrude3DInfo.yRange[0], actualY);
-    m_Extrude3DInfo.yRange[1] = max(m_Extrude3DInfo.yRange[1], actualY);
+    m_Extrude3DInfo.xRange[0] = min(m_Extrude3DInfo.xRange[0], x);
+    m_Extrude3DInfo.xRange[1] = max(m_Extrude3DInfo.xRange[1], x);
+    m_Extrude3DInfo.yRange[0] = min(m_Extrude3DInfo.yRange[0], y);
+    m_Extrude3DInfo.yRange[1] = max(m_Extrude3DInfo.yRange[1], y);
     m_iPointNum++;
 }
 
@@ -1318,7 +1314,7 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     glDisableVertexAttribArray(m_2DVertexID);
     glUseProgram(0);
     //read pixel to get the index
-    Point select = Point(m_aMPos.X() / OPENGL_SCALE_VALUE, m_aMPos.Y() / OPENGL_SCALE_VALUE);
+    Point select = Point(m_aMPos.X(), m_aMPos.Y());
     sal_uInt8 selectColor[4] = {0};
 #if 0
     int picWidth = m_iWidth - select.X();
