@@ -62,7 +62,7 @@ namespace {
     {
         OUString aResourceName;
         OUString aResourceType;
-        bool      bRemovable;
+        bool bRemovable = false;
         bool bResourceName = false;
         bool bResourceType = false;
         bool bRemoveProperty = false;
