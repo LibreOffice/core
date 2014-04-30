@@ -457,17 +457,23 @@ bool utl::UCBContentHelper::EqualURLs(
 bool utl::UCBContentHelper::ensureFolder(
     css::uno::Reference< css::uno::XComponentContext > xCtx,
     css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
-    const OUString& rFolder, ucbhelper::Content & result)
+    const OUString& rFolder, ucbhelper::Content & result) throw()
 {
-    INetURLObject aURL( rFolder );
-    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    aURL.removeSegment();
-    ::ucbhelper::Content aParent;
-
-    if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
-                              xEnv, xCtx, aParent ) )
+    try
     {
-        return ::utl::UCBContentHelper::MakeFolder(aParent, aTitle, result);
+        INetURLObject aURL( rFolder );
+        OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        aURL.removeSegment();
+        ::ucbhelper::Content aParent;
+
+        if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                  xEnv, xCtx, aParent ) )
+        {
+            return ::utl::UCBContentHelper::MakeFolder(aParent, aTitle, result);
+        }
+    }
+    catch (...)
+    {
     }
 
     return false;

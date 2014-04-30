@@ -63,7 +63,7 @@ UNOTOOLS_DLLPUBLIC bool MakeFolder(
 UNOTOOLS_DLLPUBLIC bool ensureFolder(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xCtx,
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv,
-    const OUString& rFolder, ucbhelper::Content & result);
+    const OUString& rFolder, ucbhelper::Content & result) throw();
 
 /// @return the value of the "Size" property of the given content, or zero if
 ///     obtaining the property yields a void value or raises a
