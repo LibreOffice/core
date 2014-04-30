@@ -622,7 +622,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     Reference< XHierarchicalNameAccess > xHierAccess( getHierAccess( sProvider,
                                                                      "org.openoffice.Office.Common" ) );
     OUString system( getKey( xHierAccess,"Help/System" ) );
-    sal_Bool showBasic( getBooleanKey(xHierAccess,"Help/ShowBasic") );
+    bool showBasic( getBooleanKey(xHierAccess,"Help/ShowBasic") );
     OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
       // try to determine path from default
@@ -840,12 +840,12 @@ TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
     return instPath;
 }
 
-sal_Bool
+bool
 TVChildTarget::getBooleanKey(const Reference<
                              XHierarchicalNameAccess >& xHierAccess,
                              const char* key) const
 {
-  sal_Bool ret = sal_False;
+  bool ret = false;
   if( xHierAccess.is() )
     {
       Any aAny;

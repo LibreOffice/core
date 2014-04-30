@@ -160,7 +160,7 @@ ResultSetBase::next(
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
-    sal_Bool test;
+    bool test;
     m_nRow++;
     if( sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
         test = true;

@@ -259,7 +259,7 @@ namespace treeview {
       getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                 const char* key ) const;
 
-      sal_Bool
+      bool
       getBooleanKey(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                     const char* key) const;

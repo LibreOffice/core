@@ -119,7 +119,7 @@ OUString Databases::expandURL( const OUString& aURL, Reference< uno::XComponentC
     return aRetURL;
 }
 
-Databases::Databases( sal_Bool showBasic,
+Databases::Databases( bool showBasic,
                       const OUString& instPath,
                       const com::sun::star::uno::Sequence< OUString >& imagesZipPaths,
                       const OUString& productName,
@@ -1061,7 +1061,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
         bool error = true;
         OUString fileURL;
 
-        sal_Bool bHighContrastMode = sal_False;
+        bool bHighContrastMode = false;
         OUString aCSS( m_aCSS );
         if ( aCSS.equalsAscii( "default" ) )
         {
@@ -1145,7 +1145,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
                 // fall back to default css
                 aCSS = "default";
                 retry = 2;
-                bHighContrastMode = sal_False;
+                bHighContrastMode = false;
             }
         }
 

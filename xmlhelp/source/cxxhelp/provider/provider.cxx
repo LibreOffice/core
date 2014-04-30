@@ -343,7 +343,7 @@ void ContentProvider::init()
     rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 
-    sal_Bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
+    bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
     m_pDatabases = new Databases( showBasic,
                                   instPath,
                                   aImagesZipPaths,
@@ -426,12 +426,12 @@ ContentProvider::getKey(
     return instPath;
 }
 
-sal_Bool
+bool
 ContentProvider::getBooleanKey(
     const uno::Reference< container::XHierarchicalNameAccess >& xHierAccess,
     const char* key ) const
 {
-  sal_Bool ret = sal_False;
+  bool ret = false;
   if( xHierAccess.is() )
   {
       uno::Any aAny;

@@ -165,7 +165,7 @@ namespace chelp {
          *  Input is the installdirectory in system dependent notation
          */
 
-        Databases( sal_Bool showBasic,
+        Databases( bool showBasic,
                  const OUString& instPath,
                  const com::sun::star::uno::Sequence< OUString >& imagesZipPaths,
                  const OUString& productName,
