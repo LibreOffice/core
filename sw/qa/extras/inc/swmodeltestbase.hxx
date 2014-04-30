@@ -582,7 +582,7 @@ protected:
     /**
      * Helper method to return nodes represented by rXPath.
      */
-    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) SAL_OVERRIDE
     {
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
