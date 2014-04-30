@@ -1532,7 +1532,7 @@ void ScCheckListMenuWindow::initMembers()
         else
         {
             SvTreeListEntry* pEntry = maChecks.InsertEntry(
-                maMembers[i].maName, NULL, false, TREELIST_APPEND, NULL,
+                maMembers[i].maName, NULL, false, LISTBOX_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox);
 
             maChecks.SetCheckButtonState(
