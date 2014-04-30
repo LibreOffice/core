@@ -40,7 +40,7 @@ boost_patches += boost.math.Wunused-local-typedefs.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9885
 boost_patches += boost.multi_array.C4510.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9886
-boost_patches += boost.multi_array.Wshadow.warnings.patch
+boost_patches += boost.multi_array.Wshadow.warnings.patch.2
 # https://svn.boost.org/trac/boost/ticket/9887
 boost_patches += boost.multi_array.Wundef.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9888
