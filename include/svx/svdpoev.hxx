@@ -65,7 +65,7 @@ public:
 
     void MoveMarkedPoints(const Size& rSiz);
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    void RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy=false);
+    void RotateMarkedPoints(const Point& rRef, long nWink);
 
     // Hierbei entstehen eventuell beliebig viele neue Objekte:
     void RipUpAtMarkedPoints() SAL_OVERRIDE;

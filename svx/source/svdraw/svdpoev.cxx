@@ -694,12 +694,10 @@ static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
     if (pC2!=NULL) RotatePoint(*pC2,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
 }
 
-void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy)
+void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink)
 {
-    bCopy=false; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));
-    if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_ROTATE);
     double nSin=sin(nWink*nPi180);
     double nCos=cos(nWink*nPi180);

@@ -1741,7 +1741,7 @@ bool SdrDragMove::EndSdrDrag(bool bCopy)
 
     if (IsDraggingPoints())
     {
-        getSdrDragView().MoveMarkedPoints(Size(DragStat().GetDX(),DragStat().GetDY()),bCopy);
+        getSdrDragView().MoveMarkedPoints(Size(DragStat().GetDX(),DragStat().GetDY()));
     }
     else if (IsDraggingGluePoints())
     {
@@ -2078,7 +2078,7 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
 
     if (IsDraggingPoints())
     {
-        getSdrDragView().ResizeMarkedPoints(DragStat().Ref1(),aXFact,aYFact,bCopy);
+        getSdrDragView().ResizeMarkedPoints(DragStat().Ref1(),aXFact,aYFact);
     }
     else if (IsDraggingGluePoints())
     {
@@ -2222,7 +2222,7 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
     {
         if (IsDraggingPoints())
         {
-            getSdrDragView().RotateMarkedPoints(DragStat().GetRef1(),nWink,bCopy);
+            getSdrDragView().RotateMarkedPoints(DragStat().GetRef1(),nWink);
         }
         else if (IsDraggingGluePoints())
         {
