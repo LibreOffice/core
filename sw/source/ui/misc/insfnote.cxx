@@ -167,11 +167,12 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
     return 0;
 }
 
-SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, bool bEd) :
-    SvxStandardDialog(pParent, "InsertFootnoteDialog", "modules/swriter/ui/insertfootnote.ui"),
-    rSh(rShell),
-    bExtCharAvailable(false),
-    bEdit(bEd)
+SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, bool bEd)
+    : SvxStandardDialog(pParent, "InsertFootnoteDialog", "modules/swriter/ui/insertfootnote.ui")
+    , rSh(rShell)
+    , eCharSet(RTL_TEXTENCODING_DONTKNOW)
+    , bExtCharAvailable(false)
+    , bEdit(bEd)
 {
     get(m_pNumberFrame, "numberingframe");
     get(m_pNumberAutoBtn, "automatic");
