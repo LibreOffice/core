@@ -2089,6 +2089,25 @@ DECLARE_OOXMLIMPORT_TEST(testGridBefore, "gridbefore.docx")
     CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")
+{
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> image(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> graphic;
+    imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
+    uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(58), bitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(320), bitmap->getSize().Height );
+    const uno::Sequence< sal_Int8 > data = bitmap->getDIB(); // as .bmp data
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(56374), data.getLength());
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e0])); // -50 = 206 pixel value
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e1]));
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e2]));
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e3]));
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e4]));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

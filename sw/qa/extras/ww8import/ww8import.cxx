@@ -10,6 +10,8 @@
 
 #if !defined(MACOSX) && !defined(WNT)
 
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
@@ -373,6 +375,25 @@ DECLARE_WW8IMPORT_TEST(testBorderColours, "bordercolours.doc")
     border = getProperty<table::BorderLine2>(anchor, "BottomBorder");
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 #endif
+}
+
+DECLARE_WW8IMPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
+{
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> image(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> graphic;
+    imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
+    uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(58), bitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(320), bitmap->getSize().Height );
+    const uno::Sequence< sal_Int8 > data = bitmap->getDIB(); // as .bmp data
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(20278), data.getLength());
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b0])); // -50 = 206 pixel value
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b1]));
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b2]));
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b3]));
+    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b4]));
 }
 
 #endif
