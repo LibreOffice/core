@@ -1395,9 +1395,13 @@ void ChartController::queryGL3DChart()
 {
     m_bGL3DChart = false;
 
-    uno::Reference<frame::XModel> xModel = m_aModel->getModel();
-    if (!xModel.is())
-        return;
+    uno::Reference<frame::XModel> xModel;
+    {   // it's possible that model was cleared by a different thread!
+        osl::MutexGuard g(m_aModelMutex);
+        if (!m_aModel.is())
+            return;
+        xModel = m_aModel->getModel();
+    }
 
     uno::Reference<XChartDocument> xChartDoc(xModel, uno::UNO_QUERY);
     if (!xChartDoc.is())
