@@ -1021,7 +1021,7 @@ void Ruler::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
         if ( IsControlBackground() )
             aColor = GetControlBackground();
         else
-            aColor = rStyleSettings.GetWorkspaceColor();
+            aColor = rStyleSettings.GetDialogColor();
         SetBackground( aColor );
     }
 
@@ -1185,7 +1185,7 @@ void Ruler::ImplFormat()
 
     // draw margin1, margin2 and in-between
     maVirDev.SetLineColor();
-    maVirDev.SetFillColor( rStyleSettings.GetWorkspaceColor() );
+    maVirDev.SetFillColor( rStyleSettings.GetDialogColor() );
     if ( nM1 > nVirLeft )
         ImplVDrawRect( nP1, nVirTop+1, nM1, nVirBottom ); //left gray rectangle
     if ( nM2 < nP2 )
