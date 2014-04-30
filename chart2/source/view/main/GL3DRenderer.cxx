@@ -1314,22 +1314,7 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     //read pixel to get the index
     Point select = Point(m_aMPos.X(), m_aMPos.Y());
     sal_uInt8 selectColor[4] = {0};
-#if 0
-    int picWidth = m_iWidth - select.X();
-    int picHeight = m_iHeight - select.Y();
-    picWidth = (picWidth - 1) & ~3;
-    picHeight = (picHeight - 1) & ~3;
-    sal_uInt8 *outBuf = (sal_uInt8 *)malloc(picWidth * picHeight * 3 + BMP_HEADER_LEN);
-    CreateBMPHeader(outBuf, picWidth, picHeight);
-    cout << "picWidth = " << picWidth << ", picHeight = " << picHeight << endl;
-    glReadPixels(select.X(), select.Y(), picWidth, picHeight, GL_RGB, GL_UNSIGNED_BYTE, outBuf + BMP_HEADER_LEN);
-    char fileName[256] = {0};
-    sprintf(fileName, "D:\\boundbox.bmp");
-    FILE *pfile = fopen(fileName,"wb");
-    fwrite(outBuf, picWidth * picHeight * 3 + BMP_HEADER_LEN, 1, pfile);
-    fclose(pfile);
-    cout << "select.x = " << select.X() << ", select.y = " << select.Y() << ", width = " << m_iWidth << ", height = " << m_iHeight << endl;
-#endif
+
     glReadPixels(select.X(), select.Y(), 1, 1, GL_RGB, GL_UNSIGNED_BYTE, selectColor);
     int selectID = GetIndexByColor(selectColor[0], selectColor[1], selectColor[2]);
 //    printf("selectColor[0] = %d, selectColor[1] = %d, selectColor[2] = %d, selectID = %d\n", selectColor[0], selectColor[1], selectColor[2], selectID);
