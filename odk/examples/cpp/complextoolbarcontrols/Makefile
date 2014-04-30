@@ -27,6 +27,7 @@ SETTINGS=$(PRJ)/settings
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
+include $(SETTINGS)/platform.mk
 
 # Define non-platform/compiler specific settings
 COMP_NAME=complextoolbarcontrols
@@ -37,6 +38,7 @@ OUT_COMP_SLO=$(OUT_SLO)/$(COMP_NAME)
 COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
 COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(OUT_COMP_GEN)/$(COMP_NAME)/META-INF/manifest.xml
+COMP_UNOPKG_DESCRIPTION = $(OUT_COMP_GEN)/$(COMPONENT_NAME)/description.xml
 COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
 COMP_COMPONENTS = $(OUT_COMP_GEN)/$(COMP_NAME).components
 COMP_REGISTERFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_register_component.flag
@@ -48,11 +50,6 @@ CXXFILES = \
            exports.cxx
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
-
-# Add OSL_DEBUG_LEVEL to compiler the flags (for OSL_TRACE et. al.)
-ifeq "$(DEBUG)" "yes"
-CC_FLAGS += -DOSL_DEBUG_LEVEL=2
-endif
 
 # Targets
 .PHONY: ALL
@@ -92,6 +89,11 @@ ifeq "$(OS)" "MACOSX"
 endif
 endif
 
+# rule for extension description.xml
+$(COMP_UNOPKG_DESCRIPTION) :  description.xml
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_CAT) $< | $(SDK_SED) -e "s/#EXTENSION_PLATFORM#/$(EXTENSION_PLATFORM)/" > $@
+
 # rule for component package manifest
 $(OUT_COMP_GEN)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -121,11 +123,11 @@ $(COMP_COMPONENTS) :
 	@echo $(OSEP)/components$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) Addons.xcu ProtocolHandler.xcu $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
+$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) Addons.xcu ProtocolHandler.xcu $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS) $(COMP_UNOPKG_DESCRIPTION)
 	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))
-	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_NAME).components
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_NAME).components description.xml
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(UNOPKG_PLATFORM)/$(<F)
 	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu logo_small.png logo_big.png
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
