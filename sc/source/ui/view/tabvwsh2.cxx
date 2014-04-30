@@ -249,6 +249,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     SfxRequest aNewReq(rReq);
     aNewReq.SetSlot(nDrawSfxId);
 
+    assert(nNewId != SID_DRAW_CHART); //#i71254# handled already above
+
     switch (nNewId)
     {
         case SID_OBJECT_SELECT:
@@ -294,10 +296,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             SetDrawFormShell(true);
             pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, aNewReq));
             nFormSfxId = nNewFormId;
-            break;
-
-        case SID_DRAW_CHART:
-            pTabView->SetDrawFuncPtr(new FuMarkRect(this, pWin, pView, pDoc, aNewReq));
             break;
 
         case SID_DRAWTBX_CS_BASIC :
