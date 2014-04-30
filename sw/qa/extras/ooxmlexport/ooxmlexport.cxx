@@ -2394,9 +2394,13 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76741, "fdo76741.docx")
 
     if (!pXmlDoc)
        return;
-    assertXPath(pXmlDoc, "//w:jc", "val", "center");
-    assertXPath(pXmlDoc, "//w:tblW", "w", "10081");
-    assertXPath(pXmlDoc, "//w:tblW", "type", "dxa");
+    assertXPath(pXmlDoc, "//mc:Choice//w:jc", "val", "center");
+    assertXPath(pXmlDoc, "//mc:Choice//w:tblW", "w", "10081");
+    assertXPath(pXmlDoc, "//mc:Choice//w:tblW", "type", "dxa");
+
+    assertXPath(pXmlDoc, "//mc:Fallback//w:jc", "val", "center");
+    assertXPath(pXmlDoc, "//mc:Fallback//w:tblW", "w", "10081");
+    assertXPath(pXmlDoc, "//mc:Fallback//w:tblW", "type", "dxa");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
@@ -3197,6 +3201,32 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
                 "PartName",
                 "/word/embeddings/oleObject1.xlsx");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77760, "fdo77760.docx")
+{
+    // The issue file has a table which is actually floating but was not rendered as one
+    // hence its position changed in RoundTrip file in MS Word
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTextTablesSupplier->getTextTables()->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xAnchor(xTextTable->getAnchor(), uno::UNO_QUERY);
+    uno::Any aFrame = xAnchor->getPropertyValue("TextFrame");
+    uno::Reference<beans::XPropertySet> xFrame;
+    aFrame >>= xFrame;
+    CPPUNIT_ASSERT(xFrame.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // check that the table is within a textFrame (floating table)
+    assertXPath(pXmlDoc, "//w:p[1]//mc:Choice//wp:positionV", "relativeFrom", "margin");
+    assertXPath(pXmlDoc, "//w:p[1]//mc:Choice//w:txbxContent/w:tbl", 1);
+    assertXPath(pXmlDoc, "//w:p[1]//mc:Fallback//w:txbxContent/w:tbl", 1);
+    OUString aValue = getXPath(pXmlDoc, "//w:p[1]//mc:Fallback//v:rect", "style");
+    CPPUNIT_ASSERT(aValue.match(OUString("margin-top:86.25pt"),158));
+}
+
 
 #endif
 

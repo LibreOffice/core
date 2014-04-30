@@ -278,12 +278,15 @@ struct FloatingTableInfo
     uno::Reference<text::XTextRange> m_xEnd;
     uno::Sequence<beans::PropertyValue> m_aFrameProperties;
     sal_Int32 m_nTableWidth;
+    sal_Int32 m_nTableHeight;
 
-    FloatingTableInfo(uno::Reference<text::XTextRange> xStart, uno::Reference<text::XTextRange> xEnd, uno::Sequence<beans::PropertyValue> aFrameProperties, sal_Int32 nTableWidth)
+    FloatingTableInfo(uno::Reference<text::XTextRange> xStart, uno::Reference<text::XTextRange> xEnd, uno::Sequence<beans::PropertyValue> aFrameProperties,
+                        sal_Int32 nTableWidth, sal_Int32 nTableHeight)
         : m_xStart(xStart),
         m_xEnd(xEnd),
         m_aFrameProperties(aFrameProperties),
-        m_nTableWidth(nTableWidth)
+        m_nTableWidth(nTableWidth),
+        m_nTableHeight(nTableHeight)
     {
     }
     uno::Any getPropertyValue(const OUString &propertyName);

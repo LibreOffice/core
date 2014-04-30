@@ -905,22 +905,72 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     PrepareHeaderFooterProperties( false );
 }
 
+bool lcl_isValidFloatingTable( sal_Int32 nTextAreaHeight, sal_Int32 nTextAreaWidth, FloatingTableInfo& rInfo )
+{
+
+    // The table height will be zero iff Height was not explicitly mentioned in the xml
+    // for every row in the table.
+
+    // CASE 1
+    // If the table Height is valid and Position is valid then create a floating table
+
+    // CASE 2
+    // else if Height is zero i.e. not mentioned in the document then consider following:-
+    // If the table is wider than the text area, then don't create a fly
+    // OR If the position is relative to the edge of the page or the print area, then
+    // create the fly.
+
+    // CASE 3
+    // Else if both the table width and height are valid then make the table floating
+
+    // Now if table height is mentioned in xml, multi-page floating tables will not break.
+    // Only in cases where the height is zero, and Width or Positions are valid,
+    // then the multi-page tables will break as it be converted to a textFrame
+
+    bool bIsValid = false;
+    bool bIsValidHeight = nTextAreaHeight > 0 && rInfo.m_nTableHeight > 0 && rInfo.m_nTableHeight < nTextAreaHeight;
+    bool bIsValidWidth =  rInfo.m_nTableWidth < nTextAreaWidth;
+    bool bIsValidPosition = ( rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_FRAME  ||
+            rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_PRINT_AREA );
+    if ( ( rInfo.m_nTableHeight == 0 || bIsValidHeight ) && ( bIsValidPosition || bIsValidWidth ) )
+        bIsValid = true;
+
+    return bIsValid;
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     // Text area width is known at the end of a section: decide if tables should be converted or not.
     std::vector<FloatingTableInfo>& rPendingFloatingTables = rDM_Impl.m_aPendingFloatingTables;
     sal_Int32 nTextAreaWidth = GetPageWidth() - GetLeftMargin() - GetRightMargin();
+
+
+    //prepare text grid properties
+    sal_Int32 nHeight = 1;
+    PropertyMap::iterator aElement = find(PROP_HEIGHT);
+    if( aElement != end())
+        aElement->second.getValue() >>= nHeight;
+
+    sal_Int32 nWidth = 1;
+    aElement = find(PROP_WIDTH);
+    if( aElement != end())
+        aElement->second.getValue() >>= nWidth;
+
+    text::WritingMode eWritingMode = text::WritingMode_LR_TB;
+    aElement = find(PROP_WRITING_MODE);
+    if( aElement != end())
+        aElement->second.getValue() >>= eWritingMode;
+
+    sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
+            nHeight - m_nTopMargin - m_nBottomMargin :
+            nWidth - m_nLeftMargin - m_nRightMargin;
+
     uno::Reference<text::XTextAppendAndConvert> xBodyText( rDM_Impl.GetBodyText(), uno::UNO_QUERY );
     for (size_t i = 0; i < rPendingFloatingTables.size(); ++i)
     {
         FloatingTableInfo& rInfo = rPendingFloatingTables[i];
-        // If the table is wider than the text area, then don't create a fly
-        // for the table: no wrapping will be performed anyway, but multi-page
-        // tables will be broken.
-        // If the position is relative to the edge of the page, then we always
-        // create the fly.
-        if ( ( rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_FRAME ) ||
-             ( rInfo.m_nTableWidth < nTextAreaWidth ) )
+
+        if ( lcl_isValidFloatingTable(nTextAreaHeight, nTextAreaWidth, rInfo ) )
             xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
     }
     rPendingFloatingTables.clear();
@@ -1021,25 +1071,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( m_nColumnCount > 0 )
             xColumns = ApplyColumnProperties( xFollowPageStyle );
 
-        //prepare text grid properties
-        sal_Int32 nHeight = 1;
-        PropertyMap::iterator aElement = find(PROP_HEIGHT);
-        if( aElement != end())
-            aElement->second.getValue() >>= nHeight;
-
-        sal_Int32 nWidth = 1;
-        aElement = find(PROP_WIDTH);
-        if( aElement != end())
-            aElement->second.getValue() >>= nWidth;
-
-        text::WritingMode eWritingMode = text::WritingMode_LR_TB;
-        aElement = find(PROP_WRITING_MODE);
-        if( aElement != end())
-            aElement->second.getValue() >>= eWritingMode;
-
-        sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
-            nHeight - m_nTopMargin - m_nBottomMargin :
-            nWidth - m_nLeftMargin - m_nRightMargin;
 
         sal_Int32 nGridLinePitch = m_nGridLinePitch;
         //sep.dyaLinePitch
