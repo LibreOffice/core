@@ -41,13 +41,13 @@ namespace bib
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >
                                 m_xForm;
     private:
-        void    implSetDesignMode( sal_Bool _bDesign );
+        void    implSetDesignMode( bool _bDesign );
 
     protected:
         FormControlContainer( );
         virtual ~FormControlContainer( );
 
-        sal_Bool    isFormConnected() const { return NULL != m_pFormAdapter; }
+        bool    isFormConnected() const { return NULL != m_pFormAdapter; }
         void        connectForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxForm );
         void        disconnectForm();
 

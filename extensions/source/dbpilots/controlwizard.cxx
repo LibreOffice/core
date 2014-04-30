@@ -119,7 +119,7 @@ namespace dbp
     }
 
 
-    sal_Bool OControlWizardPage::updateContext()
+    bool OControlWizardPage::updateContext()
     {
         return getDialog()->updateContext(OAccessRegulator());
     }
@@ -131,7 +131,7 @@ namespace dbp
     }
 
 
-    void OControlWizardPage::setFormConnection( const Reference< XConnection >& _rxConn, sal_Bool _bAutoDispose )
+    void OControlWizardPage::setFormConnection( const Reference< XConnection >& _rxConn, bool _bAutoDispose )
     {
         getDialog()->setFormConnection( OAccessRegulator(), _rxConn, _bAutoDispose );
     }
@@ -143,7 +143,7 @@ namespace dbp
     }
 
 
-    void OControlWizardPage::fillListBox(ListBox& _rList, const Sequence< OUString >& _rItems, sal_Bool _bClear)
+    void OControlWizardPage::fillListBox(ListBox& _rList, const Sequence< OUString >& _rItems, bool _bClear)
     {
         if (_bClear)
             _rList.Clear();
@@ -159,7 +159,7 @@ namespace dbp
     }
 
 
-    void OControlWizardPage::fillListBox(ComboBox& _rList, const Sequence< OUString >& _rItems, sal_Bool _bClear)
+    void OControlWizardPage::fillListBox(ComboBox& _rList, const Sequence< OUString >& _rItems, bool _bClear)
     {
         if (_bClear)
             _rList.Clear();
@@ -205,7 +205,7 @@ namespace dbp
     }
 
 
-    void OControlWizardPage::adjustControlForNoDSDisplay(Control* _pControl, sal_Bool _bConstLowerDistance)
+    void OControlWizardPage::adjustControlForNoDSDisplay(Control* _pControl, bool _bConstLowerDistance)
     {
         ::Size aDistanceToMove = LogicToPixel( ::Size( 0, 37 ), MAP_APPFONT );
 
@@ -467,7 +467,7 @@ namespace dbp
     }
 
 
-    void OControlWizard::setFormConnection( const OAccessRegulator& _rAccess, const Reference< XConnection >& _rxConn, sal_Bool _bAutoDispose )
+    void OControlWizard::setFormConnection( const OAccessRegulator& _rAccess, const Reference< XConnection >& _rxConn, bool _bAutoDispose )
     {
         try
         {
@@ -497,7 +497,7 @@ namespace dbp
     }
 
 
-    sal_Bool OControlWizard::updateContext(const OAccessRegulator&)
+    bool OControlWizard::updateContext(const OAccessRegulator&)
     {
         return initContext();
     }
@@ -518,11 +518,11 @@ namespace dbp
         return xHandler;
     }
 
-    sal_Bool OControlWizard::initContext()
+    bool OControlWizard::initContext()
     {
         DBG_ASSERT(m_aContext.xObjectModel.is(), "OGroupBoxWizard::initContext: have no control model to work with!");
         if (!m_aContext.xObjectModel.is())
-            return sal_False;
+            return false;
 
         // reset the context
         m_aContext.xForm.clear();
@@ -534,7 +534,7 @@ namespace dbp
 
         m_aContext.xObjectContainer.clear();
         m_aContext.aTypes.clear();
-        m_aContext.bEmbedded = sal_False;
+        m_aContext.bEmbedded = false;
 
         Any aSQLException;
         Reference< XPreparedStatement >  xStatement;
@@ -659,7 +659,7 @@ namespace dbp
             // create an interaction handler to display this exception
             Reference< XInteractionHandler > xHandler = getInteractionHandler(this);
             if ( !xHandler.is() )
-                return sal_False;
+                return false;
 
             Reference< XInteractionRequest > xRequest = new OInteractionRequest(makeAny(aContext));
             try
@@ -667,7 +667,7 @@ namespace dbp
                 xHandler->handle(xRequest);
             }
             catch(const Exception&) { }
-            return sal_False;
+            return false;
         }
 
         return 0 != m_aContext.aFieldNames.getLength();
@@ -726,7 +726,7 @@ namespace dbp
     }
 
 
-    sal_Bool OControlWizard::needDatasourceSelection()
+    bool OControlWizard::needDatasourceSelection()
     {
         // lemme see ...
         return (0 == getContext().aFieldNames.getLength());

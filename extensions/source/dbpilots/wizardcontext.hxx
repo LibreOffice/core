@@ -77,7 +77,7 @@ namespace dbp
         ::com::sun::star::uno::Sequence< OUString >
                     aFieldNames;
 
-        sal_Bool bEmbedded;
+        bool bEmbedded;
     };
 
 

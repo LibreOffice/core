@@ -60,7 +60,7 @@ namespace abp
 
         const ODataSource&      getDataSource() const { return m_aNewDataSource; }
 
-        sal_Bool                connectToDataSource( sal_Bool _bForceReConnect );
+        bool                connectToDataSource( bool _bForceReConnect );
 
         void                    travelNext( ) { OAddessBookSourcePilot_Base::travelNext(); }
 
@@ -93,26 +93,26 @@ namespace abp
         /// guesses a default for the table name, if no valid table is selected
         void implDefaultTableName();
 
-        inline sal_Bool needAdminInvokationPage( AddressSourceType _eType ) const
+        inline bool needAdminInvokationPage( AddressSourceType _eType ) const
         {
             return  (   ( AST_LDAP == _eType )
                     ||  ( AST_OTHER == _eType )
                     );
         }
         /// check if with the current settings, we would need to invoke he administration dialog for more details about the data source
-        inline sal_Bool needAdminInvokationPage() const
+        inline bool needAdminInvokationPage() const
         {
             return  needAdminInvokationPage( m_aSettings.eType );
         }
 
-        inline sal_Bool needManualFieldMapping( AddressSourceType _eType ) const
+        inline bool needManualFieldMapping( AddressSourceType _eType ) const
         {
             return  ( AST_OTHER == _eType ) || ( AST_KAB == _eType ) ||
                     ( AST_EVOLUTION == _eType ) || ( AST_EVOLUTION_GROUPWISE == _eType ) ||
                     ( AST_EVOLUTION_LDAP == _eType );
         }
         /// checks if we need a manual (user-guided) field mapping
-        inline sal_Bool needManualFieldMapping() const
+        inline bool needManualFieldMapping() const
         {
             return needManualFieldMapping( m_aSettings.eType );
         }

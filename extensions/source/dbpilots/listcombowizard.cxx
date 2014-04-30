@@ -52,8 +52,8 @@ namespace dbp
     OListComboWizard::OListComboWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_LISTCOMBOWIZARD), _rxObjectModel, _rxContext)
-        ,m_bListBox(sal_False)
-        ,m_bHadDataSelection(sal_True)
+        ,m_bListBox(false)
+        ,m_bHadDataSelection(true)
     {
         initControlSettings(&m_aSettings);
 
@@ -66,25 +66,25 @@ namespace dbp
         if (!needDatasourceSelection())
         {   // ... skip it!
             skip(1);
-            m_bHadDataSelection = sal_False;
+            m_bHadDataSelection = false;
         }
     }
 
 
-    sal_Bool OListComboWizard::approveControl(sal_Int16 _nClassId)
+    bool OListComboWizard::approveControl(sal_Int16 _nClassId)
     {
         switch (_nClassId)
         {
             case FormComponentType::LISTBOX:
-                m_bListBox = sal_True;
+                m_bListBox = true;
                 setTitleBase(ModuleRes(RID_STR_LISTWIZARD_TITLE).toString());
-                return sal_True;
+                return true;
             case FormComponentType::COMBOBOX:
-                m_bListBox = sal_False;
+                m_bListBox = false;
                 setTitleBase(ModuleRes(RID_STR_COMBOWIZARD_TITLE).toString());
-                return sal_True;
+                return true;
         }
-        return sal_False;
+        return false;
     }
 
 
@@ -223,7 +223,7 @@ namespace dbp
     //= OLCPage
 
 
-    Reference< XNameAccess > OLCPage::getTables(sal_Bool _bNeedIt)
+    Reference< XNameAccess > OLCPage::getTables(bool _bNeedIt)
     {
         Reference< XConnection > xConn = getFormConnection();
         DBG_ASSERT(!_bNeedIt || xConn.is(), "OLCPage::getTables: should have an active connection when reaching this page!");
@@ -240,7 +240,7 @@ namespace dbp
     }
 
 
-    Sequence< OUString > OLCPage::getTableFields(sal_Bool _bNeedIt)
+    Sequence< OUString > OLCPage::getTableFields(bool _bNeedIt)
     {
         Reference< XNameAccess > xTables = getTables(_bNeedIt);
         Sequence< OUString > aColumnNames;
@@ -328,7 +328,7 @@ namespace dbp
         m_aSelectTable.Clear();
         try
         {
-            Reference< XNameAccess > xTables = getTables(sal_True);
+            Reference< XNameAccess > xTables = getTables(true);
             Sequence< OUString > aTableNames;
             if (xTables.is())
                 aTableNames = xTables->getElementNames();
@@ -389,7 +389,7 @@ namespace dbp
         OLCPage::initializePage();
 
         // fill the list of fields
-        fillListBox(m_aSelectTableField, getTableFields(sal_True));
+        fillListBox(m_aSelectTableField, getTableFields(true));
 
         m_aSelectTableField.SelectEntry(getSettings().sListContentField);
         m_aDisplayedField.SetText(getSettings().sListContentField);
@@ -467,7 +467,7 @@ namespace dbp
         // fill the value list
         fillListBox(m_aValueListField, getContext().aFieldNames);
         // fill the table field list
-        fillListBox(m_aTableField, getTableFields(sal_True));
+        fillListBox(m_aTableField, getTableFields(true));
 
         // the initial selections
         m_aValueListField.SetText(getSettings().sLinkedFormField);

@@ -465,7 +465,7 @@ namespace pcr
                 Optional< double > aZero( sal_True, 0 );
                 Optional< double > aValueNotPresent( sal_False, 0 );
                 aLineDesc.Control = PropertyHandlerHelper::createNumericControl(
-                    _rxControlFactory, 2, bIsSize ? aZero : aValueNotPresent, aValueNotPresent, sal_False );
+                    _rxControlFactory, 2, bIsSize ? aZero : aValueNotPresent, aValueNotPresent, false );
 
                 Reference< XNumericControl > xNumericControl( aLineDesc.Control, UNO_QUERY_THROW );
                 xNumericControl->setValueUnit( MeasureUnit::MM_100TH );
@@ -630,7 +630,7 @@ namespace pcr
             {
                 Reference< XPropertySet > xRowOrColumn( _rxRowsOrColumns->getByIndex( currentPos ), UNO_QUERY_THROW );
 
-                sal_Bool bIsVisible = sal_True;
+                bool bIsVisible = true;
                 OSL_VERIFY( xRowOrColumn->getPropertyValue( PROPERTY_IS_VISIBLE ) >>= bIsVisible );
                 if ( !bIsVisible )
                     continue;

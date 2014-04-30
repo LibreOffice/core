@@ -47,7 +47,7 @@ class BibWindowContainer : public BibWindow     //Window
 
         virtual void            GetFocus() SAL_OVERRIDE;
 
-        virtual sal_Bool            HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
+        virtual bool            HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
 
         using Window::GetChild;
 };
@@ -96,7 +96,7 @@ class BibBookContainer: public BibSplitWindow
 
         virtual void            GetFocus() SAL_OVERRIDE;
 
-        virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
+        virtual bool        HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
 };
 
 #endif

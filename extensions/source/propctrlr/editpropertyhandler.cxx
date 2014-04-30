@@ -88,9 +88,9 @@ namespace pcr
             {
             case PROPERTY_ID_SHOW_SCROLLBARS:
             {
-                sal_Bool bHasVScroll = sal_False;
+                bool bHasVScroll = false;
                 m_xComponent->getPropertyValue( PROPERTY_VSCROLL ) >>= bHasVScroll;
-                sal_Bool bHasHScroll = sal_False;
+                bool bHasHScroll = false;
                 m_xComponent->getPropertyValue( PROPERTY_HSCROLL ) >>= bHasHScroll;
 
                 aReturn <<= (sal_Int32)( ( bHasVScroll ? 2 : 0 ) + ( bHasHScroll ? 1 : 0 ) );
@@ -100,13 +100,13 @@ namespace pcr
             case PROPERTY_ID_TEXTTYPE:
             {
                 sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
-                sal_Bool bRichText = sal_False;
+                bool bRichText = false;
                 OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_RICHTEXT ) >>= bRichText );
                 if ( bRichText )
                     nTextType = TEXTTYPE_RICHTEXT;
                 else
                 {
-                    sal_Bool bMultiLine = sal_False;
+                    bool bMultiLine = false;
                     OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_MULTILINE ) >>= bMultiLine );
                     if ( bMultiLine )
                         nTextType = TEXTTYPE_MULTILINE;
@@ -146,25 +146,25 @@ namespace pcr
                 sal_Int32 nScrollbars = 0;
                 _rValue >>= nScrollbars;
 
-                sal_Bool bHasVScroll = 0 != ( nScrollbars & 2 );
-                sal_Bool bHasHScroll = 0 != ( nScrollbars & 1 );
+                bool bHasVScroll = 0 != ( nScrollbars & 2 );
+                bool bHasHScroll = 0 != ( nScrollbars & 1 );
 
-                m_xComponent->setPropertyValue( PROPERTY_VSCROLL, makeAny( (sal_Bool)bHasVScroll ) );
-                m_xComponent->setPropertyValue( PROPERTY_HSCROLL, makeAny( (sal_Bool)bHasHScroll ) );
+                m_xComponent->setPropertyValue( PROPERTY_VSCROLL, makeAny( bHasVScroll ) );
+                m_xComponent->setPropertyValue( PROPERTY_HSCROLL, makeAny( bHasHScroll ) );
             }
             break;
 
             case PROPERTY_ID_TEXTTYPE:
             {
-                sal_Bool bMultiLine = sal_False;
-                sal_Bool bRichText = sal_False;
+                bool bMultiLine = false;
+                bool bRichText = false;
                 sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
                 OSL_VERIFY( _rValue >>= nTextType );
                 switch ( nTextType )
                 {
-                case TEXTTYPE_SINGLELINE: bMultiLine = bRichText = sal_False; break;
-                case TEXTTYPE_MULTILINE:  bMultiLine = sal_True; bRichText = sal_False; break;
-                case TEXTTYPE_RICHTEXT:   bMultiLine = sal_True; bRichText = sal_True; break;
+                case TEXTTYPE_SINGLELINE: bMultiLine = bRichText = false; break;
+                case TEXTTYPE_MULTILINE:  bMultiLine = true; bRichText = false; break;
+                case TEXTTYPE_RICHTEXT:   bMultiLine = true; bRichText = true; break;
                 default:
                     OSL_FAIL( "EditPropertyHandler::setPropertyValue: invalid text type!" );
                 }
@@ -289,7 +289,7 @@ namespace pcr
 
         case PROPERTY_ID_MULTILINE:
         {
-            sal_Bool bIsMultiline = sal_False;
+            bool bIsMultiline = false;
             _rNewValue >>= bIsMultiline;
 
             _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, bIsMultiline );

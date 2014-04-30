@@ -52,8 +52,8 @@ namespace dbp
     {
     protected:
         OListComboSettings      m_aSettings;
-        sal_Bool                m_bListBox : 1;
-        sal_Bool                m_bHadDataSelection : 1;
+        bool                m_bListBox : 1;
+        bool                m_bHadDataSelection : 1;
 
     public:
         OListComboWizard(
@@ -64,7 +64,7 @@ namespace dbp
 
         OListComboSettings& getSettings() { return m_aSettings; }
 
-        sal_Bool isListBox() const { return m_bListBox; }
+        bool isListBox() const { return m_bListBox; }
 
     protected:
         // OWizardMachine overridables
@@ -74,7 +74,7 @@ namespace dbp
         virtual bool                leaveState( WizardState _nState ) SAL_OVERRIDE;
         virtual bool                onFinish() SAL_OVERRIDE;
 
-        virtual sal_Bool approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
+        virtual bool                approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
 
         WizardState getFinalState() const { return isListBox() ? LCW_STATE_FIELDLINK : LCW_STATE_COMBODBFIELD; }
 
@@ -92,13 +92,13 @@ namespace dbp
 
     protected:
         OListComboSettings& getSettings() { return static_cast<OListComboWizard*>(getDialog())->getSettings(); }
-        sal_Bool isListBox() { return static_cast<OListComboWizard*>(getDialog())->isListBox(); }
+        bool isListBox() { return static_cast<OListComboWizard*>(getDialog())->isListBox(); }
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-            getTables(sal_Bool _bNeedIt);
+            getTables(bool _bNeedIt);
         ::com::sun::star::uno::Sequence< OUString >
-            getTableFields(sal_Bool _bNeedIt);
+            getTableFields(bool _bNeedIt);
     };
 
 

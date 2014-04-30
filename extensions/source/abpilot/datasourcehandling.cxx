@@ -306,11 +306,11 @@ namespace abp
                                                 xConnection;
         StringBag                               aTables;            // the cached table names
         OUString                         sName;
-        sal_Bool                                bTablesUpToDate;    // table name cache up-to-date?
+        bool                                bTablesUpToDate;    // table name cache up-to-date?
 
         ODataSourceImpl( const Reference< XComponentContext >& _rxORB )
             :xORB( _rxORB )
-            ,bTablesUpToDate( sal_False )
+            ,bTablesUpToDate( false )
         {
         }
 
@@ -433,14 +433,14 @@ namespace abp
     }
 
 
-    sal_Bool ODataSource::rename( const OUString& _rName ) SAL_THROW (( ))
+    bool ODataSource::rename( const OUString& _rName ) SAL_THROW (( ))
     {
         if (!isValid())
             // nothing to do
-            return sal_False;
+            return false;
 
         m_pImpl->sName = _rName;
-        return sal_True;
+        return true;
     }
 
 
@@ -497,16 +497,16 @@ namespace abp
         }
 
         // now the table cache is up-to-date
-        m_pImpl->bTablesUpToDate = sal_True;
+        m_pImpl->bTablesUpToDate = true;
         return m_pImpl->aTables;
     }
 
 
-    sal_Bool ODataSource::connect( Window* _pMessageParent ) SAL_THROW (( ))
+    bool ODataSource::connect( Window* _pMessageParent ) SAL_THROW (( ))
     {
         if ( isConnected( ) )
             // nothing to do
-            return sal_True;
+            return true;
 
 
         // create the interaction handler (needed for authentication and error handling)
@@ -528,7 +528,7 @@ namespace abp
             OUString s_sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
             if ( _pMessageParent )
                 ShowServiceNotAvailableError( _pMessageParent, s_sInteractionHandlerServiceName, true );
-            return sal_False;
+            return false;
         }
 
 
@@ -581,15 +581,15 @@ namespace abp
         }
 
         if ( !xConnection.is() )
-            return sal_False;
+            return false;
 
 
         // success
         m_pImpl->xConnection.reset( xConnection );
         m_pImpl->aTables.clear();
-        m_pImpl->bTablesUpToDate = sal_False;
+        m_pImpl->bTablesUpToDate = false;
 
-        return sal_True;
+        return true;
     }
 
 
@@ -597,17 +597,17 @@ namespace abp
     {
         m_pImpl->xConnection.clear();
         m_pImpl->aTables.clear();
-        m_pImpl->bTablesUpToDate = sal_False;
+        m_pImpl->bTablesUpToDate = false;
     }
 
 
-    sal_Bool ODataSource::isConnected( ) const SAL_THROW (( ))
+    bool ODataSource::isConnected( ) const SAL_THROW (( ))
     {
         return m_pImpl->xConnection.is();
     }
 
 
-    sal_Bool ODataSource::isValid() const SAL_THROW (( ))
+    bool ODataSource::isValid() const SAL_THROW (( ))
     {
         return m_pImpl && m_pImpl->xDataSource.is();
     }

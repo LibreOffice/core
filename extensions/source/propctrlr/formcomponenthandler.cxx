@@ -1226,7 +1226,7 @@ namespace pcr
 
                 Optional< double > aValueNotPresent( sal_False, 0 );
                 aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
-                    _rxControlFactory, nDigits, aValueNotPresent, aValueNotPresent, sal_False );
+                    _rxControlFactory, nDigits, aValueNotPresent, aValueNotPresent, false );
 
                 Reference< XNumericControl > xNumericControl( aDescriptor.Control, UNO_QUERY_THROW );
                 if ( nValueUnit != -1 )
@@ -1255,7 +1255,7 @@ namespace pcr
 
             ::std::vector< OUString > aListEntries;
             tools::StringListResource aRes(PcrRes(nResId),aListEntries);
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, false );
             bNeedDefaultStringIfVoidAllowed = true;
         }
 
@@ -1297,10 +1297,10 @@ namespace pcr
 
             // create the control
             if ( PROPERTY_ID_TARGET_FRAME == nPropId )
-                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
+                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, false, false );
             else
             {
-                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, false );
                 bNeedDefaultStringIfVoidAllowed = true;
             }
         }
@@ -1337,7 +1337,7 @@ namespace pcr
                     aMinValue.Value = 0;
 
                 aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
-                    _rxControlFactory, 0, aMinValue, aMaxValue, sal_False );
+                    _rxControlFactory, 0, aMinValue, aMaxValue, false );
             }
             break;
 
@@ -1347,7 +1347,7 @@ namespace pcr
                 Optional< double > aMaxValue( sal_True, 20 );
 
                 aDescriptor.Control = PropertyHandlerHelper::createNumericControl(
-                    _rxControlFactory, 0, aMinValue, aMaxValue, sal_False );
+                    _rxControlFactory, 0, aMinValue, aMaxValue, false );
             }
             break;
 
@@ -1365,7 +1365,7 @@ namespace pcr
                 ::std::copy( aDatasources.getConstArray(), aDatasources.getConstArray() + aDatasources.getLength(),
                     aListEntries.begin() );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
-                    _rxControlFactory, aListEntries, sal_False, sal_True );
+                    _rxControlFactory, aListEntries, false, true );
             }
             break;
 
@@ -1374,7 +1374,7 @@ namespace pcr
                 ::std::vector< OUString > aFieldNames;
                 impl_initFieldList_nothrow( aFieldNames );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
-                    _rxControlFactory, aFieldNames, sal_False, sal_False );
+                    _rxControlFactory, aFieldNames, false, false );
             }
             break;
 
@@ -2472,7 +2472,7 @@ namespace pcr
                     else
                         impl_fillQueryNames_throw( aNames );
                 }
-                _out_rProperty.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aNames, sal_False, sal_True );
+                _out_rProperty.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aNames, false, true );
             }
             break;
 
@@ -2588,7 +2588,7 @@ namespace pcr
                 else
                     impl_fillTableNames_throw( aListEntries );
             }
-            _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
+            _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, false, false );
         }
         break;
         case ListSourceType_SQL:

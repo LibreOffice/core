@@ -263,7 +263,7 @@ namespace abp
             // no break here
 
         case STATE_INVOKE_ADMIN_DIALOG:
-            if ( !connectToDataSource( sal_False ) )
+            if ( !connectToDataSource( false ) )
             {
                 // connecting did not succeed -> do not allow proceeding
                 bAllow = false;
@@ -401,7 +401,7 @@ namespace abp
     }
 
 
-    sal_Bool OAddessBookSourcePilot::connectToDataSource( sal_Bool _bForceReConnect )
+    bool OAddessBookSourcePilot::connectToDataSource( bool _bForceReConnect )
     {
         DBG_ASSERT( m_aNewDataSource.isValid(), "OAddessBookSourcePilot::implConnect: invalid current data source!" );
 

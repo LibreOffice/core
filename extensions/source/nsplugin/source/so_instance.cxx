@@ -82,7 +82,7 @@ SoPluginInstance::SoPluginInstance(long pParent, Reference< XMultiServiceFactory
     m_nX = 0;
     m_nY = 0;
     m_nFlag = 15;
-    m_bInit = sal_False;
+    m_bInit = false;
     m_hParent = 0;
     m_pParent = pParent;
     m_dParentStyl = 0;
@@ -93,7 +93,7 @@ SoPluginInstance::~SoPluginInstance()
 {
 }
 
-sal_Bool SoPluginInstance::SetURL(char* aURL)
+bool SoPluginInstance::SetURL(char* aURL)
 {
     debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetURL %s\n", aURL);
 
@@ -104,11 +104,11 @@ sal_Bool SoPluginInstance::SetURL(char* aURL)
     m_sURL = OUString(aURL, strlen(aURL), encoding);
     debug_fprintf(NSP_LOG_APPEND, "SetURL %s\nencoding is: %d\n", OUStringToOString(m_sURL,
         RTL_TEXTENCODING_GB_18030).getStr(), m_sURL.getLength(), encoding);
-    return sal_True;
+    return true;
 }
 
 // plugin window UI part: create window, load document
-sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
+bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 {
     // If doc has been loaded, we just resize the window and return
     if(m_bInit)
@@ -117,14 +117,14 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         m_xUnoWin->setPosSize( m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag );
         debug_fprintf(NSP_LOG_APPEND, "set windows to x:%d y:%d w:%d h%d falg:%d\n",
             m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag);
-        return sal_True;
+        return true;
     }
 
     // If mxRemoteMSF is not initialized, we assert and return sal_False
     if(!mxRemoteMSF.is())
     {
         debug_fprintf(NSP_LOG_APPEND, "Remote StarOfiice ServiceManager is not initilzed correctly!\n");
-        return sal_False;
+        return false;
     }
 
     try
@@ -153,7 +153,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !xNewWinPeer.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create first window\n", hParent);
-            return sal_False;
+            return false;
         }
 
         // get interface of first window
@@ -161,7 +161,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if( !m_xUnoWin.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get interface of first window\n", hParent);
-            return sal_False;
+            return false;
         }
 
         // initialize window
@@ -184,7 +184,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             uno::Reference< beans::XPropertySet > xLMProps;
             xFrameProps->getPropertyValue("LayoutManager") >>= xLMProps;
             if ( xLMProps.is() )
-                xLMProps->setPropertyValue("AutomaticToolbars", uno::makeAny( (sal_Bool)sal_False ) );
+                xLMProps->setPropertyValue("AutomaticToolbars", uno::makeAny( false ) );
         }
         catch( const uno::Exception& )
         {}
@@ -197,7 +197,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !m_xFrames.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get frames from FramesSupplier\n");
-            return sal_False;
+            return false;
         }
 
         // append m_xFrame to m_xFrames
@@ -208,7 +208,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !xLoader.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "can not get ComponentLoader to load URL\n");
-            return sal_False;
+            return false;
         }
 
         //create stream for the document
@@ -218,7 +218,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if(!xInputStream.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create XInputStream for URL\n");
-            return sal_False;
+            return false;
         }
 
         // prepare to load document
@@ -253,7 +253,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if ( !m_xComponent.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, Load Componment error\n");
-            return sal_False;
+            return false;
         }
 
          // register the closelistener that will prevent closing of the component
@@ -276,7 +276,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if(!m_xDispatchProvider.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "m_xDispatchProvider can not be getten\n");
-            return sal_False;
+            return false;
         }
 
         //try to enable toolbar and tool windows
@@ -292,7 +292,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 #ifdef WNT
         m_dParentStyl = ::NSP_ResetWinStyl (m_hParent);
 #endif
-        m_bInit = sal_True;
+        m_bInit = true;
 
         try
         {
@@ -311,14 +311,14 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         debug_fprintf(NSP_LOG_APPEND, "Unknown exception while loading document in netscape plugin windows\n");
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
         debug_fprintf(NSP_LOG_APPEND, "error: %s \n", o.pData->buffer );
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int h)
+bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int h)
 {
-    sal_Bool bRetval(sal_True);
+    bool bRetval(true);
 
     if ( m_hParent && !hParent )
     {
@@ -340,12 +340,12 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
         m_nY = y;
 
         if ( m_sURL.isEmpty() )
-            return sal_True;
+            return true;
 
         if(!mxRemoteMSF.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "Remote StarOfiice ServiceManager is not initilzed correctly!\n");
-            return sal_False;
+            return false;
         }
         debug_fprintf(NSP_LOG_APPEND, "in SoPluginInstance::SetWindow, begin LoadDocument(hParent)\n");
         bRetval = LoadDocument(hParent);  // Load document into current window
@@ -353,16 +353,16 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
             // try to reload document again
             debug_fprintf(NSP_LOG_APPEND, "load document error, try to reload it once again\n");
             mxRemoteMSF.clear();
-            m_bInit = sal_False;
+            m_bInit = false;
             bRetval = LoadDocument(hParent);
-            debug_fprintf(NSP_LOG_APPEND, "load document again, return %d\n", bRetval);
+            debug_fprintf(NSP_LOG_APPEND, "load document again, return %d\n", bRetval ? 1 : 0);
         }
     }
 
     return bRetval;
 }
 
-sal_Bool SoPluginInstance::Destroy(void)
+bool SoPluginInstance::Destroy(void)
 {
 #ifdef WNT
     if(m_dParentStyl != 0)
@@ -422,20 +422,20 @@ sal_Bool SoPluginInstance::Destroy(void)
     m_xFrames.clear();
     m_xDispatcher.clear();
     m_xDispatchProvider.clear();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SoPluginInstance::Print(void)
+bool SoPluginInstance::Print(void)
 {
     if(!m_xDispatcher.is())
-        return sal_False;
+        return false;
 
     Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
     m_xDispatcher->executeDispatch(m_xDispatchProvider,
         OUString(".uno:PrintDefault"),
         m_xFrame->getName(), 0,
         propertyValue );
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

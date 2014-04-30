@@ -461,7 +461,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
     {
-        sal_Bool bTypeListBox = sTypeColumnName == rName;
+        bool bTypeListBox = sTypeColumnName == rName;
         xCtrModel = pDatMan->loadControlModel(rName, bTypeListBox);
         if ( xCtrModel.is() )
         {
@@ -563,8 +563,8 @@ void BibGeneralPage::AdjustScrollbars()
     long nVertScrollWidth = aVertScroll.GetSizePixel().Width();
     long nHoriScrollHeight = aHoriScroll.GetSizePixel().Height();
     ::Size aOutSize(GetOutputSizePixel());
-    sal_Bool bHoriVisible = aOutSize.Width() <= aStdSize.Width();
-    sal_Bool bVertVisible = (aOutSize.Height()-(bHoriVisible ? nHoriScrollHeight : 0)) <= (aStdSize.Height());
+    bool bHoriVisible = aOutSize.Width() <= aStdSize.Width();
+    bool bVertVisible = (aOutSize.Height()-(bHoriVisible ? nHoriScrollHeight : 0)) <= (aStdSize.Height());
     aHoriScroll.Show(bHoriVisible);
     aVertScroll.Show(bVertVisible);
 
@@ -700,7 +700,7 @@ void BibGeneralPage::InitFixedTexts( void )
 
 IMPL_LINK(BibGeneralPage, ScrollHdl, ScrollBar*, pScroll)
 {
-    sal_Bool bVertical = &aVertScroll == pScroll;
+    bool bVertical = &aVertScroll == pScroll;
     long nOffset = 0;
     long nCurrentOffset = 0;
     if(bVertical)
@@ -794,13 +794,13 @@ void BibGeneralPage::GetFocus()
     aControlParentWin.GrabFocus();
 }
 
-sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
+bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 {
     DBG_ASSERT( KEY_MOD2 == rKeyEvent.GetKeyCode().GetModifier(), "+BibGeneralPage::HandleShortCutKey(): this is not for me!" );
 
     const vcl::I18nHelper&      rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
     const sal_Unicode           c = rKeyEvent.GetCharCode();
-    sal_Bool                        bHandled = sal_False;
+    bool                        bHandled = false;
 
     sal_Int16                   i;
 
@@ -815,7 +815,7 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
     {
         if( rI18nHelper.MatchMnemonic( aFixedTexts[ i ]->GetText(), c ) )
         {
-            bHandled = sal_True;
+            bHandled = true;
             sal_Int16           nCtrlIndex = nFT2CtrlMap[ i ];
 
             if( nCtrlIndex >= 0 )

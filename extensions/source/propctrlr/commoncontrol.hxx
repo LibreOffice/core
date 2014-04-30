@@ -93,7 +93,7 @@ namespace pcr
         ::com::sun::star::inspection::XPropertyControl&
                                         m_rAntiImpl;
         IModifyListener*                m_pModifyListener;
-        sal_Bool                        m_bModified;
+        bool                        m_bModified;
 
     public:
         /** creates the instance
@@ -125,7 +125,7 @@ namespace pcr
 
         /** sets our "modified" flag to <TRUE/>
         */
-        inline void setModified() { m_bModified = sal_True; }
+        inline void setModified() { m_bModified = true; }
         inline       Window* getVclControlWindow()       { return m_pControlWindow; }
         inline const Window* getVclControlWindow() const { return m_pControlWindow; }
 
@@ -135,7 +135,7 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (::com::sun::star::uno::RuntimeException);
         void SAL_CALL setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getControlWindow() throw (::com::sun::star::uno::RuntimeException);
-        sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
+        bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
         void SAL_CALL notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent

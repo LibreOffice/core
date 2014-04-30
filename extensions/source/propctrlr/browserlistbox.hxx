@@ -107,8 +107,8 @@ namespace pcr
         sal_uInt16                  m_nTheNameSize;
         sal_uInt16                  m_nRowHeight;
         ::std::set< sal_uInt16 >    m_aOutOfDateLines;
-        sal_Bool                    m_bIsActive : 1;
-        sal_Bool                    m_bUpdate : 1;
+        bool                    m_bIsActive : 1;
+        bool                    m_bUpdate : 1;
         ::rtl::Reference< PropertyControlContext_Impl >
                                     m_pControlContextImpl;
 
@@ -128,7 +128,7 @@ namespace pcr
 
         void                        UpdateAll();
 
-        void                        ActivateListBox( sal_Bool _bActive );
+        void                        ActivateListBox( bool _bActive );
 
         sal_uInt16                  CalcVisibleLines();
         void                        EnableUpdate();
@@ -147,7 +147,7 @@ namespace pcr
         void                        Clear();
 
         sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND );
-        sal_Bool                    RemoveEntry( const OUString& _rName );
+        bool                    RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
 
         void                        SetPropertyValue( const OUString& rEntryName, const ::com::sun::star::uno::Any& rValue, bool _bUnknownValue );
@@ -161,7 +161,7 @@ namespace pcr
         sal_Int32                   GetMinimumHeight();
 
 
-        sal_Bool    IsModified( ) const;
+        bool    IsModified( ) const;
         void        CommitModified( );
 
     protected:

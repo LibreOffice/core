@@ -59,10 +59,10 @@ namespace pcr
     {
     private:
         ::osl::Mutex&           m_rMutex;
-        sal_Bool                m_bHasHelpSection;
+        bool                m_bHasHelpSection;
         sal_Int32               m_nMinHelpTextLines;
         sal_Int32               m_nMaxHelpTextLines;
-        sal_Bool                m_bIsReadOnly;
+        bool                m_bIsReadOnly;
         ::std::auto_ptr< ::cppu::IPropertyArrayHelper >
                                 m_pPropertyInfo;
 
@@ -74,8 +74,8 @@ namespace pcr
         using ::comphelper::OPropertyContainerHelper::getFastPropertyValue;
 
     public:
-        inline  sal_Bool    hasHelpSection() const { return m_bHasHelpSection; }
-        inline  sal_Bool    isReadOnly() const { return m_bIsReadOnly; }
+        inline  bool    hasHelpSection() const { return m_bHasHelpSection; }
+        inline  bool    isReadOnly() const { return m_bIsReadOnly; }
         inline  sal_Int32   getMinHelpTextLines() const { return m_nMinHelpTextLines; }
         inline  sal_Int32   getMaxHelpTextLines() const { return m_nMaxHelpTextLines; }
 
@@ -93,10 +93,10 @@ namespace pcr
 
     InspectorModelProperties::InspectorModelProperties( ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
-        ,m_bHasHelpSection( sal_False )
+        ,m_bHasHelpSection( false )
         ,m_nMinHelpTextLines( 3 )
         ,m_nMaxHelpTextLines( 8 )
-        ,m_bIsReadOnly( sal_False )
+        ,m_bIsReadOnly( false )
     {
         registerProperty(
             OUString( "HasHelpSection" ),
@@ -127,7 +127,7 @@ namespace pcr
 
     void InspectorModelProperties::constructWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
-        m_bHasHelpSection = sal_True;
+        m_bHasHelpSection = true;
         m_nMinHelpTextLines = _nMinHelpTextLines;
         m_nMaxHelpTextLines = _nMaxHelpTextLines;
         // no need to notify this, those properties are not bound. Also, the method should

@@ -35,7 +35,7 @@ namespace abp
         ,m_aExplanation         (this, ModuleRes(FT_ADMINEXPLANATION))
         ,m_aInvokeAdminDialog   (this, ModuleRes(PB_INVOKE_ADMIN_DIALOG))
         ,m_aErrorMessage        (this, ModuleRes(FT_ERROR))
-        ,m_bSuccessfullyExecutedDialog(sal_False)
+        ,m_bSuccessfullyExecutedDialog(false)
     {
         FreeResource();
 
@@ -52,7 +52,7 @@ namespace abp
 
     void AdminDialogInvokationPage::implUpdateErrorMessage()
     {
-        const sal_Bool bIsConnected = getDialog()->getDataSource().isConnected();
+        const bool bIsConnected = getDialog()->getDataSource().isConnected();
         m_aErrorMessage.Show( !bIsConnected );
     }
 
@@ -67,7 +67,7 @@ namespace abp
 
     void AdminDialogInvokationPage::implTryConnect()
     {
-        getDialog()->connectToDataSource( sal_True );
+        getDialog()->connectToDataSource( true );
 
         // show our error message if and only if we could not connect
         implUpdateErrorMessage();

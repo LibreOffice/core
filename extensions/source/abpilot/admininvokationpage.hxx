@@ -37,7 +37,7 @@ namespace abp
         PushButton      m_aInvokeAdminDialog;
         FixedText       m_aErrorMessage;
 
-        sal_Bool        m_bSuccessfullyExecutedDialog;
+        bool        m_bSuccessfullyExecutedDialog;
 
     public:
         AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent );

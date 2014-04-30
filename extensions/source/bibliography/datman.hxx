@@ -145,46 +145,46 @@ public:
 
         ::com::sun::star::uno::Sequence< OUString>           getDataSources();
 
-        OUString             getActiveDataSource() {return aDataSourceURL;}
+        OUString                    getActiveDataSource() {return aDataSourceURL;}
         void                        setActiveDataSource(const OUString& rURL);
 
-        OUString             getActiveDataTable();
+        OUString                    getActiveDataTable();
         void                        setActiveDataTable(const OUString& rTable);
 
         void                        setFilter(const OUString& rQuery);
-        OUString                     getFilter();
+        OUString                    getFilter();
 
         ::com::sun::star::uno::Sequence< OUString>           getQueryFields();
-        OUString                     getQueryField();
+        OUString                    getQueryField();
         void                        startQueryWith(const OUString& rQuery);
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >&    getParser() { return m_xParser; }
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                        getForm()   { return m_xForm; }
 
 
-        OUString                     getControlName(sal_Int32 nFormatKey );
+        OUString                    getControlName(sal_Int32 nFormatKey );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const OUString& rName,
-                                                        sal_Bool bForceListBox = sal_False);
+                                                        bool bForceListBox = false);
 
         void                        CreateMappingDialog(Window* pParent);
-        OUString             CreateDBChangeDialog(Window* pParent);
+        OUString                    CreateDBChangeDialog(Window* pParent);
 
         void                        DispatchDBChangeDialog();
-        sal_Bool                    HasActiveConnection() const;
+        bool                        HasActiveConnection() const;
 
         void                        SetView( ::bib::BibView* pView ) { pBibView = pView; }
 
         void                        SetToolbar(BibToolBar* pSet);
 
-        const OUString&        GetIdentifierMapping();
+        const OUString&             GetIdentifierMapping();
         void                        ResetIdentifierMapping() {sIdentifierMapping = OUString();}
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController();
         // #100312# ----------
-        void RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
+        void                        RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
 
-        sal_Bool                    HasActiveConnection();
+        bool                        HasActiveConnection();
 };
 
 

@@ -47,7 +47,7 @@ namespace COMPMOD_NAMESPACE
     class OModuleImpl
     {
         ResMgr*     m_pResources;
-        sal_Bool    m_bInitialized;
+        bool    m_bInitialized;
         OString m_sFilePrefix;
 
     public:
@@ -63,7 +63,7 @@ namespace COMPMOD_NAMESPACE
 
     OModuleImpl::OModuleImpl()
         :m_pResources(NULL)
-        ,m_bInitialized(sal_False)
+        ,m_bInitialized(false)
     {
     }
 
@@ -88,7 +88,7 @@ namespace COMPMOD_NAMESPACE
                 .append(m_sFilePrefix)
                 .append(")!").getStr());
 
-            m_bInitialized = sal_True;
+            m_bInitialized = true;
         }
         return m_pResources;
     }

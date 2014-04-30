@@ -56,7 +56,7 @@ namespace pcr
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xSelectedControl;
         SvTreeListEntry*    m_pLastSelected;
-        sal_Bool        m_bHaveAssignableControl;
+        bool        m_bHaveAssignableControl;
 
     public:
         OSelectLabelDialog(Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);

@@ -40,7 +40,7 @@ ResId SaneResId( sal_uInt32 );
 
 
 
-GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, sal_Bool bCutValues )
+GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, bool bCutValues )
 :   ModalDialog( pParent, SaneResId( GRID_DIALOG ) ),
     m_aGridArea( 50, 15, 100, 100 ),
     m_pXValues( pXValues ),

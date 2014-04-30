@@ -69,8 +69,8 @@ namespace dbp
         OControlWizard*                 getDialog();
         const OControlWizard*           getDialog() const;
         const OControlWizardContext&    getContext();
-        sal_Bool                        updateContext();
-        void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
+        bool                        updateContext();
+        void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection() const;
 
@@ -82,15 +82,15 @@ namespace dbp
         void fillListBox(
             ListBox& _rList,
             const ::com::sun::star::uno::Sequence< OUString >& _rItems,
-            sal_Bool _bClear = sal_True);
+            bool _bClear = true);
         void fillListBox(
             ComboBox& _rList,
             const ::com::sun::star::uno::Sequence< OUString >& _rItems,
-            sal_Bool _bClear = sal_True);
+            bool _bClear = true);
 
     protected:
         void enableFormDatasourceDisplay();
-        void adjustControlForNoDSDisplay(Control* _pControl, sal_Bool bConstLowerDistance = sal_False);
+        void adjustControlForNoDSDisplay(Control* _pControl, bool bConstLowerDistance = false);
 
     protected:
         // OWizardPage overridables
@@ -119,15 +119,15 @@ namespace dbp
         virtual ~OControlWizard();
 
         // make the some base class methods public
-        sal_Bool    travelNext() { return OControlWizard_Base::travelNext(); }
+        bool    travelNext() { return OControlWizard_Base::travelNext(); }
 
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
             getComponentContext() const { return m_xContext; }
 
         const OControlWizardContext&    getContext() const { return m_aContext; }
-        sal_Bool                        updateContext(const OAccessRegulator&);
-        void                            setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
+        bool                        updateContext(const OAccessRegulator&);
+        void                            setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 
@@ -143,18 +143,18 @@ namespace dbp
         // commit the control-relevant settings
         void commitControlSettings(OControlWizardSettings* _pSettings);
 
-        sal_Bool needDatasourceSelection();
+        bool needDatasourceSelection();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection() const;
 
-        virtual sal_Bool approveControl(sal_Int16 _nClassId) = 0;
+        virtual bool approveControl(sal_Int16 _nClassId) = 0;
 
         // ModalDialog overridables
         virtual short   Execute() SAL_OVERRIDE;
 
     private:
-        sal_Bool initContext();
+        bool initContext();
 
         void implGetDSContext();
         void implDetermineForm();

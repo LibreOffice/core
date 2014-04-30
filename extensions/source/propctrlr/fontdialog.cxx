@@ -81,7 +81,7 @@ namespace pcr
             _rxProps );
 
     public:
-        sal_Bool        getCheckFontProperty(const OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
+        bool        getCheckFontProperty(const OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
         OUString getStringFontProperty(const OUString& _rPropName, const OUString& _rDefault);
         sal_Int16       getInt16FontProperty(const OUString& _rPropName, const sal_Int16 _nDefault);
         sal_Int32       getInt32FontProperty(const OUString& _rPropName, const sal_Int32 _nDefault);
@@ -91,7 +91,7 @@ namespace pcr
                             const OUString& _rPropName,
                             sal_uInt16 _nItemId,
                             SfxItemSet& _rSet,
-                            sal_Bool _bForceInvalidation = sal_False);
+                            bool _bForceInvalidation = false);
     };
 
 
@@ -103,13 +103,13 @@ namespace pcr
     }
 
 
-    sal_Bool OFontPropertyExtractor::getCheckFontProperty(const OUString& _rPropName, Any& _rValue)
+    bool OFontPropertyExtractor::getCheckFontProperty(const OUString& _rPropName, Any& _rValue)
     {
         _rValue = m_xPropValueAccess->getPropertyValue(_rPropName);
         if (m_xPropStateAccess.is())
             return PropertyState_DEFAULT_VALUE == m_xPropStateAccess->getPropertyState(_rPropName);
 
-        return sal_False;
+        return false;
     }
 
 
@@ -157,7 +157,7 @@ namespace pcr
     }
 
 
-    void OFontPropertyExtractor::invalidateItem(const OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, sal_Bool _bForceInvalidation)
+    void OFontPropertyExtractor::invalidateItem(const OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, bool _bForceInvalidation)
     {
         if  (   _bForceInvalidation
             ||  (   m_xPropStateAccess.is()
@@ -218,7 +218,7 @@ namespace pcr
             sal_Int16 nFontEmphasisMark     = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, aDefaultVCLFont.GetEmphasisMark());
 
             Any aValue;
-            sal_Bool bWordLineMode          = aPropExtractor.getCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
+            bool bWordLineMode          = aPropExtractor.getCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
             sal_Int32 nColor32              = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTCOLOR, 0);
 
             // build SfxItems with the values

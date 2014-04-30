@@ -66,44 +66,44 @@ struct DispatchInfo
 {
     const char*   pCommand;
     sal_Int16     nGroupId;
-    sal_Bool      bActiveConnection;
+    bool      bActiveConnection;
 };
 
 struct CacheDispatchInfo
 {
     sal_Int16     nGroupId;
-    sal_Bool      bActiveConnection;
+    bool      bActiveConnection;
 };
 
 // Attention: commands must be sorted by command groups. Implementation is dependent
 // on this!!
 static const DispatchInfo SupportedCommandsArray[] =
 {
-    { ".uno:Undo"               ,   frame::CommandGroup::EDIT       , sal_False },
-    { ".uno:Cut"                ,   frame::CommandGroup::EDIT       , sal_False },
-    { ".uno:Copy"               ,   frame::CommandGroup::EDIT       , sal_False },
-    { ".uno:Paste"              ,   frame::CommandGroup::EDIT       , sal_False },
-    { ".uno:SelectAll"          ,   frame::CommandGroup::EDIT       , sal_False },
-    { ".uno:CloseDoc"           ,   frame::CommandGroup::DOCUMENT   , sal_False },
-    { ".uno:StatusBarVisible"   ,   frame::CommandGroup::VIEW       , sal_False },
-    { ".uno:AvailableToolbars"  ,   frame::CommandGroup::VIEW       , sal_False },
-    { ".uno:Bib/standardFilter" ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/DeleteRecord"   ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/InsertRecord"   ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/query"          ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/autoFilter"     ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/source"         ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/removeFilter"   ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/sdbsource"      ,   frame::CommandGroup::DATA       , sal_True  },
-    { ".uno:Bib/Mapping"        ,   frame::CommandGroup::DATA       , sal_True  },
-    { 0                         ,   0                               , sal_False }
+    { ".uno:Undo"               ,   frame::CommandGroup::EDIT       , false },
+    { ".uno:Cut"                ,   frame::CommandGroup::EDIT       , false },
+    { ".uno:Copy"               ,   frame::CommandGroup::EDIT       , false },
+    { ".uno:Paste"              ,   frame::CommandGroup::EDIT       , false },
+    { ".uno:SelectAll"          ,   frame::CommandGroup::EDIT       , false },
+    { ".uno:CloseDoc"           ,   frame::CommandGroup::DOCUMENT   , false },
+    { ".uno:StatusBarVisible"   ,   frame::CommandGroup::VIEW       , false },
+    { ".uno:AvailableToolbars"  ,   frame::CommandGroup::VIEW       , false },
+    { ".uno:Bib/standardFilter" ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/DeleteRecord"   ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/InsertRecord"   ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/query"          ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/autoFilter"     ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/source"         ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/removeFilter"   ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/sdbsource"      ,   frame::CommandGroup::DATA       , true  },
+    { ".uno:Bib/Mapping"        ,   frame::CommandGroup::DATA       , true  },
+    { 0                         ,   0                               , false }
 };
 
 typedef ::boost::unordered_map< OUString, CacheDispatchInfo, OUStringHash, ::std::equal_to< OUString > > CmdToInfoCache;
 
 const CmdToInfoCache& GetCommandToInfoCache()
 {
-    static sal_Bool       bCacheInitialized = sal_False;
+    static bool       bCacheInitialized = false;
     static CmdToInfoCache aCmdToInfoCache;
 
     if ( !bCacheInitialized )
@@ -122,7 +122,7 @@ const CmdToInfoCache& GetCommandToInfoCache()
                 aCmdToInfoCache.insert( CmdToInfoCache::value_type( aCommand, aDispatchInfo ));
                 ++i;
             }
-            bCacheInitialized = sal_True;
+            bCacheInitialized = true;
         }
     }
 
@@ -186,8 +186,8 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
 {
     Window* pParent = VCLUnoHelper::GetWindow( xWindow );
     pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
-    bDisposing=sal_False;
-    bHierarchical=sal_True;
+    bDisposing=false;
+    bHierarchical=true;
     pImp = new BibFrameCtrl_Impl;
     pImp->pController = this;
     pImp->acquire();
@@ -262,7 +262,7 @@ uno::Reference< XModel >  BibFrameController_Impl::getModel() throw (::com::sun:
 
 void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    bDisposing = sal_True;
+    bDisposing = true;
     lang::EventObject aObject;
     aObject.Source = (XController*)this;
     pImp->aLC.disposeAndClear(aObject);
@@ -324,7 +324,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 
-    sal_Bool                                    bGroupFound( sal_False );
+    bool                                    bGroupFound( false );
     frame::DispatchInformation                  aDispatchInfo;
     std::list< frame::DispatchInformation >     aDispatchInfoList;
 
@@ -338,7 +338,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
             if ( pIter->second.nGroupId == nCommandGroup )
             {
-                bGroupFound = sal_True;
+                bGroupFound = true;
                 aDispatchInfo.Command = pIter->first;
                 aDispatchInfo.GroupId = pIter->second.nGroupId;
                 aDispatchInfoList.push_back( aDispatchInfo );
@@ -356,31 +356,31 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     return aSeq;
 }
 
-sal_Bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
+bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
 {
     sal_Int32 nPriv = 0;
     _rxCursorSet->getPropertyValue("Privileges") >>= nPriv;
     return ((_rxCursorSet.is() && (nPriv & sdbcx::Privilege::INSERT) != 0));
 }
 
-sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XFormController>& xController)
+bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XFormController>& xController)
 {
     if (!xController.is())
-        return sal_False;
+        return false;
 
     Reference< XResultSetUpdate> _xCursor = Reference< XResultSetUpdate>(xController->getModel(), UNO_QUERY);
 
     if (!_xCursor.is())
-        return sal_False;
+        return false;
 
     Reference< beans::XPropertySet> _xSet = Reference< beans::XPropertySet>(_xCursor, UNO_QUERY);
     if (!_xSet.is())
-        return sal_False;
+        return false;
 
     // need to save?
-    sal_Bool  bIsNew        = ::comphelper::getBOOL(_xSet->getPropertyValue("IsNew"));
-    sal_Bool  bIsModified   = ::comphelper::getBOOL(_xSet->getPropertyValue("IsModified"));
-    sal_Bool bResult = !bIsModified;
+    bool  bIsNew        = ::comphelper::getBOOL(_xSet->getPropertyValue("IsNew"));
+    bool  bIsModified   = ::comphelper::getBOOL(_xSet->getPropertyValue("IsModified"));
+    bool bResult = !bIsModified;
     if (bIsModified)
     {
         try
@@ -389,7 +389,7 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
                 _xCursor->insertRow();
             else
                 _xCursor->updateRow();
-            bResult = sal_True;
+            bResult = true;
         }
         catch(const Exception&)
         {
@@ -555,15 +555,15 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
             Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
             Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
-            sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
+            bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
             if(!bIsNew)
             {
                 sal_uInt32 nCount = 0;
                 xSet->getPropertyValue("RowCount") >>= nCount;
                 // determine next position
-                sal_Bool bSuccess = sal_False;
-                sal_Bool bLeft = sal_False;
-                sal_Bool bRight = sal_False;
+                bool bSuccess = false;
+                bool bLeft = false;
+                bool bRight = false;
                 try
                 {
                     bLeft = xCursor->isLast() && nCount > 1;
@@ -586,7 +586,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(const Exception&)
                 {
-                    bSuccess = sal_False;
+                    bSuccess = false;
                 }
                 if (bSuccess)
                 {
@@ -594,7 +594,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                         xCursor->relative(bRight ? 1 : -1);
                     else
                     {
-                        sal_Bool bCanInsert = canInsertRecords(xSet);
+                        bool bCanInsert = canInsertRecords(xSet);
                         // can another entry be inserted?
                         try
                         {
@@ -665,7 +665,7 @@ void BibFrameController_Impl::addStatusListener(
     if ( aURL.Path == "StatusBarVisible" )
     {
         aEvent.IsEnabled  = sal_False;
-        aEvent.State <<= sal_Bool( sal_False );
+        aEvent.State <<= false;
     }
     else if ( aURL.Path == "Bib/hierarchical" )
     {
@@ -765,7 +765,7 @@ void BibFrameController_Impl::addStatusListener(
         Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
         Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
         Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
-        sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
+        bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
         if(!bIsNew)
         {
             sal_uInt32 nCount = 0;
@@ -793,7 +793,7 @@ void BibFrameController_Impl::removeStatusListener(
         for ( sal_uInt16 n=0; n<nCount; n++ )
         {
             BibStatusDispatch *pObj = &aStatusListeners[n];
-            sal_Bool bFlag=pObj->xListener.is();
+            bool bFlag=pObj->xListener.is();
             if (!bFlag || (pObj->xListener == aObject &&
                 ( aURL.Complete.isEmpty() || pObj->aURL.Path == aURL.Path  )))
             {
@@ -811,8 +811,8 @@ void BibFrameController_Impl::RemoveFilter()
 
     sal_uInt16 nCount = aStatusListeners.size();
 
-    sal_Bool bRemoveFilter=sal_False;
-    sal_Bool bQueryText=sal_False;
+    bool bRemoveFilter=false;
+    bool bQueryText=false;
 
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
@@ -825,7 +825,7 @@ void BibFrameController_Impl::RemoveFilter()
             aEvent.Requery    = sal_False;
             aEvent.Source     = (XDispatch *) this;
             pObj->xListener->statusChanged( aEvent );
-            bRemoveFilter=sal_True;
+            bRemoveFilter=true;
         }
         else if(pObj->aURL.Path == "Bib/query")
         {
@@ -836,7 +836,7 @@ void BibFrameController_Impl::RemoveFilter()
             aEvent.Source     = (XDispatch *) this;
             aEvent.State <<= aQuery;
             pObj->xListener->statusChanged( aEvent );
-            bQueryText=sal_True;
+            bQueryText=true;
         }
 
         if(bRemoveFilter && bQueryText)
@@ -872,8 +872,8 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
 
     sal_uInt16 nCount = aStatusListeners.size();
 
-    sal_Bool bMenuFilter=sal_False;
-    sal_Bool bQueryText=sal_False;
+    bool bMenuFilter=false;
+    bool bQueryText=false;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         BibStatusDispatch *pObj = &aStatusListeners[n];
@@ -890,7 +890,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.State  = makeAny( aStringSeq );
 
             pObj->xListener->statusChanged( aEvent );
-            bMenuFilter=sal_True;
+            bMenuFilter=true;
         }
         else if (pObj->aURL.Path == "Bib/query")
         {
@@ -902,7 +902,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             BibConfig* pConfig = BibModul::GetConfig();
             aEvent.State <<= pConfig->getQueryText();
             pObj->xListener->statusChanged( aEvent );
-            bQueryText=sal_True;
+            bQueryText=true;
         }
 
         if (bMenuFilter && bQueryText)

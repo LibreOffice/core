@@ -381,7 +381,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
     {
         ::std::vector< OUString > aListEntries;
         tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
         _rValue >>= bValue;
         _rStringRep = bValue ? aListEntries[1] : aListEntries[0];
     }
@@ -520,10 +520,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
     {
         ::std::vector< OUString > aListEntries;
         tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
-        if ( aListEntries[0] == _rStringRep )
-            _rValue <<= (sal_Bool)sal_False;
-        else
-            _rValue <<= (sal_Bool)sal_True;
+        _rValue <<= aListEntries[0] != _rStringRep;
     }
     break;
 

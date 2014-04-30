@@ -43,7 +43,7 @@ namespace dbp
     {
     protected:
         OGridSettings   m_aSettings;
-        sal_Bool        m_bHadDataSelection : 1;
+        bool        m_bHadDataSelection : 1;
 
     public:
         OGridWizard(
@@ -62,7 +62,7 @@ namespace dbp
         virtual bool                leaveState( WizardState _nState ) SAL_OVERRIDE;
         virtual bool                onFinish() SAL_OVERRIDE;
 
-        virtual sal_Bool approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
+        virtual bool                approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
 
     protected:
         void implApplySettings();
@@ -117,7 +117,7 @@ namespace dbp
         void implCheckButtons();
         void implApplySettings();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > implGetColumns(sal_Bool _bShowError = sal_True);
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > implGetColumns(bool _bShowError = true);
     };
 
 

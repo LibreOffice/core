@@ -73,11 +73,11 @@ namespace bib
     //= OComponentAdapterBase
 
 
-    OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp, sal_Bool _bAutoRelease )
+    OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp, bool _bAutoRelease )
         :m_xComponent( _rxComp )
         ,m_pListener( NULL )
         ,m_nLockCount( 0 )
-        ,m_bListening( sal_False )
+        ,m_bListening( false )
         ,m_bAutoRelease( _bAutoRelease )
     {
         OSL_ENSURE( m_xComponent.is(), "OComponentAdapterBase::OComponentAdapterBase: invalid component!" );
@@ -94,7 +94,7 @@ namespace bib
             m_pListener->setAdapter( this );
 
         startComponentListening( );
-        m_bListening = sal_True;
+        m_bListening = true;
     }
 
 
@@ -114,7 +114,7 @@ namespace bib
             m_pListener->setAdapter(NULL);
 
             m_pListener = NULL;
-            m_bListening = sal_False;
+            m_bListening = false;
 
             if (m_bAutoRelease)
                 m_xComponent = NULL;
@@ -138,7 +138,7 @@ namespace bib
         }
 
         m_pListener = NULL;
-        m_bListening = sal_False;
+        m_bListening = false;
 
         if ( m_bAutoRelease )
             m_xComponent = NULL;
@@ -148,7 +148,7 @@ namespace bib
     //= OLoadListenerAdapter
 
 
-    OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable, sal_Bool _bAutoRelease )
+    OLoadListenerAdapter::OLoadListenerAdapter( const Reference< XLoadable >& _rxLoadable, bool _bAutoRelease )
         :OComponentAdapterBase( Reference< XComponent >( _rxLoadable, UNO_QUERY ), _bAutoRelease )
     {
     }

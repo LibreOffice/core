@@ -106,15 +106,15 @@ sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong
     return nMessageID;
 }
 
-sal_Bool Mediator::WaitForMessage( sal_uLong nTimeOut )
+bool Mediator::WaitForMessage( sal_uLong nTimeOut )
 {
     if( ! m_pListener )
-        return sal_False;
+        return false;
 
     size_t nItems = m_aMessageQueue.size();
 
     if( ! nTimeOut && nItems > 0 )
-        return sal_True;
+        return true;
 
     TimeValue aValue;
     aValue.Seconds = nTimeOut/1000;
@@ -125,9 +125,9 @@ sal_Bool Mediator::WaitForMessage( sal_uLong nTimeOut )
         m_aNewMessageCdtn.wait( & aValue );
         m_aNewMessageCdtn.reset();
         if( nTimeOut && m_aMessageQueue.size() == nItems )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 MediatorMessage* Mediator::WaitForAnswer( sal_uLong nMessageID )
@@ -154,7 +154,7 @@ MediatorMessage* Mediator::WaitForAnswer( sal_uLong nMessageID )
     return NULL;
 }
 
-MediatorMessage* Mediator::GetNextMessage( sal_Bool bWait )
+MediatorMessage* Mediator::GetNextMessage( bool bWait )
 {
     while( m_pListener )
     {

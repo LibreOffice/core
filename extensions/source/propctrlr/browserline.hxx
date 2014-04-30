@@ -91,18 +91,18 @@ namespace pcr
         void                SetTitleWidth(sal_uInt16);
 
         void                SetPosSizePixel(Point aPos,Size aSize);
-        void                Show(sal_Bool bFlag=sal_True);
+        void                Show(bool bFlag=true);
         void                Hide();
-        sal_Bool            IsVisible();
+        bool            IsVisible();
 
         Window*             GetRefWindow();
         void                SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags );
 
-        sal_Bool            GrabFocus();
-        void                ShowBrowseButton( const OUString& _rImageURL, sal_Bool _bPrimary );
-        void                ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary );
-        void                ShowBrowseButton( sal_Bool _bPrimary );
-        void                HideBrowseButton( sal_Bool _bPrimary );
+        bool            GrabFocus();
+        void                ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary );
+        void                ShowBrowseButton( const Image& _rImage, bool _bPrimary );
+        void                ShowBrowseButton( bool _bPrimary );
+        void                HideBrowseButton( bool _bPrimary );
 
         void                EnablePropertyControls( sal_Int16 _nControls, bool _bEnable );
         void                EnablePropertyLine( bool _bEnable );
@@ -117,7 +117,7 @@ namespace pcr
         DECL_LINK( OnButtonClicked, PushButton* );
         DECL_LINK( OnButtonFocus, PushButton* );
 
-        void    implHideBrowseButton( sal_Bool _bPrimary, bool _bReLayout );
+        void    implHideBrowseButton( bool _bPrimary, bool _bReLayout );
         void    implUpdateEnabledDisabled();
 
         void    impl_layoutComponents();

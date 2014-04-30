@@ -47,7 +47,7 @@ namespace bib
 
     using namespace ::com::sun::star::uno;
 
-    void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList )
+    void HandleTaskPaneList( Window* pWindow, bool bAddToList )
     {
         Window*             pParent = pWindow->GetParent();
 

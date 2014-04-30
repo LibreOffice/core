@@ -93,7 +93,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
     MediatorMessage* pMessage;
     CommandAtoms nCommand;
-    while( (pMessage = GetNextMessage( sal_False )) )
+    while( (pMessage = GetNextMessage( false )) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
         SAL_INFO("extensions.plugin", GetCommandName(nCommand));

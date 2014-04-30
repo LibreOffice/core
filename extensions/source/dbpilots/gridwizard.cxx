@@ -55,7 +55,7 @@ namespace dbp
     OGridWizard::OGridWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_GRIDWIZARD), _rxObjectModel, _rxContext)
-        ,m_bHadDataSelection(sal_True)
+        ,m_bHadDataSelection(true)
     {
         initControlSettings(&m_aSettings);
 
@@ -68,21 +68,21 @@ namespace dbp
         if (!needDatasourceSelection())
         {   // ... skip it!
             skip(1);
-            m_bHadDataSelection = sal_False;
+            m_bHadDataSelection = false;
         }
     }
 
 
-    sal_Bool OGridWizard::approveControl(sal_Int16 _nClassId)
+    bool OGridWizard::approveControl(sal_Int16 _nClassId)
     {
         if (FormComponentType::GRIDCONTROL != _nClassId)
-            return sal_False;
+            return false;
 
         Reference< XGridColumnFactory > xColumnFactory(getContext().xObjectModel, UNO_QUERY);
         if (!xColumnFactory.is())
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
 
@@ -406,7 +406,7 @@ namespace dbp
 
     IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, PushButton*, _pButton)
     {
-        sal_Bool bMoveRight = (&m_aSelectOne == _pButton);
+        bool bMoveRight = (&m_aSelectOne == _pButton);
         ListBox& rMoveTo = bMoveRight ? m_aSelFields : m_aExistFields;
 
         // the index of the selected entry
@@ -461,7 +461,7 @@ namespace dbp
 
     IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, PushButton*, _pButton)
     {
-        sal_Bool bMoveRight = (&m_aSelectAll == _pButton);
+        bool bMoveRight = (&m_aSelectAll == _pButton);
         m_aExistFields.Clear();
         m_aSelFields.Clear();
         fillListBox(bMoveRight ? m_aSelFields : m_aExistFields, getContext().aFieldNames);

@@ -59,10 +59,10 @@ namespace abp
     }
 
 
-    sal_Bool OAdminDialogInvokation::invokeAdministration( sal_Bool _bFixedType )
+    bool OAdminDialogInvokation::invokeAdministration( bool _bFixedType )
     {
         if (!m_xContext.is())
-            return sal_False;
+            return false;
 
         try
         {
@@ -107,7 +107,7 @@ namespace abp
             if (xDialog.is())
             {   // execute it
                 if (xDialog->execute())
-                    return sal_True;
+                    return true;
             }
             else
                 ShowServiceNotAvailableError(m_pMessageParent, s_sAdministrationServiceName, true);
@@ -116,7 +116,7 @@ namespace abp
         {
             OSL_FAIL("OAdminDialogInvokation::invokeAdministration: caught an exception while executing the dialog!");
         }
-        return sal_False;
+        return false;
     }
 
 

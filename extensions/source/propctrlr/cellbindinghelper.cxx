@@ -92,7 +92,7 @@ namespace pcr
     }
 
 
-    sal_Bool CellBindingHelper::isSpreadsheetDocument( const Reference< XModel >& _rxContextDocument )
+    bool CellBindingHelper::isSpreadsheetDocument( const Reference< XModel >& _rxContextDocument )
     {
         return Reference< XSpreadsheetDocument >::query( _rxContextDocument ).is();
     }

@@ -73,7 +73,7 @@ namespace bib
         if ( xResUpd.is() )
         {
             Any aModified = xProps->getPropertyValue( "IsModified" );
-            sal_Bool bFlag = sal_False;
+            bool bFlag = false;
             if ( ( aModified >>= bFlag ) && bFlag )
             {
 
@@ -124,12 +124,12 @@ namespace bib
         OUString sErrorString( m_pGeneralPage->GetErrorString() );
         if ( !sErrorString.isEmpty() )
         {
-            sal_Bool bExecute = BibModul::GetConfig()->IsShowColumnAssignmentWarning();
+            bool bExecute = BibModul::GetConfig()->IsShowColumnAssignmentWarning();
             if(!m_pDatMan->HasActiveConnection())
             {
                 //no connection is available -> the data base has to be assigned
                 m_pDatMan->DispatchDBChangeDialog();
-                bExecute = sal_False;
+                bExecute = false;
             }
             else if(bExecute)
             {
@@ -142,7 +142,7 @@ namespace bib
                     !aQuery.GetCheckBoxState());
                 if( RET_YES != nResult )
                 {
-                    bExecute = sal_False;
+                    bExecute = false;
                 }
             }
             if(bExecute)
@@ -194,9 +194,9 @@ namespace bib
             m_pGeneralPage->GrabFocus();
     }
 
-    sal_Bool BibView::HandleShortCutKey( const KeyEvent& rKeyEvent )
+    bool BibView::HandleShortCutKey( const KeyEvent& rKeyEvent )
     {
-        return m_pGeneralPage? m_pGeneralPage->HandleShortCutKey( rKeyEvent ) : sal_False;
+        return m_pGeneralPage && m_pGeneralPage->HandleShortCutKey( rKeyEvent );
     }
 
 

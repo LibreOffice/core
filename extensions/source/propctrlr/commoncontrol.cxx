@@ -45,7 +45,7 @@ namespace pcr
         ,m_nControlType( _nControlType )
         ,m_rAntiImpl( _rAntiImpl )
         ,m_pModifyListener( _pModifyListener )
-        ,m_bModified( sal_False )
+        ,m_bModified( false )
     {
         DBG_ASSERT( m_pControlWindow != NULL, "ControlHelper::ControlHelper: invalid window!" );
     }
@@ -80,7 +80,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
+    bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
     {
         return m_bModified;
     }
@@ -93,7 +93,7 @@ namespace pcr
             try
             {
                 m_xContext->valueChanged( &m_rAntiImpl );
-                m_bModified = sal_False;
+                m_bModified = false;
             }
             catch( const Exception& )
             {

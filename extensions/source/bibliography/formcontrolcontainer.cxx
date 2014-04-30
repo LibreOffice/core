@@ -81,8 +81,8 @@ namespace bib
 
     struct ControlModeSwitch : public ::std::unary_function< Reference< XControl >, void >
     {
-        sal_Bool bDesign;
-        ControlModeSwitch( sal_Bool _bDesign ) : bDesign( _bDesign ) { }
+        bool bDesign;
+        ControlModeSwitch( bool _bDesign ) : bDesign( _bDesign ) { }
 
         void operator() ( const Reference< XControl >& _rxControl ) const
         {
@@ -91,7 +91,7 @@ namespace bib
         }
     };
 
-    void FormControlContainer::implSetDesignMode( sal_Bool _bDesign )
+    void FormControlContainer::implSetDesignMode( bool _bDesign )
     {
         try
         {
@@ -120,12 +120,12 @@ namespace bib
 
     void FormControlContainer::_loaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
-        implSetDesignMode( sal_False );
+        implSetDesignMode( false );
     }
 
     void FormControlContainer::_unloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
-        implSetDesignMode( sal_True );
+        implSetDesignMode( true );
     }
 
     void FormControlContainer::_unloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
@@ -134,12 +134,12 @@ namespace bib
 
     void FormControlContainer::_reloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
-        implSetDesignMode( sal_True );
+        implSetDesignMode( true );
     }
 
     void FormControlContainer::_reloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
-        implSetDesignMode( sal_False );
+        implSetDesignMode( false );
     }
 
 

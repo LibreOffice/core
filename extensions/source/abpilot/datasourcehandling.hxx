@@ -133,7 +133,7 @@ namespace abp
 
 
         /// checks whether or not the object represents a valid data source
-        sal_Bool    isValid() const SAL_THROW (( ));
+        bool    isValid() const SAL_THROW (( ));
 
 
         /// removes the data source represented by the object from the data source context
@@ -145,7 +145,7 @@ namespace abp
                     getName() const SAL_THROW (( ));
 
         /// renames the data source
-        sal_Bool    rename( const OUString& _rName ) SAL_THROW (( ));
+        bool    rename( const OUString& _rName ) SAL_THROW (( ));
             // TODO: put this into the context class
 
 
@@ -157,10 +157,10 @@ namespace abp
                 at all.
             @see isConnected
         */
-        sal_Bool    connect( Window* _pMessageParent ) SAL_THROW (( ));
+        bool    connect( Window* _pMessageParent ) SAL_THROW (( ));
 
         /// returns <TRUE/> if the object has a valid connection, obtained from it's data source
-        sal_Bool    isConnected( ) const SAL_THROW (( ));
+        bool    isConnected( ) const SAL_THROW (( ));
 
         /// disconnects from the data source (i.e. disposes the UNO connection hold internally)
         void        disconnect( ) SAL_THROW (( ));

@@ -312,7 +312,7 @@ namespace pcr
                 Reference< XValueBinding > xBinding = m_pHelper->getCurrentBinding( );
                 if ( xBinding.is() )
                 {
-                    sal_Bool bNeedIntegerBinding = ( nExchangeType == 1 );
+                    bool bNeedIntegerBinding = ( nExchangeType == 1 );
                     if ( (bool)bNeedIntegerBinding != m_pHelper->isCellIntegerBinding( xBinding ) )
                     {
                         CellAddress aAddress;
@@ -412,7 +412,7 @@ namespace pcr
             {
                 Reference< XValueBinding > xBinding;
 #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
 #endif
                 _rPropertyValue >>= xBinding;
                 OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (1)!" );
@@ -426,7 +426,7 @@ namespace pcr
             {
                 Reference< XListEntrySource > xSource;
 #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
 #endif
                 _rPropertyValue >>= xSource;
                 OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (2)!" );

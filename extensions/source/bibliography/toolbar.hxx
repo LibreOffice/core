@@ -154,12 +154,12 @@ class BibToolBar:   public ToolBox
         void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
 
         void    ClearSourceList();
-        void    UpdateSourceList(sal_Bool bFlag=sal_True);
-        void    EnableSourceList(sal_Bool bFlag=sal_True);
+        void    UpdateSourceList(bool bFlag=true);
+        void    EnableSourceList(bool bFlag=true);
         void    InsertSourceEntry(const OUString&,sal_Int32  nPos=LISTBOX_APPEND );
         void    SelectSourceEntry(const OUString& );
 
-        void    EnableQuery(sal_Bool bFlag=sal_True);
+        void    EnableQuery(bool bFlag=true);
         void    SetQueryString(const OUString& );
         void    AdjustToolBox();
 

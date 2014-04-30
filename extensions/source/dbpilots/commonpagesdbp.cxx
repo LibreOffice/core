@@ -176,7 +176,7 @@ namespace dbp
             rContext.xForm->setPropertyValue("CommandType", makeAny( nCommandType ) );
 
             if ( !rContext.bEmbedded )
-                setFormConnection( xOldConn, sal_False );
+                setFormConnection( xOldConn, false );
 
             if (!updateContext())
                 return false;
@@ -419,7 +419,7 @@ namespace dbp
     void OMaybeListSelectionPage::implInitialize(const OUString& _rSelection)
     {
         DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::implInitialize: no controls announced!");
-        sal_Bool bIsSelection = ! _rSelection.isEmpty();
+        bool bIsSelection = ! _rSelection.isEmpty();
         m_pYes->Check(bIsSelection);
         m_pNo->Check(!bIsSelection);
         m_pList->Enable(bIsSelection);

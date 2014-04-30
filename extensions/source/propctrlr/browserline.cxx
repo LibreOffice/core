@@ -151,24 +151,24 @@ namespace pcr
     }
 
 
-    sal_Bool OBrowserLine::GrabFocus()
+    bool OBrowserLine::GrabFocus()
     {
-        sal_Bool bRes=sal_False;
+        bool bRes=false;
 
         if ( m_pControlWindow && m_pControlWindow->IsEnabled() )
         {
             m_pControlWindow->GrabFocus();
-            bRes = sal_True;
+            bRes = true;
         }
         else if ( m_pAdditionalBrowseButton && m_pAdditionalBrowseButton->IsEnabled() )
         {
             m_pAdditionalBrowseButton->GrabFocus();
-            bRes = sal_True;
+            bRes = true;
         }
         else if ( m_pBrowseButton && m_pBrowseButton->IsEnabled() )
         {
             m_pBrowseButton->GrabFocus();
-            bRes = sal_True;
+            bRes = true;
         }
         return bRes;
     }
@@ -183,7 +183,7 @@ namespace pcr
     }
 
 
-    void OBrowserLine::Show(sal_Bool bFlag)
+    void OBrowserLine::Show(bool bFlag)
     {
         m_aFtTitle.Show(bFlag);
         if ( m_pControlWindow )
@@ -197,11 +197,11 @@ namespace pcr
 
     void OBrowserLine::Hide()
     {
-        Show(sal_False);
+        Show(false);
     }
 
 
-    sal_Bool OBrowserLine::IsVisible()
+    bool OBrowserLine::IsVisible()
     {
         return m_aFtTitle.IsVisible();
     }
@@ -415,7 +415,7 @@ namespace pcr
     }
 
 
-    void OBrowserLine::ShowBrowseButton( const OUString& _rImageURL, sal_Bool _bPrimary )
+    void OBrowserLine::ShowBrowseButton( const OUString& _rImageURL, bool _bPrimary )
     {
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
 
@@ -427,7 +427,7 @@ namespace pcr
    }
 
 
-    void OBrowserLine::ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary )
+    void OBrowserLine::ShowBrowseButton( const Image& _rImage, bool _bPrimary )
     {
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
         if ( !!_rImage )
@@ -435,13 +435,13 @@ namespace pcr
     }
 
 
-    void OBrowserLine::ShowBrowseButton( sal_Bool _bPrimary )
+    void OBrowserLine::ShowBrowseButton( bool _bPrimary )
     {
         impl_ensureButton( _bPrimary );
     }
 
 
-    void OBrowserLine::implHideBrowseButton( sal_Bool _bPrimary, bool _bReLayout )
+    void OBrowserLine::implHideBrowseButton( bool _bPrimary, bool _bReLayout )
     {
         PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
 
@@ -457,7 +457,7 @@ namespace pcr
     }
 
 
-    void OBrowserLine::HideBrowseButton( sal_Bool _bPrimary )
+    void OBrowserLine::HideBrowseButton( bool _bPrimary )
     {
         implHideBrowseButton( _bPrimary, true );
     }

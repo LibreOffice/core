@@ -59,7 +59,7 @@ namespace pcr
         ,m_xControlModel(_xControlModel)
         ,m_pInitialSelection(NULL)
         ,m_pLastSelected(NULL)
-        ,m_bHaveAssignableControl(sal_False)
+        ,m_bHaveAssignableControl(false)
     {
         // initialize the TreeListBox
         m_aControlTree.SetSelectionMode( SINGLE_SELECTION );
@@ -117,7 +117,7 @@ namespace pcr
 
             // build the tree
             m_pInitialSelection = NULL;
-            m_bHaveAssignableControl = sal_False;
+            m_bHaveAssignableControl = false;
             InsertEntries(xSearch, pRoot);
             m_aControlTree.Expand(pRoot);
         }
@@ -231,7 +231,7 @@ namespace pcr
             if (m_xInitialLabelControl == xAsSet)
                 m_pInitialSelection = pCurrent;
 
-            m_bHaveAssignableControl = sal_True;
+            m_bHaveAssignableControl = true;
         }
 
         return nChildren;

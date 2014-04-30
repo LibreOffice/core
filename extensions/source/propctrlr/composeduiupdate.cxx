@@ -165,7 +165,7 @@ namespace pcr
         void checkDisposed() const;
 
     private:
-        void    impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable );
+        void    impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, bool _bEnable );
 
         /** calls <member>m_pUIChangeNotification</member> at <member>m_rMaster</member>
         */
@@ -240,7 +240,7 @@ namespace pcr
 
     namespace
     {
-        void lcl_markStringKeyPositiveOrNegative( const OUString& _rKeyName, StringBag& _rPositives, StringBag& _rNegatives, sal_Bool _bMarkPositive )
+        void lcl_markStringKeyPositiveOrNegative( const OUString& _rKeyName, StringBag& _rPositives, StringBag& _rNegatives, bool _bMarkPositive )
         {
             if ( _bMarkPositive )
             {
@@ -265,7 +265,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable )
+    void CachedInspectorUI::impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, bool _bEnable )
     {
         if ( _nElementIdOrZero == 0 )
             return;
@@ -603,10 +603,10 @@ namespace pcr
         {
         private:
             const IStringKeyBooleanUIUpdate&    m_rUpdater;
-            sal_Bool                            m_bFlag;
+            bool                            m_bFlag;
 
         public:
-            BooleanUIAspectUpdate( const IStringKeyBooleanUIUpdate& _rUpdater, sal_Bool _bFlag )
+            BooleanUIAspectUpdate( const IStringKeyBooleanUIUpdate& _rUpdater, bool _bFlag )
                 :m_rUpdater( _rUpdater )
                 ,m_bFlag( _bFlag )
             {
@@ -617,7 +617,7 @@ namespace pcr
                 m_rUpdater.updateUIForKey( _rPropertyName, m_bFlag );
             }
 
-            static void forEach( const StringBag& _rProperties, const IStringKeyBooleanUIUpdate& _rUpdater, sal_Bool _bFlag )
+            static void forEach( const StringBag& _rProperties, const IStringKeyBooleanUIUpdate& _rUpdater, bool _bFlag )
             {
                 ::std::for_each( _rProperties.begin(), _rProperties.end(), BooleanUIAspectUpdate( _rUpdater, _bFlag ) );
             }
@@ -666,12 +666,12 @@ namespace pcr
             StringBagCollector::collectAll( aAllNegatives, _rHandlerUIs, _pGetNegatives );
 
             // propagate the "negative" flags to the delegator UI
-            BooleanUIAspectUpdate::forEach( aAllNegatives, _rUIUpdate, sal_False );
+            BooleanUIAspectUpdate::forEach( aAllNegatives, _rUIUpdate, false );
 
             // propagate the "positive" flags to the delegator UI, for all elements where _no_
             // "negative" flag exists
             StringBagComplement::subtract( aAllPositives, aAllNegatives );
-            BooleanUIAspectUpdate::forEach( aAllPositives, _rUIUpdate, sal_True );
+            BooleanUIAspectUpdate::forEach( aAllPositives, _rUIUpdate, true );
 
             // the "positive" request can be cleared no, only negative requests
             // (such as "disable a property" or "hide a category") need to be preserved for the next round

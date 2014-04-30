@@ -45,7 +45,7 @@ namespace abp
             Window* _pMessageParent
         );
 
-        sal_Bool invokeAdministration( sal_Bool _bFixedType );
+        bool invokeAdministration( bool _bFixedType );
     };
 }
 

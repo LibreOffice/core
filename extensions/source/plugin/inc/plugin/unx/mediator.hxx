@@ -114,7 +114,7 @@ public:
         return SendMessage( rMessage.getLength(), rMessage.getStr(), nMessageID );
     }
 
-    sal_Bool WaitForMessage( sal_uLong nTimeOut = 5000 );
+    bool WaitForMessage( sal_uLong nTimeOut = 5000 );
     // timeout in ms
     // TRUE:  Message came in
     // FALSE: timed out
@@ -128,7 +128,7 @@ public:
     MediatorMessage* TransactMessage( sal_uLong nBytes, char* pBytes );
     // sends a message and waits for an answer
 
-    MediatorMessage* GetNextMessage( sal_Bool bWait = sal_False );
+    MediatorMessage* GetNextMessage( bool bWait = false );
 
 
     Link SetConnectionLostHdl( const Link& rLink )

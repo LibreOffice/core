@@ -408,10 +408,10 @@ namespace pcr
         switch ( nControlType )
         {
         case PropertyControlType::ListBox:
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, false );
             break;
         case PropertyControlType::NumericField:
-            aDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue, sal_False );
+            aDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue, false );
             break;
         default:
             aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
@@ -581,7 +581,7 @@ namespace pcr
             ::rtl::Reference< XSDDataType > xDataType( m_pHelper->getValidatingDataType() );
 
             // is removal of this type possible?
-            sal_Bool bIsBasicType = xDataType.is() && xDataType->isBasicType();
+            bool bIsBasicType = xDataType.is() && xDataType->isBasicType();
             _rxInspectorUI->enablePropertyUIElements( PROPERTY_XSD_DATA_TYPE, PropertyLineElement::PrimaryButton, xDataType.is() );
             _rxInspectorUI->enablePropertyUIElements( PROPERTY_XSD_DATA_TYPE, PropertyLineElement::SecondaryButton, xDataType.is() && !bIsBasicType );
 

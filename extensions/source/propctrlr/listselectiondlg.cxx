@@ -80,7 +80,7 @@ namespace pcr
         try
         {
             // initialize the multi-selection flag
-            sal_Bool bMultiSelection = sal_False;
+            bool bMultiSelection = false;
             OSL_VERIFY( m_xListBox->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
             m_aEntries.EnableMultiSelection( bMultiSelection );
 

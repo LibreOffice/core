@@ -358,11 +358,11 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
         Any aResultSetCurrency; aResultSetCurrency <<= (sal_Int32)(ResultSetConcurrency::UPDATABLE);
         xResultSetProps->setPropertyValue("ResultSetConcurrency", aResultSetCurrency);
 
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         try
         {
             xRowSet->execute();
-            bSuccess = sal_True;
+            bSuccess = true;
         }
         catch(const SQLException&)
         {
@@ -371,7 +371,7 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
         catch(const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            bSuccess = sal_False;
+            bSuccess = false;
         }
 
         if (!bSuccess)
@@ -533,7 +533,7 @@ Sequence< OUString > BibliographyLoader::getElementNames(void) throw ( RuntimeEx
 
 sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeException, std::exception )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         Reference< XResultSet >  xCursor = GetDataCursor();
@@ -546,7 +546,7 @@ sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeExc
                 OUString sCurrentId = xIdColumn->getString();
                 if (!xIdColumn->wasNull() && rName.startsWith(sCurrentId))
                 {
-                    bRet = sal_True;
+                    bRet = true;
                     break;
                 }
             }

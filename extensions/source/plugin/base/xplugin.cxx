@@ -124,7 +124,7 @@ XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiSe
         m_nProvidingState( PROVIDING_NONE ),
         m_nCalledFromPlugin( 0 ),
         m_pDisposer( NULL ),
-        m_bIsDisposed( sal_False )
+        m_bIsDisposed( false )
 {
     memset( &m_aInstance, 0, sizeof( m_aInstance ) );
     memset( &m_aNPWindow, 0, sizeof( m_aNPWindow ) );
@@ -237,7 +237,7 @@ void XPlugin_Impl::dispose() throw(std::exception)
 
     if (m_bIsDisposed || !getPluginComm())
         return;
-    m_bIsDisposed = sal_True;
+    m_bIsDisposed = true;
 
     if( isDisposable() )
         secondLevelDispose( this );
@@ -649,7 +649,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
 {
     Guard< Mutex > aGuard( m_aMutex );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( m_nProvidingState != PROVIDING_NONE )
     {
@@ -825,7 +825,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
                     xController->start();
             }
         }
-        bRet = sal_True;
+        bRet = true;
     }
 
     m_nProvidingState = PROVIDING_NONE;

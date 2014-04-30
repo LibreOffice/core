@@ -34,14 +34,14 @@
 
 class PluginDocumentClosePreventer : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {
-    sal_Bool m_bPreventClose;
+    bool m_bPreventClose;
 
 public:
     PluginDocumentClosePreventer()
-    : m_bPreventClose( sal_True )
+    : m_bPreventClose( true )
     {}
 
-    void StopPreventClose() { m_bPreventClose = sal_False; }
+    void StopPreventClose() { m_bPreventClose = false; }
 
     virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
         throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::util::CloseVetoException, std::exception ) SAL_OVERRIDE;

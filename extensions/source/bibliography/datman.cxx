@@ -263,7 +263,7 @@ class MappingDialog_Impl : public ModalDialog
     ListBox*        aListBoxes[COLUMN_COUNT];
     OUString        sNone;
 
-    sal_Bool        bModified;
+    bool        bModified;
 
 
 
@@ -274,7 +274,7 @@ public:
     MappingDialog_Impl(Window* pParent, BibDataManager* pDatMan);
     virtual ~MappingDialog_Impl();
 
-    void    SetModified() {bModified = sal_True;}
+    void    SetModified() {bModified = true;}
 
 };
 
@@ -361,7 +361,7 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     aCustom5FT(this,            BibResId( FT_CUSTOM5        )),
     aCustom5LB(this,            BibResId( LB_CUSTOM5        )),
     sNone(BIB_RESSTR(ST_NONE)),
-    bModified(sal_False)
+    bModified(false)
 {
     FreeResource();
 
@@ -742,7 +742,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             OUString sCurrentModelType;
             const OUString sType("Type");
             sal_Int32 nType = 0;
-            sal_Bool bIsFormatted           = sal_False;
+            bool bIsFormatted           = false;
             sal_Bool bFormattedIsNumeric    = sal_True;
             xField->getPropertyValue(sType) >>= nType;
             switch(nType)
@@ -767,7 +767,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                     // _NO_ break !
                 default:
                     sCurrentModelType = "FormattedField";
-                    bIsFormatted = sal_True;
+                    bIsFormatted = true;
                     break;
             }
 
@@ -1239,7 +1239,7 @@ sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException, std::exc
     Reference< XLoadable >xFormAsLoadable( m_xForm, UNO_QUERY );
     DBG_ASSERT( xFormAsLoadable.is() || !m_xForm.is(), "BibDataManager::isLoaded: invalid form!");
 
-    sal_Bool bLoaded = sal_False;
+    bool bLoaded = false;
     if ( xFormAsLoadable.is() )
         bLoaded = xFormAsLoadable->isLoaded();
     return bLoaded;
@@ -1336,7 +1336,7 @@ OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
 }
 
 Reference< awt::XControlModel > BibDataManager::loadControlModel(
-                    const OUString& rName, sal_Bool bForceListBox)
+                    const OUString& rName, bool bForceListBox)
 {
     Reference< awt::XControlModel > xModel;
     OUString aName("View_");
@@ -1376,7 +1376,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
             xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, makeAny( rName ) );
-            xPropSet->setPropertyValue("NativeWidgetLook", makeAny( (sal_Bool)sal_True ) );
+            xPropSet->setPropertyValue("NativeWidgetLook", makeAny( true ) );
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 
@@ -1627,9 +1627,9 @@ void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
 }
 
 
-sal_Bool BibDataManager::HasActiveConnection()const
+bool BibDataManager::HasActiveConnection()const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     Reference< XPropertySet >   xPrSet( m_xForm, UNO_QUERY );
     if( xPrSet.is() )
     {
@@ -1640,7 +1640,7 @@ sal_Bool BibDataManager::HasActiveConnection()const
     return bRet;
 }
 
-sal_Bool BibDataManager::HasActiveConnection()
+bool BibDataManager::HasActiveConnection()
 {
     return getConnection( m_xForm ).is();
 }

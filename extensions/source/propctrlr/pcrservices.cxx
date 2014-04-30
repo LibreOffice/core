@@ -28,7 +28,7 @@ using namespace ::com::sun::star::registry;
 
 extern "C" void SAL_CALL pcr_initializeModule()
 {
-    static sal_Bool s_bInit = sal_False;
+    static bool s_bInit = false;
     if (!s_bInit)
     {
         createRegistryInfo_OPropertyBrowserController();
@@ -50,7 +50,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
         createRegistryInfo_StringRepresentation();
         createRegistryInfo_MasterDetailLinkDialog();
         createRegistryInfo_FormGeometryHandler();
-        s_bInit = sal_True;
+        s_bInit = true;
     }
 }
 

@@ -66,19 +66,19 @@ namespace abp
     }
 
 
-    sal_Bool FinalPage::isValidName() const
+    bool FinalPage::isValidName() const
     {
         OUString sCurrentName(m_aName.GetText());
 
         if (sCurrentName.isEmpty())
             // the name must not be empty
-            return sal_False;
+            return false;
 
         if ( m_aInvalidDataSourceNames.find( sCurrentName ) != m_aInvalidDataSourceNames.end() )
             // there already is a data source with this name
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
 
@@ -180,9 +180,9 @@ namespace abp
 
     void FinalPage::implCheckName()
     {
-        sal_Bool bValidName = isValidName();
-        sal_Bool bEmptyName = m_aName.GetText().isEmpty();
-        sal_Bool bEmptyLocation = m_aLocation.GetText().isEmpty();
+        bool bValidName = isValidName();
+        bool bEmptyName = m_aName.GetText().isEmpty();
+        bool bEmptyLocation = m_aLocation.GetText().isEmpty();
 
         // enable or disable the finish button
         getDialog()->enableButtons( WZB_FINISH, !bEmptyLocation && (!m_aRegisterName.IsChecked() || bValidName) );
@@ -201,7 +201,7 @@ namespace abp
 
     IMPL_LINK_NOARG(FinalPage, OnRegister)
     {
-        sal_Bool bEnable = m_aRegisterName.IsChecked();
+        bool bEnable = m_aRegisterName.IsChecked();
         m_aNameLabel.Enable(bEnable);
         m_aName.Enable(bEnable);
         implCheckName();

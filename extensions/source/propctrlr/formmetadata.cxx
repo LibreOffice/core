@@ -529,11 +529,11 @@ namespace pcr
     }
 
 
-    sal_Bool OPropertyInfoService::isComposeable( const OUString& _rPropertyName ) const
+    bool OPropertyInfoService::isComposeable( const OUString& _rPropertyName ) const
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
         if ( nId == -1 )
-            return sal_False;
+            return false;
 
         sal_uInt32 nFlags = getPropertyUIFlags( nId );
         return ( nFlags & PROP_FLAG_COMPOSEABLE ) != 0;

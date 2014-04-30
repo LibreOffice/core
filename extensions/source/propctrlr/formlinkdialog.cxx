@@ -340,7 +340,7 @@ namespace pcr
         // in all rows, there must be either two valid selections, or none at all
         // If there is at least one row with exactly one valid selection, then the
         // OKButton needs to be disabled
-        sal_Bool bEnable = sal_True;
+        bool bEnable = true;
 
         const FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
@@ -352,7 +352,7 @@ namespace pcr
             if  (  aRows[ i ]->GetFieldName( FieldLinkRow::eDetailField, sNotInterestedInRightNow )
                 != aRows[ i ]->GetFieldName( FieldLinkRow::eMasterField, sNotInterestedInRightNow )
                 )
-                bEnable = sal_False;
+                bEnable = false;
         }
 
         m_aOK.Enable( bEnable );
@@ -491,7 +491,7 @@ namespace pcr
     }
 
 
-    sal_Bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& /*_rxRHS*/,
+    bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& /*_rxRHS*/,
             // TODO: fix the usage of _rxRHS. This is issue #i81956#.
         Sequence< OUString >& _rLeftFields, Sequence< OUString >& _rRightFields ) const
     {
@@ -566,7 +566,7 @@ namespace pcr
 
         try
         {
-            sal_Bool bEnable = sal_True;
+            bool bEnable = true;
 
             // only show the button when both forms are based on the same data source
             if ( bEnable )
@@ -589,7 +589,7 @@ namespace pcr
                 }
                 catch(const Exception&)
                 {
-                    bEnable = sal_False;
+                    bEnable = false;
                 }
             }
 

@@ -69,7 +69,7 @@ namespace abp
 
 
 
-        sal_Bool invokeDialog( const Reference< XComponentContext >& _rxORB, class Window* _pParent,
+        bool invokeDialog( const Reference< XComponentContext >& _rxORB, class Window* _pParent,
             const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings ) SAL_THROW ( ( ) )
         {
             _rSettings.aFieldMapping.clear();
@@ -77,7 +77,7 @@ namespace abp
             DBG_ASSERT( _rxORB.is(), "fieldmapping::invokeDialog: invalid service factory!" );
             DBG_ASSERT( _rxDataSource.is(), "fieldmapping::invokeDialog: invalid data source!" );
             if ( !_rxORB.is() || !_rxDataSource.is() )
-                return sal_False;
+                return false;
 
             try
             {
@@ -102,7 +102,7 @@ namespace abp
 
                     Sequence< AliasProgrammaticPair > aMapping;
 #ifdef DBG_UTIL
-                    sal_Bool bSuccess =
+                    bool bSuccess =
 #endif
                     xDialogProps->getPropertyValue("FieldMapping") >>= aMapping;
                     DBG_ASSERT( bSuccess, "fieldmapping::invokeDialog: invalid property type for FieldMapping!" );
@@ -113,7 +113,7 @@ namespace abp
                     for (;pMapping != pMappingEnd; ++pMapping)
                         _rSettings.aFieldMapping[ pMapping->ProgrammaticName ] = pMapping->Alias;
 
-                    return sal_True;
+                    return true;
                 }
 
             }
@@ -121,7 +121,7 @@ namespace abp
             {
                 OSL_FAIL("fieldmapping::invokeDialog: caught an exception while executing the dialog!");
             }
-            return sal_False;
+            return false;
         }
 
 
@@ -326,7 +326,7 @@ namespace abp
                 _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
             // set the flag
-            aAddressBookSettings.setNodeValue( OUString( "AutoPilotCompleted" ), makeAny( (sal_Bool)sal_True ) );
+            aAddressBookSettings.setNodeValue( OUString( "AutoPilotCompleted" ), makeAny( true ) );
 
             // commit the changes done
             aAddressBookSettings.commit();

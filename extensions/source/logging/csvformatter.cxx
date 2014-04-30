@@ -92,11 +92,11 @@ namespace logging
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        sal_Bool m_LogEventNo;
-        sal_Bool m_LogThread;
-        sal_Bool m_LogTimestamp;
-        sal_Bool m_LogSource;
-        sal_Bool m_MultiColumn;
+        bool m_LogEventNo;
+        bool m_LogThread;
+        bool m_LogTimestamp;
+        bool m_LogSource;
+        bool m_MultiColumn;
         ::com::sun::star::uno::Sequence< OUString > m_Columnnames;
     };
 } // namespace logging

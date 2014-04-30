@@ -77,7 +77,7 @@ class GridWindow : public ModalDialog
     sal_uInt16      m_BmOffX;
     sal_uInt16      m_BmOffY;
 
-    sal_Bool            m_bCutValues;
+    bool            m_bCutValues;
 
     // stuff for handles
     std::vector< impHandle >    m_aHandles;
@@ -117,7 +117,7 @@ class GridWindow : public ModalDialog
     virtual void MouseButtonUp( const MouseEvent& ) SAL_OVERRIDE;
 public:
     GridWindow( double* pXValues, double* pYValues, int nValues,
-                Window* pParent, sal_Bool bCutValues = sal_True );
+                Window* pParent, bool bCutValues = true );
     virtual ~GridWindow();
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );

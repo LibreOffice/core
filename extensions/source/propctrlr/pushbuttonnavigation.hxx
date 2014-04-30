@@ -36,7 +36,7 @@ namespace pcr
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     m_xControlModel;
-        sal_Bool    m_bIsPushButton;
+        bool    m_bIsPushButton;
 
     public:
         /** ctor

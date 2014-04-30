@@ -94,8 +94,8 @@ namespace pcr
             createListBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl,
-                sal_Bool _bSorted
+                bool _bReadOnlyControl,
+                bool _bSorted
             );
 
         /** creates an <member scope="com::sun::star::inspection">PropertyControlType::ComboBox</member>-type control
@@ -120,8 +120,8 @@ namespace pcr
             createComboBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl,
-                sal_Bool _bSorted
+                bool _bReadOnlyControl,
+                bool _bSorted
             );
 
         /** creates an <member scope="com::sun::star::inspection">PropertyControlType::NumericField</member>-type control
@@ -150,7 +150,7 @@ namespace pcr
                 sal_Int16 _nDigits,
                 const ::com::sun::star::beans::Optional< double >& _rMinValue,
                 const ::com::sun::star::beans::Optional< double >& _rMaxValue,
-                sal_Bool _bReadOnlyControl
+                bool _bReadOnlyControl
             );
 
         /** marks the document passed in our UNO context as modified
@@ -190,7 +190,7 @@ namespace pcr
                 the attributes of the property which should be reflected by a to-be-created
                 <type scope="com::sun::star::inspection">XPropertyControl</type>
         */
-        inline static sal_Bool requiresReadOnlyControl( sal_Int16 _nPropertyAttributes )
+        inline static bool requiresReadOnlyControl( sal_Int16 _nPropertyAttributes )
         {
             return ( _nPropertyAttributes & ::com::sun::star::beans::PropertyAttribute::READONLY ) != 0;
         }

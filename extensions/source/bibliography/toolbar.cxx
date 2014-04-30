@@ -67,7 +67,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
         ::com::sun::star::uno::Any aState=rEvt.State;
         if(aState.getValueType()==::getBooleanCppuType())
         {
-            sal_Bool bChecked= *(sal_Bool*)aState.getValue();
+            bool bChecked= *(sal_Bool*)aState.getValue();
             pToolBar->CheckItem(nIndex, bChecked);
         }
 
@@ -98,7 +98,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
         Any aState = rEvt.State;
         if(aState.getValueType() == ::getCppuType((Sequence<OUString>*)0))
         {
-            pToolBar->UpdateSourceList(sal_False);
+            pToolBar->UpdateSourceList(false);
             pToolBar->ClearSourceList();
 
             Sequence<OUString>* pStringSeq = (Sequence<OUString>*)aState.getValue();
@@ -111,7 +111,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
                 aEntry = pStringArray[i];
                 pToolBar->InsertSourceEntry(aEntry);
             }
-            pToolBar->UpdateSourceList(sal_True);
+            pToolBar->UpdateSourceList(true);
         }
 
         pToolBar->SelectSourceEntry(rEvt.FeatureDescriptor);
@@ -391,7 +391,7 @@ void BibToolBar::SelectFilterItem(sal_uInt16    nId)
     aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
 }
 
-void BibToolBar::EnableSourceList(sal_Bool bFlag)
+void BibToolBar::EnableSourceList(bool bFlag)
 {
     aFtSource.Enable(bFlag);
     aLBSource.Enable(bFlag);
@@ -402,7 +402,7 @@ void BibToolBar::ClearSourceList()
     aLBSource.Clear();
 }
 
-void BibToolBar::UpdateSourceList(sal_Bool bFlag)
+void BibToolBar::UpdateSourceList(bool bFlag)
 {
     aLBSource.SetUpdateMode(bFlag);
 }
@@ -417,7 +417,7 @@ void BibToolBar::SelectSourceEntry(const OUString& aStr)
     aLBSource.SelectEntry(aStr);
 }
 
-void BibToolBar::EnableQuery(sal_Bool bFlag)
+void BibToolBar::EnableQuery(bool bFlag)
 {
     aFtQuery.Enable(bFlag);
     aEdQuery.Enable(bFlag);
@@ -534,18 +534,18 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
 {
-    sal_Bool bRebuildToolBar = sal_False;
+    bool bRebuildToolBar = false;
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
     if ( nSymbolsSize != eSymbolsSize )
     {
         nSymbolsSize = eSymbolsSize;
-        bRebuildToolBar = sal_True;
+        bRebuildToolBar = true;
     }
     else if ( nOutStyle != SvtMiscOptions().GetToolboxStyle() )
     {
         nOutStyle = SvtMiscOptions().GetToolboxStyle();
         SetOutStyle( nOutStyle );
-        bRebuildToolBar = sal_True;
+        bRebuildToolBar = true;
     }
 
     if ( bRebuildToolBar )

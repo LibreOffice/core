@@ -82,7 +82,7 @@ namespace pcr
 
     PushButtonNavigation::PushButtonNavigation( const Reference< XPropertySet >& _rxControlModel )
         :m_xControlModel( _rxControlModel )
-        ,m_bIsPushButton( sal_False )
+        ,m_bIsPushButton( false )
     {
         OSL_ENSURE( m_xControlModel.is(), "PushButtonNavigation::PushButtonNavigation: invalid control model!" );
 

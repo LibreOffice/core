@@ -101,7 +101,7 @@ SANE_Status     (*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = 0;
 SANE_Status     (*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = 0;
 SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = 0;
 
-static sal_Bool bSaneSymbolLoadFailed = sal_False;
+static bool bSaneSymbolLoadFailed = false;
 
 inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
 {
@@ -110,7 +110,7 @@ inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
     {
         fprintf( stderr, "Could not load symbol %s\n",
                  pSymbolname );
-        bSaneSymbolLoadFailed = sal_True;
+        bSaneSymbolLoadFailed = true;
     }
     return pFunction;
 }
@@ -185,7 +185,7 @@ void Sane::Init()
 
     if( pSaneLib )
     {
-        bSaneSymbolLoadFailed = sal_False;
+        bSaneSymbolLoadFailed = false;
         p_init = (SANE_Status(*)(SANE_Int*, SANE_Auth_Callback ))
             LoadSymbol( "sane_init" );
         p_exit = (void(*)())
@@ -278,15 +278,15 @@ void Sane::ReloadOptions()
         mppOptions[ i ] =  (SANE_Option_Descriptor*)
             p_get_option_descriptor( maHandle, i );
 
-    CheckConsistency( NULL, sal_True );
+    CheckConsistency( NULL, true );
 
     maReloadOptionsLink.Call( this );
 }
 
-sal_Bool Sane::Open( const char* name )
+bool Sane::Open( const char* name )
 {
     SANE_Status nStatus = p_open( (SANE_String_Const)name, &maHandle );
-    FAIL_STATE( nStatus, "sane_open", sal_False );
+    FAIL_STATE( nStatus, "sane_open", false );
 
     ReloadOptions();
 
@@ -303,17 +303,17 @@ sal_Bool Sane::Open( const char* name )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool Sane::Open( int n )
+bool Sane::Open( int n )
 {
     if( n >= 0 && n < nDevices )
     {
         mnDevice = n;
         return Open( (char*)ppDevices[n]->name );
     }
-    return sal_False;
+    return false;
 }
 
 void Sane::Close()
@@ -340,47 +340,47 @@ int Sane::GetOptionByName( const char* rName )
     return -1;
 }
 
-sal_Bool Sane::GetOptionValue( int n, sal_Bool& rRet )
+bool Sane::GetOptionValue( int n, bool& rRet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_BOOL )
-        return sal_False;
+        return false;
     SANE_Word nRet;
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, &nRet );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
+        return false;
 
     rRet = nRet;
-    return sal_True;
+    return true;
 }
 
-sal_Bool Sane::GetOptionValue( int n, OString& rRet )
+bool Sane::GetOptionValue( int n, OString& rRet )
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
-        return sal_False;
+        return false;
     boost::scoped_array<char> pRet(new char[mppOptions[n]->size+1]);
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet.get() );
     if( nStatus == SANE_STATUS_GOOD )
     {
-        bSuccess = sal_True;
+        bSuccess = true;
         rRet = pRet.get();
     }
     return bSuccess;
 }
 
-sal_Bool Sane::GetOptionValue( int n, double& rRet, int nElement )
+bool Sane::GetOptionValue( int n, double& rRet, int nElement )
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return sal_False;
+        return false;
 
     boost::scoped_array<SANE_Word> pRet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet.get() );
     if( nStatus == SANE_STATUS_GOOD )
     {
-        bSuccess = sal_True;
+        bSuccess = true;
         if( mppOptions[n]->type == SANE_TYPE_INT )
             rRet = (double)pRet[ nElement ];
         else
@@ -389,16 +389,16 @@ sal_Bool Sane::GetOptionValue( int n, double& rRet, int nElement )
     return bSuccess;
 }
 
-sal_Bool Sane::GetOptionValue( int n, double* pSet )
+bool Sane::GetOptionValue( int n, double* pSet )
 {
     if( ! maHandle  || ! ( mppOptions[n]->type == SANE_TYPE_FIXED ||
                            mppOptions[n]->type == SANE_TYPE_INT ) )
-        return sal_False;
+        return false;
 
     boost::scoped_array<SANE_Word> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pFixedSet.get() );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
+        return false;
     for( size_t i = 0; i <mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
@@ -406,38 +406,38 @@ sal_Bool Sane::GetOptionValue( int n, double* pSet )
         else
             pSet[i] = (double) pFixedSet[i];
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool Sane::SetOptionValue( int n, sal_Bool bSet )
+bool Sane::SetOptionValue( int n, bool bSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_BOOL )
-        return sal_False;
+        return false;
     SANE_Word nRet = bSet ? SANE_TRUE : SANE_FALSE;
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, &nRet );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
-sal_Bool Sane::SetOptionValue( int n, const OUString& rSet )
+bool Sane::SetOptionValue( int n, const OUString& rSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
-        return sal_False;
+        return false;
     OString aSet(OUStringToOString(rSet, osl_getThreadTextEncoding()));
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, (void*)aSet.getStr() );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
-sal_Bool Sane::SetOptionValue( int n, double fSet, int nElement )
+bool Sane::SetOptionValue( int n, double fSet, int nElement )
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return sal_False;
+        return false;
 
     SANE_Status nStatus;
     if( mppOptions[n]->size/sizeof(SANE_Word) > 1 )
@@ -459,16 +459,16 @@ sal_Bool Sane::SetOptionValue( int n, double fSet, int nElement )
 
         nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, &nSetTo );
         if( nStatus == SANE_STATUS_GOOD )
-            bSuccess = sal_True;
+            bSuccess = true;
     }
     return bSuccess;
 }
 
-sal_Bool Sane::SetOptionValue( int n, double* pSet )
+bool Sane::SetOptionValue( int n, double* pSet )
 {
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return sal_False;
+        return false;
     boost::scoped_array<SANE_Word> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     for( size_t i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
@@ -479,8 +479,8 @@ sal_Bool Sane::SetOptionValue( int n, double* pSet )
     }
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet.get() );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 enum FrameStyleType {
@@ -519,7 +519,7 @@ static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
     return nByte;
 }
 
-sal_Bool Sane::CheckConsistency( const char* pMes, sal_Bool bInit )
+bool Sane::CheckConsistency( const char* pMes, bool bInit )
 {
     static const SANE_Option_Descriptor** pDescArray = NULL;
     static const SANE_Option_Descriptor*  pZero = NULL;
@@ -529,15 +529,15 @@ sal_Bool Sane::CheckConsistency( const char* pMes, sal_Bool bInit )
         pDescArray = mppOptions;
         if( mppOptions )
             pZero = mppOptions[0];
-        return sal_True;
+        return true;
     }
 
-    sal_Bool bConsistent = sal_True;
+    bool bConsistent = true;
 
     if( pDescArray != mppOptions )
-        bConsistent = sal_False;
+        bConsistent = false;
     if( pZero != mppOptions[0] )
-        bConsistent = sal_False;
+        bConsistent = false;
 
     if( ! bConsistent )
         dbg_msg( "Sane is not consistent. (%s)\n", pMes );
@@ -545,16 +545,16 @@ sal_Bool Sane::CheckConsistency( const char* pMes, sal_Bool bInit )
     return bConsistent;
 }
 
-sal_Bool Sane::Start( BitmapTransporter& rBitmap )
+bool Sane::Start( BitmapTransporter& rBitmap )
 {
     int nStream = 0, nLine = 0, i = 0;
     SANE_Parameters aParams;
     FrameStyleType eType = FrameStyle_Gray;
-    sal_Bool bSuccess = sal_True;
-    sal_Bool bWidthSet = sal_False;
+    bool bSuccess = true;
+    bool bWidthSet = false;
 
     if( ! maHandle )
-        return sal_False;
+        return false;
 
     int nWidthMM    = 0;
     int nHeightMM   = 0;
@@ -627,7 +627,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
             CheckConsistency( "sane_get_parameters" );
             if (nStatus != SANE_STATUS_GOOD || aParams.bytes_per_line == 0)
             {
-                bSuccess = sal_False;
+                bSuccess = false;
                 break;
             }
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
@@ -670,14 +670,14 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                     fprintf( stderr, "Warning: unknown frame style !!!\n" );
             }
 
-            sal_Bool bSynchronousRead = sal_True;
+            bool bSynchronousRead = true;
 
             // should be fail safe, but ... ??
             nStatus = p_set_io_mode( maHandle, SANE_FALSE );
             CheckConsistency( "sane_set_io_mode" );
             if( nStatus != SANE_STATUS_GOOD )
             {
-                bSynchronousRead = sal_False;
+                bSynchronousRead = false;
                 nStatus = p_set_io_mode( maHandle, SANE_TRUE );
                 CheckConsistency( "sane_set_io_mode" );
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
@@ -696,12 +696,12 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 DUMP_STATE( nStatus, "sane_get_select_fd" );
                 CheckConsistency( "sane_get_select_fd" );
                 if( nStatus != SANE_STATUS_GOOD )
-                    bSynchronousRead = sal_True;
+                    bSynchronousRead = true;
             }
             FILE* pFrame = tmpfile();
             if( ! pFrame )
             {
-                bSuccess = sal_False;
+                bSuccess = false;
                 break;
             }
             do {
@@ -733,7 +733,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
             if (nStatus != SANE_STATUS_EOF || !bSuccess)
             {
                 fclose( pFrame );
-                bSuccess = sal_False;
+                bSuccess = false;
                 break;
             }
 
@@ -759,7 +759,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.Seek( 38 );
                 aConverter.WriteUInt32( (sal_uInt32)(1000*nWidth/nWidthMM) );
                 aConverter.WriteUInt32( (sal_uInt32)(1000*nHeight/nHeightMM) );
-                bWidthSet = sal_True;
+                bWidthSet = true;
             }
             aConverter.Seek(60);
 
@@ -866,7 +866,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 break;
         }
         else
-            bSuccess = sal_False;
+            bSuccess = false;
     }
     // get stream length
     aConverter.Seek( STREAM_SEEK_TO_END );
@@ -906,7 +906,7 @@ int Sane::GetRange( int n, double*& rpDouble )
 
     rpDouble = 0;
     int nItems, i;
-    sal_Bool bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED ? sal_True : sal_False;
+    bool bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED ? sal_True : sal_False;
 
     dbg_msg( "Sane::GetRange of option %s ", mppOptions[n]->name );
     if(mppOptions[n]->constraint_type == SANE_CONSTRAINT_RANGE )
@@ -984,12 +984,12 @@ OUString Sane::GetOptionUnitName( int n )
     return aText;
 }
 
-sal_Bool Sane::ActivateButtonOption( int n )
+bool Sane::ActivateButtonOption( int n )
 {
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, NULL );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

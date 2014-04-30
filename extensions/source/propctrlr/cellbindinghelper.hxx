@@ -64,7 +64,7 @@ namespace pcr
             <p>If this method returns <FALSE/>, you cannot instantiate a CellBindingHelper with
             the document, since then no of it's functionality will be available.</p>
         */
-        static  sal_Bool    isSpreadsheetDocument(
+        static  bool    isSpreadsheetDocument(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
                             );
 

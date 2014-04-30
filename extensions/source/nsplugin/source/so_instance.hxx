@@ -70,7 +70,7 @@ private:
     int m_nY;
     sal_Int16 m_nFlag;            // Set to 12 during initialization
     OUString m_sURL; // URL of the document to be loaded
-    sal_Bool m_bInit;       // If the Plugin instance is initilaized.
+    bool m_bInit;       // If the Plugin instance is initilaized.
     NSP_HWND m_hParent;       // Windows handle of parent window
     long m_pParent;       // ID of this instance - get from NPP
     // StarOffice window
@@ -90,7 +90,7 @@ private:
     PluginDocumentClosePreventer* m_pCloseListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xCloseListener;
 
-    sal_Bool LoadDocument(NSP_HWND hParent);
+    bool LoadDocument(NSP_HWND hParent);
 
     long m_dParentStyl;       // Old Windows style of parent window
 
@@ -98,13 +98,13 @@ private:
 public:
     SoPluginInstance(long iInstance, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF);
     virtual ~SoPluginInstance(void);
-    virtual sal_Bool SetURL(char* aURL);
-    virtual sal_Bool IsInit(void){return m_bInit;};
-    virtual sal_Bool SetWindow(NSP_HWND hParent, int x, int y, int w, int h) ;
-    virtual sal_Bool Destroy(void) ;
-    virtual sal_Bool Print(void) ;
+    virtual bool SetURL(char* aURL);
+    virtual bool IsInit(void){return m_bInit;};
+    virtual bool SetWindow(NSP_HWND hParent, int x, int y, int w, int h) ;
+    virtual bool Destroy(void) ;
+    virtual bool Print(void) ;
 
-    static sal_Bool ShutDown(void);
+    static bool ShutDown(void);
     static char* GetSODir(void) {return sSO_Dir;};
     long GetParent(void) {return m_pParent;};
 };

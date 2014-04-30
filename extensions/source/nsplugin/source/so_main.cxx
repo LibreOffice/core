@@ -136,14 +136,14 @@ int find_cur_node(long cur_id)
     return -1;
 }
 
-sal_Bool dump_plugin_message(PLUGIN_MSG* pMsg)
+bool dump_plugin_message(PLUGIN_MSG* pMsg)
 {
     if (!pMsg)
-        return sal_False;
+        return false;
     debug_fprintf(NSP_LOG_APPEND, "NSPlugin Message: msg_id:%d; instance_id:%d;wnd_id:%d;wnd_x:%d;wnd_y:%d;wnd_w:%d;wnd_h:%d; url:%s\n",
         pMsg->msg_id, pMsg->instance_id, pMsg->wnd_id,
         pMsg->wnd_x, pMsg->wnd_y, pMsg->wnd_w, pMsg->wnd_h, pMsg->url);
-    return sal_True;
+    return true;
 }
 
 int Set_Window(PLUGIN_MSG* pMsg)

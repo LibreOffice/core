@@ -193,7 +193,7 @@ namespace pcr
         {
             aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(
                 _rxControlFactory, m_pInfoService->getPropertyEnumRepresentations( nPropId ),
-                PropertyHandlerHelper::requiresReadOnlyControl( rProperty.Attributes ), sal_False );
+                PropertyHandlerHelper::requiresReadOnlyControl( rProperty.Attributes ), false );
         }
         else
             PropertyHandlerHelper::describePropertyLine( rProperty, aDescriptor, _rxControlFactory );

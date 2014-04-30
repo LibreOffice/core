@@ -71,7 +71,7 @@ namespace abp
         DECL_LINK( OnNameModified, Edit* );
         DECL_LINK(OnRegister, void *);
 
-        sal_Bool    isValidName() const;
+        bool    isValidName() const;
         void        implCheckName();
         void        setFields();
     };

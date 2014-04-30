@@ -591,7 +591,7 @@ namespace pcr
             aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory,
                 impl_getEnumConverter( pos->second.Type )->getDescriptions(),
                 PropertyHandlerHelper::requiresReadOnlyControl( pos->second.Attributes ),
-                sal_False );
+                false );
             break;
         case TypeClass_STRING:
         {

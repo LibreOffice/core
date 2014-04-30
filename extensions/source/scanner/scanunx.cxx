@@ -192,7 +192,7 @@ void ScannerThread::run()
     {
         int nOption = m_pHolder->m_aSane.GetOptionByName( "preview" );
         if( nOption != -1 )
-            m_pHolder->m_aSane.SetOptionValue( nOption, (sal_Bool)sal_False );
+            m_pHolder->m_aSane.SetOptionValue( nOption, false );
 
         m_pHolder->m_nError =
             m_pHolder->m_aSane.Start( *pTransporter ) ?

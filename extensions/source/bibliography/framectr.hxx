@@ -63,15 +63,15 @@ friend class BibFrameCtrl_Impl;
     BibStatusDispatchArr        aStatusListeners;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  xWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xFrame;
-    sal_Bool                        bDisposing;
-    sal_Bool                        bHierarchical;
+    bool                        bDisposing;
+    bool                        bHierarchical;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >               m_xDatMan;
     BibDataManager*             pDatMan;
     HdlBibModul                 pBibMod;
 
     DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );
 
-    sal_Bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& xController);
+    bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& xController);
 public:
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent,
                                                         BibDataManager* pDatMan);

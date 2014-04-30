@@ -126,7 +126,7 @@ namespace pcr
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     getCanonicUnderlyingTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormProps ) const;
-        sal_Bool    getExistingRelation(
+        bool    getExistingRelation(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLHS,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRHS,
                         ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rLeftFields,

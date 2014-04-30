@@ -50,8 +50,8 @@ namespace dbp
     OGroupBoxWizard::OGroupBoxWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_GROUPBOXWIZARD), _rxObjectModel, _rxContext)
-        ,m_bVisitedDefault(sal_False)
-        ,m_bVisitedDB(sal_False)
+        ,m_bVisitedDefault(false)
+        ,m_bVisitedDB(false)
     {
         initControlSettings(&m_aSettings);
 
@@ -62,7 +62,7 @@ namespace dbp
     }
 
 
-    sal_Bool OGroupBoxWizard::approveControl(sal_Int16 _nClassId)
+    bool OGroupBoxWizard::approveControl(sal_Int16 _nClassId)
     {
         return FormComponentType::GROUPBOX == _nClassId;
     }
@@ -127,7 +127,7 @@ namespace dbp
                     DBG_ASSERT(m_aSettings.aLabels.size(), "OGroupBoxWizard::enterState: should never have reached this state!");
                     m_aSettings.sDefaultField = m_aSettings.aLabels[0];
                 }
-                m_bVisitedDefault = sal_True;
+                m_bVisitedDefault = true;
                 break;
 
             case GBW_STATE_DBFIELD:
@@ -137,7 +137,7 @@ namespace dbp
                     if (getContext().aFieldNames.getLength())
                         m_aSettings.sDBField = getContext().aFieldNames[0];
                 }
-                m_bVisitedDB = sal_True;
+                m_bVisitedDB = true;
                 break;
         }
 
@@ -209,7 +209,7 @@ namespace dbp
             adjustControlForNoDSDisplay(&m_aMoveRight);
             adjustControlForNoDSDisplay(&m_aMoveLeft);
             adjustControlForNoDSDisplay(&m_aExistingRadiosLabel);
-            adjustControlForNoDSDisplay(&m_aExistingRadios, sal_True);
+            adjustControlForNoDSDisplay(&m_aExistingRadios, true);
         }
 
         m_aMoveLeft.SetClickHdl(LINK(this, ORadioSelectionPage, OnMoveEntry));
@@ -272,7 +272,7 @@ namespace dbp
 
     IMPL_LINK( ORadioSelectionPage, OnMoveEntry, PushButton*, _pButton )
     {
-        sal_Bool bMoveLeft = (&m_aMoveLeft == _pButton);
+        bool bMoveLeft = (&m_aMoveLeft == _pButton);
         if (bMoveLeft)
         {
             while (m_aExistingRadios.GetSelectEntryCount())
@@ -317,9 +317,9 @@ namespace dbp
 
     void ORadioSelectionPage::implCheckMoveButtons()
     {
-        sal_Bool bHaveSome = (0 != m_aExistingRadios.GetEntryCount());
-        sal_Bool bSelectedSome = (0 != m_aExistingRadios.GetSelectEntryCount());
-        sal_Bool bUnfinishedInput = (!m_aRadioName.GetText().isEmpty());
+        bool bHaveSome = (0 != m_aExistingRadios.GetEntryCount());
+        bool bSelectedSome = (0 != m_aExistingRadios.GetSelectEntryCount());
+        bool bUnfinishedInput = (!m_aRadioName.GetText().isEmpty());
 
         m_aMoveLeft.Enable(bSelectedSome);
         m_aMoveRight.Enable(bUnfinishedInput);

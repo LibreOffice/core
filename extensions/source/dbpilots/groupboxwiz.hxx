@@ -48,8 +48,8 @@ namespace dbp
     protected:
         OOptionGroupSettings        m_aSettings;
 
-        sal_Bool        m_bVisitedDefault   : 1;
-        sal_Bool        m_bVisitedDB        : 1;
+        bool        m_bVisitedDefault   : 1;
+        bool        m_bVisitedDB        : 1;
 
     public:
         OGroupBoxWizard(
@@ -67,7 +67,7 @@ namespace dbp
         virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
         virtual bool                onFinish() SAL_OVERRIDE;
 
-        virtual sal_Bool approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
+        virtual bool                approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
 
     protected:
         void createRadios();

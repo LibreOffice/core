@@ -153,7 +153,7 @@ private:
     ::std::list<PluginEventListener*>   m_aPEventListeners;
     OUString                     m_aURL;
 
-    sal_Bool                        m_bIsDisposed;
+    bool                        m_bIsDisposed;
 
 #ifdef MACOSX
     void SetSysPlugDataParentView(SystemEnvData const& rEnvData);
@@ -202,7 +202,7 @@ public:
 
     void            enterPluginCallback() { m_nCalledFromPlugin++; }
     void            leavePluginCallback() { m_nCalledFromPlugin--; }
-    sal_Bool            isDisposable() { return m_nCalledFromPlugin < 1 ? sal_True : sal_False; }
+    bool            isDisposable() { return m_nCalledFromPlugin < 1 ? sal_True : sal_False; }
     DECL_LINK( secondLevelDispose, XPlugin_Impl* );
 
     void addPluginEventListener( PluginEventListener* pListener  )

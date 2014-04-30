@@ -455,10 +455,10 @@ namespace pcr
         switch ( nControlType )
         {
         case PropertyControlType::ListBox:
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, sal_False, sal_True );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, true );
             break;
         case PropertyControlType::ComboBox:
-            aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False, sal_True );
+            aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, false, true );
             break;
         default:
             aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, sal_False );
@@ -571,7 +571,7 @@ namespace pcr
                 break;
             OUString sDataModelName;
             OSL_VERIFY( _rNewValue >>= sDataModelName );
-            sal_Bool bBoundToSomeModel = !sDataModelName.isEmpty();
+            bool bBoundToSomeModel = !sDataModelName.isEmpty();
             _rxInspectorUI->rebuildPropertyUI( PROPERTY_BINDING_NAME );
             _rxInspectorUI->enablePropertyUI( PROPERTY_BINDING_NAME, bBoundToSomeModel );
         }
@@ -579,7 +579,7 @@ namespace pcr
 
         case PROPERTY_ID_BINDING_NAME:
         {
-            sal_Bool bHaveABinding = !m_pHelper->getCurrentBindingName().isEmpty();
+            bool bHaveABinding = !m_pHelper->getCurrentBindingName().isEmpty();
             _rxInspectorUI->enablePropertyUI( PROPERTY_BIND_EXPRESSION, bHaveABinding );
             _rxInspectorUI->enablePropertyUI( PROPERTY_XSD_REQUIRED, bHaveABinding );
             _rxInspectorUI->enablePropertyUI( PROPERTY_XSD_RELEVANT, bHaveABinding );

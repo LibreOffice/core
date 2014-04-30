@@ -353,8 +353,8 @@ namespace pcr
             ,m_nYOffset(0)
             ,m_nCurrentPreferredHelpHeight(0)
             ,m_nTheNameSize(0)
-            ,m_bIsActive(sal_False)
-            ,m_bUpdate(sal_True)
+            ,m_bIsActive(false)
+            ,m_bUpdate(true)
             ,m_pControlContextImpl( new PropertyControlContext_Impl( *this ) )
     {
 
@@ -388,9 +388,9 @@ namespace pcr
     }
 
 
-    sal_Bool OBrowserListBox::IsModified( ) const
+    bool OBrowserListBox::IsModified( ) const
     {
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
 
         if ( m_bIsActive && m_xActiveControl.is() )
             bModified = m_xActiveControl->isModified();
@@ -419,7 +419,7 @@ namespace pcr
     }
 
 
-    void OBrowserListBox::ActivateListBox(sal_Bool _bActive)
+    void OBrowserListBox::ActivateListBox(bool _bActive)
     {
         m_bIsActive = _bActive;
         if (m_bIsActive)
@@ -456,7 +456,7 @@ namespace pcr
 
         UpdateVScroll();
 
-        sal_Bool bNeedScrollbar = m_aLines.size() > (sal_uInt32)CalcVisibleLines();
+        bool bNeedScrollbar = m_aLines.size() > (sal_uInt32)CalcVisibleLines();
         if ( !bNeedScrollbar )
         {
             if ( m_aVScroll.IsVisible() )
@@ -636,13 +636,13 @@ namespace pcr
 
     void OBrowserListBox::DisableUpdate()
     {
-        m_bUpdate = sal_False;
+        m_bUpdate = false;
     }
 
 
     void OBrowserListBox::EnableUpdate()
     {
-        m_bUpdate = sal_True;
+        m_bUpdate = true;
         UpdateAll();
     }
 
@@ -1063,7 +1063,7 @@ namespace pcr
     }
 
 
-    sal_Bool OBrowserListBox::RemoveEntry( const OUString& _rName )
+    bool OBrowserListBox::RemoveEntry( const OUString& _rName )
     {
         sal_uInt16 nPos = 0;
         ListBoxLines::iterator it = m_aLines.begin();
@@ -1071,7 +1071,7 @@ namespace pcr
             ;
 
         if ( it == m_aLines.end() )
-            return sal_False;
+            return false;
 
         m_aLines.erase( it );
         m_aOutOfDateLines.erase( (sal_uInt16)m_aLines.size() );
@@ -1081,7 +1081,7 @@ namespace pcr
             m_aOutOfDateLines.insert( nPos++ );
         UpdatePosNSize( );
 
-        return sal_True;
+        return true;
     }
 
 

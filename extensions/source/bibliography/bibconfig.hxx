@@ -97,7 +97,7 @@ class BibConfig : public utl::ConfigItem
     MappingArray*               pMappingsArr;
     long            nBeamerSize;
     long            nViewSize;
-    sal_Bool        bShowColumnAssignmentWarning;
+    bool        bShowColumnAssignmentWarning;
 
     OUString               aColumnDefaults[COLUMN_COUNT];
 
@@ -130,9 +130,9 @@ public:
     const OUString&    getQueryText() const {return sQueryText;}
     void                    setQueryText(const OUString& rSet) {SetModified(); sQueryText = rSet;}
 
-    sal_Bool                IsShowColumnAssignmentWarning() const
+    bool                IsShowColumnAssignmentWarning() const
                                 { return bShowColumnAssignmentWarning;}
-    void                    SetShowColumnAssignmentWarning(sal_Bool bSet)
+    void                    SetShowColumnAssignmentWarning(bool bSet)
                                 { bShowColumnAssignmentWarning = bSet;}
 };
 

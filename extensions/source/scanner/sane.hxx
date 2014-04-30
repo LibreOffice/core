@@ -105,15 +105,15 @@ private:
 
     SANE_Status ControlOption( int, SANE_Action, void* );
 
-    sal_Bool CheckConsistency( const char*, sal_Bool bInit = sal_False );
+    bool CheckConsistency( const char*, bool bInit = false );
 
 public:
     Sane();
     ~Sane();
 
-    static sal_Bool         IsSane()
+    static bool         IsSane()
         { return pSaneLib ? sal_True : sal_False; }
-    sal_Bool            IsOpen()
+    bool            IsOpen()
         { return maHandle ? sal_True : sal_False; }
     static int              CountDevices()
         { return nDevices; }
@@ -145,28 +145,28 @@ public:
 
     inline int      GetOptionElements( int n );
     int             GetOptionByName( const char* );
-    sal_Bool            GetOptionValue( int, sal_Bool& );
-    sal_Bool            GetOptionValue( int, OString& );
-    sal_Bool            GetOptionValue( int, double&, int nElement = 0 );
-    sal_Bool            GetOptionValue( int, double* );
+    bool            GetOptionValue( int, bool& );
+    bool            GetOptionValue( int, OString& );
+    bool            GetOptionValue( int, double&, int nElement = 0 );
+    bool            GetOptionValue( int, double* );
 
-    sal_Bool            SetOptionValue( int, sal_Bool );
-    sal_Bool            SetOptionValue( int, const OUString& );
-    sal_Bool            SetOptionValue( int, double, int nElement = 0 );
-    sal_Bool            SetOptionValue( int, double* );
+    bool            SetOptionValue( int, bool );
+    bool            SetOptionValue( int, const OUString& );
+    bool            SetOptionValue( int, double, int nElement = 0 );
+    bool            SetOptionValue( int, double* );
 
-    sal_Bool            ActivateButtonOption( int );
+    bool            ActivateButtonOption( int );
 
     int             CountOptions() { return mnOptions; }
     int             GetDeviceNumber() { return mnDevice; }
 
-    sal_Bool            Open( const char* );
-    sal_Bool            Open( int );
+    bool            Open( const char* );
+    bool            Open( int );
     void            Close();
     void            ReloadDevices();
     void            ReloadOptions();
 
-    sal_Bool            Start( BitmapTransporter& );
+    bool            Start( BitmapTransporter& );
 
     inline Link     SetReloadOptionsHdl( const Link& rLink );
 };

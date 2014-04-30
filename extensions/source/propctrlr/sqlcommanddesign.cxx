@@ -136,7 +136,7 @@ namespace pcr
                 }
                 else if ( PROPERTY_ESCAPE_PROCESSING == Event.PropertyName )
                 {
-                    sal_Bool bEscapeProcessing( sal_False );
+                    bool bEscapeProcessing( false );
                     OSL_VERIFY( Event.NewValue >>= bEscapeProcessing );
                     m_xObjectAdapter->setEscapeProcessing( bEscapeProcessing );
                 }
@@ -359,7 +359,7 @@ namespace pcr
     bool SQLCommandDesigner::impl_trySuspendDesigner_nothrow() const
     {
         OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_trySuspendDesigner_nothrow: no active designer, this will crash!" );
-        sal_Bool bAllow = sal_True;
+        bool bAllow = true;
         try
         {
             bAllow = m_xDesigner->suspend( sal_True );

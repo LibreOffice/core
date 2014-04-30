@@ -162,9 +162,9 @@ protected:
     sal_Int32                               _nHeight;
     sal_Int16                               _nFlags;
 
-    sal_Bool                                _bVisible;
-    sal_Bool                                _bInDesignMode;
-    sal_Bool                                _bEnable;
+    bool                                _bVisible;
+    bool                                _bInDesignMode;
+    bool                                _bEnable;
 
     SystemChildWindow*                  _pSysChild;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >                      _xPeer;

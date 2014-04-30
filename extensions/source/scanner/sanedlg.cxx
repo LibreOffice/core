@@ -39,9 +39,9 @@ ResId SaneResId( sal_uInt32 nID )
 SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         ModalDialog( pParent, SaneResId( RID_SANE_DIALOG ) ),
         mrSane( rSane ),
-        mbIsDragging( sal_False ),
+        mbIsDragging( false ),
         mbScanEnabled( bScanEnabled ),
-        mbDragDrawn( sal_False ),
+        mbDragDrawn( false ),
         meDragDirection( TopLeft ),
         maMapMode( MAP_APPFONT ),
         maOKButton( this, SaneResId( RID_SCAN_OK ) ),
@@ -172,7 +172,7 @@ void SaneDlg::InitFields()
 
     int nOption, i, nValue;
     double fValue;
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     const char *ppSpecialOptions[] = {
         "resolution",
         "tl-x",
@@ -182,7 +182,7 @@ void SaneDlg::InitFields()
         "preview"
     };
 
-    mbDragEnable = sal_True;
+    mbDragEnable = true;
     maReslBox.Clear();
     maMinTopLeft = Point( 0, 0 );
     maMaxBottomRight = Point( PREVIEW_WIDTH,  PREVIEW_HEIGHT );
@@ -270,7 +270,7 @@ void SaneDlg::InitFields()
                 pField = &maBottomField;
         }
         nOption = pOptionName ? mrSane.GetOptionByName( pOptionName ) : -1;
-        bSuccess = sal_False;
+        bSuccess = false;
         if( nOption != -1 )
         {
             bSuccess = mrSane.GetOptionValue( nOption, fValue, 0 );
@@ -326,7 +326,7 @@ void SaneDlg::InitFields()
         }
         else
         {
-            mbDragEnable = sal_False;
+            mbDragEnable = false;
             pField->SetMin( 0 );
             switch( i ) {
                 case 0:
@@ -366,11 +366,11 @@ void SaneDlg::InitFields()
     // fill OptionBox
     maOptionBox.Clear();
     SvTreeListEntry* pParentEntry = 0;
-    sal_Bool bGroupRejected = sal_False;
+    bool bGroupRejected = false;
     for( i = 1; i < mrSane.CountOptions(); i++ )
     {
         OUString aOption=mrSane.GetOptionName( i );
-        sal_Bool bInsertAdvanced =
+        bool bInsertAdvanced =
             mrSane.GetOptionCap( i ) & SANE_CAP_ADVANCED &&
             ! maAdvancedBox.IsChecked() ? sal_False : sal_True;
         if( mrSane.GetOptionType( i ) == SANE_TYPE_GROUP )
@@ -379,10 +379,10 @@ void SaneDlg::InitFields()
             {
                 aOption = mrSane.GetOptionTitle( i );
                 pParentEntry = maOptionBox.InsertEntry( aOption );
-                bGroupRejected = sal_False;
+                bGroupRejected = false;
             }
             else
-                bGroupRejected = sal_True;
+                bGroupRejected = true;
         }
         else if( !aOption.isEmpty() &&
                  ! ( mrSane.GetOptionCap( i ) &
@@ -392,12 +392,12 @@ void SaneDlg::InitFields()
                          ) ) &&
                  bInsertAdvanced && ! bGroupRejected )
         {
-            sal_Bool bIsSpecial = sal_False;
+            bool bIsSpecial = false;
             for( size_t n = 0; !bIsSpecial &&
                      n < SAL_N_ELEMENTS(ppSpecialOptions); n++ )
             {
                 if( aOption == OUString::createFromAscii(ppSpecialOptions[n]) )
-                    bIsSpecial=sal_True;
+                    bIsSpecial=true;
             }
             if( ! bIsSpecial )
             {
@@ -429,8 +429,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
         else if( pButton == &maBoolCheckBox )
         {
             mrSane.SetOptionValue( mnCurrentOption,
-                                   maBoolCheckBox.IsChecked() ?
-                                   (sal_Bool)sal_True : (sal_Bool)sal_False );
+                                   maBoolCheckBox.IsChecked() );
         }
         else if( pButton == &maButtonOption )
         {
@@ -473,7 +472,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     {
         double fRes = (double)maReslBox.GetValue();
         SetAdjustedNumericalValue( "resolution", fRes );
-        UpdateScanArea( sal_True );
+        UpdateScanArea( true );
         SaveState();
         EndDialog( mrSane.IsOpen() ? 1 : 0 );
         doScan = (pButton == &maScanButton);
@@ -704,7 +703,7 @@ void SaneDlg::AcquirePreview()
     if( ! mrSane.IsOpen() )
         return;
 
-    UpdateScanArea( sal_True );
+    UpdateScanArea( true );
     // set small resolution for preview
     double fResl = (double)maReslBox.GetValue();
     SetAdjustedNumericalValue( "resolution", 30.0 );
@@ -718,7 +717,7 @@ void SaneDlg::AcquirePreview()
             return;
     }
     else
-        mrSane.SetOptionValue( nOption, (sal_Bool)sal_True );
+        mrSane.SetOptionValue( nOption, true );
 
     BitmapTransporter aTransporter;
     if( ! mrSane.Start( aTransporter ) )
@@ -781,7 +780,7 @@ void SaneDlg::Paint( const Rectangle& rRect )
     DrawBitmap( maPreviewRect.TopLeft(), maPreviewRect.GetSize(),
                 maPreviewBitmap );
 
-    mbDragDrawn = sal_False;
+    mbDragDrawn = false;
     DrawDrag();
 
     ModalDialog::Paint( rRect );
@@ -802,7 +801,7 @@ void SaneDlg::DisableOption()
 
 void SaneDlg::EstablishBoolOption()
 {
-    sal_Bool bSuccess, bValue;
+    bool bSuccess, bValue;
 
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, bValue );
     if( bSuccess )
@@ -816,7 +815,7 @@ void SaneDlg::EstablishBoolOption()
 
 void SaneDlg::EstablishStringOption()
 {
-    sal_Bool bSuccess;
+    bool bSuccess;
     OString aValue;
 
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, aValue );
@@ -887,7 +886,7 @@ void SaneDlg::EstablishQuantumRange()
 
 void SaneDlg::EstablishNumericOption()
 {
-    sal_Bool bSuccess;
+    bool bSuccess;
     double fValue;
 
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, fValue );
@@ -959,7 +958,7 @@ void SaneDlg::MouseMove( const MouseEvent& rMEvt )
             maBottomRight.Y() = nSwap;
         }
         DrawDrag();
-        UpdateScanArea( sal_False );
+        UpdateScanArea( false );
     }
     ModalDialog::MouseMove( rMEvt );
 }
@@ -980,21 +979,21 @@ void SaneDlg::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 meDragDirection = TopLeft;
                 aMousePixel = maTopLeft;
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
             else if( aMousePixel.X() >= nMiddleX &&
                      aMousePixel.X() < nMiddleX + RECT_SIZE_PIX )
             {
                 meDragDirection = Top;
                 aMousePixel.Y() = maTopLeft.Y();
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
                      aMousePixel.X() <= maBottomRight.X() )
             {
                 meDragDirection = TopRight;
                 aMousePixel = Point( maBottomRight.X(), maTopLeft.Y() );
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
         }
         else if( aMousePixel.Y() >= nMiddleY &&
@@ -1005,14 +1004,14 @@ void SaneDlg::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 meDragDirection = Left;
                 aMousePixel.X() = maTopLeft.X();
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
                      aMousePixel.X() <= maBottomRight.X() )
             {
                 meDragDirection = Right;
                 aMousePixel.X() = maBottomRight.X();
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
         }
         else if( aMousePixel.Y() <= maBottomRight.Y() &&
@@ -1023,21 +1022,21 @@ void SaneDlg::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 meDragDirection = BottomLeft;
                 aMousePixel = Point( maTopLeft.X(), maBottomRight.Y() );
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
             else if( aMousePixel.X() >= nMiddleX &&
                      aMousePixel.X() < nMiddleX + RECT_SIZE_PIX )
             {
                 meDragDirection = Bottom;
                 aMousePixel.Y() = maBottomRight.Y();
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
             else if( aMousePixel.X() > maBottomRight.X() - RECT_SIZE_PIX &&
                      aMousePixel.X() <= maBottomRight.X() )
             {
                 meDragDirection = BottomRight;
                 aMousePixel = maBottomRight;
-                mbIsDragging = sal_True;
+                mbIsDragging = true;
             }
         }
     }
@@ -1053,9 +1052,9 @@ void SaneDlg::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if( mbIsDragging )
     {
-        UpdateScanArea( sal_True );
+        UpdateScanArea( true );
     }
-    mbIsDragging = sal_False;
+    mbIsDragging = false;
 
     ModalDialog::MouseButtonUp( rMEvt );
 }
@@ -1102,7 +1101,7 @@ void SaneDlg::DrawDrag()
     aLastBR = maBottomRight;
     DrawRectangles( maTopLeft, maBottomRight );
 
-    mbDragDrawn = sal_True;
+    mbDragDrawn = true;
     SetRasterOp( eROP );
     SetMapMode( maMapMode );
 }
@@ -1141,7 +1140,7 @@ Point SaneDlg::GetLogicPos( const Point& rIn )
     return aConvert;
 }
 
-void SaneDlg::UpdateScanArea( sal_Bool bSend )
+void SaneDlg::UpdateScanArea( bool bSend )
 {
     if( ! mbDragEnable )
         return;
@@ -1166,25 +1165,25 @@ void SaneDlg::UpdateScanArea( sal_Bool bSend )
     }
 }
 
-sal_Bool SaneDlg::LoadState()
+bool SaneDlg::LoadState()
 {
     int i;
 
     if( ! Sane::IsSane() )
-        return sal_False;
+        return false;
 
     const char* pEnv = getenv("HOME");
     OUString aFileName = pEnv ? OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding() ) : OUString();
     aFileName += "/.so_sane_state";
     Config aConfig( aFileName );
     if( ! aConfig.HasGroup( "SANE" ) )
-        return sal_False;
+        return false;
 
     aConfig.SetGroup( "SANE" );
     OString aString = aConfig.ReadKey( "SO_LastSaneDevice" );
     for( i = 0; i < Sane::CountDevices() && !aString.equals(OUStringToOString(Sane::GetName(i), osl_getThreadTextEncoding())); i++ ) ;
     if( i == Sane::CountDevices() )
-        return sal_False;
+        return false;
 
     mrSane.Close();
     mrSane.Open( aString.getStr() );
@@ -1206,7 +1205,7 @@ sal_Bool SaneDlg::LoadState()
             if (aValue.startsWith("BOOL="))
             {
                 aValue = aValue.copy(RTL_CONSTASCII_LENGTH("BOOL="));
-                sal_Bool aBOOL = (sal_Bool)aValue.toInt32();
+                bool aBOOL = aValue.toInt32() != 0;
                 mrSane.SetOptionValue( nOption, aBOOL );
             }
             else if (aValue.startsWith("STRING="))
@@ -1235,7 +1234,7 @@ sal_Bool SaneDlg::LoadState()
     DisableOption();
     InitFields();
 
-    return sal_True;
+    return true;
 }
 
 void SaneDlg::SaveState()
@@ -1275,7 +1274,7 @@ void SaneDlg::SaveState()
             {
                 case SANE_TYPE_BOOL:
                 {
-                    sal_Bool bValue;
+                    bool bValue;
                     if( mrSane.GetOptionValue( nOption, bValue ) )
                     {
                         OStringBuffer aString("BOOL=");
@@ -1323,24 +1322,24 @@ void SaneDlg::SaveState()
     }
 }
 
-sal_Bool SaneDlg::SetAdjustedNumericalValue(
+bool SaneDlg::SetAdjustedNumericalValue(
     const char* pOption,
     double fValue,
     int nElement )
 {
     int nOption;
     if( ! Sane::IsSane() || ! mrSane.IsOpen() || ( nOption = mrSane.GetOptionByName( pOption ) ) == -1 )
-        return sal_False;
+        return false;
 
     if( nElement < 0 || nElement >= mrSane.GetOptionElements( nOption ) )
-        return sal_False;
+        return false;
 
     double* pValues = NULL;
     int nValues;
     if( ( nValues = mrSane.GetRange( nOption, pValues ) ) < 0 )
     {
         delete [] pValues;
-        return sal_False;
+        return false;
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1376,7 +1375,7 @@ sal_Bool SaneDlg::SetAdjustedNumericalValue(
 #endif
 
 
-    return sal_True;
+    return true;
 }
 
 bool SaneDlg::getDoScan()

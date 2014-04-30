@@ -37,9 +37,9 @@ BibShortCutHandler::~BibShortCutHandler()
 {
 }
 
-sal_Bool BibShortCutHandler::HandleShortCutKey( const KeyEvent& )
+bool BibShortCutHandler::HandleShortCutKey( const KeyEvent& )
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -115,9 +115,9 @@ void BibWindowContainer::GetFocus()
         GetChild()->GrabFocus();
 }
 
-sal_Bool BibWindowContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
+bool BibWindowContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
 {
-    return pChild? pChild->HandleShortCutKey( rKeyEvent ) : sal_False;
+    return pChild && pChild->HandleShortCutKey( rKeyEvent );
 }
 
 
@@ -245,9 +245,9 @@ bool BibBookContainer::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-sal_Bool BibBookContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
+bool BibBookContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( pTopWin )
         bRet = pTopWin->HandleShortCutKey( rKeyEvent );

@@ -59,7 +59,7 @@ namespace abp
                 structure will be filled with the settings the user did in the
                 field mapping dialog.
         */
-        sal_Bool invokeDialog(
+        bool invokeDialog(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             class Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDataSource,

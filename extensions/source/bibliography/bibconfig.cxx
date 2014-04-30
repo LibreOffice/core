@@ -298,7 +298,7 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
     for(sal_uInt16 i = 0; i < pMappingsArr->size(); i++)
     {
         Mapping& rMapping = (*pMappingsArr)[i];
-        sal_Bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
+        bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
             return &rMapping;
     }
@@ -310,7 +310,7 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
     for(sal_uInt16 i = 0; i < pMappingsArr->size(); i++)
     {
         Mapping& rMapping = (*pMappingsArr)[i];
-        sal_Bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
+        bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
         {
             pMappingsArr->erase(pMappingsArr->begin()+i);
