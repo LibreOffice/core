@@ -881,6 +881,42 @@ static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> xCell, uno::Any 
     }
 }
 
+static sal_Int32 lcl_CalculateTableHeight(PropertyMapVector2 m_aCellProperties, PropertyMapVector1 m_aRowProperties)
+{
+    PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
+    PropertyMapVector1::const_iterator aRowIterEnd = m_aRowProperties.end();
+    sal_Int32 nHeight = 0;
+    sal_Int32 nRow = 0;
+    while( aRowIter != aRowIterEnd )
+    {
+        sal_Int32 nRowHeight;
+        if( aRowIter->get()->find(PROP_HEIGHT) == aRowIter->get()->end() )
+        {
+            // set Height to zero even if one of the row doesn't have the height mentioned explicitly.
+            nHeight = 0;
+            break;
+        }
+        else
+        {
+            // also add the Cell Top and Bottom Margins
+            // Cell margins are the same for the entire Row and hence consider the margins for only the
+            // first cell in the Row
+            aRowIter->get()->find(PROP_HEIGHT)->second.getValue() >>= nRowHeight;
+            sal_Int32 nCellTopMargin = 0, nCellBottomMargin = 0;
+            PropertyMapPtr aFirstCellInRowProperties = m_aCellProperties[nRow][0];
+            if ( aFirstCellInRowProperties->find(PROP_TOP_BORDER_DISTANCE) != aFirstCellInRowProperties->end() )
+                aFirstCellInRowProperties->find(PROP_TOP_BORDER_DISTANCE)->second.getValue() >>= nCellTopMargin;
+            if ( aFirstCellInRowProperties->find(PROP_BOTTOM_BORDER_DISTANCE) != aFirstCellInRowProperties->end() )
+                aFirstCellInRowProperties->find(PROP_BOTTOM_BORDER_DISTANCE)->second.getValue() >>= nCellBottomMargin;
+            nHeight += nRowHeight + nCellTopMargin + nCellBottomMargin;
+        }
+        ++nRow;
+        ++aRowIter;
+    }
+
+    return nHeight;
+}
+
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
@@ -1016,9 +1052,10 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             // as xStart/xEnd would not point to the start/end at conversion
             // time anyway.
             sal_Int32 nTableWidth = 0;
+            sal_Int32 nTableHeight = lcl_CalculateTableHeight(m_aCellProperties, m_aRowProperties);
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
             if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1)
-                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, aFrameProperties, nTableWidth));
+                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, aFrameProperties, nTableWidth, nTableHeight));
             else
                 m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties);
         }
