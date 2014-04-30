@@ -60,7 +60,8 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {
-            if( 0 != ( pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN] ))
+            // pTab only covers POOLATTR_BEGIN..POOLATTR_END.
+            if( pItem->Which() <= POOLATTR_END && 0 != ( pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN] ))
                     (*pOut)( rWrt, *pItem );
         } while( !aIter.IsAtEnd() && 0 != ( pItem = aIter.NextItem() ) );
     }
