@@ -80,13 +80,12 @@ SvxConnectionDialog::~SvxConnectionDialog()
 |*
 \************************************************************************/
 
-SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow
-                                 ,"ConnectorTabPage"
-                                 ,"cui/ui/connectortabpage.ui"
-                                 ,rInAttrs ),
-        rOutAttrs               ( rInAttrs ),
-        aAttrSet                ( *rInAttrs.GetPool() )
+SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs )
+    : SfxTabPage(pWindow ,"ConnectorTabPage" ,"cui/ui/connectortabpage.ui"
+        ,rInAttrs)
+    , rOutAttrs(rInAttrs)
+    , aAttrSet(*rInAttrs.GetPool())
+    , pView(NULL)
 {
     get(m_pLbType,"LB_TYPE");
 
