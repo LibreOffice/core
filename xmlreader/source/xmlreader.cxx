@@ -70,8 +70,9 @@ XmlReader::XmlReader(char const *sStr, size_t nLength)
 
 XmlReader::XmlReader(OUString const & fileUrl)
     SAL_THROW((
-        css::container::NoSuchElementException, css::uno::RuntimeException)):
-    fileUrl_(fileUrl)
+        css::container::NoSuchElementException, css::uno::RuntimeException))
+    : fileUrl_(fileUrl)
+    , fileHandle_(0)
 {
     oslFileError e = osl_openFile(
         fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read);
