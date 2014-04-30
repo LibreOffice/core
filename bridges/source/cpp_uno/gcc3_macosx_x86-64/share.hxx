@@ -139,10 +139,17 @@ namespace CPPU_CURRENT_NAMESPACE
 // complain about redeclarations of these somewhat implicitly declared
 // functions):
 #if __GNUC__ == 4 && __GNUC_MINOR__ <= 6
+
+#if defined __clang__ && MACOSX_SDK_VERSION >= 1090
+#define CXA_THROW_TINFO_TYPE std::type_info *
+#else
+#define CXA_THROW_TINFO_TYPE void *
+#endif
+
 extern "C" void *__cxa_allocate_exception(
     std::size_t thrown_size ) throw();
 extern "C" void __cxa_throw (
-    void *thrown_exception, void *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
+    void *thrown_exception, CXA_THROW_TINFO_TYPE tinfo, void (*dest) (void *) ) __attribute__((noreturn));
 #endif
 
 
