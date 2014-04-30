@@ -310,15 +310,21 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
     return aRet;
 }
 
-SwTxtFly::SwTxtFly() :
-    pPage(0),
-    mpCurrAnchoredObj(0),
-    pCurrFrm(0),
-    pMaster(0),
-    mpAnchoredObjList(0),
-    nMinBottom(0),
-    nNextTop(0),
-    nIndex(0)
+SwTxtFly::SwTxtFly()
+    : pPage(0)
+    , mpCurrAnchoredObj(0)
+    , pCurrFrm(0)
+    , pMaster(0)
+    , mpAnchoredObjList(0)
+    , nMinBottom(0)
+    , nNextTop(0)
+    , nIndex(0)
+    , bOn(false)
+    , bTopRule(false)
+    , mbIgnoreCurrentFrame(false)
+    , mbIgnoreContour(false)
+    , mbIgnoreObjsInHeaderFooter(false)
+
 {
 }
 
