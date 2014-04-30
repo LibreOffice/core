@@ -670,8 +670,6 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
     AdjustMarkHdl();
 }
 
-
-
 static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
     ResizePoint(rPt,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
@@ -679,19 +677,15 @@ static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
     if (pC2!=NULL) ResizePoint(*pC2,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
 }
 
-void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
+void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    bCopy=false; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));
-    if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_RESIZE);
     ImpTransformMarkedPoints(ImpResize,&rRef,&xFact,&yFact);
     EndUndo();
     AdjustMarkHdl();
 }
-
-
 
 static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
 {
