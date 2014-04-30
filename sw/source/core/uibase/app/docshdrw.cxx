@@ -42,6 +42,7 @@ void  SwDocShell::InitDraw()
         PutItem( SvxBitmapListItem( pDrDoc->GetBitmapList(), SID_BITMAP_LIST ) );
         PutItem( SvxDashListItem( pDrDoc->GetDashList(), SID_DASH_LIST ) );
         PutItem( SvxLineEndListItem( pDrDoc->GetLineEndList(), SID_LINEEND_LIST ) );
+        PutItem( SvxColorListItem( pDrDoc->GetColorList(), SID_COLOR_TABLE ));
 
         Outliner& rOutliner = pDrDoc->GetDrawOutliner();
         uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
