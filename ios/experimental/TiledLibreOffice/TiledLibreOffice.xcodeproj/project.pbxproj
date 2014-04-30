@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE03BF9318F9A7CC00620DC7 /* icudt52l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE03BF9218F9A7CC00620DC7 /* icudt52l.dat */; };
+		BE03BF9318F9A7CC00620DC7 /* icudt53l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE03BF9218F9A7CC00620DC7 /* icudt53l.dat */; };
 		BE55B06D18D87CC600950228 /* DocumentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE55B06C18D87CC600950228 /* DocumentTableViewController.m */; };
 		BE82BD7618218E2E00A447B5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7518218E2E00A447B5 /* Foundation.framework */; };
 		BE82BD7818218E2E00A447B5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */; };
@@ -39,7 +39,7 @@
 
 /* Begin PBXFileReference section */
 		BE03BF9118F9648F00620DC7 /* udata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = udata.cpp; path = ../../../workdir/UnpackedTarball/icu/source/common/udata.cpp; sourceTree = "<group>"; };
-		BE03BF9218F9A7CC00620DC7 /* icudt52l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt52l.dat; path = ../../../../workdir/UnpackedTarball/icu/source/data/in/icudt52l.dat; sourceTree = "<group>"; };
+		BE03BF9218F9A7CC00620DC7 /* icudt53l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt53l.dat; path = ../../../../workdir/UnpackedTarball/icu/source/data/in/icudt53l.dat; sourceTree = "<group>"; };
 		BE03BF9518FC1A1C00620DC7 /* xdictionary.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xdictionary.cxx; path = ../../../i18npool/source/breakiterator/xdictionary.cxx; sourceTree = "<group>"; };
 		BE0898E81860D42B0021A679 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
 		BE0898E91860D42B0021A679 /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
@@ -1743,7 +1743,7 @@
 				BEEEFDFE1860A82C00FBDE67 /* unorc */,
 				BEEE02D01860ABB700FBDE67 /* ure */,
 				BEEEF9691860A25400FBDE67 /* test1.odt */,
-				BE03BF9218F9A7CC00620DC7 /* icudt52l.dat */,
+				BE03BF9218F9A7CC00620DC7 /* icudt53l.dat */,
 			);
 			name = Resources;
 			path = TiledLibreOffice;
@@ -1809,7 +1809,7 @@
 				BEEEFE041860A89100FBDE67 /* rc in Resources */,
 				BEEEFE051860A89100FBDE67 /* services.rdb in Resources */,
 				BEEE02D21860ABDB00FBDE67 /* share in Resources */,
-				BE03BF9318F9A7CC00620DC7 /* icudt52l.dat in Resources */,
+				BE03BF9318F9A7CC00620DC7 /* icudt53l.dat in Resources */,
 				BEEEFE061860A89100FBDE67 /* types.rdb in Resources */,
 				BEEEFE071860A89100FBDE67 /* unorc in Resources */,
 				BEEE02D31860ABDB00FBDE67 /* ure in Resources */,
