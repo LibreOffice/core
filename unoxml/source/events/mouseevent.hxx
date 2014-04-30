@@ -40,10 +40,10 @@ protected:
     sal_Int32 m_screenY;
     sal_Int32 m_clientX;
     sal_Int32 m_clientY;
-    sal_Bool m_ctrlKey;
-    sal_Bool m_shiftKey;
-    sal_Bool m_altKey;
-    sal_Bool m_metaKey;
+    bool m_ctrlKey;
+    bool m_shiftKey;
+    bool m_altKey;
+    bool m_metaKey;
     sal_Int16 m_button;
     Reference< XEventTarget > m_relatedTarget;
 

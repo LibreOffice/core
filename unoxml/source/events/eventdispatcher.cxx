@@ -29,7 +29,7 @@
 
 namespace DOM { namespace events {
 
-    void CEventDispatcher::addListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
+    void CEventDispatcher::addListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, bool bCapture)
     {
         TypeListenerMap *const pTMap = (bCapture)
             ? (& m_CaptureListeners) : (& m_TargetListeners);
@@ -48,7 +48,7 @@ namespace DOM { namespace events {
             pMap->insert(ListenerMap::value_type(pNode, aListener));
     }
 
-    void CEventDispatcher::removeListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
+    void CEventDispatcher::removeListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, bool bCapture)
     {
         TypeListenerMap *const pTMap = (bCapture)
             ? (& m_CaptureListeners) : (& m_TargetListeners);

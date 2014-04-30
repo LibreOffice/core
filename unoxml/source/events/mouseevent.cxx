@@ -27,10 +27,10 @@ namespace DOM { namespace events
         , m_screenY(0)
         , m_clientX(0)
         , m_clientY(0)
-        , m_ctrlKey(sal_False)
-        , m_shiftKey(sal_False)
-        , m_altKey(sal_False)
-        , m_metaKey(sal_False)
+        , m_ctrlKey(false)
+        , m_shiftKey(false)
+        , m_altKey(false)
+        , m_metaKey(false)
         , m_button(0)
     {
     }

@@ -56,7 +56,7 @@ namespace DOM
         try {
             Reference< XEventTarget > const xTarget(
                     static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
-            sal_Bool capture = sal_False;
+            bool capture = false;
             xTarget->addEventListener("DOMSubtreeModified",
                     Reference< XEventListener >(this), capture);
         } catch (const Exception &e){
@@ -66,7 +66,7 @@ namespace DOM
         }
     }
 
-    void CElementList::buildlist(xmlNodePtr pNode, sal_Bool start)
+    void CElementList::buildlist(xmlNodePtr pNode, bool start)
     {
         // bail out if no rebuild is needed
         if (start) {
@@ -94,7 +94,7 @@ namespace DOM
                     }
                 }
             }
-            if (pNode->children != NULL) buildlist(pNode->children, sal_False);
+            if (pNode->children != NULL) buildlist(pNode->children, false);
 
             if (!start) pNode = pNode->next;
             else break; // fold back

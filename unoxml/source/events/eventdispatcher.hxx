@@ -59,13 +59,13 @@ public:
         xmlNodePtr pNode,
         const OUString& aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
-        sal_Bool bCapture);
+        bool bCapture);
 
     void removeListener(
         xmlNodePtr pNode,
         const OUString& aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
-        sal_Bool bCapture);
+        bool bCapture);
 
     static void callListeners(
         TypeListenerMap const& rTMap,

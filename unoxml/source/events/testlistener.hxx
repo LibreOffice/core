@@ -58,7 +58,7 @@ namespace DOM { namespace events
         Reference< ::com::sun::star::lang::XMultiServiceFactory > m_factory;
         Reference <XEventTarget> m_target;
         OUString m_type;
-        sal_Bool m_capture;
+        bool m_capture;
         OUString m_name;
 
     public:
@@ -76,7 +76,7 @@ namespace DOM { namespace events
                 const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                     rSMgr)
             : m_factory(rSMgr)
-            , m_capture(sal_False)
+            , m_capture(false)
         {
         }
 

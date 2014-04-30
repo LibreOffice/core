@@ -45,13 +45,13 @@ friend class CEventDispatcher;
 
 protected:
     ::osl::Mutex m_Mutex;
-    sal_Bool m_canceled;
+    bool m_canceled;
     OUString m_eventType;
     Reference< XEventTarget > m_target;
     Reference< XEventTarget > m_currentTarget;
     PhaseType m_phase;
-    sal_Bool m_bubbles;
-    sal_Bool m_cancelable;
+    bool m_bubbles;
+    bool m_cancelable;
     com::sun::star::util::Time m_time;
 
 public:

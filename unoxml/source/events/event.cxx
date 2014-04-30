@@ -23,10 +23,10 @@ namespace DOM { namespace events
 {
 
     CEvent::CEvent()
-        : m_canceled(sal_False)
+        : m_canceled(false)
         , m_phase(PhaseType_CAPTURING_PHASE)
-        , m_bubbles(sal_False)
-        , m_cancelable(sal_True)
+        , m_bubbles(false)
+        , m_cancelable(true)
     {
     }
 
@@ -82,7 +82,7 @@ namespace DOM { namespace events
     void SAL_CALL CEvent::stopPropagation() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
-        if (m_cancelable) { m_canceled = sal_True; }
+        if (m_cancelable) { m_canceled = true; }
     }
 
     void SAL_CALL CEvent::preventDefault() throw (RuntimeException, std::exception)

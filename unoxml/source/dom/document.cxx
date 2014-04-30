@@ -745,7 +745,7 @@ namespace DOM
 
     static Reference< XNode >
     lcl_ImportNode( Reference< XDocument > const& xDocument,
-            Reference< XNode > const& xImportedNode, sal_Bool deep)
+            Reference< XNode > const& xImportedNode, bool deep)
     {
         Reference< XNode > xNode;
         NodeType aNodeType = xImportedNode->getNodeType();

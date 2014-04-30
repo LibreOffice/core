@@ -93,7 +93,7 @@ namespace DOM { namespace events
         if (! (args[1] >>= aType))
             throw IllegalArgumentException("Illegal argument 2", Reference< XInterface >(), 2);
 
-        sal_Bool bCapture = sal_False;
+        bool bCapture = false;
         if(! (args[2]  >>=  bCapture)) throw IllegalArgumentException(
             "Illegal argument 3", Reference< XInterface >(), 3);
 
