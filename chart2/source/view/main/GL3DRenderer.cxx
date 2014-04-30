@@ -89,7 +89,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     }
 
     m_uiSelectFrameCounter = 0;
-
 }
 
 void OpenGL3DRenderer::LoadShaders()
@@ -134,7 +133,6 @@ void OpenGL3DRenderer::init()
 
 
     m_3DProjection = glm::perspective(30.0f, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
-
 }
 
 int OpenGL3DRenderer::AddVertexData(GLuint vertexBuf)
@@ -167,14 +165,18 @@ int OpenGL3DRenderer::AddIndexData(GLuint indexBuf)
 bool OpenGL3DRenderer::GetSimilarVertexIndex(PackedVertex & packed,
     std::map<PackedVertex,unsigned short> & VertexToOutIndex,
     unsigned short & result
-    ){
-        std::map<PackedVertex,unsigned short>::iterator it = VertexToOutIndex.find(packed);
-        if ( it == VertexToOutIndex.end() ){
-            return false;
-        }else{
-            result = it->second;
-            return true;
-        }
+    )
+{
+    std::map<PackedVertex,unsigned short>::iterator it = VertexToOutIndex.find(packed);
+    if ( it == VertexToOutIndex.end() )
+    {
+        return false;
+    }
+    else
+    {
+        result = it->second;
+        return true;
+    }
 }
 
 void OpenGL3DRenderer::SetVertex(PackedVertex &packed,
@@ -783,16 +785,16 @@ void OpenGL3DRenderer::EndAddShapePolygon3DObject()
 }
 
 void OpenGL3DRenderer::AddPolygon3DObjectNormalPoint(float x, float y, float z)
- {
+{
     if (m_Polygon3DInfo.fillStyle)
     {
         if (!m_Polygon3DInfo.normals)
         {
             m_Polygon3DInfo.normals = new Normals3D;
         }
-         m_Polygon3DInfo.normals->push_back(glm::vec3(x, -y, z));
+        m_Polygon3DInfo.normals->push_back(glm::vec3(x, -y, z));
     }
- }
+}
 
 void OpenGL3DRenderer::EndAddPolygon3DObjectNormalPoint()
 {
@@ -866,14 +868,12 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
             #endif
             m_bCameraUpdated = true;
         }
-
     }
     m_Polygon3DInfo.vertices = NULL;
 }
 
 void OpenGL3DRenderer::AddShape3DExtrudeObject(sal_Int32 color,sal_Int32 specular,float xTransform,float yTransform,float zTransform)
 {
-
     //color
     m_Extrude3DInfo.extrudeColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
                                              (float)(((color) & 0x0000FF00) >> 8) / 255.0f,
@@ -1047,6 +1047,7 @@ int OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
         m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = m_TranslationMatrix * scale;
     }
+
     if (extrude3D.reverse)
     {
         glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
@@ -1068,6 +1069,7 @@ int OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
                       -extrude3D.yTransform,
                       extrude3D.zTransform};
+
     if (actualYTrans < 0.0f)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
