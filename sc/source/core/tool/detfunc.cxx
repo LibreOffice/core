@@ -70,6 +70,7 @@
 #include "cellvalue.hxx"
 
 #include <vector>
+#include <boost/scoped_array.hpp>
 
 using ::std::vector;
 
@@ -670,7 +671,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
     if (nObjCount)
     {
         long nDelCount = 0;
-        SdrObject** ppObj = new SdrObject*[nObjCount];
+        boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
         SdrObject* pObject = aIter.Next();
@@ -693,7 +694,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
         for (i=1; i<=nDelCount; i++)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
-        delete[] ppObj;
+        ppObj.reset();
 
         Modified();
     }
@@ -734,7 +735,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
     if (nObjCount)
     {
         long nDelCount = 0;
-        SdrObject** ppObj = new SdrObject*[nObjCount];
+        boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
         SdrObject* pObject = aIter.Next();
@@ -759,7 +760,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
         for (i=1; i<=nDelCount; i++)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
-        delete[] ppObj;
+        ppObj.reset();
 
         Modified();
     }
@@ -1245,7 +1246,7 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
     sal_uLong   nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
-        SdrObject** ppObj = new SdrObject*[nObjCount];
+        boost::scoped_array<SdrObject*> ppObj(new SdrObject*[nObjCount]);
 
         SdrObjListIter aIter( *pPage, IM_FLAT );
         SdrObject* pObject = aIter.Next();
@@ -1283,7 +1284,7 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
         for (i=1; i<=nDelCount; i++)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
-        delete[] ppObj;
+        ppObj.reset();
 
         Modified();
     }

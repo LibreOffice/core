@@ -1186,9 +1186,9 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                                         aProText.makeStringAndClear(), 3*nThisEndRow );  // 2x FindOrder, 1x hier
             long nProgressStart = 2*nThisEndRow;                    // start fuer hier
 
-            SCCOLROW* pTempRows = new SCCOLROW[nThisEndRow+1];
-            SCCOLROW* pOtherRows = new SCCOLROW[nThisEndRow+1];
-            SCCOLROW* pOtherCols = new SCCOLROW[nThisEndCol+1];
+            boost::scoped_array<SCCOLROW> pTempRows(new SCCOLROW[nThisEndRow+1]);
+            boost::scoped_array<SCCOLROW> pOtherRows(new SCCOLROW[nThisEndRow+1]);
+            boost::scoped_array<SCCOLROW> pOtherCols(new SCCOLROW[nThisEndCol+1]);
 
             //  eingefuegte/geloeschte Spalten/Zeilen finden:
             //  Zwei Versuche:
@@ -1199,14 +1199,14 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             //! Spalten vergleichen zweimal mit unterschiedlichem nMinGood ???
 
             // 1
-            FindOrder( pTempRows, nThisEndRow, nOtherEndRow, false,
+            FindOrder( pTempRows.get(), nThisEndRow, nOtherEndRow, false,
                         rOtherDoc, nThisTab, nOtherTab, nEndCol, NULL, &aProgress, 0 );
             // 2
-            FindOrder( pOtherCols, nThisEndCol, nOtherEndCol, true,
+            FindOrder( pOtherCols.get(), nThisEndCol, nOtherEndCol, true,
                         rOtherDoc, nThisTab, nOtherTab, nEndRow, NULL, NULL, 0 );
-            FindOrder( pOtherRows, nThisEndRow, nOtherEndRow, false,
+            FindOrder( pOtherRows.get(), nThisEndRow, nOtherEndRow, false,
                         rOtherDoc, nThisTab, nOtherTab, nThisEndCol,
-                        pOtherCols, &aProgress, nThisEndRow );
+                       pOtherCols.get(), &aProgress, nThisEndRow );
 
             sal_uLong nMatch1 = 0;  // pTempRows, keine Spalten
             for (nThisRow = 0; nThisRow<=nThisEndRow; nThisRow++)
@@ -1220,7 +1220,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 if (ValidRow(pOtherRows[nThisRow]))
                     nMatch2 += SC_DOCCOMP_MAXDIFF -
                                RowDifferences( nThisRow, nThisTab, rOtherDoc, pOtherRows[nThisRow],
-                                                nOtherTab, nThisEndCol, pOtherCols );
+                                               nOtherTab, nThisEndCol, pOtherCols.get() );
 
             if ( nMatch1 >= nMatch2 )           // ohne Spalten ?
             {
@@ -1229,9 +1229,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                     pOtherCols[nThisCol] = nThisCol;
 
                 //  Zeilenarrays vertauschen (geloescht werden sowieso beide)
-                SCCOLROW* pSwap = pTempRows;
-                pTempRows = pOtherRows;
-                pOtherRows = pSwap;
+                pTempRows.swap(pOtherRows);
             }
             else
             {
@@ -1351,10 +1349,6 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 }
                 aProgress.SetStateOnPercent(nProgressStart+nThisRow);
             }
-
-            delete[] pOtherCols;
-            delete[] pOtherRows;
-            delete[] pTempRows;
         }
     }
 }

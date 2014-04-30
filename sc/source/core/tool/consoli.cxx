@@ -28,6 +28,7 @@
 
 #include <math.h>
 #include <string.h>
+#include <boost/scoped_array.hpp>
 
 #define SC_CONS_NOTFOUND    -1
 
@@ -512,11 +513,11 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     if (bColByName) ++nStartRow;
     if (bRowByName) ++nStartCol;
     OUString aTitle;
-    SCCOL*  pDestCols = NULL;
-    SCROW*  pDestRows = NULL;
+    boost::scoped_array<SCCOL> pDestCols;
+    boost::scoped_array<SCROW> pDestRows;
     if (bColByName)
     {
-        pDestCols = new SCCOL[nCol2-nStartCol+1];
+        pDestCols.reset(new SCCOL[nCol2-nStartCol+1]);
         for (nCol=nStartCol; nCol<=nCol2; nCol++)
         {
             aTitle = pSrcDoc->GetString(nCol, nRow1, nTab);
@@ -537,7 +538,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     }
     if (bRowByName)
     {
-        pDestRows = new SCROW[nRow2-nStartRow+1];
+        pDestRows.reset(new SCROW[nRow2-nStartRow+1]);
         for (nRow=nStartRow; nRow<=nRow2; nRow++)
         {
             aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
@@ -607,9 +608,6 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
             }
         }
     }
-
-    delete[] pDestCols;
-    delete[] pDestRows;
 }
 
 //  vorher testen, wieviele Zeilen eingefuegt werden (fuer Undo)

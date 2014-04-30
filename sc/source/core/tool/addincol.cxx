@@ -52,6 +52,7 @@
 #include "funcdesc.hxx"
 #include "svl/sharedstring.hxx"
 #include "formulaopt.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
 
@@ -489,7 +490,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 // get argument info
 
-                ScAddInArgDesc* pVisibleArgs = NULL;
+                boost::scoped_array<ScAddInArgDesc> pVisibleArgs;
                 long nVisibleCount = 0;
                 long nCallerPos = SC_CALLERPOS_NONE;
 
@@ -532,7 +533,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                         aDesc.bOptional = false;
 
                         nVisibleCount = nArgumentCount;
-                        pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
+                        pVisibleArgs.reset(new ScAddInArgDesc[nVisibleCount]);
 
                         nIndex = 0;
                         for ( nArgument = 0; nArgument < nArgumentCount; nArgument++ )
@@ -560,7 +561,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     aFuncName, aLocalName, aDescription,
                     nCategory, sHelpId,
                     xFunc, aObject,
-                    nVisibleCount, pVisibleArgs, nCallerPos );
+                    nVisibleCount, pVisibleArgs.get(), nCallerPos );
 
                 pData->SetCompNames( aCompNames );
 
@@ -578,8 +579,6 @@ void ScUnoAddInCollection::ReadConfiguration()
                         ScAddInHashMap::value_type(
                             pData->GetUpperLocal(),
                             pData ) );
-
-                delete[] pVisibleArgs;
             }
         }
     }
@@ -898,11 +897,11 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     aDescription = "###";
                                 }
 
-                                ScAddInArgDesc* pVisibleArgs = NULL;
+                                boost::scoped_array<ScAddInArgDesc> pVisibleArgs;
                                 if ( nVisibleCount > 0 )
                                 {
                                     ScAddInArgDesc aDesc;
-                                    pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
+                                    pVisibleArgs.reset(new ScAddInArgDesc[nVisibleCount]);
                                     long nDestPos = 0;
                                     for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                                     {
@@ -953,7 +952,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     aFuncName, aLocalName, aDescription,
                                     nCategory, sHelpId,
                                     xFunc, aObject,
-                                    nVisibleCount, pVisibleArgs, nCallerPos );
+                                    nVisibleCount, pVisibleArgs.get(), nCallerPos );
 
                                 const ScUnoAddInFuncData* pData =
                                     ppFuncData[nFuncPos+nOld];
@@ -969,8 +968,6 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         ScAddInHashMap::value_type(
                                             pData->GetUpperLocal(),
                                             pData ) );
-
-                                delete[] pVisibleArgs;
                             }
                         }
                     }
@@ -1090,11 +1087,11 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                     }
                     if (bValid)
                     {
-                        ScAddInArgDesc* pVisibleArgs = NULL;
+                        boost::scoped_array<ScAddInArgDesc> pVisibleArgs;
                         if ( nVisibleCount > 0 )
                         {
                             ScAddInArgDesc aDesc;
-                            pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
+                            pVisibleArgs.reset(new ScAddInArgDesc[nVisibleCount]);
                             long nDestPos = 0;
                             for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                             {
@@ -1129,13 +1126,11 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                         }
 
                         pOldData->SetFunction( xFunc, aObject );
-                        pOldData->SetArguments( nVisibleCount, pVisibleArgs );
+                        pOldData->SetArguments( nVisibleCount, pVisibleArgs.get() );
                         pOldData->SetCallerPos( nCallerPos );
 
                         if ( pFunctionList )
                             lcl_UpdateFunctionList( *pFunctionList, *pOldData );
-
-                        delete[] pVisibleArgs;
                     }
                 }
             }
