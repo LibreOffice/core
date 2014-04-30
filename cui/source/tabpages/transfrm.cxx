@@ -432,13 +432,12 @@ void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
 |*      dialog for changing slant and corner radius
 |*
 \************************************************************************/
-
-SvxSlantTabPage::SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage              ( pParent
-                             ,"SlantAndCornerRadius"
-                             ,"cui/ui/slantcornertabpage.ui"
-                             , rInAttrs ),
-    rOutAttrs               ( rInAttrs )
+SvxSlantTabPage::SvxSlantTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage( pParent,"SlantAndCornerRadius","cui/ui/slantcornertabpage.ui",
+        rInAttrs)
+    , rOutAttrs(rInAttrs)
+    , pView(NULL)
+    , eDlgUnit(FUNIT_NONE)
 {
     get(m_pFlRadius, "FL_RADIUS");
     get(m_pMtrRadius, "MTR_FLD_RADIUS");
@@ -453,8 +452,6 @@ SvxSlantTabPage::SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
     DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 }
-
-
 
 void SvxSlantTabPage::Construct()
 {
