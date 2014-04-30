@@ -159,6 +159,23 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
     return xRet;
 }
 
+uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyBrightnessContrast(
+    const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso )
+        throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+{
+    const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
+    ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
+
+    BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
+    aBitmapEx.Adjust( nBrightness, nContrast, 0, 0, 0, 0, false, mso );
+    aGraphic = ::Graphic( aBitmapEx );
+
+    ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
+    pUnoGraphic->init( aGraphic );
+    uno::Reference< graphic::XGraphic > xRet( pUnoGraphic );
+    return xRet;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

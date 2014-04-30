@@ -51,6 +51,16 @@ interface XGraphicTransformer : ::com::sun::star::uno::XInterface
     com::sun::star::graphic::XGraphic applyDuotone( [ in ] com::sun::star::graphic::XGraphic In,
         [ in ] long ColorOne, [ in ] long ColorTwo )
             raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** changes brightness/contrast
+
+        @param mso whether to use MSOffice brightness/contrast formula
+        @returns
+            The modified graphic
+    */
+    com::sun::star::graphic::XGraphic applyBrightnessContrast( [ in ] com::sun::star::graphic::XGraphic In,
+        [ in ] long brightness, [ in ] long contrast, [ in ] boolean mso )
+            raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
 } ; } ; } ; } ;
