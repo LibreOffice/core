@@ -613,19 +613,19 @@ void SvxSlantTabPage::PointChanged( Window* , RECT_POINT  )
 |*      Dialog for changing position and size of graphic objects
 |*
 \************************************************************************/
-
-SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage      ( pParent
-                     ,"PositionAndSize"
-                     ,"cui/ui/possizetabpage.ui"
-                     , rInAttrs ),
-
-    mrOutAttrs       ( rInAttrs ),
-    mnProtectSizeState( TRISTATE_FALSE ),
-    mbPageDisabled   ( false ),
-    mbProtectDisabled( false ),
-    mbSizeDisabled( false ),
-    mbAdjustDisabled( true )
+SvxPositionSizeTabPage::SvxPositionSizeTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pParent,"PositionAndSize","cui/ui/possizetabpage.ui", rInAttrs)
+    , mrOutAttrs(rInAttrs)
+    , mpView(NULL)
+    , meDlgUnit(FUNIT_NONE)
+    , meMapUnit(MAP_100TH_MM)
+    , mnProtectSizeState(TRISTATE_FALSE)
+    , mbPageDisabled(false)
+    , mbProtectDisabled(false)
+    , mbSizeDisabled(false)
+    , mbAdjustDisabled(true)
+    , mfOldWidth(0.0)
+    , mfOldHeight(0.0)
 {
 
     get(m_pFlPosition, "FL_POSITION");
@@ -674,8 +674,6 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     m_pTsbSizeProtect->SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangeSizeProtectHdl ) );
 
 }
-
-
 
 void SvxPositionSizeTabPage::Construct()
 {
