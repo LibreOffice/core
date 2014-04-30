@@ -166,13 +166,13 @@ Point SwView::AlignToPixel(const Point &rPt) const
 void SwView::DocSzChgd(const Size &rSz)
 {
 
-extern int bDocSzUpdated;
+extern bool bDocSzUpdated;
 
 m_aDocSz = rSz;
 
     if( !m_pWrtShell || m_aVisArea.IsEmpty() )      // no shell -> no change
     {
-        bDocSzUpdated = sal_False;
+        bDocSzUpdated = false;
         return;
     }
 

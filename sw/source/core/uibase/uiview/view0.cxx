@@ -506,7 +506,10 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     case SID_AUTOSPELL_CHECK:
         if( STATE_TOGGLE == eState )
-            bFlag = bSet = !pOpt->IsOnlineSpell();
+        {
+            bFlag = !pOpt->IsOnlineSpell();
+            bSet = bFlag;
+        }
 
         pOpt->SetOnlineSpell(bSet);
         {
@@ -538,7 +541,10 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     case FN_SHADOWCURSOR:
         if( STATE_TOGGLE == eState )
-            bFlag = bSet = !pOpt->IsShadowCursor();
+        {
+            bFlag = !pOpt->IsShadowCursor();
+            bSet = bFlag;
+        }
 
         pOpt->SetShadowCursor(bSet);
         break;

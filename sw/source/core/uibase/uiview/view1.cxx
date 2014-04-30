@@ -38,7 +38,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 
-extern int bDocSzUpdated;
+extern bool bDocSzUpdated;
 
 void SwView::Activate(bool bMDIActivate)
 {

@@ -117,9 +117,9 @@ extern bool bNoInterrupt;       // in mainwn.cxx
 #define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
 
-// Statics
+// Statics. OMG.
 
-int bDocSzUpdated = 1;
+bool bDocSzUpdated = true;
 
 SvxSearchItem*  SwView::m_pSrchItem   = 0;
 
@@ -736,7 +736,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_bVerbsActive = m_bDrawRotate = m_bInOuterResizePixel = m_bInInnerResizePixel =
     m_bPasteState = m_bPasteSpecialState = m_bMakeSelectionVisible = false;
 
-    m_bShowAtResize = m_bDrawSelMode = bDocSzUpdated = sal_True;
+    m_bShowAtResize = m_bDrawSelMode = bDocSzUpdated = true;
 
     _CreateScrollbar( true );
     _CreateScrollbar( false );
