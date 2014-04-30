@@ -2251,20 +2251,23 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
         }
     }
 
-    mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
-    sax_fastparser::XFastAttributeListRef xAttrList( aOuterShdwAttrList );
-    mpFS->startElement( nEffectToken, xAttrList );
-
-    if( bContainsColor )
+    if( nEffectToken > 0 )
     {
-        if( sSchemeClr.isEmpty() )
-            WriteColor( nRgbClr, nAlpha );
-        else
-            WriteColor( sSchemeClr, aTransformations );
-    }
+        mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
+        sax_fastparser::XFastAttributeListRef xAttrList( aOuterShdwAttrList );
+        mpFS->startElement( nEffectToken, xAttrList );
 
-    mpFS->endElement( nEffectToken );
-    mpFS->endElementNS(XML_a, XML_effectLst);
+        if( bContainsColor )
+        {
+            if( sSchemeClr.isEmpty() )
+                WriteColor( nRgbClr, nAlpha );
+            else
+                WriteColor( sSchemeClr, aTransformations );
+        }
+
+        mpFS->endElement( nEffectToken );
+        mpFS->endElementNS(XML_a, XML_effectLst);
+    }
 }
 
 }
