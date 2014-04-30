@@ -198,13 +198,11 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link& rLink)
 |*      angle and the rotation angle of the graphic objects
 |*
 \************************************************************************/
-
-SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage              ( pParent
-                            ,"Rotation"
-                            ,"cui/ui/rotationtabpage.ui"
-                            , rInAttrs ),
-    rOutAttrs               ( rInAttrs )
+SvxAngleTabPage::SvxAngleTabPage(Window* pParent, const SfxItemSet& rInAttrs)
+    : SvxTabPage( pParent,"Rotation","cui/ui/rotationtabpage.ui", rInAttrs)
+    , rOutAttrs(rInAttrs)
+    , pView(NULL)
+    , eDlgUnit(FUNIT_NONE)
 {
     get(m_pFlPosition, "FL_POSITION");
     get(m_pMtrPosX, "MTR_FLD_POS_X");
@@ -222,8 +220,6 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
 
     m_pCtlAngle->SetLinkedField( m_pNfAngle, 2 );
 }
-
-
 
 void SvxAngleTabPage::Construct()
 {
