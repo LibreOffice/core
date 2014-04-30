@@ -979,6 +979,7 @@ int OpenGL3DRenderer::Update3DUniformBlock()
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     return 0;
 }
+
 int OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex)
 {
     float xzScale = extrude3D.xRange[1] - extrude3D.xRange[0];
@@ -1249,7 +1250,7 @@ glm::vec4 OpenGL3DRenderer::GetColorByIndex(int index)
     return glm::vec4(((float)r) / 255.0, ((float)g) / 255.0, ((float)b) / 255.0, 1.0);
 }
 
-int OpenGL3DRenderer::GetIndexByColor(int r, int g, int b)
+sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uInt32 b)
 {
     return r | (g << 8) | (b << 16);
 }
