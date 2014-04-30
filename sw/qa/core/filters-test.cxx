@@ -180,6 +180,14 @@ void SwFiltersTest::testCVEs()
             0,
             0,
             /*bExport=*/true);
+
+    testDir("HTML",
+            getURLFromSrc("/sw/qa/core/exportdata/html/"),
+            OUString(sHTML),
+            0,
+            0,
+            0,
+            /*bExport=*/true);
 }
 
 void SwFiltersTest::setUp()
