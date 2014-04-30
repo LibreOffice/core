@@ -373,92 +373,176 @@ private:
     friend const char* ImplDbgCheckWindow( const void* pObj );
 #endif
     friend Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
+
 public:
-    SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
-    SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
-    SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
-    SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
+
+    DECL_DLLPRIVATE_LINK(      ImplHandlePaintHdl, void* );
+    DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );
+    DECL_DLLPRIVATE_LINK(      ImplTrackTimerHdl, Timer* );
+    DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
+    DECL_DLLPRIVATE_LINK(      ImplHandleResizeTimerHdl, void* );
+    DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
+
+
+    SAL_DLLPRIVATE static void          ImplInitAppFontData( Window* pWindow );
+
+    SAL_DLLPRIVATE Window*              ImplGetFrameWindow() const;
+    SalFrame*                           ImplGetFrame() const;
+    SAL_DLLPRIVATE ImplFrameData*       ImplGetFrameData();
+
+    SAL_DLLPRIVATE Window*              ImplGetWindow();
+    SAL_DLLPRIVATE ImplWinData*         ImplGetWinData() const;
+    SAL_DLLPRIVATE Window*              ImplGetClientWindow() const;
+    SAL_DLLPRIVATE Window*              ImplGetDlgWindow( sal_uInt16 n, sal_uInt16 nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
+    SAL_DLLPRIVATE Window*              ImplGetParent() const;
+    SAL_DLLPRIVATE Window*              ImplFindWindow( const Point& rFramePos );
+
+    SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const Region& rRegion );
+
+    SAL_DLLPRIVATE bool                 ImplSetClipFlag( bool bSysObjOnlySmaller = false );
+
+    SAL_DLLPRIVATE bool                 ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow = false ) const;
+    SAL_DLLPRIVATE bool                 ImplIsChild( const Window* pWindow, bool bSystemWindow = false ) const;
+    SAL_DLLPRIVATE bool                 ImplIsFloatingWindow() const;
+    SAL_DLLPRIVATE bool                 ImplIsPushButton() const;
+    SAL_DLLPRIVATE bool                 ImplIsSplitter() const;
+    SAL_DLLPRIVATE bool                 ImplIsDockingWindow() const;
+    SAL_DLLPRIVATE bool                 ImplIsOverlapWindow() const;
+
+    SAL_DLLPRIVATE void                 ImplIsInTaskPaneList( bool mbIsInTaskList );
+
+    SAL_DLLPRIVATE WindowImpl*          ImplGetWindowImpl() const { return mpWindowImpl; }
+
+    SAL_DLLPRIVATE Point                ImplFrameToOutput( const Point& rPos );
+
+    SAL_DLLPRIVATE void                 ImplGrabFocus( sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplGrabFocusToDocument( sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplInvertFocus( const Rectangle& rRect );
+
+    SAL_DLLPRIVATE PointerStyle         ImplGetMousePointer() const;
+    SAL_DLLPRIVATE void                 ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged = false );
+    SAL_DLLPRIVATE void                 ImplGenerateMouseMove();
+
+    SAL_DLLPRIVATE void                 ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt );
+    SAL_DLLPRIVATE void                 ImplNotifyIconifiedState( bool bIconified );
+
+    SAL_DLLPRIVATE void                 ImplUpdateAll( bool bOverlapWindows = true );
+
+    SAL_DLLPRIVATE void                 ImplDeleteOverlapBackground();
+
+    SAL_DLLPRIVATE void                 ImplControlFocus( sal_uInt16 nFlags = 0 );
+
+    SAL_DLLPRIVATE void                 ImplMirrorFramePos( Point &pt ) const;
+
+    SAL_DLLPRIVATE void                 ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
+
+    SAL_DLLPRIVATE void                 ImplAddDel( ImplDelData* pDel );
+    SAL_DLLPRIVATE void                 ImplRemoveDel( ImplDelData* pDel );
+
+    SAL_DLLPRIVATE void                 ImplCallResize();
+    SAL_DLLPRIVATE void                 ImplCallMove();
+
+    SAL_DLLPRIVATE void                 ImplIncModalCount();
+    SAL_DLLPRIVATE void                 ImplDecModalCount();
+
+    SAL_DLLPRIVATE static void          ImplCalcSymbolRect( Rectangle& rRect );
+
+protected:
+
+    SAL_DLLPRIVATE void                 ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
+
+    SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
+
+    SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const Region* rRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplValidate( const Region* rRegion, sal_uInt16 nFlags );
+    SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
+    SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
+
+    SAL_DLLPRIVATE Window*              ImplGetBorderWindow() const;
+
+    SAL_DLLPRIVATE void                 ImplInvalidate( const Region* rRegion, sal_uInt16 nFlags );
+
+    SAL_DLLPRIVATE sal_uInt16           ImplHitTest( const Point& rFramePos );
+
+    SAL_DLLPRIVATE void                 ImplSetMouseTransparent( bool bTransparent );
+
+    SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_uInt16 nFlags );
+
+    SAL_DLLPRIVATE void                 ImplSaveOverlapBackground();
+    SAL_DLLPRIVATE bool                 ImplRestoreOverlapBackground( Region& rInvRegion );
+    SAL_DLLPRIVATE void                 ImplInvalidateAllOverlapBackgrounds();
+
+    SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller = false );
+    SAL_DLLPRIVATE bool                 ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
+
+    SAL_DLLPRIVATE WinBits              ImplInitRes( const ResId& rResId );
+    SAL_DLLPRIVATE WindowResHeader      ImplLoadResHeader( const ResId& rResId );
+    SAL_DLLPRIVATE void                 ImplLoadRes( const ResId& rResId );
+
+private:
     SAL_DLLPRIVATE void                ImplSetFrameParent( const Window* pParent );
+
     SAL_DLLPRIVATE void                ImplInsertWindow( Window* pParent );
     SAL_DLLPRIVATE void                ImplRemoveWindow( bool bRemoveFrameData );
-    SAL_DLLPRIVATE Window*             ImplGetWindow();
-    SAL_DLLPRIVATE ImplFrameData*      ImplGetFrameData();
-                   SalFrame*           ImplGetFrame() const;
-    SAL_DLLPRIVATE ImplWinData*        ImplGetWinData() const;
+
     SAL_DLLPRIVATE SalGraphics*        ImplGetFrameGraphics() const;
+
     SAL_DLLPRIVATE void                ImplCallFocusChangeActivate( Window* pNewOverlapWindow, Window* pOldOverlapWindow );
-    SAL_DLLPRIVATE Window*             ImplFindWindow( const Point& rFramePos );
-    SAL_DLLPRIVATE sal_uInt16              ImplHitTest( const Point& rFramePos );
-    SAL_DLLPRIVATE Window*             ImplGetParent() const;
-    SAL_DLLPRIVATE Window*             ImplGetClientWindow() const;
-    SAL_DLLPRIVATE Window*             ImplGetBorderWindow() const;
     SAL_DLLPRIVATE Window*             ImplGetFirstOverlapWindow();
     SAL_DLLPRIVATE const Window*       ImplGetFirstOverlapWindow() const;
-    SAL_DLLPRIVATE Window*             ImplGetFrameWindow() const;
+
     SAL_DLLPRIVATE bool                ImplIsRealParentPath( const Window* pWindow ) const;
-    SAL_DLLPRIVATE bool                ImplIsChild( const Window* pWindow, bool bSystemWindow = false ) const;
-    SAL_DLLPRIVATE bool                ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow = false ) const;
-    SAL_DLLPRIVATE bool                ImplIsDockingWindow() const;
-    SAL_DLLPRIVATE bool                ImplIsFloatingWindow() const;
-    SAL_DLLPRIVATE bool                ImplIsSplitter() const;
-    SAL_DLLPRIVATE bool                ImplIsPushButton() const;
-    SAL_DLLPRIVATE bool                ImplIsOverlapWindow() const;
-    SAL_DLLPRIVATE void                ImplSetMouseTransparent( bool bTransparent );
+
     SAL_DLLPRIVATE int                 ImplTestMousePointerSet();
-    SAL_DLLPRIVATE PointerStyle        ImplGetMousePointer() const;
+
     SAL_DLLPRIVATE void                ImplResetReallyVisible();
     SAL_DLLPRIVATE void                ImplSetReallyVisible();
+
     SAL_DLLPRIVATE void                ImplCallInitShow();
-    SAL_DLLPRIVATE void                ImplAddDel( ImplDelData* pDel );
-    SAL_DLLPRIVATE void                ImplRemoveDel( ImplDelData* pDel );
+
     SAL_DLLPRIVATE void                ImplInitResolutionSettings();
+
     SAL_DLLPRIVATE void                ImplPointToLogic( Font& rFont ) const;
     SAL_DLLPRIVATE void                ImplLogicToPoint( Font& rFont ) const;
-    SAL_DLLPRIVATE Point               ImplOutputToFrame( const Point& rPos );
-    SAL_DLLPRIVATE Point               ImplFrameToOutput( const Point& rPos );
+
     SAL_DLLPRIVATE bool                ImplSysObjClip( const Region* pOldRegion );
     SAL_DLLPRIVATE void                ImplUpdateSysObjChildrenClip();
     SAL_DLLPRIVATE void                ImplUpdateSysObjOverlapsClip();
     SAL_DLLPRIVATE void                ImplUpdateSysObjClip();
-    SAL_DLLPRIVATE bool                ImplSetClipFlagChildren( bool bSysObjOnlySmaller = false );
-    SAL_DLLPRIVATE bool                ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
-    SAL_DLLPRIVATE bool                ImplSetClipFlag( bool bSysObjOnlySmaller = false );
+
     SAL_DLLPRIVATE void                ImplIntersectWindowClipRegion( Region& rRegion );
     SAL_DLLPRIVATE void                ImplIntersectWindowRegion( Region& rRegion );
     SAL_DLLPRIVATE void                ImplExcludeWindowRegion( Region& rRegion );
     SAL_DLLPRIVATE void                ImplExcludeOverlapWindows( Region& rRegion );
     SAL_DLLPRIVATE void                ImplExcludeOverlapWindows2( Region& rRegion );
+
     SAL_DLLPRIVATE void                ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps );
     SAL_DLLPRIVATE bool                ImplClipChildren( Region& rRegion );
     SAL_DLLPRIVATE void                ImplClipAllChildren( Region& rRegion );
     SAL_DLLPRIVATE void                ImplClipSiblings( Region& rRegion );
+
     SAL_DLLPRIVATE void                ImplInitWinClipRegion();
     SAL_DLLPRIVATE void                ImplInitWinChildClipRegion();
     SAL_DLLPRIVATE Region*             ImplGetWinChildClipRegion();
+
     SAL_DLLPRIVATE void                ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion );
     SAL_DLLPRIVATE void                ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, Region& rRegion );
     SAL_DLLPRIVATE void                ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion );
     SAL_DLLPRIVATE void                ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
                                                bool bChildren, bool bParent, bool bSiblings );
+
     SAL_DLLPRIVATE void                ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags );
     SAL_DLLPRIVATE void                ImplCallOverlapPaint();
     SAL_DLLPRIVATE void                ImplPostPaint();
-    SAL_DLLPRIVATE void                ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplInvalidateOverlapFrameRegion( const Region& rRegion );
-    SAL_DLLPRIVATE void                ImplInvalidateParentFrameRegion( Region& rRegion );
-    SAL_DLLPRIVATE void                ImplInvalidate( const Region* rRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplValidateFrameRegion( const Region* rRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplValidate( const Region* rRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
-    SAL_DLLPRIVATE void                ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
-    SAL_DLLPRIVATE void                ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplUpdateAll( bool bOverlapWindows = true );
+
     SAL_DLLPRIVATE void                ImplUpdateWindowPtr( Window* pWindow );
     SAL_DLLPRIVATE void                ImplUpdateWindowPtr();
     SAL_DLLPRIVATE void                ImplUpdateOverlapWindowPtr( bool bNewFrame );
+
     SAL_DLLPRIVATE bool                ImplUpdatePos();
     SAL_DLLPRIVATE void                ImplUpdateSysObjPos();
-    SAL_DLLPRIVATE WindowImpl*         ImplGetWindowImpl() const { return mpWindowImpl; }
 
     /** check whether a font is suitable for UI
 
@@ -474,78 +558,64 @@ public:
     False if the font is unsuitable as UI font
      */
     SAL_DLLPRIVATE bool        ImplCheckUIFont( const Font& rFont );
+
     SAL_DLLPRIVATE void        ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl = true );
+
     SAL_DLLPRIVATE void        ImplAlignChildren();
-    SAL_DLLPRIVATE void        ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplToBottomChild();
+
     SAL_DLLPRIVATE void        ImplCalcToTop( ImplCalcToTopData* pPrevData );
     SAL_DLLPRIVATE void        ImplToTop( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplStartToTop( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible );
+
     SAL_DLLPRIVATE void        ImplShowAllOverlaps();
     SAL_DLLPRIVATE void        ImplHideAllOverlaps();
-    SAL_DLLPRIVATE void        ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt );
-    SAL_DLLPRIVATE void        ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged = false );
-    SAL_DLLPRIVATE void        ImplGenerateMouseMove();
-    SAL_DLLPRIVATE void        ImplGrabFocus( sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void        ImplGrabFocusToDocument( sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void        ImplInvertFocus( const Rectangle& rRect );
-    SAL_DLLPRIVATE void        ImplControlFocus( sal_uInt16 nFlags = 0 );
-    SAL_DLLPRIVATE Window*     ImplGetDlgWindow( sal_uInt16 n, sal_uInt16 nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
+
     SAL_DLLPRIVATE bool        ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput );
     SAL_DLLPRIVATE bool        ImplHasDlgCtrl();
     SAL_DLLPRIVATE void        ImplDlgCtrlNextWindow();
     SAL_DLLPRIVATE void        ImplDlgCtrlFocusChanged( Window* pWindow, bool bGetFocus );
     SAL_DLLPRIVATE Window*     ImplFindDlgCtrlWindow( Window* pWindow );
+
     SAL_DLLPRIVATE long        ImplLogicUnitToPixelX( long nX, MapUnit eUnit );
     SAL_DLLPRIVATE long        ImplLogicUnitToPixelY( long nY, MapUnit eUnit );
+
     SAL_DLLPRIVATE bool        ImplIsWindowInFront( const Window* pTestWindow ) const;
-    SAL_DLLPRIVATE void        ImplSaveOverlapBackground();
-    SAL_DLLPRIVATE bool        ImplRestoreOverlapBackground( Region& rInvRegion );
-    SAL_DLLPRIVATE void        ImplDeleteOverlapBackground();
-    SAL_DLLPRIVATE void        ImplInvalidateAllOverlapBackgrounds();
+
     SAL_DLLPRIVATE static void ImplNewInputContext();
+
     SAL_DLLPRIVATE void        ImplCallActivateListeners(Window*);
     SAL_DLLPRIVATE void        ImplCallDeactivateListeners(Window*);
-    DECL_DLLPRIVATE_LINK(      ImplHandlePaintHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplTrackTimerHdl, Timer* );
-    DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplHandleResizeTimerHdl, void* );
 
-    SAL_DLLPRIVATE static void ImplCalcSymbolRect( Rectangle& rRect );
     SAL_DLLPRIVATE void        ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
+
     SAL_DLLPRIVATE bool        ImplIsAccessibleCandidate() const;
     SAL_DLLPRIVATE bool        ImplIsAccessibleNativeFrame() const;
-    SAL_DLLPRIVATE sal_uInt16      ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const;
+    SAL_DLLPRIVATE sal_uInt16  ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const;
     SAL_DLLPRIVATE Window*     ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel = true ) const;
     SAL_DLLPRIVATE bool        ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplRevokeAccessibleNativeFrame();
-    SAL_DLLPRIVATE void        ImplCallResize();
-    SAL_DLLPRIVATE void        ImplCallMove();
+
     SAL_DLLPRIVATE Rectangle   ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
-    SAL_DLLPRIVATE void        ImplMirrorFramePos( Point &pt ) const;
     SAL_DLLPRIVATE long        ImplGetUnmirroredOutOffX();
-    SAL_DLLPRIVATE void        ImplIncModalCount();
-    SAL_DLLPRIVATE void        ImplDecModalCount();
 
     // retrieves the list of owner draw decorated windows for this window hiearchy
     SAL_DLLPRIVATE ::std::vector<Window *>& ImplGetOwnerDrawList();
+
     SAL_DLLPRIVATE Window*     ImplGetTopmostFrameWindow();
 
     SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, bool bClientOnly ) const;
-    SAL_DLLPRIVATE void        ImplNotifyIconifiedState( bool bIconified );
+
     SAL_DLLPRIVATE bool        ImplStopDnd();
     SAL_DLLPRIVATE void        ImplStartDnd();
 
-    SAL_DLLPRIVATE static void ImplInitAppFontData( Window* pWindow );
     SAL_DLLPRIVATE void        ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
 
-    SAL_DLLPRIVATE void        ImplIsInTaskPaneList( bool mbIsInTaskList );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
                                ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
 
+public:
     virtual Region              GetActiveClipRegion() const SAL_OVERRIDE;
 
 private:
