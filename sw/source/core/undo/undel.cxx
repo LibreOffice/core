@@ -113,13 +113,12 @@ SwUndoDelete::SwUndoDelete(
     bBackSp( false ),
     bJoinNext( false ),
     bTblDelLastNd( false ),
+    // bFullPara is set e.g. if an empty paragraph before a table is deleted
     bDelFullPara( bFullPara ),
     bResetPgDesc( false ),
     bResetPgBrk( false ),
     bFromTableCopy( bCalledByTblCpy )
 {
-    // bFullPara is set e.g. if an empty paragraph before a table is deleted
-    bDelFullPara = bFullPara;
 
     bCacheComment = false;
 
@@ -1043,15 +1042,20 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             pTblNd->DelFrms();
         }
 
-        rPam.SetMark();
+        // avoid asserts from ~SwIndexReg for deleted nodes
+        SwPaM aTmp(*rPam.End());
+        if (!aTmp.Move(fnMoveForward, fnGoNode))
+        {
+            *aTmp.GetPoint() = *rPam.Start();
+            aTmp.Move(fnMoveBackward, fnGoNode);
+        }
+        assert(aTmp.GetPoint()->nNode != rPam.GetPoint()->nNode
+            && aTmp.GetPoint()->nNode != rPam.GetMark()->nNode);
+        ::PaMCorrAbs(rPam, *aTmp.GetPoint());
+
         rPam.DeleteMark();
 
         rDoc.GetNodes().Delete( aSttIdx, nEndNode - nSttNode );
-
-        // always set the cursor into a ContentNode!
-        if( !rPam.Move( fnMoveBackward, fnGoCntnt ) &&
-            !rPam.Move( fnMoveForward, fnGoCntnt ) )
-            rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
     }
     else if( bDelFullPara )
     {
