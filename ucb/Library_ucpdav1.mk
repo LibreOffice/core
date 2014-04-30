@@ -62,6 +62,7 @@ else # WITH_WEBDAV == serf
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
 	apr \
+	$(if $(filter $(OS),MACOSX),iconv) \
 	openssl \
 	serf \
 	zlib \
