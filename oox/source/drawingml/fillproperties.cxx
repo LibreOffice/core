@@ -92,6 +92,18 @@ Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProper
     return xGraphic;
 }
 
+Reference< XGraphic > applyBrightnessContrast( Reference< XGraphic > xGraphic, sal_Int32 brightness, sal_Int32 contrast )
+{
+    try
+        {
+            Reference< XGraphicTransformer > xTransformer( xGraphic, UNO_QUERY_THROW );
+            xGraphic = xTransformer->applyBrightnessContrast( xGraphic, brightness, contrast, true );
+        }
+        catch( Exception& )
+        {
+        }
+    return xGraphic;
+}
 
 
 BitmapMode lclGetBitmapMode( sal_Int32 nToken )
@@ -519,12 +531,23 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
 void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
+    sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
+    sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
     if( maBlipProps.mxGraphic.is() )
     {
         // created transformed graphic
         Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
         xGraphic = lclCheckAndApplyChangeColorTransform( maBlipProps, xGraphic, rGraphicHelper, nPhClr );
-
+        // MSO uses a different algorithm for contrast+brightness, LO applies contrast before brightness,
+        // while MSO apparently applies half of brightness before contrast and half after. So if only
+        // contrast or brightness need to be altered, the result is the same, but if both are involved,
+        // there's no way to map that, so just force a conversion of the image.
+        if( nBrightness != 0 && nContrast != 0 )
+        {
+            xGraphic = applyBrightnessContrast( xGraphic, nBrightness, nContrast );
+            nBrightness = 0;
+            nContrast = 0;
+        }
         rPropMap.setProperty(PROP_Graphic, xGraphic);
 
         // do we still need to set GraphicURL as well? (TODO)
@@ -563,10 +586,8 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
     rPropMap.setProperty(PROP_GraphicColorMode, eColorMode);
 
     // brightness and contrast
-    sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
     if( nBrightness != 0 )
         rPropMap.setProperty(PROP_AdjustLuminance, nBrightness);
-    sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
     if( nContrast != 0 )
         rPropMap.setProperty(PROP_AdjustContrast, nContrast);
 

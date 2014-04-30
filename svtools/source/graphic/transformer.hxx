@@ -51,6 +51,11 @@ class GraphicTransformer : public GraphicTransformer_UnoImplHelper1
             sal_Int32 nColorOne, sal_Int32 nColorTwo )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL applyBrightnessContrast(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic,
+            sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso )
+                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
 };
 
 }
