@@ -795,8 +795,13 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
             mpWindow->EnterWait();
 
         Point aPos;
-        Size aSize(480,360);
         sal_Int8 nAction = DND_ACTION_COPY;
+
+        Size aSize(480,360);
+        if( mpWindow )
+            aSize = mpWindow->PixelToLogic( aSize, MAP_100TH_MM );
+        else
+            aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, MAP_100TH_MM );
 
         if( mpWindow )
         {
@@ -804,6 +809,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
             aPos.X() -= aSize.Width() >> 1;
             aPos.Y() -= aSize.Height() >> 1;
         }
+
 
         mpView->Insert3DModelURL( sURL, nAction, aPos, aSize, false ) ;
 
