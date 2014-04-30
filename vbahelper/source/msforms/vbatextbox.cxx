@@ -94,7 +94,7 @@ ScVbaTextBox::getMultiline() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Any aValue;
     aValue = m_xProps->getPropertyValue( "MultiLine" );
-    sal_Bool bRet = false;
+    bool bRet = false;
     aValue >>= bRet;
     return bRet;
 }

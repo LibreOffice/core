@@ -344,9 +344,9 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
     sal_Int16 nCopies = 1;
-    sal_Bool bPreview = sal_False;
-    sal_Bool bCollate = sal_False;
-    sal_Bool bSelection = bUseSelection;
+    bool bPreview = false;
+    bool bCollate = false;
+    bool bSelection = bUseSelection;
     From >>= nFrom;
     To >>= nTo;
     Copies >>= nCopies;
@@ -477,7 +477,7 @@ OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw
         case uno::TypeClass_BOOLEAN:
             return bUppercaseBool ?
                 (rAny.get< bool >() ? OUString(  "TRUE"  ) : OUString(  "FALSE"  )) :
-                OUString::boolean( (sal_Bool)rAny.get< bool >() );
+                OUString::boolean( rAny.get< bool >() );
         case uno::TypeClass_FLOAT:
             return OUString::number( rAny.get< float >() );
         case uno::TypeClass_DOUBLE:

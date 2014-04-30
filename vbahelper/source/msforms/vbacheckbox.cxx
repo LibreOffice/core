@@ -64,7 +64,7 @@ ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcept
     m_xProps->getPropertyValue( "State" ) >>= nOldValue;
     if( !( _value >>= nValue ) )
     {
-        sal_Bool bValue = false;
+        bool bValue = false;
         _value >>= bValue;
         if ( bValue )
             nValue = -1;

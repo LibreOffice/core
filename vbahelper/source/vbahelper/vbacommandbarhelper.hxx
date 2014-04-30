@@ -60,7 +60,7 @@ private:
     OUString maModuleId;
 
     void Init() throw (css::uno::RuntimeException);
-    sal_Bool hasToolbar( const OUString& sResourceUrl, const OUString& sName )  throw (css::uno::RuntimeException);
+    bool hasToolbar( const OUString& sResourceUrl, const OUString& sName )  throw (css::uno::RuntimeException);
 public:
     VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException );
 
@@ -78,10 +78,10 @@ public:
     {
         return m_xWindowState;
     }
-    sal_Bool persistChanges() throw (css::uno::RuntimeException);
+    bool persistChanges() throw (css::uno::RuntimeException);
     css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
     void removeSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
-    void ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, sal_Bool bTemporary = sal_True ) throw (css::uno::RuntimeException);
+    void ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, bool bTemporary = true ) throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() throw (css::uno::RuntimeException);
 

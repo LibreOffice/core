@@ -150,9 +150,9 @@ typedef ::boost::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std
 struct VbaApplicationBase_Impl
 {
     VbaTimerHashMap m_aTimerHash;
-    sal_Bool mbVisible;
+    bool mbVisible;
 
-    inline VbaApplicationBase_Impl() : mbVisible( sal_True ) {}
+    inline VbaApplicationBase_Impl() : mbVisible( true ) {}
 
     virtual ~VbaApplicationBase_Impl()
     {
@@ -364,7 +364,7 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
       || ( aLatestTime.hasValue() && !( aLatestTime >>= nLatestTime ) ) )
         throw uno::RuntimeException( "Only double is supported as time for now!" , uno::Reference< uno::XInterface >() );
 
-    sal_Bool bSetTimer = sal_True;
+    bool bSetTimer = true;
     aSchedule >>= bSetTimer;
 
     VbaTimerInfo aTimerIndex( aFunction, ::std::pair< double, double >( nEarliestTime, nLatestTime ) );

@@ -177,7 +177,7 @@ void ScVbaControl::removeResouce() throw( uno::RuntimeException )
 sal_Bool SAL_CALL ScVbaControl::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     uno::Any aValue = m_xProps->getPropertyValue ( "Enabled" );
-    sal_Bool bRet = false;
+    bool bRet = false;
     aValue >>= bRet;
     return bRet;
 }
@@ -191,7 +191,7 @@ void SAL_CALL ScVbaControl::setEnabled( sal_Bool bVisible ) throw (uno::RuntimeE
 
 sal_Bool SAL_CALL ScVbaControl::getVisible() throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bVisible( sal_True );
+    bool bVisible( true );
     m_xProps->getPropertyValue ( "EnableVisible" ) >>= bVisible;
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );
     if ( xControlShape.is() )
@@ -618,7 +618,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
             return new ScVbaComboBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::COMMANDBUTTON:
         {
-            sal_Bool bToggle = sal_False;
+            bool bToggle = false;
             xProps->getPropertyValue( "Toggle" ) >>= bToggle;
             if ( bToggle )
                 return new ScVbaToggleButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
@@ -666,7 +666,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         xVBAControl.set( new ScVbaTextBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), true ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
     {
-        sal_Bool bToggle = sal_False;
+        bool bToggle = false;
         xProps->getPropertyValue( "Toggle" ) >>= bToggle;
         if ( bToggle )
             xVBAControl.set( new ScVbaToggleButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
@@ -740,7 +740,7 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeExcep
     m_xProps->setPropertyValue( "BackgroundColor" , uno::makeAny( XLRGBToOORGB( nBackColor ) ) );
 }
 
-sal_Bool ScVbaControl::getAutoSize() throw (uno::RuntimeException)
+bool ScVbaControl::getAutoSize() throw (uno::RuntimeException)
 {
     bool bIsResizeEnabled = false;
     uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_QUERY_THROW );
@@ -751,7 +751,7 @@ sal_Bool ScVbaControl::getAutoSize() throw (uno::RuntimeException)
 }
 
 // currently no implementation for this
-void ScVbaControl::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+void ScVbaControl::setAutoSize( bool bAutoSize ) throw (uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_QUERY_THROW );
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xIf );
@@ -759,14 +759,14 @@ void ScVbaControl::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeExceptio
         pObj->SetResizeProtect( !bAutoSize );
 }
 
-sal_Bool ScVbaControl::getLocked() throw (uno::RuntimeException)
+bool ScVbaControl::getLocked() throw (uno::RuntimeException)
 {
-    sal_Bool bRes( sal_False );
+    bool bRes( false );
     m_xProps->getPropertyValue( "ReadOnly" ) >>= bRes;
     return bRes;
 }
 
-void ScVbaControl::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+void ScVbaControl::setLocked( bool bLocked ) throw (uno::RuntimeException)
 {
     m_xProps->setPropertyValue( "ReadOnly" , uno::makeAny( bLocked ) );
 }

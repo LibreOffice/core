@@ -111,10 +111,10 @@ public:
     //controls
     sal_Int32 getBackColor() throw (css::uno::RuntimeException);
     void setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
-    sal_Bool getAutoSize() throw (css::uno::RuntimeException);
-    void setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
-    sal_Bool getLocked() throw (css::uno::RuntimeException);
-    void setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
+    bool getAutoSize() throw (css::uno::RuntimeException);
+    void setAutoSize( bool bAutoSize ) throw (css::uno::RuntimeException);
+    bool getLocked() throw (css::uno::RuntimeException);
+    void setLocked( bool bAutoSize ) throw (css::uno::RuntimeException);
 };
 
 

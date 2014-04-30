@@ -55,7 +55,7 @@ VbaFontBase::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExcept
     if( mbFormControl )
         return;
 
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     aValue >>= bValue;
     sal_Int16 nValue = NORMAL;
     sal_Int8 nValue2 = NORMALHEIGHT;
@@ -86,7 +86,7 @@ VbaFontBase::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
     if( mbFormControl )
         return;
 
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     aValue >>= bValue;
     sal_Int16 nValue = NORMAL;
     sal_Int8 nValue2 = NORMALHEIGHT;
@@ -171,7 +171,7 @@ VbaFontBase::getColorIndex() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL
 VbaFontBase::setBold( const uno::Any& aValue ) throw( uno::RuntimeException, std::exception )
 {
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     aValue >>= bValue;
     double fBoldValue = awt::FontWeight::NORMAL;
     if( bValue )
@@ -191,7 +191,7 @@ VbaFontBase::getBold() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL
 VbaFontBase::setStrikethrough( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
 {
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     aValue >>= bValue;
     short nValue = awt::FontStrikeout::NONE;
     if( bValue )
@@ -223,7 +223,7 @@ VbaFontBase::getShadow() throw (uno::RuntimeException, std::exception)
 void  SAL_CALL
 VbaFontBase::setItalic( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
 {
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     aValue >>= bValue;
     short nValue = awt::FontSlant_NONE;
     if( bValue )

@@ -65,7 +65,7 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
 
     if( !( _value >>= nValue ) )
     {
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
         _value >>= bValue;
         if ( bValue )
             nValue = -1;

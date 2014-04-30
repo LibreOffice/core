@@ -119,7 +119,7 @@ ScVbaListBox::setText( const OUString& _text ) throw (uno::RuntimeException, std
 sal_Int32 SAL_CALL
 ScVbaListBox::getMultiSelect() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bMultiSelect = sal_False;
+    bool bMultiSelect = false;
     m_xProps->getPropertyValue( "MultiSelection" ) >>= bMultiSelect;
 
     return bMultiSelect ? msforms::fmMultiSelect::fmMultiSelectMulti : msforms::fmMultiSelect::fmMultiSelectSingle;
@@ -128,15 +128,15 @@ ScVbaListBox::getMultiSelect() throw (css::uno::RuntimeException, std::exception
 void SAL_CALL
 ScVbaListBox::setMultiSelect( sal_Int32 _multiselect ) throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool bBoolVal = false;
+    bool bBoolVal = false;
     switch ( _multiselect )
     {
         case  msforms::fmMultiSelect::fmMultiSelectMulti:
         case  msforms::fmMultiSelect::fmMultiSelectExtended:
-            bBoolVal = sal_True;
+            bBoolVal = true;
             break;
         case msforms::fmMultiSelect::fmMultiSelectSingle:
-            bBoolVal = sal_False;
+            bBoolVal = false;
             break;
         default:
             throw lang::IllegalArgumentException();
@@ -187,7 +187,7 @@ ScVbaListBox::Clear(  ) throw (uno::RuntimeException, std::exception)
 void
 ScVbaListBox::setValueEvent( const uno::Any& value )
 {
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     if( !(value >>= bValue) )
         throw uno::RuntimeException( "Invalid type\n. need boolean." , uno::Reference< uno::XInterface >() );
     uno::Sequence< sal_Int16 > nList;

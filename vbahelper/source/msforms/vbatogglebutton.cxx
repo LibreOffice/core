@@ -64,7 +64,7 @@ ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExcepti
     sal_Int16 nState = 0;
     if ( ! ( _value >>= nState ) )
     {
-        sal_Bool bState = false;
+        bool bState = false;
         _value >>= bState;
         if ( bState )
             nState = -1;

@@ -31,7 +31,7 @@ VbaPageSetupBase::VbaPageSetupBase(const uno::Reference< XHelperInterface >& xPa
 
 double SAL_CALL VbaPageSetupBase::getTopMargin() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool headerOn = sal_False;
+    bool headerOn = false;
     sal_Int32 topMargin = 0;
     sal_Int32 headerHeight = 0;
 
@@ -60,7 +60,7 @@ double SAL_CALL VbaPageSetupBase::getTopMargin() throw (css::uno::RuntimeExcepti
 void SAL_CALL VbaPageSetupBase::setTopMargin( double margin ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 topMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
-    sal_Bool headerOn = sal_False;
+    bool headerOn = false;
     sal_Int32 headerHeight = 0;
 
     try
@@ -85,7 +85,7 @@ void SAL_CALL VbaPageSetupBase::setTopMargin( double margin ) throw (css::uno::R
 
 double SAL_CALL VbaPageSetupBase::getBottomMargin() throw (css::uno::RuntimeException, std::exception)
 {
-    sal_Bool footerOn = sal_False;
+    bool footerOn = false;
     sal_Int32 bottomMargin = 0;
     sal_Int32 footerHeight = 0;
 
@@ -114,7 +114,7 @@ double SAL_CALL VbaPageSetupBase::getBottomMargin() throw (css::uno::RuntimeExce
 void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 bottomMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
-    sal_Bool footerOn = sal_False;
+    bool footerOn = false;
     sal_Int32 footerHeight = 0;
 
     try
@@ -259,7 +259,7 @@ sal_Int32 SAL_CALL VbaPageSetupBase::getOrientation() throw (css::uno::RuntimeEx
     sal_Int32 orientation = mnOrientPortrait;
     try
     {
-        sal_Bool isLandscape = sal_False;
+        bool isLandscape = false;
         uno::Any aValue = mxPageProps->getPropertyValue( "IsLandscape" );
         aValue >>= isLandscape;
 
@@ -284,15 +284,15 @@ void SAL_CALL VbaPageSetupBase::setOrientation( sal_Int32 orientation ) throw (c
 
     try
     {
-        sal_Bool isLandscape = sal_False;
+        bool isLandscape = false;
         uno::Any aValue = mxPageProps->getPropertyValue( "IsLandscape" );
         aValue >>= isLandscape;
 
-        sal_Bool switchOrientation = sal_False;
+        bool switchOrientation = false;
         if(( isLandscape && orientation != mnOrientLandscape ) ||
             ( !isLandscape && orientation != mnOrientPortrait ))
         {
-            switchOrientation = sal_True;
+            switchOrientation = true;
         }
 
         if( switchOrientation )

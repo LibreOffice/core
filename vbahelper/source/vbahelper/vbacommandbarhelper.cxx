@@ -143,7 +143,7 @@ void VbaCommandBarHelper::removeSettings( const OUString& sResourceUrl ) throw (
     // persistChanges();
 }
 
-void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, sal_Bool bTemporary ) throw (css::uno::RuntimeException)
+void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, bool bTemporary ) throw (css::uno::RuntimeException)
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
     {
@@ -159,14 +159,14 @@ void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::
     }
 }
 
-sal_Bool VbaCommandBarHelper::persistChanges() throw (css::uno::RuntimeException)
+bool VbaCommandBarHelper::persistChanges() throw (css::uno::RuntimeException)
 {
     uno::Reference< css::ui::XUIConfigurationPersistence > xConfigPersistence( m_xDocCfgMgr, uno::UNO_QUERY_THROW );
-    sal_Bool result = sal_False;
+    bool result = false;
     if( xConfigPersistence->isModified() )
     {
         xConfigPersistence->store();
-        result = sal_True;
+        result = true;
     }
     return result;
 }
@@ -179,7 +179,7 @@ uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() 
     return xLayoutManager;
 }
 
-sal_Bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, const OUString& sName ) throw (css::uno::RuntimeException)
+bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, const OUString& sName ) throw (css::uno::RuntimeException)
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
     {
@@ -187,9 +187,9 @@ sal_Bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, const OU
         uno::Reference< beans::XPropertySet > xPropertySet( m_xDocCfgMgr->getSettings( sResourceUrl, sal_False ), uno::UNO_QUERY_THROW );
         xPropertySet->getPropertyValue( ITEM_DESCRIPTOR_UINAME ) >>= sUIName;
         if( sName.equalsIgnoreAsciiCase( sUIName ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 // return the resource url if found

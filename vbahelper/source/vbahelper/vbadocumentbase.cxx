@@ -100,12 +100,12 @@ void
 VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
                       const uno::Any &rRouteArg ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bSaveChanges = sal_False;
+    bool bSaveChanges = false;
     OUString aFileName;
-    sal_Bool bRouteWorkbook = sal_True;
+    bool bRouteWorkbook = true;
 
     rSaveArg >>= bSaveChanges;
-    sal_Bool bFileName =  ( rFileArg >>= aFileName );
+    bool bFileName =  ( rFileArg >>= aFileName );
     rRouteArg >>= bRouteWorkbook;
     uno::Reference< frame::XStorable > xStorable( getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
@@ -125,7 +125,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
         xModifiable->setModified( false );
 
     // first try to close the document using UI dispatch functionality
-    sal_Bool bUIClose = sal_False;
+    bool bUIClose = false;
     try
     {
         uno::Reference< frame::XController > xController( getModel()->getCurrentController(), uno::UNO_SET_THROW );
@@ -142,7 +142,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
                 xDispatchProvider->queryDispatch( aURL, "_self" , 0 ),
                 uno::UNO_SET_THROW );
         xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
-        bUIClose = sal_True;
+        bUIClose = true;
     }
     catch(const uno::Exception&)
     {

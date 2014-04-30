@@ -60,7 +60,7 @@ VbaTextFrame::getAutoSize() throw (uno::RuntimeException, std::exception)
     // I don't know why, but in OOo, TextAutoGrowHeight is the property control autosize. not TextFitToSize.
     // TextFitToSize control the text content.
     // and in mso, there isnot option TextWordWrap which means auto wrap. the default is False.
-    sal_Bool bAutosize = sal_False;
+    bool bAutosize = false;
     uno::Any aTextAutoGrowHeight = m_xPropertySet->getPropertyValue( "TextAutoGrowHeight" );
     aTextAutoGrowHeight >>= bAutosize;
     return bAutosize;
