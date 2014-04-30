@@ -179,7 +179,7 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
         OUString("Width") };
 
     Any pValues[] = {
-        Any( sal_True ),
+        Any( true ),
         Any( nHeight ),
         Any( rLabel ),
         Any( nXPos ),
@@ -221,7 +221,7 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
     Any pValues[] = {
         Any( fEffectiveMax ),
         Any( fEffectiveMin ),
-        Any( sal_True ),
+        Any( true ),
         Any( (sal_Int32)12 ),
         Any( nXPos ),
         Any( nYPos ),
@@ -266,7 +266,7 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
         OUString("Width") };
 
     Any pValues[] = {
-        Any( sal_True ),
+        Any( true ),
         Any( bEnabled ),
         Any( nHeight ),
         Any( (sal_Int16)8),
@@ -344,11 +344,11 @@ OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rCont
         OUString("Width") };
 
     Any pValues[] = {
-        Any( sal_True ),
+        Any( true ),
         Any( bEnabled ),
         Any( nHeight ),
         Any( (sal_Int16)8),
-        Any( sal_False ),
+        Any( false ),
         Any( nXPos ),
         Any( nYPos ),
         Any( (sal_Int16)0 ),
@@ -384,7 +384,7 @@ void OptimizerDialog::InitNavigationBar()
     InsertButton( *this, "btnNavFinish", mxActionListener, nFinishPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, true, STR_FINISH, PushButtonType_STANDARD );
     InsertButton( *this, "btnNavCancel", mxActionListener, nCancelPosX, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mnTabIndex++, true, STR_CANCEL, PushButtonType_STANDARD );
 
-    setControlProperty( "btnNavNext", "DefaultButton", Any( sal_True ) );
+    setControlProperty( "btnNavNext", "DefaultButton", Any( true ) );
 }
 
 
@@ -440,9 +440,9 @@ void OptimizerDialog::InitPage0()
 
 void OptimizerDialog::UpdateControlStatesPage1()
 {
-    bool bDeleteUnusedMasterPages( GetConfigProperty( TK_DeleteUnusedMasterPages, sal_False ) );
-    bool bDeleteHiddenSlides( GetConfigProperty( TK_DeleteHiddenSlides, sal_False ) );
-    bool bDeleteNotesPages( GetConfigProperty( TK_DeleteNotesPages, sal_False ) );
+    bool bDeleteUnusedMasterPages( GetConfigProperty( TK_DeleteUnusedMasterPages, false ) );
+    bool bDeleteHiddenSlides( GetConfigProperty( TK_DeleteHiddenSlides, false ) );
+    bool bDeleteNotesPages( GetConfigProperty( TK_DeleteNotesPages, false ) );
 
     setControlProperty( "CheckBox0Pg3", "State", Any( (sal_Int16)bDeleteUnusedMasterPages ) );
     setControlProperty( "CheckBox1Pg3", "State", Any( (sal_Int16)bDeleteNotesPages ) );
@@ -469,9 +469,9 @@ void OptimizerDialog::InitPage1()
     maControlPages.push_back( aControlList );
     DeactivatePage( 1 );
 
-    setControlProperty( "CheckBox3Pg3", "State", Any( sal_False ) );
+    setControlProperty( "CheckBox3Pg3", "State", Any( false ) );
     setControlProperty( "CheckBox3Pg3", "Enabled", Any( aCustomShowList.getLength() != 0 ) );
-    setControlProperty( "ListBox0Pg3", "Enabled", Any( sal_False ) );
+    setControlProperty( "ListBox0Pg3", "Enabled", Any( false ) );
 
     UpdateControlStatesPage1();
 }
@@ -480,9 +480,9 @@ void OptimizerDialog::InitPage1()
 
 void OptimizerDialog::UpdateControlStatesPage2()
 {
-    bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
-    bool bRemoveCropArea( GetConfigProperty( TK_RemoveCropArea, sal_False ) );
-    bool bEmbedLinkedGraphics( GetConfigProperty( TK_EmbedLinkedGraphics, sal_True ) );
+    bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, false ) );
+    bool bRemoveCropArea( GetConfigProperty( TK_RemoveCropArea, false ) );
+    bool bEmbedLinkedGraphics( GetConfigProperty( TK_EmbedLinkedGraphics, true ) );
     sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
 
     sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
@@ -545,7 +545,7 @@ void OptimizerDialog::InitPage2()
 
 void OptimizerDialog::UpdateControlStatesPage3()
 {
-    bool bConvertOLEObjects( GetConfigProperty( TK_OLEOptimization, sal_False ) );
+    bool bConvertOLEObjects( GetConfigProperty( TK_OLEOptimization, false ) );
     sal_Int16 nOLEOptimizationType( GetConfigProperty( TK_OLEOptimizationType, (sal_Int16)0 ) );
 
     setControlProperty( "CheckBox0Pg2", "State", Any( (sal_Int16)bConvertOLEObjects ) );
@@ -603,7 +603,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
 
 void OptimizerDialog::UpdateControlStatesPage4()
 {
-    bool bSaveAs( GetConfigProperty( TK_SaveAs, sal_True ) );
+    bool bSaveAs( GetConfigProperty( TK_SaveAs, true ) );
     if ( mbIsReadonly )
     {
         setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( sal_False ) ) );
@@ -614,7 +614,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( bSaveAs == false ) ) );
         setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16)( bSaveAs == true ) ) );
     }
-    setControlProperty( "ComboBox0Pg4", "Enabled", Any( sal_False ) );
+    setControlProperty( "ComboBox0Pg4", "Enabled", Any( false ) );
 
     sal_uInt32 w;
     Sequence< OUString > aItemList;
@@ -678,7 +678,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         PageCollector::CollectNonCustomShowPages( mxController->getModel(), aCustomShowName, vNonUsedPageList );
         nDeletedSlides += vNonUsedPageList.size();
     }
-    if ( GetConfigProperty( TK_DeleteHiddenSlides, sal_False ) )
+    if ( GetConfigProperty( TK_DeleteHiddenSlides, false ) )
     {
         if ( !aCustomShowName.isEmpty() )
         {
@@ -717,7 +717,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             }
         }
     }
-    if ( GetConfigProperty( TK_DeleteUnusedMasterPages, sal_False ) )
+    if ( GetConfigProperty( TK_DeleteUnusedMasterPages, false ) )
     {
         std::vector< PageCollector::MasterPageEntity > aMasterPageList;
         PageCollector::CollectMasterPages( mxController->getModel(), aMasterPageList );
@@ -743,11 +743,11 @@ void OptimizerDialog::UpdateControlStatesPage4()
 
 // generating graphic compression info
     sal_Int32 nGraphics = 0;
-    bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, sal_False ) );
+    bool bJPEGCompression( GetConfigProperty( TK_JPEGCompression, false ) );
     sal_Int32 nJPEGQuality( GetConfigProperty( TK_JPEGQuality, (sal_Int32)90 ) );
     sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
-    GraphicSettings aGraphicSettings( bJPEGCompression, nJPEGQuality, GetConfigProperty( TK_RemoveCropArea, sal_False ),
-                                        nImageResolution, GetConfigProperty( TK_EmbedLinkedGraphics, sal_True ) );
+    GraphicSettings aGraphicSettings( bJPEGCompression, nJPEGQuality, GetConfigProperty( TK_RemoveCropArea, false ),
+                                        nImageResolution, GetConfigProperty( TK_EmbedLinkedGraphics, true ) );
     GraphicCollector::CountGraphics( mxContext, mxController->getModel(), aGraphicSettings, nGraphics );
     if ( nGraphics > 1 )
     {
@@ -770,7 +770,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         aSummaryStrings.push_back( aStr );
     }
 
-    if ( GetConfigProperty( TK_OLEOptimization, sal_False ) )
+    if ( GetConfigProperty( TK_OLEOptimization, false ) )
     {
         sal_Int32 nOLEReplacements = 0;
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( mxController->getModel(), UNO_QUERY_THROW );
@@ -923,14 +923,14 @@ void OptimizerDialog::EnablePage( sal_Int16 nStep )
     std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
     std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
     while( aBeg != aEnd )
-        setControlProperty( *aBeg++, "Enabled", Any( sal_True ) );
+        setControlProperty( *aBeg++, "Enabled", Any( true ) );
 }
 void OptimizerDialog::DisablePage( sal_Int16 nStep )
 {
     std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
     std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
     while( aBeg != aEnd )
-        setControlProperty( *aBeg++, "Enabled", Any( sal_False ) );
+        setControlProperty( *aBeg++, "Enabled", Any( false ) );
 }
 void OptimizerDialog::ActivatePage( sal_Int16 nStep )
 {
