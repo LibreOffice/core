@@ -63,7 +63,7 @@ public:
     void DeleteMarkedPoints() SAL_OVERRIDE;
     bool IsDeleteMarkedPointsPossible() const SAL_OVERRIDE;
 
-    void MoveMarkedPoints(const Size& rSiz, bool bCopy=false);
+    void MoveMarkedPoints(const Size& rSiz);
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy=false);
 

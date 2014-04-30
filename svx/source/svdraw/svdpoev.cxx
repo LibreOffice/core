@@ -660,12 +660,10 @@ static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const vo
     if (pC2!=NULL) MovePoint(*pC2,*(const Size*)p1);
 }
 
-void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
+void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
 {
-    bCopy=false; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditMove));
-    if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_MOVE);
     ImpTransformMarkedPoints(ImpMove,&rSiz);
     EndUndo();
