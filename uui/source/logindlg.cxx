@@ -87,7 +87,7 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
     }
 }
 
-void LoginDialog::EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled )
+void LoginDialog::EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled )
 {
     m_pErrorInfo->Enable( !bUseSysCredsEnabled );
     m_pErrorFT->Enable( !bUseSysCredsEnabled );
@@ -187,7 +187,7 @@ LoginDialog::LoginDialog(Window* pParent, sal_uInt16 nFlags,
     HideControls_Impl( nFlags );
 }
 
-void LoginDialog::SetUseSystemCredentials( sal_Bool bUse )
+void LoginDialog::SetUseSystemCredentials( bool bUse )
 {
     if ( m_pUseSysCredsCB->IsVisible() )
     {

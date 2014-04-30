@@ -20,7 +20,7 @@
 #include "ids.hrc"
 #include "alreadyopen.hxx"
 
-AlreadyOpenQueryBox::AlreadyOpenQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage, sal_Bool bIsStoring ) :
+AlreadyOpenQueryBox::AlreadyOpenQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage, bool bIsStoring ) :
     MessBox(pParent, 0,
             ResId(STR_ALREADYOPEN_TITLE, *pResMgr).toString(),
             aMessage )

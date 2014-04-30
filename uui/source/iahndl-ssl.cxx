@@ -135,7 +135,7 @@ getLocalizedDatTimeStr(
     return aDateTimeStr;
 }
 
-sal_Bool
+bool
 executeUnknownAuthDialog(
     Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
@@ -168,7 +168,7 @@ executeUnknownAuthDialog(
             }
         }
 
-        return static_cast<sal_Bool> (xDialog->Execute());
+        return static_cast<bool>(xDialog->Execute());
     }
     catch (std::bad_alloc const &)
     {
@@ -178,7 +178,7 @@ executeUnknownAuthDialog(
     }
 }
 
-sal_Bool
+bool
 executeSSLWarnDialog(
     Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
@@ -240,7 +240,7 @@ executeSSLWarnDialog(
             xDialog->SetText( aTitle );
         }
 
-        return static_cast<sal_Bool> (xDialog->Execute());
+        return static_cast<bool>(xDialog->Execute());
     }
     catch (std::bad_alloc const &)
     {
@@ -264,7 +264,7 @@ handleCertificateValidationRequest_(
     getContinuations(rContinuations, &xApprove, &xAbort);
 
     sal_Int32 failures = rRequest.CertificateValidity;
-    sal_Bool trustCert = sal_True;
+    bool trustCert = true;
 
     if ( ((failures & security::CertificateValidity::UNTRUSTED)
              == security::CertificateValidity::UNTRUSTED ) ||

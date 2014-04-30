@@ -60,7 +60,7 @@ class LoginDialog : public ModalDialog
     OKButton*       m_pOKBtn;
 
     void            HideControls_Impl( sal_uInt16 nFlags );
-    void            EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled );
+    void            EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled );
 
     DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK(PathHdl_Impl, void *);
@@ -78,11 +78,11 @@ public:
     void            SetPassword( const OUString& rNew )           { m_pPasswordED->SetText( rNew ); }
     OUString        GetAccount() const                          { return m_pAccountED->GetText(); }
     void            SetAccount( const OUString& rNew )            { m_pAccountED->SetText( rNew ); }
-    sal_Bool            IsSavePassword() const                      { return m_pSavePasswdBtn->IsChecked(); }
-    void            SetSavePassword( sal_Bool bSave )               { m_pSavePasswdBtn->Check( bSave ); }
+    bool            IsSavePassword() const                      { return m_pSavePasswdBtn->IsChecked(); }
+    void            SetSavePassword( bool bSave )               { m_pSavePasswdBtn->Check( bSave ); }
     void            SetSavePasswordText( const OUString& rTxt )   { m_pSavePasswdBtn->SetText( rTxt ); }
-    sal_Bool        IsUseSystemCredentials() const              { return m_pUseSysCredsCB->IsChecked(); }
-    void            SetUseSystemCredentials( sal_Bool bUse );
+    bool        IsUseSystemCredentials() const              { return m_pUseSysCredsCB->IsChecked(); }
+    void            SetUseSystemCredentials( bool bUse );
     void            SetErrorText( const OUString& rTxt )          { m_pErrorInfo->SetText( rTxt ); }
     void            SetLoginRequestText( const OUString& rTxt )   { m_pRequestInfo->SetText( rTxt ); }
     void            ClearPassword();

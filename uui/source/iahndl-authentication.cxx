@@ -233,7 +233,7 @@ handleAuthenticationRequest_(
             eAlternateRememberMode);
     }
 
-    sal_Bool bCanUseSystemCredentials;
+    bool bCanUseSystemCredentials;
     sal_Bool bDefaultUseSystemCredentials;
     if (xSupplyAuthentication2.is())
     {
@@ -243,7 +243,7 @@ handleAuthenticationRequest_(
     }
     else
     {
-        bCanUseSystemCredentials = sal_False;
+        bCanUseSystemCredentials = false;
         bDefaultUseSystemCredentials = sal_False;
     }
 

@@ -64,13 +64,13 @@ public:
     bool              IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
     const OUString&   GetPath() const                     { return m_aPath; }
     const OUString&   GetErrorText() const                { return m_aErrorText; }
-    sal_Bool            GetCanRememberPassword() const      { return ( m_nFlags & LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD ); }
-    sal_Bool            GetIsRememberPersistent() const     { return ( m_nFlags & LOGINERROR_FLAG_REMEMBER_PERSISTENT ); }
-    sal_Bool            GetIsRememberPassword() const       { return ( m_nFlags & LOGINERROR_FLAG_IS_REMEMBER_PASSWORD ); }
+    bool            GetCanRememberPassword() const      { return ( m_nFlags & LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD ); }
+    bool            GetIsRememberPersistent() const     { return ( m_nFlags & LOGINERROR_FLAG_REMEMBER_PERSISTENT ); }
+    bool            GetIsRememberPassword() const       { return ( m_nFlags & LOGINERROR_FLAG_IS_REMEMBER_PASSWORD ); }
 
-    sal_Bool            GetCanUseSystemCredentials() const
+    bool            GetCanUseSystemCredentials() const
                     { return ( m_nFlags & LOGINERROR_FLAG_CAN_USE_SYSCREDS ); }
-    sal_Bool            GetIsUseSystemCredentials() const
+    bool            GetIsUseSystemCredentials() const
                     { return ( m_nFlags & LOGINERROR_FLAG_IS_USE_SYSCREDS ) ==
                              LOGINERROR_FLAG_IS_USE_SYSCREDS; }
     sal_uInt8            GetFlags() const        { return m_nFlags; }
@@ -97,20 +97,20 @@ public:
     void            SetFlags( sal_uInt8 nFlags )
                     { m_nFlags = nFlags; }
 
-    inline void     SetCanRememberPassword( sal_Bool bSet );
-    inline void     SetIsRememberPassword( sal_Bool bSet );
-    inline void     SetIsRememberPersistent( sal_Bool bSet );
+    inline void     SetCanRememberPassword( bool bSet );
+    inline void     SetIsRememberPassword( bool bSet );
+    inline void     SetIsRememberPersistent( bool bSet );
 
-    inline void     SetCanUseSystemCredentials( sal_Bool bSet );
-    inline void     SetIsUseSystemCredentials( sal_Bool bSet );
-    inline void     SetModifyAccount( sal_Bool bSet );
-    inline void     SetModifyUserName( sal_Bool bSet );
+    inline void     SetCanUseSystemCredentials( bool bSet );
+    inline void     SetIsUseSystemCredentials( bool bSet );
+    inline void     SetModifyAccount( bool bSet );
+    inline void     SetModifyUserName( bool bSet );
 
     void            SetResult( sal_uInt16 nRet )
                     { m_nRet = nRet; }
 };
 
-inline void LoginErrorInfo::SetCanRememberPassword( sal_Bool bSet )
+inline void LoginErrorInfo::SetCanRememberPassword( bool bSet )
 {
     if ( bSet )
         m_nFlags |= LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD;
@@ -118,7 +118,7 @@ inline void LoginErrorInfo::SetCanRememberPassword( sal_Bool bSet )
         m_nFlags &= ~LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD;
 }
 
-inline void LoginErrorInfo::SetIsRememberPassword( sal_Bool bSet )
+inline void LoginErrorInfo::SetIsRememberPassword( bool bSet )
 {
     if ( bSet )
         m_nFlags |= LOGINERROR_FLAG_IS_REMEMBER_PASSWORD;
@@ -126,7 +126,7 @@ inline void LoginErrorInfo::SetIsRememberPassword( sal_Bool bSet )
         m_nFlags &= ~LOGINERROR_FLAG_IS_REMEMBER_PASSWORD;
 }
 
-inline void LoginErrorInfo::SetIsRememberPersistent( sal_Bool bSet )
+inline void LoginErrorInfo::SetIsRememberPersistent( bool bSet )
 {
     if ( bSet )
         m_nFlags |= LOGINERROR_FLAG_REMEMBER_PERSISTENT;
@@ -134,7 +134,7 @@ inline void LoginErrorInfo::SetIsRememberPersistent( sal_Bool bSet )
         m_nFlags &= ~LOGINERROR_FLAG_REMEMBER_PERSISTENT;
 }
 
-inline void LoginErrorInfo::SetCanUseSystemCredentials( sal_Bool bSet )
+inline void LoginErrorInfo::SetCanUseSystemCredentials( bool bSet )
 {
     if ( bSet )
         m_nFlags |= LOGINERROR_FLAG_CAN_USE_SYSCREDS;
@@ -142,7 +142,7 @@ inline void LoginErrorInfo::SetCanUseSystemCredentials( sal_Bool bSet )
         m_nFlags &= ~LOGINERROR_FLAG_CAN_USE_SYSCREDS;
 }
 
-inline void LoginErrorInfo::SetIsUseSystemCredentials( sal_Bool bSet )
+inline void LoginErrorInfo::SetIsUseSystemCredentials( bool bSet )
 {
     if ( bSet )
         m_nFlags |= LOGINERROR_FLAG_IS_USE_SYSCREDS;
@@ -150,7 +150,7 @@ inline void LoginErrorInfo::SetIsUseSystemCredentials( sal_Bool bSet )
         m_nFlags &= ~LOGINERROR_FLAG_IS_USE_SYSCREDS;
 }
 
-inline void LoginErrorInfo::SetModifyAccount( sal_Bool bSet )
+inline void LoginErrorInfo::SetModifyAccount( bool bSet )
 {
     if ( bSet )
         m_nFlags |= LOGINERROR_FLAG_MODIFY_ACCOUNT;
@@ -158,7 +158,7 @@ inline void LoginErrorInfo::SetModifyAccount( sal_Bool bSet )
         m_nFlags &= ~LOGINERROR_FLAG_MODIFY_ACCOUNT;
 }
 
-inline void LoginErrorInfo::SetModifyUserName( sal_Bool bSet )
+inline void LoginErrorInfo::SetModifyUserName( bool bSet )
 {
     if ( bSet )
         m_nFlags |= LOGINERROR_FLAG_MODIFY_USER_NAME;

@@ -63,7 +63,7 @@ getBoolRequestArgument(uno::Sequence< uno::Any > const & rArguments,
         beans::PropertyValue aProperty;
         if ((rArguments[i] >>= aProperty) && aProperty.Name == rKey)
         {
-            sal_Bool bValue = sal_Bool();
+            bool bValue;
             if (aProperty.Value >>= bValue)
             {
                 if (pValue)

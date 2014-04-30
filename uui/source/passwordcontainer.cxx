@@ -131,7 +131,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     uno::Reference< ucb::XInteractionSupplyAuthentication2 >
         xSupplyAuthentication2(xSupplyAuthentication, uno::UNO_QUERY);
 
-    sal_Bool bCanUseSystemCredentials = sal_False;
+    bool bCanUseSystemCredentials = false;
     if (xSupplyAuthentication2.is())
     {
         sal_Bool bDefaultUseSystemCredentials;

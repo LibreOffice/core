@@ -24,7 +24,7 @@
 class AlreadyOpenQueryBox : public MessBox
 {
 public:
-    AlreadyOpenQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage, sal_Bool bIsStoring );
+    AlreadyOpenQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage, bool bIsStoring );
     virtual ~AlreadyOpenQueryBox();
 };
 
