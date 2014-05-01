@@ -32,7 +32,19 @@ static bool EnableNativeWidget( const OutputDevice& i_rDevice )
     {
 
     case OUTDEV_WINDOW:
-        return dynamic_cast< const Window* >( &i_rDevice )->IsNativeWidgetEnabled();
+        {
+            const Window* pWindow = dynamic_cast< const Window* >( &i_rDevice );
+            if (pWindow)
+            {
+                return pWindow->IsNativeWidgetEnabled();
+            }
+            else
+            {
+                SAL_WARN ("vcl.gdi", "Could not cast i_rDevice to Window");
+                assert (pWindow);
+                return false;
+            }
+        }
 
     case OUTDEV_VIRDEV:
     {
