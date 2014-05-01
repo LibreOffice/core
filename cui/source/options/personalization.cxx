@@ -57,11 +57,11 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
 {
     PushButton *pButton;
-    get( pButton, "visit_personas" );
+    get( pButton, "search_personas" );
     pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
 
-    get( m_pEdit, "persona_url" );
-    m_pEdit->SetPlaceholderText( "https://addons.mozilla.org/firefox/themes/" );
+    get( m_pEdit, "search_term" );
+    m_pEdit->SetPlaceholderText( "Search term..." );
 }
 
 OUString SelectPersonaDialog::GetPersonaURL() const
@@ -84,10 +84,14 @@ IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
     PersonasDocHandler* pHandler = new PersonasDocHandler();
     Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+    uno::Reference< io::XInputStream > xStream;
     xParser->setDocumentHandler( xDocHandler );
 
-    OUString rURL = "file:////home/rachit/test.xml";
-    Reference< io::XInputStream > xStream;
+    OUString searchTerm = m_pEdit->GetText();
+    OUString rURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/";
+    if ( !xFileAccess.is() )
+        return false;
+
     try {
         xStream = xFileAccess->openFileRead( rURL );
     }
