@@ -8,6 +8,8 @@ use Getopt::Std;
 use Benchmark;
 
 my $non_word_characters='0-9\s';
+my @languages; # languages (sorted by name)
+my %ngram_for; # map language x ngram => rang
 
 # OPTIONS
 getopts('a:d:f:hi:lnst:u:v');
@@ -94,55 +96,64 @@ if ($opt_n) {
     classify(input()); 
 }
 
+sub read_model {
+    my ($file) = @_;
+    open(LM,"$file") or  die "cannot open $file: $!\n";
+    my %ngram;
+    my $rang = 1;
+    while (<LM>) {
+	chomp;
+	# only use lines starting with appropriate character. Others are
+	# ignored.
+	if (/^[^$non_word_characters]+/o) {
+	    $ngram{$&} = $rang++;
+	}
+    }
+    return \%ngram;
+}
+
+sub read_models {
+  # open directory to find which languages are supported
+  opendir DIR, "$opt_d" or die "directory $opt_d: $!\n";
+  @languages = sort(grep { s/\.lm// && -r "$opt_d/$_.lm" } readdir(DIR));
+  closedir DIR;
+  @languages or die "sorry, can't read any language models from $opt_d\n" .
+    "language models must reside in files with .lm ending\n";
+
+  foreach my $language (@languages) {
+      $ngram_for{$language} = read_model("$opt_d/$language.lm");
+  }
+}
+
 # CLASSIFICATION
 sub classify {
   my ($input)=@_;
   my %results=();
   my $maxp = $opt_t;
-  # open directory to find which languages are supported
-  opendir DIR, "$opt_d" or die "directory $opt_d: $!\n";
-  my @languages = sort(grep { s/\.lm// && -r "$opt_d/$_.lm" } readdir(DIR));
-  closedir DIR;
-  @languages or die "sorry, can't read any language models from $opt_d\n" .
-    "language models must reside in files with .lm ending\n";
-
+  read_models() if  !@languages;
 
   # create ngrams for input. Note that hash %unknown is not used;
   # it contains the actual counts which are only used under -n: creating
   # new language model (and even then they are not really required).
   my @unknown=create_lm($input);
-  # load model and count for each language.
-  my $language;
+
   my $t1 = new Benchmark;
-  foreach $language (@languages) {
-    # loads the language model into hash %$language.
-    my %ngram=();
-    my $rang=1;
-    open(LM,"$opt_d/$language.lm") || die "cannot open $language.lm: $!\n";
-    while (<LM>) {
-      chomp;
-      # only use lines starting with appropriate character. Others are
-      # ignored.
-      if (/^[^$non_word_characters]+/o) {
-	$ngram{$&} = $rang++;
-      } 
-    }
-    close(LM);
-    #print STDERR "loaded language model $language\n" if $opt_v;
-    
-    # compares the language model with input ngrams list
-    my ($i,$p)=(0,0);
-    while ($i < @unknown) {
-      if ($ngram{$unknown[$i]}) {
-	$p=$p+abs($ngram{$unknown[$i]}-$i);
-      } else { 
-	$p=$p+$maxp; 
+  foreach my $language (@languages) {
+      # compares the language model with input ngrams list
+      my $ngram = $ngram_for{$language} or die "no ngrams for $language";
+
+      my ($i,$p)=(0,0);
+      while ($i < @unknown) {
+	  if ($ngram->{$unknown[$i]}) {
+	      $p=$p+abs($ngram->{$unknown[$i]}-$i);
+	  } else {
+	      $p=$p+$maxp;
+	  }
+	  ++$i;
       }
-      ++$i;
-    }
-    #print STDERR "$language: $p\n" if $opt_v;
+      #print STDERR "$language: $p\n" if $opt_v;
     
-    $results{$language} = $p;
+      $results{$language} = $p;
   }
   print STDERR "read language models done (" . 
     timestr(timediff(new Benchmark, $t1)) . 
