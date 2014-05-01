@@ -22,7 +22,6 @@
 #include <com/sun/star/view/XRenderable.hpp>
 
 #include <hintids.hxx>
-#include <rtl/ustring.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/prnmon.hxx>
@@ -93,7 +92,6 @@ SwQueuedPaint *SwPaintQueue::pQueue = 0;
 // saves some settings from the draw view
 class SwDrawViewSave
 {
-    OUString sLayerNm;
     SdrView* pDV;
     bool bPrintControls;
 public:
@@ -661,8 +659,7 @@ SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
 {
     if ( pDV )
     {
-        sLayerNm = "Controls";
-        bPrintControls = pDV->IsLayerPrintable( sLayerNm );
+        bPrintControls = pDV->IsLayerPrintable( "Controls" );
     }
 }
 
@@ -670,7 +667,7 @@ SwDrawViewSave::~SwDrawViewSave()
 {
     if ( pDV )
     {
-        pDV->SetLayerPrintable( sLayerNm, bPrintControls );
+        pDV->SetLayerPrintable( "Controls", bPrintControls );
     }
 }
 
@@ -687,16 +684,14 @@ void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
     if ( HasDrawView() )
     {
         SdrView *pDrawView = GetDrawView();
-        OUString sLayerNm;
-        sLayerNm = "Controls";
         // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
         if ( !IsPreview() )
         {
-            pDrawView->SetLayerPrintable( sLayerNm, rOptions.bPrintControl );
+            pDrawView->SetLayerPrintable( "Controls", rOptions.bPrintControl );
         }
         else
         {
-            pDrawView->SetLayerVisible( sLayerNm, rOptions.bPrintControl );
+            pDrawView->SetLayerVisible( "Controls", rOptions.bPrintControl );
         }
     }
 }
