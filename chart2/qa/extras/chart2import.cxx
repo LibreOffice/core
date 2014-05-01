@@ -168,7 +168,7 @@ void Chart2ImportTest::testErrorBarFormatting()
     xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
     CPPUNIT_ASSERT(xErrorBarYProps.is());
 
-    util::Color aColor;
+    util::Color aColor(0);
     xErrorBarYProps->getPropertyValue("LineColor") >>= aColor;
     sal_uInt32 nColorValue = aColor;
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xff3333), nColorValue);
