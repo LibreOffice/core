@@ -193,6 +193,8 @@ public:
         CPPUNIT_ASSERT( aVec.size() == 3 );
 
         aVec.DeleteAndDestroyAll();
+        delete p2;
+        delete p4;
     }
 
     void testErase_FindPtr()
