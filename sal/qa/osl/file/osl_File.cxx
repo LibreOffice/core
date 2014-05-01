@@ -1860,7 +1860,7 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT( nError == FileBase::E_None );
 
             //get modify time
-            TimeValue *pTV_modify = NULL;
+            TimeValue* pTV_modify = NULL;
             CPPUNIT_ASSERT( ( pTV_modify = ( TimeValue* )malloc( sizeof( TimeValue ) ) ) != NULL );
             *pTV_modify = rFileStatus.getModifyTime();
 
@@ -1868,6 +1868,7 @@ namespace osl_FileStatus
             //delete file
             deleteTestFile( aTypeURL );
             free( pTV_current );
+            free( pTV_modify );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getModifyTime function: This test turns out that UNX pricision is no more than 1 sec, don't know how to improve this function.  ",
                                     bOK );
