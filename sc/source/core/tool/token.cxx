@@ -2785,12 +2785,16 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
     const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
+    sc::RefUpdateResult aRes;
+
+    if (!rCxt.mnColDelta && !rCxt.mnRowDelta && !rCxt.mnTabDelta)
+        // The cell hasn't moved at all.
+        return aRes;
+
     // When moving, the range is the destination range. We need to use the old
     // range prior to the move for hit analysis.
     ScRange aOldRange = rCxt.maRange;
     aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
-
-    sc::RefUpdateResult aRes;
 
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);

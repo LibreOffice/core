@@ -2176,9 +2176,14 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
             // Perform end-listening, start-listening, and dirtying on all
             // formula cells in the group.
 
-            sc::StartListeningContext aStartCxt(mpCxt->mrDoc);
+            // Make sure that the start and end listening contexts share the
+            // same block position set, else an invalid iterator may ensue.
+            boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(
+                new sc::ColumnBlockPositionSet(mpCxt->mrDoc));
 
-            sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pOldCode.get());
+            sc::StartListeningContext aStartCxt(mpCxt->mrDoc, pPosSet);
+            sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pPosSet, pOldCode.get());
+
             aEndCxt.setPositionDelta(
                 ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
 
