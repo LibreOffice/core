@@ -298,18 +298,32 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
 
 void DockingWindow::ImplInitDockingWindowData()
 {
-    mpImplData              = new ImplData;
-    mpWindowImpl->mbDockWin               = true;
-
-    mpFloatWin              = NULL;
-    mbDockCanceled          = false;
-    mbDockPrevented         = false;
-    mbFloatPrevented        = false;
-    mbDocking               = false;
-    mbPinned                = false;
-    mbRollUp                = false;
-    mbDockBtn               = false;
-    mbHideBtn               = false;
+    mpWindowImpl->mbDockWin = true;
+    mpFloatWin     = NULL;
+    mpOldBorderWin = NULL;
+    mpImplData     = new ImplData;
+    mnTrackX       = 0;
+    mnTrackY       = 0;
+    mnTrackWidth   = 0;
+    mnTrackHeight  = 0;
+    mnDockLeft     = 0;
+    mnDockTop      = 0;
+    mnDockRight    = 0;
+    mnDockBottom   = 0;
+    mnFloatBits    = 0;
+    mbDockCanceled  = false;
+    mbDockPrevented = false;
+    mbFloatPrevented = false;
+    mbDockable     = false;
+    mbDocking      = false;
+    mbDragFull     = false;
+    mbLastFloatMode = false;
+    mbStartFloat   = false;
+    mbTrackDock    = false;
+    mbPinned       = false;
+    mbRollUp       = false;
+    mbDockBtn      = false;
+    mbHideBtn      = false;
 }
 
 void DockingWindow::ImplInit( Window* pParent, WinBits nStyle )
@@ -387,7 +401,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
 }
 
 DockingWindow::DockingWindow( WindowType nType ) :
-    Window( nType )
+    Window(nType)
 {
     ImplInitDockingWindowData();
 }
