@@ -42,6 +42,7 @@ $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlsdrexport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_ooxmlsdrexport,\
 	$(sw_ooxmlexport_components) \
+	filter/source/storagefilterdetect/storagefd \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlsdrexport))

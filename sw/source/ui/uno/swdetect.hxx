@@ -57,8 +57,6 @@ class SfxFilter;
 
 class SwFilterDetect : public ::cppu::WeakImplHelper2< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
-    static sal_uLong    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
-    static sal_uLong    GlobDetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
 public:
                             SwFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SwFilterDetect();

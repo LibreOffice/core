@@ -71,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_html_export_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     filter/source/config/cache/filterconfig1 \
+    filter/source/storagefilterdetect/storagefd \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
