@@ -195,8 +195,10 @@ SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
 #define TABLE_COUNT 12
 #define TOKEN ':'
 
-SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  ) :
-  SfxTabPage          ( pParent, "OptSavePage","modules/simpress/ui/optimpressgeneralpage.ui", rInAttrs )
+SdTpOptionsMisc::SdTpOptionsMisc(Window* pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "OptSavePage", "modules/simpress/ui/optimpressgeneralpage.ui", rInAttrs)
+    , nWidth(0)
+    , nHeight(0)
 {
     get(m_pCbxQuickEdit , "qickedit");
     get(m_pCbxPickThrough , "textselected");
@@ -287,8 +289,6 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     for( i = 1; i < TABLE_COUNT; i++ )
         m_pCbScale->InsertEntry( GetScale(  aTable[i], 1 ) );
 }
-
-
 
 SdTpOptionsMisc::~SdTpOptionsMisc()
 {
