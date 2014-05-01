@@ -18,7 +18,7 @@ namespace sc {
 class RefHint : public SfxSimpleHint
 {
 public:
-    enum Type { Moved };
+    enum Type { Moved, ColumnReordered };
 
 private:
     Type meType;
@@ -53,6 +53,24 @@ public:
      * Get the movement vector.
      */
     const ScAddress& getDelta() const;
+};
+
+class RefColReorderHint : public RefHint
+{
+    const sc::ColReorderMapType& mrColMap;
+    SCTAB mnTab;
+    SCROW mnRow1;
+    SCROW mnRow2;
+
+public:
+    RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
+    virtual ~RefColReorderHint();
+
+    const sc::ColReorderMapType& getColMap() const;
+
+    SCTAB getTab() const;
+    SCROW getStartRow() const;
+    SCROW getEndRow() const;
 };
 
 }

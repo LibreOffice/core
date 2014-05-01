@@ -31,6 +31,31 @@ const ScAddress& RefMovedHint::getDelta() const
     return maMoveDelta;
 }
 
+RefColReorderHint::RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
+    RefHint(ColumnReordered), mrColMap(rColMap), mnTab(nTab), mnRow1(nRow1), mnRow2(nRow2) {}
+
+RefColReorderHint::~RefColReorderHint() {}
+
+const sc::ColReorderMapType& RefColReorderHint::getColMap() const
+{
+    return mrColMap;
+}
+
+SCTAB RefColReorderHint::getTab() const
+{
+    return mnTab;
+}
+
+SCROW RefColReorderHint::getStartRow() const
+{
+    return mnRow1;
+}
+
+SCROW RefColReorderHint::getEndRow() const
+{
+    return mnRow2;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
