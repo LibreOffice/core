@@ -182,7 +182,7 @@ public:
 
     void        Delete( SCROW nRow );
     void        FreeAll();
-    void        SwapCell( SCROW nRow, ScColumn& rCol);
+    void Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern );
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
     bool    HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
@@ -473,6 +473,7 @@ public:
     void BroadcastRecalcOnRefMove();
     void BroadcastRefMoved( const sc::RefMovedHint& rHint );
     void TransferListeners( ScColumn& rDestCol, SCROW nRow1, SCROW nRow2, SCROW nRowDelta );
+    void CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 );
 
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
@@ -566,6 +567,23 @@ public:
      * Regroup formula cells for the entire column.
      */
     void RegroupFormulaCells();
+
+    /**
+     * Reset column position of formula cells within specified row range.
+     * Reference positions are also adjusted to reflect the new position so
+     * that the formula cells still reference the same cells or ranges after
+     * the the position change.  The position of a formula cell before the
+     * call is interpreted as the old position of that cell.
+     *
+     * Caller needs to ensure that no formula groups cross the top and bottom
+     * row boundaries.
+     *
+     * @param nRow1 top row boundary
+     * @param nRow2 bottom row boundary
+     */
+    void ResetFormulaCellPositions( SCROW nRow1, SCROW nRow2 );
+
+    void SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange );
 
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups() const;
