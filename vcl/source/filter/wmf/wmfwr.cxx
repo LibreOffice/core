@@ -131,6 +131,33 @@
 
 #define PRIVATE_ESCAPE_UNICODE          2
 
+WMFWriter::WMFWriter()
+    : pWMF(NULL)
+    , pVirDev(NULL)
+    , nMetafileHeaderPos(0)
+    , nMaxRecordSize(0)
+    , nActRecordPos(0)
+    , eSrcRasterOp(ROP_OVERPAINT)
+    , eSrcTextAlign(ALIGN_BASELINE)
+    , bSrcIsClipping(false)
+    , pAttrStack(NULL)
+    , eSrcHorTextAlign(W_TA_LEFT)
+    , eDstROP2(ROP_OVERPAINT)
+    , eDstTextAlign(ALIGN_BASELINE)
+    , eDstHorTextAlign(W_TA_LEFT)
+    , bDstIsClipping(false)
+    , nDstPenHandle(0)
+    , nDstFontHandle(0)
+    , nDstBrushHandle(0)
+    , nNumberOfActions(0)
+    , nNumberOfBitmaps(0)
+    , nWrittenActions(0)
+    , nWrittenBitmaps(0)
+    , nActBitmapPercent(0)
+    , bEmbedEMF(false)
+{
+}
+
 void WMFWriter::MayCallback()
 {
     if ( xStatusIndicator.is() )
@@ -1667,13 +1694,11 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     bEmbedEMF = true;
     bStatus=true;
-    pConvert = 0;
     pVirDev = new VirtualDevice;
 
-    pFilterConfigItem = pFConfigItem;
-    if ( pFilterConfigItem )
+    if (pFConfigItem)
     {
-        xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
+        xStatusIndicator = pFConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
             OUString aMsg;
@@ -1693,7 +1718,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     {
         aTargetMapMode = aSrcMapMode;
         aTargetSize = rMTF.GetPrefSize();
-        nTargetDivisor = CalcSaveTargetMapMode(aTargetMapMode, aTargetSize);
+        sal_uInt16 nTargetDivisor = CalcSaveTargetMapMode(aTargetMapMode, aTargetSize);
         aTargetSize.Width() /= nTargetDivisor;
         aTargetSize.Height() /= nTargetDivisor;
     }
@@ -1776,7 +1801,6 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     }
 
     delete pVirDev;
-    delete pConvert;
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

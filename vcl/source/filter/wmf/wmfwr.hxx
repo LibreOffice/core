@@ -54,16 +54,13 @@ private:
     bool            bStatus;
 
     sal_uLong                   nLastPercent; // with which number pCallback was called last time.
-    FilterConfigItem*       pFilterConfigItem;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     SvStream*               pWMF;
     VirtualDevice*          pVirDev;
-    StarSymbolToMSMultiFont *pConvert;
     MapMode                 aTargetMapMode;
     Size                    aTargetSize;
-    sal_uInt16                  nTargetDivisor;
 
     sal_uLong nMetafileHeaderPos;
     sal_uInt32 nMaxRecordSize; // in words
@@ -201,9 +198,7 @@ private:
     sal_uInt16 CalcSaveTargetMapMode(MapMode& rMapMode, const Size& rPrefSize);
 
 public:
-
-    WMFWriter() {}
-
+    WMFWriter();
     bool WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem, bool bPlaceable=true);
 };
 
