@@ -78,6 +78,8 @@ class MacroSnippet
                         sSource = sCode;
                     }
                 }
+
+                free(buffer);
             }
         }
         CPPUNIT_ASSERT_MESSAGE( "Source is empty", ( sSource.getLength() > 0 ) );

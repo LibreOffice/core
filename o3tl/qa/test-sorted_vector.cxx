@@ -68,6 +68,8 @@ public:
         CPPUNIT_ASSERT( aVec.erase(p2) == 0 );
 
         aVec.DeleteAndDestroyAll();
+        delete p2;
+        delete p4;
     }
 
     void testErase()
