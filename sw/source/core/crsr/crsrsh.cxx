@@ -2511,7 +2511,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
             }
             pTmpDel = 0;
         }
-        if( bGoNext && !pTmp )
+        if( bGoNext && pTmp )
             pTmp = (SwPaM*)pTmp->GetNext();
 
     } while( !bGoNext || *ppDelRing != pTmp );
