@@ -231,6 +231,7 @@ public:
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
     static bool IsOpCodeVolatile( OpCode eOp );
+    static bool IsOpCodeJumpCommand( OpCode eOp );
 
     static bool DeQuote( OUString& rStr );
 

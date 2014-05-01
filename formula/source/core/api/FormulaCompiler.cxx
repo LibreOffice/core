@@ -805,6 +805,21 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
     return bRet;
 }
 
+bool FormulaCompiler::IsOpCodeJumpCommand( OpCode eOp )
+{
+    switch (eOp)
+    {
+        case ocIf:
+        case ocIfError:
+        case ocIfNA:
+        case ocChose:
+            return true;
+        default:
+            ;
+    }
+    return false;
+}
+
 // Remove quotes, escaped quotes are unescaped.
 bool FormulaCompiler::DeQuote( OUString& rStr )
 {
@@ -1241,9 +1256,7 @@ void FormulaCompiler::Factor()
                 || eOp == ocOr
                 || eOp == ocBad
                 || ( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
-                || ( bCompileForFAP
-                     && ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose ) )
-            )
+                || (bCompileForFAP && IsOpCodeJumpCommand(eOp)))
         {
             pFacToken = mpToken;
             OpCode eMyLastOp = eOp;
@@ -1291,7 +1304,7 @@ void FormulaCompiler::Factor()
                 pFacToken->SetByte( nSepCount );
             PutCode( pFacToken );
         }
-        else if (eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose)
+        else if (IsOpCodeJumpCommand(eOp))
         {
             // the PC counters are -1
             pFacToken = mpToken;
