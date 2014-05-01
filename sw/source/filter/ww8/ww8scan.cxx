@@ -1909,14 +1909,14 @@ Err:
 
 OUString read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    OUString aRet = read_uInt8_lenPrefixed_uInt8s_ToOUString(rStrm, eEnc);
+    const OUString aRet = read_uInt8_lenPrefixed_uInt8s_ToOUString(rStrm, eEnc);
     rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
     return aRet;
 }
 
 OUString read_uInt16_BeltAndBracesString(SvStream& rStrm)
 {
-    OUString aRet = read_uInt16_PascalString(rStrm);
+    const OUString aRet = read_uInt16_PascalString(rStrm);
     rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
     return aRet;
 }
