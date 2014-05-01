@@ -52,24 +52,30 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
     return (!hwpf.State());
 }
 
-
-HWPPara::HWPPara(void)
+HWPPara::HWPPara()
+    : _next(NULL)
+    , reuse_shape(0)
+    , nch(0)
+    , nline(0)
+    , begin_ypos(0)
+    , scflag(0)
+    , contain_cshape(0)
+    , etcflag(0)
+    , ctrlflag(0)
+    , pstyno(0)
+    , pno(0)
+    , linfo(NULL)
+    , cshapep(NULL)
+    , hhstr(NULL)
 {
-    _next = NULL;
-    linfo = NULL;
-    cshapep = NULL;
-    hhstr = NULL;
-    pno = 0;
-
+    memset(&cshape, 0, sizeof(cshape));
+    memset(&pshape, 0, sizeof(pshape));
 }
 
-
-HWPPara::~HWPPara(void)
+HWPPara::~HWPPara()
 {
-    if (linfo)
-        delete[]linfo;
-    if (cshapep)
-        delete[]cshapep;
+    delete[] linfo;
+    delete[] cshapep;
     if (hhstr)
     {
 // virtual destructor
