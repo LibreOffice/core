@@ -36,6 +36,7 @@ class Parser:
     """
     def __init__(self):
         self.strip = string.punctuation + " \n"
+        self.text_cat = self.start_text_cat();
         op = optparse.OptionParser()
         op.set_usage("%prog [options] <rootdir>\n\n" +
             "Searches for german comments in cxx/hxx source files inside a given root\n" +
@@ -117,19 +118,23 @@ class Parser:
                 yield (count, re.sub(".*/\*(.*)\*/.*", r"\1", i).strip(self.strip))
             count += 1
 
+    def start_text_cat(self):
+        cwd = os.getcwd()
+        # change to our directory
+        os.chdir(os.path.split(os.path.abspath(sys.argv[0]))[0])
+        sock = subprocess.Popen(["text_cat/text_cat", "-s", "-d", "text_cat/LM"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        os.chdir(cwd)
+        return sock
+
     def get_lang(self, s):
         """ the output is 'german' or 'english' or 'german or english'. when
         unsure, just don't warn, there are strings where you just can't
         teremine the results reliably, like '#110680#' """
-        cwd = os.getcwd()
-        # change to our directory
-        os.chdir(os.path.split(os.path.abspath(sys.argv[0]))[0])
-        sock = subprocess.Popen(["text_cat/text_cat", "-d", "text_cat/LM"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        sock.stdin.write(s)
-        sock.stdin.close()
-        lang = sock.stdout.read().strip()
-        sock.stdout.close()
-        os.chdir(cwd)
+
+        self.text_cat.stdin.write(s)
+        self.text_cat.stdin.write("\n")
+        self.text_cat.stdin.flush()
+        lang = self.text_cat.stdout.readline().strip()
         return lang
 
     def is_german(self, s):
