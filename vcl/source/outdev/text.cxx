@@ -742,7 +742,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
 {
 
     Color aColor( rColor );
-    bool bTransFill = ImplIsColorTransparent( aColor ) ? sal_True : sal_False;
+    bool bTransFill = ImplIsColorTransparent( aColor ) ? true : false;
 
     if ( !bTransFill )
     {
@@ -1330,7 +1330,7 @@ bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_
     bool bRTL = false;
     int nCharPos = -1;
     aArgs.GetNextPos( &nCharPos, &bRTL );
-    return (nCharPos != nIndex) ? sal_True : sal_False;
+    return (nCharPos != nIndex) ? true : false;
 }
 
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
