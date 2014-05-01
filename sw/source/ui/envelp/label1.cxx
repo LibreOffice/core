@@ -232,6 +232,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet)
         "modules/swriter/ui/cardmediumpage.ui", rSet)
     , pDBMgr(NULL)
     , aItem((const SwLabItem&)rSet.Get(FN_LABEL))
+    , m_bLabel(false)
 {
     WaitObject aWait( pParent );
 
