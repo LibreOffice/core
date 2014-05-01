@@ -131,7 +131,6 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="verttop">
-                    <property name="width_request">30</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:AlignTop</property>
