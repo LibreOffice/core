@@ -88,51 +88,63 @@ static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 }
 
 SvtLinguOptions::SvtLinguOptions()
+    : bROActiveDics(false)
+    , bROActiveConvDics(false)
+    , nHyphMinLeading(2)
+    , nHyphMinTrailing(2)
+    , nHyphMinWordLength(0)
+    , bROHyphMinLeading(false)
+    , bROHyphMinTrailing(false)
+    , bROHyphMinWordLength(false)
+    , nDefaultLanguage(LANGUAGE_NONE)
+    , nDefaultLanguage_CJK(LANGUAGE_NONE)
+    , nDefaultLanguage_CTL(LANGUAGE_NONE)
+    , bRODefaultLanguage(false)
+    , bRODefaultLanguage_CJK(false)
+    , bRODefaultLanguage_CTL(false)
+    , bIsSpellSpecial(true)
+    , bIsSpellAuto(false)
+    , bIsSpellReverse(false)
+    , bROIsSpellSpecial(false)
+    , bROIsSpellAuto(false)
+    , bROIsSpellReverse(false)
+    , bIsHyphSpecial(true)
+    , bIsHyphAuto(false)
+    , bROIsHyphSpecial(false)
+    , bROIsHyphAuto(false)
+    , bIsUseDictionaryList(true)
+    , bIsIgnoreControlCharacters(true)
+    , bROIsUseDictionaryList(false)
+    , bROIsIgnoreControlCharacters(false)
+    , bIsSpellWithDigits(false)
+    , bIsSpellUpperCase(false)
+    , bIsSpellCapitalization(true)
+    , bROIsSpellWithDigits(false)
+    , bROIsSpellUpperCase(false)
+    , bROIsSpellCapitalization(false)
+    , bIsIgnorePostPositionalWord(true)
+    , bIsAutoCloseDialog(false)
+    , bIsShowEntriesRecentlyUsedFirst(false)
+    , bIsAutoReplaceUniqueEntries(false)
+    , bIsDirectionToSimplified(true)
+    , bIsUseCharacterVariants(false)
+    , bIsTranslateCommonTerms(false)
+    , bIsReverseMapping(false)
+    , bROIsIgnorePostPositionalWord(false)
+    , bROIsAutoCloseDialog(false)
+    , bROIsShowEntriesRecentlyUsedFirst(false)
+    , bROIsAutoReplaceUniqueEntries(false)
+    , bROIsDirectionToSimplified(false)
+    , bROIsUseCharacterVariants(false)
+    , bROIsTranslateCommonTerms(false)
+    , bROIsReverseMapping(false)
+    , nDataFilesChangedCheckValue(0)
+    , bRODataFilesChangedCheckValue(false)
+    , bIsGrammarAuto(false)
+    , bIsGrammarInteractive(false)
+    , bROIsGrammarAuto(false)
+    , bROIsGrammarInteractive(false)
 {
-    nDefaultLanguage = LANGUAGE_NONE;
-    nDefaultLanguage_CJK = LANGUAGE_NONE;
-    nDefaultLanguage_CTL = LANGUAGE_NONE;
-
-    // general options
-    bIsUseDictionaryList    =
-    bIsIgnoreControlCharacters  = true;
-
-    // spelling options
-    bIsSpellCapitalization  =
-    bIsSpellSpecial         = true;
-    bIsSpellAuto            =
-    bIsSpellReverse         =
-    bIsSpellWithDigits      =
-    bIsSpellUpperCase       = false;
-
-    // text conversion options
-    bIsIgnorePostPositionalWord     = true;
-    bIsAutoCloseDialog              =
-    bIsShowEntriesRecentlyUsedFirst =
-    bIsAutoReplaceUniqueEntries     = false;
-    bIsDirectionToSimplified        = true;
-    bIsUseCharacterVariants         =
-    bIsTranslateCommonTerms         =
-    bIsReverseMapping               = false;
-
-    bROIsDirectionToSimplified      =
-    bROIsUseCharacterVariants       =
-    bROIsTranslateCommonTerms       =
-    bROIsReverseMapping             = false;
-
-    // hyphenation options
-    bIsHyphSpecial          = true;
-    bIsHyphAuto             = false;
-    nHyphMinLeading         =
-    nHyphMinTrailing        = 2;
-    nHyphMinWordLength      = 0;
-
-    nDataFilesChangedCheckValue = 0;
-
-    //grammar options
-    bIsGrammarAuto = false,
-    bIsGrammarInteractive = false;
-
 }
 
 class SvtLinguConfigItem: public utl::ConfigItem, private boost::noncopyable
