@@ -151,6 +151,14 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mnSupportedStatusStyle &= ~XIMStatusCallbacks;
 #endif
 
+    memset(&maPreeditStartCallback, 0, sizeof(maPreeditStartCallback));
+    memset(&maPreeditDoneCallback, 0, sizeof(maPreeditDoneCallback));
+    memset(&maPreeditDrawCallback, 0, sizeof(maPreeditDrawCallback));
+    memset(&maPreeditCaretCallback, 0, sizeof(maPreeditCaretCallback));
+    memset(&maCommitStringCallback, 0, sizeof(maCommitStringCallback));
+    memset(&maSwitchIMCallback, 0, sizeof(maSwitchIMCallback));
+    memset(&maDestroyCallback, 0, sizeof(maDestroyCallback));
+
     maClientData.aText.pUnicodeBuffer       = NULL;
     maClientData.aText.pCharStyle           = NULL;
     maClientData.aInputEv.mnTime            = 0;
