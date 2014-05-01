@@ -68,9 +68,11 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     , pSaveNum(0)
     , pWrtSh(0)
     , pOutlineDlg(0)
-    , bPreset( false )
+    , nActNumLvl(0)
+    , bModified(false)
+    , bPreset(false)
     , bInInintControl(false)
-    , bLabelAlignmentPosAndSpaceModeActive( false )
+    , bLabelAlignmentPosAndSpaceModeActive(false)
 {
     get(m_pLevelLB, "levellb");
     m_pLevelLB->EnableMultiSelection(true);
