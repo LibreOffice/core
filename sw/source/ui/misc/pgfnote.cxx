@@ -111,6 +111,7 @@ IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl)
 SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "FootnoteAreaPage",
         "modules/swriter/ui/footnoteareapage.ui", rSet)
+    , lMaxHeight(0)
 {
     get(m_pMaxHeightPageBtn, "maxheightpage");
     get(m_pMaxHeightBtn, "maxheight");
