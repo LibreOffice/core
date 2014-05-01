@@ -1906,14 +1906,6 @@
           <value xml:lang="en-US">To Previous Paragraph</value>
         </prop>
       </node>
-      <node oor:name=".uno:CellVertTop" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Top</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:RowSplit" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Allow Row to Break Across Pages and Columns</value>
@@ -1932,25 +1924,9 @@
           <value xml:lang="en-US">To Next Paragraph</value>
         </prop>
       </node>
-      <node oor:name=".uno:CellVertCenter" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Center ( vertical )</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:GotoNextPlacemarker" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To Next Placeholder</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:CellVertBottom" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Bottom</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoPrevPlacemarker" oor:op="replace">
