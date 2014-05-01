@@ -15,9 +15,14 @@
 
 #include "rangelst.hxx"
 
-class Test : public test::BootstrapFixture {
-
+class Test : public test::BootstrapFixture
+{
 public:
+    Test()
+        : m_pDoc(NULL)
+    {
+    }
+
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
