@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ww8export,\
     dbaccess/util/dba \
     embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
+    filter/source/storagefilterdetect/storagefd \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \

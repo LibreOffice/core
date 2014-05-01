@@ -56,6 +56,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_rtfimport,\
     configmgr/source/configmgr \
     embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
+    filter/source/storagefilterdetect/storagefd \
     framework/util/fwk \
     i18npool/util/i18npool \
     linguistic/source/lng \

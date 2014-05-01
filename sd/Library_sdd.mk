@@ -19,16 +19,13 @@ $(eval $(call gb_Library_use_external,sdd,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,sdd))
 
 $(eval $(call gb_Library_use_libraries,sdd,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \
     sfx \
     sot \
-    svl \
-    svt \
-    svxcore \
     tl \
-    ucbhelper \
     utl \
     vcl \
 	$(gb_UWINAPI) \

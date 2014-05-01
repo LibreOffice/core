@@ -27,12 +27,8 @@ $(eval $(call gb_Library_use_libraries,scd,\
 	sal \
 	sfx \
 	sot \
-	svl \
-	svt \
 	tl \
-	ucbhelper \
 	utl \
-	vcl \
 	$(gb_UWINAPI) \
 ))
 

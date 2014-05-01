@@ -21,55 +21,17 @@
 
 #include <sal/macros.h>
 
-#include <framework/interaction.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/InteractiveAppException.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/packages/zip/ZipIOException.hpp>
-
-#include <toolkit/helper/vclunohelper.hxx>
-#include <ucbhelper/simpleinteractionrequest.hxx>
-
-#include <svtools/parhtml.hxx>
-#include <rtl/ustring.h>
-#include <svl/itemset.hxx>
-#include <vcl/window.hxx>
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
-#include <tools/urlobj.hxx>
-#include <osl/mutex.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
-#include <sot/storinfo.hxx>
-#include <vcl/svapp.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/request.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/brokenpackageint.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ucb;
+using utl::MediaDescriptor;
 
 namespace {
 
@@ -285,359 +247,68 @@ static bool lcl_MayBeDBase( SvStream& rStream )
 OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
     throw( uno::RuntimeException, std::exception )
 {
-    uno::Reference< XInputStream > xStream;
-    uno::Reference< XContent > xContent;
-    uno::Reference< XInteractionHandler > xInteraction;
-    OUString aURL;
-    OUString sTemp;
-    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    MediaDescriptor aMediaDesc( lDescriptor );
+    OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
+    uno::Reference< io::XInputStream > xStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
+    if ( !xStream.is() )
+        return OUString();
 
-    OUString aDocumentTitle; // interesting only if set in this method
+    SfxMedium aMedium;
+    aMedium.UseInteractionHandler( false );
+    aMedium.setStreamToLoadFrom( xStream, true );
 
-    // opening as template is done when a parameter tells to do so and a template filter can be detected
-    // (otherwise no valid filter would be found) or if the detected filter is a template filter and
-    // there is no parameter that forbids to open as template
-    bool bOpenAsTemplate = false;
-    bool bWasReadOnly = false, bReadOnly = false;
+    SvStream* pStream = aMedium.GetInStream();
+    if ( !pStream || pStream->GetError() )
+        // No stream, no detection.
+        return OUString();
 
-    bool bRepairPackage = false;
-    bool bRepairAllowed = false;
-    bool bDeepDetection = false;
-
-    // now some parameters that can already be in the array, but may be overwritten or new inserted here
-    // remember their indices in the case new values must be added to the array
-    sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = -1;
-    sal_Int32 nIndexOfInputStream = -1;
-    sal_Int32 nIndexOfContent = -1;
-    sal_Int32 nIndexOfReadOnlyFlag = -1;
-    sal_Int32 nIndexOfTemplateFlag = -1;
-    sal_Int32 nIndexOfDocumentTitle = -1;
-
-    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    const char* pSearchFilterName = NULL;
+    if (aTypeName == "calc_Lotus")
     {
-        // extract properties
-        if ( lDescriptor[nProperty].Name == "URL" )
-        {
-            lDescriptor[nProperty].Value >>= sTemp;
-            aURL = sTemp;
-        }
-        else if( aURL.isEmpty() && lDescriptor[nProperty].Name == "FileName" )
-        {
-            lDescriptor[nProperty].Value >>= sTemp;
-            aURL = sTemp;
-        }
-        else if ( lDescriptor[nProperty].Name == "TypeName" )
-        {
-            lDescriptor[nProperty].Value >>= sTemp;
-            aTypeName = sTemp;
-        }
-        else if ( lDescriptor[nProperty].Name == "FilterName" )
-        {
-            lDescriptor[nProperty].Value >>= sTemp;
-            aPreselectedFilterName = sTemp;
+        if (!detectThisFormat(*pStream, pLotus) && !detectThisFormat(*pStream, pLotusNew) && !detectThisFormat(*pStream, pLotus2))
+            return OUString();
 
-            // if the preselected filter name is not correct, it must be erased after detection
-            // remember index of property to get access to it later
-            nIndexOfFilterName = nProperty;
-        }
-        else if ( lDescriptor[nProperty].Name == "InputStream" )
-            nIndexOfInputStream = nProperty;
-        else if ( lDescriptor[nProperty].Name == "ReadOnly" )
-            nIndexOfReadOnlyFlag = nProperty;
-        else if ( lDescriptor[nProperty].Name == "UCBContent" )
-            nIndexOfContent = nProperty;
-        else if ( lDescriptor[nProperty].Name == "AsTemplate" )
-        {
-            lDescriptor[nProperty].Value >>= bOpenAsTemplate;
-            nIndexOfTemplateFlag = nProperty;
-        }
-        else if ( lDescriptor[nProperty].Name == "InteractionHandler" )
-            lDescriptor[nProperty].Value >>= xInteraction;
-        else if ( lDescriptor[nProperty].Name == "RepairPackage" )
-            lDescriptor[nProperty].Value >>= bRepairPackage;
-        else if ( lDescriptor[nProperty].Name == "DocumentTitle" )
-            nIndexOfDocumentTitle = nProperty;
-        else if (lDescriptor[nProperty].Name == "DeepDetection")
-            bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
+        pSearchFilterName = pFilterLotus;
     }
-
-    // can't check the type for external filters, so set the "dont" flag accordingly
-    SolarMutexGuard aGuard;
-    //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
-
-    SfxAllItemSet *pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-    TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, false );
-
-    bWasReadOnly = pItem && pItem->GetValue();
-
-    const SfxFilter* pFilter = 0;
-    OUString aPrefix = "private:factory/";
-    if( aURL.startsWith( aPrefix ) )
+    else if (aTypeName == "calc_QPro")
     {
-        OUString aPattern = aPrefix + "scalc";
-        if ( aURL.startsWith( aPattern ) )
-            pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
+        if (!detectThisFormat(*pStream, pQPro))
+            return OUString();
+
+        pSearchFilterName = pFilterQPro6;
+    }
+    else if (aTypeName == "calc_SYLK")
+    {
+        if (!detectThisFormat(*pStream, pSylk))
+            return OUString();
+
+        pSearchFilterName = pFilterSylk;
+    }
+    else if (aTypeName == "calc_DIF")
+    {
+        if (!detectThisFormat(*pStream, pDIF1) && !detectThisFormat(*pStream, pDIF2))
+            return OUString();
+
+        pSearchFilterName = pFilterDif;
+    }
+    else if (aTypeName == "calc_dBase")
+    {
+        if (!lcl_MayBeDBase(*pStream))
+            return OUString();
+
+        pSearchFilterName = pFilterDBase;
     }
     else
-    {
-        // container for Calc filters
-        SfxFilterMatcher aMatcher("scalc");
-        if ( !aPreselectedFilterName.isEmpty() )
-            pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
-        else if( !aTypeName.isEmpty() )
-            pFilter = aMatcher.GetFilter4EA( aTypeName );
+        return OUString();
 
-        // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
-        aMedium.UseInteractionHandler( true );
-
-        bool bIsStorage = aMedium.IsStorage();
-        if ( aMedium.GetErrorCode() == ERRCODE_NONE )
-        {
-            // remember input stream and content and put them into the descriptor later
-            // should be done here since later the medium can switch to a version
-            xStream.set(aMedium.GetInputStream());
-            xContent.set(aMedium.GetContent());
-            bReadOnly = aMedium.IsReadOnly();
-
-            // maybe that IsStorage() already created an error!
-            if ( bIsStorage )
-            {
-                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( false ));
-                if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
-                {
-                    // error during storage creation means _here_ that the medium
-                    // is broken, but we can not handle it in medium since unpossibility
-                    // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError(aMedium.GetLastStorageCreationState(), OUString(OSL_LOG_PREFIX));
-                    if ( xInteraction.is() )
-                    {
-                        OUString empty;
-                        try
-                        {
-                            InteractiveAppException xException( empty,
-                                                            uno::Reference< XInterface >(),
-                                                            InteractionClassification_ERROR,
-                                                            aMedium.GetError() );
-
-                            uno::Reference< XInteractionRequest > xRequest(
-                                new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
-                                                                      ucbhelper::CONTINUATION_APPROVE ) );
-                            xInteraction->handle( xRequest );
-                        }
-                        catch ( Exception & ) {};
-                    }
-                }
-                else if ( xStorage.is() )
-                {
-                    try
-                    {
-                        OUString aFilterName;
-                        if ( pFilter )
-                            aFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : false, &aFilterName );
-                    }
-                    catch( const lang::WrappedTargetException& aWrap )
-                    {
-                        if (!bDeepDetection)
-                            // Bail out early unless it's a deep detection.
-                            return OUString();
-
-                        packages::zip::ZipIOException aZipException;
-
-                        // repairing is done only if this type is requested from outside
-                        if ( ( aWrap.TargetException >>= aZipException ) && !aTypeName.isEmpty() )
-                        {
-                            if ( xInteraction.is() )
-                            {
-                                // the package is broken one
-                                   aDocumentTitle = aMedium.GetURLObject().getName(
-                                                            INetURLObject::LAST_SEGMENT,
-                                                            true,
-                                                            INetURLObject::DECODE_WITH_CHARSET );
-
-                                if ( !bRepairPackage )
-                                {
-                                    // ask the user whether he wants to try to repair
-                                    RequestPackageReparation aRequest( aDocumentTitle );
-                                    xInteraction->handle( aRequest.GetRequest() );
-                                    bRepairAllowed = aRequest.isApproved();
-                                }
-
-                                if ( !bRepairAllowed )
-                                {
-                                    // repair either not allowed or not successful
-                                    NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
-                                    xInteraction->handle( aNotifyRequest.GetRequest() );
-                                }
-                            }
-
-                            if ( !bRepairAllowed )
-                                aTypeName = "";
-                        }
-                    }
-                    catch( uno::RuntimeException& )
-                    {
-                        throw;
-                    }
-                    catch( uno::Exception& )
-                    {
-                        aTypeName = "";
-                    }
-
-                    if ( !aTypeName.isEmpty() )
-                        pFilter = SfxFilterMatcher("scalc").GetFilter4EA( aTypeName );
-                }
-            }
-            else
-            {
-                // Non-storage format.
-
-                if (aTypeName == "calc8_template" ||
-                    aTypeName == "calc8" ||
-                    aTypeName == "calc_StarOffice_XML_Calc" ||
-                    aTypeName == "calc_StarOffice_XML_Calc_Template")
-                    // These types require storage.  Bail out.
-                    return OUString();
-
-                SvStream* pStream = aMedium.GetInStream();
-                if (!pStream)
-                    // No stream, no detection.
-                    return OUString();
-
-                pFilter = NULL;
-
-                const char* pSearchFilterName = NULL;
-                if (aTypeName == "calc_Lotus")
-                {
-                    if (!detectThisFormat(*pStream, pLotus) && !detectThisFormat(*pStream, pLotusNew) && !detectThisFormat(*pStream, pLotus2))
-                        return OUString();
-
-                    pSearchFilterName = pFilterLotus;
-                }
-                else if (aTypeName == "calc_QPro")
-                {
-                    if (!detectThisFormat(*pStream, pQPro))
-                        return OUString();
-
-                    pSearchFilterName = pFilterQPro6;
-                }
-                else if (aTypeName == "calc_SYLK")
-                {
-                    if (!detectThisFormat(*pStream, pSylk))
-                        return OUString();
-
-                    pSearchFilterName = pFilterSylk;
-                }
-                else if (aTypeName == "calc_DIF")
-                {
-                    if (!detectThisFormat(*pStream, pDIF1) && !detectThisFormat(*pStream, pDIF2))
-                        return OUString();
-
-                    pSearchFilterName = pFilterDif;
-                }
-                else if (aTypeName == "calc_dBase")
-                {
-                    if (!lcl_MayBeDBase(*pStream))
-                        return OUString();
-
-                    pSearchFilterName = pFilterDBase;
-                }
-
-                if (!pSearchFilterName)
-                    return OUString();
-
-                pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
-            }
-        }
-    }
-
-    if ( nIndexOfInputStream == -1 && xStream.is() )
-    {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opened twice
-        lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = "InputStream";
-        lDescriptor[nPropertyCount].Value <<= xStream;
-        nPropertyCount++;
-    }
-
-    if ( nIndexOfContent == -1 && xContent.is() )
-    {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opened twice
-        lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = "UCBContent";
-        lDescriptor[nPropertyCount].Value <<= xContent;
-        nPropertyCount++;
-    }
-
-    if ( bReadOnly != bWasReadOnly )
-    {
-        if ( nIndexOfReadOnlyFlag == -1 )
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = "ReadOnly";
-            lDescriptor[nPropertyCount].Value <<= bReadOnly;
-            nPropertyCount++;
-        }
-        else
-            lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
-    }
-
-    if ( !bRepairPackage && bRepairAllowed )
-    {
-        lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = "RepairPackage";
-        lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
-        nPropertyCount++;
-
-        bOpenAsTemplate = true;
-
-        // TODO/LATER: set progress bar that should be used
-    }
-
-    if ( bOpenAsTemplate )
-    {
-        if ( nIndexOfTemplateFlag == -1 )
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = "AsTemplate";
-            lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
-            nPropertyCount++;
-        }
-        else
-            lDescriptor[nIndexOfTemplateFlag].Value <<= bOpenAsTemplate;
-    }
-
-    if ( !aDocumentTitle.isEmpty() )
-    {
-        // the title was set here
-        if ( nIndexOfDocumentTitle == -1 )
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = "DocumentTitle";
-            lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
-            nPropertyCount++;
-        }
-        else
-            lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
-    }
+    SfxFilterMatcher aMatcher("scalc");
+    const SfxFilter* pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
 
     if (!pFilter)
         return OUString();
 
-    if (nIndexOfFilterName == -1)
-    {
-        lDescriptor.realloc(nPropertyCount + 1);
-        lDescriptor[nPropertyCount].Name = "FilterName";
-        lDescriptor[nPropertyCount].Value <<= pFilter->GetName();
-        ++nPropertyCount;
-    }
-    else
-        lDescriptor[nIndexOfFilterName].Value <<= pFilter->GetName();
-
+    aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= pFilter->GetName();
+    aMediaDesc >> lDescriptor;
     return aTypeName;
 }
 
