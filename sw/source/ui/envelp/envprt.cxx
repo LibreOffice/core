@@ -31,6 +31,7 @@
 SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvPrinterPage",
         "modules/swriter/ui/envprinterpage.ui", rSet)
+    , pPrt(NULL)
 {
     get(m_pAlignBox, "alignbox");
     get(m_pTopButton, "top");
