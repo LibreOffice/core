@@ -32,7 +32,6 @@ struct SfxViewFrame_Impl
     SvBorder            aBorder;
     Size                aMargin;
     Size                aSize;
-    TypeId              aLastType;
     OUString            aActualURL;
     SfxFrame&           rFrame;
     svtools::AsynchronLink* pReloader;
@@ -54,21 +53,30 @@ struct SfxViewFrame_Impl
     ::boost::optional< bool >
                         aHasToolPanels;
 
-                        SfxViewFrame_Impl( SfxFrame& i_rFrame )
-                        : rFrame( i_rFrame )
-                        , pReloader(0 )
-                        , pWindow( 0 )
-                        , pActiveChild(0)
-                        , pFocusWin(0)
-                        , bWindowWasEnabled(true)
-                        , bActive( false )
-                        {
-                        }
+    SfxViewFrame_Impl(SfxFrame& i_rFrame)
+        : rFrame(i_rFrame)
+        , pReloader(0)
+        , pWindow(0)
+        , pActiveChild(0)
+        , pFocusWin(0)
+        , nDocViewNo(0)
+        , nCurViewId(0)
+        , bResizeInToOut(false)
+        , bDontOverwriteResizeInToOut(false)
+        , bObjLocked(false)
+        , bReloading(false)
+        , bIsDowning(false)
+        , bModal(false)
+        , bEnabled(false)
+        , bWindowWasEnabled(true)
+        , bActive(false)
+    {
+    }
 
-                        ~SfxViewFrame_Impl()
-                        {
-                            delete pReloader;
-                        }
+    ~SfxViewFrame_Impl()
+    {
+        delete pReloader;
+    }
 };
 
 class SfxFrameViewWindow_Impl : public Window

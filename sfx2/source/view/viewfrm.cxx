@@ -1081,7 +1081,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
 
     if ( xObjSh.Is() )
     {
-         pImp->aLastType = xObjSh->Type();
         pDispatcher->Pop( *xObjSh );
         SfxModule* pModule = xObjSh->GetModule();
         if( pModule )
