@@ -455,6 +455,28 @@ bool SwViewShell::PrintOrPDFExport(
     // output device is now provided by a call from outside the Writer)
     pOutDev->Push();
 
+    // fdo#36815 for comments in margins print to a metafile
+    // and then scale that metafile down so that the comments
+    // will fit on the real page, and replay that scaled
+    // output to the real outputdevice
+    GDIMetaFile *pOrigRecorder(NULL);
+    GDIMetaFile *pMetaFile(NULL);
+    sal_Int16 nPostItMode = rPrintData.GetPrintPostIts();
+    if (nPostItMode == POSTITS_INMARGINS)
+    {
+        //get and disable the existing recorder
+        pOrigRecorder = pOutDev->GetConnectMetaFile();
+        pOutDev->SetConnectMetaFile(NULL);
+        // turn off output to the device
+        pOutDev->EnableOutput(false);
+        // just record the rendering commands to the metafile
+        // instead
+        pMetaFile = new GDIMetaFile;
+        pMetaFile->SetPrefSize(pOutDev->GetOutputSize());
+        pMetaFile->SetPrefMapMode(pOutDev->GetMapMode());
+        pMetaFile->Record(pOutDev);
+    }
+
     // Print/PDF export for (multi-)selection has already generated a
     // temporary document with the selected text.
     // (see XRenderable implementation in unotxdoc.cxx)
@@ -469,8 +491,6 @@ bool SwViewShell::PrintOrPDFExport(
         pDrawView->SetBufferedOutputAllowed( false );
         pDrawView->SetBufferedOverlayAllowed( false );
     }
-
-    sal_Int16 nPostItMode = rPrintData.GetPrintPostIts();
 
     {   // additional scope so that the CurrShell is reset before destroying the shell
 
@@ -519,6 +539,32 @@ bool SwViewShell::PrintOrPDFExport(
             pPostItManager->CalcRects();
             pPostItManager->LayoutPostIts();
             pPostItManager->DrawNotesForPage(pOutDev, nPage-1);
+
+            //Stop recording now
+            pMetaFile->Stop();
+            pMetaFile->WindStart();
+            //Enable output to the device again
+            pOutDev->EnableOutput(true);
+            //Restore the original recorder
+            pOutDev->SetConnectMetaFile(pOrigRecorder);
+
+            //Now scale the recorded page down so the notes
+            //will fit in the final page
+            double fScale = 0.75;
+            long nOrigHeight = pStPage->Frm().Height();
+            long nNewHeight = nOrigHeight*fScale;
+            long nShiftY = (nOrigHeight-nNewHeight)/2;
+            pMetaFile->Scale( fScale, fScale );
+            pMetaFile->WindStart();
+            //Move the scaled page down to center it
+            //the other variant of Move does not map pixels
+            //back to the logical units correctly
+            pMetaFile->Move(0, convertTwipToMm100(nShiftY), pOutDev->GetDPIX(), pOutDev->GetDPIY());
+            pMetaFile->WindStart();
+
+            //play back the scaled page
+            pMetaFile->Play(pOutDev);
+            delete pMetaFile;
         }
     }
 
@@ -527,24 +573,6 @@ bool SwViewShell::PrintOrPDFExport(
     // restore settings of OutputDevice (should be done always now since the
     // output device is now provided by a call from outside the Writer)
     pOutDev->Pop();
-
-    // fdo#36815 for comments in margins get the metafile we are printing to
-    // and then scale and vertically center that metafile down so that the
-    // comments will fit on the real page
-    GDIMetaFile *pRecorder = pOutDev->GetConnectMetaFile();
-    if (nPostItMode == POSTITS_INMARGINS && pRecorder)
-    {
-        pRecorder->Stop();
-        pRecorder->WindStart();
-        double fScale = 0.75;
-        long nOrigHeight = pOutDev->GetOutputSize().Height();
-        long nNewHeight = nOrigHeight*fScale;
-        long nShiftY = (nOrigHeight-nNewHeight)/2;
-        pRecorder->Scale(fScale, fScale);
-        pRecorder->WindStart();
-        pRecorder->Move(0, nShiftY, pOutDev->GetDPIX(), pOutDev->GetDPIY());
-        pRecorder->WindStart();
-    }
 
     return true;
 }
