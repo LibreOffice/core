@@ -15,6 +15,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class ScDocument;
 class ScTokenArray;
@@ -27,9 +28,10 @@ class ColumnBlockPositionSet;
 class StartListeningContext : boost::noncopyable
 {
     ScDocument& mrDoc;
-    boost::scoped_ptr<ColumnBlockPositionSet> mpSet;
+    boost::shared_ptr<ColumnBlockPositionSet> mpSet;
 public:
     StartListeningContext(ScDocument& rDoc);
+    StartListeningContext(ScDocument& rDoc, const boost::shared_ptr<ColumnBlockPositionSet>& pSet);
     ScDocument& getDoc();
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
@@ -39,12 +41,13 @@ class EndListeningContext : boost::noncopyable
 {
     ScDocument& mrDoc;
     ColumnSpanSet maSet;
-    boost::scoped_ptr<ColumnBlockPositionSet> mpPosSet;
+    boost::shared_ptr<ColumnBlockPositionSet> mpPosSet;
     ScTokenArray* mpOldCode;
     ScAddress maPosDelta; // Add this to get the old position prior to the move.
 
 public:
     EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode = NULL);
+    EndListeningContext(ScDocument& rDoc, const boost::shared_ptr<ColumnBlockPositionSet>& pSet, ScTokenArray* pOldCode = NULL);
 
     void setPositionDelta( const ScAddress& rDelta );
 
