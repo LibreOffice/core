@@ -19,6 +19,8 @@ $opt_f ||= 0;
 $opt_t ||= 400;
 $opt_u ||= 1.05;
 
+$| = 1; # auto-flush stdout
+
 sub help {
     print <<HELP
 Text Categorization. Typically used to determine the language of a
