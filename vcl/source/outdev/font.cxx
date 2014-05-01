@@ -2029,6 +2029,16 @@ SalLayout* OutputDevice::getFallbackFont(ImplFontEntry &rFallbackFont,
 
 SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLayoutArgs& rLayoutArgs ) const
 {
+    // This function relies on a valid mpFontEntry, if it doesn't exist bail out
+    // - we'd have crashed later on anyway. At least here we can catch the error in debug
+    // mode.
+    if ( !mpFontEntry )
+    {
+        SAL_WARN ("vcl.gdi", "No font entry set in OutputDevice");
+        assert(mpFontEntry);
+        return NULL;
+    }
+
     // prepare multi level glyph fallback
     MultiSalLayout* pMultiSalLayout = NULL;
     ImplLayoutRuns aLayoutRuns = rLayoutArgs.maRuns;
@@ -2062,7 +2072,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
 
         aFontSelData.mpFontEntry = pFallbackFont;
         aFontSelData.mpFontData = pFallbackFont->maFontSelData.mpFontData;
-        if( mpFontEntry && nFallbackLevel < MAX_FALLBACK-1)
+        if( nFallbackLevel < MAX_FALLBACK-1)
         {
             // ignore fallback font if it is the same as the original font
             if( mpFontEntry->maFontSelData.mpFontData == aFontSelData.mpFontData )
