@@ -4900,7 +4900,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
             }
             if( readSize == 0 )
                 break;
-            xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
+            xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize-1 ));
         }
         xOutStream->closeOutput();
         OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
