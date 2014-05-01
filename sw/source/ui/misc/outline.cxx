@@ -407,8 +407,9 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent,
     : SfxTabPage(pParent, "OutlineNumberingPage",
         "modules/swriter/ui/outlinenumberingpage.ui", rSet)
     , aNoFmtName(SW_RESSTR(SW_STR_NONE))
-    , pSh(0)
-    , pCollNames(0)
+    , pSh(NULL)
+    , pNumRule(NULL)
+    , pCollNames(NULL)
     , nActLevel(1)
 {
     get(m_pLevelLB, "level");
