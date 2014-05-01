@@ -54,13 +54,16 @@ static const sal_uInt16 pRanges[] =
 |* dialog (page) for copying objects
 |*
 \************************************************************************/
-
-SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow
-                                ,"TextAttributesPage"
-                                ,"cui/ui/textattrtabpage.ui"
-                                , rInAttrs ),
-                rOutAttrs( rInAttrs )
+SvxTextAttrPage::SvxTextAttrPage(Window* pWindow, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pWindow,"TextAttributesPage","cui/ui/textattrtabpage.ui", rInAttrs)
+    , rOutAttrs(rInAttrs)
+    , pView(NULL)
+    , bAutoGrowSizeEnabled(false)
+    , bContourEnabled(false)
+    , bAutoGrowWidthEnabled(false)
+    , bAutoGrowHeightEnabled(false)
+    , bWordWrapTextEnabled(false)
+    , bFitToSizeEnabled(false)
 {
     get(m_pTsbAutoGrowWidth,"TSB_AUTOGROW_WIDTH");
     get(m_pTsbAutoGrowHeight,"TSB_AUTOGROW_HEIGHT");
@@ -99,7 +102,6 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
 |* Dtor
 |*
 \************************************************************************/
-
 SvxTextAttrPage::~SvxTextAttrPage()
 {
 }

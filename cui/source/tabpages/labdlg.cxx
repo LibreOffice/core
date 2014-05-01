@@ -71,11 +71,20 @@ static const sal_uInt16 pCaptionRanges[] =
     0
 };
 
-
-
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", rInAttrs)
+    , nCaptionType(0)
+    , nGap(0)
+    , nEscDir(0)
+    , bEscRel(false)
+    , nEscAbs(0)
+    , nEscRel(0)
+    , nLineLen(0)
+    , bFitLineLen(false)
+    , nAnsatzRelPos(0)
+    , nAnsatzTypePos(0)
     , rOutAttrs(rInAttrs)
+    , pView(NULL)
 {
     get(m_pCT_CAPTTYPE, "valueset");
 
@@ -129,8 +138,6 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     m_pLB_ANSATZ_REL->SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzRelSelectHdl_Impl));
     m_pCB_LAENGE->SetClickHdl(LINK(this,SvxCaptionTabPage,LineOptHdl_Impl));
 }
-
-
 
 void SvxCaptionTabPage::Construct()
 {
