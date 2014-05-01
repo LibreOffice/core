@@ -25,6 +25,29 @@
 
 #include <salgdi.hxx>
 
+static bool EnableNativeWidget( const OutputDevice& i_rDevice )
+{
+    const OutDevType eType( i_rDevice.GetOutDevType() );
+    switch ( eType )
+    {
+
+    case OUTDEV_WINDOW:
+        return dynamic_cast< const Window* >( &i_rDevice )->IsNativeWidgetEnabled();
+
+    case OUTDEV_VIRDEV:
+    {
+        const ::vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
+        const ::vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const ::vcl::PDFExtOutDevData* >( pOutDevData ) );
+        if ( pPDFData != NULL )
+            return false;
+        return true;
+    }
+
+    default:
+        return false;
+    }
+}
+
 ImplControlValue::~ImplControlValue()
 {
 }
@@ -118,9 +141,9 @@ PushButtonValue* PushButtonValue::clone() const
 // These functions are mainly passthrough functions that allow access to
 // the SalFrame behind a Window object for native widget rendering purposes.
 
-bool Window::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
+bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
-    if( !IsNativeWidgetEnabled() )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     if ( !mpGraphics )
@@ -130,13 +153,13 @@ bool Window::IsNativeControlSupported( ControlType nType, ControlPart nPart ) co
     return( mpGraphics->IsNativeControlSupported(nType, nPart) );
 }
 
-bool Window::HitTestNativeControl( ControlType nType,
+bool OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
                               const Rectangle& rControlRegion,
                               const Point& aPos,
                               bool& rIsInside ) const
 {
-    if( !IsNativeWidgetEnabled() )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     if ( !mpGraphics )
@@ -229,15 +252,14 @@ static boost::shared_ptr< ImplControlValue > TransformControlValue( const ImplCo
     }
     return aResult;
 }
-
-bool Window::DrawNativeControl( ControlType nType,
+bool OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
                             const Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
 {
-    if( !IsNativeWidgetEnabled() )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     // make sure the current clip region is initialized correctly
@@ -270,7 +292,7 @@ bool Window::DrawNativeControl( ControlType nType,
     return bRet;
 }
 
-bool Window::GetNativeControlRegion(  ControlType nType,
+bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Rectangle& rControlRegion,
                                 ControlState nState,
@@ -279,7 +301,7 @@ bool Window::GetNativeControlRegion(  ControlType nType,
                                 Rectangle &rNativeBoundingRegion,
                                 Rectangle &rNativeContentRegion ) const
 {
-    if( !IsNativeWidgetEnabled() )
+    if( !EnableNativeWidget( *this ) )
         return false;
 
     if ( !mpGraphics )
