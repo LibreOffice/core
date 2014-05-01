@@ -964,8 +964,8 @@ void SwViewShell::SizeChgNotify()
             const SwPageFrm *pPage;
             if ( pCnt && 0 != (pPage = pCnt->FindPageFrm()) )
             {
-                sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
-                 const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
+                const sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
+                const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
                 OUString sDisplay = rNum.GetNumStr( nVirtNum );
                 PageNumNotify( this, pCnt->GetPhyPageNum(), nVirtNum, sDisplay );
             }
@@ -1073,7 +1073,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                     {
                         const long nOfst = GetOut()->PixelToLogic(
                             Size(Imp()->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width();
-                        for ( sal_uInt16 i = 0;
+                        for ( sal_uInt32 i = 0;
                               i < pPage->GetSortedObjs()->Count(); ++i )
                         {
                             SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
@@ -1555,7 +1555,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         {
             //only of interest when something has changed in the visible range
             bool bStop = true;
-            for ( sal_uInt16 i = 0; i < pRegion->size(); ++i )
+            for ( size_t i = 0; i < pRegion->size(); ++i )
             {
                 const SwRect &rTmp = (*pRegion)[i];
                 if ( false == (bStop = rTmp.IsOver( VisArea() )) )
@@ -1577,7 +1577,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
             if ( !pRegion->empty() )
             {
                 SwRegionRects aRegion( rRect );
-                for ( sal_uInt16 i = 0; i < pRegion->size(); ++i )
+                for ( size_t i = 0; i < pRegion->size(); ++i )
                 {   const SwRect &rTmp = (*pRegion)[i];
                     if ( !rRect.IsInside( rTmp ) )
                     {
@@ -1590,7 +1590,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
                 }
                 if ( bRet )
                 {
-                    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+                    for ( size_t i = 0; i < aRegion.size(); ++i )
                         GetWin()->Invalidate( aRegion[i].SVRect() );
 
                     if ( rRect != VisArea() )
