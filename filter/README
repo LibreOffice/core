@@ -9,3 +9,5 @@ and are loaded and used in a uniform fashion from code in
 svtools/source/filter/filter.cxx. Others have different API and are
 loaded from other places. For instance "icgm" has ImportCGM, and is
 loaded and used by sd/source/filter/cgm/sdcgmfilter.cxx (!).
+Svgreader is used for "File->Open" and then to choose the svg file.
+For "Insert->Picture->From File", see svgio/source/svgreader directory.
