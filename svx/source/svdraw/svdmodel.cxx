@@ -240,17 +240,6 @@ SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmb
     ImpCtor(pPool,pPers,bUseExtColorTable, bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
-    SfxBroadcaster(),
-    tools::WeakBase< SdrModel >(),
-    aReadDate( DateTime::EMPTY ),
-    maMaPag(),
-    maPages()
-{
-    // not yet implemented
-    OSL_FAIL("SdrModel::CopyCtor() is not yet implemented.");
-}
-
 SdrModel::~SdrModel()
 {
 
