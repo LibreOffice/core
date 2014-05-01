@@ -178,10 +178,24 @@ PrinterJob::GetCurrentPageBody ()
  * public methods of PrinterJob: the actual job / spool handling
  */
 
-PrinterJob::PrinterJob () :
-        mpJobHeader( NULL ),
-        mpJobTrailer( NULL ),
-        m_bQuickJob( false )
+PrinterJob::PrinterJob ()
+    : mnFileMode(0)
+    , mpJobHeader(NULL)
+    , mpJobTrailer(NULL)
+    , mnResolution(96)
+    , mnWidthPt(0)
+    , mnHeightPt(0)
+    , mnMaxWidthPt(0)
+    , mnMaxHeightPt(0)
+    , mnLandscapes(0)
+    , mnPortraits(0)
+    , mnLMarginPt(0)
+    , mnRMarginPt(0)
+    , mnTMarginPt(0)
+    , mnBMarginPt(0)
+    , mfXScale(1)
+    , mfYScale(1)
+    , m_bQuickJob(false)
 {
 }
 
