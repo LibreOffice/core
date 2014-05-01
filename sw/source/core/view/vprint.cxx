@@ -221,7 +221,7 @@ void SwViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
     OSL_ENSURE( mnStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
-    sal_uInt16 nAll = GetDoc()->GetPageDescCnt();
+    const sal_uInt16 nAll = GetDoc()->GetPageDescCnt();
     bool bNewOri = Orientation(eOri) == ORIENTATION_PORTRAIT ? sal_False : sal_True;
 
     for( sal_uInt16 i = 0; i < nAll; ++ i )
@@ -261,7 +261,7 @@ void SwViewShell::ChgAllPageSize( Size &rSz )
     SET_CURR_SHELL( this );
 
     SwDoc* pMyDoc = GetDoc();
-    sal_uInt16 nAll = pMyDoc->GetPageDescCnt();
+    const sal_uInt16 nAll = pMyDoc->GetPageDescCnt();
 
     for( sal_uInt16 i = 0; i < nAll; ++i )
     {
