@@ -4785,6 +4785,80 @@ void Test::testSort()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortHorizontal()
+{
+    ScFormulaOptions aOptions;
+    aOptions.SetFormulaSepArg(";");
+    aOptions.SetFormulaSepArrayCol(";");
+    aOptions.SetFormulaSepArrayRow("|");
+    getDocShell().SetFormulaOptions(aOptions);
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, "Sort");
+
+    // Test case from fdo#78079.
+
+    // 0 = empty cell
+    const char* aData[][4] = {
+        { "table", "has UNIQUE", "Publish to EC2", "flag" },
+        { "w2gi.mobilehit", "Yes", "No", "=CONCATENATE(B2;\"-\";C2)" },
+        { "w2gi.visitors", "No", "No", "=CONCATENATE(B3;\"-\";C3)" },
+        { "w2gi.pagedimension", "Yes", "Yes", "=CONCATENATE(B4;\"-\";C4)" },
+    };
+
+    // Insert raw data into A1:D4.
+    ScRange aDataRange = insertRangeData(m_pDoc, ScAddress(0,0,0), aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_EQUAL(OUString("A1:D4"), aDataRange.Format(SCA_VALID));
+
+    // Check the formula values.
+    CPPUNIT_ASSERT_EQUAL(OUString("Yes-No"), m_pDoc->GetString(ScAddress(3,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("No-No"), m_pDoc->GetString(ScAddress(3,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Yes-Yes"), m_pDoc->GetString(ScAddress(3,3,0)));
+
+    // Define A1:D4 as sheet-local anonymous database range.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 3, 3));
+
+    // Sort A1:D4 horizontally, ascending by row 1.
+    ScDBDocFunc aFunc(getDocShell());
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 3;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 3;
+    aSortData.bHasHeader = true;
+    aSortData.bByRow = false; // Sort by column (in horizontal direction).
+    aSortData.bIncludePattern = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][4] = {
+            { "table", "flag", "has UNIQUE", "Publish to EC2" },
+            { "w2gi.mobilehit",     "Yes-No",  "Yes", "No" },
+            { "w2gi.visitors",      "No-No",   "No",  "No" },
+            { "w2gi.pagedimension", "Yes-Yes", "Yes", "Yes" },
+        };
+
+        bool bSuccess = checkOutput<4>(m_pDoc, aDataRange, aOutputCheck, "Sorted by column with formula");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "CONCATENATE(C2;\"-\";D2)"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "CONCATENATE(C3;\"-\";D3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(1,3,0), "CONCATENATE(C4;\"-\";D4)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSortInFormulaGroup()
 {
     static struct {

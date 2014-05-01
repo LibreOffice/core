@@ -74,38 +74,7 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nField
 template<size_t _Size>
 bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][_Size], const char* pCaption)
 {
-    bool bResult = true;
-    const ScAddress& s = aOutRange.aStart;
-    const ScAddress& e = aOutRange.aEnd;
-    SheetPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
-    SCROW nOutRowSize = e.Row() - s.Row() + 1;
-    SCCOL nOutColSize = e.Col() - s.Col() + 1;
-    for (SCROW nRow = 0; nRow < nOutRowSize; ++nRow)
-    {
-        for (SCCOL nCol = 0; nCol < nOutColSize; ++nCol)
-        {
-            OUString aVal = pDoc->GetString(nCol + s.Col(), nRow + s.Row(), s.Tab());
-            printer.set(nRow, nCol, aVal);
-            const char* p = aOutputCheck[nRow][nCol];
-            if (p)
-            {
-                OUString aCheckVal = OUString::createFromAscii(p);
-                bool bEqual = aCheckVal.equals(aVal);
-                if (!bEqual)
-                {
-                    cout << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
-                    bResult = false;
-                }
-            }
-            else if (!aVal.isEmpty())
-            {
-                cout << "Empty cell expected" << endl;
-                bResult = false;
-            }
-        }
-    }
-    printer.print(pCaption);
-    return bResult;
+    return checkOutput<_Size>(pDoc, aOutRange, aOutputCheck, pCaption);
 }
 
 ScDPObject* createDPFromSourceDesc(
