@@ -102,8 +102,7 @@ bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
     return aWMFWriter.WriteWMF( aGdiMetaFile, rTargetStream, pConfigItem, bPlaceable );
 }
 
-bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              FilterConfigItem* pConfigItem )
+bool ConvertGDIMetaFileToEMF(const GDIMetaFile & rMTF, SvStream & rTargetStream)
 {
     EMFWriter aEMFWriter(rTargetStream);
     GDIMetaFile aGdiMetaFile(rMTF);
@@ -116,7 +115,7 @@ bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
         clipMetafileContentAgainstOwnRegions(aGdiMetaFile);
     }
 
-    return aEMFWriter.WriteEMF( aGdiMetaFile, pConfigItem );
+    return aEMFWriter.WriteEMF(aGdiMetaFile);
 }
 
 bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )

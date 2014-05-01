@@ -1968,7 +1968,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_EMF ) )
             {
                 // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
-                if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
+                if ( !ConvertGDIMetaFileToEMF(aGraphic.GetGDIMetaFile(), rOStm))
                     nStatus = GRFILTER_FORMATERROR;
 
                 if( rOStm.GetError() )

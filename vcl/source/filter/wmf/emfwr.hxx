@@ -35,11 +35,9 @@ private:
 
     VirtualDevice       maVDev;
     MapMode             maDestMapMode;
-    FilterConfigItem*   mpFilterConfigItem;
     SvStream& m_rStm;
     bool*               mpHandlesUsed;
     sal_uLong               mnHandleCount;
-    sal_uLong               mnLastPercent;
     sal_uLong               mnRecordCount;
     sal_uLong               mnRecordPos;
     sal_uLong               mnRecordPlusPos;
@@ -91,9 +89,26 @@ private:
 
 public:
 
-    EMFWriter(SvStream &rStream) : m_rStm(rStream) {}
+    EMFWriter(SvStream &rStream)
+        : m_rStm(rStream)
+        , mpHandlesUsed(NULL)
+        , mnHandleCount(0)
+        , mnRecordCount(0)
+        , mnRecordPos(0)
+        , mnRecordPlusPos(0)
+        , mbRecordOpen(false)
+        , mbRecordPlusOpen(false)
+        , mbLineChanged(false)
+        , mnLineHandle(0)
+        , mbFillChanged(false)
+        , mnFillHandle(0)
+        , mbTextChanged(false)
+        , mnTextHandle(0)
+        , mnHorTextAlign(0)
+    {
+    }
 
-    bool WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pConfigItem = NULL );
+    bool WriteEMF(const GDIMetaFile& rMtf);
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_WMF_EMFWR_HXX

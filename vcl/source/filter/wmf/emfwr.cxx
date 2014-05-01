@@ -284,7 +284,7 @@ void EMFWriter::ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_
     ImplEndCommentRecord();
 }
 
-bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConfigItem )
+bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
 {
     const sal_uLong nHeaderPos = m_rStm.Tell();
 
@@ -292,10 +292,9 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
     // don't work with pixel as destination map mode -> higher resolution preferrable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
-    mpFilterConfigItem = pFilterConfigItem;
     mpHandlesUsed = new bool[ MAXHANDLES ];
     memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( bool ) );
-    mnHandleCount = mnLastPercent = mnRecordCount = mnRecordPos = mnRecordPlusPos = 0;
+    mnHandleCount = mnRecordCount = mnRecordPos = mnRecordPlusPos = 0;
     mbRecordOpen = mbRecordPlusOpen = false;
     mbLineChanged = mbFillChanged = mbTextChanged = false;
     mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
