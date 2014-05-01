@@ -188,7 +188,7 @@ private:
     int RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex);
     int ProcessUnrenderedShape();
     glm::vec4 GetColorByIndex(int index);
-    int GetIndexByColor(int r, int g, int b);
+    sal_uInt32 GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uInt32 b);
     int ProcessPickingBox();
     int ProcessExtrude3DPickingBox();
     void RenderCoordinateAxis();
