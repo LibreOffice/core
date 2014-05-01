@@ -13,8 +13,21 @@
 #include "sal/types.h"
 
 #include <boost/intrusive_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
 class ScMatrix;
+
+// The typedefs
+typedef sal_Int32 SCROW;
+typedef sal_Int16 SCCOL;
+typedef sal_Int16 SCTAB;
+typedef sal_Int32 SCCOLROW;     ///< a type capable of holding either SCCOL or SCROW
+
+// temporarily signed typedefs
+typedef sal_Int32 SCsROW;
+typedef sal_Int16 SCsCOL;
+typedef sal_Int16 SCsTAB;
+typedef sal_Int32 SCsCOLROW;
 
 typedef ::boost::intrusive_ptr<ScMatrix>        ScMatrixRef;
 typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
@@ -84,6 +97,8 @@ struct RangeMatrix
 
     bool isRangeValid() const;
 };
+
+typedef boost::unordered_map<SCCOL,SCCOL> ColReorderMapType;
 
 }
 

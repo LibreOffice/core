@@ -2879,6 +2879,70 @@ void ScTokenArray::MoveReference(
     }
 }
 
+void ScTokenArray::MoveReference(
+    const ScAddress& rPos, SCTAB nTab, SCROW nRow1, SCROW nRow2, const sc::ColReorderMapType& rColMap )
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rPos);
+
+                if (aAbs.Tab() == nTab && nRow1 <= aAbs.Row() && aAbs.Row() <= nRow2)
+                {
+                    // Inside reordered row range.
+                    sc::ColReorderMapType::const_iterator it = rColMap.find(aAbs.Col());
+                    if (it != rColMap.end())
+                    {
+                        // This column is reordered.
+                        SCCOL nNewCol = it->second;
+                        aAbs.SetCol(nNewCol);
+                        rRef.SetAddress(aAbs, rPos);
+                    }
+                }
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rPos);
+
+                if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
+                    // Must be a single-sheet reference.
+                    break;
+
+                if (aAbs.aStart.Col() != aAbs.aEnd.Col())
+                    // Whole range must fit in a single column.
+                    break;
+
+                if (aAbs.aStart.Tab() == nTab && nRow1 <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= nRow2)
+                {
+                    // Inside reordered row range.
+                    sc::ColReorderMapType::const_iterator it = rColMap.find(aAbs.aStart.Col());
+                    if (it != rColMap.end())
+                    {
+                        // This column is reordered.
+                        SCCOL nNewCol = it->second;
+                        aAbs.aStart.SetCol(nNewCol);
+                        aAbs.aEnd.SetCol(nNewCol);
+                        rRef.SetRange(aAbs, rPos);
+                    }
+                }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 namespace {
 
 bool adjustSingleRefInName(
@@ -3292,6 +3356,36 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
     return aRes;
 }
 
+void ScTokenArray::AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const ScAddress& rNewPos )
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rOldPos);
+                rRef.SetAddress(aAbs, rNewPos);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rOldPos);
+                rRef.SetRange(aAbs, rNewPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 namespace {
 
 void clearTabDeletedFlag( ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
@@ -3341,28 +3435,23 @@ void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTA
 namespace {
 
 void checkBounds(
-    const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen,
-    const ScSingleRefData& rRef, std::vector<SCROW>& rBounds)
+    const ScAddress& rPos, SCROW nGroupLen, const ScRange& rCheckRange,
+    const ScSingleRefData& rRef, std::vector<SCROW>& rBounds )
 {
     if (!rRef.IsRowRel())
         return;
 
-    ScRange aCheckRange = rCxt.maRange;
-    if (rCxt.meMode == URM_MOVE)
-        // Check bounds against the old range prior to the move.
-        aCheckRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
-
     ScRange aAbs(rRef.toAbs(rPos));
     aAbs.aEnd.IncRow(nGroupLen-1);
-    if (!aCheckRange.Intersects(aAbs))
+    if (!rCheckRange.Intersects(aAbs))
         return;
 
     // Get the boundary row positions.
-    if (aAbs.aEnd.Row() < aCheckRange.aStart.Row())
+    if (aAbs.aEnd.Row() < rCheckRange.aStart.Row())
         // No intersections.
         return;
 
-    if (aAbs.aStart.Row() <= aCheckRange.aStart.Row())
+    if (aAbs.aStart.Row() <= rCheckRange.aStart.Row())
     {
         //    +-+ <---- top
         //    | |
@@ -3372,11 +3461,11 @@ void checkBounds(
         // +-------+
 
         // Add offset from the reference top to the cell position.
-        SCROW nOffset = aCheckRange.aStart.Row() - aAbs.aStart.Row();
+        SCROW nOffset = rCheckRange.aStart.Row() - aAbs.aStart.Row();
         rBounds.push_back(rPos.Row()+nOffset);
     }
 
-    if (aAbs.aEnd.Row() >= aCheckRange.aEnd.Row())
+    if (aAbs.aEnd.Row() >= rCheckRange.aEnd.Row())
     {
         // only check for end range
 
@@ -3388,9 +3477,24 @@ void checkBounds(
         //    +-+
 
         // Ditto.
-        SCROW nOffset = aCheckRange.aEnd.Row() + 1 - aAbs.aStart.Row();
+        SCROW nOffset = rCheckRange.aEnd.Row() + 1 - aAbs.aStart.Row();
         rBounds.push_back(rPos.Row()+nOffset);
     }
+}
+
+void checkBounds(
+    const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen,
+    const ScSingleRefData& rRef, std::vector<SCROW>& rBounds)
+{
+    if (!rRef.IsRowRel())
+        return;
+
+    ScRange aCheckRange = rCxt.maRange;
+    if (rCxt.meMode == URM_MOVE)
+        // Check bounds against the old range prior to the move.
+        aCheckRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+
+    checkBounds(rPos, nGroupLen, aCheckRange, rRef, rBounds);
 }
 
 }
@@ -3416,6 +3520,36 @@ void ScTokenArray::CheckRelativeReferenceBounds(
                 const ScComplexRefData& rRef = pToken->GetDoubleRef();
                 checkBounds(rCxt, rPos, nGroupLen, rRef.Ref1, rBounds);
                 checkBounds(rCxt, rPos, nGroupLen, rRef.Ref2, rBounds);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+void ScTokenArray::CheckRelativeReferenceBounds(
+    const ScAddress& rPos, SCROW nGroupLen, const ScRange& rRange, std::vector<SCROW>& rBounds ) const
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                const ScSingleRefData& rRef = pToken->GetSingleRef();
+                checkBounds(rPos, nGroupLen, rRange, rRef, rBounds);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                const ScComplexRefData& rRef = pToken->GetDoubleRef();
+                checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds);
+                checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds);
             }
             break;
             default:

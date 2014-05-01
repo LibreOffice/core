@@ -26,6 +26,7 @@
 
 #include <limits>
 #include "scdllapi.h"
+#include <types.hxx>
 #include <formula/grammar.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -37,18 +38,6 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class ScDocument;
-
-// The typedefs
-typedef sal_Int32 SCROW;
-typedef sal_Int16 SCCOL;
-typedef sal_Int16 SCTAB;
-typedef sal_Int32 SCCOLROW;     ///< a type capable of holding either SCCOL or SCROW
-
-// temporarily signed typedefs
-typedef sal_Int32 SCsROW;
-typedef sal_Int16 SCsCOL;
-typedef sal_Int16 SCsTAB;
-typedef sal_Int32 SCsCOLROW;
 
 /** size_t typedef to be able to find places where code was changed from USHORT
     to size_t and is used to read/write from/to streams. */

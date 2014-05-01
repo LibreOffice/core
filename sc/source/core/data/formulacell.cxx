@@ -1898,12 +1898,28 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
     {
         const sc::RefHint& rRefHint = static_cast<const sc::RefHint&>(rHint);
 
-        if (rRefHint.getType() == sc::RefHint::Moved)
+        switch (rRefHint.getType())
         {
-            // One of the references has moved.
+            case sc::RefHint::Moved:
+            {
+                // One of the references has moved.
 
-            const sc::RefMovedHint& rRefMoved = static_cast<const sc::RefMovedHint&>(rRefHint);
-            pCode->MoveReference(aPos, rRefMoved.getRange(), rRefMoved.getDelta());
+                const sc::RefMovedHint& rRefMoved = static_cast<const sc::RefMovedHint&>(rRefHint);
+                if (!IsShared() || IsSharedTop())
+                    pCode->MoveReference(aPos, rRefMoved.getRange(), rRefMoved.getDelta());
+            }
+            break;
+            case sc::RefHint::ColumnReordered:
+            {
+                const sc::RefColReorderHint& rRefColReorder =
+                    static_cast<const sc::RefColReorderHint&>(rRefHint);
+                if (!IsShared() || IsSharedTop())
+                    pCode->MoveReference(
+                        aPos, rRefColReorder.getTab(), rRefColReorder.getStartRow(), rRefColReorder.getEndRow(), rRefColReorder.getColMap());
+            }
+            break;
+            default:
+                ;
         }
 
         return;

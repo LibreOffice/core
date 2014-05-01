@@ -28,6 +28,7 @@
 #include <globalnames.hxx>
 #include <scitems.hxx>
 #include <cellform.hxx>
+#include <sharedformula.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -828,6 +829,134 @@ void ScColumn::UpdateScriptTypes( SCROW nRow1, SCROW nRow2 )
     sc::ParseAllNonEmpty(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     if (aFunc.isUpdated())
         CellStorageModified();
+}
+
+void ScColumn::Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern )
+{
+    maCells.swap(nRow1, nRow2, rOther.maCells, nRow1);
+    maCellTextAttrs.swap(nRow1, nRow2, rOther.maCellTextAttrs, nRow1);
+    maCellNotes.swap(nRow1, nRow2, rOther.maCellNotes, nRow1);
+    maBroadcasters.swap(nRow1, nRow2, rOther.maBroadcasters, nRow1);
+
+    if (bPattern)
+    {
+        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        {
+            const ScPatternAttr* pPat1 = GetPattern(nRow);
+            const ScPatternAttr* pPat2 = rOther.GetPattern(nRow);
+            if (pPat1 != pPat2)
+            {
+                SetPattern(nRow, *pPat2, true);
+                rOther.SetPattern(nRow, *pPat1, true);
+            }
+        }
+    }
+
+    CellStorageModified();
+    rOther.CellStorageModified();
+}
+
+namespace {
+
+class FormulaColPosSetter
+{
+    SCCOL mnCol;
+public:
+    FormulaColPosSetter( SCCOL nCol ) : mnCol(nCol) {}
+
+    void operator() ( size_t nRow, ScFormulaCell* pCell )
+    {
+        if (!pCell->IsShared() || pCell->IsSharedTop())
+        {
+            // Ensure that the references still point to the same locations
+            // after the position change.
+            ScAddress aOldPos = pCell->aPos;
+            pCell->aPos.SetCol(mnCol);
+            pCell->aPos.SetRow(nRow);
+            pCell->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, pCell->aPos);
+        }
+        else
+        {
+            pCell->aPos.SetCol(mnCol);
+            pCell->aPos.SetRow(nRow);
+        }
+    }
+};
+
+}
+
+void ScColumn::ResetFormulaCellPositions( SCROW nRow1, SCROW nRow2 )
+{
+    FormulaColPosSetter aFunc(nCol);
+    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
+}
+
+namespace {
+
+class RelativeRefBoundChecker
+{
+    std::vector<SCROW> maBounds;
+    ScRange maBoundRange;
+
+public:
+    RelativeRefBoundChecker( const ScRange& rBoundRange ) :
+        maBoundRange(rBoundRange) {}
+
+    void operator() ( size_t /*nRow*/, ScFormulaCell* pCell )
+    {
+        if (!pCell->IsSharedTop())
+            return;
+
+        pCell->GetCode()->CheckRelativeReferenceBounds(
+            pCell->aPos, pCell->GetSharedLength(), maBoundRange, maBounds);
+    }
+
+    void swapBounds( std::vector<SCROW>& rBounds )
+    {
+        rBounds.swap(maBounds);
+    }
+};
+
+}
+
+void ScColumn::SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange )
+{
+    std::vector<SCROW> aBounds;
+
+    // Cut at row boundaries first.
+    aBounds.push_back(rBoundRange.aStart.Row());
+    aBounds.push_back(rBoundRange.aEnd.Row()+1);
+    sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
+
+    RelativeRefBoundChecker aFunc(rBoundRange);
+    sc::ProcessFormula(
+        maCells.begin(), maCells, rBoundRange.aStart.Row(), rBoundRange.aEnd.Row(), aFunc);
+    aFunc.swapBounds(aBounds);
+    sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
+}
+
+namespace {
+
+class ListenerCollector
+{
+    std::vector<SvtListener*>& mrListeners;
+public:
+    ListenerCollector( std::vector<SvtListener*>& rListener ) :
+        mrListeners(rListener) {}
+
+    void operator() ( size_t /*nRow*/, SvtBroadcaster* p )
+    {
+        SvtBroadcaster::ListenersType& rLis = p->GetAllListeners();
+        std::copy(rLis.begin(), rLis.end(), std::back_inserter(mrListeners));
+    }
+};
+
+}
+
+void ScColumn::CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 )
+{
+    ListenerCollector aFunc(rListeners);
+    sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aFunc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

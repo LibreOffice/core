@@ -836,66 +836,6 @@ const sc::CellTextAttr* ScColumn::GetCellTextAttr( sc::ColumnBlockConstPosition&
     return &sc::celltextattr_block::at(*aPos.first->data, aPos.second);
 }
 
-namespace {
-
-/**
- * Adjust references in formula cell with respect to column-wise relocation.
- */
-void updateRefInFormulaCell( ScDocument* pDoc, ScFormulaCell& rCell, SCCOL nCol, SCTAB nTab, SCCOL nColDiff )
-{
-    rCell.aPos.SetCol(nCol);
-    sc::RefUpdateContext aCxt(*pDoc);
-    aCxt.meMode = URM_MOVE;
-    aCxt.maRange = ScRange(ScAddress(nCol, 0, nTab), ScAddress(nCol, MAXROW, nTab));
-    aCxt.mnColDelta = nColDiff;
-    rCell.UpdateReference(aCxt);
-}
-
-}
-
-void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
-{
-    sc::CellStoreType::position_type aPos1 = maCells.position(nRow);
-    sc::CellStoreType::position_type aPos2 = rCol.maCells.position(nRow);
-
-    if (aPos1.first->type == sc::element_type_formula)
-    {
-        ScFormulaCell& rCell = *sc::formula_block::at(*aPos1.first->data, aPos1.second);
-        updateRefInFormulaCell(pDocument, rCell, rCol.nCol, nTab, rCol.nCol - nCol);
-        sc::SharedFormulaUtil::unshareFormulaCell(aPos1, rCell);
-    }
-
-    if (aPos2.first->type == sc::element_type_formula)
-    {
-        ScFormulaCell& rCell = *sc::formula_block::at(*aPos2.first->data, aPos2.second);
-        updateRefInFormulaCell(pDocument, rCell, nCol, nTab, nCol - rCol.nCol);
-        sc::SharedFormulaUtil::unshareFormulaCell(aPos2, rCell);
-    }
-
-    maCells.swap(nRow, nRow, rCol.maCells, nRow);
-    maCellTextAttrs.swap(nRow, nRow, rCol.maCellTextAttrs, nRow);
-    maCellNotes.swap(nRow, nRow, rCol.maCellNotes, nRow);
-
-    aPos1 = maCells.position(nRow);
-    aPos2 = rCol.maCells.position(nRow);
-
-    if (aPos1.first->type == sc::element_type_formula)
-    {
-        ScFormulaCell& rCell = *sc::formula_block::at(*aPos1.first->data, aPos1.second);
-        JoinNewFormulaCell(aPos1, rCell);
-    }
-
-    if (aPos2.first->type == sc::element_type_formula)
-    {
-        ScFormulaCell& rCell = *sc::formula_block::at(*aPos2.first->data, aPos2.second);
-        rCol.JoinNewFormulaCell(aPos2, rCell);
-    }
-
-    CellStorageModified();
-    rCol.CellStorageModified();
-}
-
-
 bool ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 {
     if (IsEmpty())

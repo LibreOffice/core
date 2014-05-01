@@ -157,6 +157,18 @@ public:
         const ScAddress& rPos, const ScRange& rMovedRange, const ScAddress& rDelta );
 
     /**
+     * Move reference positions in response to column reordering.  A range
+     * reference gets moved only when the whole range fits in a single column.
+     *
+     * @param rPos position of this formula cell
+     * @param nTab sheet where columns are reordered.
+     * @param nRow1 top row of reordered range.
+     * @param nRow2 bottom row of reordered range.
+     * @param rColMap old-to-new column mapping.
+     */
+    void MoveReference( const ScAddress& rPos, SCTAB nTab, SCROW nRow1, SCROW nRow2, const sc::ColReorderMapType& rColMap );
+
+    /**
      * Adjust all references in named expression. In named expression, we only
      * update absolute positions, and leave relative positions intact.
      *
@@ -184,6 +196,11 @@ public:
     sc::RefUpdateResult AdjustReferenceOnMovedTab( sc::RefUpdateMoveTabContext& rCxt, const ScAddress& rOldPos );
 
     /**
+     * Adjust all internal references on base position change.
+     */
+    void AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const ScAddress& rNewPos );
+
+    /**
      * Clear sheet deleted flag from internal reference tokens if the sheet
      * index falls within specified range.  Note that when a reference is on a
      * sheet that's been deleted, its referenced sheet index retains the
@@ -197,6 +214,9 @@ public:
 
     void CheckRelativeReferenceBounds(
         const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const;
+
+    void CheckRelativeReferenceBounds(
+        const ScAddress& rPos, SCROW nGroupLen, const ScRange& rRange, std::vector<SCROW>& rBounds ) const;
 
     /**
      * Create a string representation of formula token array without modifying

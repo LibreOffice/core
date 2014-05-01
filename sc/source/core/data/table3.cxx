@@ -60,6 +60,7 @@
 #include <fstalgorithm.hxx>
 #include <listenercontext.hxx>
 #include <sharedformula.hxx>
+#include <refhint.hxx>
 
 #include "svl/sharedstringpool.hxx"
 
@@ -257,6 +258,7 @@ private:
     SCCOLROW        mnLastIndex; /// index of last non-empty cell position.
     sal_uInt16      nUsedSorts;
 
+    std::vector<SCCOLROW> maOldIndices;
     bool mbKeepQuery;
 
 public:
@@ -274,6 +276,9 @@ public:
                 ppInfo[j] = new ScSortInfo;
             pppInfo[nSort] = ppInfo;
         }
+
+        for (size_t i = 0; i < nCount; ++i)
+            maOldIndices.push_back(i+nStart);
     }
 
     ~ScSortInfoArray()
@@ -310,6 +315,8 @@ public:
             ppInfo[n2] = pTmp;
         }
 
+        std::swap(maOldIndices[n1], maOldIndices[n2]);
+
         if (mpRows)
         {
             // Swap rows in data table.
@@ -323,6 +330,8 @@ public:
     SCCOLROW    GetStart() const { return nStart; }
     SCCOLROW GetLast() const { return mnLastIndex; }
     SCSIZE      GetCount() const { return nCount; }
+
+    const std::vector<SCCOLROW>& GetOldIndices() const { return maOldIndices; }
 
     RowsType& InitDataRows( size_t nRowSize, size_t nColSize )
     {
@@ -520,6 +529,22 @@ void ScTable::DestroySortCollator()
     }
 }
 
+namespace {
+
+class ColReorderNotifier : std::unary_function<SvtListener*, void>
+{
+    sc::RefColReorderHint maHint;
+public:
+    ColReorderNotifier( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
+        maHint(rColMap, nTab, nRow1, nRow2) {}
+
+    void operator() ( SvtListener* p )
+    {
+        p->Notify(maHint);
+    }
+};
+
+}
 
 void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 {
@@ -531,12 +556,19 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
 
     size_t nCount = pArray->GetCount();
     SCCOLROW nStart = pArray->GetStart();
+    SCCOLROW nLast = pArray->GetLast();
     ScSortInfo** ppInfo = pArray->GetFirstArray();
 
     std::vector<ScSortInfo*> aTable(nCount);
+
     SCSIZE nPos;
     for ( nPos = 0; nPos < nCount; nPos++ )
         aTable[ppInfo[nPos]->nOrg - nStart] = ppInfo[nPos];
+
+    // Cut formula grouping at row and reference boundaries before the reordering.
+    ScRange aSortRange(nStart, aSortParam.nRow1, nTab, nLast, aSortParam.nRow2, nTab);
+    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+        aCol[nCol].SplitFormulaGroupByRelativeRef(aSortRange);
 
     SCCOLROW nDest = nStart;
     for ( nPos = 0; nPos < nCount; nPos++, nDest++ )
@@ -544,7 +576,8 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         SCCOLROW nOrg = ppInfo[nPos]->nOrg;
         if ( nDest != nOrg )
         {
-            SwapCol( static_cast<SCCOL>(nDest), static_cast<SCCOL>(nOrg) );
+            aCol[nDest].Swap(aCol[nOrg], aSortParam.nRow1, aSortParam.nRow2, aSortParam.bIncludePattern);
+
             // neue Position des weggeswapten eintragen
             ScSortInfo* p = ppInfo[nPos];
             p->nOrg = nDest;
@@ -555,6 +588,44 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress )
         }
         if(pProgress)
             pProgress->SetStateOnPercent( nPos );
+    }
+
+    // Reset formula cell positions which became out-of-sync after column reordering.
+    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+        aCol[nCol].ResetFormulaCellPositions(aSortParam.nRow1, aSortParam.nRow2);
+
+    // Set up column reorder map (for later broadcasting of reference updates).
+    sc::ColReorderMapType aColMap;
+    const std::vector<SCCOLROW>& rOldIndices = pArray->GetOldIndices();
+    for (size_t i = 0, n = rOldIndices.size(); i < n; ++i)
+    {
+        SCCOL nNew = i + nStart;
+        SCROW nOld = rOldIndices[i];
+        aColMap.insert(sc::ColReorderMapType::value_type(nOld, nNew));
+    }
+
+    // Collect all listeners within sorted range ahead of time.
+    std::vector<SvtListener*> aListeners;
+    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+        aCol[nCol].CollectListeners(aListeners, aSortParam.nRow1, aSortParam.nRow2);
+
+    // Remove any duplicate listener entries and notify all listeners
+    // afterward.  We must ensure that we notify each unique listener only
+    // once.
+    std::sort(aListeners.begin(), aListeners.end());
+    aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
+    ColReorderNotifier aFunc(aColMap, nTab, aSortParam.nRow1, aSortParam.nRow2);
+    std::for_each(aListeners.begin(), aListeners.end(), aFunc);
+
+    // Re-join formulas at row boundaries now that all the references have
+    // been adjusted for column reordering.
+    for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+    {
+        sc::CellStoreType& rCells = aCol[nCol].maCells;
+        sc::CellStoreType::position_type aPos = rCells.position(aSortParam.nRow1);
+        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+        aPos = rCells.position(aPos.first, aSortParam.nRow2+1);
+        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
     }
 }
 
@@ -909,28 +980,6 @@ void ScTable::QuickSort( ScSortInfoArray* pArray, SCsCOLROW nLo, SCsCOLROW nHi )
                 QuickSort(pArray, ni, nHi);
             if (nLo < nj)
                 QuickSort(pArray, nLo, nj);
-        }
-    }
-}
-
-void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
-{
-    SCROW nRowStart = aSortParam.nRow1;
-    SCROW nRowEnd = aSortParam.nRow2;
-    for (SCROW nRow = nRowStart; nRow <= nRowEnd; nRow++)
-    {
-        aCol[nCol1].SwapCell(nRow, aCol[nCol2]);
-        if (aSortParam.bIncludePattern)
-        {
-            const ScPatternAttr* pPat1 = GetPattern(nCol1, nRow);
-            const ScPatternAttr* pPat2 = GetPattern(nCol2, nRow);
-            if (pPat1 != pPat2)
-            {
-                pDocument->GetPool()->Put(*pPat1);
-                SetPattern(nCol1, nRow, *pPat2, true);
-                SetPattern(nCol2, nRow, *pPat1, true);
-                pDocument->GetPool()->Remove(*pPat1);
-            }
         }
     }
 }
