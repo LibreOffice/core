@@ -291,7 +291,14 @@ struct GlyphItem
     Point   maLinearPos;    // absolute position of non rotated string
 
 public:
-            GlyphItem() {}
+            GlyphItem()
+                : mnFlags(0)
+                , mnCharPos(0)
+                , mnOrigWidth(0)
+                , mnNewWidth(0)
+                , mnXOffset(0)
+                , maGlyphId(0)
+            {}
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth )
