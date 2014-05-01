@@ -1971,6 +1971,7 @@ void XclExpXF::InitDefault()
     mpItemSet = 0;
     mnScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
     mnXclFont = mnXclNumFmt = 0;
+    SetXmlIds(0, 0);
 }
 
 void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
