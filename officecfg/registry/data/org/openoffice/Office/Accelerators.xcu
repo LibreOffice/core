@@ -967,6 +967,12 @@
             <value xml:lang="en-US">.uno:ToggleFormula</value>
           </prop>
         </node>
+        <node oor:name="QUOTERIGHT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:FillSingleEdit</value>
+          </prop>
+        </node>
         <node oor:name="Y_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>

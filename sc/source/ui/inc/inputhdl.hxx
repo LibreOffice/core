@@ -164,7 +164,7 @@ public:
                     ScInputHandler();
     virtual         ~ScInputHandler();
 
-    void            SetMode( ScInputMode eNewMode );
+    void SetMode( ScInputMode eNewMode, const OUString* pInitText = NULL );
     bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
     bool            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
                                                   eMode != SC_INPUT_TYPE); }

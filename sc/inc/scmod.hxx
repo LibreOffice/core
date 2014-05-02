@@ -200,7 +200,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     // InputHandler:
     sal_Bool                IsEditMode();   // not for SC_INPUT_TYPE
     sal_Bool                IsInputMode();  // also for SC_INPUT_TYPE
-    void                SetInputMode( ScInputMode eMode );
+    void SetInputMode( ScInputMode eMode, const OUString* pInitText = NULL );
     sal_Bool                InputKeyEvent( const KeyEvent& rKEvt, sal_Bool bStartEdit = false );
     SC_DLLPUBLIC void                InputEnterHandler( sal_uInt8 nBlockMode = 0 );
     void                InputCancelHandler();
