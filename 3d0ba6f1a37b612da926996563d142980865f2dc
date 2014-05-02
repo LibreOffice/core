@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_5926f369",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000599
+      },
+      "writtenOn": "2014-05-02T09:33:38Z",
+      "side": 1,
+      "message": "Tried to maintain the consistency for if (.. as maintained majorly in the file",
+      "range": {
+        "startLine": 425,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 8
+      },
+      "revId": "3d0ba6f1a37b612da926996563d142980865f2dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
