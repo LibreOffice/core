@@ -139,42 +139,44 @@ SfxBroadcaster& SfxItemPool::BC()
 
 SfxItemPool::SfxItemPool
 (
-    const OUString& rName,          /* Name des Pools zur Idetifikation
-                                           im File-Format */
-    sal_uInt16          nStartWhich,    /* erste Which-Id des Pools */
-    sal_uInt16          nEndWhich,      /* letzte Which-Id des Pools */
-    const SfxItemInfo*  pInfos,         /* SID-Map und Item-Flags */
-    SfxPoolItem**       pDefaults,      /* Pointer auf statische Defaults,
-                                           wird direkt vom Pool referenziert,
-                                           jedoch kein Eigent"umer"ubergang */
-    bool                bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
+    const OUString& rName,              /* Name of the pool for identification
+                                           in the file format */
+    sal_uInt16          nStartWhich,    /* first Which-Id of the Pool */
+    sal_uInt16          nEndWhich,      /* last Which-Id of the Pool*/
+    const SfxItemInfo*  pInfos,         /* SID-Map and Item-Flags */
+    SfxPoolItem**       pDefaults,      /* Pointer to static defaults.
+                                           Are referenced directly from the
+                                           Pool, but without transfer of
+                                           ownership */
+    bool                bLoadRefCounts  /* load Ref-Counts or set to 1 */
 ) :
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Der im Normalfall verwendete Konstruktor der Klasse SfxItemPool. Es
-    wird eine SfxItemPool-Instanz initialisiert, die Items im b"undigen
-    Which-Bereich von 'nStartWhich' bis 'nEndWhich' verwalten kann.
+    The constructor used normally for class SfxItemPool. An SfxItemPool
+    instance is initialized which can manage Items in the Which
+    range from 'nStartWhich' to 'nEndWhich'.
 
-    F"ur jede dieser Which-Ids mu\s ein statischer Default im Array 'pDefaults'
-    vorhanden sein, die dort beginnend mit einem <SfxPoolItem> mit der
-    Which-Id 'nStartWhich' nach Which-Ids sortiert aufeinanderfolgend
-    eingetragen sein m"ussen.
+    For each of these Which-Ids a static default must be
+    present in the 'pDefaults' array. This array must contain
+    consecutive <SfxPoolItem>-s, sorted by Which-Id, the first
+    of which has Which-Id 'nStartWhich'.
 
-    'pItemInfos' ist ein identisch angeordnetes Array von USHORTs, die
-    Slot-Ids darstellen und Flags. Die Slot-Ids k"onnen 0 sein, wenn die
-    betreffenden Items ausschlie\slich in der Core verwendet werden.
-    "Uber die Flags kann z.B. bestimmt werden, ob Value-Sharing
-    (SFX_ITEM_POOLABLE) stattfinden soll.
-
-    [Anmerkung]
-
-    Wenn der Pool <SfxSetItem>s enthalten soll, k"onnen im Konstruktor noch
-    keine static-Defaults angegeben werden. Dies mu\s dann nachtr"aglich
-    mit <SfxItemPool::SetDefaults(SfxItemPool**)> geschehen.
+    'pItemInfos' is an identially arranged array of USHORTs, which
+    represent Slot-Ids and flags. The Slot-Ids can be 0 if the
+    corresponding Items are only used in the Core.
+    The flags indicate for instance whether Value-Sharing
+    (SFX_ITEM_POOLABLE) should happen.
 
 
-    [Querverweise]
+    [Note]
+
+    If the Pool should contain <SfxSetItem>-s then the static defaults
+    cannot be given yet in the constructor. In that case they should be
+    set later with <SfxItemPool::SetDefaults(SfxItemPool**)>.
+
+
+    [References]
 
     <SfxItemPool::SetDefaults(SfxItemPool**)>
     <SfxItemPool::ReleaseDefaults(SfxPoolItem**,sal_uInt16,sal_Bool)>
@@ -205,21 +207,21 @@ SfxItemPool::SfxItemPool
 
 SfxItemPool::SfxItemPool
 (
-    const SfxItemPool&  rPool,                  //  von dieser Instanz kopieren
+    const SfxItemPool&  rPool,                  //  instance to copy from
     bool                bCloneStaticDefaults    /*  sal_True
-                                                    statische Defaults kopieren
+                                                    clone static defaults
 
                                                     sal_False
-                                                    statische Defaults
-                                                    "ubernehehmen */
+                                                    reference static defaults
+                                                */
 ) :
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Copy-Konstruktor der Klasse SfxItemPool.
+    copy constructor of class SfxItemPool.
 
 
-    [Querverweise]
+    [References]
 
     <SfxItemPool::Clone()const>
 */
@@ -239,7 +241,7 @@ SfxItemPool::SfxItemPool
     pImp->nStoringEnd = pImp->mnEnd;
     pImp->mbPersistentRefCounts = rPool.pImp->mbPersistentRefCounts;
 
-    // Static Defaults "ubernehmen
+    // copy or clonse Static Defaults
     if ( bCloneStaticDefaults )
     {
         SfxPoolItem **ppDefaults = new SfxPoolItem*[pImp->mnEnd-pImp->mnStart+1];
@@ -254,7 +256,7 @@ SfxItemPool::SfxItemPool
     else
         SetDefaults( rPool.pImp->ppStaticDefaults );
 
-    // Pool Defaults kopieren
+    // copy Pool Defaults
     for ( sal_uInt16 n = 0; n <= pImp->mnEnd - pImp->mnStart; ++n )
         if ( (*( rPool.pImp->ppPoolDefaults + n )) )
         {
@@ -270,7 +272,7 @@ SfxItemPool::SfxItemPool
         pImp->aVersions.push_back( pNew );
     }
 
-    // Verkettung wiederherstellen
+    // restore link to secondary pool
     if ( rPool.pImp->mpSecondary )
         SetSecondaryPool( rPool.pImp->mpSecondary->Clone() );
 }
@@ -279,16 +281,16 @@ SfxItemPool::SfxItemPool
 
 void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
 {
-    DBG_ASSERT( pDefaults, "erst wollen, dann nichts geben..." );
-    DBG_ASSERT( !pImp->ppStaticDefaults, "habe schon defaults" );
+    DBG_ASSERT( pDefaults, "promise but not provide..." );
+    DBG_ASSERT( !pImp->ppStaticDefaults, "defaults exist already" );
 
     pImp->ppStaticDefaults = pDefaults;
     //! if ( (*ppStaticDefaults)->GetKind() != SFX_ITEMS_STATICDEFAULT )
-    //! geht wohl nicht im Zshg mit SetItems, die hinten stehen
+    //! doesn't work with SetItems that come later
     {
         DBG_ASSERT( (*pImp->ppStaticDefaults)->GetRefCount() == 0 ||
                     IsDefaultItem( (*pImp->ppStaticDefaults) ),
-                    "das sind keine statics" );
+                    "those are note statics" );
         for ( sal_uInt16 n = 0; n <= pImp->mnEnd - pImp->mnStart; ++n )
         {
             SFX_ASSERT( (*( pImp->ppStaticDefaults + n ))->Which() == n + pImp->mnStart,
@@ -304,29 +306,29 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
 void SfxItemPool::ReleaseDefaults
 (
     bool    bDelete     /*  sal_True
-                            l"oscht sowohl das Array als auch die einzelnen
-                            statischen Defaults
+                            deletes both the array and the individual
+                            Static Defaults
 
                             sal_False
-                            l"oscht weder das Array noch die einzelnen
-                            statischen Defaults */
+                            deletes neither the array nor the individual
+                            Static Defaults */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Gibt die statischen Defaults der betreffenden SfxItemPool-Instanz frei
-    und l"oscht ggf. die statischen Defaults.
+    Releases the Static Defaults of the given SfxItemPool instance
+    and deletes the static defaults if requested.
 
-    Nach Aufruf dieser Methode darf die SfxItemPool-Instanz nicht mehr
-    verwendet werden, einzig ist der Aufruf des Destruktors zu"lassig.
+    After calling the method use of the SfxItemPool instance is not
+    allowed any more, only calling the destructor is still possible.
 */
 
 {
-    DBG_ASSERT( pImp->ppStaticDefaults, "keine Arme keine Kekse" );
+    DBG_ASSERT( pImp->ppStaticDefaults, "no Static Defaults left");
     ReleaseDefaults( pImp->ppStaticDefaults, pImp->mnEnd - pImp->mnStart + 1, bDelete );
 
-    // KSO (22.10.98): ppStaticDefaults zeigt auf geloeschten Speicher,
-    // wenn bDelete == sal_True.
+    // KSO (22.10.98): ppStaticDefaults points to deleted memory
+    // if bDelete == sal_True.
     if ( bDelete )
         pImp->ppStaticDefaults = 0;
 }
@@ -335,36 +337,34 @@ void SfxItemPool::ReleaseDefaults
 
 void SfxItemPool::ReleaseDefaults
 (
-    SfxPoolItem**   pDefaults,  /*  freizugebende statische Defaults */
+    SfxPoolItem**   pDefaults,  /*  Static Defaults to release */
 
-    sal_uInt16          nCount,     /*  Anzahl der statischen Defaults */
+    sal_uInt16      nCount,     /*  number of Static Defaults */
 
     bool            bDelete     /*  sal_True
-                                    l"oscht sowohl das Array als auch die
-                                    einzelnen statischen Defaults
+                                    deletes both the array and the
+                                    individual Static Defaults
 
                                     sal_False
-                                    l"oscht weder das Array noch die
-                                    einzelnen statischen Defaults */
+                                    deletes neither the array nor the
+                                    individual Static Defaults
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Gibt die angegebenen statischen Defaults frei und l"oscht ggf.
-    die statischen Defaults.
+    Releases the given static defaults and deletes them if requested.
 
-    Diese Methode darf erst nach Zerst"orung aller SfxItemPool-Instanzen,
-    welche die angegebenen statischen Defaults 'pDefault' verwenden,
-    aufgerufen werden.
+    This method can only be called after all SfxItemPool instances
+    that use it as the 'pDefault' static defaults have been deleted.
 */
 
 {
-    DBG_ASSERT( pDefaults, "erst wollen, dann nichts geben..." );
+    DBG_ASSERT( pDefaults, "release what?");
 
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
         SFX_ASSERT( IsStaticDefaultItem( *(pDefaults+n) ),
-                    n, "das ist kein static-default" );
+                    n, "that is not a static default" );
         (*( pDefaults + n ))->SetRefCount( 0 );
         if ( bDelete )
             { delete *( pDefaults + n ); *(pDefaults + n) = 0; }
@@ -422,22 +422,22 @@ void SfxItemPool::Free(SfxItemPool* pPool)
 
 void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 {
-    // ggf. an abgeh"angten Pools den Master zur"ucksetzen
+    // restore unlinked Pool to master if necessary
     if ( pImp->mpSecondary )
     {
 #ifdef DBG_UTIL
-        SAL_INFO( "svl.items", "fuer Image, dort gibt es derzeit keine Statics - Bug" );
+        SAL_INFO( "svl.items", "for Image: nu Statics currently - Bug" );
         if ( pImp->ppStaticDefaults )
         {
-            // Delete() ist noch nicht gelaufen?
+            // delete() has not been called yet?
             if ( !pImp->maPoolItems.empty() && !pImp->mpSecondary->pImp->maPoolItems.empty() )
             {
-                // hat der master SetItems?
+                // does the master have SetItems?
                 bool bHasSetItems = false;
                 for ( sal_uInt16 i = 0; !bHasSetItems && i < pImp->mnEnd - pImp->mnStart; ++i )
                     bHasSetItems = pImp->ppStaticDefaults[i]->ISA(SfxSetItem);
 
-                // abgehaengte Pools muessen leer sein
+                // unlinked Pool must be empty
                 bool bOK = bHasSetItems;
                 for ( sal_uInt16 n = 0;
                       bOK && n <= pImp->mpSecondary->pImp->mnEnd - pImp->mpSecondary->pImp->mnStart;
@@ -465,13 +465,13 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
             p->pImp->mpMaster = pImp->mpSecondary;
     }
 
-    // ggf. den Master der neuen Secondary-Pools setzen
-    DBG_ASSERT( !pPool || pPool->pImp->mpMaster == pPool, "Secondary tanzt auf zwei Hochzeiten " );
+    // set Master on Secondary-Pools if present
+    DBG_ASSERT( !pPool || pPool->pImp->mpMaster == pPool, "Secondary serves 2 masters " );
     SfxItemPool *pNewMaster = pImp->mpMaster ? pImp->mpMaster : this;
     for ( SfxItemPool *p = pPool; p; p = p->pImp->mpSecondary )
         p->pImp->mpMaster = pNewMaster;
 
-    // neuen Secondary-Pool merken
+    // mark new Secondary-Pool
     pImp->mpSecondary = pPool;
 
     CHECK_SLOTS();
@@ -530,32 +530,32 @@ SfxItemPool* SfxItemPool::Clone() const
 
 void SfxItemPool::Delete()
 {
-    // schon deleted?
+    // deleted already?
     if ( pImp->maPoolItems.empty() || !pImp->ppPoolDefaults )
         return;
 
-    // z.B. laufenden Requests bescheidsagen
+    // notify current Requests, for instance
     pImp->aBC.Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
 
-    //MA 16. Apr. 97: Zweimal durchlaufen, in der ersten Runde fuer die SetItems.
-    //Der Klarheit halber wird das jetzt in zwei besser lesbare Schleifen aufgeteilt.
+    //MA 16. Apr. 97: Do tw twice, in the first round for the SetItems.
+    //Split up into two more readable loops for clarity.
 
     std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImp->maPoolItems.begin();
     SfxPoolItem** ppDefaultItem = pImp->ppPoolDefaults;
     SfxPoolItem** ppStaticDefaultItem = pImp->ppStaticDefaults;
     sal_uInt16 nArrCnt;
 
-    //Erst die SetItems abraeumen
-    SAL_INFO( "svl.items", "fuer Image, dort gibt es derzeit keine Statics - Bug" );
+    //First clean up the SetItems
+    SAL_INFO( "svl.items", "for Image: nu Statics currently - Bug" );
     if ( pImp->ppStaticDefaults )
     {
         for ( nArrCnt = GetSize_Impl();
                 nArrCnt;
                 --nArrCnt, ++itrItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
         {
-            // KSO (22.10.98): *ppStaticDefaultItem kann im dtor einer
-            // von SfxItemPool abgeleiteten Klasse bereits geloescht worden
-            // sein! -> CHAOS Itempool
+            // KSO (22.10.98): *ppStaticDefaultItem can already have been
+            // deleted in the dtor of classes derived from SfxItemPool!
+            // -> CHAOS Itempool
             if ( *ppStaticDefaultItem && (*ppStaticDefaultItem)->ISA(SfxSetItem) )
             {
                 if ( *itrItemArr )
@@ -585,7 +585,7 @@ void SfxItemPool::Delete()
     itrItemArr = pImp->maPoolItems.begin();
     ppDefaultItem = pImp->ppPoolDefaults;
 
-    //Jetzt die 'einfachen' Items
+    // Now the 'simple' Items
     for ( nArrCnt = GetSize_Impl();
             nArrCnt;
             --nArrCnt, ++itrItemArr, ++ppDefaultItem )
@@ -675,7 +675,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     if ( 0 == nWhich )
         nWhich = rItem.Which();
 
-    // richtigen Secondary-Pool finden
+    // find the right Secondary-Pool
     bool bSID = nWhich > SFX_WHICH_MAX;
     if ( !bSID && !IsInRange(nWhich) )
     {
@@ -684,14 +684,14 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         OSL_FAIL( "unknown Which-Id - cannot put item" );
     }
 
-    // SID oder nicht poolable (neue Definition)?
+    // SID or not poolable (new definition)?
     sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
     if ( USHRT_MAX == nIndex ||
          IsItemFlag_Impl( nIndex, SFX_ITEM_NOT_POOLABLE ) )
     {
         SFX_ASSERT( USHRT_MAX != nIndex || rItem.Which() != nWhich ||
                     !IsDefaultItem(&rItem) || rItem.GetKind() == SFX_ITEMS_DELETEONIDLE,
-                    nWhich, "ein nicht Pool-Item ist Default?!" );
+                    nWhich, "a non-Pool-Item is Default?!" );
         SfxPoolItem *pPoolItem = rItem.Clone(pImp->mpMaster);
         pPoolItem->SetWhich(nWhich);
         AddRef( *pPoolItem );
@@ -712,10 +712,10 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     bool ppFreeIsSet = false;
     if ( IsItemFlag_Impl( nIndex, SFX_ITEM_POOLABLE ) )
     {
-        // wenn es ueberhaupt gepoolt ist, koennte es schon drin sein
+        // if it is in a Pool already wenn it could be in the currentone
         if ( IsPooledItem(&rItem) )
         {
-            // 1. Schleife: teste ob der Pointer vorhanden ist.
+            // 1st loop: test whether the pointer is present.
             SfxPoolItemArrayBase_Impl::iterator itr =
                 std::find(pItemArr->begin(), pItemArr->end(), &rItem);
             if (itr != pItemArr->end())
@@ -725,7 +725,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
             }
         }
 
-        // 2. Schleife: dann muessen eben die Attribute verglichen werden
+        // 2nd loop: then also compare the attributes
         SfxPoolItemArrayBase_Impl::iterator itr = pItemArr->begin();
         for (; itr != pItemArr->end(); ++itr)
         {
@@ -749,7 +749,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
     else
     {
-        // freien Platz suchen
+        // look for a free slot
         SfxPoolItemArrayBase_Impl::iterator itr = pItemArr->begin();
         std::advance(itr, pItemArr->nFirstFree);
         for (; itr != pItemArr->end(); ++itr)
@@ -761,11 +761,11 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
                 break;
             }
         }
-        // naechstmoeglichen freien Platz merken
+        // mark the next free slot
         pItemArr->nFirstFree = std::distance(pItemArr->begin(), itr);
     }
 
-    // nicht vorhanden, also im PtrArray eintragen
+    // not present, so add to the PtrArray
     SfxPoolItem* pNewItem = rItem.Clone(pImp->mpMaster);
     pNewItem->SetWhich(nWhich);
 #ifdef DBG_UTIL
@@ -801,9 +801,9 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
                 "SetItem without ItemSet" );
 
     SFX_ASSERT( !IsPoolDefaultItem(&rItem), rItem.Which(),
-                "wo kommt denn hier ein Pool-Default her" );
+                "That's not a PoolDefaultItem" );
 
-    // richtigen Secondary-Pool finden
+    // find the right Secondary-Pool
     const sal_uInt16 nWhich = rItem.Which();
     bool bSID = nWhich > SFX_WHICH_MAX;
     if ( !bSID && !IsInRange(nWhich) )
@@ -816,13 +816,13 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
         OSL_FAIL( "unknown Which-Id - cannot remove item" );
     }
 
-    // SID oder nicht poolable (neue Definition)?
+    // SID or not poolable (new definition)?
     sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
     if ( bSID || IsItemFlag_Impl( nIndex, SFX_ITEM_NOT_POOLABLE ) )
     {
         SFX_ASSERT( USHRT_MAX != nIndex ||
                     !IsDefaultItem(&rItem), rItem.Which(),
-                    "ein nicht Pool-Item ist Default?!" );
+                    "a non-Pool-Item is Default?!" );
         if ( 0 == ReleaseRef(rItem) )
         {
             SfxPoolItem *pItem = &(SfxPoolItem &)rItem;
@@ -831,14 +831,14 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
         return;
     }
 
-    SFX_ASSERT( rItem.GetRefCount(), rItem.Which(), "RefCount == 0, Remove unmoeglich" );
+    SFX_ASSERT( rItem.GetRefCount(), rItem.Which(), "RefCount == 0, impossible to remove" );
 
-    // statische Defaults sind eben einfach da
+    // statische Default just exist
     if ( rItem.GetKind() == SFX_ITEMS_STATICDEFAULT &&
          &rItem == *( pImp->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
         return;
 
-    // Item im eigenen Pool suchen
+    // look for Item in the own Pool
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
     SFX_ASSERT( pItemArr, rItem.Which(), "removing Item not in Pool" );
     SfxPoolItemArrayBase_Impl::iterator ppHtArrBeg = pItemArr->begin(), ppHtArrEnd = pItemArr->end();
@@ -854,20 +854,20 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
                 SFX_ASSERT( false, rItem.Which(), "removing Item without ref" );
             }
 
-            // ggf. kleinstmoegliche freie Position merken
+            // mark first free Position if applicable
             size_t nPos = std::distance(ppHtArrBeg, ppHtArr);
             if ( pItemArr->nFirstFree > nPos )
                 pItemArr->nFirstFree = nPos;
 
-            //! MI: Hack, solange wir das Problem mit dem Outliner haben
-            //! siehe anderes MI-REF
+            //! MI: Hack, as long as there are problems with the Outliner.
+            //! otherwise see MI-REF
             if ( 0 == p->GetRefCount() && nWhich < 4000 )
                 DELETEZ(p);
             return;
         }
     }
 
-    // nicht vorhanden
+    // not present
     SFX_ASSERT( false, rItem.Which(), "removing Item not in Pool" );
 }
 
@@ -904,7 +904,7 @@ SfxItemPool* SfxItemPool::GetMasterPool() const
 
 void SfxItemPool::FreezeIdRanges()
 
-/*  [Beschreibung]
+/*  [Description]
 
     This method should be called at the master pool, when all secondary
     pools are appended to it.

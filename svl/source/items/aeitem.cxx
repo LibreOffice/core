@@ -157,18 +157,18 @@ SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
 
 sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Im Ggs. zu <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const> liefert
-    diese interne Methode bei nicht vorhandenen Values die Position,
-    an der der Wert liegen w"urde.
+    In constrast to <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const>,
+    for missing values this internal method returns the position
+    where the value would have been.
 */
 
 {
     if ( !pValues )
         return 0;
 
-    //!O: binaere Suche oder SortArray verwenden
+    //! linear search, binary search of SortAarray would be better
     sal_uInt16 nPos;
     for ( nPos = 0; nPos < pValues->size(); ++nPos )
         if ( (*pValues)[nPos]->nValue >= nVal )
@@ -180,11 +180,11 @@ sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
 
 sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert im Gegensatz zu <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const>
-    immer nValue zur"uck, solange nicht mindestens ein Wert mit einer der
-    Methoden <SfxAllEnumItem::InsertValue()> eingef"ugt wurde.
+    In constrast to <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const>,
+    until at least one value has been inserted with the
+    method <SfxAllEnumItem::InsertValue()> this will return nValue.
 */
 
 {

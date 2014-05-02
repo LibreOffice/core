@@ -140,7 +140,7 @@ struct SfxItemPool_Impl
 
 
 
-// IBM-C-Set mag keine doppelten Defines
+// IBM-C-Set does not like duplicated defines
 #ifdef DBG
 #  undef DBG
 #endif
