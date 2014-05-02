@@ -2381,7 +2381,7 @@ void ScInputHandler::InvalidateAttribs()
 //      --------------- public Methoden --------------------------------------------
 
 
-void ScInputHandler::SetMode( ScInputMode eNewMode )
+void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText )
 {
     if ( eMode == eNewMode )
         return;
@@ -2417,6 +2417,12 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
                 if (pActiveViewSh)
                     pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
             }
+        }
+
+        if (pInitText)
+        {
+            pEngine->SetText(*pInitText);
+            bModified = true;
         }
 
         sal_Int32 nPara = pEngine->GetParagraphCount()-1;

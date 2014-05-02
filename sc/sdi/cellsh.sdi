@@ -150,6 +150,7 @@ interface CellSelection
     FID_FILL_TAB        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_FILL_SERIES     [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_FILL_AUTO       [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_FILL_SINGLE_EDIT [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_RANDOM_NUMBER_GENERATOR_DIALOG  [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_SAMPLING_DIALOG                 [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_DESCRIPTIVE_STATISTICS_DIALOG   [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]

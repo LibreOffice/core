@@ -79,6 +79,10 @@
 #include "scui_def.hxx"
 #include <svx/dialogs.hrc>
 #include "scabstdlg.hxx"
+#include <tokenstringcontext.hxx>
+#include <cellvalue.hxx>
+#include <tokenarray.hxx>
+#include <formulacell.hxx>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -900,6 +904,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                 }
             }
+            break;
+        case FID_FILL_SINGLE_EDIT:
+            ExecuteFillSingleEdit();
             break;
         case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
             {
@@ -2769,6 +2776,36 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         GetViewData()->GetDocShell()->CancelAutoDBRange();
 
     delete pDlg;
+}
+
+void ScCellShell::ExecuteFillSingleEdit()
+{
+    ScAddress aCurPos = GetViewData()->GetCurPos();
+
+    OUString aInit;
+
+    if (aCurPos.Row() > 0)
+    {
+        // Get the initial text value from the above cell.
+
+        ScDocument* pDoc = GetViewData()->GetDocument();
+        ScRefCellValue aCell;
+        ScAddress aPrevPos = aCurPos;
+        aPrevPos.IncRow(-1);
+        aCell.assign(*pDoc, aPrevPos);
+
+        if (aCell.meType == CELLTYPE_FORMULA)
+        {
+            aInit = "=";
+            const ScTokenArray* pCode = aCell.mpFormula->GetCode();
+            sc::TokenStringContext aCxt(pDoc, pDoc->GetGrammar());
+            aInit += pCode->CreateString(aCxt, aCurPos);
+        }
+        else
+            aInit = aCell.getString(pDoc);
+    }
+
+    SC_MOD()->SetInputMode(SC_INPUT_TABLE, &aInit);
 }
 
 IMPL_LINK_NOARG(ScCellShell, DialogClosed)

@@ -199,7 +199,9 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                             nCol2, nRow1, nCol2, nRow2, rMark );    // last column
                 }
                 break;
-
+            case FID_FILL_SINGLE_EDIT:
+                bDisable = false;
+                break;
             case SID_CUT:               // cut
             case FID_INS_CELL:          // insert cells, just simple selection
                 bDisable = (!bSimpleArea);

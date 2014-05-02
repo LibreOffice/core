@@ -632,6 +632,14 @@
           <value xml:lang="en-US">~Left</value>
         </prop>
       </node>
+      <node oor:name=".uno:FillSingleEdit" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Fill Single ~Edit</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Single ~Edit</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FillTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Fill ~Sheets...</value>

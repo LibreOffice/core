@@ -286,6 +286,7 @@
 #define FID_FILL_TO_LEFT        (EDIT_MENU_START + 7)
 #define FID_FILL_TAB            (EDIT_MENU_START + 8)
 #define FID_FILL_SERIES         (EDIT_MENU_START + 9)
+#define FID_FILL_SINGLE_EDIT    (EDIT_MENU_START + 10)
 #define SID_SC_EDIT_OBJECT      (EDIT_MENU_START + 14)
 #define SID_HFEDIT              (EDIT_MENU_START + 15)
 

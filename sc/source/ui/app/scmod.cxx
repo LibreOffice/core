@@ -1427,11 +1427,11 @@ void ScModule::ViewShellChanged()
         pShell->UpdateInputHandler();
 }
 
-void ScModule::SetInputMode( ScInputMode eMode )
+void ScModule::SetInputMode( ScInputMode eMode, const OUString* pInitText )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
-        pHdl->SetMode( eMode );
+        pHdl->SetMode(eMode, pInitText);
 }
 
 bool ScModule::IsEditMode()

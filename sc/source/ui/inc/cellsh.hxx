@@ -61,6 +61,8 @@ private:
     void ExecuteXMLSourceDialog();
     void ExecuteSubtotals(SfxRequest& rReq);
 
+    void ExecuteFillSingleEdit();
+
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, void* );
 

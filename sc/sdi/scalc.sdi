@@ -2414,6 +2414,31 @@ SfxVoidItem FillLeft FID_FILL_TO_LEFT
 ]
 
 
+SfxVoidItem FillSingleEdit FID_FILL_SINGLE_EDIT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+
 SfxVoidItem FillModeEnd SID_FILL_NONE
 ()
 [
