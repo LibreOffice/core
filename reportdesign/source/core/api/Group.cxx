@@ -311,7 +311,7 @@ void SAL_CALL OGroup::removeVetoableChangeListener( const OUString& PropertyName
 }
 
 void OGroup::setSection(     const OUString& _sProperty
-                            ,const sal_Bool& _bOn
+                            ,const bool& _bOn
                             ,const OUString& _sName
                             ,uno::Reference< report::XSection>& _member)
 {

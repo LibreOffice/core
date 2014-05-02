@@ -48,7 +48,7 @@ namespace rptui
     protected:
         virtual ~OXUndoEnvironment();
 
-        void SetUndoMode(sal_Bool _bUndo);
+        void SetUndoMode(bool _bUndo);
 
     public:
         OXUndoEnvironment(OReportModel& _rModel);
@@ -77,21 +77,21 @@ namespace rptui
                 :m_rUndoEnv(_rUndoEnv)
             {
                 m_rUndoEnv.Lock();
-                m_rUndoEnv.SetUndoMode(sal_True);
+                m_rUndoEnv.SetUndoMode(true);
             }
             ~OUndoMode()
             {
-                m_rUndoEnv.SetUndoMode(sal_False);
+                m_rUndoEnv.SetUndoMode(false);
                 m_rUndoEnv.UnLock();
             }
         };
 
         void Lock();
         void UnLock();
-        sal_Bool IsLocked() const;
+        bool IsLocked() const;
 
         // returns sal_True is we are in UNDO
-        sal_Bool IsUndoMode() const;
+        bool IsUndoMode() const;
 
         // access control
         struct Accessor { friend class OReportModel; private: Accessor() { } };

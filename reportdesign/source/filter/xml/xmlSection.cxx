@@ -55,7 +55,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const uno::Reference< xml::sax::XAttributeList > & _xAttrList
                 ,const uno::Reference< report::XSection >& _xSection
-                ,sal_Bool _bPageHeader)
+                ,bool _bPageHeader)
 :SvXMLImportContext( rImport, nPrfx, _sLocalName )
 ,m_xSection(_xSection)
 ,m_bPageHeader(_bPageHeader)

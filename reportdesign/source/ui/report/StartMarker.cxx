@@ -52,7 +52,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
 ,m_aText(this,WB_HYPHENATION)
 ,m_aImage(this,WB_LEFT|WB_TOP|WB_SCALE)
 ,m_pParent(_pParent)
-,m_bShowRuler(sal_True)
+,m_bShowRuler(true)
 {
     SetUniqueId(HID_RPT_STARTMARKER);
 
@@ -250,7 +250,7 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
     }
 }
 
-void OStartMarker::showRuler(sal_Bool _bShow)
+void OStartMarker::showRuler(bool _bShow)
 {
     m_bShowRuler = _bShow;
     m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);

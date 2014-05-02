@@ -807,7 +807,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
         {
             sal_Int32 nPos = 1;
             uno::Reference< report::XGroup> xGroup(_rEvent.Source,uno::UNO_QUERY);
-            ::std::mem_fun_t< sal_Bool,OGroupHelper> pIsOn = ::std::mem_fun(&OGroupHelper::getHeaderOn);
+            ::std::mem_fun_t< bool,OGroupHelper> pIsOn = ::std::mem_fun(&OGroupHelper::getHeaderOn);
             ::std::mem_fun_t< uno::Reference<report::XSection> ,OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
             if ( bFooterOn )
             {

@@ -89,8 +89,8 @@ namespace reportdesign
         ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition> >
                                                             m_aFormatConditions;
         osl::Mutex&                                         m_rMutex;
-        OUString                                     aDataField;
-        OUString                                     aConditionalPrintExpression;
+        OUString                                            aDataField;
+        OUString                                            aConditionalPrintExpression;
         sal_Bool                                            bPrintWhenGroupChange;
 
         OReportControlModel(osl::Mutex& _rMutex
@@ -100,7 +100,7 @@ namespace reportdesign
             ,aComponent(_xContext)
             ,m_pOwner(_pOwner)
             ,m_rMutex(_rMutex)
-            ,bPrintWhenGroupChange(sal_True)
+            ,bPrintWhenGroupChange(true)
         {}
 
         // XContainer
@@ -108,7 +108,7 @@ namespace reportdesign
         void removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
-        sal_Bool hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+        bool hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XIndexReplace
         void replaceByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);

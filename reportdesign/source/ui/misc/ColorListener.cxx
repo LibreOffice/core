@@ -30,8 +30,8 @@ OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
 : Window(_pParent)
 ,m_sColorEntry(_sColorEntry)
 ,m_nColor(COL_LIGHTBLUE)
-,m_bCollapsed(sal_False)
-,m_bMarked(sal_False)
+,m_bCollapsed(false)
+,m_bMarked(false)
 {
     StartListening(m_aExtendedColorConfig);
     m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
@@ -69,7 +69,7 @@ void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OColorListener::setCollapsed(sal_Bool _bCollapsed)
 {
-    if ( m_bCollapsed != _bCollapsed )
+    if ( (m_bCollapsed ? 1 : 0) != _bCollapsed )
     {
         m_bCollapsed = _bCollapsed;
         if ( m_aCollapsedLink.IsSet() )
@@ -77,7 +77,7 @@ void OColorListener::setCollapsed(sal_Bool _bCollapsed)
     }
 }
 
-void OColorListener::setMarked(sal_Bool _bMark)
+void OColorListener::setMarked(bool _bMark)
 {
     if ( m_bMarked != _bMark)
     {

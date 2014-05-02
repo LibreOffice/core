@@ -67,8 +67,8 @@ namespace reportdesign
         ::sal_Int16                                                                         m_nForceNewPage;
         ::sal_Int16                                                                         m_nNewRowOrCol;
         sal_Bool                                                                          m_bKeepTogether;
-        sal_Bool                                                                          m_bCanGrow;
-        sal_Bool                                                                          m_bCanShrink;
+        bool                                                                          m_bCanGrow;
+        bool                                                                          m_bCanShrink;
         sal_Bool                                                                          m_bRepeatSection;
         sal_Bool                                                                          m_bVisible;
         sal_Bool                                                                          m_bBacktransparent;

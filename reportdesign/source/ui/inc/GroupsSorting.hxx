@@ -89,7 +89,7 @@ class OGroupsSortingDialog :    public FloatingWindow
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>            m_xGroups;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
-    sal_Bool                                m_bReadOnly;
+    bool                                m_bReadOnly;
 private:
     DECL_LINK( OnControlFocusLost, Control* );
     DECL_LINK( OnControlFocusGot, Control* );
@@ -119,7 +119,7 @@ private:
 
     /** returns <TRUE/> when the dialog should be read only
     */
-    sal_Bool isReadOnly( ) const;
+    bool isReadOnly( ) const;
 
     /** returns the data type for the given column name
         @param _sColumnName
@@ -153,7 +153,7 @@ protected:
     virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 public:
     OGroupsSortingDialog( Window* pParent
-                        ,sal_Bool _bReadOnly
+                        ,bool _bReadOnly
                         ,::rptui::OReportController* _pController);
     virtual ~OGroupsSortingDialog();
 

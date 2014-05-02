@@ -55,7 +55,7 @@ namespace rptui
         :m_xContext( _rxContext )
         ,m_bConstructed( false )
         ,m_bHasHelpSection( false )
-        ,m_bIsReadOnly(sal_False)
+        ,m_bIsReadOnly(false)
         ,m_nMinHelpTextLines( 3 )
         ,m_nMaxHelpTextLines( 8 )
         ,m_pInfoService(new OPropertyInfoService())

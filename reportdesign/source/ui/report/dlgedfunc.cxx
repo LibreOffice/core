@@ -167,11 +167,11 @@ DlgEdFunc::~DlgEdFunc()
 
 
 
-sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
+bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     m_aMDPos = m_pParent->PixelToLogic( rMEvt.GetPosPixel() );
     m_pParent->GrabFocus();
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     if ( rMEvt.IsLeft() )
     {
         if ( rMEvt.GetClicks() > 1 )
@@ -189,7 +189,7 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
                 // m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
                 //    if ( aVEvt.pRootObj && aVEvt.pRootObj->ISA(SdrTextObj) )
                 //        SetInEditMode(static_cast<SdrTextObj *>(aVEvt.pRootObj),rMEvt, sal_False);
-                bHandled = sal_True;
+                bHandled = true;
             }
         }
         else
@@ -199,7 +199,7 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
             // if selected object was hit, drag object
             if ( pHdl!=NULL || m_rView.IsMarkedHit(m_aMDPos) )
             {
-                bHandled = sal_True;
+                bHandled = true;
                 m_pParent->CaptureMouse();
                 m_pParent->getSectionWindow()->getViewsWindow()->BegDragObj(m_aMDPos, pHdl,&m_rView);
             }
@@ -216,10 +216,10 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         else
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
 
-        bHandled = sal_True;
+        bHandled = true;
     }
     else if( !rMEvt.IsLeft() )
-        bHandled = sal_True;
+        bHandled = true;
     if ( !bHandled )
         m_pParent->CaptureMouse();
     return bHandled;
@@ -227,9 +227,9 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 
 
 
-sal_Bool DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
+bool DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     m_pParent->getSectionWindow()->getViewsWindow()->stopScrollTimer();
     return bHandled;
 }
@@ -263,14 +263,14 @@ void DlgEdFunc::stopScrollTimer()
 }
 
 
-sal_Bool DlgEdFunc::MouseMove( const MouseEvent& /*rMEvt*/ )
+bool DlgEdFunc::MouseMove( const MouseEvent& /*rMEvt*/ )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
+bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if ( !m_bUiActive )
     {
@@ -284,12 +284,12 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                 if ( m_pParent->getSectionWindow()->getViewsWindow()->IsAction() )
                 {
                     m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
                 else if ( m_rView.IsTextEdit() )
                 {
                     m_rView.SdrEndTextEdit();
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
                 else if ( m_rView.AreObjectsMarked() )
                 {
@@ -301,7 +301,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                         m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
 
                     deactivateOle(true);
-                    bReturn = sal_False;
+                    bReturn = false;
                 }
                 else
                 {
@@ -324,7 +324,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     if ( m_rView.AreObjectsMarked() )
                         m_rView.MakeVisible( m_rView.GetAllMarkedRect(), *m_pParent);
 
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
                 else if ( rCode.IsMod1() && rCode.IsMod2())
                 {
@@ -341,7 +341,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                         m_rView.MakeVisible( aVisRect, *m_pParent);
                     }
 
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
             break;
@@ -351,7 +351,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
             case KEY_RIGHT:
             {
                 m_pParent->getSectionWindow()->getViewsWindow()->handleKey(rCode);
-                bReturn = sal_True;
+                bReturn = true;
             }
             break;
             case KEY_RETURN:
@@ -368,7 +368,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
             case KEY_DELETE:
                 if ( !rCode.IsMod1() && !rCode.IsMod2() )
                 {
-                    bReturn = sal_True;
+                    bReturn = true;
                     break;
                 }
                 // run through
@@ -664,10 +664,10 @@ DlgEdFuncInsert::~DlgEdFuncInsert()
 
 
 
-sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
+bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseButtonDown(rMEvt) )
-        return sal_True;
+        return true;
 
     SdrViewEvent aVEvt;
     sal_Int16 nId = m_rView.GetCurrentObjIdentifier();
@@ -679,7 +679,7 @@ sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     {
         // there is an object under the mouse cursor, but not a customshape
         m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
-        return sal_False;
+        return false;
     }
 
     if( eHit != SDRHIT_UNMARKEDOBJECT || nId == OBJ_CUSTOMSHAPE)
@@ -704,19 +704,19 @@ sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         m_pParent->getSectionWindow()->getViewsWindow()->BegMarkObj( m_aMDPos,&m_rView );
     }
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
+bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseButtonUp( rMEvt ) )
-        return sal_True;
+        return true;
 
     const Point aPos( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
     const sal_uInt16 nHitLog = sal_uInt16 ( m_pParent->PixelToLogic(Size(3,0)).Width() );
 
-    sal_Bool bReturn = sal_True;
+    bool bReturn = true;
     // object creation active?
     if ( m_rView.IsCreateObj() )
     {
@@ -725,7 +725,7 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
             m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
             // BrkAction disables the create mode
             m_rView.SetCreateMode( true );
-            return sal_True;
+            return true;
         }
 
         m_rView.EndCreateObj(SDRCREATE_FORCEEND);
@@ -771,10 +771,10 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
 
 
-sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
+bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseMove(rMEvt ) )
-        return sal_True;
+        return true;
     Point   aPos( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( m_rView.IsCreateObj() )
@@ -802,7 +802,7 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     if ( !bIsSetPoint )
         m_pParent->SetPointer( m_rView.GetPreferredPointer( aPos, m_pParent) );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -820,11 +820,11 @@ DlgEdFuncSelect::~DlgEdFuncSelect()
 
 
 
-sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
+bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
     m_bSelectionMode = false;
     if ( DlgEdFunc::MouseButtonDown(rMEvt) )
-        return sal_True;
+        return true;
 
     SdrViewEvent aVEvt;
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -861,15 +861,15 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
+bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseButtonUp( rMEvt ) )
-        return sal_True;
+        return true;
 
     // get view from parent
     const Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -885,15 +885,15 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     if ( !m_bUiActive )
         m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
     m_bSelectionMode = false;
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
+bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseMove(rMEvt ) )
-        return sal_True;
+        return true;
 
     Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
     bool bIsSetPoint = false;
@@ -931,7 +931,7 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
         unColorizeOverlappedObj();
     }
 
-    return sal_True;
+    return true;
 }
 
 

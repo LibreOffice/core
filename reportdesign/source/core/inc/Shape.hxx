@@ -47,7 +47,7 @@ namespace reportdesign
         ::std::auto_ptr< ::comphelper::OPropertyArrayAggregationHelper> m_pAggHelper;
         OReportControlModel                                             m_aProps;
         com::sun::star::drawing::HomogenMatrix3                         m_Transformation;
-        ::sal_Int32                                                     m_nZOrder;
+        sal_Int32                                                     m_nZOrder;
         sal_Bool                                                      m_bOpaque;
 
         OUString                                                 m_sServiceName;

@@ -128,19 +128,19 @@ void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSecti
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 
-void OReportWindow::toggleGrid(sal_Bool _bVisible)
+void OReportWindow::toggleGrid(bool _bVisible)
 {
     m_aViewsWindow.toggleGrid(_bVisible);
 }
 
-void OReportWindow::showRuler(sal_Bool _bShow)
+void OReportWindow::showRuler(bool _bShow)
 {
     m_aHRuler.Show(_bShow);
 
     m_aViewsWindow.showRuler(_bShow);
 }
 
-sal_Int32 OReportWindow::getMaxMarkerWidth(sal_Bool _bWithEnd) const
+sal_Int32 OReportWindow::getMaxMarkerWidth(bool _bWithEnd) const
 {
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_aViewsWindow.GetMapMode().GetScaleX();
@@ -254,7 +254,7 @@ void OReportWindow::notifySizeChanged()
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 
-sal_Bool OReportWindow::HasSelection() const
+bool OReportWindow::HasSelection() const
 {
     return m_aViewsWindow.HasSelection();
 }
@@ -277,7 +277,7 @@ void OReportWindow::Paste()
     m_aViewsWindow.Paste();
 }
 
-sal_Bool OReportWindow::IsPasteAllowed() const
+bool OReportWindow::IsPasteAllowed() const
 {
     return m_aViewsWindow.IsPasteAllowed();
 }
@@ -300,24 +300,24 @@ void OReportWindow::showProperties(const uno::Reference< report::XSection>& _xRe
     m_pView->UpdatePropertyBrowserDelayed(pSectionWindow->getReportSection().getSectionView());
 }
 
-sal_Bool OReportWindow::handleKeyEvent(const KeyEvent& _rEvent)
+bool OReportWindow::handleKeyEvent(const KeyEvent& _rEvent)
 {
     return m_aViewsWindow.handleKeyEvent(_rEvent);
 }
 
-void OReportWindow::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
+void OReportWindow::setMarked(OSectionView* _pSectionView, bool _bMark)
 {
     if ( _pSectionView )
         m_aViewsWindow.setMarked(_pSectionView,_bMark);
 }
 
-void OReportWindow::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
+void OReportWindow::setMarked(const uno::Reference< report::XSection>& _xSection, bool _bMark)
 {
 
     m_aViewsWindow.setMarked(_xSection,_bMark);
 }
 
-void OReportWindow::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape,sal_Bool _bMark)
+void OReportWindow::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape, bool _bMark)
 {
 
     m_aViewsWindow.setMarked(_xShape,_bMark);
@@ -357,13 +357,13 @@ void OReportWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAl
     m_aViewsWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
 }
 
-void OReportWindow::setGridSnap(sal_Bool bOn)
+void OReportWindow::setGridSnap(bool bOn)
 {
 
     m_aViewsWindow.setGridSnap(bOn);
 }
 
-void OReportWindow::setDragStripes(sal_Bool bOn)
+void OReportWindow::setDragStripes(bool bOn)
 {
     m_aViewsWindow.setDragStripes(bOn);
 }

@@ -68,7 +68,7 @@ class ODateTimeDialog : public ModalDialog
     /** returns the number format key
         @param  _nNumberFormatIndex the number format index @see com::sun::star::i18n::NumberFormatIndex
     */
-    sal_Int32 getFormatKey(sal_Bool _bDate) const;
+    sal_Int32 getFormatKey(bool _bDate) const;
 
     DECL_LINK( CBClickHdl, CheckBox* );
     ODateTimeDialog(const ODateTimeDialog&);

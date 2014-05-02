@@ -79,9 +79,9 @@ namespace rptui
 
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
-        OUString   GetInsertObjString() const;
-        void            setGridSnap(sal_Bool bOn);
-        void            setDragStripes(sal_Bool bOn);
+        OUString        GetInsertObjString() const;
+        void            setGridSnap(bool bOn);
+        void            setDragStripes(bool bOn);
 
         /** copies the current selection in this section
         */
@@ -91,7 +91,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        sal_Bool IsPasteAllowed() const;
+        bool IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -108,7 +108,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        sal_Bool HasSelection() const;
+        bool HasSelection() const;
 
         Point           getThumbPos() const;
 
@@ -132,12 +132,12 @@ namespace rptui
         *
         * \param _bVisible
         */
-        void            toggleGrid(sal_Bool _bVisible);
+        void            toggleGrid(bool _bVisible);
 
 
         /** shows the ruler
         */
-        void            showRuler(sal_Bool _bShow);
+        void            showRuler(bool _bShow);
 
         inline sal_Int32 getRulerHeight() const { return m_aHRuler.GetSizePixel().Height(); }
 
@@ -150,7 +150,7 @@ namespace rptui
         * @param _bWithEnd  if <TRUE/> the end marker will be used for calculation as well otherwise not.
         * \return the max width
         */
-        sal_Int32       getMaxMarkerWidth(sal_Bool _bWithEnd) const;
+        sal_Int32       getMaxMarkerWidth(bool _bWithEnd) const;
 
         void            ScrollChildren(const Point& _aThumbPos);
 
@@ -171,15 +171,15 @@ namespace rptui
             @param  _rCode  the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool        handleKeyEvent(const KeyEvent& _rEvent);
+        bool            handleKeyEvent(const KeyEvent& _rEvent);
 
         /** the section as marked or not marked
             @param  _pSectionView   the section where to set the marked flag
             @param  _bMark  the marked flag
         */
-        void            setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
+        void            setMarked(OSectionView* _pSectionView, bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection, bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
         ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;

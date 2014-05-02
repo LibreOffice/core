@@ -157,7 +157,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     }
 }
 
-bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
+bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<bool,OReportHelper> _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
     const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection.getSection();
@@ -170,7 +170,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
     return bRet;
 }
 
-bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
+bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<bool,OGroupHelper> _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
@@ -266,7 +266,7 @@ void OSectionWindow::Resize()
     }
 }
 
-void OSectionWindow::setCollapsed(sal_Bool _bCollapsed)
+void OSectionWindow::setCollapsed(bool _bCollapsed)
 {
     if ( m_aStartMarker.isCollapsed() != _bCollapsed )
     {
@@ -279,7 +279,7 @@ void OSectionWindow::showProperties()
     m_pParent->getView()->showProperties( m_aReportSection.getSection().get() );
 }
 
-void OSectionWindow::setMarked(sal_Bool _bMark)
+void OSectionWindow::setMarked(bool _bMark)
 {
     m_aStartMarker.setMarked(_bMark);
     m_aEndMarker.setMarked(_bMark);

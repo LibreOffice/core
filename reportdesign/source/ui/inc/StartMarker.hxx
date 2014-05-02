@@ -39,7 +39,7 @@ namespace rptui
         static Image*               s_pDefExpanded;
         static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
 
-        sal_Bool                    m_bShowRuler;
+        bool                    m_bShowRuler;
 
         void changeImage();
         void initDefaultNodeImages();
@@ -65,7 +65,7 @@ namespace rptui
 
         /** shows or hides the ruler.
         */
-        void            showRuler(sal_Bool _bShow);
+        void            showRuler(bool _bShow);
 
         virtual void    setCollapsed(sal_Bool _bCollapsed) SAL_OVERRIDE;
 

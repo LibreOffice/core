@@ -94,7 +94,7 @@ OXUndoEnvironment&  OReportModel::GetUndoEnv()
     return *m_pUndoEnv;
 }
 
-void OReportModel::SetModified(sal_Bool _bModified)
+void OReportModel::SetModified(bool _bModified)
 {
     if ( m_pController )
         m_pController->setModified(_bModified);

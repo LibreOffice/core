@@ -157,7 +157,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
             ,m_aHelpText(this, ModuleRes(ADDFIELD_HELP_FIELD) )
             ,m_aInsertButton(this, WB_TABSTOP|WB_CENTER)
             ,m_nCommandType(0)
-            ,m_bEscapeProcessing(sal_False)
+            ,m_bEscapeProcessing(false)
             ,m_pChangeListener(NULL)
             ,m_pContainerListener(NULL)
 {
@@ -319,7 +319,7 @@ void OAddFieldWindow::Update()
         {
             OUString sCommand( m_aCommandName );
             sal_Int32       nCommandType( m_nCommandType );
-            sal_Bool        bEscapeProcessing( m_bEscapeProcessing );
+            bool        bEscapeProcessing( m_bEscapeProcessing );
             OUString sFilter( m_sFilter );
 
             OSL_VERIFY( m_xRowSet->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );

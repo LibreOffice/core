@@ -101,10 +101,10 @@ private:
     Reference<XReportDefinition>                    m_xReportDefinition;
     ::boost::shared_ptr<rptui::OReportModel>        m_pReportModel;
 
-    sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
     SvXMLImportContext* CreateStylesContext(const OUString& rLocalName,
-                                     const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle );
+                                     const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
     SvXMLImportContext* CreateMetaContext(const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext* CreateFontDeclsContext(const OUString& rLocalName,
@@ -176,7 +176,7 @@ public:
     virtual void                        enterEventContext();
     virtual void                        leaveEventContext();
 
-    sal_Bool                            isOldFormat() const;
+    bool                            isOldFormat() const;
 };
 
 /** Imports only settings

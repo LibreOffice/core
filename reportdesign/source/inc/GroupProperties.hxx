@@ -25,10 +25,10 @@ namespace rptshared
     */
     struct GroupProperties
     {
-        ::sal_Int32                                                                 m_nGroupInterval;
-        OUString                                                             m_sExpression;
-        ::sal_Int16                                                                 m_nGroupOn;
-        ::sal_Int16                                                                 m_nKeepTogether;
+        sal_Int32                                                                 m_nGroupInterval;
+        OUString                                                                  m_sExpression;
+        sal_Int16                                                                 m_nGroupOn;
+        sal_Int16                                                                 m_nKeepTogether;
         sal_Bool                                                                  m_eSortAscending;
         sal_Bool                                                                  m_bStartNewColumn;
         sal_Bool                                                                  m_bResetPageNumber;
@@ -37,9 +37,9 @@ namespace rptshared
         :m_nGroupInterval(1)
         ,m_nGroupOn(0)
         ,m_nKeepTogether(0)
-        ,m_eSortAscending(sal_True)
-        ,m_bStartNewColumn(sal_False)
-        ,m_bResetPageNumber(sal_False)
+        ,m_eSortAscending(true)
+        ,m_bStartNewColumn(false)
+        ,m_bResetPageNumber(false)
         {}
     };
 }

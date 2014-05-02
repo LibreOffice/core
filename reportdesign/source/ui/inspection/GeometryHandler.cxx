@@ -679,8 +679,8 @@ void GeometryHandler::implCreateListLikeControl(
         const uno::Reference< inspection::XPropertyControlFactory >& _rxControlFactory
         ,inspection::LineDescriptor & out_Descriptor
         ,sal_uInt16 _nResId
-        ,sal_Bool _bReadOnlyControl
-        ,sal_Bool _bTrueIfListBoxFalseIfComboBox
+        ,bool _bReadOnlyControl
+        ,bool _bTrueIfListBoxFalseIfComboBox
     )
 {
     ::std::vector< OUString > aList;
@@ -693,8 +693,8 @@ void GeometryHandler::implCreateListLikeControl(
         const uno::Reference< inspection::XPropertyControlFactory >& _rxControlFactory
         ,inspection::LineDescriptor & out_Descriptor
         ,const ::std::vector< OUString>& _aEntries
-        ,sal_Bool _bReadOnlyControl
-        ,sal_Bool _bTrueIfListBoxFalseIfComboBox
+        ,bool _bReadOnlyControl
+        ,bool _bTrueIfListBoxFalseIfComboBox
     )
 {
     const uno::Reference< inspection::XStringListControl > xListControl(
@@ -717,38 +717,38 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
     {
         case PROPERTY_ID_FORCENEWPAGE:
         case PROPERTY_ID_NEWROWORCOL:
-            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_FORCENEWPAGE_CONST,sal_False,sal_True);
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_FORCENEWPAGE_CONST,false,true);
             break;
         case PROPERTY_ID_GROUPKEEPTOGETHER:
-            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_GROUPKEEPTOGETHER_CONST,sal_False,sal_True);
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_GROUPKEEPTOGETHER_CONST,false,true);
             break;
         case PROPERTY_ID_PAGEHEADEROPTION:
         case PROPERTY_ID_PAGEFOOTEROPTION:
-            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_REPORTPRINTOPTION_CONST,sal_False,sal_True);
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_REPORTPRINTOPTION_CONST,false,true);
             break;
         case PROPERTY_ID_FORMULALIST:
             {
                 ::std::vector< OUString > aList;
                 impl_fillFormulaList_nothrow(aList);
-                implCreateListLikeControl(_xControlFactory,aOut,aList,sal_False,sal_True);
+                implCreateListLikeControl(_xControlFactory,aOut,aList,false,true);
             }
             break;
         case PROPERTY_ID_SCOPE:
             {
                 ::std::vector< OUString > aList;
                 impl_fillScopeList_nothrow(aList);
-                implCreateListLikeControl(_xControlFactory,aOut,aList,sal_False,sal_True);
+                implCreateListLikeControl(_xControlFactory,aOut,aList,false,true);
             }
             break;
         case PROPERTY_ID_MIMETYPE:
             {
                 ::std::vector< OUString > aList;
                 impl_fillMimeTypes_nothrow(aList);
-                implCreateListLikeControl(_xControlFactory,aOut,aList,sal_False,sal_True);
+                implCreateListLikeControl(_xControlFactory,aOut,aList,false,true);
             }
             break;
         case PROPERTY_ID_TYPE:
-            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_TYPE_CONST,sal_False,sal_True);
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_TYPE_CONST,false,true);
             break;
         case PROPERTY_ID_VISIBLE:
         case PROPERTY_ID_CANGROW:
@@ -768,7 +768,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 sal_uInt16 nResId = RID_STR_BOOL;
                 if ( PROPERTY_ID_KEEPTOGETHER == nId && uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
                     nResId = RID_STR_KEEPTOGETHER_CONST;
-                implCreateListLikeControl(_xControlFactory,aOut,nResId,sal_False,sal_True);
+                implCreateListLikeControl(_xControlFactory,aOut,nResId,false,true);
             }
             break;
         case PROPERTY_ID_INITIALFORMULA:
@@ -830,10 +830,10 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             aOut.HasPrimaryButton = sal_True;
             break;
         case PROPERTY_ID_VERTICALALIGN:
-            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_VERTICAL_ALIGN_CONST,sal_False,sal_True);
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_VERTICAL_ALIGN_CONST,false,true);
             break;
         case PROPERTY_ID_PARAADJUST:
-            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_PARAADJUST_CONST,sal_False,sal_True);
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_PARAADJUST_CONST,false,true);
             break;
         default:
             {
@@ -927,7 +927,7 @@ beans::Property GeometryHandler::getProperty(const OUString & PropertyName)
         return beans::Property();
     return *pFind;
 }
-uno::Any GeometryHandler::getConstantValue(sal_Bool _bToControlValue,sal_uInt16 _nResId,const uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName )
+uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,sal_uInt16 _nResId,const uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName )
 {
     ::std::vector< OUString > aList;
     tools::StringListResource aRes(ModuleRes(_nResId),aList);
@@ -957,14 +957,14 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
     {
         case PROPERTY_ID_FORCENEWPAGE:
         case PROPERTY_ID_NEWROWORCOL:
-            aPropertyValue = getConstantValue(sal_False,RID_STR_FORCENEWPAGE_CONST,_rControlValue,OUString("com.sun.star.report.ForceNewPage"),PropertyName);
+            aPropertyValue = getConstantValue(false,RID_STR_FORCENEWPAGE_CONST,_rControlValue,OUString("com.sun.star.report.ForceNewPage"),PropertyName);
             break;
         case PROPERTY_ID_GROUPKEEPTOGETHER:
-            aPropertyValue = getConstantValue(sal_False,RID_STR_GROUPKEEPTOGETHER_CONST,_rControlValue,OUString("com.sun.star.report.GroupKeepTogether"),PropertyName);
+            aPropertyValue = getConstantValue(false,RID_STR_GROUPKEEPTOGETHER_CONST,_rControlValue,OUString("com.sun.star.report.GroupKeepTogether"),PropertyName);
             break;
         case PROPERTY_ID_PAGEHEADEROPTION:
         case PROPERTY_ID_PAGEFOOTEROPTION:
-            aPropertyValue = getConstantValue(sal_False,RID_STR_REPORTPRINTOPTION_CONST,_rControlValue,OUString("com.sun.star.report.ReportPrintOption"),PropertyName);
+            aPropertyValue = getConstantValue(false,RID_STR_REPORTPRINTOPTION_CONST,_rControlValue,OUString("com.sun.star.report.ReportPrintOption"),PropertyName);
             break;
         case PROPERTY_ID_BACKCOLOR:
         case PROPERTY_ID_CONTROLBACKGROUND:
@@ -978,7 +978,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
         case PROPERTY_ID_KEEPTOGETHER:
             if ( uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
             {
-                aPropertyValue = getConstantValue(sal_False,RID_STR_KEEPTOGETHER_CONST,_rControlValue,OUString("com.sun.star.report.KeepTogether"),PropertyName);
+                aPropertyValue = getConstantValue(false,RID_STR_KEEPTOGETHER_CONST,_rControlValue,OUString("com.sun.star.report.KeepTogether"),PropertyName);
                 break;
             }
             // run through
@@ -1122,19 +1122,19 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             break;
         case PROPERTY_ID_FORCENEWPAGE:
         case PROPERTY_ID_NEWROWORCOL:
-            aControlValue = getConstantValue(sal_True,RID_STR_FORCENEWPAGE_CONST,aPropertyValue,OUString("com.sun.star.report.ForceNewPage"),PropertyName);
+            aControlValue = getConstantValue(true,RID_STR_FORCENEWPAGE_CONST,aPropertyValue,OUString("com.sun.star.report.ForceNewPage"),PropertyName);
             break;
         case PROPERTY_ID_GROUPKEEPTOGETHER:
-            aControlValue = getConstantValue(sal_True,RID_STR_GROUPKEEPTOGETHER_CONST,aPropertyValue,OUString("com.sun.star.report.GroupKeepTogether"),PropertyName);
+            aControlValue = getConstantValue(true,RID_STR_GROUPKEEPTOGETHER_CONST,aPropertyValue,OUString("com.sun.star.report.GroupKeepTogether"),PropertyName);
             break;
         case PROPERTY_ID_PAGEHEADEROPTION:
         case PROPERTY_ID_PAGEFOOTEROPTION:
-            aControlValue = getConstantValue(sal_True,RID_STR_REPORTPRINTOPTION_CONST,aPropertyValue,OUString("com.sun.star.report.ReportPrintOption"),PropertyName);
+            aControlValue = getConstantValue(true,RID_STR_REPORTPRINTOPTION_CONST,aPropertyValue,OUString("com.sun.star.report.ReportPrintOption"),PropertyName);
             break;
         case PROPERTY_ID_KEEPTOGETHER:
             if ( uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
             {
-                aControlValue = getConstantValue(sal_True,RID_STR_KEEPTOGETHER_CONST,aPropertyValue,OUString("com.sun.star.report.KeepTogether"),PropertyName);
+                aControlValue = getConstantValue(true,RID_STR_KEEPTOGETHER_CONST,aPropertyValue,OUString("com.sun.star.report.KeepTogether"),PropertyName);
                 break;
             }
             // run through
@@ -1505,7 +1505,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & Actuati
             break;
         case PROPERTY_ID_DATAFIELD:
             {
-                sal_Bool bEnable = (m_nDataFieldType != DATA_OR_FORMULA && m_nDataFieldType != COUNTER );
+                bool bEnable = (m_nDataFieldType != DATA_OR_FORMULA && m_nDataFieldType != COUNTER );
                 if ( bEnable )
                 {
                     OUString sValue;
@@ -1529,7 +1529,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & Actuati
         case PROPERTY_ID_BACKTRANSPARENT:
         case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
             {
-                sal_Bool bValue = sal_False;
+                bool bValue = false;
                 NewValue >>= bValue;
                 bValue = !bValue;
                 _rxInspectorUI->enablePropertyUI(PROPERTY_BACKCOLOR,bValue);
@@ -1789,12 +1789,12 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
     return xReturn;
 }
 
-sal_Bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
+bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
                                             ,OUString& _rDataField
                                             ,const uno::Reference< report::XFunctionsSupplier>& _xFunctionsSupplier
                                             ,bool _bSet) const
 {
-    sal_Bool bDefaultFunction = sal_False;
+    bool bDefaultFunction = false;
     try
     {
         const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY_THROW);
@@ -1840,11 +1840,11 @@ sal_Bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
     return bDefaultFunction;
 }
 
-sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< report::XFunction>& _xFunction
+bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< report::XFunction>& _xFunction
                                             ,OUString& _rDataField
                                             ,OUString& _rsDefaultFunctionName) const
 {
-    sal_Bool bDefaultFunction = sal_False;
+    bool bDefaultFunction = false;
     try
     {
         const OUString sFormula( _xFunction->getFormula() );
@@ -1884,8 +1884,8 @@ void GeometryHandler::loadDefaultFunctions()
 {
     if ( m_aDefaultFunctions.empty() )
     {
-        m_aCounterFunction.m_bPreEvaluated = sal_False;
-        m_aCounterFunction.m_bDeepTraversing = sal_False;
+        m_aCounterFunction.m_bPreEvaluated = false;
+        m_aCounterFunction.m_bDeepTraversing = false;
         m_aCounterFunction.m_sName = ModuleRes(RID_STR_F_COUNTER);
         m_aCounterFunction.m_sFormula = "rpt:[%FunctionName] + 1";
         m_aCounterFunction.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*";
@@ -1893,9 +1893,9 @@ void GeometryHandler::loadDefaultFunctions()
         m_aCounterFunction.m_sInitialFormula.Value = OUString("rpt:1");
 
         DefaultFunction aDefault;
-        aDefault.m_bDeepTraversing = sal_False;
+        aDefault.m_bDeepTraversing = false;
 
-        aDefault.m_bPreEvaluated = sal_True;
+        aDefault.m_bPreEvaluated = true;
 
         aDefault.m_sName = ModuleRes(RID_STR_F_ACCUMULATION);
         aDefault.m_sFormula = "rpt:[%Column] + [%FunctionName]";

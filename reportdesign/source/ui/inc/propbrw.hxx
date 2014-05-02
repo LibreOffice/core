@@ -60,7 +60,7 @@ private:
     OUString     m_sLastActivePage;
     ODesignView*        m_pDesignView;
     OSectionView*       m_pView;
-    sal_Bool            m_bInitialStateChange;
+    bool            m_bInitialStateChange;
 
     PropBrw(PropBrw&);
     void operator =(PropBrw&);

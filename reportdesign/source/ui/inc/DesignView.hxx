@@ -73,12 +73,12 @@ namespace rptui
         DlgEdMode                           m_eMode;
         sal_uInt16                              m_nCurrentPosition;
         sal_uInt16                              m_eActObj;
-        sal_Bool                                m_bFirstDraw;
+        bool                                m_bFirstDraw;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
-        sal_Bool                                m_bGridVisible;
-        sal_Bool                                m_bGridSnap;
-        sal_Bool                                m_bDeleted;
+        bool                                m_bGridVisible;
+        bool                                m_bGridSnap;
+        bool                                m_bDeleted;
 
 
         DECL_LINK(MarkTimeout, void *);
@@ -130,7 +130,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        sal_Bool IsPasteAllowed() const;
+        bool IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -150,7 +150,7 @@ namespace rptui
         void            SelectAll(const sal_uInt16 _nObjectType);
 
         /// checks if a selection exists
-        sal_Bool            HasSelection() const;
+        bool            HasSelection() const;
 
         void            UpdatePropertyBrowserDelayed(OSectionView& _rView);
 
@@ -172,26 +172,26 @@ namespace rptui
 
         inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
         inline Size     getGridSizeFine() const { return m_aGridSizeFine; }
-        inline sal_Bool     isGridSnap() const { return m_bGridSnap; }
-        void            setGridSnap(sal_Bool bOn);
-        void            setDragStripes(sal_Bool bOn);
+        inline bool     isGridSnap() const { return m_bGridSnap; }
+        void            setGridSnap(bool bOn);
+        void            setDragStripes(bool bOn);
         /** turns the grid on or off
         *
         * \param _bGridVisible
         */
-        void            toggleGrid(sal_Bool _bGridVisible);
+        void            toggleGrid(bool _bGridVisible);
 
         void            togglePropertyBrowser(bool _bToogleOn);
 
-        sal_Bool            isAddFieldVisible() const;
+        bool            isAddFieldVisible() const;
         void            toggleAddField();
 
-        sal_Bool            isReportExplorerVisible() const;
+        bool            isReportExplorerVisible() const;
         void            toggleReportExplorer();
 
         /** shows or hides the ruler.
         */
-        void            showRuler(sal_Bool _bShow);
+        void            showRuler(bool _bShow);
 
         /** unmark all objects on the views without the given one.
         *
@@ -237,21 +237,21 @@ namespace rptui
             @param  _rCode  the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool         handleKeyEvent(const KeyEvent& _rEvent);
+        bool         handleKeyEvent(const KeyEvent& _rEvent);
 
         /** set the section as marked or not marked
             @param  _pSectionView   the section where to set the marked flag
             @param  _bMark  the marked flag
         */
-        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,bool _bMark);
 
         /** returns if the view handles the event by itself
         *
         * \param _nId the command id
         * \return  <FALSE/> is the event is not handled by the view otherwise <TRUE/>
         */
-        sal_Bool        isHandleEvent(sal_uInt16 _nId) const;
+        bool        isHandleEvent(sal_uInt16 _nId) const;
 
         sal_uInt32      getMarkedObjectCount() const;
 

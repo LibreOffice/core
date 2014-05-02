@@ -46,8 +46,8 @@ namespace rptxml
         com::sun::star::uno::Any    aConditionalFormat;
         sal_Int32                   m_nNumberFormat;
         ORptFilter&                 m_rImport;
-        sal_Bool                    bConditionalFormatCreated : 1;
-        sal_Bool                    bParentSet : 1;
+        bool                    bConditionalFormatCreated : 1;
+        bool                    bParentSet : 1;
 
         ORptFilter& GetOwnImport() const;
 
@@ -66,7 +66,7 @@ namespace rptxml
         OControlStyleContext( ORptFilter& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = sal_False );
+                SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
 
         virtual ~OControlStyleContext();
 
@@ -89,7 +89,7 @@ namespace rptxml
         const OUString m_sCellStyleFamilyName;
         ORptFilter&           m_rImport;
         sal_Int32 m_nNumberFormatIndex;
-        sal_Bool bAutoStyles : 1;
+        bool bAutoStyles : 1;
 
         //mutable UniReference < SvXMLImportPropertyMapper > m_xControlImpPropMapper;
         mutable UniReference < SvXMLImportPropertyMapper > m_xCellImpPropMapper;
@@ -132,7 +132,7 @@ namespace rptxml
         OReportStylesContext( ORptFilter& rImport, sal_uInt16 nPrfx ,
                 const OUString& rLName ,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                const sal_Bool bAutoStyles );
+                const bool bAutoStyles );
         virtual ~OReportStylesContext();
 
         virtual void EndElement() SAL_OVERRIDE;

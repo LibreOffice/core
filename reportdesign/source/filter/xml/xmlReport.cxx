@@ -178,7 +178,7 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xComponent->setPageFooterOn(sal_True);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList ,m_xComponent->getPageFooter(),sal_False);
+                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList ,m_xComponent->getPageFooter(),false);
             }
             break;
         case XML_TOK_REPORT_FOOTER:

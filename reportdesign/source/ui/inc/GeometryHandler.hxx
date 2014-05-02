@@ -48,8 +48,8 @@ namespace rptui
         OUString                                     m_sName;
         OUString                                     m_sSearchString;
         OUString                                     m_sFormula;
-        sal_Bool                                          m_bPreEvaluated;
-        sal_Bool                                          m_bDeepTraversing;
+        bool                                          m_bPreEvaluated;
+        bool                                          m_bDeepTraversing;
 
         inline OUString getName() const { return m_sName; }
     } ;
@@ -90,21 +90,21 @@ namespace rptui
         */
         sal_uInt32 impl_getDataFieldType_throw(const OUString& _sDataField = OUString()) const;
 
-        ::com::sun::star::uno::Any getConstantValue(sal_Bool bToControlValue,sal_uInt16 nResId,const ::com::sun::star::uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName );
+        ::com::sun::star::uno::Any getConstantValue(bool bToControlValue,sal_uInt16 nResId,const ::com::sun::star::uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName );
         ::com::sun::star::beans::Property getProperty(const OUString & PropertyName);
         void implCreateListLikeControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,::com::sun::star::inspection::LineDescriptor & out_Descriptor
                 ,sal_uInt16 _nResId
-                ,sal_Bool _bReadOnlyControl
-                ,sal_Bool _bTrueIfListBoxFalseIfComboBox
+                ,bool _bReadOnlyControl
+                ,bool _bTrueIfListBoxFalseIfComboBox
             );
         void implCreateListLikeControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,::com::sun::star::inspection::LineDescriptor & out_Descriptor
                 ,const ::std::vector< OUString>& _aEntries
-                ,sal_Bool _bReadOnlyControl
-                ,sal_Bool _bTrueIfListBoxFalseIfComboBox
+                ,bool _bReadOnlyControl
+                ,bool _bTrueIfListBoxFalseIfComboBox
             );
         void checkPosAndSize(   const ::com::sun::star::awt::Point& _aNewPos,
                                 const ::com::sun::star::awt::Size& _aSize);
@@ -190,7 +190,7 @@ namespace rptui
         * \param _bSet If set to sal_True than the m_sDefaultFunction and m_sScope vars will be set if successful.
         * \return sal_True with known otherwise sal_False
         */
-        sal_Bool isDefaultFunction(const OUString& _sQuotedFunction
+        bool isDefaultFunction(const OUString& _sQuotedFunction
                                     ,OUString& _Out_rDataField
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier>& _xFunctionsSupplier = ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier>()
                                     ,bool _bSet = false) const;
@@ -202,7 +202,7 @@ namespace rptui
         * \param _rsDefaultFunctionName
         * \return
         */
-        sal_Bool impl_isDefaultFunction_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction>& _xFunction
+        bool impl_isDefaultFunction_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction>& _xFunction
                                             ,OUString& _rDataField
                                             ,OUString& _rsDefaultFunctionName) const;
 

@@ -50,7 +50,7 @@ public:
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_Unicode c,
-            sal_Bool bCount );
+            bool bCount );
     OXMLCharContent(
             SvXMLImport& rImport,
             OXMLFixedContent* _pFixedContent,
@@ -69,7 +69,7 @@ OXMLCharContent::OXMLCharContent(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Unicode c,
-        sal_Bool bCount )
+        bool bCount )
     : XMLCharContext(rImport,nPrfx,rLName,xAttrList,c,bCount)
     ,m_pFixedContent(_pFixedContent)
 {
@@ -149,7 +149,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
         case XML_TOK_TEXT_TAB_STOP:
             pContext = new OXMLCharContent( m_rImport, this,nPrefix,
                                                 rLocalName, xAttrList,
-                                                0x0009, sal_False );
+                                                0x0009, false );
             break;
 
         case XML_TOK_TEXT_LINE_BREAK:
@@ -161,7 +161,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
         case XML_TOK_TEXT_S:
             pContext = new OXMLCharContent( m_rImport, this,nPrefix,
                                                 rLocalName, xAttrList,
-                                                0x0020, sal_True );
+                                                0x0020, true );
             break;
         case XML_TOK_PAGE_NUMBER:
             m_sPageText += s_sStringConcat + " PageNumber()";

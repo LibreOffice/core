@@ -55,7 +55,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_xControl(_xControl)
     ,m_pContainer(_pContainer)
-    ,m_bIsList(sal_False)
+    ,m_bIsList(false)
 {
     m_aPropType = ::getVoidCppuType();
 
@@ -198,7 +198,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         {
             bool bValue(false);
         #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
         #endif
                 ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
@@ -213,7 +213,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
             {   // it's a real int32/16 property
                 sal_Int32 nValue(0);
         #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
         #endif
                     ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
@@ -235,7 +235,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         {
             double nValue = 0.0;
         #if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
+            bool bSuccess =
         #endif
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
@@ -266,7 +266,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                     // first extract the double
                     double nValue = 0;
                 #if OSL_DEBUG_LEVEL > 0
-                    sal_Bool bSuccess =
+                    bool bSuccess =
                 #endif
                     ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                     OSL_ENSURE(bSuccess,

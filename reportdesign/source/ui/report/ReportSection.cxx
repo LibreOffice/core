@@ -88,8 +88,8 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 ,m_xSection(_xSection)
 ,m_nPaintEntranceCount(0)
 ,m_eMode(RPTUI_SELECT)
-,m_bDialogModelChanged(sal_False)
-,m_bInDrag(sal_False)
+,m_bDialogModelChanged(false)
+,m_bInDrag(false)
 {
     //EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
@@ -386,7 +386,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 
 void OReportSection::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True); // mark the section in which is clicked
+    m_pParent->getViewsWindow()->getView()->setMarked(m_pView, true); // mark the section in which is clicked
     m_pFunc->MouseButtonDown( rMEvt );
     Window::MouseButtonDown(rMEvt);
 }
@@ -405,7 +405,7 @@ void OReportSection::MouseMove( const MouseEvent& rMEvt )
 
 }
 
-void OReportSection::SetGridVisible(sal_Bool _bVisible)
+void OReportSection::SetGridVisible(bool _bVisible)
 {
     m_pView->SetGridVisible( _bVisible );
 }
@@ -557,7 +557,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
             if ( pObject )
             {
                 OObjectBase* pBase = dynamic_cast<OObjectBase*>(pObject);
-                pBase->EndListening(sal_False);
+                pBase->EndListening(false);
                 if ( aPos.X < i_nLeftMargin )
                 {
                     aPos.X  = i_nLeftMargin;
@@ -573,7 +573,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                         // add listener around
                         pBase->StartListening();
                         xReportComponent->setSize(aSize);
-                        pBase->EndListening(sal_False);
+                        pBase->EndListening(false);
                     }
                     bChanged = true;
                 }
@@ -601,9 +601,9 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
     }
 }
 
-sal_Bool OReportSection::handleKeyEvent(const KeyEvent& _rEvent)
+bool OReportSection::handleKeyEvent(const KeyEvent& _rEvent)
 {
-    return m_pFunc.get() ? m_pFunc->handleKeyEvent(_rEvent) : sal_False;
+    return m_pFunc.get() && m_pFunc->handleKeyEvent(_rEvent);
 }
 
 void OReportSection::deactivateOle()
@@ -796,7 +796,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     else if ( bMultipleFormat
         || ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR) )
     {
-        m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True);
+        m_pParent->getViewsWindow()->getView()->setMarked(m_pView, true);
         m_pView->UnmarkAll();
         const Rectangle& rRect = m_pView->GetWorkArea();
         if ( aDropPos.X() < rRect.Left() )

@@ -121,12 +121,12 @@ namespace rptui
         ::sal_Int64             m_nAspect;
         sal_Int16               m_nZoomValue;
         SvxZoomType             m_eZoomType;
-        sal_Bool                m_bShowRuler;
-        sal_Bool                m_bGridVisible;
-        sal_Bool                m_bGridUse;
-        sal_Bool                m_bShowProperties;
-        sal_Bool                m_bGroupFloaterWasVisible;
-        sal_Bool                m_bHelplinesMove;
+        bool                m_bShowRuler;
+        bool                m_bGridVisible;
+        bool                m_bGridUse;
+        bool                m_bShowProperties;
+        bool                m_bGroupFloaterWasVisible;
+        bool                m_bHelplinesMove;
         bool                    m_bChartEnabled;
         bool                    m_bChartEnabledAsked;
         bool                    m_bInGeneratePreview;
@@ -349,7 +349,7 @@ namespace rptui
             @param  _nCommand   the command id
             @param  _xControlFormat the report control format
         */
-        sal_Bool                            isFormatCommandEnabled(sal_uInt16 _nCommand
+        bool                                isFormatCommandEnabled(sal_uInt16 _nCommand
                                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xControlFormat) const;
 
         virtual bool                        Construct(Window* pParent) SAL_OVERRIDE;

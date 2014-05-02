@@ -138,7 +138,7 @@ private:
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
     Reference<XReportDefinition>                    m_xReportDefinition;
-    sal_Bool                                        m_bAllreadyFilled;
+    bool                                        m_bAllreadyFilled;
 
     void                    exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
     void                    exportReportAttributes(const Reference<XReportDefinition>& _xReport);
@@ -146,7 +146,7 @@ private:
     void                    exportFunction(const Reference< XFunction>& _xFunction);
     void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
-    sal_Bool                exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,sal_Bool _bExportAutoStyle = sal_False);
+    bool                exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle = false);
     void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName);
     void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
     void                    exportContainer(const Reference< XSection>& _xSection);

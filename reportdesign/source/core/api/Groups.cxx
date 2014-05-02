@@ -87,7 +87,7 @@ void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElemen
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        sal_Bool bAdd = (Index == static_cast<sal_Int32>(m_aGroups.size()));
+        bool bAdd = (Index == static_cast<sal_Int32>(m_aGroups.size()));
         if ( !bAdd )
             checkIndex(Index);
         uno::Reference< report::XGroup > xGroup(aElement,uno::UNO_QUERY);

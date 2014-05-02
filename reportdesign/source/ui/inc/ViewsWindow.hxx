@@ -129,7 +129,7 @@ namespace rptui
         svtools::ColorConfig                    m_aColorConfig;
         OReportWindow*                          m_pParent;
         OUString                         m_sShapeType;
-        sal_Bool                                m_bInUnmark;
+        bool                                m_bInUnmark;
 
         void ImplInitSettings();
         /** returns the iterator at pos _nPos or the end()
@@ -191,9 +191,9 @@ namespace rptui
         *
         * \param _bVisible
         */
-        void            toggleGrid(sal_Bool _bVisible);
-        void            setGridSnap(sal_Bool bOn);
-        void            setDragStripes(sal_Bool bOn);
+        void            toggleGrid(bool _bVisible);
+        void            setGridSnap(bool bOn);
+        void            setDragStripes(bool bOn);
 
         /** returns the total accumulated height of all sections until _pSection is reached
         */
@@ -211,7 +211,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        sal_Bool IsPasteAllowed() const;
+        bool IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -228,7 +228,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        sal_Bool HasSelection() const;
+        bool HasSelection() const;
 
         /** unmark all objects on the views without the given one.
         *
@@ -245,15 +245,15 @@ namespace rptui
             @param  _rCode  the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool        handleKeyEvent(const KeyEvent& _rEvent);
+        bool            handleKeyEvent(const KeyEvent& _rEvent);
 
         /** the section as marked or not marked
             @param  _pSectionView   the section where to set the marked flag
             @param  _bMark  the marked flag
         */
-        void            setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
-        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
+        void            setMarked(OSectionView* _pSectionView, bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection, bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
         ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
@@ -270,7 +270,7 @@ namespace rptui
 
         /** shows or hides the ruler.
         */
-        void showRuler(sal_Bool _bShow);
+        void showRuler(bool _bShow);
 
         /** returns the currently set shape type.
         *
@@ -296,12 +296,12 @@ namespace rptui
         bool isObjectInMyTempList(SdrObject *);
     public:
         void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection);
-        void EndDragObj(sal_Bool _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);
+        void EndDragObj(bool _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);
 
         void EndAction();
         void ForceMarkedToAnotherPage();
-        sal_Bool IsAction() const;
-        sal_Bool IsDragObj() const;
+        bool IsAction() const;
+        bool IsDragObj() const;
         void handleKey(const KeyCode& _rCode);
         void stopScrollTimer();
 

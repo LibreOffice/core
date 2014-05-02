@@ -208,8 +208,8 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
         if ( m_pToolbarController.is() )
         {
             // All other status events will be processed here
-            sal_Bool bSetCheckmark      = sal_False;
-            sal_Bool bCheckmark         = sal_False;
+            bool bSetCheckmark      = false;
+            bool bCheckmark         = false;
             //m_pToolbarController->GetToolBox().Enable(Event.IsEnabled);
             ToolBox& rTb = m_pToolbarController->GetToolBox();
             for ( sal_uInt16 i = 0; i < rTb.GetItemCount(); i++ )
@@ -226,7 +226,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
 
                     // Checkmark
                     if ( Event.State >>= bCheckmark )
-                        bSetCheckmark = sal_True;
+                        bSetCheckmark = true;
 
                     if ( bSetCheckmark )
                         rTb.CheckItem( nId, bCheckmark );

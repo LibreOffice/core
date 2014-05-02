@@ -43,9 +43,9 @@ namespace reportdesign
     {
         friend class OShapeHelper;
         OReportControlModel                 m_aProps;
-        OUString                     m_aImageURL;
+        OUString                            m_aImageURL;
         sal_Int16                           m_nScaleMode;
-        sal_Bool                          m_bPreserveIRI;
+        sal_Bool                            m_bPreserveIRI;
     private:
         OImageControl(const OImageControl&);
         OImageControl& operator=(const OImageControl&);

@@ -152,7 +152,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
             aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_MASTERFIELDS, TPropertyConverter(PROPERTY_MASTERFIELDS,aNoConverter) ) );
             aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_DETAILFIELDS, TPropertyConverter(PROPERTY_DETAILFIELDS,aNoConverter) ) );
 
-            m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
+            m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,true );
         }
     }
     catch(const uno::Exception &)
@@ -445,7 +445,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
             InspectorUI->enablePropertyUIElements( PROPERTY_DETAILFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
             InspectorUI->enablePropertyUIElements( PROPERTY_MASTERFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
 
-            sal_Bool bModified = xReport->isModified();
+            bool bModified = xReport->isModified();
             // this fills the chart again
             ::comphelper::NamedValueCollection aArgs;
             aArgs.put( "CellRangeRepresentation", uno::makeAny( OUString( "all" ) ) );

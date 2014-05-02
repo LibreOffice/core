@@ -103,13 +103,13 @@ namespace rptui
 
         try
         {
-            sal_Bool bIsDark = sal_False;
+            bool bIsDark = false;
             const sal_Int32 nBackColor( xFixedText->getControlBackground() );
             if ((sal_uInt32)nBackColor == COL_TRANSPARENT)
             {
                 uno::Reference <report::XSection> xSection(xFixedText->getParent(), uno::UNO_QUERY_THROW);
 
-                sal_Bool bSectionBackColorIsTransparent = xSection->getBackTransparent();
+                bool bSectionBackColorIsTransparent = xSection->getBackTransparent();
                 if (bSectionBackColorIsTransparent)
                 {
                     // Label Transparent, Section Transparent set LabelTextColor

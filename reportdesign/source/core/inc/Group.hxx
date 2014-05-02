@@ -70,7 +70,7 @@ namespace reportdesign
             l.notify();
         }
         void setSection(     const OUString& _sProperty
-                            ,const sal_Bool& _bOn
+                            ,const bool& _bOn
                             ,const OUString& _sName
                             ,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _member);
     protected:

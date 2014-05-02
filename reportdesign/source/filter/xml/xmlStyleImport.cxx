@@ -74,14 +74,14 @@ TYPEINIT1( OReportStylesContext, SvXMLStylesContext );
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     sNumberFormat(OUString("NumberFormat")),
     pStyles(&rStyles),
     m_nNumberFormat(-1),
     m_rImport(rImport),
-    bConditionalFormatCreated(sal_False),
-    bParentSet(sal_False)
+    bConditionalFormatCreated(false),
+    bParentSet(false)
 {
 
 }
@@ -160,7 +160,7 @@ OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
         const Reference< XAttributeList > & xAttrList,
-        const sal_Bool bTempAutoStyles ) :
+        const bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
     m_sTableStyleFamilyName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
     m_sColumnStyleFamilyName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),

@@ -67,7 +67,7 @@ namespace reportdesign
             ,m_nPosY(0)
             ,m_nBorderColor(0)
             ,m_nBorder(2)
-            ,m_bPrintRepeatedValues(sal_True)
+            ,m_bPrintRepeatedValues(true)
         {}
         ~OReportComponentProperties();
 

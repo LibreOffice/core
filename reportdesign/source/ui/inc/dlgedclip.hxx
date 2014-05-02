@@ -52,7 +52,7 @@ public:
             available flavors
     * \return
     */
-    static sal_Bool         canExtract(const DataFlavorExVector& _rFlavors);
+    static bool         canExtract(const DataFlavorExVector& _rFlavors);
 
     /** extract the section elements
     *

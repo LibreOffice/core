@@ -47,7 +47,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel > m_xComponent; /// delegatee
         bool                                                                                    m_bConstructed;
         bool                                                                                    m_bHasHelpSection;
-        sal_Bool                                                                                m_bIsReadOnly;
+        bool                                                                                m_bIsReadOnly;
         sal_Int32                                                                               m_nMinHelpTextLines;
         sal_Int32                                                                               m_nMaxHelpTextLines;
         /// access to property meta data

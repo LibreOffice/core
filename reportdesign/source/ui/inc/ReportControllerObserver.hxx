@@ -94,7 +94,7 @@ namespace rptui
 
         void Lock();
         void UnLock();
-        sal_Bool IsLocked() const;
+        bool IsLocked() const;
 
         void Clear();
     private:

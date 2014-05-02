@@ -118,7 +118,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
         aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
         aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
 
-        sal_Bool bHasCategories = sal_False;
+        bool bHasCategories = false;
 
         uno::Reference< chart2::data::XDataSource > xDataSource(m_xModel, uno::UNO_QUERY);
         if( xDataSource.is())
@@ -136,7 +136,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
                         &&  aRole == "categories"
                         )
                     {
-                        bHasCategories = sal_True;
+                        bHasCategories = true;
                         break;
                     }
                 }
@@ -257,7 +257,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         bExport = false;
     else if ( _sName == "chart:plot-area" )
     {
-        sal_Bool bHasCategories = sal_True;
+        bool bHasCategories = true;
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());

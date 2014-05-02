@@ -97,7 +97,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, Window* pParent, O
           ,m_xORB(_xORB)
           ,m_pDesignView(_pDesignView)
           ,m_pView( NULL )
-          ,m_bInitialStateChange(sal_True)
+          ,m_bInitialStateChange(true)
 {
 
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
@@ -444,16 +444,16 @@ void PropBrw::Resize()
         ::Size aMinSize = getMinimumSize();
         SetMinOutputSizePixel( aMinSize );
         ::Size aSize = GetOutputSizePixel();
-        sal_Bool bResize = sal_False;
+        bool bResize = false;
         if( aSize.Width() < aMinSize.Width() )
         {
             aSize.setWidth( aMinSize.Width() );
-            bResize = sal_True;
+            bResize = true;
         }
         if( aSize.Height() < aMinSize.Height() )
         {
             aSize.setHeight( aMinSize.Height() );
-            bResize = sal_True;
+            bResize = true;
         }
         if( bResize )
             SetOutputSizePixel( aSize );
@@ -482,7 +482,7 @@ void PropBrw::Update( OSectionView* pNewView )
         {
             // if we're just newly created, we want to have the focus
             PostUserEvent( LINK( this, PropBrw, OnAsyncGetFocus ) );
-            m_bInitialStateChange = sal_False;
+            m_bInitialStateChange = false;
             // and additionally, we want to show the page which was active during
             // our previous incarnation
             if ( !m_sLastActivePage.isEmpty() && m_xBrowserController.is() )

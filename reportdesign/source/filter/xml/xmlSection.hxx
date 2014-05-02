@@ -30,7 +30,7 @@ namespace rptxml
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
-        sal_Bool                                                                            m_bPageHeader;
+        bool                                                                            m_bPageHeader;
         ORptFilter& GetOwnImport();
 
         OXMLSection(const OXMLSection&);
@@ -42,7 +42,7 @@ namespace rptxml
                     ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-                    ,sal_Bool _bPageHeader = sal_True);
+                    ,bool _bPageHeader = true);
         virtual ~OXMLSection();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

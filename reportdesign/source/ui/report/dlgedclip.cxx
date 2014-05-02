@@ -58,7 +58,7 @@ bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor )
     return (nFormatId == getDescriptorFormatId()) && SetAny( uno::Any(m_aCopyElements), _rFlavor );
 }
 
-sal_Bool OReportExchange::canExtract(const DataFlavorExVector& _rFlavor)
+bool OReportExchange::canExtract(const DataFlavorExVector& _rFlavor)
 {
     return IsFormatSupported(_rFlavor,getDescriptorFormatId());
 }
@@ -71,7 +71,7 @@ OReportExchange::TSectionElements OReportExchange::extractCopies(const Transfera
         // extract the any from the transferable
         datatransfer::DataFlavor aFlavor;
 #if OSL_DEBUG_LEVEL > 0
-        sal_Bool bSuccess =
+        bool bSuccess =
 #endif
         SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
         OSL_ENSURE(bSuccess, "OReportExchange::extractCopies: invalid data format (no flavor)!");

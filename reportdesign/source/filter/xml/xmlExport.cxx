@@ -214,7 +214,7 @@ void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 
 ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, sal_uInt16 nExportFlag)
 : SvXMLExport( util::MeasureUnit::MM_100TH, _rxContext, implementationName, XML_REPORT, EXPORT_OASIS)
-,m_bAllreadyFilled(sal_False)
+,m_bAllreadyFilled(false)
 {
     setExportFlags( EXPORT_OASIS | nExportFlag);
     GetMM100UnitConverter().SetCoreMeasureUnit(MAP_100TH_MM);
@@ -787,7 +787,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             nEmptyCellColSpan = 0;
             for (; aColIter != aColEnd; ++aColIter)
             {
-                sal_Bool bCoveredCell = sal_False;
+                bool bCoveredCell = false;
                 sal_Int32 nColSpan = 0;
                 sal_Int32 nColIndex = aColIter - aRowIter->second.begin();
                 ::std::map<sal_Int32,sal_Int32>::iterator aRowSpanFind = aRowSpan.find(nColIndex);
@@ -800,7 +800,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     if ( aColIter->nColSpan > 1 )
                         nColSpan += aColIter->nColSpan - 1;
 
-                    bCoveredCell = sal_True;
+                    bCoveredCell = true;
                     aColIter = aColIter + (aColIter->nColSpan - 1);
                 }
                 else if ( aColIter->bSet )
@@ -808,7 +808,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     if ( nEmptyCellColSpan > 0 )
                     {
                         AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nEmptyCellColSpan) );
-                        bCoveredCell = sal_True;
+                        bCoveredCell = true;
                         nColSpan = nEmptyCellColSpan - 1;
                         nEmptyCellColSpan = 0;
                     }
@@ -817,7 +817,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     {
                         AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nSpan) );
                         nColSpan = nSpan - 1;
-                        bCoveredCell = sal_True;
+                        bCoveredCell = true;
                     }
                     nSpan = aColIter->nRowSpan;
                     if ( nSpan > 1 )
@@ -872,7 +872,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             Reference<XSection> xSection(xElement,uno::UNO_QUERY);
 
                             XMLTokenEnum eToken = XML_SECTION;
-                            sal_Bool bExportData = sal_False;
+                            bool bExportData = false;
                             if ( xElement->supportsService(SERVICE_FIXEDTEXT) )
                             {
                                 eToken = XML_FIXED_CONTENT;
@@ -880,7 +880,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             else if ( xElement->supportsService(SERVICE_FORMATTEDFIELD) )
                             {
                                 eToken = XML_FORMATTED_TEXT;
-                                bExportData = sal_True;
+                                bExportData = true;
                             }
                             else if ( xElement->supportsService(SERVICE_IMAGECONTROL) )
                             {
@@ -891,7 +891,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     sTargetLocation = GetRelativeReference(sTargetLocation);
                                     AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
                                 }
-                                bExportData = sal_True;
+                                bExportData = true;
                                 OUStringBuffer sValue;
                                 const SvXMLEnumMapEntry* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
                                 if ( SvXMLUnitConverter::convertEnum( sValue, xImage->getScaleMode(),aXML_ImageScaleEnumMap ) )
@@ -1035,9 +1035,9 @@ void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,
     }
 }
 
-sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,sal_Bool _bExportAutoStyle)
+bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle)
 {
-    sal_Bool bGroupExported = sal_False;
+    bool bGroupExported = false;
     if ( _xReportDefinition.is() )
     {
         Reference< XGroups > xGroups = _xReportDefinition->getGroups();
@@ -1046,7 +1046,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
             sal_Int32 nCount = xGroups->getCount();
             if ( _nPos >= 0 && _nPos < nCount )
             {
-                bGroupExported = sal_True;
+                bGroupExported = true;
                 Reference<XGroup> xGroup(xGroups->getByIndex(_nPos),uno::UNO_QUERY);
                 OSL_ENSURE(xGroup.is(),"No Group prepare for GPF");
                 if ( _bExportAutoStyle )
@@ -1272,7 +1272,7 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
 
         AddAttribute(XML_NAMESPACE_OFFICE, XML_MIMETYPE,_xReport->getMimeType());
 
-        sal_Bool bEscapeProcessing( _xReport->getEscapeProcessing() );
+        bool bEscapeProcessing( _xReport->getEscapeProcessing() );
         if ( !bEscapeProcessing )
             AddAttribute( XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING, ::xmloff::token::GetXMLToken( XML_FALSE ) );
 
@@ -1300,7 +1300,7 @@ void ORptExport::collectComponentStyles()
     if ( m_bAllreadyFilled )
         return;
 
-    m_bAllreadyFilled = sal_True;
+    m_bAllreadyFilled = true;
     Reference<XReportDefinition> xProp(getReportDefinition());
     if ( xProp.is() )
     {
@@ -1313,7 +1313,7 @@ void ORptExport::collectComponentStyles()
         if ( xProp->getPageHeaderOn() )
             exportSectionAutoStyle(xProp->getPageHeader());
 
-        exportGroup(xProp,0,sal_True);
+        exportGroup(xProp,0,true);
 
         if ( xProp->getPageFooterOn() )
             exportSectionAutoStyle(xProp->getPageFooter());

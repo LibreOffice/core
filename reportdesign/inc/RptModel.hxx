@@ -65,7 +65,7 @@ public:
     virtual SvxNumType  GetPageNumType() const SAL_OVERRIDE;
 
     OXUndoEnvironment&  GetUndoEnv();
-    void                SetModified(sal_Bool _bModified);
+    void                SetModified(bool _bModified);
 
     inline dbaui::DBSubComponentController* getController() const { return m_pController; }
     inline void attachController( dbaui::DBSubComponentController& _rController ) { m_pController = &_rController; }

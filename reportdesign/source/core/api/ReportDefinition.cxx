@@ -1174,7 +1174,7 @@ uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  ) t
 }
 
 void OReportDefinition::setSection(  const OUString& _sProperty
-                            ,const sal_Bool& _bOn
+                            ,const bool& _bOn
                             ,const OUString& _sName
                             ,uno::Reference< report::XSection>& _member)
 {
@@ -1260,7 +1260,7 @@ sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, 
     try
     {
         fillArgs(aDescriptor);
-        m_pImpl->m_pReportModel->SetModified(sal_False);
+        m_pImpl->m_pReportModel->SetModified(false);
     }
     catch (...)
     {
@@ -1638,7 +1638,7 @@ void SAL_CALL OReportDefinition::removeStorageChangeListener( const uno::Referen
     m_pImpl->m_aStorageChangeListeners.removeInterface(xListener);
 }
 
-sal_Bool OReportDefinition::WriteThroughComponent(
+bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<lang::XComponent> & xComponent,
     const sal_Char* pStreamName,
     const sal_Char* pServiceName,
@@ -1655,11 +1655,11 @@ sal_Bool OReportDefinition::WriteThroughComponent(
         OUString sStreamName = OUString::createFromAscii( pStreamName );
         uno::Reference<io::XStream> xStream = xMyStorage->openStreamElement( sStreamName,embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
         if ( !xStream.is() )
-            return sal_False;
+            return false;
         uno::Reference<io::XOutputStream> xOutputStream = xStream->getOutputStream();
         OSL_ENSURE(xOutputStream.is(), "Can't create output stream in package!");
         if ( ! xOutputStream.is() )
-            return sal_False;
+            return false;
 
         uno::Reference<beans::XPropertySet> xStreamProp(xOutputStream,uno::UNO_QUERY);
         OSL_ENSURE(xStreamProp.is(),"No valid preoperty set for the output stream!");
@@ -1696,7 +1696,7 @@ sal_Bool OReportDefinition::WriteThroughComponent(
     }
 }
 
-sal_Bool OReportDefinition::WriteThroughComponent(
+bool OReportDefinition::WriteThroughComponent(
     const uno::Reference<io::XOutputStream> & xOutputStream,
     const uno::Reference<lang::XComponent> & xComponent,
     const sal_Char* pServiceName,
@@ -1727,7 +1727,7 @@ sal_Bool OReportDefinition::WriteThroughComponent(
     OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if( !xExporter.is() )
-        return sal_False;
+        return false;
 
     // connect model and filter
     xExporter->setSourceDocument( xComponent );

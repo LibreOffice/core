@@ -134,10 +134,10 @@ short ODateTimeDialog::Execute()
             aValues[nLength++].Value <<= m_pDate->IsChecked();
 
             aValues[nLength].Name = PROPERTY_FORMATKEYDATE;
-            aValues[nLength++].Value <<= getFormatKey(sal_True);
+            aValues[nLength++].Value <<= getFormatKey(true);
 
             aValues[nLength].Name = PROPERTY_FORMATKEYTIME;
-            aValues[nLength++].Value <<= getFormatKey(sal_False);
+            aValues[nLength++].Value <<= getFormatKey(false);
 
             sal_Int32 nWidth = 0;
             if ( m_pDate->IsChecked() )
@@ -198,8 +198,8 @@ IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
 
      if ( _pBox == m_pDate || _pBox == m_pTime)
      {
-         sal_Bool bDate = m_pDate->IsChecked();
-        sal_Bool bTime = m_pTime->IsChecked();
+         bool bDate = m_pDate->IsChecked();
+        bool bTime = m_pTime->IsChecked();
         if (!bDate && !bTime)
         {
             m_pPB_OK->Disable();
@@ -212,7 +212,7 @@ IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
     return 1L;
 }
 
-sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
+sal_Int32 ODateTimeDialog::getFormatKey(bool _bDate) const
 {
     sal_Int32 nFormatKey;
     if ( _bDate )

@@ -289,12 +289,12 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     ,m_nAspect(0)
     ,m_nZoomValue(100)
     ,m_eZoomType(SVX_ZOOM_PERCENT)
-    ,m_bShowRuler(sal_True)
-    ,m_bGridVisible(sal_True)
-    ,m_bGridUse(sal_True)
-    ,m_bShowProperties(sal_True)
-    ,m_bGroupFloaterWasVisible(sal_False)
-    ,m_bHelplinesMove(sal_True)
+    ,m_bShowRuler(true)
+    ,m_bGridVisible(true)
+    ,m_bGridUse(true)
+    ,m_bShowProperties(true)
+    ,m_bGroupFloaterWasVisible(false)
+    ,m_bHelplinesMove(true)
     ,m_bChartEnabled(false)
     ,m_bChartEnabledAsked(false)
     ,m_bInGeneratePreview(false)
@@ -2290,7 +2290,7 @@ void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) th
 
 static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
-                          ,::std::mem_fun_t<sal_Bool,OGroupHelper>&_pGroupMemberFunction)
+                          ,::std::mem_fun_t<bool,OGroupHelper>&_pGroupMemberFunction)
 {
     uno::Reference< report::XGroup> xGroup;
     sal_uInt16 nNonVisibleGroups = 0;
@@ -2308,7 +2308,7 @@ static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XG
 
 void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,const OUString& _sPropName,sal_Int32 _nGroupPos,bool _bShow)
 {
-    ::std::mem_fun_t<sal_Bool,OGroupHelper> pMemFun = ::std::mem_fun(&OGroupHelper::getHeaderOn);
+    ::std::mem_fun_t<bool,OGroupHelper> pMemFun = ::std::mem_fun(&OGroupHelper::getHeaderOn);
     ::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
     OUString sColor(DBGROUPHEADER);
     sal_uInt16 nPosition = 0;
@@ -3053,7 +3053,7 @@ sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (Ille
         {
             if ( aElements.getLength() > 0 )
                 getDesignView()->showProperties(uno::Reference<uno::XInterface>(aElements[0],uno::UNO_QUERY));
-            getDesignView()->setMarked(aElements,sal_True);
+            getDesignView()->setMarked(aElements, true);
         }
         else
         {
@@ -3064,7 +3064,7 @@ sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (Ille
                 getDesignView()->showProperties(xObject);
                 aElements.realloc(1);
                 aElements[0] = xProp;
-                getDesignView()->setMarked(aElements,sal_True);
+                getDesignView()->setMarked(aElements, true);
             }
             else
             {
@@ -3121,7 +3121,7 @@ IMPL_LINK( OReportController, OnExecuteReport, void* ,/*_pMemfun*/)
 void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const OUString& _sFunction,sal_uInt16 _nObjectId)
 {
     SequenceAsHashMap aMap(_aArgs);
-    getDesignView()->setMarked(_xSection ,sal_True);
+    getDesignView()->setMarked(_xSection, true);
     ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
     if ( !pSectionWindow )
         return;
@@ -3213,7 +3213,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             if ( !sUrl.isEmpty() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
                 xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
 
-            pObj->CreateMediator(sal_True);
+            pObj->CreateMediator(true);
 
             if ( _nObjectId == OBJ_DLG_FIXEDTEXT ) // special case for fixed text
                 xUnoProp->setPropertyValue(PROPERTY_LABEL,uno::makeAny(OUnoObject::GetDefaultName(pObj)));
@@ -3332,7 +3332,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault("Section",xCurrentSection);
             uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
 
-            getDesignView()->setMarked(xSection,sal_True);
+            getDesignView()->setMarked(xSection, true);
             pSectionWindow[0] = getDesignView()->getMarkedSection();
 
             sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN);
@@ -3507,7 +3507,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
                             xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
 
-                        pObjs[i]->CreateMediator(sal_True);
+                        pObjs[i]->CreateMediator(true);
 
                         const sal_Int32 nShapeWidth = xShapeProp->getWidth();
                         const bool bChangedPos = (aPos.X + nShapeWidth) > nPaperWidth;
@@ -4128,9 +4128,9 @@ void OReportController::impl_zoom_nothrow()
     InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(), true);
 }
 
-sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const
+bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( _xReportControlFormat.is() && !uno::Reference< report::XFixedLine>(_xReportControlFormat,uno::UNO_QUERY).is() ) // this command is really often called so we nedd a short cut here
     {
         try

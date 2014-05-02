@@ -94,12 +94,12 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_eMode( RPTUI_SELECT )
     ,m_nCurrentPosition(USHRT_MAX)
     ,m_eActObj( OBJ_NONE )
-    ,m_bFirstDraw(sal_False)
+    ,m_bFirstDraw(false)
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
     ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
-    ,m_bGridVisible(sal_True)
-    ,m_bGridSnap(sal_True)
-    ,m_bDeleted( sal_False )
+    ,m_bGridVisible(true)
+    ,m_bGridSnap(true)
+    ,m_bDeleted( false )
 {
     SetHelpId(UID_RPT_RPT_APP_VIEW);
     ImplInitSettings();
@@ -125,7 +125,7 @@ ODesignView::ODesignView(   Window* pParent,
 
 ODesignView::~ODesignView()
 {
-    m_bDeleted = sal_True;
+    m_bDeleted = true;
     Hide();
     m_aScrollWindow.Hide();
     m_aMarkTimer.Stop();
@@ -347,13 +347,13 @@ void ODesignView::Delete()
     m_aScrollWindow.Delete();
 }
 
-sal_Bool ODesignView::HasSelection() const
+bool ODesignView::HasSelection() const
 {
     return m_aScrollWindow.HasSelection();
 }
 
 
-sal_Bool ODesignView::IsPasteAllowed() const
+bool ODesignView::IsPasteAllowed() const
 {
     return m_aScrollWindow.IsPasteAllowed();
 }
@@ -364,10 +364,10 @@ void ODesignView::UpdatePropertyBrowserDelayed(OSectionView& _rView)
     if ( m_pCurrentView != &_rView )
     {
         if ( m_pCurrentView )
-            m_aScrollWindow.setMarked(m_pCurrentView,sal_False);
+            m_aScrollWindow.setMarked(m_pCurrentView,false);
         m_pCurrentView = &_rView;
         if ( m_pCurrentView )
-            m_aScrollWindow.setMarked(m_pCurrentView,sal_True);
+            m_aScrollWindow.setMarked(m_pCurrentView,true);
         m_xReportComponent.clear();
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         Broadcast( aHint );
@@ -376,7 +376,7 @@ void ODesignView::UpdatePropertyBrowserDelayed(OSectionView& _rView)
 }
 
 
-void ODesignView::toggleGrid(sal_Bool _bGridVisible)
+void ODesignView::toggleGrid(bool _bGridVisible)
 {
      m_aScrollWindow.toggleGrid(_bGridVisible);
 }
@@ -386,7 +386,7 @@ sal_uInt16 ODesignView::getSectionCount() const
     return m_aScrollWindow.getSectionCount();
 }
 
-void ODesignView::showRuler(sal_Bool _bShow)
+void ODesignView::showRuler(bool _bShow)
 {
      m_aScrollWindow.showRuler(_bShow);
 }
@@ -428,7 +428,7 @@ IMPL_LINK( ODesignView, SplitHdl, void*,  )
     if ( m_pPropWin && m_pPropWin->IsVisible() )
         nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
 
-    if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_aScrollWindow.getMaxMarkerWidth(sal_False) )
+    if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_aScrollWindow.getMaxMarkerWidth(false) )
     {
         long nOldSplitPos = getController().getSplitPos();
         (void)nOldSplitPos;
@@ -462,7 +462,7 @@ void ODesignView::togglePropertyBrowser(bool _bToogleOn)
         if ( !m_pCurrentView && !m_xReportComponent.is() )
             m_xReportComponent = getController().getReportDefinition();
 
-        const sal_Bool bWillBeVisible = _bToogleOn;
+        const bool bWillBeVisible = _bToogleOn;
         m_pPropWin->Show(bWillBeVisible);
         m_pTaskPane->Show(bWillBeVisible);
         m_pTaskPane->Invalidate();
@@ -483,13 +483,13 @@ void ODesignView::showProperties(const uno::Reference< uno::XInterface>& _xRepor
     {
         m_xReportComponent = _xReportComponent;
         if ( m_pCurrentView )
-            m_aScrollWindow.setMarked(m_pCurrentView,sal_False);
+            m_aScrollWindow.setMarked(m_pCurrentView,false);
         m_pCurrentView = NULL;
         m_aMarkTimer.Start();
     }
 }
 
-sal_Bool ODesignView::isReportExplorerVisible() const
+bool ODesignView::isReportExplorerVisible() const
 {
     return m_pReportExplorer && m_pReportExplorer->IsVisible();
 }
@@ -510,7 +510,7 @@ void ODesignView::toggleReportExplorer()
         m_pReportExplorer->Show(!m_pReportExplorer->IsVisible());
 }
 
-sal_Bool ODesignView::isAddFieldVisible() const
+bool ODesignView::isAddFieldVisible() const
 {
     return m_pAddField && m_pAddField->IsVisible();
 }
@@ -609,18 +609,18 @@ void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlig
     m_aScrollWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
 }
 
-sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
+bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
     if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
-        return sal_False;
+        return false;
     if ( (m_pAddField && m_pAddField->HasChildPathFocus()) )
-        return sal_False;
+        return false;
     if ( (m_pReportExplorer && m_pReportExplorer->HasChildPathFocus()) )
-        return sal_False;
+        return false;
     return m_aScrollWindow.handleKeyEvent(_rEvent);
 }
 
-void ODesignView::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
+void ODesignView::setMarked(const uno::Reference< report::XSection>& _xSection,bool _bMark)
 {
     m_aScrollWindow.setMarked(_xSection,_bMark);
     if ( _bMark )
@@ -629,7 +629,7 @@ void ODesignView::setMarked(const uno::Reference< report::XSection>& _xSection,s
         m_pCurrentView = NULL;
 }
 
-void ODesignView::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _aShapes,sal_Bool _bMark)
+void ODesignView::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _aShapes,bool _bMark)
 {
     m_aScrollWindow.setMarked(_aShapes,_bMark);
     if ( _aShapes.hasElements() && _bMark )
@@ -675,18 +675,18 @@ void ODesignView::fillControlModelSelection(::std::vector< uno::Reference< uno::
     m_aScrollWindow.fillControlModelSelection(_rSelection);
 }
 
-void ODesignView::setGridSnap(sal_Bool bOn)
+void ODesignView::setGridSnap(bool bOn)
 {
     m_aScrollWindow.setGridSnap(bOn);
 
 }
 
-void ODesignView::setDragStripes(sal_Bool bOn)
+void ODesignView::setDragStripes(bool bOn)
 {
     m_aScrollWindow.setDragStripes(bOn);
 }
 
-sal_Bool ODesignView::isHandleEvent(sal_uInt16 /*_nId*/) const
+bool ODesignView::isHandleEvent(sal_uInt16 /*_nId*/) const
 {
     return m_pPropWin && m_pPropWin->HasChildPathFocus();
 }

@@ -42,7 +42,7 @@ namespace reportdesign
                             public FormatConditionPropertySet
     {
         OFormatProperties   m_aFormatProperties;
-        OUString     m_sFormula;
+        OUString            m_sFormula;
         sal_Bool            m_bEnabled;
     private:
         OFormatCondition(const OFormatCondition&);

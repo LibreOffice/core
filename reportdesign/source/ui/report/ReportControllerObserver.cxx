@@ -183,13 +183,18 @@ void OXReportControllerObserver::Lock()
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
     osl_atomic_increment( &m_pImpl->m_nLocks );
 }
+
 void OXReportControllerObserver::UnLock()
 {
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
 
     osl_atomic_decrement( &m_pImpl->m_nLocks );
 }
-sal_Bool OXReportControllerObserver::IsLocked() const { return m_pImpl->m_nLocks != 0; }
+
+bool OXReportControllerObserver::IsLocked() const
+{
+    return m_pImpl->m_nLocks != 0;
+}
 
 
 void OXReportControllerObserver::AddSection(const uno::Reference< report::XSection > & _xSection)

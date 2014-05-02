@@ -85,15 +85,15 @@ public:
     DlgEdFunc( OReportSection* pParent );
     virtual ~DlgEdFunc();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual bool MouseMove( const MouseEvent& rMEvt );
 
     /** checks if the keycode is known by the child windows
         @param  _rCode  the keycode
         @return <TRUE/> if the keycode is handled otherwise <FALSE/>
     */
-    virtual sal_Bool    handleKeyEvent(const KeyEvent& _rEvent);
+    virtual bool    handleKeyEvent(const KeyEvent& _rEvent);
 
     /** returns <TRUE/> if the mouse event is over an existing object
     *
@@ -126,9 +126,9 @@ public:
     DlgEdFuncInsert( OReportSection* pParent );
     virtual ~DlgEdFuncInsert();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 };
 
 
@@ -141,11 +141,11 @@ public:
     DlgEdFuncSelect( OReportSection* pParent );
     virtual ~DlgEdFuncSelect();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    void SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, sal_Bool bQuickDrag);
+    void SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, bool bQuickDrag);
 };
 
 }

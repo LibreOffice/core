@@ -30,7 +30,7 @@ namespace rptui
     {
         OReportSection*     m_pSection;
         OReportWindow*      m_pParent;
-        sal_Bool            m_bShow;
+        bool            m_bShow;
         OReportRuler(OReportRuler&);
         void operator =(OReportRuler&);
     public:

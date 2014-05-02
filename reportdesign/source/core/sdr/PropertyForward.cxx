@@ -36,12 +36,12 @@ namespace rptui
 OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                      ,const Reference< XPropertySet>& _xDest
                                      ,const TPropertyNamePair& _aNameMap
-                                     ,sal_Bool _bReverse)
+                                     ,bool _bReverse)
                                 : OPropertyForward_Base(m_aMutex)
                                 ,m_aNameMap(_aNameMap)
                                 ,m_xSource(_xSource)
                                 ,m_xDest(_xDest)
-                                ,m_bInChange(sal_False)
+                                ,m_bInChange(false)
 {
     osl_atomic_increment(&m_refCount);
     OSL_ENSURE(m_xDest.is(),"Dest is NULL!");
@@ -96,10 +96,10 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_bInChange )
     {
-        m_bInChange = sal_True;
+        m_bInChange = true;
         try
         {
-            sal_Bool bDest = (evt.Source == m_xDest);
+            bool bDest = (evt.Source == m_xDest);
             Reference<XPropertySet> xProp =  bDest ? m_xSource : m_xDest;
             Reference<XPropertySetInfo> xPropInfo = bDest ? m_xSourceInfo : m_xDestInfo;
             if ( xProp.is() )
@@ -153,7 +153,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
         {
             OSL_FAIL("Exception catched!");
         }
-        m_bInChange = sal_False;
+        m_bInChange = false;
     }
 }
 

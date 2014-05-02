@@ -201,7 +201,7 @@ void OScrollWindowHelper::removeSection(sal_uInt16 _nPosition)
     m_aReportWindow.removeSection(_nPosition);
 }
 
-void OScrollWindowHelper::toggleGrid(sal_Bool _bVisible)
+void OScrollWindowHelper::toggleGrid(bool _bVisible)
 {
     m_aReportWindow.toggleGrid(_bVisible);
 }
@@ -226,7 +226,7 @@ void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
     m_aReportWindow.SetMode(_eNewMode);
 }
 
-sal_Bool OScrollWindowHelper::HasSelection() const
+bool OScrollWindowHelper::HasSelection() const
 {
     return m_aReportWindow.HasSelection();
 }
@@ -246,7 +246,7 @@ void OScrollWindowHelper::Paste()
     m_aReportWindow.Paste();
 }
 
-sal_Bool OScrollWindowHelper::IsPasteAllowed() const
+bool OScrollWindowHelper::IsPasteAllowed() const
 {
     return m_aReportWindow.IsPasteAllowed();
 }
@@ -261,32 +261,32 @@ void OScrollWindowHelper::unmarkAllObjects(OSectionView* _pSectionView)
     m_aReportWindow.unmarkAllObjects(_pSectionView);
 }
 
-sal_Int32 OScrollWindowHelper::getMaxMarkerWidth(sal_Bool _bWithEnd) const
+sal_Int32 OScrollWindowHelper::getMaxMarkerWidth(bool _bWithEnd) const
 {
     return m_aReportWindow.getMaxMarkerWidth(_bWithEnd);
 }
 
-void OScrollWindowHelper::showRuler(sal_Bool _bShow)
+void OScrollWindowHelper::showRuler(bool _bShow)
 {
     m_aReportWindow.showRuler(_bShow);
 }
 
-sal_Bool OScrollWindowHelper::handleKeyEvent(const KeyEvent& _rEvent)
+bool OScrollWindowHelper::handleKeyEvent(const KeyEvent& _rEvent)
 {
     return m_aReportWindow.handleKeyEvent(_rEvent);
 }
 
-void OScrollWindowHelper::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
+void OScrollWindowHelper::setMarked(OSectionView* _pSectionView, bool _bMark)
 {
     m_aReportWindow.setMarked(_pSectionView,_bMark);
 }
 
-void OScrollWindowHelper::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
+void OScrollWindowHelper::setMarked(const uno::Reference< report::XSection>& _xSection, bool _bMark)
 {
     m_aReportWindow.setMarked(_xSection,_bMark);
 }
 
-void OScrollWindowHelper::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape,sal_Bool _bMark)
+void OScrollWindowHelper::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape, bool _bMark)
 {
     m_aReportWindow.setMarked(_xShape,_bMark);
 }
@@ -367,12 +367,12 @@ void OScrollWindowHelper::_propertyChanged(const beans::PropertyChangeEvent& /*_
     m_aReportWindow.notifySizeChanged();
 }
 
-void OScrollWindowHelper::setGridSnap(sal_Bool bOn)
+void OScrollWindowHelper::setGridSnap(bool bOn)
 {
     m_aReportWindow.setGridSnap(bOn);
 }
 
-void OScrollWindowHelper::setDragStripes(sal_Bool bOn)
+void OScrollWindowHelper::setDragStripes(bool bOn)
 {
     m_aReportWindow.setDragStripes(bOn);
 }

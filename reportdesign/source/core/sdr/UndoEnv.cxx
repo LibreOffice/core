@@ -101,8 +101,8 @@ public:
     ::std::vector< uno::Reference< container::XChild> > m_aSections;
     Reference< XIntrospection >                         m_xIntrospection;
     oslInterlockedCount                                 m_nLocks;
-    sal_Bool                                            m_bReadOnly;
-    sal_Bool                                            m_bIsUndo;
+    bool                                            m_bReadOnly;
+    bool                                            m_bIsUndo;
 
     OXUndoEnvironmentImpl(OReportModel& _rModel);
 };
@@ -111,8 +111,8 @@ OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_
         ,m_aFormatNormalizer( _rModel )
         ,m_aConditionUpdater()
         ,m_nLocks(0)
-        ,m_bReadOnly(sal_False)
-        ,m_bIsUndo(sal_False)
+        ,m_bReadOnly(false)
+        ,m_bIsUndo(false)
 {
 }
 
@@ -140,7 +140,7 @@ void OXUndoEnvironment::UnLock()
 
     osl_atomic_decrement( &m_pImpl->m_nLocks );
 }
-sal_Bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
+bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
 
 void OXUndoEnvironment::RemoveSection(OReportPage* _pPage)
 {
@@ -411,7 +411,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
 
 void OXUndoEnvironment::implSetModified()
 {
-    m_pImpl->m_rModel.SetModified( sal_True );
+    m_pImpl->m_rModel.SetModified( true );
 }
 
 
@@ -638,12 +638,12 @@ void OXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement)
         switchListening( xContainer, false );
 }
 
-void OXUndoEnvironment::SetUndoMode(sal_Bool _bUndo)
+void OXUndoEnvironment::SetUndoMode(bool _bUndo)
 {
     m_pImpl->m_bIsUndo = _bUndo;
 }
 
-sal_Bool OXUndoEnvironment::IsUndoMode() const
+bool OXUndoEnvironment::IsUndoMode() const
 {
     return m_pImpl->m_bIsUndo;
 }

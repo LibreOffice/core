@@ -166,7 +166,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         if ( !sFilter.isEmpty() )
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_FILTER),sFilter);
 
-        const sal_Bool bEscapeProcessing( m_xDatabaseDataProvider->getEscapeProcessing() );
+        const bool bEscapeProcessing( m_xDatabaseDataProvider->getEscapeProcessing() );
         if ( !bEscapeProcessing )
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_ESCAPE_PROCESSING),::xmloff::token::GetXMLToken( XML_FALSE ));
 

@@ -353,13 +353,13 @@ ORptUndoPropertyAction::ORptUndoPropertyAction(SdrModel& rNewMod, const Property
 
 void ORptUndoPropertyAction::Undo()
 {
-    setProperty(sal_True);
+    setProperty(true);
 }
 
 
 void ORptUndoPropertyAction::Redo()
 {
-    setProperty(sal_False);
+    setProperty(false);
 }
 
 Reference< XPropertySet> ORptUndoPropertyAction::getObject()
@@ -367,7 +367,7 @@ Reference< XPropertySet> ORptUndoPropertyAction::getObject()
     return m_xObj;
 }
 
-void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
+void ORptUndoPropertyAction::setProperty(bool _bOld)
 {
     Reference< XPropertySet> xObj = getObject();
 

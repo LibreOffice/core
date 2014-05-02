@@ -464,7 +464,7 @@ namespace rptui
                         continue;
 
                     Reference< XFormatCondition > xNewCond;
-                    sal_Bool bAppend = j >= m_xFormatConditions->getCount();
+                    bool bAppend = j >= m_xFormatConditions->getCount();
                     if ( bAppend )
                     {
                         xNewCond = m_xFormatConditions->createFormatCondition();

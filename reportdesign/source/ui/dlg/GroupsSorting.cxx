@@ -95,7 +95,7 @@ class OFieldExpressionControl : public TContainerListenerBase
     OGroupsSortingDialog*           m_pParent;
     bool                            m_bIgnoreEvent;
 
-    sal_Bool SaveModified(bool _bAppend);
+    bool SaveModified(bool _bAppend);
 
 public:
     OFieldExpressionControl( OGroupsSortingDialog* _pParent,const ResId& _rResId);
@@ -110,7 +110,7 @@ public:
 
     void        fillColumns(const uno::Reference< container::XNameAccess>& _xColumns);
     void        lateInit();
-    sal_Bool    IsDeleteAllowed( );
+    bool    IsDeleteAllowed( );
     void        DeleteRows();
     void        cut();
     void        copy();
@@ -126,7 +126,7 @@ public:
 
     /** move groups given by _aGroups
     */
-    void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,sal_Bool _bSelect = sal_True);
+    void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,bool _bSelect = true);
 
     virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
     using OFieldExpressionControl_Base::GetRowCount;
@@ -284,7 +284,7 @@ sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rE
     return nAction;
 }
 
-void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,sal_Bool _bSelect)
+void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,bool _bSelect)
 {
     if ( _aGroups.getLength() )
     {
@@ -401,18 +401,18 @@ bool OFieldExpressionControl::SaveModified()
     return SaveModified(true);
 }
 
-sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
+bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
 {
     sal_Int32 nRow = GetCurRow();
     if ( nRow != BROWSER_ENDOFSELECTION )
     {
-        sal_Bool bAppend = sal_False;
+        bool bAppend = false;
         try
         {
             uno::Reference< report::XGroup> xGroup;
             if ( m_aGroupPositions[nRow] == NO_GROUP )
             {
-                bAppend = sal_True;
+                bAppend = true;
                 OUString sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
                 m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString() );
                 xGroup = m_pParent->getGroups()->createGroup();
@@ -478,7 +478,7 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) const
@@ -660,7 +660,7 @@ void SAL_CALL OFieldExpressionControl::elementRemoved(const container::Container
     }
 }
 
-sal_Bool OFieldExpressionControl::IsDeleteAllowed( )
+bool OFieldExpressionControl::IsDeleteAllowed( )
 {
     return !m_pParent->isReadOnly() && GetSelectRowCount() > 0;
 }
@@ -697,12 +697,12 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
             if ( nColId == HANDLE_ID )
             {
                 PopupMenu aContextMenu(ModuleRes(RID_GROUPSROWPOPUPMENU));
-                sal_Bool bEnable = sal_False;
+                bool bEnable = false;
                 long nIndex = FirstSelectedRow();
                 while( nIndex >= 0 && !bEnable )
                 {
                     if ( m_aGroupPositions[nIndex] != NO_GROUP )
-                        bEnable = sal_True;
+                        bEnable = true;
                     nIndex = NextSelectedRow();
                 }
                 aContextMenu.EnableItem( SID_DELETE, IsDeleteAllowed() && bEnable );
@@ -738,7 +738,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 void OFieldExpressionControl::DeleteRows()
 {
 
-    sal_Bool bIsEditing = IsEditing();
+    bool bIsEditing = IsEditing();
     if (bIsEditing)
     {
         DeactivateCell();
@@ -915,7 +915,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
 // class OGroupsSortingDialog
 
 OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
-                                           ,sal_Bool _bReadOnly
+                                           ,bool _bReadOnly
                                            ,OReportController* _pController)
     : FloatingWindow( _pParent, ModuleRes(RID_GROUPS_SORTING) )
     ,OPropertyChangeListener(m_aMutex)
@@ -1014,7 +1014,7 @@ OGroupsSortingDialog::~OGroupsSortingDialog()
         m_pCurrentGroupListener->dispose();
 }
 
-sal_Bool OGroupsSortingDialog::isReadOnly( ) const
+bool OGroupsSortingDialog::isReadOnly( ) const
 {
     return m_bReadOnly;
 }
@@ -1031,7 +1031,7 @@ void OGroupsSortingDialog::UpdateData( )
 void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 {
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
-    sal_Bool bEmpty = nGroupPos == NO_GROUP;
+    bool bEmpty = nGroupPos == NO_GROUP;
     m_aHeaderLst.Enable(!bEmpty);
     m_aFooterLst.Enable(!bEmpty);
     m_aGroupOnLst.Enable(!bEmpty);
@@ -1183,7 +1183,7 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
             if ( nIndex >= 0 && aClipboardList.getLength() )
             {
                 m_pFieldExpression->SetNoSelection();
-                m_pFieldExpression->moveGroups(aClipboardList,nIndex,sal_False);
+                m_pFieldExpression->moveGroups(aClipboardList,nIndex,false);
                 m_pFieldExpression->DeactivateCell();
                 m_pFieldExpression->GoToRow(nIndex);
                 m_pFieldExpression->ActivateCell(nIndex, m_pFieldExpression->GetCurColumnId());
@@ -1332,7 +1332,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         pControls[i]->SaveValue();
 
     ListBox* pControlsLst2[] = { &m_aHeaderLst, &m_aFooterLst,  &m_aGroupOnLst, &m_aKeepTogetherLst,&m_aOrderLst};
-    sal_Bool bReadOnly = !m_pController->isEditable();
+    bool bReadOnly = !m_pController->isEditable();
     for (size_t i = 0; i < sizeof(pControlsLst2)/sizeof(pControlsLst2[0]); ++i)
         pControlsLst2[i]->SetReadOnly(bReadOnly);
     m_aGroupIntervalEd.SetReadOnly(bReadOnly);
@@ -1377,7 +1377,7 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
 {
     sal_Int32 nGroupCount = m_xGroups->getCount();
     sal_Int32 nRowCount = m_pFieldExpression->GetRowCount();
-    sal_Bool bEnabled = nGroupCount > 1;
+    bool bEnabled = nGroupCount > 1;
 
     if (bEnabled && _nRow > 0 )
     {
@@ -1399,7 +1399,7 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
     if ( nGroupPos != NO_GROUP )
     {
-        sal_Bool bEnableDelete = nGroupCount > 0;
+        bool bEnableDelete = nGroupCount > 0;
         m_aToolBox.EnableItem(SID_RPT_GROUPSORT_DELETE, bEnableDelete);
     }
     else

@@ -83,14 +83,14 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>                       m_xSection;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xKeepShapeAlive;
     OUString m_sComponentName;
-    sal_Bool        m_bIsListening;
+    bool        m_bIsListening;
 
     OObjectBase(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
     OObjectBase(const OUString& _sComponentName);
 
     virtual ~OObjectBase();
 
-    inline sal_Bool isListening() const { return m_bIsListening; }
+    inline bool isListening() const { return m_bIsListening; }
 
     void SetPropsFromRect(const Rectangle& _rRect);
 
@@ -109,12 +109,12 @@ private:
 
 public:
     void StartListening();
-    void EndListening(sal_Bool bRemoveListener = sal_True);
+    void EndListening(bool bRemoveListener = true);
     // PropertyChangeListener
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
     virtual void initializeOle() {}
 
-    sal_Bool        supportsService( const OUString& _sServiceName ) const;
+    bool        supportsService( const OUString& _sServiceName ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
@@ -261,7 +261,7 @@ public:
     /** creates the m_xMediator when it doesn't already exist.
         @param  _bReverse   when set to <TRUE/> then the properties from the uno control will be copied into report control
     */
-    void CreateMediator(sal_Bool _bReverse = sal_False);
+    void CreateMediator(bool _bReverse = false);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() SAL_OVERRIDE;
 

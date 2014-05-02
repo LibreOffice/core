@@ -48,7 +48,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>    m_xSourceInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xDest;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>    m_xDestInfo;
-        sal_Bool                                                                        m_bInChange;
+        bool                                                                        m_bInChange;
         OPropertyMediator(OPropertyMediator&);
         void operator =(OPropertyMediator&);
     protected:
@@ -61,7 +61,7 @@ namespace rptui
         OPropertyMediator(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSource
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest
                         ,const TPropertyNamePair& _aNameMap
-                        ,sal_Bool _bReverse = sal_False);
+                        ,bool _bReverse = false);
 
         // ::com::sun::star::beans::XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

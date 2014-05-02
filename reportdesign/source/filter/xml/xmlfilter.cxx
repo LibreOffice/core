@@ -125,7 +125,7 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* /*pStreamName*/,
     const uno::Reference<XComponentContext> & rContext,
     const uno::Reference< XDocumentHandler >& _xFilter,
-    sal_Bool /*bEncrypted*/ )
+    bool /*bEncrypted*/ )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
@@ -209,7 +209,7 @@ sal_Int32 ReadThroughComponent(
     if ( xStorage.is() )
     {
         uno::Reference< io::XStream > xDocStream;
-        sal_Bool bEncrypted = sal_False;
+        bool bEncrypted = false;
 
         try
         {
@@ -407,7 +407,7 @@ sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescript
     throw (RuntimeException, std::exception)
 {
     Window*     pFocusWindow = Application::GetFocusWindow();
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
 
     if( pFocusWindow )
         pFocusWindow->EnterWait();
@@ -421,7 +421,7 @@ sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescript
     return bRet;
 }
 
-sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
+bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
     OUString                     sFileName;
@@ -472,13 +472,13 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             }
         }
     }
-    sal_Bool bRet = xStorage.is();
+    bool bRet = xStorage.is();
     if ( bRet )
     {
         m_xReportDefinition.set(GetModel(),UNO_QUERY_THROW);
         OSL_ENSURE(m_xReportDefinition.is(),"ReportDefinition is NULL!");
         if ( !m_xReportDefinition.is() )
-            return sal_False;
+            return false;
 
 #if OSL_DEBUG_LEVEL > 1
         uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
@@ -613,7 +613,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                         // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
                         ErrorHandler::HandleError( nRet );
                         if( nRet & ERRCODE_WARNING_MASK )
-                            bRet = sal_True;
+                            bRet = true;
                     }
             }
         }
@@ -652,13 +652,13 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
             break;
         case XML_TOK_DOC_STYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext( rLocalName, xAttrList, sal_False);
+            pContext = CreateStylesContext( rLocalName, xAttrList, false);
             break;
         case XML_TOK_DOC_AUTOSTYLES:
             // don't use the autostyles from the styles-document for the progress
             if ( ! IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
                 GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext( rLocalName, xAttrList, sal_True);
+            pContext = CreateStylesContext( rLocalName, xAttrList, true);
             break;
         case XML_TOK_DOC_FONTDECLS:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
@@ -931,7 +931,7 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
 }
 
 SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
-                                     const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
+                                     const uno::Reference< XAttributeList>& xAttrList, bool bIsAutoStyle )
 {
     SvXMLImportContext* pContext = bIsAutoStyle ? GetAutoStyles() : GetStyles();
     if ( !pContext )
@@ -1041,9 +1041,9 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName,con
     return pContext;
 }
 
-sal_Bool ORptFilter::isOldFormat() const
+bool ORptFilter::isOldFormat() const
 {
-    sal_Bool bOldFormat = sal_True;
+    bool bOldFormat = true;
     uno::Reference<beans::XPropertySet> xProp = getImportInfo();
     if ( xProp.is() )
     {

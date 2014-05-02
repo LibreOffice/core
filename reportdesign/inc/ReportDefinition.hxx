@@ -100,7 +100,7 @@ namespace reportdesign
         OReportDefinition& operator=(const OReportDefinition&);
 
         void setSection(     const OUString& _sProperty
-                            ,const sal_Bool& _bOn
+                            ,const bool& _bOn
                             ,const OUString& _sName
                             ,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _member);
 
@@ -118,7 +118,7 @@ namespace reportdesign
         }
 
         /// write a single XML stream into the package
-        sal_Bool WriteThroughComponent(
+        bool WriteThroughComponent(
             /// the component we export
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XComponent> & xComponent,
@@ -134,7 +134,7 @@ namespace reportdesign
 
         /// write a single output stream
         /// (to be called either directly or by WriteThroughComponent(...))
-        sal_Bool WriteThroughComponent(
+        bool WriteThroughComponent(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::io::XOutputStream> & xOutputStream,
             const ::com::sun::star::uno::Reference<

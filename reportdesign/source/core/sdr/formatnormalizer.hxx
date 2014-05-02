@@ -45,9 +45,9 @@ namespace rptui
             OUString sName;
             sal_Int32       nDataType;
             sal_Int32       nScale;
-            sal_Bool        bIsCurrency;
+            bool        bIsCurrency;
 
-            Field() : sName(), nDataType( 0 ), nScale( 0 ), bIsCurrency( 0 ) { }
+            Field() : sName(), nDataType( 0 ), nScale( 0 ), bIsCurrency( false ) { }
         };
         typedef ::std::vector< Field >  FieldList;
 

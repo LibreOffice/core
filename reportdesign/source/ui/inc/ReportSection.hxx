@@ -54,8 +54,8 @@ namespace rptui
         sal_Int32                   m_nPaintEntranceCount;
 
         DlgEdMode                   m_eMode;
-        sal_Bool                        m_bDialogModelChanged;
-        sal_Bool                    m_bInDrag;
+        bool                        m_bDialogModelChanged;
+        bool                    m_bInDrag;
 
         /** fills the section with all control from the report section
         */
@@ -113,15 +113,15 @@ namespace rptui
         *
         * \param _bVisible when <TRUE/> the grid is made visible
         */
-        void SetGridVisible(sal_Bool _bVisible);
+        void SetGridVisible(bool _bVisible);
 
         inline OSectionWindow*      getSectionWindow() const { return m_pParent; }
         inline OSectionView&        getSectionView() const { return *m_pView; }
         inline OReportPage*         getPage() const { return m_pPage; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
 
-        void            SetDialogModelChanged( sal_Bool bChanged = sal_True ) { m_bDialogModelChanged = bChanged; }
-        sal_Bool            IsDialogModelChanged() const { return m_bDialogModelChanged; }
+        void            SetDialogModelChanged( bool bChanged = true ) { m_bDialogModelChanged = bChanged; }
+        bool            IsDialogModelChanged() const { return m_bDialogModelChanged; }
         DlgEdMode       GetMode() const { return m_eMode; }
         void            SetMode( DlgEdMode m_eMode );
 
@@ -129,7 +129,7 @@ namespace rptui
             @param  _rCode  the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool        handleKeyEvent(const KeyEvent& _rEvent);
+        bool            handleKeyEvent(const KeyEvent& _rEvent);
 
         /** returns the current control report model or <NULL/>
         */

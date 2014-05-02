@@ -148,7 +148,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             pNewObj = OCustomShape::Create( _xComponent );
             try
             {
-                sal_Bool bOpaque = sal_False;
+                bool bOpaque = false;
                 _xComponent->getPropertyValue(PROPERTY_OPAQUE) >>= bOpaque;
                 pNewObj->NbcSetLayer(bOpaque ? RPT_LAYER_FRONT : RPT_LAYER_BACK);
             }
@@ -311,14 +311,14 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
 
 
 OObjectBase::OObjectBase(const uno::Reference< report::XReportComponent>& _xComponent)
-:m_bIsListening(sal_False)
+:m_bIsListening(false)
 {
     m_xReportComponent = _xComponent;
 }
 
 OObjectBase::OObjectBase(const OUString& _sComponentName)
 :m_sComponentName(_sComponentName)
-,m_bIsListening(sal_False)
+,m_bIsListening(false)
 {
 }
 
@@ -355,7 +355,7 @@ void OObjectBase::StartListening()
 
     if ( !isListening() && m_xReportComponent.is() )
     {
-        m_bIsListening = sal_True;
+        m_bIsListening = true;
 
         if ( !m_xPropertyChangeListener.is() )
         {
@@ -366,11 +366,11 @@ void OObjectBase::StartListening()
     }
 }
 
-void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
+void OObjectBase::EndListening(bool /*bRemoveListener*/)
 {
     OSL_ENSURE(!m_xReportComponent.is() || isListening(), "OUnoObject::EndListening: not listening currently!");
 
-    m_bIsListening = sal_False;
+    m_bIsListening = false;
     if ( isListening() && m_xReportComponent.is() )
     {
         // XPropertyChangeListener
@@ -417,9 +417,9 @@ void OObjectBase::SetObjectItemHelper(const SfxPoolItem& /*rItem*/)
 }
 
 
-sal_Bool OObjectBase::supportsService( const OUString& _sServiceName ) const
+bool OObjectBase::supportsService( const OUString& _sServiceName ) const
 {
-    sal_Bool bSupports = sal_False;
+    bool bSupports = false;
 
     Reference< lang::XServiceInfo > xServiceInfo( m_xReportComponent , UNO_QUERY );
         // TODO: cache xServiceInfo as member?
@@ -475,14 +475,14 @@ OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xCo
           ,OObjectBase(_xComponent)
 {
     impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY) );
-    m_bIsListening = sal_True;
+    m_bIsListening = true;
 }
 
 OCustomShape::OCustomShape(const OUString& _sComponentName)
           :SdrObjCustomShape()
           ,OObjectBase(_sComponentName)
 {
-    m_bIsListening = sal_True;
+    m_bIsListening = true;
 }
 
 
@@ -522,7 +522,7 @@ void OCustomShape::NbcMove( const Size& rSize )
 {
     if ( m_bIsListening )
     {
-        m_bIsListening = sal_False;
+        m_bIsListening = false;
 
         if ( m_xReportComponent.is() )
         {
@@ -535,7 +535,7 @@ void OCustomShape::NbcMove( const Size& rSize )
         // set geometry properties
         SetPropsFromRect(GetSnapRect());
 
-        m_bIsListening = sal_True;
+        m_bIsListening = true;
     }
     else
         SdrObjCustomShape::NbcMove( rSize );
@@ -709,7 +709,7 @@ void OUnoObject::NbcMove( const Size& rSize )
     if ( m_bIsListening )
     {
         // stop listening
-        OObjectBase::EndListening(sal_False);
+        OObjectBase::EndListening(false);
 
         bool bPositionFixed = false;
         Size aUndoSize(0,0);
@@ -757,7 +757,7 @@ void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Frac
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
     // stop listening
-    OObjectBase::EndListening(sal_False);
+    OObjectBase::EndListening(false);
 
     // set geometry properties
     SetPropsFromRect(GetLogicRect());
@@ -770,7 +770,7 @@ void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrUnoObj::NbcSetLogicRect(rRect);
     // stop listening
-    OObjectBase::EndListening(sal_False);
+    OObjectBase::EndListening(false);
 
     // set geometry properties
     SetPropsFromRect(rRect);
@@ -848,7 +848,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw
             Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
             if ( xControlModel.is() )
             {
-                OObjectBase::EndListening(sal_False);
+                OObjectBase::EndListening(false);
                 try
                 {
                     xControlModel->setPropertyValue(PROPERTY_TEXTCOLOR,evt.NewValue);
@@ -875,7 +875,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw
                 if ( !aNewName.equals(aOldName) )
                 {
                     // set old name property
-                    OObjectBase::EndListening(sal_False);
+                    OObjectBase::EndListening(false);
                     if ( m_xMediator.is() )
                         m_xMediator.get()->stopListening();
                     try
@@ -894,7 +894,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw
     }
 }
 
-void OUnoObject::CreateMediator(sal_Bool _bReverse)
+void OUnoObject::CreateMediator(bool _bReverse)
 {
     if ( !m_xMediator.is() )
     {
@@ -954,7 +954,7 @@ OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,
 {
 
     impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
-    m_bIsListening = sal_True;
+    m_bIsListening = true;
 }
 
 OOle2Obj::OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType)
@@ -963,7 +963,7 @@ OOle2Obj::OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType)
           ,m_nType(_nType)
           ,m_bOnlyOnce(true)
 {
-    m_bIsListening = sal_True;
+    m_bIsListening = true;
 }
 
 OOle2Obj::~OOle2Obj()
@@ -1005,7 +1005,7 @@ void OOle2Obj::NbcMove( const Size& rSize )
     if ( m_bIsListening )
     {
         // stop listening
-        OObjectBase::EndListening(sal_False);
+        OObjectBase::EndListening(false);
 
         bool bPositionFixed = false;
         Size aUndoSize(0,0);
@@ -1058,7 +1058,7 @@ void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     SdrOle2Obj::NbcResize( rRef, xFract, yFract );
 
     // stop listening
-    OObjectBase::EndListening(sal_False);
+    OObjectBase::EndListening(false);
 
     // set geometry properties
     SetPropsFromRect(GetLogicRect());
@@ -1071,7 +1071,7 @@ void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrOle2Obj::NbcSetLogicRect(rRect);
     // stop listening
-    OObjectBase::EndListening(sal_False);
+    OObjectBase::EndListening(false);
 
     // set geometry properties
     SetPropsFromRect(rRect);

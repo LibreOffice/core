@@ -72,7 +72,7 @@ void SAL_CALL OFunctions::insertByIndex( ::sal_Int32 Index, const uno::Any& aEle
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        sal_Bool bAdd = (Index == static_cast<sal_Int32>(m_aFunctions.size()));
+        bool bAdd = (Index == static_cast<sal_Int32>(m_aFunctions.size()));
         if ( !bAdd )
             checkIndex(Index);
         uno::Reference< report::XFunction > xFunction(aElement,uno::UNO_QUERY);
