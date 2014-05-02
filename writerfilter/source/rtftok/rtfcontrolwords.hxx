@@ -10,8 +10,10 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCONTROLWORDS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCONTROLWORDS_HXX
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
 // Note that this is not a 1:1 mapping between destination control
 // words, e.g. RTF_PICT gets mapped to DESTINATION_PICT or
@@ -1981,7 +1983,7 @@ enum RTFControlTypes
 /// Respresents an RTF Control Word
 struct RTFSymbol
 {
-    const char *sKeyword;
+    const char* sKeyword;
     int nControlType;
     RTFKeyword nIndex;
 

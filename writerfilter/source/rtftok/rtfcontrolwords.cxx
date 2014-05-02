@@ -13,10 +13,13 @@
 #include <sal/macros.h>
 #include <string.h>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
-RTFSymbol aRTFControlWords[] = {
+RTFSymbol aRTFControlWords[] =
+{
     // sKeyword nControlType nIndex
     {"'", CONTROL_SYMBOL, RTF_HEXCHAR},
     {"-", CONTROL_SYMBOL, RTF_OPTHYPH},
@@ -1851,7 +1854,8 @@ bool RTFSymbol::operator<(const RTFSymbol& rOther) const
     return strcmp(sKeyword, rOther.sKeyword) < 0;
 }
 
-RTFMathSymbol aRTFMathControlWords[] = {
+RTFMathSymbol aRTFMathControlWords[] =
+{
     // eKeyword nToken eDestination
     {RTF_MOMATH, M_TOKEN(oMath), DESTINATION_MOMATH},
     {RTF_MF, M_TOKEN(f), DESTINATION_MF},
