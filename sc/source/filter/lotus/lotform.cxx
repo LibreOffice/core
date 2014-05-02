@@ -28,6 +28,7 @@
 
 #include <math.h>
 #include <comphelper/string.hxx>
+#include <boost/scoped_array.hpp>
 
 extern WKTYP                eTyp;
 
@@ -566,15 +567,13 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
 
                 if( nStrLen )
                 {
-					sal_Char*	p = new (::std::nothrow) sal_Char[ nStrLen + 1 ];
+                    boost::scoped_array<sal_Char> p(new (::std::nothrow) sal_Char[ nStrLen + 1 ]);
                     if (p)
                     {
-                        aIn.Read( p, nStrLen );
+                        aIn.Read( p.get(), nStrLen );
                         p[ nStrLen ] = 0x00;
 
-                        DoFunc( ocNoName, nAnz, p );
-
-                        delete[] p;
+                        DoFunc( ocNoName, nAnz, p.get() );
                     }
                     else
                         DoFunc( ocNoName, nAnz, NULL );

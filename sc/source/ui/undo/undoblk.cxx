@@ -51,6 +51,7 @@
 #include <refhint.hxx>
 
 #include <set>
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1284,7 +1285,7 @@ void ScUndoDragDrop::Redo()
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+    boost::scoped_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
     EnableDrawAdjust( pDoc, false );                //! include in ScBlockUndo?
 
@@ -1312,7 +1313,7 @@ void ScUndoDragDrop::Redo()
     // do not clone objects and note captions into clipdoc (see above)
     // but at least copy notes
     ScClipParam aClipParam(aSrcRange, bCut);
-    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bKeepScenarioFlags, false, true);
+    pDoc->CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, false, bKeepScenarioFlags, false, true);
 
     if (bCut)
     {
@@ -1330,7 +1331,7 @@ void ScUndoDragDrop::Redo()
 
     bool bIncludeFiltered = bCut;
     // TODO: restore old note captions instead of cloning new captions...
-    pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL & ~IDF_OBJECTS, NULL, pClipDoc, true, false, bIncludeFiltered );
+    pDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL & ~IDF_OBJECTS, NULL, pClipDoc.get(), true, false, bIncludeFiltered );
 
     if (bCut)
         for (nTab=aSrcRange.aStart.Tab(); nTab<=aSrcRange.aEnd.Tab(); nTab++)
@@ -1353,7 +1354,7 @@ void ScUndoDragDrop::Redo()
 
     SetChangeTrack();
 
-    delete pClipDoc;
+    pClipDoc.reset();
     ShowTable( aDestRange.aStart.Tab() );
 
     RedoSdrUndoAction( pDrawUndo );             //! include in ScBlockUndo?

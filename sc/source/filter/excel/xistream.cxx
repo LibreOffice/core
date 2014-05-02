@@ -25,6 +25,7 @@
 #include "xiroot.hxx"
 
 #include <vector>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 
@@ -790,20 +791,18 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
     if( mbValid && (nBytes > 0) )
     {
         const sal_Size nMaxBuffer = 4096;
-        sal_uInt8* pnBuffer = new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ];
+        boost::scoped_array<sal_uInt8> pnBuffer(new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ]);
         sal_Size nBytesLeft = nBytes;
 
         while( mbValid && (nBytesLeft > 0) )
         {
             sal_Size nReadSize = ::std::min( nBytesLeft, nMaxBuffer );
-            nRet += Read( pnBuffer, nReadSize );
+            nRet += Read( pnBuffer.get(), nReadSize );
             // writing more bytes than read results in invalid memory access
             SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
-            rOutStrm.Write( pnBuffer, nReadSize );
+            rOutStrm.Write( pnBuffer.get(), nReadSize );
             nBytesLeft -= nReadSize;
         }
-
-        delete[] pnBuffer;
     }
     return nRet;
 }
@@ -881,7 +880,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 
-    sal_Unicode* pcBuffer = new sal_Unicode[ nCharsLeft + 1 ];
+    boost::scoped_array<sal_Unicode> pcBuffer(new sal_Unicode[ nCharsLeft + 1 ]);
 
     while( IsValid() && (nCharsLeft > 0) )
     {
@@ -894,8 +893,8 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         else
             nReadSize = GetMaxRawReadSize( nCharsLeft );
 
-        sal_Unicode* pcUniChar = pcBuffer;
-        sal_Unicode* pcEndChar = pcBuffer + nReadSize;
+        sal_Unicode* pcUniChar = pcBuffer.get();
+        sal_Unicode* pcEndChar = pcBuffer.get() + nReadSize;
 
         if( b16Bit )
         {
@@ -917,14 +916,13 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         }
 
         *pcEndChar = '\0';
-        aRet += OUString( pcBuffer );
+        aRet += OUString( pcBuffer.get() );
 
         nCharsLeft = nCharsLeft - nReadSize;
         if( nCharsLeft > 0 )
             JumpToNextStringContinue( b16Bit );
     }
 
-    delete[] pcBuffer;
     return aRet;
 }
 
@@ -988,11 +986,10 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 
 OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
-    sal_Char* pcBuffer = new sal_Char[ nChars + 1 ];
-    sal_uInt16 nCharsRead = ReadRawData( pcBuffer, nChars );
+    boost::scoped_array<sal_Char> pcBuffer(new sal_Char[ nChars + 1 ]);
+    sal_uInt16 nCharsRead = ReadRawData( pcBuffer.get(), nChars );
     pcBuffer[ nCharsRead ] = '\0';
-    OUString aRet( pcBuffer, strlen(pcBuffer), mrRoot.GetTextEncoding() );
-    delete[] pcBuffer;
+    OUString aRet( pcBuffer.get(), strlen(pcBuffer.get()), mrRoot.GetTextEncoding() );
     return aRet;
 }
 

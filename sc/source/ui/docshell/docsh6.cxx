@@ -42,6 +42,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <boost/scoped_array.hpp>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -289,7 +290,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     if ( nSourceCount == 0 )
         return;                             // no source styles
 
-    ScStylePair* pStyles = new ScStylePair[ nSourceCount ];
+    boost::scoped_array<ScStylePair> pStyles(new ScStylePair[ nSourceCount ]);
     sal_uInt16 nFound = 0;
 
     //  first create all new styles
@@ -333,8 +334,6 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     lcl_AdjustPool( GetStyleSheetPool() );      // adjust SetItems
     UpdateAllRowHeights();
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );      // Paint
-
-    delete[] pStyles;
 }
 
 

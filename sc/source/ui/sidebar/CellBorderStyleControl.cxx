@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/lineitem.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace sc { namespace sidebar {
 
@@ -284,8 +285,8 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
 
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
-    editeng::SvxBorderLine *pTop = 0 ,
-                        *pBottom = 0 ;
+    boost::scoped_ptr<editeng::SvxBorderLine> pTop;
+    boost::scoped_ptr<editeng::SvxBorderLine> pBottom;
     sal_uInt8               nValidFlags = 0;
     using namespace ::com::sun::star::table::BorderLineStyle;
 
@@ -294,29 +295,29 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
     switch ( nId )
     {
     case TBI_BORDER3_S1:
-        pBottom = new editeng::SvxBorderLine(NULL, DEF_LINE_WIDTH_2 );
+        pBottom.reset(new editeng::SvxBorderLine(NULL, DEF_LINE_WIDTH_2 ));
         nValidFlags |= FRM_VALID_BOTTOM;
         break;
     case TBI_BORDER3_S2:
-        pBottom = new editeng::SvxBorderLine(NULL);
+        pBottom.reset(new editeng::SvxBorderLine(NULL));
         pBottom->GuessLinesWidths(DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
         nValidFlags |= FRM_VALID_BOTTOM;
         break;
     case TBI_BORDER3_S3:
-        pBottom = new editeng::SvxBorderLine(NULL, DEF_LINE_WIDTH_2 );
-        pTop = new editeng::SvxBorderLine(NULL, 1);
+        pBottom.reset(new editeng::SvxBorderLine(NULL, DEF_LINE_WIDTH_2 ));
+        pTop.reset(new editeng::SvxBorderLine(NULL, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
         break;
     case TBI_BORDER3_S4:
-        pBottom = new editeng::SvxBorderLine(NULL);
+        pBottom.reset(new editeng::SvxBorderLine(NULL));
         pBottom->GuessLinesWidths(DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
-        pTop = new editeng::SvxBorderLine(NULL, 1);
+        pTop.reset(new editeng::SvxBorderLine(NULL, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
         break;
     }
 
-    aBorderOuter.SetLine( pTop, BOX_LINE_TOP );
-    aBorderOuter.SetLine( pBottom, BOX_LINE_BOTTOM );
+    aBorderOuter.SetLine( pTop.get(), BOX_LINE_TOP );
+    aBorderOuter.SetLine( pBottom.get(), BOX_LINE_BOTTOM );
     aBorderOuter.SetLine( NULL, BOX_LINE_LEFT );
     aBorderOuter.SetLine( NULL, BOX_LINE_RIGHT );
 
@@ -331,8 +332,8 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
 
     mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER, SFX_CALLMODE_RECORD, &aBorderOuter, &aBorderInner, 0L);
 
-    delete pTop;
-    delete pBottom;
+    pTop.reset();
+    pBottom.reset();
 
     mrCellAppearancePropertyPanel.EndCellBorderStylePopupMode();
     return 0;

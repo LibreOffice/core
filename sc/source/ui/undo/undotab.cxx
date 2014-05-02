@@ -48,6 +48,7 @@
 #include "scresid.hxx"
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 extern bool bDrawIsInUndo; // somewhere as member!
 
@@ -512,8 +513,8 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     if (bUndo)                                      // UnDo
     {
         size_t i = mpNewTabs->size();
-        ScProgress* pProgress = new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
-                                                i * pDoc->GetCodeCount());
+        boost::scoped_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+                                                               i * pDoc->GetCodeCount()));
         for (; i > 0; --i)
         {
             SCTAB nDestTab = (*mpNewTabs)[i-1];
@@ -521,7 +522,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
             if (nDestTab > MAXTAB)                          // appended ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
-            pDoc->MoveTab( nDestTab, nOldTab, pProgress );
+            pDoc->MoveTab( nDestTab, nOldTab, pProgress.get() );
             pViewShell->GetViewData()->MoveTab( nDestTab, nOldTab );
             pViewShell->SetTabNo( nOldTab, true );
             if (mpOldNames)
@@ -530,13 +531,12 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
                 pDoc->RenameTab(nOldTab, rOldName);
             }
         }
-        delete pProgress;
     }
     else
     {
         size_t n = mpNewTabs->size();
-        ScProgress* pProgress = new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
-                                                n * pDoc->GetCodeCount());
+        boost::scoped_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+                                                               n * pDoc->GetCodeCount()));
         for (size_t i = 0; i < n; ++i)
         {
             SCTAB nDestTab = (*mpNewTabs)[i];
@@ -545,7 +545,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
             if (nDestTab > MAXTAB)                          // appended ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
-            pDoc->MoveTab( nOldTab, nNewTab, pProgress );
+            pDoc->MoveTab( nOldTab, nNewTab, pProgress.get() );
             pViewShell->GetViewData()->MoveTab( nOldTab, nNewTab );
             pViewShell->SetTabNo( nDestTab, true );
             if (mpNewNames)
@@ -554,7 +554,6 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
                 pDoc->RenameTab(nNewTab, rNewName);
             }
         }
-        delete pProgress;
     }
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
