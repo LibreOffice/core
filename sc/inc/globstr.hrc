@@ -493,7 +493,6 @@
 #define STR_SCATTR_PAGE_SCALE_PAGES     389
 #define STR_SCATTR_PAGE_SCALE_AUTO      390
 
-<<<<<<< HEAD
 #define STR_UNDO_TAB_RTL                        391
 #define STR_UNDO_HANGULHANJA            392
 #define STR_UNDO_CHINESE_TRANSLATION    393
