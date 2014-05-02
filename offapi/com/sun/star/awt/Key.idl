@@ -362,6 +362,9 @@ published constants Key
     const short SEMICOLON = 1317;
 
 
+    const short QUOTERIGHT = 1318;
+
+
     const short DELETE_TO_END_OF_PARAGRAPH = 1539;
 
 
