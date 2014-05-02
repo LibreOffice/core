@@ -2873,12 +2873,23 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
-    pPam->DeleteMark();
     SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
     rIdx = nTblNode + nOffset;
+    pPam->GetPoint()->nContent.Assign(rIdx.GetNode().GetCntntNode(), 0);
+    assert(rIdx.GetNode().GetCntntNode()->Len() == 0); // empty para inserted
 
-    // remove implicitly created paragraph again
-    pDoc->GetNodes().Delete( rIdx, 1 );
+    {
+        // avoid asserts from ~SwIndexReg
+        SwNodeIndex const idx(pDoc->GetNodes(), nTblNode + nOffset);
+        {
+            SwPaM pam(idx);
+            pam.Move(fnMoveBackward, fnGoCntnt);
+            ::PaMCorrAbs(*pPam, *pam.GetPoint());
+        }
+
+        // remove implicitly created paragraph again
+        pDoc->GetNodes().Delete( idx, 1 );
+    }
 
     rIdx = nTblNode + nOffset;
     SwTableNode* pTblNd = rIdx.GetNode().GetTableNode();
