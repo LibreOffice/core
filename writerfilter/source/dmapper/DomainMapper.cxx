@@ -1841,6 +1841,26 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             pSectionContext->SetLeftMargin( rPageMar.left );
             pSectionContext->SetHeaderTop( rPageMar.header );
             pSectionContext->SetHeaderBottom( rPageMar.footer );
+
+            uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
+            if(xPropertySet.is())
+            {
+                // If headerreference of "default" or "even" is not available in document.xml,
+                // the docxexport will not get header/footer values from pgMargin while exporting document.
+                // Hence grabbaged header/footer size from page margin."
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                sal_Int32 nLength = aGrabBag.getLength();
+                aGrabBag.realloc(nLength + 2);
+                // Grab bag header value
+                aGrabBag[nLength].Name = "PG_MAR_HEADER";
+                aGrabBag[nLength].Value = uno::makeAny(rPageMar.header);
+                xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+                // Grab bag footer value
+                aGrabBag[nLength + 1].Name = "PG_MAR_FOOTER";
+                aGrabBag[nLength + 1].Value = uno::makeAny(rPageMar.footer);
+                xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+            }
         }
         break;
 

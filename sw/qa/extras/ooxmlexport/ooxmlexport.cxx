@@ -3210,6 +3210,16 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
                 "/word/embeddings/oleObject1.xlsx");
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77121,"fdo77121.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "header", "708");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "footer", "708");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

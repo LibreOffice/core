@@ -6309,9 +6309,25 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
         HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
 
+        uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+        uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+        xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
         sal_Int32 nHeader = 0;
         if ( aDistances.HasHeader() )
             nHeader = sal_Int32( aDistances.dyaHdrTop );
+        else
+        {
+            // In case HasHeader() is false but value of "Header form Top" is not 0
+            for (sal_Int32 i = 0; i < aInteropGrabBag.getLength(); ++i)
+            {
+                if (aInteropGrabBag[i].Name == "PG_MAR_HEADER")
+                {
+                    aInteropGrabBag[i].Value >>= nHeader;
+                    nHeader = convertMm100ToTwip(nHeader);
+                    break;
+                }
+            }
+        }
 
         // Page top
         m_pageMargins.nPageMarginTop = aDistances.dyaTop;
@@ -6319,6 +6335,19 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
+        else
+        {
+            // In case HasFooter() is false but value of "Footer form bottom" is not 0
+            for (sal_Int32 i = 0; i < aInteropGrabBag.getLength(); ++i)
+            {
+                if (aInteropGrabBag[i].Name == "PG_MAR_FOOTER")
+                {
+                    aInteropGrabBag[i].Value >>= nFooter;
+                    nFooter = convertMm100ToTwip(nFooter);
+                    break;
+                }
+           }
+        }
 
         // Page Bottom
         m_pageMargins.nPageMarginBottom = aDistances.dyaBottom;
