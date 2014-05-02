@@ -255,6 +255,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
             case GDK_bracketleft:  nCode = KEY_BRACKETLEFT;  break;
             case GDK_bracketright: nCode = KEY_BRACKETRIGHT; break;
             case GDK_semicolon:    nCode = KEY_SEMICOLON;   break;
+            case GDK_quoteright:   nCode = KEY_QUOTERIGHT;  break;
             // some special cases, also see saldisp.cxx
             // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
             case 0x1000FF02: // apXK_Copy

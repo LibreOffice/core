@@ -139,6 +139,7 @@ static void KeyCodeToGdkKey ( const KeyCode& rKeyCode, guint* pGdkKeyCode, GdkMo
         case KEY_BRACKETLEFT:   nKeyCode = GDK_bracketleft;     break;
         case KEY_BRACKETRIGHT:  nKeyCode = GDK_bracketright;    break;
         case KEY_SEMICOLON:     nKeyCode = GDK_semicolon;       break;
+        case KEY_QUOTERIGHT:    nKeyCode = GDK_quoteright;      break;
 
         // Special cases
         case KEY_COPY:          nKeyCode = GDK_Copy;            break;

@@ -145,6 +145,7 @@
 #define KEY_BRACKETLEFT ((sal_uInt16)::com::sun::star::awt::Key::BRACKETLEFT)
 #define KEY_BRACKETRIGHT ((sal_uInt16)::com::sun::star::awt::Key::BRACKETRIGHT)
 #define KEY_SEMICOLON   ((sal_uInt16)::com::sun::star::awt::Key::SEMICOLON)
+#define KEY_QUOTERIGHT  ((sal_uInt16)::com::sun::star::awt::Key::QUOTERIGHT)
 
 #define KEY_CAPSLOCK    ((sal_uInt16)::com::sun::star::awt::Key::CAPSLOCK)
 #define KEY_NUMLOCK     ((sal_uInt16)::com::sun::star::awt::Key::NUMLOCK)
