@@ -149,7 +149,7 @@ std::vector<OUString>* pAuthFieldTypeList = 0;
 void _FinitUI()
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    SwDBMgr::RemoveDbtoolsClient();
+    SwDBManager::RemoveDbtoolsClient();
 #endif
     delete SwViewShell::GetShellRes();
     SwViewShell::SetShellRes( 0 );

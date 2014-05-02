@@ -206,25 +206,25 @@ void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTarget
 class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
 < lang::XEventListener >
 {
-    SwDBMgr&     rDBMgr;
+    SwDBManager&     rDBManager;
 
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 public:
-    SwConnectionDisposedListener_Impl(SwDBMgr& rMgr);
+    SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
     virtual ~SwConnectionDisposedListener_Impl();
 
 };
 
-struct SwDBMgr_Impl
+struct SwDBManager_Impl
 {
     SwDSParam*          pMergeData;
     AbstractMailMergeDlg*     pMergeDialog;
     uno::Reference<lang::XEventListener> xDisposeListener;
 
-    SwDBMgr_Impl(SwDBMgr& rDBMgr)
+    SwDBManager_Impl(SwDBManager& rDBManager)
        :pMergeData(0)
        ,pMergeDialog(0)
-       ,xDisposeListener(new SwConnectionDisposedListener_Impl(rDBMgr))
+       ,xDisposeListener(new SwConnectionDisposedListener_Impl(rDBManager))
         {}
 };
 
@@ -233,7 +233,7 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSourc
     uno::Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     rParam.xFormatter = uno::Reference<util::XNumberFormatter>(util::NumberFormatter::create(xContext), UNO_QUERY);
     if(!xSource.is())
-        xSource = SwDBMgr::getDataSourceAsParent(rParam.xConnection, rParam.sDataSource);
+        xSource = SwDBManager::getDataSourceAsParent(rParam.xConnection, rParam.sDataSource);
 
     uno::Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
     if(xSourceProps.is())
@@ -296,7 +296,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam,
     SwDBFormatData aFormatData;
     if(!pParam->xFormatter.is())
     {
-        uno::Reference<XDataSource> xSource = SwDBMgr::getDataSourceAsParent(
+        uno::Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(
                                     pParam->xConnection,pParam->sDataSource);
         lcl_InitNumberFormatter(*pParam, xSource );
     }
@@ -305,14 +305,14 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam,
 
     aFormatData.aLocale = LanguageTag( (LanguageType)nLanguage ).getLocale();
 
-    rResult = SwDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
+    rResult = SwDBManager::GetDBField( xColumnProps, aFormatData, pNumber);
     return true;
 };
 
 /*--------------------------------------------------------------------
     Description: import data
  --------------------------------------------------------------------*/
-bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
+bool SwDBManager::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
     OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
 
@@ -395,7 +395,7 @@ bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         OSL_FAIL("exception in MergeNew()");
     }
 
-    uno::Reference<XDataSource> xSource = SwDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
+    uno::Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,aData.sDataSource);
 
     lcl_InitNumberFormatter(*pImpl->pMergeData, xSource);
 
@@ -447,7 +447,7 @@ bool SwDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 /*--------------------------------------------------------------------
     Description: import data
  --------------------------------------------------------------------*/
-bool SwDBMgr::Merge(SwWrtShell* pSh)
+bool SwDBManager::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
 
@@ -459,7 +459,7 @@ bool SwDBMgr::Merge(SwWrtShell* pSh)
     return true;
 }
 
-void SwDBMgr::ImportFromConnection(  SwWrtShell* pSh )
+void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
     {
@@ -523,7 +523,7 @@ static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos
     return sReturn;
 }
 
-void SwDBMgr::ImportDBEntry(SwWrtShell* pSh)
+void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
     {
@@ -595,7 +595,7 @@ void SwDBMgr::ImportDBEntry(SwWrtShell* pSh)
 /*--------------------------------------------------------------------
     Description: fill Listbox with tablelist
  --------------------------------------------------------------------*/
-bool SwDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
+bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 {
     bool bRet = false;
     OUString sOldTableName(pListBox->GetSelectEntry());
@@ -646,7 +646,7 @@ bool SwDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 /*--------------------------------------------------------------------
     Description: fill Listbox with column names of a database
  --------------------------------------------------------------------*/
-void SwDBMgr::GetColumnNames(ListBox* pListBox,
+void SwDBManager::GetColumnNames(ListBox* pListBox,
                              const OUString& rDBName, const OUString& rTableName, bool bAppend)
 {
     if (!bAppend)
@@ -664,7 +664,7 @@ void SwDBMgr::GetColumnNames(ListBox* pListBox,
         OUString sDBName(rDBName);
         xConnection = RegisterConnection( sDBName );
     }
-    uno::Reference< XColumnsSupplier> xColsSupp = SwDBMgr::GetColumnSupplier(xConnection, rTableName);
+    uno::Reference< XColumnsSupplier> xColsSupp = SwDBManager::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
         uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
@@ -678,13 +678,13 @@ void SwDBMgr::GetColumnNames(ListBox* pListBox,
     }
 }
 
-void SwDBMgr::GetColumnNames(ListBox* pListBox,
+void SwDBManager::GetColumnNames(ListBox* pListBox,
         uno::Reference< XConnection> xConnection,
         const OUString& rTableName, bool bAppend)
 {
     if (!bAppend)
         pListBox->Clear();
-    uno::Reference< XColumnsSupplier> xColsSupp = SwDBMgr::GetColumnSupplier(xConnection, rTableName);
+    uno::Reference< XColumnsSupplier> xColsSupp = SwDBManager::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
         uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
@@ -701,19 +701,19 @@ void SwDBMgr::GetColumnNames(ListBox* pListBox,
 /*--------------------------------------------------------------------
     Description: CTOR
  --------------------------------------------------------------------*/
-SwDBMgr::SwDBMgr()
+SwDBManager::SwDBManager()
     : bCancel(false)
     , bInitDBFields(false)
     , bSingleJobs(false)
     , bInMerge(false)
     , bMergeSilent(false)
     , bMergeLock(false)
-    , pImpl(new SwDBMgr_Impl(*this))
+    , pImpl(new SwDBManager_Impl(*this))
     , pMergeEvtSrc(NULL)
 {
 }
 
-SwDBMgr::~SwDBMgr()
+SwDBManager::~SwDBManager()
 {
     for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.size(); nPos++)
     {
@@ -819,7 +819,7 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
     rWorkShell.SetLabelDoc( false );
 }
 
-bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
+bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         const SwMergeDescriptor& rMergeDescriptor)
 {
     //check if the doc is synchronized and contains at least one linked section
@@ -939,7 +939,7 @@ bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin(), PrintMonitor::MONITOR_TYPE_PRINT);
             aPrtMonDlg.m_pDocName->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
 
-            aPrtMonDlg.m_pCancel->SetClickHdl(LINK(this, SwDBMgr, PrtCancelHdl));
+            aPrtMonDlg.m_pCancel->SetClickHdl(LINK(this, SwDBManager, PrtCancelHdl));
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 
@@ -1036,8 +1036,8 @@ bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     static_cast< SwView* >(pWorkFrame->GetViewShell())->GetWrtShell();
                             rWorkShell.CalcLayout();
                             SwDoc* pWorkDoc = ((SwDocShell*)(&xWorkDocSh))->GetDoc();
-                            SwDBMgr* pOldDBMgr = pWorkDoc->GetDBMgr();
-                            pWorkDoc->SetDBMgr( this );
+                            SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
+                            pWorkDoc->SetDBManager( this );
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
                             pWorkDoc->UpdateFlds(NULL, false);
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
@@ -1223,7 +1223,7 @@ bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                 }
                             }
-                            pWorkDoc->SetDBMgr( pOldDBMgr );
+                            pWorkDoc->SetDBManager( pOldDBManager );
                         }
                         xWorkDocSh->DoClose();
                     }
@@ -1354,24 +1354,24 @@ bool SwDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     return bNoError;
 }
 
-void SwDBMgr::MergeCancel()
+void SwDBManager::MergeCancel()
 {
     bCancel = true;
 }
 
-IMPL_LINK_INLINE_START( SwDBMgr, PrtCancelHdl, Button *, pButton )
+IMPL_LINK_INLINE_START( SwDBManager, PrtCancelHdl, Button *, pButton )
 {
     pButton->GetParent()->Hide();
     MergeCancel();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwDBMgr, PrtCancelHdl, Button *, pButton )
+IMPL_LINK_INLINE_END( SwDBManager, PrtCancelHdl, Button *, pButton )
 
 /*--------------------------------------------------------------------
     Description: determine the column's Numberformat and transfer
                     to the forwarded Formatter, if applicable.
   --------------------------------------------------------------------*/
-sal_uLong SwDBMgr::GetColumnFmt( const OUString& rDBName,
+sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
                                 const OUString& rTableName,
                                 const OUString& rColNm,
                                 SvNumberFormatter* pNFmtr,
@@ -1389,7 +1389,7 @@ sal_uLong SwDBMgr::GetColumnFmt( const OUString& rDBName,
             pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
         {
             xConnection = pImpl->pMergeData->xConnection;
-            xSource = SwDBMgr::getDataSourceAsParent(xConnection,rDBName);
+            xSource = SwDBManager::getDataSourceAsParent(xConnection,rDBName);
             bUseMergeData = true;
             xColsSupp = xColsSupp.query( pImpl->pMergeData->xResultSet );
         }
@@ -1417,7 +1417,7 @@ sal_uLong SwDBMgr::GetColumnFmt( const OUString& rDBName,
         bool bDispose = !xColsSupp.is();
         if(bDispose)
         {
-            xColsSupp = SwDBMgr::GetColumnSupplier(xConnection, rTableName);
+            xColsSupp = SwDBManager::GetColumnSupplier(xConnection, rTableName);
         }
         if(xColsSupp.is())
         {
@@ -1451,7 +1451,7 @@ sal_uLong SwDBMgr::GetColumnFmt( const OUString& rDBName,
     return nRet;
 }
 
-sal_uLong SwDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
+sal_uLong SwDBManager::GetColumnFmt( uno::Reference< XDataSource> xSource,
                         uno::Reference< XConnection> xConnection,
                         uno::Reference< XPropertySet> xColumn,
                         SvNumberFormatter* pNFmtr,
@@ -1528,12 +1528,12 @@ sal_uLong SwDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
             OSL_FAIL("no FormatKey property found");
         }
         if(bUseDefault)
-            nRet = SwDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
+            nRet = SwDBManager::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
     }
     return nRet;
 }
 
-sal_Int32 SwDBMgr::GetColumnType( const OUString& rDBName,
+sal_Int32 SwDBManager::GetColumnType( const OUString& rDBName,
                           const OUString& rTableName,
                           const OUString& rColNm )
 {
@@ -1558,7 +1558,7 @@ sal_Int32 SwDBMgr::GetColumnType( const OUString& rDBName,
     }
     if( !xColsSupp.is() )
     {
-        xColsSupp = SwDBMgr::GetColumnSupplier(xConnection, rTableName);
+        xColsSupp = SwDBManager::GetColumnSupplier(xConnection, rTableName);
         bDispose = true;
     }
     if(xColsSupp.is())
@@ -1578,14 +1578,14 @@ sal_Int32 SwDBMgr::GetColumnType( const OUString& rDBName,
     return nRet;
 }
 
-uno::Reference< sdbc::XConnection> SwDBMgr::GetConnection(const OUString& rDataSource,
+uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rDataSource,
                                                     uno::Reference<XDataSource>& rxSource)
 {
     Reference< sdbc::XConnection> xConnection;
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     try
     {
-        Reference<XCompletedConnection> xComplConnection(SwDBMgr::GetDbtoolsClient().getDataSource(rDataSource, xContext),UNO_QUERY);
+        Reference<XCompletedConnection> xComplConnection(SwDBManager::GetDbtoolsClient().getDataSource(rDataSource, xContext),UNO_QUERY);
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection,UNO_QUERY);
@@ -1600,7 +1600,7 @@ uno::Reference< sdbc::XConnection> SwDBMgr::GetConnection(const OUString& rDataS
     return xConnection;
 }
 
-uno::Reference< sdbcx::XColumnsSupplier> SwDBMgr::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
+uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
                                     const OUString& rTableOrQuery,
                                     sal_uInt8   eTableOrQuery)
 {
@@ -1624,7 +1624,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBMgr::GetColumnSupplier(uno::Referen
         Reference<XRowSet> xRowSet(xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
 
         OUString sDataSource;
-        Reference<XDataSource> xSource = SwDBMgr::getDataSourceAsParent(xConnection, sDataSource);
+        Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection, sDataSource);
         Reference<XPropertySet> xSourceProperties(xSource, UNO_QUERY);
         if(xSourceProperties.is())
         {
@@ -1642,19 +1642,19 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBMgr::GetColumnSupplier(uno::Referen
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("Exception in SwDBMgr::GetColumnSupplier");
+        OSL_FAIL("Exception in SwDBManager::GetColumnSupplier");
     }
 
     return xRet;
 }
 
-OUString SwDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
+OUString SwDBManager::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                         const SwDBFormatData& rDBFormatData,
                         double* pNumber)
 {
     uno::Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
     OUString sRet;
-    OSL_ENSURE(xColumn.is(), "SwDBMgr::::ImportDBField: illegal arguments");
+    OSL_ENSURE(xColumn.is(), "SwDBManager::::ImportDBField: illegal arguments");
     if(!xColumn.is())
         return sRet;
 
@@ -1692,7 +1692,7 @@ OUString SwDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
 
             try
             {
-                SwDbtoolsClient& aClient = SwDBMgr::GetDbtoolsClient();
+                SwDbtoolsClient& aClient = SwDBManager::GetDbtoolsClient();
                 sRet = aClient.getFormattedValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
@@ -1720,7 +1720,7 @@ OUString SwDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
 }
 
 // releases the merge data source table or query after merge is completed
-void    SwDBMgr::EndMerge()
+void    SwDBManager::EndMerge()
 {
     OSL_ENSURE(bInMerge, "merge is not active");
     bInMerge = false;
@@ -1729,7 +1729,7 @@ void    SwDBMgr::EndMerge()
 }
 
 // checks if a desired data source table or query is open
-bool    SwDBMgr::IsDataSourceOpen(const OUString& rDataSource,
+bool    SwDBManager::IsDataSourceOpen(const OUString& rDataSource,
                                   const OUString& rTableOrQuery, bool bMergeOnly)
 {
     if(pImpl->pMergeData)
@@ -1754,7 +1754,7 @@ bool    SwDBMgr::IsDataSourceOpen(const OUString& rDataSource,
 }
 
 // read column data at a specified position
-bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
+bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
                            const OUString& rColumnName, sal_uInt32 nAbsRecordId,
                            long nLanguage,
                            OUString& rResult, double* pNumber)
@@ -1820,7 +1820,7 @@ bool SwDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTableNa
 }
 
 // reads the column data at the current position
-bool    SwDBMgr::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
+bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
                                    OUString &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
 {
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
@@ -1833,13 +1833,13 @@ bool    SwDBMgr::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLang
     return bRet;
 }
 
-bool SwDBMgr::ToNextMergeRecord()
+bool SwDBManager::ToNextMergeRecord()
 {
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     return ToNextRecord(pImpl->pMergeData);
 }
 
-bool SwDBMgr::ToNextRecord(
+bool SwDBManager::ToNextRecord(
     const OUString& rDataSource, const OUString& rCommand, sal_Int32 /*nCommandType*/)
 {
     SwDSParam* pFound = 0;
@@ -1858,7 +1858,7 @@ bool SwDBMgr::ToNextRecord(
     return ToNextRecord(pFound);
 }
 
-bool SwDBMgr::ToNextRecord(SwDSParam* pParam)
+bool SwDBManager::ToNextRecord(SwDSParam* pParam)
 {
     bool bRet = true;
     if(!pParam || !pParam->xResultSet.is() || pParam->bEndOfDB ||
@@ -1906,12 +1906,12 @@ bool SwDBMgr::ToNextRecord(SwDSParam* pParam)
     to assure that the next page can be created in mail merge
     the cursor position must be validated
  ---------------------------------------------------------------------------*/
-bool SwDBMgr::ExistsNextRecord() const
+bool SwDBManager::ExistsNextRecord() const
 {
     return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;
 }
 
-sal_uInt32  SwDBMgr::GetSelectedRecordId()
+sal_uInt32  SwDBManager::GetSelectedRecordId()
 {
     sal_uInt32  nRet = 0;
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
@@ -1927,7 +1927,7 @@ sal_uInt32  SwDBMgr::GetSelectedRecordId()
     return nRet;
 }
 
-bool SwDBMgr::ToRecordId(sal_Int32 nSet)
+bool SwDBManager::ToRecordId(sal_Int32 nSet)
 {
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is()|| nSet < 0)
@@ -1944,7 +1944,7 @@ bool SwDBMgr::ToRecordId(sal_Int32 nSet)
     return bRet;
 }
 
-bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
+bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
             sal_Int32 nCommandType, bool bCreate)
 {
     SwDBData aData;
@@ -2005,13 +2005,13 @@ bool SwDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rTable
     return pFound->xResultSet.is();
 }
 
-uno::Reference< XConnection> SwDBMgr::RegisterConnection(OUString& rDataSource)
+uno::Reference< XConnection> SwDBManager::RegisterConnection(OUString& rDataSource)
 {
-    SwDSParam* pFound = SwDBMgr::FindDSConnection(rDataSource, true);
+    SwDSParam* pFound = SwDBManager::FindDSConnection(rDataSource, true);
     uno::Reference< XDataSource> xSource;
     if(!pFound->xConnection.is())
     {
-        pFound->xConnection = SwDBMgr::GetConnection(rDataSource, xSource );
+        pFound->xConnection = SwDBManager::GetConnection(rDataSource, xSource );
         try
         {
             uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
@@ -2025,7 +2025,7 @@ uno::Reference< XConnection> SwDBMgr::RegisterConnection(OUString& rDataSource)
     return pFound->xConnection;
 }
 
-sal_uInt32      SwDBMgr::GetSelectedRecordId(
+sal_uInt32      SwDBManager::GetSelectedRecordId(
     const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType)
 {
     sal_uInt32 nRet = 0xffffffff;
@@ -2066,7 +2066,7 @@ sal_uInt32      SwDBMgr::GetSelectedRecordId(
 }
 
 // close all data sources - after fields were updated
-void    SwDBMgr::CloseAll(bool bIncludingMerge)
+void    SwDBManager::CloseAll(bool bIncludingMerge)
 {
     //the only thing done here is to reset the selection index
     //all connections stay open
@@ -2089,7 +2089,7 @@ void    SwDBMgr::CloseAll(bool bIncludingMerge)
     }
 }
 
-SwDSParam* SwDBMgr::FindDSData(const SwDBData& rData, bool bCreate)
+SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
 {
     //prefer merge data if available
     if(pImpl->pMergeData && rData.sDataSource == pImpl->pMergeData->sDataSource &&
@@ -2138,7 +2138,7 @@ SwDSParam* SwDBMgr::FindDSData(const SwDBData& rData, bool bCreate)
     return pFound;
 }
 
-SwDSParam*  SwDBMgr::FindDSConnection(const OUString& rDataSource, bool bCreate)
+SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCreate)
 {
     //prefer merge data if available
     if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource )
@@ -2174,19 +2174,19 @@ SwDSParam*  SwDBMgr::FindDSConnection(const OUString& rDataSource, bool bCreate)
     return pFound;
 }
 
-const SwDBData& SwDBMgr::GetAddressDBName()
+const SwDBData& SwDBManager::GetAddressDBName()
 {
     return SW_MOD()->GetDBConfig()->GetAddressSource();
 }
 
-Sequence<OUString> SwDBMgr::GetExistingDatabaseNames()
+Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
 {
     Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
     return xDBContext->getElementNames();
 }
 
-OUString SwDBMgr::LoadAndRegisterDataSource()
+OUString SwDBManager::LoadAndRegisterDataSource()
 {
     sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
@@ -2371,7 +2371,7 @@ OUString SwDBMgr::LoadAndRegisterDataSource()
 
 }
 
-void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
+void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties,
                         bool bWithDataSourceBrowser)
 {
@@ -2404,7 +2404,7 @@ void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     SwDSParam* pFound = 0;
     if(!xConnection.is())
     {
-        xConnection = SwDBMgr::RegisterConnection(sDataSource);
+        xConnection = SwDBManager::RegisterConnection(sDataSource);
         pFound = FindDSConnection(sDataSource, true);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -2465,10 +2465,10 @@ void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                     SwView *pView = (SwView*) pFrame->GetViewShell();
                     pView->AttrChangedNotify( &pView->GetWrtShell() );// in order for SelectShell to be called
-                    //set the current DBMgr
+                    //set the current DBManager
                     SwDoc* pWorkDoc = pView->GetWrtShell().GetDoc();
-                    SwDBMgr* pWorkDBMgr = pWorkDoc->GetDBMgr();
-                    pWorkDoc->SetDBMgr( this );
+                    SwDBManager* pWorkDBManager = pWorkDoc->GetDBManager();
+                    pWorkDoc->SetDBManager( this );
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
@@ -2481,7 +2481,7 @@ void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
                     MergeNew(aMergeDesc);
 
-                    pWorkDoc->SetDBMgr( pWorkDBMgr );
+                    pWorkDoc->SetDBManager( pWorkDBManager );
                     //close the temporary file
                     uno::Reference< util::XCloseable > xClose( xWorkDocSh->GetModel(), uno::UNO_QUERY );
                     if (xClose.is())
@@ -2533,7 +2533,7 @@ void SwDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     DELETEZ(pImpl->pMergeDialog);
 }
 
-void SwDBMgr::InsertText(SwWrtShell& rSh,
+void SwDBManager::InsertText(SwWrtShell& rSh,
                         const Sequence< PropertyValue>& rProperties)
 {
     OUString sDataSource, sDataTableOrQuery;
@@ -2568,7 +2568,7 @@ void SwDBMgr::InsertText(SwWrtShell& rSh,
     if(xChild.is())
         xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     if(!xSource.is())
-        xSource = SwDBMgr::GetDbtoolsClient().getDataSource(sDataSource, xContext);
+        xSource = SwDBManager::GetDbtoolsClient().getDataSource(sDataSource, xContext);
     uno::Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
     SwDBData aDBData;
     aDBData.sDataSource = sDataSource;
@@ -2599,22 +2599,22 @@ void SwDBMgr::InsertText(SwWrtShell& rSh,
     }
 }
 
-SwDbtoolsClient* SwDBMgr::pDbtoolsClient = NULL;
+SwDbtoolsClient* SwDBManager::pDbtoolsClient = NULL;
 
-SwDbtoolsClient& SwDBMgr::GetDbtoolsClient()
+SwDbtoolsClient& SwDBManager::GetDbtoolsClient()
 {
     if ( !pDbtoolsClient )
         pDbtoolsClient = new SwDbtoolsClient;
     return *pDbtoolsClient;
 }
 
-void SwDBMgr::RemoveDbtoolsClient()
+void SwDBManager::RemoveDbtoolsClient()
 {
     delete pDbtoolsClient;
     pDbtoolsClient = 0;
 }
 
-uno::Reference<XDataSource> SwDBMgr::getDataSourceAsParent(const uno::Reference< XConnection>& _xConnection,const OUString& _sDataSourceName)
+uno::Reference<XDataSource> SwDBManager::getDataSourceAsParent(const uno::Reference< XConnection>& _xConnection,const OUString& _sDataSourceName)
 {
     uno::Reference<XDataSource> xSource;
     try
@@ -2623,7 +2623,7 @@ uno::Reference<XDataSource> SwDBMgr::getDataSourceAsParent(const uno::Reference<
         if ( xChild.is() )
             xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
         if ( !xSource.is() )
-            xSource = SwDBMgr::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
+            xSource = SwDBManager::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
     }
     catch(const Exception&)
     {
@@ -2632,7 +2632,7 @@ uno::Reference<XDataSource> SwDBMgr::getDataSourceAsParent(const uno::Reference<
     return xSource;
 }
 
-uno::Reference<XResultSet> SwDBMgr::createCursor(const OUString& _sDataSourceName,
+uno::Reference<XResultSet> SwDBManager::createCursor(const OUString& _sDataSourceName,
                                        const OUString& _sCommand,
                                        sal_Int32 _nCommandType,
                                        const uno::Reference<XConnection>& _xConnection
@@ -2672,7 +2672,7 @@ uno::Reference<XResultSet> SwDBMgr::createCursor(const OUString& _sDataSourceNam
 }
 
 // merge all data into one resulting document and return the number of merged documents
-sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
+sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                             SwView& rSourceView )
 {
     // check the availability of all data in the config item
@@ -2712,7 +2712,7 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     bCancel = false;
 
     CreateMonitor aMonitorDlg(&rSourceView.GetEditWin());
-    aMonitorDlg.SetCancelHdl(LINK(this, SwDBMgr, PrtCancelHdl));
+    aMonitorDlg.SetCancelHdl(LINK(this, SwDBManager, PrtCancelHdl));
     if (!IsMergeSilent())
     {
         aMonitorDlg.Show();
@@ -2800,8 +2800,8 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
                 // merge the data
                 SwDoc* pWorkDoc = rWorkShell.GetDoc();
-                SwDBMgr* pWorkDBMgr = pWorkDoc->GetDBMgr();
-                pWorkDoc->SetDBMgr( this );
+                SwDBManager* pWorkDBManager = pWorkDoc->GetDBManager();
+                pWorkDoc->SetDBManager( this );
                 pWorkDoc->EmbedAllLinks();
                 SwUndoId nLastUndoId(UNDO_EMPTY);
                 if (rWorkShell.GetLastUndoInfo(0, & nLastUndoId))
@@ -2901,8 +2901,8 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             for( sal_uInt16 i = 0; i < 25; i++)
                 Application::Reschedule();
 
-            //restore the ole DBMgr
-            pWorkDoc->SetDBMgr( pWorkDBMgr );
+            //restore the ole DBManager
+            pWorkDoc->SetDBManager( pWorkDBManager );
             //now the temporary document should be closed
             SfxObjectShellRef xDocSh(pWorkView->GetDocShell());
             xDocSh->DoClose();
@@ -2925,15 +2925,15 @@ sal_Int32 SwDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     }
     catch(const Exception&)
     {
-        OSL_FAIL("exception caught in SwDBMgr::MergeDocuments");
+        OSL_FAIL("exception caught in SwDBManager::MergeDocuments");
     }
     DELETEZ(pImpl->pMergeData);
     bInMerge = false;
     return nRet;
 }
 
-SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBMgr& rMgr) :
-    rDBMgr(rMgr)
+SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBManager& rMgr) :
+    rDBManager(rMgr)
 {
 };
 
@@ -2946,13 +2946,13 @@ void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
 {
     ::SolarMutexGuard aGuard;
     uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
-    for(sal_uInt16 nPos = rDBMgr.aDataSourceParams.size(); nPos; nPos--)
+    for(sal_uInt16 nPos = rDBManager.aDataSourceParams.size(); nPos; nPos--)
     {
-        SwDSParam* pParam = &rDBMgr.aDataSourceParams[nPos - 1];
+        SwDSParam* pParam = &rDBManager.aDataSourceParams[nPos - 1];
         if(pParam->xConnection.is() &&
                 (xSource == pParam->xConnection))
         {
-            rDBMgr.aDataSourceParams.erase(rDBMgr.aDataSourceParams.begin() + nPos - 1);
+            rDBManager.aDataSourceParams.erase(rDBManager.aDataSourceParams.begin() + nPos - 1);
         }
     }
 }

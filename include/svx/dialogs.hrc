@@ -1012,7 +1012,7 @@
 #define RID_SVX_MDLG_FONTWORK_CHARSPACING   ( RID_SVX_START + 19 )
 
 // document recovery and error report
-// recycling ids from DBMgr
+// recycling ids from DBManager
 #define RID_SVX_MDLG_DOCRECOVERY_PROGR      ( RID_SVX_START +  11 )
 #define RID_SVX_MDLG_DOCRECOVERY_BROKEN     ( RID_SVX_START +  12 )
 

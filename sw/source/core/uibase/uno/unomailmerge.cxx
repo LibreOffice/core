@@ -669,7 +669,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             throw IllegalArgumentException("Invalid value of property: OutputType", static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
 
-    SwDBMgr* pMgr = rSh.GetDBMgr();
+    SwDBManager* pMgr = rSh.GetDBManager();
     //force layout creation
     rSh.CalcLayout();
     OSL_ENSURE( pMgr, "database manager missing" );

@@ -242,14 +242,14 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     if (pListBox == m_pDatabaseLB)
     {
         sActDBName = pListBox->GetSelectEntry();
-        pSh->GetDBMgr()->GetTableNames(m_pTableLB, sActDBName);
+        pSh->GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
         sActDBName += OUString(DB_DELIM);
     }
     else
     {
         sActDBName = comphelper::string::setToken(sActDBName, 1, DB_DELIM, m_pTableLB->GetSelectEntry());
     }
-    pSh->GetDBMgr()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectEntry(),
+    pSh->GetDBManager()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectEntry(),
                                        m_pTableLB->GetSelectEntry());
     return 0;
 }
@@ -284,10 +284,10 @@ IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
 
 void SwEnvPage::InitDatabaseBox()
 {
-    if (pSh->GetDBMgr())
+    if (pSh->GetDBManager())
     {
         m_pDatabaseLB->Clear();
-        Sequence<OUString> aDataNames = SwDBMgr::GetExistingDatabaseNames();
+        Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
 
         for (sal_Int32 i = 0; i < aDataNames.getLength(); i++)
@@ -296,10 +296,10 @@ void SwEnvPage::InitDatabaseBox()
         OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
         OUString sTableName = sActDBName.getToken( 1, DB_DELIM );
         m_pDatabaseLB->SelectEntry(sDBName);
-        if (pSh->GetDBMgr()->GetTableNames(m_pTableLB, sDBName))
+        if (pSh->GetDBManager()->GetTableNames(m_pTableLB, sDBName))
         {
             m_pTableLB->SelectEntry(sTableName);
-            pSh->GetDBMgr()->GetColumnNames(m_pDBFieldLB, sDBName, sTableName);
+            pSh->GetDBManager()->GetColumnNames(m_pDBFieldLB, sDBName, sTableName);
         }
         else
             m_pDBFieldLB->Clear();

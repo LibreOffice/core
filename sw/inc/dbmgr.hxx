@@ -72,7 +72,7 @@ class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
 
-enum DBMgrOptions
+enum DBManagerOptions
 {
     DBMGR_MERGE,             ///< Data records in fields.
     DBMGR_INSERT,            ///< Data records in text.
@@ -173,11 +173,11 @@ struct SwMergeDescriptor
 
 };
 
-struct SwDBMgr_Impl;
+struct SwDBManager_Impl;
 class SwConnectionDisposedListener_Impl;
 class AbstractMailMergeDlg;
 
-class SW_DLLPUBLIC SwDBMgr
+class SW_DLLPUBLIC SwDBManager
 {
 friend class SwConnectionDisposedListener_Impl;
 
@@ -194,7 +194,7 @@ friend class SwConnectionDisposedListener_Impl;
     bool            bMergeLock : 1;     /**< prevent update of database fields while document is
                                              actually printed at the SwViewShell */
     SwDSParamArr        aDataSourceParams;
-    SwDBMgr_Impl*    pImpl;
+    SwDBManager_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
 
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, bool bCreate);
@@ -214,8 +214,8 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE bool          ToNextRecord(SwDSParam* pParam);
 
 public:
-    SwDBMgr();
-    ~SwDBMgr();
+    SwDBManager();
+    ~SwDBManager();
 
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }

@@ -52,7 +52,7 @@ class SvxAutoCorrect;
 class SwField;
 class SwFieldType;
 class SwDDEFieldType;
-class SwDBMgr;
+class SwDBManager;
 
 struct SwDocStat;
 class SwAutoCompleteWord;
@@ -393,7 +393,7 @@ public:
     void SetFldUpdateFlags( SwFldUpdateFlags eFlags );
 
     /// For evaluation of DB fields (new DB-manager).
-    SwDBMgr* GetDBMgr() const;
+    SwDBManager* GetDBManager() const;
 
     SwFieldType* InsertFldType(const SwFieldType &);
 

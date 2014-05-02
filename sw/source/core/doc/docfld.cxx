@@ -352,7 +352,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     if( bCloseDB )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
-        GetDBMgr()->CloseAll();
+        GetDBManager()->CloseAll();
 #endif
     }
     // Only evaluate on full update
@@ -1024,7 +1024,7 @@ static OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 #endif
 
 static void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
-                        SwDBMgr* pMgr )
+                        SwDBManager* pMgr )
 {
     const SwTxtFld* pTxtFld = rSGEFld.GetTxtFld();
     if( !pTxtFld )
@@ -1091,9 +1091,9 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
     mbNewFldLst = false;
 
 #if !HAVE_FEATURE_DBCONNECTIVITY
-    SwDBMgr* pMgr = NULL;
+    SwDBManager* pMgr = NULL;
 #else
-    SwDBMgr* pMgr = GetDBMgr();
+    SwDBManager* pMgr = GetDBManager();
     pMgr->CloseAll(false);
 #endif
 
@@ -1117,9 +1117,9 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
     mbNewFldLst = false;
 
 #if !HAVE_FEATURE_DBCONNECTIVITY
-    SwDBMgr* pMgr = NULL;
+    SwDBManager* pMgr = NULL;
 #else
-    SwDBMgr* pMgr = GetDBMgr();
+    SwDBManager* pMgr = GetDBManager();
     pMgr->CloseAll(false);
 #endif
 
@@ -1283,7 +1283,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     OUString sDBNumNm( SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) );
 
     // already set the current record number
-    SwDBMgr* pMgr = GetDBMgr();
+    SwDBManager* pMgr = GetDBManager();
     pMgr->CloseAll(false);
 #endif
 
@@ -1556,7 +1556,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     (void) rDBFld;
     (void) rCalc;
 #else
-    SwDBMgr* pMgr = GetDBMgr();
+    SwDBManager* pMgr = GetDBManager();
 
     sal_uInt16 nFldType = rDBFld.Which();
 
@@ -1685,7 +1685,7 @@ const SwDBData& SwDoc::GetDBDesc()
         }
     }
     if(maDBData.sDataSource.isEmpty())
-        maDBData = GetDBMgr()->GetAddressDBName();
+        maDBData = GetDBManager()->GetAddressDBName();
 #endif
     return maDBData;
 }
@@ -1695,7 +1695,7 @@ void SwDoc::SetInitDBFields( bool b )
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void) b;
 #else
-    GetDBMgr()->SetInitDBFields( b );
+    GetDBManager()->SetInitDBFields( b );
 #endif
 }
 
@@ -1800,7 +1800,7 @@ void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void) rAllDBNames;
 #else
-    SwDBMgr* pMgr = GetDBMgr();
+    SwDBManager* pMgr = GetDBManager();
 
     const SwDSParamArr& rArr = pMgr->GetDSParamArray();
     for(sal_uInt16 i = 0; i < rArr.size(); i++)
@@ -1875,7 +1875,7 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString&
     aData.sDataSource = rDBName.getToken(0, DB_DELIM);
     aData.sCommand = rDBName.getToken(1, DB_DELIM);
     aData.nCommandType = -1;
-    GetDBMgr()->CreateDSData(aData);
+    GetDBManager()->CreateDSData(aData);
     rDBNameList.push_back(rDBName);
 #endif
 }
@@ -2331,7 +2331,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     const OUString sFalse("FALSE");
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    bool bIsDBMgr = 0 != rDoc.GetDBMgr();
+    bool bIsDBManager = 0 != rDoc.GetDBManager();
 #endif
     sal_uInt16 nWhich, n;
     const SfxPoolItem* pItem;
@@ -2412,7 +2412,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 SwDBData aDBData(((SwDBNumSetField*)pFld)->GetDBData(&rDoc));
 
                 if (
-                     (bIsDBMgr && rDoc.GetDBMgr()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
+                     (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
                      (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNumSetField*)pFld)->IsCondValid()))
                    )
                 {
@@ -2425,7 +2425,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 SwDBData aDBData(((SwDBNextSetField*)pFld)->GetDBData(&rDoc));
 
                 if (
-                     (bIsDBMgr && rDoc.GetDBMgr()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
+                     (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
                      (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNextSetField*)pFld)->IsCondValid()))
                    )
                 {

@@ -369,16 +369,16 @@ void SwEditShell::UpdateExpFlds(bool bCloseDB)
     if (bCloseDB)
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
-        GetDoc()->GetDBMgr()->CloseAll(); // close all database connections
+        GetDoc()->GetDBManager()->CloseAll(); // close all database connections
 #endif
     }
     EndAllAction();
 }
 
-SwDBMgr* SwEditShell::GetDBMgr() const
+SwDBManager* SwEditShell::GetDBManager() const
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    return GetDoc()->GetDBMgr();
+    return GetDoc()->GetDBManager();
 #else
     return NULL;
 #endif

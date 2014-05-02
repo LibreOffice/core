@@ -55,12 +55,12 @@ bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName
 {
     bool bNumeric = true;
 
-    SwDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetDBMgr() :
-                            ::GetActiveView()->GetWrtShell().GetDBMgr();
+    SwDBManager* pDBManager = pWrtShell ? pWrtShell->GetDBManager() :
+                            ::GetActiveView()->GetWrtShell().GetDBManager();
 
     OUString sSource(rDBName);
     Reference< XConnection> xConnection =
-                    pDBMgr->RegisterConnection(sSource);
+                    pDBManager->RegisterConnection(sSource);
 
     if( !xConnection.is() )
         return bNumeric;

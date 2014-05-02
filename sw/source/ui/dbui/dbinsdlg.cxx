@@ -322,7 +322,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                     }
                     else
                     {
-                        pNew->nDBNumFmt = SwDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xCol,
+                        pNew->nDBNumFmt = SwDBManager::GetDbtoolsClient().getDefaultNumberFormat(xCol,
                                 xDocNumberFormatTypes, LanguageTag( rSh.GetCurLang() ).getLocale());
                     }
 
@@ -950,7 +950,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     // we don't have a cursor, so we have to create our own RowSet
     if ( !xResultSet.is() )
     {
-        xResultSet = SwDBMgr::createCursor(aDBData.sDataSource,aDBData.sCommand,aDBData.nCommandType,xConnection);
+        xResultSet = SwDBManager::createCursor(aDBData.sDataSource,aDBData.sCommand,aDBData.nCommandType,xConnection);
         bDisposeResultSet = xResultSet.is();
     }
 
@@ -1286,7 +1286,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             Reference< XPropertySet > xColumnProps;
                             xCols->getByName(pDBCol->pColInfo->sColumn) >>= xColumnProps;
 
-                            pFld->SetExpansion( SwDBMgr::GetDBField(
+                            pFld->SetExpansion( SwDBManager::GetDBField(
                                                 xColumnProps,
                                                 aDBFormatData,
                                                 &nValue ) );
@@ -1320,7 +1320,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             double nValue = DBL_MAX;
                             Reference< XPropertySet > xColumnProps;
                             xCols->getByName(pDBCol->pColInfo->sColumn) >>= xColumnProps;
-                            sIns = SwDBMgr::GetDBField(
+                            sIns = SwDBManager::GetDBField(
                                                 xColumnProps,
                                                 aDBFormatData,
                                                 &nValue );

@@ -265,7 +265,7 @@ SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
 /// get current field value and cache it
 void SwDBField::Evaluate()
 {
-    SwDBMgr* pMgr = GetDoc()->GetDBMgr();
+    SwDBManager* pMgr = GetDoc()->GetDBManager();
 
     // first delete
     bValidValue = false;
@@ -571,7 +571,7 @@ SwField* SwDBNextSetField::Copy() const
 
 void SwDBNextSetField::Evaluate(SwDoc* pDoc)
 {
-    SwDBMgr* pMgr = pDoc->GetDBMgr();
+    SwDBManager* pMgr = pDoc->GetDBManager();
     const SwDBData& rData = GetDBData();
     if( !bCondValid ||
             !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand, false))
@@ -660,7 +660,7 @@ SwField* SwDBNumSetField::Copy() const
 
 void SwDBNumSetField::Evaluate(SwDoc* pDoc)
 {
-    SwDBMgr* pMgr = pDoc->GetDBMgr();
+    SwDBManager* pMgr = pDoc->GetDBManager();
     const SwDBData& aTmpData = GetDBData();
 
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
@@ -814,7 +814,7 @@ OUString SwDBSetNumberField::Expand() const
 
 void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
 {
-    SwDBMgr* pMgr = pDoc->GetDBMgr();
+    SwDBManager* pMgr = pDoc->GetDBManager();
 
     const SwDBData& aTmpData = GetDBData();
     if (!pMgr || !pMgr->IsInMerge() ||

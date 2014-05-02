@@ -214,16 +214,16 @@ void SwXDispatch::dispatch(const util::URL& aURL,
     }
 #else
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    SwDBMgr* pDBMgr = rSh.GetDBMgr();
+    SwDBManager* pDBManager = rSh.GetDBManager();
     if(aURL.Complete.equalsAscii(cURLInsertContent))
     {
         ::svx::ODataAccessDescriptor aDescriptor(aArgs);
         SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
-        pDBMgr->MergeNew(aMergeDesc);
+        pDBManager->MergeNew(aMergeDesc);
     }
     else if(aURL.Complete.equalsAscii(cURLInsertColumns))
     {
-        pDBMgr->InsertText(rSh, aArgs);
+        pDBManager->InsertText(rSh, aArgs);
     }
     else if(aURL.Complete.equalsAscii(cURLFormLetter))
     {

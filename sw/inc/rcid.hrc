@@ -170,7 +170,7 @@
 #define RC_MISC_BEGIN               RC_MISC
 #define RC_MISC_END                 (RC_MISC + 99)
 
-// DBMgr
+// DBManager
 #define RC_DBUI_BEGIN               RC_DBUI
 //      RC_DBUI_END                 (RC_DBUI + 99)
 

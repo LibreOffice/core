@@ -516,7 +516,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
     if( !ins )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
-        SwDBMgr *pMgr = rDoc.GetDBMgr();
+        SwDBManager *pMgr = rDoc.GetDBManager();
 
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
@@ -580,7 +580,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
-        SwDBMgr *pMgr = rDoc.GetDBMgr();
+        SwDBManager *pMgr = rDoc.GetDBManager();
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
         OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));

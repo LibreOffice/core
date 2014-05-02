@@ -161,7 +161,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DB-Manager
-    boost::scoped_ptr<SwDBMgr> pDBMgr(new SwDBMgr);
+    boost::scoped_ptr<SwDBManager> pDBManager(new SwDBManager);
 #endif
 
     // Read SwLabItem from Config
@@ -176,7 +176,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
     boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet,
 #if HAVE_FEATURE_DBCONNECTIVITY
-                                                                            pDBMgr.get(),
+                                                                            pDBManager.get(),
 #else
                                                                             NULL,
 #endif

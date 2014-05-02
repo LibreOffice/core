@@ -86,7 +86,7 @@ struct DBTextStruct_Impl
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    SwDBMgr* pDBMgr = GetShell().GetDBMgr();
+    SwDBManager* pDBManager = GetShell().GetDBManager();
     sal_uInt16 nSlot = rReq.GetSlot();
     OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
@@ -128,7 +128,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     if ( !xConnection.is() )
     {
         Reference<XDataSource> xSource;
-        xConnection = pDBMgr->GetConnection(sSourceArg, xSource);
+        xConnection = pDBManager->GetConnection(sSourceArg, xSource);
     }
     if(!xConnection.is())
         return ;
@@ -168,7 +168,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 bool bDisposeResultSet = false;
                 if ( !xCursor.is() )
                 {
-                    xCursor = SwDBMgr::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);
+                    xCursor = SwDBManager::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);
                     bDisposeResultSet = xCursor.is();
                 }
 
@@ -180,7 +180,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 aDescriptor[daCommandType]  <<= nCommandTypeArg;
 
                 SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
-                pDBMgr->MergeNew(aMergeDesc);
+                pDBManager->MergeNew(aMergeDesc);
 
                 if ( bDisposeResultSet )
                     ::comphelper::disposeComponent(xCursor);
@@ -241,20 +241,20 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
     {
         bool bDispose = false;
         Reference< sdbc::XConnection> xConnection = pDBStruct->xConnection;
-        Reference<XDataSource> xSource = SwDBMgr::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
+        Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
         // #111987# the connection is disposed an so no parent has been found
         if(xConnection.is() && !xSource.is())
             return 0;
 
         if ( !xConnection.is()  )
         {
-            xConnection = SwDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
+            xConnection = SwDBManager::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
             bDispose = true;
         }
 
         Reference< XColumnsSupplier> xColSupp;
         if(xConnection.is())
-            xColSupp = SwDBMgr::GetColumnSupplier(xConnection,
+            xColSupp = SwDBManager::GetColumnSupplier(xConnection,
                                     pDBStruct->aDBData.sCommand,
                                     pDBStruct->aDBData.nCommandType == CommandType::QUERY ?
                                         SW_DB_SELECT_QUERY : SW_DB_SELECT_TABLE);

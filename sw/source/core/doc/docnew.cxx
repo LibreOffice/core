@@ -341,8 +341,8 @@ SwDoc::SwDoc()
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, SwDoc, DoIdleStatsUpdate ) );
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    // Create DBMgr
-    mpDBMgr = new SwDBMgr;
+    // Create DBManager
+    mpDBManager = new SwDBManager;
 #endif
 
     // create TOXTypes
@@ -590,7 +590,7 @@ SwDoc::~SwDoc()
     mpCharFmtTbl->erase( mpCharFmtTbl->begin() );
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    DELETEZ( mpDBMgr );
+    DELETEZ( mpDBManager );
 #endif
 
     // All Flys need to be destroyed before the Drawing Model,

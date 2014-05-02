@@ -90,7 +90,7 @@ public:
     /// For calculations in expressions.
     void                ChgValue( double d, bool bVal );
 
-    /// Get the evaluation via DBMgr string.
+    /// Get the evaluation via DBManager string.
     void                Evaluate();
 
     /// Evaluation for header and footer.
