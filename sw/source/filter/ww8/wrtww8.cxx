@@ -3475,6 +3475,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , mnHdFtIndex(0)
     , mnRedlineMode(0)
     , pAktPageDesc(0)
+    , bPrevTextNodeIsEmpty(false)
     , pPapPlc(0)
     , pChpPlc(0)
     , pChpIter(0)

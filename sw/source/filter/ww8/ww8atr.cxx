@@ -422,11 +422,18 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (pAktPageDesc != pPageDesc)
     {
-        if ( (isCellOpen && (pAktPageDesc->GetName() != pPageDesc->GetName())) || isTextNodeEmpty )
+        if ( ( isCellOpen && ( pAktPageDesc->GetName() != pPageDesc->GetName() )) ||
+             ( isTextNodeEmpty || bPrevTextNodeIsEmpty ))
         {
-           // Table cell is open and page header types are different,so do not output section break OR
-           // PageBreak is present but text node has no string - it is an empty node, do not prepare
-           // new page descriptor i.e. bNewPageDesc should be false.
+            /* Do not output a section break in the following scenarios.
+                1) Table cell is open and page header types are different
+                2) PageBreak is present but text node has no string - it is an empty node.
+                3) If the previous node was an empty text node and current node is a non empty text node or vice versa.
+                4) If previous node and current node both are empty text nodes.
+                Converting a page break to section break would cause serious issues while importing
+                the RT files with different first page being set.
+            */
+            bNewPageDesc = false;
         }
         else
         {
@@ -539,6 +546,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
         PrepareNewPageDesc( pSet, rNd, pPgDesc, pAktPageDesc );
     }
     bBreakBefore = false;
+    bPrevTextNodeIsEmpty = isTextNodeEmpty ;
 }
 
 // #i76300#
