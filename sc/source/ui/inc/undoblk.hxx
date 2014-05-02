@@ -640,7 +640,7 @@ private:
 class ScUndoConditionalFormat : public ScSimpleUndo
 {
 public:
-    TYPEINFO_OVERRIDE();
+    TYPEINFO();
     ScUndoConditionalFormat( ScDocShell* pNewDocShell,
             ScDocument* pUndoDoc, ScDocument* pRedoDoc, const ScRange& rRange);
     virtual         ~ScUndoConditionalFormat();
