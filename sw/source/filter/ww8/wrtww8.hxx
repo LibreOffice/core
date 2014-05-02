@@ -479,6 +479,7 @@ public:
     SwImplBookmarks maImplicitBookmarks;
     sw::Frames maFrames;             // The floating frames in this document
     const SwPageDesc *pAktPageDesc;
+    bool bPrevTextNodeIsEmpty;
     WW8_WrPlcPn* pPapPlc;
     WW8_WrPlcPn* pChpPlc;
     MSWordAttrIter* pChpIter;

@@ -3135,6 +3135,19 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76587 , "fdo76587.docx")
     assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "lineRule", "auto");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO77890 , "fdo77890.docx")
+{
+    /*
+    Ensure that the page break is preserved i.e it should not be converted to a section break, in case
+    if the different first page is set for the pages in the document.
+    For additional comments pls refer https://www.libreoffice.org/bugzilla/show_bug.cgi?id=77890#c2
+    */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:br", "type", "page");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testNumberedList,"NumberedList.docx")
 {
     //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
