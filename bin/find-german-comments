@@ -155,7 +155,7 @@ class Parser:
         def tab_calc (string):
             START = 40 #Default of 10 tabs
             if len(string) >= START:
-                return 1, 0
+                return 1
             diff = START - len(string)
             if diff % 4 is not 0:
                 padding = 1
