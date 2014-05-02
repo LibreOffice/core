@@ -1689,7 +1689,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     // ? TL_CHART2: notification or locking of controller required ?
 
     SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
-    std::vector< SwTableBox* > aDelBoxes;
+    SwSelBoxes aDelBoxes;
     if( IsDelBox() )
     {
         // Trick: add missing boxes in any line, they will be connected
@@ -1712,7 +1712,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     else if( !pNewSttNds->empty() )
     {
-        // Than the nodes have be moved and not deleted!
+        // Then the nodes have be moved and not deleted!
         // But for that we need a temp array.
         std::vector<_BoxMove> aTmp( pNewSttNds->begin(), pNewSttNds->end() );
 
@@ -1728,6 +1728,10 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             // TL_CHART2: notify chart about box to be removed
             if (pPCD)
                 pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
+
+            // insert _before_ deleting the section - otherwise the box
+            // has no start node so all boxes sort equal in SwSelBoxes
+            aDelBoxes.insert(pBox);
 
             if( aTmp[n].hasMoved )
             {
@@ -1755,7 +1759,6 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 pBox->RemoveFromTable();
                 rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
             }
-            aDelBoxes.insert( aDelBoxes.end(), pBox );
         }
     }
     else
@@ -1770,11 +1773,16 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             // TL_CHART2: notify chart about box to be removed
             if (pPCD)
                 pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
+            aDelBoxes.insert(pBox);
             pBox->RemoveFromTable(); // ~SwTableBox would access pBox->pSttNd
-            aDelBoxes.insert( aDelBoxes.end(), pBox );
             rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
         }
     }
+
+    // fdo#57197: before deleting the SwTableBoxes, delete the SwTabFrms
+    aTmpBox.SetTableLines(aDelBoxes, pTblNd->GetTable());
+    aTmpBox.DelFrms(pTblNd->GetTable());
+
     // Remove boxes from table structure
     for( sal_uInt16 n = 0; n < aDelBoxes.size(); ++n )
     {
