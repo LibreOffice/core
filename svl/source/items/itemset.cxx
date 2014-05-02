@@ -35,9 +35,9 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static const sal_uInt16 nInitCount = 10; // einzelne USHORTs => 5 Paare ohne '0'
+static const sal_uInt16 nInitCount = 10; // individual USHORTs => 5 paairs without '0'
 #if OSL_DEBUG_LEVEL > 1
-static sal_uLong nRangesCopyCount = 0;   // wie oft wurden Ranges kopiert
+static sal_uLong nRangesCopyCount = 0;   // the Ranges were copied this often
 #endif
 
 #include "nranges.cxx"
@@ -81,7 +81,7 @@ SfxItemSet::SfxItemSet
     SfxItemPool&    rPool,          /* der Pool, in dem die SfxPoolItems,
                                        welche in dieses SfxItemSet gelangen,
                                        aufgenommen werden sollen */
-    bool        bTotalRanges    /* komplette Pool-Ranges uebernehmen,
+    bool            bTotalRanges    /* komplette Pool-Ranges uebernehmen,
                                        muss auf sal_True gesetzt werden */
 )
 /*  [Beschreibung]
@@ -100,7 +100,7 @@ SfxItemSet::SfxItemSet
     _pParent( 0 ),
     _nCount( 0 )
 {
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
+    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "not a Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 //  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
 //              "please use suitable ranges" );
@@ -128,8 +128,8 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhic
     _pParent( 0 ),
     _nCount( 0 )
 {
-    DBG_ASSERT( nWhich1 <= nWhich2, "Ungueltiger Bereich" );
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
+    DBG_ASSERT( nWhich1 <= nWhich2, "invalid range" );
+    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "not a Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
     InitRanges_Impl(nWhich1, nWhich2);
@@ -166,8 +166,8 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
     _pWhichRanges( 0 ),
     _nCount( 0 )
 {
-    DBG_ASSERT( nWh1 <= nWh2, "Ungueltiger Bereich" );
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
+    DBG_ASSERT( nWh1 <= nWh2, "invalid range" );
+    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "not a Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
     if(!nNull)
@@ -219,7 +219,7 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     , _pWhichRanges(0)
     , _nCount(0)
 {
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
+    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "not a Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
     // pWhichPairTable == 0 ist f"ur das SfxAllEnumItemSet
@@ -232,7 +232,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
     _pParent( rASet._pParent ),
     _nCount( rASet._nCount )
 {
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
+    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "not a Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
     DBG( ++*_pChildCount(_pParent) );
 
@@ -461,7 +461,7 @@ void SfxItemSet::InvalidateDefaultItems()
 
 void SfxItemSet::InvalidateAllItems()
 {
-    DBG_ASSERT( !_nCount, "Es sind noch Items gesetzt" );
+    DBG_ASSERT( !_nCount, "No Items have been set yet" );
 
     memset( (void*)_aItems, -1, ( _nCount = TotalCount() ) * sizeof( SfxPoolItem*) );
 }
@@ -1031,8 +1031,8 @@ sal_uInt16 SfxItemSet::TotalCount() const
 
 void SfxItemSet::Intersect( const SfxItemSet& rSet )
 {
-    DBG_ASSERT(_pPool, "nicht implementiert ohne Pool");
-    if( !Count() )       // gar keine gesetzt ?
+    DBG_ASSERT(_pPool, "not implemented without Pool");
+    if( !Count() )       // none set?
         return;
 
     // loesche alle Items, die im rSet nicht mehr vorhanden sind
@@ -1475,7 +1475,7 @@ SvStream &SfxItemSet::Store
 
 {
     DBG_ASSERT( _pPool, "Kein Pool" );
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
+    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "not a Master-Pool" );
 
     // Position des Counts merken, um ggf. zu korrigieren
     sal_uLong nCountPos = rStream.Tell();

@@ -347,7 +347,7 @@ void SfxItemPool::ReleaseDefaults
 
                                     sal_False
                                     deletes neither the array nor the
-                                    individual Static Defaults
+                                    individual Static Defaults */
 )
 
 /*  [Description]
