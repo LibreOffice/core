@@ -272,14 +272,14 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     if (nCount >= 7)
     {
         aToken = rString.getToken(6, ',');
-        bQuotedFieldAsText = aToken.equalsAscii("true") ? true : false;
+        bQuotedFieldAsText = aToken.equalsAscii("true");
     }
 
     // Detect special numbers.
     if (nCount >= 8)
     {
         aToken = rString.getToken(7, ',');
-        bDetectSpecialNumber = aToken.equalsAscii("true") ? true : false;
+        bDetectSpecialNumber = aToken.equalsAscii("true");
     }
     else
         bDetectSpecialNumber = true;    // default of versions that didn't add the parameter

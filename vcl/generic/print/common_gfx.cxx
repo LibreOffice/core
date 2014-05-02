@@ -64,7 +64,7 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
     mnDpi = rPrinterJob.GetResolution();
     rPrinterJob.GetScale (mfScaleX, mfScaleY);
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
-    mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? true : false ) : false;
+    mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
 
     return true;
 }
@@ -76,13 +76,13 @@ PrinterGfx::Init (const JobData& rData)
     mpPageBody      = NULL;
     mnDepth         = rData.m_nColorDepth;
     mnPSLevel       = rData.m_nPSLevel ? rData.m_nPSLevel : (rData.m_pParser ? rData.m_pParser->getLanguageLevel() : 2 );
-    mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice == -1 ? false : true ) : (( rData.m_pParser ?  (rData.m_pParser->isColorDevice() ? true : false ) : true ) );
+    mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice != -1 ) : ( rData.m_pParser ? rData.m_pParser->isColorDevice() : true );
     int nRes = rData.m_aContext.getRenderResolution();
     mnDpi           = nRes;
     mfScaleX        = (double)72.0 / (double)mnDpi;
     mfScaleY        = (double)72.0 / (double)mnDpi;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
-    mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? true : false ) : false;
+    mbUploadPS42Fonts = rInfo.m_pParser && rInfo.m_pParser->isType42Capable();
 
     return true;
 }

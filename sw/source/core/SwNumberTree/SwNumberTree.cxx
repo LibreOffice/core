@@ -690,7 +690,7 @@ void SwNumberTreeNode::RemoveMe()
 
 bool SwNumberTreeNode::IsValid() const
 {
-    return mpParent ? mpParent->IsValid(this) : false;
+    return mpParent && mpParent->IsValid(this);
 }
 
 SwNumberTree::tSwNumTreeNumber SwNumberTreeNode::GetNumber(bool bValidate)

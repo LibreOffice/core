@@ -1910,7 +1910,7 @@ SdrObjUserData* SdrObject::ImpGetMacroUserData() const
 bool SdrObject::HasMacro() const
 {
     SdrObjUserData* pData=ImpGetMacroUserData();
-    return pData!=NULL ? pData->HasMacro(this) : false;
+    return pData && pData->HasMacro(this);
 }
 
 SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const

@@ -111,8 +111,7 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(OUString const & url)
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            bool bJava = (readSimpleElement("java-type-library", aNode) ==
-                "true") ? true : false;
+            bool bJava = readSimpleElement("java-type-library", aNode) == "true";
             retData.javaTypeLibrary = bJava;
 
             retData.implementationNames =

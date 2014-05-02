@@ -302,8 +302,8 @@ const sal_uInt8* ExcDummy_041::GetData( void ) const
 Exc1904::Exc1904( ScDocument& rDoc )
 {
     Date* pDate = rDoc.GetFormatTable()->GetNullDate();
-    bVal = pDate ? (*pDate == Date( 1, 1, 1904 )) : false;
-    bDateCompatibility = pDate ? !( *pDate == Date( 30, 12, 1899 )) : false;
+    bVal = pDate && (*pDate == Date( 1, 1, 1904 ));
+    bDateCompatibility = pDate && !( *pDate == Date( 30, 12, 1899 ));
 }
 
 

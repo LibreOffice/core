@@ -190,7 +190,7 @@ namespace frm
                 continue;
 
             // is this item enabled?
-            bool bEnabled = m_pDispatcher ? m_pDispatcher->isEnabled( nItemId ) : false;
+            bool bEnabled = m_pDispatcher && m_pDispatcher->isEnabled( nItemId );
             implEnableItem( nItemId, bEnabled );
         }
     }

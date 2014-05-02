@@ -1132,7 +1132,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
             InsertAttrsAsDrawingAttrs(nStartCp, nEndCp, eType);
         }
 
-        bool bVertical = pTextObj->IsVerticalWriting() ? true : false;
+        bool bVertical = pTextObj->IsVerticalWriting();
         EditTextObject* pTemporaryText = mpDrawEditEngine->CreateTextObject();
         OutlinerParaObject* pOp = new OutlinerParaObject(*pTemporaryText);
         pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );

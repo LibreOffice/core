@@ -68,7 +68,7 @@ public:
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
 
-    bool            operator!() const { return( !mpImplData ? true : false ); }
+    bool            operator!() const { return !mpImplData; }
     Image&          operator=( const Image& rImage );
     bool            operator==( const Image& rImage ) const;
     bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }

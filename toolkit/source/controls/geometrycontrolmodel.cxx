@@ -498,7 +498,7 @@
     {
         bool operator()( const Property& _rLHS, const Property& _rRHS )
         {
-            return _rLHS.Name < _rRHS.Name ? true : false;
+            return _rLHS.Name < _rRHS.Name;
         }
     };
 
@@ -510,7 +510,7 @@
 
         bool operator()( const Property& _rLHS )
         {
-            return _rLHS.Name == m_rCompare ? true : false;
+            return _rLHS.Name == m_rCompare;
         }
     };
 
@@ -593,7 +593,7 @@
 
         bool operator()( sal_Int32 _nLHS )
         {
-            return _nLHS == m_nCompare ? true  : false;
+            return _nLHS == m_nCompare;
         }
     };
 

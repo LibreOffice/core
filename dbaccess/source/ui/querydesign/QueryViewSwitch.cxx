@@ -176,7 +176,7 @@ void OQueryViewSwitch::impl_forceSQLView()
     OAddTableDlg* pAddTabDialog( getAddTableDialog() );
 
     // hide the "Add Table" dialog
-    m_bAddTableDialogWasVisible = pAddTabDialog ? pAddTabDialog->IsVisible() : false;
+    m_bAddTableDialogWasVisible = pAddTabDialog && pAddTabDialog->IsVisible();
     if ( m_bAddTableDialogWasVisible )
         pAddTabDialog->Hide();
 

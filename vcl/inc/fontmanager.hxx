@@ -399,7 +399,7 @@ public:
     bool getUseOnlyFontEncoding( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_bFontEncodingOnly : false;
+        return pFont && pFont->m_bFontEncodingOnly;
     }
 
     // get a specific fonts system dependent filename

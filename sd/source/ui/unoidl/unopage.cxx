@@ -349,7 +349,7 @@ SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPa
 {
     mpSdrModel = SvxFmDrawPage::mpModel;
     if( mpModel )
-        mbIsImpressDocument = mpModel->IsImpressDocument() ? true : false;
+        mbIsImpressDocument = mpModel->IsImpressDocument();
 
 }
 
@@ -373,7 +373,7 @@ SdXImpressDocument* SdGenericDrawPage::GetModel() const
             uno::Reference< uno::XInterface > xModel( SvxFmDrawPage::mpModel->getUnoModel() );
             const_cast< SdGenericDrawPage*>(this)->mpModel = SdXImpressDocument::getImplementation( xModel );
             if( mpModel )
-                const_cast< SdGenericDrawPage*>(this)->mbIsImpressDocument = mpModel->IsImpressDocument() ? true : false;
+                const_cast< SdGenericDrawPage*>(this)->mbIsImpressDocument = mpModel->IsImpressDocument();
         }
         else
         {
@@ -712,7 +712,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 bool bStopSound = false;
                 if( aValue >>= bStopSound )
                 {
-                    GetPage()->SetStopSound( bStopSound ? true : false );
+                    GetPage()->SetStopSound( bStopSound );
                     break;
                 }
             }
@@ -726,7 +726,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if( ! (aValue >>= bLoop) )
                 throw lang::IllegalArgumentException();
 
-            GetPage()->SetLoopSound( bLoop ? true : false );
+            GetPage()->SetLoopSound( bLoop );
             break;
         }
         case WID_PAGE_BACKFULL:

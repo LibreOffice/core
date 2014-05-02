@@ -897,7 +897,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
             ImplToBottomChild();
             if ( pOldMenuBar )
             {
-                bool bDelete = (pMenuBar == 0) ? true : false;
+                bool bDelete = (pMenuBar == 0);
                 if( bDelete && pOldWindow )
                 {
                     if( mpImplData->mpTaskPaneList )

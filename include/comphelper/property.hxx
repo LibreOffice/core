@@ -48,7 +48,7 @@ namespace comphelper
     {
         bool operator() (const ::com::sun::star::beans::Property& x, const ::com::sun::star::beans::Property& y) const
         {
-            return x.Name.compareTo(y.Name) < 0;// ? true : false;
+            return x.Name.compareTo(y.Name) < 0;
         }
     };
 

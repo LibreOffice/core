@@ -81,7 +81,7 @@ namespace {
 
             const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
             if ( pFly && bBackgroundMatches &&
-                 ( ( pCMS ? pCMS->bSetInReadOnly : false ) ||
+                 ( ( pCMS && pCMS->bSetInReadOnly ) ||
                    !pFly->IsProtected() ) &&
                  pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
             {

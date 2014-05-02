@@ -417,8 +417,8 @@ void TableDesignWidget::updateControls()
         {
             OSL_FAIL("sd::TableDesignWidget::updateControls(), exception caught!");
         }
-        m_aCheckBoxes[i]->Check(bUse ? true : false);
-        m_aCheckBoxes[i]->Enable(bHasTable ? true : false);
+        m_aCheckBoxes[i]->Check(bUse);
+        m_aCheckBoxes[i]->Enable(bHasTable);
     }
 
     FillDesignPreviewControl();

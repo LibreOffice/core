@@ -453,7 +453,7 @@ sal_Int32 ImplEntryList::GetSelectEntryPos( sal_Int32 nIndex ) const
 bool ImplEntryList::IsEntryPosSelected( sal_Int32 nIndex ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nIndex );
-    return pImplEntry ? pImplEntry->mbIsSelected : false;
+    return pImplEntry && pImplEntry->mbIsSelected;
 }
 
 bool ImplEntryList::IsEntrySelectable( sal_Int32 nPos ) const

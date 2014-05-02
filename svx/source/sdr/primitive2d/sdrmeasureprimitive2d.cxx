@@ -74,8 +74,8 @@ namespace drawinglayer
             const attribute::SdrLineStartEndAttribute aLineStartEnd(
                 bLeftActive ? rLineStartEnd.getStartPolyPolygon() : aEmpty, bRightActive ? rLineStartEnd.getEndPolyPolygon() : aEmpty,
                 bLeftActive ? rLineStartEnd.getStartWidth() : 0.0, bRightActive ? rLineStartEnd.getEndWidth() : 0.0,
-                bLeftActive ? rLineStartEnd.isStartActive() : false, bRightActive ? rLineStartEnd.isEndActive() : false,
-                bLeftActive ? rLineStartEnd.isStartCentered() : false, bRightActive? rLineStartEnd.isEndCentered() : false);
+                bLeftActive && rLineStartEnd.isStartActive(), bRightActive && rLineStartEnd.isEndActive(),
+                bLeftActive && rLineStartEnd.isStartCentered(), bRightActive && rLineStartEnd.isEndCentered());
 
             return createPolygonLinePrimitive(
                 aPolygon,

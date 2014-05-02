@@ -4377,7 +4377,7 @@ ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObject
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {
-    m_bProxyIsClassModuleObject = xScopeObj.Is() ? xScopeObj->ISA(SbClassModuleObject) : false;
+    m_bProxyIsClassModuleObject = xScopeObj.Is() && xScopeObj->ISA(SbClassModuleObject);
 }
 
 Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection() throw(std::exception)

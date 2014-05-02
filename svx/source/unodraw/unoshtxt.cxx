@@ -115,7 +115,7 @@ private:
     bool                            IsEditMode() const
                                     {
                                         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-                                        return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive() ? true : false;
+                                        return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive();
                                     }
 
     void                            dispose();
@@ -661,7 +661,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         }
         else
         {
-            bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : false;
+            bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
 
             // set objects style sheet on empty outliner
             SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)mpObject->GetModel()->GetStyleSheetPool();

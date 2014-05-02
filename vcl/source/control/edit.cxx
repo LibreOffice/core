@@ -513,7 +513,7 @@ void Edit::ImplRepaint(bool bLayout)
     }
 
     Cursor* pCursor = GetCursor();
-    bool bVisCursor = pCursor ? pCursor->IsVisible() : false;
+    bool bVisCursor = pCursor && pCursor->IsVisible();
     if ( pCursor )
         pCursor->Hide();
 

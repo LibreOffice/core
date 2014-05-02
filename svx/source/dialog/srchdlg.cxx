@@ -99,7 +99,7 @@ namespace
 {
     bool GetCheckBoxValue(const CheckBox *pBox)
     {
-        return pBox->IsEnabled() ? pBox->IsChecked() : false;
+        return pBox->IsEnabled() && pBox->IsChecked();
     }
 }
 

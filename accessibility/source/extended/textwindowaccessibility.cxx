@@ -986,7 +986,7 @@ struct IndexCompare
     IndexCompare( const ::css::beans::PropertyValue* pVals ) : pValues(pVals) {}
     bool operator() ( const sal_Int32& a, const sal_Int32& b ) const
     {
-        return (pValues[a].Name < pValues[b].Name) ? true : false;
+        return pValues[a].Name < pValues[b].Name;
     }
 };
 

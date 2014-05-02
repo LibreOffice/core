@@ -916,7 +916,7 @@ namespace accessibility
         IndexCompare( const PropertyValue* pVals ) : pValues(pVals) {}
         bool operator() ( const sal_Int32& a, const sal_Int32& b ) const
         {
-            return (pValues[a].Name < pValues[b].Name) ? true : false;
+            return pValues[a].Name < pValues[b].Name;
         }
     };
 

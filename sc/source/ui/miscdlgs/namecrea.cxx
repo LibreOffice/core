@@ -30,10 +30,10 @@ ScNameCreateDlg::ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags )
     get(m_pLeftBox, "left");
     get(m_pBottomBox, "bottom");
     get(m_pRightBox, "right");
-    m_pTopBox->Check   ( (nFlags & NAME_TOP)   ? sal_True : false );
-    m_pLeftBox->Check  ( (nFlags & NAME_LEFT)  ? sal_True : false );
-    m_pBottomBox->Check( (nFlags & NAME_BOTTOM)? sal_True : false );
-    m_pRightBox->Check ( (nFlags & NAME_RIGHT) ? sal_True : false );
+    m_pTopBox->Check   ( (nFlags & NAME_TOP)   ? true : false );
+    m_pLeftBox->Check  ( (nFlags & NAME_LEFT)  ? true : false );
+    m_pBottomBox->Check( (nFlags & NAME_BOTTOM)? true : false );
+    m_pRightBox->Check ( (nFlags & NAME_RIGHT) ? true : false );
 }
 
 sal_uInt16 ScNameCreateDlg::GetFlags() const

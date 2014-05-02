@@ -1587,7 +1587,7 @@ bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             bool bTransactStarted = false;
             SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, false );
                SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, false );
-            bool bRename = pRename ? pRename->GetValue() : false;
+            bool bRename = pRename && pRename->GetValue();
             bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
 
             try

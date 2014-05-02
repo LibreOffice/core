@@ -772,7 +772,7 @@ namespace sw
             if (pOne->aStamp == pTwo->aStamp)
                 return (pOne->eType == nsRedlineType_t::REDLINE_INSERT && pTwo->eType != nsRedlineType_t::REDLINE_INSERT);
             else
-                return (pOne->aStamp < pTwo->aStamp) ? true : false;
+                return (pOne->aStamp < pTwo->aStamp);
         }
 
         RedlineStack::~RedlineStack()

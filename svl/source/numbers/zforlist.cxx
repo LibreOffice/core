@@ -486,7 +486,7 @@ bool SvNumberFormatter::IsTextFormat(sal_uInt32 F_Index) const
 {
     const SvNumberformat* pFormat = GetFormatEntry(F_Index);
 
-    return pFormat ? pFormat->IsTextFormat() : false;
+    return pFormat && pFormat->IsTextFormat();
 }
 
 bool SvNumberFormatter::PutEntry(OUString& rString,
@@ -3750,9 +3750,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             lcl_CheckCurrencySymbolPosition( *pEntry );
         }
         rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
-        if ( !nSystemCurrencyPosition && (!aConfiguredCurrencyAbbrev.isEmpty() ?
-                                          pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
-                                          pEntry->GetLanguage() == eConfiguredCurrencyLanguage : false) )
+        if ( !nSystemCurrencyPosition && !aConfiguredCurrencyAbbrev.isEmpty() &&
+             pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
+             pEntry->GetLanguage() == eConfiguredCurrencyLanguage )
         {
             nSystemCurrencyPosition = nCurrencyPos-1;
         }

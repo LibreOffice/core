@@ -51,7 +51,7 @@ public class Assert
 
         boolean noExceptionAllowed = ( i_expectedExceptionClass == null );
 
-        boolean caughtExpected = noExceptionAllowed ? true : false;
+        boolean caughtExpected = noExceptionAllowed;
         try
         {
             Method method = impl_getMethod( objectClass, i_methodName, i_argClasses );

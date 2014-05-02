@@ -1026,7 +1026,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
     if ( pEntry->HasChildListPos() )
     {
         size_t nListPos = pEntry->GetChildListPos();
-        bLastEntry = (nListPos == (rList.size()-1)) ? true : false;
+        bLastEntry = (nListPos == (rList.size()-1));
         SvTreeListEntries::iterator it = rList.begin();
         std::advance(it, nListPos);
         rList.release(it).release();

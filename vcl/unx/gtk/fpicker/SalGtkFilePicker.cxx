@@ -507,12 +507,12 @@ namespace {
                         *this
                     );
 
-            return bMatch ? true : false;
+            return bMatch;
         }
         bool operator () ( const UnoFilterEntry& _rEntry )
         {
             OUString aShrunkName = shrinkFilterName( _rEntry.First );
-            return aShrunkName == rTitle ? true : false;
+            return aShrunkName == rTitle;
         }
     };
 }
@@ -1217,7 +1217,7 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
     //actually select something from the list.
     gint nItems = gtk_tree_model_iter_n_children(
                     gtk_combo_box_get_model(pWidget), NULL);
-    gtk_widget_set_sensitive(GTK_WIDGET(pWidget), nItems > 1 ? true : false);
+    gtk_widget_set_sensitive(GTK_WIDGET(pWidget), nItems > 1);
 }
 
 uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction) const

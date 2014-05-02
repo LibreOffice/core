@@ -970,7 +970,7 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, bool bFlag )
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
-            pTxtNd->SetListRestart(bFlag ? true : false);
+            pTxtNd->SetListRestart(bFlag);
 
             SetModified();
         }
@@ -2065,8 +2065,8 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
         if ( !pTxtNd->IsCountedInList() == !bDel)
         {
             bool bOldNum = bDel;
-            bool bNewNum = bDel ? sal_False : sal_True;
-            pTxtNd->SetCountedInList(bNewNum ? true : false);
+            bool bNewNum = !bDel;
+            pTxtNd->SetCountedInList(bNewNum);
 
             SetModified();
 

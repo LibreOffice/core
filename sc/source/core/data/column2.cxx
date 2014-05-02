@@ -3197,7 +3197,7 @@ SCSIZE ScColumn::GetPatternCount( SCROW nRow1, SCROW nRow2 ) const
 
 bool ScColumn::ReservePatternCount( SCSIZE nReserve )
 {
-    return pAttrArray ? pAttrArray->Reserve( nReserve ) : false;
+    return pAttrArray && pAttrArray->Reserve( nReserve );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -243,7 +243,7 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
     {
         // #i83479# - refactoring
         // simplify comparison by comparing the indexes of the text nodes
-        bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() ) ? true : false;
+        bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() );
     }
 
     return bResult;

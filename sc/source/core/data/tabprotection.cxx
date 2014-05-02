@@ -293,7 +293,7 @@ void ScTableProtectionImpl::setPasswordHash(
     const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
     sal_Int32 nLen = aPassword.getLength();
-    mbEmptyPass = nLen <= 0 ? true : false;
+    mbEmptyPass = nLen <= 0;
     meHash1 = eHash;
     meHash2 = eHash2;
     maPassHash = aPassword;

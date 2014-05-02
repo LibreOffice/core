@@ -669,7 +669,7 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                 if (pProps)
                 {
                     SmConfig *pConfig = SM_MOD()->GetConfig();
-                    const bool bUsedSymbolsOnly = pConfig ? pConfig->IsSaveOnlyUsedSymbols() : false;
+                    const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
 
                     const OUString sFormula ( "Formula" );
                     const OUString sBasicLibraries ( "BasicLibraries" );

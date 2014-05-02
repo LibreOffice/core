@@ -414,7 +414,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
 
     ScModule* pScMod = SC_MOD();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    bool bRefMode = ( pViewShell ? pViewShell->IsRefInputMode() : false );
+    bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
 
     bool bHide = !bRefMode && !pViewData->IsAnyFillMode() &&
             ( nPosX != (SCsCOL) pViewData->GetCurX() || nPosY != (SCsROW) pViewData->GetCurY() );

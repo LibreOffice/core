@@ -946,7 +946,7 @@ bool OGenericUnoController::isUserDefinedFeature( const OUString& _rFeatureURL )
     OSL_PRECOND( pos != m_aSupportedFeatures.end(),
         "OGenericUnoController::isUserDefinedFeature: this is no supported feature at all!" );
 
-    return ( pos != m_aSupportedFeatures.end() ) ? isUserDefinedFeature( pos->second.nFeatureId ) : false;
+    return ( pos != m_aSupportedFeatures.end() ) && isUserDefinedFeature( pos->second.nFeatureId );
 }
 
 sal_Bool SAL_CALL OGenericUnoController::supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception)

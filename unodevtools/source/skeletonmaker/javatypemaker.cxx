@@ -443,7 +443,7 @@ void printMethods(std::ostream & o,
 
     static OString sd("_");
     bool body = !delegate.isEmpty();
-    bool defaultbody = ((delegate.equals(sd)) ? true : false);
+    bool defaultbody = delegate.equals(sd);
 
     generated.add(u2b(name));
     rtl::Reference< unoidl::Entity > ent;

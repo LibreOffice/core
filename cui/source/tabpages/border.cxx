@@ -708,7 +708,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
     if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     false ))
     {
-        bPut = aBoxItem != (const SvxBoxItem&)(rOldSet.Get(nBoxWhich)) ? true : false;
+        bPut = aBoxItem != (const SvxBoxItem&)(rOldSet.Get(nBoxWhich));
     }
     if(  SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, false ) )
     {

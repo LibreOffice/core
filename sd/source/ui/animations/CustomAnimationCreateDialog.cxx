@@ -465,12 +465,12 @@ void CustomAnimationCreateTabPage::setDuration( double fDuration )
 
 bool CustomAnimationCreateTabPage::getIsPreview() const
 {
-    return mpCBXPReview->IsChecked() ? true : false;
+    return mpCBXPReview->IsChecked();
 }
 
 void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
 {
-    mpCBXPReview->Check( bIsPreview ? sal_True : sal_False );
+    mpCBXPReview->Check( bIsPreview );
 }
 
 sal_uInt16 CustomAnimationCreateTabPage::getId() const

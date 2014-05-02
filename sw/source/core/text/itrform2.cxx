@@ -439,7 +439,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             {
                 const OUString& rTxt = rInf.GetTxt();
                 sal_Int32 nIdx = rInf.GetIdx();
-                bAllowBehind = nIdx < rTxt.getLength() ? rCC.isLetterNumeric(rTxt, nIdx) : false;
+                bAllowBehind = nIdx < rTxt.getLength() && rCC.isLetterNumeric(rTxt, nIdx);
             }
 
             const SwLinePortion* pLast = rInf.GetLast();

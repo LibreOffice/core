@@ -1666,7 +1666,7 @@ private:
     bool SetLowerSpacing(SwPaM &rMyPam, int nSpace);
 
     bool IsInlineEscherHack() const
-        {return !maFieldStack.empty() ? maFieldStack.back().mnFieldId == 95 : false; };
+        { return !maFieldStack.empty() && maFieldStack.back().mnFieldId == 95; };
 
     void StoreMacroCmds();
 

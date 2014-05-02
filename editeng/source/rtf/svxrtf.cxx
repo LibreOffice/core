@@ -1215,7 +1215,7 @@ void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
 void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     const SvxNodeIdx &rNewNode)
 {
-    bool bSameEndAsStart = (pSttNd == pEndNd) ? true : false;
+    bool bSameEndAsStart = (pSttNd == pEndNd);
 
     if (GetSttNodeIdx() == rOldNode.GetIdx())
     {

@@ -121,7 +121,7 @@ void XMLTextNumRuleInfo::Set(
                                     hasPropertyByName( msNumberingIsOutline ) )
             {
                 xNumRulesProps->getPropertyValue( msNumberingIsOutline ) >>= bIsOutline;
-                bSuppressListStyle = bIsOutline ? true : false;
+                bSuppressListStyle = bIsOutline;
             }
         }
     }

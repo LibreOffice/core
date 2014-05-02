@@ -107,7 +107,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
          Sequence<Reference<css::security::XCertificate> >());
 
-    bool bCertValid = certStatus == css::security::CertificateValidity::VALID ?  true : false;
+    bool bCertValid = certStatus == css::security::CertificateValidity::VALID;
 
     if ( !bCertValid )
     {
@@ -419,7 +419,7 @@ void CertificateViewerCertPathTP::ActivatePage()
             //Verify the certificate
             sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
                  Sequence<Reference<css::security::XCertificate> >());
-            bool bCertValid = certStatus == css::security::CertificateValidity::VALID ? true : false;
+            bool bCertValid = certStatus == css::security::CertificateValidity::VALID;
             pParent = InsertCert( pParent, sName, rCert, bCertValid);
         }
 

@@ -1229,7 +1229,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
         }
 
-        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 ? true : false ) ? sal_True : sal_False;
+        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 );
     }
 
     if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(FORMAT_BITMAP))

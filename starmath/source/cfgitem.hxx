@@ -136,7 +136,7 @@ protected:
     void        SetFormatModified( bool bVal );
     inline bool IsFormatModified() const    { return bIsFormatModified; }
     void        SetFontFormatListModified( bool bVal );
-    inline bool IsFontFormatListModified() const    { return pFontFormatList ? pFontFormatList->IsModified(): false; }
+    inline bool IsFontFormatListModified() const    { return pFontFormatList && pFontFormatList->IsModified(); }
 
     SmFontFormatList &          GetFontFormatList();
     const SmFontFormatList &    GetFontFormatList() const

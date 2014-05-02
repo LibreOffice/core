@@ -78,7 +78,7 @@ public:
 
   bool operator== (long count) const
   {
-    return (m_pCount != 0) ? *m_pCount == count : false;
+    return (m_pCount != 0) && (*m_pCount == count);
   }
 
   friend void swap<> (SharedCount & lhs, SharedCount & rhs); // nothrow

@@ -63,9 +63,7 @@ public:
         , m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
         , m_EventListeners(m_Mutex)
-// #i111177#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
-//        , m_bIsDescriptor(0 == pFootnote)
-        , m_bIsDescriptor((0 == pFootnote) ? true : false)
+        , m_bIsDescriptor(0 == pFootnote)
         , m_pFmtFtn(pFootnote)
     {
     }
@@ -322,8 +320,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     SwXTextCursor const*const pTextCursor(
             dynamic_cast<SwXTextCursor*>(pCursor));
-    const bool bForceExpandHints( (pTextCursor)
-            ? pTextCursor->IsAtEndOfMeta() : false );
+    const bool bForceExpandHints( pTextCursor && pTextCursor->IsAtEndOfMeta() );
     const SetAttrMode nInsertFlags = (bForceExpandHints)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;

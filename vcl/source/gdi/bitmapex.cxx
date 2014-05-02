@@ -467,12 +467,12 @@ bool BitmapEx::Crop( const Rectangle& rRectPixel )
 
 bool BitmapEx::Convert( BmpConversion eConversion )
 {
-    return( !!aBitmap ? aBitmap.Convert( eConversion ) : false );
+    return !!aBitmap && aBitmap.Convert( eConversion );
 }
 
 bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount, BmpReduce eReduce )
 {
-    return( !!aBitmap ? aBitmap.ReduceColors( nNewColorCount, eReduce ) : false );
+    return !!aBitmap && aBitmap.ReduceColors( nNewColorCount, eReduce );
 }
 
 bool BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor, bool bExpandTransparent )
@@ -614,31 +614,31 @@ bool BitmapEx::Erase( const Color& rFillColor )
 
 bool BitmapEx::Dither( sal_uLong nDitherFlags )
 {
-    return( !!aBitmap ? aBitmap.Dither( nDitherFlags ) : false );
+    return !!aBitmap && aBitmap.Dither( nDitherFlags );
 }
 
 bool BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
-    return( !!aBitmap ? aBitmap.Replace( rSearchColor, rReplaceColor, nTol ) : false );
+    return !!aBitmap && aBitmap.Replace( rSearchColor, rReplaceColor, nTol );
 }
 
 bool BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, const sal_uLong* pTols )
 {
-    return( !!aBitmap ? aBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, (sal_uLong*) pTols ) : false );
+    return !!aBitmap && aBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, (sal_uLong*) pTols );
 }
 
 bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,
                        short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
                        double fGamma, bool bInvert, bool msoBrightness )
 {
-    return( !!aBitmap ? aBitmap.Adjust( nLuminancePercent, nContrastPercent,
+    return !!aBitmap && aBitmap.Adjust( nLuminancePercent, nContrastPercent,
                                         nChannelRPercent, nChannelGPercent, nChannelBPercent,
-                                        fGamma, bInvert, msoBrightness ) : false );
+                                        fGamma, bInvert, msoBrightness );
 }
 
 bool BitmapEx::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
-    return( !!aBitmap ? aBitmap.Filter( eFilter, pFilterParam, pProgress ) : false );
+    return !!aBitmap && aBitmap.Filter( eFilter, pFilterParam, pProgress );
 }
 
 void BitmapEx::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const

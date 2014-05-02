@@ -173,7 +173,7 @@ IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
 
 IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
 {
-    bool bVertical = mpCbStacked->IsChecked() ? true : false;
+    bool bVertical = mpCbStacked->IsChecked();
     SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_ALIGN_STACKED, SFX_CALLMODE_RECORD, &aStackItem, 0L );

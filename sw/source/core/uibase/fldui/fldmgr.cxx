@@ -780,11 +780,11 @@ bool SwFldMgr::GoNextPrev( bool bNext, SwFieldType* pTyp )
     if (pTyp && pTyp->Which() == RES_DBFLD)
     {
         // for fieldcommand-edit (hop to all DB fields)
-        return pSh->MoveFldType( 0, (bNext ? true : false), RES_DBFLD );
+        return pSh->MoveFldType( 0, bNext, RES_DBFLD );
     }
 
     return (pTyp && pSh)
-           ? pSh->MoveFldType( pTyp, (bNext ? true : false) )
+           ? pSh->MoveFldType( pTyp, bNext )
            : sal_False;
 }
 

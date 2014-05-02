@@ -816,7 +816,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         {
             bool bDraggingDone = false;
             SdrDragMethod* pDragMethod = pDrawViewWrapper->SdrView::GetDragMethod();
-            bool bIsMoveOnly = pDragMethod ? pDragMethod->getMoveOnly() : false;
+            bool bIsMoveOnly = pDragMethod && pDragMethod->getMoveOnly();
             DragMethod_Base* pChartDragMethod = dynamic_cast< DragMethod_Base* >(pDragMethod);
             if( pChartDragMethod )
             {

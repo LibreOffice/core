@@ -288,7 +288,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     if ( nPosX != nOldX || nPosY != nOldY || bNew )
     {
         ScTabViewShell* pViewShell = aViewData.GetViewShell();
-        bool bRefMode = ( pViewShell ? pViewShell->IsRefInputMode() : false );
+        bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
         if ( aViewData.HasEditView( aViewData.GetActivePart() ) && !bRefMode ) // 23259 oder so
         {
             UpdateInputLine();

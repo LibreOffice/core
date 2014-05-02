@@ -46,9 +46,9 @@ struct SwPamRange
     SwPamRange( sal_uLong nS, sal_uLong nE ) : nStart( nS ), nEnd( nE ) {}
 
     bool operator==( const SwPamRange& rRg ) const
-        { return nStart == rRg.nStart ? true : false; }
+        { return nStart == rRg.nStart; }
     bool operator<( const SwPamRange& rRg ) const
-        { return nStart < rRg.nStart ? true : false; }
+        { return nStart < rRg.nStart; }
 };
 
 class _SwPamRanges : public o3tl::sorted_vector<SwPamRange> {};

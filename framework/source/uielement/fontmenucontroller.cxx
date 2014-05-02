@@ -48,7 +48,7 @@ using namespace std;
 static bool lcl_I18nCompareString(const OUString& rStr1, const OUString& rStr2)
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    return rI18nHelper.CompareString( rStr1, rStr2 ) < 0 ? true : false;
+    return rI18nHelper.CompareString( rStr1, rStr2 ) < 0;
 }
 
 namespace framework

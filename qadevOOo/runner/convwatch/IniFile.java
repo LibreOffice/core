@@ -102,7 +102,7 @@ class IniFile
      */
     public boolean is()
         {
-            return m_aList.size() > 1 ? true : false;
+            return m_aList.size() > 1;
         }
 
 

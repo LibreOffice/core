@@ -379,7 +379,7 @@ struct DoesStyleMatchStyleSheetPredicate SAL_FINAL : public svl::StyleSheetPredi
         bool bMatchFamily = ((mIterator->GetSearchFamily() == SFX_STYLE_FAMILY_ALL) ||
                 ( styleSheet.GetFamily() == mIterator->GetSearchFamily() ));
 
-        bool bUsed = mIterator->SearchUsed() ? styleSheet.IsUsed( ) : false;
+        bool bUsed = mIterator->SearchUsed() && styleSheet.IsUsed( );
 
         bool bSearchHidden = ( mIterator->GetSearchMask() & SFXSTYLEBIT_HIDDEN );
         bool bMatchVisibility = !( !bSearchHidden && styleSheet.IsHidden() && !bUsed );

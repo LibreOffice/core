@@ -331,7 +331,7 @@ Size MediaWindowImpl::getPreferredSize() const
 
 bool MediaWindowImpl::start()
 {
-    return( mxPlayer.is() ? ( mxPlayer->start(), true ) : false );
+    return mxPlayer.is() && ( mxPlayer->start(), true );
 }
 
 void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
@@ -414,7 +414,7 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
 
 bool MediaWindowImpl::setZoom( ::com::sun::star::media::ZoomLevel eLevel )
 {
-    return( mxPlayerWindow.is() ? mxPlayerWindow->setZoomLevel( eLevel ) : false );
+    return mxPlayerWindow.is() && mxPlayerWindow->setZoomLevel( eLevel );
 }
 
 ::com::sun::star::media::ZoomLevel MediaWindowImpl::getZoom() const
@@ -462,7 +462,7 @@ void MediaWindowImpl::setPlaybackLoop( bool bSet )
 
 bool MediaWindowImpl::isPlaybackLoop() const
 {
-    return( mxPlayer.is() ? mxPlayer->isPlaybackLoop() : false );
+    return mxPlayer.is() && mxPlayer->isPlaybackLoop();
 }
 
 void MediaWindowImpl::setMute( bool bSet )
@@ -473,7 +473,7 @@ void MediaWindowImpl::setMute( bool bSet )
 
 bool MediaWindowImpl::isMute() const
 {
-    return( mxPlayer.is() ? mxPlayer->isMute() : false );
+    return mxPlayer.is() && mxPlayer->isMute();
 }
 
 void MediaWindowImpl::setVolumeDB( sal_Int16 nVolumeDB )

@@ -52,7 +52,7 @@ public:
 
 inline bool TextPaM::operator == ( const TextPaM& rPaM ) const
 {
-    return ( ( mnPara == rPaM.mnPara ) && ( mnIndex == rPaM.mnIndex ) ) ? true : false;
+    return ( mnPara == rPaM.mnPara ) && ( mnIndex == rPaM.mnIndex );
 }
 
 inline bool TextPaM::operator != ( const TextPaM& rPaM ) const
@@ -62,14 +62,14 @@ inline bool TextPaM::operator != ( const TextPaM& rPaM ) const
 
 inline bool TextPaM::operator < ( const TextPaM& rPaM ) const
 {
-    return ( ( mnPara < rPaM.mnPara ) ||
-             ( ( mnPara == rPaM.mnPara ) && mnIndex < rPaM.mnIndex ) ) ? true : false;
+    return ( mnPara < rPaM.mnPara ) ||
+           ( ( mnPara == rPaM.mnPara ) && mnIndex < rPaM.mnIndex );
 }
 
 inline bool TextPaM::operator > ( const TextPaM& rPaM ) const
 {
-    return ( ( mnPara > rPaM.mnPara ) ||
-             ( ( mnPara == rPaM.mnPara ) && mnIndex > rPaM.mnIndex ) ) ? true : false;
+    return ( mnPara > rPaM.mnPara ) ||
+           ( ( mnPara == rPaM.mnPara ) && mnIndex > rPaM.mnIndex );
 }
 
 class VCL_DLLPUBLIC TextSelection

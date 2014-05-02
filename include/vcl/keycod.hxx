@@ -67,7 +67,7 @@ public:
     OUString        GetName( Window* pWindow = NULL ) const;
 
     bool        IsFunction() const
-                    { return ((eFunc != KEYFUNC_DONTKNOW) ? true : false); }
+                    { return (eFunc != KEYFUNC_DONTKNOW); }
 
     KeyFuncType GetFunction() const;
 

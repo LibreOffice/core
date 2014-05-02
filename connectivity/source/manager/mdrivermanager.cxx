@@ -227,7 +227,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 
         bool operator()( const DriverAccess& lhs, const DriverAccess& rhs )
         {
-            return lhs.sImplementationName < rhs.sImplementationName ? true : false;
+            return lhs.sImplementationName < rhs.sImplementationName;
         }
     };
 

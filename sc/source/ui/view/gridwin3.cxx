@@ -386,7 +386,7 @@ void ScGridWindow::UpdateStatusPosSize()
 bool ScGridWindow::DrawHasMarkedObj()
 {
     ScDrawView* p = pViewData->GetScDrawView();
-    return p ? p->AreObjectsMarked() : false;
+    return p && p->AreObjectsMarked();
 }
 
 void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )

@@ -1338,7 +1338,7 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
             ( ! pItem->mbMirrorMode && bMirror )
             )
         {
-            pItem->mbMirrorMode = bMirror ? true : false;
+            pItem->mbMirrorMode = bMirror;
             if( !!pItem->maImage )
             {
                 pItem->maImage = ImplMirrorImage( pItem->maImage );
@@ -2134,7 +2134,7 @@ bool ToolBox::AlwaysLocked()
         }
     }
 
-    return nAlwaysLocked == 1 ? true : false;
+    return nAlwaysLocked == 1;
 }
 
 bool ToolBox::WillUsePopupMode() const

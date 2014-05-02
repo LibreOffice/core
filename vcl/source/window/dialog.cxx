@@ -1189,7 +1189,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 bool Dialog::isLayoutEnabled() const
 {
     //pre dtor called, and single child is a container => we're layout enabled
-    return mpDialogImpl ? ::isLayoutEnabled(this) : false;
+    return mpDialogImpl && ::isLayoutEnabled(this);
 }
 
 Size Dialog::GetOptimalSize() const

@@ -2971,7 +2971,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
 
     if(  !rDocShell.GetDocument()->IsImportingXML() )
     {
-        bInsertDocModule = pDoc ? pDoc->IsInVBAMode() : false;
+        bInsertDocModule = pDoc && pDoc->IsInVBAMode();
     }
     if ( bInsertDocModule || ( bRecord && !pDoc->IsUndoEnabled() ) )
         bRecord = false;
@@ -3017,7 +3017,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
 
     bool bSuccess = false;
     ScDocument* pDoc = rDocShell.GetDocument();
-    bool bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : false;
+    bool bVbaEnabled = pDoc && pDoc->IsInVBAMode();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
     if ( bVbaEnabled )

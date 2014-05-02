@@ -1156,7 +1156,7 @@ void Export::MergeRest( ResData *pResData )
 
                 MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                 OString sText;
-                bool bText = pEntrys ? pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, true ) : false;
+                bool bText = pEntrys && pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, true );
 
                 if( bText && !sText.isEmpty())
                 {

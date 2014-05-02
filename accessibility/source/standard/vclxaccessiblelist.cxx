@@ -157,7 +157,7 @@ void VCLXAccessibleList::FillAccessibleStateSet (utl::AccessibleStateSetHelper& 
 
 void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
 {
-    m_bVisible = _bSetNew ? true : false;
+    m_bVisible = _bSetNew;
     Any aOldValue, aNewValue;
     (_bSetNew ? aNewValue : aOldValue ) <<= AccessibleStateType::VISIBLE;
     NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );

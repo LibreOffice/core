@@ -821,10 +821,7 @@ const PPDKey* PPDParser::getKey( const OUString& rKey ) const
 
 bool PPDParser::hasKey( const PPDKey* pKey ) const
 {
-    return
-        pKey ?
-        ( m_aKeys.find( pKey->getKey() ) != m_aKeys.end() ? true : false ) :
-        false;
+    return pKey && ( m_aKeys.find( pKey->getKey() ) != m_aKeys.end() );
 }
 
 static sal_uInt8 getNibble( sal_Char cChar )
@@ -1676,7 +1673,7 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
     if( ! pResetValue && bDefaultable )
         pResetValue = pKey->getDefaultValue();
 
-    bool bRet = pResetValue ? ( setValue( pKey, pResetValue ) == pResetValue ? true : false ) : false;
+    bool bRet = pResetValue && ( setValue( pKey, pResetValue ) == pResetValue );
 
     return bRet;
 }

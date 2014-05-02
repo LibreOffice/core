@@ -2249,7 +2249,7 @@ bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
     OSL_ASSERT(m_spDispatch);
     LPOLESTR lpsz = const_cast<LPOLESTR> (reinterpret_cast<LPCOLESTR>(sFuncName.getStr()));
     HRESULT hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
-    return hr == S_OK ? true : false;
+    return hr == S_OK;
 }
 void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncDesc)
 

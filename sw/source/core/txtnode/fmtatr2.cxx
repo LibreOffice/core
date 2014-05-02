@@ -92,7 +92,7 @@ void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 // weiterleiten an das TextAttribut
 bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : false;
+    return pTxtAttr && pTxtAttr->GetInfo( rInfo );
 }
 bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
@@ -693,7 +693,7 @@ bool Meta::IsInClipboard() const
 {
     const SwTxtNode * const pTxtNode( GetTxtNode() );
 // no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInClipboard: no text node?");
-    return (pTxtNode) ? pTxtNode->IsInClipboard() : false;
+    return pTxtNode && pTxtNode->IsInClipboard();
 }
 
 bool Meta::IsInUndo() const

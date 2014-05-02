@@ -1816,7 +1816,7 @@ void SwFEShell::BreakCreate()
 
 bool SwFEShell::IsDrawCreate() const
 {
-    return Imp()->HasDrawView() ? Imp()->GetDrawView()->IsCreateObj() : false;
+    return Imp()->HasDrawView() && Imp()->GetDrawView()->IsCreateObj();
 }
 
 bool SwFEShell::BeginMark( const Point &rPos )
@@ -2877,7 +2877,7 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
                     OSL_ENSURE( pPageFrm, "inconsistent modell - no page!");
                     if ( pPageFrm )
                     {
-                        bRet = pPageFrm->IsRightToLeft() ? true : false;
+                        bRet = pPageFrm->IsRightToLeft();
                     }
                 }
             }

@@ -697,8 +697,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 
         if( bVert || bVertL2R )
         {
-            bVertic = bVert ? true : false;
-            bVerticalL2R = bVertL2R ? true : false;
+            bVertic = bVert;
+            bVerticalL2R = bVertL2R;
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
@@ -1030,8 +1030,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                          0;
         if( bVert || bVertL2R )
         {
-            bVertic = bVert ? true : false;
-            bVerticalL2R = bVertL2R ? true : false;
+            bVertic = bVert;
+            bVerticalL2R = bVertL2R;
             _bMirror = false;
 
             switch ( _eHoriRelOrient )

@@ -800,7 +800,7 @@ void ScInterpreter::ScCeil()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        bool bAbs = ( nParamCount == 3 ? GetBool() : false );
+        bool bAbs = nParamCount == 3 && GetBool();
         double fDec = GetDouble();
         double fVal = GetDouble();
         if ( fDec == 0.0 )
@@ -845,7 +845,7 @@ void ScInterpreter::ScFloor()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        bool bAbs = ( nParamCount == 3 ? GetBool() : false );
+        bool bAbs = nParamCount == 3 && GetBool();
         double fDec = GetDouble();
         double fVal = GetDouble();
         if ( fDec == 0.0 )

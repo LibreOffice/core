@@ -725,7 +725,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         else
         {
             Graphic& rGrf = const_cast<Graphic&>(rGrfNd.GetGrf());
-            bool bSwapped = rGrf.IsSwapOut() ? true : false;
+            bool bSwapped = rGrf.IsSwapOut();
             // immer ueber den Node einswappen!
             const_cast<SwGrfNode&>(rGrfNd).SwapIn();
 

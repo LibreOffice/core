@@ -917,7 +917,7 @@ struct PreviewPosInsidePagePred
         if ( _pPreviewPage->bVisible )
         {
             Rectangle aPreviewPageRect( _pPreviewPage->aPreviewWinPos, _pPreviewPage->aPageSize );
-            return aPreviewPageRect.IsInside( mnPreviewPos ) ? true : false;
+            return aPreviewPageRect.IsInside( mnPreviewPos );
         }
         else
             return false;

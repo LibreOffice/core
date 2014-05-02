@@ -139,7 +139,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             m_bProvidesStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
 
             m_bProvidesMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType )
-                                            .getLength() ? true : false;
+                                            .getLength();
         }
     }
 

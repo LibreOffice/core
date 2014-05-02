@@ -693,7 +693,7 @@ void SwSidebarWin::SetPosAndSize()
                     DocView(),
                     mColorAnchor,
                     aAnnotationTextRanges,
-                    mpAnchor != NULL ? mpAnchor->getLineSolid() : false );
+                    mpAnchor && mpAnchor->getLineSolid() );
         }
     }
     else

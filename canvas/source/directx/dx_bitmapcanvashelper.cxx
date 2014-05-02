@@ -230,7 +230,7 @@ namespace dxcanvas
     }
     bool BitmapCanvasHelper::hasAlpha() const
     {
-        return mpTarget ? mpTarget->hasAlpha() : false;
+        return mpTarget && mpTarget->hasAlpha();
     }
 }
 

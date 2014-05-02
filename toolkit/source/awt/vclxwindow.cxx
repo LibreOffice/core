@@ -378,7 +378,7 @@ void VCLXWindow::SetWindow( Window* pWindow )
     if ( GetWindow() )
     {
         GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
-        bool bDirectVisible = pWindow ? pWindow->IsVisible() : false;
+        bool bDirectVisible = pWindow && pWindow->IsVisible();
         mpImpl->setDirectVisible( bDirectVisible );
     }
 }

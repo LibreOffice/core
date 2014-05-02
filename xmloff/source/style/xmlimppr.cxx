@@ -560,7 +560,7 @@ struct PropertyPairLessFunctor :
 {
     bool operator()( const PropertyPair& a, const PropertyPair& b ) const
     {
-        return (*a.first < *b.first ? true : false);
+        return (*a.first < *b.first);
     }
 };
 

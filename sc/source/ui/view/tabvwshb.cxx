@@ -434,7 +434,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
     bool bOle = GetViewFrame()->GetFrame().IsInPlace();
     bool bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
-    bool bShared = ( pDocShell ? pDocShell->IsDocShared() : false );
+    bool bShared = pDocShell && pDocShell->IsDocShared();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();

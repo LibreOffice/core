@@ -340,8 +340,7 @@ public:
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
-        , m_bIsDescriptor((0 == pBaseSection) ? true : false)
+        , m_bIsDescriptor(0 == pBaseSection)
         , m_pDoc(&rDoc)
         , m_pProps((m_bIsDescriptor)
             ? new SwDocIndexDescriptorProperties_Impl(rDoc.GetTOXType(eType, 0))
@@ -1572,9 +1571,7 @@ public:
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
         , m_EventListeners(m_Mutex)
-// #i112513#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
-//        , m_bIsDescriptor(0 == pMark)
-        , m_bIsDescriptor((0 == pMark) ? true : false)
+        , m_bIsDescriptor(0 == pMark)
         , m_TypeDepend(this, pType)
         , m_pTOXMark(pMark)
         , m_pDoc(pDoc)
@@ -1964,8 +1961,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
         rMark.SetAlternativeText( OUString(' ') );
     }
 
-    const bool bForceExpandHints( (!bMark && pTextCursor)
-            ? pTextCursor->IsAtEndOfMeta() : false );
+    const bool bForceExpandHints( !bMark && pTextCursor && pTextCursor->IsAtEndOfMeta() );
     const SetAttrMode nInsertFlags = (bForceExpandHints)
         ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
             | nsSetAttrMode::SETATTR_DONTEXPAND)

@@ -514,8 +514,8 @@ SfxSaveGuard::~SfxSaveGuard()
 SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 : BaseMutex()
 , m_pData( new IMPL_SfxBaseModel_DataContainer( m_aMutex, pObjectShell ) )
-, m_bSupportEmbeddedScripts( pObjectShell && pObjectShell->Get_Impl() ? !pObjectShell->Get_Impl()->m_bNoBasicCapabilities : false )
-, m_bSupportDocRecovery( pObjectShell && pObjectShell->Get_Impl() ? pObjectShell->Get_Impl()->m_bDocRecoverySupport : false )
+, m_bSupportEmbeddedScripts( pObjectShell && pObjectShell->Get_Impl() && !pObjectShell->Get_Impl()->m_bNoBasicCapabilities )
+, m_bSupportDocRecovery( pObjectShell && pObjectShell->Get_Impl() && pObjectShell->Get_Impl()->m_bDocRecoverySupport )
 {
     if ( pObjectShell != NULL )
     {

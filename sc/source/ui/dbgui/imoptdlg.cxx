@@ -60,7 +60,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
         if ( nTokenCount == 4 )
         {
             // compatibility with old options string: "Save as shown" as 4th token, numeric
-            bSaveAsShown = (rStr.getToken( 3, ',' ).toInt32() ? sal_True : false);
+            bSaveAsShown = (rStr.getToken( 3, ',' ).toInt32() ? true : false);
             bQuoteAllText = true;   // use old default then
         }
         else

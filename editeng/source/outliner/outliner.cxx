@@ -306,7 +306,7 @@ bool Outliner::IsParaIsNumberingRestart( sal_Int32 nPara )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     DBG_ASSERT( pPara, "Outliner::IsParaIsNumberingRestart - Paragraph not found!" );
-    return pPara ? pPara->IsParaIsNumberingRestart() : false;
+    return pPara && pPara->IsParaIsNumberingRestart();
 }
 
 void Outliner::SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart )

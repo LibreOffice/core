@@ -199,7 +199,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
 
 void SbiParser::Dim()
 {
-    DefVar( _DIM, ( pProc && bVBASupportOn ) ? pProc->IsStatic() : false );
+    DefVar( _DIM, pProc && bVBASupportOn && pProc->IsStatic() );
 }
 
 void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
@@ -549,7 +549,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
 
 void SbiParser::ReDim()
 {
-    DefVar( _REDIM, (  pProc && bVBASupportOn ) ? pProc->IsStatic() : false );
+    DefVar( _REDIM, pProc && bVBASupportOn && pProc->IsStatic() );
 }
 
 // ERASE array, ...

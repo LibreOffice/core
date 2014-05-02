@@ -92,7 +92,7 @@ Any toBool( const OUString& rValue )
     bool bValue(false);
     if (::sax::Converter::convertBool( bValue, rValue ))
     {
-        aValue <<= ( bValue ? true : false );
+        aValue <<= bValue;
     }
     return aValue;
 }

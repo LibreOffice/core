@@ -66,8 +66,8 @@ Font2::Font2(const PrinterGfx &rGfx)
     mpFont[1] = rGfx.getFallbackID();
 
     PrintFontManager &rMgr = PrintFontManager::get();
-    mbSymbol = mpFont[0] != -1 ?
-                rMgr.getFontEncoding(mpFont[0]) == RTL_TEXTENCODING_SYMBOL : false;
+    mbSymbol = mpFont[0] != -1 &&
+                rMgr.getFontEncoding(mpFont[0]) == RTL_TEXTENCODING_SYMBOL;
 }
 
 } // namespace psp
@@ -714,7 +714,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
     {
         if (aIter->GetFontType() == fonttype::TrueType)
         {
-            aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts ? true : false, rSuppliedFonts );
+            aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts, rSuppliedFonts );
         }
         else
         {

@@ -1350,7 +1350,7 @@ void ModifyGuard::init()
     }
 
     mbIsEnableSetModified = mpDocShell ? mpDocShell->IsEnableSetModified() : sal_False;
-    mbIsDocumentChanged = mpDoc ? mpDoc->IsChanged() : false;
+    mbIsDocumentChanged = mpDoc && mpDoc->IsChanged();
 
     if( mbIsEnableSetModified )
         mpDocShell->EnableSetModified( false );

@@ -70,7 +70,7 @@ namespace pcr
 
             inline bool operator()( const OUString& _rCompare )
             {
-                return ( _rCompare == m_sReference ) ? true : false;
+                return ( _rCompare == m_sReference );
             }
         };
     }

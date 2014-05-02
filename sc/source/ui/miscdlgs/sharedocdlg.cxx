@@ -93,7 +93,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     m_aStrUnknownUser = get<FixedText>("unknownuser")->GetText();
     m_aStrExclusiveAccess = get<FixedText>("exclusive")->GetText();
 
-    bool bIsDocShared = ( mpDocShell ? mpDocShell->IsDocShared() : false );
+    bool bIsDocShared = mpDocShell && mpDocShell->IsDocShared();
     m_pCbShare->Check( bIsDocShared );
     m_pCbShare->SetToggleHdl( LINK( this, ScShareDocumentDlg, ToggleHandle ) );
     m_pFtWarning->Enable( bIsDocShared );

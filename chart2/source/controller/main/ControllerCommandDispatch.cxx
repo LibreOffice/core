@@ -523,7 +523,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // @todo: determine correctly
     bool bHasSuitableClipboardContent = true;
 
-    bool bShapeContext = ( m_pChartController ? m_pChartController->isShapeContext() : false );
+    bool bShapeContext = m_pChartController && m_pChartController->isShapeContext();
 
     bool bDisableDataTableDialog = false;
     if ( m_xController.is() )

@@ -554,7 +554,7 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
 struct PropertyValueLess
 {
     bool operator() (const PropertyValue& x, const PropertyValue& y) const
-        { return x.Name < y.Name ? true : false; }      // construct prevents a MSVC6 warning
+        { return x.Name < y.Name; }      // construct prevents a MSVC6 warning
 };
 
 typedef std::set<PropertyValue, PropertyValueLess> PropertyValueSet;

@@ -33,7 +33,7 @@ public:
 
     bool operator()( const WildCard& _rMatcher )
     {
-        return _rMatcher.Matches( m_rCompareString ) ? true : false;
+        return _rMatcher.Matches( m_rCompareString );
     }
 
     static void createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters);

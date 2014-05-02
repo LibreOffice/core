@@ -1958,7 +1958,7 @@ void Menu::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
             ( ! pData->bMirrorMode && bMirror )
             )
         {
-            pData->bMirrorMode = bMirror ? true : false;
+            pData->bMirrorMode = bMirror;
             if( !!pData->aImage )
                 pData->aImage = ImplMirrorImage( pData->aImage );
         }

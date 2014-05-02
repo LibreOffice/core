@@ -252,10 +252,9 @@ inline bool IsPrevPos( const SwPosition rPos1, const SwPosition rPos2 )
 {
     const SwCntntNode* pCNd;
     return 0 == rPos2.nContent.GetIndex() &&
-            rPos2.nNode.GetIndex() - 1 == rPos1.nNode.GetIndex() &&
-            0 != ( pCNd = rPos1.nNode.GetNode().GetCntntNode() )
-                ? rPos1.nContent.GetIndex() == pCNd->Len()
-                : false;
+           rPos2.nNode.GetIndex() - 1 == rPos1.nNode.GetIndex() &&
+           0 != ( pCNd = rPos1.nNode.GetNode().GetCntntNode() ) &&
+           rPos1.nContent.GetIndex() == pCNd->Len();
 }
 
 #if OSL_DEBUG_LEVEL > 0

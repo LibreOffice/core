@@ -1103,11 +1103,11 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     void * p = (char *) uno_data + comp_td->pMemberOffsets[ nPos ];
                     //When using polymorphic structs then the parameterized members can be null.
                     //Then we set a default value.
-                    bool bDefault = ((struct_td != NULL
+                    bool bDefault = (struct_td != NULL
                                      && struct_td->pParameterizedTypes != NULL
                                      && struct_td->pParameterizedTypes[nPos] == sal_True
-                                      && val == nullptr)
-                                     || cli_data == nullptr) ? true : false;
+                                     && val == nullptr)
+                                    || cli_data == nullptr;
                     switch (member_type->eTypeClass)
                     {
                     case typelib_TypeClass_CHAR:
@@ -1504,7 +1504,7 @@ void Bridge::map_to_cli(
         *cli_data= *(__wchar_t const*)uno_data;
         break;
     case typelib_TypeClass_BOOLEAN:
-        *cli_data = (*(bool const*)uno_data) == sal_True ? true : false;
+        *cli_data = (*(bool const*)uno_data) == sal_True;
         break;
     case typelib_TypeClass_BYTE:
         *cli_data = *(unsigned char const*) uno_data;

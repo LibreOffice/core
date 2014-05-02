@@ -215,7 +215,7 @@ namespace basctl
         inline  bool    isValid()       const   { return m_bValid; }
         /** determines whether the instance refers to a non-closed document
         */
-        inline  bool    isAlive()       const   { return m_bValid ? ( m_bIsApplication ? true : !m_bDocumentClosed ) : false; }
+        inline  bool    isAlive()       const   { return m_bValid && ( m_bIsApplication || !m_bDocumentClosed ); }
         /// determines whether the "document" refers to the application in real
         inline  bool    isApplication() const   { return m_bValid && m_bIsApplication; }
         /// determines whether the document refers to a real document (instead of the application)

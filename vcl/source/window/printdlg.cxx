@@ -787,7 +787,7 @@ bool PrintDialog::isPrintToFile()
 
 bool PrintDialog::isCollate()
 {
-    return maJobPage.mpCopyCountField->GetValue() > 1 ? maJobPage.mpCollateBox->IsChecked() : false;
+    return maJobPage.mpCopyCountField->GetValue() > 1 && maJobPage.mpCollateBox->IsChecked();
 }
 
 bool PrintDialog::isSingleJobs()

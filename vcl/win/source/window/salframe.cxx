@@ -3813,7 +3813,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
     if ( bMutex )
         ImplSalYieldMutexRelease();
 
-    return bMutex ? true : false;
+    return bMutex;
 }
 
 static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )

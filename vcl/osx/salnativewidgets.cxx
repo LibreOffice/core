@@ -409,7 +409,7 @@ bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
     {
         Rectangle aRect;
         bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion, aRect );
-        rIsInside = bValid ? aRect.IsInside( rPos ) : false;
+        rIsInside = bValid && aRect.IsInside( rPos );
         if( NSAppKitVersionNumber < NSAppKitVersionNumber10_7 &&
             GetSalData()->mbIsScrollbarDoubleMax )
         {

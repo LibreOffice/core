@@ -183,7 +183,7 @@ void UndoObjectSetText::Undo()
     DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectSetText::Undo(), object already dead!" );
     if( mxSdrObject.is() )
     {
-        mbNewEmptyPresObj = mxSdrObject->IsEmptyPresObj() ? true : false;
+        mbNewEmptyPresObj = mxSdrObject->IsEmptyPresObj();
         SdrUndoObjSetText::Undo();
         if( mpUndoAnimation )
             mpUndoAnimation->Undo();

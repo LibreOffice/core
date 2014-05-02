@@ -892,7 +892,7 @@ SdAnimationInfo* SdXShape::GetAnimationInfo( bool bCreate ) const
 
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj)
-        pInfo = SdDrawDocument::GetShapeUserData(*pObj, bCreate ? true : false);
+        pInfo = SdDrawDocument::GetShapeUserData(*pObj, bCreate);
 
     return pInfo;
 }

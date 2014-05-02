@@ -1287,7 +1287,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     OUString aExtensionPath = xPackage->getURL();
     ExtensionHelpExistanceMap::iterator it = aHelpExistanceMap.find( aExtensionPath );
     bool bFound = ( it != aHelpExistanceMap.end() );
-    bool bHasHelp = bFound ? it->second : false;
+    bool bHasHelp = bFound && it->second;
     if( bFound && !bHasHelp )
         return xHelpPackage;
 

@@ -652,7 +652,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                             // System.out.println(aPrinterProps[nPropIndex].Name);
                             nPropIndex++;
                         }
-                        isBusy = (aPrinterProps[nPropIndex].Value == Boolean.TRUE) ? true : false;
+                        isBusy = (aPrinterProps[nPropIndex].Value == Boolean.TRUE);
                         TimeHelper.waitInSeconds(1, "is print ready?");
                         nPrintCount++;
                         if (nPrintCount > 3600)

@@ -970,9 +970,9 @@ namespace osl_StreamSocket
             }
 
     public:
-        sal_Int32 getCount() {return m_nReadCount;}
-        bool       isOk() {return m_nReadCount == 0 ? false : true;}
-        bool       getFailed() {return m_bOk == false ? true : false;}
+        sal_Int32  getCount()  { return m_nReadCount; }
+        bool       isOk()      { return m_nReadCount != 0; }
+        bool       getFailed() { return m_bOk == false; }
 
         ReadSocket2Thread(osl::Condition &_aCondition)
                 :m_aCondition(_aCondition),

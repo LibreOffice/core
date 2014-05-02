@@ -719,7 +719,7 @@ struct ContainsPredicate
     ContainsPredicate( const Point& rPoint ) : mrPoint(rPoint) {}
     bool operator() ( const Rectangle& rRect ) const
     {
-        return rRect.IsInside( mrPoint ) ? true : false;
+        return rRect.IsInside( mrPoint );
     }
 };
 

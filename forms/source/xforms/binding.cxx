@@ -498,7 +498,7 @@ void Binding::checkModel()
 bool Binding::isLive() const
 {
     const Model* pModel = getModelImpl();
-    return ( pModel != NULL ) ? pModel->isInitialized() : false;
+    return pModel && pModel->isInitialized();
 }
 
 Model* Binding::getModelImpl() const

@@ -2556,7 +2556,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
     const bool bModifiedRecognize = ( !m_pMainCB->IsChecked() != !pSmartTagMgr->IsLabelTextWithSmartTags() );
     if ( bModifiedSmartTagTypes || bModifiedRecognize )
     {
-        bool bLabelTextWithSmartTags = m_pMainCB->IsChecked() ? true : false;
+        bool bLabelTextWithSmartTags = m_pMainCB->IsChecked();
         pSmartTagMgr->WriteConfiguration( bModifiedRecognize     ? &bLabelTextWithSmartTags : 0,
                                           bModifiedSmartTagTypes ? &aDisabledSmartTagTypes : 0 );
     }

@@ -118,7 +118,7 @@ SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 
 inline bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 {
-    return ( pStr1 ? ( pStr2 ? ( *pStr1 == *pStr2 ) : false ) : ( pStr2 ? false : true ) );
+    return ( pStr1 ? ( pStr2 && ( *pStr1 == *pStr2 ) ) : ( pStr2 ? false : true ) );
 }
 
 inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )

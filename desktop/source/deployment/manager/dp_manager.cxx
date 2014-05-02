@@ -214,7 +214,7 @@ void PackageManagerImpl::initActivationLayer(
                 }
             }
 
-            bool bShared = (m_context == "shared") ? true : false;
+            bool bShared = (m_context == "shared");
             for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
             {
                 OUString const & tempEntry = tempEntries[ pos ];

@@ -48,7 +48,7 @@ XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout()
 bool XMLPMPropHdl_PageStyleLayout::equals( const Any& rAny1, const Any& rAny2 ) const
 {
     style::PageStyleLayout eLayout1, eLayout2;
-    return ((rAny1 >>= eLayout1) && (rAny2 >>= eLayout2)) ? (eLayout1 == eLayout2) : false;
+    return (rAny1 >>= eLayout1) && (rAny2 >>= eLayout2) && (eLayout1 == eLayout2);
 }
 
 bool XMLPMPropHdl_PageStyleLayout::importXML(

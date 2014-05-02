@@ -292,7 +292,7 @@ bool SyntaxHighlighter::Tokenizer::testCharFlags( sal_Unicode c, sal_uInt16 nTes
     else if( c > 255 )
     {
         bRet = (( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER ) & nTestFlags) != 0
-            ? isAlpha(c) : false;
+            && isAlpha(c);
     }
     return bRet;
 }

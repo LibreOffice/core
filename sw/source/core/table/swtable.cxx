@@ -145,7 +145,7 @@ void SwTableBox::setRowSpan( long nNewRowSpan )
 
 bool SwTableBox::getDummyFlag() const
 {
-    return pImpl ? pImpl->getDummyFlag() : false;
+    return pImpl && pImpl->getDummyFlag();
 }
 
 void SwTableBox::setDummyFlag( bool bDummy )

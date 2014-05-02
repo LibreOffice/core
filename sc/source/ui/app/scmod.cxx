@@ -1449,7 +1449,7 @@ bool ScModule::IsInputMode()
 bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit )
 {
     ScInputHandler* pHdl = GetInputHdl();
-    return ( pHdl ? pHdl->KeyInput( rKEvt, bStartEdit ) : false );
+    return pHdl && pHdl->KeyInput( rKEvt, bStartEdit );
 }
 
 void ScModule::InputEnterHandler( sal_uInt8 nBlockMode )

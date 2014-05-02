@@ -117,8 +117,7 @@ public:
         , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
-        , m_bIsDescriptor((0 == pTxtNode) ? true : false)
+        , m_bIsDescriptor(0 == pTxtNode)
         , m_nSelectionStartPos(nSelStart)
         , m_nSelectionEndPos(nSelEnd)
         , m_xParentText(xParent)

@@ -49,9 +49,9 @@ public:
     bool operator() (const OUString& x, const OUString& y) const
     {
         if (m_bCaseSensitive)
-            return rtl_ustr_compare(x.getStr(), y.getStr()) < 0 ? true : false;
+            return rtl_ustr_compare(x.getStr(), y.getStr()) < 0;
         else
-            return rtl_ustr_compareIgnoreAsciiCase(x.getStr(), y.getStr()) < 0 ? true : false;
+            return rtl_ustr_compareIgnoreAsciiCase(x.getStr(), y.getStr()) < 0;
     }
 
     bool isCaseSensitive() const {return m_bCaseSensitive;}

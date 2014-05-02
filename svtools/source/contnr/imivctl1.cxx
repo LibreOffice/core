@@ -2721,7 +2721,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, bool bAdd,
 
     Rectangle aRect( rRect );
     aRect.Justify();
-    bool bCalcOverlap = (bAdd && pOtherRects && !pOtherRects->empty()) ? true : false;
+    bool bCalcOverlap = (bAdd && pOtherRects && !pOtherRects->empty());
 
     sal_Bool bResetClipRegion = sal_False;
     if( !pView->IsClipRegion() )

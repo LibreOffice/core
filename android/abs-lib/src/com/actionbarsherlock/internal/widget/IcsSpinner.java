@@ -606,7 +606,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
         }
 
         public boolean isShowing() {
-            return mPopup != null ? mPopup.isShowing() : false;
+            return mPopup && mPopup.isShowing();
         }
 
         public void setAdapter(ListAdapter adapter) {

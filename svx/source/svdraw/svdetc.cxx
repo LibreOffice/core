@@ -634,7 +634,7 @@ namespace
             return false;
 
         bool bRet(false);
-        bool bMaster(rList.GetPage() ? rList.GetPage()->IsMasterPage() : false);
+        bool bMaster(rList.GetPage() && rList.GetPage()->IsMasterPage());
 
         for(sal_uIntPtr no(rList.GetObjCount()); !bRet && no > 0; )
         {

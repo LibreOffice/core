@@ -2340,7 +2340,7 @@ ImplMiscData::ImplMiscData()
     mnEnableATT                 = TRISTATE_INDET;
     mnDisablePrinting           = TRISTATE_INDET;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
-    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? true : false;
+    mbEnableLocalizedDecimalSep = (pEnv != NULL);
 }
 
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )

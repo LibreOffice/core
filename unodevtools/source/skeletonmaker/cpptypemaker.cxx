@@ -431,7 +431,7 @@ void printMethods(std::ostream & o,
 
     static OString sd("_");
     bool body = !delegate.isEmpty();
-    bool defaultbody = ((delegate.equals(sd)) ? true : false);
+    bool defaultbody = delegate.equals(sd);
 
     if (body && propertyhelper.getLength() > 1) {
         if (name == "com.sun.star.beans.XPropertySet") {

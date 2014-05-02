@@ -970,7 +970,7 @@ bool PspSalPrinter::EndPage()
     bool bResult = m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
     OSL_TRACE("PspSalPrinter::EndPage");
-    return bResult ? true : false;
+    return bResult;
 }
 
 sal_uLong PspSalPrinter::GetErrorCode()

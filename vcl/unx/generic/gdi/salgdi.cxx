@@ -113,7 +113,7 @@ X11SalGraphics::X11SalGraphics()
 #if ENABLE_GRAPHITE
     // check if graphite fonts have been disabled
     static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
-    bDisableGraphite_       = pDisableGraphiteStr ? (pDisableGraphiteStr[0]!='0') : false;
+    bDisableGraphite_   = pDisableGraphiteStr && (pDisableGraphiteStr[0]!='0');
 #endif
 
     pBrushGC_           = NULL;

@@ -622,7 +622,7 @@ bool SwCrsrShell::MoveFldType(
         }
 
         // found Modify object, add all fields to array
-        ::lcl_MakeFldLst( aSrtLst, *pFldType, ( IsReadOnlyAvailable() ? true : false ) );
+        ::lcl_MakeFldLst( aSrtLst, *pFldType, IsReadOnlyAvailable() );
 
         if( RES_INPUTFLD == pFldType->Which() && bAddSetExpressionFldsToInputFlds )
         {
@@ -634,7 +634,7 @@ bool SwCrsrShell::MoveFldType(
                 pFldType = rFldTypes[ i ];
                 if ( RES_SETEXPFLD == pFldType->Which() )
                 {
-                    ::lcl_MakeFldLst( aSrtLst, *pFldType, ( IsReadOnlyAvailable() ? true : false ), true );
+                    ::lcl_MakeFldLst( aSrtLst, *pFldType, IsReadOnlyAvailable(), true );
                 }
             }
         }
@@ -648,7 +648,7 @@ bool SwCrsrShell::MoveFldType(
             pFldType = rFldTypes[ i ];
             if( nResType == pFldType->Which() )
             {
-                ::lcl_MakeFldLst( aSrtLst, *pFldType, ( IsReadOnlyAvailable() ? true : false ) );
+                ::lcl_MakeFldLst( aSrtLst, *pFldType, IsReadOnlyAvailable() );
             }
         }
     }

@@ -101,7 +101,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
         m_pEdName->Disable();
     }
 
-    bool bShared = ( rViewData.GetDocShell() ? rViewData.GetDocShell()->IsDocShared() : false );
+    bool bShared = rViewData.GetDocShell() && rViewData.GetDocShell()->IsDocShared();
 
     if ( !bFromFile || bShared )
     {

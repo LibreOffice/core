@@ -2317,7 +2317,7 @@ void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
 bool SwWW8ImplReader::isValid_HdFt_CP(WW8_CP nHeaderCP) const
 {
     // Each CP of Plcfhdd MUST be less than FibRgLw97.ccpHdd
-    return (nHeaderCP < pWwFib->ccpHdr) ? true : false;
+    return (nHeaderCP < pWwFib->ccpHdr);
 }
 
 bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIhdt,
@@ -4378,7 +4378,7 @@ void wwSectionManager::InsertSegments()
         bool bThisAndPreviousAreCompatible = ((aIter->GetPageWidth() == aPrev->GetPageWidth()) &&
             (aIter->GetPageHeight() == aPrev->GetPageHeight()) && (aIter->IsLandScape() == aPrev->IsLandScape()));
 
-        bool bInsertSection = (aIter != aStart) ? (aIter->IsContinuous() &&  bThisAndPreviousAreCompatible): false;
+        bool bInsertSection = (aIter != aStart) && aIter->IsContinuous() &&  bThisAndPreviousAreCompatible;
         bool bInsertPageDesc = !bInsertSection;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disables this...
         if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected())
@@ -6174,7 +6174,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
         WW8Glossary aGloss( refStrm, 8, pStg );
         bRet = aGloss.Load( rBlocks, bSaveRelFiles ? true : false);
     }
-    return bRet ? true : false;
+    return bRet;
 }
 
 bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,

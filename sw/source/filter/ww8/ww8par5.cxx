@@ -2151,8 +2151,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
                 aVText += aReadParam.GetResult();
                 if (bNewVText)
                 {
-                    bBracket = (aVText[0] == '[')
-                        ? true : false;
+                    bBracket = (aVText[0] == '[');
                     bNewVText = false;
                 }
                 else if( aVText.endsWith("]") )

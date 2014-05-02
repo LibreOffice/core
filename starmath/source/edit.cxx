@@ -79,7 +79,7 @@ void SmGetLeftSelectionPart(const ESelection &rSel,
 bool SmEditWindow::IsInlineEditEnabled()
 {
     SmViewShell *pView = GetView();
-    return pView ? pView->IsInlineEditEnabled() : false;
+    return pView && pView->IsInlineEditEnabled();
 }
 
 
@@ -947,13 +947,13 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
 bool SmEditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
-    bool bEmpty = ( pEditEngine ? pEditEngine->GetTextLen() == 0 : false);
+    bool bEmpty = ( pEditEngine && pEditEngine->GetTextLen() == 0 );
     return bEmpty;
 }
 
 bool SmEditWindow::IsSelected() const
 {
-    return pEditView ? pEditView->HasSelection() : false;
+    return pEditView && pEditView->HasSelection();
 }
 
 

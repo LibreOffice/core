@@ -599,8 +599,7 @@ static void lcl_ExportBookmark(
                 new SwXTextPortion(pUnoCrsr, xParent, PORTION_BOOKMARK_START);
             rPortions.push_back(pPortion);
             pPortion->SetBookmark(pPtr->xBookmark);
-            pPortion->SetCollapsed( (BKM_TYPE_START_END == pPtr->nBkmType)
-                    ? true : false);
+            pPortion->SetCollapsed( BKM_TYPE_START_END == pPtr->nBkmType );
 
         }
         if (BKM_TYPE_END == pPtr->nBkmType)

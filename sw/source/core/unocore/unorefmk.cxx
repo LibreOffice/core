@@ -57,8 +57,7 @@ public:
         : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
         , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
-        , m_bIsDescriptor((0 == pRefMark) ? true : false)
+        , m_bIsDescriptor(0 == pRefMark)
         , m_pDoc(pDoc)
         , m_pMarkFmt(pRefMark)
     {
@@ -213,8 +212,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     SwFmtRefMark aRefMark(m_sMarkName);
     bool bMark = *rPam.GetPoint() != *rPam.GetMark();
 
-    const bool bForceExpandHints( (!bMark && pCursor)
-            ? pCursor->IsAtEndOfMeta() : false );
+    const bool bForceExpandHints( !bMark && pCursor && pCursor->IsAtEndOfMeta() );
     const SetAttrMode nInsertFlags = (bForceExpandHints)
         ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
             | nsSetAttrMode::SETATTR_DONTEXPAND)
@@ -669,8 +667,7 @@ public:
         , m_EventListeners(m_Mutex)
         , m_pTextPortions( pPortions )
         , m_bIsDisposed( false )
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
-        , m_bIsDescriptor((0 == pMeta) ? true : false)
+        , m_bIsDescriptor(0 == pMeta)
         , m_xParentText(xParentText)
         , m_Text(rDoc, rThis)
     {
@@ -1021,8 +1018,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     SwXTextCursor const*const pTextCursor(
             dynamic_cast<SwXTextCursor*>(pCursor));
-    const bool bForceExpandHints((pTextCursor)
-            ? pTextCursor->IsAtEndOfMeta() : false);
+    const bool bForceExpandHints(pTextCursor && pTextCursor->IsAtEndOfMeta());
     const SetAttrMode nInsertFlags( (bForceExpandHints)
         ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
             | nsSetAttrMode::SETATTR_DONTEXPAND)

@@ -245,7 +245,7 @@ bool ExtTextView::MatchGroup()
     if ( aMatchSel.HasRange() )
         SetSelection( aMatchSel );
 
-    return aMatchSel.HasRange() ? true : false;
+    return aMatchSel.HasRange();
 }
 
 bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, bool bForward )

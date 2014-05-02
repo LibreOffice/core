@@ -1432,7 +1432,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // pressing this inside a note will switch to next/previous note
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
     {
-        const bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN ? true : false;
+        const bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN;
         const SwFieldType* pFldType = rSh.GetFldType( 0, RES_POSTITFLD );
         rSh.MoveFldType( pFldType, bNext );
         return;

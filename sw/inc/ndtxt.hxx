@@ -696,14 +696,14 @@ public:
 
     /// Hidden Paragraph Field:
     inline bool CalcHiddenParaField()
-        { return m_pSwpHints ? m_pSwpHints->CalcHiddenParaField() : false; }
+        { return m_pSwpHints && m_pSwpHints->CalcHiddenParaField(); }
     /// set CalcVisible flags
     inline void SetCalcHiddenParaField()
         { if (m_pSwpHints) m_pSwpHints->SetCalcHiddenParaField(); }
 
     /// is the paragraph visible?
     inline bool HasHiddenParaField() const
-        { return m_pSwpHints ? m_pSwpHints->HasHiddenParaField()  : false; }
+        { return m_pSwpHints && m_pSwpHints->HasHiddenParaField(); }
 
     /// Hidden Paragraph Field:
 

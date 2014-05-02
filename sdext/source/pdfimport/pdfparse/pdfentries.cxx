@@ -78,7 +78,7 @@ struct EmitImplData
                   unsigned int nObject, unsigned int nGeneration ) const
     {
         const PDFFile* pFile = dynamic_cast<const PDFFile*>(m_pObjectContainer);
-        return pFile ? pFile->decrypt( pInBuffer, nLen, pOutBuffer, nObject, nGeneration ) : false;
+        return pFile && pFile->decrypt( pInBuffer, nLen, pOutBuffer, nObject, nGeneration );
     }
 
     void setDecryptObject( unsigned int nObject, unsigned int nGeneration )

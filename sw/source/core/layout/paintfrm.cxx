@@ -195,7 +195,7 @@ public:
     void LockLines( bool bLock );
 
     //Limit lines to 100
-    bool isFull() const { return aLineRects.size()>100 ? true : false; }
+    bool isFull() const { return aLineRects.size()>100; }
 };
 
 class SwSubsRects : public SwLineRects
@@ -3286,7 +3286,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                                             pPrintData,
                                             pPage->Frm(),
                                             &aPageBackgrdColor,
-                                            (pPage->IsRightToLeft() ? true : false),
+                                            pPage->IsRightToLeft(),
                                             &aSwRedirector );
                     pLines->PaintLines( pSh->GetOut() );
                     pLines->LockLines( false );
@@ -3333,7 +3333,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                                             pPrintData,
                                             pPage->Frm(),
                                             &aPageBackgrdColor,
-                                            (pPage->IsRightToLeft() ? true : false),
+                                            pPage->IsRightToLeft(),
                                             &aSwRedirector );
                 }
 
@@ -4110,7 +4110,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         bool bPaintCompleteBack( !pNoTxt );
         // paint complete background for transparent graphic and contour,
         // if own background color exists.
-        const bool bIsGraphicTransparent = pNoTxt ? pNoTxt->IsTransparent() : false;
+        const bool bIsGraphicTransparent = pNoTxt && pNoTxt->IsTransparent();
         if ( !bPaintCompleteBack &&
              ( bIsGraphicTransparent|| bContour ) )
         {
@@ -5357,7 +5357,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
             return;
     }
 
-    const bool bLine = rAttrs.IsLine() ? true : false;
+    const bool bLine = rAttrs.IsLine();
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE;
 
     // - flag to control,
@@ -7059,7 +7059,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     //      top and bottom (vertical layout) lines painted.
     // NOTE2: this does not hold for the new table model!!! We paint the top border
     // of each non-covered table cell.
-    const bool bVert = IsVertical() ? true : false;
+    const bool bVert = IsVertical();
     if ( bFlys )
     {
         // OD 14.11.2002 #104822# - add control for drawing left and right lines
@@ -7304,11 +7304,11 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 
                 pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
-                                        (pPage->IsRightToLeft() ? true : false),
+                                        pPage->IsRightToLeft(),
                                         &aSwRedirector );
                 pSh->Imp()->PaintLayer( pIDDMA->GetHeavenId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
-                                        (pPage->IsRightToLeft() ? true : false),
+                                        pPage->IsRightToLeft(),
                                         &aSwRedirector );
             }
 
@@ -7573,7 +7573,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         SwViewObjectContactRedirector aSwRedirector( *pSh );
         // <--
         pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
-                          (pFlyPage->IsRightToLeft() ? true : false),
+                          pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
         pLines->PaintLines( &aDev );
         if ( pFly->IsFlyInCntFrm() )
@@ -7581,7 +7581,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pLines->PaintLines( &aDev );
         // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
-                          (pFlyPage->IsRightToLeft() ? true : false),
+                          pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
         pLines->PaintLines( &aDev );
         DELETEZ( pLines );

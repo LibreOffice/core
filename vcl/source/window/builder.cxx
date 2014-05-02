@@ -176,7 +176,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
-    m_bToplevelHasDeferredInit = (pParent && pParent->IsDialog()) ? ((Dialog*)pParent)->isDeferredInit() : false;
+    m_bToplevelHasDeferredInit = pParent && pParent->IsDialog() && ((Dialog*)pParent)->isDeferredInit();
     m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
 
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
@@ -1820,9 +1820,9 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
     sal_Int32 nPackA = m_pBuilder->get_window_packing_data(pA).m_nPosition;
     sal_Int32 nPackB = m_pBuilder->get_window_packing_data(pB).m_nPosition;
     if (nPackA < nPackB)
-        return ePackA == VCL_PACK_START ? true : false;
+        return ePackA == VCL_PACK_START;
     if (nPackA > nPackB)
-        return ePackA == VCL_PACK_START ? false : true;
+        return ePackA != VCL_PACK_START;
     //sort labels of Frames before body
     if (pA->GetParent() == pB->GetParent())
     {

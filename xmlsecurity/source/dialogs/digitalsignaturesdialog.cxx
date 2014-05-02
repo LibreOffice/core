@@ -348,7 +348,7 @@ short DigitalSignaturesDialog::Execute()
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl)
 {
-    bool bSel = m_pSignaturesLB->FirstSelected() ? true : false;
+    bool bSel = m_pSignaturesLB->FirstSelected();
     m_pViewBtn->Enable( bSel );
     if ( m_pAddBtn->IsEnabled() ) // not read only
         m_pRemoveBtn->Enable( bSel );
@@ -612,7 +612,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     sal_Int32 certResult = xSecEnv->verifyCertificate(xCert,
                         Sequence<css::uno::Reference<css::security::XCertificate> >());
 
-                    bCertValid = certResult == css::security::CertificateValidity::VALID ? true : false;
+                    bCertValid = certResult == css::security::CertificateValidity::VALID;
                     if ( bCertValid )
                         nValidCerts++;
 

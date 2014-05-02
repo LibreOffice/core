@@ -1014,7 +1014,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
     for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
     {
         pFly = (*GetSpzFrmFmts())[ n ];
-        bool bDrawFmt = bDrawAlso ? RES_DRAWFRMFMT == pFly->Which() : false;
+        bool bDrawFmt = bDrawAlso && RES_DRAWFRMFMT == pFly->Which();
         bool bFlyFmt = RES_FLYFRMFMT == pFly->Which();
         if( bFlyFmt || bDrawFmt )
         {

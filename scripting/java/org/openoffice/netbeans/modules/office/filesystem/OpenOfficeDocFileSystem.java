@@ -553,7 +553,7 @@ System.out.println("    exception: " + ioe.getMessage());
         public boolean readOnly(String name) {
             synchronized(cache) {
                 Entry entry = (Entry)cache.get(zipName(name));
-                return (entry != null)? entry.isReadOnly(): false;
+                return entry && entry.isReadOnly();
             }
         }
 
@@ -805,8 +805,7 @@ System.out.println("    exception: " + ioe.getMessage());
         {
             // recognizes all entries in a subtree of the
             // 'scope' as editable entries
-            return (entry != null)?
-                entry.getName().startsWith(scope): false;
+            return entry && entry.getName().startsWith(scope);
         }
     }
 

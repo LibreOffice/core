@@ -3141,7 +3141,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? true : false );
+                ImplDrawButton( this, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
 
             if( nHighlight != 0 )
             {
@@ -3195,7 +3195,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
             if( bHasOpenPopup )
                 ImplDrawFloatwinBorder( pItem );
             else
-                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow ? true : false );
+                ImplDrawButton( this, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
         }
 
         sal_uInt16 nTextStyle = 0;
@@ -4283,7 +4283,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
 
                 if( bNoTabCycling &&  ! (GetStyle() & WB_FORCETABCYCLE) )
                     return DockingWindow::Notify( rNEvt );
-                else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() ? true : false , bNoTabCycling ) )
+                else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() , bNoTabCycling ) )
                     return false;
                 else
                     return DockingWindow::Notify( rNEvt );

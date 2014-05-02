@@ -155,9 +155,9 @@ PrinterJob::IsColorPrinter () const
     bool bColor = false;
 
     if( m_aLastJobData.m_nColorDevice )
-        bColor = m_aLastJobData.m_nColorDevice == -1 ? false : true;
+        bColor = m_aLastJobData.m_nColorDevice != -1;
     else if( m_aLastJobData.m_pParser )
-        bColor = m_aLastJobData.m_pParser->isColorDevice() ? true : false;
+        bColor = m_aLastJobData.m_pParser->isColorDevice();
 
     return bColor;
 }

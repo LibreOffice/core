@@ -446,8 +446,8 @@ void ScInputWindow::Select()
                             for ( size_t i = 0; i < nCount; ++i )
                             {
                                 const ScRange aRange( *aMarkRangeList[i] );
-                                const bool bSetCursor = ( i == nCount - 1 ? true : false );
-                                const bool bContinue = ( i != 0  ? true : false );
+                                const bool bSetCursor = ( i == nCount - 1 );
+                                const bool bContinue = ( i != 0 );
                                 if ( !pViewSh->AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
                                 {
                                     pViewSh->MarkRange( aRange, false, false );

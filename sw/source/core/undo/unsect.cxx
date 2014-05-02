@@ -356,7 +356,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
             SwCalc aCalc( rDoc );
             rDoc.FldsToCalc(aCalc, pInsertedSectNd->GetIndex(), USHRT_MAX);
             bool bRecalcCondHidden =
-                    aCalc.Calculate( aInsertedSect.GetCondition() ).GetBool() ? true : false;
+                    aCalc.Calculate( aInsertedSect.GetCondition() ).GetBool();
             aInsertedSect.SetCondHidden( bRecalcCondHidden );
         }
 

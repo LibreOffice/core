@@ -123,7 +123,7 @@ public class IniFile implements Enumeration<String>
      */
     public boolean is()
         {
-            return m_aList.size() > 1 ? true : false;
+            return m_aList.size() > 1;
         }
 
     /**

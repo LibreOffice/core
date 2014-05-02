@@ -990,7 +990,7 @@ void EffectMigration::SetDimHide( SvxShape* pShape, bool bDimHide )
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
         {
-            pEffect->setHasAfterEffect( bDimHide ? true : false );
+            pEffect->setHasAfterEffect( bDimHide );
             if( bDimHide ) {
                 Any aEmpty;
                 pEffect->setDimColor( aEmpty );

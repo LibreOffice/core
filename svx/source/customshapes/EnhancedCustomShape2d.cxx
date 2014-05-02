@@ -2386,7 +2386,7 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 
 bool EnhancedCustomShape2d::IsPostRotate() const
 {
-    return pCustomShapeObj->ISA( SdrObjCustomShape ) ? ((SdrObjCustomShape*)pCustomShapeObj)->IsPostRotate() : false;
+    return pCustomShapeObj->ISA( SdrObjCustomShape ) && ((SdrObjCustomShape*)pCustomShapeObj)->IsPostRotate();
 }
 
 SdrObject* EnhancedCustomShape2d::CreateLineGeometry()

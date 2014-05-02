@@ -1027,7 +1027,7 @@ void SlideShow::jumpToBookmark( const OUString& sBookmark )
 
 bool SlideShow::isFullScreen()
 {
-    return mxController.is() ? mxController->maPresSettings.mbFullScreen : false;
+    return mxController.is() && mxController->maPresSettings.mbFullScreen;
 }
 
 
@@ -1082,7 +1082,7 @@ void SlideShow::deactivate( ViewShellBase& /*rBase*/ )
 
 bool SlideShow::keyInput(const KeyEvent& rKEvt)
 {
-    return mxController.is() ? mxController->keyInput(rKEvt) : false;
+    return mxController.is() && mxController->keyInput(rKEvt);
 }
 
 
@@ -1097,7 +1097,7 @@ void SlideShow::paint( const Rectangle& rRect )
 
 bool SlideShow::isAlwaysOnTop()
 {
-    return mxController.is() ? mxController->maPresSettings.mbAlwaysOnTop : false;
+    return mxController.is() && mxController->maPresSettings.mbAlwaysOnTop;
 }
 
 
@@ -1140,14 +1140,14 @@ sal_Int32 SlideShow::getLastPageNumber()
 
 bool SlideShow::isEndless()
 {
-    return mxController.is() ? mxController->isEndless() : false;
+    return mxController.is() && mxController->isEndless();
 }
 
 
 
 bool SlideShow::isDrawingPossible()
 {
-    return mxController.is() ? mxController->getUsePen() : false;
+    return mxController.is() && mxController->getUsePen();
 }
 
 

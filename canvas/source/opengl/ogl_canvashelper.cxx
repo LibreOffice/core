@@ -746,7 +746,7 @@ namespace oglcanvas
 
                 aFont.SetAlign( ALIGN_BASELINE );
                 aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-                aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==util::TriState_YES) ? true : false );
+                aFont.SetVertical( rFontRequest.FontDescription.IsVertical==util::TriState_YES );
                 aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
                 aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
 

@@ -72,7 +72,7 @@ namespace pcr
     {
         bool operator() (::com::sun::star::beans::Property _rLhs, ::com::sun::star::beans::Property _rRhs) const
         {
-            return _rLhs.Name < _rRhs.Name ? true : false;
+            return _rLhs.Name < _rRhs.Name;
         }
     };
 
@@ -85,7 +85,7 @@ namespace pcr
     {
         bool operator() (::com::sun::star::uno::Type _rLhs, ::com::sun::star::uno::Type _rRhs) const
         {
-            return _rLhs.getTypeName() < _rRhs.getTypeName() ? true : false;
+            return _rLhs.getTypeName() < _rRhs.getTypeName();
         }
     };
 

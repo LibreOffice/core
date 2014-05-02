@@ -601,7 +601,7 @@ bool ExtensionManager::doChecksForAddExtension(
                 new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
 
         bCanInstall = xTmpExtension->checkPrerequisites(
-            xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0 ? true : false;
+            xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0;
 
         return bCanInstall;
     }

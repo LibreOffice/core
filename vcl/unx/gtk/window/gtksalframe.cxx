@@ -2932,7 +2932,7 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
 
 void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, SalX11Screen nXScreen )
 {
-    bool bWasVisible = m_pWindow ? IS_WIDGET_MAPPED(m_pWindow) : false;
+    bool bWasVisible = m_pWindow && IS_WIDGET_MAPPED(m_pWindow);
     if( bWasVisible )
         Show( false );
 
@@ -3035,7 +3035,7 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     GetGenericData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
-    createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) ? pSysParent->bXEmbedSupport : false, m_nXScreen );
+    createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) && pSysParent->bXEmbedSupport, m_nXScreen );
     return true;
 #else
     (void)pSysParent;

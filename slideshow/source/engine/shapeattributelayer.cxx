@@ -83,7 +83,7 @@ namespace slideshow
             // deviated from the (*shared_ptr).*mpFuncPtr notation
             // here, since gcc does not seem to parse that as a member
             // function call anymore.
-            const bool bChildInstanceValueValid( haveChild() ? (mpChild.get()->*pIsValid)() : false );
+            const bool bChildInstanceValueValid( haveChild() && (mpChild.get()->*pIsValid)() );
 
             if( bThisInstanceValid )
             {
@@ -267,7 +267,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isWidthValid() const
         {
-            return mbWidthValid ? true : haveChild() ? mpChild->isWidthValid() : false;
+            return mbWidthValid || (haveChild() && mpChild->isWidthValid());
         }
 
         double ShapeAttributeLayer::getWidth() const
@@ -291,7 +291,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isHeightValid() const
         {
-            return mbHeightValid ? true : haveChild() ? mpChild->isHeightValid() : false;
+            return mbHeightValid || ( haveChild() && mpChild->isHeightValid() );
         }
 
         double ShapeAttributeLayer::getHeight() const
@@ -326,7 +326,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isPosXValid() const
         {
-            return mbPosXValid ? true : haveChild() ? mpChild->isPosXValid() : false;
+            return mbPosXValid || ( haveChild() && mpChild->isPosXValid() );
         }
 
         double ShapeAttributeLayer::getPosX() const
@@ -350,7 +350,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isPosYValid() const
         {
-            return mbPosYValid ? true : haveChild() ? mpChild->isPosYValid() : false;
+            return mbPosYValid || ( haveChild() && mpChild->isPosYValid() );
         }
 
         double ShapeAttributeLayer::getPosY() const
@@ -381,7 +381,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isRotationAngleValid() const
         {
-            return mbRotationAngleValid ? true : haveChild() ? mpChild->isRotationAngleValid() : false;
+            return mbRotationAngleValid || ( haveChild() && mpChild->isRotationAngleValid() );
         }
 
         double ShapeAttributeLayer::getRotationAngle() const
@@ -405,7 +405,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isShearXAngleValid() const
         {
-            return mbShearXAngleValid ? true : haveChild() ? mpChild->isShearXAngleValid() : false;
+            return mbShearXAngleValid || ( haveChild() && mpChild->isShearXAngleValid() );
         }
 
         double ShapeAttributeLayer::getShearXAngle() const
@@ -428,7 +428,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isShearYAngleValid() const
         {
-            return mbShearYAngleValid ? true : haveChild() ? mpChild->isShearYAngleValid() : false;
+            return mbShearYAngleValid || ( haveChild() && mpChild->isShearYAngleValid() );
         }
 
         double ShapeAttributeLayer::getShearYAngle() const
@@ -451,7 +451,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isAlphaValid() const
         {
-            return mbAlphaValid ? true : haveChild() ? mpChild->isAlphaValid() : false;
+            return mbAlphaValid || ( haveChild() && mpChild->isAlphaValid() );
         }
 
         double ShapeAttributeLayer::getAlpha() const
@@ -474,7 +474,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isClipValid() const
         {
-            return mbClipValid ? true : haveChild() ? mpChild->isClipValid() : false;
+            return mbClipValid || ( haveChild() && mpChild->isClipValid() );
         }
 
         ::basegfx::B2DPolyPolygon ShapeAttributeLayer::getClip() const
@@ -497,7 +497,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isDimColorValid() const
         {
-            return mbDimColorValid ? true : haveChild() ? mpChild->isDimColorValid() : false;
+            return mbDimColorValid || ( haveChild() && mpChild->isDimColorValid() );
         }
 
         RGBColor ShapeAttributeLayer::getDimColor() const
@@ -517,7 +517,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isFillColorValid() const
         {
-            return mbFillColorValid ? true : haveChild() ? mpChild->isFillColorValid() : false;
+            return mbFillColorValid || ( haveChild() && mpChild->isFillColorValid() );
         }
 
         RGBColor ShapeAttributeLayer::getFillColor() const
@@ -537,7 +537,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isLineColorValid() const
         {
-            return mbLineColorValid ? true : haveChild() ? mpChild->isLineColorValid() : false;
+            return mbLineColorValid || ( haveChild() && mpChild->isLineColorValid() );
         }
 
         RGBColor  ShapeAttributeLayer::getLineColor() const
@@ -557,7 +557,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isFillStyleValid() const
         {
-            return mbFillStyleValid ? true : haveChild() ? mpChild->isFillStyleValid() : false;
+            return mbFillStyleValid || ( haveChild() && mpChild->isFillStyleValid() );
         }
 
         sal_Int16 ShapeAttributeLayer::getFillStyle() const
@@ -582,7 +582,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isLineStyleValid() const
         {
-            return mbLineStyleValid ? true : haveChild() ? mpChild->isLineStyleValid() : false;
+            return mbLineStyleValid || ( haveChild() && mpChild->isLineStyleValid() );
         }
 
         sal_Int16 ShapeAttributeLayer::getLineStyle() const
@@ -607,7 +607,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isVisibilityValid() const
         {
-            return mbVisibilityValid ? true : haveChild() ? mpChild->isVisibilityValid() : false;
+            return mbVisibilityValid || ( haveChild() && mpChild->isVisibilityValid() );
         }
 
         bool ShapeAttributeLayer::getVisibility() const
@@ -631,7 +631,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isCharColorValid() const
         {
-            return mbCharColorValid ? true : haveChild() ? mpChild->isCharColorValid() : false;
+            return mbCharColorValid || ( haveChild() && mpChild->isCharColorValid() );
         }
 
         RGBColor ShapeAttributeLayer::getCharColor() const
@@ -651,7 +651,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isCharRotationAngleValid() const
         {
-            return mbCharRotationAngleValid ? true : haveChild() ? mpChild->isCharRotationAngleValid() : false;
+            return mbCharRotationAngleValid || ( haveChild() && mpChild->isCharRotationAngleValid() );
         }
 
         double ShapeAttributeLayer::getCharRotationAngle() const
@@ -674,7 +674,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isCharWeightValid() const
         {
-            return mbCharWeightValid ? true : haveChild() ? mpChild->isCharWeightValid() : false;
+            return mbCharWeightValid || ( haveChild() && mpChild->isCharWeightValid() );
         }
 
         double ShapeAttributeLayer::getCharWeight() const
@@ -699,7 +699,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isUnderlineModeValid() const
         {
-            return mbUnderlineModeValid ? true : haveChild() ? mpChild->isUnderlineModeValid() : false;
+            return mbUnderlineModeValid || ( haveChild() && mpChild->isUnderlineModeValid() );
         }
 
         sal_Int16 ShapeAttributeLayer::getUnderlineMode() const
@@ -724,7 +724,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isFontFamilyValid() const
         {
-            return mbFontFamilyValid ? true : haveChild() ? mpChild->isFontFamilyValid() : false;
+            return mbFontFamilyValid || ( haveChild() && mpChild->isFontFamilyValid() );
         }
 
         OUString ShapeAttributeLayer::getFontFamily() const
@@ -748,7 +748,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isCharPostureValid() const
         {
-            return mbCharPostureValid ? true : haveChild() ? mpChild->isCharPostureValid() : false;
+            return mbCharPostureValid || ( haveChild() && mpChild->isCharPostureValid() );
         }
 
         sal_Int16 ShapeAttributeLayer::getCharPosture() const
@@ -773,7 +773,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::isCharScaleValid() const
         {
-            return mbCharScaleValid ? true : haveChild() ? mpChild->isCharScaleValid() : false;
+            return mbCharScaleValid || ( haveChild() && mpChild->isCharScaleValid() );
         }
 
         double ShapeAttributeLayer::getCharScale() const

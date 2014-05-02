@@ -6503,7 +6503,7 @@ void Window::SetCallHandlersOnInputDisabled( bool bCall )
 
 bool Window::IsCallHandlersOnInputDisabled() const
 {
-    return mpWindowImpl->mbCallHandlersDuringInputDisabled ? true : false;
+    return mpWindowImpl->mbCallHandlersDuringInputDisabled;
 }
 
 void Window::EnableInput( bool bEnable, bool bChild )

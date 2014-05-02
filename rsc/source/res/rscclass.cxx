@@ -721,8 +721,7 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                         aError = aTmpI.pClass->
                             WriteRcHeader( aTmpI, rMem, pTC,
                                            RscId(), nDeep,
-                                           (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName)
-                                           ? bExtra : false );
+                                           (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName) && bExtra );
                     }
                     sal_uInt32 nMask = rMem.GetLong( nMaskOff );
                     nMask |= pVarTypeList[ i ].nMask;
@@ -744,8 +743,7 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                 aError = aTmpI.pClass->
                             WriteRcHeader( aTmpI, rMem, pTC,
                                         RscId(), nDeep,
-                                        (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName)
-                                        ? bExtra : false );
+                                        (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName) && bExtra );
             }
         }
     }

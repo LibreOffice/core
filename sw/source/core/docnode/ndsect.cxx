@@ -608,7 +608,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     SwSection* pSection = pFmt->GetSection();
 
     /// remember hidden condition flag of SwSection before changes
-    bool bOldCondHidden = pSection->IsCondHidden() ? true : false;
+    bool bOldCondHidden = pSection->IsCondHidden();
 
     if (pSection->DataEquals(rNewData))
     {
@@ -724,7 +724,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         /// This is necessary, because otherwise the <SetCondHidden> would have
         /// no effect.
         bool bCalculatedCondHidden =
-                aCalc.Calculate( pSection->GetCondition() ).GetBool() ? true : false;
+                aCalc.Calculate( pSection->GetCondition() ).GetBool();
         if ( bCalculatedCondHidden && !bOldCondHidden )
         {
             pSection->SetCondHidden( false );

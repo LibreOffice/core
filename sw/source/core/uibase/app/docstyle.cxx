@@ -1972,7 +1972,7 @@ bool  SwDocStyleSheet::IsUsed() const
     case SFX_STYLE_FAMILY_PAGE : pMod = pDesc;      break;
 
     case SFX_STYLE_FAMILY_PSEUDO:
-            return pNumRule ? rDoc.IsUsed( *pNumRule ) : false;
+            return pNumRule && rDoc.IsUsed( *pNumRule );
 
     default:
         OSL_ENSURE(!this, "unknown style family");

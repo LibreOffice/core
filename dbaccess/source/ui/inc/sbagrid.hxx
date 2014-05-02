@@ -45,7 +45,7 @@ namespace dbaui
 {
     struct SbaURLCompare : public ::std::binary_function< ::com::sun::star::util::URL, ::com::sun::star::util::URL, bool>
     {
-        bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete == y.Complete ? true : false;}
+        bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const { return x.Complete == y.Complete; }
     };
 
     class SbaXStatusMultiplexer;

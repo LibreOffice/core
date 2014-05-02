@@ -1817,7 +1817,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         {
             // default for no model is FALSE
             ScDrawLayer* pModel = pDoc->GetDrawLayer();
-            bool bAutoControlFocus = pModel ? pModel->GetAutoControlFocus() : false;
+            bool bAutoControlFocus = pModel && pModel->GetAutoControlFocus();
             ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoControlFocus );
         }
         else if ( aString.equalsAscii( SC_UNO_FORBIDDEN ) )

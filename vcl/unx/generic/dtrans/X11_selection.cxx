@@ -4023,7 +4023,7 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) thro
 
 sal_Bool SelectionManagerHolder::isDragImageSupported() throw(std::exception)
 {
-    return m_xRealDragSource.is() ? m_xRealDragSource->isDragImageSupported() : false;
+    return m_xRealDragSource.is() && m_xRealDragSource->isDragImageSupported();
 }
 
 sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw(std::exception)

@@ -365,11 +365,11 @@ namespace {
                         *this
                     );
 
-            return bMatch ? true : false;
+            return bMatch;
         }
         bool operator () ( const UnoFilterEntry& _rEntry )
         {
-            return _rEntry.First == rTitle ? true : false;
+            return _rEntry.First == rTitle;
         }
     };
 }

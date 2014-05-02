@@ -134,7 +134,7 @@ public:
 
     bool operator()( const ControlModelContainerBase::UnoControlModelHolder& _rCompare )
     {
-        return ( _rCompare.second == m_rName ) ? true : false;
+        return _rCompare.second == m_rName;
     }
 };
 
@@ -172,7 +172,7 @@ public:
 
     bool operator()( const ControlModelContainerBase::UnoControlModelHolder& _rCompare )
     {
-        return ( _rCompare.first.get() == m_xReference.get() ) ? true : false;
+        return _rCompare.first.get() == m_xReference.get();
     }
 };
 

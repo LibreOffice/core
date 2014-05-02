@@ -124,7 +124,7 @@ public abstract class TestCase
 
         boolean noExceptionAllowed = ( _expectedExceptionClass == null );
 
-        boolean caughtExpected = noExceptionAllowed ? true : false;
+        boolean caughtExpected = noExceptionAllowed;
         try
         {
             Method method = objectClass.getMethod( _methodName, _argClasses );
