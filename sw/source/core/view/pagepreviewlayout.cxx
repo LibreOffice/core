@@ -1357,11 +1357,7 @@ sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
         ++_nPageNum;
     }
 
-    sal_uInt16 nRow = (_nPageNum) / mnCols;
-    if ( ( (_nPageNum) % mnCols ) > 0 )
-        ++nRow;
-
-    return nRow;
+    return _nPageNum / mnCols + ((_nPageNum % mnCols)>0 ? 1 : 0);
 }
 
 /** determine column the page with the given number is in
@@ -1381,11 +1377,8 @@ sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
         ++_nPageNum;
     }
 
-    sal_uInt16 nCol = (_nPageNum) % mnCols;
-    if ( nCol == 0 )
-        nCol = mnCols;
-
-    return nCol;
+    const sal_uInt16 nCol = _nPageNum % mnCols;
+    return nCol ? nCol : mnCols;
 }
 
 Size SwPagePreviewLayout::GetPreviewDocSize() const
