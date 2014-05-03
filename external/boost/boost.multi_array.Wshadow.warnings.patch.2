@@ -11,7 +11,7 @@ diff --git a/include/boost/multi_array.hpp b/include/boost/multi_array.hpp
 index 8193699..72b2294 100644
 --- a/include/boost/multi_array.hpp
 +++ b/include/boost/multi_array.hpp
-@@ -18,6 +18,11 @@
+@@ -18,6 +18,16 @@
  // declaration and definition
  //
  
@@ -20,15 +20,24 @@ index 8193699..72b2294 100644
 +#  pragma GCC diagnostic ignored "-Wshadow"
 +#endif
 +
++#if defined(__clang__)
++#  pragma clang diagnostic push
++#  pragma clang diagnostic ignored "-Wshadow"
++#endif
++
  #include "boost/multi_array/base.hpp"
  #include "boost/multi_array/collection_concept.hpp"
  #include "boost/multi_array/copy_array.hpp"
-@@ -496,4 +501,8 @@ private:
+@@ -496,4 +501,12 @@ private:
  
  } // namespace boost
  
 +#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 406)
 +#  pragma GCC diagnostic pop
++#endif
++
++#if defined(__clang__)
++#  pragma clang diagnostic pop
 +#endif
 +
  #endif // BOOST_MULTI_ARRAY_RG071801_HPP
