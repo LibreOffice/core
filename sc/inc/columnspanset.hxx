@@ -39,8 +39,10 @@ struct RowSpan
  */
 class ColumnSpanSet : boost::noncopyable
 {
+public:
     typedef mdds::flat_segment_tree<SCROW, bool> ColumnSpansType;
 
+private:
     struct ColumnType
     {
         ColumnSpansType maSpans;
@@ -80,6 +82,12 @@ public:
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
     void set(const ScRange& rRange, bool bVal);
+
+    /**
+     * Scan specified range in a specified sheet and mark all non-empty cells
+     * with specified boolean value.
+     */
+    void scan(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal);
 
     void executeAction(Action& ac) const;
     void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const;
