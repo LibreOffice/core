@@ -826,17 +826,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     sal_uInt16 nTmpRelSelPageNum = ConvertAbsoluteToRelativePageNum( mnSelectedPageNum );
     sal_uInt16 nNewRelSelectedPageNum = nTmpRelSelPageNum;
 
-    // leaving left-top-corner blank is controlled
-    // by <mbBookPreview>.
-    if ( mbBookPreview )
-    {
-        // Note: consider that left-top-corner is left blank --> +1
-        ++nTmpRelSelPageNum;
-    }
-    sal_uInt16 nTmpCol = nTmpRelSelPageNum % mnCols;
-    sal_uInt16 nCurrRow = nTmpRelSelPageNum / mnCols;
-    if ( nTmpCol > 0 )
-        ++nCurrRow;
+    const sal_uInt16 nCurrRow = GetRowOfPage(nTmpRelSelPageNum);
 
     // determine new selected page number
     {
