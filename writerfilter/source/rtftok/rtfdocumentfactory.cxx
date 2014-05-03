@@ -9,14 +9,16 @@
 
 #include <rtfdocumentimpl.hxx>
 
-namespace writerfilter {
-namespace rtftok {
+namespace writerfilter
+{
+namespace rtftok
+{
 
-RTFDocument::Pointer_t RTFDocumentFactory::createDocument(uno::Reference< uno::XComponentContext > const & xContext,
-        uno::Reference< io::XInputStream > const & xInputStream,
-        uno::Reference< lang::XComponent > const & xDstDoc,
-        uno::Reference< frame::XFrame > const & xFrame,
-        uno::Reference< task::XStatusIndicator > const & xStatusIndicator)
+RTFDocument::Pointer_t RTFDocumentFactory::createDocument(uno::Reference< uno::XComponentContext > const& xContext,
+        uno::Reference< io::XInputStream > const& xInputStream,
+        uno::Reference< lang::XComponent > const& xDstDoc,
+        uno::Reference< frame::XFrame > const& xFrame,
+        uno::Reference< task::XStatusIndicator > const& xStatusIndicator)
 {
     return RTFDocument::Pointer_t(new RTFDocumentImpl(xContext, xInputStream, xDstDoc, xFrame, xStatusIndicator));
 }
