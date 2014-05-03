@@ -35,6 +35,7 @@
 
 #include <vcl/outdevstate.hxx>
 
+#include "outdev.h"
 #include "outdata.hxx"
 #include "salgdi.hxx"
 #include "sallayout.hxx"
@@ -637,5 +638,31 @@ void OutputDevice::InitFillColor()
 
     mbInitFillColor = false;
 }
+
+void OutputDevice::ImplReleaseFonts()
+{
+    mpGraphics->ReleaseFonts();
+    mbNewFont = true;
+    mbInitFont = true;
+
+    if ( mpFontEntry )
+    {
+        mpFontCache->Release( mpFontEntry );
+        mpFontEntry = NULL;
+    }
+
+    if ( mpGetDevFontList )
+    {
+        delete mpGetDevFontList;
+        mpGetDevFontList = NULL;
+    }
+
+    if ( mpGetDevSizeList )
+    {
+        delete mpGetDevSizeList;
+        mpGetDevSizeList = NULL;
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,10 +20,13 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <boost/scoped_array.hpp>
+
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/settings.hxx>
 
+#include "outdata.hxx"
 #include "salgdi.hxx"
 
 namespace
@@ -64,7 +67,56 @@ namespace
 
         return aTarget;
     }
+}
 
+Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
+{
+    Color aColor( rColor );
+    sal_uLong  nDrawMode = GetDrawMode();
+
+    if( nDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
+                      DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
+                      DRAWMODE_SETTINGSLINE ) )
+    {
+        if( !ImplIsColorTransparent( aColor ) )
+        {
+            if( nDrawMode & DRAWMODE_BLACKLINE )
+            {
+                aColor = Color( COL_BLACK );
+            }
+            else if( nDrawMode & DRAWMODE_WHITELINE )
+            {
+                aColor = Color( COL_WHITE );
+            }
+            else if( nDrawMode & DRAWMODE_GRAYLINE )
+            {
+                const sal_uInt8 cLum = aColor.GetLuminance();
+                aColor = Color( cLum, cLum, cLum );
+            }
+            else if( nDrawMode & DRAWMODE_SETTINGSLINE )
+            {
+                aColor = GetSettings().GetStyleSettings().GetFontColor();
+            }
+
+            if( nDrawMode & DRAWMODE_GHOSTEDLINE )
+            {
+                aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
+                                ( aColor.GetGreen() >> 1 ) | 0x80,
+                                ( aColor.GetBlue() >> 1 ) | 0x80);
+            }
+        }
+    }
+    return aColor;
+}
+
+sal_uInt16 OutputDevice::GetAlphaBitCount() const
+{
+    return 0;
+}
+
+bool OutputDevice::HasAlpha()
+{
+    return mpAlphaVDev != NULL;
 }
 
 void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
