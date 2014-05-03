@@ -405,11 +405,7 @@ public:
     css::uno::Reference< css::awt::XGraphics >
                                 CreateUnoGraphics();
     VCLXGraphicsList_impl*      GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
-    VCLXGraphicsList_impl*      CreateUnoGraphicsList()
-                                    {
-                                        mpUnoGraphicsList = new VCLXGraphicsList_impl();
-                                        return mpUnoGraphicsList;
-                                    }
+    VCLXGraphicsList_impl*      CreateUnoGraphicsList();
 
 protected:
 
@@ -503,14 +499,19 @@ private:
 
 public:
 
-    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize );
-    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize,
-                                            const OutputDevice& rOutDev );
-    virtual void                CopyArea( const Point& rDestPt,
-                                          const Point& rSrcPt,  const Size& rSrcSize,
-                                          sal_uInt16 nFlags = 0 );
+    virtual void                DrawOutDev(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPt,  const Size& rSrcSize );
+
+    virtual void                DrawOutDev(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPt,  const Size& rSrcSize,
+                                    const OutputDevice& rOutDev );
+
+    virtual void                CopyArea(
+                                    const Point& rDestPt,
+                                    const Point& rSrcPt,  const Size& rSrcSize,
+                                    sal_uInt16 nFlags = 0 );
 
 protected:
 
@@ -589,11 +590,16 @@ public:
     void                        SetFont( const Font& rNewFont );
     const Font&                 GetFont() const { return maFont; }
 
+protected:
+
+    virtual void                ImplReleaseFonts();
+
 private:
 
     SAL_DLLPRIVATE void         InitLineColor();
 
     SAL_DLLPRIVATE void         InitFillColor();
+
     ///@}
 
 
@@ -796,14 +802,17 @@ public:
 
     void                        DrawEllipse( const Rectangle& rRect );
 
-    void                        DrawArc( const Rectangle& rRect,
-                                         const Point& rStartPt, const Point& rEndPt );
+    void                        DrawArc(
+                                    const Rectangle& rRect,
+                                    const Point& rStartPt, const Point& rEndPt );
 
-    void                        DrawPie( const Rectangle& rRect,
-                                         const Point& rStartPt, const Point& rEndPt );
+    void                        DrawPie(
+                                    const Rectangle& rRect,
+                                    const Point& rStartPt, const Point& rEndPt );
 
-    void                        DrawChord( const Rectangle& rRect,
-                                           const Point& rStartPt, const Point& rEndPt );
+    void                        DrawChord(
+                                    const Rectangle& rRect,
+                                    const Point& rStartPt, const Point& rEndPt );
 
     ///@}
 
@@ -1126,7 +1135,6 @@ public:
 protected:
 
     virtual void                InitFont() const;
-    virtual void                ImplReleaseFonts();
     virtual void                SetFontOrientation( ImplFontEntry* const pFontEntry ) const;
     virtual long                GetFontExtLeading() const;
 
@@ -1417,17 +1425,19 @@ public:
         @attention the output metafile is prepared in pixel mode for the currentOutputDevice
                    state. It can not be moved or rotated reliably anymore.
     */
-    bool                        RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
-                                                                  long nMaxBmpDPIX, long nMaxBmpDPIY,
-                                                                  bool bReduceTransparency,
-                                                                  bool bTransparencyAutoMode,
-                                                                  bool bDownsampleBitmaps,
-                                                                  const Color& rBackground = Color( COL_TRANSPARENT )
-                                                                );
+    bool                        RemoveTransparenciesFromMetaFile(
+                                    const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
+                                    long nMaxBmpDPIX, long nMaxBmpDPIY,
+                                    bool bReduceTransparency,
+                                    bool bTransparencyAutoMode,
+                                    bool bDownsampleBitmaps,
+                                    const Color& rBackground = Color( COL_TRANSPARENT ) );
 
-    SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
-                                                       const Point& rDestPt, const Size& rDestSize,
-                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    SAL_DLLPRIVATE void         ImplPrintTransparent (
+                                    const Bitmap& rBmp, const Bitmap& rMask,
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+
     SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
 
 
@@ -1441,10 +1451,12 @@ public:
 
     void                        DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency);
-    void                        DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
-                                         const Gradient& rTransparenceGradient );
+    void                        DrawTransparent(
+                                        const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
+                                        const Gradient& rTransparenceGradient );
 
 protected:
+
     virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
@@ -1473,9 +1485,10 @@ public:
 
 protected:
 
-    virtual void                DrawDeviceMask ( const Bitmap& rMask, const Color& rMaskColor,
-                                            const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    virtual void                DrawDeviceMask (
+                                         const Bitmap& rMask, const Color& rMaskColor,
+                                         const Point& rDestPt, const Size& rDestSize,
+                                         const Point& rSrcPtPixel, const Size& rSrcSizePixel );
     ///@}
 
 
@@ -1809,31 +1822,34 @@ public:
 
     /** Query the native control to determine if it was acted upon
      */
-    bool                        HitTestNativeControl(   ControlType nType,
-                                                        ControlPart nPart,
-                                                        const Rectangle& rControlRegion,
-                                                        const Point& aPos,
-                                                        bool& rIsInside ) const;
+    bool                        HitTestNativeControl(
+                                    ControlType nType,
+                                    ControlPart nPart,
+                                    const Rectangle& rControlRegion,
+                                    const Point& aPos,
+                                    bool& rIsInside ) const;
 
     /** Request rendering of a particular control and/or part
      */
-    bool                        DrawNativeControl(  ControlType nType,
-                                                    ControlPart nPart,
-                                                    const Rectangle& rControlRegion,
-                                                    ControlState nState,
-                                                    const ImplControlValue& aValue,
-                                                    const OUString& aCaption );
+    bool                        DrawNativeControl(
+                                    ControlType nType,
+                                    ControlPart nPart,
+                                    const Rectangle& rControlRegion,
+                                    ControlState nState,
+                                    const ImplControlValue& aValue,
+                                    const OUString& aCaption );
 
     /** Query the native control's actual drawing region (including adornment)
      */
-    bool                        GetNativeControlRegion( ControlType nType,
-                                                        ControlPart nPart,
-                                                        const Rectangle& rControlRegion,
-                                                        ControlState nState,
-                                                        const ImplControlValue& aValue,
-                                                        const OUString& aCaption,
-                                                        Rectangle &rNativeBoundingRegion,
-                                                        Rectangle &rNativeContentRegion ) const;
+    bool                        GetNativeControlRegion(
+                                    ControlType nType,
+                                    ControlPart nPart,
+                                    const Rectangle& rControlRegion,
+                                    ControlState nState,
+                                    const ImplControlValue& aValue,
+                                    const OUString& aCaption,
+                                    Rectangle &rNativeBoundingRegion,
+                                    Rectangle &rNativeContentRegion ) const;
     ///@}
 
     /** @name EPS functions
@@ -1842,13 +1858,14 @@ public:
 
 public:
 
-    /** Added return value to see if EPS could be painted directly.
+    /** @returns boolean value to see if EPS could be painted directly.
         Theoreticaly, handing over a matrix would be needed to handle
         painting rotated EPS files (e.g. contained in Metafiles). This
         would then need to be supported for Mac and PS printers, but
         that's too much for now, wrote \#i107046# for this */
-    bool                        DrawEPS( const Point& rPt, const Size& rSz,
-                                         const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
+    bool                        DrawEPS(
+                                    const Point& rPt, const Size& rSz,
+                                    const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
     ///@}
 
 };
