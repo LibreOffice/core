@@ -32,8 +32,8 @@
 #include "bcaslot.hxx"
 #include "globstr.hrc"
 #include <rowheightcontext.hxx>
+#include <column.hxx>
 
-// STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      ScSimpleUndo);
@@ -148,6 +148,48 @@ void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->BroadcastCells(rRange, SC_HINT_DATACHANGED);
+}
+
+namespace {
+
+class SpanBroadcaster : public sc::ColumnSpanSet::ColumnAction
+{
+    ScDocument& mrDoc;
+    SCTAB mnCurTab;
+    SCCOL mnCurCol;
+
+public:
+    SpanBroadcaster( ScDocument& rDoc ) : mrDoc(rDoc), mnCurTab(-1), mnCurCol(-1) {}
+
+    virtual void startColumn( ScColumn* pCol )
+    {
+        mnCurTab = pCol->GetTab();
+        mnCurCol = pCol->GetCol();
+    }
+
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal )
+    {
+        if (!bVal)
+            return;
+
+        ScRange aRange(mnCurTab, mnCurCol, nRow1, mnCurTab, mnCurCol, nRow2);
+        mrDoc.BroadcastCells(aRange, SC_HINT_DATACHANGED);
+    };
+};
+
+}
+
+void ScSimpleUndo::BroadcastChanges( const DataSpansType& rSpans )
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    SpanBroadcaster aBroadcaster(*pDoc);
+
+    DataSpansType::const_iterator it = rSpans.begin(), itEnd = rSpans.end();
+    for (; it != itEnd; ++it)
+    {
+        const sc::ColumnSpanSet& rSet = *it->second;
+        rSet.executeColumnAction(*pDoc, aBroadcaster);
+    }
 }
 
 void ScSimpleUndo::ShowTable( SCTAB nTab )

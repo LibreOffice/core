@@ -106,6 +106,11 @@ OUString ScUndoDeleteContents::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );    // "Delete"
 }
 
+void ScUndoDeleteContents::SetDataSpans( const boost::shared_ptr<DataSpansType>& pSpans )
+{
+    mpDataSpans = pSpans;
+}
+
 void ScUndoDeleteContents::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
@@ -184,8 +189,13 @@ void ScUndoDeleteContents::Undo()
     EndUndo();
 
     if (nFlags & IDF_CONTENTS)
+    {
         // Broadcast only when the content changes. fdo#74687
-        BroadcastChanges(aRange);
+        if (mpDataSpans)
+            BroadcastChanges(*mpDataSpans);
+        else
+            BroadcastChanges(aRange);
+    }
 
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }

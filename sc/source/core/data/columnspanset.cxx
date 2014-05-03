@@ -21,6 +21,29 @@
 
 namespace sc {
 
+namespace {
+
+class ColumnScanner
+{
+    ColumnSpanSet::ColumnSpansType& mrRanges;
+    bool mbVal;
+public:
+    ColumnScanner(ColumnSpanSet::ColumnSpansType& rRanges, bool bVal) :
+        mrRanges(rRanges), mbVal(bVal) {}
+
+    void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
+    {
+        if (node.type == sc::element_type_empty)
+            return;
+
+        size_t nRow = node.position + nOffset;
+        size_t nEndRow = nRow + nDataSize; // Last row of current block plus 1
+        mrRanges.insert_back(nRow, nEndRow, mbVal);
+    }
+};
+
+}
+
 RowSpan::RowSpan(SCROW nRow1, SCROW nRow2) : mnRow1(nRow1), mnRow2(nRow2) {}
 
 ColRowSpan::ColRowSpan(SCCOLROW nStart, SCCOLROW nEnd) : mnStart(nStart), mnEnd(nEnd) {}
@@ -94,6 +117,30 @@ void ColumnSpanSet::set(const ScRange& rRange, bool bVal)
             ColumnType& rCol = getColumn(nTab, nCol);
             rCol.miPos = rCol.maSpans.insert(rCol.miPos, rRange.aStart.Row(), rRange.aEnd.Row()+1, bVal).first;
         }
+    }
+}
+
+void ColumnSpanSet::scan(
+    const ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal)
+{
+    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+        return;
+
+    if (nCol1 > nCol2 || nRow1 > nRow2)
+        return;
+
+    const ScTable* pTab = rDoc.FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+    {
+        ColumnType& rCol = getColumn(nTab, nCol);
+
+        const CellStoreType& rSrcCells = pTab->aCol[nCol].maCells;
+
+        ColumnScanner aScanner(rCol.maSpans, bVal);
+        ParseBlock(rSrcCells.begin(), rSrcCells, aScanner, nRow1, nRow2);
     }
 }
 

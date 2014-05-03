@@ -25,7 +25,6 @@
 #include "spellparam.hxx"
 #include "cellmergeoption.hxx"
 #include "paramisc.hxx"
-#include <columnspanset.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -274,7 +273,11 @@ public:
 
     virtual OUString GetComment() const SAL_OVERRIDE;
 
+    void SetDataSpans( const boost::shared_ptr<DataSpansType>& pSpans );
+
 private:
+    boost::shared_ptr<DataSpansType> mpDataSpans; // Spans of non-empty cells.
+
     ScRange         aRange;
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;       // Block mark and deleted data

@@ -24,6 +24,9 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "docsh.hxx"
+#include <columnspanset.hxx>
+
+#include <boost/ptr_container/ptr_map.hpp>
 
 class ScDocument;
 class ScDocShell;
@@ -36,6 +39,8 @@ class ScSimpleUndo: public SfxUndoAction
     ScSimpleUndo(const ScSimpleUndo&); // disabled
 
 public:
+    typedef boost::ptr_map<SCTAB,sc::ColumnSpanSet> DataSpansType;
+
                     TYPEINFO_OVERRIDE();
                     ScSimpleUndo( ScDocShell* pDocSh );
     virtual         ~ScSimpleUndo();
@@ -56,6 +61,14 @@ protected:
     void            EndRedo();
 
     void BroadcastChanges( const ScRange& rRange );
+
+    /**
+     * Broadcast changes on specified spans.
+     *
+     * @param rSpans container that specifies all spans whose changes need to
+     *               be broadcasted.
+     */
+    void BroadcastChanges( const DataSpansType& rSpans );
 
     static void     ShowTable( SCTAB nTab );
     static void     ShowTable( const ScRange& rRange );

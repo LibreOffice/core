@@ -1846,6 +1846,9 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
                                        aFuncMark );
     }
 
+    // To keep track of all non-empty cells within the deleted area.
+    boost::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
+
     if ( bRecord )
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -1872,6 +1875,26 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
         // do not copy note captions to undo document
         nUndoDocFlags |= IDF_NOCAPTIONS;
         pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &aFuncMark );
+
+        pDataSpans.reset(new ScSimpleUndo::DataSpansType);
+
+        for (itr = aFuncMark.begin(); itr != itrEnd; ++itr)
+        {
+            nTab = *itr;
+
+            SCCOL nCol1 = aCopyRange.aStart.Col(), nCol2 = aCopyRange.aEnd.Col();
+            SCROW nRow1 = aCopyRange.aStart.Row(), nRow2 = aCopyRange.aEnd.Row();
+
+            std::pair<ScSimpleUndo::DataSpansType::iterator,bool> r =
+                pDataSpans->insert(nTab, new sc::ColumnSpanSet(false));
+
+            if (r.second)
+            {
+                ScSimpleUndo::DataSpansType::iterator it = r.first;
+                sc::ColumnSpanSet* pSet = it->second;
+                pSet->scan(*pDoc, nTab, nCol1, nRow1, nCol2, nRow2, true);
+            }
+        }
     }
 
     HideAllCursors();   // for if summary is cancelled
@@ -1886,9 +1909,12 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
 
     if ( bRecord )
     {
-        pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoDeleteContents( pDocSh, aFuncMark, aExtendedRange,
-                                      pUndoDoc, bMulti, nFlags, bDrawUndo ) );
+        ScUndoDeleteContents* pUndo =
+            new ScUndoDeleteContents(
+                pDocSh, aFuncMark, aExtendedRange, pUndoDoc, bMulti, nFlags, bDrawUndo);
+        pUndo->SetDataSpans(pDataSpans);
+
+        pDocSh->GetUndoManager()->AddUndoAction(pUndo);
     }
 
     if (!AdjustRowHeight( aExtendedRange.aStart.Row(), aExtendedRange.aEnd.Row() ))
