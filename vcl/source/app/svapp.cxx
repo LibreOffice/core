@@ -322,12 +322,12 @@ void Application::Abort( const OUString& rErrorText )
     SalAbort( rErrorText, dumpCore );
 }
 
-sal_uLong   Application::GetReservedKeyCodeCount()
+sal_uLong Application::GetReservedKeyCodeCount()
 {
     return ImplReservedKeys::get()->second;
 }
 
-const KeyCode*  Application::GetReservedKeyCode( sal_uLong i )
+const KeyCode* Application::GetReservedKeyCode( sal_uLong i )
 {
     if( i >= GetReservedKeyCodeCount() )
         return NULL;
@@ -1668,5 +1668,53 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->createFolderPicker( xSM );
 }
+
+void Application::InitAppFontData()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    Window *pWindow = pSVData->mpDefaultWin;
+
+    long nTextHeight = pWindow->GetTextHeight();
+    long nTextWidth = pWindow->approximate_char_width() * 8;
+    long nSymHeight = nTextHeight*4;
+    // Make the basis wider if the font is too narrow
+    // such that the dialog looks symmetrical and does not become too narrow.
+    // Add some extra space when the dialog has the same width,
+    // as a little more space is better.
+    if ( nSymHeight > nTextWidth )
+        nTextWidth = nSymHeight;
+    else if ( nSymHeight+5 > nTextWidth )
+        nTextWidth = nSymHeight+5;
+    pSVData->maGDIData.mnAppFontX = nTextWidth * 10 / 8;
+    pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
+
+    // FIXME: this is currently only on OS X, check with other
+    // platforms
+    if( pSVData->maNWFData.mbNoFocusRects )
+    {
+        // try to find out whether there is a large correction
+        // of control sizes, if yes, make app font scalings larger
+        // so dialog positioning is not completely off
+        ImplControlValue aControlValue;
+        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
+        Rectangle aBoundingRgn( aCtrlRegion );
+        Rectangle aContentRgn( aCtrlRegion );
+        if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                             CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                             aBoundingRgn, aContentRgn ) )
+        {
+            // comment: the magical +6 is for the extra border in bordered
+            // (which is the standard) edit fields
+            if( aContentRgn.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
+                pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
+        }
+    }
+
+    pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
+    if ( pSVData->maAppData.mnDialogScaleX )
+        pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
