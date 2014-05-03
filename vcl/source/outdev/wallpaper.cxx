@@ -77,6 +77,25 @@ void OutputDevice::DrawColorWallpaper( long nX, long nY,
     EnableMapMode( bMap );
 }
 
+void OutputDevice::Erase()
+{
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+        return;
+
+    if ( mbBackground )
+    {
+        RasterOp eRasterOp = GetRasterOp();
+        if ( eRasterOp != ROP_OVERPAINT )
+            SetRasterOp( ROP_OVERPAINT );
+        DrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
+        if ( eRasterOp != ROP_OVERPAINT )
+            SetRasterOp( eRasterOp );
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Erase();
+}
+
 void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                             long nWidth, long nHeight,
                                             const Wallpaper& rWallpaper )

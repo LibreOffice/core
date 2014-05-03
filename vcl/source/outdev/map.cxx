@@ -332,6 +332,26 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
     ImplCalcBigIntThreshold( nDPIX, nDPIY, rMapRes, rThresRes );
 }
 
+// #i75163#
+void OutputDevice::ImplInvalidateViewTransform()
+{
+    if(mpOutDevData)
+    {
+        if(mpOutDevData->mpViewTransform)
+        {
+            delete mpOutDevData->mpViewTransform;
+            mpOutDevData->mpViewTransform = NULL;
+        }
+
+        if(mpOutDevData->mpInverseViewTransform)
+        {
+            delete mpOutDevData->mpInverseViewTransform;
+            mpOutDevData->mpInverseViewTransform = NULL;
+        }
+    }
+}
+
+
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
