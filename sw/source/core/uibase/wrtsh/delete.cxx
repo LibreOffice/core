@@ -516,20 +516,7 @@ long SwWrtShell::DelPrvWord()
     if ( !IsSttWrd() ||
          !_PrvWrdForDelete() ) // #i92468#
     {
-        if( IsEndWrd() )
-        {
-            if ( _PrvWrdForDelete() ) // #i92468#
-            {
-                // skip over all spaces
-                short n = 0;
-                while( ' ' == GetChar( false, n ))
-                    --n;
-
-                if( ++n )
-                    ExtendSelection( false, -n );
-            }
-        }
-        else if( IsSttPara())
+        if (IsEndWrd() || IsSttPara())
             _PrvWrdForDelete(); // #i92468#
         else
             _SttWrd();
