@@ -637,7 +637,7 @@ private:
 class ScUndoConditionalFormat : public ScSimpleUndo
 {
 public:
-    TYPEINFO_OVERRIDE();
+    TYPEINFO();
     ScUndoConditionalFormat( ScDocShell* pNewDocShell,
             ScDocument* pUndoDoc, ScDocument* pRedoDoc, const ScRange& rRange);
     virtual         ~ScUndoConditionalFormat();
@@ -645,7 +645,7 @@ public:
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
     virtual void    Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
-    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
+    virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
 
     virtual OUString GetComment() const SAL_OVERRIDE;
 

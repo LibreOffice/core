@@ -1450,7 +1450,7 @@ void ScUndoConditionalFormat::Repeat(SfxRepeatTarget& )
 {
 }
 
-bool ScUndoConditionalFormat::CanRepeat(SfxRepeatTarget& ) const
+sal_Bool ScUndoConditionalFormat::CanRepeat(SfxRepeatTarget& ) const
 {
     return false;
 }
