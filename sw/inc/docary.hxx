@@ -38,7 +38,7 @@ class SwUnoCrsr;
 class SwOLENode;
 class SwTxtFmtColl;
 class SwGrfFmtColl;
-class SwPosition;
+struct SwPosition;
 
 namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    ///< comes from the I18N UNO interface
