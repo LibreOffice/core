@@ -1400,7 +1400,7 @@ public:
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 
-        if(abs((e.Col()-s.Col())*(e.Row()-s.Row())) < SHRINK_RANGE_THRESHOLD)
+        if(abs((e.nCol-s.nCol)*(e.nRow-s.nRow)) < SHRINK_RANGE_THRESHOLD)
             return;
 
         SCCOL nMinCol = MAXCOL, nMaxCol = 0;
