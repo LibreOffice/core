@@ -274,7 +274,11 @@ public:
 
     virtual OUString GetComment() const;
 
+    void SetDataSpans( const boost::shared_ptr<DataSpansType>& pSpans );
+
 private:
+    boost::shared_ptr<DataSpansType> mpDataSpans; // Spans of non-empty cells.
+
     ScRange         aRange;
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;       // Block mark and deleted data
