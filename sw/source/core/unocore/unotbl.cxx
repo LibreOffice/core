@@ -279,7 +279,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
                    sPDesc = SwStyleNameMapper::GetProgName(pDsc->GetName(), nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
                 }
             }
-            aRet <<= OUString(sPDesc);
+            aRet <<= sPDesc;
         }
         break;
 
@@ -494,12 +494,11 @@ OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
     }
 #endif
 
-    OUString sCellName;
     if (nColumn < 0 || nRow < 0)
-        return sCellName;
+        return OUString();
+    OUString sCellName;
     sw_GetTblBoxColStr( static_cast< sal_uInt16 >(nColumn), sCellName );
-    sCellName += OUString::number( nRow + 1 );
-    return sCellName;
+    return sCellName + OUString::number( nRow + 1 );
 }
 
 /** Find the top left or bottom right corner box in given table.
@@ -575,7 +574,7 @@ void SwRangeDescriptor::Normalize()
 static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
 {
     SwXCell* pXCell = 0;
-    OUString sCellName = sw_GetCellName(nColumn, nRow);
+    const OUString sCellName = sw_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable( pFmt );
     SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
     if(pBox)
@@ -1098,7 +1097,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             }
             else
             {
-                throw beans::UnknownPropertyException(OUString( "No redline type property: " ), static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
             }
         }
         else
@@ -1164,7 +1163,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             }
             break;
             case FN_UNO_CELL_NAME:
-                aRet <<= OUString ( pBox->GetName() );
+                aRet <<= pBox->GetName();
             break;
             case FN_UNO_REDLINE_NODE_START:
             case FN_UNO_REDLINE_NODE_END:
@@ -1389,7 +1388,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                 }
                 else
                 {
-                    throw beans::UnknownPropertyException(OUString( "No redline type property: " ), static_cast < cppu::OWeakObject * > ( this ) );
+                    throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
                 }
             }
             else
@@ -1398,7 +1397,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                     m_pPropSet->getPropertyMap().getByName(rPropertyName);
                 SwDoc* pDoc = pFmt->GetDoc();
                 if (!pEntry)
-                    throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                    throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
                 if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                     throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -1460,7 +1459,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
             const SfxItemPropertySimpleEntry* pEntry =
                                     m_pPropSet->getPropertyMap().getByName(rPropertyName);
             if (!pEntry)
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             switch(pEntry->nWID)
             {
@@ -1620,7 +1619,7 @@ OUString SwXTextTableCursor::getRangeName()
         const SwStartNode* pNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
         const SwTableBox* pEndBox = pTable->GetTblBox( pNode->GetIndex());
-        OUString aTmp( pEndBox->GetName() );
+        aRet = pEndBox->GetName();
 
         if(pTblCrsr->HasMark())
         {
@@ -1636,17 +1635,14 @@ OUString SwXTextTableCursor::getRangeName()
                     pEndBox = pTmpBox;
                 }
 
-                aTmp  = pStartBox->GetName();
-                aTmp += ":";
-                aTmp += pEndBox->GetName();
+                aRet = pStartBox->GetName() + ":" + pEndBox->GetName();
             }
         }
-        aRet = aTmp;
     }
     return aRet;
 }
 
-sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool Expand)
+sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool Expand)
     throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1656,7 +1652,6 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool E
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
-        OUString sCellName(CellName);
         bRet = pTblCrsr->GotoTblBox(sCellName);
     }
     return bRet;
@@ -1868,7 +1863,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
             }
         }
         else
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
 }
 
@@ -1930,7 +1925,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     return aRet;
 }
@@ -2275,7 +2270,7 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
     return xRet;
 }
 
-uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& CellName) throw( uno::RuntimeException, std::exception )
+uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& sCellName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCell >  xRet;
@@ -2283,7 +2278,6 @@ uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& CellN
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-        OUString sCellName(CellName);
         SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
         if(pBox)
         {
@@ -2318,7 +2312,7 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
     return uno::Sequence< OUString >();
 }
 
-uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(const OUString& CellName)
+uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(const OUString& sCellName)
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -2327,7 +2321,6 @@ uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(co
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-        OUString sCellName(CellName);
         SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
         if(pBox && pBox->getRowSpan() > 0 )
         {
@@ -2394,11 +2387,10 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                 if(!m_sTableName.isEmpty())
                 {
                     sal_uInt16 nIndex = 1;
-                    const OUString sTmpName(m_sTableName);
-                    OUString sTmpNameIndex(sTmpName);
+                    OUString sTmpNameIndex(m_sTableName);
                     while(pDoc->FindTblFmtByName( sTmpNameIndex, true ) && nIndex < USHRT_MAX)
                     {
-                        sTmpNameIndex = sTmpName + OUString::number(nIndex++);
+                        sTmpNameIndex = m_sTableName + OUString::number(nIndex++);
                     }
                     pDoc->SetTableName( *pTblFmt, sTmpNameIndex);
                 }
@@ -2497,9 +2489,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCellRange >  aRef;
-    OUString sTLName(rTLName);
-    OUString sBRName(rBRName);
-    const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+    const SwTableBox* pTLBox = pTable->GetTblBox( rTLName );
     if(pTLBox)
     {
         // invalidate all actions
@@ -2510,7 +2500,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
         SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
         pUnoCrsr->SetRemainInSection( false );
-        const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
+        const SwTableBox* pBRBox = pTable->GetTblBox( rBRName );
         if(pBRBox)
         {
             pUnoCrsr->SetMark();
@@ -2549,8 +2539,8 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
             aDesc.nBottom = nBottom;
             aDesc.nLeft   = nLeft;
             aDesc.nRight  = nRight;
-            OUString sTLName = sw_GetCellName(aDesc.nLeft, aDesc.nTop);
-            OUString sBRName = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
+            const OUString sTLName = sw_GetCellName(aDesc.nLeft, aDesc.nTop);
+            const OUString sBRName = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
 
             // please note that according to the 'if' statement at the begin
             // sTLName:sBRName already denotes the normalized range string
@@ -2563,7 +2553,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
     return aRef;
 }
 
-uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUString& aRange)
+uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUString& sRange)
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -2574,9 +2564,9 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUSt
         SwTable* pTable = SwTable::FindTable( pFmt );
         if(!pTable->IsTblComplex())
         {
-            OUString sRange(aRange);
-            OUString sTLName(sRange.getToken(0, ':'));
-            OUString sBRName(sRange.getToken(1, ':'));
+            sal_Int32 nPos = 0;
+            const OUString sTLName(sRange.getToken(0, ':', nPos));
+            const OUString sBRName(sRange.getToken(0, ':', nPos));
             if(sTLName.isEmpty() || sBRName.isEmpty())
                 throw uno::RuntimeException();
             SwRangeDescriptor aDesc;
@@ -3029,7 +3019,7 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
     }
 }
 
-void SwXTextTable::autoFormat(const OUString& aName)
+void SwXTextTable::autoFormat(const OUString& sAutoFmtName)
     throw (lang::IllegalArgumentException, uno::RuntimeException,
            std::exception)
 {
@@ -3040,8 +3030,6 @@ void SwXTextTable::autoFormat(const OUString& aName)
         SwTable* pTable = SwTable::FindTable( pFmt );
         if(!pTable->IsTblComplex())
         {
-
-            OUString sAutoFmtName(aName);
             SwTableAutoFmtTbl aAutoFmtTbl;
             aAutoFmtTbl.Load();
             for (size_t i = aAutoFmtTbl.size(); i;)
@@ -3335,7 +3323,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                                 m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     if(pFmt)
     {
@@ -3842,8 +3830,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             aNewDesc.nLeft   = nLeft + aRgDesc.nLeft;
             aNewDesc.nRight  = nRight + aRgDesc.nLeft;
             aNewDesc.Normalize();
-            OUString sTLName = sw_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
-            OUString sBRName = sw_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
+            const OUString sTLName = sw_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
+            const OUString sBRName = sw_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -3881,9 +3869,9 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUSt
         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    OUString sRange(rRange);
-    OUString sTLName(sRange.getToken(0, ':'));
-    OUString sBRName(sRange.getToken(1, ':'));
+    sal_Int32 nPos = 0;
+    const OUString sTLName(rRange.getToken(0, ':', nPos));
+    const OUString sBRName(rRange.getToken(0, ':', nPos));
     if(sTLName.isEmpty() || sBRName.isEmpty())
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
@@ -4016,7 +4004,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
             }
         }
         else
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
 }
 
@@ -4098,7 +4086,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-           throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+           throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     return aRet;
 }
@@ -4243,9 +4231,8 @@ void SwXCellRange::GetDataSequence(
                                 nFIndex = pNumFormatter->GetStandardIndex( eLang );
                             }
 
-                            OUString aTxt( lcl_getString(*pXCell) );
                             double fTmp;
-                            if (pNumFormatter->IsNumberFormat( aTxt, nFIndex, fTmp ))
+                            if (pNumFormatter->IsNumberFormat( lcl_getString(*pXCell), nFIndex, fTmp ))
                                 fVal = fTmp;
                         }
                         pDblData[nDtaCnt++] = fVal;
@@ -4828,7 +4815,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
                 throw aExcept;
             }
 
-            OUString sTLName = sw_GetCellName(0, nIndex);
+            const OUString sTLName = sw_GetCellName(0, nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             bool bAppend = false;
             if(!pTLBox)
@@ -4890,7 +4877,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( false );
-                OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
+                const OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
                 const SwTableBox* pBLBox = pTable->GetTblBox( sBLName );
                 if(pBLBox)
                 {
@@ -5042,7 +5029,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
                 throw aExcept;
             }
 
-            OUString sTLName = sw_GetCellName(nIndex, 0);
+            const OUString sTLName = sw_GetCellName(nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             bool bAppend = false;
             if(!pTLBox)
@@ -5088,7 +5075,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            OUString sTLName = sw_GetCellName(nIndex, 0);
+            const OUString sTLName = sw_GetCellName(nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -5102,7 +5089,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( false );
-                OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
+                const OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
                 const SwTableBox* pTRBox = pTable->GetTblBox( sTRName );
                 if(pTRBox)
                 {
