@@ -161,13 +161,13 @@ class SpanBroadcaster : public sc::ColumnSpanSet::ColumnAction
 public:
     SpanBroadcaster( ScDocument& rDoc ) : mrDoc(rDoc), mnCurTab(-1), mnCurCol(-1) {}
 
-    virtual void startColumn( ScColumn* pCol )
+    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
     {
         mnCurTab = pCol->GetTab();
         mnCurCol = pCol->GetCol();
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal )
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
     {
         if (!bVal)
             return;
