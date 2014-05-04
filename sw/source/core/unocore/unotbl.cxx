@@ -238,7 +238,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
         case  FN_TABLE_HEADLINE_COUNT:
         {
             SwTable* pTable = SwTable::FindTable( pFmt );
-            sal_uInt16 nRepeat = pTable->GetRowsToRepeat();
+            const sal_uInt16 nRepeat = pTable->GetRowsToRepeat();
             if(pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
             {
                 sal_Bool bTemp = nRepeat > 0;
@@ -314,7 +314,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             if(FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 pTblNode = pTblNode->EndOfSectionNode();
             const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
-            for(sal_uInt16 nRed = 0; nRed < rRedTbl.size(); nRed++)
+            for(size_t nRed = 0; nRed < rRedTbl.size(); ++nRed)
             {
                 const SwRangeRedline* pRedline = rRedTbl[nRed];
                 const SwNode* pRedPointNode = pRedline->GetNode(true);
@@ -587,11 +587,11 @@ static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRo
 
 static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString*>& rAllNames)
 {
-    for( sal_uInt16 i = 0; i < rLines.size(); i++ )
+    for( size_t i = 0; i < rLines.size(); ++i )
     {
         SwTableLine* pLine = rLines[i];
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        for(sal_uInt16 j = 0; j < rBoxes.size(); j++)
+        for(size_t j = 0; j < rBoxes.size(); ++j)
         {
             SwTableBox* pBox = rBoxes[j];
             if(!pBox->GetName().isEmpty() && pBox->getRowSpan() > 0 )
@@ -1524,7 +1524,7 @@ SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine* pLine)
 {
     SwTableLine* pRet = 0;
     SwTableLines &rLines = pTable->GetTabLines();
-    for(sal_uInt16 i = 0; i < rLines.size(); i++)
+    for(size_t i = 0; i < rLines.size(); ++i)
         if(rLines[i] == pLine)
         {
             pRet = pLine;
@@ -2306,7 +2306,7 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
         SwTableLines& rTblLines = pTable->GetTabLines();
         std::vector<OUString*> aAllNames;
         lcl_InspectLines(rTblLines, aAllNames);
-        uno::Sequence< OUString > aRet( static_cast<sal_uInt16>(aAllNames.size()) );
+        uno::Sequence< OUString > aRet( static_cast<sal_Int32>(aAllNames.size()) );
         OUString* pArray = aRet.getArray();
         for( size_t i = 0; i < aAllNames.size(); ++i)
         {
@@ -2604,8 +2604,8 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
     // see SwXTextTable::getData(...) also
 
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -2659,8 +2659,8 @@ void SAL_CALL SwXTextTable::setDataArray(
     // see SwXTextTable::setData(...) also
 
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
 
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2724,8 +2724,8 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
                                         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -2739,12 +2739,12 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
     {
         uno::Sequence< double >* pArray = aRowSeq.getArray();
 
-        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
         for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
             uno::Sequence< double >  aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
             double* pColArray = aColSeq.getArray();
-            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
@@ -2766,8 +2766,8 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
                                         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
     bool bChanged = false;
 
     if(!nRowCount || !nColCount)
@@ -2780,7 +2780,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
-        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
         if(rData.getLength() < nRowCount - nRowStart)
         {
             throw uno::RuntimeException();
@@ -2789,7 +2789,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
         for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
             const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
-            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
             if(rColSeq.getLength() < nColCount - nColStart)
             {
                 throw uno::RuntimeException();
@@ -2816,7 +2816,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
 uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
+    const sal_uInt16 nRowCount = getRowCount();
     if(!nRowCount)
     {
         uno::RuntimeException aRuntime;
@@ -2831,7 +2831,7 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
         OUString* pArray = aRet.getArray();
         if(bFirstColumnAsLabel)
         {
-            sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nRowCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
@@ -2860,7 +2860,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        sal_Int16 nRowCount = getRowCount();
+        const sal_uInt16 nRowCount = getRowCount();
         if(!nRowCount || rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
         {
             throw uno::RuntimeException();
@@ -2868,7 +2868,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         const OUString* pArray = rRowDesc.getConstArray();
         if(bFirstColumnAsLabel)
         {
-            sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nRowCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
@@ -2893,7 +2893,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
                                                 throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nColCount = getColumnCount();
     if(!nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -2907,7 +2907,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
         OUString* pArray = aRet.getArray();
         if(bFirstRowAsLabel)
         {
-            sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
@@ -2933,7 +2933,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
 void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColumnDesc) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nColCount = getColumnCount();
     if(!nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -2946,7 +2946,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
         const OUString* pArray = rColumnDesc.getConstArray();
         if(bFirstRowAsLabel && rColumnDesc.getLength() >= nColCount - (bFirstColumnAsLabel ? 1 : 0))
         {
-            sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
@@ -3044,7 +3044,7 @@ void SwXTextTable::autoFormat(const OUString& aName)
             OUString sAutoFmtName(aName);
             SwTableAutoFmtTbl aAutoFmtTbl;
             aAutoFmtTbl.Load();
-            for (sal_uInt16 i = aAutoFmtTbl.size(); i;)
+            for (size_t i = aAutoFmtTbl.size(); i;)
                 if( sAutoFmtName == aAutoFmtTbl[ --i ].GetName() )
                 {
                     SwSelBoxes aBoxes;
@@ -3254,19 +3254,19 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                         !aTableBorderDistances.IsBottomDistanceValid ))
                         break;
 
-                    sal_uInt16 nLeftDistance =     convertMm100ToTwip( aTableBorderDistances.LeftDistance);
-                    sal_uInt16 nRightDistance =    convertMm100ToTwip( aTableBorderDistances.RightDistance);
-                    sal_uInt16 nTopDistance =      convertMm100ToTwip( aTableBorderDistances.TopDistance);
-                    sal_uInt16 nBottomDistance =   convertMm100ToTwip( aTableBorderDistances.BottomDistance);
+                    const sal_uInt16 nLeftDistance =   convertMm100ToTwip(aTableBorderDistances.LeftDistance);
+                    const sal_uInt16 nRightDistance =  convertMm100ToTwip(aTableBorderDistances.RightDistance);
+                    const sal_uInt16 nTopDistance =    convertMm100ToTwip(aTableBorderDistances.TopDistance);
+                    const sal_uInt16 nBottomDistance = convertMm100ToTwip(aTableBorderDistances.BottomDistance);
                     SwDoc* pDoc = pFmt->GetDoc();
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
                     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
-                    for(sal_uInt16 i = 0; i < rLines.size(); i++)
+                    for(size_t i = 0; i < rLines.size(); ++i)
                     {
                         SwTableLine* pLine = rLines[i];
                         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-                        for(sal_uInt16 k = 0; k < rBoxes.size(); k++)
+                        for(size_t k = 0; k < rBoxes.size(); ++k)
                         {
                             SwTableBox* pBox = rBoxes[k];
                             const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
@@ -3470,11 +3470,11 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     sal_uInt16 nTopDistance = 0;
                     sal_uInt16 nBottomDistance = 0;
 
-                    for(sal_uInt16 i = 0; i < rLines.size(); i++)
+                    for(size_t i = 0; i < rLines.size(); ++i)
                     {
                         const SwTableLine* pLine = rLines[i];
                         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-                        for(sal_uInt16 k = 0; k < rBoxes.size(); k++)
+                        for(size_t k = 0; k < rBoxes.size(); ++k)
                         {
                             const SwTableBox* pBox = rBoxes[k];
                             SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
@@ -3622,7 +3622,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
         const OUString aOldName( pFmt->GetName() );
         SwFrmFmt* pTmpFmt;
         const SwFrmFmts* pTbl = pFmt->GetDoc()->GetTblFrmFmts();
-        for( sal_uInt16 i = pTbl->size(); i; )
+        for( size_t i = pTbl->size(); i; )
             if( !( pTmpFmt = (*pTbl)[ --i ] )->IsDefault() &&
                 pTmpFmt->GetName() == rName &&
                             pFmt->GetDoc()->IsUsed( *pTmpFmt ))
@@ -3660,7 +3660,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
 sal_uInt16 SwXTextTable::getRowCount(void)
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRet = 0;
+    sal_uInt16 nRet = 0;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
@@ -3677,7 +3677,7 @@ sal_uInt16 SwXTextTable::getColumnCount(void)
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
-    sal_Int16 nRet = 0;
+    sal_uInt16 nRet = 0;
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
@@ -4136,8 +4136,8 @@ void SwXCellRange::GetDataSequence(
 
     // compare to SwXCellRange::getDataArray (note different return types though)
 
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
 
     if(!nRowCount || !nColCount)
     {
@@ -4272,8 +4272,8 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
 
     if(!nRowCount || !nColCount)
     {
@@ -4327,8 +4327,8 @@ void SAL_CALL SwXCellRange::setDataArray(
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -4389,8 +4389,8 @@ void SAL_CALL SwXCellRange::setDataArray(
 uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
 
     if(!nRowCount || !nColCount)
     {
@@ -4404,12 +4404,12 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     {
         uno::Sequence< double >* pRowArray = aRowSeq.getArray();
 
-        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
         for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
             uno::Sequence< double > aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
             double * pArray = aColSeq.getArray();
-            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
@@ -4429,8 +4429,8 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
                                                 throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nRowCount = getRowCount();
+    const sal_uInt16 nColCount = getColumnCount();
     if(!nRowCount || !nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -4440,7 +4440,7 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
-        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
         if(rData.getLength() < nRowCount - nRowStart)
         {
             throw uno::RuntimeException();
@@ -4449,7 +4449,7 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
         for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
             const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
-            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
             if(rColSeq.getLength() < nColCount - nColStart)
             {
                 throw uno::RuntimeException();
@@ -4473,7 +4473,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
                                             throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nRowCount = getRowCount();
+    const sal_uInt16 nRowCount = getRowCount();
     if(!nRowCount)
     {
         uno::RuntimeException aRuntime;
@@ -4487,7 +4487,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
         OUString* pArray = aRet.getArray();
         if(bFirstColumnAsLabel)
         {
-            sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nRowCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
@@ -4517,7 +4517,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        sal_Int16 nRowCount = getRowCount();
+        const sal_uInt16 nRowCount = getRowCount();
         if(!nRowCount || rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
         {
             throw uno::RuntimeException();
@@ -4525,7 +4525,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         const OUString* pArray = rRowDesc.getConstArray();
         if(bFirstColumnAsLabel)
         {
-            sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstRowAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nRowCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(0, i);
@@ -4549,7 +4549,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
                                         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nColCount = getColumnCount();
     if(!nColCount)
     {
         uno::RuntimeException aRuntime;
@@ -4563,7 +4563,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
         OUString* pArray = aRet.getArray();
         if(bFirstRowAsLabel)
         {
-            sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
@@ -4590,14 +4590,14 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
                                                         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int16 nColCount = getColumnCount();
+    const sal_uInt16 nColCount = getColumnCount();
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
         const OUString* pArray = ColumnDesc.getConstArray();
         if(bFirstRowAsLabel && ColumnDesc.getLength() >= nColCount - (bFirstColumnAsLabel ? 1 : 0))
         {
-            sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
+            const sal_uInt16 nStart = bFirstColumnAsLabel ? 1 : 0;
             for(sal_uInt16 i = nStart; i < nColCount; i++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(i, 0);
@@ -4766,9 +4766,9 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     else
     {
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if( (sal_uInt16)pTable->GetTabLines().size() > nIndex)
+        if( pTable->GetTabLines().size() > static_cast<size_t>(nIndex))
         {
-            SwTableLine* pLine = pTable->GetTabLines()[(sal_uInt16)nIndex];
+            SwTableLine* pLine = pTable->GetTabLines()[nIndex];
             SwIterator<SwXTextTableRow,SwFmt> aIter( *pFrmFmt );
             SwXTextTableRow* pXRow = aIter.First();
             while( pXRow )
@@ -4820,8 +4820,8 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            sal_uInt16 nRowCount = pTable->GetTabLines().size();
-            if (nCount <= 0 || !(0 <= nIndex && nIndex <= nRowCount))
+            const size_t nRowCount = pTable->GetTabLines().size();
+            if (nCount <= 0 || !(0 <= nIndex && static_cast<size_t>(nIndex) <= nRowCount))
             {
                 uno::RuntimeException aExcept;
                 aExcept.Message = "Illegal arguments";
@@ -4988,7 +4988,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     else
     {
-        sal_uInt16 nCount = 0;
+        size_t nCount = 0;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -4996,7 +4996,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
             SwTableLine* pLine = rLines.front();
             nCount = pLine->GetTabBoxes().size();
         }
-        if(nCount <= nIndex || nIndex < 0)
+        if(nIndex < 0 || nCount <= static_cast<size_t>(nIndex))
             throw lang::IndexOutOfBoundsException();
         xRet = uno::Reference<uno::XInterface>();   //!! writer tables do not have columns !!
     }
@@ -5034,8 +5034,8 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         {
             SwTableLines& rLines = pTable->GetTabLines();
             SwTableLine* pLine = rLines.front();
-            sal_uInt16 nColCount = pLine->GetTabBoxes().size();
-            if (nCount <= 0 || !(0 <= nIndex && nIndex <= nColCount))
+            const size_t nColCount = pLine->GetTabBoxes().size();
+            if (nCount <= 0 || !(0 <= nIndex && static_cast<size_t>(nIndex) <= nColCount))
             {
                 uno::RuntimeException aExcept;
                 aExcept.Message = "Illegal arguments";
