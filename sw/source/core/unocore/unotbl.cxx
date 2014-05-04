@@ -352,42 +352,40 @@ void sw_GetCellPosition(const OUString &rCellName,
                         sal_Int32 &rColumn, sal_Int32 &rRow)
 {
     rColumn = rRow = -1;    // default return values indicating failure
-    sal_Int32 nLen = rCellName.getLength();
+    const sal_Int32 nLen = rCellName.getLength();
     if (nLen)
     {
-        const sal_Unicode *pBuf = rCellName.getStr();
-        const sal_Unicode *pEnd = pBuf + nLen;
-        while (pBuf < pEnd && !('0' <= *pBuf && *pBuf <= '9'))
-            ++pBuf;
-        // start of number found?
-        if (pBuf < pEnd && ('0' <= *pBuf && *pBuf <= '9'))
+        sal_Int32 nRowPos = 0;
+        while (nRowPos<nLen)
         {
-            OUString aColTxt(rCellName.getStr(), pBuf - rCellName.getStr());
-            OUString aRowTxt(pBuf, (rCellName.getStr() + nLen - pBuf));
-            if (!aColTxt.isEmpty() && !aRowTxt.isEmpty())
+            if (rCellName[nRowPos]>='0' && rCellName[nRowPos]<='9')
             {
-                sal_Int32 nColIdx = 0;
-                sal_Int32 nLength = aColTxt.getLength();
-                for (sal_Int32 i = 0;  i < nLength;  ++i)
-                {
-                    nColIdx = 52 * nColIdx;
-                    if (i < nLength - 1)
-                        ++nColIdx;
-                    sal_Unicode cChar = aColTxt[i];
-                    if ('A' <= cChar && cChar <= 'Z')
-                        nColIdx = nColIdx + (cChar - 'A');
-                    else if ('a' <= cChar && cChar <= 'z')
-                        nColIdx = nColIdx + (26 + cChar - 'a');
-                    else
-                    {
-                        nColIdx = -1;   // sth failed
-                        break;
-                    }
-                }
-
-                rColumn = nColIdx;
-                rRow    = aRowTxt.toInt32() - 1;    // - 1 because indices ought to be 0 based
+                break;
             }
+            ++nRowPos;
+        }
+        if (nRowPos>0 && nRowPos<nLen)
+        {
+            sal_Int32 nColIdx = 0;
+            for (sal_Int32 i = 0;  i < nRowPos;  ++i)
+            {
+                nColIdx *= 52;
+                if (i < nRowPos - 1)
+                    ++nColIdx;
+                const sal_Unicode cChar = rCellName[i];
+                if ('A' <= cChar && cChar <= 'Z')
+                    nColIdx += cChar - 'A';
+                else if ('a' <= cChar && cChar <= 'z')
+                    nColIdx += 26 + cChar - 'a';
+                else
+                {
+                    nColIdx = -1;   // sth failed
+                    break;
+                }
+            }
+
+            rColumn = nColIdx;
+            rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
         }
     }
     OSL_ENSURE( rColumn != -1 && rRow != -1, "failed to get column or row index" );
