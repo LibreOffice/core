@@ -515,7 +515,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     if (!xContent.is())
     {
         lang::IllegalArgumentException aIllegal;
-        aIllegal.Message += "second parameter invalid";
+        aIllegal.Message = "second parameter invalid";
         throw aIllegal;
     }
     if(!GetDoc())
@@ -1142,8 +1142,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         beans::UnknownPropertyException aExcept;
-        aExcept.Message = "Unknown property: ";
-        aExcept.Message += rPropertyName;
+        aExcept.Message = "Unknown property: " + rPropertyName;
         throw aExcept;
     }
 
@@ -2025,10 +2024,7 @@ lcl_DebugCellProperties(
             for (sal_Int32  nDebugProperty = 0;
                  nDebugProperty < nDebugCellProperties; ++nDebugProperty)
             {
-                const OUString sName =
-                    rDebugCellProperties[nDebugProperty].Name;
-                sNames += sName;
-                sNames += OUString('-');
+                sNames += rDebugCellProperties[nDebugProperty].Name + OUString('-');
             }
             sNames += OUString('+');
         }
@@ -2593,8 +2589,7 @@ public:
     SwFrmFmt & GetHeadFootFmtOrThrow() {
         SwFrmFmt *const pFmt( GetHeadFootFmt() );
         if (!pFmt) {
-            throw uno::RuntimeException(OUString(
-                    "SwXHeadFootText: disposed or invalid"), 0);
+            throw uno::RuntimeException("SwXHeadFootText: disposed or invalid", 0);
         }
         return *pFmt;
     }
