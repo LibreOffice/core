@@ -1063,7 +1063,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     {
         bHasSelectionText = true;
         const OUString sSelection( pViewShell->GetSelectionText() );
-        m_pReplaceED->SetText( sSelection );
+        m_pShortED->SetText( sSelection );
         m_pTextOnlyCB->Check( !bSWriter );
         m_pTextOnlyCB->Enable( bSWriter && !sSelection.isEmpty() );
     }
