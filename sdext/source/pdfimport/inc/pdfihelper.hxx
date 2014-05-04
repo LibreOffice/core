@@ -28,6 +28,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <com/sun/star/rendering/XColorSpace.hpp>
+#include "com/sun/star/rendering/PathCapType.hpp"
+#include "com/sun/star/rendering/PathJoinType.hpp"
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -70,6 +72,9 @@ namespace pdfi
 
     /// Convert color to "#FEFEFE" color notation
     OUString getColorString( const ::com::sun::star::rendering::ARGBColor& );
+
+    double GetAverageTransformationScale(const basegfx::B2DHomMatrix& matrix);
+    void FillDashStyleProps(PropertyMap& props, const std::vector<double>& dashArray, double scale);
 
     struct FontAttrHash
     {
@@ -138,6 +143,34 @@ namespace pdfi
                 TextRenderMode == rRight.TextRenderMode &&
                 Transformation == rRight.Transformation &&
                 Clip == rRight.Clip;
+        }
+
+        OUString GetLineJoinString() const
+        {
+            switch (LineJoin)
+            {
+            default:
+            case ::com::sun::star::rendering::PathJoinType::MITER:
+                return "miter";
+            case ::com::sun::star::rendering::PathJoinType::ROUND:
+                return "round";
+            case ::com::sun::star::rendering::PathJoinType::BEVEL:
+                return "bevel";
+            }
+        }
+
+        OUString GetLineCapString() const
+        {
+            switch (LineCap)
+            {
+            default:
+            case ::com::sun::star::rendering::PathCapType::BUTT:
+                return "butt";
+            case ::com::sun::star::rendering::PathCapType::ROUND:
+                return "round";
+            case ::com::sun::star::rendering::PathCapType::SQUARE:
+                return "square";
+            }
         }
 
         bool isRotatedOrSkewed() const
