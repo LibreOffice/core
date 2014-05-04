@@ -35,8 +35,6 @@
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/i18n/ScriptType.hpp"
 #include "com/sun/star/i18n/DirectionProperty.hpp"
-#include "com/sun/star/rendering/PathCapType.hpp"
-#include "com/sun/star/rendering/PathJoinType.hpp"
 
 #include <string.h>
 
@@ -778,12 +776,11 @@ void DrawXmlOptimizer::visit( DocumentElement& elem, const std::list< Element* >
 }
 
 
-
-
 void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& )
 {
     // xxx TODO copied from DrawElement
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext(elem.GCId );
+
     PropertyMap aProps;
     aProps[ "style:family" ] = "graphic";
     aProps[ "style:parent-style-name" ] = "standard";
@@ -791,52 +788,29 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >
     m_rStyleContainer.getStandardStyleId( "graphic" );
 
     PropertyMap aGCProps;
-
-    // TODO(F3): proper dash emulation
-    if( elem.Action & PATH_STROKE )
+    if (elem.Action & PATH_STROKE)
     {
-        aGCProps[ "draw:stroke" ] = rGC.DashArray.empty() ? OUString("solid") : OUString("dash");
-        aGCProps[ "svg:stroke-color" ] = getColorString( rGC.LineColor );
-        if( rGC.LineWidth != 0.0 )
+        double scale = GetAverageTransformationScale(rGC.Transformation);
+        if (rGC.DashArray.size() < 2)
         {
-            ::basegfx::B2DVector aVec(rGC.LineWidth,0);
-            aVec *= rGC.Transformation;
+            aGCProps[ "draw:stroke" ] = "solid";
+        }
+        else
+        {
+            PropertyMap props;
+            FillDashStyleProps(props, rGC.DashArray, scale);
+            StyleContainer::Style style("draw:stroke-dash", props);
 
-            aVec.setX ( convPx2mmPrec2( aVec.getX() )*100.0 );
-            aVec.setY ( convPx2mmPrec2( aVec.getY() )*100.0 );
+            aGCProps[ "draw:stroke" ] = "dash";
+            aGCProps[ "draw:stroke-dash" ] =
+                m_rStyleContainer.getStyleName(
+                m_rStyleContainer.getStyleId(style));
+        }
 
-            aGCProps[ "svg:stroke-width" ] = OUString::number( aVec.getLength() );
-        }
-        OUString strokeLinejoinValue;
-        OUString strokeLinecapValue;
-        switch (rGC.LineJoin)
-        {
-        default:
-        case rendering::PathJoinType::MITER:
-            strokeLinejoinValue = "miter";
-            break;
-        case rendering::PathJoinType::ROUND:
-            strokeLinejoinValue = "round";
-            break;
-        case rendering::PathJoinType::BEVEL:
-            strokeLinejoinValue = "bevel";
-            break;
-        }
-        switch (rGC.LineCap)
-        {
-        default:
-        case rendering::PathCapType::BUTT:
-            strokeLinecapValue = "butt";
-            break;
-        case rendering::PathCapType::ROUND:
-            strokeLinecapValue = "round";
-            break;
-        case rendering::PathCapType::SQUARE:
-            strokeLinecapValue = "square";
-            break;
-        }
-        aGCProps[ "draw:stroke-linejoin" ] = strokeLinejoinValue;
-        aGCProps[ "svg:stroke-linecap" ] = strokeLinecapValue;
+        aGCProps[ "svg:stroke-color" ] = getColorString(rGC.LineColor);
+        aGCProps[ "svg:stroke-width" ] = convertPixelToUnitString(rGC.LineWidth * scale);
+        aGCProps[ "draw:stroke-linejoin" ] = rGC.GetLineJoinString();
+        aGCProps[ "svg:stroke-linecap" ] = rGC.GetLineCapString();
     }
     else
     {

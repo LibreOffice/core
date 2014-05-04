@@ -23,8 +23,61 @@
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
+#include <math.h>
+
 using namespace pdfi;
 using namespace com::sun::star;
+
+double pdfi::GetAverageTransformationScale(const basegfx::B2DHomMatrix& matrix)
+{
+    double rotate, shearX;
+    basegfx::B2DTuple scale, translation;
+    matrix.decompose(scale, translation, rotate, shearX);
+    return (fabs(scale.getX()) + fabs(scale.getY())) / 2.0;
+}
+
+void pdfi::FillDashStyleProps(PropertyMap& props, const std::vector<double>& dashArray, double scale)
+{
+    size_t pairCount = dashArray.size() / 2;
+
+    double distance = 0.0;
+    for (size_t i = 0; i < pairCount; i++)
+        distance += dashArray[i * 2 + 1];
+    distance /= pairCount;
+
+    props["draw:style"] = "rect";
+    props["draw:distance"] = convertPixelToUnitString(distance * scale);
+
+    int dotStage = 0;
+    int dotCounts[3] = {0, 0, 0};
+    double dotLengths[3] = {0.0, 0.0, 0.0};
+
+    for (size_t i = 0; i < pairCount; i++)
+    {
+        if (dotLengths[dotStage] != dashArray[i * 2])
+        {
+            dotStage++;
+            if (dotStage == 3)
+                break;
+
+            dotCounts[dotStage] = 1;
+            dotLengths[dotStage] = dashArray[i * 2];
+        }
+        else
+        {
+            dotCounts[dotStage]++;
+        }
+    }
+
+    for (int i = 1; i < 3; i++)
+    {
+        if (dotCounts[i] == 0)
+            continue;
+        props["draw:dots" + OUString::number(i)] = OUString::number(dotCounts[i]);
+        props["draw:dots" + OUString::number(i) + "-length"] =
+            convertPixelToUnitString(dotLengths[i] * scale);
+    }
+}
 
 OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
 {

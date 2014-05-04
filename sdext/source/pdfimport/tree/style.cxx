@@ -191,6 +191,8 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
             PropertyMap aProps( rStyle.Properties );
         if( !rStyle.IsSubStyle )
             aProps[ "style:name" ] = getStyleName( nStyleId );
+        if (rStyle.Name == "draw:stroke-dash")
+            aProps[ "draw:name" ] = aProps[ "style:name" ];
         rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
 
         for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
