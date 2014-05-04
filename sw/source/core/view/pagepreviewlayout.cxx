@@ -708,8 +708,6 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
                                               sal_uInt16& _onStartPageNum,
                                               Rectangle&  _orDocPreviewPaintRect )
 {
-    bool bRet = false;
-
     if ( mbBookPreview != _bEnableBookPreview)
     {
         mbBookPreview = _bEnableBookPreview;
@@ -731,10 +729,10 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
             mbBookPreviewModeToggled = false;
         }
 
-        bRet = true;
+        return true;
     }
 
-    return bRet;
+    return false;
 }
 
 // methods to determine new data for changing the current shown part of the
