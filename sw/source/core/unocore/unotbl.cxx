@@ -388,7 +388,7 @@ void sw_GetCellPosition(const OUString &rCellName,
             rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
         }
     }
-    OSL_ENSURE( rColumn != -1 && rRow != -1, "failed to get column or row index" );
+    OSL_ENSURE( rColumn >= 0 && rRow >= 0, "failed to get column or row index" );
 }
 
 /** compare position of two cells (check rows first)
