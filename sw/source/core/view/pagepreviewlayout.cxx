@@ -916,8 +916,6 @@ bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point  _aPreviewPo
                                                     bool&        _obPosInEmptyPage,
                                                     sal_uInt16&  _onPageNum ) const
 {
-    bool bIsPosInsideDoc;
-
     // initialize variable parameter values.
     _orDocPos.X() = 0;
     _orDocPos.Y() = 0;
@@ -928,29 +926,22 @@ bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point  _aPreviewPo
             std::find_if( maPreviewPages.begin(), maPreviewPages.end(),
                           PreviewPosInsidePagePred( _aPreviewPos ) );
 
-    if ( aFoundPreviewPageIter == maPreviewPages.end() )
-        // given preview position outside a document page.
-        bIsPosInsideDoc = false;
-    else
+    if ( aFoundPreviewPageIter != maPreviewPages.end() )
     {
+        // given preview position is inside a document page.
         _onPageNum = (*aFoundPreviewPageIter)->pPage->GetPhyPageNum();
-        if ( (*aFoundPreviewPageIter)->pPage->IsEmptyPage() )
-        {
-            // given preview position inside an empty page
-            bIsPosInsideDoc = false;
-            _obPosInEmptyPage = true;
-        }
-        else
+        _obPosInEmptyPage = (*aFoundPreviewPageIter)->pPage->IsEmptyPage();
+        if ( !_obPosInEmptyPage )
         {
             // given preview position inside a normal page
-            bIsPosInsideDoc = true;
             _orDocPos = _aPreviewPos -
                         (*aFoundPreviewPageIter)->aPreviewWinPos +
                         (*aFoundPreviewPageIter)->aLogicPos;
+            return true;
         }
     }
 
-    return bIsPosInsideDoc;
+    return false;
 }
 
 /** determine window page scroll amount */
