@@ -909,8 +909,7 @@ struct PreviewPosInsidePagePred
             Rectangle aPreviewPageRect( _pPreviewPage->aPreviewWinPos, _pPreviewPage->aPageSize );
             return aPreviewPageRect.IsInside( mnPreviewPos );
         }
-        else
-            return false;
+        return false;
     }
 };
 
@@ -1336,8 +1335,8 @@ const PreviewPage* SwPagePreviewLayout::_GetPreviewPageByPageNum( const sal_uInt
 
     if ( aFoundPreviewPageIter == maPreviewPages.end() )
         return 0;
-    else
-        return (*aFoundPreviewPageIter);
+
+    return (*aFoundPreviewPageIter);
 }
 
 /** determine row the page with the given number is in
@@ -1398,10 +1397,7 @@ Size SwPagePreviewLayout::GetPreviewPageSizeByPageNum( sal_uInt16 _nPageNum ) co
     {
         return pPreviewPage->aPageSize;
     }
-    else
-    {
-        return Size( 0, 0 );
-    }
+    return Size( 0, 0 );
 }
 
 /** get virtual page number by its physical page number
@@ -1415,10 +1411,7 @@ sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) 
     {
         return pPreviewPage->pPage->GetVirtPageNum();
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }
 
 /** Convert absolute to relative page numbers (see PrintEmptyPages) */
