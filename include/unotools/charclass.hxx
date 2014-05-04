@@ -76,7 +76,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
         const LanguageTag& rLanguageTag );
 
-    /// Depricated ctor, tries to get a process service manager or to load the
+    /// Deprecated ctor, tries to get a process service manager or to load the
     /// library directly.
     CharClass( const LanguageTag& rLanguageTag );
 

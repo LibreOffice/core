@@ -641,7 +641,7 @@ public:
     sal_uInt16  ExpandTwoDigitYear( sal_uInt16 nYear ) const;
     inline  static  sal_uInt16  ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart );
 
-    /// DEPRICATED: Return first character of the decimal separator of the current language/country
+    /// DEPRECATED: Return first character of the decimal separator of the current language/country
     sal_Unicode GetDecSep() const { return GetNumDecimalSep()[0]; }
     /// Return the decimal separator of the current language/country
     OUString GetDecimalSep() const { return GetNumDecimalSep(); }
