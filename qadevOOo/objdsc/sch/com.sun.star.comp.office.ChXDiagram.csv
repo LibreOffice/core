@@ -73,7 +73,6 @@
 "ChXDiagram";"com::sun::star::chart::ChartStatistics";"PercentageError"
 "ChXDiagram";"com::sun::star::chart::ChartStatistics";"ErrorMargin"
 "ChXDiagram";"com::sun::star::chart::ChartStatistics";"ErrorIndicator"
-"ChXDiagram";"com::sun::star::chart::ChartStatistics";"RegressionCurves"
 "ChXDiagram";"com::sun::star::chart::X3DDisplay";"getWall()"
 "ChXDiagram";"com::sun::star::chart::X3DDisplay";"getFloor()"
 "ChXDiagram";"com::sun::star::chart::StackableDiagram";"Percent"
