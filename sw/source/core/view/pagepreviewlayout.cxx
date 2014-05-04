@@ -161,7 +161,7 @@ void SwPagePreviewLayout::_CalcPreviewLayoutSizes()
         // document height
         // determine number of rows needed for <nPages> in preview layout
         // OD 19.02.2003 #107369# - use method <GetRowOfPage(..)>.
-        sal_uInt16 nDocRows = GetRowOfPage( mnPages );
+        const sal_uInt16 nDocRows = GetRowOfPage( mnPages );
         aDocSize.Height() = nDocRows * maMaxPageSize.Height() +
                             (nDocRows+1) * mnYFree;
         maPreviewDocRect.SetPos( Point( 0, 0 ) );
@@ -344,8 +344,8 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     if ( nProposedStartPageNum > 0 )
     {
         // determine column and row of proposed start page in virtual preview layout
-        sal_uInt16 nColOfProposed = GetColOfPage( nProposedStartPageNum );
-        sal_uInt16 nRowOfProposed = GetRowOfPage( nProposedStartPageNum );
+        const sal_uInt16 nColOfProposed = GetColOfPage( nProposedStartPageNum );
+        const sal_uInt16 nRowOfProposed = GetRowOfPage( nProposedStartPageNum );
         // determine start page
         if ( _bStartWithPageAtFirstCol )
         {
@@ -384,9 +384,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     {
         // determine column and row of proposed start position.
         // Note: paint starts at point (0,0)
-        sal_uInt16 nColOfProposed =
+        const sal_uInt16 nColOfProposed =
                 static_cast<sal_uInt16>(_aProposedStartPos.X() / mnColWidth) + 1;
-        sal_uInt16 nRowOfProposed =
+        const sal_uInt16 nRowOfProposed =
                 static_cast<sal_uInt16>(_aProposedStartPos.Y() / mnRowHeight) + 1;
         // determine start page == page at proposed start position
         // OD 19.02.2003 #107369# - leaving left-top-corner blank is
@@ -853,7 +853,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     sal_uInt16 nNewStartPage = mnPaintPhyStartPageNum;
     Point aNewStartPos = Point(0,0);
 
-    sal_uInt16 nNewAbsSelectedPageNum = ConvertRelativeToAbsolutePageNum( nNewRelSelectedPageNum );
+    const sal_uInt16 nNewAbsSelectedPageNum = ConvertRelativeToAbsolutePageNum( nNewRelSelectedPageNum );
     if ( !IsPageVisible( nNewAbsSelectedPageNum ) )
     {
         if ( _nHoriMove != 0 && _nVertMove != 0 )
@@ -864,7 +864,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
 
         // new selected page has to be brought into view considering current
         // visible preview.
-        sal_Int16 nTotalRows = GetRowOfPage( mnPages );
+        const sal_uInt16 nTotalRows = GetRowOfPage( mnPages );
         if ( (_nHoriMove > 0 || _nVertMove > 0) &&
              mbDoesLayoutRowsFitIntoWindow &&
              mbDoesLayoutColsFitIntoWindow &&
@@ -1275,7 +1275,7 @@ void SwPagePreviewLayout::_PaintSelectMarkAtPage(
 */
 void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 {
-    sal_uInt16 nOldSelectedPageNum = mnSelectedPageNum;
+    const sal_uInt16 nOldSelectedPageNum = mnSelectedPageNum;
     mnSelectedPageNum = _nSelectedPage;
 
     // re-paint for current selected page in order to umark it.
