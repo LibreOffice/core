@@ -1156,12 +1156,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         case FN_UNO_REDLINE_NODE_END:
         {
             const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-            const sal_uInt16 nRedTblCount = rRedTbl.size();
+            const size_t nRedTblCount = rRedTbl.size();
             if (nRedTblCount > 0)
             {
                 SwStartNode const*const pStartNode = GetStartNode();
                 const sal_uLong nOwnIndex = pStartNode->EndOfSectionIndex();
-                for (sal_uInt16 nRed = 0; nRed < nRedTblCount; nRed++)
+                for (size_t nRed = 0; nRed < nRedTblCount; ++nRed)
                 {
                     SwRangeRedline const*const pRedline = rRedTbl[nRed];
                     SwPosition const*const pRedStart = pRedline->Start();
