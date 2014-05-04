@@ -1870,9 +1870,9 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                             break;
                         }
 
-                        if ( dynamic_cast<const SwFlyFrm*>(pUpperFrm) )
+                        if ( const SwFlyFrm* pFlyFrm = dynamic_cast<const SwFlyFrm*>(pUpperFrm) )
                         {
-                            pUpperFrm = dynamic_cast<const SwFlyFrm*>(pUpperFrm)->GetAnchorFrm();
+                            pUpperFrm = pFlyFrm->GetAnchorFrm();
                         }
                         else
                         {
