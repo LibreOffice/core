@@ -10404,7 +10404,8 @@ if test $_os != iOS -a $_os != Android -a $_os != Darwin -a "x$enable_gltf" != "
     if test "$test_freetype" = "no"; then
         BUILD_TYPE="$BUILD_TYPE FREETYPE"
         if test "$COM" = "MSC"; then
-            FREETYPE_LIBS="${WORKDIR}/UnpackedTarball/freetype/objs/win32/vc2010/freetype248.lib"
+            test -n "${MSVC_USE_DEBUG_RUNTIME}" && FREETYPE_LIB_DEBUGLIB_SUFFIX="_D"
+            FREETYPE_LIBS="${WORKDIR}/UnpackedTarball/freetype/objs/win32/vc2010/freetype248$FREETYPE_LIB_DEBUGLIB_SUFFIX.lib"
         fi
     fi
 else
