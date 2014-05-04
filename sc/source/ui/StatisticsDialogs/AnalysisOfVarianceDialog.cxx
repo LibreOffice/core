@@ -30,19 +30,20 @@
 namespace
 {
 
-static sal_Int16 lclBasicStatisticsLabels[] =
-{
-    STR_ANOVA_LABEL_GROUPS,
-    STRID_CALC_COUNT,
-    STRID_CALC_SUM,
-    STRID_CALC_MEAN,
-    STRID_CALC_VARIANCE,
-    0
+struct StatisticCalculation {
+    sal_Int16   aLabelId;
+    const char* aFormula;
+    const char* aResultRangeName;
 };
 
-static const char* lclBasicStatisticsFormula[] =
+static StatisticCalculation lclBasicStatistics[] =
 {
-    "=COUNT(%RANGE%)", "=SUM(%RANGE%)", "=AVERAGE(%RANGE%)", "=VAR(%RANGE%)", NULL
+    { STR_ANOVA_LABEL_GROUPS, NULL,                NULL          },
+    { STRID_CALC_COUNT,       "=COUNT(%RANGE%)",   "COUNT_RANGE" },
+    { STRID_CALC_SUM,         "=SUM(%RANGE%)",     "SUM_RANGE"   },
+    { STRID_CALC_MEAN,        "=AVERAGE(%RANGE%)", "MEAN_RANGE"  },
+    { STRID_CALC_VARIANCE,    "=VAR(%RANGE%)",     "VAR_RANGE"   },
+    { 0,                      NULL,                NULL          }
 };
 
 static sal_Int16 lclAnovaLabels[] =
@@ -77,6 +78,21 @@ OUString lclCreateMultiParameterFormula(
     return aResult;
 }
 
+void lclMakeSubRangesList(ScRangeList& rRangeList, ScRange& rInputRange, ScStatisticsInputOutputDialog::GroupedBy aGroupedBy)
+{
+    boost::scoped_ptr<DataRangeIterator> pIterator;
+    if (aGroupedBy == ScStatisticsInputOutputDialog::BY_COLUMN)
+        pIterator.reset(new DataRangeByColumnIterator(rInputRange));
+    else
+        pIterator.reset(new DataRangeByRowIterator(rInputRange));
+
+    for( ; pIterator->hasNext(); pIterator->next() )
+    {
+        ScRange aRange = pIterator->get();
+        rRangeList.Append(aRange);
+    }
+}
+
 }
 
 ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
@@ -84,9 +100,21 @@ ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
                     Window* pParent, ScViewData* pViewData ) :
     ScStatisticsInputOutputDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
-            "AnalysisOfVarianceDialog", "modules/scalc/ui/analysisofvariancedialog.ui" )
+            "AnalysisOfVarianceDialog", "modules/scalc/ui/analysisofvariancedialog.ui" ),
+    meFactor(SINGLE_FACTOR)
 {
-    get(mpAlpha, "alpha-spin");
+    get(mpAlphaField,         "alpha-spin");
+    get(mpSingleFactorRadio,  "radio-single-factor");
+    get(mpTwoFactorRadio,     "radio-two-factor");
+    get(mpRowsPerSampleField, "rows-per-sample-spin");
+
+    mpSingleFactorRadio->SetToggleHdl( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
+    mpTwoFactorRadio->SetToggleHdl( LINK( this, ScAnalysisOfVarianceDialog, FactorChanged ) );
+
+    mpSingleFactorRadio->Check(true);
+    mpTwoFactorRadio->Check(false);
+
+    FactorChanged(NULL);
 }
 
 ScAnalysisOfVarianceDialog::~ScAnalysisOfVarianceDialog()
@@ -102,59 +130,101 @@ sal_Int16 ScAnalysisOfVarianceDialog::GetUndoNameId()
     return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
 }
 
-ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
+IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged )
 {
-    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
-            formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    if (mpSingleFactorRadio->IsChecked())
+    {
+        mpGroupByRowsRadio->Enable(true);
+        mpGroupByColumnsRadio->Enable(true);
+        mpRowsPerSampleField->Enable(false);
+        meFactor = SINGLE_FACTOR;
+    }
+    else if (mpTwoFactorRadio->IsChecked())
+    {
+        mpGroupByRowsRadio->Enable(false);
+        mpGroupByColumnsRadio->Enable(false);
+        mpRowsPerSampleField->Enable(false); // Rows per sample not yet implemented
+        meFactor = TWO_FACTOR;
+    }
 
+    return 0;
+}
+
+void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
+                                           OUString& sFormula, GroupedBy aGroupedBy, ScRange* pResultRange)
+{
+    if (pResultRange != NULL)
+        pResultRange->aStart = aOutput.current();
+    if (!sFormula.isEmpty())
+    {
+        for (size_t i = 0; i < rRangeList.size(); i++)
+        {
+            ScRange* pRange = rRangeList[i];
+            aTemplate.setTemplate(sFormula);
+            aTemplate.applyRange(strWildcardRange, *pRange);
+            aOutput.writeFormula(aTemplate.getTemplate());
+            if (pResultRange != NULL)
+                pResultRange->aEnd = aOutput.current();
+            aOutput.nextRow();
+        }
+    }
+    else
+    {
+        sal_Int16 aLabelId = (aGroupedBy == BY_COLUMN) ? STR_COLUMN_LABEL_TEMPLATE : STR_ROW_LABEL_TEMPLATE;
+        OUString aLabelTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, aLabelId));
+
+        for (size_t i = 0; i < rRangeList.size(); i++)
+        {
+            aTemplate.setTemplate(aLabelTemplate);
+            aTemplate.applyNumber(strWildcardNumber, i + 1);
+            aOutput.writeString(aTemplate.getTemplate());
+            if (pResultRange != NULL)
+                pResultRange->aEnd = aOutput.current();
+            aOutput.nextRow();
+        }
+    }
+}
+
+void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, FormulaTemplate& aTemplate)
+{
     output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_SINGLE_FACTOR_LABEL));
-    output.nextRow();
-    output.nextRow();
+    output.newLine();
+
+    double aAlphaValue = mpAlphaField->GetValue() / 100.0;
+    output.writeString("Alpha");
+    output.nextColumn();
+    output.writeValue(aAlphaValue);
+    aTemplate.autoReplaceAddress("%ALPHA%", output.current());
+    output.newLine();
+    output.newLine();
 
     // Write labels
-    for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != 0; i++)
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
     {
-        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclBasicStatisticsLabels[i]));
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclBasicStatistics[i].aLabelId));
         output.nextColumn();
     }
-    output.nextRow();
+    output.newLine();
 
+    // Collect aRangeList
     ScRangeList aRangeList;
+    lclMakeSubRangesList(aRangeList, mInputRange, mGroupedBy);
 
-    boost::scoped_ptr<DataRangeIterator> pIterator;
-    if (mGroupedBy == BY_COLUMN)
-        pIterator.reset(new DataRangeByColumnIterator(mInputRange));
-    else
-        pIterator.reset(new DataRangeByRowIterator(mInputRange));
+    output.push();
 
-    // Write statistic formulas for rows/columns
-    for( ; pIterator->hasNext(); pIterator->next() )
+    // Write values
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
     {
-        output.resetColumn();
-
-        if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
-        else
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
-
-        aTemplate.applyNumber(strWildcardNumber, pIterator->index() + 1);
-        output.writeString(aTemplate.getTemplate());
-
+        output.resetRow();
+        ScRange aResultRange;
+        OUString sFormula = OUString::createFromAscii(lclBasicStatistics[i].aFormula);
+        RowColumn(aRangeList, output, aTemplate, sFormula, mGroupedBy, &aResultRange);
         output.nextColumn();
-
-        ScRange aColumnRange = pIterator->get();
-
-        aRangeList.Append(aColumnRange);
-
-        for(sal_Int32 i = 0; lclBasicStatisticsFormula[i] != NULL; i++)
+        if (lclBasicStatistics[i].aResultRangeName != NULL)
         {
-            aTemplate.setTemplate(lclBasicStatisticsFormula[i]);
-            aTemplate.applyRange(strWildcardRange, aColumnRange);
-            output.writeFormula(aTemplate.getTemplate());
-            output.nextColumn();
+            OUString sResultRangeName = OUString::createFromAscii(lclBasicStatistics[i].aResultRangeName);
+            aTemplate.autoReplaceRange("%" + sResultRangeName + "%", aResultRange);
         }
-        output.nextRow();
     }
 
     output.nextRow(); // Blank row
@@ -168,6 +238,8 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     }
     output.nextRow();
 
+    aTemplate.autoReplaceRange("%FIRST_COLUMN%", *aRangeList[0]);
+
     // Between Groups
     {
         // Label
@@ -176,51 +248,40 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
         output.nextColumn();
 
         // Sum of Squares
-        aTemplate.setTemplate("=%TOTAL% - %WITHIN%");
-        aTemplate.applyAddress("%TOTAL%", output.current(0, 2));
-        aTemplate.applyAddress("%WITHIN%", output.current(0, 1));
+
+        aTemplate.setTemplate("=SUMPRODUCT(%SUM_RANGE%;%MEAN_RANGE%)-SUM(%SUM_RANGE%)^2/SUM(%COUNT_RANGE%)");
+        aTemplate.autoReplaceAddress("%BETWEEN_SS%", output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
-        aTemplate.setTemplate("=%TOTAL% - %WITHIN%");
-        aTemplate.applyAddress("%TOTAL%", output.current(0, 2));
-        aTemplate.applyAddress("%WITHIN%", output.current(0, 1));
+        aTemplate.setTemplate("=COUNT(%SUM_RANGE%)-1");
+        aTemplate.autoReplaceAddress("%BETWEEN_DF%", output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // MS
-        aTemplate.setTemplate("=%SS_REF% / %DF_REF%");
-        aTemplate.applyAddress("%SS_REF%", output.current(-2, 0));
-        aTemplate.applyAddress("%DF_REF%", output.current(-1, 0));
+        aTemplate.setTemplate("=%BETWEEN_SS% / %BETWEEN_DF%");
+        aTemplate.autoReplaceAddress("%BETWEEN_MS%", output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // F
-        aTemplate.setTemplate("=%MS_BETWEEN% / %MS_WITHIN%");
-        aTemplate.applyAddress("%MS_BETWEEN%", output.current(-1, 0));
-        aTemplate.applyAddress("%MS_WITHIN%",  output.current(-1, 1));
+        aTemplate.setTemplate("=%BETWEEN_MS% / %WITHIN_MS%");
+        aTemplate.applyAddress("%WITHIN_MS%",  output.current(-1, 1));
+        aTemplate.autoReplaceAddress("%F_VAL%", output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // P-value
-        aTemplate.setTemplate("=FDIST(%F_VAL%; %DF_BETWEEN%; %DF_WITHIN%");
-        aTemplate.applyAddress("%F_VAL%",       output.current(-1, 0));
-        aTemplate.applyAddress("%DF_BETWEEN%",  output.current(-3, 0));
-        aTemplate.applyAddress("%DF_WITHIN%",   output.current(-3, 1));
+        aTemplate.setTemplate("=FDIST(%F_VAL%; %BETWEEN_DF%; %WITHIN_DF%");
+        aTemplate.applyAddress("%WITHIN_DF%",   output.current(-3, 1));
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // F critical
-        double aAlphaValue = mpAlpha->GetValue() / 100.0;
-        OUString aAlphaString = rtl::math::doubleToUString(
-                                    aAlphaValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                    ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
-
-        aTemplate.setTemplate("=FINV(%ALPHA%; %DF_BETWEEN%; %DF_WITHIN%");
-        aTemplate.applyString("%ALPHA%",       aAlphaString);
-        aTemplate.applyAddress("%DF_BETWEEN%", output.current(-4, 0));
-        aTemplate.applyAddress("%DF_WITHIN%",  output.current(-4, 1));
+        aTemplate.setTemplate("=FINV(%ALPHA%; %BETWEEN_DF%; %WITHIN_DF%");
+        aTemplate.applyAddress("%WITHIN_DF%",  output.current(-4, 1));
         output.writeFormula(aTemplate.getTemplate());
     }
     output.nextRow();
@@ -236,20 +297,18 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
         OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, OUString("DEVSQ(%RANGE%)"), strWildcardRange, mDocument, mAddressDetails);
         aTemplate.setTemplate("=SUM(%RANGE%)");
         aTemplate.applyString(strWildcardRange, aSSPart);
+        aTemplate.autoReplaceAddress("%WITHIN_SS%", output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
-        OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, OUString("COUNT(%RANGE%)-1"), strWildcardRange, mDocument, mAddressDetails);
-        aTemplate.setTemplate("=SUM(%RANGE%)");
-        aTemplate.applyString(strWildcardRange, aDFPart);
+        aTemplate.setTemplate("=SUM(%COUNT_RANGE%)-COUNT(%COUNT_RANGE%)");
+        aTemplate.autoReplaceAddress("%WITHIN_DF%", output.current());
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // MS
-        aTemplate.setTemplate("=%SS% / %DF%");
-        aTemplate.applyAddress("%SS%", output.current(-2, 0));
-        aTemplate.applyAddress("%DF%", output.current(-1, 0));
+        aTemplate.setTemplate("=%WITHIN_SS% / %WITHIN_DF%");
         output.writeFormula(aTemplate.getTemplate());
     }
     output.nextRow();
@@ -262,18 +321,244 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
         output.nextColumn();
 
         // Sum of Squares
-        aTemplate.setTemplate("=DEVSQ(%RANGE%)");
-        aTemplate.applyRangeList(strWildcardRange, aRangeList);
+        aTemplate.setTemplate("=DEVSQ(%RANGE_LIST%)");
+        aTemplate.applyRangeList("%RANGE_LIST%", aRangeList);
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
         // Degree of freedom
-        OUString aDFPart = lclCreateMultiParameterFormula(aRangeList, "COUNT(%RANGE%)", strWildcardRange, mDocument, mAddressDetails);
-        aTemplate.setTemplate("=SUM(%RANGE%) - 1");
-        aTemplate.applyString(strWildcardRange, aDFPart);
+        aTemplate.setTemplate("=SUM(%COUNT_RANGE%) - 1");
         output.writeFormula(aTemplate.getTemplate());
     }
     output.nextRow();
+}
+
+void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, FormulaTemplate& aTemplate)
+{
+    output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_TWO_FACTOR_LABEL));
+    output.newLine();
+
+    double aAlphaValue = mpAlphaField->GetValue() / 100.0;
+    output.writeString("Alpha");
+    output.nextColumn();
+    output.writeValue(aAlphaValue);
+    aTemplate.autoReplaceAddress("%ALPHA%", output.current());
+    output.newLine();
+    output.newLine();
+
+    // Write labels
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    {
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclBasicStatistics[i].aLabelId));
+        output.nextColumn();
+    }
+    output.newLine();
+
+    ScRangeList aColumnRangeList;
+    ScRangeList aRowRangeList;
+
+    lclMakeSubRangesList(aColumnRangeList, mInputRange, BY_COLUMN);
+    lclMakeSubRangesList(aRowRangeList, mInputRange, BY_ROW);
+
+    // Write ColumnX values
+    output.push();
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    {
+        output.resetRow();
+        ScRange aResultRange;
+        OUString sFormula = OUString::createFromAscii(lclBasicStatistics[i].aFormula);
+        RowColumn(aColumnRangeList, output, aTemplate, sFormula, BY_COLUMN, &aResultRange);
+        if (lclBasicStatistics[i].aResultRangeName != NULL)
+        {
+            OUString sResultRangeName = OUString::createFromAscii(lclBasicStatistics[i].aResultRangeName);
+            aTemplate.autoReplaceRange("%" + sResultRangeName + "_COLUMN%", aResultRange);
+        }
+        output.nextColumn();
+    }
+    output.newLine();
+
+    // Write RowX values
+    output.push();
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    {
+        output.resetRow();
+        ScRange aResultRange;
+        OUString sFormula = OUString::createFromAscii(lclBasicStatistics[i].aFormula);
+        RowColumn(aRowRangeList, output, aTemplate, sFormula, BY_ROW, &aResultRange);
+
+        if (lclBasicStatistics[i].aResultRangeName != NULL)
+        {
+            OUString sResultRangeName = OUString::createFromAscii(lclBasicStatistics[i].aResultRangeName);
+            aTemplate.autoReplaceRange("%" + sResultRangeName + "_ROW%", aResultRange);
+        }
+        output.nextColumn();
+    }
+    output.newLine();
+
+    // Write ANOVA labels
+    for(sal_Int32 i = 0; lclAnovaLabels[i] != 0; i++)
+    {
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclAnovaLabels[i]));
+        output.nextColumn();
+    }
+    output.nextRow();
+
+    // Setup auto-replace strings
+    aTemplate.autoReplaceRange(strWildcardRange, mInputRange);
+    aTemplate.autoReplaceRange("%FIRST_COLUMN%", *aColumnRangeList[0]);
+    aTemplate.autoReplaceRange("%FIRST_ROW%",    *aRowRangeList[0]);
+
+    // Rows
+    {
+        // Label
+        output.resetColumn();
+        output.writeString("Rows");
+        output.nextColumn();
+
+        // Sum of Squares
+        aTemplate.setTemplate("=SUMPRODUCT(%SUM_RANGE_ROW%;%MEAN_RANGE_ROW%) - SUM(%RANGE%)^2 / COUNT(%RANGE%)");
+        aTemplate.autoReplaceAddress("%ROW_SS%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // Degree of freedom
+        aTemplate.setTemplate("=MAX(%COUNT_RANGE_COLUMN%) - 1");
+        aTemplate.autoReplaceAddress("%ROW_DF%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // MS
+        aTemplate.setTemplate("=%ROW_SS% / %ROW_DF%");
+        aTemplate.autoReplaceAddress("%MS_ROW%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // F
+        aTemplate.setTemplate("=%MS_ROW% / %MS_ERROR%");
+        aTemplate.applyAddress("%MS_ERROR%", output.current(-1, 2));
+        aTemplate.autoReplaceAddress("%F_ROW%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // P-value
+        aTemplate.setTemplate("=FDIST(%F_ROW%; %ROW_DF%; %ERROR_DF%");
+        aTemplate.applyAddress("%ERROR_DF%",   output.current(-3, 2));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // F critical
+        aTemplate.setTemplate("=FINV(%ALPHA%; %ROW_DF%; %ERROR_DF%");
+        aTemplate.applyAddress("%ERROR_DF%",  output.current(-4, 2));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+    }
+    output.nextRow();
+
+    // Columns
+    {
+        // Label
+        output.resetColumn();
+        output.writeString("Columns");
+        output.nextColumn();
+
+        // Sum of Squares
+        aTemplate.setTemplate("=SUMPRODUCT(%SUM_RANGE_COLUMN%;%MEAN_RANGE_COLUMN%) - SUM(%RANGE%)^2 / COUNT(%RANGE%)");
+        aTemplate.autoReplaceAddress("%COLUMN_SS%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // Degree of freedom
+        aTemplate.setTemplate("=MAX(%COUNT_RANGE_ROW%) - 1");
+        aTemplate.autoReplaceAddress("%COLUMN_DF%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // MS
+        aTemplate.setTemplate("=%COLUMN_SS% / %COLUMN_DF%");
+        aTemplate.autoReplaceAddress("%MS_COLUMN%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // F
+        aTemplate.setTemplate("=%MS_COLUMN% / %MS_ERROR%");
+        aTemplate.applyAddress("%MS_ERROR%", output.current(-1, 1));
+        aTemplate.autoReplaceAddress("%F_COLUMN%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+         // P-value
+        aTemplate.setTemplate("=FDIST(%F_COLUMN%; %COLUMN_DF%; %ERROR_DF%");
+        aTemplate.applyAddress("%ERROR_DF%",   output.current(-3, 1));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // F critical
+        aTemplate.setTemplate("=FINV(%ALPHA%; %COLUMN_DF%; %ERROR_DF%");
+        aTemplate.applyAddress("%ERROR_DF%",  output.current(-4, 1));
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+    }
+    output.nextRow();
+
+    // Error
+    {
+        // Label
+        output.resetColumn();
+        output.writeString("Error");
+        output.nextColumn();
+
+        // Sum of Squares
+        aTemplate.setTemplate("=SUMSQ(%RANGE%)+SUM(%RANGE%)^2/COUNT(%RANGE%) - (SUMPRODUCT(%SUM_RANGE_ROW%;%MEAN_RANGE_ROW%) + SUMPRODUCT(%SUM_RANGE_COLUMN%;%MEAN_RANGE_COLUMN%))");
+        aTemplate.autoReplaceAddress("%ERROR_SS%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // Degree of freedom
+        aTemplate.setTemplate("=%TOTAL_DF% - %ROW_DF% - %COLUMN_DF%");
+        aTemplate.applyAddress("%TOTAL_DF%", output.current(0,1,0));
+        aTemplate.autoReplaceAddress("%ERROR_DF%", output.current());
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // MS
+        aTemplate.setTemplate("=%ERROR_SS% / %ERROR_DF%");
+        output.writeFormula(aTemplate.getTemplate());
+    }
+    output.nextRow();
+
+     // Total
+    {
+        // Label
+        output.resetColumn();
+        output.writeString("Total");
+        output.nextColumn();
+
+        // Sum of Squares
+        aTemplate.setTemplate("=SUM(%ROW_SS%;%COLUMN_SS%;%ERROR_SS%)");
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+
+        // Degree of freedom
+        aTemplate.setTemplate("=COUNT(%RANGE%)-1");
+        output.writeFormula(aTemplate.getTemplate());
+        output.nextColumn();
+    }
+}
+
+ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
+{
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
+        formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
+    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+
+    if (meFactor == SINGLE_FACTOR)
+    {
+        AnovaSingleFactor(output, aTemplate);
+    }
+    else if (meFactor == TWO_FACTOR)
+    {
+        AnovaTwoFactor(output, aTemplate);
+    }
 
     return ScRange(output.mMinimumAddress, output.mMaximumAddress);
 }

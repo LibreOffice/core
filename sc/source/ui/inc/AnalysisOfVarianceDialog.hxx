@@ -21,10 +21,33 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
+class FormulaTemplate;
+class AddressWalkerWriter;
+
 class ScAnalysisOfVarianceDialog : public ScStatisticsInputOutputDialog
 {
 private:
-    NumericField* mpAlpha;
+    enum AnovaFactor
+    {
+        SINGLE_FACTOR,
+        TWO_FACTOR
+    };
+
+    NumericField* mpAlphaField;
+    RadioButton*  mpSingleFactorRadio;
+    RadioButton*  mpTwoFactorRadio;
+    NumericField* mpRowsPerSampleField;
+
+    DECL_LINK(FactorChanged,   void*);
+
+    AnovaFactor meFactor;
+
+    void RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput,
+                   FormulaTemplate& aTemplate, OUString& sFormula,
+                   GroupedBy aGroupedBy, ScRange* pResultRange);
+
+    void AnovaSingleFactor(AddressWalkerWriter& output, FormulaTemplate& aTemplate);
+    void AnovaTwoFactor(AddressWalkerWriter& output, FormulaTemplate& aTemplate);
 
 public:
     ScAnalysisOfVarianceDialog(

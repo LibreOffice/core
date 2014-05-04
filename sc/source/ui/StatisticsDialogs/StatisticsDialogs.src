@@ -39,6 +39,11 @@ Resource RID_STATISTICS_DLGS
         Text [ en-US ] = "ANOVA - Single Factor";
     };
 
+    String STR_ANOVA_TWO_FACTOR_LABEL
+    {
+        Text [ en-US ] = "ANOVA - Two Factor";
+    };
+
     String STR_ANOVA_LABEL_GROUPS
     {
         Text [ en-US ] = "Groups";

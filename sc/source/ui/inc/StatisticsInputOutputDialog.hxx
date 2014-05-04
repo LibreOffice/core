@@ -52,6 +52,9 @@ protected:
     formula::RefEdit*   mpOutputRangeEdit;
     formula::RefButton* mpOutputRangeButton;
 
+    RadioButton*        mpGroupByColumnsRadio;
+    RadioButton*        mpGroupByRowsRadio;
+
     // Data
     ScViewData*         mViewData;
     ScDocument*         mDocument;
@@ -69,8 +72,6 @@ private:
     PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
     CloseButton*        mpButtonClose;
-    RadioButton*        mpGroupByColumnsRadio;
-    RadioButton*        mpGroupByRowsRadio;
 
     formula::RefEdit*   mpActiveEdit;
     ScAddress           mCurrentAddress;

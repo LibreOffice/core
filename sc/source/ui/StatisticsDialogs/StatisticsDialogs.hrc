@@ -71,6 +71,7 @@
 #define STR_ANOVA_LABEL_P_VALUE                     71
 #define STR_ANOVA_LABEL_F_CRITICAL                  72
 #define STR_ANOVA_LABEL_TOTAL                       73
+#define STR_ANOVA_TWO_FACTOR_LABEL                  74
 
 #define STR_CORRELATION_LABEL                       80
 #define STR_COVARIANCE_LABEL                        81
