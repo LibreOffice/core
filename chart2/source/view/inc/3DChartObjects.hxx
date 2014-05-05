@@ -104,7 +104,7 @@ public:
     TemporaryContext();
 
     void init();
-    void render();
+    virtual void render() SAL_OVERRIDE;
 
 private:
     OpenGLContext maContext;
