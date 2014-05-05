@@ -97,7 +97,7 @@ void RangeHighlighter::determineRanges()
             uno::Any aSelection( m_xSelectionSupplier->getSelection());
             const uno::Type& rType = aSelection.getValueType();
 
-            if ( rType == ::getCppuType( static_cast< const OUString* >( 0 ) ) )
+            if ( rType == cppu::UnoType<OUString>::get() )
             {
                 // @todo??: maybe getSelection() should return a model object rather than a CID
 
@@ -164,7 +164,7 @@ void RangeHighlighter::determineRanges()
                     }
                 }
             }
-            else if ( rType == ::getCppuType( static_cast< const Reference< drawing::XShape >* >( 0 ) ) )
+            else if ( rType == cppu::UnoType< drawing::XShape >::get() )
             {
                 // #i12587# support for shapes in chart
                 Reference< drawing::XShape > xShape;
@@ -336,7 +336,7 @@ void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEv
 void RangeHighlighter::fireSelectionEvent()
 {
     ::cppu::OInterfaceContainerHelper* pIC = rBHelper.getContainer(
-        ::getCppuType((const uno::Reference< view::XSelectionChangeListener >*)0) );
+        cppu::UnoType< view::XSelectionChangeListener >::get() );
     if( pIC )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );

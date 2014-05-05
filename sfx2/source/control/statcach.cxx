@@ -102,19 +102,19 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
                 aAny >>= bTemp ;
                 pItem = new SfxBoolItem( nId, bTemp );
             }
-            else if ( pType == ::getCppuType((const sal_uInt16*)0) )
+            else if ( pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
             {
                 sal_uInt16 nTemp = 0;
                 aAny >>= nTemp ;
                 pItem = new SfxUInt16Item( nId, nTemp );
             }
-            else if ( pType == ::getCppuType((const sal_uInt32*)0) )
+            else if ( pType == cppu::UnoType<sal_uInt32>::get() )
             {
                 sal_uInt32 nTemp = 0;
                 aAny >>= nTemp ;
                 pItem = new SfxUInt32Item( nId, nTemp );
             }
-            else if ( pType == ::getCppuType((const OUString*)0) )
+            else if ( pType == cppu::UnoType<OUString>::get() )
             {
                 OUString sTemp ;
                 aAny >>= sTemp ;

@@ -268,25 +268,25 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= bTemp ;
                     pItem = new SfxBoolItem( nSlotID, bTemp );
                 }
-                else if ( pType == ::getCppuType((const sal_uInt16*)0) )
+                else if ( pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
                 {
                     sal_uInt16 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt16Item( nSlotID, nTemp );
                 }
-                else if ( pType == ::getCppuType((const sal_uInt32*)0) )
+                else if ( pType == cppu::UnoType<sal_uInt32>::get() )
                 {
                     sal_uInt32 nTemp = 0;
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotID, nTemp );
                 }
-                else if ( pType == ::getCppuType((const OUString*)0) )
+                else if ( pType == cppu::UnoType<OUString>::get() )
                 {
                     OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotID, sTemp );
                 }
-                else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::ItemStatus*)0) )
+                else if ( pType == cppu::UnoType<::com::sun::star::frame::status::ItemStatus>::get() )
                 {
                     frame::status::ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
