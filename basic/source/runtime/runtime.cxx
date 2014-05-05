@@ -3314,7 +3314,7 @@ void SbiRuntime::StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt )
     bool bOk = checkClass_Impl( refVal, aClass, true );
     if( bOk )
     {
-        StepSET_Impl( refVal, refVar, bHandleDflt ); // don't do handle dflt prop for a "proper" set
+        StepSET_Impl( refVal, refVar, bHandleDflt ); // don't do handle default prop for a "proper" set
     }
 }
 

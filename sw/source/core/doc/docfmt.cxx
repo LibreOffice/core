@@ -1807,7 +1807,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
     pNewFmt->SetPoolFmtId( rFmt.GetPoolFmtId() );
     pNewFmt->SetPoolHelpId( rFmt.GetPoolHelpId() );
 
-    // Always set the HelpFile Id to dflt!
+    // Always set the HelpFile Id to default!
     pNewFmt->SetPoolHlpFileId( UCHAR_MAX );
 
     return pNewFmt;
@@ -1866,7 +1866,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     pNewColl->SetPoolFmtId( rColl.GetPoolFmtId() );
     pNewColl->SetPoolHelpId( rColl.GetPoolHelpId() );
 
-    // Always set the HelpFile Id to dflt!
+    // Always set the HelpFile Id to default!
     pNewColl->SetPoolHlpFileId( UCHAR_MAX );
 
     if( &rColl.GetNextTxtFmtColl() != &rColl )
@@ -1917,7 +1917,7 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
     pNewColl->SetPoolFmtId( rColl.GetPoolFmtId() );
     pNewColl->SetPoolHelpId( rColl.GetPoolHelpId() );
 
-    // Always set the HelpFile Id to dflt!
+    // Always set the HelpFile Id to default!
     pNewColl->SetPoolHlpFileId( UCHAR_MAX );
 
     return pNewColl;
@@ -1997,7 +1997,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         pDest->SetPoolFmtId( pSrc->GetPoolFmtId() );
         pDest->SetPoolHelpId( pSrc->GetPoolHelpId() );
 
-        // Always set the HelpFile Id to dflt!
+        // Always set the HelpFile Id to default!
         pDest->SetPoolHlpFileId( UCHAR_MAX );
 
         if( pSrc->DerivedFrom() )
@@ -2100,7 +2100,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     {
         rDstDesc.SetPoolFmtId( rSrcDesc.GetPoolFmtId() );
         rDstDesc.SetPoolHelpId( rSrcDesc.GetPoolHelpId() );
-        // Always set the HelpFile Id to dflt!
+        // Always set the HelpFile Id to default!
         rDstDesc.SetPoolHlpFileId( UCHAR_MAX );
     }
 

@@ -326,7 +326,7 @@ public:
     virtual SvParserState CallParser() SAL_OVERRIDE;
 
     inline const Color& GetColor( size_t nId ) const;
-    const Font& GetFont( sal_uInt16 nId );      // Changes the dflt Font
+    const Font& GetFont( sal_uInt16 nId );      // Changes the default Font
 
     virtual bool IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const = 0;
 

@@ -1069,7 +1069,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
             // richtigen (Folge-) Pool gefunden?
             if ( pTarget->IsInRange(rWhich) )
             {
-                // dflt-Attribut?
+                // default attribute?
                 if ( SFX_ITEMS_DEFAULT == nSurrogat )
                     return *(pTarget->pImp->ppStaticDefaults +
                             pTarget->GetIndex_Impl(rWhich));
@@ -1162,7 +1162,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
         SFX_ASSERT( false, pItem->Which(), "unknown Which-Id - dont ask me for surrogates" );
     }
 
-    // Pointer auf static- oder pool-dflt-Attribut?
+    // pointer on static or pool-default attribute?
     if( IsStaticDefaultItem(pItem) || IsPoolDefaultItem(pItem) )
         return SFX_ITEMS_DEFAULT;
 

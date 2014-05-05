@@ -230,7 +230,7 @@ properties are stored per-table, and are lossless.
 */
 class SW_DLLPUBLIC SwTableAutoFmt
 {
-    friend void _FinitCore();       // To destroy dflt. pointer.
+    friend void _FinitCore();       // To destroy default pointer.
     static SwBoxAutoFmt* pDfltBoxAutoFmt;
 
     OUString m_aName;

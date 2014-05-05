@@ -74,7 +74,7 @@ class SW_DLLPUBLIC SwTOXMark
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XDocumentIndexMark> m_wXDocumentIndexMark;
 
-    SwTOXMark();                    // to create the dflt. atr. in _InitCore
+    SwTOXMark();                    // to create the default attribute in _InitCore
 
 protected:
     // SwClient

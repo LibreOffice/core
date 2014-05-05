@@ -162,7 +162,7 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 
         if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
         {
-            OSL_TRACE("SetSbUnoObjectDfltPropName setting dflt prop for %s", OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE("SetSbUnoObjectDfltPropName setting default prop for %s", OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
             pUnoObj->SetDfltProperty( sDfltPropName );
         }
     }

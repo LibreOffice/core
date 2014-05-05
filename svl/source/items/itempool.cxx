@@ -955,7 +955,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
         return 0;
     }
 
-    // dflt-Attribut?
+    // default attribute?
     if ( nOfst == SFX_ITEMS_DEFAULT )
         return *(pImp->ppStaticDefaults + GetIndex_Impl(nWhich));
 

@@ -87,7 +87,7 @@ private:
     SVL_DLLPRIVATE bool             IsItemFlag_Impl( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
 
 public:
-    // fuer dflt. SfxItemSet::CTOR, setze dflt. WhichRanges
+    // for default SfxItemSet::CTOR, set default WhichRanges
     void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
     const sal_uInt16*               GetFrozenIdRanges() const;
 #endif

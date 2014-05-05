@@ -266,7 +266,7 @@ bool SfxStyleSheetBase::SetFollow( const OUString& rName )
     return true;
 }
 
-// Set Itemset. The dflt-implementation creates a new set
+// Set Itemset. The default implementation creates a new set
 
 SfxItemSet& SfxStyleSheetBase::GetItemSet()
 {
