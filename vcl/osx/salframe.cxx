@@ -1036,6 +1036,13 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_DECIMAL ]  = OUString( sal_Unicode( ) );
         aKeyMap[ KEY_TILDE ]    = OUString( sal_Unicode( ) );
         aKeyMap[ KEY_QUOTELEFT ]= OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_BRACKETLEFT ]= OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_BRACKETRIGHT ]= OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_SEMICOLON ]= OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_QUOTERIGHT ]= OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_CAPSLOCK ]= OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_NUMLOCK ]= OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_SCROLLLOCK ]= OUString( sal_Unicode( ) );
         */
 
     }
