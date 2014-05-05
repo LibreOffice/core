@@ -31,6 +31,7 @@ void Renderable3DObject::getRender()
     {
         mPrender = new OpenGL3DRenderer();
         mPrender->init();
+        mPrender->Set3DSenceInfo();
     }
 }
 

@@ -716,11 +716,8 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
     return;
 }
 
-void OpenGL3DRenderer::Set3DSenceInfo(const glm::vec3& cameraUp, sal_Int32 color, bool twoSidesLighting)
+void OpenGL3DRenderer::Set3DSenceInfo(sal_Int32 color, bool twoSidesLighting)
 {
-
-    m_CameraInfo.cameraUp = cameraUp;
-
     m_Polygon3DInfo.material.twoSidesLighting = twoSidesLighting;
 
     m_LightsInfo.ambient = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
@@ -729,10 +726,15 @@ void OpenGL3DRenderer::Set3DSenceInfo(const glm::vec3& cameraUp, sal_Int32 color
                                                    1.0);
 
     m_LightsInfo.lightNum = 0;
+    SetLightInfo(true, 255, glm::vec4(1.0, 1.0, 1.0, 0.0));
 }
 
 void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction)
 {
+    if (m_LightsInfo.lightNum > MAX_LIGHT_NUM)
+    {
+        return;
+    }
     if (lightOn)
     {
         m_LightsInfo.light[m_LightsInfo.lightNum].lightColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,

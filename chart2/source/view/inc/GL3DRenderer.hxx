@@ -160,7 +160,7 @@ public:
     void LoadShaders();
     void init();
     bool isOpenGLInitialized();
-    void Set3DSenceInfo(const glm::vec3& cameraUp, sal_Int32 color, bool twoSidesLighting = false);
+    void Set3DSenceInfo(sal_Int32 color = 255, bool twoSidesLighting = true);
     void SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction);
     void AddShapePolygon3DObject(sal_Int32 color, bool lineOnly, sal_Int32 lineColor,
             long fillStyle, sal_Int32 specular);
