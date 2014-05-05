@@ -8,7 +8,6 @@
  */
 
 #include <glm/glm.hpp>
-
 #include <tools/color.hxx>
 #include <vcl/bitmapex.hxx>
 
@@ -75,6 +74,7 @@ class Rectangle : public Renderable3DObject
 {
 public:
     Rectangle(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
+    virtual void render() SAL_OVERRIDE;
 private:
     glm::vec3 maTopLeft;
     glm::vec3 maTopRight;
