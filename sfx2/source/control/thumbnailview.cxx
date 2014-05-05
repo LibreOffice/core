@@ -350,11 +350,6 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     size_t nFirstItem = (bScrollBarUsed ? nHiddenLines : mnFirstLine) * mnCols;
     size_t nLastItem = nFirstItem + (mnVisLines + 1) * mnCols;
 
-    maItemListRect.Left() = x;
-    maItemListRect.Top() = y;
-    maItemListRect.Right() = x + mnCols*(mnItemWidth+nHItemSpace) - nHItemSpace - 1;
-    maItemListRect.Bottom() = y + mnVisLines*(mnItemHeight+nVItemSpace) - nVItemSpace - 1;
-
     // If want also draw parts of items in the last line,
     // then we add one more line if parts of these line are
     // visible
@@ -449,13 +444,10 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos ) const
         return THUMBNAILVIEW_ITEM_NOTFOUND;
     }
 
-    if ( maItemListRect.IsInside( rPos ) )
+    for (size_t i = 0; i < mFilteredItemList.size(); ++i)
     {
-        for (size_t i = 0; i < mFilteredItemList.size(); ++i)
-        {
-            if (mFilteredItemList[i]->isVisible() && mFilteredItemList[i]->getDrawArea().IsInside(rPos))
-                return i;
-        }
+        if (mFilteredItemList[i]->isVisible() && mFilteredItemList[i]->getDrawArea().IsInside(rPos))
+            return i;
     }
 
     return THUMBNAILVIEW_ITEM_NOTFOUND;
