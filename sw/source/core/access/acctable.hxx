@@ -263,9 +263,10 @@ public:
     //=====  XAccessibleComponent  ============================================
     sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException);
-    typedef std::vector<const SwAccessibleContext*> VEC_CELL;
-    VEC_CELL m_vecCellAdd;
-    VEC_CELL m_vecCellRemove;
+    typedef std::vector< ::std::pair<SwAccessibleContext*,
+        css::uno::WeakReference<css::accessibility::XAccessible> > > Cells_t;
+    Cells_t m_vecCellAdd;
+    Cells_t m_vecCellRemove;
     void FireSelectionEvent( );
     void ClearSelectionCellCache();
     void AddSelectionCell(const SwAccessibleContext* ,sal_Bool bAddOrRemove);
