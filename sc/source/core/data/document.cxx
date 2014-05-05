@@ -6131,27 +6131,37 @@ void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote)
     return maTabs[nTab]->aCol[nCol].SetCellNote(nRow, pNote);
 }
 
-bool ScDocument::HasNote(const ScAddress& rPos)
+bool ScDocument::HasNote(const ScAddress& rPos) const
 {
     return HasNote(rPos.Col(), rPos.Row(), rPos.Tab());
 }
-bool ScDocument::HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
+bool ScDocument::HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
-    ScPostIt* pNote = maTabs[nTab]->aCol[nCol].GetCellNote(nRow);
+    const ScPostIt* pNote = maTabs[nTab]->aCol[nCol].GetCellNote(nRow);
     return pNote != NULL;
 }
-bool ScDocument::HasColNotes(SCCOL nCol, SCTAB nTab)
+bool ScDocument::HasColNotes(SCCOL nCol, SCTAB nTab) const
 {
     return maTabs[nTab]->aCol[nCol].HasCellNotes();
 }
 
-bool ScDocument::HasTabNotes(SCTAB nTab)
+bool ScDocument::HasTabNotes(SCTAB nTab) const
 {
     bool hasNotes = false;
     for (SCCOL nCol=0; nCol<MAXCOLCOUNT && !hasNotes; ++nCol)
         hasNotes = HasColNotes(nCol, nTab);
 
     return hasNotes;
+}
+
+bool ScDocument::HasNotes() const
+{
+    for (SCTAB i = 0; i <= MAXTAB; ++i)
+    {
+        if (HasTabNotes(i))
+            return true;
+    }
+    return false;
 }
 
 ScPostIt* ScDocument::ReleaseNote(const ScAddress& rPos)

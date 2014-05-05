@@ -933,10 +933,11 @@ public:
     SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
     void                         SetNote(const ScAddress& rPos, ScPostIt* pNote);
     void                         SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote);
-    SC_DLLPUBLIC bool HasNote(const ScAddress& rPos);
-    bool                         HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
-    SC_DLLPUBLIC bool            HasColNotes(SCCOL nCol, SCTAB nTab);
-    SC_DLLPUBLIC bool            HasTabNotes(SCTAB nTab);
+    SC_DLLPUBLIC bool HasNote(const ScAddress& rPos) const;
+    bool HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    SC_DLLPUBLIC bool HasColNotes(SCCOL nCol, SCTAB nTab) const;
+    SC_DLLPUBLIC bool HasTabNotes(SCTAB nTab) const;
+    bool HasNotes() const;
     SC_DLLPUBLIC ScPostIt*       ReleaseNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);

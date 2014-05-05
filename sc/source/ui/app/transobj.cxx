@@ -637,7 +637,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
             }
         }
 
-        if ( pDoc->GetDrawLayer() )
+        if (pDoc->GetDrawLayer() || pDoc->HasNotes())
             pDocSh->MakeDrawLayer();
 
         //  cell range is copied to the original position, but on the first sheet
