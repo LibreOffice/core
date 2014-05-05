@@ -1071,23 +1071,23 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         return;
 
     uno::Reference< report::XGroup> xGroup = getGroup(nGroupPos);
-    if ( m_aHeaderLst.GetSavedValue() != m_aHeaderLst.GetSelectEntryPos() )
+    if ( m_aHeaderLst.IsValueChangedFromSaved() )
         xGroup->setHeaderOn( m_aHeaderLst.GetSelectEntryPos() == 0 );
-    if ( m_aFooterLst.GetSavedValue() != m_aFooterLst.GetSelectEntryPos() )
+    if ( m_aFooterLst.IsValueChangedFromSaved() )
         xGroup->setFooterOn( m_aFooterLst.GetSelectEntryPos() == 0 );
-    if ( m_aKeepTogetherLst.GetSavedValue() != m_aKeepTogetherLst.GetSelectEntryPos() )
+    if ( m_aKeepTogetherLst.IsValueChangedFromSaved() )
         xGroup->setKeepTogether( m_aKeepTogetherLst.GetSelectEntryPos() );
-    if ( m_aGroupOnLst.GetSavedValue() != m_aGroupOnLst.GetSelectEntryPos() )
+    if ( m_aGroupOnLst.IsValueChangedFromSaved() )
     {
         sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_IntPtr>(m_aGroupOnLst.GetEntryData(m_aGroupOnLst.GetSelectEntryPos())));
         xGroup->setGroupOn( nGroupOn );
     }
-    if ( m_aGroupIntervalEd.GetSavedValue().toInt32() != m_aGroupIntervalEd.GetValue() )
+    if ( m_aGroupIntervalEd.IsValueChangedFromSaved() )
     {
         xGroup->setGroupInterval( static_cast<sal_Int32>(m_aGroupIntervalEd.GetValue()) );
         m_aGroupIntervalEd.SaveValue();
     }
-    if ( m_aOrderLst.GetSavedValue() != m_aOrderLst.GetSelectEntryPos() )
+    if ( m_aOrderLst.IsValueChangedFromSaved() )
         xGroup->setSortAscending( m_aOrderLst.GetSelectEntryPos() == 0 );
 
     ListBox* pControls[] = { &m_aHeaderLst,&m_aFooterLst,&m_aGroupOnLst,&m_aKeepTogetherLst,&m_aOrderLst};
@@ -1196,13 +1196,13 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 
 IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
 {
-    if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
+    if ( pListBox->IsValueChangedFromSaved() )
     {
         sal_Int32 nRow = m_pFieldExpression->GetCurRow();
         sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(nRow);
         if ( pListBox != &m_aHeaderLst && pListBox != &m_aFooterLst)
         {
-            if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
+            if ( pListBox->IsValueChangedFromSaved() )
                 SaveData(nRow);
             if ( pListBox == &m_aGroupOnLst )
                 m_aGroupIntervalEd.Enable( pListBox->GetSelectEntryPos() != 0 );
