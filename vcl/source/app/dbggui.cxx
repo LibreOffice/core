@@ -334,7 +334,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         #define IMMEDIATE_FLAGS (DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT)
         pData->nTestFlags &= ~IMMEDIATE_FLAGS;
         pData->nTestFlags |= aData.nTestFlags & IMMEDIATE_FLAGS;
-        if ( maBoldAppFont.GetSavedValue() != TriState(maBoldAppFont.IsChecked()) )
+        if ( maBoldAppFont.IsValueChangedFromSaved() )
         {
             AllSettings aSettings = Application::GetSettings();
             StyleSettings aStyleSettings = aSettings.GetStyleSettings();

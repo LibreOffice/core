@@ -218,6 +218,7 @@ public:
 
     void                SaveValue() { maSaveValue = GetText(); }
     const OUString&     GetSavedValue() const { return maSaveValue; }
+    bool                IsValueChangedFromSaved() const { return maSaveValue != GetText(); }
 
     virtual void        SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
     virtual const Link& GetModifyHdl() const { return maModifyHdl; }

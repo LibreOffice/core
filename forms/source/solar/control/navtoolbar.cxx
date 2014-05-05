@@ -681,7 +681,7 @@ namespace frm
 
     void RecordPositionInput::FirePosition( sal_Bool _bForce )
     {
-        if ( _bForce || (GetText() != GetSavedValue()) )
+        if ( _bForce || IsValueChangedFromSaved() )
         {
             sal_Int64 nRecord = GetValue();
             if ( nRecord < GetMin() || nRecord > GetMax() )

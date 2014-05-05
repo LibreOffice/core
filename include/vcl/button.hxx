@@ -48,9 +48,9 @@ private:
     SAL_DLLPRIVATE                  Button (const Button &);
     SAL_DLLPRIVATE                  Button & operator= (const Button &);
 public:
-    SAL_DLLPRIVATE sal_uInt16           ImplGetButtonState() const;
-    SAL_DLLPRIVATE sal_uInt16&          ImplGetButtonState();
-    SAL_DLLPRIVATE sal_uInt16           ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
+    SAL_DLLPRIVATE sal_uInt16       ImplGetButtonState() const;
+    SAL_DLLPRIVATE sal_uInt16&      ImplGetButtonState();
+    SAL_DLLPRIVATE sal_uInt16       ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos, Size& rSize,
                                               bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
                                               sal_uInt16 nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
@@ -106,7 +106,7 @@ protected:
     SymbolType      meSymbol;
     TriState        meState;
     TriState        meSaveValue;
-    sal_uInt16          mnDDStyle;
+    sal_uInt16      mnDDStyle;
     bool            mbPressed;
     bool            mbInUserDraw;
     Link            maToggleHdl;
@@ -185,6 +185,7 @@ public:
 
     void            SaveValue() { meSaveValue = GetState(); }
     TriState        GetSavedValue() const { return meSaveValue; }
+    bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
@@ -367,7 +368,7 @@ public:
     void            EnableRadioCheck( bool bRadioCheck = true ) { mbRadioCheck = bRadioCheck; }
     bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
-    bool        SetModeRadioImage( const Image& rImage );
+    bool            SetModeRadioImage( const Image& rImage );
     const Image&    GetModeRadioImage( ) const;
 
     void            SetState( bool bCheck );
@@ -376,6 +377,7 @@ public:
 
     void            SaveValue() { mbSaveValue = IsChecked(); }
     bool            GetSavedValue() const { return mbSaveValue; }
+    bool            IsValueChangedFromSaved() const { return mbSaveValue != IsChecked(); }
 
     static Image    GetRadioImage( const AllSettings& rSettings, sal_uInt16 nFlags );
 
@@ -488,6 +490,7 @@ public:
 
     void            SaveValue() { meSaveValue = GetState(); }
     TriState        GetSavedValue() const { return meSaveValue; }
+    bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
     static Image    GetCheckImage( const AllSettings& rSettings, sal_uInt16 nFlags );
 

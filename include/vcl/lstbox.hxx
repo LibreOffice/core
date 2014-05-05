@@ -164,6 +164,7 @@ public:
 
     void                SaveValue() { mnSaveValue = GetSelectEntryPos(); }
     sal_Int32           GetSavedValue() const { return mnSaveValue; }
+    bool                IsValueChangedFromSaved() const { return mnSaveValue != GetSelectEntryPos(); }
 
     void                SetSeparatorPos( sal_Int32  n = LISTBOX_ENTRY_NOTFOUND );
     sal_Int32           GetSeparatorPos() const;
@@ -244,10 +245,12 @@ class VCL_DLLPUBLIC MultiListBox : public ListBox
 public:
     using ListBox::SaveValue;
     using ListBox::GetSavedValue;
+    using ListBox::IsValueChangedFromSaved;
 private:
     // Bei MultiListBox nicht erlaubt...
     void            SaveValue();
     sal_Int32       GetSavedValue();
+    bool            IsValueChangedFromSaved() const;
 
 public:
     explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );
