@@ -54,6 +54,8 @@ class Line : public Renderable3DObject
 public:
     Line( sal_uInt32 nId );
 
+    virtual void render() SAL_OVERRIDE;
+
 private:
     glm::vec3 maPosBegin;
     glm::vec3 maPosEnd;
@@ -87,7 +89,7 @@ class Camera : public Renderable3DObject
 {
 public:
     Camera();
-    virtual void render();
+    virtual void render() SAL_OVERRIDE;
 private:
     glm::vec3 maPos;
     glm::vec3 maUp;

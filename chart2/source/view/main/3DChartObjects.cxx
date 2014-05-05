@@ -54,6 +54,14 @@ Line::Line(sal_uInt32 nId):
 {
 }
 
+void Line::render()
+{
+    getRender()->AddShapePolygon3DObject(0, true, (sal_Int32)maLineColor.GetColor(), 0, 0);
+    getRender()->AddPolygon3DObjectPoint(maPosBegin.x, maPosBegin.y, maPosBegin.z);
+    getRender()->AddPolygon3DObjectPoint(maPosEnd.x, maPosEnd.y, maPosEnd.z);
+    getRender()->EndAddShapePolygon3DObject();
+}
+
 Text::Text(sal_uInt32 nId):
     Renderable3DObject(nId)
 {
