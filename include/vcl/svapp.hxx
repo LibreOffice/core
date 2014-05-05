@@ -265,12 +265,6 @@ public:
     */
     virtual void                Init();
 
-protected:
-    /** Initialize font data for the application.
-     */
-    virtual void                InitAppFontData();
-
-public:
     /** Finish initialization of the application.
 
      @see Init, DeInit
@@ -354,7 +348,7 @@ public:
 
      @returns true if exited successfully, false if not able to fully exit
     */
-    virtual bool                QueryExit();
+    virtual bool           QueryExit();
 
     /** Send user event.
 
@@ -632,7 +626,7 @@ public:
 
      @see IsInExecute, IsInModalMode
     */
-    static bool                 IsInMain();
+    static bool             IsInMain();
 
     /** Queries whether the application is in the event loop
 
@@ -640,7 +634,7 @@ public:
 
      @see IsInMain, IsInModalMode
     */
-    static bool                 IsInExecute();
+    static bool             IsInExecute();
 
     /** Queries whether application has a modal dialog active.
 
@@ -648,7 +642,7 @@ public:
 
      @see IsInMain, IsInExecute
     */
-    static bool                 IsInModalMode();
+    static bool             IsInModalMode();
 
     /** Return how many events are being dispatched.
 
@@ -685,7 +679,7 @@ public:
 
      @returns   true if UI is captured, false if not
      */
-    static bool                 IsUICaptured();
+    static bool             IsUICaptured();
 
     /** @name Settings
 
@@ -842,7 +836,7 @@ public:
 
      @see PostKeyEvent
     */
-    static bool                 HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static bool             HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send keypress event
 
@@ -908,7 +902,7 @@ public:
 
      @return true if there is a default window and the event could be posted to it successfully.
     */
-    static bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    static bool             PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
 
     /** Remove user event based on event ID
 
@@ -926,7 +920,7 @@ public:
 
      @return true if the handler was inserted successfully, false if it couldn't be inserted.
     */
-    static bool                 InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+    static bool             InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
 
     /** Remove an idle handler from the application.
 
@@ -1179,7 +1173,7 @@ public:
 
      @see RemoveAccel
     */
-    static bool                 InsertAccel( Accelerator* pAccel );
+    static bool             InsertAccel( Accelerator* pAccel );
 
     /** Remove accelerator
 
@@ -1203,7 +1197,7 @@ public:
 
      @see EnableAutoMnemonic
     */
-    static bool                 IsAutoMnemonicEnabled();
+    static bool             IsAutoMnemonicEnabled();
 
     /** Get the number of reserved key codes used by the application.
 
@@ -1264,7 +1258,7 @@ public:
 
      @see EnableAutoHelpId
     */
-    static bool                 IsAutoHelpIdEnabled();
+    static bool             IsAutoHelpIdEnabled();
 
     ///@}
 
@@ -1322,7 +1316,7 @@ public:
 
      @see GetDialogCancelMode, SetDialogCancelMode
     */
-    static bool                 IsDialogCancelEnabled();
+    static bool             IsDialogCancelEnabled();
 
 
     /** Make a dialog box a system window or not.
@@ -1425,7 +1419,7 @@ public:
 
      @see EnableHeadlessMode, IsHeadlessModeRequested
     */
-    static bool                 IsHeadlessModeEnabled();
+    static bool             IsHeadlessModeEnabled();
 
     /** Check command line arguments for \code --headless \endcode
 
