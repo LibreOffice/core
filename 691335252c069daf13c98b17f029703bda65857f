@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_d9c3c336",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-05T07:20:58Z",
+      "side": 1,
+      "message": "Couldn\u0027t you just use \u0027return m_aTablePositions.back()\u0027 here, and then get rid of the unnecessary getRealTablePosition() method? It\u0027s only a simple \"return this\" after all.",
+      "revId": "691335252c069daf13c98b17f029703bda65857f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
