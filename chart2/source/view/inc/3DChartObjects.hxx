@@ -13,6 +13,9 @@
 #include <vcl/bitmapex.hxx>
 
 #include <vcl/opengl/OpenGLContext.hxx>
+#include "GL3DRenderer.hxx"
+
+
 
 namespace chart {
 
@@ -27,8 +30,11 @@ public:
 
     virtual void render();
 
+    void getRender();
+
 protected:
     sal_uInt32 mnUniqueId;
+    static OpenGL3DRenderer* mPrender;
 };
 
 class Bar : public Renderable3DObject

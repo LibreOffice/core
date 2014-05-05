@@ -13,6 +13,8 @@ namespace chart {
 
 namespace opengl3D {
 
+OpenGL3DRenderer* Renderable3DObject::mPrender = NULL;
+
 Renderable3DObject::Renderable3DObject(sal_uInt32 nId):
     mnUniqueId(nId)
 {
@@ -22,6 +24,16 @@ void Renderable3DObject::render()
 {
     (void) mnUniqueId;
 }
+
+void Renderable3DObject::getRender()
+{
+    if(mPrender==NULL)
+    {
+        mPrender = new OpenGL3DRenderer();
+        mPrender->init();
+    }
+}
+
 
 Bar::Bar(const glm::mat4& rPosition, sal_uInt32 nId)
     : Renderable3DObject(nId)
