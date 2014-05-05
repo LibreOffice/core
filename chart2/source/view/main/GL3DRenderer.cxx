@@ -141,7 +141,14 @@ void OpenGL3DRenderer::init()
 
     m_3DProjection = glm::perspective(30.0f, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
     LoadShaders();
+    m_IsOpenglInit = true;
 }
+
+bool OpenGL3DRenderer::isOpenGLInitialized()
+{
+    return m_IsOpenglInit;
+}
+
 
 void OpenGL3DRenderer::AddVertexData(GLuint vertexBuf)
 {

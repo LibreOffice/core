@@ -159,7 +159,7 @@ public:
 
     void LoadShaders();
     void init();
-
+    bool isOpenGLInitialized();
     void Set3DSenceInfo(const glm::vec3& cameraUp, sal_Int32 color, bool twoSidesLighting = false);
     void SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction);
     void AddShapePolygon3DObject(sal_Int32 color, bool lineOnly, sal_Int32 lineColor,
@@ -227,7 +227,7 @@ private:
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
-
+    bool m_IsOpenglInit;
 #if 0
     double m_dFreq;
 #endif
