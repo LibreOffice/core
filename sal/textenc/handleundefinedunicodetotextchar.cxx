@@ -108,7 +108,7 @@ bool sal::detail::textenc::handleUndefinedUnicodeToTextChar(
     /* one replacement character */
     if (ImplIsHighSurrogate(c))
     {
-        if ( *ppSrcBuf == pEndSrcBuf )
+        if ( ((*ppSrcBuf) + 1) == pEndSrcBuf )
         {
             *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
             return false;
