@@ -24,7 +24,8 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** These values are used to specifies distinct physical keys.
+/** These values are used to specify distinct physical keys, plus
+    some special values used by the OS X implementation.
  */
 published constants Key
 {
@@ -364,6 +365,12 @@ published constants Key
 
     const short QUOTERIGHT = 1318;
 
+
+    /** The following values don't correspond to physical keys on any
+        keyboard but are used in the OS X implementation of VCL. They
+        correspond to some of the action messages of the NSResponder
+        abstract class.
+    */
 
     const short DELETE_TO_END_OF_PARAGRAPH = 1539;
 
