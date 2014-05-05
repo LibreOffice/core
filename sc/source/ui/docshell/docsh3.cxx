@@ -418,6 +418,12 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
         // so it must not be taken from the global options.
         // Calculation settings are handled separately in ScXMLBodyContext::EndElement.
         aDocOpt.SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
+
+        // fdo#78294 The default null-date if
+        // <table:null-date table:date-value='...' />
+        // is absent is 1899-12-30 regardless what the configuration is set to.
+        // Import filters may override this value.
+        aDocOpt.SetDate( 30, 12, 1899);
     }
 
     aDocument.SetDocOptions( aDocOpt );
