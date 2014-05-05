@@ -15,8 +15,6 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include "GL3DRenderer.hxx"
 
-
-
 namespace chart {
 
 namespace opengl3D {
