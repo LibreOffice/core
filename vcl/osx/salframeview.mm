@@ -60,22 +60,22 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
 {
     static sal_uInt16 aKeyCodeMap[ 128 ] =
     {
-        0, 0, 0, 0, 0, 0, 0, 0,
-        KEY_BACKSPACE, KEY_TAB, KEY_RETURN, 0, 0, KEY_RETURN, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, KEY_TAB, 0, KEY_ESCAPE, 0, 0, 0, 0,
-        KEY_SPACE, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, KEY_MULTIPLY, KEY_ADD, KEY_COMMA, KEY_SUBTRACT, KEY_POINT, KEY_DIVIDE,
-        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7,
-        KEY_8, KEY_9, 0, 0, KEY_LESS, KEY_EQUAL, KEY_GREATER, 0,
-        0, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G,
-        KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O,
-        KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W,
-        KEY_X, KEY_Y, KEY_Z, 0, 0, 0, 0, 0,
-        KEY_QUOTELEFT, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G,
-        KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O,
-        KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W,
-        KEY_X, KEY_Y, KEY_Z, 0, 0, 0, KEY_TILDE, KEY_BACKSPACE
+                    0,                0,                0,                0,                0,                0,                0,                0,  
+        KEY_BACKSPACE,          KEY_TAB,       KEY_RETURN,                0,                0,       KEY_RETURN,                0,                0,  
+                    0,                0,                0,                0,                0,                0,                0,                0,  
+                    0,          KEY_TAB,                0,       KEY_ESCAPE,                0,                0,                0,                0,  
+            KEY_SPACE,                0,                0,                0,                0,                0,                0,                0,  
+                    0,                0,     KEY_MULTIPLY,          KEY_ADD,        KEY_COMMA,     KEY_SUBTRACT,        KEY_POINT,       KEY_DIVIDE,  
+                KEY_0,            KEY_1,            KEY_2,            KEY_3,            KEY_4,            KEY_5,            KEY_6,            KEY_7,  
+                KEY_8,            KEY_9,                0,                0,         KEY_LESS,        KEY_EQUAL,      KEY_GREATER,                0,  
+                    0,            KEY_A,            KEY_B,            KEY_C,            KEY_D,            KEY_E,            KEY_F,            KEY_G,  
+                KEY_H,            KEY_I,            KEY_J,            KEY_K,            KEY_L,            KEY_M,            KEY_N,            KEY_O,  
+                KEY_P,            KEY_Q,            KEY_R,            KEY_S,            KEY_T,            KEY_U,            KEY_V,            KEY_W,  
+                KEY_X,            KEY_Y,            KEY_Z,                0,                0,                0,                0,                0,  
+        KEY_QUOTELEFT,            KEY_A,            KEY_B,            KEY_C,            KEY_D,            KEY_E,            KEY_F,            KEY_G,  
+                KEY_H,            KEY_I,            KEY_J,            KEY_K,            KEY_L,            KEY_M,            KEY_N,            KEY_O,  
+                KEY_P,            KEY_Q,            KEY_R,            KEY_S,            KEY_T,            KEY_U,            KEY_V,            KEY_W,  
+                KEY_X,            KEY_Y,            KEY_Z,                0,                0,                0,        KEY_TILDE,    KEY_BACKSPACE
     };
     
     // Note: the mapping 0x7f should by rights be KEY_DELETE
@@ -88,22 +88,22 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
     
     static sal_uInt16 aFunctionKeyCodeMap[ 128 ] =
     {
-        KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_F1, KEY_F2, KEY_F3, KEY_F4,
-        KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
-        KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18, KEY_F19, KEY_F20,
-        KEY_F21, KEY_F22, KEY_F23, KEY_F24, KEY_F25, KEY_F26, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, KEY_INSERT,
-        KEY_DELETE, KEY_HOME, 0, KEY_END, KEY_PAGEUP, KEY_PAGEDOWN, 0, 0,
-        0, 0, 0, 0, 0, KEY_MENU, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, KEY_UNDO, KEY_REPEAT, KEY_FIND, KEY_HELP, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0
+            KEY_UP,         KEY_DOWN,         KEY_LEFT,        KEY_RIGHT,           KEY_F1,           KEY_F2,           KEY_F3,           KEY_F4,  
+            KEY_F5,           KEY_F6,           KEY_F7,           KEY_F8,           KEY_F9,          KEY_F10,          KEY_F11,          KEY_F12,  
+           KEY_F13,          KEY_F14,          KEY_F15,          KEY_F16,          KEY_F17,          KEY_F18,          KEY_F19,          KEY_F20,  
+           KEY_F21,          KEY_F22,          KEY_F23,          KEY_F24,          KEY_F25,          KEY_F26,                0,                0,  
+                 0,                0,                0,                0,                0,                0,                0,       KEY_INSERT,  
+        KEY_DELETE,         KEY_HOME,                0,          KEY_END,        KEY_PAGEUP,    KEY_PAGEDOWN,                0,                0,  
+                 0,                0,                0,                0,                 0,        KEY_MENU,                0,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0,  
+                 0,                0,                0,         KEY_UNDO,        KEY_REPEAT,        KEY_FIND,         KEY_HELP,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0,  
+                 0,                0,                0,                0,                 0,               0,                0,                0
     };
     
     sal_uInt16 nKeyCode = 0;
@@ -123,22 +123,22 @@ static sal_uInt16 ImplMapKeyCode(sal_uInt16 nKeyCode)
 
     static sal_uInt16 aKeyCodeMap[ 0x80 ] =
     {
-        KEY_A,               KEY_S,     KEY_D,        KEY_F,      KEY_H,      KEY_G,            KEY_Z,         KEY_X,
-        KEY_C,               KEY_V,     0,            KEY_B,      KEY_Q,      KEY_W,            KEY_E,         KEY_R,
-        KEY_Y,               KEY_T,     KEY_1,        KEY_2,      KEY_3,      KEY_4,            KEY_6,         KEY_5,
-        KEY_EQUAL,           KEY_9,     KEY_7, KEY_SUBTRACT,      KEY_8,      KEY_0, KEY_BRACKETRIGHT,         KEY_0,
-        KEY_U,     KEY_BRACKETLEFT,     KEY_I,        KEY_P, KEY_RETURN,      KEY_L,            KEY_J, KEY_QUOTELEFT,
-        KEY_K,       KEY_SEMICOLON,         0,    KEY_COMMA, KEY_DIVIDE,      KEY_N,            KEY_M,     KEY_POINT,
-        KEY_TAB,         KEY_SPACE, KEY_TILDE,   KEY_DELETE,          0, KEY_ESCAPE,                0,             0,
-              0,      KEY_CAPSLOCK,         0,            0,          0,          0,                0,             0,
-        KEY_F17,       KEY_DECIMAL,         0, KEY_MULTIPLY,          0,    KEY_ADD,		    0,             0,
-              0,                 0,         0,   KEY_DIVIDE, KEY_RETURN,          0,     KEY_SUBTRACT,       KEY_F18,
-        KEY_F19,         KEY_EQUAL,         0,            0,          0,          0,                0,             0,
-              0,                 0,   KEY_F20,            0,          0,          0,                0,             0,
-         KEY_F5,            KEY_F6,    KEY_F7,       KEY_F3,     KEY_F8,     KEY_F9,                0,       KEY_F11,
-              0,           KEY_F13,   KEY_F16,      KEY_F14,          0,    KEY_F10,                0,       KEY_F12,
-              0,           KEY_F15,  KEY_HELP,     KEY_HOME, KEY_PAGEUP, KEY_DELETE,           KEY_F4,       KEY_END,
-         KEY_F2,      KEY_PAGEDOWN,    KEY_F1,     KEY_LEFT,  KEY_RIGHT,   KEY_DOWN,           KEY_UP,		   0
+            KEY_A,            KEY_S,            KEY_D,            KEY_F,            KEY_H,            KEY_G,            KEY_Z,            KEY_X,
+            KEY_C,            KEY_V,                0,            KEY_B,            KEY_Q,            KEY_W,            KEY_E,            KEY_R,
+            KEY_Y,            KEY_T,            KEY_1,            KEY_2,            KEY_3,            KEY_4,            KEY_6,            KEY_5,
+        KEY_EQUAL,            KEY_9,            KEY_7,     KEY_SUBTRACT,            KEY_8,            KEY_0, KEY_BRACKETRIGHT,            KEY_0,
+            KEY_U,  KEY_BRACKETLEFT,            KEY_I,            KEY_P,       KEY_RETURN,            KEY_L,            KEY_J,    KEY_QUOTELEFT,
+            KEY_K,    KEY_SEMICOLON,                0,        KEY_COMMA,       KEY_DIVIDE,            KEY_N,            KEY_M,        KEY_POINT,
+          KEY_TAB,        KEY_SPACE,        KEY_TILDE,       KEY_DELETE,                0,       KEY_ESCAPE,                0,                0,
+                0,     KEY_CAPSLOCK,                0,                0,                0,                0,                0,                0,
+          KEY_F17,      KEY_DECIMAL,                0,     KEY_MULTIPLY,                0,          KEY_ADD,		    0,                0,
+                0,                0,                0,       KEY_DIVIDE,       KEY_RETURN,                0,     KEY_SUBTRACT,          KEY_F18,
+          KEY_F19,        KEY_EQUAL,                0,                0,                0,                0,                0,                0,
+                0,                0,          KEY_F20,                0,                0,                0,                0,                0,
+           KEY_F5,           KEY_F6,           KEY_F7,           KEY_F3,           KEY_F8,           KEY_F9,                0,          KEY_F11,
+                0,          KEY_F13,          KEY_F16,          KEY_F14,                0,          KEY_F10,                0,          KEY_F12,
+                0,          KEY_F15,         KEY_HELP,         KEY_HOME,       KEY_PAGEUP,       KEY_DELETE,           KEY_F4,          KEY_END,
+           KEY_F2,     KEY_PAGEDOWN,           KEY_F1,         KEY_LEFT,        KEY_RIGHT,         KEY_DOWN,           KEY_UP,                0
     };
 
     if (nKeyCode < SAL_N_ELEMENTS(aKeyCodeMap))
