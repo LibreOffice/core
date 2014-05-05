@@ -577,7 +577,6 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         PosVecf3 scale = {1.0f, m_fHeightWeight, 1.0f};
         MoveModelf(trans, angle, scale);
 
-        m_3DMVP = m_3DProjection * m_3DView * m_D3DTrasform;
         m_3DMVP = m_3DProjection * m_3DView * m_Model;
         //if line only, using the common shader to render
 
@@ -710,12 +709,10 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
     return;
 }
 
-void OpenGL3DRenderer::Set3DSenceInfo(const glm::vec3& cameraUp, const glm::mat4& D3DTrasform, bool twoSidesLighting, sal_Int32 color)
+void OpenGL3DRenderer::Set3DSenceInfo(const glm::vec3& cameraUp, sal_Int32 color, bool twoSidesLighting)
 {
 
     m_CameraInfo.cameraUp = cameraUp;
-
-    m_D3DTrasform = D3DTrasform;
 
     m_Polygon3DInfo.material.twoSidesLighting = twoSidesLighting;
 
