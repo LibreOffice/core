@@ -60,57 +60,57 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
 {
     static sal_uInt16 aKeyCodeMap[ 128 ] =
     {
-                    0,                0,                0,                0,                0,                0,                0,                0,  
-        KEY_BACKSPACE,          KEY_TAB,       KEY_RETURN,                0,                0,       KEY_RETURN,                0,                0,  
-                    0,                0,                0,                0,                0,                0,                0,                0,  
-                    0,          KEY_TAB,                0,       KEY_ESCAPE,                0,                0,                0,                0,  
-            KEY_SPACE,                0,                0,                0,                0,                0,                0,                0,  
-                    0,                0,     KEY_MULTIPLY,          KEY_ADD,        KEY_COMMA,     KEY_SUBTRACT,        KEY_POINT,       KEY_DIVIDE,  
-                KEY_0,            KEY_1,            KEY_2,            KEY_3,            KEY_4,            KEY_5,            KEY_6,            KEY_7,  
-                KEY_8,            KEY_9,                0,                0,         KEY_LESS,        KEY_EQUAL,      KEY_GREATER,                0,  
-                    0,            KEY_A,            KEY_B,            KEY_C,            KEY_D,            KEY_E,            KEY_F,            KEY_G,  
-                KEY_H,            KEY_I,            KEY_J,            KEY_K,            KEY_L,            KEY_M,            KEY_N,            KEY_O,  
-                KEY_P,            KEY_Q,            KEY_R,            KEY_S,            KEY_T,            KEY_U,            KEY_V,            KEY_W,  
-                KEY_X,            KEY_Y,            KEY_Z,                0,                0,                0,                0,                0,  
-        KEY_QUOTELEFT,            KEY_A,            KEY_B,            KEY_C,            KEY_D,            KEY_E,            KEY_F,            KEY_G,  
-                KEY_H,            KEY_I,            KEY_J,            KEY_K,            KEY_L,            KEY_M,            KEY_N,            KEY_O,  
-                KEY_P,            KEY_Q,            KEY_R,            KEY_S,            KEY_T,            KEY_U,            KEY_V,            KEY_W,  
+                    0,                0,                0,                0,                0,                0,                0,                0,
+        KEY_BACKSPACE,          KEY_TAB,       KEY_RETURN,                0,                0,       KEY_RETURN,                0,                0,
+                    0,                0,                0,                0,                0,                0,                0,                0,
+                    0,          KEY_TAB,                0,       KEY_ESCAPE,                0,                0,                0,                0,
+            KEY_SPACE,                0,                0,                0,                0,                0,                0,                0,
+                    0,                0,     KEY_MULTIPLY,          KEY_ADD,        KEY_COMMA,     KEY_SUBTRACT,        KEY_POINT,       KEY_DIVIDE,
+                KEY_0,            KEY_1,            KEY_2,            KEY_3,            KEY_4,            KEY_5,            KEY_6,            KEY_7,
+                KEY_8,            KEY_9,                0,                0,         KEY_LESS,        KEY_EQUAL,      KEY_GREATER,                0,
+                    0,            KEY_A,            KEY_B,            KEY_C,            KEY_D,            KEY_E,            KEY_F,            KEY_G,
+                KEY_H,            KEY_I,            KEY_J,            KEY_K,            KEY_L,            KEY_M,            KEY_N,            KEY_O,
+                KEY_P,            KEY_Q,            KEY_R,            KEY_S,            KEY_T,            KEY_U,            KEY_V,            KEY_W,
+                KEY_X,            KEY_Y,            KEY_Z,                0,                0,                0,                0,                0,
+        KEY_QUOTELEFT,            KEY_A,            KEY_B,            KEY_C,            KEY_D,            KEY_E,            KEY_F,            KEY_G,
+                KEY_H,            KEY_I,            KEY_J,            KEY_K,            KEY_L,            KEY_M,            KEY_N,            KEY_O,
+                KEY_P,            KEY_Q,            KEY_R,            KEY_S,            KEY_T,            KEY_U,            KEY_V,            KEY_W,
                 KEY_X,            KEY_Y,            KEY_Z,                0,                0,                0,        KEY_TILDE,    KEY_BACKSPACE
     };
-    
+
     // Note: the mapping 0x7f should by rights be KEY_DELETE
     // however if you press "backspace" 0x7f is reported
     // whereas for "delete" 0xf728 gets reported
-    
+
     // Note: the mapping of 0x19 to KEY_TAB is because for unknown reasons
     // tab alone is reported as 0x09 (as expected) but shift-tab is
     // reported as 0x19 (end of medium)
-    
+
     static sal_uInt16 aFunctionKeyCodeMap[ 128 ] =
     {
-            KEY_UP,         KEY_DOWN,         KEY_LEFT,        KEY_RIGHT,           KEY_F1,           KEY_F2,           KEY_F3,           KEY_F4,  
-            KEY_F5,           KEY_F6,           KEY_F7,           KEY_F8,           KEY_F9,          KEY_F10,          KEY_F11,          KEY_F12,  
-           KEY_F13,          KEY_F14,          KEY_F15,          KEY_F16,          KEY_F17,          KEY_F18,          KEY_F19,          KEY_F20,  
-           KEY_F21,          KEY_F22,          KEY_F23,          KEY_F24,          KEY_F25,          KEY_F26,                0,                0,  
-                 0,                0,                0,                0,                0,                0,                0,       KEY_INSERT,  
-        KEY_DELETE,         KEY_HOME,                0,          KEY_END,        KEY_PAGEUP,    KEY_PAGEDOWN,                0,                0,  
-                 0,                0,                0,                0,                 0,        KEY_MENU,                0,                0,  
-                 0,                0,                0,                0,                 0,               0,                0,                0,  
-                 0,                0,                0,         KEY_UNDO,        KEY_REPEAT,        KEY_FIND,         KEY_HELP,                0,  
-                 0,                0,                0,                0,                 0,               0,                0,                0,  
-                 0,                0,                0,                0,                 0,               0,                0,                0,  
-                 0,                0,                0,                0,                 0,               0,                0,                0,  
-                 0,                0,                0,                0,                 0,               0,                0,                0,  
-                 0,                0,                0,                0,                 0,               0,                0,                0,  
-                 0,                0,                0,                0,                 0,               0,                0,                0,  
+            KEY_UP,         KEY_DOWN,         KEY_LEFT,        KEY_RIGHT,           KEY_F1,           KEY_F2,           KEY_F3,           KEY_F4,
+            KEY_F5,           KEY_F6,           KEY_F7,           KEY_F8,           KEY_F9,          KEY_F10,          KEY_F11,          KEY_F12,
+           KEY_F13,          KEY_F14,          KEY_F15,          KEY_F16,          KEY_F17,          KEY_F18,          KEY_F19,          KEY_F20,
+           KEY_F21,          KEY_F22,          KEY_F23,          KEY_F24,          KEY_F25,          KEY_F26,                0,                0,
+                 0,                0,                0,                0,                0,                0,                0,       KEY_INSERT,
+        KEY_DELETE,         KEY_HOME,                0,          KEY_END,        KEY_PAGEUP,    KEY_PAGEDOWN,                0,                0,
+                 0,                0,                0,                0,                 0,        KEY_MENU,                0,                0,
+                 0,                0,                0,                0,                 0,               0,                0,                0,
+                 0,                0,                0,         KEY_UNDO,        KEY_REPEAT,        KEY_FIND,         KEY_HELP,                0,
+                 0,                0,                0,                0,                 0,               0,                0,                0,
+                 0,                0,                0,                0,                 0,               0,                0,                0,
+                 0,                0,                0,                0,                 0,               0,                0,                0,
+                 0,                0,                0,                0,                 0,               0,                0,                0,
+                 0,                0,                0,                0,                 0,               0,                0,                0,
+                 0,                0,                0,                0,                 0,               0,                0,                0,
                  0,                0,                0,                0,                 0,               0,                0,                0
     };
-    
+
     sal_uInt16 nKeyCode = 0;
     if( aCode < SAL_N_ELEMENTS( aKeyCodeMap)  )
         nKeyCode = aKeyCodeMap[ aCode ];
     else if( aCode >= 0xf700 && aCode < 0xf780 )
-        nKeyCode = aFunctionKeyCodeMap[ aCode - 0xf700 ]; 
+        nKeyCode = aFunctionKeyCodeMap[ aCode - 0xf700 ];
     return nKeyCode;
 }
 
@@ -131,7 +131,7 @@ static sal_uInt16 ImplMapKeyCode(sal_uInt16 nKeyCode)
             KEY_K,    KEY_SEMICOLON,                0,        KEY_COMMA,       KEY_DIVIDE,            KEY_N,            KEY_M,        KEY_POINT,
           KEY_TAB,        KEY_SPACE,        KEY_TILDE,       KEY_DELETE,                0,       KEY_ESCAPE,                0,                0,
                 0,     KEY_CAPSLOCK,                0,                0,                0,                0,                0,                0,
-          KEY_F17,      KEY_DECIMAL,                0,     KEY_MULTIPLY,                0,          KEY_ADD,		    0,                0,
+          KEY_F17,      KEY_DECIMAL,                0,     KEY_MULTIPLY,                0,          KEY_ADD,                0,                0,
                 0,                0,                0,       KEY_DIVIDE,       KEY_RETURN,                0,     KEY_SUBTRACT,          KEY_F18,
           KEY_F19,        KEY_EQUAL,                0,                0,                0,                0,                0,                0,
                 0,                0,          KEY_F20,                0,                0,                0,                0,                0,
@@ -183,7 +183,7 @@ static AquaSalFrame* getMouseContainerFrame()
 @implementation SalFrameWindow
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
-	mDraggingDestinationHandler = nil;
+    mDraggingDestinationHandler = nil;
     mpFrame = pFrame;
     NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.nX), static_cast<CGFloat>(pFrame->maGeometry.nY) },
                      { static_cast<CGFloat>(pFrame->maGeometry.nWidth), static_cast<CGFloat>(pFrame->maGeometry.nHeight) } };
@@ -241,7 +241,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(BOOL)canBecomeKeyWindow
 {
-    if( (mpFrame->mnStyle & 
+    if( (mpFrame->mnStyle &
             ( SAL_FRAME_STYLE_FLOAT                 |
               SAL_FRAME_STYLE_TOOLTIP               |
               SAL_FRAME_STYLE_INTRO
@@ -266,7 +266,7 @@ static AquaSalFrame* getMouseContainerFrame()
         static const sal_uLong nGuessDocument = SAL_FRAME_STYLE_MOVEABLE|
                                             SAL_FRAME_STYLE_SIZEABLE|
                                             SAL_FRAME_STYLE_CLOSEABLE;
-        
+
         if( mpFrame->mpMenu )
             mpFrame->mpMenu->setMainMenu();
         else if( ! mpFrame->mpParent &&
@@ -472,7 +472,7 @@ static AquaSalFrame* getMouseContainerFrame()
         mMarkedRange = NSMakeRange(NSNotFound, 0);
         mSelectedRange = NSMakeRange(NSNotFound, 0);
         mpReferenceWrapper = nil;
-		mpMouseEventListener = nil;
+        mpMouseEventListener = nil;
         mpLastSuperEvent = nil;
     }
 
@@ -508,13 +508,13 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(BOOL)isOpaque
 {
-	if( !mpFrame)
-		return YES;
-	if( !AquaSalFrame::isAlive( mpFrame))
-		return YES;
-	if( !mpFrame->getClipPath())
-		return YES;
-	return NO;
+    if( !mpFrame)
+        return YES;
+    if( !AquaSalFrame::isAlive( mpFrame))
+        return YES;
+    if( !mpFrame->getClipPath())
+        return YES;
+    return NO;
 }
 
 // helper class similar to a osl::Guard< comphelper::SolarMutex > for the
@@ -523,31 +523,31 @@ static AquaSalFrame* getMouseContainerFrame()
 class TryGuard
 {
 public:
-			TryGuard()  { mbGuarded = ImplSalYieldMutexTryToAcquire(); }
-			~TryGuard() { if( mbGuarded ) ImplSalYieldMutexRelease(); }
-	bool	IsGuarded() { return mbGuarded; }
+            TryGuard()  { mbGuarded = ImplSalYieldMutexTryToAcquire(); }
+            ~TryGuard() { if( mbGuarded ) ImplSalYieldMutexRelease(); }
+    bool    IsGuarded() { return mbGuarded; }
 private:
-	bool	mbGuarded;
+    bool    mbGuarded;
 };
 
 -(void)drawRect: (NSRect)aRect
 {
-	// HOTFIX: #i93512# prevent deadlocks if any other thread already has the SalYieldMutex
-	TryGuard aTryGuard;
-	if( !aTryGuard.IsGuarded() )
-	{
-		// NOTE: the mpFrame access below is not guarded yet!
-		// TODO: mpFrame et al need to be guarded by an independent mutex
-		AquaSalGraphics* pGraphics = (mpFrame && AquaSalFrame::isAlive(mpFrame)) ? mpFrame->mpGraphics : NULL;
-		if( pGraphics )
-		{
-			// we did not get the mutex so we cannot draw now => request to redraw later
-			// convert the NSRect to a CGRect for Refreshrect()
-			const CGRect aCGRect = {{aRect.origin.x,aRect.origin.y},{aRect.size.width,aRect.size.height}};
-			pGraphics->RefreshRect( aCGRect );
-		}
-		return;
-	}
+    // HOTFIX: #i93512# prevent deadlocks if any other thread already has the SalYieldMutex
+    TryGuard aTryGuard;
+    if( !aTryGuard.IsGuarded() )
+    {
+        // NOTE: the mpFrame access below is not guarded yet!
+        // TODO: mpFrame et al need to be guarded by an independent mutex
+        AquaSalGraphics* pGraphics = (mpFrame && AquaSalFrame::isAlive(mpFrame)) ? mpFrame->mpGraphics : NULL;
+        if( pGraphics )
+        {
+            // we did not get the mutex so we cannot draw now => request to redraw later
+            // convert the NSRect to a CGRect for Refreshrect()
+            const CGRect aCGRect = {{aRect.origin.x,aRect.origin.y},{aRect.size.width,aRect.size.height}};
+            pGraphics->RefreshRect( aCGRect );
+        }
+        return;
+    }
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -576,7 +576,7 @@ private:
         pDispatchFrame = s_pMouseFrame;
     else
         pDispatchFrame = mpFrame;
-    
+
     /* #i81645# Cocoa reports mouse events while a button is pressed
        to the window in which it was first pressed. This is reasonable and fine and
        gets one around most cases where on other platforms one uses CaptureMouse or XGrabPointer,
@@ -589,8 +589,8 @@ private:
         // is this event actually inside that NSWindow ?
         NSPoint aPt = [NSEvent mouseLocation];
         NSRect aFrameRect = [pDispatchFrame->getNSWindow() frame];
-        
-	if ( ! NSPointInRect( aPt, aFrameRect ) )
+
+    if ( ! NSPointInRect( aPt, aFrameRect ) )
         {
             // no, it is not
             // now we need to find the one it may be in
@@ -602,18 +602,18 @@ private:
                NSWindow* pWindow = [NSApp makeWindowsPerform: @selector(containsMouse) inOrder: YES];
                if( pWindow && [pWindow isMemberOfClass: [SalFrameWindow class]] )
                    pDispatchFrame = [(SalFrameWindow*)pWindow getSalFrame];
-               
+
                However if a non SalFrameWindow is on screen (like e.g. the file dialog)
                it can be hit with the containsMouse selector, which it doesn't support.
                Sadly NSApplication:makeWindowsPerform does not check (for performance reasons
-               I assume) whether a window supports a selector before sending it. 
+               I assume) whether a window supports a selector before sending it.
             */
             AquaSalFrame* pMouseFrame = getMouseContainerFrame();
             if( pMouseFrame )
                 pDispatchFrame = pMouseFrame;
         }
     }
-    
+
     if( pDispatchFrame && AquaSalFrame::isAlive( pDispatchFrame ) )
     {
         pDispatchFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
@@ -621,7 +621,7 @@ private:
 
         NSPoint aPt = [NSEvent mouseLocation];
         pDispatchFrame->CocoaToVCL( aPt );
-        
+
         sal_uInt16 nModMask = ImplGetModifierMask( [pEvent modifierFlags] );
         // #i82284# emulate ctrl left
         if( nModMask == KEY_MOD3 && nButton == MOUSE_LEFT )
@@ -640,18 +640,18 @@ private:
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = pDispatchFrame->maGeometry.nWidth-1-aEvent.mnX;
-        
+
         pDispatchFrame->CallCallback( nEvent, &aEvent );
     }
 }
 
 -(void)mouseDown: (NSEvent*)pEvent
 {
-    if ( mpMouseEventListener != nil && 
-	    [mpMouseEventListener respondsToSelector: @selector(mouseDown:)])
-	{
-	    [mpMouseEventListener mouseDown: [pEvent copyWithZone: NULL]];
-	}
+    if ( mpMouseEventListener != nil &&
+        [mpMouseEventListener respondsToSelector: @selector(mouseDown:)])
+    {
+        [mpMouseEventListener mouseDown: [pEvent copyWithZone: NULL]];
+    }
 
     s_nLastButton = MOUSE_LEFT;
     [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SALEVENT_MOUSEBUTTONDOWN];
@@ -659,11 +659,11 @@ private:
 
 -(void)mouseDragged: (NSEvent*)pEvent
 {
-    if ( mpMouseEventListener != nil && 
-	     [mpMouseEventListener respondsToSelector: @selector(mouseDragged:)])
-	{
-	    [mpMouseEventListener mouseDragged: [pEvent copyWithZone: NULL]];
-	}
+    if ( mpMouseEventListener != nil &&
+         [mpMouseEventListener respondsToSelector: @selector(mouseDragged:)])
+    {
+        [mpMouseEventListener mouseDragged: [pEvent copyWithZone: NULL]];
+    }
     s_nLastButton = MOUSE_LEFT;
     [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SALEVENT_MOUSEMOVE];
 }
@@ -683,7 +683,7 @@ private:
 -(void)mouseEntered: (NSEvent*)pEvent
 {
     s_pMouseFrame = mpFrame;
- 
+
     // #i107215# the only mouse events we get when inactive are enter/exit
     // actually we would like to have all of them, but better none than some
     if( [NSApp isActive] )
@@ -751,11 +751,11 @@ private:
 - (void)magnifyWithEvent: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     // TODO: ??  -(float)magnification;
     if( AquaSalFrame::isAlive( mpFrame ) )
-	{
-		const NSTimeInterval fMagnifyTime = [pEvent timestamp];
+    {
+        const NSTimeInterval fMagnifyTime = [pEvent timestamp];
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( fMagnifyTime * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
@@ -798,7 +798,7 @@ private:
 
         NSPoint aPt = [NSEvent mouseLocation];
         mpFrame->CocoaToVCL( aPt );
-        
+
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
         aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
@@ -806,11 +806,11 @@ private:
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
         aEvent.mbDeltaIsPixel   = TRUE;
-        
+
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
-        
+
         aEvent.mnDelta = nDeltaZ;
         aEvent.mnNotchDelta = (nDeltaZ >= 0) ? +1 : -1;
         if( aEvent.mnDelta == 0 )
@@ -833,12 +833,12 @@ private:
 - (void)swipeWithEvent: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-        
+
         // merge pending scroll wheel events
         float dX = 0.0;
         float dY = 0.0;
@@ -852,21 +852,21 @@ private:
                 break;
             pEvent = pNextEvent;
         }
-        
+
         NSPoint aPt = [NSEvent mouseLocation];
         mpFrame->CocoaToVCL( aPt );
-        
+
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
         aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
         aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel   = TRUE;
-        
+
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
-        
+
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
@@ -893,7 +893,7 @@ private:
 -(void)scrollWheel: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
@@ -905,7 +905,7 @@ private:
         for(;;)
         {
             dX += [pEvent deltaX];
-    	    dY += [pEvent deltaY];
+            dY += [pEvent deltaY];
             NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSScrollWheelMask
                 untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
             if( !pNextEvent )
@@ -960,7 +960,7 @@ private:
 -(void)keyDown: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpLastEvent = pEvent;
@@ -970,7 +970,7 @@ private:
 
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-        
+
         if( ! [self handleKeyDownException: pEvent] )
         {
             NSArray* pArray = [NSArray arrayWithObject: pEvent];
@@ -984,7 +984,7 @@ private:
 -(BOOL)handleKeyDownException:(NSEvent*)pEvent
 {
     // check for a very special set of modified characters
-    NSString* pUnmodifiedString = [pEvent charactersIgnoringModifiers]; 
+    NSString* pUnmodifiedString = [pEvent charactersIgnoringModifiers];
 
     if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
     {
@@ -1000,7 +1000,7 @@ private:
         }
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
         sal_uInt16 nKeyCode = ImplMapCharCode( keyChar );
-        
+
         // Caution: should the table grow to more than 5 or 6 entries,
         // we must consider moving it to a kind of hash map
         const unsigned int nExceptions = SAL_N_ELEMENTS( aExceptionalKeys );
@@ -1022,7 +1022,7 @@ private:
 -(void)flagsChanged: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
@@ -1033,7 +1033,7 @@ private:
 -(void)insertText:(id)aString
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         NSString* pInsert = nil;
@@ -1041,18 +1041,18 @@ private:
             pInsert = [aString string];
         else
             pInsert = aString;
-        
+
         int nLen = 0;
         if( pInsert && ( nLen = [pInsert length] ) > 0 )
         {
             OUString aInsertString( GetOUString( pInsert ) );
              // aCharCode initializer is safe since aInsertString will at least contain '\0'
             sal_Unicode aCharCode = *aInsertString.getStr();
-            
+
             if( nLen == 1 &&
                 aCharCode < 0x80 &&
                 aCharCode > 0x1f &&
-				! [self hasMarkedText ]
+                ! [self hasMarkedText ]
                 )
             {
                 sal_uInt16 nKeyCode = ImplMapCharCode( aCharCode );
@@ -1060,12 +1060,12 @@ private:
 
                 // #i99567#
                 // find out the unmodified key code
-    
+
                 // sanity check
                 if( mpLastEvent && ( [mpLastEvent type] == NSKeyDown || [mpLastEvent type] == NSKeyUp ) )
                 {
                     // get unmodified string
-                    NSString* pUnmodifiedString = [mpLastEvent charactersIgnoringModifiers]; 
+                    NSString* pUnmodifiedString = [mpLastEvent charactersIgnoringModifiers];
                     if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
                     {
                         // map the unmodified key code
@@ -1478,7 +1478,7 @@ private:
                 mpLastSuperEvent = mpLastEvent;
                 [NSApp performSelector:@selector(sendSuperEvent:) withObject: mpLastEvent];
                 mpLastSuperEvent = pLastSuperEvent;
-                
+
                 std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
                 if( it != GetSalData()->maKeyEventAnswer.end() )
                     it->second = true;
@@ -1501,7 +1501,7 @@ private:
 -(BOOL)sendKeyToFrameDirect: (sal_uInt16)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
     YIELD_GUARD;
-    
+
     long nRet = 0;
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -1523,7 +1523,7 @@ private:
 
 -(BOOL)sendSingleCharacter: (NSEvent *)pEvent
 {
-    NSString* pUnmodifiedString = [pEvent charactersIgnoringModifiers]; 
+    NSString* pUnmodifiedString = [pEvent charactersIgnoringModifiers];
 
     if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
     {
@@ -1591,7 +1591,7 @@ private:
     // and b) why we should have a marked range at this point.
     if( ! mbInKeyInput )
         return NSMakeRange( 0, 0 );
-    
+
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
 
@@ -1628,7 +1628,7 @@ private:
         {
             unsigned int nUnderlineValue;
             NSRange effectiveRange;
-            
+
             effectiveRange = NSMakeRange(i, 1);
             nUnderlineValue = [[aString attribute:NSUnderlineStyleAttributeName atIndex:i effectiveRange:&effectiveRange] unsignedIntValue];
 
@@ -1739,7 +1739,7 @@ private:
     if ( mpReferenceWrapper == nil ) {
         // some frames never become visible ..
         Window *pWindow = mpFrame -> GetWindow();
-        if ( ! pWindow ) 
+        if ( ! pWindow )
             return nil;
 
         mpReferenceWrapper = new ReferenceWrapper;
