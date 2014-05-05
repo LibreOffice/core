@@ -1446,7 +1446,8 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
             SwAccessibleTableData_Impl *pNewTableData = CreateNewTableData(); // #i77106#
             if( !pNewTableData->CompareExtents( GetTableData() ) )
             {
-                if(pNewTableData->GetRowCount()!= mpTableData->GetRowCount())
+                if (pNewTableData->GetRowCount() != mpTableData->GetRowCount()
+                    && 1 < GetTableData().GetRowCount())
                 {
                     Int32Set_Impl::const_iterator aSttCol( GetTableData().GetColumnIter( 0 ) );
                     Int32Set_Impl::const_iterator aSttRow( GetTableData().GetRowIter( 1 ) );

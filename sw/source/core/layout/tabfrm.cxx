@@ -4178,28 +4178,6 @@ void SwRowFrm::Cut()
         pTab->FindMaster()->InvalidatePos();
     }
 
-    // #i103961#
-    // notification for accessibility
-    {
-        SwRootFrm *pRootFrm = getRootFrm();
-        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
-        {
-            SwViewShell* pVSh = pRootFrm->GetCurrShell();
-            if ( pVSh && pVSh->Imp() )
-            {
-                SwFrm* pCellFrm( GetLower() );
-                while ( pCellFrm )
-                {
-                    OSL_ENSURE( pCellFrm->IsCellFrm(),
-                            "<SwRowFrm::Cut()> - unexpected type of SwRowFrm lower." );
-                    pVSh->Imp()->DisposeAccessibleFrm( pCellFrm );
-
-                    pCellFrm = pCellFrm->GetNext();
-                }
-            }
-        }
-    }
-
     SwLayoutFrm::Cut();
 }
 
