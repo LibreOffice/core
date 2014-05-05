@@ -521,6 +521,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 {
                     const css::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
                     sal_Int32 nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
+                    if (nSoftBreak == -1)
+                    {
+                        nSoftBreak = nPos;
+                    }
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                     css::i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, css::uno::Sequence <css::beans::PropertyValue>(), 1 );
                     css::i18n::LineBreakUserOptions aUserOptions;
