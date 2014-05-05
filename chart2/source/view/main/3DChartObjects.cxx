@@ -70,8 +70,13 @@ Camera::Camera():
     maUp(0, 1, 0),
     maDirection(glm::vec3(0,0,0)-maPos)
 {
+}
+
+void Camera::render()
+{
     getRender()->SetCameraInfo(maPos, maDirection, maUp, true);
 }
+
 
 namespace temporary {
 

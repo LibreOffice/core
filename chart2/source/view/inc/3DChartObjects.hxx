@@ -87,6 +87,7 @@ class Camera : public Renderable3DObject
 {
 public:
     Camera();
+    virtual void render();
 private:
     glm::vec3 maPos;
     glm::vec3 maUp;
