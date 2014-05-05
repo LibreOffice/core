@@ -1690,6 +1690,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
     SwSelBoxes aDelBoxes;
+    std::vector< std::pair<SwTableBox *, sal_uLong> > aDelNodes;
     if( IsDelBox() )
     {
         // Trick: add missing boxes in any line, they will be connected
@@ -1754,10 +1755,8 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 rDoc.GetNodes()._MoveNodes( aRg, rDoc.GetNodes(), aInsPos, false );
             }
             else
-            {   // first disconnect box from node, otherwise ~SwTableBox would
-                // access pBox->pSttNd, deleted by DeleteSection
-                pBox->RemoveFromTable();
-                rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
+            {
+                aDelNodes.push_back(std::make_pair(pBox, nIdx));
             }
         }
     }
@@ -1774,14 +1773,23 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             if (pPCD)
                 pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
             aDelBoxes.insert(pBox);
-            pBox->RemoveFromTable(); // ~SwTableBox would access pBox->pSttNd
-            rDoc.DeleteSection( rDoc.GetNodes()[ nIdx ] );
+            aDelNodes.push_back(std::make_pair(pBox, nIdx));
         }
     }
 
     // fdo#57197: before deleting the SwTableBoxes, delete the SwTabFrms
     aTmpBox.SetTableLines(aDelBoxes, pTblNd->GetTable());
     aTmpBox.DelFrms(pTblNd->GetTable());
+
+    // do this _after_ deleting Frms because disposing SwAccessible requires
+    // connection to the nodes, see SwAccessibleChild::IsAccessible()
+    for (size_t i = 0; i < aDelNodes.size(); ++i)
+    {
+        // first disconnect box from node, otherwise ~SwTableBox would
+        // access pBox->pSttNd, deleted by DeleteSection
+        aDelNodes[i].first->RemoveFromTable();
+        rDoc.DeleteSection(rDoc.GetNodes()[ aDelNodes[i].second ]);
+    }
 
     // Remove boxes from table structure
     for( sal_uInt16 n = 0; n < aDelBoxes.size(); ++n )
