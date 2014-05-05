@@ -67,8 +67,10 @@ Rectangle::Rectangle(sal_uInt32 nId):
 Camera::Camera():
     Renderable3DObject(0),
     maPos(10,10,-10),
+    maUp(0, 1, 0),
     maDirection(glm::vec3(0,0,0)-maPos)
 {
+    getRender()->SetCameraInfo(maPos, maDirection, maUp, true);
 }
 
 namespace temporary {

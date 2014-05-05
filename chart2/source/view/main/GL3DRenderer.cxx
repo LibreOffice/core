@@ -96,6 +96,8 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_SenceBox.minZCoord = FLT_MAX;
     m_uiSelectFrameCounter = 0;
     m_fHeightWeight = 1.0f;
+    m_CameraInfo.useDefault = true;
+    m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
 }
 
 void OpenGL3DRenderer::LoadShaders()
@@ -109,6 +111,18 @@ void OpenGL3DRenderer::LoadShaders()
     m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
 
     Init3DUniformBlock();
+}
+
+void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut)
+{
+    m_CameraInfo.useDefault = useDefalut;
+    if (m_CameraInfo.useDefault)
+    {
+        return;
+    }
+    m_CameraInfo.cameraPos = pos;
+    m_CameraInfo.cameraOrg = pos + direction;
+    m_CameraInfo.cameraUp = up;
 }
 
 void OpenGL3DRenderer::init()
@@ -801,21 +815,6 @@ void OpenGL3DRenderer::EndAddShapePolygon3DObject()
 
 void OpenGL3DRenderer::AddPolygon3DObjectNormalPoint(float x, float y, float z)
 {
-    float actualX = x - (float)m_iWidth / 2;
-    float actualY = y - (float)m_iHeight / 2;
-    float actualZ = z;
-    float maxCoord = std::max(actualX, std::max(actualY, actualZ));
-    m_fZmax = std::max(maxCoord, m_fZmax);
-    m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, -actualY, actualZ));
-
-    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, actualX);
-    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, actualX);
-
-    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, actualY);
-    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, actualY);
-
-    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, actualZ);
-    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, actualZ);
     if (m_Polygon3DInfo.fillStyle)
     {
         if (!m_Polygon3DInfo.normals)
@@ -844,61 +843,19 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
     float maxCoord = std::max(actualX, std::max(actualY, actualZ));
     m_fZmax = std::max(maxCoord, m_fZmax);
     m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, -actualY, actualZ));
+    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, actualX);
+    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, actualX);
+
+    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, actualY);
+    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, actualY);
+
+    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, actualZ);
+    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, actualZ);
 }
 
 void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
 {
     m_Polygon3DInfo.verticesList.push_back(m_Polygon3DInfo.vertices);
-    //get the buttom surface to calc the camera org, just for the demo
-    if (m_Polygon3DInfo.vertices->size() && !m_bCameraUpdated)
-    {
-        float minX = m_Polygon3DInfo.vertices->at(0).x;
-        float maxX = m_Polygon3DInfo.vertices->at(0).x;
-        float minZ = m_Polygon3DInfo.vertices->at(0).z;
-        float maxZ = m_Polygon3DInfo.vertices->at(0).z;
-        float maxY = m_Polygon3DInfo.vertices->at(0).y;
-        float minY = m_Polygon3DInfo.vertices->at(0).y;
-        for (size_t i = 1; i < m_Polygon3DInfo.vertices->size(); i++)
-        {
-            minX = std::min(minX, m_Polygon3DInfo.vertices->at(i).x);
-            maxX = std::max(maxX, m_Polygon3DInfo.vertices->at(i).x);
-            minZ = std::min(minZ, m_Polygon3DInfo.vertices->at(i).z);
-            maxZ = std::max(maxZ, m_Polygon3DInfo.vertices->at(i).z);
-            minY = std::min(minY, m_Polygon3DInfo.vertices->at(i).y);
-            maxY = std::max(maxY, m_Polygon3DInfo.vertices->at(i).y);
-        }
-
-        if (maxY == minY)
-        {
-            float distance = maxZ + 300;
-            float veriticalAngle = GL_PI / 6.0f;
-            float horizontalAngle = 0;
-            m_CameraInfo.cameraOrg = glm::vec3(minX + (maxX - minX) / 2,
-                                               minY + (maxY - minY) / 2,
-                                               minZ + (maxZ - minZ) / 2);
-            //update the camera position and org
-            m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
-            m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
-            m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y - distance * sin(veriticalAngle);
-
-            m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
-                       m_CameraInfo.cameraOrg, // and looks at the origin
-                       m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
-                       );
-            m_3DViewBack = m_3DView;
-            #if 0
-            cout << "update position" << endl;
-            cout << "m_CameraInfo.cameraPos.x = " << m_CameraInfo.cameraPos.x << endl;
-            cout << "m_CameraInfo.cameraPos.y = " << m_CameraInfo.cameraPos.y << endl;
-            cout << "m_CameraInfo.cameraPos.z = " << m_CameraInfo.cameraPos.z << endl;
-
-            cout << "m_CameraInfo.cameraOrg.x = " << m_CameraInfo.cameraOrg.x << endl;
-            cout << "m_CameraInfo.cameraOrg.y = " << m_CameraInfo.cameraOrg.y << endl;
-            cout << "m_CameraInfo.cameraOrg.z = " << m_CameraInfo.cameraOrg.z << endl;
-            #endif
-            m_bCameraUpdated = true;
-        }
-    }
     m_Polygon3DInfo.vertices = NULL;
 }
 
@@ -1263,14 +1220,16 @@ void OpenGL3DRenderer::CreateSceneBoxView()
     m_fHeightWeight = senceBoxWidth * (float)m_iHeight / (float)m_iWidth / senceBoxHeight;
     m_SenceBox.maxYCoord *= m_fHeightWeight;
     m_SenceBox.minYCoord *= m_fHeightWeight;
-    m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
-                                       -m_SenceBox.minYCoord - senceBoxHeight * m_fHeightWeight/ 2,
-                                       m_SenceBox.minZCoord + senceBoxDepth / 2);
-    //update the camera position and org
-    m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
-    m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
-    m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y - distance * sin(veriticalAngle);
-
+    if (m_CameraInfo.useDefault)
+    {
+        m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
+                                           -m_SenceBox.minYCoord - senceBoxHeight * m_fHeightWeight/ 2,
+                                           m_SenceBox.minZCoord + senceBoxDepth / 2);
+        //update the camera position and org
+        m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
+        m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
+        m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y - distance * sin(veriticalAngle);
+    }
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
                m_CameraInfo.cameraOrg, // and looks at the origin
                m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
@@ -1395,14 +1354,16 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     extrude3DInfo.yRange[0] *= m_fHeightWeight;
     extrude3DInfo.yRange[1] *= m_fHeightWeight;
     int reverse = extrude3DInfo.yRange[0] > extrude3DInfo.yRange[1] ? 1 : -1;
-    m_CameraInfo.cameraOrg = glm::vec3(extrude3DInfo.xTransform + (extrude3DInfo.xRange[1] - extrude3DInfo.xRange[0]) / 2,
-                                       -extrude3DInfo.yTransform + (extrude3DInfo.yRange[1] - extrude3DInfo.yRange[0]) *reverse,
-                                       extrude3DInfo.zTransform + (extrude3DInfo.xRange[1] - extrude3DInfo.xRange[0]) / 2);
+    if (m_CameraInfo.useDefault)
+    {
+        m_CameraInfo.cameraOrg = glm::vec3(extrude3DInfo.xTransform + (extrude3DInfo.xRange[1] - extrude3DInfo.xRange[0]) / 2,
+                                           -extrude3DInfo.yTransform + (extrude3DInfo.yRange[1] - extrude3DInfo.yRange[0]) *reverse,
+                                           extrude3DInfo.zTransform + (extrude3DInfo.xRange[1] - extrude3DInfo.xRange[0]) / 2);
 
-    m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x - distance * cos(veriticalAngle) * sin(horizontalAngle);
-    m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
-    m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * sin(horizontalAngle) * reverse;
-
+        m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x - distance * cos(veriticalAngle) * sin(horizontalAngle);
+        m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
+        m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * sin(horizontalAngle) * reverse;
+    }
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
                m_CameraInfo.cameraOrg, // and looks at the origin
                m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)

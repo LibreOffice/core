@@ -89,6 +89,7 @@ public:
     Camera();
 private:
     glm::vec3 maPos;
+    glm::vec3 maUp;
     glm::vec3 maDirection;
 };
 

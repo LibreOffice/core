@@ -109,6 +109,7 @@ typedef struct Extrude3DInfo
 
 typedef struct CameraInfo
 {
+    bool useDefault;
     glm::vec3 cameraPos;
     glm::vec3 cameraOrg;
     glm::vec3 cameraUp;
@@ -179,7 +180,7 @@ public:
     void SetClickPos(Point aMPos);
     void RenderClickPos(Point aMPos);
     void SetSize(const Size& rSize);
-
+    void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut);
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
