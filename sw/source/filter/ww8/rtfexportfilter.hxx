@@ -35,38 +35,32 @@ protected:
 
 /// The physical access to the RTF document (for writing).
 class RtfExportFilter : public cppu::WeakImplHelper2
-<
-    com::sun::star::document::XFilter,
-    com::sun::star::document::XExporter
->
+    <
+    css::document::XFilter,
+    css::document::XExporter
+    >
 {
 protected:
-    ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xCtx;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xSrcDoc;
+    css::uno::Reference<css::uno::XComponentContext> m_xCtx;
+    css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
 public:
-    RtfExportFilter( const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xCtx );
+    RtfExportFilter(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
     virtual ~RtfExportFilter();
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL cancel(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc)
+    throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     RtfWriter m_aWriter;
 };
 
 OUString RtfExport_getImplementationName();
-::com::sun::star::uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames()
-    throw();
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL RtfExport_createInstance(
-                                                                        const ::com::sun::star::uno::Reference<
-                                                                        com::sun::star::uno::XComponentContext > &xCtx)
-    throw( ::com::sun::star::uno::Exception );
+css::uno::Sequence<OUString> SAL_CALL RtfExport_getSupportedServiceNames() throw();
+css::uno::Reference<css::uno::XInterface> SAL_CALL RtfExport_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xCtx) throw(css::uno::Exception);
 
 #define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"
 
