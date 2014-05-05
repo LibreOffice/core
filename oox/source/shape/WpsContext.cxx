@@ -73,20 +73,24 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 }
             }
 
-            // Handle inset attributes for Writer textframes.
-            sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
-            boost::optional<sal_Int32> oInsets[4];
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aInsets); ++i)
-            {
-                OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
-                if (oValue.has())
-                    oInsets[i] = oox::drawingml::GetCoordinate(oValue.get());
-            }
-            OUString aProps[] = { OUString("LeftBorderDistance"), OUString("TopBorderDistance"), OUString("RightBorderDistance"), OUString("BottomBorderDistance") };
+            uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aProps); ++i)
-                if (oInsets[i])
-                    xPropertySet->setPropertyValue(aProps[i], uno::makeAny(*oInsets[i]));
+            if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+            {
+                // Handle inset attributes for Writer textframes.
+                sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
+                boost::optional<sal_Int32> oInsets[4];
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aInsets); ++i)
+                {
+                    OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
+                    if (oValue.has())
+                        oInsets[i] = oox::drawingml::GetCoordinate(oValue.get());
+                }
+                OUString aProps[] = { OUString("LeftBorderDistance"), OUString("TopBorderDistance"), OUString("RightBorderDistance"), OUString("BottomBorderDistance") };
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aProps); ++i)
+                    if (oInsets[i])
+                        xPropertySet->setPropertyValue(aProps[i], uno::makeAny(*oInsets[i]));
+            }
 
             // Handle text vertical adjustment inside a text frame
             if (rAttribs.hasAttribute(XML_anchor))
@@ -100,11 +104,12 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     case XML_noAutofit:
     case XML_spAutoFit:
     {
+        uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
         // We can't use oox::drawingml::TextBodyPropertiesContext here, as this
         // is a child context of bodyPr, so the shape is already sent: we need
         // to alter the XShape directly.
         uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-        if (xPropertySet.is())
+        if (xPropertySet.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
             xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));
     }
     break;
