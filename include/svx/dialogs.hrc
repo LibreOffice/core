@@ -319,9 +319,6 @@
 // String-Arrays
 #define RID_SVXSTR_TEXTENCODING_TABLE       (RID_SVX_START + 312)
 
-// Graphic filter
-#define RID_SVXTBX_GRFFILTER                (RID_SVX_START + 331)
-
 #define RID_SVXERRCODE                      (RID_SVX_START + 350)
 
 // gallery

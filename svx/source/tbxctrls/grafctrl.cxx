@@ -36,7 +36,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <svx/svxids.hrc>
-#include "grafctrl.hrc"
 #include <svx/dialogs.hrc>
 #include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
