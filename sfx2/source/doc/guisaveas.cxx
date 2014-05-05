@@ -1715,11 +1715,13 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
     }
 
     // Launch PDF viewer
-    if ( nStoreMode & PDFEXPORT_REQUESTED ) {
+    if ( nStoreMode & PDFEXPORT_REQUESTED )
+    {
         FilterConfigItem aItem( "Office.Common/Filter/PDF/Export/" );
         bool aViewPDF = aItem.ReadBool( "ViewPDFAfterExport", false );
 
-        if ( aViewPDF ) {
+        if ( aViewPDF )
+        {
             uno::Reference<XSystemShellExecute> xSystemShellExecute(SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
             xSystemShellExecute->execute( aURL.GetMainURL( INetURLObject::NO_DECODE ), "", SystemShellExecuteFlags::URIS_ONLY );
         }
