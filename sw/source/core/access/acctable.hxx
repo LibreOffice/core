@@ -266,11 +266,12 @@ public:
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    typedef std::vector<const SwAccessibleContext*> VEC_CELL;
-    VEC_CELL m_vecCellAdd;
-    VEC_CELL m_vecCellRemove;
+    typedef std::vector< ::std::pair<SwAccessibleContext*,
+        css::uno::WeakReference<css::accessibility::XAccessible> > > Cells_t;
+    Cells_t m_vecCellAdd;
+    Cells_t m_vecCellRemove;
     void FireSelectionEvent( );
-    void AddSelectionCell(const SwAccessibleContext* , bool bAddOrRemove);
+    void AddSelectionCell(SwAccessibleContext*, bool bAddOrRemove);
 };
 
 inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()

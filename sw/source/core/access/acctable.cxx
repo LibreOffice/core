@@ -1730,26 +1730,33 @@ void SwAccessibleTable::FireSelectionEvent( )
 
     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
 
-//    int nRemove = m_vecCellRemove.size();
-//    int nAdd = m_vecCellAdd.size();
-
-    VEC_CELL::iterator vi = m_vecCellRemove.begin();
-    for (; vi != m_vecCellRemove.end()  ; ++vi)
+    for (Cells_t::iterator vi = m_vecCellRemove.begin();
+            vi != m_vecCellRemove.end(); ++vi)
     {
-        SwAccessibleContext *pAccCell = const_cast<SwAccessibleContext *>(*vi);
-        OSL_ASSERT(pAccCell != NULL );
-        pAccCell->FireAccessibleEvent(aEvent);
+        // fdo#57197: check if the object is still alive
+        uno::Reference<XAccessible> const xAcc(vi->second);
+        if (xAcc.is())
+        {
+            SwAccessibleContext *const pAccCell(vi->first);
+            assert(pAccCell);
+            pAccCell->FireAccessibleEvent(aEvent);
+        }
     }
 
     if (m_vecCellAdd.size() <= SELECTION_WITH_NUM)
     {
         aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
-        vi = m_vecCellAdd.begin();
-        for (; vi != m_vecCellAdd.end()  ; ++vi)
+        for (Cells_t::iterator vi = m_vecCellAdd.begin();
+                vi != m_vecCellAdd.end(); ++vi)
         {
-            SwAccessibleContext *pAccCell = const_cast<SwAccessibleContext *>(*vi);
-            OSL_ASSERT(pAccCell != NULL );
-            pAccCell->FireAccessibleEvent(aEvent);
+            // fdo#57197: check if the object is still alive
+            uno::Reference<XAccessible> const xAcc(vi->second);
+            if (xAcc.is())
+            {
+                SwAccessibleContext *const pAccCell(vi->first);
+                assert(pAccCell);
+                pAccCell->FireAccessibleEvent(aEvent);
+            }
         }
         return ;
     }
@@ -1760,15 +1767,17 @@ void SwAccessibleTable::FireSelectionEvent( )
     }
 }
 
-void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell, bool bAddOrRemove)
+void SwAccessibleTable::AddSelectionCell(
+        SwAccessibleContext *const pAccCell, bool const bAddOrRemove)
 {
+    uno::Reference<XAccessible> const xTmp(pAccCell);
     if (bAddOrRemove)
     {
-        m_vecCellAdd.push_back(pAccCell);
+        m_vecCellAdd.push_back(std::make_pair(pAccCell, xTmp));
     }
     else
     {
-        m_vecCellRemove.push_back(pAccCell);
+        m_vecCellRemove.push_back(std::make_pair(pAccCell, xTmp));
     }
 }
 
