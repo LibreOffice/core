@@ -23,6 +23,8 @@
 #include <config_features.h>
 
 #include <sal/config.h>
+#include <sal/types.h>
+
 
 #include <cassert>
 #include <stdexcept>
@@ -928,7 +930,7 @@ public:
      @returns UNO reference to an object that implements the css:awt:XDisplayConnection
         interface.
     */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > GetDisplayConnection();
+    static css::uno::Reference< css::awt::XDisplayConnection > GetDisplayConnection();
 
     /** @deprecated AppEvent is used only in the Desktop class now. However, it is
      intended to notify the application that an event has occured. It was in oldsv.cxx,
@@ -1352,7 +1354,7 @@ public:
 
      @returns UNO reference to VCL toolkit
     */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > GetVCLToolkit();
+    static css::uno::Reference< css::awt::XToolkit > GetVCLToolkit();
 
     /** Get the application's UNO wrapper object.
 
