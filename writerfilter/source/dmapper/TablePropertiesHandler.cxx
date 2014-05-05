@@ -324,10 +324,10 @@ namespace dmapper {
                     CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
                     pCellColorHandler->enableInteropGrabBag("shd"); //enable to store shd unsupported props in grab bag
                     pProperties->resolve( *pCellColorHandler );
+                    TablePropertyMapPtr pPropertyMap = pCellColorHandler->getProperties();
                     beans::PropertyValue aGrabBag = pCellColorHandler->getInteropGrabBag();
                     if (m_pCurrentInteropGrabBag)
                         m_pCurrentInteropGrabBag->push_back(aGrabBag);
-                    TablePropertyMapPtr pPropertyMap = pCellColorHandler->getProperties();
                     pPropertyMap->Insert( PROP_CELL_INTEROP_GRAB_BAG, aGrabBag.Value );
                     cellProps( pPropertyMap );
                 }

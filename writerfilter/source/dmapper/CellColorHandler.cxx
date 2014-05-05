@@ -131,6 +131,15 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Shd_themeFillTint:
             createGrabBag("themeFillTint", uno::makeAny(OUString::number(nIntValue, 16)));
             break;
+        case NS_ooxml::LN_CT_Shd_themeColor:
+            createGrabBag("themeColor", uno::makeAny(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+        break;
+        case NS_ooxml::LN_CT_Shd_themeShade:
+            createGrabBag("themeShade", uno::makeAny(OUString::number(nIntValue, 16)));
+        break;
+        case NS_ooxml::LN_CT_Shd_themeTint:
+            createGrabBag("themeTint", uno::makeAny(OUString::number(nIntValue, 16)));
+            break;
         default:
             OSL_FAIL( "unknown attribute");
     }
@@ -319,6 +328,10 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
                         : m_OutputFormat == Paragraph ? PROP_PARA_BACK_COLOR
                         : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
+
+    createGrabBag("originalColor", uno::makeAny( OStringToOUString(
+            msfilter::util::ConvertColor( nApplyColor, true ), RTL_TEXTENCODING_UTF8 )));
+
     return pPropertyMap;
 }
 

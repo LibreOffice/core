@@ -2896,7 +2896,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
             sw::util::HasItem<SfxGrabBagItem>( pFmt->GetAttrSet(), RES_FRMATR_GRABBAG )->GetGrabBag();
 
     OString sOriginalColor;
-    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement = aGrabBag.find("fill");
+    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement = aGrabBag.find("originalColor");
     if( aGrabBagElement != aGrabBag.end() )
         sOriginalColor = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
 
@@ -2911,7 +2911,6 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     else
     {
         ::sax_fastparser::FastAttributeList* aAttrList = NULL;
-        AddToAttrList( aAttrList, FSNS( XML_w, XML_fill ), sColor.getStr() );
 
         for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
         {
@@ -2922,6 +2921,14 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
                 AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFillTint ), sValue.getStr() );
             else if( aGrabBagElement->first == "themeFillShade")
                 AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFillShade ), sValue.getStr() );
+            else if( aGrabBagElement->first == "fill" )
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_fill ), sValue.getStr() );
+            else if( aGrabBagElement->first == "themeColor")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeColor ), sValue.getStr() );
+            else if( aGrabBagElement->first == "themeTint")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeTint ), sValue.getStr() );
+            else if( aGrabBagElement->first == "themeShade")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeShade ), sValue.getStr() );
             else if( aGrabBagElement->first == "color")
                 AddToAttrList( aAttrList, FSNS( XML_w, XML_color ), sValue.getStr() );
             else if( aGrabBagElement->first == "val")
