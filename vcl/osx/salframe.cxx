@@ -1018,6 +1018,11 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_GREATER ]  = OUString( '>' );
         aKeyMap[ KEY_EQUAL ]    = OUString( '=' );
         aKeyMap[ KEY_OPEN ]     = OUString( sal_Unicode( 0x23cf ) );
+        aKeyMap[ KEY_TILDE ]    = OUString( '~' );
+        aKeyMap[ KEY_BRACKETLEFT ] = OUString( '[' );
+        aKeyMap[ KEY_BRACKETRIGHT ] = OUString( '}' );
+        aKeyMap[ KEY_SEMICOLON ] = OUString( ';' );
+        aKeyMap[ KEY_QUOTERIGHT ] = OUString( '\'' );
 
         /* yet unmapped KEYCODES:
         aKeyMap[ KEY_INSERT ]   = OUString( sal_Unicode( ) );
@@ -1034,12 +1039,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_HELP ]     = OUString( sal_Unicode( ) );
         aKeyMap[ KEY_HANGUL_HANJA ]   = OUString( sal_Unicode( ) );
         aKeyMap[ KEY_DECIMAL ]  = OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_TILDE ]    = OUString( sal_Unicode( ) );
         aKeyMap[ KEY_QUOTELEFT ]= OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_BRACKETLEFT ]= OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_BRACKETRIGHT ]= OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_SEMICOLON ]= OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_QUOTERIGHT ]= OUString( sal_Unicode( ) );
         aKeyMap[ KEY_CAPSLOCK ]= OUString( sal_Unicode( ) );
         aKeyMap[ KEY_NUMLOCK ]= OUString( sal_Unicode( ) );
         aKeyMap[ KEY_SCROLLLOCK ]= OUString( sal_Unicode( ) );
