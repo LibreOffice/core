@@ -435,7 +435,12 @@ bool OpenGLContext::ImplInit()
     }
     SetPixelFormat(m_aGLWin.hDC,WindowPix,&PixelFormatFront);
     m_aGLWin.hRC  = wglCreateContext(m_aGLWin.hDC);
-    wglMakeCurrent(m_aGLWin.hDC,m_aGLWin.hRC);
+
+    if (!wglMakeCurrent(m_aGLWin.hDC,m_aGLWin.hRC))
+    {
+        SAL_WARN("vcl.opengl", "Failed wglMakeCurrent: " << GetLastError());
+        return false;
+    }
 
 #elif defined( MACOSX )
 
@@ -506,9 +511,10 @@ bool OpenGLContext::ImplInit()
     if(!bGlewInit)
     {
         glewExperimental = GL_TRUE;
-        if (glewInit() != GLEW_OK)
+        GLenum err = glewInit();
+        if (err != GLEW_OK)
         {
-            SAL_WARN("vcl.opengl", "Failed to initialize GLEW");
+            SAL_WARN("vcl.opengl", "Failed to initialize GLEW: " << glewGetErrorString(err));
             return false;
         }
         else
