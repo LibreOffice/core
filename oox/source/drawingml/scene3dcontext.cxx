@@ -46,9 +46,12 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     switch( aElementToken )
     {
     case A_TOKEN( camera ):
-        mr3DProperties.mfFieldOfVision = rAttribs.getInteger( XML_fov, 0 ) / 60000.0; // 60000ths of degree
-        mr3DProperties.mfZoom = rAttribs.getInteger( XML_zoom, 100000 ) / 100000.0;
-        mr3DProperties.mnPreset = rAttribs.getToken( XML_prst, XML_none );
+        if( rAttribs.hasAttribute( XML_fov ) )
+            mr3DProperties.mfFieldOfVision = rAttribs.getInteger( XML_fov, 0 ) / 60000.0; // 60000ths of degree
+        if( rAttribs.hasAttribute( XML_zoom ) )
+            mr3DProperties.mfZoom = rAttribs.getInteger( XML_zoom, 100000 ) / 100000.0;
+        if( rAttribs.hasAttribute( XML_prst ) )
+            mr3DProperties.mnPreset = rAttribs.getToken( XML_prst, XML_none );
         // TODO: nested element XML_rot
         break;
     case A_TOKEN( lightRig ):

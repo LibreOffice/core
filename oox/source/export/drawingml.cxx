@@ -2270,6 +2270,59 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
     }
 }
 
+void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
+{
+    // check existence of the grab bag
+    if( !GetProperty( xPropSet, "InteropGrabBag" ) )
+        return;
+
+    // extract the relevant properties from the grab bag
+    Sequence< PropertyValue > aGrabBag, aEffectProps;
+    mAny >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+        if( aGrabBag[i].Name == "3DEffectProperties" )
+        {
+            aGrabBag[i].Value >>= aEffectProps;
+            break;
+        }
+    if( aEffectProps.getLength() == 0 )
+        return;
+
+    sax_fastparser::FastAttributeList *aCameraAttrList = mpFS->createAttrList();
+    for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
+    {
+        if( aEffectProps[i].Name == "prst" )
+        {
+            OUString sVal;
+            aEffectProps[i].Value >>= sVal;
+            aCameraAttrList->add( XML_prst, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        else if( aEffectProps[i].Name == "fov" )
+        {
+            float fVal = 0;
+            aEffectProps[i].Value >>= fVal;
+            aCameraAttrList->add( XML_fov, OString::number( fVal * 60000 ).getStr() );
+        }
+        else if( aEffectProps[i].Name == "zoom" )
+        {
+            float fVal = 1;
+            aEffectProps[i].Value >>= fVal;
+            aCameraAttrList->add( XML_zoom, OString::number( fVal * 100000 ).getStr() );
+        }
+    }
+
+    mpFS->startElementNS( XML_a, XML_scene3d, FSEND );
+
+    sax_fastparser::XFastAttributeListRef xAttrList( aCameraAttrList );
+    mpFS->startElementNS( XML_a, XML_camera, xAttrList );
+    mpFS->endElementNS( XML_a, XML_camera );
+
+    // a:lightRig with Word default values - Word won't open the document if this is not present
+    mpFS->singleElementNS( XML_a, XML_lightRig, XML_rig, "threePt", XML_dir, "t", FSEND );
+
+    mpFS->endElementNS( XML_a, XML_scene3d );
+}
+
 }
 }
 

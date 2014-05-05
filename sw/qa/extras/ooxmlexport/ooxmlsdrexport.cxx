@@ -1145,6 +1145,26 @@ DECLARE_OOXMLEXPORT_TEST(testShapeEffectPreservation, "shape-effect-preservation
             0 ); // should not be present
 }
 
+DECLARE_OOXMLEXPORT_TEST(testShape3DEffectPreservation, "shape-3d-effect-preservation.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // first shape
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera",
+            "prst", "perspectiveRelaxedModerately");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera",
+            "zoom", "150000");
+
+    // second shape
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera",
+            "prst", "isometricLeftDown");
+}
+
 DECLARE_OOXMLEXPORT_TEST(fdo77719, "fdo77719.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

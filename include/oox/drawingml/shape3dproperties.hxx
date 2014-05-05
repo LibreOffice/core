@@ -46,6 +46,10 @@ struct Shape3DProperties
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const Shape3DProperties& rSourceProps );
+
+    OUString            getCameraPrstName( sal_Int32 nElement );
+
+    css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
 };
 
 

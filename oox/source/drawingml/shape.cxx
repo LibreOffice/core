@@ -924,6 +924,11 @@ Reference< XShape > Shape::createAndInsert(
 
                 putPropertyToGrabBag( "EffectProperties", Any( aEffectsGrabBag ) );
             }
+
+            // add 3D effects if any
+            Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
+            if( aCamera3DEffects.getLength() > 0 )
+                putPropertyToGrabBag( "3DEffectProperties", Any( aCamera3DEffects ) );
         }
 
         // These can have a custom geometry, so position should be set here,

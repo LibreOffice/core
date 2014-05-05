@@ -374,6 +374,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
         WriteFill( rXPropSet );
         WriteOutline( rXPropSet );
         WriteShapeEffects( rXPropSet );
+        WriteShape3DEffects( rXPropSet );
     }
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
