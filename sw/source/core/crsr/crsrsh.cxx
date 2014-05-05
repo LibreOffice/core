@@ -970,7 +970,7 @@ bool SwCrsrShell::ChgCurrPam(
     // search in all selections for this position
     SwShellCrsr* pCmp = (SwShellCrsr*)m_pCurCrsr; // keep the pointer on cursor
     do {
-        if( pCmp->HasMark() &&
+        if( pCmp && pCmp->HasMark() &&
             *pCmp->Start() <= aPtPos && *pCmp->End() > aPtPos )
         {
             if( bTstOnly || m_pCurCrsr == pCmp ) // is the current
