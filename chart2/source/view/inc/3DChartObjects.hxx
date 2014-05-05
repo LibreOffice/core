@@ -30,7 +30,7 @@ public:
 
     virtual void render();
 
-    void getRender();
+    OpenGL3DRenderer* getRender();
 
 protected:
     sal_uInt32 mnUniqueId;
@@ -94,7 +94,7 @@ private:
 
 namespace temporary {
 
-class TemporaryContext
+class TemporaryContext: public opengl3D::Renderable3DObject
 {
 public:
     TemporaryContext();

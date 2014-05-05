@@ -144,6 +144,12 @@ void OpenGL3DRenderer::init()
     m_IsOpenglInit = true;
 }
 
+void OpenGL3DRenderer::SetSize(const Size& rSize)
+{
+    m_iWidth = rSize.Width();
+    m_iHeight = rSize.Height();
+}
+
 bool OpenGL3DRenderer::isOpenGLInitialized()
 {
     return m_IsOpenglInit;

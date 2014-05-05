@@ -25,7 +25,7 @@ void Renderable3DObject::render()
     (void) mnUniqueId;
 }
 
-void Renderable3DObject::getRender()
+OpenGL3DRenderer* Renderable3DObject::getRender()
 {
     if(mPrender==NULL)
     {
@@ -33,6 +33,7 @@ void Renderable3DObject::getRender()
         mPrender->init();
         mPrender->Set3DSenceInfo();
     }
+    return mPrender;
 }
 
 
@@ -73,6 +74,7 @@ Camera::Camera():
 namespace temporary {
 
 TemporaryContext::TemporaryContext():
+    Renderable3DObject(-1),
     miWidth(200),
     miHeight(200)
 {
@@ -81,7 +83,9 @@ TemporaryContext::TemporaryContext():
 void TemporaryContext::init()
 {
     maContext.init();
-    maContext.setWinSize(Size(miWidth, miHeight));
+    Size winSize(miWidth, miHeight);
+    maContext.setWinSize(winSize);
+    getRender()->SetSize(winSize);
 }
 
 void TemporaryContext::render()

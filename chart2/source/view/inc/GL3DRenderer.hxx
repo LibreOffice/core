@@ -178,6 +178,7 @@ public:
     void SetFPS(float fps);
     void SetClickPos(Point aMPos);
     void RenderClickPos(Point aMPos);
+    void SetSize(const Size& rSize);
 
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
