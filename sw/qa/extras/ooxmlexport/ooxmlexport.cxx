@@ -3260,6 +3260,17 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreakInFirstPara,"fdo77727.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br","type","page");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc,"/ContentType:Types/ContentType:Override[@PartName='/word/media/OOXDiagramDataRels1_0.png']",
+                        "ContentType",
+                        "image/png");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
