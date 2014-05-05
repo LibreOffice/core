@@ -127,6 +127,7 @@
 #include "dputil.hxx"
 
 #include <list>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
@@ -1536,9 +1537,9 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangeList* pUndoRanges = NULL;
+        boost::scoped_ptr<ScRangeList> pUndoRanges;
         if ( pDoc->HasUnoRefUndo() )
-            pUndoRanges = new ScRangeList( aRanges );
+            pUndoRanges.reset(new ScRangeList( aRanges ));
 
         if ( aRanges.UpdateReference( rRef.GetMode(), pDoc, rRef.GetRange(),
                                     rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) )
@@ -1570,8 +1571,6 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             if ( pUndoRanges )
                 pDoc->AddUnoRefChange( nObjectId, *pUndoRanges );
         }
-
-        delete pUndoRanges;
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
@@ -2403,10 +2402,10 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                        formula::FormulaGrammar::GRAM_UNSPECIFIED :
                                        formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
-                                ScValidationData* pNewData =
-                                        pValidObj->CreateValidationData( pDoc, eGrammar );
+                                boost::scoped_ptr<ScValidationData> pNewData(
+                                        pValidObj->CreateValidationData( pDoc, eGrammar ));
                                 sal_uLong nIndex = pDoc->AddValidationEntry( *pNewData );
-                                delete pNewData;
+                                pNewData.reset();
 
                                 ScPatternAttr aPattern( pDoc->GetPool() );
                                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
@@ -2643,7 +2642,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
         const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
-        const SfxItemPropertySimpleEntry** pEntryArray = new const SfxItemPropertySimpleEntry*[nCount];
+        boost::scoped_array<const SfxItemPropertySimpleEntry*> pEntryArray(new const SfxItemPropertySimpleEntry*[nCount]);
 
         sal_Int32 i;
         for(i = 0; i < nCount; i++)
@@ -2670,8 +2669,8 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
         }
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScPatternAttr* pOldPattern = NULL;
-        ScPatternAttr* pNewPattern = NULL;
+        boost::scoped_ptr<ScPatternAttr> pOldPattern;
+        boost::scoped_ptr<ScPatternAttr> pNewPattern;
 
         for(i = 0; i < nCount; i++)
         {
@@ -2684,9 +2683,9 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
                 {
                     if ( !pOldPattern )
                     {
-                        pOldPattern = new ScPatternAttr( *GetCurrentAttrsDeep() );
+                        pOldPattern.reset(new ScPatternAttr( *GetCurrentAttrsDeep() ));
                         pOldPattern->GetItemSet().ClearInvalidItems();
-                        pNewPattern = new ScPatternAttr( pDoc->GetPool() );
+                        pNewPattern.reset(new ScPatternAttr( pDoc->GetPool() ));
                     }
 
                     //  collect items in pNewPattern, apply with one call after the loop
@@ -2710,10 +2709,6 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
 
         if ( pNewPattern && !aRanges.empty() )
             pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), *pNewPattern, true, true );
-
-        delete pNewPattern;
-        delete pOldPattern;
-        delete[] pEntryArray;
     }
 }
 
@@ -2790,7 +2785,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
-        const SfxItemPropertySimpleEntry** pMapArray = new const SfxItemPropertySimpleEntry*[nCount];
+        boost::scoped_array<const SfxItemPropertySimpleEntry*> pMapArray(new const SfxItemPropertySimpleEntry*[nCount]);
 
         sal_Int32 i;
         for(i = 0; i < nCount; i++)
@@ -2817,8 +2812,8 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         }
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScPatternAttr* pOldPattern = NULL;
-        ScPatternAttr* pNewPattern = NULL;
+        boost::scoped_ptr<ScPatternAttr> pOldPattern;
+        boost::scoped_ptr<ScPatternAttr> pNewPattern;
 
         sal_Int32 nFailed(0);
         for(i = 0; i < nCount; i++)
@@ -2832,9 +2827,9 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                 {
                     if ( !pOldPattern )
                     {
-                        pOldPattern = new ScPatternAttr( *GetCurrentAttrsDeep() );
+                        pOldPattern.reset(new ScPatternAttr( *GetCurrentAttrsDeep() ));
                         pOldPattern->GetItemSet().ClearInvalidItems();
-                        pNewPattern = new ScPatternAttr( pDoc->GetPool() );
+                        pNewPattern.reset(new ScPatternAttr( pDoc->GetPool() ));
                     }
 
                     //  collect items in pNewPattern, apply with one call after the loop
@@ -2882,10 +2877,6 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
 
         if ( pNewPattern && !aRanges.empty() )
             pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), *pNewPattern, true, true );
-
-        delete pNewPattern;
-        delete pOldPattern;
-        delete[] pMapArray;
 
         aReturns.realloc(nFailed);
 
@@ -3043,7 +3034,7 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScMemChart* pMemChart = CreateMemChart_Impl();
+    boost::scoped_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
@@ -3061,7 +3052,6 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
             pRowAry[nRow] = aColSeq;
         }
 
-        delete pMemChart;
         return aRowSeq;
     }
 
@@ -3158,7 +3148,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScMemChart* pMemChart = CreateMemChart_Impl();
+    boost::scoped_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nRowCount = static_cast<sal_Int32>(pMemChart->GetRowCount());
@@ -3167,7 +3157,6 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
         for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
             pAry[nRow] = pMemChart->GetRowText(static_cast<short>(nRow));
 
-        delete pMemChart;
         return aSeq;
     }
     return uno::Sequence<OUString>(0);
@@ -3230,7 +3219,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScMemChart* pMemChart = CreateMemChart_Impl();
+    boost::scoped_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
@@ -3239,7 +3228,6 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
         for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
             pAry[nCol] = pMemChart->GetColText(static_cast<short>(nCol));
 
-        delete pMemChart;
         return aSeq;
     }
     return uno::Sequence<OUString>(0);

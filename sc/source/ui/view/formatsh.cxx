@@ -772,7 +772,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             if ( pStyleSheet )
             {
                 SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
-                SfxAbstractTabDialog* pDlg    = NULL;
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
                 sal_uInt16          nRsc    = 0;
 
                 // alte Items aus der Vorlage merken
@@ -858,7 +858,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                pDlg = pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc );
+                pDlg.reset(pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(false);
@@ -946,7 +946,6 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         pDocSh->PostPaintGridAll();
                     }
                 }
-                delete pDlg;
             }
         }
 
@@ -1775,16 +1774,16 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     ::editeng::SvxBorderLine*          pDefLine = pTabViewShell->GetDefaultFrameLine();
                     const ScPatternAttr*    pOldAttrs = pTabViewShell->GetSelectionPattern();
-                    SfxItemSet*             pOldSet =
+                    boost::scoped_ptr<SfxItemSet> pOldSet(
                                                 new SfxItemSet(
                                                         *(pDoc->GetPool()),
                                                         ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END );
-                    SfxItemSet*             pNewSet =
+                                                        ATTR_PATTERN_END ));
+                    boost::scoped_ptr<SfxItemSet> pNewSet(
                                                 new SfxItemSet(
                                                         *(pDoc->GetPool()),
                                                         ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END );
+                                                        ATTR_PATTERN_END ));
                     const SfxPoolItem&      rBorderAttr =
                                                 pOldAttrs->GetItemSet().
                                                     Get( ATTR_BORDER );
@@ -1833,10 +1832,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     }
 
                     pOldSet->Put( rBorderAttr );
-                    pTabViewShell->ApplyAttributes( pNewSet, pOldSet );
-
-                    delete pOldSet;
-                    delete pNewSet;
+                    pTabViewShell->ApplyAttributes( pNewSet.get(), pOldSet.get() );
                 }
                 break;
 
@@ -1844,8 +1840,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_BORDER_DIAG_BLTR:
                 {
                     const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
-                    SfxItemSet* pOldSet = new SfxItemSet(pOldAttrs->GetItemSet());
-                    SfxItemSet* pNewSet = new SfxItemSet(pOldAttrs->GetItemSet());
+                    boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+                    boost::scoped_ptr<SfxItemSet> pNewSet(new SfxItemSet(pOldAttrs->GetItemSet()));
                     const SfxPoolItem* pItem = 0;
 
                     if(SID_ATTR_BORDER_DIAG_TLBR == nSlot)
@@ -1856,7 +1852,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                             aItem.SetLine(((const SvxLineItem&)pNewAttrs->Get(ATTR_BORDER_TLBR)).GetLine());
                             pNewSet->Put(aItem);
                             rReq.AppendItem(aItem);
-                            pTabViewShell->ApplyAttributes(pNewSet, pOldSet);
+                            pTabViewShell->ApplyAttributes(pNewSet.get(), pOldSet.get());
                         }
                     }
                     else // if( nSlot == SID_ATTR_BORDER_DIAG_BLTR )
@@ -1867,12 +1863,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                             aItem.SetLine(((const SvxLineItem&)pNewAttrs->Get(ATTR_BORDER_BLTR)).GetLine());
                             pNewSet->Put(aItem);
                             rReq.AppendItem(aItem);
-                            pTabViewShell->ApplyAttributes(pNewSet, pOldSet);
+                            pTabViewShell->ApplyAttributes(pNewSet.get(), pOldSet.get());
                         }
                     }
 
-                    delete pOldSet;
-                    delete pNewSet;
                     rBindings.Invalidate(nSlot);
                 }
                 break;

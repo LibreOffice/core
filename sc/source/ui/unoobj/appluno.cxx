@@ -39,6 +39,7 @@
 #include "funcdesc.hxx"
 #include <com/sun/star/sheet/FunctionArgument.hpp>
 #include "ScPanelFactory.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
 
@@ -634,18 +635,16 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
     sal_uInt16 nCount = (sal_uInt16) std::min( aRecentFunctionIds.getLength(), (sal_Int32) LRU_MAX );
     const sal_Int32* pAry = aRecentFunctionIds.getConstArray();
 
-    sal_uInt16* pFuncs = nCount ? new sal_uInt16[nCount] : NULL;
+    boost::scoped_array<sal_uInt16> pFuncs(nCount ? new sal_uInt16[nCount] : NULL);
     for (sal_uInt16 i=0; i<nCount; i++)
         pFuncs[i] = (sal_uInt16)pAry[i];        //! auf gueltige Werte testen?
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions aNewOpts(pScMod->GetAppOptions());
-    aNewOpts.SetLRUFuncList(pFuncs, nCount);
+    aNewOpts.SetLRUFuncList(pFuncs.get(), nCount);
     pScMod->SetAppOptions(aNewOpts);
 
     pScMod->RecentFunctionsChanged();       // update function list child window
-
-    delete[] pFuncs;
 }
 
 sal_Int32 SAL_CALL ScRecentFunctionsObj::getMaxRecentFunctions() throw(uno::RuntimeException, std::exception)

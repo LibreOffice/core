@@ -58,6 +58,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 
 #include <limits>
+#include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
 
@@ -912,18 +913,17 @@ void SAL_CALL ScConsolidationDescriptor::setSources(
     if (nCount)
     {
         const table::CellRangeAddress* pAry = aSources.getConstArray();
-        ScArea** pNew = new ScArea*[nCount];
+        boost::scoped_array<ScArea*> pNew(new ScArea*[nCount]);
         sal_uInt16 i;
         for (i=0; i<nCount; i++)
             pNew[i] = new ScArea( pAry[i].Sheet,
                     static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow,
                     static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow );
 
-        aParam.SetAreas( pNew, nCount );    // kopiert alles
+        aParam.SetAreas( pNew.get(), nCount );    // kopiert alles
 
         for (i=0; i<nCount; i++)
             delete pNew[i];
-        delete[] pNew;
     }
     else
         aParam.ClearDataAreas();
