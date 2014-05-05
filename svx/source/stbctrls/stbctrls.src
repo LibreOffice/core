@@ -44,28 +44,24 @@ Menu RID_SVXMENU_SELECTION
         MenuItem
         {
             Identifier = SELECTION_STANDARD ;
-            //HelpId = ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Standard selection" ;
         };
         MenuItem
         {
             Identifier = SELECTION_EXTENDED ;
-            //HelpId = ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Extending selection" ;
         };
         MenuItem
         {
             Identifier = SELECTION_ADDED ;
-            //HelpId = ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Adding selection" ;
         };
         MenuItem
         {
             Identifier = SELECTION_BLOCK ;
-            //HelpId = ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "Block selection" ;
         };

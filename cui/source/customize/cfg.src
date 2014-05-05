@@ -269,7 +269,6 @@ ModalDialog MD_ICONCHANGE
         Pos = MAP_APPFONT ( 30 , 38) ;
         Size = MAP_APPFONT ( 140 , 83 ) ;
         Border = TRUE;
-      //  VScroll = TRUE;
         IgnoreTab = TRUE;
         ReadOnly = TRUE;
     };

@@ -72,7 +72,6 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_BT_AUTOFILTER ;
             HelpID = HID_BIB_TBX_AUTOFILTER;
-//            ItemBitmap = Bitmap { File = "sc10716.bmp" ; };
             DropDown = TRUE ;
             Command = ".uno:Bib/autoFilter" ;
             Text [ en-US ] = "AutoFilter";
@@ -81,7 +80,6 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_FILTERCRIT ;
-//            ItemBitmap = Bitmap { File = "sc10715.bmp" ; };
             Command = ".uno:Bib/standardFilter" ;
             Text [ en-US ] = "Standard Filter";
         };
@@ -89,7 +87,6 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_REMOVEFILTER ;
-//            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Command = ".uno:Bib/removeFilter" ;
             Text [ en-US ] = "Reset Filter";
         };
@@ -97,8 +94,6 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_BT_COL_ASSIGN ;
             HelpId = HID_BIB_MAPPINGDLG;
-//          Command = ".uno:Bib/Mapping" ;
-//            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Text [ en-US ] = "Column Arrangement";
         };
         ToolBoxItem
@@ -106,7 +101,6 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_CHANGESOURCE ;
             HelpId = HID_BIB_CHANGESOURCE;
             Command = ".uno:Bib/sdbsource" ;
-//            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Checkable=TRUE;
             Text [ en-US ] = "Data Source";
         };

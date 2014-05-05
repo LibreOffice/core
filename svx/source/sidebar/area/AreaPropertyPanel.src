@@ -67,8 +67,6 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
     DialogControl = TRUE;
     Border = FALSE;
 
-//  Size = MAP_APPFONT( POP_WIDTH, POP_HEIGHT );
-
     FixedText FT_TRGR_CENTER_X
     {
         Size = MAP_APPFONT ( CONTROL_WIDTH , FIXED_TEXT_HEIGHT ) ;

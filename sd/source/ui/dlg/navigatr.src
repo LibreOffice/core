@@ -62,28 +62,24 @@ Window FLT_NAVIGATOR
             {
                 Identifier = TBI_FIRST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_FIRST ;
-                 //Symbol = IMAGEBUTTON_FIRST ;
                 Text [ en-US ] = "First Slide" ;
             };
             ToolBoxItem
             {
                 Identifier = TBI_PREVIOUS ;
                 HelpId = HID_SD_NAVIGATOR_TBI_PREV ;
-                 //Symbol = IMAGEBUTTON_PREV ;
                 Text [ en-US ] = "Previous Slide" ;
             };
             ToolBoxItem
             {
                 Identifier = TBI_NEXT ;
                 HelpId = HID_SD_NAVIGATOR_TBI_NEXT ;
-                 //Symbol = IMAGEBUTTON_NEXT ;
                 Text [ en-US ] = "Next Slide" ;
             };
             ToolBoxItem
             {
                 Identifier = TBI_LAST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_LAST ;
-                 //Symbol = IMAGEBUTTON_LAST ;
                 Text [ en-US ] = "Last Slide" ;
             };
             ToolBoxItem
@@ -95,7 +91,6 @@ Window FLT_NAVIGATOR
                 Identifier = TBI_DRAGTYPE ;
                 HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE ;
                 DropDown = TRUE ;
-                 //Left = FALSE;
                 Text [ en-US ] = "Drag Mode" ;
             };
             ToolBoxItem

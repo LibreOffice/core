@@ -31,7 +31,6 @@
 Image IMG_CELL_BORDER
 {
     ImageBitmap = Bitmap{File = "sidebar/CellBorder.png";};
-    //MaskColor = STD_MASKCOLOR ;
 };
 Image IMG_LINE_STYLE1
 {

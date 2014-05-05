@@ -70,7 +70,6 @@ FloatingWindow DLG_MAILMERGECHILD\
     };
 };
 
-//FloatingWindow DLG_MM_SENDMAILS
 ModelessDialog DLG_MM_SENDMAILS
 {
     OutputSize = TRUE ;

@@ -148,9 +148,6 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ en-US ] = "End" ;
             };
 
-             //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
-
-
             ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
 
             ToolBoxItem

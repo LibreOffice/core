@@ -45,8 +45,6 @@ DockingWindow FLT_WIN_LAYER_DIALOG
         HelpId = HID_SD_TABBAR_LAYERS;
         BORDER = TRUE;
         SvLook = TRUE;
-        //        Scroll = TRUE ;
-        //        SIZEABLE = TRUE;
     };
 };
 

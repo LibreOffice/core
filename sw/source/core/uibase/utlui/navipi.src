@@ -29,25 +29,13 @@ Window DLG_NAVIGATION_PI
     OutputSize = TRUE ;
     DialogControl = TRUE ;
     SVLook = TRUE ;
-     // Size = MAP_PIXEL( 235, 195 );
-     // ZoomInOutputSize = MAP_PIXEL(235, 56);
     Size = MAP_PIXEL ( 282 , 59 ) ;
-     //    Closeable = TRUE ;
-     //    Zoomable = TRUE ;
-     //    Moveable = TRUE ;
-     // ZoomIn = FALSE;
     Hide = TRUE ;
-     //    HideWhenDeactivate = TRUE ;
-     //    Sizeable = TRUE ;
-     //    EnableResizing = TRUE ;
-     //    Dockable = TRUE ;
-     //    Sizeable = TRUE ;
     Text [ en-US ] = "Navigator" ;
     ExtraData =
     {
         198;
     };
-    // Toolbox from 323 x
 #define NAVI_IDLIST \
         IdList =                                    \
         {                                           \
@@ -105,14 +93,12 @@ Window DLG_NAVIGATION_PI
             ToolBoxItem
             {
                 Identifier = FN_UP ;
-                 //                 ItemBitmap = Bitmap { File = "navup.bmp"; };
                 HelpID = HID_NAVI_TBX2 ;
                 Text [ en-US ] = "Back" ;
             };
             ToolBoxItem
             {
                 Identifier = FN_DOWN ;
-                 //                 ItemBitmap = Bitmap { File = "navdn.bmp"; };
                 HelpID = HID_NAVI_TBX3 ;
                 Text [ en-US ] = "Forward" ;
             };
@@ -130,15 +116,12 @@ Window DLG_NAVIGATION_PI
             ToolBoxItem
             {
                 Identifier = FN_ITEM_UP ;
-                 //                 ItemBitmap = Bitmap { File = "navchup.bmp"; };
                 HelpID = HID_NAVI_TBX5 ;
                 Text [ en-US ] = "Promote Chapter" ;
-                 //HelpText[english_us-wrong] = "Move chapter down";//"Move chapter up"
             };
             ToolBoxItem
             {
                 Identifier = FN_ITEM_DOWN ;
-                 //                 ItemBitmap = Bitmap { File = "navchdn.bmp"; };
                 HelpID = HID_NAVI_TBX6 ;
                 Text [ en-US ] = "Demote Chapter" ;
             };
@@ -166,7 +149,6 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_SELECT_SET_AUTO_BOOKMARK ;
                 HelpID = HID_NAVI_TBX9 ;
-                 //                 ItemBitmap = Bitmap { File = "navstmp.bmp"; };
                 Text [ en-US ] = "Set Reminder" ;
             };
             ToolBoxItem
@@ -176,21 +158,18 @@ Window DLG_NAVIGATION_PI
             ToolBoxItem
             {
                 Identifier = FN_SELECT_HEADER ;
-                 //                 ItemBitmap = Bitmap { File = "navhead.bmp"; };
                 HelpID = HID_NAVI_TBX10 ;
                 Text [ en-US ] = "Header" ;
             };
             ToolBoxItem
             {
                 Identifier = FN_SELECT_FOOTER ;
-                 //                 ItemBitmap = Bitmap { File = "navfoot.bmp"; };
                 HelpID = HID_NAVI_TBX11 ;
                 Text [ en-US ] = "Footer" ;
             };
             ToolBoxItem
             {
                 Identifier = FN_SELECT_FOOTNOTE ;
-                 //                 ItemBitmap = Bitmap { File = "navnote.bmp"; };
                 HelpID = HID_NAVI_TBX12 ;
                 Text [ en-US ] = "Anchor<->Text" ;
             };
@@ -213,13 +192,11 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_ITEM_LEFT ;
                 HelpID = HID_NAVI_TBX14 ;
-                 //                 ItemBitmap = Bitmap { File = "navchlf.bmp"; };
                 Text [ en-US ] = "Promote Level" ;
             };
             ToolBoxItem
             {
                 Identifier = FN_ITEM_RIGHT ;
-                 //                 ItemBitmap = Bitmap { File = "navchrg.bmp"; };
                 HelpID = HID_NAVI_TBX15 ;
                 Text [ en-US ] = "Demote Level" ;
             };
