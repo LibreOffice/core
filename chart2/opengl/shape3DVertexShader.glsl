@@ -21,9 +21,10 @@ uniform mat3 normalMatrix;
 void main()
 {
     gl_Position =  P * V * M * vec4(vertexPositionModelspace,1);
-    
+
     positionWorldspace = (M * vec4(vertexPositionModelspace,1)).xyz;
 
     normalCameraspace = normalize(mat3(V) * normalMatrix * vertexNormalModelspace);
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
