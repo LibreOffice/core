@@ -31,15 +31,6 @@ namespace opengl3D {
 
 namespace {
 
-struct TextInfo
-{
-    GLuint texture;
-    double rotation;
-    float vertex[12];
-    float nDx;
-    float nDy;
-};
-
 int static checkGLError(const char *file, int line)
 {
     GLenum glErr;
@@ -65,7 +56,14 @@ int static checkGLError(const char *file, int line)
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
-    m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
+    m_IsOpenglInit(false)
+    , m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
+    , m_TextProID(0)
+    , m_TextMatrixID(0)
+    , m_TextVertexID(0)
+    , m_TextTexCoordID(0)
+    , m_TextTexCoordBuf(0)
+    , m_TextTexID(0)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -100,26 +98,15 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
 }
 
-void OpenGL3DRenderer::CreateFrameBufferObj()
-{
-    // create a framebuffer object, you need to delete them when program exits.
-    glGenFramebuffers(2, m_FboID);
-    glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    for (int i = 0; i < 2; i++)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[i]);
-        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
-        // attach a texture to FBO color attachement point
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[i], 0);
-        glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        // attach a renderbuffer to depth attachment point
-        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[i]);
-        glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
+namespace {
+
+GLfloat texCoords[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f
+};
+
 }
 
 void OpenGL3DRenderer::LoadShaders()
@@ -132,12 +119,17 @@ void OpenGL3DRenderer::LoadShaders()
     m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
     m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
 
-    m_CommonProID = OpenGLHelper::LoadShaders("commonVertexShader", "commonFragmentShader");
-    m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
-    m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
-    m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
-    CHECK_GL_ERROR();
+    m_TextProID = OpenGLHelper::LoadShaders("textVertexShader", "textFragmentShader");
+    m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
+    m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
+    m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
+    m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
 
+    glGenBuffers(1, &m_TextTexCoordBuf);
+    glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR();
     Init3DUniformBlock();
 }
 
@@ -152,6 +144,8 @@ void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::ve
     m_CameraInfo.cameraOrg = pos + direction;
     m_CameraInfo.cameraUp = up;
 }
+
+
 
 void OpenGL3DRenderer::init()
 {
@@ -209,7 +203,6 @@ void OpenGL3DRenderer::init()
 
     m_3DProjection = glm::perspective(30.0f, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
     LoadShaders();
-    CreateFrameBufferObj();
     m_IsOpenglInit = true;
 }
 
@@ -1213,6 +1206,114 @@ void OpenGL3DRenderer::SetFPS(float fps)
 void OpenGL3DRenderer::SetClickPos(Point aMPos)
 {
     m_aMPos = aMPos;
+}
+
+void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft)
+{
+    long bmpWidth = rBitmapEx.GetSizePixel().Width();
+    long bmpHeight = rBitmapEx.GetSizePixel().Height();
+    boost::scoped_array<sal_uInt8> bitmapBuf(OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx));
+
+    TextInfo aTextInfo;
+    aTextInfo.vertex[0] = vBottomRight.x;
+    aTextInfo.vertex[1] = vBottomRight.y;
+    aTextInfo.vertex[2] = vBottomRight.z;
+
+    aTextInfo.vertex[3] = vTopRight.x;
+    aTextInfo.vertex[4] = vTopRight.y;
+    aTextInfo.vertex[5] = vTopRight.z;
+
+    aTextInfo.vertex[6] = vTopLeft.x;
+    aTextInfo.vertex[7] = vTopLeft.y;
+    aTextInfo.vertex[8] = vTopLeft.z;
+
+    aTextInfo.vertex[9] = vBottomLeft.x;
+    aTextInfo.vertex[10] = vBottomLeft.y;
+    aTextInfo.vertex[11] = vBottomLeft.z;
+
+    CHECK_GL_ERROR();
+    glGenTextures(1, &aTextInfo.texture);
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, aTextInfo.texture);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    CHECK_GL_ERROR();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapBuf.get());
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    CHECK_GL_ERROR();
+    m_TextInfoList.push_back(aTextInfo);
+}
+
+void OpenGL3DRenderer::RenderTextShape()
+{
+    CHECK_GL_ERROR();
+    size_t listNum = m_TextInfoList.size();
+    for (size_t i = 0; i < listNum; i++)
+    {
+        TextInfo &textInfo = m_TextInfoList.front();
+        PosVecf3 trans = {0, 0, 0};
+        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+        PosVecf3 scale = {1.0, 1.0, 1.0f};
+        MoveModelf(trans, angle, scale);
+        m_MVP = m_Projection * m_View * m_Model;
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
+        glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
+        CHECK_GL_ERROR();
+        glUseProgram(m_TextProID);
+
+        CHECK_GL_ERROR();
+        glUniformMatrix4fv(m_TextMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(m_TextVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_TextVertexID,
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        //tex coord
+        CHECK_GL_ERROR();
+        glEnableVertexAttribArray(m_TextTexCoordID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
+        glVertexAttribPointer(
+            m_TextTexCoordID,
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        //texture
+        CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, textInfo.texture);
+        CHECK_GL_ERROR();
+        glUniform1i(m_TextTexID, 0);
+        CHECK_GL_ERROR();
+        //TODO: moggi: get rid fo GL_QUADS
+        glDrawArrays(GL_QUADS, 0, 4);
+        CHECK_GL_ERROR();
+        glDisableVertexAttribArray(m_TextTexCoordID);
+        CHECK_GL_ERROR();
+        glDisableVertexAttribArray(m_TextVertexID);
+        CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glUseProgram(0);
+        glDeleteTextures(1, &textInfo.texture);
+        CHECK_GL_ERROR();
+        m_TextInfoList.pop_front();
+    }
+    CHECK_GL_ERROR();
 }
 
 void OpenGL3DRenderer::RenderText(const ::rtl::OUString& , awt::Point )

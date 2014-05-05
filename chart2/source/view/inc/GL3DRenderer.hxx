@@ -18,6 +18,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <tools/gen.hxx>
 
+#include <vcl/bitmapex.hxx>
 #include <vcl/opengl/IOpenGLRenderer.hxx>
 
 #include <vector>
@@ -142,6 +143,13 @@ struct PackedVertex{
     };
 };
 
+typedef struct TextInfo
+{
+    GLuint texture;
+    float vertex[12];
+}TextInfo;
+
+
 typedef struct SceneBox
 {
     float maxXCoord;
@@ -158,7 +166,6 @@ class OpenGL3DRenderer : public IOpenGLInfoProvider
 public:
     OpenGL3DRenderer();
 
-    void CreateFrameBufferObj();
     void LoadShaders();
     void init();
     virtual bool isOpenGLInitialized() SAL_OVERRIDE;
@@ -193,6 +200,9 @@ private:
     void Update3DUniformBlock();
     void RenderExtrude3DObject();
     void RenderFPS(float fps);
+    //add for text
+    void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
+    void RenderTextShape();
     void RenderText(const ::rtl::OUString& string, com::sun::star::awt::Point aPos);
     void RenderExtrudeSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D);
@@ -312,6 +322,15 @@ private:
     Point m_aMPos;
 
     GLuint m_BoundBox;
+
+     // add for text
+    std::list <TextInfo> m_TextInfoList;
+    GLint m_TextProID;
+    GLint m_TextMatrixID;
+    GLint m_TextVertexID;
+    GLint m_TextTexCoordID;
+    GLuint m_TextTexCoordBuf;
+    GLint m_TextTexID;
 
     GLuint m_CoordinateBuf;
 
