@@ -6060,7 +6060,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The type of the quartile (1 = 25%, 2 = 50 %, 3 = 75 %)." ;
+            Text [ en-US ] = "The type of the quartile (1 = 25%, 2 = 50%, 3 = 75%)." ;
         };
     };
      // -=*# Resource for function QUARTILE.INC #*=-
@@ -6092,7 +6092,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50 %, 3 = 75 %, 4 =MAX)." ;
+            Text [ en-US ] = "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50%, 3 = 75%, 4 = MAX)." ;
         };
     };
      // -=*# Resource for function KGRÖSSTE #*=-
