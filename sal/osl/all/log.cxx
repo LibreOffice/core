@@ -240,6 +240,7 @@ void log(
 #endif
     } else {
         std::fputs(s.str().c_str(), stderr);
+        std::fflush(stderr);
     }
 #endif
 }
