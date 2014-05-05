@@ -61,7 +61,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bDummy6 = bDummy7 = bDummy8 =
          false;
 
-    nRightMargin = 50;      // dflt. 50 %
+    nRightMargin = 50;      // dflt. 50%
     nAutoCmpltExpandKey = KEY_RETURN;
 
     aBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );

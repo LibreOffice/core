@@ -88,7 +88,7 @@ short SwColMgr::GetLineHeightPercent() const
 
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
-    OSL_ENSURE(nPercent <= 100, "line height may be at most 100 %");
+    OSL_ENSURE(nPercent <= 100, "line height may be at most 100%");
     aFmtCol.SetLineHeight((sal_uInt8)nPercent);
 }
 

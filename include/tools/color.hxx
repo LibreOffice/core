@@ -146,8 +146,8 @@ public:
     // color space conversion tools
     // the range for h/s/b is:
     // Hue: 0-360 degree
-    // Saturation: 0-100 %
-    // Brightness: 0-100 %
+    // Saturation: 0-100%
+    // Brightness: 0-100%
     static ColorData    HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri );
     void                RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const;
 

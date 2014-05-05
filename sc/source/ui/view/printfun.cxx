@@ -2810,7 +2810,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
             if (bFitsPage)
             {
                 if (nZoom == 100)
-                    // If it fits at 100 %, it's good enough for me.
+                    // If it fits at 100%, it's good enough for me.
                     break;
 
                 nLastFitZoom = nZoom;
@@ -2869,7 +2869,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
             if (bFitsPage)
             {
                 if (nZoom == 100)
-                    // If it fits at 100 %, it's good enough for me.
+                    // If it fits at 100%, it's good enough for me.
                     break;
 
                 nLastFitZoom = nZoom;

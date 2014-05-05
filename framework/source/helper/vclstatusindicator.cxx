@@ -118,7 +118,7 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     sal_Int32 nRange = m_nRange;
     nValue = m_nValue;
 
-    // normalize value to fit the range of 0-100 %
+    // normalize value to fit the range of 0-100%
     sal_uInt16 nPercent = sal::static_int_cast< sal_uInt16 >(
         ::std::min(
             ((nValue*100) / ::std::max(nRange,(sal_Int32)1)), (sal_Int32)100));

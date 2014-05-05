@@ -1521,8 +1521,8 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
     sal_uInt16 nCompCount = CountCompChg();
 
     // In asian typography, there are full width and half width characters.
-    // Full width punctuation characters can be compressed by 50 %
-    // to determine this, we compare the font width with 75 % of its height
+    // Full width punctuation characters can be compressed by 50%
+    // to determine this, we compare the font width with 75% of its height
     sal_uInt16 nMinWidth = ( 3 * nFontHeight ) / 4;
 
     sal_uInt16 nCompIdx = HasKana( nIdx, nLen );

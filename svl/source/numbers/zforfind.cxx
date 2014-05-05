@@ -2505,7 +2505,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         }
     }
 
-    if ( SkipChar('%', rString, nPos) )             // 1 %
+    if ( SkipChar('%', rString, nPos) )             // 1%
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED) // already another type
         {

@@ -1457,7 +1457,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     InitItems();
     CalcOutputFactor();
     if ( bRet && (bSetColWidths || bSetRowHeights) )
-    {   // Adjust column width/row height; base 100 % zoom
+    {   // Adjust column width/row height; base 100% zoom
         Fraction aZoom( 1, 1 );
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;

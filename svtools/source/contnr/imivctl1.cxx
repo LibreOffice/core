@@ -2680,7 +2680,7 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* pEntry 
         aTextRect.Bottom() + 1);
 }
 
-// the hot spot is the inner 50 % of the rectangle
+// the hot spot is the inner 50% of the rectangle
 static Rectangle GetHotSpot( const Rectangle& rRect )
 {
     Rectangle aResult( rRect );

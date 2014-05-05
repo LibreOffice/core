@@ -94,7 +94,7 @@ published service GraphicObjectShape
 
     /** If this property is set, the transparency value of this graphic shape is
         adjusted by the given unsigned percent value.
-        100% is fully transparent, 0 % is fully opaque.
+        100% is fully transparent, 0% is fully opaque.
     */
     [property] short Transparency;
 
