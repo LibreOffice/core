@@ -573,7 +573,8 @@ void SwShellCrsr::Hide()
 {
     SwShellCrsr * pTmp = this;
     do {
-        pTmp->SwSelPaintRects::Hide();
+        if (pTmp)
+            pTmp->SwSelPaintRects::Hide();
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 }
 
