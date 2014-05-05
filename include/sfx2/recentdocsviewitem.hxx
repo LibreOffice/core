@@ -33,7 +33,7 @@ public:
     virtual void Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                        const ThumbnailItemAttributes *pAttrs) SAL_OVERRIDE;
 
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     /// Called when the user clicks a document - it will open it.
     void OpenDocument();

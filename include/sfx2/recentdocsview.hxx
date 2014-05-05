@@ -63,8 +63,6 @@ public:
 protected:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
