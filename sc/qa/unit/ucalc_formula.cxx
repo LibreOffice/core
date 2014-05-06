@@ -17,7 +17,6 @@
 #include "scopetools.hxx"
 #include "formulacell.hxx"
 #include "formulagroup.hxx"
-#include "inputopt.hxx"
 #include "scmod.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
@@ -1036,10 +1035,7 @@ void Test::testFormulaRefUpdateRange()
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
-    ScModule* pMod = SC_MOD();
-    ScInputOptions aOpt = pMod->GetInputOptions();
-    aOpt.SetExpandRefs(false);
-    pMod->SetInputOptions(aOpt);
+    setExpandRefs(false);
 
     // Set values to B2:C5.
     m_pDoc->SetValue(ScAddress(1,1,0), 1);
@@ -1166,7 +1162,7 @@ void Test::testFormulaRefUpdateRange()
     clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
 
     // Disable expansion of range reference on insertion in adjacent areas.
-    m_pDoc->SetExpandRefs(false);
+    setExpandRefs(false);
 
     // Fill C2:D3 with values.
     m_pDoc->SetValue(ScAddress(2,1,0), 1);
@@ -1251,8 +1247,7 @@ void Test::testFormulaRefUpdateRange()
     clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
 
     // Turn edge expansion on.
-    aOpt.SetExpandRefs(true);
-    pMod->SetInputOptions(aOpt);
+    setExpandRefs(true);
 
     // Fill C6:D7 with values.
     m_pDoc->SetValue(ScAddress(2,5,0), 1);
@@ -1479,10 +1474,7 @@ void Test::testFormulaRefUpdateSheets()
 
 void Test::testFormulaRefUpdateInsertRows()
 {
-    ScModule* pMod = SC_MOD();
-    ScInputOptions aOpt = pMod->GetInputOptions();
-    aOpt.SetExpandRefs(false);
-    pMod->SetInputOptions(aOpt);
+    setExpandRefs(false);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Formula");
@@ -1533,6 +1525,37 @@ void Test::testFormulaRefUpdateInsertRows()
 
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "MAX(A7:A9)"))
         CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaRefUpdateInsertColumns()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    setExpandRefs(false);
+
+    m_pDoc->InsertTab(0, "Formula");
+
+    // Set values in B1:B3.
+    m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
+    m_pDoc->SetValue(ScAddress(1,2,0), 3.0);
+
+    // Reference them in B4.
+    m_pDoc->SetString(ScAddress(1,3,0), "=SUM(B1:B3)");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+
+    // Inert columns over A:B.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.InsertCells(ScRange(0,0,0,1,MAXROW,0), &aMark, INS_INSCOLS, false, true, false);
+
+    // Now, the original column B has moved to column D.
+    if (!checkFormula(*m_pDoc, ScAddress(3,3,0), "SUM(D1:D3)"))
+        CPPUNIT_FAIL("Wrong formula in D4 after column insertion.");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -1982,10 +2005,7 @@ void Test::testFormulaRefUpdateNamedExpressionMove()
 
 void Test::testFormulaRefUpdateNamedExpressionExpandRef()
 {
-    ScModule* pMod = SC_MOD();
-    ScInputOptions aOpt = pMod->GetInputOptions();
-    aOpt.SetExpandRefs(true); // turn on automatic range expansion.
-    pMod->SetInputOptions(aOpt);
+    setExpandRefs(true);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 

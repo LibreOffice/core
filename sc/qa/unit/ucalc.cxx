@@ -62,6 +62,7 @@
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <globalnames.hxx>
+#include <inputopt.hxx>
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -6137,6 +6138,14 @@ ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, Sc
 
     return new ScUndoPaste(
         &rDocSh, rRange, aMarkData, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
+}
+
+void Test::setExpandRefs(bool bExpand)
+{
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aOpt = pMod->GetInputOptions();
+    aOpt.SetExpandRefs(bExpand);
+    pMod->SetInputOptions(aOpt);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

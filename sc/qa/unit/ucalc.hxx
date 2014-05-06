@@ -47,6 +47,12 @@ public:
     static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
     static ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc);
 
+    /**
+     * Enable or disable expand reference options which controls how
+     * references in formula are expanded when inserting rows or columns.
+     */
+    static void setExpandRefs(bool bExpand);
+
     template<size_t _Size>
     static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
     {
@@ -119,6 +125,7 @@ public:
     void testFormulaRefUpdateRange();
     void testFormulaRefUpdateSheets();
     void testFormulaRefUpdateInsertRows();
+    void testFormulaRefUpdateInsertColumns();
     void testFormulaRefUpdateMove();
     void testFormulaRefUpdateMoveUndo();
     void testFormulaRefUpdateNamedExpression();
@@ -375,6 +382,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateRange);
     CPPUNIT_TEST(testFormulaRefUpdateSheets);
     CPPUNIT_TEST(testFormulaRefUpdateInsertRows);
+    CPPUNIT_TEST(testFormulaRefUpdateInsertColumns);
     CPPUNIT_TEST(testFormulaRefUpdateMove);
     CPPUNIT_TEST(testFormulaRefUpdateMoveUndo);
     CPPUNIT_TEST(testFormulaRefUpdateNamedExpression);
