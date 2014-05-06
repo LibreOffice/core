@@ -76,9 +76,9 @@ namespace frm
         ::connectivity::OSQLParser      m_aParser;
 #endif
         sal_Int16                       m_nControlClass;        // which kind of control do we use?
-        sal_Bool                        m_bFilterList : 1;
-        sal_Bool                        m_bMultiLine : 1;
-        sal_Bool                        m_bFilterListFilled : 1;
+        bool                        m_bFilterList : 1;
+        bool                        m_bMultiLine : 1;
+        bool                        m_bFilterListFilled : 1;
 
     private:
         void implInitFilterList();
@@ -142,7 +142,7 @@ namespace frm
         virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc ) SAL_OVERRIDE;
         virtual void ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal ) SAL_OVERRIDE;
 
-        sal_Bool ensureInitialized( );
+        bool ensureInitialized( );
 
         void displayException( const ::com::sun::star::sdb::SQLContext& _rExcept );
     };

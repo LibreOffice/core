@@ -96,7 +96,7 @@ namespace frm
         if ( HasChildPathFocus() )
             getView().HideCursor();
 
-        sal_Bool bOldUpdateMode = getEngine().GetUpdateMode();   // TODO: guard?
+        bool bOldUpdateMode = getEngine().GetUpdateMode();   // TODO: guard?
         getEngine().SetUpdateMode( false );
 
         getView().SetAttribs( _rAttributesToApply );
@@ -202,9 +202,9 @@ namespace frm
                 const ::KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
 
                 sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
-                sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
-                sal_Bool   bCtrl = pKeyEvent->GetKeyCode().IsMod1();
-                sal_Bool   bAlt = pKeyEvent->GetKeyCode().IsMod2();
+                bool   bShift = pKeyEvent->GetKeyCode().IsShift();
+                bool   bCtrl = pKeyEvent->GetKeyCode().IsMod1();
+                bool   bAlt = pKeyEvent->GetKeyCode().IsMod2();
                 if ( ( KEY_TAB == nCode ) && bCtrl && !bAlt )
                 {
                     // Ctrl-Tab is used to step out of the control

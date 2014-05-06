@@ -58,12 +58,12 @@ namespace frm
         sal_Int16                           m_nIconSize;
         sal_Int16                           m_nBorder;
         sal_Int32                           m_nDelay;
-        sal_Bool                            m_bEnabled;
-        sal_Bool                            m_bEnableVisible;
-        sal_Bool                            m_bShowPosition;
-        sal_Bool                            m_bShowNavigation;
-        sal_Bool                            m_bShowActions;
-        sal_Bool                            m_bShowFilterSort;
+        bool                            m_bEnabled;
+        bool                            m_bEnableVisible;
+        bool                            m_bShowPosition;
+        bool                            m_bShowNavigation;
+        bool                            m_bShowActions;
+        bool                            m_bShowFilterSort;
         sal_Int16                           m_nWritingMode;
         sal_Int16                           m_nContextWritingMode;
         // </properties>

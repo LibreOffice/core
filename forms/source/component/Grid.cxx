@@ -77,13 +77,13 @@ OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFact
     ,m_nBorder(1)
     ,m_nWritingMode( WritingMode2::CONTEXT )
     ,m_nContextWritingMode( WritingMode2::CONTEXT )
-    ,m_bEnableVisible(sal_True)
-    ,m_bEnable(sal_True)
-    ,m_bNavigation(sal_True)
-    ,m_bRecordMarker(sal_True)
-    ,m_bPrintable(sal_True)
-    ,m_bAlwaysShowCursor(sal_False)
-    ,m_bDisplaySynchron(sal_True)
+    ,m_bEnableVisible(true)
+    ,m_bEnable(true)
+    ,m_bNavigation(true)
+    ,m_bRecordMarker(true)
+    ,m_bPrintable(true)
+    ,m_bAlwaysShowCursor(false)
+    ,m_bDisplaySynchron(true)
 {
     m_nClassId = FormComponentType::GRIDCONTROL;
 }
@@ -350,7 +350,7 @@ void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
-    sal_Bool bContinue = sal_True;
+    bool bContinue = true;
     while (aIter.hasMoreElements() && bContinue)
         bContinue =((XResetListener*)aIter.next())->approveReset(aEvt);
     if (bContinue)
@@ -490,7 +490,7 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
 sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                                     sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (nHandle)
     {
         case PROPERTY_ID_CONTEXT_WRITING_MODE:
@@ -896,7 +896,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
                 xMark->deleteMark(nMark);
             }
             if ( xCol.is() )
-                implInsert( i, xCol, sal_False, NULL, sal_False );
+                implInsert( i, xCol, false, NULL, false );
         }
     }
     // In the base implementation events are only read, elements in the container exist

@@ -42,7 +42,7 @@ class ImgProdLockBytes : public SvLockBytes
 
 public:
 
-                        ImgProdLockBytes( SvStream* pStm, sal_Bool bOwner );
+                        ImgProdLockBytes( SvStream* pStm, bool bOwner );
                         ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes();
 
@@ -55,7 +55,7 @@ public:
 
 
 
-ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, sal_Bool bOwner ) :
+ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, bool bOwner ) :
         SvLockBytes( pStm, bOwner )
 {
 }
@@ -173,7 +173,7 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
 ImageProducer::ImageProducer()
     : mpStm(NULL)
     , mnTransIndex(0)
-    , mbConsInit(sal_False)
+    , mbConsInit(false)
 {
     mpGraphic = new Graphic;
 }
@@ -223,7 +223,7 @@ void ImageProducer::SetImage( const OUString& rPath )
 {
     maURL = rPath;
     mpGraphic->Clear();
-    mbConsInit = sal_False;
+    mbConsInit = false;
     delete mpStm;
 
     if ( ::svt::GraphicAccess::isSupportedURL( maURL ) )
@@ -233,7 +233,7 @@ void ImageProducer::SetImage( const OUString& rPath )
     else if( !maURL.isEmpty() )
     {
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_STD_READ );
-        mpStm = pIStm ? new SvStream( new ImgProdLockBytes( pIStm, sal_True ) ) : NULL;
+        mpStm = pIStm ? new SvStream( new ImgProdLockBytes( pIStm, true ) ) : NULL;
     }
     else
         mpStm = NULL;
@@ -245,10 +245,10 @@ void ImageProducer::SetImage( SvStream& rStm )
 {
     maURL = OUString();
     mpGraphic->Clear();
-    mbConsInit = sal_False;
+    mbConsInit = false;
 
     delete mpStm;
-    mpStm = new SvStream( new ImgProdLockBytes( &rStm, sal_False ) );
+    mpStm = new SvStream( new ImgProdLockBytes( &rStm, false ) );
 }
 
 
@@ -257,7 +257,7 @@ void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star
 {
     maURL = OUString();
     mpGraphic->Clear();
-    mbConsInit = sal_False;
+    mbConsInit = false;
     delete mpStm;
 
     if( rInputStmRef.is() )
@@ -322,7 +322,7 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
 
 
 
-sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
+bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
     if (!mpStm)
         return false;
@@ -332,7 +332,7 @@ sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 
     mpStm->Seek( 0UL );
 
-    sal_Bool bRet = GraphicConverter::Import( *mpStm, rGraphic ) == ERRCODE_NONE;
+    bool bRet = GraphicConverter::Import( *mpStm, rGraphic ) == ERRCODE_NONE;
 
     if( ERRCODE_IO_PENDING == mpStm->GetError() )
         mpStm->ResetError();
@@ -352,7 +352,7 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
         ConsumerList_t aTmp = maConsList;
 
         ImplUpdateConsumer( rGraphic );
-        mbConsInit = sal_False;
+        mbConsInit = false;
 
         // iterate through interfaces
         for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter )
@@ -427,7 +427,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
         }
 
         aBmp.ReleaseAccess( pBmpAcc );
-        mbConsInit = sal_True;
+        mbConsInit = true;
     }
 }
 

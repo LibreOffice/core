@@ -70,23 +70,23 @@ namespace frm
         sal_Int16                   m_nTextWritingMode;
         sal_Int16                   m_nContextWritingMode;
         sal_Int16                   m_nBorder;
-        sal_Bool                    m_bEnabled;
-        sal_Bool                    m_bEnableVisible;
-        sal_Bool                    m_bHardLineBreaks;
-        sal_Bool                    m_bHScroll;
-        sal_Bool                    m_bVScroll;
-        sal_Bool                    m_bReadonly;
-        sal_Bool                    m_bPrintable;
-        sal_Bool                    m_bReallyActAsRichText; // despite the class name, the RichTextControl later on
+        bool                    m_bEnabled;
+        bool                    m_bEnableVisible;
+        bool                    m_bHardLineBreaks;
+        bool                    m_bHScroll;
+        bool                    m_bVScroll;
+        bool                    m_bReadonly;
+        bool                    m_bPrintable;
+        bool                    m_bReallyActAsRichText; // despite the class name, the RichTextControl later on
                                                             // will create "ordinary" text peers depending on this property
-        sal_Bool                    m_bHideInactiveSelection;
+        bool                    m_bHideInactiveSelection;
         // </properties>
 
         // <properties_for_awt_edit_compatibility>
         ::com::sun::star::uno::Any  m_aAlign;
         sal_Int16                   m_nEchoChar;
         sal_Int16                   m_nMaxTextLength;
-        sal_Bool                    m_bMultiLine;
+        bool                    m_bMultiLine;
         // </properties_for_awt_edit_compatibility>
 
         ::std::auto_ptr<RichTextEngine>

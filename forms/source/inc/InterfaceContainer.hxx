@@ -215,9 +215,9 @@ protected:
             void implInsert(
                 sal_Int32 _nIndex,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
-                sal_Bool _bEvents /* = sal_True */,
+                bool _bEvents /* = sal_True */,
                 ElementDescription* _pApprovalResult /* = NULL */ ,
-                sal_Bool _bFire /* = sal_True */
+                bool _bFire /* = sal_True */
             ) throw(::com::sun::star::lang::IllegalArgumentException);
 
     // called after the object is inserted, but before the "real listeners" are notified

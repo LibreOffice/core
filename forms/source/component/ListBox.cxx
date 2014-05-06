@@ -156,7 +156,7 @@ namespace frm
 
 
     OListBoxModel::OListBoxModel(const Reference<XComponentContext>& _rxFactory)
-        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
+        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, true, true, true )
         // use the old control name for compatibility reasons
         ,OEntryListHelper( (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -395,7 +395,7 @@ namespace frm
         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
         throw (IllegalArgumentException)
     {
-        sal_Bool bModified(sal_False);
+        bool bModified(false);
         switch (_nHandle)
         {
         case PROPERTY_ID_BOUNDCOLUMN :
@@ -727,7 +727,7 @@ namespace frm
         {
             m_aListRowSet.setConnection( xConnection );
 
-            sal_Bool bExecute = sal_False;
+            bool bExecute = false;
             switch (m_eListSourceType)
             {
             case ListSourceType_TABLEFIELDS:
@@ -801,21 +801,21 @@ namespace frm
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
                     aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
-                    m_aListRowSet.setEscapeProcessing( sal_False );
+                    m_aListRowSet.setEscapeProcessing( false );
                     m_aListRowSet.setCommand( aStatement );
-                    bExecute = sal_True;
+                    bExecute = true;
                 }
                 break;
 
             case ListSourceType_QUERY:
                 m_aListRowSet.setCommandFromQuery( sListSource );
-                bExecute = sal_True;
+                bExecute = true;
                 break;
 
             default:
                 m_aListRowSet.setEscapeProcessing( ListSourceType_SQLPASSTHROUGH != m_eListSourceType );
                 m_aListRowSet.setCommand( sListSource );
-                bExecute = sal_True;
+                bExecute = true;
                 break;
             }
 
@@ -846,7 +846,7 @@ namespace frm
 
         // Fill display and value lists
         ValueList aDisplayList, aValueList;
-        sal_Bool bUseNULL = hasField() && !isRequired();
+        bool bUseNULL = hasField() && !isRequired();
 
         // empty BoundColumn is treated as BoundColumn==0,
         if(!aBoundColumn)
@@ -1116,7 +1116,7 @@ namespace frm
     }
 
 
-    sal_Bool OListBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+    bool OListBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         // current selection list
         const ORowSetValue aCurrentValue( getFirstSelectedValue() );
@@ -1132,12 +1132,12 @@ namespace frm
                 }
                 catch ( const Exception& )
                 {
-                    return sal_False;
+                    return false;
                 }
             }
             m_aSaveValue = aCurrentValue;
         }
-        return sal_True;
+        return true;
     }
 
 
@@ -1635,7 +1635,7 @@ namespace frm
 
         try
         {
-            sal_Bool bMultiSelection( sal_False );
+            bool bMultiSelection( false );
             OSL_VERIFY( const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
 
             if ( bMultiSelection )
@@ -1768,7 +1768,7 @@ namespace frm
 
 
     OListBoxControl::OListBoxControl(const Reference<XComponentContext>& _rxFactory)
-        :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, sal_False )
+        :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, false )
         ,m_aChangeListeners( m_aMutex )
         ,m_aItemListeners( m_aMutex )
     {
@@ -1882,14 +1882,14 @@ namespace frm
                 if (xSet.is())
                 {
                     // Has the selection been changed?
-                    sal_Bool bModified(sal_False);
+                    bool bModified(false);
                     Any aValue = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
                     Sequence<sal_Int16>& rSelection = *(Sequence<sal_Int16> *)aValue.getValue();
                     Sequence<sal_Int16>& rOldSelection = *(Sequence<sal_Int16> *)m_aCurrentSelection.getValue();
                     sal_Int32 nLen = rSelection.getLength();
                     if (nLen != rOldSelection.getLength())
-                        bModified = sal_True;
+                        bModified = true;
                     else
                     {
                         const sal_Int16* pVal = rSelection.getConstArray();

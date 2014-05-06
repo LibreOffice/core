@@ -72,7 +72,7 @@ XFormsEventConcrete::Time_t SAL_CALL XFormsEventConcrete::getTimeStamp() throw (
 void SAL_CALL XFormsEventConcrete::stopPropagation() throw (RuntimeException, std::exception)
 {
     if(m_cancelable)
-        m_canceled = sal_True;
+        m_canceled = true;
 }
 void SAL_CALL XFormsEventConcrete::preventDefault() throw (RuntimeException, std::exception)
 {

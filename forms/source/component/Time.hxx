@@ -37,7 +37,7 @@ class OTimeModel
 {
 private:
     ::com::sun::star::uno::Any      m_aSaveValue;
-    sal_Bool                        m_bDateTimeField;
+    bool                        m_bDateTimeField;
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
@@ -71,7 +71,7 @@ protected:
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( ) SAL_OVERRIDE;
-    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
                             getSupportedBindingTypes() SAL_OVERRIDE;

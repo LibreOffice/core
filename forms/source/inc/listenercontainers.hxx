@@ -101,7 +101,7 @@ namespace frm
 
         /** see whether all our listeners approve the reset
         */
-        sal_Bool approveReset()
+        bool approveReset()
         {
             m_eCurrentNotificationType = eApproval;
             return notify();

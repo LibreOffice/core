@@ -114,7 +114,7 @@ private:
 };
 
 // base class for form layer controls
-OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
+OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUString& _rAggregateService, const bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
             ,m_xContext( _rxContext )
 {
@@ -303,7 +303,7 @@ sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) thro
     if ( !m_xControl.is() )
         return sal_False;
 
-    sal_Bool bSuccess = m_xControl->setModel( Model );
+    bool bSuccess = m_xControl->setModel( Model );
     impl_resetStateGuard_nothrow();
     return bSuccess;
 }
@@ -336,9 +336,9 @@ sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException, std::excep
 
 // OBoundControl
 OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
-            const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
+            const OUString& _rAggregateService, const bool _bSetDelegator )
     :OControl( _rxContext, _rAggregateService, _bSetDelegator )
-    ,m_bLocked(sal_False)
+    ,m_bLocked(false)
     ,m_aOriginalFont( EmptyFontDescriptor() )
     ,m_nOriginalTextLineColor( 0 )
 {
@@ -380,7 +380,7 @@ sal_Bool SAL_CALL OBoundControl::getLock() throw(RuntimeException, std::exceptio
 
 void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(RuntimeException, std::exception)
 {
-    if (m_bLocked == _bLock)
+    if ((m_bLocked ? 1 : 0) == _bLock)
         return;
 
     osl::MutexGuard aGuard(m_aMutex);
@@ -504,7 +504,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
 OControlModel::OControlModel(
             const Reference<XComponentContext>& _rxContext,
             const OUString& _rUnoControlModelTypeName,
-            const OUString& rDefault, const sal_Bool _bSetDelegator)
+            const OUString& rDefault, const bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
     ,m_xContext( _rxContext )
@@ -512,8 +512,8 @@ OControlModel::OControlModel(
     ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
-    ,m_bNativeLook( sal_False )
-    ,m_bGenerateVbEvents( sal_False )
+    ,m_bNativeLook( false )
+    ,m_bGenerateVbEvents( false )
     ,m_nControlTypeinMSO(0) // 0 : default value is create from AOO
     ,m_nObjIDinMSO(INVALID_OBJ_ID_IN_MSO)
     // form controls are usually embedded into documents, not dialogs, and in documents
@@ -549,7 +549,7 @@ OControlModel::OControlModel(
     }
 }
 
-OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory, const sal_Bool _bCloneAggregate, const sal_Bool _bSetDelegator )
+OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory, const bool _bCloneAggregate, const bool _bSetDelegator )
     :OComponentHelper( m_aMutex )
     ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
     ,m_xContext( _rxFactory )
@@ -835,7 +835,7 @@ PropertyState OControlModel::getPropertyStateByHandle( sal_Int32 _nHandle )
     Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
     Any aDefaultValue;  getFastPropertyValue( aDefaultValue, _nHandle );
 
-    sal_Bool bEqual = uno_type_equalData(
+    bool bEqual = uno_type_equalData(
             const_cast< void* >( aCurrentValue.getValue() ), aCurrentValue.getValueType().getTypeLibType(),
             const_cast< void* >( aDefaultValue.getValue() ), aDefaultValue.getValueType().getTypeLibType(),
             reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
@@ -872,10 +872,10 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             aReturn <<= (sal_Int16)FRM_DEFAULT_TABINDEX;
             break;
         case PROPERTY_ID_NATIVE_LOOK:
-            aReturn <<= (sal_Bool)sal_True;
+            aReturn <<= true;
             break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
-            aReturn <<= (sal_Bool)sal_False;
+            aReturn <<= false;
             break;
         // added for exporting OCX control
         case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
@@ -910,10 +910,10 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
             _rValue <<= m_nTabIndex;
             break;
         case PROPERTY_ID_NATIVE_LOOK:
-            _rValue <<= (sal_Bool)m_bNativeLook;
+            _rValue <<= m_bNativeLook;
             break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
-            _rValue <<= (sal_Bool)m_bGenerateVbEvents;
+            _rValue <<= m_bGenerateVbEvents;
         // added for exporting OCX control
         case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
             _rValue <<= (sal_Int16)m_nControlTypeinMSO;
@@ -934,7 +934,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
                         throw (com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (_nHandle)
     {
         case PROPERTY_ID_NAME:
@@ -1129,8 +1129,8 @@ Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (R
 OBoundControlModel::OBoundControlModel(
         const Reference< XComponentContext>& _rxFactory,
         const OUString& _rUnoControlModelTypeName, const OUString& _rDefault,
-        const sal_Bool _bCommitable, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
-    :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
+        const bool _bCommitable, const bool _bSupportExternalBinding, const bool _bSupportsValidation )
+    :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, false )
     ,OPropertyChangeListener( m_aMutex )
     ,m_xField()
     ,m_xAmbientForm()
@@ -1140,19 +1140,19 @@ OBoundControlModel::OBoundControlModel(
     ,m_aResetHelper( *this, m_aMutex )
     ,m_aUpdateListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
-    ,m_bInputRequired( sal_True )
+    ,m_bInputRequired( true )
     ,m_pAggPropMultiplexer( NULL )
     ,m_bFormListening( false )
-    ,m_bLoaded(sal_False)
-    ,m_bRequired(sal_False)
+    ,m_bLoaded(false)
+    ,m_bRequired(false)
     ,m_bCommitable(_bCommitable)
     ,m_bSupportsExternalBinding( _bSupportExternalBinding )
     ,m_bSupportsValidation( _bSupportsValidation )
-    ,m_bForwardValueChanges(sal_True)
-    ,m_bTransferingValue( sal_False )
-    ,m_bIsCurrentValueValid( sal_True )
-    ,m_bBindingControlsRO( sal_False )
-    ,m_bBindingControlsEnable( sal_False )
+    ,m_bForwardValueChanges(true)
+    ,m_bTransferingValue( false )
+    ,m_bIsCurrentValueValid( true )
+    ,m_bBindingControlsRO( false )
+    ,m_bBindingControlsEnable( false )
     ,m_eControlValueChangeInstigator( eOther )
     ,m_aLabelServiceName(FRM_SUN_COMPONENT_FIXEDTEXT)
 {
@@ -1162,7 +1162,7 @@ OBoundControlModel::OBoundControlModel(
 
 OBoundControlModel::OBoundControlModel(
         const OBoundControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory )
-    :OControlModel( _pOriginal, _rxFactory, sal_True, sal_False )
+    :OControlModel( _pOriginal, _rxFactory, true, false )
     ,OPropertyChangeListener( m_aMutex )
     ,m_xField()
     ,m_xAmbientForm()
@@ -1173,19 +1173,19 @@ OBoundControlModel::OBoundControlModel(
     ,m_aUpdateListeners( m_aMutex )
     ,m_aFormComponentListeners( m_aMutex )
     ,m_xValidator( _pOriginal->m_xValidator )
-    ,m_bInputRequired( sal_True )
+    ,m_bInputRequired( true )
     ,m_pAggPropMultiplexer( NULL )
     ,m_bFormListening( false )
-    ,m_bLoaded( sal_False )
-    ,m_bRequired( sal_False )
+    ,m_bLoaded( false )
+    ,m_bRequired( false )
     ,m_bCommitable( _pOriginal->m_bCommitable )
     ,m_bSupportsExternalBinding( _pOriginal->m_bSupportsExternalBinding )
     ,m_bSupportsValidation( _pOriginal->m_bSupportsValidation )
-    ,m_bForwardValueChanges( sal_True )
-    ,m_bTransferingValue( sal_False )
+    ,m_bForwardValueChanges( true )
+    ,m_bTransferingValue( false )
     ,m_bIsCurrentValueValid( _pOriginal->m_bIsCurrentValueValid )
-    ,m_bBindingControlsRO( sal_False )
-    ,m_bBindingControlsEnable( sal_False )
+    ,m_bBindingControlsRO( false )
+    ,m_bBindingControlsEnable( false )
     ,m_eControlValueChangeInstigator( eOther )
 {
     // start property listening at the aggregate
@@ -1640,7 +1640,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
                                 const Any& _rValue)
                 throw (com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (_nHandle)
     {
         case PROPERTY_ID_INPUT_REQUIRED:
@@ -1681,7 +1681,7 @@ Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     switch ( _nHandle )
     {
         case PROPERTY_ID_INPUT_REQUIRED:
-            aDefault <<= sal_Bool( sal_True );
+            aDefault <<= true;
             break;
         case PROPERTY_ID_CONTROLSOURCE:
             aDefault <<= OUString();
@@ -1871,7 +1871,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException, std::exce
     ::cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
     EventObject aEvent;
     aEvent.Source = static_cast< XWeak* >( this );
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
     aLock.release();
     // UNSAFE >
     while (aIter.hasMoreElements() && bSuccess)
@@ -1888,7 +1888,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException, std::exce
 
         catch(const Exception&)
         {
-            bSuccess = sal_False;
+            bSuccess = false;
         }
 
     }
@@ -1909,7 +1909,7 @@ void OBoundControlModel::resetField()
     m_nFieldType = DataType::OTHER;
 }
 
-sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
+bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::connectToField: invalid call (have an external binding)!" );
     // if there's a connection to the database
@@ -1995,7 +1995,7 @@ void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
     }
 }
 
-sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
+bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::approveDbColumnType: invalid call (have an external binding)!" );
     if ((_nColumnType == DataType::BINARY) || (_nColumnType == DataType::VARBINARY)
@@ -2004,8 +2004,8 @@ sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
         || (_nColumnType == DataType::STRUCT) || (_nColumnType == DataType::ARRAY)
         || (_nColumnType == DataType::BLOB) /*|| (_nColumnType == DataType::CLOB)*/
         || (_nColumnType == DataType::REF) || (_nColumnType == DataType::SQLNULL))
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 void OBoundControlModel::impl_determineAmbientForm_nothrow()
@@ -2039,9 +2039,9 @@ void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload 
 
     // now that we're connected (more or less, even if we did not find a column),
     // we definitely want to forward any potentially occurring value changes
-    m_bForwardValueChanges = sal_True;
+    m_bForwardValueChanges = true;
     // let derived classes react on this new connection
-    m_bLoaded = sal_True;
+    m_bLoaded = true;
     onConnectedDbColumn( xRowSet );
     // initially transfer the db column value to the control, if we successfully connected to a database column
     if ( hasField() )
@@ -2060,7 +2060,7 @@ void OBoundControlModel::impl_disconnectDatabaseColumn_noNotify()
     }
 
     m_xCursor = NULL;
-    m_bLoaded = sal_False;
+    m_bLoaded = false;
 }
 
 // XLoadListener
@@ -2087,7 +2087,7 @@ void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventOb
     if ( hasExternalValueBinding() )
         return;
     osl::MutexGuard aGuard(m_aMutex);
-    m_bForwardValueChanges = sal_False;
+    m_bForwardValueChanges = false;
 }
 
 void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& /*aEvent*/) throw(RuntimeException, std::exception)
@@ -2161,7 +2161,7 @@ void OBoundControlModel::onConnectedValidator( )
         if ( m_xAggregateSet.is() )
             xAggregatePropertyInfo = m_xAggregateSet->getPropertySetInfo();
         if ( xAggregatePropertyInfo.is() && xAggregatePropertyInfo->hasPropertyByName( PROPERTY_ENFORCE_FORMAT ) )
-            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, makeAny( (sal_Bool)sal_False ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, makeAny( false ) );
     }
 
     catch( const Exception& )
@@ -2181,7 +2181,7 @@ void OBoundControlModel::onDisconnectedValidator( )
         if ( m_xAggregateSet.is() )
             xAggregatePropertyInfo = m_xAggregateSet->getPropertySetInfo();
         if ( xAggregatePropertyInfo.is() && xAggregatePropertyInfo->hasPropertyByName( PROPERTY_ENFORCE_FORMAT ) )
-            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, makeAny( (sal_Bool)sal_True ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, makeAny( true ) );
     }
 
     catch( const Exception& )
@@ -2239,7 +2239,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
        return;
     ControlModelLock aLock( *this );
     // on a new record?
-    sal_Bool bIsNewRecord = sal_False;
+    bool bIsNewRecord = false;
     Reference<XPropertySet> xSet( m_xCursor, UNO_QUERY );
     if ( xSet.is() )
     {
@@ -2256,7 +2256,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
     }
 
     // cursor on an invalid row?
-    sal_Bool bInvalidCursorPosition = sal_True;
+    bool bInvalidCursorPosition = true;
     try
     {
         bInvalidCursorPosition =    m_xCursor.is()
@@ -2273,7 +2273,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
     }
 
     // #i24495# - don't count the insert row as "invalid"
-    sal_Bool bSimpleReset =
+    bool bSimpleReset =
                         (   !m_xColumn.is()                     // no connection to a database column
                         ||  (   m_xCursor.is()                  // OR   we have an improperly positioned cursor
                             &&  bInvalidCursorPosition
@@ -2287,7 +2287,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
         // Else, the current field value should be refreshed
         // This behaviour is not completely ... "matured": What should happen if the field as well as the
         // control have a default value?
-        sal_Bool bIsNull = sal_True;
+        bool bIsNull = true;
         // we have to access the field content at least once to get a reliable result by XColumn::wasNull
         try
         {
@@ -2317,7 +2317,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        sal_Bool bNeedValueTransfer = sal_True;
+        bool bNeedValueTransfer = true;
         if ( bIsNull )
         {
             if ( bIsNewRecord )
@@ -2326,7 +2326,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
                 resetNoBroadcast();
                 // and immediately commit the changes to the DB column, to keep consistency
                 commitControlValueToDbColumn( true );
-                bNeedValueTransfer = sal_False;
+                bNeedValueTransfer = false;
             }
 
         }
@@ -2356,10 +2356,10 @@ void OBoundControlModel::impl_setField_noNotify( const Reference< XPropertySet>&
     m_xField = _rxField;
 }
 
-sal_Bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValueBinding >& _rxBinding )
+bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValueBinding >& _rxBinding )
 {
     if ( !_rxBinding.is() )
-        return sal_False;
+        return false;
     Sequence< Type > aTypeCandidates;
     {
         // SYNCHRONIZED >
@@ -2374,9 +2374,9 @@ sal_Bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< X
         )
     {
         if ( _rxBinding->supportsType( *pType ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 void OBoundControlModel::connectExternalValueBinding(
@@ -2410,13 +2410,13 @@ void OBoundControlModel::connectExternalValueBinding(
             if ( xBindingPropsInfo->hasPropertyByName( PROPERTY_READONLY ) )
             {
                 xBindingProps->addPropertyChangeListener( PROPERTY_READONLY, this );
-                m_bBindingControlsRO = sal_True;
+                m_bBindingControlsRO = true;
             }
 
             if ( xBindingPropsInfo->hasPropertyByName( PROPERTY_RELEVANT ) )
             {
                 xBindingProps->addPropertyChangeListener( PROPERTY_RELEVANT, this );
-                m_bBindingControlsEnable = sal_True;
+                m_bBindingControlsEnable = true;
             }
 
         }
@@ -2572,7 +2572,7 @@ void OBoundControlModel::transferControlValueToExternal( ControlModelLock& _rIns
     if ( m_xExternalBinding.is() )
     {
         Any aExternalValue( translateControlValueToExternalValue() );
-        m_bTransferingValue = sal_True;
+        m_bTransferingValue = true;
         _rInstanceLock.release();
          // UNSAFE >
         try
@@ -2587,7 +2587,7 @@ void OBoundControlModel::transferControlValueToExternal( ControlModelLock& _rIns
 
         // < UNSAFE
         _rInstanceLock.acquire();
-        m_bTransferingValue = sal_False;
+        m_bTransferingValue = false;
     }
 }
 
@@ -2784,7 +2784,7 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
 {
     try
     {
-        sal_Bool bIsCurrentlyValid = sal_True;
+        bool bIsCurrentlyValid = true;
         if ( hasValidator() )
             bIsCurrentlyValid = m_xValidator->isValid( translateControlValueToValidatableValue() );
 

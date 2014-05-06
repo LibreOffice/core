@@ -286,7 +286,7 @@ void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle
 
 sal_Bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     switch ( _nHandle )
     {
     case PROPERTY_ID_DEFAULT_STATE:
@@ -366,7 +366,7 @@ OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
                  ,OFormNavigationHelper( _rxFactory )
                  ,m_nClickEvent( 0 )
                  ,m_nTargetUrlFeatureId( -1 )
-                 ,m_bEnabledByPropertyValue( sal_False )
+                 ,m_bEnabledByPropertyValue( false )
 {
     increment(m_refCount);
     {
@@ -603,10 +603,10 @@ void OButtonControl::startOrStopModelPropertyListening( bool _bStart )
 sal_Bool SAL_CALL OButtonControl::setModel( const Reference< XControlModel >& _rxModel ) throw ( RuntimeException, std::exception )
 {
     startOrStopModelPropertyListening( false );
-    sal_Bool bResult = OClickableImageBaseControl::setModel( _rxModel );
+    bool bResult = OClickableImageBaseControl::setModel( _rxModel );
     startOrStopModelPropertyListening( true );
 
-    m_bEnabledByPropertyValue = sal_True;
+    m_bEnabledByPropertyValue = true;
     Reference< XPropertySet > xModelProps( _rxModel, UNO_QUERY );
     if ( xModelProps.is() )
         xModelProps->getPropertyValue( PROPERTY_ENABLED ) >>= m_bEnabledByPropertyValue;

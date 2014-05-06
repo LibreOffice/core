@@ -100,7 +100,7 @@ namespace frm
 
 
     OScrollBarModel::OScrollBarModel( const Reference<XComponentContext>& _rxFactory )
-        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SCROLLBAR, VCL_CONTROL_SCROLLBAR, sal_True, sal_True, sal_False )
+        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SCROLLBAR, VCL_CONTROL_SCROLLBAR, true, true, false )
         ,m_nDefaultScrollValue( 0 )
     {
 
@@ -180,7 +180,7 @@ namespace frm
                 Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
                 throw ( IllegalArgumentException )
     {
-        sal_Bool bModified( sal_False );
+        bool bModified( false );
         switch ( _nHandle )
         {
             case PROPERTY_ID_DEFAULT_SCROLL_VALUE:
@@ -221,10 +221,10 @@ namespace frm
     }
 
 
-    sal_Bool OScrollBarModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+    bool OScrollBarModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         OSL_FAIL( "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
-        return sal_True;
+        return true;
     }
 
 

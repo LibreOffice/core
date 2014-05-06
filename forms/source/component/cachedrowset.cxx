@@ -60,14 +60,14 @@ namespace frm
     struct CachedRowSet_Data
     {
         OUString                 sCommand;
-        sal_Bool                        bEscapeProcessing;
+        bool                        bEscapeProcessing;
         Reference< XConnection >        xConnection;
 
         bool                            bStatementDirty;
 
         CachedRowSet_Data()
             :sCommand()
-            ,bEscapeProcessing( sal_False )
+            ,bEscapeProcessing( false )
             ,xConnection()
             ,bStatementDirty( true )
         {
@@ -106,7 +106,7 @@ namespace frm
         Reference< XNameAccess >      xQueries      ( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
         Reference< XPropertySet >     xQuery        ( xQueries->getByName( _rQueryName ), UNO_QUERY_THROW );
 
-        sal_Bool bEscapeProcessing( sal_False );
+        bool bEscapeProcessing( false );
         OSL_VERIFY( xQuery->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
         setEscapeProcessing( bEscapeProcessing );
 
@@ -116,7 +116,7 @@ namespace frm
     }
 
 
-    void CachedRowSet::setEscapeProcessing ( const sal_Bool _bEscapeProcessing )
+    void CachedRowSet::setEscapeProcessing ( const bool _bEscapeProcessing )
     {
         if ( m_pData->bEscapeProcessing == _bEscapeProcessing )
             return;

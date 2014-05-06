@@ -63,9 +63,9 @@ namespace frm
     void OAttributeDispatcher::fillFeatureEventFromAttributeState( FeatureStateEvent& _rEvent, const AttributeState& _rState ) const
     {
         if ( _rState.eSimpleState == eChecked )
-            _rEvent.State <<= (sal_Bool)sal_True;
+            _rEvent.State <<= true;
         else if ( _rState.eSimpleState == eUnchecked )
-            _rEvent.State <<= (sal_Bool)sal_False;
+            _rEvent.State <<= false;
     }
 
 

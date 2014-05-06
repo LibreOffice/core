@@ -72,7 +72,7 @@ namespace frm
         void    setCommandFromQuery ( const OUString& _rQueryName );
 
         void    setCommand          ( const OUString& _rCommand );
-        void    setEscapeProcessing ( const sal_Bool _bEscapeProcessing );
+        void    setEscapeProcessing ( const bool _bEscapeProcessing );
         void    setConnection       ( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
 
     private:

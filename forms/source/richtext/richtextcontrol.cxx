@@ -110,7 +110,7 @@ namespace frm
         static void implAdjustTriStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nPositiveFlag, WinBits nNegativeFlag )
         {
-            sal_Bool bFlagValue = sal_False;
+            bool bFlagValue = false;
             if ( _rxProps->getPropertyValue( _rPropertyName ) >>= bFlagValue )
                 _rAllBits |= ( bFlagValue ? _nPositiveFlag : nNegativeFlag );
         }
@@ -118,7 +118,7 @@ namespace frm
 
         static void implAdjustTwoStateFlag( const Any& _rValue, WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
-            sal_Bool bFlagValue = sal_False;
+            bool bFlagValue = false;
             if ( _rValue >>= bFlagValue )
             {
                 if ( _bInvert )
@@ -176,7 +176,7 @@ namespace frm
 
     void SAL_CALL ORichTextControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException, std::exception )
     {
-        sal_Bool bReallyActAsRichText = sal_False;
+        bool bReallyActAsRichText = false;
         try
         {
             Reference< XPropertySet > xModelProps( getModel(), UNO_QUERY_THROW );
@@ -431,7 +431,7 @@ namespace frm
         else if ( _rPropertyName.equals( PROPERTY_READONLY ) )
         {
             RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
-            sal_Bool bReadOnly( pControl->IsReadOnly() );
+            bool bReadOnly( pControl->IsReadOnly() );
             OSL_VERIFY( _rValue >>= bReadOnly );
             pControl->SetReadOnly( bReadOnly );
 
@@ -447,7 +447,7 @@ namespace frm
         else if ( _rPropertyName.equals( PROPERTY_HIDEINACTIVESELECTION ) )
         {
             RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
-            sal_Bool bHide = pRichTextControl->GetHideInactiveSelection();
+            bool bHide = pRichTextControl->GetHideInactiveSelection();
             OSL_VERIFY( _rValue >>= bHide );
             pRichTextControl->SetHideInactiveSelection( bHide );
         }

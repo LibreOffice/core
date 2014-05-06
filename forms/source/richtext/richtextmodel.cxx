@@ -92,7 +92,7 @@ namespace frm
 
 
     ORichTextModel::ORichTextModel( const ORichTextModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
-        :OControlModel       ( _pOriginal, _rxFactory, sal_False )
+        :OControlModel       ( _pOriginal, _rxFactory, false )
         ,FontControlModel    ( _pOriginal                        )
         ,m_pEngine           ( NULL                              )
         ,m_bSettingEngineText( false                             )
@@ -329,7 +329,7 @@ namespace frm
 
     sal_Bool SAL_CALL ORichTextModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
 
         if ( isRegisteredProperty( _nHandle ) )
         {
@@ -444,7 +444,7 @@ namespace frm
         case PROPERTY_ID_ENABLEVISIBLE:
         case PROPERTY_ID_PRINTABLE:
         case PROPERTY_ID_HIDEINACTIVESELECTION:
-            aDefault <<= (sal_Bool)sal_True;
+            aDefault <<= true;
             break;
 
         case PROPERTY_ID_HARDLINEBREAKS:
@@ -453,7 +453,7 @@ namespace frm
         case PROPERTY_ID_READONLY:
         case PROPERTY_ID_MULTILINE:
         case PROPERTY_ID_RICH_TEXT:
-            aDefault <<= (sal_Bool)sal_False;
+            aDefault <<= false;
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:

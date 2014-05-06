@@ -321,7 +321,7 @@ namespace frm
             case FormFeature::AutoFilter:
                 if ( m_xController.is() && impl_isParseable_throw() )
                 {
-                    sal_Bool bIsDeleted = m_xCursor->rowDeleted();
+                    bool bIsDeleted = m_xCursor->rowDeleted();
 
                     if ( !bIsDeleted && !impl_isInsertOnlyForm_throw() )
                     {
@@ -355,9 +355,9 @@ namespace frm
             case FormFeature::MoveAbsolute:
             {
                 sal_Int32 nPosition   = m_xCursor->getRow();
-                sal_Bool  bIsNew      = impl_isInsertionRow_throw();
+                bool  bIsNew      = impl_isInsertionRow_throw();
                 sal_Int32 nCount      = impl_getRowCount_throw();
-                sal_Bool  bFinalCount = impl_isRowCountFinal_throw();
+                bool  bFinalCount = impl_isRowCountFinal_throw();
 
                 if ( ( nPosition >= 0 ) || bIsNew )
                 {
@@ -388,9 +388,9 @@ namespace frm
 
             case FormFeature::TotalRecords:
             {
-                sal_Bool  bIsNew      = impl_isInsertionRow_throw();
+                bool  bIsNew      = impl_isInsertionRow_throw();
                 sal_Int32 nCount      = impl_getRowCount_throw();
-                sal_Bool  bFinalCount = impl_isRowCountFinal_throw();
+                bool  bFinalCount = impl_isRowCountFinal_throw();
 
                 if ( bIsNew )
                     ++nCount;
@@ -492,8 +492,8 @@ namespace frm
             {
                 if(!checkConfirmation(needConfirmation, shouldCommit))
                     return false;
-                sal_Bool _;
-                if (shouldCommit && !xFrmOps->commitCurrentRecord(_))
+                sal_Bool bTmp;
+                if (shouldCommit && !xFrmOps->commitCurrentRecord(bTmp))
                     return false;
             }
             return true;
@@ -672,9 +672,9 @@ namespace frm
                 sal_uInt32 nCount = impl_getRowCount_throw();
 
                 // next position
-                sal_Bool bLeft = m_xCursor->isLast() && ( nCount > 1 );
-                sal_Bool bRight= !m_xCursor->isLast();
-                sal_Bool bSuccess = sal_False;
+                bool bLeft = m_xCursor->isLast() && ( nCount > 1 );
+                bool bRight= !m_xCursor->isLast();
+                bool bSuccess = false;
                 try
                 {
                     // ask for confirmation
@@ -695,7 +695,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    bSuccess = sal_False;
+                    bSuccess = false;
                 }
 
                 if ( bSuccess )
@@ -704,7 +704,7 @@ namespace frm
                         m_xCursor->relative( bRight ? 1 : -1 );
                     else
                     {
-                        sal_Bool bCanInsert = ::dbtools::canInsert( m_xCursorProperties );
+                        bool bCanInsert = ::dbtools::canInsert( m_xCursorProperties );
                         // is it possible to insert another record?
                         if ( bCanInsert )
                             m_xUpdateCursor->moveToInsertRow();
@@ -719,7 +719,7 @@ namespace frm
             case FormFeature::SaveRecordChanges:
             case FormFeature::UndoRecordChanges:
             {
-                sal_Bool bInserting = impl_isInsertionRow_throw();
+                bool bInserting = impl_isInsertionRow_throw();
 
                 if ( FormFeature::UndoRecordChanges == _nFeature )
                 {
@@ -779,7 +779,7 @@ namespace frm
                 if ( impl_commitCurrentControl_throw() && impl_commitCurrentRecord_throw() )
                 {
                     // simply toggle the value
-                    sal_Bool bApplied = sal_False;
+                    bool bApplied = false;
                     m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
                     m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( (sal_Bool)!bApplied ) );
 
@@ -867,7 +867,7 @@ namespace frm
                     return;
 
                 sal_Int32 nCount      = impl_getRowCount_throw();
-                sal_Bool  bFinalCount = impl_isRowCountFinal_throw();
+                bool  bFinalCount = impl_isRowCountFinal_throw();
 
                 if ( bFinalCount && ( (sal_Int32)nPosition > nCount ) )
                     nPosition = nCount;
@@ -905,7 +905,7 @@ namespace frm
             return false;
 
         // nothing to do if the record is not modified
-        sal_Bool bResult = !impl_isModifiedRow_throw();
+        bool bResult = !impl_isModifiedRow_throw();
         if ( !bResult )
         {
             // insert respectively update the row
@@ -944,7 +944,7 @@ namespace frm
 
             // check whether the control is locked
             Reference< XBoundControl > xCheckLock( xCurrentControl, UNO_QUERY );
-            sal_Bool bControlIsLocked = xCheckLock.is() && xCheckLock->getLock();
+            bool bControlIsLocked = xCheckLock.is() && xCheckLock->getLock();
 
             // commit if necessary
             bSuccess = true;
@@ -974,7 +974,7 @@ namespace frm
 
     sal_Bool SAL_CALL FormOperations::isInsertionRow() throw (RuntimeException, WrappedTargetException, std::exception)
     {
-        sal_Bool bIs = sal_False;
+        bool bIs = false;
         try
         {
             bIs = impl_isInsertionRow_throw();
@@ -990,7 +990,7 @@ namespace frm
 
     sal_Bool SAL_CALL FormOperations::isModifiedRow() throw (RuntimeException, WrappedTargetException, std::exception)
     {
-        sal_Bool bIs = sal_False;
+        bool bIs = false;
         try
         {
             bIs = impl_isModifiedRow_throw();
@@ -1044,7 +1044,7 @@ namespace frm
 
         if ( m_xCursor.is() && ( m_xCursor == _rEvent.Source ) )
         {
-            sal_Bool bIs = sal_False;
+            bool bIs = false;
             if  ( ( _rEvent.PropertyName == PROPERTY_ISMODIFIED )
                || ( _rEvent.PropertyName == PROPERTY_ISNEW )
                 )
@@ -1239,7 +1239,7 @@ namespace frm
 
         try
         {
-            sal_Bool bUseEscapeProcessing = sal_False;
+            bool bUseEscapeProcessing = false;
             m_xCursorProperties->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bUseEscapeProcessing;
             if ( bUseEscapeProcessing )
             {
@@ -1473,7 +1473,7 @@ namespace frm
             return false;
 
         sal_Bool bRecordInserted = sal_False;
-        sal_Bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
+        bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )
             return false;
@@ -1509,7 +1509,7 @@ namespace frm
             return false;
 
         sal_Bool bRecordInserted = sal_False;
-        sal_Bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
+        bool bSuccess = impl_commitCurrentRecord_throw( &bRecordInserted );
 
         if ( !bSuccess )
             return false;
@@ -1642,7 +1642,7 @@ namespace frm
 
             OUString sOriginalFilter;
             m_xCursorProperties->getPropertyValue( PROPERTY_FILTER ) >>= sOriginalFilter;
-            sal_Bool bApplied = sal_True;
+            bool bApplied = true;
             m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
 
             // if we have a filter, but it's not applied, then we have to overwrite it, else append one

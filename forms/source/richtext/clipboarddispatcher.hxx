@@ -45,7 +45,7 @@ namespace frm
 
     private:
         ClipboardFunc   m_eFunc;
-        sal_Bool        m_bLastKnownEnabled;
+        bool        m_bLastKnownEnabled;
 
     public:
         OClipboardDispatcher( EditView& _rView, ClipboardFunc _eFunc );
@@ -63,7 +63,7 @@ namespace frm
         /** determines whether our functionality is currently available
             to be overridden for ePaste
         */
-        virtual sal_Bool implIsEnabled( ) const;
+        virtual bool implIsEnabled( ) const;
     };
 
 
@@ -73,7 +73,7 @@ namespace frm
     {
     private:
         TransferableClipboardListener*  m_pClipListener;
-        sal_Bool                        m_bPastePossible;
+        bool                        m_bPastePossible;
 
     public:
         OPasteClipboardDispatcher( EditView& _rView );
@@ -82,7 +82,7 @@ namespace frm
         virtual ~OPasteClipboardDispatcher();
 
         // OClipboardDispatcher
-        virtual sal_Bool    implIsEnabled( ) const SAL_OVERRIDE;
+        virtual bool    implIsEnabled( ) const SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
         virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) SAL_OVERRIDE;

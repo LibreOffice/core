@@ -42,7 +42,7 @@ class OFormattedModel
 
         sal_Int32                           m_nFieldType;
         sal_Int16                           m_nKeyType;
-        sal_Bool                            m_bOriginalNumeric      : 1,
+        bool                            m_bOriginalNumeric      : 1,
                                             m_bNumeric              : 1;    // analogous for the TreatAsNumeric-property
 
     protected:
@@ -115,7 +115,7 @@ class OFormattedModel
         // OBoundControlModel overridables
         virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( ) SAL_OVERRIDE;
-        virtual sal_Bool    commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+        virtual bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
                             getSupportedBindingTypes() SAL_OVERRIDE;

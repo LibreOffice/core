@@ -219,7 +219,7 @@ extern "C"
 
 void SAL_CALL createRegistryInfo_FORMS()
 {
-    static sal_Bool bInit = sal_False;
+    static bool bInit = false;
     if (!bInit)
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -236,7 +236,7 @@ void SAL_CALL createRegistryInfo_FORMS()
 #if HAVE_FEATURE_DBCONNECTIVITY
         createRegistryInfo_FormOperations();
 #endif
-        bInit = sal_True;
+        bInit = true;
     }
 }
 

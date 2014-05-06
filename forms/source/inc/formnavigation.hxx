@@ -56,10 +56,10 @@ namespace frm
         {
             ::com::sun::star::util::URL                                             aURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDispatcher;
-            sal_Bool                                                                bCachedState;
+            bool                                                                bCachedState;
             ::com::sun::star::uno::Any                                              aCachedAdditionalState;
 
-            FeatureInfo() : bCachedState( sal_False ) { }
+            FeatureInfo() : bCachedState( false ) { }
         };
         typedef ::std::map< sal_Int16, FeatureInfo >    FeatureMap;
 

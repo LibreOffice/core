@@ -268,8 +268,8 @@ void OFormattedControl::setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::un
 void OFormattedModel::implConstruct()
 {
     // members
-    m_bOriginalNumeric = sal_False;
-    m_bNumeric = sal_False;
+    m_bOriginalNumeric = false;
+    m_bNumeric = false;
     m_xOriginalFormatter = NULL;
     m_nKeyType = NumberFormat::UNDEFINED;
     m_aNullDate = DBTypeConversion::getStandardDate();
@@ -282,7 +282,7 @@ void OFormattedModel::implConstruct()
     startAggregatePropertyListening( PROPERTY_FORMATSSUPPLIER );
 }
 OFormattedModel::OFormattedModel(const Reference<XComponentContext>& _rxFactory)
-    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD, sal_True, sal_True )
+    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD, true, true )
                             // use the old control name for compytibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
@@ -602,7 +602,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                 // das Numeric-Flag an mein gebundenes Feld anpassen
                 if (xField.is())
                 {
-                    m_bNumeric = sal_False;
+                    m_bNumeric = false;
                     switch (nType)
                     {
                         case DataType::BIT:
@@ -619,13 +619,13 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                         case DataType::DATE:
                         case DataType::TIME:
                         case DataType::TIMESTAMP:
-                            m_bNumeric = sal_True;
+                            m_bNumeric = true;
                             break;
                     }
                 }
                 else
                     m_bNumeric = m_bOriginalNumeric;
-                setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bNumeric));
+                setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bNumeric));
                 OSL_VERIFY( aFmtKey >>= nFormatKey );
             }
         }
@@ -644,7 +644,7 @@ void OFormattedModel::onDisconnectedDbColumn()
     {   // unser aggregiertes Model hatte keinerlei Format-Informationen
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
-        setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny((sal_Bool)m_bOriginalNumeric));
+        setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bOriginalNumeric));
         m_xOriginalFormatter = NULL;
     }
     m_nFieldType = DataType::OTHER;
@@ -661,7 +661,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
     // aber deswegen muessen wir ja nicht gleich den ganzen Supplier speichern, das waere ein klein wenig Overhead ;)
         Reference<XNumberFormatsSupplier>  xSupplier;
         Any aFmtKey;
-    sal_Bool bVoidKey = sal_True;
+    bool bVoidKey = true;
     if (m_xAggregateSet.is())
     {
         Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
@@ -750,7 +750,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
         case 0x0002 :
         case 0x0003 :
         {
-            sal_Bool bNonVoidKey = _rxInStream->readBoolean();
+            bool bNonVoidKey = _rxInStream->readBoolean();
             if (bNonVoidKey)
             {
                 // read string and language...
@@ -834,7 +834,7 @@ sal_uInt16 OFormattedModel::getPersistenceFlags() const
     // a) we do our own call to writeCommonEditProperties
 }
 
-sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( aControlValue != m_aSaveValue )
@@ -864,12 +864,12 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             }
             catch(const Exception&)
             {
-                return sal_False;
+                return false;
             }
         }
         m_aSaveValue = aControlValue;
     }
-    return sal_True;
+    return true;
 }
 
 void OFormattedModel::onConnectedExternalValue( )
@@ -890,7 +890,7 @@ Any OFormattedModel::translateExternalValueToControlValue( const Any& _rExternal
         break;
     case TypeClass_BOOLEAN:
     {
-        sal_Bool bExternalValue = sal_False;
+        bool bExternalValue = false;
         _rExternalValue >>= bExternalValue;
         aControlValue <<= (double)( bExternalValue ? 1 : 0 );
     }

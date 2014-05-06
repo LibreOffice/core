@@ -104,7 +104,7 @@ namespace frm
         {
             if ( aFeature->second.aURL.Main == _rState.FeatureURL.Main )
             {
-                if  (  ( aFeature->second.bCachedState != _rState.IsEnabled )
+                if  (  ( (aFeature->second.bCachedState ? 1 : 0) != _rState.IsEnabled )
                     || ( aFeature->second.aCachedAdditionalState != _rState.State )
                     )
                 {
@@ -137,7 +137,7 @@ namespace frm
                 {
                     aFeature->second.xDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), aFeature->second.aURL );
                     aFeature->second.xDispatcher = NULL;
-                    aFeature->second.bCachedState = sal_False;
+                    aFeature->second.bCachedState = false;
                     aFeature->second.aCachedAdditionalState.clear();
                     --m_nConnectedFeatures;
 
@@ -186,7 +186,7 @@ namespace frm
             if ( xCurrentDispatcher.is() )
                 ++m_nConnectedFeatures;
             else
-                aFeature->second.bCachedState = sal_False;
+                aFeature->second.bCachedState = false;
         }
 
         // notify derivee that (potentially) all features changed their state
@@ -211,7 +211,7 @@ namespace frm
                 ++aFeature
             )
         {
-            aFeature->second.bCachedState = sal_False;
+            aFeature->second.bCachedState = false;
             aFeature->second.aCachedAdditionalState.clear();
             aFeature->second.xDispatcher = queryDispatch( aFeature->second.aURL );
             if ( aFeature->second.xDispatcher.is() )
@@ -239,7 +239,7 @@ namespace frm
                     aFeature->second.xDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), aFeature->second.aURL );
 
                 aFeature->second.xDispatcher = NULL;
-                aFeature->second.bCachedState = sal_False;
+                aFeature->second.bCachedState = false;
                 aFeature->second.aCachedAdditionalState.clear();
             }
 
@@ -330,7 +330,7 @@ namespace frm
 
     bool OFormNavigationHelper::getBooleanState( sal_Int16 _nFeatureId ) const
     {
-        sal_Bool bState = sal_False;
+        bool bState = false;
 
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
         if ( m_aSupportedFeatures.end() != aInfo )

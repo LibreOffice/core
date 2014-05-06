@@ -108,7 +108,7 @@ namespace frm
                 break;
 
             case PROPERTY_ID_FONT_WORDLINEMODE:
-                aValue = makeAny( (sal_Bool)_rFont.WordLineMode );
+                aValue = makeAny( _rFont.WordLineMode );
                 break;
 
             default:
@@ -252,10 +252,10 @@ namespace frm
     }
 
 
-    sal_Bool FontControlModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
+    bool FontControlModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
                 sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
         switch( _nHandle )
         {
         case PROPERTY_ID_TEXTCOLOR:
@@ -342,7 +342,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT_WORDLINEMODE:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, (sal_Bool)m_aFont.WordLineMode );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.WordLineMode );
             break;
 
         default:
@@ -424,7 +424,7 @@ namespace frm
 
         case PROPERTY_ID_FONT_WORDLINEMODE:
         {
-            sal_Bool bWordLineMode = sal_False;
+            bool bWordLineMode = false;
             rValue >>= bWordLineMode;
             rFont.WordLineMode = bWordLineMode;
         }

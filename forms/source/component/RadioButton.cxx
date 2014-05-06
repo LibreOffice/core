@@ -99,7 +99,7 @@ InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiSer
 
 
 ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFactory)
-    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON,sal_True )
+    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON,true )
                     // use the old control name for compytibility reasons
 {
 
@@ -393,7 +393,7 @@ Any ORadioButtonModel::translateExternalValueToControlValue( const Any& _rExtern
 }
 
 
-sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Reference< XPropertySet > xField( getField() );
     OSL_PRECOND( xField.is(), "ORadioButtonModel::commitControlValueToDbColumn: not bound!" );
@@ -411,7 +411,7 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             OSL_FAIL("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
         }
     }
-    return sal_True;
+    return true;
 }
 
 

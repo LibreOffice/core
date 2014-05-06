@@ -67,7 +67,7 @@ namespace frm
         // OBoundControlModel
         virtual ::com::sun::star::uno::Any
                                 translateDbColumnToControlValue( ) SAL_OVERRIDE;
-        virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+        virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any
                                 getDefaultForReset() const SAL_OVERRIDE;
 

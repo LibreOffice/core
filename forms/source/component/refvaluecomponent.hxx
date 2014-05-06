@@ -42,7 +42,7 @@ namespace frm
         ToggleState         m_eDefaultChecked;          // the default check state
         // </properties>
 
-        sal_Bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?
+        bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?
 
     protected:
         const OUString& getReferenceValue() const { return m_sReferenceValue; }
@@ -58,7 +58,7 @@ namespace frm
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault,
-            sal_Bool _bSupportNoCheckRefValue = sal_False
+            bool _bSupportNoCheckRefValue = false
         );
         DECLARE_DEFAULT_CLONE_CTOR( OReferenceValueComponent )
         DECLARE_DEFAULT_DTOR( OReferenceValueComponent );

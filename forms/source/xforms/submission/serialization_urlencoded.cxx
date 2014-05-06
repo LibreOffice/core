@@ -52,10 +52,10 @@ CSerializationURLEncoded::CSerializationURLEncoded()
  mark        = "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
  unreserved = alphanum | mark
 */
-sal_Bool CSerializationURLEncoded::is_unreserved(sal_Char c)
+bool CSerializationURLEncoded::is_unreserved(sal_Char c)
 {
     if (comphelper::string::isalnumAscii(c))
-        return sal_True;
+        return true;
     switch (c) {
         case '-':
         case '_':
@@ -66,9 +66,9 @@ sal_Bool CSerializationURLEncoded::is_unreserved(sal_Char c)
         case '\'':
         case '(':
         case ')':
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStringBuffer& aBuffer)
 {

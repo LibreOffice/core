@@ -200,7 +200,7 @@ public:
     OControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rFactory,
         const OUString& _rAggregateService,
-        const sal_Bool _bSetDelegator = sal_True
+        const bool _bSetDelegator = true
     );
 
     /** initializes the given peer with various settings necessary for form controls
@@ -282,7 +282,7 @@ class OBoundControl :public OControl
                     ,public OBoundControl_BASE
 {
 protected:
-    sal_Bool    m_bLocked : 1;
+    bool    m_bLocked : 1;
 
     OUString m_sOriginalHelpText;                // as long as the text/value is invalid, we change the help text of our peer
     ::com::sun::star::awt::FontDescriptor
@@ -293,7 +293,7 @@ public:
     OBoundControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         const OUString& _rAggregateService,
-        const sal_Bool _bSetDelegator = sal_True
+        const bool _bSetDelegator = true
     );
 
     virtual ~OBoundControl();
@@ -361,8 +361,8 @@ protected:
     OUString                 m_aTag;                     // tag for additional data
     sal_Int16                       m_nTabIndex;                // index within the taborder
     sal_Int16                       m_nClassId;                 // type of the control
-    sal_Bool                        m_bNativeLook;              // should the control use the native platform look?
-    sal_Bool                        m_bGenerateVbEvents;        // should the control generate fake vba events
+    bool                        m_bNativeLook;              // should the control use the native platform look?
+    bool                        m_bGenerateVbEvents;        // should the control generate fake vba events
     //added for exporting OCX control
     sal_Int16                       m_nControlTypeinMSO;        //keep the MS office control type for exporting to MS binarary file
     sal_uInt16                      m_nObjIDinMSO;              //keep the OCX control obj id for exporting to MS binarary file
@@ -374,13 +374,13 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
         const OUString& rDefault = OUString(),                    // service name of the default control
-        const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
+        const bool _bSetDelegator = true                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
         const OControlModel* _pOriginal,                                        // the original object to clone
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
-        const sal_Bool _bCloneAggregate = sal_True,                             // should the aggregate of the original be cloned, too?
-        const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
+        const bool _bCloneAggregate = true,                             // should the aggregate of the original be cloned, too?
+        const bool _bSetDelegator = true                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     virtual ~OControlModel();
 
@@ -554,8 +554,8 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, \
         const OUString& _rUnoControlModelTypeName, \
         const OUString& _rDefault, \
-        const sal_Bool _bSupportExternalBinding, \
-        const sal_Bool _bSupportsValidation \
+        const bool _bSupportExternalBinding, \
+        const bool _bSupportsValidation \
     ); \
     DECLARE_DEFAULT_CLONE_CTOR( classname )  \
     DECLARE_DEFAULT_DTOR( classname )   \
@@ -651,23 +651,23 @@ private:
     OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xLabelControl;            // reference to a sibling control (model) which is our label
-    sal_Bool                            m_bInputRequired;
+    bool                            m_bInputRequired;
 // </properties>
 
     ::comphelper::OPropertyChangeMultiplexer*
                                 m_pAggPropMultiplexer;
 
     bool                        m_bFormListening            : 1;    // are we currently a XLoadListener at our ambient form?
-    sal_Bool                    m_bLoaded                   : 1;
-    sal_Bool                    m_bRequired                 : 1;
-    const sal_Bool              m_bCommitable               : 1;    // do we support XBoundComponent?
-    const sal_Bool              m_bSupportsExternalBinding  : 1;    // do we support XBindableValue?
-    const sal_Bool              m_bSupportsValidation       : 1;    // do we support XValidatable?
-    sal_Bool                    m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
-    sal_Bool                    m_bTransferingValue         : 1;    // true if we're currently transferring our value to an external binding
-    sal_Bool                    m_bIsCurrentValueValid      : 1;    // flag specifying whether our current value is valid, relative to our external validator
-    sal_Bool                    m_bBindingControlsRO        : 1;    // is our ReadOnly property currently controlled by our external binding?
-    sal_Bool                    m_bBindingControlsEnable    : 1;    // is our Enabled property currently controlled by our external binding?
+    bool                    m_bLoaded                   : 1;
+    bool                    m_bRequired                 : 1;
+    const bool              m_bCommitable               : 1;    // do we support XBoundComponent?
+    const bool              m_bSupportsExternalBinding  : 1;    // do we support XBindableValue?
+    const bool              m_bSupportsValidation       : 1;    // do we support XValidatable?
+    bool                    m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
+    bool                    m_bTransferingValue         : 1;    // true if we're currently transferring our value to an external binding
+    bool                    m_bIsCurrentValueValid      : 1;    // flag specifying whether our current value is valid, relative to our external validator
+    bool                    m_bBindingControlsRO        : 1;    // is our ReadOnly property currently controlled by our external binding?
+    bool                    m_bBindingControlsEnable    : 1;    // is our Enabled property currently controlled by our external binding?
 
     ValueChangeInstigator       m_eControlValueChangeInstigator;
 
@@ -690,8 +690,8 @@ protected:
     inline const OUString&   getValuePropertyName( ) const       { return m_sValuePropertyName; }
     inline sal_Int32                getValuePropertyAggHandle( ) const  { return m_nValuePropertyAggregateHandle; }
     inline const OUString&   getControlSource( ) const           { return m_aControlSource; }
-    inline sal_Bool                 isRequired() const                  { return m_bRequired; }
-    inline sal_Bool                 isLoaded() const                    { return m_bLoaded; }
+    inline bool                 isRequired() const                  { return m_bRequired; }
+    inline bool                 isLoaded() const                    { return m_bLoaded; }
 
 protected:
 
@@ -700,9 +700,9 @@ protected:
                                                             // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const OUString& _rDefault,                   // service name of the default control
-        const sal_Bool _bCommitable,                        // is the control (model) commitable ?
-        const sal_Bool _bSupportExternalBinding,            // set to sal_True if you want to support XBindableValue
-        const sal_Bool _bSupportsValidation                 // set to sal_True if you want to support XValidatable
+        const bool _bCommitable,                        // is the control (model) commitable ?
+        const bool _bSupportExternalBinding,            // set to sal_True if you want to support XBindableValue
+        const bool _bSupportsValidation                 // set to sal_True if you want to support XValidatable
     );
     OBoundControlModel(
         const OBoundControlModel* _pOriginal,               // the original object to clone
@@ -873,7 +873,7 @@ protected:
             <TRUE/> if and only if the current control value results from a reset (<member>getDefaultForReset</member>)
         @pure
     */
-    virtual sal_Bool        commitControlValueToDbColumn(
+    virtual bool        commitControlValueToDbColumn(
                                 bool _bPostReset
                             ) = 0;
 
@@ -948,7 +948,7 @@ protected:
         Die Standard-Implementation erlaubt alles ausser den drei binary-Typen und
         FieldType_OTHER.
     */
-    virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType);
+    virtual bool        approveDbColumnType(sal_Int32 _nColumnType);
 
     /** retrieves the current value of the control, in a shape which can be used with our
         external validator.
@@ -1161,7 +1161,7 @@ protected:
     void        initFromField( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxForm );
 
 private:
-    sal_Bool    connectToField( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxForm );
+    bool    connectToField( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxForm );
     void        resetField();
 
     /** does a new validation of the control value
@@ -1281,7 +1281,7 @@ private:
 
         @seealso getExternalValueType
     */
-    sal_Bool    impl_approveValueBinding_nolock(
+    bool    impl_approveValueBinding_nolock(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
                 );
 };

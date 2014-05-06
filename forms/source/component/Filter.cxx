@@ -102,26 +102,26 @@ namespace frm
         ,m_aParser( _rxORB )
 #endif
         ,m_nControlClass( FormComponentType::TEXTFIELD )
-        ,m_bFilterList( sal_False )
-        ,m_bMultiLine( sal_False )
-        ,m_bFilterListFilled( sal_False )
+        ,m_bFilterList( false )
+        ,m_bMultiLine( false )
+        ,m_bFilterListFilled( false )
     {
     }
 
 
-    sal_Bool OFilterControl::ensureInitialized( )
+    bool OFilterControl::ensureInitialized( )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
         if ( !m_xField.is() )
         {
             OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no field!" );
-            return sal_False;
+            return false;
         }
 
         if ( !m_xConnection.is() )
         {
             OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no connection!" );
-            return sal_False;
+            return false;
         }
 
         if ( !m_xFormatter.is() )
@@ -140,10 +140,10 @@ namespace frm
         {
             OSL_FAIL( "OFilterControl::ensureInitialized: no number formatter!" );
             // no fallback anymore
-            return sal_False;
+            return false;
         }
 #endif
-        return sal_True;
+        return true;
     }
 
 
@@ -205,7 +205,7 @@ namespace frm
                 case FormComponentType::CHECKBOX:
                 {
                     // checkboxes always have a tristate-mode
-                    xVclWindow->setProperty( PROPERTY_TRISTATE, makeAny( sal_Bool( sal_True ) ) );
+                    xVclWindow->setProperty( PROPERTY_TRISTATE, makeAny( true ) );
                     xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( TRISTATE_INDET ) ) );
 
                     Reference< XCheckBox >  xBox( getPeer(), UNO_QUERY_THROW );
@@ -232,7 +232,7 @@ namespace frm
 
                 case FormComponentType::COMBOBOX:
                 {
-                    xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, makeAny( sal_Bool( sal_True ) ) );
+                    xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, makeAny( true ) );
                 }
                 // no break
 
@@ -254,7 +254,7 @@ namespace frm
             Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
             if ( xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
-                xVclWindow->setProperty( PROPERTY_READONLY, makeAny( sal_Bool( sal_False ) ) );
+                xVclWindow->setProperty( PROPERTY_READONLY, makeAny( false ) );
         }
         catch( const Exception& )
         {
@@ -262,7 +262,7 @@ namespace frm
         }
 
         if (m_bFilterList)
-            m_bFilterListFilled = sal_False;
+            m_bFilterListFilled = false;
     }
 
 
@@ -400,7 +400,7 @@ namespace frm
 
         try
         {
-            m_bFilterListFilled = sal_True;
+            m_bFilterListFilled = true;
 
             if ( !m_xField.is() )
                 return;

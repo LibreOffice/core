@@ -122,7 +122,7 @@ private:
     sal_uLong m_nClickEvent;
     sal_Int16   m_nTargetUrlFeatureId;
     /// caches the value of the "Enabled" property of our model
-    sal_Bool    m_bEnabledByPropertyValue;
+    bool    m_bEnabledByPropertyValue;
 
 protected:
 

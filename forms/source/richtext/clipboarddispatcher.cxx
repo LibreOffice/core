@@ -64,14 +64,14 @@ namespace frm
     OClipboardDispatcher::OClipboardDispatcher( EditView& _rView, ClipboardFunc _eFunc )
         :ORichTextFeatureDispatcher( _rView, createClipboardURL( _eFunc ) )
         ,m_eFunc( _eFunc )
-        ,m_bLastKnownEnabled( sal_True )
+        ,m_bLastKnownEnabled( true )
     {
     }
 
 
-    sal_Bool OClipboardDispatcher::implIsEnabled( ) const
+    bool OClipboardDispatcher::implIsEnabled( ) const
     {
-        sal_Bool bEnabled = sal_False;
+        bool bEnabled = false;
         switch ( m_eFunc )
         {
         case eCut:
@@ -100,7 +100,7 @@ namespace frm
 
     void OClipboardDispatcher::invalidateFeatureState_Broadcast()
     {
-        sal_Bool bEnabled = implIsEnabled();
+        bool bEnabled = implIsEnabled();
         if ( m_bLastKnownEnabled == bEnabled )
             // nothing changed -> no notification
             return;
@@ -139,7 +139,7 @@ namespace frm
     OPasteClipboardDispatcher::OPasteClipboardDispatcher( EditView& _rView )
         :OClipboardDispatcher( _rView, ePaste )
         ,m_pClipListener( NULL )
-        ,m_bPastePossible( sal_False )
+        ,m_bPastePossible( false )
     {
         m_pClipListener = new TransferableClipboardListener( LINK( this, OPasteClipboardDispatcher, OnClipboardChanged ) );
         m_pClipListener->acquire();
@@ -189,7 +189,7 @@ namespace frm
     }
 
 
-    sal_Bool OPasteClipboardDispatcher::implIsEnabled( ) const
+    bool OPasteClipboardDispatcher::implIsEnabled( ) const
     {
         return m_bPastePossible && OClipboardDispatcher::implIsEnabled();
     }

@@ -294,7 +294,7 @@ void OGridColumn::disposing()
 }
 
 
-void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_Bool bAllowDropDown )
+void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool bAllowDropDown )
 {
     // some properties are not to be exposed to the outer world
     ::std::set< OUString > aForbiddenProperties;
@@ -395,7 +395,7 @@ void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue )throw( IllegalArgumentException )
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (nHandle)
     {
         case PROPERTY_ID_LABEL:
@@ -454,7 +454,7 @@ Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         case PROPERTY_ID_ALIGN:
             return Any();
         case PROPERTY_ID_HIDDEN:
-            return makeAny((sal_Bool)sal_False);
+            return makeAny(false);
         default:
             return OPropertySetAggregationHelper::getPropertyDefaultByHandle(nHandle);
     }
@@ -552,8 +552,8 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
     }
     if (nAnyMask & OLD_HIDDEN)
     {
-        sal_Bool bValue = _rxInStream->readBoolean();
-        m_aHidden <<= (sal_Bool)bValue;
+        bool bValue = _rxInStream->readBoolean();
+        m_aHidden <<= bValue;
     }
 
     // Name
@@ -561,22 +561,22 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
 
     if (nAnyMask & COMPATIBLE_HIDDEN)
     {
-        sal_Bool bValue = _rxInStream->readBoolean();
-        m_aHidden <<= (sal_Bool)bValue;
+        bool bValue = _rxInStream->readBoolean();
+        m_aHidden <<= bValue;
     }
 }
 
 
-IMPL_COLUMN(TextFieldColumn,        FRM_SUN_COMPONENT_TEXTFIELD,        sal_False);
-IMPL_COLUMN(PatternFieldColumn,     FRM_SUN_COMPONENT_PATTERNFIELD,     sal_False);
-IMPL_COLUMN(DateFieldColumn,        FRM_SUN_COMPONENT_DATEFIELD,        sal_True);
-IMPL_COLUMN(TimeFieldColumn,        FRM_SUN_COMPONENT_TIMEFIELD,        sal_False);
-IMPL_COLUMN(NumericFieldColumn,     FRM_SUN_COMPONENT_NUMERICFIELD,     sal_False);
-IMPL_COLUMN(CurrencyFieldColumn,    FRM_SUN_COMPONENT_CURRENCYFIELD,    sal_False);
-IMPL_COLUMN(CheckBoxColumn,         FRM_SUN_COMPONENT_CHECKBOX,         sal_False);
-IMPL_COLUMN(ComboBoxColumn,         FRM_SUN_COMPONENT_COMBOBOX,         sal_False);
-IMPL_COLUMN(ListBoxColumn,          FRM_SUN_COMPONENT_LISTBOX,          sal_False);
-IMPL_COLUMN(FormattedFieldColumn,   FRM_SUN_COMPONENT_FORMATTEDFIELD,   sal_False);
+IMPL_COLUMN(TextFieldColumn,        FRM_SUN_COMPONENT_TEXTFIELD,        false);
+IMPL_COLUMN(PatternFieldColumn,     FRM_SUN_COMPONENT_PATTERNFIELD,     false);
+IMPL_COLUMN(DateFieldColumn,        FRM_SUN_COMPONENT_DATEFIELD,        true);
+IMPL_COLUMN(TimeFieldColumn,        FRM_SUN_COMPONENT_TIMEFIELD,        false);
+IMPL_COLUMN(NumericFieldColumn,     FRM_SUN_COMPONENT_NUMERICFIELD,     false);
+IMPL_COLUMN(CurrencyFieldColumn,    FRM_SUN_COMPONENT_CURRENCYFIELD,    false);
+IMPL_COLUMN(CheckBoxColumn,         FRM_SUN_COMPONENT_CHECKBOX,         false);
+IMPL_COLUMN(ComboBoxColumn,         FRM_SUN_COMPONENT_COMBOBOX,         false);
+IMPL_COLUMN(ListBoxColumn,          FRM_SUN_COMPONENT_LISTBOX,          false);
+IMPL_COLUMN(FormattedFieldColumn,   FRM_SUN_COMPONENT_FORMATTEDFIELD,   false);
 
 
 }   // namespace frm

@@ -51,7 +51,7 @@ class OImageControlModel
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xImageProducer;
     ImageProducer*                                  m_pImageProducer;
     bool                                            m_bExternalGraphic;
-    sal_Bool                                        m_bReadOnly;
+    bool                                        m_bReadOnly;
     OUString                                 m_sImageURL;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >
                                                     m_xGraphicObject;
@@ -114,13 +114,13 @@ protected:
     virtual void            onDisconnectedDbColumn() SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( ) SAL_OVERRIDE;
-    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any
                             getControlValue( ) const SAL_OVERRIDE;
     virtual void            doSetControlValue( const ::com::sun::star::uno::Any& _rValue ) SAL_OVERRIDE;
 
-    virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType) SAL_OVERRIDE;
+    virtual bool            approveDbColumnType(sal_Int32 _nColumnType) SAL_OVERRIDE;
 
     virtual void            resetNoBroadcast() SAL_OVERRIDE;
 
@@ -133,12 +133,12 @@ protected:
         @precond
             our own mutex is locked
     */
-    sal_Bool    impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator );
+    bool    impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator );
 
     /** updates the binary stream, created from loading the file which the given URL points to, into our
         bound field, or the control itself if there is no bound field
     */
-    sal_Bool    impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator );
+    bool    impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator );
 
     DECL_LINK( OnImageImportDone, ::Graphic* );
 };
@@ -186,7 +186,7 @@ public:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
-    void    implClearGraphics( sal_Bool _bForce );
+    void    implClearGraphics( bool _bForce );
     bool    implInsertGraphics();
 
     /** determines whether the control does currently have an empty grahic set

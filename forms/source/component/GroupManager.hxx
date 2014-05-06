@@ -77,7 +77,7 @@ namespace frm
     }
 
     template <class ELEMENT, class LESS_COMPARE>
-    sal_Bool seek_entry(const ::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, sal_Int32& nPos, const LESS_COMPARE& _rCompareOp)
+    bool seek_entry(const ::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, sal_Int32& nPos, const LESS_COMPARE& _rCompareOp)
     {
         typename ::std::vector<ELEMENT>::const_iterator aExistentPos = ::std::lower_bound(
             _rArray.begin(),
@@ -88,10 +88,10 @@ namespace frm
         if ((aExistentPos != _rArray.end()) && (*aExistentPos == _rNewElement))
         {   // we have a valid "lower or equal" element and it's really "equal"
             nPos = aExistentPos - _rArray.begin();
-            return sal_True;
+            return true;
         }
         nPos = -1;
-        return sal_False;
+        return false;
     }
 
 
@@ -110,7 +110,7 @@ public:
     OGroupComp(const OGroupComp& _rSource);
     OGroupComp();
 
-    sal_Bool operator==( const OGroupComp& rComp ) const;
+    bool operator==( const OGroupComp& rComp ) const;
 
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
@@ -135,7 +135,7 @@ class OGroupCompAcc
 public:
     OGroupCompAcc(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement, const OGroupComp& _rGroupComp );
 
-    sal_Bool operator==( const OGroupCompAcc& rCompAcc ) const;
+    bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>&  GetComponent() const { return m_xComponent; }
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
@@ -158,7 +158,7 @@ public:
     OGroup( const OUString& rGroupName );
     virtual ~OGroup();
 
-    sal_Bool operator==( const OGroup& rGroup ) const;
+    bool operator==( const OGroup& rGroup ) const;
 
     OUString GetGroupName() const { return m_aGroupName; }
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>  > GetControlModels() const;

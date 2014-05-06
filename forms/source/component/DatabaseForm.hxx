@@ -194,7 +194,7 @@ class ODatabaseForm :public OFormComponents
     sal_Int32                       m_nResetsPending;
 //  <overwritten_properties>
     sal_Int32                   m_nPrivileges;
-    sal_Bool                    m_bInsertOnly;
+    bool                    m_bInsertOnly;
 //  </overwritten_properties>
 
 //  <properties>
@@ -208,14 +208,14 @@ class ODatabaseForm :public OFormComponents
     ::com::sun::star::form::FormSubmitMethod    m_eSubmitMethod;
     ::com::sun::star::form::FormSubmitEncoding  m_eSubmitEncoding;
     ::com::sun::star::form::NavigationBarMode   m_eNavigation;
-    sal_Bool                    m_bAllowInsert : 1;
-    sal_Bool                    m_bAllowUpdate : 1;
-    sal_Bool                    m_bAllowDelete : 1;
+    bool                    m_bAllowInsert : 1;
+    bool                    m_bAllowUpdate : 1;
+    bool                    m_bAllowDelete : 1;
 //  </properties>
-    sal_Bool                    m_bLoaded : 1;
-    sal_Bool                    m_bSubForm : 1;
-    sal_Bool                    m_bForwardingConnection : 1;    // sal_True if we're setting the ActiveConnection on the aggregate
-    sal_Bool                    m_bSharingConnection : 1;       // sal_True if the connection we're using is shared with out parent
+    bool                    m_bLoaded : 1;
+    bool                    m_bSubForm : 1;
+    bool                    m_bForwardingConnection : 1;    // sal_True if we're setting the ActiveConnection on the aggregate
+    bool                    m_bSharingConnection : 1;       // sal_True if the connection we're using is shared with out parent
 
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
@@ -242,7 +242,7 @@ public:
 
     ::com::sun::star::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void fire( sal_Int32 * pnHandles, const ::com::sun::star::uno::Any * pNewValues, const ::com::sun::star::uno::Any * pOldValues, sal_Int32 nCount, sal_Bool bVetoable );
+    void fire( sal_Int32 * pnHandles, const ::com::sun::star::uno::Any * pNewValues, const ::com::sun::star::uno::Any * pOldValues, sal_Int32 nCount, bool bVetoable );
 
     // IPropertyBagHelperContext
     virtual ::osl::Mutex&   getMutex() SAL_OVERRIDE;
@@ -454,7 +454,7 @@ protected:
     virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    sal_Bool executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True,
+    bool executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, bool bMoveToFirst = true,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
     bool    fillParameters(::osl::ResettableMutexGuard& _rClearForNotifies,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
@@ -462,21 +462,21 @@ private:
     bool    hasValidParent() const;
 
     // impl methods
-    void    load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst = sal_True,
+    void    load_impl(bool bCausedByParentForm, bool bMoveToFirst = true,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >())
         throw(::com::sun::star::uno::RuntimeException);
-    void    reload_impl(sal_Bool bMoveToFirst,
+    void    reload_impl(bool bMoveToFirst,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >())
         throw(::com::sun::star::uno::RuntimeException);
     void    submit_impl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt, bool _bAproveByListeners);
     void    reset_impl(bool _bAproveByListeners);
 
-    sal_Bool    implEnsureConnection();
+    bool    implEnsureConnection();
 
     // connection sharing
 
     /// checks if we can re-use (aka share) the connection of the given parent
-    sal_Bool    canShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
+    bool    canShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
 
     /// starts sharing the connection with the parent
     void        doShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
@@ -488,7 +488,7 @@ private:
     void        disposingSharedConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn );
 
     /// checks if we currently share our connection with our parent
-    sal_Bool    isSharingConnection( ) const { return m_bSharingConnection; }
+    bool    isSharingConnection( ) const { return m_bSharingConnection; }
 
     /** calls our row set approval listeners
 
@@ -531,7 +531,7 @@ private:
     void FillSuccessfulList(HtmlSuccessfulObjList& rList, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
 
     void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rData);
-    sal_Bool InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
+    bool InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
     void Encode(OUString& rString) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection();

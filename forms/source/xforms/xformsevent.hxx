@@ -72,7 +72,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
 
     private:
 
-        sal_Bool m_canceled;
+        bool m_canceled;
 
     protected:
 
@@ -80,8 +80,8 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
         XEventTarget_t m_target;
         XEventTarget_t m_currentTarget;
         PhaseType_t m_phase;
-        sal_Bool m_bubbles;
-        sal_Bool m_cancelable;
+        bool m_bubbles;
+        bool m_cancelable;
         Time_t m_time;
 };
 

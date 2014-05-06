@@ -138,11 +138,11 @@ Sequence<Type> OImageControlModel::_getTypes()
 
 
 OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, sal_False, sal_False, sal_False )
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, false, false, false )
                     // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
     ,m_bExternalGraphic( true )
-    ,m_bReadOnly( sal_False )
+    ,m_bReadOnly( false )
     ,m_sImageURL()
     ,m_xGraphicObject()
 {
@@ -226,7 +226,7 @@ Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (Run
 }
 
 
-sal_Bool OImageControlModel::approveDbColumnType( sal_Int32 _nColumnType )
+bool OImageControlModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
     return ImageStoreInvalid != lcl_getImageStoreType( _nColumnType );
 }
@@ -237,7 +237,7 @@ void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
     switch (nHandle)
     {
         case PROPERTY_ID_READONLY:
-            rValue <<= (sal_Bool)m_bReadOnly;
+            rValue <<= m_bReadOnly;
             break;
         case PROPERTY_ID_IMAGE_URL:
             rValue <<= m_sImageURL;
@@ -395,7 +395,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             break;
         default :
             OSL_FAIL("OImageControlModel::read : unknown version !");
-            m_bReadOnly = sal_False;
+            m_bReadOnly = false;
             defaultCommonProperties();
             break;
     }
@@ -408,7 +408,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
 }
 
 
-sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
+bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
     // create a stream for the image specified by the URL
     boost::scoped_ptr< SvStream > pImageStream;
@@ -421,7 +421,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
     else
     {
         pImageStream.reset( ::utl::UcbStreamHelper::CreateStream( _rURL, STREAM_READ ) );
-        sal_Bool bSetNull = ( pImageStream.get() == NULL ) || ( ERRCODE_NONE != pImageStream->GetErrorCode() );
+        bool bSetNull = ( pImageStream.get() == NULL ) || ( ERRCODE_NONE != pImageStream->GetErrorCode() );
 
         if ( !bSetNull )
         {
@@ -442,20 +442,20 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
         else
             setControlValue( makeAny( xImageStream ), _eInstigator );
         xImageStream->closeInput();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator )
+bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _eInstigator )
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
     {
     case ImageStoreBinary:
         if ( impl_updateStreamForURL_lck( m_sImageURL, _eInstigator ) )
-            return sal_True;
+            return true;
         break;
 
     case ImageStoreLink:
@@ -467,7 +467,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
         if ( m_xColumnUpdate.is() )
         {
             m_xColumnUpdate->updateString( sCommitURL );
-            return sal_True;
+            return true;
         }
     }
     break;
@@ -484,11 +484,11 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
     else
         setControlValue( Any(), _eInstigator );
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
+bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     if ( _bPostReset )
     {
@@ -503,7 +503,7 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
         return impl_handleNewImageURL_lck( eDbColumnBinding );
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -777,7 +777,7 @@ void SAL_CALL OImageControlControl::disposing( const EventObject& _Event ) throw
 }
 
 
-void OImageControlControl::implClearGraphics( sal_Bool _bForce )
+void OImageControlControl::implClearGraphics( bool _bForce )
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
     if ( xSet.is() )
@@ -819,13 +819,13 @@ bool OImageControlControl::implInsertGraphics()
         Reference<XPropertySet> xBoundField;
         if ( hasProperty( PROPERTY_BOUNDFIELD, xSet ) )
             xSet->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= xBoundField;
-        sal_Bool bHasField = xBoundField.is();
+        bool bHasField = xBoundField.is();
 
         // if the control is bound to a DB field, then it's not possible to decide whether or not to link
         xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, !bHasField );
 
         // if the control is bound to a DB field, then linking of the image depends on the type of the field
-        sal_Bool bImageIsLinked = sal_True;
+        bool bImageIsLinked = true;
         if ( bHasField )
         {
             sal_Int32 nFieldType = DataType::OTHER;
@@ -838,8 +838,8 @@ bool OImageControlControl::implInsertGraphics()
         {
             // reset the url property in case it already has the value we're about to set - in this case
             // our propertyChanged would not get called without this.
-            implClearGraphics( sal_False );
-            sal_Bool bIsLink = sal_False;
+            implClearGraphics( false );
+            bool bIsLink = false;
             xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
             // Force bIsLink to be sal_True if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
             // in this case, and disabled the respective control, there might be picker implementations which do not
@@ -937,7 +937,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
                 break;
 
             case ID_CLEAR_GRAPHICS:
-                implClearGraphics( sal_True );
+                implClearGraphics( true );
                 bModified = true;
                 break;
             }
@@ -968,7 +968,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
                     return;
             }
 
-            sal_Bool bReadOnly = false;
+            bool bReadOnly = false;
             xSet->getPropertyValue(PROPERTY_READONLY) >>= bReadOnly;
             if (bReadOnly)
                 return;

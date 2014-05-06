@@ -57,10 +57,10 @@ private:
     Graphic*        mpGraphic;
     SvStream*       mpStm;
     sal_uInt32      mnTransIndex;
-    sal_Bool        mbConsInit;
+    bool        mbConsInit;
     Link            maDoneHdl;
 
-    sal_Bool        ImplImportGraphic( Graphic& rGraphic );
+    bool        ImplImportGraphic( Graphic& rGraphic );
     void            ImplUpdateData( const Graphic& rGraphic );
     void            ImplInitConsumer( const Graphic& rGraphic );
     void            ImplUpdateConsumer( const Graphic& rGraphic );

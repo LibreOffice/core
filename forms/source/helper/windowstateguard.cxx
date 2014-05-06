@@ -120,7 +120,7 @@ namespace frm
         {
             Reference< XWindow2 > xWindow;
             Reference< XPropertySet > xModelProps;
-            sal_Bool bShouldBeEnabled = sal_False;
+            bool bShouldBeEnabled = false;
             {
                 ::osl::MutexGuard aGuard( m_aMutex );
                 if ( !m_xWindow.is() || !m_xModelProps.is() )

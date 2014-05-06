@@ -90,7 +90,7 @@ Sequence<Type> OPatternModel::_getTypes()
 
 
 OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
-    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, sal_False, sal_False )
+    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, false, false )
                                     // use the old control name for compytibility reasons
 {
 
@@ -145,7 +145,7 @@ OUString SAL_CALL OPatternModel::getServiceName() throw ( ::com::sun::star::uno:
 }
 
 
-sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
@@ -166,16 +166,16 @@ sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         {
             OSL_ENSURE( m_pFormattedValue.get(), "OPatternModel::commitControlValueToDbColumn: no value helper!" );
             if ( !m_pFormattedValue.get() )
-                return sal_False;
+                return false;
 
             if ( !m_pFormattedValue->setFormattedValue( sNewValue ) )
-                return sal_False;
+                return false;
         }
 
         m_aLastKnownValue = aNewValue;
     }
 
-    return sal_True;
+    return true;
 }
 
 

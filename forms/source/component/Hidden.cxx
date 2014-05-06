@@ -99,7 +99,7 @@ sal_Bool OHiddenModel::convertFastPropertyValue(
             Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
             throw (IllegalArgumentException)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (_nHandle)
     {
         case PROPERTY_ID_HIDDEN_VALUE :

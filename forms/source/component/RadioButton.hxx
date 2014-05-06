@@ -61,7 +61,7 @@ protected:
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( ) SAL_OVERRIDE;
-    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any
                             translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
 

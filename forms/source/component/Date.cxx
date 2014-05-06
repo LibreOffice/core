@@ -90,7 +90,7 @@ Sequence<Type> ODateModel::_getTypes()
 
 ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
     : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD,
-        FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True)
+        FRM_SUN_CONTROL_DATEFIELD, true, true)
     // use the old control name for compytibility reasons
     , OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
     , m_bDateTimeField(false)
@@ -218,7 +218,7 @@ void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     Reference<XPropertySet> xField = getField();
     if (xField.is())
     {
-        m_bDateTimeField = sal_False;
+        m_bDateTimeField = false;
         try
         {
             sal_Int32 nFieldType = 0;
@@ -232,7 +232,7 @@ void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 }
 
 
-sal_Bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
@@ -264,12 +264,12 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             }
             catch(const Exception&)
             {
-                return sal_False;
+                return false;
             }
         }
         m_aSaveValue = aControlValue;
     }
-    return sal_True;
+    return true;
 }
 
 

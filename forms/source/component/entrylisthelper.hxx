@@ -91,7 +91,7 @@ namespace frm
             <p>The signature of this method and the return type have the same semantics
             as convertFastPropertyValue.</p>
         */
-        sal_Bool    convertNewListSourceProperty(
+        bool    convertNewListSourceProperty(
                         ::com::sun::star::uno::Any& _rConvertedValue,
                         ::com::sun::star::uno::Any& _rOldValue,
                         const ::com::sun::star::uno::Any& _rValue

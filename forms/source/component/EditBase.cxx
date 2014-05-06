@@ -58,11 +58,11 @@ namespace
 
 
 OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& rUnoControlModelName,
-        const OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
-    :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding, _bSupportsValidation )
+        const OUString& rDefault, const bool _bSupportExternalBinding, const bool _bSupportsValidation )
+    :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, true, _bSupportExternalBinding, _bSupportsValidation )
     ,m_nLastReadVersion(0)
-    ,m_bEmptyIsNull(sal_True)
-    ,m_bFilterProposal(sal_False)
+    ,m_bEmptyIsNull(true)
+    ,m_bFilterProposal(false)
 {
 }
 
@@ -168,7 +168,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
     sal_uInt16 nVersion = _rxInStream->readShort();
     m_nLastReadVersion = nVersion;
 
-    sal_Bool bHandleCommonProps = (nVersion & PF_HANDLE_COMMON_PROPS) != 0;
+    bool bHandleCommonProps = (nVersion & PF_HANDLE_COMMON_PROPS) != 0;
     nVersion = nVersion & ~PF_SPECIAL_FLAGS;
 
     // obsolete
@@ -201,7 +201,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
         }
 
         if ((nAnyMask & FILTERPROPOSAL) == FILTERPROPOSAL)
-            m_bFilterProposal = sal_True;
+            m_bFilterProposal = true;
     }
 
     if (nVersion > 4)
@@ -273,10 +273,10 @@ void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     switch (nHandle)
     {
         case PROPERTY_ID_EMPTY_IS_NULL:
-            rValue <<= (sal_Bool)m_bEmptyIsNull;
+            rValue <<= m_bEmptyIsNull;
             break;
         case PROPERTY_ID_FILTERPROPOSAL:
-            rValue <<= (sal_Bool)m_bFilterProposal;
+            rValue <<= m_bFilterProposal;
             break;
         case PROPERTY_ID_DEFAULT_TEXT:
             rValue <<= m_aDefaultText;
@@ -295,7 +295,7 @@ void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException )
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (nHandle)
     {
         case PROPERTY_ID_EMPTY_IS_NULL:
@@ -365,7 +365,7 @@ Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         case PROPERTY_ID_DEFAULT_TEXT:
             return makeAny(OUString());
         case PROPERTY_ID_FILTERPROPOSAL:
-            return Any(makeAny((sal_Bool)sal_False));
+            return makeAny(false);
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_DEFAULT_DATE:
         case PROPERTY_ID_DEFAULT_TIME:

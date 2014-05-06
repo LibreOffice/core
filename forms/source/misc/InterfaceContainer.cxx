@@ -584,9 +584,9 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                     implInsert(
                         m_aItems.size(),    // position
                         xElement,           // element to insert
-                        sal_False,          // no event attacher manager handling
+                        false,          // no event attacher manager handling
                         NULL,               // not yet approved - let implInsert do it
-                        sal_True            // fire the event
+                        true            // fire the event
                     );
                 }
                 catch( const Exception& )
@@ -598,7 +598,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                         // couldn't handle it
                         throw;
                     // insert the placeholder
-                    implInsert( m_aItems.size(), xElement, sal_False, NULL, sal_True );
+                    implInsert( m_aItems.size(), xElement, false, NULL, true );
                 }
             }
         }
@@ -802,7 +802,7 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
 
 
 void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XPropertySet >& _rxElement,
-    sal_Bool _bEvents, ElementDescription* _pApprovalResult, sal_Bool _bFire ) throw( IllegalArgumentException )
+    bool _bEvents, ElementDescription* _pApprovalResult, bool _bFire ) throw( IllegalArgumentException )
 {
     const bool bHandleEvents = _bEvents && m_xEventAttacher.is();
 
@@ -948,7 +948,7 @@ void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& 
 {
     Reference< XPropertySet > xElement;
     _rElement >>= xElement;
-    implInsert( _nIndex, xElement, sal_True /* event handling */ , NULL /* not yet approved */ , sal_True /* notification */ );
+    implInsert( _nIndex, xElement, true /* event handling */ , NULL /* not yet approved */ , true /* notification */ );
 }
 
 
@@ -1128,7 +1128,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
     {
         SAL_WARN("forms.misc", "OInterfaceContainer::insertByName: caught an exception!" );
     }
-    implInsert( m_aItems.size(), xElementProps, sal_True, aElementMetaData.get(), sal_True );
+    implInsert( m_aItems.size(), xElementProps, true, aElementMetaData.get(), true );
 }
 
 

@@ -81,7 +81,7 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
 
 
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
-    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, sal_True )
+    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, true )
                     // use the old control name for compytibility reasons
 {
 
@@ -230,7 +230,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
     }
     if ( m_xColumn->wasNull() )
     {
-        sal_Bool bTriState = sal_True;
+        bool bTriState = true;
         if ( m_xAggregateSet.is() )
             m_xAggregateSet->getPropertyValue( PROPERTY_TRISTATE ) >>= bTriState;
         aValue <<= (sal_Int16)( bTriState ? TRISTATE_INDET : getDefaultChecked() );
@@ -248,7 +248,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
 }
 
 
-sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     OSL_PRECOND( m_xColumnUpdate.is(), "OCheckBoxModel::commitControlValueToDbColumn: not bound!" );
     if ( m_xColumnUpdate.is() )
@@ -284,7 +284,7 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
         }
     }
-    return sal_True;
+    return true;
 }
 
 

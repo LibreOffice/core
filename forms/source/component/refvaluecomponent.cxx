@@ -37,8 +37,8 @@ namespace frm
     //=
 
 
-    OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
-        :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
+    OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, bool _bSupportNoCheckRefValue )
+        :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, false, true, true )
         ,m_eDefaultChecked( TRISTATE_FALSE )
         ,m_bSupportSecondRefValue( _bSupportNoCheckRefValue )
     {
@@ -118,7 +118,7 @@ namespace frm
 
     sal_Bool SAL_CALL OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
     {
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
         switch ( _nHandle )
         {
         case PROPERTY_ID_REFVALUE:
@@ -180,7 +180,7 @@ namespace frm
     {
         sal_Int16 nState = TRISTATE_INDET;
 
-        sal_Bool bExternalState = sal_False;
+        bool bExternalState = false;
         OUString sExternalValue;
         if ( _rExternalValue >>= bExternalState )
         {
@@ -231,7 +231,7 @@ namespace frm
             case TRISTATE_TRUE:
                 if ( bBooleanExchange )
                 {
-                    aExternalValue <<= (sal_Bool)sal_True;
+                    aExternalValue <<= true;
                 }
                 else if ( bStringExchange )
                 {
@@ -242,7 +242,7 @@ namespace frm
             case TRISTATE_FALSE:
                 if ( bBooleanExchange )
                 {
-                    aExternalValue <<= (sal_Bool)sal_False;
+                    aExternalValue <<= false;
                 }
                 else if ( bStringExchange )
                 {
@@ -273,10 +273,10 @@ namespace frm
         switch ( nControlValue )
         {
         case TRISTATE_TRUE:
-            aValidatableValue <<= (sal_Bool)sal_True;
+            aValidatableValue <<= true;
             break;
         case TRISTATE_FALSE:
-            aValidatableValue <<= (sal_Bool)sal_False;
+            aValidatableValue <<= false;
             break;
         }
         return aValidatableValue;

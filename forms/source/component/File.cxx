@@ -244,7 +244,7 @@ void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
 {
     ::cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
-    sal_Bool bContinue = sal_True;
+    bool bContinue = true;
     while (aIter.hasMoreElements() && bContinue)
         bContinue =((XResetListener*)aIter.next())->approveReset(aEvt);
 

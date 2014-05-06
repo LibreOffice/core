@@ -287,9 +287,9 @@ Sequence<Type> OEditModel::_getTypes()
 
 
 OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
-    :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
-    ,m_bMaxTextLenModified(sal_False)
-    ,m_bWritingFormattedFake(sal_False)
+    :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, true, true )
+    ,m_bMaxTextLenModified(false)
+    ,m_bWritingFormattedFake(false)
 {
 
     m_nClassId = FormComponentType::TEXTFIELD;
@@ -299,8 +299,8 @@ OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
 
 OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
-    ,m_bMaxTextLenModified(sal_False)
-    ,m_bWritingFormattedFake(sal_False)
+    ,m_bMaxTextLenModified(false)
+    ,m_bWritingFormattedFake(false)
 {
 
     // Note that most of the properties are not clone from the original object:
@@ -408,7 +408,7 @@ void OEditModel::describeAggregateProperties( Sequence< Property >& _rAggregateP
 
 bool OEditModel::implActsAsRichText( ) const
 {
-    sal_Bool bActAsRichText = sal_False;
+    bool bActAsRichText = false;
     if ( m_xAggregateSet.is() )
     {
         OSL_VERIFY( m_xAggregateSet->getPropertyValue( PROPERTY_RICH_TEXT ) >>= bActAsRichText );
@@ -622,11 +622,11 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
                     aVal <<= (sal_Int16)nFieldLen;
                     m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
 
-                    m_bMaxTextLenModified = sal_True;
+                    m_bMaxTextLenModified = true;
                 }
             }
             else
-                m_bMaxTextLenModified = sal_False; // to get sure that the text len won't be set in unloaded
+                m_bMaxTextLenModified = false; // to get sure that the text len won't be set in unloaded
         }
     }
 }
@@ -643,16 +643,16 @@ void OEditModel::onDisconnectedDbColumn()
         Any aVal;
         aVal <<= (sal_Int16)0;  // Only if it was 0, I switched it in onConnectedDbColumn
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
-        m_bMaxTextLenModified = sal_False;
+        m_bMaxTextLenModified = false;
     }
 }
 
 
-sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
+bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
     // if we act as rich text currently, we do not allow binding to a database column
     if ( implActsAsRichText() )
-        return sal_False;
+        return false;
 
     return OEditBaseModel::approveDbColumnType( _nColumnType );
 }
@@ -664,7 +664,7 @@ void OEditModel::resetNoBroadcast()
 }
 
 
-sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
@@ -687,18 +687,18 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             if ( m_pValueFormatter.get() )
             {
                 if ( !m_pValueFormatter->setFormattedValue( sNewValue ) )
-                    return sal_False;
+                    return false;
             }
             else
                 m_xColumnUpdate->updateString( sNewValue );
         }
         catch ( const Exception& )
         {
-            return sal_False;
+            return false;
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 

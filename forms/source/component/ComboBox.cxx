@@ -126,7 +126,7 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 
 
 OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, true, true, true )
                     // use the old control name for compytibility reasons
     ,OEntryListHelper( (OControlModel&)*this )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -265,7 +265,7 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
                         throw (IllegalArgumentException)
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (_nHandle)
     {
         case PROPERTY_ID_LISTSOURCETYPE :
@@ -550,7 +550,7 @@ void OComboBoxModel::loadData( bool _bForce )
                     aStatement.appendAscii( " FROM " );
                     aStatement.append     ( composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
 
-                    m_aListRowSet.setEscapeProcessing( sal_False );
+                    m_aListRowSet.setEscapeProcessing( false );
                     m_aListRowSet.setCommand( aStatement.makeStringAndClear() );
                     bExecuteRowSet = true;
                 }
@@ -718,7 +718,7 @@ void OComboBoxModel::resetNoBroadcast()
 }
 
 
-sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
+bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
@@ -744,14 +744,14 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
                 if ( m_pValueFormatter.get() )
                 {
                     if ( !m_pValueFormatter->setFormattedValue( sNewValue ) )
-                        return sal_False;
+                        return false;
                 }
                 else
                     m_xColumnUpdate->updateString( sNewValue );
             }
             catch ( const Exception& )
             {
-                return sal_False;
+                return false;
             }
         }
 
@@ -759,7 +759,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
     }
 
     // add the new value to the list
-    sal_Bool bAddToList = bModified && !_bPostReset;
+    bool bAddToList = bModified && !_bPostReset;
         // (only if this is not the "commit" triggered by a "reset")
 
     if ( bAddToList )
@@ -787,7 +787,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 // XPropertiesChangeListener

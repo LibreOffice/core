@@ -55,7 +55,7 @@ namespace xforms
     {
     private:
         // <properties>
-        sal_Bool        m_bIsBasic;
+        bool        m_bIsBasic;
         sal_Int16       m_nTypeClass;
         OUString m_sName;
         OUString m_sPattern;
@@ -68,7 +68,7 @@ namespace xforms
 
     protected:
 
-        sal_Bool    isBasic() const         { return m_bIsBasic; }
+        bool    isBasic() const         { return m_bIsBasic; }
         sal_Int16   getTypeClass() const    { return m_nTypeClass; }
         const OUString&
                     getName() const         { return m_sName; }

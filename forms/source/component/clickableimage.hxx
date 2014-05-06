@@ -66,9 +66,9 @@ namespace frm
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xProducer;
         SfxMedium*                              m_pMedium;          // Download-Medium
         ImageProducer*                          m_pProducer;
-        sal_Bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
-        sal_Bool                                m_bDownloading : 1; // laeuft ein Download?
-        sal_Bool                                m_bProdStarted : 1;
+        bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
+        bool                                m_bDownloading : 1; // laeuft ein Download?
+        bool                                m_bProdStarted : 1;
 
         // XSubmission stuff
         ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission >
@@ -85,7 +85,7 @@ namespace frm
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
         inline bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
-        inline void     setDispatchUrlInternal(sal_Bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
+        inline void     setDispatchUrlInternal(bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
     public:
         DECLARE_DEFAULT_XTOR( OClickableImageBaseModel );

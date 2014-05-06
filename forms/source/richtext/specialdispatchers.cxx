@@ -144,7 +144,7 @@ namespace frm
         OSL_ENSURE( pEngine, "OTextDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
 
         aEvent.IsEnabled = sal_True;
-        aEvent.State <<= (sal_Bool)( pEngine && pEngine->IsVertical() );
+        aEvent.State <<= pEngine && pEngine->IsVertical();
 
         return aEvent;
     }
@@ -172,7 +172,7 @@ namespace frm
         }
         if ( pLookup != pLookupEnd )
         {
-            sal_Bool bEnable = sal_True;
+            bool bEnable = true;
             OSL_VERIFY( pLookup->Value >>= bEnable );
             if ( m_nAttributeId == SID_ATTR_PARA_SCRIPTSPACE )
                 return new SvxScriptSpaceItem( bEnable, (WhichId)m_nAttributeId );

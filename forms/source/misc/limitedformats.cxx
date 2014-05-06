@@ -269,7 +269,7 @@ namespace frm
     }
 
 
-    sal_Bool OLimitedFormats::convertFormatKeyPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rNewValue)
+    bool OLimitedFormats::convertFormatKeyPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rNewValue)
     {
         OSL_ENSURE(m_xAggregate.is() && (-1 != m_nFormatEnumPropertyHandle), "OLimitedFormats::convertFormatKeyPropertyValue: not initialized!");
 
@@ -302,8 +302,8 @@ namespace frm
                     _rOldValue <<= pFormats->nKey;
             }
 
-            sal_Bool bFoundIt = (NULL != pFormats->pDescription);
-            sal_Bool bModified = sal_False;
+            bool bFoundIt = (NULL != pFormats->pDescription);
+            bool bModified = false;
             if (bFoundIt)
             {
                 _rConvertedValue <<= (sal_Int16)nTablePosition;
@@ -337,7 +337,7 @@ namespace frm
             return bModified;
         }
 
-        return sal_False;
+        return false;
     }
 
 

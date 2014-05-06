@@ -588,20 +588,20 @@ void SAL_CALL Submission::removeSubmissionVetoListener( const Reference< XSubmis
     throw NoSupportException();
 }
 
-static sal_Bool _isIgnorable(const Reference< XNode >& aNode)
+static bool _isIgnorable(const Reference< XNode >& aNode)
 {
     // ignore whitespace-only textnodes
     if (aNode->getNodeType() == NodeType_TEXT_NODE)
     {
         OUString aTrimmedValue = aNode->getNodeValue().trim();
-        if (aTrimmedValue.isEmpty()) return sal_True;
+        if (aTrimmedValue.isEmpty()) return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // recursively copy relevant nodes from A to B
-static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, const Reference< XNode >& source, sal_Bool bRemoveWSNodes)
+static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, const Reference< XNode >& source, bool bRemoveWSNodes)
 {
     if (!source.is()) return;
 
@@ -638,7 +638,7 @@ Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathOb
     return aDocument;
 }
 
-Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, sal_Bool bRemoveWSNodes)
+Reference< XDocumentFragment > Submission::createSubmissionDocument(const Reference< XXPathObject >& aObj, bool bRemoveWSNodes)
 {
     using namespace com::sun::star::xml::xpath;
     Reference< XDocumentBuilder > aDocBuilder = DocumentBuilder::create(comphelper::getProcessComponentContext());

@@ -100,24 +100,24 @@ void OCurrencyModel::implConstruct()
             const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
 
             OUString sCurrencySymbol;
-            sal_Bool bPrependCurrencySymbol;
+            bool bPrependCurrencySymbol;
             switch ( aLocaleInfo.getCurrPositiveFormat() )
             {
                 case 0: // $1
                     sCurrencySymbol = aLocaleInfo.getCurrSymbol();
-                    bPrependCurrencySymbol = sal_True;
+                    bPrependCurrencySymbol = true;
                     break;
                 case 1: // 1$
                     sCurrencySymbol = aLocaleInfo.getCurrSymbol();
-                    bPrependCurrencySymbol = sal_False;
+                    bPrependCurrencySymbol = false;
                     break;
                 case 2: // $ 1
                     sCurrencySymbol = aLocaleInfo.getCurrSymbol() + " ";
-                    bPrependCurrencySymbol = sal_True;
+                    bPrependCurrencySymbol = true;
                     break;
                 case 3: // 1 $
                     sCurrencySymbol = " " + aLocaleInfo.getCurrSymbol();
-                    bPrependCurrencySymbol = sal_False;
+                    bPrependCurrencySymbol = false;
                     break;
             }
             if (!sCurrencySymbol.isEmpty())
@@ -136,7 +136,7 @@ void OCurrencyModel::implConstruct()
 
 
 OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
-    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, sal_False, sal_True )
+    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, false, true )
                                     // use the old control name for compytibility reasons
 {
 
@@ -200,7 +200,7 @@ OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno
 }
 
 
-sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
@@ -215,12 +215,12 @@ sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             }
             catch(const Exception&)
             {
-                return sal_False;
+                return false;
             }
         }
         m_aSaveValue = aControlValue;
     }
-    return sal_True;
+    return true;
 }
 
 

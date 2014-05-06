@@ -70,7 +70,7 @@ namespace frm
 
     protected:
         void        getFormatKeyPropertyValue( ::com::sun::star::uno::Any& _rValue ) const;
-        sal_Bool    convertFormatKeyPropertyValue(
+        bool    convertFormatKeyPropertyValue(
                         ::com::sun::star::uno::Any& _rConvertedValue,
                         ::com::sun::star::uno::Any& _rOldValue,
                 const   ::com::sun::star::uno::Any& _rNewValue

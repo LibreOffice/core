@@ -235,7 +235,7 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
 
 // Date and Time Functions
 
-static OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_True)
+static OString makeDateTimeString (const DateTime& aDateTime, bool bUTC = true)
 {
     OStringBuffer aDateTimeString;
     aDateTimeString.append((sal_Int32)aDateTime.GetYear());
@@ -288,7 +288,7 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     xmlXPathReturnString(ctxt, pString);
 }
 
-static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
+static bool parseDateTime(const OUString& aString, DateTime& aDateTime)
 {
     // take apart a canonical literal xsd:dateTime string
     //CCYY-MM-DDThh:mm:ss(Z)
@@ -297,7 +297,7 @@ static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
 
     // check length
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
-        return sal_False;
+        return false;
 
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
@@ -324,7 +324,7 @@ static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
 
     aDateTime = tmpDateTime;
 
-    return sal_True;
+    return true;
 }
 
 
@@ -377,24 +377,24 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
 
 }
 
-static sal_Bool parseDuration(const xmlChar* aString, sal_Bool& bNegative, sal_Int32& nYears, sal_Int32& nMonth, sal_Int32& nDays,
+static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nYears, sal_Int32& nMonth, sal_Int32& nDays,
                               sal_Int32& nHours, sal_Int32& nMinutes, sal_Int32& nSeconds)
 {
-    sal_Bool bTime = sal_False; // in part after T
+    bool bTime = false; // in part after T
     sal_Int32 nLength = strlen((char*)aString)+1;
     char *pString = (char*)rtl_allocateMemory(nLength);
     char *pString0 = pString;
     strncpy(pString, (char*)aString, nLength);
 
     if (pString[0] == '-') {
-        bNegative = sal_True;
+        bNegative = true;
         pString++;
     }
 
     if (pString[0] != 'P')
     {
         rtl_freeMemory(pString0);
-        return sal_False;
+        return false;
     }
 
     pString++;
@@ -431,7 +431,7 @@ static sal_Bool parseDuration(const xmlChar* aString, sal_Bool& bNegative, sal_I
             pString = ++pToken;
             break;
         case 'T':
-            bTime = sal_True;
+            bTime = true;
             pString = ++pToken;
             break;
         default:
@@ -439,7 +439,7 @@ static sal_Bool parseDuration(const xmlChar* aString, sal_Bool& bNegative, sal_I
         }
     }
     rtl_freeMemory(pString0);
-    return sal_True;
+    return true;
 }
 
 void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs)
@@ -450,7 +450,7 @@ void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs)
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
 
-    sal_Bool bNegative = sal_False;
+    bool bNegative = false;
     sal_Int32 nYears = 0;
     sal_Int32 nMonths = 0;
     sal_Int32 nDays = 0;
@@ -480,7 +480,7 @@ void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs)
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
 
-    sal_Bool bNegative = sal_False;
+    bool bNegative = false;
     sal_Int32 nYears = 0;
     sal_Int32 nMonths = 0;
     sal_Int32 nDays = 0;

@@ -111,7 +111,7 @@ public:
     const OUString& getModelName() const { return m_aModelName; }
 
 protected:
-    static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, sal_Bool bAllowDropDown);
+    static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, bool bAllowDropDown);
     static void setOwnProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps);
 
     virtual OGridColumn* createCloneColumn() const = 0;

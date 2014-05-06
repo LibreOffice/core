@@ -679,7 +679,7 @@ namespace frm
     }
 
 
-    void RecordPositionInput::FirePosition( sal_Bool _bForce )
+    void RecordPositionInput::FirePosition( bool _bForce )
     {
         if ( _bForce || (GetText() != GetSavedValue()) )
         {
@@ -697,14 +697,14 @@ namespace frm
 
     void RecordPositionInput::LoseFocus()
     {
-        FirePosition( sal_False );
+        FirePosition( false );
     }
 
 
     void RecordPositionInput::KeyInput( const KeyEvent& rKeyEvent )
     {
         if( rKeyEvent.GetKeyCode() == KEY_RETURN && !GetText().isEmpty() )
-            FirePosition( sal_True );
+            FirePosition( true );
         else
             NumericField::KeyInput( rKeyEvent );
     }

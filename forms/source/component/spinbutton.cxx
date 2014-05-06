@@ -56,7 +56,7 @@ namespace frm
 
 
     OSpinButtonModel::OSpinButtonModel( const Reference<XComponentContext>& _rxFactory )
-        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, sal_True, sal_True, sal_False )
+        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, true, true, false )
         ,m_nDefaultSpinValue( 0 )
     {
 
@@ -136,7 +136,7 @@ namespace frm
                 Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
                 throw ( IllegalArgumentException )
     {
-        sal_Bool bModified( sal_False );
+        bool bModified( false );
         switch ( _nHandle )
         {
             case PROPERTY_ID_DEFAULT_SPIN_VALUE:
@@ -177,10 +177,10 @@ namespace frm
     }
 
 
-    sal_Bool OSpinButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+    bool OSpinButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
         OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
-        return sal_True;
+        return true;
     }
 
 

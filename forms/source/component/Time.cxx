@@ -123,7 +123,7 @@ Sequence<Type> OTimeModel::_getTypes()
 
 OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
     : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD,
-        FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True)
+        FRM_SUN_CONTROL_TIMEFIELD, true, true)
       // use the old control name for compatibility reasons
     , OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
     , m_bDateTimeField(false)
@@ -215,7 +215,7 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     Reference<XPropertySet> xField = getField();
     if (xField.is())
     {
-        m_bDateTimeField = sal_False;
+        m_bDateTimeField = false;
         try
         {
             sal_Int32 nFieldType = 0;
@@ -229,7 +229,7 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 }
 
 
-sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
+bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( !compare( aControlValue, m_aSaveValue ) )
@@ -262,12 +262,12 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             }
             catch(const Exception&)
             {
-                return sal_False;
+                return false;
             }
         }
         m_aSaveValue = aControlValue;
     }
-    return sal_True;
+    return true;
 }
 
 

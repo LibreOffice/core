@@ -108,7 +108,7 @@ void OComponentEventThread::disposing( const EventObject& evt ) throw ( ::com::s
     }
 }
 
-void OComponentEventThread::addEvent( const EventObject* _pEvt, sal_Bool bFlag )
+void OComponentEventThread::addEvent( const EventObject* _pEvt, bool bFlag )
 {
     Reference<XControl>  xTmp;
     addEvent( _pEvt, xTmp, bFlag );
@@ -116,7 +116,7 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt, sal_Bool bFlag )
 
 void OComponentEventThread::addEvent( const EventObject* _pEvt,
                                    const Reference<XControl>& rControl,
-                                   sal_Bool bFlag )
+                                   bool bFlag )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -184,7 +184,7 @@ void OComponentEventThread::run()
             m_aControls.erase( firstControl );
 
             ThreadBools::iterator firstFlag( m_aFlags.begin() );
-            sal_Bool bFlag = *firstFlag;
+            bool bFlag = *firstFlag;
             m_aFlags.erase( firstFlag );
 
             {

@@ -110,7 +110,7 @@ namespace frm
                     if ( nBorder )
                         nBits |= WB_BORDER;
 
-                    sal_Bool bTabStop = sal_False;
+                    bool bTabStop = false;
                     if ( xProps->getPropertyValue( PROPERTY_TABSTOP ) >>= bTabStop )
                         nBits |= ( bTabStop ? WB_TABSTOP : WB_NOTABSTOP );
                 }
@@ -305,7 +305,7 @@ namespace frm
 
         bool bVoid = !_rValue.hasValue();
 
-        sal_Bool  bBoolValue = sal_False;
+        bool  bBoolValue = false;
         sal_Int32 nColor = COL_TRANSPARENT;
 
         // TODO: more generic mechanisms for this (the grid control implementation,
@@ -395,19 +395,19 @@ namespace frm
         }
         else if ( _rPropertyName.equals( PROPERTY_SHOW_POSITION ) )
         {
-            aReturn <<= (sal_Bool)( pNavBar->IsFunctionGroupVisible( NavigationToolBar::ePosition ) );
+            aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::ePosition );
         }
         else if ( _rPropertyName.equals( PROPERTY_SHOW_NAVIGATION ) )
         {
-            aReturn <<= (sal_Bool)( pNavBar->IsFunctionGroupVisible( NavigationToolBar::eNavigation ) );
+            aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::eNavigation );
         }
         else if ( _rPropertyName.equals( PROPERTY_SHOW_RECORDACTIONS ) )
         {
-            aReturn <<= (sal_Bool)( pNavBar->IsFunctionGroupVisible( NavigationToolBar::eRecordActions ) );
+            aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::eRecordActions );
         }
         else if ( _rPropertyName.equals( PROPERTY_SHOW_FILTERSORT ) )
         {
-            aReturn <<= (sal_Bool)( pNavBar->IsFunctionGroupVisible( NavigationToolBar::eFilterSort ) );
+            aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::eFilterSort );
         }
         else
             aReturn = VCLXWindow::getProperty( _rPropertyName );

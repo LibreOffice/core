@@ -176,7 +176,7 @@ namespace frm
         virtual void KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;
 
     private:
-        void FirePosition( sal_Bool _bForce );
+        void FirePosition( bool _bForce );
     };
 
 

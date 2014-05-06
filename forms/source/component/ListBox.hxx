@@ -188,7 +188,7 @@ protected:
                             translateControlValueToExternalValue( ) const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any
                             translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
-    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
     virtual void            onDisconnectedDbColumn() SAL_OVERRIDE;

@@ -172,7 +172,7 @@ namespace frm
 
     bool OClickableImageBaseControl::approveAction( )
     {
-        sal_Bool bCancelled = sal_False;
+        bool bCancelled = false;
         EventObject aEvent( static_cast< XWeak* >( this ) );
 
         ::cppu::OInterfaceIteratorHelper aIter( m_aApproveActionListeners );
@@ -180,7 +180,7 @@ namespace frm
         {
             // Jede approveAction-Methode muss thread-safe sein!!!
             if( !static_cast< XApproveActionListener* >( aIter.next() )->approveAction( aEvent ) )
-                bCancelled = sal_True;
+                bCancelled = true;
         }
 
         return !bCancelled;
@@ -291,7 +291,7 @@ namespace frm
                     aURL.Complete += aURL.Mark;
                 }
 
-                sal_Bool bDispatchUrlInternal = sal_False;
+                bool bDispatchUrlInternal = false;
                 xSet->getPropertyValue(PROPERTY_DISPATCHURLINTERNAL) >>= bDispatchUrlInternal;
                 if ( bDispatchUrlInternal )
                 {
@@ -454,9 +454,9 @@ namespace frm
         ,OPropertyChangeListener(m_aMutex)
         ,m_pMedium(NULL)
         ,m_pProducer( NULL )
-        ,m_bDispatchUrlInternal(sal_False)
-        ,m_bDownloading(sal_False)
-        ,m_bProdStarted(sal_False)
+        ,m_bDispatchUrlInternal(false)
+        ,m_bDownloading(false)
+        ,m_bProdStarted(false)
     {
         implConstruct();
         m_eButtonType = FormButtonType_PUSH;
@@ -468,9 +468,9 @@ namespace frm
         ,OPropertyChangeListener( m_aMutex )
         ,m_pMedium( NULL )
         ,m_pProducer( NULL )
-        ,m_bDispatchUrlInternal(sal_False)
-        ,m_bDownloading( sal_False )
-        ,m_bProdStarted( sal_False )
+        ,m_bDispatchUrlInternal(false)
+        ,m_bDownloading( false )
+        ,m_bProdStarted( false )
     {
         implConstruct();
 
@@ -684,7 +684,7 @@ namespace frm
             else
                 // caution: the medium may be NULL if somebody gave us a invalid URL to work with
                 pImgProd->SetImage(OUString());
-            m_bDownloading = sal_False;
+            m_bDownloading = false;
             return;
         }
         if (m_pMedium->GetErrorCode()==0)
@@ -693,14 +693,14 @@ namespace frm
 
             pImgProd->SetImage(*pStream);
             pImgProd->startProduction();
-            m_bProdStarted = sal_True;
+            m_bProdStarted = true;
         }
         else
         {
             pImgProd->SetImage(OUString());
             delete m_pMedium;
             m_pMedium = 0;
-            m_bDownloading = sal_False;
+            m_bDownloading = false;
         }
     }
 
@@ -795,8 +795,8 @@ namespace frm
 
             // Downloading-Flag auf sal_True setzen. Es werden dann auch
             // Data-Available-Links, wenn wir in den Pending-Staus gelangen.
-            m_bDownloading = sal_True;
-            m_bProdStarted = sal_False;
+            m_bDownloading = true;
+            m_bProdStarted = false;
 
             // Download anstossen (Achtung: Kann auch synchron sein).
             m_pMedium->Download(STATIC_LINK(this, OClickableImageBaseModel, DownloadDoneLink));
@@ -822,7 +822,7 @@ namespace frm
     void OClickableImageBaseModel::DownloadDone()
     {
         DataAvailable();
-        m_bDownloading = sal_False;
+        m_bDownloading = false;
     }
 
 

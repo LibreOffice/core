@@ -61,7 +61,7 @@ namespace frm
         ::cppu::OInterfaceIteratorHelper aIter( m_aResetListeners );
         EventObject aResetEvent( m_rParent );
 
-        sal_Bool bContinue = sal_True;
+        bool bContinue = true;
         while ( aIter.hasMoreElements() && bContinue )
             bContinue = static_cast< XResetListener* >( aIter.next() )->approveReset( aResetEvent );
 

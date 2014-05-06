@@ -87,13 +87,13 @@ class OGridControlModel :public OControlModel
     sal_Int16                   m_nBorder;
     sal_Int16                   m_nWritingMode;
     sal_Int16                   m_nContextWritingMode;
-    sal_Bool                    m_bEnableVisible    : 1;
-    sal_Bool                    m_bEnable           : 1;
-    sal_Bool                    m_bNavigation       : 1;
-    sal_Bool                    m_bRecordMarker     : 1;
-    sal_Bool                    m_bPrintable        : 1;
-    sal_Bool                    m_bAlwaysShowCursor : 1;    // transient
-    sal_Bool                    m_bDisplaySynchron  : 1;    // transient
+    bool                    m_bEnableVisible    : 1;
+    bool                    m_bEnable           : 1;
+    bool                    m_bNavigation       : 1;
+    bool                    m_bRecordMarker     : 1;
+    bool                    m_bPrintable        : 1;
+    bool                    m_bAlwaysShowCursor : 1;    // transient
+    bool                    m_bDisplaySynchron  : 1;    // transient
 // [properties]
 
 protected:

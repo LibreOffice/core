@@ -296,17 +296,17 @@ ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
     ,m_pThread(NULL)
     ,m_nResetsPending(0)
     ,m_nPrivileges(0)
-    ,m_bInsertOnly( sal_False )
+    ,m_bInsertOnly( false )
     ,m_eSubmitMethod(FormSubmitMethod_GET)
     ,m_eSubmitEncoding(FormSubmitEncoding_URL)
     ,m_eNavigation(NavigationBarMode_CURRENT)
-    ,m_bAllowInsert(sal_True)
-    ,m_bAllowUpdate(sal_True)
-    ,m_bAllowDelete(sal_True)
-    ,m_bLoaded(sal_False)
-    ,m_bSubForm(sal_False)
-    ,m_bForwardingConnection(sal_False)
-    ,m_bSharingConnection( sal_False )
+    ,m_bAllowInsert(true)
+    ,m_bAllowUpdate(true)
+    ,m_bAllowDelete(true)
+    ,m_bLoaded(false)
+    ,m_bSubForm(false)
+    ,m_bForwardingConnection(false)
+    ,m_bSharingConnection( false )
 {
     impl_construct();
 }
@@ -349,10 +349,10 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_bAllowInsert( _cloneSource.m_bAllowInsert )
     ,m_bAllowUpdate( _cloneSource.m_bAllowUpdate )
     ,m_bAllowDelete( _cloneSource.m_bAllowDelete )
-    ,m_bLoaded( sal_False )
-    ,m_bSubForm( sal_False )
-    ,m_bForwardingConnection( sal_False )
-    ,m_bSharingConnection( sal_False )
+    ,m_bLoaded( false )
+    ,m_bSubForm( false )
+    ,m_bForwardingConnection( false )
+    ,m_bSharingConnection( false )
 {
 
     impl_construct();
@@ -705,7 +705,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 
             // MIB: Special treatment for multiline edit only if we have a control for it
             Any aTmp = xComponentSet->getPropertyValue( PROPERTY_MULTILINE );
-            sal_Bool bMulti =   rxSubmitButton.is()
+            bool bMulti =   rxSubmitButton.is()
                             && (aTmp.getValueType().getTypeClass() == TypeClass_BOOLEAN)
                             && getBOOL(aTmp);
             OUString sText;
@@ -1037,7 +1037,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
 }
 
 
-sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rName,
+bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rName,
     const OUString& rFileName )
 {
     OUString aFileName(rFileName);
@@ -1093,7 +1093,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString
     pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
     rParent.AttachChild( *pChild );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1193,13 +1193,13 @@ void ODatabaseForm::restoreInsertOnlyState( )
 }
 
 
-sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler)
+bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler)
 {
     if (!m_xAggregateAsRowSet.is())
-        return sal_False;
+        return false;
 
     if (!fillParameters(_rClearForNotifies, _rxCompletionHandler))
-        return sal_False;
+        return false;
 
     restoreInsertOnlyState( );
 
@@ -1227,11 +1227,11 @@ sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNot
     m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, makeAny( (sal_Int32)nConcurrency ) );
     m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( (sal_Int32)ResultSetType::SCROLL_SENSITIVE ) );
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         m_xAggregateAsRowSet->execute();
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     catch(const RowSetVetoException&)
     {
@@ -1286,7 +1286,7 @@ sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNot
                 else
                     onError(eDB, FRM_RES_STRING(RID_STR_READERROR));
                 _rClearForNotifies.reset();
-                bSuccess = sal_False;
+                bSuccess = false;
             }
         }
     }
@@ -1469,7 +1469,7 @@ Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  ) throw (RuntimeEx
 }
 
 
-void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any* pOldValues, sal_Int32 nCount, sal_Bool bVetoable )
+void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any* pOldValues, sal_Int32 nCount, bool bVetoable )
 {
     // same as in getFastPropertyValue(sal_Int32) : if we're resetting currently don't fire any changes of the
     // IsModified property from sal_False to sal_True, as this is only temporary 'til the reset is done
@@ -1566,13 +1566,13 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             rValue <<= m_eNavigation;
             break;
         case PROPERTY_ID_ALLOWADDITIONS:
-            rValue <<= (sal_Bool)m_bAllowInsert;
+            rValue <<= m_bAllowInsert;
             break;
         case PROPERTY_ID_ALLOWEDITS:
-            rValue <<= (sal_Bool)m_bAllowUpdate;
+            rValue <<= m_bAllowUpdate;
             break;
         case PROPERTY_ID_ALLOWDELETIONS:
-            rValue <<= (sal_Bool)m_bAllowDelete;
+            rValue <<= m_bAllowDelete;
             break;
         case PROPERTY_ID_PRIVILEGES:
             rValue <<= (sal_Int32)m_nPrivileges;
@@ -1602,7 +1602,7 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                                 sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException )
 {
-    sal_Bool bModified(sal_False);
+    bool bModified(false);
     switch (nHandle)
     {
         case PROPERTY_ID_INSERTONLY:
@@ -1705,7 +1705,7 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 
         case PROPERTY_ID_APPLYFILTER:
         {
-            sal_Bool bApply = sal_True;
+            bool bApply = true;
             rValue >>= bApply;
             m_aFilterManager.setApplyPublicFilter( bApply );
         }
@@ -1808,7 +1808,7 @@ void ODatabaseForm::forwardingPropertyValue( sal_Int32 _nHandle )
     {
         if ( m_bSharingConnection )
             stopSharingConnection( );
-        m_bForwardingConnection = sal_True;
+        m_bForwardingConnection = true;
     }
 }
 
@@ -1818,7 +1818,7 @@ void ODatabaseForm::forwardedPropertyValue( sal_Int32 _nHandle )
     OSL_ENSURE( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION, "ODatabaseForm::forwardedPropertyValue: unexpected property!" );
     if ( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION )
     {
-        m_bForwardingConnection = sal_False;
+        m_bForwardingConnection = false;
     }
 }
 
@@ -1963,7 +1963,7 @@ void SAL_CALL ODatabaseForm::reset() throw( RuntimeException, std::exception )
             m_pThread->create();
         }
         EventObject aEvt;
-        m_pThread->addEvent(&aEvt, sal_False);
+        m_pThread->addEvent(&aEvt, false);
     }
     else
     {
@@ -1985,7 +1985,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 
     ::osl::ResettableMutexGuard aResetGuard(m_aResetSafety);
     // do we have a database connected form and stay on the insert row
-    sal_Bool bInsertRow = sal_False;
+    bool bInsertRow = false;
     if (m_xAggregateSet.is())
         bInsertRow = getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW));
     if (bInsertRow)
@@ -2013,7 +2013,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                 {
                     Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );
 
-                    sal_Bool bReadOnly = sal_False;
+                    bool bReadOnly = false;
                     if ( xPSI->hasPropertyByName( PROPERTY_ISREADONLY ) )
                         xColProps->getPropertyValue( PROPERTY_ISREADONLY ) >>= bReadOnly;
 
@@ -2133,7 +2133,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
             m_pThread->acquire();
             m_pThread->create();
         }
-        m_pThread->addEvent(&MouseEvt, Control, sal_True);
+        m_pThread->addEvent(&MouseEvt, Control, true);
     }
     else
     {
@@ -2180,11 +2180,11 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     {
         ::cppu::OInterfaceIteratorHelper aIter(m_aSubmitListeners);
         EventObject aEvt(static_cast<XWeak*>(this));
-        sal_Bool bCanceled = sal_False;
+        bool bCanceled = false;
         while (aIter.hasMoreElements() && !bCanceled)
         {
             if (!((XSubmitListener*)aIter.next())->approveSubmit(aEvt))
-                bCanceled = sal_True;
+                bCanceled = true;
         }
 
         if (bCanceled)
@@ -2358,7 +2358,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
         // the rowset changed its active connection itself (without interaction from our side), so
         // we need to fire this event, too
         sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
-        fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, sal_False);
+        fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, false);
     }
     else    // it was one of the statement relevant props
     {
@@ -2422,7 +2422,7 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
     // <----- SYNCHRONIZED
 
     Reference< XConnection > xOuterConnection;
-    sal_Bool bIsEmbedded = ::dbtools::isEmbeddedInDatabase( Parent, xOuterConnection );
+    bool bIsEmbedded = ::dbtools::isEmbeddedInDatabase( Parent, xOuterConnection );
 
     if ( bIsEmbedded )
         xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCE, makeAny( OUString() ) );
@@ -2603,7 +2603,7 @@ void SAL_CALL ODatabaseForm::loaded(const EventObject& /*aEvent*/) throw( Runtim
         impl_createLoadTimer();
     }
 
-    load_impl( sal_True );
+    load_impl( true );
 }
 
 
@@ -2646,7 +2646,7 @@ void SAL_CALL ODatabaseForm::reloading(const EventObject& /*aEvent*/) throw( Run
 
 void SAL_CALL ODatabaseForm::reloaded(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
 {
-    reload_impl(sal_True);
+    reload_impl(true);
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         Reference<XRowSet>  xParentRowSet(m_xParent, UNO_QUERY);
@@ -2658,7 +2658,7 @@ void SAL_CALL ODatabaseForm::reloaded(const EventObject& /*aEvent*/) throw( Runt
 
 IMPL_LINK_NOARG(ODatabaseForm, OnTimeout)
 {
-    reload_impl(sal_True);
+    reload_impl(true);
     return 1;
 }
 
@@ -2667,11 +2667,11 @@ IMPL_LINK_NOARG(ODatabaseForm, OnTimeout)
 
 void SAL_CALL ODatabaseForm::load() throw( RuntimeException, std::exception )
 {
-    load_impl(sal_False);
+    load_impl(false);
 }
 
 
-sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rxParentProps )
+bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rxParentProps )
 {
     // our own data source
     OUString sOwnDatasource;
@@ -2684,14 +2684,14 @@ sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rx
     if ( _rxParentProps.is() )
         _rxParentProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sParentDataSource;
 
-    sal_Bool bCanShareConnection = sal_False;
+    bool bCanShareConnection = false;
 
     // both rowsets share are connected to the same data source
     if ( sParentDataSource == sOwnDatasource )
     {
         if ( !sParentDataSource.isEmpty() )
             // and it's really a data source name (not empty)
-            bCanShareConnection = sal_True;
+            bCanShareConnection = true;
         else
         {   // the data source name is empty
             // -> ook for the URL
@@ -2741,14 +2741,14 @@ void ODatabaseForm::doShareConnection( const Reference< XPropertySet >& _rxParen
         xParentConnComp->addEventListener( static_cast< XLoadListener* >( this ) );
 
         // forward the connection to our own aggregate
-        m_bForwardingConnection = sal_True;
+        m_bForwardingConnection = true;
         m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xParentConn ) );
-        m_bForwardingConnection = sal_False;
+        m_bForwardingConnection = false;
 
-        m_bSharingConnection = sal_True;
+        m_bSharingConnection = true;
     }
     else
-        m_bSharingConnection = sal_False;
+        m_bSharingConnection = false;
 }
 
 
@@ -2782,23 +2782,23 @@ void ODatabaseForm::stopSharingConnection( )
 
         // reset the property
         xSharedConn.clear();
-        m_bForwardingConnection = sal_True;
+        m_bForwardingConnection = true;
         m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xSharedConn ) );
-        m_bForwardingConnection = sal_False;
+        m_bForwardingConnection = false;
 
         // reset the flag
-        m_bSharingConnection = sal_False;
+        m_bSharingConnection = false;
     }
 }
 
 
-sal_Bool ODatabaseForm::implEnsureConnection()
+bool ODatabaseForm::implEnsureConnection()
 {
     try
     {
         if ( getConnection( ).is() )
             // if our aggregate already has a connection, nothing needs to be done about it
-            return sal_True;
+            return true;
 
         // see whether we're an embedded form
         Reference< XConnection > xOuterConnection;
@@ -2808,7 +2808,7 @@ sal_Bool ODatabaseForm::implEnsureConnection()
             return xOuterConnection.is();
         }
 
-        m_bSharingConnection = sal_False;
+        m_bSharingConnection = false;
 
         // if we're a sub form, we try to re-use the connection of our parent
         if (m_bSubForm)
@@ -2826,7 +2826,7 @@ sal_Bool ODatabaseForm::implEnsureConnection()
                 // success?
                 if ( m_bSharingConnection )
                     // yes -> outta here
-                    return sal_True;
+                    return true;
             }
         }
 
@@ -2849,11 +2849,11 @@ sal_Bool ODatabaseForm::implEnsureConnection()
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    return sal_False;
+    return false;
 }
 
 
-void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException )
+void ODatabaseForm::load_impl(bool bCausedByParentForm, bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException )
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
@@ -2865,10 +2865,10 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
 
     // if we don't have a connection, we are not intended to be a database form or the aggregate was not able
     // to establish a connection
-    sal_Bool bConnected = implEnsureConnection();
+    bool bConnected = implEnsureConnection();
 
     // we don't have to execute if we do not have a command to execute
-    sal_Bool bExecute = bConnected && m_xAggregateSet.is() && !getString(m_xAggregateSet->getPropertyValue(PROPERTY_COMMAND)).isEmpty();
+    bool bExecute = bConnected && m_xAggregateSet.is() && !getString(m_xAggregateSet->getPropertyValue(PROPERTY_COMMAND)).isEmpty();
 
     // a database form always uses caching
     // we use starting fetchsize with at least 10 rows
@@ -2880,7 +2880,7 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
     // (and there were no relevant changes between these two listener calls, the "load" of a form is quite an
     // atomic operation.)
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     if (bExecute)
     {
         m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_LOADING_FORM);
@@ -2889,7 +2889,7 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
 
     if (bSuccess)
     {
-        m_bLoaded = sal_True;
+        m_bLoaded = true;
         aGuard.clear();
         EventObject aEvt(static_cast<XWeak*>(this));
         m_aLoadListeners.notifyEach( &XLoadListener::loaded, aEvt );
@@ -2937,7 +2937,7 @@ void SAL_CALL ODatabaseForm::unload() throw( RuntimeException, std::exception )
         aGuard.reset();
     }
 
-    m_bLoaded = sal_False;
+    m_bLoaded = false;
 
     // if the connection we used while we were loaded is only shared with our parent, we
     // reset it
@@ -2951,11 +2951,11 @@ void SAL_CALL ODatabaseForm::unload() throw( RuntimeException, std::exception )
 
 void SAL_CALL ODatabaseForm::reload() throw( RuntimeException, std::exception )
 {
-    reload_impl(sal_True);
+    reload_impl(true);
 }
 
 
-void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException )
+void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException )
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     if (!isLoaded())
@@ -2982,7 +2982,7 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
         }
     }
 
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
     try
     {
         m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_REFRESHING_FORM);
@@ -3006,7 +3006,7 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
             reset();
     }
     else
-        m_bLoaded = sal_False;
+        m_bLoaded = false;
 }
 
 
@@ -3300,7 +3300,7 @@ void SAL_CALL ODatabaseForm::executeWithCompletion( const Reference< XInteractio
     if (!isLoaded())
     {
         aGuard.clear();
-        load_impl(sal_False, sal_False, _rxHandler);
+        load_impl(false, false, _rxHandler);
     }
     else
     {
@@ -3309,7 +3309,7 @@ void SAL_CALL ODatabaseForm::executeWithCompletion( const Reference< XInteractio
             return;
 
         // we're loaded and somebody want's to execute ourself -> this means a reload
-        reload_impl(sal_False, _rxHandler);
+        reload_impl(false, _rxHandler);
     }
 }
 
@@ -3326,7 +3326,7 @@ void SAL_CALL ODatabaseForm::execute() throw( SQLException, RuntimeException, st
     if (!isLoaded())
     {
         aGuard.clear();
-        load_impl(sal_False, sal_False);
+        load_impl(false, false);
     }
     else
     {
@@ -3335,7 +3335,7 @@ void SAL_CALL ODatabaseForm::execute() throw( SQLException, RuntimeException, st
             return;
 
         // we're loaded and somebody want's to execute ourself -> this means a reload
-        reload_impl(sal_False);
+        reload_impl(false);
     }
 }
 
@@ -3757,10 +3757,10 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt ) th
     {
         if ( evt.PropertyName == PROPERTY_ISNEW )
         {
-            sal_Bool bCurrentIsNew( sal_False );
+            bool bCurrentIsNew( false );
             OSL_VERIFY( evt.NewValue >>= bCurrentIsNew );
             if ( !bCurrentIsNew )
-                reload_impl( sal_True );
+                reload_impl( true );
         }
         return;
     }
@@ -3890,7 +3890,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
             case CommandType::QUERY : eTranslated = DataSelectionType_QUERY; break;
             case CommandType::COMMAND:
             {
-                sal_Bool bEscapeProcessing = getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
+                bool bEscapeProcessing = getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
                 eTranslated = bEscapeProcessing ? DataSelectionType_SQL : DataSelectionType_SQLPASSTHROUGH;
             }
             break;
@@ -3996,8 +3996,8 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
         case DataSelectionType_SQLPASSTHROUGH:
         {
             nCommandType = CommandType::COMMAND;
-            sal_Bool bEscapeProcessing = ((DataSelectionType)nCursorSourceType) != DataSelectionType_SQLPASSTHROUGH;
-            m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny((sal_Bool)bEscapeProcessing));
+            bool bEscapeProcessing = ((DataSelectionType)nCursorSourceType) != DataSelectionType_SQLPASSTHROUGH;
+            m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(bEscapeProcessing));
         }
         break;
         default : OSL_FAIL("ODatabaseForm::read : wrong CommandType !");
@@ -4010,11 +4010,11 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 
     // navigation mode was a boolean in version 1
     // was a sal_Bool in version 1
-    sal_Bool bNavigation = _rxInStream->readBoolean();
+    bool bNavigation = _rxInStream->readBoolean();
     if (nVersion == 1)
         m_eNavigation = bNavigation ? NavigationBarMode_CURRENT : NavigationBarMode_NONE;
 
-    sal_Bool bInsertOnly = _rxInStream->readBoolean();
+    bool bInsertOnly = _rxInStream->readBoolean();
     if (m_xAggregateSet.is())
         m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY, makeAny(bInsertOnly));
 
@@ -4057,7 +4057,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
             m_aCycle.clear();
     }
     if (m_xAggregateSet.is())
-        m_xAggregateSet->setPropertyValue(PROPERTY_APPLYFILTER, makeAny((sal_Bool)((nAnyMask & DONTAPPLYFILTER) == 0)));
+        m_xAggregateSet->setPropertyValue(PROPERTY_APPLYFILTER, makeAny((nAnyMask & DONTAPPLYFILTER) == 0));
 }
 
 

@@ -39,9 +39,9 @@ class OEditModel
 {
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >
                                 m_pValueFormatter;
-    sal_Bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
+    bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
 
-    sal_Bool                    m_bWritingFormattedFake : 1;
+    bool                    m_bWritingFormattedFake : 1;
         // are we writing something which should be interpreted as formatted upon reading?
 
 protected:
@@ -49,9 +49,9 @@ protected:
 
     DECLARE_DEFAULT_LEAF_XTOR( OEditModel );
 
-    void enableFormattedWriteFake() { m_bWritingFormattedFake = sal_True; }
-    void disableFormattedWriteFake() { m_bWritingFormattedFake = sal_False; }
-    sal_Bool lastReadWasFormattedFake() const { return (getLastReadVersion() & PF_FAKE_FORMATTED_FIELD) != 0; }
+    void enableFormattedWriteFake() { m_bWritingFormattedFake = true; }
+    void disableFormattedWriteFake() { m_bWritingFormattedFake = false; }
+    bool lastReadWasFormattedFake() const { return (getLastReadVersion() & PF_FAKE_FORMATTED_FIELD) != 0; }
 
     friend InterfaceRef SAL_CALL OEditModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     friend class OFormattedFieldWrapper;
@@ -97,7 +97,7 @@ protected:
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( ) SAL_OVERRIDE;
-    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
+    virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const SAL_OVERRIDE;
@@ -105,7 +105,7 @@ protected:
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
     virtual void            onDisconnectedDbColumn() SAL_OVERRIDE;
 
-    virtual sal_Bool        approveDbColumnType( sal_Int32 _nColumnType ) SAL_OVERRIDE;
+    virtual bool            approveDbColumnType( sal_Int32 _nColumnType ) SAL_OVERRIDE;
 
     virtual void            resetNoBroadcast() SAL_OVERRIDE;
 

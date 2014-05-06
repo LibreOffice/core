@@ -93,9 +93,9 @@ public:
     OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread();
 
-    void addEvent( const ::com::sun::star::lang::EventObject* _pEvt, sal_Bool bFlag = sal_False );
+    void addEvent( const ::com::sun::star::lang::EventObject* _pEvt, bool bFlag = false );
     void addEvent( const ::com::sun::star::lang::EventObject* _pEvt, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& rControl,
-                   sal_Bool bFlag = sal_False );
+                   bool bFlag = false );
 
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

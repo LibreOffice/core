@@ -245,7 +245,7 @@ namespace frm
             // the maybeboid anys
             if ( nNonVoids & PERSIST_TABSTOP )
             {
-                sal_Bool bTabStop( sal_False );
+                bool bTabStop( false );
                 m_aTabStop >>= bTabStop;
                 _rxOutStream->writeBoolean( bTabStop );
             }
@@ -372,7 +372,7 @@ namespace frm
     sal_Bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
 
         if ( isRegisteredProperty( _nHandle ) )
         {
@@ -431,7 +431,7 @@ namespace frm
         case PROPERTY_ID_SHOW_NAVIGATION:
         case PROPERTY_ID_SHOW_RECORDACTIONS:
         case PROPERTY_ID_SHOW_FILTERSORT:
-            aDefault <<= (sal_Bool)sal_True;
+            aDefault <<= true;
             break;
 
         case PROPERTY_ID_ICONSIZE:

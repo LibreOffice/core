@@ -88,7 +88,7 @@ private:
     // this will extract the document from the model that will be submitted
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocumentFragment >
         createSubmissionDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject,
-                                 sal_Bool bRemoveWSNodes = sal_False);
+                                 bool bRemoveWSNodes = false);
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument >
         getInstanceDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject);
 

@@ -62,7 +62,7 @@ namespace xforms
 
     OXSDDataType::OXSDDataType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
-        ,m_bIsBasic( sal_True )
+        ,m_bIsBasic( true )
         ,m_nTypeClass( _nTypeClass )
         ,m_sName( _rName )
         ,m_nWST( WhiteSpaceTreatment::Preserve )
@@ -89,7 +89,7 @@ namespace xforms
 
     void OXSDDataType::initializeClone( const OXSDDataType& _rCloneSource )
     {
-        m_bIsBasic   = sal_False;
+        m_bIsBasic   = false;
         m_nTypeClass = _rCloneSource.m_nTypeClass;
         m_sPattern   = _rCloneSource.m_sPattern;
         m_nWST       = _rCloneSource.m_nWST;

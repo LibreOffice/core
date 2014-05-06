@@ -62,7 +62,7 @@ OGroupCompAcc::OGroupCompAcc(const Reference<XPropertySet>& rxElement, const OGr
 {
 }
 
-sal_Bool OGroupCompAcc::operator==( const OGroupCompAcc& rCompAcc ) const
+bool OGroupCompAcc::operator==( const OGroupCompAcc& rCompAcc ) const
 {
     return (m_xComponent == rCompAcc.GetComponent());
 }
@@ -70,7 +70,7 @@ sal_Bool OGroupCompAcc::operator==( const OGroupCompAcc& rCompAcc ) const
 class OGroupCompAccLess : public ::std::binary_function<OGroupCompAcc, OGroupCompAcc, sal_Bool>
 {
 public:
-    sal_Bool operator() (const OGroupCompAcc& lhs, const OGroupCompAcc& rhs) const
+    bool operator() (const OGroupCompAcc& lhs, const OGroupCompAcc& rhs) const
     {
         return
             reinterpret_cast<sal_Int64>(lhs.m_xComponent.get())
@@ -109,7 +109,7 @@ OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPo
     }
 }
 
-sal_Bool OGroupComp::operator==( const OGroupComp& rComp ) const
+bool OGroupComp::operator==( const OGroupComp& rComp ) const
 {
     return m_nTabIndex == rComp.GetTabIndex() && m_nPos == rComp.GetPos();
 }
@@ -117,9 +117,9 @@ sal_Bool OGroupComp::operator==( const OGroupComp& rComp ) const
 class OGroupCompLess : public ::std::binary_function<OGroupComp, OGroupComp, sal_Bool>
 {
 public:
-    sal_Bool operator() (const OGroupComp& lhs, const OGroupComp& rhs) const
+    bool operator() (const OGroupComp& lhs, const OGroupComp& rhs) const
     {
-        sal_Bool bResult;
+        bool bResult;
         // TabIndex von 0 wird hinten einsortiert
         if (lhs.m_nTabIndex == rhs.GetTabIndex())
             bResult = lhs.m_nPos < rhs.GetPos();
@@ -185,7 +185,7 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
     }
 }
 
-sal_Bool OGroup::operator==( const OGroup& rGroup ) const
+bool OGroup::operator==( const OGroup& rGroup ) const
 {
     return m_aGroupName.equals(rGroup.GetGroupName());
 }
