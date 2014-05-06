@@ -59,7 +59,7 @@ public:
     void Restart (bool bForce);
 
 private:
-    sal_Int32 mnEventId;
+    sal_uLong mnEventId;
     ::rtl::Reference<SlideShow> mpSlideShow;
     ViewShellBase* mpViewShellBase;
     ::boost::shared_ptr<SlideShowRestarter> mpSelf;
