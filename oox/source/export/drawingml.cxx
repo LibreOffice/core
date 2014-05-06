@@ -2277,15 +2277,23 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         return;
 
     // extract the relevant properties from the grab bag
-    Sequence< PropertyValue > aGrabBag, aEffectProps;
+    Sequence< PropertyValue > aGrabBag, aEffectProps, aLightRigProps;
     mAny >>= aGrabBag;
     for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
         if( aGrabBag[i].Name == "3DEffectProperties" )
         {
-            aGrabBag[i].Value >>= aEffectProps;
+            Sequence< PropertyValue > a3DEffectProps;
+            aGrabBag[i].Value >>= a3DEffectProps;
+            for( sal_Int32 j=0; j < a3DEffectProps.getLength(); ++j )
+            {
+                if( a3DEffectProps[j].Name == "Camera" )
+                    a3DEffectProps[j].Value >>= aEffectProps;
+                else if( a3DEffectProps[j].Name == "LightRig" )
+                    a3DEffectProps[j].Value >>= aLightRigProps;
+            }
             break;
         }
-    if( aEffectProps.getLength() == 0 )
+    if( aEffectProps.getLength() == 0 && aLightRigProps.getLength() == 0 )
         return;
 
     bool bCameraRotationPresent = false;
@@ -2328,19 +2336,70 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         }
     }
 
+    bool bLightRigRotationPresent = false;
+    sax_fastparser::FastAttributeList *aLightRigAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aLightRigRotationAttrList = mpFS->createAttrList();
+    for( sal_Int32 i=0; i < aLightRigProps.getLength(); ++i )
+    {
+        if( aLightRigProps[i].Name == "rig" || aLightRigProps[i].Name == "dir" )
+        {
+            OUString sVal;
+            sal_Int32 nToken = XML_none;
+            aLightRigProps[i].Value >>= sVal;
+            if( aLightRigProps[i].Name == "rig" )
+                nToken = XML_rig;
+            else if( aLightRigProps[i].Name == "dir" )
+                nToken = XML_dir;
+            aLightRigAttrList->add( nToken, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        else if( aLightRigProps[i].Name == "rotLat" ||
+                aLightRigProps[i].Name == "rotLon" ||
+                aLightRigProps[i].Name == "rotRev" )
+        {
+            sal_Int32 nVal = 0, nToken = XML_none;
+            aLightRigProps[i].Value >>= nVal;
+            if( aLightRigProps[i].Name == "rotLat" )
+                nToken = XML_lat;
+            else if( aLightRigProps[i].Name == "rotLon" )
+                nToken = XML_lon;
+            else if( aLightRigProps[i].Name == "rotRev" )
+                nToken = XML_rev;
+            aLightRigRotationAttrList->add( nToken, OString::number( nVal ).getStr() );
+            bLightRigRotationPresent = true;
+        }
+    }
+
     mpFS->startElementNS( XML_a, XML_scene3d, FSEND );
 
-    sax_fastparser::XFastAttributeListRef xAttrList( aCameraAttrList );
-    mpFS->startElementNS( XML_a, XML_camera, xAttrList );
-    if( bCameraRotationPresent )
+    if( aEffectProps.getLength() > 0 )
     {
-        sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
-        mpFS->singleElementNS( XML_a, XML_rot, xRotAttrList );
+        sax_fastparser::XFastAttributeListRef xAttrList( aCameraAttrList );
+        mpFS->startElementNS( XML_a, XML_camera, xAttrList );
+        if( bCameraRotationPresent )
+        {
+            sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
+            mpFS->singleElementNS( XML_a, XML_rot, xRotAttrList );
+        }
+        mpFS->endElementNS( XML_a, XML_camera );
     }
-    mpFS->endElementNS( XML_a, XML_camera );
+    else
+        // a:camera with Word default values - Word won't open the document if this is not present
+        mpFS->singleElementNS( XML_a, XML_camera, XML_prst, "orthographicFront", FSEND );
 
-    // a:lightRig with Word default values - Word won't open the document if this is not present
-    mpFS->singleElementNS( XML_a, XML_lightRig, XML_rig, "threePt", XML_dir, "t", FSEND );
+    if( aEffectProps.getLength() > 0 )
+    {
+        sax_fastparser::XFastAttributeListRef xAttrList( aLightRigAttrList );
+        mpFS->startElementNS( XML_a, XML_lightRig, xAttrList );
+        if( bLightRigRotationPresent )
+        {
+            sax_fastparser::XFastAttributeListRef xRotAttrList( aLightRigRotationAttrList );
+            mpFS->singleElementNS( XML_a, XML_rot, xRotAttrList );
+        }
+        mpFS->endElementNS( XML_a, XML_lightRig );
+    }
+    else
+        // a:lightRig with Word default values - Word won't open the document if this is not present
+        mpFS->singleElementNS( XML_a, XML_lightRig, XML_rig, "threePt", XML_dir, "t", FSEND );
 
     mpFS->endElementNS( XML_a, XML_scene3d );
 }

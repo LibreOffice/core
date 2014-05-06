@@ -118,6 +118,59 @@ OUString Shape3DProperties::getCameraPrstName( sal_Int32 nElement )
     return OUString();
 }
 
+OUString Shape3DProperties::getLightRigName( sal_Int32 nElement )
+{
+    switch( nElement )
+    {
+        case XML_legacyFlat1:       return OUString( "legacyFlat1" );
+        case XML_legacyFlat2:       return OUString( "legacyFlat2" );
+        case XML_legacyFlat3:       return OUString( "legacyFlat3" );
+        case XML_legacyFlat4:       return OUString( "legacyFlat4" );
+        case XML_legacyNormal1:     return OUString( "legacyNormal1" );
+        case XML_legacyNormal2:     return OUString( "legacyNormal2" );
+        case XML_legacyNormal3:     return OUString( "legacyNormal3" );
+        case XML_legacyNormal4:     return OUString( "legacyNormal4" );
+        case XML_legacyHarsh1:      return OUString( "legacyHarsh1" );
+        case XML_legacyHarsh2:      return OUString( "legacyHarsh2" );
+        case XML_legacyHarsh3:      return OUString( "legacyHarsh3" );
+        case XML_legacyHarsh4:      return OUString( "legacyHarsh4" );
+        case XML_threePt:           return OUString( "threePt" );
+        case XML_balanced:          return OUString( "balanced" );
+        case XML_soft:              return OUString( "soft" );
+        case XML_harsh:             return OUString( "harsh" );
+        case XML_flood:             return OUString( "flood" );
+        case XML_contrasting:       return OUString( "contrasting" );
+        case XML_morning:           return OUString( "morning" );
+        case XML_sunrise:           return OUString( "sunrise" );
+        case XML_sunset:            return OUString( "sunset" );
+        case XML_chilly:            return OUString( "chilly" );
+        case XML_freezing:          return OUString( "freezing" );
+        case XML_flat:              return OUString( "flat" );
+        case XML_twoPt:             return OUString( "twoPt" );
+        case XML_glow:              return OUString( "glow" );
+        case XML_brightRoom:        return OUString( "brightRoom" );
+    }
+    SAL_WARN( "oox.drawingml", "Shape3DProperties::getLightRigName - unexpected token" );
+    return OUString();
+}
+
+OUString Shape3DProperties::getLightRigDirName( sal_Int32 nElement )
+{
+    switch( nElement )
+    {
+        case XML_tl:    return OUString( "tl" );
+        case XML_t:     return OUString( "t" );
+        case XML_tr:    return OUString( "tr" );
+        case XML_l:     return OUString( "l" );
+        case XML_r:     return OUString( "r" );
+        case XML_bl:    return OUString( "bl" );
+        case XML_b:     return OUString( "b" );
+        case XML_br:    return OUString( "br" );
+    }
+    SAL_WARN( "oox.drawingml", "Shape3DProperties::getLightRigDirName - unexpected token" );
+    return OUString();
+}
+
 css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttributes()
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
@@ -156,6 +209,44 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttr
     {
         aSeq[nSize].Name = "rotRev";
         aSeq[nSize].Value = css::uno::Any( maCameraRotation.mnRevolution.use() );
+        nSize++;
+    }
+    aSeq.realloc( nSize );
+    return aSeq;
+}
+
+css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getLightRigAttributes()
+{
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(5);
+    sal_Int32 nSize = 0;
+    if( mnLightRigDirection.has() )
+    {
+        aSeq[nSize].Name = "dir";
+        aSeq[nSize].Value = css::uno::Any( getLightRigDirName( mnLightRigDirection.use() ) );
+        nSize++;
+    }
+    if( mnLightRigType.has() )
+    {
+        aSeq[nSize].Name = "rig";
+        aSeq[nSize].Value = css::uno::Any( getLightRigName( mnLightRigType.use() ) );
+        nSize++;
+    }
+    if( maLightRigRotation.mnLatitude.has() )
+    {
+        aSeq[nSize].Name = "rotLat";
+        aSeq[nSize].Value = css::uno::Any( maLightRigRotation.mnLatitude.use() );
+        nSize++;
+    }
+    if( maLightRigRotation.mnLongitude.has() )
+    {
+        aSeq[nSize].Name = "rotLon";
+        aSeq[nSize].Value = css::uno::Any( maLightRigRotation.mnLongitude.use() );
+        nSize++;
+    }
+    if( maLightRigRotation.mnRevolution.has() )
+    {
+        aSeq[nSize].Name = "rotRev";
+        aSeq[nSize].Value = css::uno::Any( maLightRigRotation.mnRevolution.use() );
         nSize++;
     }
     aSeq.realloc( nSize );

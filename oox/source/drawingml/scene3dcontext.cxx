@@ -58,8 +58,9 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     case A_TOKEN( lightRig ):
         mr3DProperties.mnLightRigDirection = rAttribs.getToken( XML_dir, XML_none );
         mr3DProperties.mnLightRigType = rAttribs.getToken( XML_rig, XML_none );
-        // TODO: nested element XML_rot
-        break;
+
+        return new Scene3DRotationPropertiesContext( *this, mr3DProperties.maLightRigRotation );
+
     case A_TOKEN( backdrop ):
     case A_TOKEN( extLst ):
         return 0; // TODO: later (backdrop is not supported by core anyway)

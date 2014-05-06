@@ -939,8 +939,14 @@ Reference< XShape > Shape::createAndInsert(
 
             // add 3D effects if any
             Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
-            if( aCamera3DEffects.getLength() > 0 )
-                putPropertyToGrabBag( "3DEffectProperties", Any( aCamera3DEffects ) );
+            Sequence< PropertyValue > aLightRig3DEffects = get3DProperties().getLightRigAttributes();
+            if( aCamera3DEffects.getLength() > 0 || aLightRig3DEffects.getLength() > 0 )
+            {
+                Sequence< PropertyValue > a3DEffectsGrabBag( 2 );
+                PUT_PROP( a3DEffectsGrabBag, 0, "Camera", Any( aCamera3DEffects ) );
+                PUT_PROP( a3DEffectsGrabBag, 1, "LightRig", Any( aLightRig3DEffects ) );
+                putPropertyToGrabBag( "3DEffectProperties", Any( a3DEffectsGrabBag ) );
+            }
         }
 
         // These can have a custom geometry, so position should be set here,

@@ -51,13 +51,17 @@ struct Shape3DProperties
     OptValue< sal_Int32 > mnLightRigDirection;
     OptValue< sal_Int32 > mnLightRigType;
     RotationProperties maCameraRotation;
+    RotationProperties maLightRigRotation;
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const Shape3DProperties& rSourceProps );
 
     OUString            getCameraPrstName( sal_Int32 nElement );
+    OUString            getLightRigName( sal_Int32 nElement );
+    OUString            getLightRigDirName( sal_Int32 nElement );
 
     css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
+    css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
 };
 
 
