@@ -1,0 +1,10 @@
+--- libgltf/inc/libgltf.h
++++ libgltf/inc/libgltf.h
+@@ -48,7 +48,6 @@
+ void gltf_get_camera_pos(glm::vec3 *pos,glm::vec3 *view,glm::vec3 *up);
+ 
+ /*get model center position information*/
+-extern "C"
+ glm::vec3 gltf_get_model_center_pos();
+ /*get camera position information*/
+ extern "C"
