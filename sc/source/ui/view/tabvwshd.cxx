@@ -57,11 +57,11 @@ Window* ScTabViewShell::GetDialogParent()
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     if ( pDocSh->IsOle() )
     {
-        //TODO/LATER: how to GetEditWindow in embedded document?!
-        //It should be OK to return the VieShell Window!
+        // TODO/LATER: how to GetEditWindow in embedded document?!
+        // It should be OK to return the ViewShell Window!
         return GetWindow();
-        //SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
-        //if (pEnv)
+        // SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
+        // if (pEnv)
         //    return pEnv->GetEditWin();
     }
 
