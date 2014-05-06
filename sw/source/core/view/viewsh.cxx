@@ -887,6 +887,10 @@ void SwViewShell::ChgNumberDigits()
 
 void SwViewShell::CalcLayout()
 {
+    // extremely likely to be a Bad Idea to call this without StartAction
+    // (except the Page Preview apparently only has a non-subclassed ViewShell)
+    assert((typeid(*this) == typeid(SwViewShell)) || mnStartAction);
+
     SET_CURR_SHELL( this );
     SwWait aWait( *GetDoc()->GetDocShell(), true );
 
