@@ -119,6 +119,67 @@ void OpenGL3DRenderer::LoadShaders()
     m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
     m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
     m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
+
+    m_CommonProID = OpenGLHelper::LoadShaders("commonVertexShader", "commonFragmentShader");
+    m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
+    m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
+    m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+    CHECK_GL_ERROR();
+}
+
+void OpenGL3DRenderer::CreateTextureObj(int width, int height)
+{
+    glGenTextures(2, m_TextureObj);
+    for (int i = 0; i < 2; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+}
+
+void OpenGL3DRenderer::CreateRenderObj(int width, int height)
+{
+    glGenRenderbuffers(2, m_RboID);
+    for (int i = 0; i < 2; i++)
+    {
+        CHECK_GL_ERROR();
+        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
+        CHECK_GL_ERROR();
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+        CHECK_GL_ERROR();
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        CHECK_GL_ERROR();
+    }
+}
+
+void OpenGL3DRenderer::CreateFrameBufferObj()
+{
+    CreateTextureObj(m_iWidth, m_iHeight);
+    CreateRenderObj(m_iWidth, m_iHeight);
+    // create a framebuffer object, you need to delete them when program exits.
+    glGenFramebuffers(2, m_FboID);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    for (int i = 0; i < 2; i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[i]);
+        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
+        // attach a texture to FBO color attachement point
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[i], 0);
+        glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        // attach a renderbuffer to depth attachment point
+        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[i]);
+        glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
+    }
 }
 
 void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut)
@@ -162,6 +223,8 @@ void OpenGL3DRenderer::init()
     glClear(GL_COLOR_BUFFER_BIT);
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    CreateFrameBufferObj();
 
     glGenBuffers(1, &m_CubeVertexBuf);
     glGenBuffers(1, &m_CubeNormalBuf);
@@ -1440,7 +1503,7 @@ sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uIn
 void OpenGL3DRenderer::ProcessPickingBox()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
     glClearDepth(1.0f);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     if(ProcessExtrude3DPickingBox() == 1)
@@ -1448,7 +1511,7 @@ void OpenGL3DRenderer::ProcessPickingBox()
         //the picked object has been processed, return
         return ;
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
 }
 
 int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
@@ -1553,7 +1616,6 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     m_coordinateAxisinfo.scale.y = 4 * extrude3DInfo.xScale;
     m_coordinateAxisinfo.scale.z = 4 * extrude3DInfo.xScale;
     m_coordinateAxisinfo.color = glm::vec4(0.5, 1.0, 0.8, 1.0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     return 1;
 }
 

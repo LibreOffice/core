@@ -169,6 +169,9 @@ class OpenGL3DRenderer : public IOpenGLInfoProvider
 public:
     OpenGL3DRenderer();
 
+    void CreateFrameBufferObj();
+    void CreateTextureObj(int,int);
+    void CreateRenderObj(int, int);
     void LoadShaders();
     void init();
     virtual bool isOpenGLInitialized() SAL_OVERRIDE;
