@@ -155,11 +155,10 @@ void SvxLanguageBox::Init()
 
     if ( m_bWithCheckmark )
     {
-        SvtLanguageTable aLangTable;
-        sal_uInt32 nCount = aLangTable.GetEntryCount();
+        sal_uInt32 nCount = SvtLanguageTable::GetLanguageEntryCount();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            LanguageType nLangType = aLangTable.GetTypeAtIndex( i );
+            LanguageType nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
 
             bool bInsert = true;
             if ((LANGUAGE_DONTKNOW == nLangType)  ||
@@ -257,7 +256,6 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
             }
         }
 
-        SvtLanguageTable aLangTable;
         ::com::sun::star::uno::Sequence< sal_uInt16 > xKnown;
         const sal_uInt16* pKnown;
         sal_uInt32 nCount;
@@ -269,7 +267,7 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
         }
         else
         {
-            nCount = aLangTable.GetEntryCount();
+            nCount = SvtLanguageTable::GetLanguageEntryCount();
             pKnown = NULL;
         }
         for ( sal_uInt32 i = 0; i < nCount; i++ )
@@ -278,7 +276,7 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
             if ( nLangList & LANG_LIST_ONLY_KNOWN )
                 nLangType = pKnown[i];
             else
-                nLangType = aLangTable.GetTypeAtIndex( i );
+                nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
             if ( nLangType != LANGUAGE_DONTKNOW &&
                  nLangType != LANGUAGE_SYSTEM &&
                  nLangType != LANGUAGE_NONE &&
