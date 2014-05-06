@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <tools/debug.hxx>
 #include <vcl/evntpost.hxx>
 #include <vcl/svapp.hxx>
 
@@ -31,6 +34,7 @@ EventPoster::EventPoster( const Link& rLink )
 
 EventPoster::~EventPoster()
 {
+    DBG_TESTSOLARMUTEX();
     if ( m_nId )
         GetpApp()->RemoveUserEvent( m_nId );
 }
@@ -38,11 +42,13 @@ EventPoster::~EventPoster()
 void EventPoster::Post( UserEvent* pEvent )
 
 {
+    DBG_TESTSOLARMUTEX();
     m_nId = GetpApp()->PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ), pEvent );
 }
 
 IMPL_LINK( EventPoster, DoEvent_Impl, UserEvent*, pEvent )
 {
+    DBG_TESTSOLARMUTEX();
     m_nId = 0;
     m_aLink.Call( pEvent );
     return 0;

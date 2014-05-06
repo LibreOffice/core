@@ -57,7 +57,8 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                                  const OUString&                                           sTarget)
     : m_xContext         (rxContext                                       )
-    , m_aAsyncCallback   (LINK( this, CloseDispatcher, impl_asyncCallback))
+    , m_aAsyncCallback(
+        new vcl::EventPoster(LINK(this, CloseDispatcher, impl_asyncCallback)))
     , m_eOperation(E_CLOSE_DOC)
     , m_lStatusListener(m_mutex)
     , m_pSysWindow(NULL)
@@ -77,6 +78,8 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
 
 CloseDispatcher::~CloseDispatcher()
 {
+    SolarMutexGuard g;
+    m_aAsyncCallback.reset();
 }
 
 void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,
@@ -215,7 +218,10 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     if ( bIsSynchron )
         impl_asyncCallback(0);
     else
-        m_aAsyncCallback.Post(0);
+    {
+        SolarMutexGuard g;
+        m_aAsyncCallback->Post(0);
+    }
 }
 
 /**
