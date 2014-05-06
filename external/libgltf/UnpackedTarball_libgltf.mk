@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/remove_extra_include.patch \
 	external/libgltf/patches/fmod_error_handling.patch \
 	external/libgltf/patches/extern-C.patch \
+	external/libgltf/patches/errno.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
