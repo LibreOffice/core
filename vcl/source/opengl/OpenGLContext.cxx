@@ -581,18 +581,18 @@ bool OpenGLContext::initWindow()
     if( !m_pChildWindow )
     {
         SystemWindowData winData = generateWinData(mpWindow);
-        m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, sal_False);
+        m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
         m_pChildWindowGC.reset(m_pChildWindow);
     }
 
     if( m_pChildWindow )
     {
-        m_pChildWindow->SetMouseTransparent( sal_True );
+        m_pChildWindow->SetMouseTransparent( true );
         m_pChildWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        m_pChildWindow->EnableEraseBackground( sal_False );
+        m_pChildWindow->EnableEraseBackground( false );
         m_pChildWindow->SetControlForeground();
         m_pChildWindow->SetControlBackground();
-        m_pChildWindow->EnablePaint(sal_False);
+        m_pChildWindow->EnablePaint(false);
 
         const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
         m_aGLWin.hWnd = sysData->hWnd;
