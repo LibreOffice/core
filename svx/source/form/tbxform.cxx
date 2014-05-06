@@ -33,7 +33,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "svx/tbxctl.hxx"
-#include "svx/tbxdraw.hxx"
 #include "tbxform.hxx"
 #include "svx/fmresids.hrc"
 #include "fmhelp.hrc"

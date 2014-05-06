@@ -32,7 +32,6 @@
 #include <svx/dialogs.hrc>
 
 #include "svx/tbxctl.hxx"
-#include "svx/tbxdraw.hxx"
 #include "svx/tbxcolor.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
