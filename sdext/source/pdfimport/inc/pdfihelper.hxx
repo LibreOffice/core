@@ -151,11 +151,11 @@ namespace pdfi
             {
             default:
             case ::com::sun::star::rendering::PathJoinType::MITER:
-                return "miter";
+                return OUString("miter");
             case ::com::sun::star::rendering::PathJoinType::ROUND:
-                return "round";
+                return OUString("round");
             case ::com::sun::star::rendering::PathJoinType::BEVEL:
-                return "bevel";
+                return OUString("bevel");
             }
         }
 
@@ -165,11 +165,11 @@ namespace pdfi
             {
             default:
             case ::com::sun::star::rendering::PathCapType::BUTT:
-                return "butt";
+                return OUString("butt");
             case ::com::sun::star::rendering::PathCapType::ROUND:
-                return "round";
+                return OUString("round");
             case ::com::sun::star::rendering::PathCapType::SQUARE:
-                return "square";
+                return OUString("square");
             }
         }
 
