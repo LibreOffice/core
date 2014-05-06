@@ -47,8 +47,6 @@
 #include "ReportWindow.hxx"
 #include "RptObject.hxx"
 #include "ScrollHelper.hxx"
-
-#include "ReportRuler.hxx"
 #include "UITools.hxx"
 
 #include <uistrings.hrc>

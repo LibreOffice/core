@@ -18,7 +18,6 @@
  */
 #include "SectionWindow.hxx"
 #include "ReportWindow.hxx"
-#include "ReportRuler.hxx"
 #include "rptui_slotid.hrc"
 #include "ReportController.hxx"
 #include "SectionView.hxx"

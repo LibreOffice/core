@@ -20,7 +20,6 @@
 #include "ReportSection.hxx"
 #include "SectionView.hxx"
 #include "ViewsWindow.hxx"
-#include "ReportRuler.hxx"
 #include "DesignView.hxx"
 #include "UITools.hxx"
 
