@@ -541,7 +541,8 @@ void SwShellCrsr::Show()
 {
     SwShellCrsr * pTmp = this;
     do {
-        pTmp->SwSelPaintRects::Show();
+        if (pTmp)
+            pTmp->SwSelPaintRects::Show();
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 }
 
