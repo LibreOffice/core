@@ -135,14 +135,14 @@ throw( RuntimeException, std::exception )
             rEvent.State >>= sTemp ;
             m_pItem = new SfxStringItem( m_nSlotID, sTemp );
         }
-        else if ( pType == cppu::UnoType<::com::sun::star::frame::status::ItemStatus>::get() )
+        else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
         {
             ItemStatus aItemStatus;
             rEvent.State >>= aItemStatus;
             m_eState = aItemStatus.State;
             m_pItem = new SfxVoidItem( m_nSlotID );
         }
-        else if ( pType == cppu::UnoType<::com::sun::star::frame::status::Visibility>::get() )
+        else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
         {
             Visibility aVisibilityStatus;
             rEvent.State >>= aVisibilityStatus;
