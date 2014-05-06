@@ -652,7 +652,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 for ( long n = 0; n < nEntries; n++ )
                     OutStream->writeUTF( aSeq.getConstArray()[n] );
             }
-            else if ( rType == cppu::UnoType< ::com::sun::star::uno::Sequence< ::cppu::UnoUnsignedShortType > >::get() )
+            else if ( rType == cppu::UnoType< cppu::UnoSequenceType<cppu::UnoUnsignedShortType> >::get() )
             {
                 ::com::sun::star::uno::Sequence<sal_uInt16> aSeq;
                 rValue >>= aSeq;
@@ -867,7 +867,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     aValue <<= aSeq;
 
                 }
-                else if ( *pType == cppu::UnoType< ::com::sun::star::uno::Sequence< ::cppu::UnoUnsignedShortType > >::get() )
+                else if ( *pType == cppu::UnoType< cppu::UnoSequenceType<cppu::UnoUnsignedShortType> >::get() )
 
                 {
                     long nEntries = InStream->readLong();
