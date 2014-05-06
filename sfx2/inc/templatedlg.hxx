@@ -141,8 +141,8 @@ private:
 
     Edit *mpSearchEdit;
     ToolBox *mpViewBar;
-    ToolBox *mpActionBar;
     ToolBox *mpTemplateBar;
+    ToolBox *mpActionBar;
     TemplateSearchView *mpSearchView;
     TemplateAbstractView *mpCurView;
     TemplateLocalView *mpLocalView;
