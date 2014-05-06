@@ -99,7 +99,7 @@ namespace temporary {
 class TemporaryContext: public opengl3D::Renderable3DObject
 {
 public:
-    TemporaryContext();
+    TemporaryContext(OpenGL3DRenderer* pRenderer);
 
     void init();
     virtual void render() SAL_OVERRIDE;

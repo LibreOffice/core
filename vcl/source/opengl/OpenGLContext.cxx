@@ -563,7 +563,7 @@ void OpenGLContext::renderToFile()
 
     BitmapEx aBmp = OpenGLHelper::ConvertBGRABufferToBitmapEx(buf.get(), iWidth, iHeight);
     static int nIdx = 0;
-    OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
+    OUString aName = OUString( "file:///home/moggi/Documents/work/output" ) + OUString::number( nIdx++ ) + ".png";
     try {
         vcl::PNGWriter aWriter( aBmp );
         SvFileStream sOutput( aName, STREAM_WRITE );

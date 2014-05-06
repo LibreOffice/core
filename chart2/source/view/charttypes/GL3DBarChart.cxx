@@ -21,7 +21,8 @@ namespace chart {
 
 GL3DBarChart::GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries):
     maDataSeries(rDataSeries),
-    mxContext(new opengl3D::temporary::TemporaryContext())
+    mpRenderer(new opengl3D::OpenGL3DRenderer()),
+    mxContext(new opengl3D::temporary::TemporaryContext(mpRenderer.get()))
 {
 }
 
@@ -35,10 +36,9 @@ void GL3DBarChart::create3DShapes()
     const float nBarSizeY = 10;
     const float nBarDistanceX = nBarSizeX / 2;
     const float nBarDistanceY = nBarSizeY / 2;
-    opengl3D::OpenGL3DRenderer* pRenderer = NULL;
 
     maShapes.clear();
-    maShapes.push_back(new opengl3D::Camera(pRenderer));
+    maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     sal_Int32 nSeriesIndex = 0;
     sal_uInt32 nId = 1;
     for(std::vector<VDataSeries*>::const_iterator itr = maDataSeries.begin(),
@@ -56,7 +56,7 @@ void GL3DBarChart::create3DShapes()
             glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
             glm::translate(aBarPosition, nXPos, nYPos, nVal/2);
 
-            maShapes.push_back(new opengl3D::Bar(pRenderer, aBarPosition, nId++));
+            maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nId++));
         }
 
         ++nSeriesIndex;

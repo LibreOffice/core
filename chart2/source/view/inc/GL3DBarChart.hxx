@@ -21,6 +21,7 @@ namespace chart {
 namespace opengl3D {
 
 class Renderable3DObject;
+class OpenGL3DRenderer;
 
 namespace temporary {
 
@@ -43,6 +44,7 @@ private:
     std::vector<VDataSeries*> maDataSeries;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
+    boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
     boost::scoped_ptr<opengl3D::temporary::TemporaryContext> mxContext;
 };
 

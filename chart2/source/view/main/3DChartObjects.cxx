@@ -75,8 +75,8 @@ void Camera::render()
 
 namespace temporary {
 
-TemporaryContext::TemporaryContext():
-    Renderable3DObject(NULL, -1)
+TemporaryContext::TemporaryContext(OpenGL3DRenderer* pRenderer):
+    Renderable3DObject(pRenderer, -1)
 {
 }
 
@@ -87,6 +87,10 @@ void TemporaryContext::render()
 
 void TemporaryContext::init()
 {
+    maContext.init();
+    Size winSize(800, 600);
+    maContext.setWinSize(winSize);
+    mpRenderer->SetSize(winSize);
 }
 
 }
