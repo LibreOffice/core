@@ -518,7 +518,7 @@ void ScFormulaResult::SetHybridDouble( double f )
     }
 }
 
-void ScFormulaResult::SetHybridString( const OUString & rStr )
+void ScFormulaResult::SetHybridString( const svl::SharedString& rStr )
 {
     // Obtain values before changing anything.
     double f = GetDouble();

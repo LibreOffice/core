@@ -20,6 +20,7 @@
 
 #include "formula/token.hxx"
 #include "tools/datetime.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
@@ -305,7 +306,7 @@ void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* 
         return;
     }
     OUString aResult( p, n, RTL_TEXTENCODING_UTF8);
-    pCell->SetHybridString(aResult);
+    pCell->SetHybridString(mrDoc.getDoc().GetSharedStringPool().intern(aResult));
 }
 
 void ScOrcusSheet::set_shared_formula(

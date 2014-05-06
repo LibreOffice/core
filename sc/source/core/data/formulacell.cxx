@@ -2084,7 +2084,7 @@ void ScFormulaCell::SetHybridDouble( double n )
     aResult.SetHybridDouble( n);
 }
 
-void ScFormulaCell::SetHybridString( const OUString& r )
+void ScFormulaCell::SetHybridString( const svl::SharedString& r )
 {
     aResult.SetHybridString( r);
 }

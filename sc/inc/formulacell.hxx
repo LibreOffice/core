@@ -338,7 +338,7 @@ public:
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void SetHybridString( const OUString& r );
+    void SetHybridString( const svl::SharedString& r );
     /** For import only: set a temporary formula string to be compiled later.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
