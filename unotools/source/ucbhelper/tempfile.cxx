@@ -91,12 +91,12 @@ bool ensuredir( const OUString& rUnqPath )
     // returns ENOSYS in any case !!
     osl::Directory aDirectory( aPath );
 #ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
+    /* RW permission for the user only! */
+    mode_t old_mode = umask(077);
 #endif
     osl::FileBase::RC nError = aDirectory.open();
 #ifdef UNX
-umask(old_mode);
+    umask(old_mode);
 #endif
     aDirectory.close();
     if( nError == osl::File::E_None )
@@ -299,12 +299,12 @@ void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _b
         {
             File aFile( aTmp );
 #ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
+            /* RW permission for the user only! */
+            mode_t old_mode = umask(077);
 #endif
             FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
 #ifdef UNX
-umask(old_mode);
+            umask(old_mode);
 #endif
             if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
