@@ -34,23 +34,27 @@ public:
     SvtLanguageTable();
     ~SvtLanguageTable();
 
+    static OUString     GetLanguageString( const LanguageType eType );
+    static LanguageType GetLanguageType( const OUString& rStr );
+    static sal_uInt32   GetLanguageEntryCount();
+    static LanguageType GetLanguageTypeAtIndex( sal_uInt32 nIndex );
+
     /**
         @param bUserInterfaceSelection
             If TRUE, don't replace an UI-only locale. Only use for
                      Tools->Options->LanguageSettings->UserInterface listbox.
-            If FALSE, do replace.
+            If FALSE, do replace; same as GetLanguageString() without bool
+                      parameter.
      */
-    const OUString GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
-    LanguageType    GetType( const OUString& rStr ) const;
+    static OUString     GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection );
 
+private:
+
+    const OUString  GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
+    LanguageType    GetType( const OUString& rStr ) const;
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
 
-    static OUString     GetLanguageString( const LanguageType eType );
-    static OUString     GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection );
-    static LanguageType GetLanguageType( const OUString& rStr );
-    static sal_uInt32   GetLanguageEntryCount();
-    static LanguageType GetLanguageTypeAtIndex( sal_uInt32 nIndex );
 };
 
 // Add LRE or RLE embedding characters to the string based on the
