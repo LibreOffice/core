@@ -63,6 +63,7 @@ class Text : public Renderable3DObject
 {
 public:
     Text(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
+    virtual void render() SAL_OVERRIDE;
 private:
     BitmapEx maText;
     glm::vec3 maTopLeft;

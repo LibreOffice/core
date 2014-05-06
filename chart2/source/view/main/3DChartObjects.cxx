@@ -54,6 +54,13 @@ Text::Text(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
 {
 }
 
+void Text::render()
+{
+    glm::vec3 dir2 = maTopRight - maTopLeft;
+    glm::vec3 bottomLeft = maBottomRight - dir2;
+    mpRenderer->CreateTextTexture(maText, maTopLeft, maTopRight, maBottomRight, bottomLeft);
+}
+
 Rectangle::Rectangle(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
     Renderable3DObject(pRenderer, nId)
 {

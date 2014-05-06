@@ -189,6 +189,7 @@ public:
     void RenderClickPos(Point aMPos);
     void SetSize(const Size& rSize);
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut);
+    void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
@@ -201,7 +202,6 @@ private:
     void RenderExtrude3DObject();
     void RenderFPS(float fps);
     //add for text
-    void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
     void RenderTextShape();
     void RenderText(const ::rtl::OUString& string, com::sun::star::awt::Point aPos);
     void RenderExtrudeSurface(const Extrude3DInfo& extrude3D);
