@@ -223,17 +223,6 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
         case MAP_APPFONT:
             {
             ImplSVData* pSVData = ImplGetSVData();
-            if ( !pSVData->maGDIData.mnAppFontX )
-            {
-                if( pSVData->maWinData.mpFirstFrame )
-                    Window::ImplInitAppFontData( pSVData->maWinData.mpFirstFrame );
-                else
-                {
-                    WorkWindow* pWin = new WorkWindow( NULL, 0 );
-                    Window::ImplInitAppFontData( pWin );
-                    delete pWin;
-                }
-            }
             rMapRes.mnMapScNumX   = pSVData->maGDIData.mnAppFontX;
             rMapRes.mnMapScDenomX = nDPIX * 40;
             rMapRes.mnMapScNumY   = pSVData->maGDIData.mnAppFontY;

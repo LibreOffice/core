@@ -384,8 +384,6 @@ public:
     DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
 
 
-    SAL_DLLPRIVATE static void          ImplInitAppFontData( Window* pWindow );
-
     SAL_DLLPRIVATE Window*              ImplGetFrameWindow() const;
     SalFrame*                           ImplGetFrame() const;
     SAL_DLLPRIVATE ImplFrameData*       ImplGetFrameData();

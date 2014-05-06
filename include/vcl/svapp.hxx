@@ -267,6 +267,12 @@ public:
     */
     virtual void                Init();
 
+protected:
+    /** Initialize font data for the application.
+     */
+    static void                 InitAppFontData();
+
+public:
     /** Finish initialization of the application.
 
      @see Init, DeInit
