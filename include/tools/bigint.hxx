@@ -26,11 +26,6 @@
 
 class SvStream;
 
-#ifdef _TLBIGINT_INT64
-struct SbxINT64;
-struct SbxUINT64;
-#endif
-
 #define MAX_DIGITS 8
 
 class Fraction;
@@ -108,10 +103,6 @@ public:
     BigInt( sal_uInt32 nVal );
     BigInt( const BigInt& rBigInt );
     BigInt( const OUString& rString );
-#ifdef _TLBIGINT_INT64
-    BigInt( const SbxINT64  &r );
-    BigInt( const SbxUINT64 &r );
-#endif
 
     operator        short() const;
     operator        long()  const;
@@ -128,10 +119,6 @@ public:
     bool        IsOne() const;
     bool        IsLong() const { return !((bool)bIsBig); }
     void            Abs();
-#ifdef _TLBIGINT_INT64
-    bool        INT64 ( SbxINT64  *p ) const;
-    bool        UINT64( SbxUINT64 *p ) const;
-#endif
 
     BigInt&         operator  =( const BigInt& rVal );
     BigInt&         operator +=( const BigInt& rVal );
