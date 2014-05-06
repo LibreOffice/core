@@ -369,17 +369,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     }
 }
 
-com::sun::star::drawing::EnhancedCustomShapeParameterPair
-CustomShapeProvider::createParameterPair( const ParameterPairData *pData )
-{
-    EnhancedCustomShapeParameterPair aParameterPair;
-    aParameterPair.First.Type = pData->nFirstType;
-    aParameterPair.First.Value = makeAny(pData->nFirstValue);
-    aParameterPair.Second.Type = pData->nSecondType;
-    aParameterPair.Second.Value = makeAny(pData->nSecondValue);
-    return aParameterPair;
-}
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

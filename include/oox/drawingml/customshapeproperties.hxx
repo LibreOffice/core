@@ -104,20 +104,6 @@ struct Path2D
 };
 
 
-class CustomShapeProvider {
-protected:
-    struct ParameterPairData {
-        sal_uInt16 nFirstType;
-        sal_uInt16 nSecondType;
-        sal_uInt32 nFirstValue;
-        sal_uInt32 nSecondValue;
-    };
-    static com::sun::star::drawing::EnhancedCustomShapeParameterPair createParameterPair( const ParameterPairData *pData );
-public:
-    virtual ~CustomShapeProvider() {}
-    virtual PropertyMap getProperties() = 0;
-};
-
 class CustomShapeProperties
 {
 public:
