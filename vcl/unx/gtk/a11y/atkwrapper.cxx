@@ -287,11 +287,12 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         roleMap[accessibility::AccessibleRole::PAGE] = registerRole("page");
         roleMap[accessibility::AccessibleRole::SECTION] = registerRole("section");
         roleMap[accessibility::AccessibleRole::FORM] = registerRole("form");
+        roleMap[accessibility::AccessibleRole::GROUP_BOX] = registerRole("grouping");
+        roleMap[accessibility::AccessibleRole::COMMENT] = registerRole("comment");
 
         // these don't exist in ATK yet
         roleMap[accessibility::AccessibleRole::END_NOTE] = registerRole("end note");
         roleMap[accessibility::AccessibleRole::FOOTNOTE] = registerRole("foot note");
-        roleMap[accessibility::AccessibleRole::GROUP_BOX] = registerRole("group box");
         roleMap[accessibility::AccessibleRole::HYPER_LINK] = registerRole("hyper link");
         roleMap[accessibility::AccessibleRole::SHAPE] = registerRole("shape");
         roleMap[accessibility::AccessibleRole::TEXT_FRAME] = registerRole("text frame");
