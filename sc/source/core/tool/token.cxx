@@ -2546,7 +2546,7 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
             // Selected range is only partially overlapping in vertical direction. Bail out.
             return false;
 
-        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Col() == rRefRange.aStart.Col())
+        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Col() <= rRefRange.aStart.Col())
             // Selected range is at the left end and the edge expansion is turned off.  No expansion.
             return false;
 
