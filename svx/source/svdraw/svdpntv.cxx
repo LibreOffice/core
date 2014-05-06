@@ -44,7 +44,7 @@
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sxlayitm.hxx>
+#include <sxlayitm.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/whiter.hxx>

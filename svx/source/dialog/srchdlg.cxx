@@ -58,7 +58,7 @@
 #include <svx/svxitems.hrc>
 
 #include <svl/srchitem.hxx>
-#include <svx/AccessibleSvxFindReplaceDialog.hxx>
+#include <AccessibleSvxFindReplaceDialog.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>

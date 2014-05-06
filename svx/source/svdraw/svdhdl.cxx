@@ -32,7 +32,7 @@
 
 #include <svx/sxekitm.hxx>
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 
 #include <svx/svdmodel.hxx>
 #include "gradtrns.hxx"

@@ -19,7 +19,7 @@
 
 
 #include <svx/svdopage.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>

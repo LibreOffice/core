@@ -26,7 +26,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>

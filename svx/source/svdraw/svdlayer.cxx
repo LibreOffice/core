@@ -21,7 +21,7 @@
 
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 bool SetOfByte::IsEmpty() const

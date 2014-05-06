@@ -11,7 +11,7 @@
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 #include <svx/sdr/contact/viewobjectcontactofopenglobj.hxx>
 #include <drawinglayer/primitive2d/openglprimitive2d.hxx>
-#include <svx/svdoopengl.hxx>
+#include <svdoopengl.hxx>
 #include <tools/gen.hxx>
 
 using namespace sdr::contact;

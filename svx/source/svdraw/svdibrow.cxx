@@ -39,7 +39,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
-#include <svx/sxcikitm.hxx>
+#include <sxcikitm.hxx>
 #include <svx/sxcllitm.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>

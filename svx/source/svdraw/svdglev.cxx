@@ -23,7 +23,7 @@
 
 #include <svx/svdundo.hxx>
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdtrans.hxx>

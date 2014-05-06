@@ -61,7 +61,7 @@
 #include <editeng/colritem.hxx>
 #include "editeng/lineitem.hxx"
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdpage.hxx"
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"

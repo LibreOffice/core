@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdocirc.hxx>
-#include <svx/sxcikitm.hxx>
+#include <sxcikitm.hxx>
 #include <svx/sxciaitm.hxx>
 
 

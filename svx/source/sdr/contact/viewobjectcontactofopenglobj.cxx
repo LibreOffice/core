@@ -12,7 +12,7 @@
 #include <svx/sdr/contact/viewobjectcontactofopenglobj.hxx>
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 
-#include <svx/svdoopengl.hxx>
+#include <svdoopengl.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 

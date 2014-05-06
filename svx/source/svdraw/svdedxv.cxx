@@ -49,7 +49,7 @@
 #endif
 #include <svx/svddrgv.hxx>
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/globl3d.hxx"
 #include <editeng/outliner.hxx>
 #include <editeng/adjustitem.hxx>

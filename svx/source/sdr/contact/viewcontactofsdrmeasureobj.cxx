@@ -25,7 +25,7 @@
 #include <svx/sxmbritm.hxx>
 #include <svx/sxmlhitm.hxx>
 #include <svx/sxmtritm.hxx>
-#include <svx/sxmtaitm.hxx>
+#include <sxmtaitm.hxx>
 #include <svx/sdr/primitive2d/sdrmeasureprimitive2d.hxx>
 #include <svx/sxmtpitm.hxx>
 

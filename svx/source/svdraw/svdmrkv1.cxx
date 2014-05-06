@@ -21,7 +21,7 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include "svddrgm1.hxx"

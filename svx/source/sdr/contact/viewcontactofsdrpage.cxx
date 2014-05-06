@@ -37,7 +37,7 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/settings.hxx>
 #include <svx/svdstr.hrc>
-#include <svx/svdglob.hxx>
+#include <svdglob.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 

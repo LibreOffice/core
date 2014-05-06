@@ -32,7 +32,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include <svx/svddrgv.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/dialogs.hrc>

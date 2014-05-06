@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svdmodel.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>

@@ -19,7 +19,7 @@
 
 
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include <svx/svdpage.hxx>
 #include "svx/globl3d.hxx"
 #include <svx/extrud3d.hxx>

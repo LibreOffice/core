@@ -19,7 +19,7 @@
 
 
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include <svx/cube3d.hxx>
 #include "svx/globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>

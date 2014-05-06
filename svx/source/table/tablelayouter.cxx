@@ -36,7 +36,7 @@
 #include "editeng/boxitem.hxx"
 #include "svx/svdmodel.hxx"
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 
 using ::editeng::SvxBorderLine;
 using ::com::sun::star::awt::XLayoutConstrains;

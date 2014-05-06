@@ -53,7 +53,7 @@
 #include <vector>
 
 #include "svx/shapepropertynotifier.hxx"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/xlinjoit.hxx"
 
@@ -93,19 +93,19 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
-#include <svx/sxlayitm.hxx>
-#include <svx/sxlogitm.hxx>
-#include <svx/sxmovitm.hxx>
+#include <sxlayitm.hxx>
+#include <sxlogitm.hxx>
+#include <sxmovitm.hxx>
 #include <svx/sxmspitm.hxx>
-#include <svx/sxoneitm.hxx>
-#include <svx/sxonitm.hxx>
-#include <svx/sxopitm.hxx>
-#include <svx/sxraitm.hxx>
-#include <svx/sxreoitm.hxx>
-#include <svx/sxrooitm.hxx>
-#include <svx/sxsaitm.hxx>
-#include <svx/sxsoitm.hxx>
-#include <svx/sxtraitm.hxx>
+#include <sxoneitm.hxx>
+#include <sxonitm.hxx>
+#include <sxopitm.hxx>
+#include <sxraitm.hxx>
+#include <sxreoitm.hxx>
+#include <sxrooitm.hxx>
+#include <sxsaitm.hxx>
+#include <sxsoitm.hxx>
+#include <sxtraitm.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xbtmpit.hxx>
@@ -128,7 +128,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
 #include <rtl/strbuf.hxx>
-#include <svx/svdoopengl.hxx>
+#include <svdoopengl.hxx>
 
 using namespace ::com::sun::star;
 

@@ -32,7 +32,7 @@
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
-#include <svx/AccessibleTableShape.hxx>
+#include <AccessibleTableShape.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 

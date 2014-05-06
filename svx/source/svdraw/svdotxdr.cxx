@@ -23,7 +23,7 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <svx/svdoashp.hxx>
 #include <tools/bigint.hxx>

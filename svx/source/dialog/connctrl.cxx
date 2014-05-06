@@ -30,7 +30,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxelditm.hxx>
-#include <svx/sxmkitm.hxx>
+#include <sxmkitm.hxx>
 
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>

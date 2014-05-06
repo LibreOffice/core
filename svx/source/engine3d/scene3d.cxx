@@ -19,7 +19,7 @@
 
 
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svditer.hxx"
 
 #include <stdlib.h>

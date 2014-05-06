@@ -57,7 +57,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include "svdoutlinercache.hxx"
 

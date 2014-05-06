@@ -76,7 +76,7 @@
 #include "svx/xflgrit.hxx"
 #include "svx/xflhtit.hxx"
 #include "svx/xlndsit.hxx"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include "svx/unomaster.hxx"
 #include <editeng/outlobj.hxx>

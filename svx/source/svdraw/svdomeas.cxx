@@ -18,7 +18,7 @@
  */
 
 #include "svdconv.hxx"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -52,12 +52,12 @@
 #include <svx/svdview.hxx>
 #include <svx/sxmbritm.hxx>
 #include <svx/sxmfsitm.hxx>
-#include <svx/sxmkitm.hxx>
+#include <sxmkitm.hxx>
 #include <svx/sxmlhitm.hxx>
-#include <svx/sxmoitm.hxx>
-#include <svx/sxmsitm.hxx>
+#include <sxmoitm.hxx>
+#include <sxmsitm.hxx>
 #include <svx/sxmsuitm.hxx>
-#include <svx/sxmtaitm.hxx>
+#include <sxmtaitm.hxx>
 #include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>

@@ -29,7 +29,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svdfmtf.hxx"
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>

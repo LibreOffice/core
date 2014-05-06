@@ -36,7 +36,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdetc.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>

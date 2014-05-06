@@ -28,7 +28,7 @@
 #include <tools/bigint.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svditer.hxx"
 #include "svx/svdstr.hrc"
 
@@ -48,15 +48,15 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svxids.hrc>
-#include <svx/sxallitm.hxx>
-#include <svx/sxmovitm.hxx>
-#include <svx/sxreaitm.hxx>
-#include <svx/sxreoitm.hxx>
-#include <svx/sxroaitm.hxx>
-#include <svx/sxrooitm.hxx>
-#include <svx/sxsalitm.hxx>
-#include <svx/sxsoitm.hxx>
-#include <svx/sxtraitm.hxx>
+#include <sxallitm.hxx>
+#include <sxmovitm.hxx>
+#include <sxreaitm.hxx>
+#include <sxreoitm.hxx>
+#include <sxroaitm.hxx>
+#include <sxrooitm.hxx>
+#include <sxsalitm.hxx>
+#include <sxsoitm.hxx>
+#include <sxtraitm.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>

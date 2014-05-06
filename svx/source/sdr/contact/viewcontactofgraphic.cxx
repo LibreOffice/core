@@ -30,7 +30,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
 #include "svx/svdstr.hrc"
-#include <svx/svdglob.hxx>
+#include <svdglob.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

@@ -26,7 +26,7 @@
 #include <math.h>
 #include <svl/style.hxx>
 
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
@@ -42,7 +42,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxciaitm.hxx>
-#include <svx/sxcikitm.hxx>
+#include <sxcikitm.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstit.hxx>

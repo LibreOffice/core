@@ -20,7 +20,7 @@
 #include <editeng/eeitem.hxx>
 
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdedxv.hxx>

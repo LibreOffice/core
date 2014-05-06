@@ -26,7 +26,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>

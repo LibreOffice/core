@@ -19,7 +19,7 @@
 
 
 #include "svx/ActionDescriptionProvider.hxx"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 OUString ActionDescriptionProvider::createDescription( ActionType eActionType

@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svx/AccessibleTableShape.hxx>
+#include <AccessibleTableShape.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include "accessiblecell.hxx"
 

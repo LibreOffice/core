@@ -36,7 +36,7 @@
 #include "svx/svdotable.hxx"
 #include "svx/svdmodel.hxx"
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

@@ -23,7 +23,7 @@
 #include <svx/AccessibleGraphicShape.hxx>
 #include <svx/AccessibleOLEShape.hxx>
 #include <svx/AccessibleControlShape.hxx>
-#include <svx/AccessibleTableShape.hxx>
+#include <AccessibleTableShape.hxx>
 
 namespace accessibility {
 

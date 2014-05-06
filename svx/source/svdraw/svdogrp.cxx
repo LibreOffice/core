@@ -37,7 +37,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 #include <svx/svxids.hrc>

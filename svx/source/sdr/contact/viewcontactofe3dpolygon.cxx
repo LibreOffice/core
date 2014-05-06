@@ -19,7 +19,7 @@
 
 
 #include <svx/sdr/contact/viewcontactofe3dpolygon.hxx>
-#include <svx/polygn3d.hxx>
+#include <polygn3d.hxx>
 #include <drawinglayer/primitive3d/sdrpolypolygonprimitive3d.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>

@@ -28,7 +28,7 @@
 #include <tools/helpers.hxx>
 
 #include "svdconv.hxx"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 #include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>

@@ -24,7 +24,7 @@
 #include "cell.hxx"
 #include "svx/svdmodel.hxx"
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 
 
 

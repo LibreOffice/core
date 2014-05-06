@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svx/AccessibleSvxFindReplaceDialog.hxx>
+#include <AccessibleSvxFindReplaceDialog.hxx>
 #include <svx/srchdlg.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>

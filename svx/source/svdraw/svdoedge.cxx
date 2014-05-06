@@ -18,7 +18,7 @@
  */
 
 #include "svddrgm1.hxx"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

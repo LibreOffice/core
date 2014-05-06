@@ -30,7 +30,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
 #include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 
 
 #include <svx/obj3d.hxx>

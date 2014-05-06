@@ -66,7 +66,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svdmodel.hxx>
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>

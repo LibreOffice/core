@@ -48,9 +48,9 @@
 #include "svx/unoapi.hxx"
 #include "svx/svdpagv.hxx"
 #include "svx/svdview.hxx"
-#include "svx/svdglob.hxx"
+#include "svdglob.hxx"
 #include "svx/svdstr.hrc"
-#include <svx/svdoopengl.hxx>
+#include <svdoopengl.hxx>
 #include <vcl/wmf.hxx>
 
 
