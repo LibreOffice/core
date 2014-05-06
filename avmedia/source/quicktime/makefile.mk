@@ -26,7 +26,7 @@ PRJNAME=avmedia
 TARGET=avmediaQuickTime
 
 # the QuickTime API has been deprecated since OSX 10.5 and has been removed in the OSX SDK 10.7
-.IF ("$(GUIBASE)" != "aqua") || ("${MACOSX_DEPLOYMENT_TARGET:s/.//}" >= "106")
+.IF "$(GUIBASE)" != "aqua"
 dummy:
     @echo " Nothing to build for GUIBASE=$(GUIBASE) and OSX$(MACOSX_DEPLOYMENT_TARGET)"
 .ELSE
