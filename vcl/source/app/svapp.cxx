@@ -549,7 +549,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             {
                 nOldDPIX = pFirstFrame->mnDPIX;
                 nOldDPIY = pFirstFrame->mnDPIY;
-                pSVData->maGDIData.mnAppFontX = 0;
+                Window::ImplInitAppFontData(pFirstFrame);
             }
             Window* pFrame = pFirstFrame;
             while ( pFrame )
