@@ -86,6 +86,7 @@
 #include "editeng/langitem.hxx"
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/sharedstringpool.hxx>
 #include <svtools/miscopt.hxx>
 #include <sax/tools/converter.hxx>
 
@@ -1021,7 +1022,8 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         {
             if( !IsPossibleErrorString() )
             {
-                pFCell->SetHybridString( *maStringValue );
+                ScDocument* pDoc = rXMLImport.GetDocument();
+                pFCell->SetHybridString(pDoc->GetSharedStringPool().intern(*maStringValue));
                 pFCell->ResetDirty();
             }
         }
@@ -1062,7 +1064,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             {
                 if (bDoIncrement && !IsPossibleErrorString())
                 {
-                    pFCell->SetHybridString( aCellString );
+                    ScDocument* pDoc = rXMLImport.GetDocument();
+                    pFCell->SetHybridString(pDoc->GetSharedStringPool().intern(aCellString));
                     pFCell->ResetDirty();
                 }
                 else
