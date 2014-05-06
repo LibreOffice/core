@@ -239,7 +239,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
         }
     }
 
-    return bKeyProcessed ? true : pEditView->PostKeyEvent( rKEvt, pFrameWin );
+    return bKeyProcessed || pEditView->PostKeyEvent( rKEvt, pFrameWin );
 }
 
 sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTarget)

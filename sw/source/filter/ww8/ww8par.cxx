@@ -6172,7 +6172,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
     if (!pThis->OpenMainStream(refStrm, nOldBuffSize))
     {
         WW8Glossary aGloss( refStrm, 8, pStg );
-        bRet = aGloss.Load( rBlocks, bSaveRelFiles ? true : false);
+        bRet = aGloss.Load( rBlocks, bSaveRelFiles );
     }
     return bRet;
 }

@@ -1009,7 +1009,7 @@ void OTableController::alterColumns()
     // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-    ::std::map< OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->supportsMixedCaseQuotedIdentifiers() ? true : false): sal_True);
+    ::std::map< OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed

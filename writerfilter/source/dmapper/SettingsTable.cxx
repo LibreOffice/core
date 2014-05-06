@@ -216,7 +216,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     m_pImpl->m_sCharacterSpacing = sStringValue; // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana
     break;
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
-    m_pImpl->m_doNotIncludeSubdocsInStats = nIntValue? true : false;
+    m_pImpl->m_doNotIncludeSubdocsInStats = nIntValue ? true : false;
     break;
     case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
     m_pImpl->m_sDecimalSymbol = sStringValue;

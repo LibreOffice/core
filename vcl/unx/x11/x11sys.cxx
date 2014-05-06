@@ -52,7 +52,7 @@ bool X11SalSystem::IsUnifiedDisplay()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     unsigned int nScreenCount = pSalDisp->GetXScreenCount();
-    return pSalDisp->IsXinerama() ? true : (nScreenCount == 1);
+    return pSalDisp->IsXinerama() || (nScreenCount == 1);
 }
 
 unsigned int X11SalSystem::GetDisplayBuiltInScreen()

@@ -526,7 +526,7 @@ bool SdrGrafObj::IsEPS() const
 
 bool SdrGrafObj::IsSwappedOut() const
 {
-    return mbIsPreview ? true : pGraphic->IsSwappedOut();
+    return mbIsPreview || pGraphic->IsSwappedOut();
 }
 
 const MapMode& SdrGrafObj::GetGrafPrefMapMode() const

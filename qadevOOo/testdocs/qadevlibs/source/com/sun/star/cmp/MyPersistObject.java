@@ -68,7 +68,7 @@ public class MyPersistObject implements XPersistObject, XTypeProvider,
         }
         public boolean hasPropertyByName(String name) {
             int i = getPropertyIndexByName(name);
-            return i>0?true:false;
+            return i>0;
         }
     }
 

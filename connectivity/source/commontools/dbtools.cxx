@@ -800,8 +800,8 @@ namespace
                 break;
         }
         return NameComponentSupport(
-            bIgnoreMetaData ? true : (_rxMetaData.get()->*pCatalogCall)(),
-            bIgnoreMetaData ? true : (_rxMetaData.get()->*pSchemaCall)()
+            bIgnoreMetaData || (_rxMetaData.get()->*pCatalogCall)(),
+            bIgnoreMetaData || (_rxMetaData.get()->*pSchemaCall)()
         );
     }
 }

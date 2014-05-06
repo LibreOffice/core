@@ -133,8 +133,8 @@ namespace basegfx
 
                 if(!bBaseEqualZero)
                 {
-                    const bool bLeftParallel(bLeftEqualZero ? true : areParallel(aLeft, aBase));
-                    const bool bRightParallel(bRightEqualZero ? true : areParallel(aRight, aBase));
+                    const bool bLeftParallel(bLeftEqualZero || areParallel(aLeft, aBase));
+                    const bool bRightParallel(bRightEqualZero || areParallel(aRight, aBase));
 
                     if(bLeftParallel && bRightParallel)
                     {

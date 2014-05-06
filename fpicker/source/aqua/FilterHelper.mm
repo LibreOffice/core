@@ -135,16 +135,16 @@ public:
 
         bool operator () ( const FilterEntry& _rEntry )
         {
-            sal_Bool bMatch;
+            bool bMatch;
             if( !_rEntry.hasSubFilters() ) {
                 //first try the complete filter name
                 rtl::OUString title = _rEntry.getTitle();
-                bMatch = ( title.equals(rTitle) );
+                bMatch = title.equals(rTitle);
                 if (!bMatch) {
                     //we didn't find a match using the full name, let's give it another
                     //try using the shrunk version
                     rtl::OUString aShrunkName = shrinkFilterName( _rEntry.getTitle() ).trim();
-                    bMatch = ( aShrunkName.equals(rTitle) );
+                    bMatch = aShrunkName.equals(rTitle);
                 }
             }
             else
@@ -156,7 +156,7 @@ public:
                                                               *this
                                                               );
 
-            return bMatch ? true : false;
+            return bMatch;
         }
 
         bool operator () ( const UnoFilterEntry& _rEntry )

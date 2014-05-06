@@ -2228,7 +2228,7 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
     SCROW nStart = nStartRow;
     for (SCSIZE i = 0; i < nCount; i++)
     {
-        if ((pData[i].nRow >= nStartRow) && ((i==0) ? true : pData[i-1].nRow < nEndRow))
+        if ((pData[i].nRow >= nStartRow) && (i == 0 || pData[i-1].nRow < nEndRow))
         {
             // copy (bPutToPool=TRUE)
             rAttrArray.SetPatternArea( nStart, std::min( (SCROW)pData[i].nRow, (SCROW)nEndRow ),

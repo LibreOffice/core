@@ -225,7 +225,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
 
-        bool bPerformUBA = UBIDI_LTR != nFldDir ? true : i18n::ScriptType::COMPLEX == nScript;
+        bool bPerformUBA = UBIDI_LTR != nFldDir || i18n::ScriptType::COMPLEX == nScript;
         if (bPerformUBA)
         {
             UErrorCode nError = U_ZERO_ERROR;

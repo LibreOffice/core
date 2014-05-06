@@ -1059,7 +1059,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
             // Space for selection change
             if( !bShift && ( ( eLET == LET_KEYSPACE ) || ( eLET == LET_MBDOWN ) ) )
             {
-                bool bSelect = ( mbStackMode && IsMouseMoveSelect() ) ? true : !mpEntryList->IsEntryPosSelected( nSelect );
+                bool bSelect = ( mbStackMode && IsMouseMoveSelect() ) || !mpEntryList->IsEntryPosSelected( nSelect );
                 if ( mbStackMode )
                 {
                     sal_Int32 n;

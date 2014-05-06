@@ -251,7 +251,7 @@ bool ScChangeAction::IsDialogParent() const
         return pPrevContent && pPrevContent->IsVirgin();
     }
     if ( HasDependent() )
-        return IsDeleteType() ? true : !IsDeletedIn();
+        return IsDeleteType() || !IsDeletedIn();
     if ( HasDeleted() )
     {
         if ( IsDeleteType() )

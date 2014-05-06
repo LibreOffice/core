@@ -870,8 +870,8 @@ void SwDoc::CalculatePagesForPrinting(
 
     // properties to take into account when calculating the set of pages
     // (PDF export UI does not allow for selecting left or right pages only)
-    bool bPrintLeftPages    = bIsPDFExport ? true : rOptions.IsPrintLeftPages();
-    bool bPrintRightPages   = bIsPDFExport ? true : rOptions.IsPrintRightPages();
+    bool bPrintLeftPages    = bIsPDFExport || rOptions.IsPrintLeftPages();
+    bool bPrintRightPages   = bIsPDFExport || rOptions.IsPrintRightPages();
     // #i103700# printing selections should not allow for automatic inserting empty pages
     bool bPrintEmptyPages   = bPrintSelection ? false : rOptions.IsPrintEmptyPages( bIsPDFExport );
 

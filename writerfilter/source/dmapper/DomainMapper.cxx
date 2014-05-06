@@ -1580,7 +1580,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     {
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
-            pSectionContext->SetTitlePage( nIntValue > 0 ? true : false );//section has title page
+            pSectionContext->SetTitlePage( nIntValue > 0 );//section has title page
     }
     break;
     case 165:

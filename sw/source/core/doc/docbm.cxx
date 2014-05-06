@@ -1249,7 +1249,7 @@ namespace
                     bool bChkSelDirection )
     {
         // Respect direction of selection
-        bool bBound1IsStart = !bChkSelDirection ? true :
+        bool bBound1IsStart = !bChkSelDirection ||
                             ( *rPam.GetPoint() < *rPam.GetMark()
                                 ? rPam.GetPoint() == &rPam.GetBound()
                                 : rPam.GetMark() == &rPam.GetBound());
