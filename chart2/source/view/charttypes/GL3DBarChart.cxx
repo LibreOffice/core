@@ -53,8 +53,8 @@ void GL3DBarChart::create3DShapes()
             float nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY);
 
             glm::mat4 aBarPosition;
-            glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
-            glm::translate(aBarPosition, nXPos, nYPos, nVal/2);
+            aBarPosition = glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
+            aBarPosition = glm::translate(aBarPosition, nXPos, nYPos, nVal/2);
 
             maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nId++));
         }
