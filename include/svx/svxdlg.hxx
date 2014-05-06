@@ -220,17 +220,6 @@ public:
     virtual void            SetTitle( const OUString& rNewTitle ) = 0;
 };
 
-class AbstractSvxMultiFileDialog : public AbstractSvxMultiPathDialog
-{
-public:
-    virtual OUString GetFiles() const = 0;
-    virtual void     SetFiles( const OUString& rPath ) = 0;
-    //from SvxMultiPathDialog
-    virtual void     SetClassPathMode() = 0;
-    //From Class Window
-    virtual void     SetHelpId( const OString& ) = 0;
-};
-
 class AbstractSvxHpLinkDlg : public VclAbstractDialog
 {
 public:
