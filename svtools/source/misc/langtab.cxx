@@ -31,12 +31,26 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/syslocale.hxx>
+#include <tools/resary.hxx>
 
 
 using namespace ::com::sun::star;
 
+class SvtLanguageTableImpl : public ResStringArray
+{
+public:
+
+    SvtLanguageTableImpl();
+    virtual ~SvtLanguageTableImpl();
+
+    const OUString  GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
+    LanguageType    GetType( const OUString& rStr ) const;
+    sal_uInt32      GetEntryCount() const;
+    LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
+};
+
 namespace {
-struct theLanguageTable : public rtl::Static< SvtLanguageTable, theLanguageTable > {};
+struct theLanguageTable : public rtl::Static< SvtLanguageTableImpl, theLanguageTable > {};
 }
 
 SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
@@ -122,20 +136,20 @@ namespace {
 //        "The value of STR_ARR_SVT_LANGUAGE_TABLE has changed. wizards/com/sun/star/wizards/letter/LocaleCodes.java has this value hard coded, please adapt it to your change."
 }
 
-SvtLanguageTable::SvtLanguageTable() :
+SvtLanguageTableImpl::SvtLanguageTableImpl() :
     ResStringArray( SvtResId( STR_ARR_SVT_LANGUAGE_TABLE ) )
 {
 }
 
 
 
-SvtLanguageTable::~SvtLanguageTable()
+SvtLanguageTableImpl::~SvtLanguageTableImpl()
 {
 }
 
 
 
-const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
+const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
 {
     LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType, bUserInterfaceSelection);
     sal_uInt32 nPos = FindIndex( eLang );
@@ -164,7 +178,7 @@ OUString SvtLanguageTable::GetLanguageString( const LanguageType eType, bool bUs
 
 
 
-LanguageType SvtLanguageTable::GetType( const OUString& rStr ) const
+LanguageType SvtLanguageTableImpl::GetType( const OUString& rStr ) const
 {
     LanguageType eType = LANGUAGE_DONTKNOW;
     sal_uInt32 nCount = Count();
@@ -187,7 +201,7 @@ LanguageType SvtLanguageTable::GetLanguageType( const OUString& rStr )
 
 
 
-sal_uInt32 SvtLanguageTable::GetEntryCount() const
+sal_uInt32 SvtLanguageTableImpl::GetEntryCount() const
 {
     return Count();
 }
@@ -199,7 +213,7 @@ sal_uInt32 SvtLanguageTable::GetLanguageEntryCount()
 
 
 
-LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
+LanguageType SvtLanguageTableImpl::GetTypeAtIndex( sal_uInt32 nIndex ) const
 {
     LanguageType nType = LANGUAGE_DONTKNOW;
     if (nIndex < Count())

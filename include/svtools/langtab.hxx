@@ -19,20 +19,13 @@
 #ifndef INCLUDED_SVTOOLS_LANGTAB_HXX
 #define INCLUDED_SVTOOLS_LANGTAB_HXX
 
-
-#include <tools/resary.hxx>
 #include <i18nlangtag/lang.h>
+#include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
 
-
-//  class SvtLanguageTable
-
-
-class SVT_DLLPUBLIC SvtLanguageTable : public ResStringArray
+class SVT_DLLPUBLIC SvtLanguageTable
 {
 public:
-    SvtLanguageTable();
-    ~SvtLanguageTable();
 
     static OUString     GetLanguageString( const LanguageType eType );
     static LanguageType GetLanguageType( const OUString& rStr );
@@ -47,14 +40,6 @@ public:
                       parameter.
      */
     static OUString     GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection );
-
-private:
-
-    const OUString  GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
-    LanguageType    GetType( const OUString& rStr ) const;
-    sal_uInt32      GetEntryCount() const;
-    LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
-
 };
 
 // Add LRE or RLE embedding characters to the string based on the
