@@ -2882,7 +2882,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
          (bValChanged && bHasRelName && (bHasRelName || bInDeleteUndo || bRefSizeChanged)) || bOnRefMove)
         bNeedDirty = true;
 
-    if (pUndoDoc && (bValChanged || bOnRefMove))
+    if (pUndoDoc && (bValChanged || bRefModified || bOnRefMove))
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
