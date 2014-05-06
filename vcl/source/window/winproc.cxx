@@ -1876,17 +1876,11 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
             if ( pSVEvent->mpWindow )
             {
                 pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
-                if ( pSVEvent->mpLink )
-                    pSVEvent->mpLink->Call( pSVEvent->mpData );
-                else
-                    pSVEvent->mpWindow->UserEvent( 0, pSVEvent->mpData );
+                pSVEvent->mpLink->Call( pSVEvent->mpData );
             }
             else
             {
-                if ( pSVEvent->mpLink )
-                    pSVEvent->mpLink->Call( pSVEvent->mpData );
-                else
-                    GetpApp()->UserEvent( 0, pSVEvent->mpData );
+                pSVEvent->mpLink->Call( pSVEvent->mpData );
             }
         }
 
