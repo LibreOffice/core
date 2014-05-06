@@ -21,7 +21,6 @@
 #include "DeckTitleBar.hxx"
 #include "Panel.hxx"
 #include "PanelTitleBar.hxx"
-#include "SidebarPanel.hxx"
 #include "SidebarResource.hxx"
 #include "TabBar.hxx"
 #include <sfx2/sidebar/Theme.hxx>

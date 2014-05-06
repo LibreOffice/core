@@ -47,7 +47,6 @@
 #include <vbahelper/vbahelper.hxx>
 #include "vbarevisions.hxx"
 #include "vbaframes.hxx"
-#include "vbaformfields.hxx"
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 
