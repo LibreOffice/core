@@ -423,22 +423,34 @@ bool OpenGLContext::ImplInit()
     };
 
     //  we must check whether can set the MSAA
-    int WindowPix;
+    int WindowPix = 0;
     bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix);
-    if (bMultiSampleSupport)
+    if (bMultiSampleSupport && WindowPix != 0)
     {
         m_aGLWin.bMultiSampleSupported = true;
     }
     else
     {
-        WindowPix = ChoosePixelFormat(m_aGLWin.hDC,&PixelFormatFront);
+        WindowPix = ChoosePixelFormat(m_aGLWin.hDC, &PixelFormatFront);
     }
-    SetPixelFormat(m_aGLWin.hDC,WindowPix,&PixelFormatFront);
-    m_aGLWin.hRC  = wglCreateContext(m_aGLWin.hDC);
 
-    if (!wglMakeCurrent(m_aGLWin.hDC,m_aGLWin.hRC))
+    if (WindowPix == 0)
     {
-        SAL_WARN("vcl.opengl", "Failed wglMakeCurrent: " << GetLastError());
+        SAL_WARN("vcl.opengl", "Invalid pixelformat");
+        return false;
+    }
+
+    SetPixelFormat(m_aGLWin.hDC, WindowPix, &PixelFormatFront);
+    m_aGLWin.hRC = wglCreateContext(m_aGLWin.hDC);
+    if (m_aGLWin.hRC == NULL)
+    {
+        SAL_WARN("vcl.opengl", "wglCreateContext failed");
+        return false;
+    }
+
+    if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
+    {
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << GetLastError());
         return false;
     }
 
@@ -757,7 +769,10 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 void OpenGLContext::makeCurrent()
 {
 #if defined( WNT )
-    wglMakeCurrent(m_aGLWin.hDC,m_aGLWin.hRC);
+    if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
+    {
+        SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
+    }
 #elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
