@@ -672,8 +672,8 @@ void DomainMapperTableManager::endOfRowAction()
          * then replace the TABLE_WIDTH property, set earlier.
          */
         TablePropertyMapPtr propMap = m_aTmpTableProperties.back();
-        sal_Int32 nTableWidth;
-        sal_Int32 nTableWidthType;
+        sal_Int32 nTableWidth(0);
+        sal_Int32 nTableWidthType(text::SizeType::VARIABLE);
         propMap->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
         propMap->getValue( TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType );
         if ((nTableWidthType == text::SizeType::FIX) && (nTableWidth < m_nTableWidth))
