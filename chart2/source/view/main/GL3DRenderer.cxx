@@ -106,7 +106,7 @@ GLfloat texCoords[] = {
 
 void OpenGL3DRenderer::LoadShaders()
 {
-    m_3DProID = OpenGLHelper::LoadShaders("Shape3DVertexShader", "Shape3DFragmentShader");
+    m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShader", "shape3DFragmentShader");
     m_3DProjectionID = glGetUniformLocation(m_3DProID, "P");
     m_3DViewID = glGetUniformLocation(m_3DProID, "V");
     m_3DModelID = glGetUniformLocation(m_3DProID, "M");
