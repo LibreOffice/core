@@ -79,12 +79,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
 
     m_bCameraUpdated = false;
     GetFreq();
-
-    for (int i = 0; i < 5; i++)
-    {
-        m_Extrude3DInfo.startIndex[i] = m_RoundBarMesh.iElementStartIndices[i];
-        m_Extrude3DInfo.size[i] = m_RoundBarMesh.iElementSizes[i];
-    }
     m_fViewAngle = 30.0f;
     m_SenceBox.maxXCoord = -1.0 * FLT_MAX;
     m_SenceBox.minXCoord = FLT_MAX;
@@ -96,6 +90,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_fHeightWeight = 1.0f;
     m_CameraInfo.useDefault = true;
     m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
+    m_RoundBarMesh.iMeshSizes = 0;
 }
 
 namespace {
@@ -176,23 +171,16 @@ void OpenGL3DRenderer::init()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glGenBuffers(1, &m_CubeVertexBuf);
-    AddVertexData(m_CubeVertexBuf);
-
     glGenBuffers(1, &m_CubeNormalBuf);
-    AddNormalData(m_CubeNormalBuf);
-
     glGenBuffers(1, &m_CubeElementBuf);
-    AddIndexData(m_CubeElementBuf);
-
-    for (int i = 0; i < 5; i++)
-    {
-        m_Extrude3DInfo.startIndex[i] = m_RoundBarMesh.iElementStartIndices[i];
-        m_Extrude3DInfo.size[i] = m_RoundBarMesh.iElementSizes[i];
-    }
-
     glGenBuffers(1, &m_BoundBox);
     glBindBuffer(GL_ARRAY_BUFFER, m_BoundBox);
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBox), boundBox, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &m_BoundBoxNormal);
+    glBindBuffer(GL_ARRAY_BUFFER, m_BoundBoxNormal);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(boundBoxNormal), boundBoxNormal, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glGenBuffers(1, &m_CoordinateBuf);
@@ -949,11 +937,15 @@ void OpenGL3DRenderer::AddExtrude3DObjectPoint(float x, float y, float z)
         m_Extrude3DInfo.xRange[1] = x;
         m_Extrude3DInfo.yRange[0] = y;
         m_Extrude3DInfo.yRange[1] = y;
+        m_Extrude3DInfo.zRange[0] = z;
+        m_Extrude3DInfo.zRange[1] = z;
     }
     m_Extrude3DInfo.xRange[0] = std::min(m_Extrude3DInfo.xRange[0], x);
     m_Extrude3DInfo.xRange[1] = std::max(m_Extrude3DInfo.xRange[1], x);
     m_Extrude3DInfo.yRange[0] = std::min(m_Extrude3DInfo.yRange[0], y);
     m_Extrude3DInfo.yRange[1] = std::max(m_Extrude3DInfo.yRange[1], y);
+    m_Extrude3DInfo.zRange[0] = std::min(m_Extrude3DInfo.zRange[0], z);
+    m_Extrude3DInfo.zRange[1] = std::max(m_Extrude3DInfo.zRange[1], z);
     m_iPointNum++;
 }
 
@@ -1128,6 +1120,28 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
 }
 
+void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
+{
+    float xScale = extrude3D.xRange[1] - extrude3D.xRange[0];
+    float yScale = extrude3D.yRange[1] - extrude3D.yRange[0];
+    float zScale = extrude3D.zRange[1] - extrude3D.zRange[0];
+    glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
+    glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3D.xTransform, -extrude3D.yTransform, extrude3D.zTransform));
+    glm::mat4 scaleMatrix = glm::scale(xScale, yScale, zScale);
+    m_Model = transformMatrix * scaleMatrix;
+    if (extrude3D.reverse)
+    {
+        glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
+        m_Model = m_Model * reverseMatrix;
+    }
+    glm::mat3 normalMatrix(m_Model);
+    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+    glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+    glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
 void OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
 {
     glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
@@ -1154,32 +1168,46 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     Update3DUniformBlock();
     //render to fbo
     glUseProgram(m_3DProID);
-
-    // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(m_3DVertexID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_CubeVertexBuf);
-    glVertexAttribPointer(m_3DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                            3,                  // size
-                            GL_FLOAT,           // type
-                            GL_FALSE,           // normalized?
-                            0,                  // stride
-                            (void*)0            // array buffer offset
-                            );
-    // 2nd attribute buffer : normals
-    glEnableVertexAttribArray(m_3DNormalID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_CubeNormalBuf);
-    glVertexAttribPointer(m_3DNormalID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-                            3,                  // size
-                            GL_FLOAT,           // type
-                            GL_FALSE,           // normalized?
-                            0,                  // stride
-                            (void*)0            // array buffer offset
-                            );
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
     size_t extrude3DNum = m_Extrude3DList.size();
     for (size_t i = 0; i < extrude3DNum; i++)
     {
         Extrude3DInfo extrude3DInfo = m_Extrude3DList[i];
+        if (extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
+        {
+            float xScale = extrude3DInfo.xRange[1] - extrude3DInfo.xRange[0];
+            float zScale = extrude3DInfo.zRange[1] - extrude3DInfo.zRange[0];
+            CreateActualRoundedCube(0.1f, 30, 30, 1.0f, 1.2f, zScale / xScale);
+            AddVertexData(m_CubeVertexBuf);
+            AddNormalData(m_CubeNormalBuf);
+            AddIndexData(m_CubeElementBuf);
+            for (int i = 0; i < 5; i++)
+            {
+                m_Extrude3DInfo.startIndex[i] = m_RoundBarMesh.iElementStartIndices[i];
+                m_Extrude3DInfo.size[i] = m_RoundBarMesh.iElementSizes[i];
+            }
+        }
+        GLuint vertexBuf = extrude3DInfo.rounded ? m_CubeVertexBuf : m_BoundBox;
+        GLuint normalBuf = extrude3DInfo.rounded ? m_CubeNormalBuf : m_BoundBoxNormal;
+        // 1st attribute buffer : vertices
+        glEnableVertexAttribArray(m_3DVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
+        glVertexAttribPointer(m_3DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                                3,                  // size
+                                GL_FLOAT,           // type
+                                GL_FALSE,           // normalized?
+                                0,                  // stride
+                                (void*)0            // array buffer offset
+                                );
+        // 2nd attribute buffer : normals
+        glEnableVertexAttribArray(m_3DNormalID);
+        glBindBuffer(GL_ARRAY_BUFFER, normalBuf);
+        glVertexAttribPointer(m_3DNormalID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                                3,                  // size
+                                GL_FLOAT,           // type
+                                GL_FALSE,           // normalized?
+                                0,                  // stride
+                                (void*)0            // array buffer offset
+                                );
         extrude3DInfo.yTransform *= m_fHeightWeight;
         extrude3DInfo.yRange[0] *= m_fHeightWeight;
         extrude3DInfo.yRange[1] *= m_fHeightWeight;
@@ -1188,11 +1216,19 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         CHECK_GL_ERROR();
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
         extrude3DInfo.reverse = -extrude3DInfo.yRange[0] > extrude3DInfo.yRange[1] ? 0 : 1;
-        RenderExtrudeSurface(extrude3DInfo);
+        if (extrude3DInfo.rounded)
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
+            RenderExtrudeSurface(extrude3DInfo);
+        }
+        else
+        {
+            RenderNonRoundedBar(extrude3DInfo);
+        }
+        glDisableVertexAttribArray(m_3DVertexID);
+        glDisableVertexAttribArray(m_3DNormalID);
     }
     m_Extrude3DList.clear();
-    glDisableVertexAttribArray(m_3DVertexID);
-    glDisableVertexAttribArray(m_3DNormalID);
     glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glDisable(GL_CULL_FACE);

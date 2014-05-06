@@ -91,6 +91,7 @@ typedef struct Polygon3DInfo
 typedef struct Extrude3DInfo
 {
     int pickingFlg;
+    bool rounded;
     bool lineOnly;
     float lineWidth;
     bool twoSidesLighting;
@@ -98,6 +99,7 @@ typedef struct Extrude3DInfo
     long fillStyle;
     float xRange[2];
     float yRange[2];
+    float zRange[2];
     float xTransform;
     float yTransform;
     float zTransform;
@@ -218,6 +220,7 @@ private:
     void AddVertexData(GLuint vertexBuf);
     void AddNormalData(GLuint normalBuf);
     void AddIndexData(GLuint indexBuf);
+    void RenderNonRoundedBar(const Extrude3DInfo& extrude3D);
     bool GetSimilarVertexIndex(PackedVertex & packed,
         std::map<PackedVertex,unsigned short> & VertexToOutIndex,
         unsigned short & result
@@ -322,7 +325,7 @@ private:
     Point m_aMPos;
 
     GLuint m_BoundBox;
-
+    GLuint m_BoundBoxNormal;
      // add for text
     std::list <TextInfo> m_TextInfoList;
     GLint m_TextProID;
