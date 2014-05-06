@@ -145,14 +145,6 @@ public:
     virtual void    Invalidate( sal_uInt16 nFlags = 0 ) = 0;
 };
 
-class AbstractSvxSearchFormatDialog : public SfxAbstractTabDialog   //for SvxSearchFormatDialog
-{
-public:
-    //From class Window.
-    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE =0 ;
-    virtual OUString    GetText() const SAL_OVERRIDE =0 ;
-};
-
 class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog
 {
 public:
