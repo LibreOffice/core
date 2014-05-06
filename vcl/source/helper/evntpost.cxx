@@ -41,13 +41,12 @@ void EventPoster::Post( UserEvent* pEvent )
     m_nId = GetpApp()->PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ), pEvent );
 }
 
-IMPL_LINK_INLINE_START( EventPoster, DoEvent_Impl, UserEvent*, pEvent )
+IMPL_LINK( EventPoster, DoEvent_Impl, UserEvent*, pEvent )
 {
     m_nId = 0;
     m_aLink.Call( pEvent );
     return 0;
 }
-IMPL_LINK_INLINE_END( EventPoster, DoEvent_Impl, UserEvent*, pEvent )
 
 }
 
