@@ -18,7 +18,7 @@
  */
 #include "precompiled_sfx2.hxx"
 
-#include <sfx2/sidebar/PopupContainer.hxx>
+#include <sidebar/PopupContainer.hxx>
 
 namespace sfx2 { namespace sidebar {
 

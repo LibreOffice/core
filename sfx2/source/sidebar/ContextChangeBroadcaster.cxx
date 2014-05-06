@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sfx2/sidebar/ContextChangeBroadcaster.hxx>
+#include <sidebar/ContextChangeBroadcaster.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>

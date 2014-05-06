@@ -42,7 +42,7 @@
 #include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
-#include <sfx2/sidebar/ContextChangeBroadcaster.hxx>
+#include <sidebar/ContextChangeBroadcaster.hxx>
 
 #include <map>
 
