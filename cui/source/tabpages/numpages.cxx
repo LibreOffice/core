@@ -2302,7 +2302,6 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
         aLineColor.Invert();
     pVDev->SetLineColor(aLineColor);
     pVDev->SetFillColor( aBackColor );
-    pVDev->DrawRect(aRect);
 
     if(pActNum)
     {
