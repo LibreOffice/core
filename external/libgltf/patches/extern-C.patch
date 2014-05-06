@@ -8,3 +8,13 @@
  glm::vec3 gltf_get_model_center_pos();
  /*get camera position information*/
  extern "C"
+--- libgltf/src/libgltf.cpp
++++ /src/libgltf.cpp
+@@ -59,7 +59,6 @@
+     return;
+ }
+ 
+-extern "C"
+     glm::vec3 gltf_get_model_center_pos()
+ {
+     return cameraScene->getModelCenterPos();
