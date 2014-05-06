@@ -230,15 +230,7 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
 {
     if (mpMetadataAuthor->IsVisible() )
     {
-        //draw left over space
-        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-        {
-            pDev->SetFillColor(COL_BLACK);
-        }
-        else
-        {
-            pDev->SetFillColor(mColorDark);
-        }
+        pDev->SetFillColor(mColorDark);
         pDev->SetLineColor();
         pDev->DrawRect( Rectangle( rPt, rSz ) );
     }
@@ -279,6 +271,27 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
     if (mpTextRangeOverlay)
         pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
     delete pProcessor;
+
+    if (mpVScrollbar->IsVisible())
+    {
+        Font aOrigFont(mpMetadataDate->GetControlFont());
+        Color aOrigBg( mpMetadataDate->GetControlBackground() );
+        OUString sOrigText(mpMetadataDate->GetText());
+
+        Size aSize(PixelToLogic(mpMenuButton->GetSizePixel()));
+        Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
+        aPos += rPt;
+
+        Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+        mpMetadataDate->SetControlFont( aFont );
+        mpMetadataDate->SetControlBackground( 0xFFFFFF );
+        mpMetadataDate->SetText("...");
+        mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
+
+        mpMetadataDate->SetText(sOrigText);
+        mpMetadataDate->SetControlFont( aOrigFont );
+        mpMetadataDate->SetControlBackground( aOrigBg );
+    }
 }
 
 void SwSidebarWin::SetPosSizePixelRect( long nX,

@@ -121,28 +121,13 @@ void SidebarTxtControl::RequestHelp(const HelpEvent &rEvt)
 
 void SidebarTxtControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, sal_uLong)
 {
-    if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        if ( mrSidebarWin.IsMouseOverSidebarWin() ||
-             HasFocus() )
-        {
-            pDev->DrawGradient( Rectangle( Point(0,0) + rPt, PixelToLogic(GetSizePixel()) ),
-                          Gradient( GradientStyle_LINEAR,
-                                    mrSidebarWin.ColorDark(),
-                                    mrSidebarWin.ColorDark() ) );
-        }
-        else
-        {
-            pDev->DrawGradient( Rectangle( Point(0,0) + rPt, PixelToLogic(GetSizePixel()) ),
-                          Gradient( GradientStyle_LINEAR,
-                                    mrSidebarWin.ColorLight(),
-                                    mrSidebarWin.ColorDark()));
-        }
-    }
+    //Take the control's height, but overwrite the scrollbar area if there was one
+    Size aSize(PixelToLogic(GetSizePixel()));
+    aSize.Width() = rSz.Width();
 
     if ( GetTextView() )
     {
-        GetTextView()->GetOutliner()->Draw(pDev, Rectangle(rPt, rSz));
+        GetTextView()->GetOutliner()->Draw(pDev, Rectangle(rPt, aSize));
     }
 
     if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
