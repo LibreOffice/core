@@ -89,6 +89,10 @@ class Camera : public Renderable3DObject
 public:
     Camera(OpenGL3DRenderer* pRenderer);
     virtual void render() SAL_OVERRIDE;
+
+    /// Zooms the camera towards the bar with Unique Id nId.
+    void zoom(sal_uInt32 nId);
+
 private:
     glm::vec3 maPos;
     glm::vec3 maUp;
