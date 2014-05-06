@@ -1,0 +1,11 @@
+diff -ur libgltf.org/inc/libgltf.h libgltf/inc/libgltf.h
+--- libgltf.org/inc/libgltf.h	2014-05-06 11:59:40.224234787 +0200
++++ libgltf/inc/libgltf.h	2014-05-06 12:00:15.192236159 +0200
+@@ -9,7 +9,6 @@
+ #define LIBGLTF_H
+ #include <stddef.h>
+ #include "types.h"
+-#include "Common.h"
+ #include <GL/glew.h>
+ #include <glm/glm.hpp>
+ using namespace glTF;

@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/FPSCounter.h libgltf/src/FPSCounter.h
+--- libgltf.org/src/FPSCounter.h	2014-05-05 14:36:38.983373597 +0200
++++ libgltf/src/FPSCounter.h	2014-05-05 14:40:20.327383038 +0200
+@@ -70,7 +70,7 @@
+ #endif
+ 
+ #if WRITEFPS2FILE
+-        FPSFile = ofstream("./FPSCounter.txt");
++        FPSFile.open("./FPSCounter.txt");
+ #endif
+     }
+     ~FPSCounter()

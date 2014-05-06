@@ -58,7 +58,6 @@ private:
     OUString m_sURL;
     glTFHandle* m_pHandle;
     OpenGLContext m_aContext;
-    bool m_bIsPlayingTmp; // Temporarly while libgltf does not implement the corresponding methods
 };
 
 } // namespace ogl

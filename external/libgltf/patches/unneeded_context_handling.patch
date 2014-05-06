@@ -1,12 +1,18 @@
 diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
---- libgltf.org/src/RenderScene.cpp	2014-04-18 12:13:26.226991534 +0200
-+++ libgltf/src/RenderScene.cpp	2014-04-18 12:13:46.133990800 +0200
-@@ -587,8 +587,6 @@
- 	}
-     pFPSCounter->timeStampEnd();
-     pFPSCounter->printFPS(pViewport);
--
--    SwapBuffers(wglGetCurrentDC());
+--- libgltf.org/src/RenderScene.cpp	2014-05-05 14:42:40.523389018 +0200
++++ libgltf/src/RenderScene.cpp	2014-05-05 14:43:01.027389893 +0200
+@@ -746,7 +746,6 @@
+ #if ENABLE_FPS
+   pFPSCounter->printFPS(&viewport);
+ #endif
+-  SwapBuffers(wglGetCurrentDC());
+   return;
  }
  
- void RenderScene::releaseRender(void* lpParam)
+@@ -1004,4 +1003,4 @@
+ int  RenderScene::isAnimPlay()
+ {
+     return this->mAnimationPlay ?  1 : 0;
+-}
+\ No newline at end of file
++}

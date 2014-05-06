@@ -13,9 +13,6 @@ $(eval $(call gb_Library_set_componentfile,avmediaogl,avmedia/source/opengl/avme
 
 $(eval $(call gb_Library_use_sdk_api,avmediaogl))
 
-# Avoid warnings until libgltf's interface is minimized
-$(eval $(call gb_Library_add_cxxflags,avmediaogl,-w))
-
 $(eval $(call gb_Library_use_externals,avmediaogl, \
     boost_headers \
     libgltf \

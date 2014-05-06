@@ -25,7 +25,6 @@ namespace avmedia { namespace ogl {
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
     , m_pHandle(NULL)
-    , m_bIsPlayingTmp(false)
 {
 }
 
@@ -102,20 +101,18 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     gltf_animation_start(m_pHandle);
-    m_bIsPlayingTmp = true;
 }
 
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     gltf_animation_stop(m_pHandle);
-    m_bIsPlayingTmp = false;
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    return m_bIsPlayingTmp; //(sal_Bool)gltf_animation_is_playing(m_pHandle)
+    return (sal_Bool)gltf_animation_is_playing(m_pHandle);
 }
 
 double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exception )
@@ -139,7 +136,7 @@ double SAL_CALL OGLPlayer::getMediaTime() throw ( ::com::sun::star::uno::Runtime
 double SAL_CALL OGLPlayer::getRate() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    // TODO: Get the speed of stream reading (see com::sun::star::media::XPlayer)
+    // Seems unused
     return 1.0;
 }
 
@@ -179,7 +176,7 @@ sal_Bool SAL_CALL OGLPlayer::isMute() throw ( uno::RuntimeException, std::except
 
 awt::Size SAL_CALL OGLPlayer::getPreferredPlayerWindowSize() throw ( uno::RuntimeException, std::exception )
 {
-    return awt::Size( 480, 360 ); // TODO: It will be good for OpenGL too?
+    return awt::Size( 480, 360 );
 }
 
 uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
@@ -215,7 +212,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
     m_pHandle->viewport.height = getPreferredPlayerWindowSize().Height;
     gltf_renderer_set_content(m_pHandle);
     OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( m_pHandle );
-    return uno::Reference< media::XFrameGrabber >( pFrameGrabber );;
+    return uno::Reference< media::XFrameGrabber >( pFrameGrabber );
 }
 
 OUString SAL_CALL OGLPlayer::getImplementationName()
