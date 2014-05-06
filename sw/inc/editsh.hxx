@@ -574,7 +574,7 @@ public:
     void EndAllAction();
 
     /// To enable set up of StartActions and EndActions.
-    void CalcLayout();
+    virtual void CalcLayout() SAL_OVERRIDE;
 
     /// Determine form of content. Return Type at CurCrsr->SPoint.
     sal_uInt16 GetCntType() const;

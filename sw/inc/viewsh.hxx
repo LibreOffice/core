@@ -282,7 +282,7 @@ public:
 
      Size GetDocSize() const;   // Get document size.
 
-    void CalcLayout();  // Force complete formatting of layout.
+    virtual void CalcLayout();  // Force complete formatting of layout.
 
     sal_uInt16 GetPageCount() const;
 
