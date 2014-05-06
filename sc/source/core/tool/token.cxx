@@ -1157,6 +1157,13 @@ void ScMatrixFormulaCellToken::ResetResult()
     xUpperLeft = NULL;
 }
 
+ScHybridCellToken::ScHybridCellToken(
+    double f, const svl::SharedString & rStr, const OUString & rFormula ) :
+        ScToken( formula::svHybridCell ),
+        mfDouble( f ), maString( rStr ),
+        maFormula( rFormula )
+{
+}
 
 double ScHybridCellToken::GetDouble() const { return mfDouble; }
 

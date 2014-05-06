@@ -414,12 +414,8 @@ private:
     svl::SharedString maString;
     OUString maFormula;
 public:
-    ScHybridCellToken( double f,
-            const svl::SharedString & rStr,
-            const OUString & rFormula ) :
-        ScToken( formula::svHybridCell ),
-        mfDouble( f ), maString( rStr ),
-        maFormula( rFormula ) {}
+    ScHybridCellToken(
+        double f, const svl::SharedString & rStr, const OUString & rFormula );
 
     const OUString& GetFormula() const  { return maFormula; }
     virtual double GetDouble() const SAL_OVERRIDE;
