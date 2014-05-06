@@ -100,7 +100,7 @@ void OCurrencyModel::implConstruct()
             const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
 
             OUString sCurrencySymbol;
-            bool bPrependCurrencySymbol;
+            bool bPrependCurrencySymbol = false;
             switch ( aLocaleInfo.getCurrPositiveFormat() )
             {
                 case 0: // $1
