@@ -22,7 +22,7 @@ namespace opengl3D {
 class Renderable3DObject
 {
 public:
-    Renderable3DObject(sal_uInt32 nId);
+    Renderable3DObject(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
 
     virtual ~Renderable3DObject() {};
 
@@ -31,14 +31,14 @@ public:
     OpenGL3DRenderer* getRender();
 
 protected:
+    OpenGL3DRenderer* mpRenderer;
     sal_uInt32 mnUniqueId;
-    static OpenGL3DRenderer* mPrender;
 };
 
 class Bar : public Renderable3DObject
 {
 public:
-    Bar( const glm::mat4& rPosition, sal_uInt32 nId );
+    Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 nId);
 
     virtual void render() SAL_OVERRIDE;
 private:
@@ -50,7 +50,7 @@ private:
 class Line : public Renderable3DObject
 {
 public:
-    Line( sal_uInt32 nId );
+    Line(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
 
     virtual void render() SAL_OVERRIDE;
 
@@ -63,7 +63,7 @@ private:
 class Text : public Renderable3DObject
 {
 public:
-    Text( sal_uInt32 nId );
+    Text(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
 private:
     BitmapEx maText;
     glm::vec3 maTopLeft;
@@ -74,7 +74,7 @@ private:
 class Rectangle : public Renderable3DObject
 {
 public:
-    Rectangle( sal_uInt32 nId );
+    Rectangle(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
 private:
     glm::vec3 maTopLeft;
     glm::vec3 maTopRight;
@@ -86,7 +86,7 @@ private:
 class Camera : public Renderable3DObject
 {
 public:
-    Camera();
+    Camera(OpenGL3DRenderer* pRenderer);
     virtual void render() SAL_OVERRIDE;
 private:
     glm::vec3 maPos;
@@ -106,9 +106,6 @@ public:
 
 private:
     OpenGLContext maContext;
-
-    int miWidth;
-    int miHeight;
 };
 
 }

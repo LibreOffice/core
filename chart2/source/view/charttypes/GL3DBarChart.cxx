@@ -15,6 +15,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "3DChartObjects.hxx"
+#include "GL3DRenderer.hxx"
 
 namespace chart {
 
@@ -34,9 +35,10 @@ void GL3DBarChart::create3DShapes()
     const float nBarSizeY = 10;
     const float nBarDistanceX = nBarSizeX / 2;
     const float nBarDistanceY = nBarSizeY / 2;
+    opengl3D::OpenGL3DRenderer* pRenderer = NULL;
 
     maShapes.clear();
-    maShapes.push_back(new opengl3D::Camera());
+    maShapes.push_back(new opengl3D::Camera(pRenderer));
     sal_Int32 nSeriesIndex = 0;
     sal_uInt32 nId = 1;
     for(std::vector<VDataSeries*>::const_iterator itr = maDataSeries.begin(),
@@ -54,7 +56,7 @@ void GL3DBarChart::create3DShapes()
             glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
             glm::translate(aBarPosition, nXPos, nYPos, nVal/2);
 
-            maShapes.push_back(new opengl3D::Bar(aBarPosition, nId++));
+            maShapes.push_back(new opengl3D::Bar(pRenderer, aBarPosition, nId++));
         }
 
         ++nSeriesIndex;
