@@ -566,8 +566,6 @@ void OpenGLContext::renderToFile()
 
 bool OpenGLContext::initWindow()
 {
-    const SystemEnvData* sysData(mpWindow->GetSystemData());
-    m_aGLWin.hWnd = sysData->hWnd;
     if( !m_pChildWindow )
     {
         SystemWindowData winData = generateWinData(mpWindow);
@@ -583,6 +581,8 @@ bool OpenGLContext::initWindow()
         m_pChildWindow->SetControlForeground();
         m_pChildWindow->SetControlBackground();
         m_pChildWindow->EnablePaint(sal_False);
+
+        const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
         m_aGLWin.hWnd = sysData->hWnd;
     }
 
