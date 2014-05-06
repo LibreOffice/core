@@ -217,7 +217,7 @@ namespace dbaui
         ::svx::ODataAccessDescriptor    m_aDataDescriptor;
         SbaGridListener*                m_pMasterListener;
 
-        sal_Int32                       m_nAsyncDropEvent;
+        sal_uLong                       m_nAsyncDropEvent;
 
         sal_uInt16                          m_nCurrentActionColId;
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
