@@ -1879,14 +1879,14 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
                 if ( pSVEvent->mpLink )
                     pSVEvent->mpLink->Call( pSVEvent->mpData );
                 else
-                    pSVEvent->mpWindow->UserEvent( pSVEvent->mnEvent, pSVEvent->mpData );
+                    pSVEvent->mpWindow->UserEvent( 0, pSVEvent->mpData );
             }
             else
             {
                 if ( pSVEvent->mpLink )
                     pSVEvent->mpLink->Call( pSVEvent->mpData );
                 else
-                    GetpApp()->UserEvent( pSVEvent->mnEvent, pSVEvent->mpData );
+                    GetpApp()->UserEvent( 0, pSVEvent->mpData );
             }
         }
 

@@ -938,7 +938,6 @@ sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 bool Application::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
-    pSVEvent->mnEvent   = 0;
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = NULL;

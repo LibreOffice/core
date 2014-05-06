@@ -395,7 +395,6 @@ private:
 
 struct ImplSVEvent
 {
-    sal_uLong               mnEvent;
     void*               mpData;
     Link*               mpLink;
     Window*             mpWindow;

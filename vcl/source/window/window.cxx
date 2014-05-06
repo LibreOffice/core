@@ -5305,7 +5305,6 @@ bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCalle
 {
 
     ImplSVEvent* pSVEvent = new ImplSVEvent;
-    pSVEvent->mnEvent   = 0;
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = this;
