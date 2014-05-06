@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <sdr/primitive2d/sdrprimitivetools.hxx>
 #include <vcl/bmpacc.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>

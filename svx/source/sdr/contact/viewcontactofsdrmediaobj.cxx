@@ -20,7 +20,7 @@
 
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svdomedia.hxx>
-#include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
+#include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <drawinglayer/primitive2d/mediaprimitive2d.hxx>
 #include <avmedia/mediawindow.hxx>
 

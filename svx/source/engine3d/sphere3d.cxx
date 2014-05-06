@@ -27,10 +27,10 @@
 
 #include <svx/svxids.hrc>
 #include <svx/svx3ditems.hxx>
-#include <svx/sdr/properties/e3dsphereproperties.hxx>
+#include <sdr/properties/e3dsphereproperties.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b3dpoint.hxx>
-#include <svx/sdr/contact/viewcontactofe3dsphere.hxx>
+#include <sdr/contact/viewcontactofe3dsphere.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 
 

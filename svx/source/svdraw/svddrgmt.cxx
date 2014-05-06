@@ -42,7 +42,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/overlay/overlayrollingrectangle.hxx>
+#include <sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -65,7 +65,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdovirt.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>

@@ -10,7 +10,7 @@
 #include <config_features.h>
 
 #include <svdoopengl.hxx>
-#include <svx/sdr/contact/viewcontactofopenglobj.hxx>
+#include <sdr/contact/viewcontactofopenglobj.hxx>
 
 #include <vcl/opengl/IOpenGLRenderer.hxx>
 

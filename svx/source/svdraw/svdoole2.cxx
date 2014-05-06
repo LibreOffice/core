@@ -72,9 +72,9 @@
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
 #include <svx/charthelper.hxx>
-#include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
+#include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/sdr/properties/oleproperties.hxx>
+#include <sdr/properties/oleproperties.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbmtit.hxx>

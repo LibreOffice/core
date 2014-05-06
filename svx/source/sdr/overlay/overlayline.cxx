@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/overlay/overlayline.hxx>
+#include <sdr/overlay/overlayline.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

@@ -18,10 +18,10 @@
  */
 
 
-#include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
+#include <sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/primitive2d/sdrconnectorprimitive2d.hxx>
+#include <sdr/primitive2d/sdrconnectorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 

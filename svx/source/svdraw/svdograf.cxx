@@ -53,8 +53,8 @@
 #include "svdfmtf.hxx"
 #include <svx/sdgcpitm.hxx>
 #include <editeng/eeitem.hxx>
-#include <svx/sdr/properties/graphicproperties.hxx>
-#include <svx/sdr/contact/viewcontactofgraphic.hxx>
+#include <sdr/properties/graphicproperties.hxx>
+#include <sdr/contact/viewcontactofgraphic.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

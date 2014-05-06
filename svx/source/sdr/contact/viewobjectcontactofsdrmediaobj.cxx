@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
+#include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>

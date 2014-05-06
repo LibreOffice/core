@@ -19,8 +19,8 @@
 
 #include <config_features.h>
 
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
-#include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
+#include <sdr/contact/objectcontactofpageview.hxx>
+#include <sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

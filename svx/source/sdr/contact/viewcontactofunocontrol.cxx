@@ -20,9 +20,9 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <svx/sdr/contact/viewcontactofunocontrol.hxx>
-#include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <sdr/contact/viewcontactofunocontrol.hxx>
+#include <sdr/contact/viewobjectcontactofunocontrol.hxx>
+#include <sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>

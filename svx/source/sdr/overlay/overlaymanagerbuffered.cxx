@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/overlay/overlaymanagerbuffered.hxx>
+#include <sdr/overlay/overlaymanagerbuffered.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/point/b2dpoint.hxx>

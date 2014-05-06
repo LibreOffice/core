@@ -27,7 +27,7 @@
 #include <svx/svdmodel.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
-#include <svx/sdr/properties/itemsettools.hxx>
+#include <sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svl/itemset.hxx>

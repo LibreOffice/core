@@ -42,7 +42,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/svdovirt.hxx>
-#include <svx/sdr/overlay/overlayrollingrectangle.hxx>
+#include <sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>

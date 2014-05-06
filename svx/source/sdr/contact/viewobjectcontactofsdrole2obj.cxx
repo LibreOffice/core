@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewobjectcontactofsdrole2obj.hxx>
+#include <sdr/contact/viewobjectcontactofsdrole2obj.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
-#include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
+#include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdview.hxx>

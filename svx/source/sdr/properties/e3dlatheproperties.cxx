@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/properties/e3dlatheproperties.hxx>
+#include <sdr/properties/e3dlatheproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/lathe3d.hxx>
 

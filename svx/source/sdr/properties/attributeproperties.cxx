@@ -18,7 +18,7 @@
  */
 
 #include <svx/sdr/properties/attributeproperties.hxx>
-#include <svx/sdr/properties/itemsettools.hxx>
+#include <sdr/properties/itemsettools.hxx>
 #include <tools/debug.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>

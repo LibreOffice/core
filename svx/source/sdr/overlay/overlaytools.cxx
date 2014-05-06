@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/overlay/overlaytools.hxx>
+#include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>

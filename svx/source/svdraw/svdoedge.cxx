@@ -28,8 +28,8 @@
 #include <svl/smplhint.hxx>
 #include <svl/style.hxx>
 
-#include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
-#include <svx/sdr/properties/connectorproperties.hxx>
+#include <sdr/contact/viewcontactofsdredgeobj.hxx>
+#include <sdr/properties/connectorproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svddrgv.hxx>

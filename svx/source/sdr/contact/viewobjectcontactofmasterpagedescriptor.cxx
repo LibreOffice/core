@@ -18,8 +18,8 @@
  */
 
 
-#include <svx/sdr/contact/viewobjectcontactofmasterpagedescriptor.hxx>
-#include <svx/sdr/contact/viewcontactofmasterpagedescriptor.hxx>
+#include <sdr/contact/viewobjectcontactofmasterpagedescriptor.hxx>
+#include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdpagv.hxx>

@@ -18,10 +18,10 @@
  */
 
 
-#include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>
+#include <sdr/contact/viewcontactofsdrcaptionobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/primitive2d/sdrcaptionprimitive2d.hxx>
+#include <sdr/primitive2d/sdrcaptionprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 

@@ -21,9 +21,9 @@
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/primitive2d/sdrrectangleprimitive2d.hxx>
+#include <sdr/primitive2d/sdrrectangleprimitive2d.hxx>
 #include <svl/itemset.hxx>
-#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
 

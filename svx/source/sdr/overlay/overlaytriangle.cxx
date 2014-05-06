@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/overlay/overlaytriangle.hxx>
+#include <sdr/overlay/overlaytriangle.hxx>
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

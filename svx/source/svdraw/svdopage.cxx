@@ -29,7 +29,7 @@
 #include <svx/svdoutl.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/itemset.hxx>
-#include <svx/sdr/properties/pageproperties.hxx>
+#include <sdr/properties/pageproperties.hxx>
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
 
 

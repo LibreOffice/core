@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>
+#include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/drawing/NormalsKind.hpp>

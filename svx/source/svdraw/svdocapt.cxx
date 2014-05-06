@@ -31,8 +31,8 @@
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
-#include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>
-#include <svx/sdr/properties/captionproperties.hxx>
+#include <sdr/contact/viewcontactofsdrcaptionobj.hxx>
+#include <sdr/properties/captionproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdetc.hxx>

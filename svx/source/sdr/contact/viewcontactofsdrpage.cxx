@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewcontactofsdrpage.hxx>
+#include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/sdr/contact/viewobjectcontactofsdrpage.hxx>
+#include <sdr/contact/viewobjectcontactofsdrpage.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpagv.hxx>

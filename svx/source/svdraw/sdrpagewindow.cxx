@@ -30,7 +30,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <osl/mutex.hxx>
 #include <svx/fmview.hxx>

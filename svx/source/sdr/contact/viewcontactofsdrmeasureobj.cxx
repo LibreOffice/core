@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>
+#include <sdr/contact/viewcontactofsdrmeasureobj.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
@@ -26,7 +26,7 @@
 #include <svx/sxmlhitm.hxx>
 #include <svx/sxmtritm.hxx>
 #include <sxmtaitm.hxx>
-#include <svx/sdr/primitive2d/sdrmeasureprimitive2d.hxx>
+#include <sdr/primitive2d/sdrmeasureprimitive2d.hxx>
 #include <svx/sxmtpitm.hxx>
 
 

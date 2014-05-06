@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/attribute/sdrfilltextattribute.hxx>
+#include <sdr/attribute/sdrfilltextattribute.hxx>
 
 
 

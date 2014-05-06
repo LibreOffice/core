@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/contact/viewobjectcontactofe3dscene.hxx>
+#include <sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
@@ -26,7 +26,7 @@
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <svx/sdr/contact/viewobjectcontactofe3d.hxx>
+#include <sdr/contact/viewobjectcontactofe3d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
 

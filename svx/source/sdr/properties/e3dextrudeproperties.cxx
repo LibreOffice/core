@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/properties/e3dextrudeproperties.hxx>
+#include <sdr/properties/e3dextrudeproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/extrud3d.hxx>
 

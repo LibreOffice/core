@@ -9,8 +9,8 @@
 
 #include <config_features.h>
 
-#include <svx/sdr/contact/viewobjectcontactofopenglobj.hxx>
-#include <svx/sdr/contact/viewcontactofopenglobj.hxx>
+#include <sdr/contact/viewobjectcontactofopenglobj.hxx>
+#include <sdr/contact/viewcontactofopenglobj.hxx>
 
 #include <svdoopengl.hxx>
 #include <vcl/outdev.hxx>

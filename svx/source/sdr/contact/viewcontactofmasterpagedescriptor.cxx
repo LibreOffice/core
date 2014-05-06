@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewcontactofmasterpagedescriptor.hxx>
+#include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -26,8 +26,8 @@
 #include <vcl/timer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
-#include <svx/sdr/contact/viewcontactofsdrpage.hxx>
-#include <svx/sdr/contact/viewobjectcontactofmasterpagedescriptor.hxx>
+#include <sdr/contact/viewcontactofsdrpage.hxx>
+#include <sdr/contact/viewobjectcontactofmasterpagedescriptor.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

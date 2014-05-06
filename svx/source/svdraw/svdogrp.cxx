@@ -43,8 +43,8 @@
 #include <svx/svxids.hrc>
 #include <svl/whiter.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/sdr/properties/groupproperties.hxx>
-#include <svx/sdr/contact/viewcontactofgroup.hxx>
+#include <sdr/properties/groupproperties.hxx>
+#include <sdr/contact/viewcontactofgroup.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

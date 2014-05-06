@@ -23,7 +23,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>

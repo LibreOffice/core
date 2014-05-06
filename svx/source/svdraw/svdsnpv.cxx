@@ -27,8 +27,8 @@
 #include <svx/svdpage.hxx>
 #include "svx/svditer.hxx"
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
-#include <svx/sdr/overlay/overlaycrosshair.hxx>
-#include <svx/sdr/overlay/overlayhelpline.hxx>
+#include <sdr/overlay/overlaycrosshair.hxx>
+#include <sdr/overlay/overlayhelpline.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdrpaintwindow.hxx>

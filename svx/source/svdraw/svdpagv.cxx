@@ -36,7 +36,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdoole2.hxx>
 
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/fmview.hxx>
 

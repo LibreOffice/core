@@ -18,11 +18,11 @@
  */
 
 
-#include <svx/sdr/contact/viewcontactofsdrpathobj.hxx>
+#include <sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svx/sdr/primitive2d/sdrpathprimitive2d.hxx>
+#include <sdr/primitive2d/sdrpathprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 

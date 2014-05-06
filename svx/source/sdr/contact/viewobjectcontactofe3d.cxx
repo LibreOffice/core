@@ -18,11 +18,11 @@
  */
 
 
-#include <svx/sdr/contact/viewobjectcontactofe3d.hxx>
+#include <sdr/contact/viewobjectcontactofe3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
-#include <svx/sdr/contact/viewobjectcontactofe3dscene.hxx>
+#include <sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 

@@ -37,7 +37,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svl/whiter.hxx>
 #include <svx/xflftrit.hxx>
-#include <svx/sdr/properties/e3dsceneproperties.hxx>
+#include <sdr/properties/e3dsceneproperties.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/svddrag.hxx>
 #include <helperminimaldepth3d.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewcontactofgraphic.hxx>
-#include <svx/sdr/contact/viewobjectcontactofgraphic.hxx>
+#include <sdr/contact/viewcontactofgraphic.hxx>
+#include <sdr/contact/viewobjectcontactofgraphic.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
@@ -28,7 +28,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
+#include <sdr/primitive2d/sdrgrafprimitive2d.hxx>
 #include "svx/svdstr.hrc"
 #include <svdglob.hxx>
 #include <vcl/svapp.hxx>
@@ -39,7 +39,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

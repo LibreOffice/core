@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/contact/viewobjectcontactofgroup.hxx>
+#include <sdr/contact/viewobjectcontactofgroup.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <basegfx/numeric/ftools.hxx>

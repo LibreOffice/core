@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/overlay/overlayhelpline.hxx>
+#include <sdr/overlay/overlayhelpline.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <svx/sdr/overlay/overlaytools.hxx>
+#include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
 

@@ -21,7 +21,7 @@
 #include <svx/svdpage.hxx>
 #include "svx/globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
-#include <svx/sdr/contact/viewcontactofe3dpolygon.hxx>
+#include <sdr/contact/viewcontactofe3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 

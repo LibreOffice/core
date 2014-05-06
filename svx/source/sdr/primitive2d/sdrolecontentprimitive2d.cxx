@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/primitive2d/sdrolecontentprimitive2d.hxx>
+#include <sdr/primitive2d/sdrolecontentprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>

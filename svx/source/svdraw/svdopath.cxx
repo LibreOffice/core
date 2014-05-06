@@ -40,7 +40,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <svx/xlntrit.hxx>
-#include <svx/sdr/contact/viewcontactofsdrpathobj.hxx>
+#include <sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "svdconv.hxx"
 #include <basegfx/point/b2dpoint.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include <svx/sdr/properties/properties.hxx>
-#include <svx/sdr/properties/itemsettools.hxx>
+#include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>

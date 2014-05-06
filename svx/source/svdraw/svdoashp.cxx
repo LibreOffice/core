@@ -64,8 +64,8 @@
 #include <svx/xlnclit.hxx>
 #include <svx/svxids.hrc>
 #include <svl/whiter.hxx>
-#include <svx/sdr/properties/customshapeproperties.hxx>
-#include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
+#include <sdr/properties/customshapeproperties.hxx>
+#include <sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflclit.hxx>

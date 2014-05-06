@@ -18,7 +18,7 @@
  */
 
 #include <svx/sdrmasterpagedescriptor.hxx>
-#include <svx/sdr/contact/viewcontactofmasterpagedescriptor.hxx>
+#include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/xfillit0.hxx>

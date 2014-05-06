@@ -35,7 +35,7 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <svx/sdr/overlay/overlayrectangle.hxx>
+#include <sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 namespace sdr { namespace table {

@@ -48,9 +48,9 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
-#include <svx/sdr/overlay/overlayline.hxx>
-#include <svx/sdr/overlay/overlaytriangle.hxx>
-#include <svx/sdr/overlay/overlayrectangle.hxx>
+#include <sdr/overlay/overlayline.hxx>
+#include <sdr/overlay/overlaytriangle.hxx>
+#include <sdr/overlay/overlayrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>

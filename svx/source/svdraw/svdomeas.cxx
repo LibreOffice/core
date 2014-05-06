@@ -37,8 +37,8 @@
 #include <svl/smplhint.hxx>
 #include <svl/style.hxx>
 
-#include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>
-#include <svx/sdr/properties/measureproperties.hxx>
+#include <sdr/contact/viewcontactofsdrmeasureobj.hxx>
+#include <sdr/properties/measureproperties.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>

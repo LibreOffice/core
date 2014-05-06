@@ -29,8 +29,8 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svx3ditems.hxx>
-#include <svx/sdr/properties/e3dlatheproperties.hxx>
-#include <svx/sdr/contact/viewcontactofe3dlathe.hxx>
+#include <sdr/properties/e3dlatheproperties.hxx>
+#include <sdr/contact/viewcontactofe3dlathe.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

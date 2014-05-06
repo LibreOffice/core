@@ -73,7 +73,7 @@
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
-#include <svx/sdr/attribute/sdrfilltextattribute.hxx>
+#include <sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
 

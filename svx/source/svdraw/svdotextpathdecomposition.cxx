@@ -21,7 +21,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -55,7 +55,7 @@
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
+#include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 
 
 

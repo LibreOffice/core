@@ -57,7 +57,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrundomanager.hxx>
-#include <svx/sdr/overlay/overlaytools.hxx>
+#include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 

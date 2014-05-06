@@ -18,9 +18,9 @@
  */
 
 
-#include <svx/sdr/contact/viewobjectcontactofsdrpage.hxx>
+#include <sdr/contact/viewobjectcontactofsdrpage.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/sdr/contact/viewcontactofsdrpage.hxx>
+#include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
@@ -30,7 +30,7 @@
 #include <drawinglayer/primitive2d/gridprimitive2d.hxx>
 #include <drawinglayer/primitive2d/helplineprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <sdr/primitive2d/sdrprimitivetools.hxx>
 
 
 

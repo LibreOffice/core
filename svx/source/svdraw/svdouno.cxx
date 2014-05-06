@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewcontactofunocontrol.hxx>
-#include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
+#include <sdr/contact/viewcontactofunocontrol.hxx>
+#include <sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

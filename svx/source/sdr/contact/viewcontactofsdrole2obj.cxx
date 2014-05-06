@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
+#include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/sdr/contact/viewobjectcontactofsdrole2obj.hxx>
+#include <sdr/contact/viewobjectcontactofsdrole2obj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/primitive2d/sdrole2primitive2d.hxx>
+#include <sdr/primitive2d/sdrole2primitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
@@ -29,7 +29,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/sdr/primitive2d/sdrolecontentprimitive2d.hxx>
+#include <sdr/primitive2d/sdrolecontentprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/charthelper.hxx>

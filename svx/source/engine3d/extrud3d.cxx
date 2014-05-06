@@ -30,8 +30,8 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svx3ditems.hxx>
-#include <svx/sdr/properties/e3dextrudeproperties.hxx>
-#include <svx/sdr/contact/viewcontactofe3dextrude.hxx>
+#include <sdr/properties/e3dextrudeproperties.hxx>
+#include <sdr/contact/viewcontactofe3dextrude.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>

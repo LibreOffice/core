@@ -18,11 +18,11 @@
  */
 
 
-#include <svx/sdr/contact/viewcontactofe3dcube.hxx>
+#include <sdr/contact/viewcontactofe3dcube.hxx>
 #include <svx/cube3d.hxx>
 #include <drawinglayer/primitive3d/sdrcubeprimitive3d.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>
+#include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/range/b3drange.hxx>
 
 

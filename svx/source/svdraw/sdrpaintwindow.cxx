@@ -18,7 +18,7 @@
  */
 
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/sdr/overlay/overlaymanagerbuffered.hxx>
+#include <sdr/overlay/overlaymanagerbuffered.hxx>
 #include <svx/svdpntv.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>

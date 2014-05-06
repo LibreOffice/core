@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
+#include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 

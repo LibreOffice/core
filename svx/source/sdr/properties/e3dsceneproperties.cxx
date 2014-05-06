@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/properties/e3dsceneproperties.hxx>
+#include <sdr/properties/e3dsceneproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svddef.hxx>

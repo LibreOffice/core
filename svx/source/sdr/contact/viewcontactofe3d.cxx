@@ -19,7 +19,7 @@
 
 
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
-#include <svx/sdr/contact/viewobjectcontactofe3d.hxx>
+#include <sdr/contact/viewobjectcontactofe3d.hxx>
 #include <svx/obj3d.hxx>
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>

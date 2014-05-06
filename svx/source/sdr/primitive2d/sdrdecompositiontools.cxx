@@ -31,7 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
-#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/svdotext.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>

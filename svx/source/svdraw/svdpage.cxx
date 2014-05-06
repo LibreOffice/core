@@ -49,7 +49,7 @@
 #include <svx/fmdpage.hxx>
 
 #include <sfx2/objsh.hxx>
-#include <svx/sdr/contact/viewcontactofsdrpage.hxx>
+#include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <algorithm>

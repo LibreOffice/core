@@ -33,14 +33,14 @@
 #include <editeng/editdata.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/sdr/properties/itemsettools.hxx>
+#include <sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svdocapt.hxx>
 #include <svl/whiter.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdviter.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/sdr/contact/viewcontactofgraphic.hxx>
+#include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/svdotable.hxx> // #i124389#
 
 

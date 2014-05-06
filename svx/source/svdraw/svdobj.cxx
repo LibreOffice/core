@@ -61,7 +61,7 @@
 #include <svx/polysc3d.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/viewcontactofgraphic.hxx>
+#include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/sdr/properties/emptyproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>

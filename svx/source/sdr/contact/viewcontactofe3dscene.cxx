@@ -25,7 +25,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/contact/viewobjectcontactofe3dscene.hxx>
+#include <sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>

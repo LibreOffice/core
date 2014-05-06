@@ -18,7 +18,7 @@
  */
 
 #include <svx/sdr/properties/defaultproperties.hxx>
-#include <svx/sdr/properties/itemsettools.hxx>
+#include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
 

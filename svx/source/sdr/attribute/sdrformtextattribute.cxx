@@ -42,7 +42,7 @@
 #include <svx/xlndsit.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
+#include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
 

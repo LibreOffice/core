@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
+#include <sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/svditer.hxx>
-#include <svx/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
+#include <sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

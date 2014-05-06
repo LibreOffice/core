@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/primitive2d/sdrmeasureprimitive2d.hxx>
+#include <sdr/primitive2d/sdrmeasureprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/canvastools.hxx>

@@ -42,7 +42,7 @@
 #include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
-#include <svx/sdr/overlay/overlayrollingrectangle.hxx>
+#include <sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sxlayitm.hxx>
 #include <svl/itemiter.hxx>

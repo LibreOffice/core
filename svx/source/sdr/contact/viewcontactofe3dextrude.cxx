@@ -18,11 +18,11 @@
  */
 
 
-#include <svx/sdr/contact/viewcontactofe3dextrude.hxx>
+#include <sdr/contact/viewcontactofe3dextrude.hxx>
 #include <svx/extrud3d.hxx>
 #include <drawinglayer/primitive3d/sdrextrudeprimitive3d.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>
+#include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 
