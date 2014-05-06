@@ -46,11 +46,8 @@ $(eval $(call gb_Module_add_targets,sw,\
 
 endif
 
-$(eval $(call gb_Module_add_check_targets,sw,\
-    CppunitTest_sw_uwriter \
-))
-
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
+    CppunitTest_sw_uwriter \
     CppunitTest_sw_htmlexport \
     CppunitTest_sw_macros_test \
     CppunitTest_sw_ooxmlexport \
