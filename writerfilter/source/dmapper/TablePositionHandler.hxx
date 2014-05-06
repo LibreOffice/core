@@ -38,27 +38,27 @@ class TablePositionHandler
     virtual void lcl_sprm(Sprm& sprm) SAL_OVERRIDE;
 
 public:
-    int getY()
+    sal_Int32 getY()
     {
         return m_nY;
     }
-    int getX()
+    sal_Int32 getX()
     {
         return m_nX;
     }
-    int getLeftFromText()
+    sal_Int32 getLeftFromText()
     {
         return m_nLeftFromText;
     }
-    int getRightFromText()
+    sal_Int32 getRightFromText()
     {
         return m_nRightFromText;
     }
-    int getTopFromText()
+    sal_Int32 getTopFromText()
     {
         return m_nTopFromText;
     }
-    int getBottomFromText()
+    sal_Int32 getBottomFromText()
     {
         return m_nBottomFromText;
     }
