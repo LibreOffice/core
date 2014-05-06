@@ -175,7 +175,7 @@ awt::Size lcl_parseSize(const OString& rValue)
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedHeightPrefix));
     nIndex = aExpectedHeightPrefix.getLength();
-    aSize.Width = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
+    aSize.Height = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
 
     return aSize;
 }

@@ -24,6 +24,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1207,6 +1208,17 @@ DECLARE_OOXMLEXPORT_TEST(test77219, "test77219.docx")
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "behindDoc", "1");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
+{
+    // Document contains a flowChartMultidocument preset shape, our date for that shape wasn't correct.
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry["Path"]);
+    comphelper::SequenceAsVector<awt::Size> aSubViewSize(aPath["SubViewSize"]);
+    // This was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aSubViewSize[0].Height);
 }
 
 #endif
