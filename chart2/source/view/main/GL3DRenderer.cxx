@@ -100,6 +100,28 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
 }
 
+void OpenGL3DRenderer::CreateFrameBufferObj()
+{
+    // create a framebuffer object, you need to delete them when program exits.
+    glGenFramebuffers(2, m_FboID);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    for (int i = 0; i < 2; i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[i]);
+        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
+        // attach a texture to FBO color attachement point
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[i], 0);
+        glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        // attach a renderbuffer to depth attachment point
+        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[i]);
+        glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+}
+
 void OpenGL3DRenderer::LoadShaders()
 {
     m_3DProID = OpenGLHelper::LoadShaders("Shape3DVertexShader", "Shape3DFragmentShader");
@@ -109,6 +131,12 @@ void OpenGL3DRenderer::LoadShaders()
     m_3DNormalMatrixID = glGetUniformLocation(m_3DProID, "normalMatrix");
     m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
     m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
+
+    m_CommonProID = OpenGLHelper::LoadShaders("commonVertexShader", "commonFragmentShader");
+    m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
+    m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
+    m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+    CHECK_GL_ERROR();
 
     Init3DUniformBlock();
 }
@@ -127,6 +155,32 @@ void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::ve
 
 void OpenGL3DRenderer::init()
 {
+    if (glewIsSupported("framebuffer_object") != GLEW_OK)
+    {
+        SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
+        return;
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    // Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
+    glEnable(GL_POINT_SMOOTH);
+    glEnable(GL_LINE_SMOOTH);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glClearColor (1.0, 1.0, 1.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearDepth(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     glGenBuffers(1, &m_CubeVertexBuf);
     AddVertexData(m_CubeVertexBuf);
 
@@ -155,6 +209,7 @@ void OpenGL3DRenderer::init()
 
     m_3DProjection = glm::perspective(30.0f, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
     LoadShaders();
+    CreateFrameBufferObj();
     m_IsOpenglInit = true;
 }
 

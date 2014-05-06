@@ -158,6 +158,7 @@ class OpenGL3DRenderer : public IOpenGLInfoProvider
 public:
     OpenGL3DRenderer();
 
+    void CreateFrameBufferObj();
     void LoadShaders();
     void init();
     virtual bool isOpenGLInitialized() SAL_OVERRIDE;
@@ -288,7 +289,11 @@ private:
 
     GLint m_MatrixID;
 
+    GLuint m_TextureObj[2];
+
     GLuint m_FboID[2];
+
+    GLuint m_RboID[2];
 
     Extrude3DInfo m_Extrude3DInfo;
 

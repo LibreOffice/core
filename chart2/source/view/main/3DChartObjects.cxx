@@ -91,6 +91,7 @@ void TemporaryContext::init()
     Size winSize(800, 600);
     maContext.setWinSize(winSize);
     mpRenderer->SetSize(winSize);
+    mpRenderer->init();
 }
 
 }
