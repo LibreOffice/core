@@ -2286,7 +2286,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumberingPreview(Window 
 void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));
-    Rectangle aRect(Point(0,0), aSize);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color aBackColor = rStyleSettings.GetFieldColor();
