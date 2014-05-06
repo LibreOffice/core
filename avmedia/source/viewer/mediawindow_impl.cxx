@@ -84,7 +84,7 @@ MediaChildWindow::MediaChildWindow( Window* pParent ) :
 }
 
 MediaChildWindow::MediaChildWindow( Window* pParent, SystemWindowData* pData ) :
-    SystemChildWindow( pParent, 0, pData )
+    SystemChildWindow( pParent, WB_CLIPCHILDREN, pData )
 {
 }
 
