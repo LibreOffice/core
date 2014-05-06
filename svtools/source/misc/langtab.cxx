@@ -192,6 +192,11 @@ sal_uInt32 SvtLanguageTable::GetEntryCount() const
     return Count();
 }
 
+sal_uInt32 SvtLanguageTable::GetLanguageEntryCount()
+{
+    return theLanguageTable::get().GetEntryCount();
+}
+
 
 
 LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
@@ -200,6 +205,11 @@ LanguageType SvtLanguageTable::GetTypeAtIndex( sal_uInt32 nIndex ) const
     if (nIndex < Count())
         nType = LanguageType( GetValue( nIndex ) );
     return nType;
+}
+
+LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
+{
+    return theLanguageTable::get().GetTypeAtIndex( nIndex);
 }
 
 

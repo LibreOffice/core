@@ -49,6 +49,8 @@ public:
     static OUString     GetLanguageString( const LanguageType eType );
     static OUString     GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection );
     static LanguageType GetLanguageType( const OUString& rStr );
+    static sal_uInt32   GetLanguageEntryCount();
+    static LanguageType GetLanguageTypeAtIndex( sal_uInt32 nIndex );
 };
 
 // Add LRE or RLE embedding characters to the string based on the
