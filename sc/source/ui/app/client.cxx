@@ -148,7 +148,7 @@ void ScClient::ObjectAreaChanged()
         return;
     }
 
-    //  Position und Groesse ins Dokument uebernehmen
+    // Take over position and size into document
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
@@ -207,7 +207,7 @@ void ScClient::ViewChanged()
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
     Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
 
-    //  Groesse ins Dokument uebernehmen
+    // Take over position and size into document
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
@@ -216,12 +216,12 @@ void ScClient::ViewChanged()
         Fraction aFractY = GetScaleHeight();
         aFractX *= aVisSize.Width();
         aFractY *= aVisSize.Height();
-        aVisSize = Size( (long) aFractX, (long) aFractY );      // skaliert fuer Draw-Model
+        aVisSize = Size( (long) aFractX, (long) aFractY ); // Scaled for Draw model
 
-        //  pClientData->SetObjArea vor pDrawObj->SetLogicRect, damit keine
-        //  falschen Skalierungen ausgerechnet werden:
+        //  pClientData->SetObjArea before pDrawObj->SetLogicRect, so that we don't
+        //  calculate wrong scalings:
         //Rectangle aObjArea = aLogicRect;
-        //aObjArea.SetSize( aVisSize );          // Dokument-Groesse vom Server
+        //aObjArea.SetSize( aVisSize );          // Document size from the server
         //SetObjArea( aObjArea );
 
         SfxViewShell* pSfxViewSh = GetViewShell();
@@ -234,7 +234,7 @@ void ScClient::ViewChanged()
                 aLogicRect.SetSize( aVisSize );
                 pDrawObj->SetLogicRect( aLogicRect );
 
-                //  set document modified (SdrModel::SetChanged is not used)
+                // set document modified (SdrModel::SetChanged is not used)
                 pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
             }
         }
