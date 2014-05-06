@@ -564,49 +564,49 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             const ::com::sun::star::uno::Any& rValue = *pProp;
             const ::com::sun::star::uno::Type& rType = rValue.getValueType();
 
-            if ( rType == ::getBooleanCppuType() )
+            if ( rType == cppu::UnoType< bool >::get() )
             {
                 bool b = false;
                 rValue >>= b;
                 OutStream->writeBoolean( b );
             }
-            else if ( rType == ::getCppuType((const OUString*)0) )
+            else if ( rType == ::cppu::UnoType< OUString >::get() )
             {
                 OUString aUString;
                 rValue >>= aUString;
                 OutStream->writeUTF( aUString );
             }
-            else if ( rType == ::getCppuType((const sal_uInt16*)0) )
+            else if ( rType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
             {
                 sal_uInt16 n = 0;
                 rValue >>= n;
                 OutStream->writeShort( n );
             }
-            else if ( rType == ::getCppuType((const sal_Int16*)0) )
+            else if ( rType == cppu::UnoType<sal_Int16>::get() )
             {
                 sal_Int16 n = 0;
                 rValue >>= n;
                 OutStream->writeShort( n );
             }
-            else if ( rType == ::getCppuType((const sal_uInt32*)0) )
+            else if ( rType == cppu::UnoType<sal_uInt32>::get() )
             {
                 sal_uInt32 n = 0;
                 rValue >>= n;
                 OutStream->writeLong( n );
             }
-            else if ( rType == ::getCppuType((const sal_Int32*)0) )
+            else if ( rType == cppu::UnoType<sal_Int32>::get() )
             {
                 sal_Int32 n = 0;
                 rValue >>= n;
                 OutStream->writeLong( n );
             }
-            else if ( rType == ::getCppuType((const double*)0) )
+            else if ( rType == cppu::UnoType<double>::get() )
             {
                 double n = 0;
                 rValue >>= n;
                 OutStream->writeDouble( n );
             }
-            else if ( rType == ::getCppuType((const ::com::sun::star::awt::FontDescriptor*)0) )
+            else if ( rType == cppu::UnoType< ::com::sun::star::awt::FontDescriptor >::get() )
             {
                 ::com::sun::star::awt::FontDescriptor aFD;
                 rValue >>= aFD;
@@ -643,7 +643,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                     t.NanoSeconds / 1000000 + 100 * t.Seconds
                     + 10000 * t.Minutes + 1000000 * t.Hours); // HHMMSShh
             }
-            else if ( rType == ::getCppuType((const ::com::sun::star::uno::Sequence< OUString>*)0 ) )
+            else if ( rType == cppu::UnoType< ::com::sun::star::uno::Sequence< OUString> >::get() )
             {
                 ::com::sun::star::uno::Sequence< OUString> aSeq;
                 rValue >>= aSeq;
@@ -652,7 +652,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 for ( long n = 0; n < nEntries; n++ )
                     OutStream->writeUTF( aSeq.getConstArray()[n] );
             }
-            else if ( rType == ::getCppuType((const ::com::sun::star::uno::Sequence<sal_uInt16>*)0 ) )
+            else if ( rType == cppu::UnoType< ::com::sun::star::uno::Sequence< ::cppu::UnoUnsignedShortType > >::get() )
             {
                 ::com::sun::star::uno::Sequence<sal_uInt16> aSeq;
                 rValue >>= aSeq;
@@ -661,7 +661,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 for ( long n = 0; n < nEntries; n++ )
                     OutStream->writeShort( aSeq.getConstArray()[n] );
             }
-            else if ( rType == ::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int16>*)0 ) )
+            else if ( rType == cppu::UnoType< ::com::sun::star::uno::Sequence<sal_Int16> >::get() )
             {
                 ::com::sun::star::uno::Sequence<sal_Int16> aSeq;
                 rValue >>= aSeq;
@@ -794,37 +794,37 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     bool b = InStream->readBoolean();
                     aValue <<= b;
                 }
-                else if ( *pType == ::getCppuType((const OUString*)0) )
+                else if ( *pType == cppu::UnoType<OUString>::get() )
                 {
                     OUString aUTF = InStream->readUTF();
                     aValue <<= aUTF;
                 }
-                else if ( *pType == ::getCppuType((const sal_uInt16*)0) )
+                else if ( *pType == ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
                 {
                     sal_uInt16 n = InStream->readShort();
                     aValue <<= n;
                 }
-                else if ( *pType == ::getCppuType((const sal_Int16*)0) )
+                else if ( *pType == cppu::UnoType<sal_Int16>::get() )
                 {
                     sal_Int16 n = InStream->readShort();
                     aValue <<= n;
                 }
-                else if ( *pType == ::getCppuType((const sal_uInt32*)0) )
+                else if ( *pType == cppu::UnoType<sal_uInt32>::get() )
                 {
                     sal_uInt32 n = InStream->readLong();
                     aValue <<= n;
                 }
-                else if ( *pType == ::getCppuType((const sal_Int32*)0) )
+                else if ( *pType == cppu::UnoType<sal_Int32>::get() )
                 {
                     sal_Int32 n = InStream->readLong();
                     aValue <<= n;
                 }
-                else if ( *pType == ::getCppuType((const double*)0) )
+                else if ( *pType == cppu::UnoType<double>::get() )
                 {
                     double n = InStream->readDouble();
                     aValue <<= n;
                 }
-                else if ( *pType == ::getCppuType((const ::com::sun::star::awt::FontDescriptor*)0) )
+                else if ( *pType == cppu::UnoType< ::com::sun::star::awt::FontDescriptor >::get() )
                 {
                     ::com::sun::star::awt::FontDescriptor aFD;
                     aFD.Name = InStream->readUTF();
@@ -858,7 +858,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                         (n % 100) * 1000000, (n / 100) % 100, (n / 10000) % 100,
                         n / 1000000, false);
                 }
-                else if ( *pType == ::getCppuType((const ::com::sun::star::uno::Sequence< OUString>*)0 ) )
+                else if ( *pType == cppu::UnoType< ::com::sun::star::uno::Sequence< OUString> >::get() )
                 {
                     long nEntries = InStream->readLong();
                     ::com::sun::star::uno::Sequence< OUString> aSeq( nEntries );
@@ -867,7 +867,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     aValue <<= aSeq;
 
                 }
-                else if ( *pType == ::getCppuType((const ::com::sun::star::uno::Sequence<sal_uInt16>*)0 ) )
+                else if ( *pType == cppu::UnoType< ::com::sun::star::uno::Sequence< ::cppu::UnoUnsignedShortType > >::get() )
 
                 {
                     long nEntries = InStream->readLong();
@@ -876,7 +876,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                         aSeq.getArray()[n] = (sal_uInt16)InStream->readShort();
                     aValue <<= aSeq;
                 }
-                else if ( *pType == ::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int16>*)0 ) )
+                else if ( *pType == cppu::UnoType< ::com::sun::star::uno::Sequence<sal_Int16> >::get() )
                 {
                     long nEntries = InStream->readLong();
                     ::com::sun::star::uno::Sequence<sal_Int16> aSeq( nEntries );

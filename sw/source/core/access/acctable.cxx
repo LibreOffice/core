@@ -851,17 +851,17 @@ uno::Any SwAccessibleTable::queryInterface( const uno::Type& rType )
     throw (uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleTable > * >( 0 ) ) )
+    if ( rType == cppu::UnoType< uno::Reference< XAccessibleTable > >::get() )
     {
         uno::Reference<XAccessibleTable> xThis( this );
            aRet <<= xThis;
     }
-    else if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) ) )
+    else if ( rType == cppu::UnoType< uno::Reference< XAccessibleSelection > >::get() )
     {
         uno::Reference<XAccessibleSelection> xSelection( this );
         aRet <<= xSelection;
     }
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleTableSelection> *)0) )
+    else if ( rType == cppu::UnoType< uno::Reference<XAccessibleTableSelection> >::get() )
     {
         uno::Reference<XAccessibleTableSelection> xTableExtent( this );
         aRet <<= xTableExtent;
@@ -884,8 +884,8 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
     aTypes.realloc( nIndex + 2 );
 
     uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTable > * >( 0 ) );
+    pTypes[nIndex++] = cppu::UnoType< uno::Reference< XAccessibleSelection > >::get();
+    pTypes[nIndex++] = cppu::UnoType< uno::Reference< XAccessibleTable >  >::get();
 
     return aTypes;
 }

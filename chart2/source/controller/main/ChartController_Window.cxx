@@ -1627,7 +1627,7 @@ bool ChartController::requestQuickHelp(
     if ( rSelection.hasValue() )
     {
         const uno::Type& rType = rSelection.getValueType();
-        if ( rType == ::getCppuType( static_cast< const OUString* >( 0 ) ) )
+        if ( rType == cppu::UnoType< OUString >::get() )
         {
             OUString aNewCID;
             if ( ( rSelection >>= aNewCID ) && m_aSelection.setSelection( aNewCID ) )
@@ -1635,7 +1635,7 @@ bool ChartController::requestQuickHelp(
                 bSuccess = true;
             }
         }
-        else if ( rType == ::getCppuType( static_cast< const uno::Reference< drawing::XShape >* >( 0 ) ) )
+        else if ( rType == cppu::UnoType< uno::Reference< drawing::XShape > >::get() )
         {
             uno::Reference< drawing::XShape > xShape;
             if ( ( rSelection >>= xShape ) && m_aSelection.setSelection( xShape ) )
@@ -1701,7 +1701,7 @@ bool ChartController::requestQuickHelp(
         return; //behave passive if already disposed or suspended
 
     //--add listener
-    m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType((const uno::Reference< view::XSelectionChangeListener >*)0), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType< uno::Reference< view::XSelectionChangeListener > >::get(), xListener );
 }
 
         void SAL_CALL ChartController
@@ -1714,14 +1714,14 @@ bool ChartController::requestQuickHelp(
         return; //behave passive if already disposed or suspended
 
     //--remove listener
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< view::XSelectionChangeListener >*)0), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType< uno::Reference< view::XSelectionChangeListener > >::get(), xListener );
 }
 
         void ChartController
 ::impl_notifySelectionChangeListeners()
 {
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
-        .getContainer( ::getCppuType((const uno::Reference< view::XSelectionChangeListener >*)0) );
+        .getContainer( cppu::UnoType< uno::Reference< view::XSelectionChangeListener > >::get() );
     if( pIC )
     {
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier(this);

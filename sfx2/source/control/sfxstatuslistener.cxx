@@ -170,43 +170,43 @@ throw( RuntimeException, std::exception )
         eState = SFX_ITEM_AVAILABLE;
         ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
-        if ( pType == ::getVoidCppuType() )
+        if ( pType == ::cppu::UnoType< ::cppu::UnoVoidType >::get() )
         {
             pItem = new SfxVoidItem( m_nSlotID );
             eState = SFX_ITEM_UNKNOWN;
         }
-        else if ( pType == ::getBooleanCppuType() )
+        else if ( pType == cppu::UnoType< bool >::get() )
         {
             bool bTemp = false;
             rEvent.State >>= bTemp ;
             pItem = new SfxBoolItem( m_nSlotID, bTemp );
         }
-        else if ( pType == ::getCppuType((const sal_uInt16*)0) )
+        else if ( pType == cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
         {
             sal_uInt16 nTemp = 0;
             rEvent.State >>= nTemp ;
             pItem = new SfxUInt16Item( m_nSlotID, nTemp );
         }
-        else if ( pType == ::getCppuType((const sal_uInt32*)0) )
+        else if ( pType == cppu::UnoType<sal_uInt32>::get() )
         {
             sal_uInt32 nTemp = 0;
             rEvent.State >>= nTemp ;
             pItem = new SfxUInt32Item( m_nSlotID, nTemp );
         }
-        else if ( pType == ::getCppuType((const OUString*)0) )
+        else if ( pType == cppu::UnoType<OUString>::get() )
         {
             OUString sTemp ;
             rEvent.State >>= sTemp ;
             pItem = new SfxStringItem( m_nSlotID, sTemp );
         }
-        else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::ItemStatus*)0) )
+        else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus >::get() )
         {
             ItemStatus aItemStatus;
             rEvent.State >>= aItemStatus;
             eState = aItemStatus.State;
             pItem = new SfxVoidItem( m_nSlotID );
         }
-        else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::Visibility*)0) )
+        else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility >::get() )
         {
             Visibility aVisibilityStatus;
             rEvent.State >>= aVisibilityStatus;

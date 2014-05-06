@@ -96,7 +96,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
             ::com::sun::star::uno::Any aAny = aStatus.State;
 
             ::com::sun::star::uno::Type pType = aAny.getValueType();
-            if ( pType == ::getBooleanCppuType() )
+            if ( pType == cppu::UnoType< bool >::get() )
             {
                 bool bTemp = false;
                 aAny >>= bTemp ;

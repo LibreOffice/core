@@ -219,7 +219,7 @@ bool SvxXMLXTableExportComponent::save(
     INetURLObject aURLObj( rURL );
     bool bToStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; // a relative path
 
-    bool bSaveAsStorage = xTable->getElementType() == ::getCppuType((const OUString*)0);
+    bool bSaveAsStorage = xTable->getElementType() == cppu::UnoType<OUString>::get();
 
     if( pOptName )
         *pOptName = rURL;
@@ -357,32 +357,32 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
             Type aExportType = mxTable->getElementType();
             SvxXMLTableEntryExporter* pExporter = NULL;
 
-            if( aExportType == ::getCppuType((const sal_Int32*)0) )
+            if( aExportType == cppu::UnoType<sal_Int32>::get() )
             {
                 pExporter = new SvxXMLColorEntryExporter(*this);
                 pEleName = "color-table";
             }
-            else if( aExportType == ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
+            else if( aExportType == cppu::UnoType< drawing::PolyPolygonBezierCoords >::get() )
             {
                 pExporter = new SvxXMLLineEndEntryExporter(*this);
                 pEleName = "marker-table";
             }
-            else if( aExportType == ::getCppuType((const drawing::LineDash*)0) )
+            else if( aExportType == cppu::UnoType< drawing::LineDash >::get() )
             {
                 pExporter = new SvxXMLDashEntryExporter(*this);
                 pEleName = "dash-table";
             }
-            else if( aExportType == ::getCppuType((const drawing::Hatch*)0) )
+            else if( aExportType == cppu::UnoType< drawing::Hatch >::get() )
             {
                 pExporter = new SvxXMLHatchEntryExporter(*this);
                 pEleName = "hatch-table";
             }
-            else if( aExportType == ::getCppuType((const awt::Gradient*)0))
+            else if( aExportType == cppu::UnoType< awt::Gradient >::get() )
             {
                 pExporter = new SvxXMLGradientEntryExporter(*this);
                 pEleName = "gradient-table";
             }
-            else if( aExportType == ::getCppuType((const OUString*)0))
+            else if( aExportType == cppu::UnoType<OUString>::get())
             {
                 pExporter = new SvxXMLBitmapEntryExporter(*this);
                 pEleName = "bitmap-table";

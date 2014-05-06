@@ -1453,7 +1453,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
     if( !rValue.hasValue() )
         return;
 
-    if( rValue.getValueType() == ::getCppuType((const ValuePair*)0) )
+    if( rValue.getValueType() == cppu::UnoType<ValuePair>::get() )
     {
         const ValuePair* pValuePair = static_cast< const ValuePair* >( rValue.getValue() );
         OUStringBuffer sTmp2;
@@ -1462,7 +1462,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         convertValue( eAttributeName, sTmp2, pValuePair->Second );
         sTmp.append( sTmp2.makeStringAndClear() );
     }
-    else if( rValue.getValueType() == ::getCppuType((Sequence<Any>*)0) )
+    else if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
     {
         const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
         const sal_Int32 nLength = pSequence->getLength();
@@ -1497,7 +1497,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             {
                 sTmp.append( aString );
             }
-            else if( rValue.getValueType() == ::getCppuType((const double*)0) )
+            else if( rValue.getValueType() == cppu::UnoType<double>::get() )
             {
                 sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
             }
@@ -1544,7 +1544,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     if( !rValue.hasValue() )
         return;
 
-    if( rValue.getValueType() == ::getCppuType((Sequence<Any>*)0) )
+    if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
     {
         const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
         const sal_Int32 nLength = pSequence->getLength();
@@ -1561,17 +1561,17 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
             sTmp.append( sTmp2.makeStringAndClear() );
         }
     }
-    else if( rValue.getValueType() == ::getCppuType((const double*)0) )
+    else if( rValue.getValueType() == cppu::UnoType<double>::get() )
     {
         sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
         sTmp.append( 's');
     }
-    else if( rValue.getValueType() == ::getCppuType((const Timing*)0) )
+    else if( rValue.getValueType() == cppu::UnoType<Timing>::get() )
     {
         const Timing* pTiming = static_cast< const Timing* >( rValue.getValue() );
         sTmp.append( GetXMLToken( (*pTiming == Timing_MEDIA) ? XML_MEDIA : XML_INDEFINITE ) );
     }
-    else if( rValue.getValueType() == ::getCppuType((const Event*)0) )
+    else if( rValue.getValueType() == cppu::UnoType<Event>::get() )
     {
         OUStringBuffer sTmp2;
 
@@ -1622,7 +1622,7 @@ void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTa
     {
         rTarget >>= xRef;
     }
-    else if( rTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    else if( rTarget.getValueType() == cppu::UnoType<ParagraphTarget>::get() )
     {
         xRef = getParagraphTarget( static_cast< const ParagraphTarget* >( rTarget.getValue() ) );
     }
@@ -1641,13 +1641,13 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
     if( !rValue.hasValue() )
         return;
 
-    if( rValue.getValueType() == ::getCppuType((const ValuePair*)0) )
+    if( rValue.getValueType() == cppu::UnoType<ValuePair>::get() )
     {
         const ValuePair* pValuePair = static_cast< const ValuePair* >( rValue.getValue() );
         prepareValue( pValuePair->First );
         prepareValue( pValuePair->Second );
     }
-    else if( rValue.getValueType() == ::getCppuType((Sequence<Any>*)0) )
+    else if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
     {
         const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
         const sal_Int32 nLength = pSequence->getLength();
@@ -1663,13 +1663,13 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
         if( xRef.is() )
             mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
     }
-    else if( rValue.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    else if( rValue.getValueType() == cppu::UnoType<ParagraphTarget>::get() )
     {
         Reference< XInterface> xRef( getParagraphTarget( static_cast< const ParagraphTarget* >( rValue.getValue() ) ) );
         if( xRef.is() )
             mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
     }
-    else if( rValue.getValueType() == ::getCppuType((const Event*)0) )
+    else if( rValue.getValueType() == cppu::UnoType<Event>::get() )
     {
         const Event* pEvent = static_cast< const Event* >( rValue.getValue() );
         prepareValue( pEvent->Source );

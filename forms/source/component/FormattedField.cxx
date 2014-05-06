@@ -1005,23 +1005,23 @@ Any OFormattedModel::translateDbColumnToControlValue()
 Sequence< Type > OFormattedModel::getSupportedBindingTypes()
 {
     ::std::list< Type > aTypes;
-    aTypes.push_back( ::getCppuType( static_cast< double* >( NULL ) ) );
+    aTypes.push_back( cppu::UnoType< double >::get() );
     switch ( m_nKeyType & ~NumberFormat::DEFINED )
     {
     case NumberFormat::DATE:
-        aTypes.push_front(::getCppuType( static_cast< UNODate* >( NULL ) ) );
+        aTypes.push_front(cppu::UnoType< UNODate >::get() );
         break;
     case NumberFormat::TIME:
-        aTypes.push_front(::getCppuType( static_cast< UNOTime* >( NULL ) ) );
+        aTypes.push_front(cppu::UnoType< UNOTime >::get() );
         break;
     case NumberFormat::DATETIME:
-        aTypes.push_front(::getCppuType( static_cast< UNODateTime* >( NULL ) ) );
+        aTypes.push_front(cppu::UnoType< UNODateTime >::get() );
         break;
     case NumberFormat::TEXT:
-        aTypes.push_front(::getCppuType( static_cast< OUString* >( NULL ) ) );
+        aTypes.push_front(cppu::UnoType< OUString >::get() );
         break;
     case NumberFormat::LOGICAL:
-        aTypes.push_front(::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
+        aTypes.push_front(cppu::UnoType< sal_Bool >::get() );
         break;
     }
     Sequence< Type > aTypesRet( aTypes.size() );
