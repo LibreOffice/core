@@ -172,6 +172,7 @@ public:
     void testSharedFormulaWrappedRefsXLS();
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
+    void testHybridSharedStringODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -248,6 +249,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaWrappedRefsXLS);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
+    CPPUNIT_TEST(testHybridSharedStringODS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2537,6 +2539,19 @@ void ScFiltersTest::testExternalRefCacheODS()
     CPPUNIT_ASSERT_EQUAL(OUString("text"), pDoc->GetString(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("text"), pDoc->GetString(ScAddress(1,2,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("text"), pDoc->GetString(ScAddress(1,3,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testHybridSharedStringODS()
+{
+    ScDocShellRef xDocSh = loadDoc("hybrid-shared-string.", ODS);
+
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // A2 contains formula with MATCH function.  The result must be 2, not #N/A!
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0,1,0)));
 
     xDocSh->DoClose();
 }
