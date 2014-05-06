@@ -839,7 +839,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     {
         OUString aString;
 
-        if( rValue.getValueType() == ::getCppuType((const ValuePair*)0) )
+        if( rValue.getValueType() == cppu::UnoType<ValuePair>::get() )
         {
             ValuePair aValuePair;
             if( rValue >>= aValuePair )
@@ -863,7 +863,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
                 }
             }
         }
-        else if( rValue.getValueType() == ::getCppuType((const OUString*)0) )
+        else if( rValue.getValueType() == cppu::UnoType<OUString>::get() )
         {
             if( rValue >>= aString )
             {
@@ -890,14 +890,14 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
 
     case MS_STYLEROTATION:
     {
-        if( rValue.getValueType() == ::getCppuType((const OUString*)0) )
+        if( rValue.getValueType() == cppu::UnoType<OUString>::get() )
         {
             OUString aString;
             rValue >>= aString;
             rValue <<= (sal_Int16)aString.toDouble();
             bRet = true;
         }
-        else if( rValue.getValueType() == ::getCppuType((const double*)0) )
+        else if( rValue.getValueType() == cppu::UnoType<double>::get() )
         {
             double fValue = 0.0;
             rValue >>= fValue;
@@ -2683,7 +2683,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                         bool bHasValue = aValue2.hasValue();
                         if( bHasValue )
                         {
-                            if( aValue2.getValueType() == ::getCppuType((const OUString*)0) )
+                            if( aValue2.getValueType() == cppu::UnoType<OUString>::get() )
                             {
                                 OUString aTest;
                                 aValue2 >>= aTest;
@@ -2692,7 +2692,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                             }
                         }
 
-                        if( bHasValue && bCouldBeFormula && (aValue1.getValueType() == ::getCppuType((const double*)0)) )
+                        if( bHasValue && bCouldBeFormula && (aValue1.getValueType() == cppu::UnoType<double>::get() ))
                         {
                             aValue2 >>= aFormula;
                             bHasValue = false;

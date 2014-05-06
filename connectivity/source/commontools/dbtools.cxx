@@ -1508,24 +1508,24 @@ bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
             break;
 
         case TypeClass_SEQUENCE:
-            if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
+            if (_rValue.getValueType() == cppu::UnoType< Sequence< sal_Int8 > >::get())
                 _rxUpdatedObject->updateBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
             else
                 bSuccessfullyReRouted = false;
             break;
         case TypeClass_STRUCT:
-            if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
+            if (_rValue.getValueType() == cppu::UnoType<DateTime>::get())
                 _rxUpdatedObject->updateTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
-            else if (_rValue.getValueType() == ::getCppuType((const Date*)0))
+            else if (_rValue.getValueType() == cppu::UnoType<Date>::get())
                 _rxUpdatedObject->updateDate(_nColumnIndex, *(Date*)_rValue.getValue());
-            else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
+            else if (_rValue.getValueType() == cppu::UnoType<Time>::get())
                 _rxUpdatedObject->updateTime(_nColumnIndex, *(Time*)_rValue.getValue());
             else
                 bSuccessfullyReRouted = false;
             break;
 
         case TypeClass_INTERFACE:
-            if (_rValue.getValueType() == ::getCppuType(static_cast<Reference< XInputStream>*>(NULL)))
+            if (_rValue.getValueType() == cppu::UnoType<Reference< XInputStream> >::get())
             {
                 Reference< XInputStream >  xStream;
                 _rValue >>= xStream;
@@ -1613,7 +1613,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
             break;
 
         case TypeClass_SEQUENCE:
-            if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
+            if (_rValue.getValueType() == cppu::UnoType< Sequence< sal_Int8 > >::get())
             {
                 _rxParameters->setBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
             }
@@ -1621,18 +1621,18 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
                 bSuccessfullyReRouted = false;
             break;
         case TypeClass_STRUCT:
-            if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
+            if (_rValue.getValueType() == cppu::UnoType<DateTime>::get())
                 _rxParameters->setTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
-            else if (_rValue.getValueType() == ::getCppuType((const Date*)0))
+            else if (_rValue.getValueType() == cppu::UnoType<Date>::get())
                 _rxParameters->setDate(_nColumnIndex, *(Date*)_rValue.getValue());
-            else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
+            else if (_rValue.getValueType() == cppu::UnoType<Time>::get())
                 _rxParameters->setTime(_nColumnIndex, *(Time*)_rValue.getValue());
             else
                 bSuccessfullyReRouted = false;
             break;
 
         case TypeClass_INTERFACE:
-            if (_rValue.getValueType() == ::getCppuType(static_cast<Reference< XInputStream>*>(NULL)))
+            if (_rValue.getValueType() == cppu::UnoType<Reference< XInputStream> >::get())
             {
                 Reference< XInputStream >  xStream;
                 _rValue >>= xStream;

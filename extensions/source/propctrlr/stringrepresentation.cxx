@@ -441,7 +441,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
     // some structs
     case uno::TypeClass_STRUCT:
         OSL_FAIL( "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
-        if ( _rValue.getValueType().equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
+        if ( _rValue.getValueType().equals( cppu::UnoType< util::Date >::get() ))
         {
             // weird enough, the string representation of dates, as used
             // by the control displaying dates, and thus as passed through the layers,
@@ -450,14 +450,14 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
             _rValue >>= aUnoDate;
             _rStringRep = ::dbtools::DBTypeConversion::toDateString(aUnoDate);
         }
-        else if ( _rValue.getValueType().equals( ::getCppuType( static_cast< util::Time* >( NULL ) ) ) )
+        else if ( _rValue.getValueType().equals( cppu::UnoType< util::Time >::get() ))
         {
             // similar for time (HHMMSSHH)
             util::Time aUnoTime;
             _rValue >>= aUnoTime;
             _rStringRep = ::dbtools::DBTypeConversion::toTimeString(aUnoTime);
         }
-        else if ( _rValue.getValueType().equals( ::getCppuType( static_cast< util::DateTime* >( NULL ) ) ) )
+        else if ( _rValue.getValueType().equals( cppu::UnoType< util::DateTime >::get() ))
         {
             util::DateTime aUnoDateTime;
             _rValue >>= aUnoDateTime;
@@ -582,7 +582,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
     case uno::TypeClass_STRUCT:
         OSL_FAIL( "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
-        if ( _rTargetType.equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
+        if ( _rTargetType.equals( cppu::UnoType< util::Date >::get() ))
         {
             // weird enough, the string representation of dates, as used
             // by the control displaying dates, and thus as passed through the layers,
@@ -590,12 +590,12 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
             _rValue <<= ::dbtools::DBTypeConversion::toDate(_rStringRep);
         }
-        else if ( _rTargetType.equals( ::getCppuType( static_cast< util::Time* >( NULL ) ) ) )
+        else if ( _rTargetType.equals( cppu::UnoType< util::Time >::get() ))
         {
             // similar for time (HHMMSSHH)
             _rValue <<= ::dbtools::DBTypeConversion::toTime(_rStringRep);
         }
-        else if ( _rTargetType.equals( ::getCppuType( static_cast< util::DateTime* >( NULL ) ) ) )
+        else if ( _rTargetType.equals( cppu::UnoType< util::DateTime >::get() ))
         {
             _rValue <<= ::dbtools::DBTypeConversion::toDateTime(_rStringRep);
         }

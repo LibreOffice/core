@@ -223,7 +223,7 @@ namespace sd
     {
         if( rValue.hasValue() ) try
         {
-            if( rValue.getValueType() == ::getCppuType((const ValuePair*)0) )
+            if( rValue.getValueType() == cppu::UnoType<ValuePair>::get() )
             {
                 ValuePair aValuePair;
                 rValue >>= aValuePair;
@@ -233,7 +233,7 @@ namespace sd
 
                 return makeAny( aValuePair );
             }
-            else if( rValue.getValueType() == ::getCppuType((Sequence<Any>*)0) )
+            else if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
             {
                 Sequence<Any> aSequence;
                 rValue >>= aSequence;
@@ -263,7 +263,7 @@ namespace sd
                         return makeAny( getClonedNode( xNode ) );
                 }
             }
-            else if( rValue.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+            else if( rValue.getValueType() == cppu::UnoType<ParagraphTarget>::get() )
             {
                 ParagraphTarget aParaTarget;
                 rValue >>= aParaTarget;
@@ -272,7 +272,7 @@ namespace sd
 
                 return makeAny( aParaTarget );
             }
-            else if( rValue.getValueType() == ::getCppuType((const Event*)0) )
+            else if( rValue.getValueType() == cppu::UnoType<Event>::get() )
             {
                 Event aEvent;
                 rValue >>= aEvent;

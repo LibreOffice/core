@@ -141,25 +141,25 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
             eState = SFX_ITEM_AVAILABLE;
             ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
-            if ( pType == ::getBooleanCppuType() )
+            if ( pType == cppu::UnoType< bool >::get() )
             {
                 bool bTemp = false;
                 rEvent.State >>= bTemp ;
                 pItem = new SfxBoolItem( pCtrlItem->GetId(), bTemp );
             }
-            else if ( pType == ::getCppuType((const sal_uInt16*)0) )
+            else if ( pType == cppu::UnoType< ::cppu::UnoUnsignedShortType >::get() )
             {
                 sal_uInt16 nTemp = 0;
                 rEvent.State >>= nTemp ;
                 pItem = new SfxUInt16Item( pCtrlItem->GetId(), nTemp );
             }
-            else if ( pType == ::getCppuType((const sal_uInt32*)0) )
+            else if ( pType == cppu::UnoType<sal_uInt32>::get() )
             {
                 sal_uInt32 nTemp = 0;
                 rEvent.State >>= nTemp ;
                 pItem = new SfxUInt32Item( pCtrlItem->GetId(), nTemp );
             }
-            else if ( pType == ::getCppuType((const OUString*)0) )
+            else if ( pType == cppu::UnoType<OUString>::get() )
             {
                 OUString sTemp ;
                 rEvent.State >>= sTemp ;
