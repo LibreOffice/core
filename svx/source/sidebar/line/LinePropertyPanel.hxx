@@ -34,9 +34,6 @@
 
 
 namespace svx { class ToolboxButtonColorUpdater; }
-class SvxLineColorPage;
-class SvxLineStylePage;
-class SvxLineWidthPage;
 class XLineStyleItem;
 class XLineDashItem;
 class XLineStartItem;
@@ -62,10 +59,6 @@ class LinePropertyPanel
 :   public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
-private:
-    friend class ::SvxLineStylePage;
-    friend class ::SvxLineWidthPage;
-
 public:
     static LinePropertyPanel* Create(
         Window* pParent,
