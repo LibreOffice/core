@@ -33,7 +33,8 @@ Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 nId
 
 void Bar::render()
 {
-    (void) mbRoundedCorners;
+    mpRenderer->AddShape3DExtrudeObject(mbRoundedCorners, (sal_Int32)maColor.GetColor(), 0xFFFFFF, maPos);
+    mpRenderer->EndAddShape3DExtrudeObject();
 }
 
 Line::Line(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):

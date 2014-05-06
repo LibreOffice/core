@@ -97,12 +97,13 @@ typedef struct Extrude3DInfo
     bool twoSidesLighting;
     glm::vec4 extrudeColor;
     long fillStyle;
-    float xRange[2];
-    float yRange[2];
-    float zRange[2];
+    float xScale;
+    float yScale;
+    float zScale;
     float xTransform;
     float yTransform;
     float zTransform;
+    glm::mat4 rotation;
     Material material;
     int startIndex[5];
     int size[5];
@@ -180,11 +181,8 @@ public:
     void EndAddPolygon3DObjectNormalPoint();
     void AddPolygon3DObjectPoint(float x, float y, float z);
     void EndAddPolygon3DObjectPoint();
-    void AddShape3DExtrudeObject(sal_Int32 color, sal_Int32 specular, float xTransform,
-            float yTransform, float zTransform);
+    void AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 color, sal_Int32 specular, glm::mat4 modelMatrix);
     void EndAddShape3DExtrudeObject();
-    void AddExtrude3DObjectPoint(float x, float y, float z);
-    void EndAddExtrude3DObjectPoint();
     double GetTime();
     void SetFPS(float fps);
     void SetClickPos(Point aMPos);
