@@ -38,12 +38,10 @@ SAL_IMPLEMENT_MAIN()
     InitVCL();
 
     {
-        SvtLanguageTable aTable;
-
-        sal_uInt32 nCount = aTable.GetEntryCount();
+        sal_uInt32 nCount = SvtLanguageTable::GetLanguageEntryCount();
         for (sal_uInt32 i = 0; i < nCount; ++i)
         {
-            LanguageType eLang = aTable.GetTypeAtIndex(i);
+            LanguageType eLang = SvtLanguageTable::GetLanguageTypeAtIndex(i);
 
             if (eLang == LANGUAGE_DONTKNOW ||
                 eLang == LANGUAGE_NONE ||
