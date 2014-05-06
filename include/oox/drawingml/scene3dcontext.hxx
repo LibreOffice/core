@@ -27,6 +27,17 @@ namespace oox { namespace drawingml {
 
 struct Shape3DProperties;
 
+class Scene3DRotationPropertiesContext : public ::oox::core::ContextHandler2
+{
+public:
+    Scene3DRotationPropertiesContext( ::oox::core::ContextHandler2Helper& rParent, RotationProperties& rRotationProperties ) throw();
+
+    ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+
+private:
+    RotationProperties& mrRotationProperties;
+};
+
 class Scene3DPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:

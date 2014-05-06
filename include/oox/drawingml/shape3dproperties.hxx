@@ -36,6 +36,13 @@ namespace drawingml {
 
 
 
+struct RotationProperties
+{
+    OptValue< sal_Int32 > mnLatitude;
+    OptValue< sal_Int32 > mnLongitude;
+    OptValue< sal_Int32 > mnRevolution;
+};
+
 struct Shape3DProperties
 {
     OptValue< sal_Int32 > mnPreset;
@@ -43,6 +50,7 @@ struct Shape3DProperties
     OptValue< float > mfZoom;
     OptValue< sal_Int32 > mnLightRigDirection;
     OptValue< sal_Int32 > mnLightRigType;
+    RotationProperties maCameraRotation;
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const Shape3DProperties& rSourceProps );

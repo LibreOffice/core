@@ -120,7 +120,7 @@ OUString Shape3DProperties::getCameraPrstName( sal_Int32 nElement )
 
 css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttributes()
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(3);
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
     sal_Int32 nSize = 0;
     if( mfFieldOfVision.has() )
     {
@@ -138,6 +138,24 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttr
     {
         aSeq[nSize].Name = "prst";
         aSeq[nSize].Value = css::uno::Any( getCameraPrstName( mnPreset.use() ) );
+        nSize++;
+    }
+    if( maCameraRotation.mnLatitude.has() )
+    {
+        aSeq[nSize].Name = "rotLat";
+        aSeq[nSize].Value = css::uno::Any( maCameraRotation.mnLatitude.use() );
+        nSize++;
+    }
+    if( maCameraRotation.mnLongitude.has() )
+    {
+        aSeq[nSize].Name = "rotLon";
+        aSeq[nSize].Value = css::uno::Any( maCameraRotation.mnLongitude.use() );
+        nSize++;
+    }
+    if( maCameraRotation.mnRevolution.has() )
+    {
+        aSeq[nSize].Name = "rotRev";
+        aSeq[nSize].Value = css::uno::Any( maCameraRotation.mnRevolution.use() );
         nSize++;
     }
     aSeq.realloc( nSize );

@@ -2288,7 +2288,9 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     if( aEffectProps.getLength() == 0 )
         return;
 
+    bool bCameraRotationPresent = false;
     sax_fastparser::FastAttributeList *aCameraAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aCameraRotationAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
         if( aEffectProps[i].Name == "prst" )
@@ -2309,12 +2311,32 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
             aEffectProps[i].Value >>= fVal;
             aCameraAttrList->add( XML_zoom, OString::number( fVal * 100000 ).getStr() );
         }
+        else if( aEffectProps[i].Name == "rotLat" ||
+                aEffectProps[i].Name == "rotLon" ||
+                aEffectProps[i].Name == "rotRev" )
+        {
+            sal_Int32 nVal = 0, nToken = XML_none;
+            aEffectProps[i].Value >>= nVal;
+            if( aEffectProps[i].Name == "rotLat" )
+                nToken = XML_lat;
+            else if( aEffectProps[i].Name == "rotLon" )
+                nToken = XML_lon;
+            else if( aEffectProps[i].Name == "rotRev" )
+                nToken = XML_rev;
+            aCameraRotationAttrList->add( nToken, OString::number( nVal ).getStr() );
+            bCameraRotationPresent = true;
+        }
     }
 
     mpFS->startElementNS( XML_a, XML_scene3d, FSEND );
 
     sax_fastparser::XFastAttributeListRef xAttrList( aCameraAttrList );
     mpFS->startElementNS( XML_a, XML_camera, xAttrList );
+    if( bCameraRotationPresent )
+    {
+        sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
+        mpFS->singleElementNS( XML_a, XML_rot, xRotAttrList );
+    }
     mpFS->endElementNS( XML_a, XML_camera );
 
     // a:lightRig with Word default values - Word won't open the document if this is not present

@@ -52,8 +52,9 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
             mr3DProperties.mfZoom = rAttribs.getInteger( XML_zoom, 100000 ) / 100000.0;
         if( rAttribs.hasAttribute( XML_prst ) )
             mr3DProperties.mnPreset = rAttribs.getToken( XML_prst, XML_none );
-        // TODO: nested element XML_rot
-        break;
+
+        return new Scene3DRotationPropertiesContext( *this, mr3DProperties.maCameraRotation );
+
     case A_TOKEN( lightRig ):
         mr3DProperties.mnLightRigDirection = rAttribs.getToken( XML_dir, XML_none );
         mr3DProperties.mnLightRigType = rAttribs.getToken( XML_rig, XML_none );
@@ -62,6 +63,25 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     case A_TOKEN( backdrop ):
     case A_TOKEN( extLst ):
         return 0; // TODO: later (backdrop is not supported by core anyway)
+    }
+    return 0;
+}
+
+Scene3DRotationPropertiesContext::Scene3DRotationPropertiesContext( ContextHandler2Helper& rParent, RotationProperties& rRotationProperties ) throw()
+: ContextHandler2( rParent )
+, mrRotationProperties( rRotationProperties )
+{
+}
+
+ContextHandlerRef Scene3DRotationPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+{
+    switch( aElementToken )
+    {
+    case A_TOKEN( rot ):
+        mrRotationProperties.mnLatitude = rAttribs.getInteger( XML_lat, 0 );
+        mrRotationProperties.mnLongitude = rAttribs.getInteger( XML_lon, 0 );
+        mrRotationProperties.mnRevolution = rAttribs.getInteger( XML_rev, 0 );
+        break;
     }
     return 0;
 }
