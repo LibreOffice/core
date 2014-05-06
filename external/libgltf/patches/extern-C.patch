@@ -9,7 +9,7 @@
  /*get camera position information*/
  extern "C"
 --- libgltf/src/libgltf.cpp
-+++ /src/libgltf.cpp
++++ libgltf/src/libgltf.cpp
 @@ -59,7 +59,6 @@
      return;
  }
