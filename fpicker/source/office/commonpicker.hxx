@@ -65,7 +65,7 @@ namespace svt
         // </properties>
 
         SvtFileDialog*      m_pDlg;
-        sal_uInt32          m_nCancelEvent;
+        sal_uLong           m_nCancelEvent;
         sal_Bool            m_bExecuting;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xDialogParent;

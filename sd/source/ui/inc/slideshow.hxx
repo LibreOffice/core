@@ -214,7 +214,7 @@ private:
     ViewShellBase* mpCurrentViewShellBase;
     ViewShellBase* mpFullScreenViewShellBase;
     FrameView* mpFullScreenFrameView;
-    sal_Int32   mnInPlaceConfigEvent;
+    sal_uLong   mnInPlaceConfigEvent;
 };
 
 namespace slideshowhelp
