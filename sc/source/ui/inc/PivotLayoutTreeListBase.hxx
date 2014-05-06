@@ -13,7 +13,6 @@
 
 #include <svtools/treelistbox.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <vcl/builder.hxx>
 
 #include "pivot.hxx"
