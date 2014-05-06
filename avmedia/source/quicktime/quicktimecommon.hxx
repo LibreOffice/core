@@ -24,7 +24,6 @@
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
 #import <QTKit/QTKit.h>
-#import <QuickTime/QuickTime.h>
 #include <postmac.h>
 #endif
 #include <osl/mutex.hxx>
@@ -54,14 +53,6 @@
 
 #define AVMEDIA_QUICKTIME_WINDOW_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Window_QuickTime"
 #define AVMEDIA_QUICKTIME_WINDOW_SERVICENAME "com.sun.star.media.Window_QuickTime"
-
-#define WM_GRAPHNOTIFY (WM_USER + 567)
-
-// Quicktime 7+ in Mac OS X 10.4
-#define QT701 0x07010000
-
-// Quicktime 6.4+ in Mac OS X 10.3
-#define QT64 0x06400000
 
 #endif // _QUICKTIMECOMMOM_HXX
 

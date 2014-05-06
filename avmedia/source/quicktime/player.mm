@@ -47,14 +47,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 
     NSApplicationLoad();
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    // check the version of QuickTime installed
-    long nVersion;
-    result = Gestalt(gestaltQuickTime,&nVersion);
-    if ((result == noErr) && (nVersion >= QT701))
-    {
-      // we have version 7.01 or later, initialize
       mbInitialized = true;
-    }
     [pool release];
 }
 

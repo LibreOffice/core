@@ -42,15 +42,10 @@ FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& 
     OSErr result;
 
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    // check the version of QuickTime installed
-    result = Gestalt(gestaltQuickTime,&mnVersion);
-     if ((result == noErr) && (mnVersion >= QT701))
-    {
       // we have version 7.01 or later, initialize
       mpMovie = [QTMovie movie];
       [mpMovie retain];
       mbInitialized = true;
-    }
     [pool release];
 }
 
