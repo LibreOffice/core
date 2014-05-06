@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svtools/vclxaccessibleheaderbar.hxx>
-#include <svtools/vclxaccessibleheaderbaritem.hxx>
+#include <vclxaccessibleheaderbar.hxx>
+#include <vclxaccessibleheaderbaritem.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <svtools/headbar.hxx>

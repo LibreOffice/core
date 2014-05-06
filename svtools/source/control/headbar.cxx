@@ -18,7 +18,7 @@
  */
 
 #include <svtools/headbar.hxx>
-#include <svtools/vclxaccessibleheaderbar.hxx>
+#include <vclxaccessibleheaderbar.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>

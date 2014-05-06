@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_SOURCE_UNO_UNOGRIDCOLUMNFACADE_HXX
 
 #include "svtools/table/tablemodel.hxx"
-#include "svtools/table/tablecontrol.hxx"
+#include "table/tablecontrol.hxx"
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>

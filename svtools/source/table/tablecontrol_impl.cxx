@@ -18,8 +18,8 @@
  */
 
 
-#include "svtools/table/tablecontrol.hxx"
-#include "svtools/table/defaultinputhandler.hxx"
+#include "table/tablecontrol.hxx"
+#include "table/defaultinputhandler.hxx"
 #include "svtools/table/tablemodel.hxx"
 
 #include "tabledatawindow.hxx"

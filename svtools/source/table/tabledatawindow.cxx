@@ -18,7 +18,7 @@
  */
 
 
-#include "svtools/table/tablecontrol.hxx"
+#include "table/tablecontrol.hxx"
 
 #include "tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"

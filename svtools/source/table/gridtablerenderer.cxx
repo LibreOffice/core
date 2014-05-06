@@ -19,7 +19,7 @@
 
 
 #include "cellvalueconversion.hxx"
-#include "svtools/table/gridtablerenderer.hxx"
+#include "table/gridtablerenderer.hxx"
 #include "svtools/colorcfg.hxx"
 
 #include <com/sun/star/graphic/XGraphic.hpp>

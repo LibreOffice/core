@@ -20,9 +20,9 @@
 #include "unogridcolumnfacade.hxx"
 #include "unocontroltablemodel.hxx"
 
-#include "svtools/table/defaultinputhandler.hxx"
-#include "svtools/table/gridtablerenderer.hxx"
-#include "svtools/table/tablecontrol.hxx"
+#include "table/defaultinputhandler.hxx"
+#include "table/gridtablerenderer.hxx"
+#include "table/tablecontrol.hxx"
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/view/SelectionType.hpp>

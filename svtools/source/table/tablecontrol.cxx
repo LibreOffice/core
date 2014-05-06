@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/table/tablecontrol.hxx"
+#include "table/tablecontrol.hxx"
 
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"

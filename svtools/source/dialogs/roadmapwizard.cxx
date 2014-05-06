@@ -21,7 +21,7 @@
 #include <svtools/roadmapwizard.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
-#include <svtools/roadmap.hxx>
+#include <roadmap.hxx>
 #include <tools/debug.hxx>
 
 #include <stdarg.h>

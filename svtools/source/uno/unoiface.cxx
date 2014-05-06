@@ -25,7 +25,7 @@
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
 #include <svtools/filectrl.hxx>
-#include <svtools/roadmap.hxx>
+#include <roadmap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
@@ -38,7 +38,7 @@
 #include <svtools/treelistbox.hxx>
 #include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"
-#include <svtools/table/tablecontrol.hxx>
+#include <table/tablecontrol.hxx>
 
 namespace
 {
