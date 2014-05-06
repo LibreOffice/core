@@ -33,6 +33,8 @@
 #include "UndoManager.hxx"
 #include "ChartView.hxx"
 
+#include <vcl/window.hxx>
+
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
 #include <comphelper/InlineContainer.hxx>
@@ -1405,6 +1407,14 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
 uno::Reference< uno::XInterface > ChartModel::getChartView()
 {
     return xChartView;
+}
+
+void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
+    throw (uno::RuntimeException, std::exception)
+{
+    void* pPtr = (void*)nWindowPtr;
+    Window* pWindow = reinterpret_cast<Window*>(pPtr);
+    assert(pWindow);
 }
 
 }  // namespace chart

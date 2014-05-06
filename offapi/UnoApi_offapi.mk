@@ -2005,6 +2005,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	SymbolStyle \
 	TickmarkStyle \
 	TransparencyStyle \
+	X3DChartWindowProvider \
 	XAnyDescriptionAccess \
 	XAxis \
 	XChartDocument \
