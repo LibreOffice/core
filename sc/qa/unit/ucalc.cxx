@@ -3772,6 +3772,54 @@ void Test::testCopyPasteSkipEmptyConditionalFormatting()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCutPasteRefUndo()
+{
+    // Testing scenario: A2 references B2, and B2 gets cut and pasted onto C2,
+    // which updates A2's formula to reference C2. Then the paste action gets
+    // undone, which should also undo A2's formula to reference back to B2.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // A2 references B2.
+    m_pDoc->SetString(ScAddress(0,1,0), "=B2");
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Set up clip document for cutting of B2.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScClipParam aParam(ScAddress(1,1,0), true);
+    aClipDoc.SetClipParam(aParam);
+    aClipDoc.SetValue(ScAddress(1,1,0), 12.0);
+
+    // Set up undo document for reference update.
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+
+    // Do the pasting of 12 into C2.  This should update A2 to reference C2.
+    m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc, true, false);
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(0,1,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "C2"))
+        CPPUNIT_FAIL("A2 should be referencing C2.");
+
+    // At this point, the ref undo document should contain a formula cell at A2 that references B2.
+    if (!checkFormula(*pUndoDoc, ScAddress(0,1,0), "B2"))
+        CPPUNIT_FAIL("A2 in the undo document should be referencing B2.");
+
+    ScUndoPaste aUndo(&getDocShell(), ScRange(ScAddress(2,1,0)), aMark, pUndoDoc, NULL, IDF_CONTENTS, NULL, false, NULL);
+    aUndo.Undo();
+
+    // Now A2 should be referencing B2 once again.
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "B2"))
+        CPPUNIT_FAIL("A2 should be referencing B2 after undo.");
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testUndoCut()
 {
     m_pDoc->InsertTab(0, "Test");

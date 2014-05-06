@@ -404,7 +404,11 @@ ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
 {
     ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
     if (!pCell)
+    {
+        OUString aStr = rPos.Format(SCA_VALID);
+        cerr << aStr << " is not a formula cell." << endl;
         return NULL;
+    }
 
     return pCell->GetCode();
 }
