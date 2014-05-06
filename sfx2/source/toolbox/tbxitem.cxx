@@ -565,14 +565,14 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == cppu::UnoType<::com::sun::star::frame::status::ItemStatus>::get() )
+                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
                     eState = aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == cppu::UnoType<::com::sun::star::frame::status::Visibility>::get() )
+                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;
@@ -1111,14 +1111,14 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == cppu::UnoType<::com::sun::star::frame::status::ItemStatus>::get() )
+                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
                     eState = aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == cppu::UnoType<::com::sun::star::frame::status::Visibility>::get() )
+                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;

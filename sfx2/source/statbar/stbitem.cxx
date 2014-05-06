@@ -286,7 +286,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotID, sTemp );
                 }
-                else if ( pType == cppu::UnoType<::com::sun::star::frame::status::ItemStatus>::get() )
+                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
                 {
                     frame::status::ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
