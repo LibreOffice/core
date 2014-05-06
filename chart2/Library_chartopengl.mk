@@ -17,6 +17,8 @@ $(eval $(call gb_Library_set_include,chartopengl,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,chartopengl,$(SRCDIR)/chart2/inc/pch/precompiled_chartopengl))
+
 $(eval $(call gb_Library_use_externals,chartopengl,\
 	boost_headers \
 	glm_headers \
