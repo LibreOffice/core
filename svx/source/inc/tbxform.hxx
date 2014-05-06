@@ -42,22 +42,6 @@ protected:
 };
 
 
-
-class SvxFmConfigWin : public SfxPopupWindow
-{
-private:
-    DECL_LINK( TbxSelectHdl, ToolBox* );
-
-public:
-    SvxFmConfigWin( sal_uInt16 nId, ResId aRIdWin, ResId aRIdTbx );
-    virtual ~SvxFmConfigWin();
-
-    void            Update();
-    virtual void    PopupModeEnd() SAL_OVERRIDE;
-};
-
-
-
 class SvxFmTbxCtlConfig : public SfxToolBoxControl
 {
 private:
