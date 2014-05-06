@@ -30,6 +30,7 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <rootfrm.hxx>
+#include <editsh.hxx>
 
 #include <libxml/xmlwriter.h>
 #include <libxml/xpath.h>
@@ -211,7 +212,7 @@ private:
     {
         SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
         SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
-        pDoc->GetCurrentViewShell()->CalcLayout();
+        dynamic_cast<SwEditShell*>(pDoc->GetCurrentViewShell())->CalcLayout();
     }
 
 
