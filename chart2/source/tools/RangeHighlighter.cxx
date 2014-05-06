@@ -164,7 +164,7 @@ void RangeHighlighter::determineRanges()
                     }
                 }
             }
-            else if ( rType == cppu::UnoType< drawing::XShape >::get() )
+            else if ( rType == cppu::UnoType< Reference < drawing::XShape > >::get() )
             {
                 // #i12587# support for shapes in chart
                 Reference< drawing::XShape > xShape;
@@ -336,7 +336,7 @@ void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEv
 void RangeHighlighter::fireSelectionEvent()
 {
     ::cppu::OInterfaceContainerHelper* pIC = rBHelper.getContainer(
-        cppu::UnoType< view::XSelectionChangeListener >::get() );
+        cppu::UnoType< Reference < view::XSelectionChangeListener > >::get() );
     if( pIC )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );

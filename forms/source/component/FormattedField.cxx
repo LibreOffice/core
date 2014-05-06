@@ -897,19 +897,19 @@ Any OFormattedModel::translateExternalValueToControlValue( const Any& _rExternal
     break;
     default:
     {
-        if ( _rExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODate* >( NULL ) ) ) )
+        if ( _rExternalValue.getValueType().equals( cppu::UnoType< UNODate >::get() ) )
         {
             UNODate aDate;
             _rExternalValue >>= aDate;
             aControlValue <<= DBTypeConversion::toDouble( aDate, m_aNullDate );
         }
-        else if ( _rExternalValue.getValueType().equals( ::getCppuType( static_cast< UNOTime* >( NULL ) ) ) )
+        else if ( _rExternalValue.getValueType().equals( cppu::UnoType< UNOTime >::get() ) )
         {
             UNOTime aTime;
             _rExternalValue >>= aTime;
             aControlValue <<= DBTypeConversion::toDouble( aTime );
         }
-        else if ( _rExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODateTime* >( NULL ) ) ) )
+        else if ( _rExternalValue.getValueType().equals( cppu::UnoType< UNODateTime >::get() ) )
         {
             UNODateTime aDateTime;
             _rExternalValue >>= aDateTime;
@@ -967,21 +967,21 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
             // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
             // and the control value is a string. This implies some weird misconfiguration
             // of the FormattedModel, so we won't care for it for the moment.
-        if ( aExternalValueType.equals( ::getCppuType( static_cast< UNODate* >( NULL ) ) ) )
+        if ( aExternalValueType.equals( cppu::UnoType< UNODate >::get() ) )
         {
             aExternalValue <<= DBTypeConversion::toDate( fValue, m_aNullDate );
         }
-        else if ( aExternalValueType.equals( ::getCppuType( static_cast< UNOTime* >( NULL ) ) ) )
+        else if ( aExternalValueType.equals( cppu::UnoType< UNOTime >::get() ) )
         {
             aExternalValue <<= DBTypeConversion::toTime( fValue );
         }
-        else if ( aExternalValueType.equals( ::getCppuType( static_cast< UNODateTime* >( NULL ) ) ) )
+        else if ( aExternalValueType.equals( cppu::UnoType< UNODateTime >::get() ) )
         {
             aExternalValue <<= DBTypeConversion::toDateTime( fValue, m_aNullDate );
         }
         else
         {
-            OSL_ENSURE( aExternalValueType.equals( ::getCppuType( static_cast< double* >( NULL ) ) ),
+            OSL_ENSURE( aExternalValueType.equals( cppu::UnoType< double >::get() ),
                 "OFormattedModel::translateControlValueToExternalValue: don't know how to translate this type!" );
             aExternalValue <<= fValue;
         }
