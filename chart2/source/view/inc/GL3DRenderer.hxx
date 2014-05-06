@@ -356,7 +356,9 @@ private:
 
     //TODO: moggi: kill the following parts
     // don't add anything below or I will remove it
+#if 0
     size_t m_iPointNum;
+#endif
 
     SceneBox m_SenceBox;
 
