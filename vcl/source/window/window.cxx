@@ -4945,10 +4945,6 @@ void Window::Tracking( const TrackingEvent& rTEvt )
         pWrapper->Tracking( rTEvt );
 }
 
-void Window::UserEvent( sal_uLong, void* )
-{
-}
-
 void Window::StateChanged( StateChangedType eType )
 {
     switch (eType)

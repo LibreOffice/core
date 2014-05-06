@@ -373,10 +373,6 @@ void TableWindow::Update( long nNewCol, long nNewLine )
 
 void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
 {
-    Window* pParent = rTbx.GetParent();
-    sal_uInt16 nId = GetId();
-    pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
-
     Reference< XDispatchProvider > xDispatchProvider( mxFrame, UNO_QUERY );
     if ( xDispatchProvider.is() )
     {
@@ -693,10 +689,6 @@ void ColumnsWindow::PopupModeEnd()
 {
     if ( !IsPopupModeCanceled() && nCol )
     {
-        sal_uInt16 nId = GetId();
-        Window* pParent = rTbx.GetParent();
-        pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
-
         Sequence< PropertyValue > aArgs( 2 );
         aArgs[0].Name = "Columns";
         aArgs[0].Value = makeAny( sal_Int16( nCol ));

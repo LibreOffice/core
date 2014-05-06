@@ -350,14 +350,6 @@ public:
     */
     virtual bool           QueryExit();
 
-    /** Send user event.
-
-    @param  nEvent      The numeric ID of the event
-    @param  pEventData  Pointer to a data associated with the event. Use
-                        a reinterpret_cast<void*> to pass in the parameter.
-    */
-    virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
-
     /** @name Change Notification Functions
 
         Functions that notify when changes occur in the application.

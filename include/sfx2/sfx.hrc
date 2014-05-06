@@ -38,10 +38,6 @@
 #define EVENT_APP_START             20000
 //      EVENT_APP_END               29999
 
-#define EVENT_OBJ_START             30000
-
-#define EVENT_SVX_START             (EVENT_OBJ_START+0x0400)
-
 // Warning: the following are simultaneously SID_ON_ ...
 #define SFX_EVENT_CLOSEAPP          (EVENT_SFX_START + 1)
 #define SFX_EVENT_CREATEDOC         (EVENT_SFX_START + 2)

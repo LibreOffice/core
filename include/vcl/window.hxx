@@ -695,7 +695,6 @@ public:
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        UserEvent( sal_uLong nEvent, void* pEventData );
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual bool        PreNotify( NotifyEvent& rNEvt );

@@ -219,10 +219,6 @@ bool Application::QueryExit()
         return true;
 }
 
-void Application::UserEvent( sal_uLong, void* )
-{
-}
-
 void Application::FocusChanged()
 {
 }

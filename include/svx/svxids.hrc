@@ -88,13 +88,6 @@
 #define MID_ZOOMSLIDER_MINZOOM          0x7b
 #define MID_ZOOMSLIDER_MAXZOOM          0x7c
 
-
-// Event-Id's Block 1
-
-
-#define SVX_EVENT_COLUM_WINDOW_EXECUTE      (EVENT_SVX_START)
-
-
 // Event-Id's Block 2
 
 
