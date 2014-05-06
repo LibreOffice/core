@@ -300,6 +300,7 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     // OD 14.04.2003 #106346# - init new flag <mbFormatCntntOnInterrupt>.
     mbFormatCntntOnInterrupt = false;
 
+    assert(!pImp->pLayAct); // there can be only one SwLayAction
     pImp->pLayAct = this;   // register there
 }
 
@@ -2169,11 +2170,15 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             pSh = (SwViewShell*)pSh->GetNext();
         } while ( pSh != pImp->GetShell() );
 
-        SwLayAction aAction( pRoot, pImp );
-        aAction.SetInputType( VCL_INPUT_ANY );
-        aAction.SetIdle( true );
-        aAction.SetWaitAllowed( false );
-        aAction.Action();
+        bool bInterrupt(false);
+        {
+            SwLayAction aAction( pRoot, pImp );
+            aAction.SetInputType( VCL_INPUT_ANY );
+            aAction.SetIdle( true );
+            aAction.SetWaitAllowed( false );
+            aAction.Action();
+            bInterrupt = aAction.IsInterrupt();
+        }
 
         // Further start/end actions only happen if there were paints started
         // somewhere or if the visibility of the CharRects has changed.
@@ -2263,7 +2268,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             } while ( pSh != pImp->GetShell() );
         }
 
-        if ( !aAction.IsInterrupt() )
+        if (!bInterrupt)
         {
             if ( !DoIdleJob( WORD_COUNT, false ) )
                 if ( !DoIdleJob( SMART_TAGS, false ) )
