@@ -39,14 +39,11 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/InlineContainer.hxx>
-#include <config_folders.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <editeng/unoprnms.hxx>
 #include <fstream>
 #include <iostream>
-#include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <stdio.h>
@@ -58,9 +55,10 @@
 #include <svx/unoshape.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>
-#include <vcl/bmpacc.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/opengl/IOpenGLRenderer.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
