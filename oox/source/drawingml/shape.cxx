@@ -105,6 +105,7 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 , mbHiddenMasterShape( false )
 , mbLockedCanvas( false )
 , mbWps( false )
+, mbTextBox( false )
 , mbHasLinkedTxbx( false )
 , maDiagramDoms( 0 )
 {
@@ -143,6 +144,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
 , mbWps( pSourceShape->mbWps )
+, mbTextBox( pSourceShape->mbTextBox )
 , maLinkedTxbxAttr()
 , mbHasLinkedTxbx(false)
 , maDiagramDoms( pSourceShape->maDiagramDoms )
@@ -281,6 +283,11 @@ void Shape::setWps(bool bWps)
 bool Shape::getWps()
 {
     return mbWps;
+}
+
+void Shape::setTextBox(bool bTextBox)
+{
+    mbTextBox = bTextBox;
 }
 
 void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
@@ -814,6 +821,11 @@ Reference< XShape > Shape::createAndInsert(
                     aFormat.ShadowWidth = *oShadowDistance;
                     aShapeProps.setProperty(PROP_ShadowFormat, uno::makeAny(aFormat));
                 }
+            }
+            else if (mbTextBox)
+            {
+                //No such property yet
+                //aShapeProps.setProperty(PROP_TextBox, uno::makeAny(true));
             }
 
             PropertySet( xSet ).setProperties( aShapeProps );

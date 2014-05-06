@@ -117,6 +117,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     {
         mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
         mpShape->setServiceName("com.sun.star.text.TextFrame");
+        mpShape->setTextBox(true);
         //in case if the textbox is linked, save the attributes
         //for further processing.
         if (rAttribs.hasAttribute(XML_id))

@@ -180,6 +180,7 @@ public:
     bool                getLockedCanvas();
     void                setWps(bool bWps);
     bool                getWps();
+    void                setTextBox(bool bTextBox);
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &
                         getDiagramDoms() { return maDiagramDoms; }
     void                setDiagramDoms(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
@@ -293,6 +294,7 @@ private:
                                                          // to propagate it when applying reference shape
     bool mbLockedCanvas; ///< Is this shape part of a locked canvas?
     bool mbWps; ///< Is this a wps shape?
+    bool mbTextBox; ///< This shape has a textbox.
     LinkedTxbxAttr                  maLinkedTxbxAttr;
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
 

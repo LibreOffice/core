@@ -496,6 +496,7 @@ Tag
 TargetFrame
 Text
 TextAutoGrowHeight
+TextBox
 TextBreak
 TextColor
 TextFitToSize
