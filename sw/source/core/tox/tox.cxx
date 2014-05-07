@@ -417,10 +417,9 @@ void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
             continue;
         }
 
-        const SvxTabStopItem* pTabStops = pColl != NULL ? &pColl->GetTabStops(false) : 0;
-        const sal_uInt16 nTabCount = pTabStops != NULL ? pTabStops->Count() : 0;
-        if( pTabStops != NULL
-            && nTabCount != 0 )
+        const SvxTabStopItem& rTabStops = pColl->GetTabStops(false);
+        const sal_uInt16 nTabCount = rTabStops.Count();
+        if (nTabCount != 0)
         {
             SwFormTokens aCurrentPattern = GetPattern(nLevel);
             SwFormTokens::iterator aIt = aCurrentPattern.begin();
@@ -428,7 +427,7 @@ void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
             bool bChanged = false;
             for(sal_uInt16 nTab = 0; nTab < nTabCount; ++nTab)
             {
-                const SvxTabStop& rTab = (*pTabStops)[nTab];
+                const SvxTabStop& rTab = rTabStops[nTab];
 
                 if ( rTab.GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
                     continue; // ignore the default tab stop
