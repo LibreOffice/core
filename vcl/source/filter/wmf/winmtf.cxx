@@ -460,12 +460,10 @@ void WinMtfOutput::ImplMap( Font& rFont )
 {
     // !!! HACK: we now always set the width to zero because the OS width is interpreted differently;
     // must later be made portable in SV (KA 1996-02-08)
-    Size  aFontSize = rFont.GetSize();
+    Size  aFontSize = ImplMap (rFont.GetSize());
 
     if( aFontSize.Height() < 0 )
         aFontSize.Height() *= -1;
-
-    aFontSize = ImplMap (aFontSize);
 
     rFont.SetSize( aFontSize );
 
