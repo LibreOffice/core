@@ -219,7 +219,7 @@ void SwJavaEditDialog::SetFld()
 
 bool SwJavaEditDialog::IsUpdate() const
 {
-    return pFld && ( (bIsUrl ? 1 : 0) != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
+    return pFld && ( sal_uInt32(bIsUrl ? 1 : 0) != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)
