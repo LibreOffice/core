@@ -254,9 +254,6 @@ void touch_lo_selection_attempt_resize(const void *documentHandle,
                                        MLORect *selectedRectangles,
                                        int numberOfRectangles);
 
-// Special case: synchronous: waits for the rendering to complete
-void touch_lo_render_windows(void *context, int minX, int minY, int width, int height);
-
 // Special case: This is the function that is called in the newly
 // created LO thread to run the LO code.
 void touch_lo_runMain();
