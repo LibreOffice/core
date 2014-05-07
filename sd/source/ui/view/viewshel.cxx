@@ -683,6 +683,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                             nNewZoom = std::min( (long) pWin->GetMaxZoom(), basegfx::zoomtools::zoomIn( nOldZoom ));
 
                         SetZoom( nNewZoom );
+                        ScrollCenter(); //center slide after changing zoom
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );
 

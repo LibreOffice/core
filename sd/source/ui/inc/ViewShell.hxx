@@ -206,6 +206,7 @@ public:
     virtual void UpdateScrollBars (void);
     void    Scroll(long nX, long nY);
     void    ScrollLines(long nX, long nY);
+    void    ScrollCenter();
     virtual void    SetZoom(long nZoom);
     virtual void    SetZoomRect(const Rectangle& rZoomRect);
     void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,

@@ -365,6 +365,33 @@ void ViewShell::SetZoom(long nZoom)
     UpdateScrollBars();
 }
 
+namespace
+{
+    void CenterScrollBar(ScrollBar *pBar)
+    {
+        long nVisSize = pBar->GetVisibleSize();
+        long nMin = pBar->GetRangeMin();
+        long nMax = pBar->GetRangeMax();
+        long nLen = nMax - nMin - nVisSize;
+        long nPos = nMin + nLen/2;
+        pBar->DoScroll(nPos);
+    }
+}
+
+void ViewShell::ScrollCenter()
+{
+    if (mpHorizontalScrollBar.get() != NULL)
+        CenterScrollBar(mpHorizontalScrollBar.get());
+
+    //zoom mode with no panning of the current slide, i.e. the
+    //scrollbar is in change slide mode not pan slide mode
+    if (IsPageFlipMode())
+        return;
+
+    if (mpVerticalScrollBar.get() != NULL)
+        CenterScrollBar(mpVerticalScrollBar.get());
+}
+
 /**
  * Set zoom rectangle for active window. Sets all split windows to the same zoom
  * factor.
