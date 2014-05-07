@@ -757,7 +757,9 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
 static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
-    OSL_ENSURE( pOld, "we cannot proceed without the old NumRule" );
+    assert(pOld); //we cannot proceed without the old NumRule
+    if (!pOld)
+        return;
 
     sal_uInt16 nChgFmtLevel = 0;
     sal_uInt16 nMask = 1;
