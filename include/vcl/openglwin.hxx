@@ -23,7 +23,7 @@ class VCLOPENGL_DLLPUBLIC OpenGLWindow : public SystemChildWindow
 {
 public:
     OpenGLWindow(Window* pParent);
-    ~OpenGLWindow();
+    virtual ~OpenGLWindow();
     OpenGLContext* getContext();
 
 private:
