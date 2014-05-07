@@ -704,6 +704,9 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObject );
+    assert(pFormObj);
+    if (!pFormObj)
+        return rWrt;
     uno::Reference< awt::XControlModel > xControlModel =
         pFormObj->GetUnoControlModel();
 
