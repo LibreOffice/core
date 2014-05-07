@@ -2608,7 +2608,7 @@ void MSWordExportBase::WriteText()
                     sal_uInt16 nColumnCount = rCol.GetNumCols();
                     if(nColumnCount > 1)
                     {
-                        bNeedExportBreakHere = sal_False;
+                        bNeedExportBreakHere = false;
                     }
                 }
 
