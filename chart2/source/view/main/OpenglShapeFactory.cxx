@@ -110,8 +110,9 @@ IOpenGLRenderer* getRenderer(const uno::Reference< drawing::XDrawPage>& xDrawPag
                 xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
                 if( aRet.equals("com.sun.star.chart2.shapes") )
                 {
-                    IOpenGLRenderer* pRenderer = dynamic_cast<SvxOpenGLObject*>(xShape.get())->getRenderer();
-                    if(pRenderer)
+                    SvxOpenGLObject* pGLObj = dynamic_cast<SvxOpenGLObject*>(xShape.get());
+                    IOpenGLRenderer* pRenderer = pGLObj ? pGLObj->getRenderer() : NULL;
+                    if (pRenderer)
                         return pRenderer;
                 }
             }
