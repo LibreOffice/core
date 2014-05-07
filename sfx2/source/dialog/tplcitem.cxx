@@ -103,8 +103,11 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             else if( eState == SFX_ITEM_AVAILABLE )
             {
                 const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
-                DBG_ASSERT(pStateItem != 0, "BoolItem expected");
-                nWaterCanState = pStateItem->GetValue() ? 1 : 0;
+                assert(pStateItem); //BoolItem expected
+                if (pStateItem)
+                    nWaterCanState = pStateItem->GetValue() ? 1 : 0;
+                else
+                    nWaterCanState = 0xff;
             }
             //not necessary if the last event is still on the way
             if(!nUserEventId)
