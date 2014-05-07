@@ -24,10 +24,11 @@ void Renderable3DObject::render()
     (void) mnUniqueId;
 }
 
-Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 nId)
+Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_Int32 aColor, sal_uInt32 nId)
     : Renderable3DObject(pRenderer, nId)
     , mbRoundedCorners(false)
     , maPos(rPosition)
+    , maColor(aColor)
 {
 }
 

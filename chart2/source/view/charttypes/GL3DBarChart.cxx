@@ -17,6 +17,8 @@
 #include "3DChartObjects.hxx"
 #include "GL3DRenderer.hxx"
 
+using namespace com::sun::star;
+
 namespace chart {
 
 GL3DBarChart::GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries,
@@ -53,11 +55,13 @@ void GL3DBarChart::create3DShapes()
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
             float nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY);
 
+            sal_Int32 nColor = COL_BLUE;
+
             glm::mat4 aBarPosition;
             aBarPosition = glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
             aBarPosition = glm::translate(aBarPosition, nXPos, nYPos, nVal/2);
 
-            maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nId++));
+            maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId++));
         }
 
         ++nSeriesIndex;
