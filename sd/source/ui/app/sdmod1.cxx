@@ -658,11 +658,15 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
                         }
 
-                        if( pShell && pViewFrame )
+                        ::sd::DrawDocShell* pDocShell(NULL);
+                        if (pShell && pViewFrame)
                         {
-                            ::sd::DrawDocShell* pDocShell =
-                                  PTR_CAST(::sd::DrawDocShell,pShell);
-                            SdDrawDocument* pDoc = pDocShell->GetDoc();
+                            pDocShell = PTR_CAST(::sd::DrawDocShell, pShell);
+                        }
+
+                        if (pDocShell)
+                        {
+                           SdDrawDocument* pDoc = pDocShell->GetDoc();
 
                             ::sd::ViewShellBase* pBase =
                                   ::sd::ViewShellBase::GetViewShellBase (
