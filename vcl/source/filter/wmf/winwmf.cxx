@@ -19,7 +19,9 @@
 
 
 #include "winmtf.hxx"
+
 #include <boost/scoped_array.hpp>
+#include <boost/optional.hpp>
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 #include <rtl/crc.h>
@@ -1132,7 +1134,12 @@ sal_Bool WMFReader::ReadHeader()
     else
     {
         nUnitsPerInch = 96;
-        if ( pExternalHeader != NULL && ( pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC ) )
+
+
+        if (   pExternalHeader != NULL
+            && pExternalHeader->xExt > 0
+            && pExternalHeader->yExt > 0
+            && (pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC))
         {
             // #n417818#: If we have an external header then overwrite the bounds!
             Rectangle aExtRect(0, 0,
@@ -1313,15 +1320,22 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 {
     sal_Bool bRet = sal_True;
 
-    rPlaceableBound.Left()   = RECT_MAX;
-    rPlaceableBound.Top()    = RECT_MAX;
-    rPlaceableBound.Right()  = RECT_MIN;
-    rPlaceableBound.Bottom() = RECT_MIN;
+    Rectangle aBound;
+    aBound.Left()   = RECT_MAX;
+    aBound.Top()    = RECT_MAX;
+    aBound.Right()  = RECT_MIN;
+    aBound.Bottom() = RECT_MIN;
 
     sal_uInt32 nPos = pStm->Tell();
     sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
 
     pStm->Seek( nPos );
+
+    boost::optional<Point> aWinOrg;
+    boost::optional<Size>  aWinExt;
+
+    boost::optional<Point> aViewportOrg;
+    boost::optional<Size>  aViewportExt;
 
     if( nEnd - nPos )
     {
@@ -1346,9 +1360,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
             {
                 case W_META_SETWINDOWORG:
                 {
-                    Point aWinOrg;
                     aWinOrg = ReadYX();
-                    rPlaceableBound.SetPos( aWinOrg );
                 }
                 break;
 
@@ -1362,17 +1374,15 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_SETVIEWPORTORG:
                 {
-                    Point aWinOrg;
-                    aWinOrg = ReadYX();
-                    rPlaceableBound.SetPos( aWinOrg );
+                    aViewportOrg = ReadYX();
                 }
                 break;
 
                 case W_META_SETVIEWPORTEXT:
                 {
                     sal_Int16 nWidth(0), nHeight(0);
-                    *pStm >>  nHeight >>  nWidth;
-                    rPlaceableBound.SetSize( Size( nWidth, nHeight ) );
+                    *pStm >> nHeight >> nWidth;
+                    aViewportExt = Size(nWidth, nHeight);
                 }
                 break;
 
@@ -1382,19 +1392,19 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_MOVETO:
                 case W_META_LINETO:
-                    GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadYX(), aBound, nMapMode );
                 break;
 
                 case W_META_RECTANGLE:
                 case W_META_INTERSECTCLIPRECT:
                 case W_META_EXCLUDECLIPRECT :
                 case W_META_ELLIPSE:
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadRectangle(), aBound, nMapMode );
                 break;
 
                 case W_META_ROUNDRECT:
                     ReadYXExt(); // size
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadRectangle(), aBound, nMapMode );
                 break;
 
                 case W_META_ARC:
@@ -1402,7 +1412,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_CHORD:
                     ReadYX(); // end
                     ReadYX(); // start
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadRectangle(), aBound, nMapMode );
                 break;
 
                 case W_META_POLYGON:
@@ -1410,7 +1420,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     sal_uInt16 nPoints;
                     *pStm >> nPoints;
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
                 }
                 break;
 
@@ -1443,7 +1453,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     }
 
                     for (sal_uInt16 i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
 
                     bRecordOk &= pStm->good();
 
@@ -1461,14 +1471,14 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     sal_uInt16 nPoints;
                     *pStm >> nPoints;
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
                 }
                 break;
 
                 case W_META_SETPIXEL:
                 {
                     ReadColor();
-                    GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadYX(), aBound, nMapMode );
                 }
                 break;
 
@@ -1480,7 +1490,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     if ( nLength )
                     {
                         pStm->SeekRel( ( nLength + 1 ) &~ 1 );
-                        GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadYX(), aBound, nMapMode );
                     }
                 }
                 break;
@@ -1494,7 +1504,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     *pStm >> nLen >> nOptions;
                     // todo: we also have to take care of the text width
                     if( nLen )
-                        GetWinExtMax( aPosition, rPlaceableBound, nMapMode );
+                        GetWinExtMax( aPosition, aBound, nMapMode );
                 }
                 break;
                 case W_META_BITBLT:
@@ -1529,7 +1539,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                         {
                             Rectangle aDestRect( ReadYX(), aDestSize );
-                            GetWinExtMax( aDestRect, rPlaceableBound, nMapMode );
+                            GetWinExtMax( aDestRect, aBound, nMapMode );
                         }
                     }
                 }
@@ -1540,7 +1550,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     sal_uInt32 nROP;
                     *pStm >> nROP;
                     Size aSize = ReadYXExt();
-                    GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound, nMapMode );
+                    GetWinExtMax( Rectangle( ReadYX(), aSize ), aBound, nMapMode );
                 }
                 break;
             }
@@ -1560,6 +1570,23 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
         pStm->SetError( SVSTREAM_GENERALERROR );
         bRet = sal_False;
     }
+
+    if (bRet)
+    {
+        if (aWinOrg && aWinExt)
+        {
+            rPlaceableBound = Rectangle(*aWinOrg, *aWinExt);
+        }
+        else if (aViewportOrg && aViewportExt)
+        {
+            rPlaceableBound = Rectangle(*aViewportOrg, *aViewportExt);
+        }
+        else
+        {
+            rPlaceableBound = aBound;
+        }
+    }
+
     return bRet;
 }
 
