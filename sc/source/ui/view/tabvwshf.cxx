@@ -131,7 +131,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg(GetDialogParent());
+                    boost::scoped_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     OUString aTabName;
@@ -158,7 +158,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         ShowTable( rNames );
                         rReq.Done();
                     }
-                    delete pDlg;
                 }
             }
             break;
@@ -200,8 +199,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg(GetDialogParent(), *pViewData,
-                        nTabSelCount, nSlot == FID_INS_TABLE_EXT);
+                    boost::scoped_ptr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetDialogParent(), *pViewData,
+                        nTabSelCount, nSlot == FID_INS_TABLE_EXT));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
                     {
@@ -292,8 +291,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             }
                         }
                     }
-
-                    delete pDlg;
                 }
             }
             break;
@@ -374,10 +371,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg(
+                    boost::scoped_ptr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
                         GetDialogParent(), aDlgTitle, OUString(ScResId(SCSTR_NAME)),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
-                        pHelpId);
+                        pHelpId));
 
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
@@ -423,7 +420,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             }
                         }
                     }
-                    delete pDlg;
                 }
             }
             break;
@@ -502,8 +498,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg(GetDialogParent(),
-                        aDefaultName);
+                    boost::scoped_ptr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetDialogParent(),
+                        aDefaultName));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();
@@ -553,7 +549,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
                         rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bCpy ) );
                     }
-                    delete pDlg;
                 }
 
                 if( bDoIt )

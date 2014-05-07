@@ -523,14 +523,14 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     // #114135#
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    FmFormView* pDrawView = NULL;
+    boost::scoped_ptr<FmFormView> pDrawView;
 
     if( pModel )
     {
-        pDrawView = new FmFormView( pModel, pDev );
+        pDrawView.reset(new FmFormView( pModel, pDev ));
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
         pDrawView->SetPrintPreview( true );
-        aOutputData.SetDrawView( pDrawView );
+        aOutputData.SetDrawView( pDrawView.get() );
     }
 
     //! SetUseStyleColor ??
@@ -594,9 +594,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     aOutputData.PrintDrawingLayer(SC_LAYER_FRONT, aMMOffset);
     aOutputData.PrintDrawingLayer(SC_LAYER_INTERN, aMMOffset);
     aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
-
-    // #114135#
-    delete pDrawView;
 }
 
 
@@ -1346,7 +1343,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
     if (pBorderData)
     {
-        ScDocument* pBorderDoc = new ScDocument( SCDOCMODE_UNDO );
+        boost::scoped_ptr<ScDocument> pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
         pBorderDoc->InitUndo( pDoc, 0,0, true,true );
         if (pBorderData)
             pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
@@ -1360,14 +1357,12 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
             aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = (sal_uInt16) nEffWidth;
 
-        ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc, 0,
+        ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc.get(), 0,
                                     nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
         aOutputData.SetUseStyleColor( bUseStyleColor );
 
         if (pBorderData)
             aOutputData.DrawFrame();
-
-        delete pBorderDoc;
     }
 }
 

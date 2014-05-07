@@ -65,6 +65,7 @@
 #include "undodat.hxx"
 #include "drawview.hxx"
 #include "cliputil.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -1206,16 +1207,16 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         //  wenn gerechnet werden soll, Originaldaten merken
 
 
-    ScDocument* pMixDoc = NULL;
+    boost::scoped_ptr<ScDocument> pMixDoc;
     if (nFunction)
     {
         bSkipEmpty = false;
         if ( nFlags & IDF_CONTENTS )
         {
-            pMixDoc = new ScDocument( SCDOCMODE_UNDO );
+            pMixDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pMixDoc->InitUndo( pDoc, nStartTab, nEndTab );
             pDoc->CopyToDocument( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                                    IDF_CONTENTS, false, pMixDoc );
+                                  IDF_CONTENTS, false, pMixDoc.get() );
         }
     }
 
@@ -1261,9 +1262,9 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     if ( pMixDoc )              // Rechenfunktionen mit Original-Daten auszufuehren ?
     {
-        pDoc->MixDocument( aUserRange, nFunction, bSkipEmpty, pMixDoc );
+        pDoc->MixDocument( aUserRange, nFunction, bSkipEmpty, pMixDoc.get() );
     }
-    delete pMixDoc;
+    pMixDoc.reset();
 
     AdjustBlockHeight();            // update row heights before pasting objects
 
@@ -1854,10 +1855,10 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
     //  Ausfuehren per Paste
 
     ScDocument* pDoc = GetViewData()->GetDocument();
-    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+    boost::scoped_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
     pDoc->CopyTabToClip( rSource.aStart.Col(), rSource.aStart.Row(),
                             rSource.aEnd.Col(), rSource.aEnd.Row(),
-                            rSource.aStart.Tab(), pClipDoc );
+                         rSource.aStart.Tab(), pClipDoc.get() );
 
     //  Zielbereich markieren (Cursor setzen, keine Markierung)
 
@@ -1868,9 +1869,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
 
     //  Paste
 
-    PasteFromClip( IDF_ALL, pClipDoc, PASTE_NOFUNC, false, false, true );       // als Link
-
-    delete pClipDoc;
+    PasteFromClip( IDF_ALL, pClipDoc.get(), PASTE_NOFUNC, false, false, true );       // als Link
 
     return true;
 }

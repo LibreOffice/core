@@ -647,7 +647,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
                     SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
-                    AbstractSvxZoomDialog* pDlg = NULL;
+                    boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
                     ScMarkData&     rMark = GetViewData()->GetMarkData();
                     sal_uInt16          nBtnFlags =   SVX_ZOOM_ENABLE_50
                                                 | SVX_ZOOM_ENABLE_75
@@ -665,7 +665,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet );
+                        pDlg.reset(pFact->CreateSvxZoomDialog(GetDialogParent(), aSet ));
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     }
                     if (pDlg)
@@ -685,8 +685,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                             eNewZoomType = rZoomItem.GetType();
                             nZoom     = rZoomItem.GetValue();
                         }
-
-                        delete pDlg;
                     }
                 }
 
@@ -966,7 +964,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_PROTECT_DOC:
             {
                 ScDocument*         pDoc = GetViewData()->GetDocument();
-                SfxPasswordDialog*  pDlg;
 
                 if( pReqArgs )
                 {
@@ -989,7 +986,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         OUString aText(ScResId(SCSTR_PASSWORD));
 
-                        pDlg = new SfxPasswordDialog(GetDialogParent(), &aText);
+                        boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                         pDlg->SetText( ScResId(SCSTR_UNPROTECTDOC) );
                         pDlg->SetMinLen( 0 );
                         pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
@@ -999,7 +996,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                             aPassword = pDlg->GetPassword();
                         else
                             bCancel = true;
-                        delete pDlg;
                     }
                     if (!bCancel)
                     {
@@ -1012,7 +1008,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     OUString aText(ScResId(SCSTR_PASSWORDOPT));
 
-                    pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
+                    boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_PROTECTDOC) );
                     pDlg->SetMinLen( 0 );
                     pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
@@ -1026,8 +1022,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, true ) );
                         rReq.Done();
                     }
-
-                    delete pDlg;
                 }
                 rBindings.Invalidate( FID_PROTECT_DOC );
             }

@@ -779,7 +779,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     ScAddress aPos( nCol, nRow, nTab );
 
-    ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
+    boost::scoped_ptr<ScDocument> pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
     pInsDoc->ResetClip( pDoc, nTab );
 
     if (aNewStr[0] == '=')                      // Formula ?
@@ -797,7 +797,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     pInsDoc->SetClipArea( ScRange(aPos) );
     // insert Block, with Undo etc.
-    if ( PasteFromClip( IDF_CONTENTS, pInsDoc, PASTE_NOFUNC, false, false,
+    if ( PasteFromClip( IDF_CONTENTS, pInsDoc.get(), PASTE_NOFUNC, false, false,
             false, INS_NONE, IDF_ATTRIB ) )
     {
         const SfxUInt32Item* pItem = (SfxUInt32Item*) pInsDoc->GetAttr(
@@ -807,16 +807,13 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
             // MarkData was already MarkToSimple'ed in PasteFromClip
             ScRange aRange;
             rMark.GetMarkArea( aRange );
-            ScPatternAttr* pPattern = new ScPatternAttr( pDoc->GetPool() );
+            boost::scoped_ptr<ScPatternAttr> pPattern(new ScPatternAttr( pDoc->GetPool() ));
             pPattern->GetItemSet().Put( *pItem );
             short nNewType = pDoc->GetFormatTable()->GetType( pItem->GetValue() );
             pDoc->ApplyPatternIfNumberformatIncompatible( aRange, rMark,
                 *pPattern, nNewType );
-            delete pPattern;
         }
     }
-
-    delete pInsDoc;
 }
 
 //  manual page break
@@ -2883,14 +2880,14 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         // none of the lines don't care?
         if( (eItemState != SFX_ITEM_DONTCARE) && (eTLBRState != SFX_ITEM_DONTCARE) && (eBLTRState != SFX_ITEM_DONTCARE) )
         {
-            SfxItemSet*     pOldSet = new SfxItemSet(
+            boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(
                                             *(pDoc->GetPool()),
                                             ATTR_PATTERN_START,
-                                            ATTR_PATTERN_END );
-            SfxItemSet*     pNewSet = new SfxItemSet(
+                                            ATTR_PATTERN_END ));
+            boost::scoped_ptr<SfxItemSet> pNewSet(new SfxItemSet(
                                             *(pDoc->GetPool()),
                                             ATTR_PATTERN_START,
-                                            ATTR_PATTERN_END );
+                                            ATTR_PATTERN_END ));
 
 
             const SvxBorderLine*    pBoxLine = NULL;
@@ -2935,10 +2932,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                 pNewSet->Put( aBLTRItem );
             }
 
-            ApplyAttributes( pNewSet, pOldSet );
-
-            delete pOldSet;
-            delete pNewSet;
+            ApplyAttributes( pNewSet.get(), pOldSet.get() );
         }
         else // if ( eItemState == SFX_ITEM_DONTCARE )
         {
