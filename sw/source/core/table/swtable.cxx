@@ -2581,11 +2581,12 @@ public:
 
     ~Impl() {}
 
-    void setTable(const SwTable * pTable) {
+    void setTable(const SwTable * pTable)
+    {
         m_pTable = pTable;
         SwFrmFmt * pFrmFmt = m_pTable->GetFrmFmt();
         m_pTabFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement(*pFrmFmt);
-        if (m_pTabFrm->IsFollow())
+        if (m_pTabFrm && m_pTabFrm->IsFollow())
             m_pTabFrm = m_pTabFrm->FindMaster(true);
     }
 
