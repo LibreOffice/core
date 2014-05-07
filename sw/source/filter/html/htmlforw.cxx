@@ -1316,7 +1316,9 @@ static void AddControl( HTMLControls& rControls,
                         sal_uInt32 nNodeIdx )
 {
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pSdrObj );
-    OSL_ENSURE( pFormObj, "Doch kein FormObj" );
+    assert(pFormObj); //Doch kein FormObj
+    if (!pFormObj)
+        return;
     uno::Reference< awt::XControlModel > xControlModel =
             pFormObj->GetUnoControlModel();
     if( !xControlModel.is() )
