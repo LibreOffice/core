@@ -42,7 +42,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	filter/source/xsltdialog/xsltdlg \
 	filter/source/xsltfilter/xsltfilter \
 	formula/util/for \
-	fpicker/source/office/fps_office \
+	$(call gb_Helper_optional,DESKTOP,fpicker/source/office/fps_office) \
 	framework/util/fwk \
 	framework/util/fwl \
 	framework/util/fwm \

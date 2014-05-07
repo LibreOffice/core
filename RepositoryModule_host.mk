@@ -52,7 +52,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	filter \
 	$(call gb_Helper_optional,DBCONNECTIVITY,forms) \
 	formula \
-	fpicker \
+	$(call gb_Helper_optional,DESKTOP,fpicker) \
 	framework \
 	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HELP,helpcontent2) \
