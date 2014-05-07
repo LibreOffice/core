@@ -648,6 +648,9 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
         return 0;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
+    assert(pFormObj);
+    if (!pFormObj)
+        return 0;
     uno::Reference< awt::XControlModel >  xControlModel =
             pFormObj->GetUnoControlModel();
 
