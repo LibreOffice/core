@@ -870,12 +870,14 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_KEEP:
         {
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
-            OSL_ENSURE( pFmtKeep != NULL, "Wrong Which-ID" );
-
-            aOut.append( pFmtKeep->GetValue()
-                         ? GetXMLToken( XML_ALWAYS )
-                         : GetXMLToken( XML_AUTO ) );
-            bOk = true;
+            assert(pFmtKeep); //Wrong Which-ID
+            if (pFmtKeep)
+            {
+                aOut.append( pFmtKeep->GetValue()
+                             ? GetXMLToken( XML_ALWAYS )
+                             : GetXMLToken( XML_AUTO ) );
+                bOk = true;
+            }
         }
         break;
 
