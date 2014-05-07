@@ -539,7 +539,6 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , msVerb( "Verb" )
 , mnEndShowEvent(0)
 , mnContextMenuEvent(0)
-, mnUpdateEvent(0)
 , mxPresentation( xPresentation )
 {
     if( mpViewShell )
@@ -621,12 +620,6 @@ void SAL_CALL SlideshowImpl::disposing()
         mxPresentation->end();
 
     maUpdateTimer.Stop();
-
-    if( mnUpdateEvent )
-    {
-        Application::RemoveUserEvent( mnUpdateEvent );
-        mnUpdateEvent = 0;
-    }
 
     removeShapeEvents();
 
@@ -1843,8 +1836,6 @@ IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl)
 */
 IMPL_LINK_NOARG(SlideshowImpl, updateHdl)
 {
-    mnUpdateEvent = 0;
-
     return updateSlideShow();
 }
 

@@ -55,7 +55,7 @@ class DialogHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     Dialog*         m_pVCLWindow;
-    sal_uLong           m_nEventID;
+    ImplSVEvent *   m_nEventID;
     bool            m_bIsBusy;
 
 public:

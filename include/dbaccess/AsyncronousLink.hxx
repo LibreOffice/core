@@ -23,6 +23,8 @@
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>
 
+struct ImplSVEvent;
+
 namespace dbaui
 {
 
@@ -41,7 +43,7 @@ namespace dbaui
     protected:
         ::osl::Mutex        m_aEventSafety;
         ::osl::Mutex        m_aDestructionSafety;
-        sal_uLong               m_nEventId;
+        ImplSVEvent *       m_nEventId;
 
     public:
         /** constructs the object

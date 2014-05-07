@@ -54,7 +54,7 @@ private:
     css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
 
     css::uno::Reference< css::media::XPlayer > mxPlayer;
-    sal_uLong                       mnPlaySoundEvent;
+    ImplSVEvent *               mnPlaySoundEvent;
     bool                        mbUsableSelection;
     bool                        mbLabelPlaying;
 

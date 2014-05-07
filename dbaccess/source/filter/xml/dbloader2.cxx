@@ -229,7 +229,7 @@ private:
     const Reference< XComponentContext >  m_aContext;
     Reference< XFrameLoader >           m_xMySelf;
     OUString                            m_sCurrentURL;
-    sal_uLong                               m_nStartWizard;
+    ImplSVEvent * m_nStartWizard;
 
     DECL_LINK( OnStartTableWizard, void* );
 public:

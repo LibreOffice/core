@@ -26,6 +26,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include "errorbroadcaster.hxx"
 
+struct ImplSVEvent;
+
 namespace frm
 {
 class OFormattedModel
@@ -145,7 +147,7 @@ class OFormattedModel
     class OFormattedControl :    public OBoundControl
                                 ,public OFormattedControl_BASE
     {
-        sal_uInt32              m_nKeyEvent;
+        ImplSVEvent * m_nKeyEvent;
 
     public:
         OFormattedControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);

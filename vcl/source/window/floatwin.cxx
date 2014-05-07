@@ -577,7 +577,7 @@ void FloatingWindow::ImplCallPopupModeEnd()
 
     // call Handler asyncron.
     if ( !mnPostId )
-        Application::PostUserEvent( mnPostId, LINK( this, FloatingWindow, ImplEndPopupModeHdl ) );
+        mnPostId = Application::PostUserEvent( LINK( this, FloatingWindow, ImplEndPopupModeHdl ) );
 }
 
 void FloatingWindow::PopupModeEnd()

@@ -139,7 +139,7 @@ struct ImplToolBoxPrivateData
     // the optional custom menu
     PopupMenu*  mpMenu;
     sal_uInt16      maMenuType;
-    sal_uIntPtr       mnEventId;
+    ImplSVEvent *   mnEventId;
 
     // called when menu button is clicked and before the popup menu is executed
     Link        maMenuButtonHdl;

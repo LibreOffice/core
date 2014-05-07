@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase3.hxx>
 
 namespace dbtools { class FormattedColumnValue; }
-
+struct ImplSVEvent;
 
 namespace frm
 {
@@ -132,7 +132,7 @@ class OEditControl : public OBoundControl
                         m_aChangeListeners;
 
     OUString         m_aHtmlChangeValue;
-    sal_uInt32              m_nKeyEvent;
+    ImplSVEvent *    m_nKeyEvent;
 
 public:
     OEditControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);

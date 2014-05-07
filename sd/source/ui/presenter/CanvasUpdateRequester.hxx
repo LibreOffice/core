@@ -29,6 +29,8 @@
 #include <tools/link.hxx>
 #include <vector>
 
+struct ImplSVEvent;
+
 namespace sd { namespace presenter {
 
 /** Each UpdateRequester handles update requests (calls to
@@ -59,7 +61,7 @@ private:
     static RequesterMap maRequesterMap;
 
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
-    sal_uLong mnUserEventId;
+    ImplSVEvent * mnUserEventId;
     bool mbUpdateFlag;
     DECL_LINK(Callback, void*);
 };

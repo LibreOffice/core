@@ -72,7 +72,7 @@ private:
     Window*         mpFirstPopupModeWin;
     ImplData*       mpImplData;
     Rectangle       maFloatRect;
-    sal_uLong           mnPostId;
+    ImplSVEvent *   mnPostId;
     sal_uLong           mnPopupModeFlags;
     sal_uInt16          mnTitle;
     sal_uInt16          mnOldTitle;

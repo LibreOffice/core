@@ -434,7 +434,7 @@ namespace svxform
         SvTreeListEntry*        m_pRootEntry;
         SvTreeListEntry*        m_pEditEntry;
 
-        sal_uLong               nEditEvent;
+        ImplSVEvent *       nEditEvent;
 
         SELDATA_ITEMS       m_sdiState;
         Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde

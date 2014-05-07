@@ -41,6 +41,7 @@
 
 class VirtualDevice;
 struct ImplDelData;
+struct ImplSVEvent;
 struct ImplWinData;
 struct ImplFrameData;
 struct ImplCalcToTopData;
@@ -704,9 +705,8 @@ public:
     /*virtual*/ void    AddChildEventListener( const Link& rEventListener );
     /*virtual*/ void    RemoveChildEventListener( const Link& rEventListener );
 
-    sal_uLong               PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
-    void                RemoveUserEvent( sal_uLong nUserEvent );
+    ImplSVEvent *       PostUserEvent( const Link& rLink, void* pCaller = NULL );
+    void                RemoveUserEvent( ImplSVEvent * nUserEvent );
 
     void                IncrementLockCount();
     void                DecrementLockCount();

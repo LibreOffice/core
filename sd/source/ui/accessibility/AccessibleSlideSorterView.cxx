@@ -101,8 +101,8 @@ private:
     ::Window* mpWindow;
     sal_Int32 mnFocusedIndex;
     bool mbModelChangeLocked;
-    sal_uLong mnUpdateChildrenUserEventId;
-    sal_uLong mnSelectionChangeUserEventId;
+    ImplSVEvent * mnUpdateChildrenUserEventId;
+    ImplSVEvent * mnSelectionChangeUserEventId;
 
     void UpdateChildren (void);
 };

@@ -89,8 +89,7 @@ void PluginDisposer::onShot()
     {
         if( m_pPlugin->isDisposable() )
         {
-            sal_uLong nEvent;
-            Application::PostUserEvent( nEvent, LINK( m_pPlugin, XPlugin_Impl, secondLevelDispose ), (void*)m_pPlugin );
+            Application::PostUserEvent( LINK( m_pPlugin, XPlugin_Impl, secondLevelDispose ), (void*)m_pPlugin );
         }
     }
     else

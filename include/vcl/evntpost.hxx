@@ -22,7 +22,7 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
-
+struct ImplSVEvent;
 
 namespace vcl
 {
@@ -34,7 +34,7 @@ namespace vcl
 
     class VCL_DLLPUBLIC EventPoster
     {
-        sal_uLong           m_nId;
+        ImplSVEvent *   m_nId;
         Link            m_aLink;
 
         DECL_DLLPRIVATE_LINK( DoEvent_Impl, UserEvent* );

@@ -471,7 +471,7 @@ namespace svt
         CellControllerRef        aController,
                                  aOldController;
 
-        sal_uLong   nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
+        ImplSVEvent * nStartEvent, * nEndEvent, * nCellModifiedEvent;     // event ids
         Window* m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.

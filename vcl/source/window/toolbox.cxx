@@ -4979,7 +4979,7 @@ bool ToolBox::ImplOpenItem( KeyCode aKeyCode )
             return bRet;
 
         UpdateCustomMenu();
-        Application::PostUserEvent( mpData->mnEventId, LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
+        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
     }
     else if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
         (ImplGetItem( mnHighItemId )->mnBits & TIB_DROPDOWN) )

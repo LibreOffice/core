@@ -26,13 +26,14 @@
 #include <osl/mutex.hxx>
 
 class Timer;
+struct ImplSVEvent;
 
 namespace svtools {
 
 class SVT_DLLPUBLIC AsynchronLink
 {
     Link   _aLink;
-    sal_uLong  _nEventId;
+    ImplSVEvent * _nEventId;
     Timer* _pTimer;
     bool   _bInCall;
     bool*  _pDeleted;

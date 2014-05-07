@@ -84,7 +84,7 @@ private:
     int                                             mnIndex;
     const Font&                                     mrFont;
     Size                                            maSize;
-    sal_uLong                                           mnClosePopupEvent;
+    ImplSVEvent *                                   mnClosePopupEvent;
     ::Window*                                       mpListenWindow;
     Point                                           maMouseDownPos;
 };

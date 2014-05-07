@@ -22,6 +22,7 @@
 
 #include <tools/link.hxx>
 
+struct ImplSVEvent;
 
 namespace svxform
 {
@@ -62,7 +63,7 @@ namespace svxform
 
     private:
         Link    m_aHandler;
-        sal_uLong   m_nEventId;
+        ImplSVEvent * m_nEventId;
 
     private:
         DECL_LINK( OnCall, void* );

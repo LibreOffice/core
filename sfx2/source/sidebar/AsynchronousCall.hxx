@@ -23,6 +23,8 @@
 #include <tools/solar.h>
 #include <tools/link.hxx>
 
+struct ImplSVEvent;
+
 namespace sfx2 { namespace sidebar {
 
 /** A simple asynchronous call via Application::PostUserCall.
@@ -42,7 +44,7 @@ public:
 
 private:
     Action maAction;
-    sal_uLong mnCallId;
+    ImplSVEvent * mnCallId;
 
     DECL_LINK(HandleUserCall, void*);
 };

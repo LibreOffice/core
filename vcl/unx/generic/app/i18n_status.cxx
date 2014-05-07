@@ -87,7 +87,7 @@ class XIMStatusWindow : public StatusWindow
     // for delayed showing
     bool                    m_bDelayedShow;
     I18NStatus::ShowReason  m_eDelayedReason;
-    sal_uLong                   m_nDelayedEvent;
+    ImplSVEvent *           m_nDelayedEvent;
     // for toggling
     bool                    m_bOn;
 

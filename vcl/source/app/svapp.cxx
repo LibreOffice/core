@@ -156,7 +156,7 @@ struct ImplPostEventData
 {
     sal_uLong           mnEvent;
     const Window*   mpWin;
-    sal_uLong           mnEventId;
+    ImplSVEvent *   mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
     ZoomEvent       maZoomEvent;
@@ -712,16 +712,16 @@ bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent
     return bProcessed;
 }
 
-sal_uLong Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
+ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
     const SolarMutexGuard aGuard;
-    sal_uLong               nEventId = 0;
+    ImplSVEvent * nEventId = 0;
 
     if( pWin && pKeyEvent )
     {
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pKeyEvent );
 
-        PostUserEvent( nEventId,
+        nEventId = PostUserEvent(
                        STATIC_LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
@@ -737,10 +737,10 @@ sal_uLong Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* p
     return nEventId;
 }
 
-sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent )
+ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent )
 {
     const SolarMutexGuard aGuard;
-    sal_uLong               nEventId = 0;
+    ImplSVEvent * nEventId = 0;
 
     if( pWin && pMouseEvent )
     {
@@ -754,7 +754,7 @@ sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEven
 
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
 
-        PostUserEvent( nEventId,
+        nEventId = PostUserEvent(
                        STATIC_LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
@@ -772,10 +772,10 @@ sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEven
 
 #if !HAVE_FEATURE_DESKTOP
 
-sal_uLong Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent )
+ImplSVEvent * Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent )
 {
     const SolarMutexGuard aGuard;
-    sal_uLong               nEventId = 0;
+    ImplSVEvent * nEventId = 0;
 
     if( pWin && pZoomEvent )
     {
@@ -788,7 +788,7 @@ sal_uLong Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent*
 
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
 
-        PostUserEvent( nEventId,
+        nEventId = PostUserEvent(
                        STATIC_LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
@@ -804,16 +804,16 @@ sal_uLong Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent*
     return nEventId;
 }
 
-sal_uLong Application::PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent )
+ImplSVEvent * Application::PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent )
 {
     const SolarMutexGuard aGuard;
-    sal_uLong               nEventId = 0;
+    ImplSVEvent * nEventId = 0;
 
     if( pWin && pScrollEvent )
     {
         ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pScrollEvent );
 
-        PostUserEvent( nEventId,
+        nEventId = PostUserEvent(
                        STATIC_LINK( NULL, Application, PostEventHandler ),
                        pPostEventData );
 
@@ -837,7 +837,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
     sal_uLong               nEvent;
-    const sal_uLong         nEventId = pData->mnEventId;
+    ImplSVEvent * const nEventId = pData->mnEventId;
 
     switch( pData->mnEvent )
     {
@@ -924,51 +924,40 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
     }
 }
 
-sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
-{
-    sal_uLong nEventId;
-    PostUserEvent( nEventId, rLink, pCaller );
-    return nEventId;
-}
-
-bool Application::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
+ImplSVEvent * Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = true;
-    rEventId = (sal_uLong)pSVEvent;
     Window* pDefWindow = ImplGetDefaultWindow();
-    if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
-        return true;
-    else
+    if ( pDefWindow == 0 || !pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
     {
-        rEventId = 0;
+        delete pSVEvent->mpLink;
         delete pSVEvent;
-        return false;
+        pSVEvent = 0;
     }
+    return pSVEvent;
 }
 
-void Application::RemoveUserEvent( sal_uLong nUserEvent )
+void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
 {
     if(nUserEvent)
     {
-        ImplSVEvent* pSVEvent = (ImplSVEvent*)nUserEvent;
-
-        DBG_ASSERT( !pSVEvent->mpWindow,
+        DBG_ASSERT( !nUserEvent->mpWindow,
                     "Application::RemoveUserEvent(): Event is send to a window" );
-        DBG_ASSERT( pSVEvent->mbCall,
+        DBG_ASSERT( nUserEvent->mbCall,
                     "Application::RemoveUserEvent(): Event is already removed" );
 
-        if ( pSVEvent->mpWindow )
+        if ( nUserEvent->mpWindow )
         {
-            if( ! pSVEvent->maDelData.IsDead() )
-                pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
-            pSVEvent->mpWindow = NULL;
+            if( ! nUserEvent->maDelData.IsDead() )
+                nUserEvent->mpWindow->ImplRemoveDel( &(nUserEvent->maDelData) );
+            nUserEvent->mpWindow = NULL;
         }
 
-        pSVEvent->mbCall = false;
+        nUserEvent->mbCall = false;
     }
 }
 

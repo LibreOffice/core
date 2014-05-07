@@ -50,7 +50,7 @@ public:
 
 private:
     ViewShellBase& mrBase;
-    sal_uLong mnUpdateTagsEvent;
+    ImplSVEvent * mnUpdateTagsEvent;
 
     ViewTagVector   maTagVector;
 };

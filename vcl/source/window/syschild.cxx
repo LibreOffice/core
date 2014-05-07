@@ -85,7 +85,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
             {
                 pWindow->ImplGetFrameData()->mbStartFocusState = true;
-                Application::PostUserEvent( pWindow->ImplGetFrameData()->mnFocusId, LINK( pWindow->ImplGetFrameWindow(), Window, ImplAsyncFocusHdl ) );
+                pWindow->ImplGetFrameData()->mnFocusId = Application::PostUserEvent( LINK( pWindow->ImplGetFrameWindow(), Window, ImplAsyncFocusHdl ) );
             }
             break;
 

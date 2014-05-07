@@ -35,6 +35,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+struct ImplSVEvent;
 
 namespace frm
 {
@@ -119,7 +120,7 @@ class OButtonControl    :public OButtonControl_BASE
                         ,public OFormNavigationHelper
 {
 private:
-    sal_uLong m_nClickEvent;
+    ImplSVEvent * m_nClickEvent;
     sal_Int16   m_nTargetUrlFeatureId;
     /// caches the value of the "Enabled" property of our model
     bool    m_bEnabledByPropertyValue;

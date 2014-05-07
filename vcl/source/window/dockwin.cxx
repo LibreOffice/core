@@ -63,7 +63,7 @@ private:
     Point           maDockPos;
     Rectangle       maDockRect;
     bool            mbInMove;
-    sal_uLong           mnLastUserEvent;
+    ImplSVEvent *   mnLastUserEvent;
 
     DECL_LINK(DockingHdl, void *);
     DECL_LINK(DockTimerHdl, void *);

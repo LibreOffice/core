@@ -57,8 +57,8 @@ namespace dbaui
         Point                       m_aMousePos;
 
         OTableWindow*               m_pTabWin;
-        sal_uLong                       m_nDropEvent;
-        sal_uLong                       m_nUiEvent;
+        ImplSVEvent *               m_nDropEvent;
+        ImplSVEvent *               m_nUiEvent;
         OJoinDropData               m_aDropInfo;
 
         bool                        m_bReallyScrolled : 1;

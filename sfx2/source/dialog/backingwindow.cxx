@@ -561,8 +561,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
         if ( xDispatch.is() )
         {
             ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
-            sal_uLong nEventId = 0;
-            if( ! Application::PostUserEvent( nEventId, Link( NULL, implDispatchDelayed ), pDisp ) )
+            if( Application::PostUserEvent( Link( NULL, implDispatchDelayed ), pDisp ) == 0 )
                 delete pDisp; // event could not be posted for unknown reason, at least don't leak
         }
     }

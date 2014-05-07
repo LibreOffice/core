@@ -113,7 +113,7 @@ private:
     TopWindowListenerMultiplexer        maTopWindowListeners;
 
     CallbackArray                       maCallbackEvents;
-    sal_uLong                               mnCallbackEventId;
+    ImplSVEvent *                       mnCallbackEventId;
 
 public:
     bool                                mbDisposing             : 1;

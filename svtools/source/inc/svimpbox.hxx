@@ -135,7 +135,7 @@ private:
     long                nNextVerVisSize;
     long                nMostRight;
     sal_uLong               nVisibleCount;  // Anzahl Zeilen im Control
-    sal_uLong               nCurUserEvent; //-1 == kein Userevent amn Laufen
+    ImplSVEvent *       nCurUserEvent;
     short               nHorSBarHeight, nVerSBarWidth;
     sal_uInt16              nFlags;
     sal_uInt16              nCurTabPos;

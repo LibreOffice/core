@@ -233,7 +233,7 @@ private:
 
                     m_xEmptyRow;        // record set to insert
 
-    sal_uInt32          m_nAsynAdjustEvent;
+    ImplSVEvent *   m_nAsynAdjustEvent;
 
     // if we modify the row for the new record, we automatically insert a "new new row".
     // But if somebody else inserts a new record into the data source, we have to do the same.
@@ -272,7 +272,7 @@ private:
 
     BrowserMode         m_nMode;
     sal_Int32           m_nCurrentPos;      // Current position;
-    sal_uInt32          m_nDeleteEvent;     // EventId for asychronous deletion of rows
+    ImplSVEvent *       m_nDeleteEvent;     // EventId for asychronous deletion of rows
     sal_uInt16          m_nOptions;         // What is the able to do (Insert, Update, Delete)
                                         // default readonly
     sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource

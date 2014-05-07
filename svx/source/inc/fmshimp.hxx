@@ -103,11 +103,11 @@ class FmFormPage;
 struct FmLoadAction
 {
     FmFormPage* pPage;
-    sal_uLong       nEventId;
+    ImplSVEvent * nEventId;
     sal_uInt16  nFlags;
 
     FmLoadAction( ) : pPage( NULL ), nEventId( 0 ), nFlags( 0 ) { }
-    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, sal_uLong _nEventId )
+    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, ImplSVEvent * _nEventId )
         :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {
     }
@@ -183,8 +183,8 @@ class FmXFormShell   :public FmXFormShell_BASE
     std::vector<long> m_arrRelativeGridColumn;
 
     ::osl::Mutex    m_aMutex;
-    sal_uLong           m_nInvalidationEvent;
-    sal_uLong           m_nActivationEvent;
+    ImplSVEvent *   m_nInvalidationEvent;
+    ImplSVEvent *   m_nActivationEvent;
     ::std::queue< FmLoadAction >
                     m_aLoadingPages;
 

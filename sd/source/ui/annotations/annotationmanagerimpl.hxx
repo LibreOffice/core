@@ -124,7 +124,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > mxSelectedAnnotation;
 
     bool mbShowAnnotations;
-    sal_uLong mnUpdateTagsEvent;
+    ImplSVEvent * mnUpdateTagsEvent;
     Font maFont;
 };
 

@@ -1132,7 +1132,7 @@ void Menu::ImplSelect()
     // call select
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mpActivePopupMenu = NULL;        // if new execute in select()
-    Application::PostUserEvent( nEventId, LINK( this, Menu, ImplCallSelect ) );
+    nEventId = Application::PostUserEvent( LINK( this, Menu, ImplCallSelect ) );
 }
 
 void Menu::Select()

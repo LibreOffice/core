@@ -104,7 +104,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
 
     nMostRight = -1;
     pMostRightEntry = 0;
-    nCurUserEvent = 0xffffffff;
+    nCurUserEvent = 0;
 
     bUpdateMode = true;
     bInVScrollHdl = false;
@@ -3336,7 +3336,7 @@ void SvImpLBox::FindMostRight_Impl( SvTreeListEntry* pParent, SvTreeListEntry* p
 void SvImpLBox::NotifyTabsChanged()
 {
     if( GetUpdateMode() && !(nFlags & F_IGNORE_CHANGED_TABS ) &&
-        nCurUserEvent == 0xffffffff )
+        nCurUserEvent == 0 )
     {
         nCurUserEvent = Application::PostUserEvent(LINK(this,SvImpLBox,MyUserEvent),(void*)0);
     }
@@ -3354,7 +3354,7 @@ bool SvImpLBox::IsNowExpandable() const
 
 IMPL_LINK(SvImpLBox,MyUserEvent,void*, pArg )
 {
-    nCurUserEvent = 0xffffffff;
+    nCurUserEvent = 0;
     if( !pArg )
     {
         pView->Invalidate();
@@ -3372,10 +3372,10 @@ IMPL_LINK(SvImpLBox,MyUserEvent,void*, pArg )
 
 void SvImpLBox::StopUserEvent()
 {
-    if( nCurUserEvent != 0xffffffff )
+    if( nCurUserEvent != 0 )
     {
         Application::RemoveUserEvent( nCurUserEvent );
-        nCurUserEvent = 0xffffffff;
+        nCurUserEvent = 0;
     }
 }
 

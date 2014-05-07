@@ -54,12 +54,11 @@ namespace dbaui
 
          ::boost::shared_ptr<OTableRow> pActRow;
 
-        sal_uLong                       nIndexEvent;
-        sal_uLong                       nCutEvent;
-        sal_uLong                       nPasteEvent;
-        sal_uLong                       nDeleteEvent;
-        sal_uLong                       nInsNewRowsEvent;
-        sal_uLong                       nInvalidateTypeEvent;
+        ImplSVEvent *               nCutEvent;
+        ImplSVEvent *               nPasteEvent;
+        ImplSVEvent *               nDeleteEvent;
+        ImplSVEvent *               nInsNewRowsEvent;
+        ImplSVEvent *               nInvalidateTypeEvent;
         ChildFocusState             m_eChildFocus;
 
         long nOldDataPos;

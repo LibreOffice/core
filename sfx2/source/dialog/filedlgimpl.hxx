@@ -72,7 +72,7 @@ namespace sfx2
         SfxFilterFlags              m_nMustFlags;
         SfxFilterFlags              m_nDontFlags;
 
-        sal_uIntPtr                     mnPostUserEventId;
+        ImplSVEvent *               mnPostUserEventId;
 
         ErrCode                     mnError;
 

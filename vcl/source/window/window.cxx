@@ -3869,7 +3869,7 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
 void Window::ImplGenerateMouseMove()
 {
     if ( !mpWindowImpl->mpFrameData->mnMouseMoveId )
-        Application::PostUserEvent( mpWindowImpl->mpFrameData->mnMouseMoveId, LINK( mpWindowImpl->mpFrameWindow, Window, ImplGenerateMouseMoveHdl ) );
+        mpWindowImpl->mpFrameData->mnMouseMoveId = Application::PostUserEvent( LINK( mpWindowImpl->mpFrameWindow, Window, ImplGenerateMouseMoveHdl ) );
 }
 
 IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl)
@@ -5242,51 +5242,38 @@ void Window::RemoveChildEventListener( const Link& rEventListener )
     mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
-sal_uLong Window::PostUserEvent( const Link& rLink, void* pCaller )
+ImplSVEvent * Window::PostUserEvent( const Link& rLink, void* pCaller )
 {
-    sal_uLong nEventId;
-    PostUserEvent( nEventId, rLink, pCaller );
-    return nEventId;
-}
-
-bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
-{
-
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = this;
     pSVEvent->mbCall    = true;
     ImplAddDel( &(pSVEvent->maDelData) );
-    rEventId = (sal_uLong)pSVEvent;
-    if ( mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
-        return true;
-    else
+    if ( !mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
     {
-        rEventId = 0;
         ImplRemoveDel( &(pSVEvent->maDelData) );
+        delete pSVEvent->mpLink;
         delete pSVEvent;
-        return false;
+        pSVEvent = 0;
     }
+    return pSVEvent;
 }
 
-void Window::RemoveUserEvent( sal_uLong nUserEvent )
+void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 {
-
-    ImplSVEvent* pSVEvent = (ImplSVEvent*)nUserEvent;
-
-    DBG_ASSERT( pSVEvent->mpWindow == this,
+    DBG_ASSERT( nUserEvent->mpWindow == this,
                 "Window::RemoveUserEvent(): Event doesn't send to this window or is already removed" );
-    DBG_ASSERT( pSVEvent->mbCall,
+    DBG_ASSERT( nUserEvent->mbCall,
                 "Window::RemoveUserEvent(): Event is already removed" );
 
-    if ( pSVEvent->mpWindow )
+    if ( nUserEvent->mpWindow )
     {
-        pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
-        pSVEvent->mpWindow = NULL;
+        nUserEvent->mpWindow->ImplRemoveDel( &(nUserEvent->maDelData) );
+        nUserEvent->mpWindow = NULL;
     }
 
-    pSVEvent->mbCall = false;
+    nUserEvent->mbCall = false;
 }
 
 bool Window::IsLocked( bool bChildren ) const

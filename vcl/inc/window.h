@@ -140,8 +140,8 @@ struct ImplFrameData
     sal_Int32           mnDPIY;             // Original Screen Resolution
     ImplMapRes          maMapUnitRes;       // for LogicUnitToPixel
     sal_uIntPtr         mnAllSaveBackSize;  // size of all bitmaps of saved backgrounds
-    sal_uIntPtr         mnFocusId;          // FocusId for PostUserLink
-    sal_uIntPtr         mnMouseMoveId;      // MoveId for PostUserLink
+    ImplSVEvent *       mnFocusId;          // FocusId for PostUserLink
+    ImplSVEvent *       mnMouseMoveId;      // MoveId for PostUserLink
     long                mnLastMouseX;       // last x mouse position
     long                mnLastMouseY;       // last y mouse position
     long                mnBeforeLastMouseX; // last but one x mouse position

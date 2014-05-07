@@ -331,8 +331,8 @@ private:
     ::std::auto_ptr<LayouterLock> mpAsynchronousLayouterLock;
     ::std::auto_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    sal_uLong mnPendingUpdateCall;
-    sal_uLong mnPendingSetValidCall;
+    ImplSVEvent * mnPendingUpdateCall;
+    ImplSVEvent * mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
 
     OUString GetToolBarResourceName (const OUString& rsBaseName) const;

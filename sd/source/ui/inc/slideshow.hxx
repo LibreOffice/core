@@ -51,6 +51,7 @@ class Rectangle;
 class Window;
 class SfxRequest;
 class WorkWindow;
+struct ImplSVEvent;
 
 // TODO: Remove
 #define PAGE_NO_END         65535
@@ -216,7 +217,7 @@ private:
     ViewShellBase* mpCurrentViewShellBase;
     ViewShellBase* mpFullScreenViewShellBase;
     FrameView* mpFullScreenFrameView;
-    sal_Int32   mnInPlaceConfigEvent;
+    ImplSVEvent * mnInPlaceConfigEvent;
 };
 
 namespace slideshowhelp

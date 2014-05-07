@@ -36,6 +36,7 @@ class Window;
 struct AcceptDropEvent;
 class DropTargetHelper;
 struct ExecuteDropEvent;
+struct ImplSVEvent;
 class Point;
 class SdPage;
 class Window;
@@ -137,7 +138,7 @@ private:
     ::boost::scoped_ptr<UndoContext> mpUndoContext;
 
     ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
-    sal_uLong mnDragFinishedUserEventId;
+    ImplSVEvent * mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (
         ::Window* pWindow,

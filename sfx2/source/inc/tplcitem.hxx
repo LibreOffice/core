@@ -27,7 +27,7 @@ class SfxCommonTemplateDialog_Impl;
 class SfxTemplateControllerItem: public SfxControllerItem {
     SfxCommonTemplateDialog_Impl  &rTemplateDlg;
     sal_uInt8                            nWaterCanState;
-    long                            nUserEventId;
+    ImplSVEvent *                        nUserEventId;
 
     DECL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                 SfxTemplateControllerItem*);

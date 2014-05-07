@@ -31,6 +31,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+struct ImplSVEvent;
+
 namespace sd { namespace framework {
 
 class ConfigurationController;
@@ -103,7 +105,7 @@ private:
         so that a pending user event can be removed when the queue processor
         is destroyed.
     */
-    sal_uIntPtr mnUserEventId;
+    ImplSVEvent * mnUserEventId;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfiguration> mxConfiguration;

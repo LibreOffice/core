@@ -60,6 +60,7 @@ class KeyEvent;
 class MouseEvent;
 class ZoomEvent;
 class ScrollEvent;
+struct ImplSVEvent;
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/connection/XConnection.hpp>
@@ -846,7 +847,7 @@ public:
 
      @see HandleKey
     */
-    static sal_uLong            PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static ImplSVEvent *        PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send mouse event
 
@@ -854,7 +855,7 @@ public:
      @param     pWin            Pointer to window to which the event is sent
      @param     pKeyEvent       Mouse event to send
     */
-    static sal_uLong            PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+    static ImplSVEvent *        PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
 
 #if !HAVE_FEATURE_DESKTOP
     /** Send zoom event
@@ -863,7 +864,7 @@ public:
      @param     pWin            Pointer to window to which the event is sent
      @param     pZoomEvent      Zoom event to send
     */
-    static sal_uLong            PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
+    static ImplSVEvent *        PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
 
     /* Send scroll event
 
@@ -871,7 +872,7 @@ public:
      @param      pWin            Pointer to window to which the event is sent
      @param      pScrollEvent    Scroll event to send
     */
-    static sal_uLong            PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
+    static ImplSVEvent *         PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
 #endif
 
     /** Remove mouse and keypress events from a window... any also zoom and scroll events
@@ -892,23 +893,13 @@ public:
 
      @return the event ID used to post the event.
     */
-    static sal_uLong            PostUserEvent( const Link& rLink, void* pCaller = NULL );
-
-    /** Post a user event to the default window.
-
-     @param     rEventID        Reference to event ID to be posted
-     @param     rLink           Link to event callback function
-     @param     pCaller         Pointer to data sent to teh event by the caller. Optional.
-
-     @return true if there is a default window and the event could be posted to it successfully.
-    */
-    static bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    static ImplSVEvent * PostUserEvent( const Link& rLink, void* pCaller = NULL );
 
     /** Remove user event based on event ID
 
-     @param     nUserEvent      Numeric user event to remove
+     @param     nUserEvent      User event to remove
     */
-    static void                 RemoveUserEvent( sal_uLong nUserEvent );
+    static void                 RemoveUserEvent( ImplSVEvent * nUserEvent );
 
     /** Insert an idle handler into the application.
 

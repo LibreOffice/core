@@ -205,7 +205,7 @@ class SwSidebarWin : public Window
         SwView&         mrView;
         const SwPostItBits nFlags;
 
-        sal_uLong           mnEventId;
+        ImplSVEvent *   mnEventId;
 
         OutlinerView*   mpOutlinerView;
         Outliner*       mpOutliner;

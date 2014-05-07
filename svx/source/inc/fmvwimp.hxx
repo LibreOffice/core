@@ -56,6 +56,7 @@ class FmFormShell;
 class Window;
 class OutputDevice;
 class SdrUnoObj;
+struct ImplSVEvent;
 
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -159,10 +160,10 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
 
     FmFormObj*      m_pMarkedGrid;
     FmFormView*     m_pView;
-    sal_uIntPtr     m_nActivationEvent;
-    sal_uIntPtr     m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError
-    sal_uIntPtr     m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
-    sal_uIntPtr     m_nControlWizardEvent;  // event for asynchronously setting the focus to a control
+    ImplSVEvent *   m_nActivationEvent;
+    ImplSVEvent *   m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError
+    ImplSVEvent *   m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
+    ImplSVEvent *   m_nControlWizardEvent;  // event for asynchronously setting the focus to a control
 
     ::com::sun::star::sdb::SQLErrorEvent
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.

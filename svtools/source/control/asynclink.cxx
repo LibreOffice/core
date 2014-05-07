@@ -69,7 +69,7 @@ bAllowDoubles
         else
         {
             if( _pMutex ) _pMutex->acquire();
-            Application::PostUserEvent( _nEventId, STATIC_LINK( this, AsynchronLink, HandleCall), 0 );
+            _nEventId = Application::PostUserEvent( STATIC_LINK( this, AsynchronLink, HandleCall), 0 );
             if( _pMutex ) _pMutex->release();
         }
     }

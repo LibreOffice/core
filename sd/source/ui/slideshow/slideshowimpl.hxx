@@ -400,9 +400,8 @@ private:
 
     ::std::auto_ptr<PaneHider> mpPaneHider;
 
-    sal_uLong   mnEndShowEvent;
-    sal_uLong   mnContextMenuEvent;
-    sal_Int32 mnUpdateEvent;
+    ImplSVEvent * mnEndShowEvent;
+    ImplSVEvent * mnContextMenuEvent;
 
     css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;
     ::rtl::Reference< SlideShowListenerProxy > mxListenerProxy;

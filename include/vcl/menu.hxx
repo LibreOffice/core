@@ -30,6 +30,7 @@
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
+struct ImplSVEvent;
 struct MenuItemData;
 class Point;
 class Size;
@@ -128,7 +129,7 @@ private:
 
     OUString            aTitleText;         // PopupMenu text
 
-    sal_uLong           nEventId;
+    ImplSVEvent *       nEventId;
     sal_uInt16          mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
     sal_uInt16          nMenuFlags;
     sal_uInt16          nDefaultItem;       // Id of default item

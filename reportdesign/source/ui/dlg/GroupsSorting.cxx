@@ -90,8 +90,8 @@ class OFieldExpressionControl : public TContainerListenerBase
     ::svt::ComboBoxControl*         m_pComboCell;
     sal_Int32                       m_nDataPos;
     sal_Int32                       m_nCurrentPos;
-    sal_uLong                           m_nPasteEvent;
-    sal_uLong                           m_nDeleteEvent;
+    ImplSVEvent *                   m_nPasteEvent;
+    ImplSVEvent *                   m_nDeleteEvent;
     OGroupsSortingDialog*           m_pParent;
     bool                            m_bIgnoreEvent;
 

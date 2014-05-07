@@ -617,13 +617,9 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
     if (mnDragFinishedUserEventId == 0)
     {
-        if ( ! Application::PostUserEvent(
-            mnDragFinishedUserEventId,
+        mnDragFinishedUserEventId = Application::PostUserEvent(
             LINK(this, Clipboard, ProcessDragFinished),
-            reinterpret_cast<void*>(nDropAction)))
-        {
-            mnDragFinishedUserEventId = 0;
-        }
+            reinterpret_cast<void*>(nDropAction));
     }
 }
 

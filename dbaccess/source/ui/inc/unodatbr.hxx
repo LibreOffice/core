@@ -104,7 +104,7 @@ namespace dbaui
         Splitter*               m_pSplitter;
         SvTreeList*         m_pTreeModel;           // contains the datasources of the registry
         SvTreeListEntry*            m_pCurrentlyDisplayed;
-        sal_uLong                   m_nAsyncDrop;
+        ImplSVEvent *               m_nAsyncDrop;
 
         sal_Int16               m_nBorder;              // sal_True when border should be shown
 

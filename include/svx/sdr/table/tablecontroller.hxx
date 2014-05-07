@@ -167,7 +167,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > mxModifyListener;
 
-    sal_uLong mnUpdateEvent;
+    ImplSVEvent * mnUpdateEvent;
 };
 
 rtl::Reference< sdr::SelectionController > CreateTableController( SdrObjEditView* pView, const SdrObject* pObj, const rtl::Reference< sdr::SelectionController >& xRefController );

@@ -58,6 +58,7 @@ namespace sw { namespace sidebarwindows {
 class SwSidebarItem;
 class SwFrm;
 class Window;
+struct ImplSVEvent;
 
 #define SORT_POS    1
 #define SORT_AUTHOR 2
@@ -143,7 +144,7 @@ class SwPostItMgr: public SfxListener
         SwEditWin*                      mpEditWin;
         std::list< SwSidebarItem*>      mvPostItFlds;
         std::vector<SwPostItPageItem*>  mPages;
-        sal_uLong                           mnEventId;
+        ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
         sw::sidebarwindows::SwSidebarWin* mpActivePostIt;
         bool                            mbLayout;

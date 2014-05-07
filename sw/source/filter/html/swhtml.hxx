@@ -47,6 +47,7 @@ struct SwHTMLFootEndNote_Impl;
 class HTMLTableCnts;
 struct SwPendingStack;
 class SvxCSS1PropertyInfo;
+struct ImplSVEvent;
 
 #define HTML_PARSPACE (MM50)
 #define HTML_CJK_PARSPACE (MM50/2)
@@ -406,7 +407,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     sal_uInt32  aFontHeights[7];    // die Font-Hoehen 1-7
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
-    sal_uLong       nEventId;
+    ImplSVEvent * nEventId;
 
     sal_uInt16  nBaseFontStMin;
     sal_uInt16  nFontStMin;

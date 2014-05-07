@@ -1234,8 +1234,7 @@ bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
     if (aText.isEmpty())
     {
         // deleting the entry asynchron
-        sal_uLong nEvent;
-        PostUserEvent(nEvent, LINK(this, FmFilterNavigator, OnRemove), pEntry);
+        PostUserEvent(LINK(this, FmFilterNavigator, OnRemove), pEntry);
     }
     else
     {
