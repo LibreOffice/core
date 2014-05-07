@@ -1758,6 +1758,9 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
             break;
     }
 
+    if (!pParent)
+        return;
+
     TabControl *pTabControl = static_cast<TabControl*>(pParent);
     VclBuilder::stringmap::iterator aFind = aProperties.find(OString("label"));
     if (aFind != aProperties.end())
