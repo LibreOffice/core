@@ -630,19 +630,18 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//------------------------------------------------------------------------
 SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", rItemSet)
     , m_pInfoItem   ( NULL )
-
 {
     get(m_pTitleEd, "title");
     get(m_pThemaEd, "subject");
     get(m_pKeywordsEd, "keywords");
     get(m_pCommentEd, "comments");
+    m_pCommentEd->set_width_request(m_pKeywordsEd->get_preferred_size().Width());
+    m_pCommentEd->set_height_request(m_pCommentEd->GetTextHeight() * 16);
 }
 
-//------------------------------------------------------------------------
 SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItemSet)
 {
      return new SfxDocumentDescPage(pParent, rItemSet);
