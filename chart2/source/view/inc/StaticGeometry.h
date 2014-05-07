@@ -104,7 +104,7 @@ static const GLfloat boundBoxNormal[] = {
     1.0f, 0.0f, 0.0f//12
 };
 
-GLfloat coordinateAxis[] = {
+static GLfloat coordinateAxis[] = {
       -1.0, 0.0, 0.0,
       1.0, 0.0, 0.0,//x
       0.0, 0.0, -1.0,
@@ -112,4 +112,19 @@ GLfloat coordinateAxis[] = {
       0.0, 0.0, 0.0,
       0.0, 1.0, 0.0//y
 };
+
+static GLfloat coordReverseVertices[] = {
+    0.0f, 1.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f,
+    0.0f, 0.0f,
+};
+
+static GLfloat squareVertices[] = {
+    -1.0f, -1.0f, -1.0,
+    1.0f, -1.0f, -1.0,
+    1.0f,  1.0f, -1.0,
+    -1.0f,  1.0f, -1.0
+};
+
 

@@ -127,6 +127,12 @@ void OpenGL3DRenderer::LoadShaders()
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+
+    m_RenderProID = OpenGLHelper::LoadShaders("renderTextureVertexShader", "renderTextureFragmentShader");
+    m_RenderVertexID = glGetAttribLocation(m_RenderProID, "vPosition");
+    m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
+    m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
+    printf("m_RenderProID = %d, m_RenderVertexID = %d\n", m_RenderProID, m_RenderVertexID);
     CHECK_GL_ERROR();
 }
 
@@ -181,7 +187,6 @@ void OpenGL3DRenderer::CreateFrameBufferObj()
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[i]);
         glCheckFramebufferStatus(GL_FRAMEBUFFER);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
     }
 }
 
@@ -197,7 +202,40 @@ void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::ve
     m_CameraInfo.cameraUp = up;
 }
 
+void OpenGL3DRenderer::RenderTexture(GLuint TexID)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glUseProgram(m_RenderProID);
+
+    glEnableVertexAttribArray(m_RenderVertexID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RenderVertexBuf);
+    glVertexAttribPointer(
+        m_RenderVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        3,                  // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        (void*)0            // array buffer offset
+        );
+    glEnableVertexAttribArray(m_RenderTexCoordID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RenderTexCoordBuf);
+    glVertexAttribPointer(
+        m_RenderTexCoordID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        2,                  // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        (void*)0            // array buffer offset
+        );
+    glBindTexture(GL_TEXTURE_2D, TexID);
+    glUniform1i(m_RenderTexID, 0);
+    glDrawArrays(GL_QUADS, 0, 4);
+    glDisableVertexAttribArray(m_RenderTexCoordID);
+    glDisableVertexAttribArray(m_RenderVertexID);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glUseProgram(0);
+}
 
 void OpenGL3DRenderer::init()
 {
@@ -251,6 +289,17 @@ void OpenGL3DRenderer::init()
     glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
     glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &m_RenderTexCoordBuf);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RenderTexCoordBuf);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(coordReverseVertices), coordReverseVertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &m_RenderVertexBuf);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RenderVertexBuf);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(squareVertices), squareVertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     CHECK_GL_ERROR();
     Init3DUniformBlock();
 
@@ -1526,11 +1575,6 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
 #if 1
     if ((!m_FboID[0]) || (!m_FboID[1]))
     {
-        // create a texture object
-        CreateTextureObj(m_iWidth, m_iHeight);
-        //create render buffer object
-        CreateRenderObj(m_iWidth, m_iHeight);
-        //create fbo
         CreateFrameBufferObj();
     }
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
@@ -1546,6 +1590,9 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderTextShape();
     //render the axis
     RenderCoordinateAxis();
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
+    glViewport(0, 0, m_iWidth, m_iHeight);
+    RenderTexture(m_TextureObj[0]);
 #if DEBUG_FBO
     char fileName[256] = {0};
     sprintf(fileName, "D://shaderout_%d_%d.bmp", m_iWidth, m_iHeight);

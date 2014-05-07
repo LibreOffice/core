@@ -235,6 +235,7 @@ private:
                                int iSubDivZ, float width, float height, float depth);
     void CreateSceneBoxView();
     void CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
+    void RenderTexture(GLuint TexID);
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
@@ -353,6 +354,17 @@ private:
     GLint m_2DVertexID;
     GLint m_2DColorID;
 
+    GLint m_RenderProID;
+
+    GLuint m_RenderVertexBuf;
+
+    GLuint m_RenderTexCoordBuf;
+
+    GLint m_RenderTexID;
+
+    GLint m_RenderVertexID;
+
+    GLint m_RenderTexCoordID;
     //TODO: moggi: kill the following parts
     // don't add anything below or I will remove it
 #if 0
