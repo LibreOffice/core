@@ -1276,11 +1276,13 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_ANIMATOR_STATE )
     {
         const SfxUInt16Item* pStateItem = PTR_CAST( SfxUInt16Item, pItem );
-        DBG_ASSERT( pStateItem, "SfxUInt16Item expected");
-        sal_uInt16 nState = pStateItem->GetValue();
-
-        pAnimationWin->aBtnGetOneObject.Enable( nState & 1 );
-        pAnimationWin->aBtnGetAllObjects.Enable( nState & 2 );
+        assert(pStateItem); //SfxUInt16Item expected
+        if (pStateItem)
+        {
+            sal_uInt16 nState = pStateItem->GetValue();
+            pAnimationWin->aBtnGetOneObject.Enable( nState & 1 );
+            pAnimationWin->aBtnGetAllObjects.Enable( nState & 2 );
+        }
     }
 }
 
