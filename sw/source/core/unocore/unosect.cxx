@@ -1115,11 +1115,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 {
                     pEnclosingSection = pEnclosingSection->GetParent();
                 }
-                if (pEnclosingSection)
+                SwTOXBaseSection* const pTOXBaseSect = pEnclosingSection ?
+                    PTR_CAST(SwTOXBaseSection, pEnclosingSection) : NULL;
+                if (pTOXBaseSect)
                 {
                     // convert section to TOXBase and get SwXDocumentIndex
-                    SwTOXBaseSection *const pTOXBaseSect =
-                        PTR_CAST(SwTOXBaseSection, pEnclosingSection);
                     const uno::Reference<text::XDocumentIndex> xIndex =
                         SwXDocumentIndex::CreateXDocumentIndex(
                             *pTOXBaseSect->GetFmt()->GetDoc(), *pTOXBaseSect);
