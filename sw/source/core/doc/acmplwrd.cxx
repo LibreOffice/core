@@ -417,9 +417,8 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
     const bool bDelete = !pACorr->GetSwFlags().bAutoCmpltKeepList;
     for (size_t nPos = m_WordList.size(); nPos; nPos--)
     {
-        SwAutoCompleteString *const pCurrent =
-            dynamic_cast<SwAutoCompleteString*>(m_WordList[nPos - 1]);
-        if(pCurrent->RemoveDocument(rDoc) && bDelete)
+        SwAutoCompleteString *const pCurrent = dynamic_cast<SwAutoCompleteString*>(m_WordList[nPos - 1]);
+        if(pCurrent && pCurrent->RemoveDocument(rDoc) && bDelete)
         {
             m_WordList.erase(nPos - 1);
             SwAutoCompleteStringPtrDeque::iterator it = std::find( aLRULst.begin(), aLRULst.end(), pCurrent );
