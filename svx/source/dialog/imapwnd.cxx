@@ -109,7 +109,7 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, bool /*bScaleToGrap
     {
         SdrObject* pNewObj = CreateObj( rImageMap.GetIMapObject( i - 1 ) );
 
-        if ( pNewObj )
+        if (pNewObj && pPage)
         {
             pPage->InsertObject( pNewObj );
         }
