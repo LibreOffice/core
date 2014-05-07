@@ -1024,10 +1024,12 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_ROW_SPLIT:
         {
             const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-            OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
-
-            ::sax::Converter::convertBool( aOut, pSplit->GetValue() );
-            bOk = true;
+            assert(pSplit); //Wrong Which-ID
+            if (pSplit)
+            {
+                ::sax::Converter::convertBool( aOut, pSplit->GetValue() );
+                bOk = true;
+            }
         }
         break;
 
