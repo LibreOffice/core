@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_79a48f57",
+        "filename": "sw/source/ui/fldui/javaedit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-07T07:59:29Z",
+      "side": 1,
+      "message": "if SwField::GetFormat returns sal_uInt32, wouldn\u0027t it be cleaner to force the lhs to that type, like\n\n  sal_uInt32(bIsUrl ? 1 : 0)",
+      "revId": "678698e5f59d208c8a0042d744c11b0479a7085a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
