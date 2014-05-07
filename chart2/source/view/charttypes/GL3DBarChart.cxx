@@ -67,6 +67,9 @@ void GL3DBarChart::create3DShapes()
 void GL3DBarChart::render()
 {
     mrWindow.getContext()->makeCurrent();
+    Size aSize = mrWindow.GetSizePixel();
+    mpRenderer->SetSize(aSize);
+    mrWindow.getContext()->setWinSize(aSize);
     for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
     {

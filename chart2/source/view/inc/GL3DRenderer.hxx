@@ -249,9 +249,9 @@ private:
     double m_dFreq;
 #endif
 
-    int m_iWidth;
+    sal_Int32 m_iWidth;
 
-    int m_iHeight;
+    sal_Int32 m_iHeight;
 
     float m_fZmax;
 
