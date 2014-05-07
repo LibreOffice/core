@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_d9fbc345",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-07T07:33:44Z",
+      "side": 1,
+      "message": "No need to have this include in the .hxx, it\u0027s enough to add it to the .cxx. That will help to avoid unnecessary rebuilds of all the users of this .hxx when the included .hxx changes.",
+      "revId": "20a58c281a40e3bb35dff4dd1b99e0b8dcd75534",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
