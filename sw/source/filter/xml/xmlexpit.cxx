@@ -132,8 +132,8 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             {
                 OUStringBuffer aOut;
                 const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-                OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
-                const unsigned int eEnum = pSplit->GetValue() ? 1 : 0;
+                assert(pSplit); //Wrong Which-ID
+                const unsigned int eEnum = (pSplit && pSplit->GetValue()) ? 1 : 0;
                 rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
                 aValue = aOut.makeStringAndClear();
             }
