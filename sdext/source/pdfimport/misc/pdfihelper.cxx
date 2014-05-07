@@ -96,10 +96,15 @@ OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
         aBuf.append( '0' );
     aBuf.append( sal_Int32(nBlue), 16 );
 
-    // TODO(F3): respect alpha transparency (polygons etc.)
-    OSL_ASSERT(rCol.Alpha == 1.0);
-
     return aBuf.makeStringAndClear();
+}
+
+OUString pdfi::getPercentString(double value)
+{
+    OUStringBuffer buf(32);
+    buf.append(value);
+    buf.appendAscii("%");
+    return buf.makeStringAndClear();
 }
 
 OUString pdfi::unitMMString( double fMM )
