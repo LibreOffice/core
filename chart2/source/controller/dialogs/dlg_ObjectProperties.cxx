@@ -46,7 +46,7 @@
 #include "ExplicitCategoriesProvider.hxx"
 #include "ChartModel.hxx"
 #include "CommonConverters.hxx"
-#include "../../tools/RegressionCalculationHelper.hxx"
+#include "RegressionCalculationHelper.hxx"
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
