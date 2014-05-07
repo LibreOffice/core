@@ -86,11 +86,12 @@ void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
     if ( ( nSID == SID_IMAP_EXEC ) && pItem )
     {
         const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
-
-        DBG_ASSERT( pStateItem || pItem == 0, "SfxBoolItem expected");
-
-        // Disable Float if possible
-        rIMap.SetExecState( !pStateItem->GetValue() );
+        assert(pStateItem); //SfxBoolItem expected
+        if (pStateItem)
+        {
+            // Disable Float if possible
+            rIMap.SetExecState( !pStateItem->GetValue() );
+        }
     }
 }
 
