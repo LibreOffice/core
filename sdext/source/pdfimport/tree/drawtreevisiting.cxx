@@ -808,6 +808,8 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >
         }
 
         aGCProps[ "svg:stroke-color" ] = getColorString(rGC.LineColor);
+        if (rGC.LineColor.Alpha != 1.0)
+            aGCProps["svg:stroke-opacity"] = getPercentString(rGC.LineColor.Alpha * 100.0);
         aGCProps[ "svg:stroke-width" ] = convertPixelToUnitString(rGC.LineWidth * scale);
         aGCProps[ "draw:stroke-linejoin" ] = rGC.GetLineJoinString();
         aGCProps[ "svg:stroke-linecap" ] = rGC.GetLineCapString();
@@ -821,7 +823,9 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >
     if( elem.Action & (PATH_FILL | PATH_EOFILL) )
     {
         aGCProps[ "draw:fill" ]   = "solid";
-        aGCProps[ "draw:fill-color" ] = getColorString( rGC.FillColor );
+        aGCProps[ "draw:fill-color" ] = getColorString(rGC.FillColor);
+        if (rGC.FillColor.Alpha != 1.0)
+            aGCProps["draw:opacity"] = getPercentString(rGC.FillColor.Alpha * 100.0);
     }
     else
     {
@@ -904,10 +908,7 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
     if (((textScale >= 1) && (textScale <= 99)) ||
         ((textScale >= 101) && (textScale <= 999)))
     {
-        OUStringBuffer aBuf(32);
-        aBuf.append(textScale);
-        aBuf.appendAscii("%");
-        aFontProps[ "style:text-scale" ] = aBuf.makeStringAndClear();
+        aFontProps[ "style:text-scale" ] = getPercentString(textScale);
     }
 
     StyleContainer::Style aStyle( "style:style", aProps );

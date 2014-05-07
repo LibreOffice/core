@@ -72,6 +72,7 @@ namespace pdfi
 
     /// Convert color to "#FEFEFE" color notation
     OUString getColorString( const ::com::sun::star::rendering::ARGBColor& );
+    OUString getPercentString(double value);
 
     double GetAverageTransformationScale(const basegfx::B2DHomMatrix& matrix);
     void FillDashStyleProps(PropertyMap& props, const std::vector<double>& dashArray, double scale);
