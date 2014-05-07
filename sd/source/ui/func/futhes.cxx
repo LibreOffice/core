@@ -70,7 +70,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(),
                              mpWindow, RID_SVXERRCTX, &DIALOG_MGR() );
 
-    if( mpViewShell && mpViewShell->ISA(DrawViewShell) )
+    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
         SdrTextObj* pTextObj = NULL;
 
@@ -117,7 +117,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
             }
         }
     }
-    else if ( mpViewShell->ISA(OutlineViewShell) )
+    else if (mpViewShell && mpViewShell->ISA(OutlineViewShell))
     {
         Outliner* pOutliner = mpDoc->GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);
