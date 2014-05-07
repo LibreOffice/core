@@ -1105,12 +1105,14 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_COLLAPSING_BORDERS:
         {
             const SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
-            OSL_ENSURE( pBorders != NULL, "Wrong RES-ID" );
-
-            aOut.append( pBorders->GetValue()
-                         ? GetXMLToken( XML_COLLAPSING )
-                         : GetXMLToken( XML_SEPARATING ) );
-            bOk = true;
+            assert(pBorders); //Wrong RES-ID
+            if (pBorders)
+            {
+                aOut.append( pBorders->GetValue()
+                             ? GetXMLToken( XML_COLLAPSING )
+                             : GetXMLToken( XML_SEPARATING ) );
+                bOk = true;
+            }
         }
         break;
 
