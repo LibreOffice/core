@@ -3506,7 +3506,8 @@ namespace {
                     sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
                 }
 
-                if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false, &pItem ) ==
+                const SwAttrSetChg* pSet = dynamic_cast<const SwAttrSetChg*>(pNewValue);
+                if ( pSet && pSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false, &pItem ) ==
                         SFX_ITEM_SET )
                 {
                     // #i70748#
