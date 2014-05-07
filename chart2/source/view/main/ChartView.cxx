@@ -2459,6 +2459,14 @@ void ChartView::createShapes()
         createShapes3D();
         return;
     }
+    else
+    {
+        // hide OpenGL window for now in normal charts
+        OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
+        if(pWindow)
+            pWindow->Show(false);
+
+    }
 #endif
 
     {
@@ -3148,6 +3156,8 @@ void ChartView::createShapes3D()
     OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
     if(!pWindow)
         return;
+
+    pWindow->Show();
 
     GL3DBarChart aBarChart(aDataSeries, *pWindow);
     aBarChart.create3DShapes();
