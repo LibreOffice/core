@@ -8,15 +8,40 @@
  */
 
 #include <vcl/openglwin.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
+
+class OpenGLWindowImpl
+{
+public:
+    OpenGLWindowImpl(SystemChildWindow* pWindow);
+    OpenGLContext* getContext();
+private:
+    OpenGLContext maContext;
+};
+
+OpenGLWindowImpl::OpenGLWindowImpl(SystemChildWindow* pWindow)
+{
+    maContext.init(pWindow);
+}
+
+OpenGLContext* OpenGLWindowImpl::getContext()
+{
+    return &maContext;
+}
 
 OpenGLWindow::OpenGLWindow(Window* pParent):
-    SystemChildWindow(pParent, 0)
+    SystemChildWindow(pParent, 0),
+    mpImpl(new OpenGLWindowImpl(this))
 {
 }
 
-OpenGLContext& OpenGLWindow::getContext()
+OpenGLWindow::~OpenGLWindow()
 {
-    return maContext;
+}
+
+OpenGLContext* OpenGLWindow::getContext()
+{
+    return mpImpl->getContext();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

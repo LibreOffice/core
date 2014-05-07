@@ -11,16 +11,23 @@
 #define INCLUDED_VCL_OPENGLWIN_HXX
 
 #include <vcl/syschild.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/vclopengl_dllapi.hxx>
 
-class OpenGLWindow : public SystemChildWindow
+#include <boost/scoped_ptr.hpp>
+
+class OpenGLContext;
+class OpenGLWindowImpl;
+
+// pImpl Pattern to avoid linking against OpenGL libs when using the class without the context
+class VCLOPENGL_DLLPUBLIC OpenGLWindow : public SystemChildWindow
 {
 public:
     OpenGLWindow(Window* pParent);
-    OpenGLContext& getContext();
+    ~OpenGLWindow();
+    OpenGLContext* getContext();
 
 private:
-    OpenGLContext maContext;
+    boost::scoped_ptr<OpenGLWindowImpl> mpImpl;
 };
 
 #endif
