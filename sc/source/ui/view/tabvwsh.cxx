@@ -38,7 +38,6 @@
 #include "scresid.hxx"
 #include "dwfunctr.hxx"
 #include "sc.hrc"
-#include "drawattr.hxx"
 #include "spelldialog.hxx"
 
 #define ScTabViewShell
