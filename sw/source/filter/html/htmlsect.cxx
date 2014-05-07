@@ -704,7 +704,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SwFmtCol aFmtCol;
         nPrcWidth = 100;
 
-        aFmtCol.Init( nCols, nGutter, nPrcWidth ? USHRT_MAX : nTwipWidth );
+        aFmtCol.Init( nCols, nGutter, USHRT_MAX );
         aFrmItemSet.Put( aFmtCol );
 
         const SfxPoolItem *pItem;
