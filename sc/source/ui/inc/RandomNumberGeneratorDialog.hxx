@@ -15,10 +15,11 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 
-
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
+
+#include <boost/optional.hpp>
 
 class ScRandomNumberGeneratorDialog : public ScAnyRefDlg
 {
@@ -29,9 +30,9 @@ public:
 
     virtual ~ScRandomNumberGeneratorDialog();
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
-    virtual void        SetActive() SAL_OVERRIDE;
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual void SetActive() SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
 
 private:
     // Widgets
@@ -45,6 +46,8 @@ private:
     NumericField*       mpParameter2Value;
     NumericField*       mpSeed;
     CheckBox*           mpEnableSeed;
+    NumericField*       mpDecimalPlaces;
+    CheckBox*           mpEnableRounding;
     PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
     CloseButton*        mpButtonClose;
@@ -61,7 +64,8 @@ private:
     void GetRangeFromSelection();
 
     template<class RNG>
-    void GenerateNumbers(RNG randomGenerator, const OUString& aDistributionName);
+
+    void GenerateNumbers(RNG randomGenerator, const sal_Int16 aDistributionStringId, const boost::optional<sal_Int8> aDecimalPlaces);
 
     void SelectGeneratorAndGenerateNumbers();
 
@@ -74,7 +78,7 @@ private:
     DECL_LINK( Parameter1ValueModified, void* );
     DECL_LINK( Parameter2ValueModified, void* );
     DECL_LINK( DistributionChanged, void* );
-    DECL_LINK( SeedCheckChanged, void* );
+    DECL_LINK( CheckChanged, void* );
 
 };
 

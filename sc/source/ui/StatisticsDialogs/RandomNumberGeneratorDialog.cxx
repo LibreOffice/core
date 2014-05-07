@@ -11,6 +11,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
+#include <rtl/math.hxx>
 
 #include "rangelst.hxx"
 #include "scitems.hxx"
@@ -36,7 +37,8 @@
 
 #include "RandomNumberGeneratorDialog.hxx"
 
-namespace {
+namespace
+{
 
 const sal_Int64 DIST_UNIFORM             = 0;
 const sal_Int64 DIST_NORMAL              = 1;
@@ -76,11 +78,14 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
     get(mpEnableSeed, "enable-seed-check");
     get(mpSeed,       "seed-spin");
 
+    get(mpEnableRounding, "enable-rounding-check");
+    get(mpDecimalPlaces,  "decimal-places-spin");
+
     get(mpDistributionCombo, "distribution-combo");
 
     get(mpButtonOk,     "ok");
     get(mpButtonApply,  "apply");
-    get(mpButtonClose, "close");
+    get(mpButtonClose,  "close");
 
     Init();
     GetRangeFromSelection();
@@ -105,10 +110,11 @@ void ScRandomNumberGeneratorDialog::Init()
 
     mpDistributionCombo->SetSelectHdl( LINK( this, ScRandomNumberGeneratorDialog, DistributionChanged ));
 
-    mpEnableSeed->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, SeedCheckChanged ));
+    mpEnableSeed->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
+    mpEnableRounding->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
 
     DistributionChanged(NULL);
-    SeedCheckChanged(NULL);
+    CheckChanged(NULL);
 }
 
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
@@ -181,78 +187,85 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
     double parameter1 = parameterInteger1 / static_cast<double>(PERCISION);
     double parameter2 = parameterInteger2 / static_cast<double>(PERCISION);
 
+    boost::optional<sal_Int8> aDecimalPlaces;
+    if (mpEnableRounding->IsChecked())
+    {
+        aDecimalPlaces = static_cast<sal_Int8>(mpDecimalPlaces->GetValue());
+    }
+
     switch(aSelectedId)
     {
         case DIST_UNIFORM:
         {
             boost::random::uniform_real_distribution<> distribution(parameter1, parameter2);
             boost::variate_generator<boost::mt19937&, boost::random::uniform_real_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_UNIFORM_REAL));
+            GenerateNumbers(rng, STR_DISTRIBUTION_UNIFORM_REAL, aDecimalPlaces);
             break;
         }
         case DIST_UNIFORM_INTEGER:
         {
             boost::random::uniform_int_distribution<> distribution(parameterInteger1, parameterInteger2);
             boost::variate_generator<boost::mt19937&, boost::random::uniform_int_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_UNIFORM_INTEGER));
+            GenerateNumbers(rng, STR_DISTRIBUTION_UNIFORM_INTEGER, aDecimalPlaces);
             break;
         }
         case DIST_NORMAL:
         {
             boost::random::normal_distribution<> distribution(parameter1, parameter2);
             boost::variate_generator<boost::mt19937&, boost::random::normal_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_NORMAL));
+            GenerateNumbers(rng, STR_DISTRIBUTION_NORMAL, aDecimalPlaces);
             break;
         }
         case DIST_CAUCHY:
         {
             boost::random::cauchy_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::cauchy_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_CAUCHY));
+            GenerateNumbers(rng, STR_DISTRIBUTION_CAUCHY, aDecimalPlaces);
             break;
         }
         case DIST_BERNOULLI:
         {
             boost::random::bernoulli_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::bernoulli_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_BERNOULLI));
+            GenerateNumbers(rng, STR_DISTRIBUTION_BERNOULLI, aDecimalPlaces);
             break;
         }
         case DIST_BINOMIAL:
         {
             boost::random::binomial_distribution<> distribution(parameterInteger2, parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::binomial_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_BINOMIAL));
+            GenerateNumbers(rng, STR_DISTRIBUTION_BINOMIAL, aDecimalPlaces);
             break;
         }
         case DIST_NEGATIVE_BINOMIAL:
         {
             boost::random::negative_binomial_distribution<> distribution(parameterInteger2, parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::negative_binomial_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_NEGATIVE_BINOMIAL));
+            GenerateNumbers(rng, STR_DISTRIBUTION_NEGATIVE_BINOMIAL, aDecimalPlaces);
             break;
         }
         case DIST_CHI_SQUARED:
         {
             boost::random::chi_squared_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::chi_squared_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_CHI_SQUARED));
+            GenerateNumbers(rng, STR_DISTRIBUTION_CHI_SQUARED, aDecimalPlaces);
             break;
         }
         case DIST_GEOMETRIC:
         {
             boost::random::geometric_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::geometric_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_GEOMETRIC));
+            GenerateNumbers(rng, STR_DISTRIBUTION_GEOMETRIC, aDecimalPlaces);
             break;
         }
     }
 }
 
 template<class RNG>
-void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, const OUString& aDistributionName)
+void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, const sal_Int16 aDistributionStringId, boost::optional<sal_Int8> aDecimalPlaces)
 {
-    OUString aUndo = SC_STRLOAD( RID_STATISTICS_DLGS, STR_UNDO_DISTRIBUTION_TEMPLATE);
+    OUString aUndo = SC_STRLOAD(RID_STATISTICS_DLGS, STR_UNDO_DISTRIBUTION_TEMPLATE);
+    OUString aDistributionName = SC_STRLOAD(RID_STATISTICS_DLGS, aDistributionStringId);
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
 
     ScDocShell* pDocShell = mpViewData->GetDocShell();
@@ -267,7 +280,7 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, const O
     SCTAB nTabEnd   = maInputRange.aEnd.Tab();
 
     std::vector<double> aVals;
-    aVals.reserve(nRowEnd-nRowStart+1);
+    aVals.reserve(nRowEnd - nRowStart + 1);
 
     for (SCROW nTab = nTabStart; nTab <= nTabEnd; ++nTab)
     {
@@ -277,7 +290,13 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, const O
 
             ScAddress aPos(nCol, nRowStart, nTab);
             for (SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
-                aVals.push_back(randomGenerator());
+            {
+
+                if (aDecimalPlaces)
+                    aVals.push_back(rtl::math::round(randomGenerator(), *aDecimalPlaces));
+                else
+                    aVals.push_back(randomGenerator());
+            }
 
             pDocShell->GetDocFunc().SetValueCells(aPos, aVals, true);
         }
@@ -361,9 +380,10 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter2ValueModified)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, SeedCheckChanged)
+IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged)
 {
     mpSeed->Enable(mpEnableSeed->IsChecked());
+    mpDecimalPlaces->Enable(mpEnableRounding->IsChecked());
     return 0;
 }
 
@@ -372,10 +392,10 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
     sal_Int64 aSelectedId = (sal_Int64) mpDistributionCombo->GetEntryData(aSelectedIndex);
 
-    mpParameter1Value->SetMin( SAL_MIN_INT64 );
-    mpParameter1Value->SetMax( SAL_MAX_INT64 );
-    mpParameter2Value->SetMin( SAL_MIN_INT64 );
-    mpParameter2Value->SetMax( SAL_MAX_INT64 );
+    mpParameter1Value->SetMin(SAL_MIN_INT64);
+    mpParameter1Value->SetMax(SAL_MAX_INT64);
+    mpParameter2Value->SetMin(SAL_MIN_INT64);
+    mpParameter2Value->SetMax(SAL_MAX_INT64);
 
     mpParameter1Value->SetDecimalDigits(DIGITS);
     mpParameter1Value->SetSpinSize(PERCISION);
