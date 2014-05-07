@@ -29,6 +29,14 @@ $(eval $(call gb_Module_add_l10n_targets,desktop,\
     UIConfig_deployment \
 ))
 
+ifeq ($(OS),LINUX)
+ifneq ($(ENABLE_GTK),)
+$(eval $(call gb_Module_add_targets,desktop,\
+    Executable_gtktiledviewer \
+))
+endif
+endif
+
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \
