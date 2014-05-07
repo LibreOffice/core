@@ -527,6 +527,20 @@ void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w)
             OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
 
+            writer.writeFormatAttribute("whichId", TMP_FORMAT, pFmt->Which());
+            const char* pWhich = 0;
+            switch (pFmt->Which())
+            {
+            case RES_FLYFRMFMT:
+                pWhich = "fly frame format";
+                break;
+            case RES_DRAWFRMFMT:
+                pWhich = "draw frame format";
+                break;
+            }
+            if (pWhich)
+                writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
+
             lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
             writer.endElement();
         }
