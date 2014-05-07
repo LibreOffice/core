@@ -77,11 +77,11 @@ static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
         {OUString(SC_UNONAME_FORMATS),  0,  getBooleanCppuType(),       0, 0},
         {OUString(SC_UNONAME_INSBRK),   0,  getBooleanCppuType(),       0, 0},
         {OUString(SC_UNONAME_ISCASE),   0,  getBooleanCppuType(),       0, 0},
-        {OUString(SC_UNONAME_MAXFLD),   0,  getCppuType((sal_Int32*)0), beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNONAME_MAXFLD),   0,  cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNONAME_SORTASC),  0,  getBooleanCppuType(),       0, 0},
         {OUString(SC_UNONAME_ULIST),    0,  getBooleanCppuType(),       0, 0},
-        {OUString(SC_UNONAME_UINDEX),   0,  getCppuType((sal_Int32*)0), 0, 0},
-        {OUString(SC_UNONAME_USINDEX),  0,  getCppuType((sal_Int32*)0), 0, 0},
+        {OUString(SC_UNONAME_UINDEX),   0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {OUString(SC_UNONAME_USINDEX),  0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aSubTotalPropertyMap_Impl;
@@ -94,7 +94,7 @@ static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
         {OUString(SC_UNONAME_CONTHDR),  0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_COPYOUT),  0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_ISCASE),   0,  getBooleanCppuType(),                      0, 0},
-        {OUString(SC_UNONAME_MAXFLD),   0,  getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNONAME_MAXFLD),   0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNONAME_ORIENT),   0,  getCppuType((table::TableOrientation*)0),  0, 0},
         {OUString(SC_UNONAME_OUTPOS),   0,  getCppuType((table::CellAddress*)0),       0, 0},
         {OUString(SC_UNONAME_SAVEOUT),  0,  getBooleanCppuType(),                      0, 0},
@@ -115,11 +115,11 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
         {OUString(SC_UNONAME_ISUSER),   0,  getBooleanCppuType(),           beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_KEEPFORM), 0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNO_LINKDISPBIT),  0,  getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNO_LINKDISPNAME), 0,  getCppuType((OUString*)0), beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNO_LINKDISPNAME), 0,  cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_MOVCELLS), 0,  getBooleanCppuType(),                      0, 0},
-        {OUString(SC_UNONAME_REFPERIOD), 0, getCppuType((sal_Int32*)0),                0, 0},
+        {OUString(SC_UNONAME_REFPERIOD), 0, cppu::UnoType<sal_Int32>::get(),                0, 0},
         {OUString(SC_UNONAME_STRIPDAT), 0,  getBooleanCppuType(),                      0, 0},
-        {OUString(SC_UNONAME_TOKENINDEX),0, getCppuType((sal_Int32*)0),     beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_TOKENINDEX),0, cppu::UnoType<sal_Int32>::get(),     beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_USEFLTCRT),0,  getBooleanCppuType(),                      0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

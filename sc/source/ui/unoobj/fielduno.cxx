@@ -59,7 +59,7 @@ const SfxItemPropertySet* getDateTimePropertySet()
         { OUString(SC_UNONAME_DATETIME), 0, getCppuType((const util::DateTime*)0), 0, 0 },
         { OUString(SC_UNONAME_ISFIXED),  0, getBooleanCppuType(),                  0, 0 },
         { OUString(SC_UNONAME_ISDATE),   0, getBooleanCppuType(),                  0, 0 },
-        { OUString(SC_UNONAME_NUMFMT),   0, getCppuType((const sal_Int32*)0),      0, 0 },
+        { OUString(SC_UNONAME_NUMFMT),   0, cppu::UnoType<sal_Int32>::get(),      0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aMap(aMapContent);
@@ -82,10 +82,10 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
     {
         {OUString(SC_UNONAME_ANCTYPE),  0,  getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_ANCTYPES), 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_REPR),     0,  getCppuType((OUString*)0),    0, 0},
-        {OUString(SC_UNONAME_TARGET),   0,  getCppuType((OUString*)0),    0, 0},
+        {OUString(SC_UNONAME_REPR),     0,  cppu::UnoType<OUString>::get(),    0, 0},
+        {OUString(SC_UNONAME_TARGET),   0,  cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNONAME_TEXTWRAP), 0,  getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_URL),      0,  getCppuType((OUString*)0),    0, 0},
+        {OUString(SC_UNONAME_URL),      0,  cppu::UnoType<OUString>::get(),    0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aURLPropertySet_Impl( aURLPropertyMap_Impl );

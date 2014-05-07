@@ -128,8 +128,8 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_HASDRAWPAGES),            0, getBooleanCppuType(),                                             beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_IGNORECASE),              PROP_UNO_IGNORECASE, getBooleanCppuType(),                           0, 0},
         {OUString(SC_UNO_ITERENABLED),             PROP_UNO_ITERENABLED, getBooleanCppuType(),                          0, 0},
-        {OUString(SC_UNO_ITERCOUNT),               PROP_UNO_ITERCOUNT, getCppuType((sal_Int32*)0),                      0, 0},
-        {OUString(SC_UNO_ITEREPSILON),             PROP_UNO_ITEREPSILON, getCppuType((double*)0),                       0, 0},
+        {OUString(SC_UNO_ITERCOUNT),               PROP_UNO_ITERCOUNT, cppu::UnoType<sal_Int32>::get(),                      0, 0},
+        {OUString(SC_UNO_ITEREPSILON),             PROP_UNO_ITEREPSILON, cppu::UnoType<double>::get(),                       0, 0},
         {OUString(SC_UNO_LOOKUPLABELS),            PROP_UNO_LOOKUPLABELS, getBooleanCppuType(),                         0, 0},
         {OUString(SC_UNO_MATCHWHOLE),              PROP_UNO_MATCHWHOLE, getBooleanCppuType(),                           0, 0},
         {OUString(SC_UNO_NAMEDRANGES),             0, getCppuType((uno::Reference<sheet::XNamedRanges>*)0),             0, 0},
@@ -166,7 +166,7 @@ static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
         {OUString(SC_UNONAME_NEWPAGE),  0,  getBooleanCppuType(),          0, 0 },
         {OUString(SC_UNONAME_CELLVIS),  0,  getBooleanCppuType(),          0, 0 },
         {OUString(SC_UNONAME_OWIDTH),   0,  getBooleanCppuType(),          0, 0 },
-        {OUString(SC_UNONAME_CELLWID),  0,  getCppuType((sal_Int32*)0),    0, 0 },
+        {OUString(SC_UNONAME_CELLWID),  0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aColumnsPropertyMap_Impl;
@@ -176,13 +176,13 @@ static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aRowsPropertyMap_Impl[] =
     {
-        {OUString(SC_UNONAME_CELLHGT),  0,  getCppuType((sal_Int32*)0),    0, 0 },
+        {OUString(SC_UNONAME_CELLHGT),  0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
         {OUString(SC_UNONAME_CELLFILT), 0,  getBooleanCppuType(),          0, 0 },
         {OUString(SC_UNONAME_OHEIGHT),  0,  getBooleanCppuType(),          0, 0 },
         {OUString(SC_UNONAME_MANPAGE),  0,  getBooleanCppuType(),          0, 0 },
         {OUString(SC_UNONAME_NEWPAGE),  0,  getBooleanCppuType(),          0, 0 },
         {OUString(SC_UNONAME_CELLVIS),  0,  getBooleanCppuType(),          0, 0 },
-        {OUString(SC_UNONAME_CELLBACK), ATTR_BACKGROUND, ::getCppuType((const sal_Int32*)0), 0, MID_BACK_COLOR },
+        {OUString(SC_UNONAME_CELLBACK), ATTR_BACKGROUND, ::cppu::UnoType<sal_Int32>::get(), 0, MID_BACK_COLOR },
         {OUString(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND, ::getBooleanCppuType(), 0, MID_GRAPHIC_TRANSPARENT },
         // not sorted, not used with SfxItemPropertyMapEntry::GetByName
         { OUString(), 0, css::uno::Type(), 0, 0 }

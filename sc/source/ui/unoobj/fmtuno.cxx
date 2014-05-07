@@ -47,11 +47,11 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
     static const SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
         {OUString(SC_UNONAME_ERRALSTY), 0,  getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
-        {OUString(SC_UNONAME_ERRMESS),  0,  getCppuType((OUString*)0),                0, 0},
-        {OUString(SC_UNONAME_ERRTITLE), 0,  getCppuType((OUString*)0),                0, 0},
+        {OUString(SC_UNONAME_ERRMESS),  0,  cppu::UnoType<OUString>::get(),                0, 0},
+        {OUString(SC_UNONAME_ERRTITLE), 0,  cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNONAME_IGNOREBL), 0,  getBooleanCppuType(),                          0, 0},
-        {OUString(SC_UNONAME_INPMESS),  0,  getCppuType((OUString*)0),                0, 0},
-        {OUString(SC_UNONAME_INPTITLE), 0,  getCppuType((OUString*)0),                0, 0},
+        {OUString(SC_UNONAME_INPMESS),  0,  cppu::UnoType<OUString>::get(),                0, 0},
+        {OUString(SC_UNONAME_INPTITLE), 0,  cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNONAME_SHOWERR),  0,  getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNONAME_SHOWINP),  0,  getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNONAME_SHOWLIST), 0,  getCppuType((sal_Int16*)0),                    0, 0},

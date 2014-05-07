@@ -2185,7 +2185,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
     // Sometimes we might get a float or a double or whatever
     // set in the Any, we should convert as appropriate
     // #FIXME - perhaps worth turning this into some sort of
-    // conversion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, getCppuType((sal_Int32*)0) )
+    // conversion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, cppu::UnoType<sal_Int32>::get() )
     uno::Any aRowIndexAny = nRowIndex;
     if ( aRowIndexAny.hasValue() && !( aRowIndexAny >>= nRow ) )
     {
@@ -2193,7 +2193,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         uno::Any aConverted;
         try
         {
-            aConverted = xConverter->convertTo( aRowIndexAny, getCppuType((sal_Int32*)0) );
+            aConverted = xConverter->convertTo( aRowIndexAny, cppu::UnoType<sal_Int32>::get() );
             bIsIndex = ( aConverted >>= nRow );
         }
         catch( uno::Exception& ) {} // silence any errors
@@ -2222,7 +2222,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
                 uno::Any aConverted;
                 try
                 {
-                    aConverted = xConverter->convertTo( aColumnAny, getCppuType((sal_Int32*)0) );
+                    aConverted = xConverter->convertTo( aColumnAny, cppu::UnoType<sal_Int32>::get() );
                     bIsColumnIndex = ( aConverted >>= nColumn );
                 }
                 catch( uno::Exception& ) {} // silence any errors
@@ -4509,7 +4509,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
         uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
         try
         {
-            Field = xConverter->convertTo( aField, getCppuType( (sal_Int32*)0 ) );
+            Field = xConverter->convertTo( aField, cppu::UnoType<sal_Int32>::get() );
         }
         catch( uno::Exception& )
         {

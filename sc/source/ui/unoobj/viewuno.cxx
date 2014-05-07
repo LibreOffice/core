@@ -83,7 +83,7 @@ static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
     static const SfxItemPropertyMapEntry aViewOptPropertyMap_Impl[] =
     {
         {OUString(OLD_UNO_COLROWHDR),   0,  getBooleanCppuType(),          0, 0},
-        {OUString(SC_UNO_GRIDCOLOR),    0,  getCppuType((sal_Int32*)0),    0, 0},
+        {OUString(SC_UNO_GRIDCOLOR),    0,  cppu::UnoType<sal_Int32>::get(),    0, 0},
         {OUString(SC_UNO_COLROWHDR),    0,  getBooleanCppuType(),          0, 0},
         {OUString(SC_UNO_HORSCROLL),    0,  getBooleanCppuType(),          0, 0},
         {OUString(SC_UNO_SHEETTABS),    0,  getBooleanCppuType(),          0, 0},

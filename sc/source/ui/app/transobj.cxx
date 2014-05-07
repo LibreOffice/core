@@ -317,7 +317,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 
             //  DataType depends on format type:
 
-            if ( rFlavor.DataType.equals( ::getCppuType( (const OUString*) 0 ) ) )
+            if ( rFlavor.DataType.equals( ::cppu::UnoType<OUString>::get() ) )
             {
                 OUString aString;
                 if ( aObj.ExportString( aString, nFormat ) )

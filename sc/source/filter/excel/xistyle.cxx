@@ -91,7 +91,7 @@ public:
     // Methods XElementAcess
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        return ::getCppuType( (sal_Int32*)0 );
+        return ::cppu::UnoType<sal_Int32>::get();
     }
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
