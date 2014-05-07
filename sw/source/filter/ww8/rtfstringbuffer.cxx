@@ -11,22 +11,22 @@
 
 RtfStringBufferValue::RtfStringBufferValue()
     : m_aBuffer(),
-    m_pFlyFrmFmt(0),
-    m_pGrfNode(0)
+      m_pFlyFrmFmt(0),
+      m_pGrfNode(0)
 {
 }
 
 RtfStringBufferValue::RtfStringBufferValue(const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode)
     : m_aBuffer(),
-    m_pFlyFrmFmt(pFlyFrmFmt),
-    m_pGrfNode(pGrfNode)
+      m_pFlyFrmFmt(pFlyFrmFmt),
+      m_pGrfNode(pGrfNode)
 {
 }
 
 void RtfStringBufferValue::makeStringAndClear(RtfAttributeOutput* pAttributeOutput)
 {
     if (!isGraphic())
-        pAttributeOutput->m_rExport.Strm().WriteCharPtr( m_aBuffer.makeStringAndClear().getStr() );
+        pAttributeOutput->m_rExport.Strm().WriteCharPtr(m_aBuffer.makeStringAndClear().getStr());
     else
         pAttributeOutput->FlyFrameGraphic(m_pFlyFrmFmt, m_pGrfNode);
 }
