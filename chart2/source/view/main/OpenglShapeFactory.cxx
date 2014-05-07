@@ -154,7 +154,8 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
         xPropSet->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, aName );
 
         SvxOpenGLObject* pObj = dynamic_cast<SvxOpenGLObject*>(xTarget.get());
-        pObj->setRenderer(new OpenGLChartAdapter(xChart));
+        if (pObj)
+            pObj->setRenderer(new OpenGLChartAdapter(xChart));
 
         xRet = getChartShape( xDrawPage );
     }
