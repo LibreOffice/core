@@ -784,8 +784,8 @@ void WinMtfOutput::MoveClipRegion( const Size& rSize )
 
 void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
 {
-    mbClipNeedsUpdate=true;
-    if ( bIsMapped )
+    mbClipNeedsUpdate = true;
+    if (bIsMapped)
     {
         PolyPolygon aPP( rPolyPolygon );
         aClipPath.setClipPath( ImplScale( aPP ), nClippingMode );
@@ -845,7 +845,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
 
     mnRop = R2_BLACK + 1;
     SetRasterOp( R2_BLACK );
-};
+}
 
 WinMtfOutput::~WinMtfOutput()
 {
@@ -858,7 +858,7 @@ WinMtfOutput::~WinMtfOutput()
 
     for ( sal_uInt32 i = 0; i < vGDIObj.size(); i++ )
         delete vGDIObj[ i ];
-};
+}
 
 void WinMtfOutput::UpdateClipRegion()
 {
@@ -1827,14 +1827,17 @@ void WinMtfOutput::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
     {
         if ( mnMapMode == MM_ISOTROPIC ) //TODO: WHAT ABOUT ANISOTROPIC???
         {
-            SetDevExt(Size((mnWinExtX+mnWinOrgX)>>MS_FIXPOINT_BITCOUNT_28_4,-((mnWinExtY-mnWinOrgY)>>MS_FIXPOINT_BITCOUNT_28_4)),false);
+            Size aSize( (mnWinExtX + mnWinOrgX) >> MS_FIXPOINT_BITCOUNT_28_4,
+                      -((mnWinExtY - mnWinOrgY) >> MS_FIXPOINT_BITCOUNT_28_4));
+
+            SetDevExt(aSize, false);
         }
     }
 }
 
-void WinMtfOutput::SetWinExt( const Size& rSize, bool bIsEMF )
+void WinMtfOutput::SetWinExt(const Size& rSize, bool bIsEMF)
 {
-    if( rSize.Width() && rSize.Height() )
+    if (rSize.Width() && rSize.Height())
     {
         switch( mnMapMode )
         {
@@ -1847,7 +1850,7 @@ void WinMtfOutput::SetWinExt( const Size& rSize, bool bIsEMF )
                 {
                     SetDevByWin();
                 }
-                mbIsMapWinSet=true;
+                mbIsMapWinSet = true;
             }
         }
     }

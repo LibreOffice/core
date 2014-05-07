@@ -464,7 +464,8 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadInt32( nRecordSize );
             pWMF->SeekRel(2);
             aPosition = ReadYX();
-            pWMF->ReadUInt16( nLen ).ReadUInt16( nOptions );
+            pWMF->ReadUInt16( nLen );
+            pWMF->ReadUInt16( nOptions );
 
             sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
             if ( nOptions & ETO_RTLREADING )
@@ -1560,7 +1561,6 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                  pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
                  bRet = false;
              }
-
         }
     }
     else
