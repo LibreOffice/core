@@ -33,6 +33,12 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_targets,desktop,\
 	Library_libreoffice \
 ))
+
+ifneq ($(ENABLE_GTK),)
+$(eval $(call gb_Module_add_targets,desktop,\
+    Executable_gtktiledviewer \
+))
+endif
 endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

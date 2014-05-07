@@ -98,6 +98,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	) \
 	ui-previewer \
 	tiledrendering \
+	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	xpdfimport \
 	$(if $(filter WNT,$(OS)), \
