@@ -277,6 +277,9 @@ public:
     // delete all attributes from SwpHintsArray.
     void    ClearSwpHintsArr( bool bDelFields );
 
+    /// initialize the hints after file loading (which takes shortcuts)
+    void    FileLoadedInitHints();
+
     /// Insert pAttr into hints array. @return true iff inserted successfully
     bool    InsertHint( SwTxtAttr * const pAttr,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );

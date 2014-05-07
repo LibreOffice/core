@@ -255,14 +255,19 @@ SwTxtNode::~SwTxtNode()
     InitSwParaStatistics( false );
 }
 
-SwCntntFrm *SwTxtNode::MakeFrm( SwFrm* pSib )
+void SwTxtNode::FileLoadedInitHints()
 {
-    // fdo#52028: ODF file import does not result in MergePortions being called
-    // for every attribute, since that would be inefficient.  So call it here.
     if (m_pSwpHints)
     {
         m_pSwpHints->MergePortions(*this);
     }
+}
+
+SwCntntFrm *SwTxtNode::MakeFrm( SwFrm* pSib )
+{
+    // fdo#52028: ODF file import does not result in MergePortions being called
+    // for every attribute, since that would be inefficient.  So call it here.
+    FileLoadedInitHints();
     SwCntntFrm *pFrm = new SwTxtFrm( this, pSib );
     return pFrm;
 }

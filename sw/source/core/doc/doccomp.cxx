@@ -1757,11 +1757,22 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
     }
 }
 
+static bool lcl_MergePortions(SwNode *const& pNode, void *)
+{
+    if (pNode->IsTxtNode())
+    {
+        pNode->GetTxtNode()->FileLoadedInitHints();
+    }
+    return true;
+}
+
 // Returns (the difference count?) if something is different
 long SwDoc::CompareDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
         return 0;
+
+    const_cast<SwDoc&>(rDoc).GetNodes().ForEach(&lcl_MergePortions);
 
     long nRet = 0;
 
@@ -2003,6 +2014,8 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         return 0;
 
     long nRet = 0;
+
+    const_cast<SwDoc&>(rDoc).GetNodes().ForEach(&lcl_MergePortions);
 
     GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
