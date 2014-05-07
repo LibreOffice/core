@@ -353,11 +353,8 @@ static typelib_TypeClass cpp_mediate(
  * is called on incoming vtable calls
  * (called by asm snippets)
  */
-static void cpp_vtable_call(
+static void __attribute__((noinline,regparm(3))) cpp_vtable_call(
     int nFunctionIndex, int nVtableOffset, void** pCallStack )
-    __attribute__((regparm(3)));
-
-void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** pCallStack )
 {
     volatile long nRegReturn[2];
     typelib_TypeClass aType = cpp_mediate(

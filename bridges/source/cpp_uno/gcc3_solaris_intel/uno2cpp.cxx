@@ -38,15 +38,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-void callVirtualMethod(
-    void * pAdjustedThisPtr,
-    sal_Int32 nVtableIndex,
-    void * pRegisterReturn,
-    typelib_TypeClass eReturnType,
-    sal_Int32 * pStackLongs,
-    sal_Int32 nStackLongs ) __attribute__((noinline));
-
-void callVirtualMethod(
+static void  __attribute__((noinline)) callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
