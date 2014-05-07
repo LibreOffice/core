@@ -122,41 +122,11 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
 {
-    //i120759,this function is for both the reference chapter field and normal chapter field
-    //bSrchNum can distinguish the two types,to the latter type,the outline num rule is must...
     sNumber = OUString();
     sTitle = OUString();
     sPost = OUString();
     sPre = OUString();
-    //The reference chapter field of normal num rule will be handled in this code segment
-    if (bSrchNum && !rTxtNd.IsOutline())
-    {
-        SwNumRule* pRule(rTxtNd.GetNumRule());
-        if (rTxtNd.IsCountedInList() && pRule)
-        {
-            sNumber = rTxtNd.GetNumString(false);
 
-            int nListLevel = rTxtNd.GetActualListLevel();
-
-            if (nListLevel < 0)
-                nListLevel = 0;
-
-            if (nListLevel >= MAXLEVEL)
-                nListLevel = MAXLEVEL - 1;
-
-            const SwNumFmt& rNFmt = pRule->Get(static_cast<unsigned short>(nListLevel));
-            sPost = rNFmt.GetSuffix();
-            sPre = rNFmt.GetPrefix();
-        }
-        else
-        {
-            sNumber = "??";
-        }
-        sTitle = removeControlChars(rTxtNd.GetExpandTxt());
-    }
-    else
-    {
-    //End
     SwDoc* pDoc = (SwDoc*)rTxtNd.GetDoc();
     const SwTxtNode *pTxtNd = rTxtNd.FindOutlineNodeOfLevel( nLevel );
     if( pTxtNd )
@@ -221,7 +191,6 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
 
         sTitle = removeControlChars(pTxtNd->GetExpandTxt(0, -1, false, false, false, false));
 
-    }
     }
 }
 
