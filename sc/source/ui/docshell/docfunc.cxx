@@ -2726,7 +2726,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         ScDrawLayer::MoveCells() which may move away inserted objects to wrong
         positions (e.g. if source and destination range overlaps).*/
     pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL & ~(IDF_OBJECTS),
-                        pRefUndoDoc, pClipDoc, true, false, bIncludeFiltered );
+                        NULL, pClipDoc, true, false, bIncludeFiltered );
 
 
     // skipped rows and merged cells don't mix
