@@ -635,7 +635,9 @@ namespace svxform
     )
     {
         FmEntryData* pData = FindData(xOld, GetRootList(), true);
-        DBG_ASSERT(pData && pData->ISA(FmControlData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
+        assert(pData && pData->ISA(FmControlData)); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
+        if (!pData || !pData->ISA(FmControlData))
+            return;
         ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages );
 
         FmNavModelReplacedHint aReplacedHint( pData );
