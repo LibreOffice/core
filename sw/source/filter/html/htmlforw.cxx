@@ -680,6 +680,9 @@ static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
         return;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObj );
+    assert(pFormObj);
+    if (!pFormObj)
+        return;
     uno::Reference< awt::XControl >  xControl;
     SdrView* pDrawView = pVSh->GetDrawView();
     OSL_ENSURE( pDrawView && pVSh->GetWin(), "no DrawView or window!" );
