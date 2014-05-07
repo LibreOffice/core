@@ -112,6 +112,11 @@ void Camera::render()
     mpRenderer->SetCameraInfo(maPos, maDirection, maUp, true);
 }
 
+void Camera::zoom(sal_uInt32 /*nId*/)
+{
+    // TODO here
+}
+
 }
 
 }

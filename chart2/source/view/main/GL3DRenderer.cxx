@@ -22,7 +22,9 @@
 
 #define GL_PI 3.14159f
 #define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
+#define BMP_HEADER_LEN 54
 
+#define DEBUG_FBO 0
 using namespace com::sun::star;
 
 namespace chart {
@@ -90,6 +92,8 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_CameraInfo.useDefault = true;
     m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
     m_RoundBarMesh.iMeshSizes = 0;
+    m_FboID[0] = 0;
+    m_FboID[1] = 0;
 }
 
 namespace {
@@ -223,8 +227,6 @@ void OpenGL3DRenderer::init()
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    CreateFrameBufferObj();
-
     glGenBuffers(1, &m_CubeVertexBuf);
     glGenBuffers(1, &m_CubeNormalBuf);
     glGenBuffers(1, &m_CubeElementBuf);
@@ -242,9 +244,8 @@ void OpenGL3DRenderer::init()
     glBindBuffer(GL_ARRAY_BUFFER, m_CoordinateBuf);
     glBufferData(GL_ARRAY_BUFFER, sizeof(coordinateAxis), coordinateAxis, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-    m_3DProjection = glm::perspective(30.0f, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
+    m_fViewAngle = 30.0f;
+    m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
     LoadShaders();
     glGenBuffers(1, &m_TextTexCoordBuf);
     glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
@@ -252,6 +253,9 @@ void OpenGL3DRenderer::init()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERROR();
     Init3DUniformBlock();
+
+    glViewport(0, 0, m_iWidth, m_iHeight);
+    Set3DSenceInfo(0xFFFFFF, true);
 }
 
 void OpenGL3DRenderer::SetSize(const Size& rSize)
@@ -836,7 +840,7 @@ void OpenGL3DRenderer::Set3DSenceInfo(sal_Int32 color, bool twoSidesLighting)
                                                    1.0);
 
     m_LightsInfo.lightNum = 0;
-    SetLightInfo(true, 255, glm::vec4(1.0, 1.0, 1.0, 0.0));
+    SetLightInfo(true, 0xFFFFFF, glm::vec4(1.0, 1.0, 1.0, 0.0));
 }
 
 void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction)
@@ -927,12 +931,14 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
     {
         m_Polygon3DInfo.vertices = new Vertices3D;
     }
-    float actualX = x - (float)m_iWidth / 2;
-    float actualY = y  - (float)m_iHeight / 2;
+    //float actualX = x - (float)m_iWidth / 2;
+    //float actualY = y  - (float)m_iHeight / 2;
+    float actualX = x;
+    float actualY = y;
     float actualZ = z;
     float maxCoord = std::max(actualX, std::max(actualY, actualZ));
     m_fZmax = std::max(maxCoord, m_fZmax);
-    m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, -actualY, actualZ));
+    m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, actualY, actualZ));
     m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, actualX);
     m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, actualX);
 
@@ -956,10 +962,10 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 col
     glm::vec4 DirY = modelMatrix * glm::vec4(0.0, 1.0, 0.0, 0.0);
     glm::vec4 DirZ = modelMatrix * glm::vec4(0.0, 0.0, 1.0, 0.0);
     m_Extrude3DInfo.xScale = glm::length(DirX);
-    m_Extrude3DInfo.yScale = glm::length(DirY);
-    m_Extrude3DInfo.zScale = glm::length(DirZ);
+    m_Extrude3DInfo.yScale = glm::length(DirZ);
+    m_Extrude3DInfo.zScale = glm::length(DirY);
     glm::mat4 transformMatrixInverse = glm::inverse(glm::translate(glm::vec3(tranform)));
-    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.yScale, m_Extrude3DInfo.zScale));
+    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.zScale, m_Extrude3DInfo.yScale));
     m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
     //color
     m_Extrude3DInfo.extrudeColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
@@ -979,10 +985,35 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 col
     m_Extrude3DInfo.material.ambient = glm::vec4(0.2, 0.2, 0.2, 1.0);
 
     m_Extrude3DInfo.material.shininess = 1.0f;
-    m_Extrude3DInfo.xTransform = tranform.x - ((float)m_iWidth / 2);
-    m_Extrude3DInfo.yTransform = tranform.y - ((float)m_iHeight / 2);
+    m_Extrude3DInfo.xTransform = tranform.x;
+    m_Extrude3DInfo.yTransform = tranform.y;
     m_Extrude3DInfo.zTransform = tranform.z;
+//    m_Extrude3DInfo.zTransform = 0;
     m_Extrude3DInfo.rounded = roundedCorner;
+    if (m_Extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
+    {
+        CreateActualRoundedCube(0.1f, 30, 30, 1.0f, 1.2f, m_Extrude3DInfo.zScale / m_Extrude3DInfo.xScale);
+        AddVertexData(m_CubeVertexBuf);
+        AddNormalData(m_CubeNormalBuf);
+        AddIndexData(m_CubeElementBuf);
+        for (int j = 0; j < 5; j++)
+        {
+            m_Extrude3DInfo.startIndex[j] = m_RoundBarMesh.iElementStartIndices[j];
+            m_Extrude3DInfo.size[j] = m_RoundBarMesh.iElementSizes[j];
+        }
+    }
+    m_Vertices.clear();
+    m_Normals.clear();
+    m_Indeices.clear();
+    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, m_Extrude3DInfo.xTransform + m_Extrude3DInfo.xScale);
+    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, m_Extrude3DInfo.xTransform);
+
+    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, m_Extrude3DInfo.yTransform + m_Extrude3DInfo.yScale);
+    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, m_Extrude3DInfo.yTransform );
+
+    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, m_Extrude3DInfo.zTransform + m_Extrude3DInfo.zScale);
+    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, m_Extrude3DInfo.zTransform);
+
 }
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
@@ -1051,7 +1082,7 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, &extrude3D.startIndex[surIndex]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[surIndex]);
 }
 
 void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D)
@@ -1084,7 +1115,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[BOTTOM_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[BOTTOM_SURFACE]);
 }
 
 void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
@@ -1119,7 +1150,7 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[MIDDLE_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[MIDDLE_SURFACE]);
 }
 
 void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
@@ -1155,7 +1186,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[TOP_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[TOP_SURFACE]);
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
 }
 
@@ -1185,6 +1216,7 @@ void OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
 {
     glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
     glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    CHECK_GL_ERROR();
     RenderExtrudeMiddleSurface(extrude3D);
     // check reverse flag to decide whether to render the top middle
     if (extrude3D.reverse)
@@ -1211,18 +1243,6 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     for (size_t i = 0; i < extrude3DNum; i++)
     {
         Extrude3DInfo extrude3DInfo = m_Extrude3DList[i];
-        if (extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
-        {
-            CreateActualRoundedCube(0.1f, 30, 30, 1.0f, 1.2f, extrude3DInfo.zScale / extrude3DInfo.xScale);
-            AddVertexData(m_CubeVertexBuf);
-            AddNormalData(m_CubeNormalBuf);
-            AddIndexData(m_CubeElementBuf);
-            for (int j = 0; i < 5; i++)
-            {
-                m_Extrude3DInfo.startIndex[j] = m_RoundBarMesh.iElementStartIndices[i];
-                m_Extrude3DInfo.size[j] = m_RoundBarMesh.iElementSizes[i];
-            }
-        }
         GLuint vertexBuf = extrude3DInfo.rounded ? m_CubeVertexBuf : m_BoundBox;
         GLuint normalBuf = extrude3DInfo.rounded ? m_CubeNormalBuf : m_BoundBoxNormal;
         // 1st attribute buffer : vertices
@@ -1438,25 +1458,25 @@ void OpenGL3DRenderer::RenderClickPos(Point aMPos)
 
 void OpenGL3DRenderer::CreateSceneBoxView()
 {
-    float senceBoxWidth = m_SenceBox.maxXCoord - m_SenceBox.minXCoord;
-    float senceBoxHeight = m_SenceBox.maxYCoord - m_SenceBox.minYCoord;
-    float senceBoxDepth = m_SenceBox.maxZCoord - m_SenceBox.minZCoord;
-    float distanceZ = m_SenceBox.maxZCoord + senceBoxWidth / 2 / tan(m_fViewAngle * GL_PI / 180.0f);
-    float veriticalAngle = atan((float)m_iHeight / (float)m_iWidth);
-    float distance = distanceZ / cos(veriticalAngle);
-    float horizontalAngle = 0;
-    m_fHeightWeight = senceBoxWidth * (float)m_iHeight / (float)m_iWidth / senceBoxHeight;
-    m_SenceBox.maxYCoord *= m_fHeightWeight;
-    m_SenceBox.minYCoord *= m_fHeightWeight;
     if (m_CameraInfo.useDefault)
     {
+        float senceBoxWidth = m_SenceBox.maxXCoord - m_SenceBox.minXCoord;
+        float senceBoxHeight = m_SenceBox.maxYCoord - m_SenceBox.minYCoord;
+        float senceBoxDepth = m_SenceBox.maxZCoord - m_SenceBox.minZCoord;
+        float distanceZ = m_SenceBox.maxZCoord + senceBoxWidth / 2 / tan(m_fViewAngle / 2 * GL_PI / 180.0f);
+        float veriticalAngle = atan((float)m_iHeight / (float)m_iWidth);
+        float distance = distanceZ / cos(veriticalAngle);
+        float horizontalAngle = 0;
+        m_fHeightWeight = senceBoxWidth * (float)m_iHeight / (float)m_iWidth / senceBoxHeight;
+        m_SenceBox.maxYCoord *= m_fHeightWeight;
+        m_SenceBox.minYCoord *= m_fHeightWeight;
         m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
-                                           -m_SenceBox.minYCoord - senceBoxHeight * m_fHeightWeight/ 2,
-                                           m_SenceBox.minZCoord + senceBoxDepth / 2);
+                                           m_SenceBox.minYCoord + senceBoxHeight * m_fHeightWeight/ 2,
+                                           m_SenceBox.minZCoord + senceBoxDepth * 2);
         //update the camera position and org
         m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
         m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
-        m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y - distance * sin(veriticalAngle);
+        m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * sin(veriticalAngle);
     }
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
                m_CameraInfo.cameraOrg, // and looks at the origin
@@ -1466,9 +1486,56 @@ void OpenGL3DRenderer::CreateSceneBoxView()
     m_bCameraUpdated = true;
 }
 
+void OpenGL3DRenderer::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
+{
+    unsigned char header[BMP_HEADER_LEN] = {
+        0x42, 0x4d, 0, 0, 0, 0, 0, 0, 0, 0,
+        54, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0
+    };
+
+    long file_size = (long)xsize * (long)ysize * 3 + 54;
+    header[2] = (unsigned char)(file_size &0x000000ff);
+    header[3] = (file_size >> 8) & 0x000000ff;
+    header[4] = (file_size >> 16) & 0x000000ff;
+    header[5] = (file_size >> 24) & 0x000000ff;
+
+    long width = xsize;
+    header[18] = width & 0x000000ff;
+    header[19] = (width >> 8) &0x000000ff;
+    header[20] = (width >> 16) &0x000000ff;
+    header[21] = (width >> 24) &0x000000ff;
+
+    long height = -ysize;
+    header[22] = height &0x000000ff;
+    header[23] = (height >> 8) &0x000000ff;
+    header[24] = (height >> 16) &0x000000ff;
+    header[25] = (height >> 24) &0x000000ff;
+    memcpy(bmpHeader, header, BMP_HEADER_LEN);
+}
+
 
 void OpenGL3DRenderer::ProcessUnrenderedShape()
 {
+    CreateSceneBoxView();
+    glViewport(0, 0, m_iWidth, m_iHeight);
+    glClearDepth(1.0f);
+#if 1
+    if ((!m_FboID[0]) || (!m_FboID[1]))
+    {
+        // create a texture object
+        CreateTextureObj(m_iWidth, m_iHeight);
+        //create render buffer object
+        CreateRenderObj(m_iWidth, m_iHeight);
+        //create fbo
+        CreateFrameBufferObj();
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
+#endif
+    glViewport(0, 0, m_iWidth, m_iHeight);
+    glClearColor(0.0, 0.0, 1.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Polygon
     RenderPolygon3DObject();
     //Shape3DExtrudeObject
@@ -1477,6 +1544,18 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderTextShape();
     //render the axis
     RenderCoordinateAxis();
+#if DEBUG_FBO
+    char fileName[256] = {0};
+    sprintf(fileName, "D://shaderout_%d_%d.bmp", m_iWidth, m_iHeight);
+    FILE *pfile = fopen(fileName,"wb");
+    sal_uInt8 *Tmp = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
+    CreateBMPHeader(Tmp, m_iWidth, m_iHeight);
+    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, Tmp + BMP_HEADER_LEN);
+    fwrite(Tmp, m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN, 1, pfile);
+    fclose(pfile);
+    free(Tmp);
+#endif
+//    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 glm::vec4 OpenGL3DRenderer::GetColorByIndex(int index)
@@ -1495,7 +1574,7 @@ sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uIn
 void OpenGL3DRenderer::ProcessPickingBox()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
     glClearDepth(1.0f);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     if(ProcessExtrude3DPickingBox() == 1)
@@ -1503,7 +1582,7 @@ void OpenGL3DRenderer::ProcessPickingBox()
         //the picked object has been processed, return
         return ;
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
@@ -1608,6 +1687,7 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
     m_coordinateAxisinfo.scale.y = 4 * extrude3DInfo.xScale;
     m_coordinateAxisinfo.scale.z = 4 * extrude3DInfo.xScale;
     m_coordinateAxisinfo.color = glm::vec4(0.5, 1.0, 0.8, 1.0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     return 1;
 }
 

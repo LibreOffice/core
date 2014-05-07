@@ -192,6 +192,7 @@ public:
     void SetSize(const Size& rSize);
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut);
     void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
+    void ProcessUnrenderedShape();
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
@@ -211,7 +212,6 @@ private:
     void RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex);
-    void ProcessUnrenderedShape();
     glm::vec4 GetColorByIndex(int index);
     sal_uInt32 GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uInt32 b);
     void ProcessPickingBox();
@@ -234,6 +234,7 @@ private:
     int GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY,
                                int iSubDivZ, float width, float height, float depth);
     void CreateSceneBoxView();
+    void CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
