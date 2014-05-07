@@ -3025,6 +3025,15 @@ DECLARE_OOXMLEXPORT_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")
    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78292, "FDO78292.docx")
+{
+   //text node is a leaf node, it should not have any children
+   xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+   if(!pXmlDoc)
+      return;
+   assertXPath(pXmlDoc,"/w:document/w:body/w:p[14]/w:sdt[3]/w:sdtPr[1]/w:text/w14:checked",0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testHyperLinkTagEnded, "fdo76316.docx")
 {
     /* XML tag <w:hyperlink> was not getting closed when its inside another
