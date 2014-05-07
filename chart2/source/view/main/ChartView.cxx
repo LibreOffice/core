@@ -3149,7 +3149,7 @@ void ChartView::createShapes3D()
     if(!pWindow)
         return;
 
-    GL3DBarChart aBarChart(aDataSeries, *pWindow->getContext());
+    GL3DBarChart aBarChart(aDataSeries, *pWindow);
     aBarChart.create3DShapes();
     aBarChart.render();
 }

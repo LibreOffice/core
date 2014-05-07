@@ -20,10 +20,10 @@
 namespace chart {
 
 GL3DBarChart::GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries,
-        OpenGLContext& rContext):
+        OpenGLWindow& rWindow):
     maDataSeries(rDataSeries),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
-    mrContext(rContext)
+    mrWindow(rWindow)
 {
 }
 
@@ -66,13 +66,13 @@ void GL3DBarChart::create3DShapes()
 
 void GL3DBarChart::render()
 {
-    mrContext.makeCurrent();
+    mrWindow.getContext()->makeCurrent();
     for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
     {
         itr->render();
     }
-    mrContext.swapBuffers();
+    mrWindow.getContext()->swapBuffers();
 }
 
 }
