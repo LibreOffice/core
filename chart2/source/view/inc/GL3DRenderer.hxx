@@ -164,7 +164,7 @@ typedef struct SceneBox
 }SceneBox;
 
 
-class OpenGL3DRenderer : public IOpenGLInfoProvider
+class OpenGL3DRenderer
 {
 public:
     OpenGL3DRenderer();
@@ -174,7 +174,6 @@ public:
     void CreateRenderObj(int, int);
     void LoadShaders();
     void init();
-    virtual bool isOpenGLInitialized() SAL_OVERRIDE;
     void Set3DSenceInfo(sal_Int32 color = 255, bool twoSidesLighting = true);
     void SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction);
     void AddShapePolygon3DObject(sal_Int32 color, bool lineOnly, sal_Int32 lineColor,
@@ -244,7 +243,6 @@ private:
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
-    bool m_IsOpenglInit;
 #if 0
     double m_dFreq;
 #endif

@@ -56,8 +56,7 @@ int static checkGLError(const char *file, int line)
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
-    m_IsOpenglInit(false)
-    , m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
+    m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
     , m_TextProID(0)
     , m_TextMatrixID(0)
     , m_TextVertexID(0)
@@ -253,7 +252,6 @@ void OpenGL3DRenderer::init()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERROR();
     Init3DUniformBlock();
-    m_IsOpenglInit = true;
 }
 
 void OpenGL3DRenderer::SetSize(const Size& rSize)
@@ -261,12 +259,6 @@ void OpenGL3DRenderer::SetSize(const Size& rSize)
     m_iWidth = rSize.Width();
     m_iHeight = rSize.Height();
 }
-
-bool OpenGL3DRenderer::isOpenGLInitialized()
-{
-    return m_IsOpenglInit;
-}
-
 
 void OpenGL3DRenderer::AddVertexData(GLuint vertexBuf)
 {
