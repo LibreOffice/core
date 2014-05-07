@@ -1783,6 +1783,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     }
 
     CHECK_SWPHINTS(this);
+    CHECK_SWPHINTS(pDest);
 }
 
 OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
