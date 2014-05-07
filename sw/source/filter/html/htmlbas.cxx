@@ -276,7 +276,9 @@ void SwHTMLWriter::OutBasic()
         for( sal_uInt16 j=0; j<pModules->Count(); j++ )
         {
             const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
-            OSL_ENSURE( pModule, "Wo ist das Modul?" );
+            assert(pModule); //Wo ist das Modul?
+            if (!pModule)
+                continue;
 
             OUString sLang(SVX_MACRO_LANGUAGE_STARBASIC);
             ScriptType eType = STARBASIC;
