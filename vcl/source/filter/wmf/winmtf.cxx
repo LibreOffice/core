@@ -304,14 +304,14 @@ Color WinMtf::ReadColor()
 
 Point WinMtfOutput::ImplScale( const Point& rPt) // Hack to set varying defaults for incompletely defined files.
 {
-        if (mbIsMapDevSet && mbIsMapWinSet)
-        {
-            return rPt; //fdo#73764
-        }
-        else
-        {
-            return Point((rPt.X())*UNDOCUMENTED_WIN_RCL_RELATION-mrclFrame.Left(),(rPt.Y())*UNDOCUMENTED_WIN_RCL_RELATION-mrclFrame.Top());
-        }
+    if (mbIsMapDevSet)
+        return rPt; //fdo#73764
+
+    if (mbIsMapWinSet)
+        return Point(rPt.X() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Left(),
+                     rPt.Y() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Top());
+
+    return ImplMap(rPt);
 }
 
 
