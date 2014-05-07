@@ -62,15 +62,11 @@ void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, 
     if ( pItem && ( SID_CONTOUR_EXEC == nSID ) )
     {
         const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
-
-        DBG_ASSERT( pStateItem || pItem == 0, "SfxBoolItem expected ");
-
-        rDlg.SetExecState( !pStateItem->GetValue() );
+        assert(pStateItem); //SfxBoolItem expected
+        if (pStateItem)
+            rDlg.SetExecState(!pStateItem->GetValue());
     }
 }
-
-
-/******************************************************************************/
 
 SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, sal_uInt16 nId,
                                                     SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
