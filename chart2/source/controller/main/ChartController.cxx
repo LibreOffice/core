@@ -356,7 +356,9 @@ void SAL_CALL ChartController::attachFrame(
     {
         uno::Reference< awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xContainerWindow);
-        pParentComponent->setVisible(sal_True);
+        assert(pParentComponent);
+        if (pParentComponent)
+            pParentComponent->setVisible(sal_True);
 
         pParent = VCLUnoHelper::GetWindow( xContainerWindow );
     }
