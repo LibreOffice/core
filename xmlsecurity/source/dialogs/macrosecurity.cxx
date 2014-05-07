@@ -138,7 +138,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(Window* _pParent, MacroSecurity* _pDl
     {
         OSL_FAIL("illegal macro security level");
     }
-    if (bReadonly)
+    if (bReadonly && pImage)
     {
         pImage->Show(true);
         m_pVeryHighRB->Enable(false);
