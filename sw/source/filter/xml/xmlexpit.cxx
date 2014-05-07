@@ -1032,11 +1032,13 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_HORI_ORIENT:
         {
             SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
-            OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
-
-            rUnitConverter.convertEnum( aOut, pHoriOrient->GetHoriOrient(),
-                                        aXMLTableAlignMap );
-            bOk = true;
+            assert(pHoriOrient); //Wrong Which-ID
+            if (pHoriOrient)
+            {
+                rUnitConverter.convertEnum( aOut, pHoriOrient->GetHoriOrient(),
+                                            aXMLTableAlignMap );
+                bOk = true;
+            }
         }
         break;
 
