@@ -1963,7 +1963,8 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 }
                 CorrRel( aIdx, aInsPos, 0, false );
 
-                pCNd->JoinNext();
+                if (pCNd)
+                    pCNd->JoinNext();
             }
 
             rOrigPam.GetPoint()->nNode++;
