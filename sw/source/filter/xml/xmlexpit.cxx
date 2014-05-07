@@ -532,290 +532,291 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BOX:
         {
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
-            OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
-
-            /**
-               xml -> MemberId
-
-               border-padding           ALL_BORDER_PADDING
-               border-padding-before    LEFT_BORDER_PADDING
-               border-padding-after RIGHT_BORDER_PADDING
-               border-padding-start TOP_BORDER_PADDING
-               border-padding-end       BOTTOM_BORDER_PADDING
-
-               border                   ALL_BORDER
-               border-before            LEFT_BORDER
-               border-after         RIGHT_BORDER
-               border-start         TOP_BORDER
-               border-end               BOTTOM_BORDER
-
-               border-line-width            ALL_BORDER_LINE_WIDTH
-               border-line-width-before LEFT_BORDER_LINE_WIDTH
-               border-line-width-after      RIGHT_BORDER_LINE_WIDTH
-               border-line-width-start      TOP_BORDER_LINE_WIDTH
-               border-line-width-end        BOTTOM_BORDER_LINE_WIDTH
-            */
-
-            const SvxBorderLine* pLeft    = pBox->GetLeft();
-            const SvxBorderLine* pRight   = pBox->GetRight();
-            const SvxBorderLine* pTop     = pBox->GetTop();
-            const SvxBorderLine* pBottom  = pBox->GetBottom();
-            const sal_uInt16 nTopDist     = pBox->GetDistance( BOX_LINE_TOP );
-            const sal_uInt16 nBottomDist  = pBox->GetDistance( BOX_LINE_BOTTOM );
-            const sal_uInt16 nLeftDist    = pBox->GetDistance( BOX_LINE_LEFT );
-            const sal_uInt16 nRightDist   = pBox->GetDistance( BOX_LINE_RIGHT );
-
-            // check if we need to export it
-            switch( nMemberId )
+            assert(pBox); //Wrong WHich-ID
+            if (pBox)
             {
-                case ALL_BORDER_PADDING:
-                case LEFT_BORDER_PADDING:
-                case RIGHT_BORDER_PADDING:
-                case TOP_BORDER_PADDING:
-                case BOTTOM_BORDER_PADDING:
-                {
-                    bool bEqual = nLeftDist == nRightDist &&
-                                      nLeftDist == nTopDist &&
-                                      nLeftDist == nBottomDist;
-                    // don't export individual paddings if all paddings are equal and
-                    // don't export all padding if some paddings are not equal
-                    if( (bEqual && ALL_BORDER_PADDING != nMemberId) ||
-                        (!bEqual && ALL_BORDER_PADDING == nMemberId) )
-                        return false;
-                }
-                break;
-                case ALL_BORDER:
-                case LEFT_BORDER:
-                case RIGHT_BORDER:
-                case TOP_BORDER:
-                case BOTTOM_BORDER:
-                {
-                    bool bEqual = ( NULL == pTop && NULL == pBottom &&
-                                        NULL == pLeft && NULL == pRight ) ||
-                                      ( pTop && pBottom && pLeft && pRight &&
-                                       *pTop == *pBottom  && *pTop == *pLeft &&
-                                        *pTop == *pRight );
+                /**
+                   xml -> MemberId
 
-                    // don't export individual borders if all are the same and
-                    // don't export all borders if some are not equal
-                    if( (bEqual && ALL_BORDER != nMemberId) ||
-                        (!bEqual && ALL_BORDER == nMemberId) )
-                        return false;
-                }
-                break;
-                case ALL_BORDER_LINE_WIDTH:
-                case LEFT_BORDER_LINE_WIDTH:
-                case RIGHT_BORDER_LINE_WIDTH:
-                case TOP_BORDER_LINE_WIDTH:
-                case BOTTOM_BORDER_LINE_WIDTH:
+                   border-padding           ALL_BORDER_PADDING
+                   border-padding-before    LEFT_BORDER_PADDING
+                   border-padding-after RIGHT_BORDER_PADDING
+                   border-padding-start TOP_BORDER_PADDING
+                   border-padding-end       BOTTOM_BORDER_PADDING
+
+                   border                   ALL_BORDER
+                   border-before            LEFT_BORDER
+                   border-after         RIGHT_BORDER
+                   border-start         TOP_BORDER
+                   border-end               BOTTOM_BORDER
+
+                   border-line-width            ALL_BORDER_LINE_WIDTH
+                   border-line-width-before LEFT_BORDER_LINE_WIDTH
+                   border-line-width-after      RIGHT_BORDER_LINE_WIDTH
+                   border-line-width-start      TOP_BORDER_LINE_WIDTH
+                   border-line-width-end        BOTTOM_BORDER_LINE_WIDTH
+                */
+
+                const SvxBorderLine* pLeft    = pBox->GetLeft();
+                const SvxBorderLine* pRight   = pBox->GetRight();
+                const SvxBorderLine* pTop     = pBox->GetTop();
+                const SvxBorderLine* pBottom  = pBox->GetBottom();
+                const sal_uInt16 nTopDist     = pBox->GetDistance( BOX_LINE_TOP );
+                const sal_uInt16 nBottomDist  = pBox->GetDistance( BOX_LINE_BOTTOM );
+                const sal_uInt16 nLeftDist    = pBox->GetDistance( BOX_LINE_LEFT );
+                const sal_uInt16 nRightDist   = pBox->GetDistance( BOX_LINE_RIGHT );
+
+                // check if we need to export it
+                switch( nMemberId )
                 {
-                    // if no line is set, there is nothing to export
-                    if( !pTop && !pBottom && !pLeft && !pRight )
-                        return false;
-
-                    bool bEqual = NULL != pTop &&
-                                      NULL != pBottom &&
-                                      NULL != pLeft &&
-                                      NULL != pRight;
-
-                    if( bEqual )
+                    case ALL_BORDER_PADDING:
+                    case LEFT_BORDER_PADDING:
+                    case RIGHT_BORDER_PADDING:
+                    case TOP_BORDER_PADDING:
+                    case BOTTOM_BORDER_PADDING:
                     {
-                        const sal_uInt16 nDistance = pTop->GetDistance();
-                        const sal_uInt16 nInWidth  = pTop->GetInWidth();
-                        const sal_uInt16 nOutWidth = pTop->GetOutWidth();
-                        const long nWidth = pTop->GetWidth();
-
-                        bEqual = nDistance == pLeft->GetDistance() &&
-                                 nInWidth  == pLeft->GetInWidth()  &&
-                                 nOutWidth == pLeft->GetOutWidth() &&
-                                 nWidth == pLeft->GetWidth() &&
-                                 nDistance == pRight->GetDistance()  &&
-                                 nInWidth  == pRight->GetInWidth()   &&
-                                 nOutWidth == pRight->GetOutWidth()  &&
-                                 nWidth == pRight->GetWidth()  &&
-                                 nDistance == pBottom->GetDistance()  &&
-                                 nInWidth  == pBottom->GetInWidth()   &&
-                                 nOutWidth == pBottom->GetOutWidth() &&
-                                 nWidth == pBottom->GetWidth();
+                        bool bEqual = nLeftDist == nRightDist &&
+                                          nLeftDist == nTopDist &&
+                                          nLeftDist == nBottomDist;
+                        // don't export individual paddings if all paddings are equal and
+                        // don't export all padding if some paddings are not equal
+                        if( (bEqual && ALL_BORDER_PADDING != nMemberId) ||
+                            (!bEqual && ALL_BORDER_PADDING == nMemberId) )
+                            return false;
                     }
-
-                    switch( nMemberId )
-                    {
-                        case ALL_BORDER_LINE_WIDTH:
-                            if( !bEqual || pTop->GetDistance() == 0 ||
-                                !lcl_isOdfDoubleLine( pTop ) )
-                                return false;
-                            break;
-                        case LEFT_BORDER_LINE_WIDTH:
-                            if( bEqual || NULL == pLeft ||
-                                0 == pLeft->GetDistance() ||
-                                !lcl_isOdfDoubleLine( pLeft ) )
-                                return false;
-                            break;
-                        case RIGHT_BORDER_LINE_WIDTH:
-                            if( bEqual || NULL == pRight ||
-                                0 == pRight->GetDistance() ||
-                                !lcl_isOdfDoubleLine( pRight ) )
-                                return false;
-                            break;
-                        case TOP_BORDER_LINE_WIDTH:
-                            if( bEqual || NULL == pTop ||
-                                0 == pTop->GetDistance() ||
-                                !lcl_isOdfDoubleLine( pTop ) )
-                                return false;
-                            break;
-                        case BOTTOM_BORDER_LINE_WIDTH:
-                            if( bEqual || NULL == pBottom ||
-                                0 == pBottom->GetDistance() ||
-                                !lcl_isOdfDoubleLine( pBottom ) )
-                                return false;
-                            break;
-                    }
-                }
-                break;
-            }
-
-            // now export it export
-            switch( nMemberId )
-                {
-                    // padding
-                case ALL_BORDER_PADDING:
-                case LEFT_BORDER_PADDING:
-                    rUnitConverter.convertMeasureToXML( aOut, nLeftDist );
                     break;
-                case RIGHT_BORDER_PADDING:
-                    rUnitConverter.convertMeasureToXML( aOut, nRightDist );
-                    break;
-                case TOP_BORDER_PADDING:
-                    rUnitConverter.convertMeasureToXML( aOut, nTopDist );
-                    break;
-                case BOTTOM_BORDER_PADDING:
-                    rUnitConverter.convertMeasureToXML( aOut, nBottomDist );
-                    break;
-
-                    // border
-                case ALL_BORDER:
-                case LEFT_BORDER:
-                case RIGHT_BORDER:
-                case TOP_BORDER:
-                case BOTTOM_BORDER:
-                {
-                    const SvxBorderLine* pLine;
-                    switch( nMemberId )
-                    {
                     case ALL_BORDER:
                     case LEFT_BORDER:
-                        pLine = pLeft;
-                        break;
                     case RIGHT_BORDER:
-                        pLine = pRight;
-                        break;
                     case TOP_BORDER:
-                        pLine = pTop;
-                        break;
                     case BOTTOM_BORDER:
-                        pLine = pBottom;
-                        break;
-                    default:
-                        pLine = NULL;
-                        break;
-                    }
-
-                    if( NULL != pLine )
                     {
-                        sal_Int32 nWidth = pLine->GetWidth();
+                        bool bEqual = ( NULL == pTop && NULL == pBottom &&
+                                            NULL == pLeft && NULL == pRight ) ||
+                                          ( pTop && pBottom && pLeft && pRight &&
+                                           *pTop == *pBottom  && *pTop == *pLeft &&
+                                            *pTop == *pRight );
 
-                        enum XMLTokenEnum eStyle = XML_SOLID;
-                        bool bNoBorder = false;
-                        switch (pLine->GetBorderLineStyle())
-                        {
-                            case table::BorderLineStyle::SOLID:
-                                eStyle = XML_SOLID;
-                                break;
-                            case table::BorderLineStyle::DOTTED:
-                                eStyle = XML_DOTTED;
-                                break;
-                            case table::BorderLineStyle::DASHED:
-                                eStyle = XML_DASHED;
-                                break;
-                            case table::BorderLineStyle::DOUBLE:
-                            case table::BorderLineStyle::THINTHICK_SMALLGAP:
-                            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
-                            case table::BorderLineStyle::THINTHICK_LARGEGAP:
-                            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
-                            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
-                            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
-                                eStyle = XML_DOUBLE;
-                                break;
-                            case table::BorderLineStyle::EMBOSSED:
-                                eStyle = XML_RIDGE;
-                                break;
-                            case table::BorderLineStyle::ENGRAVED:
-                                eStyle = XML_GROOVE;
-                                break;
-                            case table::BorderLineStyle::INSET:
-                                eStyle = XML_INSET;
-                                break;
-                            case table::BorderLineStyle::OUTSET:
-                                eStyle = XML_OUTSET;
-                                break;
-                            default:
-                                bNoBorder = true;
-                        }
-
-                        if ( !bNoBorder )
-                        {
-                            ::sax::Converter::convertMeasure(aOut, nWidth,
-                                   util::MeasureUnit::TWIP,
-                                   util::MeasureUnit::POINT);
-                            aOut.append( ' ' );
-                            aOut.append( GetXMLToken( eStyle ) );
-                            aOut.append( ' ' );
-                            ::sax::Converter::convertColor(aOut,
-                                    pLine->GetColor().GetColor());
-                        }
+                        // don't export individual borders if all are the same and
+                        // don't export all borders if some are not equal
+                        if( (bEqual && ALL_BORDER != nMemberId) ||
+                            (!bEqual && ALL_BORDER == nMemberId) )
+                            return false;
                     }
-                    else
-                    {
-                        aOut.append( GetXMLToken(XML_NONE) );
-                    }
-                }
-                break;
-
-                // width
-                case ALL_BORDER_LINE_WIDTH:
-                case LEFT_BORDER_LINE_WIDTH:
-                case RIGHT_BORDER_LINE_WIDTH:
-                case TOP_BORDER_LINE_WIDTH:
-                case BOTTOM_BORDER_LINE_WIDTH:
-                    const SvxBorderLine* pLine;
-                    switch( nMemberId )
-                    {
+                    break;
                     case ALL_BORDER_LINE_WIDTH:
                     case LEFT_BORDER_LINE_WIDTH:
-                        pLine = pLeft;
-                        break;
                     case RIGHT_BORDER_LINE_WIDTH:
-                        pLine = pRight;
-                        break;
                     case TOP_BORDER_LINE_WIDTH:
-                        pLine = pTop;
-                        break;
                     case BOTTOM_BORDER_LINE_WIDTH:
-                        pLine = pBottom;
-                        break;
-                    default:
-                        return false;
+                    {
+                        // if no line is set, there is nothing to export
+                        if( !pTop && !pBottom && !pLeft && !pRight )
+                            return false;
+
+                        bool bEqual = NULL != pTop &&
+                                          NULL != pBottom &&
+                                          NULL != pLeft &&
+                                          NULL != pRight;
+
+                        if( bEqual )
+                        {
+                            const sal_uInt16 nDistance = pTop->GetDistance();
+                            const sal_uInt16 nInWidth  = pTop->GetInWidth();
+                            const sal_uInt16 nOutWidth = pTop->GetOutWidth();
+                            const long nWidth = pTop->GetWidth();
+
+                            bEqual = nDistance == pLeft->GetDistance() &&
+                                     nInWidth  == pLeft->GetInWidth()  &&
+                                     nOutWidth == pLeft->GetOutWidth() &&
+                                     nWidth == pLeft->GetWidth() &&
+                                     nDistance == pRight->GetDistance()  &&
+                                     nInWidth  == pRight->GetInWidth()   &&
+                                     nOutWidth == pRight->GetOutWidth()  &&
+                                     nWidth == pRight->GetWidth()  &&
+                                     nDistance == pBottom->GetDistance()  &&
+                                     nInWidth  == pBottom->GetInWidth()   &&
+                                     nOutWidth == pBottom->GetOutWidth() &&
+                                     nWidth == pBottom->GetWidth();
+                        }
+
+                        switch( nMemberId )
+                        {
+                            case ALL_BORDER_LINE_WIDTH:
+                                if( !bEqual || pTop->GetDistance() == 0 ||
+                                    !lcl_isOdfDoubleLine( pTop ) )
+                                    return false;
+                                break;
+                            case LEFT_BORDER_LINE_WIDTH:
+                                if( bEqual || NULL == pLeft ||
+                                    0 == pLeft->GetDistance() ||
+                                    !lcl_isOdfDoubleLine( pLeft ) )
+                                    return false;
+                                break;
+                            case RIGHT_BORDER_LINE_WIDTH:
+                                if( bEqual || NULL == pRight ||
+                                    0 == pRight->GetDistance() ||
+                                    !lcl_isOdfDoubleLine( pRight ) )
+                                    return false;
+                                break;
+                            case TOP_BORDER_LINE_WIDTH:
+                                if( bEqual || NULL == pTop ||
+                                    0 == pTop->GetDistance() ||
+                                    !lcl_isOdfDoubleLine( pTop ) )
+                                    return false;
+                                break;
+                            case BOTTOM_BORDER_LINE_WIDTH:
+                                if( bEqual || NULL == pBottom ||
+                                    0 == pBottom->GetDistance() ||
+                                    !lcl_isOdfDoubleLine( pBottom ) )
+                                    return false;
+                                break;
+                        }
                     }
-                    rUnitConverter.convertMeasureToXML( aOut, pLine->GetInWidth() );
-                    aOut.append( ' ' );
-                    rUnitConverter.convertMeasureToXML( aOut, pLine->GetDistance() );
-                    aOut.append( ' ' );
-                    rUnitConverter.convertMeasureToXML( aOut, pLine->GetOutWidth() );
                     break;
                 }
 
-            bOk = true;
+                // now export it export
+                switch( nMemberId )
+                {
+                    // padding
+                    case ALL_BORDER_PADDING:
+                    case LEFT_BORDER_PADDING:
+                        rUnitConverter.convertMeasureToXML( aOut, nLeftDist );
+                        break;
+                    case RIGHT_BORDER_PADDING:
+                        rUnitConverter.convertMeasureToXML( aOut, nRightDist );
+                        break;
+                    case TOP_BORDER_PADDING:
+                        rUnitConverter.convertMeasureToXML( aOut, nTopDist );
+                        break;
+                    case BOTTOM_BORDER_PADDING:
+                        rUnitConverter.convertMeasureToXML( aOut, nBottomDist );
+                        break;
+
+                        // border
+                    case ALL_BORDER:
+                    case LEFT_BORDER:
+                    case RIGHT_BORDER:
+                    case TOP_BORDER:
+                    case BOTTOM_BORDER:
+                    {
+                        const SvxBorderLine* pLine;
+                        switch( nMemberId )
+                        {
+                        case ALL_BORDER:
+                        case LEFT_BORDER:
+                            pLine = pLeft;
+                            break;
+                        case RIGHT_BORDER:
+                            pLine = pRight;
+                            break;
+                        case TOP_BORDER:
+                            pLine = pTop;
+                            break;
+                        case BOTTOM_BORDER:
+                            pLine = pBottom;
+                            break;
+                        default:
+                            pLine = NULL;
+                            break;
+                        }
+
+                        if( NULL != pLine )
+                        {
+                            sal_Int32 nWidth = pLine->GetWidth();
+
+                            enum XMLTokenEnum eStyle = XML_SOLID;
+                            bool bNoBorder = false;
+                            switch (pLine->GetBorderLineStyle())
+                            {
+                                case table::BorderLineStyle::SOLID:
+                                    eStyle = XML_SOLID;
+                                    break;
+                                case table::BorderLineStyle::DOTTED:
+                                    eStyle = XML_DOTTED;
+                                    break;
+                                case table::BorderLineStyle::DASHED:
+                                    eStyle = XML_DASHED;
+                                    break;
+                                case table::BorderLineStyle::DOUBLE:
+                                case table::BorderLineStyle::THINTHICK_SMALLGAP:
+                                case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+                                case table::BorderLineStyle::THINTHICK_LARGEGAP:
+                                case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+                                case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+                                case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+                                    eStyle = XML_DOUBLE;
+                                    break;
+                                case table::BorderLineStyle::EMBOSSED:
+                                    eStyle = XML_RIDGE;
+                                    break;
+                                case table::BorderLineStyle::ENGRAVED:
+                                    eStyle = XML_GROOVE;
+                                    break;
+                                case table::BorderLineStyle::INSET:
+                                    eStyle = XML_INSET;
+                                    break;
+                                case table::BorderLineStyle::OUTSET:
+                                    eStyle = XML_OUTSET;
+                                    break;
+                                default:
+                                    bNoBorder = true;
+                            }
+
+                            if ( !bNoBorder )
+                            {
+                                ::sax::Converter::convertMeasure(aOut, nWidth,
+                                       util::MeasureUnit::TWIP,
+                                       util::MeasureUnit::POINT);
+                                aOut.append( ' ' );
+                                aOut.append( GetXMLToken( eStyle ) );
+                                aOut.append( ' ' );
+                                ::sax::Converter::convertColor(aOut,
+                                        pLine->GetColor().GetColor());
+                            }
+                        }
+                        else
+                        {
+                            aOut.append( GetXMLToken(XML_NONE) );
+                        }
+                    }
+                    break;
+
+                    // width
+                    case ALL_BORDER_LINE_WIDTH:
+                    case LEFT_BORDER_LINE_WIDTH:
+                    case RIGHT_BORDER_LINE_WIDTH:
+                    case TOP_BORDER_LINE_WIDTH:
+                    case BOTTOM_BORDER_LINE_WIDTH:
+                        const SvxBorderLine* pLine;
+                        switch( nMemberId )
+                        {
+                        case ALL_BORDER_LINE_WIDTH:
+                        case LEFT_BORDER_LINE_WIDTH:
+                            pLine = pLeft;
+                            break;
+                        case RIGHT_BORDER_LINE_WIDTH:
+                            pLine = pRight;
+                            break;
+                        case TOP_BORDER_LINE_WIDTH:
+                            pLine = pTop;
+                            break;
+                        case BOTTOM_BORDER_LINE_WIDTH:
+                            pLine = pBottom;
+                            break;
+                        default:
+                            return false;
+                        }
+                        rUnitConverter.convertMeasureToXML( aOut, pLine->GetInWidth() );
+                        aOut.append( ' ' );
+                        rUnitConverter.convertMeasureToXML( aOut, pLine->GetDistance() );
+                        aOut.append( ' ' );
+                        rUnitConverter.convertMeasureToXML( aOut, pLine->GetOutWidth() );
+                        break;
+                }
+                bOk = true;
+            }
         }
         break;
 
