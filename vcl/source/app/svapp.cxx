@@ -1670,6 +1670,9 @@ void Application::InitAppFontData()
 
     Window *pWindow = pSVData->mpDefaultWin;
 
+    if (!pWindow)
+       pWindow = new WorkWindow( NULL, 0 );
+
     long nTextHeight = pWindow->GetTextHeight();
     long nTextWidth = pWindow->approximate_char_width() * 8;
     long nSymHeight = nTextHeight*4;
