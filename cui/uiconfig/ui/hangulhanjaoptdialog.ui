@@ -204,7 +204,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="ignorepost">
-                            <property name="label" translatable="yes">Ignore post-positional wordIgnore post-positional word</property>
+                            <property name="label" translatable="yes">Ignore post-positional word</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
