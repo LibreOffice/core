@@ -560,7 +560,7 @@ void SwFmtCntnt::SetNewCntntIdx( const SwNodeIndex *pIdx )
 bool SwFmtCntnt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    if( (sal_IntPtr)pStartNode ^ (sal_IntPtr)((SwFmtCntnt&)rAttr).pStartNode )
+    if( (bool)pStartNode ^ (bool)((SwFmtCntnt&)rAttr).pStartNode )
         return false;
     if( pStartNode )
         return ( *pStartNode == *((SwFmtCntnt&)rAttr).GetCntntIdx() );
