@@ -208,7 +208,6 @@ public:
     void InvalidateCursorPosition( const SwFrm *pFrm );
     void InvalidateFocus();
     void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
-    void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
     void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
     void SetCursorContext(
         const ::rtl::Reference < SwAccessibleContext >& rCursorContext );

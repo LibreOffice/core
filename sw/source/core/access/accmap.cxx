@@ -2770,24 +2770,6 @@ void SwAccessibleMap::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPa
         }
 }
 
-void SwAccessibleMap::FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection)
-{
-    uno::Reference<XAccessible> xAcc = GetDocumentView( );
-        if ( xAcc.is() )
-        {
-            SwAccessibleDocumentBase *pAcc =
-            static_cast< SwAccessibleDocumentBase * >( xAcc.get() );
-            if (pAcc)
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::SECTION_CHANGED;
-                aEvent.OldValue <<= nOldSection;
-                aEvent.NewValue <<= nNewSection;
-                pAcc->FireAccessibleEvent( aEvent );
-
-            }
-        }
-}
 void SwAccessibleMap::FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn)
 {
     uno::Reference<XAccessible> xAcc = GetDocumentView( );

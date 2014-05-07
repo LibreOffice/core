@@ -80,7 +80,6 @@ SvxUnoTextBase::SvxUnoTextBase()
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)
 SwAccessibleMap::FireColumnChangeEvent(unsigned short, unsigned short)
 SwAccessibleMap::FirePageChangeEvent(unsigned short, unsigned short)
-SwAccessibleMap::FireSectionChangeEvent(unsigned short, unsigned short)
 SwExtraRedlineTbl::GetPos(SwExtraRedline const*) const
 SwExtraRedlineTbl::Remove(unsigned short)
 TextDoc::IsValidPaM(TextPaM const&)
