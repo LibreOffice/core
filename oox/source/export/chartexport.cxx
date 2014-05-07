@@ -3000,7 +3000,7 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
             pSymbolType = "star";
             break;
         case 10:
-            pSymbolType = "X";
+            pSymbolType = "x"; // in MS office 2010 built in symbol marker 'X' is represented as 'x'
             break;
         case 11:
             pSymbolType = "plus";
@@ -3023,7 +3023,8 @@ void ChartExport::exportMarker(Reference< chart2::XDataSeries > xSeries)
     awt::Size aSymbolSize = aSymbol.Size;
     sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
 
-    nSize = nSize/250.0*7.0; // just guessed based on some test cases
+    nSize = nSize/250.0*7.0 + 1; // just guessed based on some test cases,
+                                //the value is always 1 less than the actual value.
     nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
     pFS->singleElement( FSNS( XML_c, XML_size),
             XML_val, I32S(nSize),

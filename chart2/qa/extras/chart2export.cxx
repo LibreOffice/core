@@ -57,6 +57,9 @@ public:
     void testGapWidthXLSX();
     void testSmoothedLines();
     void testLabelStringODS();
+    void testfdo78290_Line_Chart_Marker_x();
+    void testfdo78290_Scatter_Chart_Marker_x();
+    void testfdo78290_Combination_Chart_Marker_x();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -86,6 +89,9 @@ public:
     CPPUNIT_TEST(testGapWidthXLSX);
     CPPUNIT_TEST(testSmoothedLines);
     CPPUNIT_TEST(testLabelStringODS);
+    CPPUNIT_TEST(testfdo78290_Line_Chart_Marker_x);
+    CPPUNIT_TEST(testfdo78290_Scatter_Chart_Marker_x);
+    CPPUNIT_TEST(testfdo78290_Combination_Chart_Marker_x);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -627,6 +633,40 @@ void Chart2ExportTest::testFdo74115WallBitmapFill()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill");
+}
+
+//The below test case tests the built in marker 'x' for Office 2010 in Line charts
+
+void Chart2ExportTest::testfdo78290_Line_Chart_Marker_x()
+{
+    load("/chart2/qa/extras/data/docx/", "fdo78290_Line_Chart_Marker_x.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val","x");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val","7");
+}
+
+// We can also use the built in marker 'x' in scatter chart, hence writing the test case for the same.
+
+void Chart2ExportTest::testfdo78290_Scatter_Chart_Marker_x()
+{
+    load("/chart2/qa/extras/data/docx/", "fdo78290_Scatter_Chart_Marker_x.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:scatterChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val","x");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:scatterChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val","7");
+}
+
+// Also in a combination of charts like a column chart and line chart, we can use the built in marker 'x'
+// for the line chart too. hence put a test case for the combination chart also.
+
+void Chart2ExportTest::testfdo78290_Combination_Chart_Marker_x()
+{
+    load("/chart2/qa/extras/data/docx/", "fdo78290_Combination_Chart_Marker_x.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val","x");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val","7");
 }
 
 void Chart2ExportTest::testBarChartRotation()
