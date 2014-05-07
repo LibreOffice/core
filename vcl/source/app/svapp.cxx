@@ -1659,6 +1659,9 @@ void Application::InitAppFontData()
 
     Window *pWindow = pSVData->mpDefaultWin;
 
+    if (!pWindow)
+       pWindow = new WorkWindow( NULL, 0 );
+
     long nTextHeight = pWindow->GetTextHeight();
     long nTextWidth = pWindow->approximate_char_width() * 8;
     long nSymHeight = nTextHeight*4;
@@ -1698,6 +1701,10 @@ void Application::InitAppFontData()
     pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
     if ( pSVData->maAppData.mnDialogScaleX )
         pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
+
+    // a temporary WorkWindow was created, we need to delete it
+    if (!pSVData->mpDefaultWin && pWindow)
+        delete pWindow;
 }
 
 
