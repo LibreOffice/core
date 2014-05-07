@@ -7325,7 +7325,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                            rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
+                //do not overwrite the parent node.
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text" && !m_pRunSdtPrTokenChildren)
                     m_nRunSdtPrToken = FSNS( XML_w, XML_text );
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id" && m_nRunSdtPrToken == 0)
                     // only write id token as a marker if no other exist
