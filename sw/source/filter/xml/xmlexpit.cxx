@@ -493,39 +493,41 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_SHADOW:
         {
             const SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
-            OSL_ENSURE( pShadow != NULL, "Wrong Which-ID" );
-
-            sal_Int32 nX = 1, nY = 1;
-            switch( pShadow->GetLocation() )
+            assert(pShadow); //Wrong Which-ID
+            if (pShadow)
+            {
+                sal_Int32 nX = 1, nY = 1;
+                switch( pShadow->GetLocation() )
                 {
-                case SVX_SHADOW_TOPLEFT:
-                    nX = -1;
-                    nY = -1;
-                    break;
-                case SVX_SHADOW_TOPRIGHT:
-                    nY = -1;
-                    break;
-                case SVX_SHADOW_BOTTOMLEFT:
-                    nX = -1;
-                    break;
-                case SVX_SHADOW_BOTTOMRIGHT:
-                    break;
-                case SVX_SHADOW_NONE:
-                default:
-                    rValue = GetXMLToken(XML_NONE);
-                    return true;
+                    case SVX_SHADOW_TOPLEFT:
+                        nX = -1;
+                        nY = -1;
+                        break;
+                    case SVX_SHADOW_TOPRIGHT:
+                        nY = -1;
+                        break;
+                    case SVX_SHADOW_BOTTOMLEFT:
+                        nX = -1;
+                        break;
+                    case SVX_SHADOW_BOTTOMRIGHT:
+                        break;
+                    case SVX_SHADOW_NONE:
+                    default:
+                        rValue = GetXMLToken(XML_NONE);
+                        return true;
                 }
 
-            nX *= pShadow->GetWidth();
-            nY *= pShadow->GetWidth();
+                nX *= pShadow->GetWidth();
+                nY *= pShadow->GetWidth();
 
-            ::sax::Converter::convertColor(aOut, pShadow->GetColor().GetColor());
-            aOut.append( ' ' );
-            rUnitConverter.convertMeasureToXML( aOut, nX );
-            aOut.append( ' ' );
-            rUnitConverter.convertMeasureToXML( aOut, nY );
+                ::sax::Converter::convertColor(aOut, pShadow->GetColor().GetColor());
+                aOut.append( ' ' );
+                rUnitConverter.convertMeasureToXML( aOut, nX );
+                aOut.append( ' ' );
+                rUnitConverter.convertMeasureToXML( aOut, nY );
 
-            bOk = true;
+                bOk = true;
+            }
         }
         break;
 
