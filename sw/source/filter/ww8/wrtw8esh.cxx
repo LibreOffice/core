@@ -3155,6 +3155,9 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
         return false;
 
     SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObj);
+    assert(pFormObj);
+    if (!pFormObj)
+        return false;
     uno::Reference< awt::XControlModel > xControlModel =
     pFormObj->GetUnoControlModel();
 
