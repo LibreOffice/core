@@ -18,7 +18,9 @@
  */
 
 #include "winmtf.hxx"
+
 #include <boost/scoped_array.hpp>
+#include <boost/optional.hpp>
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 #include <rtl/crc.h>
@@ -1129,7 +1131,12 @@ bool WMFReader::ReadHeader()
     else
     {
         nUnitsPerInch = 96;
-        if ( pExternalHeader != NULL && ( pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC ) )
+
+
+        if (   pExternalHeader != NULL
+            && pExternalHeader->xExt > 0
+            && pExternalHeader->yExt > 0
+            && (pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC))
         {
             // #n417818#: If we have an external header then overwrite the bounds!
             Rectangle aExtRect(0, 0,
@@ -1322,15 +1329,22 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 {
     bool bRet = true;
 
-    rPlaceableBound.Left()   = RECT_MAX;
-    rPlaceableBound.Top()    = RECT_MAX;
-    rPlaceableBound.Right()  = RECT_MIN;
-    rPlaceableBound.Bottom() = RECT_MIN;
+    Rectangle aBound;
+    aBound.Left()   = RECT_MAX;
+    aBound.Top()    = RECT_MAX;
+    aBound.Right()  = RECT_MIN;
+    aBound.Bottom() = RECT_MIN;
 
     sal_uInt32 nPos = pStm->Tell();
     sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
 
     pStm->Seek( nPos );
+
+    boost::optional<Point> aWinOrg;
+    boost::optional<Size>  aWinExt;
+
+    boost::optional<Point> aViewportOrg;
+    boost::optional<Size>  aViewportExt;
 
     if( nEnd - nPos )
     {
@@ -1355,33 +1369,31 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
             {
                 case W_META_SETWINDOWORG:
                 {
-                    Point aWinOrg;
                     aWinOrg = ReadYX();
-                    rPlaceableBound.SetPos( aWinOrg );
                 }
                 break;
 
                 case W_META_SETWINDOWEXT:
                 {
                     sal_Int16 nWidth(0), nHeight(0);
-                    pStm->ReadInt16( nHeight ).ReadInt16( nWidth );
-                    rPlaceableBound.SetSize( Size( nWidth, nHeight ) );
+                    pStm->ReadInt16(nHeight);
+                    pStm->ReadInt16(nWidth);
+                    aWinExt = Size(nWidth, nHeight);
                 }
                 break;
 
                 case W_META_SETVIEWPORTORG:
                 {
-                    Point aWinOrg;
-                    aWinOrg = ReadYX();
-                    rPlaceableBound.SetPos( aWinOrg );
+                    aViewportOrg = ReadYX();
                 }
                 break;
 
                 case W_META_SETVIEWPORTEXT:
                 {
                     sal_Int16 nWidth(0), nHeight(0);
-                    pStm->ReadInt16( nHeight ).ReadInt16( nWidth );
-                    rPlaceableBound.SetSize( Size( nWidth, nHeight ) );
+                    pStm->ReadInt16(nHeight);
+                    pStm->ReadInt16(nWidth);
+                    aViewportExt = Size(nWidth, nHeight);
                 }
                 break;
 
@@ -1391,19 +1403,19 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 
                 case W_META_MOVETO:
                 case W_META_LINETO:
-                    GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadYX(), aBound, nMapMode );
                 break;
 
                 case W_META_RECTANGLE:
                 case W_META_INTERSECTCLIPRECT:
                 case W_META_EXCLUDECLIPRECT :
                 case W_META_ELLIPSE:
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadRectangle(), aBound, nMapMode );
                 break;
 
                 case W_META_ROUNDRECT:
                     ReadYXExt(); // size
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadRectangle(), aBound, nMapMode );
                 break;
 
                 case W_META_ARC:
@@ -1411,7 +1423,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                 case W_META_CHORD:
                     ReadYX(); // end
                     ReadYX(); // start
-                    GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadRectangle(), aBound, nMapMode );
                 break;
 
                 case W_META_POLYGON:
@@ -1419,7 +1431,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     sal_uInt16 nPoints;
                     pStm->ReadUInt16( nPoints );
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
                 }
                 break;
 
@@ -1452,7 +1464,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     }
 
                     for (sal_uInt16 i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
 
                     bRecordOk &= pStm->good();
 
@@ -1470,14 +1482,14 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     sal_uInt16 nPoints;
                     pStm->ReadUInt16( nPoints );
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
-                        GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
                 }
                 break;
 
                 case W_META_SETPIXEL:
                 {
                     ReadColor();
-                    GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
+                    GetWinExtMax( ReadYX(), aBound, nMapMode );
                 }
                 break;
 
@@ -1489,7 +1501,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     if ( nLength )
                     {
                         pStm->SeekRel( ( nLength + 1 ) &~ 1 );
-                        GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
+                        GetWinExtMax( ReadYX(), aBound, nMapMode );
                     }
                 }
                 break;
@@ -1503,7 +1515,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     pStm->ReadUInt16( nLen ).ReadUInt16( nOptions );
                     // todo: we also have to take care of the text width
                     if( nLen )
-                        GetWinExtMax( aPosition, rPlaceableBound, nMapMode );
+                        GetWinExtMax( aPosition, aBound, nMapMode );
                 }
                 break;
                 case W_META_BITBLT:
@@ -1538,7 +1550,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                         {
                             Rectangle aDestRect( ReadYX(), aDestSize );
-                            GetWinExtMax( aDestRect, rPlaceableBound, nMapMode );
+                            GetWinExtMax( aDestRect, aBound, nMapMode );
                         }
                     }
                 }
@@ -1549,7 +1561,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     sal_uInt32 nROP;
                     pStm->ReadUInt32( nROP );
                     Size aSize = ReadYXExt();
-                    GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound, nMapMode );
+                    GetWinExtMax( Rectangle( ReadYX(), aSize ), aBound, nMapMode );
                 }
                 break;
             }
@@ -1568,6 +1580,23 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
         pStm->SetError( SVSTREAM_GENERALERROR );
         bRet = false;
     }
+
+    if (bRet)
+    {
+        if (aWinOrg && aWinExt)
+        {
+            rPlaceableBound = Rectangle(*aWinOrg, *aWinExt);
+        }
+        else if (aViewportOrg && aViewportExt)
+        {
+            rPlaceableBound = Rectangle(*aViewportOrg, *aViewportExt);
+        }
+        else
+        {
+            rPlaceableBound = aBound;
+        }
+    }
+
     return bRet;
 }
 
