@@ -152,7 +152,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             const SvXMLAttrContainerItem *pUnknown =
                 PTR_CAST( SvXMLAttrContainerItem, &rItem );
 
-            const sal_uInt16 nCount = pUnknown->GetAttrCount();
+            const sal_uInt16 nCount = pUnknown ? pUnknown->GetAttrCount() : 0;
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
                 const OUString sPrefix( pUnknown->GetAttrPrefix( i ) );
