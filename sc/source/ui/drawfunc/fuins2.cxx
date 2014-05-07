@@ -32,7 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/sysdata.hxx>
+#include <vcl/openglwin.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/insdlg.hxx>
@@ -544,7 +544,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         ScDocument* pScDoc   = pScDocSh->GetDocument();
         bool bUndo (pScDoc->IsUndoEnabled());
 
-        SystemChildWindow* pChildWindow = new SystemChildWindow(pData->GetActiveWin(), 0);
+        OpenGLWindow* pChildWindow = new OpenGLWindow(pData->GetActiveWin());
         Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
         pChildWindow->SetSizePixel(aWindowSize);
         Wallpaper aBackground = pChildWindow->GetBackground();

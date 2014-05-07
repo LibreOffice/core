@@ -88,6 +88,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
         vbahelper) \
     vcl \
+	vclopengl \
     xo \
     $(gb_UWINAPI) \
 ))

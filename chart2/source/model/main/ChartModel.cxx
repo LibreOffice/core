@@ -33,7 +33,7 @@
 #include "UndoManager.hxx"
 #include "ChartView.hxx"
 
-#include <vcl/window.hxx>
+#include <vcl/openglwin.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
@@ -1413,7 +1413,7 @@ void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     throw (uno::RuntimeException, std::exception)
 {
     void* pPtr = (void*)nWindowPtr;
-    Window* pWindow = reinterpret_cast<Window*>(pPtr);
+    OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(pPtr);
     assert(pWindow);
 }
 
