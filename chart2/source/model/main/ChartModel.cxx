@@ -108,6 +108,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , mnStart(0)
     , mnEnd(0)
     ,bSet(false)
+    , mpOpenGLWindow(NULL)
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
@@ -153,6 +154,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
     , bSet(false)
+    , mpOpenGLWindow(NULL)
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
@@ -1415,6 +1417,12 @@ void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     void* pPtr = (void*)nWindowPtr;
     OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(pPtr);
     assert(pWindow);
+    mpOpenGLWindow = pWindow;
+}
+
+OpenGLWindow* ChartModel::getOpenGLWindow()
+{
+    return mpOpenGLWindow;
 }
 
 }  // namespace chart

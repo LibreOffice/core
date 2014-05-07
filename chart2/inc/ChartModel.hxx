@@ -70,6 +70,7 @@
 #include <boost/scoped_ptr.hpp>
 
 class SvNumberFormatter;
+class OpenGLWindow;
 
 namespace chart
 {
@@ -595,10 +596,13 @@ public:
     void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
+    OpenGLWindow* getOpenGLWindow();
+
 private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
     bool bSet;
+    OpenGLWindow* mpOpenGLWindow;
 };
 
 }  // namespace chart

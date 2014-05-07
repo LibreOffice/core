@@ -65,6 +65,8 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
+#include <vcl/openglwin.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #include <drawinglayer/XShapeDumper.hxx>
 
@@ -3143,7 +3145,11 @@ void ChartView::createShapes3D()
         }
     }
 
-    GL3DBarChart aBarChart(aDataSeries);
+    OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
+    if(!pWindow)
+        return;
+
+    GL3DBarChart aBarChart(aDataSeries, *pWindow->getContext());
     aBarChart.create3DShapes();
     aBarChart.render();
 }

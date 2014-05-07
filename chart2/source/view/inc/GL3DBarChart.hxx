@@ -32,7 +32,7 @@ class TemporaryContext;
 class GL3DBarChart
 {
 public:
-    GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries);
+    GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries, OpenGLContext& rContext);
     ~GL3DBarChart();
 
     void create3DShapes();
@@ -45,7 +45,7 @@ private:
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
     boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
-    boost::scoped_ptr<opengl3D::temporary::TemporaryContext> mxContext;
+    OpenGLContext& mrContext;
 };
 
 }
