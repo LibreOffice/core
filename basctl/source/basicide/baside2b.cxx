@@ -1136,7 +1136,6 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
     for( sal_uInt16 i=0; i < pMethods->Count(); i++ )
     {
         SbxVariable* p = PTR_CAST( SbMethod, pMethods->Get( i ) );
-        OUString sName = p->GetName();
         SbMethod* pMeth = p ? PTR_CAST( SbMethod, p ) : NULL;
         if( pMeth )
         {
@@ -1144,7 +1143,7 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
             pMeth->GetLineRange(l1,l2);
             if( (l1 <= nLine+1) && (nLine+1 <= l2) )
             {
-                return sName;
+                return pMeth->GetName();
             }
         }
     }
