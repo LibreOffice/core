@@ -270,6 +270,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
 
     Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
+    assert(pParentComponent);
 
     Window* pParent = VCLUnoHelper::GetWindow( aWindow );
 
@@ -293,10 +294,12 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     xCtrRef->attachFrame(rFrame);
     rFrame->setComponent( xWin, xCtrRef);
     pBeamer->SetXController(xCtrRef);
-    //!
 
-    // not earlier because SetFocus() is triggered in setVisible()
-    pParentComponent->setVisible(sal_True);
+    if (pParentComponent)
+    {
+        // not earlier because SetFocus() is triggered in setVisible()
+        pParentComponent->setVisible(sal_True);
+    }
 
     m_xDatMan->load();
     // #100312# ----------
