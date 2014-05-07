@@ -474,4 +474,9 @@ void ScGridWindow::SwitchView()
     }
 }
 
+void ScGridWindow::AddChildWindow(Window* pWindow)
+{
+    maChildWindows.push_back(pWindow);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

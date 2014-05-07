@@ -32,6 +32,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace editeng {
     struct MisspellRanges;
@@ -129,6 +130,7 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     VisibleRange maVisibleRange;
 
     boost::scoped_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
+    boost::ptr_vector<Window> maChildWindows;
 
     ScViewData*             pViewData;
     ScSplitPos              eWhich;
@@ -408,6 +410,11 @@ public:
     void            DeleteShrinkOverlay();
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();
+
+    /**
+     * Takes ownership of the window
+     */
+    void            AddChildWindow(Window* pChildWindow);
 
 protected:
     // #114409#

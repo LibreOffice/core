@@ -82,6 +82,7 @@ using namespace ::com::sun::star;
 #include "globstr.hrc"
 #include "drawview.hxx"
 #include "markdata.hxx"
+#include "gridwin.hxx"
 
 namespace {
 
@@ -544,11 +545,19 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         ScDocument* pScDoc   = pScDocSh->GetDocument();
         bool bUndo (pScDoc->IsUndoEnabled());
 
-        OpenGLWindow* pChildWindow = new OpenGLWindow(pData->GetActiveWin());
+        Window* pParentWindow = pData->GetActiveWin();
+        ScGridWindow* pGridWindow = dynamic_cast<ScGridWindow*>(pParentWindow);
+        if(pGridWindow)
+        {
+            pGridWindow->AddChildWindow(pGridWindow);
+        }
+        else
+            SAL_WARN("sc", "not a grid window. Youare in serious trouble");
+        OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
         Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
         pChildWindow->SetSizePixel(aWindowSize);
         Wallpaper aBackground = pChildWindow->GetBackground();
-        aBackground.SetColor(COL_RED);
+        aBackground.SetColor(COL_BLUE);
         pChildWindow->SetBackground(aBackground);
         pChildWindow->Show();
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( xChartModel, uno::UNO_QUERY_THROW );
