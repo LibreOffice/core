@@ -80,11 +80,10 @@ private:
     double**            ppCount;
     double**            ppSumSqr;
     ScReferenceList**   ppRefs;
-    OUString*           mpColHeaders;
-    OUString*           mpRowHeaders;
+    ::std::vector<OUString> maColHeaders;
+    ::std::vector<OUString> maRowHeaders;
+    ::std::vector<OUString> maTitles;
     SCSIZE              nDataCount;
-    SCSIZE              nTitleCount;
-    OUString*           mpTitles;
     SCSIZE**            ppTitlePos;
     bool                bCornerUsed;
     OUString            aCornerText;        // only for bColByName && bRowByName
