@@ -171,11 +171,11 @@ DECLARE_OOXMLIMPORT_TEST(testN750935, "n750935.docx")
      * xray ThisComponent.StyleFamilies.PageStyles.Default.FooterIsShared
      */
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
-    sal_Bool bValue = false;
+    bool bValue = false;
     xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
+    CPPUNIT_ASSERT_EQUAL(true, bValue);
     xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
+    CPPUNIT_ASSERT_EQUAL(true, bValue);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN757890, "n757890.docx")
@@ -379,7 +379,7 @@ DECLARE_OOXMLIMPORT_TEST(testN764005, "n764005.docx")
     text::TextContentAnchorType eValue;
     xPropertySet->getPropertyValue("AnchorType") >>= eValue;
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
-    sal_Bool bValue = sal_True;
+    bool bValue = true;
     xPropertySet->getPropertyValue("Opaque") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
 }
@@ -1149,7 +1149,7 @@ DECLARE_OOXMLIMPORT_TEST(testToolsLineNumbering, "tools-line-numbering.docx")
      * xray ThisComponent.getLineNumberingProperties().SeparatorInterval == 3
      */
 
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     sal_Int32 nValue = -1;
 
     uno::Reference< text::XTextDocument > xtextDocument(mxComponent, uno::UNO_QUERY);
@@ -1157,10 +1157,10 @@ DECLARE_OOXMLIMPORT_TEST(testToolsLineNumbering, "tools-line-numbering.docx")
     uno::Reference< beans::XPropertySet > xPropertySet = xLineProperties->getLineNumberingProperties();
 
     xPropertySet->getPropertyValue("IsOn") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(sal_True, bValue);
+    CPPUNIT_ASSERT_EQUAL(true, bValue);
 
     xPropertySet->getPropertyValue("CountEmptyLines") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(sal_True, bValue);
+    CPPUNIT_ASSERT_EQUAL(true, bValue);
 
     xPropertySet->getPropertyValue("NumberPosition") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValue);

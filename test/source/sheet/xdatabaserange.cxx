@@ -73,15 +73,15 @@ void XDatabaseRange::testGetSortDescriptor()
 
         if (xProp.Name == "IsSortColumns")
         {
-            sal_Bool bIsSortColumns = sal_True;
+            bool bIsSortColumns = true;
             xProp.Value >>= bIsSortColumns;
-            CPPUNIT_ASSERT(bIsSortColumns == sal_True);
+            CPPUNIT_ASSERT(bIsSortColumns);
         }
         else if (xProp.Name == "ContainsHeader")
         {
-            sal_Bool bContainsHeader = sal_True;
+            bool bContainsHeader = true;
             xProp.Value >>= bContainsHeader;
-            CPPUNIT_ASSERT(bContainsHeader == sal_True);
+            CPPUNIT_ASSERT(bContainsHeader);
         }
         else if (xProp.Name == "MaxFieldCount")
         {
@@ -96,15 +96,15 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (xProp.Name == "BindFormatsToContent")
         {
-            sal_Bool bBindFormatsToContent = sal_False;
+            bool bBindFormatsToContent = false;
             xProp.Value >>= bBindFormatsToContent;
-            CPPUNIT_ASSERT(bBindFormatsToContent == sal_True);
+            CPPUNIT_ASSERT(bBindFormatsToContent);
         }
         else if (xProp.Name == "CopyOutputData")
         {
-            sal_Bool bCopyOutputData = sal_True;
+            bool bCopyOutputData = true;
             xProp.Value >>= bCopyOutputData;
-            CPPUNIT_ASSERT(bCopyOutputData == sal_False);
+            CPPUNIT_ASSERT(bCopyOutputData == false);
         }
         else if (xProp.Name == "OutputPosition")
         {
@@ -112,9 +112,9 @@ void XDatabaseRange::testGetSortDescriptor()
         }
         else if (xProp.Name == "IsUserListEnabled")
         {
-            sal_Bool bIsUserListEnabled  = sal_True;
+            bool bIsUserListEnabled  = true;
             xProp.Value >>= bIsUserListEnabled;
-            CPPUNIT_ASSERT(bIsUserListEnabled == sal_False);
+            CPPUNIT_ASSERT(bIsUserListEnabled == false);
 
         }
         else if (xProp.Name == "UserListIndex")

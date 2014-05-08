@@ -59,7 +59,7 @@ using namespace com::sun::star::container;
 namespace unoexe
 {
 
-static sal_Bool s_quiet = false;
+static bool s_quiet = false;
 
 static inline void out( const sal_Char * pText )
 {
@@ -84,18 +84,18 @@ static const char arUsingText[] =
 "    [--quiet]\n"
 "    [-- Argument1 Argument2 ...]\n";
 
-static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
-                            sal_uInt32 * pnIndex, const OUString & aArg)
+static bool readOption( OUString * pValue, const sal_Char * pOpt,
+                        sal_uInt32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
 {
     const OUString dash("-");
     if(!aArg.startsWith(dash))
-        return sal_False;
+        return false;
 
     OUString aOpt = OUString::createFromAscii( pOpt );
 
     if (aArg.getLength() < aOpt.getLength())
-        return sal_False;
+        return false;
 
     if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) ))
     {
@@ -119,7 +119,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
               out( tmp.getStr() );
 #endif
             ++(*pnIndex);
-            return sal_True;
+            return true;
         }
     }
       else if (aArg.indexOf(aOpt) == 1)
@@ -134,13 +134,13 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
 #endif
         ++(*pnIndex);
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
-                            sal_uInt32 * pnIndex, const OUString & aArg)
+static bool readOption( bool * pbOpt, const sal_Char * pOpt,
+                        sal_uInt32 * pnIndex, const OUString & aArg)
 {
     const OUString dashdash("--");
     OUString aOpt = OUString::createFromAscii(pOpt);
@@ -148,14 +148,14 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     if(aArg.startsWith(dashdash) && aOpt.equals(aArg.copy(2)))
     {
         ++(*pnIndex);
-        *pbOpt = sal_True;
+        *pbOpt = true;
 #if OSL_DEBUG_LEVEL > 1
         out( "\n> identified option --" );
         out( pOpt );
 #endif
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 template< class T >
@@ -270,7 +270,7 @@ class OInstanceProvider
 
     Mutex                             _aSingleInstanceMutex;
     Reference< XInterface >           _xSingleInstance;
-    sal_Bool                          _bSingleInstance;
+    bool                              _bSingleInstance;
 
     OUString                          _aImplName;
     OUString                          _aLocation;
@@ -285,7 +285,7 @@ public:
     OInstanceProvider( const Reference< XComponentContext > & xContext,
                        const OUString & rImplName, const OUString & rLocation,
                        const OUString & rServiceName, const Sequence< Any > & rInitParams,
-                       sal_Bool bSingleInstance, const OUString & rInstanceName )
+                       bool bSingleInstance, const OUString & rInstanceName )
         : _xContext( xContext )
         , _bSingleInstance( bSingleInstance )
         , _aImplName( rImplName )
@@ -408,8 +408,8 @@ SAL_IMPLEMENT_MAIN()
     {
         OUString aImplName, aLocation, aServiceName, aUnoUrl;
         Sequence< OUString > aParams;
-        sal_Bool bSingleAccept = sal_False;
-        sal_Bool bSingleInstance = sal_False;
+        bool bSingleAccept = false;
+        bool bSingleInstance = false;
 
         // read command line arguments
 

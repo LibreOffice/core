@@ -70,7 +70,7 @@ inline static Sequence< OUString > getSupportedServiceNames()
 
 
 static void assign( TestElement & rData,
-                    sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
+                    bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
                     sal_Int32 nLong, sal_uInt32 nULong,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,
@@ -97,7 +97,7 @@ static void assign( TestElement & rData,
 }
 
 static void assign( TestData & rData,
-                    sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
+                    bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
                     sal_Int32 nLong, sal_uInt32 nULong,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,

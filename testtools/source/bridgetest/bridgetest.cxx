@@ -124,7 +124,7 @@ public:
 };
 
 
-static sal_Bool equals( const TestElement & rData1, const TestElement & rData2 )
+static bool equals( const TestElement & rData1, const TestElement & rData2 )
 {
     check( rData1.Bool == rData2.Bool, "### bool does not match!" );
     check( rData1.Char == rData2.Char, "### char does not match!" );
@@ -159,7 +159,7 @@ static sal_Bool equals( const TestElement & rData1, const TestElement & rData2 )
             rData1.Any == rData2.Any);
 }
 
-static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
+static bool equals( const TestData & rData1, const TestData & rData2 )
 {
     sal_Int32 nLen;
 
@@ -175,16 +175,16 @@ static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
             if (! equals( pElements1[nLen], pElements2[nLen] ))
             {
                 check( false, "### sequence element did not match!" );
-                return sal_False;
+                return false;
             }
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 static void assign( TestElement & rData,
-                    sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
+                    bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
                     sal_Int32 nLong, sal_uInt32 nULong,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,
@@ -248,7 +248,7 @@ bool testAny(
 
 }
 
-static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const TestData &data)
+static bool performAnyTest( const Reference< XBridgeTest > &xLBT, const TestData &data)
 {
     bool bReturn = true;
     bReturn = testAny( data.Byte ,xLBT ) && bReturn;
@@ -283,7 +283,7 @@ static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const Test
 }
 
 
-static sal_Bool performSequenceOfCallTest( const Reference < XBridgeTest > &xLBT )
+static bool performSequenceOfCallTest( const Reference < XBridgeTest > &xLBT )
 {
     sal_Int32 i,nRounds;
     sal_Int32 nGlobalIndex = 0;
@@ -328,11 +328,11 @@ public:
 
 
 
-static sal_Bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT )
+static bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT )
 {
     xLBT->startRecursiveCall( new ORecursiveCall , 50 );
     // on failure, the test would lock up or crash
-    return sal_True;
+    return true;
 }
 
 class MyClass : public osl::DebugBase<MyClass>, public OWeakObject
@@ -364,7 +364,7 @@ void MyClass::release() throw ()
 }
 
 
-static sal_Bool performTest(
+static bool performTest(
     const Reference<XComponentContext> & xContext,
     const Reference<XBridgeTest > & xLBT,
     bool noCurrentContext )
@@ -924,9 +924,9 @@ static sal_Bool performTest(
     return bRet;
 }
 
-static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
+static bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
 {
-    sal_Bool bReturn = sal_True;
+    bool bReturn = true;
     OUString sCompare = STRING_TEST_CONSTANT;
     Reference<XInterface> const x(xLBT->getInterface());
     try
@@ -949,7 +949,7 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
 }
 
 
-static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
+static bool raiseException( const Reference< XBridgeTest > & xLBT )
 {
     sal_Int32 nCount = 0;
     try
@@ -1027,7 +1027,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         }
         return (nCount == 3);
     }
-    return sal_False;
+    return false;
 }
 
 /* Returns an acquired sequence

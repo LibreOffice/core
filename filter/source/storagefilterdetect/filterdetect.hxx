@@ -60,7 +60,7 @@ public:
 
 OUString StorageFilterDetect_getImplementationName();
 
-sal_Bool StorageFilterDetect_supportsService(const OUString& ServiceName);
+bool StorageFilterDetect_supportsService(const OUString& ServiceName);
 
 com::sun::star::uno::Sequence<OUString> StorageFilterDetect_getSupportedServiceNames();
 

@@ -2377,7 +2377,7 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
         boost::bind<void>(
             ::boost::mem_fn(&presentation::XSlideShowListener::slideEnded),
             _1,
-            sal_Bool(bReverse)));
+            bReverse));
 }
 
 bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )

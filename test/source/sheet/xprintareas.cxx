@@ -21,20 +21,18 @@ namespace apitest {
     void XPrintAreas::testSetAndGetPrintTitleColumns()
     {
         uno::Reference< sheet::XPrintAreas > xPrintAreas(init(), UNO_QUERY_THROW);
-        sal_Bool testState = true;
-        xPrintAreas->setPrintTitleColumns(testState);
+        xPrintAreas->setPrintTitleColumns(sal_True);
 
-        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleColumns", xPrintAreas->getPrintTitleColumns() == testState);
+        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleColumns", xPrintAreas->getPrintTitleColumns() == sal_True);
 
     }
 
     void XPrintAreas::testSetAndGetPrintTitleRows()
     {
         uno::Reference< sheet::XPrintAreas > xPrintAreas(init(), UNO_QUERY_THROW);
-        sal_Bool testState = true;
-        xPrintAreas->setPrintTitleRows(testState);
+        xPrintAreas->setPrintTitleRows(sal_True);
 
-        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleRows", xPrintAreas->getPrintTitleRows() == testState);
+        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleRows", xPrintAreas->getPrintTitleRows() == sal_True);
     }
 
     // the rest is right now in progress...

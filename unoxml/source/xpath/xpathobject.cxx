@@ -95,7 +95,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        return (sal_Bool) xmlXPathCastToBoolean(m_pXPathObj.get());
+        return xmlXPathCastToBoolean(m_pXPathObj.get()) != 0;
     }
 
     /**

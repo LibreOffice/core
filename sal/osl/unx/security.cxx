@@ -46,11 +46,11 @@ static oslSecurityError SAL_CALL
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                   oslSecurity* pSecurity);
 extern "C" sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
-static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax);
-static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
-static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
+static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax);
+static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
+static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
-static sal_Bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
+static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
 #if defined _SC_GETPW_R_SIZE_MAX
     long m;
     errno = 0;
@@ -59,17 +59,17 @@ static sal_Bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
         /* _SC_GETPW_R_SIZE_MAX has no limit; some platforms like certain
            FreeBSD versions support sysconf(_SC_GETPW_R_SIZE_MAX) in a broken
            way and always set EINVAL, so be resilient here: */
-        return sal_False;
+        return false;
     } else {
         OSL_ASSERT(
             m >= 0
             && (unsigned long) m < std::numeric_limits<std::size_t>::max());
         *value = (std::size_t) m;
-        return sal_True;
+        return true;
     }
 #else
     /* some platforms like Mac OS X 1.3 do not define _SC_GETPW_R_SIZE_MAX: */
-    return sal_False;
+    return false;
 #endif
 }
 
@@ -210,7 +210,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
 
 sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
 {
-    sal_Bool bRet=sal_False;
+    bool     bRet = false;
     sal_Char pszIdent[1024];
 
     pszIdent[0] = '\0';
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent,
 
 sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 {
-    sal_Bool bRet=sal_False;
+    bool     bRet = false;
     sal_Char pszName[1024];
 
     pszName[0] = '\0';
@@ -257,28 +257,28 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     return bRet;
 }
 
-static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
+static bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
 {
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
 
     if (pSecImpl == NULL || pSecImpl->m_pPasswd.pw_name == NULL)
-        return sal_False;
+        return false;
 
     strncpy(pszName, pSecImpl->m_pPasswd.pw_name, nMax);
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
-    sal_Bool bRet=sal_False;
+    bool     bRet = false;
     sal_Char pszDirectory[PATH_MAX];
 
     pszDirectory[0] = '\0';
 
     bRet = osl_psz_getHomeDir(Security,pszDirectory,sizeof(pszDirectory));
 
-    if ( bRet == sal_True )
+    if ( bRet )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
         OSL_ASSERT(*pustrDirectory != NULL);
@@ -288,12 +288,12 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     return bRet;
 }
 
-static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
 
     if (pSecImpl == NULL)
-        return sal_False;
+        return false;
 
 #ifdef ANDROID
 {
@@ -354,26 +354,26 @@ static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszD
         else if (pSecImpl->m_pPasswd.pw_dir != NULL)
             strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
         else
-            return sal_False;
+            return false;
     }
     else if (pSecImpl->m_pPasswd.pw_dir != NULL)
         strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
     else
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
-    sal_Bool bRet = sal_False;
+    bool     bRet = false;
     sal_Char pszDirectory[PATH_MAX];
 
     pszDirectory[0] = '\0';
 
     bRet = osl_psz_getConfigDir(Security,pszDirectory,sizeof(pszDirectory));
 
-    if ( bRet == sal_True )
+    if ( bRet )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
         OSL_ASSERT(*pustrDirectory != NULL);
@@ -387,7 +387,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
 #define DOT_CONFIG "/.config"
 
-static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 
@@ -397,7 +397,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
 
         // a default equal to $HOME/.config should be used.
         if (!osl_psz_getHomeDir(Security, pszDirectory, nMax))
-            return sal_False;
+            return false;
         n = strlen(pszDirectory);
         if (n + sizeof(DOT_CONFIG) < nMax)
         {
@@ -448,7 +448,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
     else
         strncpy(pszDirectory, pStr, nMax);
 
-    return sal_True;
+    return true;
 }
 
 #undef DOT_CONFIG

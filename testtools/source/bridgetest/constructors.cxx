@@ -68,7 +68,7 @@ private:
 void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     throw (css::uno::Exception, std::exception)
 {
-    sal_Bool arg0 = sal_Bool();
+    bool arg0;
     ::sal_Int8 arg1 = sal_Int8();
     ::sal_Int16 arg2 = sal_Int16();
     ::sal_uInt16 arg3 = sal_uInt16();
@@ -80,7 +80,7 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     double arg9 = double();
     OUString arg11;
     css::uno::Type arg12;
-    sal_Bool arg13 = sal_Bool();
+    bool arg13;
     css::uno::Sequence< sal_Bool > arg14;
     css::uno::Sequence< ::sal_Int8 > arg15;
     css::uno::Sequence< ::sal_Int16 > arg16;
@@ -94,23 +94,23 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     css::uno::Sequence< OUString > arg25;
     css::uno::Sequence< css::uno::Type > arg26;
     css::uno::Sequence< css::uno::Any > arg27;
-    sal_Bool arg27b = sal_Bool();
+    bool arg27b;
     css::uno::Sequence< css::uno::Sequence< sal_Bool > > arg28;
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > > arg29;
-    sal_Bool arg29b = sal_Bool();
+    bool arg29b;
     css::uno::Sequence< ::test::testtools::bridgetest::TestEnum > arg30;
     css::uno::Sequence< ::test::testtools::bridgetest::TestStruct > arg31;
     css::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< sal_Bool > > arg32;
     css::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< css::uno::Any > > arg33;
-    sal_Bool arg33b = sal_Bool();
+    bool arg33b;
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > arg34;
     ::test::testtools::bridgetest::TestEnum arg35;
     ::test::testtools::bridgetest::TestStruct arg36;
     ::test::testtools::bridgetest::TestPolyStruct< sal_Bool > arg37;
     ::test::testtools::bridgetest::TestPolyStruct< css::uno::Any > arg38;
-    sal_Bool arg38b = sal_Bool();
+    bool arg38b;
     css::uno::Reference< css::uno::XInterface > arg39;
     if (!(arguments.getLength() == 40
           && (arguments[0] >>= arg0) && arg0

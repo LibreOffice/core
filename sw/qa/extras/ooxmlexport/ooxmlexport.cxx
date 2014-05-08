@@ -672,7 +672,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65655, "fdo65655.docx")
     // However - LO assumed that because the 'even' footer is blank - it should ignore the 'Different Odd & Even Pages' flag
     // So it did not import it and did not export it
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
-    sal_Bool bValue = false;
+    bool bValue = false;
     xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
     xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
@@ -1411,12 +1411,12 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
-    sal_Bool bTheme = sal_False;
+    bool bTheme = false;
     for(int i = 0; i < aGrabBag.getLength(); ++i)
     {
       if (aGrabBag[i].Name == "OOXTheme")
       {
-        bTheme = sal_True;
+        bTheme = true;
         uno::Reference<xml::dom::XDocument> aThemeDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aThemeDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
@@ -1435,40 +1435,40 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     xGroupPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
-    sal_Bool bData = sal_False, bLayout = sal_False, bQStyle = sal_False, bColor = sal_False, bDrawing = sal_False;
+    bool bData = false, bLayout = false, bQStyle = false, bColor = false, bDrawing = false;
     for(int i = 0; i < aGrabBag.getLength(); ++i)
     {
       if (aGrabBag[i].Name == "OOXData")
       {
-        bData = sal_True;
+        bData = true;
         uno::Reference<xml::dom::XDocument> aDataDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDataDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aDataDom.get()); // Reference not empty
       }
       else if (aGrabBag[i].Name == "OOXLayout")
       {
-        bLayout = sal_True;
+        bLayout = true;
         uno::Reference<xml::dom::XDocument> aLayoutDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aLayoutDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aLayoutDom.get()); // Reference not empty
       }
       else if (aGrabBag[i].Name == "OOXStyle")
       {
-        bQStyle = sal_True;
+        bQStyle = true;
         uno::Reference<xml::dom::XDocument> aStyleDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aStyleDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aStyleDom.get()); // Reference not empty
       }
       else if (aGrabBag[i].Name == "OOXColor")
       {
-        bColor = sal_True;
+        bColor = true;
         uno::Reference<xml::dom::XDocument> aColorDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aColorDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aColorDom.get()); // Reference not empty
       }
       else if (aGrabBag[i].Name == "OOXDrawing")
       {
-        bDrawing = sal_True;
+        bDrawing = true;
         uno::Sequence< uno::Any > diagramDrawing;
         uno::Reference<xml::dom::XDocument> aDrawingDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= diagramDrawing);
@@ -1570,12 +1570,12 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
    uno::Sequence<beans::PropertyValue> aGrabBag(0);
    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
-   sal_Bool CustomXml = sal_False;
+   bool CustomXml = false;
    for(int i = 0; i < aGrabBag.getLength(); ++i)
    {
        if (aGrabBag[i].Name == "OOXCustomXml" || aGrabBag[i].Name == "OOXCustomXmlProps")
        {
-           CustomXml = sal_True;
+           CustomXml = true;
            uno::Reference<xml::dom::XDocument> aCustomXmlDom;
            uno::Sequence<uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aCustomXmlDomList); // PropertyValue of proper type

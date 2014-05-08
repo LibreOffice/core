@@ -100,7 +100,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         if (type == getCppuType<sal_Bool>())
         {
             // boolean type
-            sal_Bool bOld = any.get<sal_Bool>();
+            bool bOld = any.get<sal_Bool>();
             xPropSet->setPropertyValue(rName, makeAny(!bOld));
         }
         else if (type == getCppuType<sal_Int8>())

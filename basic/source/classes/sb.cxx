@@ -1698,7 +1698,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     bool bRet;
     if( GetSbData()->aErrHdl.IsSet() )
     {
-        bRet = (sal_Bool) GetSbData()->aErrHdl.Call( this );
+        bRet = (bool) GetSbData()->aErrHdl.Call( this );
     }
     else
     {
@@ -1746,7 +1746,7 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
     SetErrorData( code, l, c1, c2 );
     if( GetSbData()->aErrHdl.IsSet() )
     {
-        return (sal_Bool) GetSbData()->aErrHdl.Call( this );
+        return (bool) GetSbData()->aErrHdl.Call( this );
     }
     else
     {

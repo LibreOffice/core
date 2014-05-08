@@ -57,7 +57,7 @@ void ServicesTest::test()
                 try
                 {
                     OString message = OUStringToOString(s[i], RTL_TEXTENCODING_UTF8);
-                    sal_Bool bDefConstructor = xseq[c]->isDefaultConstructor();
+                    bool bDefConstructor = xseq[c]->isDefaultConstructor();
                     Reference< css::lang::XMultiComponentFactory > serviceManager = m_xContext->getServiceManager();
                     Reference< XInterface > instance;
 

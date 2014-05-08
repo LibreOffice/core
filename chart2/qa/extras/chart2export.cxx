@@ -274,8 +274,8 @@ void testErrorBar( Reference< XPropertySet > xErrorBar )
 void checkCommonTrendline(
         Reference<chart2::XRegressionCurve> xCurve,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        sal_Bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        sal_Bool aExpectedShowEquation, sal_Bool aExpectedR2)
+        bool aExpectedForceIntercept, double aExpectedInterceptValue,
+        bool aExpectedShowEquation, bool aExpectedR2)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -288,7 +288,7 @@ void checkCommonTrendline(
     CPPUNIT_ASSERT(xProperties->getPropertyValue("ExtrapolateBackward") >>= aExtrapolateBackward);
     CPPUNIT_ASSERT_EQUAL(aExpectedExtrapolateBackward, aExtrapolateBackward);
 
-    sal_Bool aForceIntercept = false;
+    bool aForceIntercept = false;
     CPPUNIT_ASSERT(xProperties->getPropertyValue("ForceIntercept") >>= aForceIntercept);
     CPPUNIT_ASSERT_EQUAL(aExpectedForceIntercept, aForceIntercept);
 
@@ -302,11 +302,11 @@ void checkCommonTrendline(
     Reference< XPropertySet > xEquationProperties( xCurve->getEquationProperties() );
     CPPUNIT_ASSERT(xEquationProperties.is());
 
-    sal_Bool aShowEquation = false;
+    bool aShowEquation = false;
     CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowEquation") >>= aShowEquation);
     CPPUNIT_ASSERT_EQUAL(aExpectedShowEquation, aShowEquation);
 
-    sal_Bool aShowCorrelationCoefficient = false;
+    bool aShowCorrelationCoefficient = false;
     CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= aShowCorrelationCoefficient);
     CPPUNIT_ASSERT_EQUAL(aExpectedR2, aShowCorrelationCoefficient);
 }
@@ -327,8 +327,8 @@ void checkNameAndType(Reference<XPropertySet> xProperties, const OUString& aExpe
 void checkLinearTrendline(
         Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        sal_Bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        sal_Bool aExpectedShowEquation, sal_Bool aExpectedR2)
+        bool aExpectedForceIntercept, double aExpectedInterceptValue,
+        bool aExpectedShowEquation, bool aExpectedR2)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -346,8 +346,8 @@ void checkPolynomialTrendline(
         Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName,
         sal_Int32 aExpectedDegree,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        sal_Bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        sal_Bool aExpectedShowEquation, sal_Bool aExpectedR2)
+        bool aExpectedForceIntercept, double aExpectedInterceptValue,
+        bool aExpectedShowEquation, bool aExpectedR2)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());

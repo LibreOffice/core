@@ -24,7 +24,7 @@
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.h"
 
-static sal_Bool hasOption(char const * szOption, int argc, char** argv);
+static bool hasOption(char const * szOption, int argc, char** argv);
 
 
 #define HELP_TEXT    \
@@ -109,14 +109,14 @@ int main(int argc, char **argv)
 
 
 
-static sal_Bool hasOption(char const * szOption, int argc, char** argv)
+static bool hasOption(char const * szOption, int argc, char** argv)
 {
-    sal_Bool retVal= sal_False;
+    bool retVal = false;
     for(sal_Int16 i= 1; i < argc; i++)
     {
         if( ! strcmp(argv[i], szOption))
         {
-            retVal= sal_True;
+            retVal = true;
             break;
         }
     }

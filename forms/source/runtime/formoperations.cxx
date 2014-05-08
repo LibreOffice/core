@@ -348,7 +348,7 @@ namespace frm
                     aState.Enabled = !impl_isInsertOnlyForm_throw();
                 }
                 else
-                    aState.State <<= (sal_Bool)sal_False;
+                    aState.State <<= false;
             }
             break;
 
@@ -781,7 +781,7 @@ namespace frm
                     // simply toggle the value
                     bool bApplied = false;
                     m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
-                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( (sal_Bool)!bApplied ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( !bApplied ) );
 
                     // and reload
                     WaitObject aWO( NULL );
@@ -1656,7 +1656,7 @@ namespace frm
             try
             {
                 m_xCursorProperties->setPropertyValue( PROPERTY_FILTER, makeAny( m_xParser->getFilter() ) );
-                m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( (sal_Bool)sal_True ) );
+                m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( true ) );
 
                 m_xLoadableForm->reload();
             }
@@ -1671,7 +1671,7 @@ namespace frm
                 try
                 {
                     m_xParser->setOrder( sOriginalFilter );
-                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( (sal_Bool)bApplied ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( bApplied ) );
                     m_xCursorProperties->setPropertyValue( PROPERTY_FILTER, makeAny( m_xParser->getFilter() ) );
                     m_xLoadableForm->reload();
                 }

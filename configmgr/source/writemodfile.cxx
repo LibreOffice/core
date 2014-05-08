@@ -114,7 +114,7 @@ void writeData_(oslFileHandle handle, char const * begin, sal_Int32 length) {
     }
 }
 
-void writeValueContent_(oslFileHandle handle, sal_Bool value) {
+void writeValueContent_(oslFileHandle handle, bool value) {
     if (value) {
         writeData_(handle, RTL_CONSTASCII_STRINGPARAM("true"));
     } else {
@@ -196,7 +196,7 @@ template< typename T > void writeItemListValue(
 void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
     switch (type) {
     case TYPE_BOOLEAN:
-        writeSingleValue< sal_Bool >(handle, value);
+        writeSingleValue< bool >(handle, value);
         break;
     case TYPE_SHORT:
         writeSingleValue< sal_Int16 >(handle, value);
@@ -217,7 +217,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
         writeSingleValue< css::uno::Sequence< sal_Int8 > >(handle, value);
         break;
     case TYPE_BOOLEAN_LIST:
-        writeListValue< sal_Bool >(handle, value);
+        writeListValue< bool >(handle, value);
         break;
     case TYPE_SHORT_LIST:
         writeListValue< sal_Int16 >(handle, value);

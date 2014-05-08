@@ -95,7 +95,7 @@ bool SwEditShell::AcceptRedlinesInSelection()
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    sal_Bool bRet = GetDoc()->AcceptRedline( *GetCrsr(), true );
+    bool bRet = GetDoc()->AcceptRedline( *GetCrsr(), true );
     EndAllAction();
     return bRet;
 }
@@ -104,7 +104,7 @@ bool SwEditShell::RejectRedlinesInSelection()
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    sal_Bool bRet = GetDoc()->RejectRedline( *GetCrsr(), true );
+    bool bRet = GetDoc()->RejectRedline( *GetCrsr(), true );
     EndAllAction();
     return bRet;
 }
