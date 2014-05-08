@@ -63,6 +63,24 @@
       "revId": "3d0ba6f1a37b612da926996563d142980865f2dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_34793e94",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000599
+      },
+      "writtenOn": "2014-05-08T07:15:08Z",
+      "side": 1,
+      "message": "Yes :-) .. I will make the changes and push the patch set 2 in a while",
+      "parentUuid": "5a72e520_d44aaa54",
+      "revId": "3d0ba6f1a37b612da926996563d142980865f2dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
