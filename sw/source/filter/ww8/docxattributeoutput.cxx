@@ -2679,17 +2679,30 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     const char* widthType = "dxa";
     bool bRelBoxSize = false;
 
-    // If actual width of table is relative it shoud export is as "auto".
+    // If actual width of table is relative it shoud export is as "pct".`
     const SwTable *pTable = pTableTextNodeInfoInner->getTable();
     SwFrmFmt *pTblFmt = pTable->GetFrmFmt( );
+    const SwFmtFrmSize &rSize = pTblFmt->GetFrmSize();
+    int nWidthPercent = rSize.GetWidthPercent();
     uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(const_cast<SwFrmFmt&>(*pTable->GetFrmFmt( ))),uno::UNO_QUERY);
     bool isWidthRelative = false;
     xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;
 
     if(isWidthRelative)
     {
-        nPageSize = 0;
-        widthType = "auto";
+       /**
+       * As per ECMA Specification : ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference [ 17.18.90 ST_TblWidth (Table Width Units)]
+       * http://www.schemacentral.com/sc/ooxml/a-w_type-7.html
+       *
+       * Fiftieths of a Percent :
+       * http://startbigthinksmall.wordpress.com/2010/01/04/points-inches-and-emus-measuring-units-in-office-open-xml/
+       * pct Width is in Fiftieths of a Percent
+       *
+       * ex. If the Table width is 50% then
+       * Width in Fiftieths of a percent is (50 * 50) % or 0.5 * 5000 = 2500pct
+       **/
+        nPageSize = nWidthPercent * 50 ;
+        widthType = "pct" ;
     }
     else
     {
