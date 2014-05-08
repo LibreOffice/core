@@ -3217,6 +3217,19 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
 }
 
 
+DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if(!pXmlDoc)
+        return;
+
+    // Problem :If the table preferred width is in percent, then after RT it changes to 0 & width type changes
+    // to 'auto' instead of 'pct'.
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblW[1]", "w", "3000");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblW[1]", "type","pct");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
