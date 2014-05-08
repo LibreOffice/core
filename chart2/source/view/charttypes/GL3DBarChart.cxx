@@ -41,6 +41,14 @@ GL3DBarChart::~GL3DBarChart()
 
 void GL3DBarChart::create3DShapes()
 {
+    // Each series of data flows from left to right, and multiple series are
+    // stacked vertically along y axis.
+
+    // NOTE: These objects are created and positioned in a totally blind
+    // fashion since we don't even have a way to see them on screen.  So, no
+    // guarantee they are positioned correctly.  In fact, they are guaranteed
+    // to be positioned incorrectly.
+
     const float nBarSizeX = 10;
     const float nBarSizeY = 10;
     const float nBarDistanceX = nBarSizeX / 2;
@@ -48,10 +56,9 @@ void GL3DBarChart::create3DShapes()
 
     sal_uInt32 nId = 1;
 
-    uno::Sequence<OUString> aCats = mrCatProvider.getSimpleCategories();
-    for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
-        // Category name text object.
-        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
+    std::vector<opengl3D::Text*> aYAxisTexts;
+
+    float nYPos = 0.0;
 
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
@@ -59,6 +66,8 @@ void GL3DBarChart::create3DShapes()
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = maDataSeries.begin(),
             itrEnd = maDataSeries.end(); itr != itrEnd; ++itr)
     {
+        nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY);
+
         const VDataSeries& rDataSeries = *itr;
         sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
 
@@ -67,13 +76,21 @@ void GL3DBarChart::create3DShapes()
             DataSeriesHelper::getDataSeriesLabel(
                 rDataSeries.getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
 
-        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
+        aYAxisTexts.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
+        opengl3D::Text* p = aYAxisTexts.back();
+        Size aTextSize = p->getSize();
+        glm::vec3 aTopLeft, aTopRight, aBottomRight;
+        aTopLeft.x = aTextSize.getWidth() * -1.0;
+        aTopLeft.y = nYPos;
+        aTopRight.y = nYPos;
+        aBottomRight = aTopRight;
+        aBottomRight.y += aTextSize.getHeight();
+        p->setPosition(aTopLeft, aTopRight, aBottomRight);
 
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
             float nVal = rDataSeries.getYValue(nIndex);
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
-            float nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY);
 
             sal_Int32 nColor = COL_BLUE;
 
@@ -86,6 +103,31 @@ void GL3DBarChart::create3DShapes()
 
         ++nSeriesIndex;
     }
+
+    nYPos += nBarSizeY + nBarDistanceY;
+
+    // Create category texts along X-axis at the bottom.
+    uno::Sequence<OUString> aCats = mrCatProvider.getSimpleCategories();
+    for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
+    {
+        float nXPos = i * (nBarSizeX + nBarDistanceX);
+
+        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
+        opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
+        Size aTextSize = p->getSize();
+        glm::vec3 aTopLeft;
+        aTopLeft.x = nXPos;
+        aTopLeft.y = nYPos;
+        glm::vec3 aTopRight = aTopLeft;
+        aTopRight.x += aTextSize.getWidth();
+        glm::vec3 aBottomRight = aTopRight;
+        aBottomRight.y += aTextSize.getHeight();
+        p->setPosition(aTopLeft, aTopRight, aBottomRight);
+    }
+
+    // Transfer all Y-axis text objects to the shape collection.
+    std::copy(aYAxisTexts.begin(), aYAxisTexts.end(), std::back_inserter(maShapes));
+    aYAxisTexts.clear();
 }
 
 void GL3DBarChart::render()

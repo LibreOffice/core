@@ -8,6 +8,8 @@
  */
 
 #include "3DChartObjects.hxx"
+#include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
 
 namespace chart {
 
@@ -51,10 +53,20 @@ void Line::render()
     mpRenderer->EndAddShapePolygon3DObject();
 }
 
-Text::Text(OpenGL3DRenderer* pRenderer, const OUString& /*rStr*/, sal_uInt32 nId):
+Text::Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId):
     Renderable3DObject(pRenderer, nId)
 {
-    // TODO : convert OUString to BitmapEx.
+    // Convert OUString to BitmapEx.
+    VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
+    Font aFont = aDevice.GetFont();
+    aFont.SetColor(COL_WHITE);
+    aDevice.SetFont(aFont);
+    aDevice.Erase();
+    aDevice.SetOutputSizePixel(Size(20,12));
+    aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+    aDevice.DrawText(Point(0,0), rStr);
+
+    maText = BitmapEx(aDevice.GetBitmapEx(Point(0,0), Size(20,12)));
 }
 
 void Text::render()
@@ -62,6 +74,18 @@ void Text::render()
     glm::vec3 dir2 = maTopRight - maTopLeft;
     glm::vec3 bottomLeft = maBottomRight - dir2;
     mpRenderer->CreateTextTexture(maText, maTopLeft, maTopRight, maBottomRight, bottomLeft);
+}
+
+Size Text::getSize() const
+{
+    return maText.GetSizePixel();
+}
+
+void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight)
+{
+    maTopLeft = rTopLeft;
+    maTopRight = rTopRight;
+    maBottomRight = rBottomRight;
 }
 
 Rectangle::Rectangle(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
