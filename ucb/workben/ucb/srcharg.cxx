@@ -105,14 +105,14 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
 {
     /* Format of rInput:
 
-       argument = *option [criterium *("OR" criterium)]
+       argument = *option [criterion *("OR" criterion)]
 
        option = ("--RECURSE" "=" ("NONE" / "ONE" / "DEEP"))
                     / (("--BASE" / "--FOLDERVIEW" / "--DOCVIEW"
                                 / "--INDIRECT")
                            "=" bool)
 
-       criterium = "EMPTY" / (term *("AND" term))
+       criterion = "EMPTY" / (term *("AND" term))
 
        term = text-term / date-term / numeric-term / bool-term
 

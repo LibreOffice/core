@@ -222,7 +222,7 @@ OUString columnMetaData2SDBCX(
             st.DESCRIPTION, makeAny( xRow->getString( DESCRIPTION ) ) );
 
 
-    // maybe a better criterium than the type name can be found in future
+    // maybe a better criterion than the type name can be found in future
     pBase->setPropertyValue_NoBroadcast_public(
         st.IS_AUTO_INCREMENT, isAutoIncrement(xRow->getString( DEFAULT_VALUE )) );
 

@@ -118,7 +118,7 @@
         <info>
           <desc>It's the "most actual" filter, which is able to import/export
           ALL currently implemented features of this office module. It has to be
-          the programatic name of the filter.</desc>
+          the programmatic name of the filter.</desc>
         </info>
       </prop>
       <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:type="xs:string">

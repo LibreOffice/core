@@ -104,7 +104,7 @@
       </prop>
       <set oor:name="Fields" oor:node-type="FieldAssignment">
         <info>
-          <desc>Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+          <desc>Specifies the column name mapping between the programmatic column name and the logical column name.</desc>
         </info>
       </set>
     </group>
@@ -334,7 +334,7 @@
       </prop>
       <set oor:name="Fields" oor:node-type="FieldAssignment">
         <info>
-          <desc>Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+          <desc>Specifies the column name mapping between the programmatic column name and the logical column name.</desc>
         </info>
       </set>
     </group>

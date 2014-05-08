@@ -949,10 +949,10 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
             {
                 // Sort criteria... Note that column numbering starts with 1!
                 aOpenArg.SortingInfo.realloc(2);
-                // primary sort criterium: column 4 --> IsFolder
+                // primary sort criterion: column 4 --> IsFolder
                 aOpenArg.SortingInfo[ 0 ].ColumnIndex = 4;
                 aOpenArg.SortingInfo[ 0 ].Ascending   = sal_False;
-                // secondary sort criterium: column 1 --> Title
+                // secondary sort criterion: column 1 --> Title
                 aOpenArg.SortingInfo[ 1 ].ColumnIndex = 1;
                 aOpenArg.SortingInfo[ 1 ].Ascending   = sal_True;
             }
