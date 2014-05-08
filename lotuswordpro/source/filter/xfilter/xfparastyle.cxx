@@ -310,8 +310,6 @@ bool    XFParaStyle::Equal(IXFStyle *pStyle)
         return false;
 
     XFParaStyle *pOther = (XFParaStyle*)(pStyle);
-    if( !pOther )
-        return false;
 
     if( m_nFlag != pOther->m_nFlag )
         return false;
