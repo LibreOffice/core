@@ -164,6 +164,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bTOCPageRef(false),
         m_bStartGenericField(false),
         m_bTextInserted(false),
+        m_nSymboldata(-1),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
         m_nCurrentTabStopIndex( 0 ),
@@ -373,6 +374,16 @@ void DomainMapper_Impl::RemoveLastParagraph( )
     catch( const uno::Exception& )
     {
     }
+}
+
+void DomainMapper_Impl::SetSymbolData( bool nSymbolData )
+{
+    m_nSymboldata = nSymbolData;
+}
+
+sal_Int32 DomainMapper_Impl::GetSymbolData()
+{
+    return m_nSymboldata;
 }
 
 void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )

@@ -3321,6 +3321,13 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
                         "image/png");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
