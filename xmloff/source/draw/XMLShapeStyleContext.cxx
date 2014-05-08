@@ -195,7 +195,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         static ::rtl::OUString s_FillStyle(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
 
         // try to find a FillStyle entry and a value from it
-        for(a = rProperties.begin(); a != rProperties.end(); a++)
+        for(a = rProperties.begin(); a != rProperties.end(); ++a)
         {
             if(a->mnIndex != -1)
             {
@@ -238,7 +238,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             static ::rtl::OUString s_BackGraphicLocation(RTL_CONSTASCII_USTRINGPARAM("BackGraphicLocation"));
             static ::rtl::OUString s_BackGraphicTransparency(RTL_CONSTASCII_USTRINGPARAM("BackGraphicTransparency"));
 
-            for(a = rProperties.begin(); a != rProperties.end(); a++)
+            for(a = rProperties.begin(); a != rProperties.end(); ++a)
             {
                 if(a->mnIndex != -1)
                 {
