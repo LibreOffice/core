@@ -51,7 +51,7 @@ class ODocumentCloser : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
 
-    sal_Bool m_bDisposed;
+    bool m_bDisposed;
 
 public:
     ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
@@ -147,7 +147,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
 
 ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments)
 : m_pListenersContainer( NULL )
-, m_bDisposed( sal_False )
+, m_bDisposed( false )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_refCount )
@@ -199,7 +199,7 @@ void SAL_CALL ODocumentCloser::dispose()
         MainThreadFrameCloserRequest::Start( pCloser );
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 

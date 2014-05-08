@@ -182,7 +182,7 @@ namespace svt { namespace uno
     }
 
 
-    void WizardShell::enablePage( const sal_Int16 i_nPageID, const sal_Bool i_bEnable )
+    void WizardShell::enablePage( const sal_Int16 i_nPageID, const bool i_bEnable )
     {
         enableState( impl_pageIdToState( i_nPageID ), i_bEnable );
     }

@@ -116,7 +116,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
 
     // specify our internal dispatch provider
     // frame or desktop?! => document or global config.
-    sal_Bool bDesktopIsUsed = sal_False;
+    bool bDesktopIsUsed = false;
     m_xDispatcher  = css::uno::Reference< css::frame::XDispatchProvider >(xEnv, css::uno::UNO_QUERY);
     if (!m_xDispatcher.is())
     {
@@ -129,7 +129,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
         aLock.reset();
 
         m_xDispatcher  = xDispatcher;
-        bDesktopIsUsed = sal_True;
+        bDesktopIsUsed = true;
     }
 
     aLock.clear();
@@ -232,10 +232,10 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
 
 KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 {
-    sal_Bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
-    sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
-    sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
-    sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
+    bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
+    bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
+    bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+    bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
     sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
     return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);

@@ -172,7 +172,7 @@ class SVTXFormattedField : public VCLXSpinField
 {
 protected:
     SvNumberFormatsSupplierObj* m_pCurrentSupplier;
-    sal_Bool                    bIsStandardSupplier;
+    bool                    bIsStandardSupplier;
 
     sal_Int32                   nKeyToSetDelayed;
 
@@ -195,8 +195,8 @@ protected:
     void    SetValue(const ::com::sun::star::uno::Any& rValue);
     ::com::sun::star::uno::Any  GetValue();
 
-    void    SetTreatAsNumber(sal_Bool bSet);
-    sal_Bool    GetTreatAsNumber();
+    void    SetTreatAsNumber(bool bSet);
+    bool    GetTreatAsNumber();
 
     void    SetDefaultValue(const ::com::sun::star::uno::Any& rValue);
     ::com::sun::star::uno::Any  GetDefaultValue();
@@ -229,7 +229,7 @@ namespace svt
 
 struct RMItemData
 {
-    sal_Bool            b_Enabled;
+    bool            b_Enabled;
     sal_Int32           n_ID;
     OUString     Label;
 };

@@ -107,14 +107,14 @@ bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataF
                             uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetTemporaryStorage();
                             OUString aName( "Dummy" );
                             SvStream* pStream = NULL;
-                            sal_Bool bDeleteStream = sal_False;
+                            bool bDeleteStream = false;
                             uno::Sequence < beans::PropertyValue > aEmpty;
                             xPers->storeToEntry( xStg, aName, aEmpty, aEmpty );
                             if ( xStg->isStreamElement( aName ) )
                             {
                                 uno::Reference < io::XStream > xStm = xStg->cloneStreamElement( aName );
                                 pStream = utl::UcbStreamHelper::CreateStream( xStm );
-                                bDeleteStream = sal_True;
+                                bDeleteStream = true;
                             }
                             else
                             {

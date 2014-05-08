@@ -40,16 +40,16 @@ class ButtonFrame
     Rectangle   aRect;
     Rectangle   aInnerRect;
     OUString    aText;
-    sal_Bool        bPressed;
-    sal_Bool        bCurs;
-    sal_Bool        m_bDrawDisabled;
+    bool        bPressed;
+    bool        bCurs;
+    bool        m_bDrawDisabled;
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
                             const OUString &rText,
-                            sal_Bool bPress,
-                            sal_Bool bCursor,
-                            sal_Bool _bDrawDisabled)
+                            bool bPress,
+                            bool bCursor,
+                            bool _bDrawDisabled)
                 :aRect( rPt, rSz )
                 ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
                             Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
@@ -67,12 +67,12 @@ public:
 
 class BrowserColumn
 {
-    sal_uInt16              _nId;
-    sal_uLong               _nOriginalWidth;
-    sal_uLong               _nWidth;
+    sal_uInt16          _nId;
+    sal_uLong           _nOriginalWidth;
+    sal_uLong           _nWidth;
     Image               _aImage;
     OUString            _aTitle;
-    sal_Bool                _bFrozen;
+    bool                _bFrozen;
 
 public:
                         BrowserColumn( sal_uInt16 nItemId, const Image &rImage,
@@ -85,8 +85,8 @@ public:
     Image&              GetImage() { return _aImage; }
     OUString&           Title() { return _aTitle; }
 
-    sal_Bool            IsFrozen() const { return _bFrozen; }
-    void                Freeze( sal_Bool bFreeze = sal_True ) { _bFrozen = bFreeze; }
+    bool                IsFrozen() const { return _bFrozen; }
+    void                Freeze( bool bFreeze = true ) { _bFrozen = bFreeze; }
 
     virtual void        Draw( BrowseBox& rBox, OutputDevice& rDev,
                               const Point& rPos, sal_Bool bCurs  );
@@ -165,7 +165,7 @@ public:
                          { return (BrowseBox*) Window::GetParent(); }
     const OUString& GetRealRowCount() const { return aRealRowCount; }
 
-    void            SetUpdateMode( sal_Bool bMode );
+    void            SetUpdateMode( bool bMode );
     bool            GetUpdateMode() const { return bUpdateMode; }
     void            EnterUpdateLock() { ++nUpdateLock; }
     void            LeaveUpdateLock();
@@ -178,7 +178,7 @@ public:
 
 protected:
     void            StartRowDividerDrag( const Point& _rStartPos );
-    sal_Bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
+    bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
 };
 
 
@@ -215,7 +215,7 @@ public:
 
 
 void InitSettings_Impl( Window *pWin,
-         sal_Bool bFont = sal_True, sal_Bool bForeground = sal_True, sal_Bool bBackground = sal_True );
+         bool bFont = true, bool bForeground = true, bool bBackground = true );
 
 
 

@@ -42,7 +42,7 @@
 
 namespace
 {
-    static void lcl_setWinBits( Window* _pWindow, WinBits _nBits, sal_Bool _bSet )
+    static void lcl_setWinBits( Window* _pWindow, WinBits _nBits, bool _bSet )
     {
         WinBits nStyle = _pWindow->GetStyle();
         if ( _bSet )
@@ -433,7 +433,7 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const ::com::
 
             case BASEPROPERTY_READONLY:
             {
-                sal_Bool b = sal_Bool();
+                bool b;
                 if ( Value >>= b )
                     pMultiLineEdit->SetReadOnly( b );
             }
@@ -447,7 +447,7 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_HIDEINACTIVESELECTION:
             {
-                sal_Bool b = sal_Bool();
+                bool b;
                 if ( Value >>= b )
                 {
                     pMultiLineEdit->EnableFocusSelectionHide( b );
@@ -574,7 +574,7 @@ void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const 
         {
         case BASEPROPERTY_HIDEINACTIVESELECTION:
         {
-            sal_Bool bValue( sal_False );
+            bool bValue;
             OSL_VERIFY( Value >>= bValue );
 
             lcl_setWinBits( pControl, WB_NOHIDESELECTION, !bValue );
@@ -807,7 +807,7 @@ void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 SVTXFormattedField::SVTXFormattedField()
     :m_pCurrentSupplier(NULL)
-    ,bIsStandardSupplier(sal_True)
+    ,bIsStandardSupplier(true)
     ,nKeyToSetDelayed(-1)
 {
 }
@@ -843,7 +843,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
         {
             case BASEPROPERTY_ENFORCE_FORMAT:
             {
-                sal_Bool bEnable( sal_True );
+                bool bEnable( true );
                 if ( Value >>= bEnable )
                     pField->EnableNotANumber( !bEnable );
             }
@@ -865,7 +865,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
 
             case BASEPROPERTY_TREATASNUMBER:
             {
-                sal_Bool b = sal_Bool();
+                bool b;
                 if ( Value >>= b )
                     SetTreatAsNumber(b);
             }
@@ -935,7 +935,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                    sal_Bool b = sal_Bool();
+                    bool b;
                     if ( Value >>= b )
                      pField->SetThousandsSep( b );
             }
@@ -1213,17 +1213,17 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
 }
 
 
-sal_Bool SVTXFormattedField::GetTreatAsNumber()
+bool SVTXFormattedField::GetTreatAsNumber()
 {
     FormattedField* pField = GetFormattedField();
     if (pField)
         return pField->TreatingAsNumber();
 
-    return sal_True;
+    return true;
 }
 
 
-void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
+void SVTXFormattedField::SetTreatAsNumber(bool bSet)
 {
     FormattedField* pField = GetFormattedField();
     if (pField)
@@ -1303,13 +1303,13 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
         if (pField)
         {
             pNew = new SvNumberFormatsSupplierObj(pField->StandardFormatter());
-            bIsStandardSupplier = sal_True;
+            bIsStandardSupplier = true;
         }
     }
     else
     {
         pNew = SvNumberFormatsSupplierObj::getImplementation(xSupplier);
-        bIsStandardSupplier = sal_False;
+        bIsStandardSupplier = false;
     }
 
     if (!pNew)
@@ -1456,7 +1456,7 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         OUString sPropertyName = evt.PropertyName;
         if ( sPropertyName == "Enabled" )
         {
-            sal_Bool bEnable = false;
+            bool bEnable = false;
             evt.NewValue >>= bEnable;
             pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
         }
@@ -1506,7 +1506,7 @@ RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::Contai
     }
     else
     {
-        aCurRMItemData.b_Enabled = sal_False;
+        aCurRMItemData.b_Enabled = false;
         aCurRMItemData.n_ID = 0;
     }
     return aCurRMItemData;
@@ -1565,7 +1565,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
         {
             case BASEPROPERTY_COMPLETE:
             {
-                sal_Bool b = false;
+                bool b = false;
                 Value >>= b;
                 pField->SetRoadmapComplete( b);
             }
@@ -1573,7 +1573,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 
             case BASEPROPERTY_ACTIVATED:
             {
-                   sal_Bool b = false;
+                   bool b = false;
                 Value >>= b;
                 pField->SetRoadmapInteractive( b);
             }
@@ -2003,7 +2003,7 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_CURSYM_POSITION:
             {
-                sal_Bool b = false;
+                bool b = false;
                 Value >>= b;
                 pField->setPrependCurrSym(b);
             }
@@ -2233,7 +2233,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::su
                 Window* pWindow = GetWindow();
                 if ( pWindow )
                 {
-                    sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+                    bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
                     if ( bVoid )
                     {

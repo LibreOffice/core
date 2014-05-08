@@ -74,7 +74,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
         if ( css::datatransfer::dnd::DNDConstants::ACTION_NONE != nAction )
         {
             TransferableDataHelper aHelper( dtde.Transferable );
-            sal_Bool bFormatFound = sal_False;
+            bool bFormatFound = false;
             FileList aFileList;
 
             // at first check filelist format
@@ -83,7 +83,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
                 sal_uLong i, nCount = aFileList.Count();
                 for ( i = 0; i < nCount; ++i )
                     implts_OpenFile( aFileList.GetFile(i) );
-                bFormatFound = sal_True;
+                bFormatFound = true;
             }
 
             // then, if necessary, the file format
@@ -132,7 +132,7 @@ void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd
 {
     try
     {
-        sal_Bool bAccept = ( implts_IsDropFormatSupported( SOT_FORMAT_FILE ) ||
+        bool bAccept = ( implts_IsDropFormatSupported( SOT_FORMAT_FILE ) ||
                              implts_IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) );
 
         if ( !bAccept )

@@ -449,7 +449,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
 sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor ) throw( RuntimeException, std::exception )
 {
     const SolarMutexGuard aGuard;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {

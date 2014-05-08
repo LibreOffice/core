@@ -180,7 +180,7 @@ namespace {
             if (aVal.Name.equalsAscii("DataSource"))
             {
 #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
 #endif
                 aVal.Value >>= m_xDataSource;
                 OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for DataSource!" );
@@ -190,7 +190,7 @@ namespace {
             if (aVal.Name.equalsAscii("DataSourceName"))
             {
 #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
 #endif
                 aVal.Value >>= m_sDataSourceName;
                 OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for DataSourceName!" );
@@ -200,7 +200,7 @@ namespace {
             if (aVal.Name.equalsAscii("Command"))
             {
 #if OSL_DEBUG_LEVEL > 0
-                sal_Bool bSuccess =
+                bool bSuccess =
 #endif
                 aVal.Value >>= m_sTable;
                 OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for Command!" );

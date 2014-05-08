@@ -174,7 +174,7 @@ static basegfx::B2DRange GetShapeRangeForXShape( const uno::Reference< drawing::
     return aShapeRange;
 }
 
-uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpdateConfig )
+uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateConfig )
 {
     if ( bUpdateConfig )
     {
@@ -329,7 +329,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
     }
 
     uno::Sequence< beans::PropertyValue > aRet( pFilterOptions->GetFilterData() );
-    if ( bUpdateConfig == sal_False )
+    if ( bUpdateConfig == false )
         delete pFilterOptions;
     return aRet;
 }
@@ -425,9 +425,9 @@ void ExportDialog::GetGraphicSource()
     }
 }
 
-sal_Bool ExportDialog::GetGraphicStream()
+bool ExportDialog::GetGraphicStream()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( !IsTempExportAvailable() )
     {
@@ -436,14 +436,14 @@ sal_Bool ExportDialog::GetGraphicStream()
         return bRet;
     }
 
-    sal_Bool bRecreateOutputStream = mpTempStream->Tell() == 0;
+    bool bRecreateOutputStream = mpTempStream->Tell() == 0;
 
     static uno::Sequence< beans::PropertyValue > aOldFilterData;
-    uno::Sequence< beans::PropertyValue > aNewFilterData( GetFilterData( sal_False ) );
+    uno::Sequence< beans::PropertyValue > aNewFilterData( GetFilterData( false ) );
     if ( aOldFilterData != aNewFilterData )
     {
         aOldFilterData = aNewFilterData;
-        bRecreateOutputStream = sal_True;
+        bRecreateOutputStream = true;
     }
     try
     {
@@ -478,7 +478,7 @@ sal_Bool ExportDialog::GetGraphicStream()
             {
                 xGraphicExporter->setSourceDocument( xSourceDoc );
                 xGraphicExporter->filter( aDescriptor );
-                bRet = sal_True;
+                bRet = true;
 
                 if ( mnFormat == FORMAT_JPG )
                 {
@@ -489,7 +489,7 @@ sal_Bool ExportDialog::GetGraphicStream()
             }
         }
         else
-            bRet = sal_True;
+            bRet = true;
     }
     catch( uno::Exception& )
     {
@@ -548,7 +548,7 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
 
 // checks if the source dimension/resolution is not too big
 // to determine the exact graphic output size and preview for jpg
-sal_Bool ExportDialog::IsTempExportAvailable() const
+bool ExportDialog::IsTempExportAvailable() const
 {
     return GetRawFileSize() < static_cast< sal_uInt32 >( mnMaxFilesizeForRealtimePreview );
 }
@@ -556,7 +556,7 @@ sal_Bool ExportDialog::IsTempExportAvailable() const
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
     const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
-    sal_Bool bExportSelection, sal_Bool bIsPixelFormat)
+    bool bExportSelection, bool bIsPixelFormat)
     : ModalDialog(rPara.pWindow, "GraphicExportDialog", "svt/ui/graphicexport.ui")
     , mrFltCallPara(rPara)
     , mxContext(rxContext)
@@ -580,7 +580,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , maOriginalSize(awt::Size(0, 0))
     , mbIsPixelFormat(bIsPixelFormat)
     , mbExportSelection(bExportSelection)
-    , mbPreserveAspectRatio(sal_True)
+    , mbPreserveAspectRatio(true)
 {
     get(mpMfSizeX, "widthmf-nospin");
     get(mpMfSizeY, "heightmf-nospin");
@@ -974,7 +974,7 @@ void ExportDialog::updateControls()
     // EPS
     if ( mpRbEPSLevel1->IsVisible() )
     {
-        sal_Bool bEnabled = !mpRbEPSLevel1->IsChecked();
+        bool bEnabled = !mpRbEPSLevel1->IsChecked();
         mpRbEPSColorFormat1->Enable( bEnabled );
         mpRbEPSColorFormat2->Enable( bEnabled );
         mpRbEPSCompressionLZW->Enable( bEnabled );
@@ -1094,7 +1094,7 @@ IMPL_LINK_NOARG(ExportDialog, OK)
     // writing config parameter
 
 
-    mrFltCallPara.aFilterData = GetFilterData( sal_True );
+    mrFltCallPara.aFilterData = GetFilterData( true );
     EndDialog( RET_OK );
 
     return 0;

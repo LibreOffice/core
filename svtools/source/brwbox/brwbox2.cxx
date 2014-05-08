@@ -676,7 +676,7 @@ void BrowseBox::Paint( const Rectangle& rRect )
             {
                 ButtonFrame aButtonFrame( Point( nX, 0 ),
                     Size( pCol->Width()-1, GetTitleHeight()-1 ),
-                    pCol->Title(), sal_False, sal_False, !IsEnabled());
+                    pCol->Title(), false, false, !IsEnabled());
                 aButtonFrame.Draw( *this );
                 DrawLine( Point( nX + pCol->Width() - 1, 0 ),
                    Point( nX + pCol->Width() - 1, GetTitleHeight()-1 ) );
@@ -810,7 +810,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         {
             ButtonFrame aButtonFrame( aRealPos,
                 Size( pFirstCol->Width()-1, nTitleHeight-1 ),
-                pFirstCol->Title(), sal_False, sal_False, !IsEnabled());
+                pFirstCol->Title(), false, false, !IsEnabled());
             aButtonFrame.Draw( *pDev );
 
             pDev->Push( PUSH_LINECOLOR );

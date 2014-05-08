@@ -352,7 +352,7 @@ long SvtIconWindow_Impl::CalcHeight() const
     return nHeight;
 }
 
-sal_Bool SvtIconWindow_Impl::IsRootURL( const OUString& rURL ) const
+bool SvtIconWindow_Impl::IsRootURL( const OUString& rURL ) const
 {
     return  rURL == aNewDocumentRootURL ||
             rURL == aTemplateRootURL ||
@@ -412,7 +412,7 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
 
     rParent             ( *pParent ),
     aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_NONE | FILEVIEW_SHOW_ONLYTITLE ),
-    bIsTemplateFolder   ( sal_False )
+    bIsTemplateFolder   ( false )
 
 {
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
@@ -543,7 +543,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const OUString& rURL )
     aNewFolderLink.Call( this );
 }
 
-sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( OUString& rURL ) const
+bool SvtFileViewWindow_Impl::HasPreviousLevel( OUString& rURL ) const
 {
     INetURLObject aViewObj( aFileView.GetViewURL() );
     INetURLObject aRootObj( aCurrentRootURL );
@@ -666,7 +666,7 @@ void SvtFrameWindow_Impl::Resize()
     pEmptyWin->SetSizePixel( aWinSize );
 }
 
-void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate )
+void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, bool bPreview, bool bIsTemplate, bool bAsTemplate )
 {
     if ( bPreview )
         aCurrentURL = rURL;
@@ -775,13 +775,13 @@ void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, sal_Bool bPreview, sal
     }
 }
 
-void SvtFrameWindow_Impl::ToggleView( sal_Bool bDI )
+void SvtFrameWindow_Impl::ToggleView( bool bDI )
 {
     bDocInfo = bDI;
 
     // view is set properly in OpenFile()
 
-    OpenFile( aCurrentURL, sal_True, sal_False, sal_False );
+    OpenFile( aCurrentURL, true, false, false );
 }
 
 // class SvtTemplateWindow -----------------------------------------------
@@ -902,7 +902,7 @@ IMPL_LINK_NOARG(SvtTemplateWindow , FileDblClickHdl_Impl)
 
 IMPL_LINK_NOARG(SvtTemplateWindow , NewFolderHdl_Impl)
 {
-    pFrameWin->OpenFile( "", sal_True, sal_False, sal_False );
+    pFrameWin->OpenFile( "", true, false, false );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, false );
 
     OUString sURL = pFileWin->GetFolderURL();
@@ -919,14 +919,14 @@ IMPL_LINK_NOARG(SvtTemplateWindow , TimeoutHdl_Impl)
 {
     aSelectHdl.Call( this );
     OUString sURL = pFileWin->GetSelectedFile();
-    sal_Bool bIsNewDoc = ( pIconWin->GetSelectEntryPos() == ICON_POS_NEWDOC );
-    sal_Bool bIsFile = ( !sURL.isEmpty() && !::utl::UCBContentHelper::IsFolder( sURL ) &&
+    bool bIsNewDoc = ( pIconWin->GetSelectEntryPos() == ICON_POS_NEWDOC );
+    bool bIsFile = ( !sURL.isEmpty() && !::utl::UCBContentHelper::IsFolder( sURL ) &&
                          INetURLObject( sURL ).GetProtocol() != INET_PROT_PRIVATE && !bIsNewDoc );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, bIsFile );
     aFrameWinTB.EnableItem( TI_DOCTEMPLATE_PREVIEW, !bIsNewDoc );
 
     if ( bIsFile )
-        pFrameWin->OpenFile( sURL, sal_True, sal_False, sal_False );
+        pFrameWin->OpenFile( sURL, true, false, false );
     else if ( bIsNewDoc && aFrameWinTB.IsItemChecked( TI_DOCTEMPLATE_PREVIEW ) )
     {
         aFrameWinTB.CheckItem( TI_DOCTEMPLATE_DOCINFO );
@@ -978,7 +978,7 @@ void SvtTemplateWindow::PrintFile( const OUString& rURL )
 
 void SvtTemplateWindow::AppendHistoryURL( const OUString& rURL, sal_uLong nGroup )
 {
-    sal_Bool bInsert = sal_True;
+    bool bInsert = true;
     if ( !pHistoryList )
         pHistoryList = new HistoryList_Impl;
     else if ( pHistoryList->size() > 0 )
@@ -1060,7 +1060,7 @@ void SvtTemplateWindow::InitToolBoxes()
     aSize.Height() += 4;
     aFrameWinTB.SetPosSizePixel( Point( pFrameWin->GetPosPixel().X() + 2, 2 ), aSize );
 
-    sal_Bool bFlat = ( SvtMiscOptions().GetToolboxStyle() == TOOLBOX_STYLE_FLAT );
+    bool bFlat = ( SvtMiscOptions().GetToolboxStyle() == TOOLBOX_STYLE_FLAT );
     if ( bFlat )
     {
         aFileViewTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
@@ -1081,7 +1081,7 @@ void SvtTemplateWindow::InitToolBoxes()
 void SvtTemplateWindow::InitToolBoxImages()
 {
     SvtMiscOptions aMiscOpt;
-    sal_Bool bLarge = aMiscOpt.AreCurrentSymbolsLarge();
+    bool bLarge = aMiscOpt.AreCurrentSymbolsLarge();
 
     aFileViewTB.SetItemImage( TI_DOCTEMPLATE_BACK, Image( SvtResId(
         bLarge ? IMG_SVT_DOCTEMPLATE_BACK_LARGE
@@ -1193,20 +1193,20 @@ OUString SvtTemplateWindow::GetSelectedFile() const
 
 
 
-sal_Bool SvtTemplateWindow::IsFileSelected() const
+bool SvtTemplateWindow::IsFileSelected() const
 {
     OUString aURL = pFileWin->GetSelectedFile();
-    sal_Bool bRet = ( !aURL.isEmpty() && !::utl::UCBContentHelper::IsFolder( aURL ) );
+    bool bRet = ( !aURL.isEmpty() && !::utl::UCBContentHelper::IsFolder( aURL ) );
     return bRet;
 }
 
 
 
-void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
+void SvtTemplateWindow::OpenFile( bool bNotAsTemplate )
 {
     OUString aURL = pFileWin->GetSelectedFile();
     if ( !aURL.isEmpty() && !::utl::UCBContentHelper::IsFolder( aURL ) )
-        pFrameWin->OpenFile( aURL, sal_False, pFileWin->IsTemplateFolder(), !bNotAsTemplate );
+        pFrameWin->OpenFile( aURL, false, pFileWin->IsTemplateFolder(), !bNotAsTemplate );
 }
 
 
@@ -1232,7 +1232,7 @@ OUString SvtTemplateWindow::GetFolderURL() const
 
 
 
-void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
+void SvtTemplateWindow::SetFocus( bool bIconWin )
 {
     if ( bIconWin )
         pIconWin->SetFocus();
@@ -1255,7 +1255,7 @@ void SvtTemplateWindow::SetPrevLevelButtonState( const OUString& rURL )
     // and on the root of all (file:/// -> count == 0)
     INetURLObject aObj( rURL );
     sal_Int32 nCount = aObj.getSegmentCount();
-    sal_Bool bEnable =
+    bool bEnable =
         ( nCount > 0 &&
             ( !pIconWin->IsRootURL( rURL ) || rURL == pIconWin->GetMyDocumentsRootURL() ) );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, bEnable );
@@ -1380,12 +1380,12 @@ struct SvtTmplDlg_Impl
     SvtTemplateWindow*  pWin;
     OUString            aTitle;
     Timer               aUpdateTimer;
-    sal_Bool            bSelectNoOpen;
+    bool            bSelectNoOpen;
 
     uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
 
-    SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ) ,bSelectNoOpen( sal_False ) {}
+    SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ) ,bSelectNoOpen( false ) {}
 
     ~SvtTmplDlg_Impl() { delete pWin; }
 };
@@ -1649,7 +1649,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, PackageHdl_Impl)
 
 IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 {
-    pImpl->pWin->SetFocus( sal_False );
+    pImpl->pWin->SetFocus( false );
     Reference< XDocumentTemplates > xTemplates( frame::DocumentTemplates::create(::comphelper::getProcessComponentContext()) );
     if ( _pEventSource )
     {   // it was no direct call, which means it was triggered by the timer, which means we alread checked the necessity

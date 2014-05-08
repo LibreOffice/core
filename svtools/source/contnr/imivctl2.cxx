@@ -289,7 +289,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     a,b,c : 2nd, 3rd, 4th searched rectangle
 */
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCtrlEntry, sal_Bool bRight )
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCtrlEntry, bool bRight )
 {
     SvxIconChoiceCtrlEntry* pResult;
     pCurEntry = pCtrlEntry;
@@ -337,7 +337,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     return 0;
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pStart, sal_Bool bDown)
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pStart, bool bDown)
 {
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
@@ -397,7 +397,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
     return 0;
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlEntry, sal_Bool bDown)
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlEntry, bool bDown)
 {
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
@@ -557,9 +557,9 @@ void IcnGridMap_Impl::Expand()
         else
             nNewGridCols += 50;
 
-        sal_Bool* pNewGridMap = new sal_Bool[nNewGridRows*nNewGridCols];
-        memset( pNewGridMap, 0, nNewGridRows * nNewGridCols * sizeof(sal_Bool) );
-        memcpy( pNewGridMap, _pGridMap, _nGridRows * _nGridCols * sizeof(sal_Bool) );
+        bool* pNewGridMap = new bool[nNewGridRows*nNewGridCols];
+        memset( pNewGridMap, 0, nNewGridRows * nNewGridCols * sizeof(bool) );
+        memcpy( pNewGridMap, _pGridMap, _nGridRows * _nGridCols * sizeof(bool) );
         delete[] _pGridMap;
         _pGridMap = pNewGridMap;
         _nGridRows = nNewGridRows;
@@ -578,7 +578,7 @@ void IcnGridMap_Impl::Create_Impl()
     else
         _nGridCols += 50;
 
-    _pGridMap = new sal_Bool[ _nGridRows * _nGridCols];
+    _pGridMap = new bool[ _nGridRows * _nGridCols];
     memset( (void*)_pGridMap, 0, _nGridRows * _nGridCols );
 
     const size_t nCount = _pView->aEntries.size();
@@ -637,7 +637,7 @@ GridId IcnGridMap_Impl::GetGrid( sal_uInt16 nGridX, sal_uInt16 nGridY )
         return nGridY + ( nGridX * _nGridRows );
 }
 
-GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos, sal_Bool* pbClipped )
+GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos, bool* pbClipped )
 {
     Create();
 
@@ -647,16 +647,16 @@ GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos, sal_Bool* pbClipped )
     nY -= TBOFFS_WINBORDER;
     nX /= _pView->nGridDX;
     nY /= _pView->nGridDY;
-    sal_Bool bClipped = sal_False;
+    bool bClipped = false;
     if( nX >= _nGridCols )
     {
         nX = _nGridCols - 1;
-        bClipped = sal_True;
+        bClipped = true;
     }
     if( nY >= _nGridRows )
     {
         nY = _nGridRows - 1;
-        bClipped = sal_True;
+        bClipped = true;
     }
     GridId nId = GetGrid( (sal_uInt16)nX, (sal_uInt16)nY );
     if( pbClipped )
@@ -678,11 +678,11 @@ Rectangle IcnGridMap_Impl::GetGridRect( GridId nId )
         nTop + _pView->nGridDY );
 }
 
-GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
+GridId IcnGridMap_Impl::GetUnoccupiedGrid( bool bOccupyFound )
 {
     Create();
     sal_uLong nStart = 0;
-    sal_Bool bExpanded = sal_False;
+    bool bExpanded = false;
 
     while( true )
     {
@@ -692,14 +692,14 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
             if( !_pGridMap[ nCur ] )
             {
                 if( bOccupyFound )
-                    _pGridMap[ nCur ] = sal_True;
+                    _pGridMap[ nCur ] = true;
                 return (GridId)nCur;
             }
         }
         DBG_ASSERT(!bExpanded,"ExpandGrid failed");
         if( bExpanded )
             return 0; // prevent never ending loop
-        bExpanded = sal_True;
+        bExpanded = true;
         Expand();
         nStart = nCount;
     }
@@ -708,7 +708,7 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
 // An entry only means that there's a GridRect lying under its center. This
 // variant is much faster than allocating via the bounding rectangle but can
 // lead to small overlaps.
-void IcnGridMap_Impl::OccupyGrids( const SvxIconChoiceCtrlEntry* pEntry, sal_Bool bOccupy )
+void IcnGridMap_Impl::OccupyGrids( const SvxIconChoiceCtrlEntry* pEntry, bool bOccupy )
 {
     if( !_pGridMap || !_pView->IsBoundingRectValid( pEntry->aRect ))
         return;

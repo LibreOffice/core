@@ -64,7 +64,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
         OUString aVal = rDev.GetEllipsisString(aText,aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH);
 
         Font aFont( rDev.GetFont() );
-        sal_Bool bOldTransp = aFont.IsTransparent();
+        bool bOldTransp = aFont.IsTransparent();
         if ( !bOldTransp )
         {
             aFont.SetTransparent( true );
@@ -109,7 +109,7 @@ BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
     _nWidth( nWidthPixel ),
     _aImage( rImage ),
     _aTitle( rTitle ),
-    _bFrozen( sal_False )
+    _bFrozen( false )
 {
     double n = (double)_nWidth;
     n *= (double)rCurrentZoom.GetDenominator();
@@ -140,7 +140,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
     {
         // paint handle column
         ButtonFrame( rPos, Size( Width()-1, rBox.GetDataRowHeight()-1 ),
-                     "", sal_False, bCurs, false ).Draw( rDev );
+                     "", false, bCurs, false ).Draw( rDev );
         Color aOldLineColor = rDev.GetLineColor();
         rDev.SetLineColor( Color( COL_BLACK ) );
         rDev.DrawLine(
@@ -243,7 +243,7 @@ void BrowserDataWin::LeaveUpdateLock()
 
 
 void InitSettings_Impl( Window *pWin,
-                     sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+                        bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings =
             pWin->GetSettings().GetStyleSettings();
@@ -290,9 +290,9 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if( !bOwnDataChangedHdl )
         {
-            InitSettings_Impl( this, sal_True, sal_True, sal_True );
+            InitSettings_Impl( this, true, true, true );
             Invalidate();
-            InitSettings_Impl( GetParent(), sal_True, sal_True, sal_True );
+            InitSettings_Impl( GetParent(), true, true, true );
             GetParent()->Invalidate();
             GetParent()->Resize();
         }
@@ -437,7 +437,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 
 
 
-sal_Bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
+bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
 {
     if ( ! (  GetParent()->IsInteractiveRowHeightEnabled()
            && ( _rEvent.GetRow() >= 0 )
@@ -445,7 +445,7 @@ sal_Bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent
            && ( _rEvent.GetColumnId() == BrowseBox::HandleColumnId )
            )
        )
-       return sal_False;
+       return false;
 
     long nDividerDistance = GetParent()->GetDataRowHeight() - ( _rEvent.GetPosPixel().Y() % GetParent()->GetDataRowHeight() );
     return ( nDividerDistance <= 4 );
@@ -668,7 +668,7 @@ BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const
 
 
 
-void BrowserDataWin::SetUpdateMode( sal_Bool bMode )
+void BrowserDataWin::SetUpdateMode( bool bMode )
 {
     DBG_ASSERT( !bUpdateMode || aInvalidRegion.empty(), "invalid region not empty" );
     if ( (bool) bMode == bUpdateMode )

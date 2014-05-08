@@ -261,8 +261,8 @@ struct ErrorResource_Impl : private Resource
 
     ~ErrorResource_Impl() { FreeResource(); }
 
-    operator ResString(){ return ResString( aResId ); }
-    operator sal_Bool(){return IsAvailableRes(aResId.SetRT(RSC_STRING));}
+    operator ResString() { return ResString( aResId ); }
+    operator bool()      { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 
 };
 

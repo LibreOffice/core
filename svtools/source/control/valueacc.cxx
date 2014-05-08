@@ -237,14 +237,14 @@ sal_Int32 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
 
     if( pParent )
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
 
         for( sal_uInt16 i = 0, nCount = pParent->GetChildCount(); ( i < nCount ) && !bFound; i++ )
         {
             if( pParent->GetChild( i ) == mpParent )
             {
                 nRet = i;
-                bFound = sal_True;
+                bFound = true;
             }
         }
     }
@@ -392,12 +392,12 @@ void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< acc
     if( rxListener.is() )
     {
            ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
 
         while( !bFound && ( aIter != mxEventListeners.end() ) )
         {
             if( *aIter == rxListener )
-                bFound = sal_True;
+                bFound = true;
             else
                 ++aIter;
         }
@@ -592,7 +592,7 @@ sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int32 nChildIndex 
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     if (pItem != NULL)
         bRet = mpParent->IsItemSelected( pItem->mnId );
@@ -1058,12 +1058,12 @@ void SAL_CALL ValueItemAcc::addAccessibleEventListener( const uno::Reference< ac
     if( rxListener.is() )
     {
            ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
 
         while( !bFound && ( aIter != mxEventListeners.end() ) )
         {
             if( *aIter == rxListener )
-                bFound = sal_True;
+                bFound = true;
             else
                 ++aIter;
         }

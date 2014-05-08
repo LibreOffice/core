@@ -141,9 +141,9 @@ throw ( RuntimeException, std::exception )
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = TRISTATE_FALSE;
 
-        sal_Bool        bValue = sal_Bool();
-        OUString   aStrValue;
-        ItemStatus      aItemState;
+        bool        bValue;
+        OUString    aStrValue;
+        ItemStatus  aItemState;
 
         if ( Event.State >>= bValue )
         {

@@ -32,7 +32,7 @@ struct SvParser_Impl
     sal_uLong       nlLineNr;           // actual line number
     sal_uLong       nlLinePos;          // actual column number
     long            nTokenValue;        // extra value (RTF)
-    sal_Bool        bTokenHasValue;     // indicates whether nTokenValue is valid
+    bool        bTokenHasValue;     // indicates whether nTokenValue is valid
     int             nToken;             // actual Token
     sal_Unicode     nNextCh;            // actual character
     int             nSaveToken;         // the token from Continue
@@ -154,11 +154,11 @@ sal_Unicode SvParser::GetNextChar()
     // When reading muliple bytes, we don't have to care about the file
     // position when we run inti the pending state. The file position is
     // maintained by SaveState/RestoreState.
-    sal_Bool bErr;
+    bool bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
         unsigned char c1, c2;
-        sal_Bool bSeekBack = sal_True;
+        bool bSeekBack = true;
 
         rInput.ReadUChar( c1 );
         bErr = rInput.IsEof() || rInput.GetError();
@@ -540,7 +540,7 @@ void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
         if( *pWhichIds )
         {
             aNewRange[0] = aNewRange[1] = *pWhichIds;
-            sal_Bool bIns = sal_True;
+            bool bIns = true;
 
             // search position
             for ( sal_uInt16 nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
@@ -549,14 +549,14 @@ void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
                 {
                     // new range before
                     rWhichMap.insert( rWhichMap.begin() + nOfs, aNewRange, aNewRange + 2 );
-                    bIns = sal_False;
+                    bIns = false;
                     break;
                 }
                 else if( *pWhichIds == rWhichMap[nOfs] - 1 )
                 {
                     // extend range downwards
                     rWhichMap[nOfs] = *pWhichIds;
-                    bIns = sal_False;
+                    bIns = false;
                     break;
                 }
                 else if( *pWhichIds == rWhichMap[nOfs+1] + 1 )
@@ -571,7 +571,7 @@ void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
                     else
                         // extend range upwards
                         rWhichMap[nOfs+1] = *pWhichIds;
-                    bIns = sal_False;
+                    bIns = false;
                     break;
                 }
             }

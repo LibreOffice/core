@@ -1282,7 +1282,7 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
     {
         case BASEPROPERTY_HIDEINACTIVESELECTION:
         {
-            sal_Bool bEnabled = sal_False;
+            bool bEnabled = false;
             if ( aValue >>= bEnabled )
             {
                 WinBits nStyle = rTree.GetStyle();
@@ -1327,7 +1327,7 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
         }
         case BASEPROPERTY_TREE_EDITABLE:
         {
-            sal_Bool bEnabled = false;
+            bool bEnabled = false;
             if( aValue >>= bEnabled )
                 rTree.EnableInplaceEditing( bEnabled ? sal_True : sal_False );
             break;
@@ -1336,7 +1336,7 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
             break; // @todo
         case BASEPROPERTY_TREE_ROOTDISPLAYED:
         {
-            sal_Bool bDisplayed = false;
+            bool bDisplayed = false;
             if( (aValue >>= bDisplayed) && ( bDisplayed != mbIsRootDisplayed) )
             {
                 onChangeRootDisplayed(bDisplayed);
@@ -1345,7 +1345,7 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
         }
         case BASEPROPERTY_TREE_SHOWSHANDLES:
         {
-            sal_Bool bEnabled = false;
+            bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
                 WinBits nBits = rTree.GetStyle() & (~WB_HASLINES);
@@ -1358,7 +1358,7 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
         }
         case BASEPROPERTY_TREE_SHOWSROOTHANDLES:
         {
-            sal_Bool bEnabled = false;
+            bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
                 WinBits nBits = rTree.GetStyle() & (~WB_HASLINESATROOT);
@@ -1422,7 +1422,7 @@ Any TreeControlPeer::getProperty( const OUString& PropertyName ) throw(RuntimeEx
     return VCLXWindow::getProperty( PropertyName );
 }
 
-void TreeControlPeer::onChangeRootDisplayed( sal_Bool bIsRootDisplayed )
+void TreeControlPeer::onChangeRootDisplayed( bool bIsRootDisplayed )
 {
     if( mbIsRootDisplayed == bIsRootDisplayed )
         return;

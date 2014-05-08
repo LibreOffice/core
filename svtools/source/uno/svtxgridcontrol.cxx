@@ -242,7 +242,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
                 break;
             }
 
-            sal_Bool bUseGridLines = sal_False;
+            bool bUseGridLines = false;
             OSL_VERIFY( aValue >>= bUseGridLines );
             pGridRenderer->useGridLines( bUseGridLines );
             pTable->Invalidate();
@@ -304,7 +304,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
         }
         case BASEPROPERTY_HSCROLL:
         {
-            sal_Bool bHScroll = true;
+            bool bHScroll = true;
             if( aValue >>= bHScroll )
                 m_pTableModel->setHorizontalScrollbarVisibility( bHScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
             break;
@@ -312,7 +312,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
 
         case BASEPROPERTY_VSCROLL:
         {
-            sal_Bool bVScroll = true;
+            bool bVScroll = true;
             if( aValue >>= bVScroll )
             {
                 m_pTableModel->setVerticalScrollbarVisibility( bVScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
@@ -322,7 +322,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
 
         case BASEPROPERTY_GRID_SHOWROWHEADER:
         {
-            sal_Bool rowHeader = true;
+            bool rowHeader = true;
             if( aValue >>= rowHeader )
             {
                 m_pTableModel->setRowHeaders(rowHeader);
@@ -391,7 +391,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
 
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
         {
-            sal_Bool colHeader = true;
+            bool colHeader = true;
             if( aValue >>= colHeader )
             {
                 m_pTableModel->setColumnHeaders(colHeader);
@@ -497,11 +497,11 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
     }
 
     case BASEPROPERTY_GRID_SHOWROWHEADER:
-        aPropertyValue <<=  sal_Bool( m_pTableModel->hasRowHeaders() );
+        aPropertyValue <<= m_pTableModel->hasRowHeaders();
         break;
 
     case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
-        aPropertyValue <<=  sal_Bool( m_pTableModel->hasColumnHeaders() );
+        aPropertyValue <<= m_pTableModel->hasColumnHeaders();
         break;
 
     case BASEPROPERTY_GRID_DATAMODEL:
@@ -514,14 +514,14 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
 
     case BASEPROPERTY_HSCROLL:
         {
-            sal_Bool const bHasScrollbar = ( m_pTableModel->getHorizontalScrollbarVisibility() != ScrollbarShowNever );
+            bool const bHasScrollbar = ( m_pTableModel->getHorizontalScrollbarVisibility() != ScrollbarShowNever );
             aPropertyValue <<= bHasScrollbar;
             break;
         }
 
     case BASEPROPERTY_VSCROLL:
         {
-            sal_Bool const bHasScrollbar = ( m_pTableModel->getVerticalScrollbarVisibility() != ScrollbarShowNever );
+            bool const bHasScrollbar = ( m_pTableModel->getVerticalScrollbarVisibility() != ScrollbarShowNever );
             aPropertyValue <<= bHasScrollbar;
             break;
         }

@@ -31,11 +31,11 @@ class SvResizeHelper
     Rectangle   aOuter;
     short       nGrab; // -1 no Grab,  0 - 7, 8 = Move, see FillHandle...
     Point       aSelPos;
-    sal_Bool        bResizeable;
+    bool        bResizeable;
 public:
                 SvResizeHelper();
 
-    void        SetResizeable( sal_Bool b ) { bResizeable = b; }
+    void        SetResizeable( bool b ) { bResizeable = b; }
     short       GetGrab() const { return nGrab; }
     void        SetBorderPixel( const Size & rBorderP )
                 { aBorder = rBorderP; }
@@ -59,12 +59,12 @@ public:
     void        FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const;
     void        Draw( OutputDevice * );
     void        InvalidateBorder( Window * );
-    sal_Bool        SelectBegin( Window *, const Point & rPos );
+    bool        SelectBegin( Window *, const Point & rPos );
     short       SelectMove( Window * pWin, const Point & rPos );
     Point       GetTrackPosPixel( const Rectangle & rRect ) const;
     Rectangle   GetTrackRectPixel( const Point & rTrackPos ) const;
     void        ValidateRect( Rectangle & rValidate ) const;
-    sal_Bool        SelectRelease( Window *, const Point & rPos, Rectangle & rOutPosSize );
+    bool        SelectRelease( Window *, const Point & rPos, Rectangle & rOutPosSize );
     void        Release( Window * pWin );
 };
 
@@ -76,7 +76,7 @@ class SvResizeWindow : public Window
     Pointer         m_aOldPointer;
     short           m_nMoveGrab;  // last pointer type
     SvResizeHelper  m_aResizer;
-    sal_Bool        m_bActive;
+    bool        m_bActive;
 
     VCLXHatchWindow* m_pWrapper;
 public:

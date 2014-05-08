@@ -47,7 +47,7 @@ private:
     sal_uLong               mnMaxObjDisplaySize;
     sal_uLong               mnUsedDisplaySize;
 
-    sal_Bool                ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree );
+    bool                ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree );
     GraphicCacheEntry*      ImplGetCacheEntry( const GraphicObject& rObj );
 
 
@@ -74,7 +74,7 @@ public:
     void                    ReleaseGraphicObject( const GraphicObject& rObj );
 
     void                    GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    sal_Bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
+    bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                    GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
     OString            GetUniqueID( const GraphicObject& rObj ) const;
@@ -86,7 +86,7 @@ public:
 
     void                    SetMaxObjDisplayCacheSize(
                                 sal_uLong nNewMaxObjSize,
-                                sal_Bool bDestroyGreaterCached = sal_False
+                                bool bDestroyGreaterCached = false
                             );
 
     sal_uLong               GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
@@ -97,7 +97,7 @@ public:
     void                    SetCacheTimeout( sal_uLong nTimeoutSeconds );
     sal_uLong               GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
 
-    sal_Bool                IsDisplayCacheable(
+    bool                IsDisplayCacheable(
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
@@ -105,7 +105,7 @@ public:
                                 const GraphicAttr& rAttr
                             ) const;
 
-    sal_Bool                IsInDisplayCache(
+    bool                IsInDisplayCache(
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
@@ -113,7 +113,7 @@ public:
                                 const GraphicAttr& rAttr
                             ) const;
 
-    sal_Bool                CreateDisplayCacheObj(
+    bool                CreateDisplayCacheObj(
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
@@ -122,7 +122,7 @@ public:
                                 const BitmapEx& rBmpEx
                             );
 
-    sal_Bool                CreateDisplayCacheObj(
+    bool                CreateDisplayCacheObj(
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
@@ -131,7 +131,7 @@ public:
                                 const GDIMetaFile& rMtf
                             );
 
-    sal_Bool                DrawDisplayCacheObj(
+    bool                DrawDisplayCacheObj(
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,

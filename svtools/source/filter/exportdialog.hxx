@@ -127,9 +127,9 @@ private:
     com::sun::star::awt::Size
                         maSize;             // for vector graphics it always contains the logical size in 1/100mm
 
-    sal_Bool            mbIsPixelFormat;
-    sal_Bool            mbExportSelection;
-    sal_Bool            mbPreserveAspectRatio;
+    bool            mbIsPixelFormat;
+    bool            mbExportSelection;
+    bool            mbPreserveAspectRatio;
 
     sal_Int32           mnInitialResolutionUnit;
 
@@ -160,13 +160,13 @@ private:
                         void updateControls();
 
                         void GetGraphicSource();
-                        sal_Bool GetGraphicStream();
+                        bool GetGraphicStream();
                         Bitmap GetGraphicBitmap( SvStream& rStream );
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                            GetFilterData( sal_Bool bUpdateConfig );
+                            GetFilterData( bool bUpdateConfig );
 
                         sal_uInt32 GetRawFileSize() const;
-                        sal_Bool IsTempExportAvailable() const;
+                        bool IsTempExportAvailable() const;
 
                         com::sun::star::awt::Size
                             GetOriginalSize();
@@ -177,7 +177,7 @@ public:
                         ExportDialog( FltCallDialogParameter& rPara,
                             const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                 const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
-                                    sal_Bool bExportSelection, sal_Bool bIsExportVectorFormat );
+                                    bool bExportSelection, bool bIsExportVectorFormat );
                         virtual ~ExportDialog();
 };
 

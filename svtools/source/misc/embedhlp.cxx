@@ -839,7 +839,7 @@ OUString EmbeddedObjectRef::GetChartType()
                     uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
                     uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
                     // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
-                    sal_Bool bGetChartType = sal_False;
+                    bool bGetChartType = false;
                     for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
                     {
                         uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
@@ -855,12 +855,12 @@ OUString EmbeddedObjectRef::GetChartType()
                             if (strChartType == "com.sun.star.chart2.AreaChartType")
                             {
                                 Style += "Areas";
-                                bGetChartType = sal_True;
+                                bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.BarChartType")
                             {
                                 Style += "Bars";
-                                bGetChartType = sal_True;
+                                bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.ColumnChartType")
                             {
@@ -874,34 +874,34 @@ OUString EmbeddedObjectRef::GetChartType()
                                             Style += "Bars";
                                         else
                                             Style += "Columns";
-                                        bGetChartType = sal_True;
+                                        bGetChartType = true;
                                     }
                                 }
                             }
                             else if (strChartType == "com.sun.star.chart2.LineChartType")
                             {
                                 Style += "Lines";
-                                bGetChartType = sal_True;
+                                bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.ScatterChartType")
                             {
                                 Style += "XY Chart";
-                                bGetChartType = sal_True;
+                                bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.PieChartType")
                             {
                                 Style += "Pies";
-                                bGetChartType = sal_True;
+                                bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.NetChartType")
                             {
                                 Style += "Radar";
-                                bGetChartType = sal_True;
+                                bGetChartType = true;
                             }
                             else if (strChartType == "com.sun.star.chart2.CandleStickChartType")
                             {
                                 Style += "Candle Stick Chart";
-                                bGetChartType = sal_True;
+                                bGetChartType = true;
                             }
                             if (bGetChartType)
                                 return Style;

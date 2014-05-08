@@ -104,7 +104,7 @@ namespace svt
         virtual OUString getCommand() const = 0;
 
         /// checks whether or not there is an assignment for a given logical field
-        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) = 0;
+        virtual bool        hasFieldAssignment(const OUString& _rLogicalName) = 0;
         /// retrieves the assignment for a given logical field
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) = 0;
 
@@ -143,9 +143,9 @@ public:
         virtual OUString getDatasourceName() const SAL_OVERRIDE;
         virtual OUString getCommand() const SAL_OVERRIDE;
 
-        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
+        virtual bool     hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
-        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
+        virtual void     setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
 
         virtual void    setDatasourceName(const OUString& _rName) SAL_OVERRIDE;
         virtual void    setCommand(const OUString& _rCommand) SAL_OVERRIDE;
@@ -206,7 +206,7 @@ public:
     }
 
 
-    sal_Bool AssigmentTransientData::hasFieldAssignment(const OUString& _rLogicalName)
+    bool AssigmentTransientData::hasFieldAssignment(const OUString& _rLogicalName)
     {
         MapString2String::const_iterator aPos = m_aAliases.find( _rLogicalName );
         return  ( m_aAliases.end() != aPos )
@@ -272,9 +272,9 @@ public:
         virtual OUString getDatasourceName() const SAL_OVERRIDE;
         virtual OUString getCommand() const SAL_OVERRIDE;
 
-        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
+        virtual bool     hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
-        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
+        virtual void     setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
 
         virtual void    setDatasourceName(const OUString& _rName) SAL_OVERRIDE;
         virtual void    setCommand(const OUString& _rCommand) SAL_OVERRIDE;
@@ -311,7 +311,7 @@ void AssignmentPersistentData::Commit()
     }
 
 
-    sal_Bool AssignmentPersistentData::hasFieldAssignment(const OUString& _rLogicalName)
+    bool AssignmentPersistentData::hasFieldAssignment(const OUString& _rLogicalName)
     {
         return (m_aStoredFields.end() != m_aStoredFields.find(_rLogicalName));
     }
@@ -402,7 +402,7 @@ void AssignmentPersistentData::Commit()
 
         // just set the new value
 #ifdef DBG_UTIL
-        sal_Bool bSuccess =
+        bool bSuccess =
 #endif
         SetSetProperties(sDescriptionNodePath, aNewFieldDescription);
         DBG_ASSERT(bSuccess, "AssignmentPersistentData::setFieldAssignment: could not commit the changes a field!");
@@ -460,9 +460,9 @@ void AssignmentPersistentData::Commit()
         /// the index within m_pFields of the last visible list box. This is redundant, it could be extracted from other members
         sal_Int32       nLastVisibleListIndex;
         /// indicates that we've an odd field number. This member is for efficiency only, it's redundant.
-        sal_Bool        bOddFieldNumber : 1;
+        bool        bOddFieldNumber : 1;
         /// indicates that we're working with the real persistent configuration
-        sal_Bool        bWorkingPersistent : 1;
+        bool        bWorkingPersistent : 1;
 
         /// the strings to use as labels for the field selection listboxes
         StringArray     aFieldLabels;
@@ -477,8 +477,8 @@ void AssignmentPersistentData::Commit()
         AddressBookSourceDialogData( )
             :nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
-            ,bOddFieldNumber(sal_False)
-            ,bWorkingPersistent( sal_True )
+            ,bOddFieldNumber(false)
+            ,bWorkingPersistent( true )
             ,pConfigData( new AssignmentPersistentData )
         {
         }
@@ -489,8 +489,8 @@ void AssignmentPersistentData::Commit()
             :m_xTransientDataSource( _rxTransientDS )
             ,nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
-            ,bOddFieldNumber(sal_False)
-            ,bWorkingPersistent( sal_False )
+            ,bOddFieldNumber(false)
+            ,bWorkingPersistent( false )
             ,pConfigData( new AssigmentTransientData( m_xTransientDataSource, _rDataSourceName, _rTableName, _rFields ) )
         {
         }
@@ -866,7 +866,7 @@ void AssignmentPersistentData::Commit()
             return;
         }
 
-        sal_Bool bKnowOldTable = sal_False;
+        bool bKnowOldTable = false;
         // fill the table list
         const OUString* pTableNames = aTableNames.getConstArray();
         const OUString* pEnd = pTableNames + aTableNames.getLength();
@@ -874,7 +874,7 @@ void AssignmentPersistentData::Commit()
         {
             m_pTable->InsertEntry(*pTableNames);
             if (0 == pTableNames->compareTo(sOldTable))
-                bKnowOldTable = sal_True;
+                bKnowOldTable = true;
         }
 
         // set the old table, if the new data source knows a table with this name, too. Else reset the tables edit field.
@@ -1038,7 +1038,7 @@ void AssignmentPersistentData::Commit()
             // (If sometimes we support an arbitrary number of field assignments, we would have to care for
             // an invisible left hand side column, too. But right now, the left hand side controls are always
             // visible)
-            sal_Bool bHideRightColumn = pRightColumnLabel->isEmpty();
+            bool bHideRightColumn = pRightColumnLabel->isEmpty();
             (*pRightLabelControl)->Show(!bHideRightColumn);
             (*pRightListControl)->Show(!bHideRightColumn);
             // the new selections of the listboxes
@@ -1231,9 +1231,9 @@ void AssignmentPersistentData::Commit()
             {
                 const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
                 sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
-                sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
-                sal_Bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
-                sal_Bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
+                bool   bShift = pKeyEvent->GetKeyCode().IsShift();
+                bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
+                bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
 
                 if (KEY_TAB == nCode)
                 {   // somebody pressed the tab key

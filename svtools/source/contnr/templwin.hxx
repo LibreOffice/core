@@ -89,11 +89,11 @@ public:
     sal_uLong           GetSelectEntryPos() const;
     void                SetFocus();
     long                CalcHeight() const;
-    sal_Bool            IsRootURL( const OUString& rURL ) const;
+    bool                IsRootURL( const OUString& rURL ) const;
     sal_uLong           GetRootPos( const OUString& rURL ) const;
     void                UpdateIcons();
 
-    inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
+    inline bool         ProcessKeyEvent( const KeyEvent& rKEvt );
 
     inline const OUString&    GetTemplateRootURL() const      { return aTemplateRootURL; }
     inline const OUString&    GetMyDocumentsRootURL() const   { return aMyDocumentsRootURL; }
@@ -102,9 +102,9 @@ public:
     void                SelectFolder(sal_Int32 nFolderPos);
 };
 
-inline sal_Bool SvtIconWindow_Impl::ProcessKeyEvent( const KeyEvent& rKEvt )
+inline bool SvtIconWindow_Impl::ProcessKeyEvent( const KeyEvent& rKEvt )
 {
-    return ( rKEvt.GetKeyCode().IsMod2() ? aIconCtrl.DoKeyInput( rKEvt ) : sal_False );
+    return rKEvt.GetKeyCode().IsMod2() && aIconCtrl.DoKeyInput( rKEvt );
 }
 
 // class SvtFileViewWindow_Impl ------------------------------------------
@@ -122,7 +122,7 @@ private:
     OUString            aMyDocumentsURL;
     OUString            aSamplesFolderURL;
 
-    sal_Bool            bIsTemplateFolder;
+    bool                bIsTemplateFolder;
 
     ::com::sun::star::uno::Sequence< OUString >
                         GetNewDocContents() const;
@@ -136,7 +136,7 @@ public:
     inline void         SetSelectHdl( const Link& rLink ) { aFileView.SetSelectHdl( rLink ); }
     inline void         SetDoubleClickHdl( const Link& rLink ) { aFileView.SetDoubleClickHdl( rLink ); }
     inline void         SetNewFolderHdl( const Link& rLink ) { aNewFolderLink = rLink; }
-    inline sal_Bool     IsTemplateFolder() const { return bIsTemplateFolder; }
+    inline bool         IsTemplateFolder() const { return bIsTemplateFolder; }
     inline OUString     GetFolderURL() const { return aFolderURL; }
     inline OUString     GetRootURL() const { return aCurrentRootURL; }
     inline void         OpenRoot( const OUString& rRootURL )
@@ -146,7 +146,7 @@ public:
 
     OUString            GetSelectedFile() const;
     void                OpenFolder( const OUString& rURL );
-    sal_Bool            HasPreviousLevel( OUString& rURL ) const;
+    bool                HasPreviousLevel( OUString& rURL ) const;
     OUString            GetFolderTitle() const;
     void                SetFocus();
 };
@@ -178,8 +178,8 @@ private:
     ::com::sun::star::lang::Locale  aLocale;
     SvtDocInfoTable_Impl            aInfoTable;
     OUString                        aCurrentURL;
-    OUString                 m_aOpenURL;
-    sal_Bool                        bDocInfo;
+    OUString                        m_aOpenURL;
+    bool                            bDocInfo;
 
     void                    ShowDocInfo( const OUString& rURL );
     void                    ViewEditWin();
@@ -199,8 +199,8 @@ public:
 
     virtual void            Resize() SAL_OVERRIDE;
 
-    void                    OpenFile( const OUString& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate );
-    void                    ToggleView( sal_Bool bDocInfo );
+    void                    OpenFile( const OUString& rURL, bool bPreview, bool bIsTemplate, bool bAsTemplate );
+    void                    ToggleView( bool bDocInfo );
 };
 
 // class SvtTemplateWindow -----------------------------------------------
@@ -259,17 +259,17 @@ public:
     inline void         SetDoubleClickHdl( const Link& rLink ) { aDoubleClickHdl = rLink; }
     inline void         SetNewFolderHdl( const Link& rLink ) { aNewFolderHdl = rLink; }
     inline void         SetSendFocusHdl( const Link& rLink ) { aSendFocusHdl = rLink; }
-    inline sal_Bool     IsTemplateFolderOpen() const { return pFileWin->IsTemplateFolder(); }
-    inline sal_Bool     HasIconWinFocus() const { return pIconWin->HasChildPathFocus(); }
+    inline bool         IsTemplateFolderOpen() const { return pFileWin->IsTemplateFolder(); }
+    inline bool         HasIconWinFocus() const { return pIconWin->HasChildPathFocus(); }
 
     void                ReadViewSettings( );
     void                WriteViewSettings( );
-    sal_Bool            IsFileSelected() const;
+    bool                IsFileSelected() const;
     OUString            GetSelectedFile() const;
-    void                OpenFile( sal_Bool bNotAsTemplate );
+    void                OpenFile( bool bNotAsTemplate );
     OUString            GetFolderTitle() const;
     OUString            GetFolderURL() const;
-    void                SetFocus( sal_Bool bIconWin );
+    void                SetFocus( bool bIconWin );
     void                OpenTemplateRoot();
     void                SetPrevLevelButtonState( const OUString& rURL );  // sets state (enable/disable) for previous level button
     void                ClearHistory();

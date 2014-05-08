@@ -66,18 +66,18 @@ namespace svt { namespace uno
         static sal_Int16 convertCommitReasonToTravelType( const CommitPageReason i_eReason );
 
         // operations
-        sal_Bool    advanceTo( const sal_Int16 i_nPageId )
+        bool    advanceTo( const sal_Int16 i_nPageId )
         {
             return skipUntil( impl_pageIdToState( i_nPageId ) );
         }
-        sal_Bool    goBackTo( const sal_Int16 i_nPageId )
+        bool    goBackTo( const sal_Int16 i_nPageId )
         {
             return skipBackwardUntil( impl_pageIdToState( i_nPageId ) );
         }
-        sal_Bool    travelNext()        { return WizardShell_Base::travelNext(); }
-        sal_Bool    travelPrevious()    { return WizardShell_Base::travelPrevious(); }
+        bool    travelNext()        { return WizardShell_Base::travelNext(); }
+        bool    travelPrevious()    { return WizardShell_Base::travelPrevious(); }
 
-        void        activatePath( const sal_Int16 i_nPathID, const sal_Bool i_bFinal )
+        void        activatePath( const sal_Int16 i_nPathID, const bool i_bFinal )
         {
             WizardShell_Base::activatePath( PathId( i_nPathID ), i_bFinal );
         }
@@ -90,7 +90,7 @@ namespace svt { namespace uno
             return impl_stateToPageId( getCurrentState() );
         }
 
-        void        enablePage( const sal_Int16 i_PageID, const sal_Bool i_Enable );
+        void        enablePage( const sal_Int16 i_PageID, const bool i_Enable );
 
         bool        knowsPage( const sal_Int16 i_nPageID ) const
         {

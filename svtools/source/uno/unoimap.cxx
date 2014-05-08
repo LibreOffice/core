@@ -114,7 +114,7 @@ private:
     OUString maDesc;
     OUString maTarget;
     OUString maName;
-    sal_Bool mbIsActive;
+    bool mbIsActive;
     awt::Rectangle maBoundary;
     awt::Point maCenter;
     sal_Int32 mnRadius;
@@ -412,7 +412,7 @@ OUString SAL_CALL SvUnoImageMapObject::getImplementationName() throw(RuntimeExce
 void SvUnoImageMapObject::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
 
     while( *ppEntries )
     {
@@ -526,7 +526,7 @@ public:
     SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
     virtual ~SvUnoImageMap();
 
-    sal_Bool fillImageMap( ImageMap& rMap ) const;
+    bool fillImageMap( ImageMap& rMap ) const;
     SvUnoImageMapObject* getObject( const Any& aElement ) const throw( IllegalArgumentException );
 
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMap )
@@ -712,7 +712,7 @@ Sequence< OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
     return Sequence< OUString >( &aSN, 1 );
 }
 
-sal_Bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
+bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
 {
     rMap.ClearImageMap();
 
@@ -729,7 +729,7 @@ sal_Bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
         ++aIter;
     }
 
-    return sal_True;
+    return true;
 }
 
 

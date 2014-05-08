@@ -71,7 +71,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper5
 
     OUString        maDialogTitle;
     FieldUnit       meFieldUnit;
-    sal_Bool        mbExportSelection;
+    bool        mbExportSelection;
 
 public:
 
@@ -117,7 +117,7 @@ public:
 SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& rxContext ) :
     mxContext           ( rxContext ),
     meFieldUnit         ( FUNIT_CM ),
-    mbExportSelection   ( sal_False )
+    mbExportSelection   ( false )
 {
 }
 
@@ -255,7 +255,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
             aFltCallDlgPara.pResMgr = pResMgr;
 
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
-            sal_Bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
+            bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
             if ( ExportDialog( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat ).Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 

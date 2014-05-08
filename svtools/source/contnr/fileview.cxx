@@ -394,7 +394,7 @@ public:
                             virtual ~NameTranslator_Impl();
 
      // IContentTitleTranslation
-    virtual sal_Bool            GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const SAL_OVERRIDE;
+    virtual bool            GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const SAL_OVERRIDE;
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
     const OUString*         GetTransTableFileName() const;
@@ -1078,7 +1078,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     try
     {
         ::ucbhelper::Content aCnt( rContent, mxCmdEnv, comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( OUString( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( OUString( "delete" ), makeAny( true ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException const & )
     {
@@ -1624,9 +1624,9 @@ void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
         mpActFolder = new NameTranslationList( rActualFolder );
 }
 
-sal_Bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rTrans ) const
+bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rTrans ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( mpActFolder )
     {
@@ -1634,7 +1634,7 @@ sal_Bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rT
         if( pTrans )
         {
             rTrans = *pTrans;
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -2407,8 +2407,8 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     SortingData_Impl* pData = new SortingData_Impl;
 
     pData->SetNewTitle( rTitle );
-    pData->maSize     = 0;
-    pData->mbIsFolder = sal_True;
+    pData->maSize        = 0;
+    pData->mbIsFolder    = true;
     pData->maTargetURL   = rURL;
 
     ::svtools::VolumeInfo aVolInfo;

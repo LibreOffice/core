@@ -330,7 +330,7 @@ namespace svt
 
         // determine up to which index (in the new path) we have to display the items
         RoadmapTypes::ItemIndex nUpperStepBoundary = (RoadmapTypes::ItemIndex)rActivePath.size();
-        sal_Bool bIncompletePath = sal_False;
+        bool bIncompletePath = false;
         if ( !m_pImpl->bActivePathIsDefinite )
         {
             for ( Paths::const_iterator aPathPos = m_pImpl->aPaths.begin();
@@ -351,7 +351,7 @@ namespace svt
                 // the path conflicts with our new path -> don't activate the
                 // *complete* new path, but only up to the step which is unambiguous
                 nUpperStepBoundary = nDivergenceIndex;
-                bIncompletePath = sal_True;
+                bIncompletePath = true;
             }
         }
 
@@ -538,7 +538,7 @@ namespace svt
             return 0L;
         }
 
-        sal_Bool bResult = sal_True;
+        bool bResult = true;
         if ( nNewIndex > nCurrentIndex )
         {
             bResult = skipUntil( (WizardState)nCurItemId );

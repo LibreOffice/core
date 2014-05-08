@@ -160,7 +160,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
 #endif
             if ( pValues[nProp].hasValue() )
             {
-                sal_Bool bTmp = sal_Bool();
+                bool bTmp;
                 OUString aTmpStr;
                 sal_Int32 nTmpInt = 0;
                 if ( pValues[nProp] >>= bTmp )

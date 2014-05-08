@@ -49,15 +49,15 @@ namespace svt
         OUString maTargetURL;
         OUString maImageURL;
         OUString maDisplayText;
-        DateTime        maModDate;
-        Image           maImage;
-        sal_Int64       maSize;
-        sal_Bool        mbIsFolder;
-        sal_Bool        mbIsVolume;
-        sal_Bool        mbIsRemote;
-        sal_Bool        mbIsRemoveable;
-        sal_Bool        mbIsFloppy;
-        sal_Bool        mbIsCompactDisc;
+        DateTime    maModDate;
+        Image       maImage;
+        sal_Int64   maSize;
+        bool        mbIsFolder;
+        bool        mbIsVolume;
+        bool        mbIsRemote;
+        bool        mbIsRemoveable;
+        bool        mbIsFloppy;
+        bool        mbIsCompactDisc;
 
         inline                          SortingData_Impl();
         inline const OUString&   GetTitle() const;
@@ -73,12 +73,12 @@ namespace svt
     inline SortingData_Impl::SortingData_Impl() :
         maModDate       ( DateTime::EMPTY ),
         maSize          ( 0 ),
-        mbIsFolder      ( sal_False ),
-        mbIsVolume      ( sal_False ),
-        mbIsRemote      ( sal_False ),
-        mbIsRemoveable  ( sal_False ),
-        mbIsFloppy      ( sal_False ),
-        mbIsCompactDisc ( sal_False )
+        mbIsFolder      ( false ),
+        mbIsVolume      ( false ),
+        mbIsRemote      ( false ),
+        mbIsRemoveable  ( false ),
+        mbIsFloppy      ( false ),
+        mbIsCompactDisc ( false )
     {
     }
 
@@ -120,7 +120,7 @@ namespace svt
     class IContentTitleTranslation
     {
     public:
-        virtual sal_Bool    GetTranslation( const OUString& _rOriginalName, OUString& _rTranslatedName ) const = 0;
+        virtual bool    GetTranslation( const OUString& _rOriginalName, OUString& _rTranslatedName ) const = 0;
 
     protected:
         ~IContentTitleTranslation() {}
@@ -201,7 +201,7 @@ namespace svt
 
         ::com::sun::star::uno::Sequence< OUString > m_rBlackList;
 
-        sal_Bool URLOnBlackList ( const OUString& sRealURL );
+        bool URLOnBlackList ( const OUString& sRealURL );
 
     public:
         /** constructs an enumerator instance
@@ -258,7 +258,7 @@ namespace svt
         virtual void execute() SAL_OVERRIDE;
 
     private:
-        sal_Bool implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const;
+        bool implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const;
     };
 
 

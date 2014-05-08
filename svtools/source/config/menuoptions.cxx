@@ -328,12 +328,12 @@ void SvtMenuOptions_Impl::Commit()
                                                             break;
             //Output cache of current setting as possibly modified by System Theme for older version
             case PROPERTYHANDLE_SHOWICONSINMENUES       :   {
-                                                                sal_Bool bValue = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetUseImagesInMenus());
+                                                                bool bValue = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
                                                                 seqValues[nProperty] <<= bValue;
                                                             }
                                                             break;
             case PROPERTYHANDLE_SYSTEMICONSINMENUES     :   {
-                                                                sal_Bool bValue = (m_eMenuIcons == TRISTATE_INDET ? sal_True : sal_False) ;
+                                                                bool bValue = m_eMenuIcons == TRISTATE_INDET;
                                                                 seqValues[nProperty] <<= bValue;
                                                             }
                                                             break;

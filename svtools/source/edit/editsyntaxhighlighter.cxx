@@ -166,7 +166,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
 {
     // syntax highlighting
     // this must be possible improved by using notifychange correctly
-    sal_Bool bTempModified = GetTextEngine()->IsModified();
+    bool bTempModified = GetTextEngine()->IsModified();
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         OUString aLine( GetTextEngine()->GetText( nLine ) );

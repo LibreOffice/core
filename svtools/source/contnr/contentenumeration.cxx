@@ -212,14 +212,14 @@ namespace svt
                     bool bCancelled = false;
                     while ( !bCancelled && xResultSet->next() )
                     {
-                        sal_Bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
+                        bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
                         // don't show hidden files
                         if ( !bIsHidden || xRow->wasNull() )
                         {
                             pData = NULL;
 
                             aDT = xRow->getTimestamp( ROW_DATE_MOD );
-                            sal_Bool bContainsDate = !xRow->wasNull();
+                            bool bContainsDate = !xRow->wasNull();
                             if ( !bContainsDate )
                             {
                                 aDT = xRow->getTimestamp( ROW_DATE_CREATE );
@@ -228,7 +228,7 @@ namespace svt
 
                             OUString aContentURL = xContentAccess->queryContentIdentifierString();
                             OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
-                            sal_Bool bHasTargetURL = !xRow->wasNull() && !aTargetURL.isEmpty();
+                            bool bHasTargetURL = !xRow->wasNull() && !aTargetURL.isEmpty();
 
                             OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
 
@@ -286,7 +286,7 @@ namespace svt
                                 if( m_pTranslator )
                                 {
                                     OUString sNewTitle;
-                                    sal_Bool bTranslated = sal_False;
+                                    bool bTranslated = false;
 
                                     if ( pData->mbIsFolder )
                                         bTranslated = m_pTranslator->GetTranslation( pData->GetTitle(), sNewTitle );
@@ -352,7 +352,7 @@ namespace svt
 
 
 
-    sal_Bool FileViewContentEnumerator::URLOnBlackList ( const OUString& sRealURL )
+    bool FileViewContentEnumerator::URLOnBlackList ( const OUString& sRealURL )
     {
         OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( '/' ) + 1 );
 
@@ -366,9 +366,9 @@ namespace svt
     }
 
 
-    sal_Bool FileViewContentEnumerator::implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const
+    bool FileViewContentEnumerator::implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
 
         try
         {
@@ -381,7 +381,7 @@ namespace svt
 
             assert(m_xDocProps.is());
             if (!m_xDocProps.is())
-                return sal_False;
+                return false;
 
             m_xDocProps->loadFromMedium(_rTargetURL, Sequence<PropertyValue>());
 
@@ -389,7 +389,7 @@ namespace svt
             if (!sTitle.isEmpty())
             {
                 _rRet = sTitle;
-                bRet = sal_True;
+                bRet = true;
             }
         }
         catch ( const Exception& )

@@ -312,7 +312,7 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
 {
     osl::MutexGuard aLock( m_aMutex );
 
-    sal_Bool bInitalized( m_bInitialized );
+    bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
         PropertyValue       aPropValue;

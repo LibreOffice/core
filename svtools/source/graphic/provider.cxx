@@ -593,7 +593,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     sal_Int32 nImageResolution = 0;
     awt::Size aLogicalSize( 0, 0 );
     text::GraphicCrop aCropLogic( 0, 0, 0, 0 );
-    sal_Bool bRemoveCropArea = sal_True;
+    bool bRemoveCropArea = true;
 
     for( sal_Int32 i = 0; i < rFilterData.getLength(); ++i )
     {

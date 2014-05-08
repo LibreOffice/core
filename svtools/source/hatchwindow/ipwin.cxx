@@ -34,7 +34,7 @@
 SvResizeHelper::SvResizeHelper()
     : aBorder( 5, 5 )
     , nGrab( -1 )
-    , bResizeable( sal_True )
+    , bResizeable( true )
 {
 }
 
@@ -151,7 +151,7 @@ void SvResizeHelper::InvalidateBorder( Window * pWin )
 |*
 |*    Description
 *************************************************************************/
-sal_Bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
+bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
 {
     if( -1 == nGrab )
     {
@@ -160,10 +160,10 @@ sal_Bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
         {
             aSelPos = rPos; // store start position
             pWin->CaptureMouse();
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -421,7 +421,7 @@ void SvResizeHelper::ValidateRect( Rectangle & rValidate ) const
 |*
 |*    Description
 *************************************************************************/
-sal_Bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
+bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
                                     Rectangle & rOutPosSize )
 {
     if( -1 != nGrab )
@@ -431,9 +431,9 @@ sal_Bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
         nGrab = -1;
         pWin->ReleaseMouse();
         pWin->HideTracking();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -463,7 +463,7 @@ SvResizeWindow::SvResizeWindow
 )
     : Window( pParent, WB_CLIPCHILDREN )
     , m_nMoveGrab( -1 )
-    , m_bActive( sal_False )
+    , m_bActive( false )
     , m_pWrapper( pWrapper )
 {
     OSL_ENSURE( pParent != NULL && pWrapper != NULL, "Wrong initialization of hatch window!\n" );
@@ -621,7 +621,7 @@ bool SvResizeWindow::PreNotify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_GETFOCUS && !m_bActive )
     {
-        m_bActive = sal_True;
+        m_bActive = true;
         m_pWrapper->Activated();
     }
 
@@ -632,10 +632,10 @@ bool SvResizeWindow::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_LOSEFOCUS && m_bActive )
     {
-        sal_Bool bHasFocus = HasChildPathFocus(true);
+        bool bHasFocus = HasChildPathFocus(true);
         if ( !bHasFocus )
         {
-            m_bActive = sal_False;
+            m_bActive = false;
             m_pWrapper->Deactivated();
         }
     }

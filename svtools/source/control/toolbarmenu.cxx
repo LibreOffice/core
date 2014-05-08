@@ -334,7 +334,7 @@ void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (Ind
 
 
 
-sal_Bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     const int nEntryCount = maEntryVector.size();
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
@@ -1285,7 +1285,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 
 static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRect, bool i_bHighlight )
 {
-    sal_Bool bNativeOk = sal_False;
+    bool bNativeOk = false;
     if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;

@@ -171,10 +171,10 @@ bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
 IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
 {
     // Change default port if needed
-    sal_Bool bCheckedDavs = pCheckBox->IsChecked();
-    if ( m_pEDPort->GetValue() == 80 && bCheckedDavs == sal_True)
+    bool bCheckedDavs = pCheckBox->IsChecked();
+    if ( m_pEDPort->GetValue() == 80 && bCheckedDavs )
         m_pEDPort->SetValue( 443 );
-    else if ( m_pEDPort->GetValue() == 443 && bCheckedDavs == sal_False )
+    else if ( m_pEDPort->GetValue() == 443 && bCheckedDavs == false )
         m_pEDPort->SetValue( 80 );
 
     OUString sScheme( "http" );

@@ -146,7 +146,7 @@ private:
     bool onExpanding( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, bool bExpanding );
     void onExpanded( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, bool bExpanding );
 
-    void onChangeRootDisplayed( sal_Bool bIsRootDisplayed );
+    void onChangeRootDisplayed( bool bIsRootDisplayed );
 
     void addEntry( UnoTreeListEntry* pEntry );
     void removeEntry( UnoTreeListEntry* pEntry );
@@ -158,7 +158,7 @@ private:
     TreeSelectionListenerMultiplexer maSelectionListeners;
     TreeExpansionListenerMultiplexer maTreeExpansionListeners;
     TreeEditListenerMultiplexer maTreeEditListeners;
-    sal_Bool mbIsRootDisplayed;
+    bool mbIsRootDisplayed;
     UnoTreeListBoxImpl* mpTreeImpl;
     sal_Int32 mnEditLock;
     OUString msDefaultCollapsedGraphicURL;

@@ -182,7 +182,7 @@ sal_uInt16 SvBaseEventDescriptor::getMacroID(const OUString& rName) const
 void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                                        const SvxMacro& rMacro)
 {
-    sal_Bool bRetValueOK = sal_False;   // do we have a ret value?
+    bool bRetValueOK = false;   // do we have a ret value?
 
     if (rMacro.HasMacro())
     {
@@ -218,7 +218,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 aSequence[2] = aLibValue;
 
                 rAny <<= aSequence;
-                bRetValueOK = sal_True;
+                bRetValueOK = true;
                 break;
             }
             case EXTENDED_STYPE:
@@ -243,7 +243,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 aSequence[1] = aNameValue;
 
                 rAny <<= aSequence;
-                bRetValueOK = sal_True;
+                bRetValueOK = true;
                 break;
                         }
             case JAVASCRIPT:
@@ -267,7 +267,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
         aSequence[0] = aKindValue;
 
         rAny <<= aSequence;
-        bRetValueOK = sal_True;
+        bRetValueOK = true;
     }
 }
 
@@ -282,8 +282,8 @@ void SvBaseEventDescriptor::getMacroFromAny(
     rAny >>= aSequence;
 
     // process ...
-    sal_Bool bTypeOK = sal_False;
-    sal_Bool bNone = sal_False;     // true if EventType=="None"
+    bool bTypeOK = false;
+    bool bNone = false;     // true if EventType=="None"
     enum ScriptType eType = EXTENDED_STYPE;
     OUString sScriptVal;
     OUString sMacroVal;
@@ -299,22 +299,22 @@ void SvBaseEventDescriptor::getMacroFromAny(
             if (sTmp.equals(sStarBasic))
             {
                 eType = STARBASIC;
-                bTypeOK = sal_True;
+                bTypeOK = true;
             }
             else if (sTmp.equals(sJavaScript))
             {
                 eType = JAVASCRIPT;
-                bTypeOK = sal_True;
+                bTypeOK = true;
             }
             else if (sTmp.equals(sScript))
             {
                 eType = EXTENDED_STYPE;
-                bTypeOK = sal_True;
+                bTypeOK = true;
             }
             else if (sTmp.equals(sNone))
             {
-                bNone = sal_True;
-                bTypeOK = sal_True;
+                bNone = true;
+                bTypeOK = true;
             }
             // else: unknown script type
         }

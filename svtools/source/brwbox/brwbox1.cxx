@@ -338,7 +338,7 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, bool bFreeze )
         return;
 
     // doesn't the state change?
-    if ( (*pCols)[ nItemPos ]->IsFrozen() == (bFreeze ? 1 : 0) )
+    if ( (*pCols)[ nItemPos ]->IsFrozen() == bFreeze )
         return;
 
     // remark the column selection

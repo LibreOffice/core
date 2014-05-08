@@ -741,9 +741,9 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
     {
         case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE:
         {
-            sal_Bool aNewValue(sal_False);
+            bool aNewValue(false);
             aValue >>= aNewValue;
-            if (aNewValue != (m_bSupportVisible ? 1 : 0))
+            if (aNewValue != m_bSupportVisible)
             {
                 aConvertedValue <<= aNewValue;
                 aOldValue <<= m_bSupportVisible;
@@ -763,7 +763,7 @@ throw( com::sun::star::uno::Exception, std::exception)
     OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
     if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE == nHandle)
     {
-        sal_Bool rValue(sal_False);
+        bool rValue(false);
         if (( aValue >>= rValue ) && m_bInitialized)
             this->setSupportVisibleProperty( rValue );
     }

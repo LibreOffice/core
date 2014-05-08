@@ -89,8 +89,8 @@ public:
     void            DivBig( const Fix& a )
                         { x=((x<<FIX_P3)/a.x)<<FIX_P2; }
 
-    friend sal_Bool     operator> ( const Fix& a, const Fix& b ) { return a.x > b.x; }
-    friend sal_Bool     operator< ( const Fix& a, const Fix& b ) { return a.x < b.x; }
+    friend bool     operator> ( const Fix& a, const Fix& b ) { return a.x > b.x; }
+    friend bool     operator< ( const Fix& a, const Fix& b ) { return a.x < b.x; }
 
     operator        long() const    { return (x+FIX_ADD) >> FIX_POST; }
     operator        double() const  { return double(x)/(1<<FIX_POST); }

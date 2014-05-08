@@ -443,19 +443,19 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
             case( UNOGRAPHIC_TRANSPARENT ):
             {
-                *pValues <<= static_cast< sal_Bool >( mpGraphic ? mpGraphic->IsTransparent() : mbTransparent );
+                *pValues <<= mpGraphic ? mpGraphic->IsTransparent() : mbTransparent;
             }
             break;
 
             case( UNOGRAPHIC_ALPHA ):
             {
-                *pValues <<= static_cast< sal_Bool >( mpGraphic ? mpGraphic->IsAlpha() : mbAlpha );
+                *pValues <<= mpGraphic ? mpGraphic->IsAlpha() : mbAlpha;
             }
             break;
 
             case( UNOGRAPHIC_ANIMATED ):
             {
-                *pValues <<= static_cast< sal_Bool >( mpGraphic ? mpGraphic->IsAnimated() : mbAnimated );
+                *pValues <<= mpGraphic ? mpGraphic->IsAnimated() : mbAnimated;
             }
             break;
         }

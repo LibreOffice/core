@@ -68,23 +68,23 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     TDisplayNames       m_aComponentDisplayNames;
     ::std::vector<TComponents::iterator> m_aConfigValuesPos;
 
-    sal_Bool            m_bEditMode;
-    OUString       m_sLoadedScheme;
-    sal_Bool            m_bIsBroadcastEnabled;
-    static sal_Bool     m_bLockBroadcast;
-    static sal_Bool     m_bBroadcastWhenUnlocked;
+    bool            m_bEditMode;
+    OUString        m_sLoadedScheme;
+    bool            m_bIsBroadcastEnabled;
+    static bool     m_bLockBroadcast;
+    static bool     m_bBroadcastWhenUnlocked;
 
     uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
     void FillComponentColors(uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames);
 public:
-    ExtendedColorConfig_Impl(sal_Bool bEditMode = sal_False);
+    ExtendedColorConfig_Impl(bool bEditMode = false);
     virtual ~ExtendedColorConfig_Impl();
 
     void                            Load(const OUString& rScheme);
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
-    sal_Bool                        ExistsScheme(const OUString& _sSchemeName);
+    bool                            ExistsScheme(const OUString& _sSchemeName);
     virtual void                    Commit() SAL_OVERRIDE;
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
@@ -116,15 +116,15 @@ public:
     void                            SetColorConfigValue(const OUString& _sName,
                                                             const ExtendedColorConfigValue& rValue );
 
-    sal_Bool                        AddScheme(const OUString& rNode);
-    sal_Bool                        RemoveScheme(const OUString& rNode);
+    bool                            AddScheme(const OUString& rNode);
+    bool                            RemoveScheme(const OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
 
     static void                     DisableBroadcast();
     static void                     EnableBroadcast();
-    static sal_Bool                 IsEnableBroadcast();
+    static bool                     IsEnableBroadcast();
 
     static void                     LockBroadcast();
     static void                     UnlockBroadcast();
@@ -192,12 +192,12 @@ OUString ExtendedColorConfig_Impl::GetComponentName(sal_uInt32 _nPos) const
     return sRet;
 }
 
-sal_Bool ExtendedColorConfig_Impl::m_bLockBroadcast = sal_False;
-sal_Bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = sal_False;
-ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(sal_Bool bEditMode) :
+bool ExtendedColorConfig_Impl::m_bLockBroadcast = false;
+bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = false;
+ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(bool bEditMode) :
     ConfigItem(OUString("Office.ExtendedColorScheme")),
     m_bEditMode(bEditMode),
-    m_bIsBroadcastEnabled(sal_True)
+    m_bIsBroadcastEnabled(true)
 {
     if(!m_bEditMode)
     {
@@ -221,18 +221,18 @@ ExtendedColorConfig_Impl::~ExtendedColorConfig_Impl()
 void ExtendedColorConfig_Impl::DisableBroadcast()
 {
     if ( ExtendedColorConfig::m_pImpl )
-        ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_False;
+        ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = false;
 }
 
 void ExtendedColorConfig_Impl::EnableBroadcast()
 {
     if ( ExtendedColorConfig::m_pImpl )
-        ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_True;
+        ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = true;
 }
 
-sal_Bool ExtendedColorConfig_Impl::IsEnableBroadcast()
+bool ExtendedColorConfig_Impl::IsEnableBroadcast()
 {
-    return ExtendedColorConfig::m_pImpl ? ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled : sal_False;
+    return ExtendedColorConfig::m_pImpl && ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled;
 }
 
 void lcl_addString(uno::Sequence < OUString >& _rSeq,const OUString& _sAdd)
@@ -305,7 +305,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     OUString sBase("ExtendedColorScheme/ColorSchemes/");
     sBase += sScheme;
 
-    sal_Bool bFound = ExistsScheme(sScheme);
+    bool bFound = ExistsScheme(sScheme);
     if ( bFound )
     {
         aComponentNames = GetPropertyNames(sBase);
@@ -406,7 +406,7 @@ void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rProp
 
     if(m_bLockBroadcast)
     {
-        m_bBroadcastWhenUnlocked = sal_True;
+        m_bBroadcastWhenUnlocked = true;
     }
     else
         Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
@@ -468,7 +468,7 @@ void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
     PutProperties(aCurrent, aCurrentVal);
 }
 
-sal_Bool ExtendedColorConfig_Impl::ExistsScheme(const OUString& _sSchemeName)
+bool ExtendedColorConfig_Impl::ExistsScheme(const OUString& _sSchemeName)
 {
     OUString sBase("ExtendedColorScheme/ColorSchemes");
 
@@ -493,18 +493,18 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const OUString& _sName, const
     }
 }
 
-sal_Bool ExtendedColorConfig_Impl::AddScheme(const OUString& rScheme)
+bool ExtendedColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
     if(ConfigItem::AddNode(OUString("ExtendedColorScheme/ColorSchemes"), rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool ExtendedColorConfig_Impl::RemoveScheme(const OUString& rScheme)
+bool ExtendedColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
     uno::Sequence< OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
@@ -520,7 +520,7 @@ void ExtendedColorConfig_Impl::SettingsChanged()
 
 void ExtendedColorConfig_Impl::LockBroadcast()
 {
-    m_bLockBroadcast = sal_True;
+    m_bLockBroadcast = true;
 }
 
 void ExtendedColorConfig_Impl::UnlockBroadcast()
@@ -532,12 +532,12 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
         {
             if ( ExtendedColorConfig::m_pImpl->IsEnableBroadcast() )
             {
-                m_bBroadcastWhenUnlocked = sal_False;
+                m_bBroadcastWhenUnlocked = false;
                 ExtendedColorConfig::m_pImpl->Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
             }
         }
     }
-    m_bLockBroadcast = sal_False;
+    m_bLockBroadcast = false;
 }
 
 IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )

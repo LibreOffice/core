@@ -144,7 +144,7 @@ SvtAccessibilityOptions_Impl::~SvtAccessibilityOptions_Impl()
 bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    bool                                            bRet = true;
 
     try
     {
@@ -162,7 +162,7 @@ bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
 bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    bool                                            bRet = true;
 
     try
     {
@@ -179,7 +179,7 @@ bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
 bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    bool                                            bRet = true;
 
     try
     {
@@ -197,7 +197,7 @@ bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
 bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    bool                                            bRet = true;
 
     try
     {
@@ -215,7 +215,7 @@ bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
 bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    bool                                            bRet = true;
 
     try
     {
@@ -233,7 +233,7 @@ bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
 bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_False;
+    bool                                            bRet = false;
 
     try
     {
@@ -251,7 +251,7 @@ bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
 bool SvtAccessibilityOptions_Impl::GetIsSystemFont() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    bool                                            bRet = true;
 
     try
     {
@@ -287,7 +287,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetHelpTipSeconds() const
 bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_False;
+    bool                                            bRet = false;
 
     try
     {
@@ -359,7 +359,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
 bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {

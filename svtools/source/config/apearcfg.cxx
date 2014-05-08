@@ -168,7 +168,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     // SetStandard...Styles() resets the UseSystemUIFonts flag,
     // but we don't want to change it now, so save the flag before ...
-    sal_Bool bUseSystemUIFonts = hAppStyle.GetUseSystemUIFonts();
+    bool bUseSystemUIFonts = hAppStyle.GetUseSystemUIFonts();
     hAppStyle.SetStandardStyles();
     // and set it here
     hAppStyle.SetUseSystemUIFonts( bUseSystemUIFonts );
