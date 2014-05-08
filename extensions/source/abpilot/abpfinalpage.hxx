@@ -38,22 +38,21 @@ namespace abp
     class FinalPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aExplanation;
-        FixedText       m_aLocationLabel;
-        ::svt::OFileURLControl  m_aLocation;
-        PushButton      m_aBrowse;
-        CheckBox        m_aRegisterName;
-        FixedText       m_aNameLabel;
-        Edit            m_aName;
-        FixedText       m_aDuplicateNameError;
+        ::svt::OFileURLControl*  m_pLocation;
+        PushButton*     m_pBrowse;
+        CheckBox*       m_pRegisterName;
+        FixedText*      m_pNameLabel;
+        Edit*           m_pName;
+        FixedText*      m_pDuplicateNameError;
 
-        ::svx::DatabaseLocationInputController
-                        m_aLocationController;
+        ::svx::DatabaseLocationInputController*
+                        m_pLocationController;
 
         StringBag       m_aInvalidDataSourceNames;
 
     public:
         FinalPage( OAddessBookSourcePilot* _pParent );
+        ~FinalPage();
 
     protected:
         // OWizardPage overridables

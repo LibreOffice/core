@@ -45,10 +45,9 @@
 // tab pages
 
 #define RID_PAGE_ADMININVOKATION        ( RID_PAGE_START +  1 )
-#define RID_PAGE_FINAL                  ( RID_PAGE_START +  4 )
 // please adjust RID_PAGE_END (below) when adding new tab pages
 
-#define RID_PAGE_END                    RID_PAGE_FINAL
+#define RID_PAGE_END                    RID_PAGE_ADMININVOKATION
 
 
 // strings
@@ -130,18 +129,8 @@
 #define FT_ADMINEXPLANATION      3
 #define FT_NAME_EXPL             4
 #define FT_ERROR                 5
-#define FT_FINISH_EXPL           9
-#define FT_DUPLICATENAME        10
-#define FT_LOCATION             11
-
-#define ET_DATASOURCENAME       1
 
 #define PB_INVOKE_ADMIN_DIALOG  1
-#define PB_BROWSE               3
-
-#define CB_REGISTER_DS          1
-
-#define CBB_LOCATION            1
 
 #define STR_SELECT_ABTYPE           1
 #define STR_INVOKE_ADMIN_DIALOG     2

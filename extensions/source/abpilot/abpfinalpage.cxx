@@ -43,32 +43,33 @@ namespace abp
     }
 
     //= FinalPage
-
-
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
-        :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))
-        ,m_aExplanation         ( this, ModuleRes( FT_FINISH_EXPL ) )
-        ,m_aLocationLabel       ( this, ModuleRes( FT_LOCATION ) )
-        ,m_aLocation            ( this, ModuleRes( CBB_LOCATION ) )
-        ,m_aBrowse              ( this, ModuleRes( PB_BROWSE ) )
-        ,m_aRegisterName        ( this, ModuleRes( CB_REGISTER_DS ) )
-        ,m_aNameLabel           ( this, ModuleRes( FT_NAME_EXPL ) )
-        ,m_aName                ( this, ModuleRes( ET_DATASOURCENAME ) )
-        ,m_aDuplicateNameError  ( this, ModuleRes( FT_DUPLICATENAME ) )
-        ,m_aLocationController( _pParent->getORB(), m_aLocation, m_aBrowse )
+        : AddressBookSourcePage(_pParent, "DataSourcePage",
+            "modules/sabpilot/ui/datasourcepage.ui")
     {
-        FreeResource();
+        get(m_pLocation, "location");
+        get(m_pBrowse, "browse");
+        get(m_pRegisterName, "available");
+        get(m_pNameLabel, "nameft");
+        get(m_pName, "name");
+        get(m_pDuplicateNameError, "warning");
+        m_pLocationController = new ::svx::DatabaseLocationInputController(_pParent->getORB(),
+            *m_pLocation, *m_pBrowse);
 
-        m_aName.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
-        m_aLocation.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
-        m_aRegisterName.SetClickHdl( LINK( this, FinalPage, OnRegister ) );
-        m_aRegisterName.Check(true);
+        m_pName->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
+        m_pLocation->SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
+        m_pRegisterName->SetClickHdl( LINK( this, FinalPage, OnRegister ) );
+        m_pRegisterName->Check(true);
     }
 
+    FinalPage::~FinalPage()
+    {
+        delete m_pLocationController;
+    }
 
     bool FinalPage::isValidName() const
     {
-        OUString sCurrentName(m_aName.GetText());
+        OUString sCurrentName(m_pName->GetText());
 
         if (sCurrentName.isEmpty())
             // the name must not be empty
@@ -80,7 +81,6 @@ namespace abp
 
         return true;
     }
-
 
     void FinalPage::setFields()
     {
@@ -104,16 +104,16 @@ namespace abp
         }
         OSL_ENSURE( aURL.GetProtocol() != INET_PROT_NOT_VALID ,"No valid file name!");
         rSettings.sDataSourceName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-        m_aLocationController.setURL( rSettings.sDataSourceName );
+        m_pLocationController->setURL( rSettings.sDataSourceName );
         OUString sName = aURL.getName( );
         sal_Int32 nPos = sName.indexOf(aURL.GetExtension());
         if ( nPos != -1 )
         {
             sName = sName.replaceAt(nPos-1, 4, "");
         }
-        m_aName.SetText(sName);
+        m_pName->SetText(sName);
 
-        OnRegister(&m_aRegisterName);
+        OnRegister(m_pRegisterName);
     }
 
 
@@ -131,15 +131,15 @@ namespace abp
             return false;
 
         if  (   ( ::svt::WizardTypes::eTravelBackward != _eReason )
-            &&  ( !m_aLocationController.prepareCommit() )
+            &&  ( !m_pLocationController->prepareCommit() )
             )
             return false;
 
         AddressSettings& rSettings = getSettings();
-        rSettings.sDataSourceName = m_aLocationController.getURL();
-        rSettings.bRegisterDataSource = m_aRegisterName.IsChecked();
+        rSettings.sDataSourceName = m_pLocationController->getURL();
+        rSettings.bRegisterDataSource = m_pRegisterName->IsChecked();
         if ( rSettings.bRegisterDataSource )
-            rSettings.sRegisteredDataSourceName = m_aName.GetText();
+            rSettings.sRegisteredDataSourceName = m_pName->GetText();
 
         return true;
     }
@@ -154,7 +154,7 @@ namespace abp
         aContext.getDataSourceNames( m_aInvalidDataSourceNames );
 
         // give the name edit the focus
-        m_aLocation.GrabFocus();
+        m_pLocation->GrabFocus();
 
         // default the finish button
         getDialog()->defaultButton( WZB_FINISH );
@@ -181,14 +181,14 @@ namespace abp
     void FinalPage::implCheckName()
     {
         bool bValidName = isValidName();
-        bool bEmptyName = m_aName.GetText().isEmpty();
-        bool bEmptyLocation = m_aLocation.GetText().isEmpty();
+        bool bEmptyName = m_pName->GetText().isEmpty();
+        bool bEmptyLocation = m_pLocation->GetText().isEmpty();
 
         // enable or disable the finish button
-        getDialog()->enableButtons( WZB_FINISH, !bEmptyLocation && (!m_aRegisterName.IsChecked() || bValidName) );
+        getDialog()->enableButtons( WZB_FINISH, !bEmptyLocation && (!m_pRegisterName->IsChecked() || bValidName) );
 
         // show the error message for an invalid name
-        m_aDuplicateNameError.Show( !bValidName && !bEmptyName );
+        m_pDuplicateNameError->Show( !bValidName && !bEmptyName );
     }
 
 
@@ -201,9 +201,9 @@ namespace abp
 
     IMPL_LINK_NOARG(FinalPage, OnRegister)
     {
-        bool bEnable = m_aRegisterName.IsChecked();
-        m_aNameLabel.Enable(bEnable);
-        m_aName.Enable(bEnable);
+        bool bEnable = m_pRegisterName->IsChecked();
+        m_pNameLabel->Enable(bEnable);
+        m_pName->Enable(bEnable);
         implCheckName();
         return 0L;
     }
