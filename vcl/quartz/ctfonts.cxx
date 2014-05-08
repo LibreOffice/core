@@ -199,6 +199,9 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     // XXX: this is broken if the glyph came from fallback font
     CTFontRef pCTFont = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, NULL );
+    if (!xPath) {
+        return false;
+    }
 
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rResult;
