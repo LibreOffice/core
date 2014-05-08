@@ -16,6 +16,41 @@
       "revId": "1fb962caf0f934e86ccb8fcc4491fb0d311d84e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_145e02ea",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-05-08T15:59:14Z",
+      "side": 1,
+      "message": "So the intention here is to have a set of the characters used in all known spreadsheet functions. I don\u0027t get why maFormulaChar is sorted after each push_back() though. However, I think the data structure to be used should be a std::set instead, which already has the advantage that a set::insert() inserts only new characters not yet in the set (you don\u0027t even need to call find() first), and the data is internally sorted so an additional sort is unnecessary.",
+      "parentUuid": "5a72e520_8e673fea",
+      "revId": "1fb962caf0f934e86ccb8fcc4491fb0d311d84e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_f45166d9",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-05-08T15:59:14Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this should be a std::deque.\n\nHowever, I think it should be a std::set instead, see my comment in inputhdl.cxx",
+      "revId": "1fb962caf0f934e86ccb8fcc4491fb0d311d84e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
