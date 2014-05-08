@@ -120,7 +120,7 @@ void DebugEventInjector::InjectMenuEvent()
 static void InitKeyEvent( SalKeyEvent &rKeyEvent )
 {
     double nRand = getRandom();
-    if (nRand < 0.01)
+    if (nRand < 0.001)
         rKeyEvent.mnTime = getRandom() * ULONG_MAX;
     else
         rKeyEvent.mnTime = Time::GetSystemTicks();
@@ -216,14 +216,15 @@ void DebugEventInjector::InjectKeyNavEdit()
     InitKeyEvent( aKeyEvent );
     aKeyEvent.mnCode = nKey;
 
-    if (getRandom() < 0.10) // modifier
+    if (getRandom() < 0.15) // modifier
         aKeyEvent.mnCode |= (sal_uInt16)(getRandom() * KEY_MODTYPE) & KEY_MODTYPE;
 
     aKeyEvent.mnCharCode = 0x0; // hopefully unused.
 
-    bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent);
-    fprintf (stderr, "Injected edit / move key 0x%x -> %d win %p\n",
-             (int) aKeyEvent.mnCode, (int)bHandled, pWindow);
+    bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent );
+    fprintf( stderr, "Injected edit / move key 0x%x -> %d win %p\n",
+             (int) aKeyEvent.mnCode, (int)bHandled, pWindow );
+    ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
 }
 
 void DebugEventInjector::Timeout()
@@ -235,6 +236,8 @@ void DebugEventInjector::Timeout()
         SetTimeout( 1 );
         Start();
     }
+    else
+        Application::Quit();
 }
 
 DebugEventInjector *DebugEventInjector::getCreate()
