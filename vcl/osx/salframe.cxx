@@ -1020,7 +1020,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_OPEN ]     = OUString( sal_Unicode( 0x23cf ) );
         aKeyMap[ KEY_TILDE ]    = OUString( '~' );
         aKeyMap[ KEY_BRACKETLEFT ] = OUString( '[' );
-        aKeyMap[ KEY_BRACKETRIGHT ] = OUString( '}' );
+        aKeyMap[ KEY_BRACKETRIGHT ] = OUString( ']' );
         aKeyMap[ KEY_SEMICOLON ] = OUString( ';' );
         aKeyMap[ KEY_QUOTERIGHT ] = OUString( '\'' );
 
