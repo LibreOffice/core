@@ -107,10 +107,12 @@ for arg in $@ $VALGRINDOPT ; do
                 VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-limit=no"
                 echo "use kill -SIGUSR2 pid to dump traces of active allocations"
                 checks="c$checks"
-                if [ "$VALGRIND" = "memcheck" ] ; then
+                case $VALGRIND in
+                helgrind|memcheck)
                     export G_SLICE=always-malloc
                     export GLIBCXX_FORCE_NEW=1
-                fi
+                    ;;
+                esac
             else
                 echo "Error: Can't find the tool \"valgrind\", --valgrind option will be ignored"
                 exit 1
