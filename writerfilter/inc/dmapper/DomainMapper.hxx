@@ -169,6 +169,7 @@ private:
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
     bool mbIsSplitPara;
+    sal_Int32 mnSymboldata;
     boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
 };
 

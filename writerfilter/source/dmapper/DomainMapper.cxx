@@ -240,7 +240,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         else //it's a _real_ symbol
         {
-            utext( reinterpret_cast < const sal_uInt8 * >( &nIntValue ), 1 );
+           mnSymboldata = nIntValue;
         }
         break;
         case NS_ooxml::LN_CT_Sym_font:
@@ -254,7 +254,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         else //a real symbol
             if (m_pImpl->GetTopContext())
+            {
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sStringValue ));
+                /*
+                 * In case of symbol, symbol character get imported first and then font of symbols.
+                 * So we are storing symbol character and when we parse symbol font then create UNO object for text.
+                 */
+                utext( reinterpret_cast < const sal_uInt8 * >( &mnSymboldata ), 1 );
+            }
+
         break;
         case NS_ooxml::LN_CT_Underline_val:
             handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
