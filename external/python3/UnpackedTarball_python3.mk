@@ -37,4 +37,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 ))
 endif
 
+ifneq ($(ENABLE_RUNTIME_OPTIMIZATIONS),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,python3,\
+	external/python3/python-3.3.3-disable-obmalloc.patch.0 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,21 @@
+--- Objects/obmalloc.c
++++ Objects/obmalloc.c
+@@ -9,8 +9,8 @@
+  #endif
+ #endif
+ 
++#define WITH_VALGRIND
+ #ifdef WITH_VALGRIND
+-#include <valgrind/valgrind.h>
+ 
+ /* If we're using GCC, use __builtin_expect() to reduce overhead of
+    the valgrind checks */
+@@ -771,7 +771,7 @@
+ 
+ #ifdef WITH_VALGRIND
+     if (UNLIKELY(running_on_valgrind == -1))
+-        running_on_valgrind = RUNNING_ON_VALGRIND;
++        running_on_valgrind = 1;
+     if (UNLIKELY(running_on_valgrind))
+         goto redirect;
+ #endif
