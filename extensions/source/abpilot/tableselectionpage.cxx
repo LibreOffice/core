@@ -33,14 +33,12 @@ namespace abp
 
 
     TableSelectionPage::TableSelectionPage( OAddessBookSourcePilot* _pParent )
-        :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION_AB))
-        ,m_aLabel           ( this, ModuleRes( FL_TOOMUCHTABLES ) )
-        ,m_aTableList       ( this, ModuleRes( LB_TABLELIST ) )
+        :AddressBookSourcePage(_pParent, "SelectTablePage",
+          "modules/sabpilot/ui/selecttablepage.ui")
     {
-        FreeResource();
-
-        m_aTableList.SetSelectHdl( LINK( this, TableSelectionPage, OnTableSelected ) );
-        m_aTableList.SetDoubleClickHdl( LINK( this, TableSelectionPage, OnTableDoubleClicked ) );
+        get(m_pTableList, "table");
+        m_pTableList->SetSelectHdl( LINK( this, TableSelectionPage, OnTableSelected ) );
+        m_pTableList->SetDoubleClickHdl( LINK( this, TableSelectionPage, OnTableDoubleClicked ) );
     }
 
 
@@ -48,7 +46,7 @@ namespace abp
     {
         AddressBookSourcePage::ActivatePage();
 
-        m_aTableList.GrabFocus();
+        m_pTableList->GrabFocus();
     }
 
 
@@ -64,7 +62,7 @@ namespace abp
 
         const AddressSettings& rSettings = getSettings();
 
-        m_aTableList.Clear();
+        m_pTableList->Clear();
 
         // get the table names
         const StringBag& aTableNames = getDialog()->getDataSource().getTableNames();
@@ -76,16 +74,16 @@ namespace abp
                 aTables != aTableNames.end();
                 ++aTables
             )
-            m_aTableList.InsertEntry( *aTables );
+            m_pTableList->InsertEntry( *aTables );
 
         // initially select the proper table
-        m_aTableList.SelectEntry( rSettings.sSelectedTable );
+        m_pTableList->SelectEntry( rSettings.sSelectedTable );
     }
 
 
     IMPL_LINK( TableSelectionPage, OnTableDoubleClicked, void*, /*NOTINTERESTEDIN*/ )
     {
-        if ( 1 == m_aTableList.GetSelectEntryCount() )
+        if ( 1 == m_pTableList->GetSelectEntryCount() )
             getDialog()->travelNext();
 
         return 0L;
@@ -105,7 +103,7 @@ namespace abp
             return false;
 
         AddressSettings& rSettings = getSettings();
-        rSettings.sSelectedTable = m_aTableList.GetSelectEntry();
+        rSettings.sSelectedTable = m_pTableList->GetSelectEntry();
 
         return true;
     }
@@ -114,7 +112,7 @@ namespace abp
     bool TableSelectionPage::canAdvance() const
     {
         return  AddressBookSourcePage::canAdvance()
-            &&  ( 0 < m_aTableList.GetSelectEntryCount() );
+            &&  ( 0 < m_pTableList->GetSelectEntryCount() );
     }
 
 

@@ -93,35 +93,6 @@ TabPage RID_PAGE_ADMININVOKATION
     };
 };
 
-
-TabPage RID_PAGE_TABLESELECTION_AB
-{
-    HelpID = "extensions:TabPage:RID_PAGE_TABLESELECTION_AB";
-    SVLook  = TRUE ;
-    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-
-    FixedText FL_TOOMUCHTABLES
-    {
-        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24 ) ;
-        WordBreak = TRUE;
-
-        Text [ en-US ] = "The external data source you have chosen contains more than one address book.\nPlease select the one you mainly want to work with:";
-    };
-
-    ListBox LB_TABLELIST
-    {
-        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION_AB:LB_TABLELIST";
-        Pos     = MAP_APPFONT ( BORDER_X, 36 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 50 ) ;
-        SVLook = TRUE;
-        Sort = TRUE;
-        DropDown = FALSE;
-        AutoHScroll = TRUE;
-        Border = TRUE;
-    };
-};
-
 TabPage RID_PAGE_FINAL
 {
     HelpID = "extensions:TabPage:RID_PAGE_FINAL";

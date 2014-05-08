@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,modules/sabpilot))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/sabpilot,\
 	extensions/uiconfig/sabpilot/ui/fieldassignpage \
+	extensions/uiconfig/sabpilot/ui/selecttablepage \
 	extensions/uiconfig/sabpilot/ui/selecttypepage \
 ))
 

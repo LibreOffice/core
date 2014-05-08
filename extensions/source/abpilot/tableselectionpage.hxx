@@ -34,8 +34,7 @@ namespace abp
     class TableSelectionPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aLabel;
-        ListBox         m_aTableList;
+        ListBox*        m_pTableList;
 
     public:
         TableSelectionPage( OAddessBookSourcePilot* _pParent );
