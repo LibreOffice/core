@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <stdio.h>
+// #include <stdio.h>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
 #include <tools/time.hxx>
@@ -110,11 +110,11 @@ void DebugEventInjector::InjectMenuEvent()
     SalMenuEvent aEvent = aIds[ getRandom() * aIds.size() ];
     bool bHandled = ImplWindowFrameProc( pSysWin, NULL, nEvent, &aEvent);
 
-    fprintf( stderr, "Injected menu event %p (%d) '%s' -> %d\n",
+/*    fprintf( stderr, "Injected menu event %p (%d) '%s' -> %d\n",
              aEvent.mpMenu, aEvent.mnId,
              OUStringToOString( ((Menu *)aEvent.mpMenu)->GetItemText( aEvent.mnId ),
                                 RTL_TEXTENCODING_UTF8 ).getStr(),
-             (int)bHandled);
+             (int)bHandled); */
 }
 
 static void InitKeyEvent( SalKeyEvent &rKeyEvent )
@@ -131,22 +131,43 @@ static void InitKeyEvent( SalKeyEvent &rKeyEvent )
         rKeyEvent.mnRepeat = 0;
 }
 
-void DebugEventInjector::InjectKeyEvent()
+void DebugEventInjector::InjectTextEvent()
 {
     SalKeyEvent aKeyEvent;
     Window *pWindow = ChooseWindow();
 
     InitKeyEvent( aKeyEvent );
-    sal_uInt16 nCode = getRandom() * KEY_CODE;
-    if( getRandom() < 0.05 ) // modifier
-        nCode |= (sal_uInt16)( getRandom() * KEY_MODTYPE ) & KEY_MODTYPE;
 
-    aKeyEvent.mnCode = nCode;
-    aKeyEvent.mnCharCode = getRandom() * 0xffff;
+    if (getRandom() < 0.10) // Occasionally a truly random event
+    {
+        aKeyEvent.mnCode = getRandom() * KEY_CODE;
+        aKeyEvent.mnCharCode = getRandom() * 0xffff;
+    }
+    else
+    {
+        struct {
+            sal_uInt16 nCodeStart, nCodeEnd;
+            char       aCharStart;
+        } nTextCodes[] = {
+            { KEY_0, KEY_9, '0' },
+            { KEY_A, KEY_Z, 'a' }
+        };
+
+        size_t i = getRandom() * SAL_N_ELEMENTS( nTextCodes );
+        int offset = trunc( getRandom() * ( nTextCodes[i].nCodeEnd - nTextCodes[i].nCodeStart ) );
+        aKeyEvent.mnCode = nTextCodes[i].nCodeStart + offset;
+        aKeyEvent.mnCharCode = nTextCodes[i].aCharStart + offset;
+//        fprintf( stderr, "Char '%c' offset %d into record %d base '%c'\n",
+//                 aKeyEvent.mnCharCode, offset, (int)i, nTextCodes[i].aCharStart );
+    }
+
+    if( getRandom() < 0.05 ) // modifier
+        aKeyEvent.mnCode |= (sal_uInt16)( getRandom() * KEY_MODTYPE ) & KEY_MODTYPE;
 
     bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent);
-    fprintf (stderr, "Injected key 0x%x -> %d win %p\n",
-             (int) aKeyEvent.mnCode, (int)bHandled, pWindow);
+//    fprintf( stderr, "Injected key 0x%x -> %d win %p\n",
+//             (int) aKeyEvent.mnCode, (int)bHandled, pWindow );
+    ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
 }
 
 /*
@@ -155,12 +176,14 @@ void DebugEventInjector::InjectKeyEvent()
  */
 void DebugEventInjector::InjectEvent()
 {
+//    fprintf( stderr, "%6d - ", (int)mnEventsLeft );
+
     double nRand = getRandom();
-    if (nRand < 0.50)
+    if (nRand < 0.30)
     {
         int nEvents = getRandom() * 10;
         for (int i = 0; i < nEvents; i++)
-            InjectKeyEvent();
+            InjectTextEvent();
     }
     else if (nRand < 0.60)
         InjectKeyNavEdit();
@@ -222,8 +245,8 @@ void DebugEventInjector::InjectKeyNavEdit()
     aKeyEvent.mnCharCode = 0x0; // hopefully unused.
 
     bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent );
-    fprintf( stderr, "Injected edit / move key 0x%x -> %d win %p\n",
-             (int) aKeyEvent.mnCode, (int)bHandled, pWindow );
+//    fprintf( stderr, "Injected edit / move key 0x%x -> %d win %p\n",
+//             (int) aKeyEvent.mnCode, (int)bHandled, pWindow );
     ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
 }
 
