@@ -928,7 +928,7 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
-                                                                        sal_Bool                    beFast )
+                                                                        bool                        beFast )
     {
         if( !mpOutDev.get() || !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed

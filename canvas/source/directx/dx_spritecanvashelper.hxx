@@ -86,9 +86,9 @@ namespace dxcanvas
             In/out parameter, whether backbuffer surface is dirty (if
             yes, we're performing a full update, anyway)
          */
-        sal_Bool updateScreen( const ::basegfx::B2IRectangle& rCurrArea,
-                               sal_Bool                       bUpdateAll,
-                               bool&                          io_bSurfaceDirty );
+        bool updateScreen( const ::basegfx::B2IRectangle& rCurrArea,
+                           bool                           bUpdateAll,
+                           bool&                          io_bSurfaceDirty );
 
 
         // SpriteRedrawManager functor calls

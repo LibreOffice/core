@@ -80,8 +80,8 @@ namespace vclcanvas
             In/out parameter, whether backbuffer surface is dirty (if
             yes, we're performing a full update, anyway)
          */
-        sal_Bool updateScreen( sal_Bool bUpdateAll,
-                               bool&    io_bSurfaceDirty );
+        bool updateScreen( bool bUpdateAll,
+                           bool&    io_bSurfaceDirty );
 
         // SpriteRedrawManager functor calls
 

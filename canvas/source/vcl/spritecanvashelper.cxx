@@ -241,15 +241,15 @@ namespace vclcanvas
         return uno::Reference< rendering::XSprite >();
     }
 
-    sal_Bool SpriteCanvasHelper::updateScreen( sal_Bool bUpdateAll,
-                                               bool&    io_bSurfaceDirty )
+    bool SpriteCanvasHelper::updateScreen( bool bUpdateAll,
+                                           bool&    io_bSurfaceDirty )
     {
         if( !mpRedrawManager ||
             !mpOwningSpriteCanvas ||
             !mpOwningSpriteCanvas->getFrontBuffer() ||
             !mpOwningSpriteCanvas->getBackBuffer() )
         {
-            return sal_False; // disposed, or otherwise dysfunctional
+            return false; // disposed, or otherwise dysfunctional
         }
 
         // commit to backbuffer
@@ -361,7 +361,7 @@ namespace vclcanvas
             pTargetWindow->Sync();
         }
 
-        return sal_True;
+        return true;
     }
 
     void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& rUpdateRect )

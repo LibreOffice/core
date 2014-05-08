@@ -1553,7 +1553,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
-                                                                        sal_Bool                    /*beFast*/ )
+                                                                        bool                       /*beFast*/ )
     {
 #ifdef CAIRO_CANVAS_PERF_TRACE
         struct timespec aTimer;

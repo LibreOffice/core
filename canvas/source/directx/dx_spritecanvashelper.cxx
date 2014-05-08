@@ -171,15 +171,15 @@ namespace dxcanvas
         return uno::Reference< rendering::XSprite >();
     }
 
-    sal_Bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRectangle& rCurrArea,
-                                               sal_Bool                       bUpdateAll,
-                                               bool&                          io_bSurfaceDirty )
+    bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRectangle& rCurrArea,
+                                           bool                           bUpdateAll,
+                                           bool&                          io_bSurfaceDirty )
     {
         if( !mpRedrawManager ||
             !mpRenderModule ||
             !mpBackBuffer )
         {
-            return sal_False; // disposed, or otherwise dysfunctional
+            return false; // disposed, or otherwise dysfunctional
         }
 
 #if defined(DX_DEBUG_IMAGES)
@@ -251,7 +251,7 @@ namespace dxcanvas
 
         io_bSurfaceDirty = false;
 
-        return sal_True;
+        return true;
     }
 
     void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& rUpdateRect )

@@ -149,7 +149,7 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
-                                                                              sal_Bool                    /*beFast*/ )
+                                                                              bool                        /*beFast*/ )
     {
         // TODO(F1):
         return uno::Reference< rendering::XBitmap >();

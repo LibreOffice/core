@@ -96,7 +96,7 @@ namespace dxcanvas
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
             getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
-                             sal_Bool                                       beFast );
+                             bool                                           beFast );
 
         ::com::sun::star::uno::Sequence< sal_Int8 >
             getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,

@@ -74,7 +74,7 @@ namespace cairocanvas
         awt::Rectangle aRect;
         maArguments[2] >>= aRect;
 
-        sal_Bool bIsFullscreen( sal_False );
+        bool bIsFullscreen( false );
         maArguments[3] >>= bIsFullscreen;
 
         uno::Reference< awt::XWindow > xParentWindow;

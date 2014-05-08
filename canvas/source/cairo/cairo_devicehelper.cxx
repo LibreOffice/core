@@ -203,13 +203,13 @@ namespace cairocanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    sal_Bool DeviceHelper::hasFullScreenMode()
+    bool DeviceHelper::hasFullScreenMode()
     {
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
     }
 
-    sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool /*bEnter*/ )
+    bool DeviceHelper::enterFullScreenMode( bool /*bEnter*/ )
     {
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;

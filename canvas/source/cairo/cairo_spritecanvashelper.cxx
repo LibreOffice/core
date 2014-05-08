@@ -189,16 +189,16 @@ namespace cairocanvas
         return uno::Reference< rendering::XSprite >();
     }
 
-    sal_Bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRange& /*rCurrArea*/,
-                                               sal_Bool                   bUpdateAll,
-                                               bool&                      io_bSurfaceDirty )
+    bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRange& /*rCurrArea*/,
+                                                 bool                   bUpdateAll,
+                                                 bool&                  io_bSurfaceDirty )
     {
         if( !mpRedrawManager ||
             !mpOwningSpriteCanvas ||
             !mpOwningSpriteCanvas->getWindowSurface() ||
             !mpOwningSpriteCanvas->getBufferSurface() )
         {
-            return sal_False; // disposed, or otherwise dysfunctional
+            return false; // disposed, or otherwise dysfunctional
         }
 
         SAL_INFO("canvas.cairo", "SpriteCanvasHelper::updateScreen called");
@@ -268,7 +268,7 @@ namespace cairocanvas
         // commit to screen
         mpOwningSpriteCanvas->flush();
 
-        return sal_True;
+        return true;
     }
 
     void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& rUpdateRect )

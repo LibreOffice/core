@@ -164,13 +164,13 @@ namespace dxcanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    sal_Bool SpriteDeviceHelper::hasFullScreenMode()
+    bool SpriteDeviceHelper::hasFullScreenMode()
     {
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
     }
 
-    sal_Bool SpriteDeviceHelper::enterFullScreenMode( sal_Bool /*bEnter*/ )
+    bool SpriteDeviceHelper::enterFullScreenMode( bool /*bEnter*/ )
     {
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
