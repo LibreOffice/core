@@ -574,7 +574,7 @@ void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const 
         {
         case BASEPROPERTY_HIDEINACTIVESELECTION:
         {
-            bool bValue;
+            bool bValue(false);
             OSL_VERIFY( Value >>= bValue );
 
             lcl_setWinBits( pControl, WB_NOHIDESELECTION, !bValue );
