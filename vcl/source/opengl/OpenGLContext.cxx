@@ -711,6 +711,7 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 
     static int visual_attribs[] =
     {
+        GLX_DOUBLEBUFFER,
         GLX_RED_SIZE,           8,
         GLX_GREEN_SIZE,         8,
         GLX_BLUE_SIZE,          8,
