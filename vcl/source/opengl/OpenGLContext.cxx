@@ -558,20 +558,9 @@ void OpenGLContext::renderToFile()
 {
     int iWidth = m_aGLWin.Width;
     int iHeight = m_aGLWin.Height;
-    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[iWidth * iHeight * 4]);
-    glReadPixels(0, 0, iWidth, iHeight, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
-
-    BitmapEx aBmp = OpenGLHelper::ConvertBGRABufferToBitmapEx(buf.get(), iWidth, iHeight);
     static int nIdx = 0;
     OUString aName = OUString( "file:///home/moggi/Documents/work/output" ) + OUString::number( nIdx++ ) + ".png";
-    try {
-        vcl::PNGWriter aWriter( aBmp );
-        SvFileStream sOutput( aName, STREAM_WRITE );
-        aWriter.Write( sOutput );
-        sOutput.Close();
-    } catch (...) {
-        SAL_WARN("vcl.opengl", "Error writing png to " << aName);
-    }
+    OpenGLHelper::renderToFile(iWidth, iHeight, aName);
 }
 
 #if defined( WNT )

@@ -14,6 +14,9 @@
 #include <config_folders.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
+#include <boost/scoped_array.hpp>
+#include <vcl/pngwrite.hxx>
+#include <vcl/graph.hxx>
 
 #include <vector>
 
@@ -166,6 +169,21 @@ sal_uInt8* OpenGLHelper::ConvertBitmapExToRGBABuffer(const BitmapEx& rBitmapEx)
         }
     }
     return pBitmapBuf;
+}
+
+void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFileName)
+{
+    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nWidth*nHeight*4]);
+    glReadPixels(0, 0, nWidth, nHeight, GL_BGRA, GL_UNSIGNED_BYTE, pBuffer.get());
+    BitmapEx aBitmap = ConvertBGRABufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
+    try {
+        vcl::PNGWriter aWriter( aBitmap );
+        SvFileStream sOutput( rFileName, STREAM_WRITE );
+        aWriter.Write( sOutput );
+        sOutput.Close();
+    } catch (...) {
+        SAL_WARN("vcl.opengl", "Error writing png to " << rFileName);
+    }
 }
 
 BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight)
