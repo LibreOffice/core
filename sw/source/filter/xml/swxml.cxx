@@ -537,13 +537,13 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     comphelper::PropertyMapEntry const aInfoMap[] =
     {
         { OUString("ProgressRange"), 0,
-              ::getCppuType((sal_Int32*)0),
+              ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("ProgressMax"), 0,
-              ::getCppuType((sal_Int32*)0),
+              ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("ProgressCurrent"), 0,
-              ::getCppuType((sal_Int32*)0),
+              ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("NumberStyles"), 0,
               ::getCppuType( (uno::Reference<container::XNameContainer> *) 0),

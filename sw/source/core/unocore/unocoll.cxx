@@ -225,7 +225,7 @@ public:
     // XElemenAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        return ::getCppuType((const OUString*)0);
+        return ::cppu::UnoType<OUString>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {

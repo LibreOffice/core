@@ -169,7 +169,7 @@ sal_Bool SAL_CALL SvxUnoColorTable::hasByName( const OUString& aName )
 uno::Type SAL_CALL SvxUnoColorTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const sal_Int32*)0);
+    return ::cppu::UnoType<sal_Int32>::get();
 }
 
 sal_Bool SAL_CALL SvxUnoColorTable::hasElements()

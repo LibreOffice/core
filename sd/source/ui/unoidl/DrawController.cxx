@@ -732,12 +732,12 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property("ZoomValue",
             PROPERTY_ZOOMVALUE,
-            ::getCppuType((const sal_Int16*)0),
+            ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("ZoomType",
             PROPERTY_ZOOMTYPE,
-            ::getCppuType((const sal_Int16*)0),
+            ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("ViewOffset",
@@ -753,12 +753,12 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("UpdateAcc") ),
             PROPERTY_UPDATEACC,
-            ::getCppuType((const sal_Int16*)0),
+            ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("PageChange") ),
             PROPERTY_PAGE_CHANGE,
-            ::getCppuType((const sal_Int16*)0),
+            ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND ));
 }
 

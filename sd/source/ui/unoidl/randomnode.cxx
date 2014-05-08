@@ -242,7 +242,7 @@ void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments
     if( aArguments.getLength() != 1 )
         throw IllegalArgumentException();
 
-    if( aArguments[0].getValueType() == ::getCppuType((const sal_Int16*)0) )
+    if( aArguments[0].getValueType() == ::cppu::UnoType<sal_Int16>::get() )
     {
         aArguments[0] >>= mnPresetClass;
     }

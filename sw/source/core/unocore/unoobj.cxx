@@ -2827,7 +2827,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             sal_uInt16 nIndex = rPropName[17];
             nIndex -= '0';
             sal_Int16 nCol = -1;
-            if (aValue.getValueType() == ::getCppuType((const sal_Int16*)0)
+            if (aValue.getValueType() == ::cppu::UnoType<sal_Int16>::get()
                 && nIndex < 3)
             {
                 aValue >>= nCol;

@@ -69,9 +69,9 @@ const SvxItemPropertySet* ImplGetSdLayerPropertySet()
         { OUString(UNO_NAME_LAYER_LOCKED),      WID_LAYER_LOCKED,   ::getBooleanCppuType(),            0, 0 },
         { OUString(UNO_NAME_LAYER_PRINTABLE),   WID_LAYER_PRINTABLE,::getBooleanCppuType(),            0, 0 },
         { OUString(UNO_NAME_LAYER_VISIBLE),     WID_LAYER_VISIBLE,  ::getBooleanCppuType(),            0, 0 },
-        { OUString(UNO_NAME_LAYER_NAME),        WID_LAYER_NAME,     ::getCppuType((const OUString*)0), 0, 0 },
-        { OUString("Title"),                    WID_LAYER_TITLE,    ::getCppuType((const OUString*)0), 0, 0 },
-        { OUString("Description"),              WID_LAYER_DESC,     ::getCppuType((const OUString*)0), 0, 0 },
+        { OUString(UNO_NAME_LAYER_NAME),        WID_LAYER_NAME,     ::cppu::UnoType<OUString>::get(), 0, 0 },
+        { OUString("Title"),                    WID_LAYER_TITLE,    ::cppu::UnoType<OUString>::get(), 0, 0 },
+        { OUString("Description"),              WID_LAYER_DESC,     ::cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );

@@ -139,7 +139,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         SvxUnoConvertToMM( eMapUnit, rValue );
     }
     // convert int32 to correct enum type if needed
-    else if ( pEntry->maType.getTypeClass() == uno::TypeClass_ENUM && rValue.getValueType() == ::getCppuType((const sal_Int32*)0) )
+    else if ( pEntry->maType.getTypeClass() == uno::TypeClass_ENUM && rValue.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
     {
         sal_Int32 nEnum;
         rValue >>= nEnum;

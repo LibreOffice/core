@@ -418,7 +418,7 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
             if( xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             {
                 uno::Any aAny2 = xPropSet->getPropertyValue( sPropName );
-                if( aAny2.getValueType() == ::getCppuType((sal_Int16*)0) )
+                if( aAny2.getValueType() == ::cppu::UnoType<sal_Int16>::get() )
                 {
                     if( form::FormComponentType::HIDDENCONTROL ==
                                                 *(sal_Int16*)aAny2.getValue() )
@@ -465,7 +465,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     uno::Any aTmp = xFormPropSet->getPropertyValue(
                                     OUString("Name") );
-    if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+    if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
@@ -477,7 +477,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     aTmp = xFormPropSet->getPropertyValue(
                     OUString("TargetURL") );
-    if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+    if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_action) + "=\"";
@@ -528,7 +528,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     aTmp = xFormPropSet->getPropertyValue(
                         OUString("TargetFrame") );
-    if( aTmp.getValueType() == ::getCppuType((const OUString*)0)&&
+    if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get()&&
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_target) + "=\"";
@@ -588,7 +588,7 @@ void SwHTMLWriter::OutHiddenControls(
             continue;
 
         aTmp = xPropSet->getPropertyValue( sPropName );
-        if( aTmp.getValueType() != ::getCppuType((const sal_Int16*)0) )
+        if( aTmp.getValueType() != ::cppu::UnoType<sal_Int16>::get() )
             continue;
 
         if( form::FormComponentType::HIDDENCONTROL ==
@@ -602,7 +602,7 @@ void SwHTMLWriter::OutHiddenControls(
 
             aTmp = xPropSet->getPropertyValue(
                             OUString("Name") );
-            if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+            if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                 !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
@@ -613,7 +613,7 @@ void SwHTMLWriter::OutHiddenControls(
             }
             aTmp = xPropSet->getPropertyValue(
                             OUString("HiddenValue") );
-            if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+            if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                 !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
@@ -665,7 +665,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
         return 0;
 
     uno::Any aTmp = xPropSet->getPropertyValue( sPropName );
-    if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0)&&
+    if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get()&&
         lcl_html_isHTMLControl( *(sal_Int16*) aTmp.getValue() ) )
     {
         return pObj;
@@ -756,7 +756,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     ? TYPE_CHECKBOX : TYPE_RADIO);
         aTmp = xPropSet->getPropertyValue(
                         OUString("DefaultState") );
-        if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) &&
+        if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() &&
             TRISTATE_FALSE != *(sal_Int16*) aTmp.getValue() )
         {
             sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_checked);
@@ -764,7 +764,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
         aTmp = xPropSet->getPropertyValue(
                         OUString("RefValue") );
-        if( aTmp.getValueType() == ::getCppuType((const OUString*)0) )
+        if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() )
 
         {
             const OUString& rVal = *(OUString*)aTmp.getValue();
@@ -799,7 +799,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
             aTmp = xPropSet->getPropertyValue(
                             OUString("Label") );
-            if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+            if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                 !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 sValue = *(OUString*)aTmp.getValue();
@@ -891,7 +891,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( xPropSetInfo->hasPropertyByName( sEchoChar ) )
                 {
                     aTmp = xPropSet->getPropertyValue( sEchoChar );
-                    if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) &&
+                    if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() &&
                         *(sal_Int16*)aTmp.getValue() != 0 )
                         eType = TYPE_PASSWORD;
                 }
@@ -904,7 +904,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
                 aTmp = xPropSet->getPropertyValue(
                             OUString("MaxTextLen") );
-                if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) &&
+                if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() &&
                     *(sal_Int16*) aTmp.getValue() != 0 )
                 {
                     sOptions += " " + OString(OOO_STRING_SVTOOLS_HTML_O_maxlength) + "=\"" +
@@ -915,7 +915,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( xPropSetInfo->hasPropertyByName( sDefaultText ) )
                 {
                     aTmp = xPropSet->getPropertyValue( sDefaultText );
-                    if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+                    if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                         !((OUString*)aTmp.getValue())->isEmpty() )
                     {
                         sValue = *(OUString*)aTmp.getValue();
@@ -962,7 +962,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     }
 
     aTmp = xPropSet->getPropertyValue("Name");
-    if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+    if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
@@ -993,7 +993,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         aTmp = xPropSet->getPropertyValue(
                     OUString("ImageURL") );
-        if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+        if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
             !((OUString*)aTmp.getValue())->isEmpty() )
         {
             sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_src) + "=\"";
@@ -1034,7 +1034,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     aTmp = xPropSet->getPropertyValue(
                     OUString("TabIndex") );
-    if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) )
+    if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() )
     {
         sal_Int16 nTabIndex = *(sal_Int16*) aTmp.getValue();
         if( nTabIndex > 0 )
@@ -1074,7 +1074,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            if( aTmp.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
             {
                 Color aCol(*(sal_Int32*)aTmp .getValue());
                 aItemSet.Put( SvxBrushItem( aCol, RES_CHRATR_BACKGROUND ) );
@@ -1084,7 +1084,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            if( aTmp.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
             {
                 Color aColor( *(sal_Int32*)aTmp .getValue() );
                 aItemSet.Put( SvxColorItem( aColor, RES_CHRATR_COLOR ) );
@@ -1106,7 +1106,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+            if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                 !((OUString*)aTmp.getValue())->isEmpty() )
             {
                 Font aFixedFont( OutputDevice::GetDefaultFont(
@@ -1120,7 +1120,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     if( xPropSetInfo->hasPropertyByName( sPropName ) )
                     {
                         aTmp = xPropSet->getPropertyValue( sPropName );
-                        if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0))
+                        if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get())
                             eFamily = (FontFamily)*(sal_Int16*) aTmp.getValue();
                     }
                     SvxFontItem aItem( eFamily, aFName, aEmptyOUStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
@@ -1144,7 +1144,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0))
+            if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get())
             {
                 FontItalic eItalic = (FontItalic)*(sal_Int16*)aTmp.getValue();
                 if( eItalic != ITALIC_DONTKNOW && eItalic != ITALIC_NONE )
@@ -1155,7 +1155,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) )
+            if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get() )
             {
                 FontUnderline eUnderline =
                     (FontUnderline)*(sal_Int16*)aTmp.getValue();
@@ -1168,7 +1168,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0))
+            if( aTmp.getValueType() == ::cppu::UnoType<sal_Int16>::get())
             {
                 FontStrikeout eStrikeout =
                     (FontStrikeout)*(sal_Int16*)aTmp.getValue();
@@ -1275,7 +1275,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         OUString sVal;
         aTmp = xPropSet->getPropertyValue(
         OUString("DefaultText") );
-        if( aTmp.getValueType() == ::getCppuType((const OUString*)0)&&
+        if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get()&&
             !((OUString*)aTmp.getValue())->isEmpty() )
         {
             sVal = *(OUString*)aTmp.getValue();
@@ -1298,7 +1298,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     else if( TYPE_CHECKBOX == eType || TYPE_RADIO == eType )
     {
         aTmp = xPropSet->getPropertyValue("Label");
-        if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+        if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
             !((OUString*)aTmp.getValue())->isEmpty() )
         {
             sValue = *(OUString*)aTmp.getValue();

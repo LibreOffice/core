@@ -121,7 +121,7 @@ const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         {OUString("TextField"),                     EE_FEATURE_FIELD,   ::getCppuType((const Reference< XTextField >*)0),  PropertyAttribute::READONLY, 0 },
-        {OUString("TextPortionType"),               WID_PORTIONTYPE,    ::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0 },
+        {OUString("TextPortionType"),               WID_PORTIONTYPE,    ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0 },
         {OUString("TextUserDefinedAttributes"),     EE_CHAR_XMLATTRIBS,     ::getCppuType((const Reference< XNameContainer >*)0)  ,        0,     0},
         {OUString("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     ::getCppuType((const Reference< XNameContainer >*)0)  ,        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }

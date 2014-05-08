@@ -106,21 +106,21 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
     static const SfxItemPropertyMapEntry aDrawPagePropertyMap_Impl[] =
     {
         { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                  beans::PropertyAttribute::MAYBEVOID,0},
-        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_CHANGE),           WID_PAGE_CHANGE,    ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_DURATION),         WID_PAGE_DURATION,  ::getCppuType((const sal_Int32*)0),            0,  0},
+        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_CHANGE),           WID_PAGE_CHANGE,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_DURATION),         WID_PAGE_DURATION,  ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_EFFECT),           WID_PAGE_EFFECT,    ::getCppuType((const presentation::FadeEffect*)0),     0,  0},
-        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::getCppuType((const sal_Int16*)0),            0,  0},
+        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                          beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
         { OUString(UNO_NAME_PAGE_SPEED),            WID_PAGE_SPEED,     ::getCppuType((const presentation::AnimationSpeed*)0), 0,  0},
-        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::getCppuType((const sal_Int32*)0),            0,  0},
+        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_PREVIEWBITMAP),    WID_PAGE_PREVIEWBITMAP, ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_VISIBLE),          WID_PAGE_VISIBLE,   ::getBooleanCppuType(),                        0, 0},
@@ -128,49 +128,49 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
         { OUString(sUNO_Prop_IsBackgroundVisible),  WID_PAGE_BACKVIS,   ::getBooleanCppuType(),                        0, 0},
         { OUString(sUNO_Prop_IsBackgroundObjectsVisible),   WID_PAGE_BACKOBJVIS,    ::getBooleanCppuType(),                        0, 0},
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
-        { OUString(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  ::getCppuType((const OUString*)0),             0,  0},
-        { OUString("HighResDuration"),              WID_PAGE_HIGHRESDURATION,  ::getCppuType((const double*)0),            0,  0},
+        { OUString(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},
+        { OUString("HighResDuration"),              WID_PAGE_HIGHRESDURATION,  ::cppu::UnoType<double>::get(),            0,  0},
         { OUString("IsBackgroundDark") ,            WID_PAGE_ISDARK,    ::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
         { OUString("IsFooterVisible"),              WID_PAGE_FOOTERVISIBLE, ::getBooleanCppuType(),                    0, 0},
-        { OUString("FooterText"),                   WID_PAGE_FOOTERTEXT, ::getCppuType((const OUString*)0),                0,  0},
+        { OUString("FooterText"),                   WID_PAGE_FOOTERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},
         { OUString("IsPageNumberVisible"),          WID_PAGE_PAGENUMBERVISIBLE, ::getBooleanCppuType(),                    0, 0},
         { OUString("IsDateTimeVisible"),            WID_PAGE_DATETIMEVISIBLE, ::getBooleanCppuType(),                  0, 0},
         { OUString("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, ::getBooleanCppuType(),                    0, 0},
-        { OUString("DateTimeText"),                 WID_PAGE_DATETIMETEXT, ::getCppuType((const OUString*)0),              0,  0},
-        { OUString("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, ::getCppuType((const sal_Int32*)0),           0,  0},
-        { OUString("TransitionType"),               WID_TRANSITION_TYPE, ::getCppuType((const sal_Int16*)0),           0,  0},
-        { OUString("TransitionSubtype"),            WID_TRANSITION_SUBTYPE, ::getCppuType((const sal_Int16*)0),            0,  0},
+        { OUString("DateTimeText"),                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},
+        { OUString("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},
+        { OUString("TransitionType"),               WID_TRANSITION_TYPE, ::cppu::UnoType<sal_Int16>::get(),           0,  0},
+        { OUString("TransitionSubtype"),            WID_TRANSITION_SUBTYPE, ::cppu::UnoType<sal_Int16>::get(),            0,  0},
         { OUString("TransitionDirection"),          WID_TRANSITION_DIRECTION, ::getCppuType((const sal_Bool*)0),           0,  0},
-        { OUString("TransitionFadeColor"),          WID_TRANSITION_FADE_COLOR, ::getCppuType((const sal_Int32*)0),         0,  0},
-        { OUString("TransitionDuration"),           WID_TRANSITION_DURATION, ::getCppuType((const double*)0),          0,  0},
+        { OUString("TransitionFadeColor"),          WID_TRANSITION_FADE_COLOR, ::cppu::UnoType<sal_Int32>::get(),         0,  0},
+        { OUString("TransitionDuration"),           WID_TRANSITION_DURATION, ::cppu::UnoType<double>::get(),          0,  0},
         { OUString("LoopSound"),                    WID_LOOP_SOUND, ::getBooleanCppuType(),                    0, 0},
         { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
 #define DRAW_PAGE_NOTES_PROPERTIES \
-        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
-        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
-        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
-        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
-        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
-        { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::getCppuType((const sal_Int16*)0),            0,  0},                                                                \
+        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
+        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
+        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
+        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
+        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
+        { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},                                                                \
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                          beans::PropertyAttribute::READONLY, 0},                                \
-        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},                                \
-        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},                                \
+        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},                                \
+        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                \
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},                                                                \
-        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
+        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},\
         { OUString("IsHeaderVisible"),              WID_PAGE_HEADERVISIBLE, ::getBooleanCppuType(),                    0, 0},                                                                 \
-        { OUString("HeaderText"),                   WID_PAGE_HEADERTEXT, ::getCppuType((const OUString*)0),                0,  0},                                                            \
+        { OUString("HeaderText"),                   WID_PAGE_HEADERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},                                                            \
         { OUString("IsBackgroundDark"),             WID_PAGE_ISDARK,     ::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},                                \
         { OUString("IsFooterVisible"),              WID_PAGE_FOOTERVISIBLE, ::getBooleanCppuType(),                    0, 0},                                                                 \
-        { OUString("FooterText"),                   WID_PAGE_FOOTERTEXT, ::getCppuType((const OUString*)0),                0,  0},                                                            \
+        { OUString("FooterText"),                   WID_PAGE_FOOTERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},                                                            \
         { OUString("IsPageNumberVisible"),          WID_PAGE_PAGENUMBERVISIBLE, ::getBooleanCppuType(),                    0, 0},                                                             \
         { OUString("IsDateTimeVisible"),            WID_PAGE_DATETIMEVISIBLE, ::getBooleanCppuType(),                  0, 0},                                                                 \
         { OUString("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, ::getBooleanCppuType(),                    0, 0},                                                                 \
-        { OUString("DateTimeText"),                 WID_PAGE_DATETIMETEXT, ::getCppuType((const OUString*)0),              0,  0},                                                            \
-        { OUString("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, ::getCppuType((const sal_Int32*)0),           0,  0},                                                            \
+        { OUString("DateTimeText"),                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},                                                            \
+        { OUString("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},                                                            \
         { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                                            \
         { OUString(), 0, css::uno::Type(), 0, 0 }
 
@@ -186,20 +186,20 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
     };
 
 #define GRAPHIC_PAGE_PROPERTIES \
-        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
-        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
-        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
-        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
-        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
+        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                           beans::PropertyAttribute::READONLY, 0},                                             \
-        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},                                             \
-        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},                                             \
+        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},                                             \
+        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                             \
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},                                                                             \
-        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
+        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
         { OUString(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},    \
         { OUString(UNO_NAME_PAGE_PREVIEWBITMAP),    WID_PAGE_PREVIEWBITMAP, ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},                          \
-        { OUString(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  ::getCppuType((const OUString*)0),             0,  0},                                                                             \
+        { OUString(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},                                                                             \
         { OUString("IsBackgroundDark"),             WID_PAGE_ISDARK,    ::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},                                             \
         { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                                                         \
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -260,16 +260,16 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
     static const SfxItemPropertyMapEntry aMasterPagePropertyMap_Impl[] =
     {
         { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                    0,  0},
-        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},
+        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                           beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
-        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::getCppuType((const sal_Int32*)0),            0,  0},
+        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString("BackgroundFullSize"),           WID_PAGE_BACKFULL,  ::getBooleanCppuType(),                        0, 0},
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
         { OUString("IsBackgroundDark"),             WID_PAGE_ISDARK,    ::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
@@ -278,26 +278,26 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
 
     static const SfxItemPropertyMapEntry aHandoutMasterPagePropertyMap_Impl[] =
     {
-        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},
+        { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
-        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::getCppuType((const sal_Int16*)0),            0,  0},
+        { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
         { OUString("IsBackgroundDark"),             WID_PAGE_ISDARK,    ::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
         { OUString("IsHeaderVisible"),              WID_PAGE_HEADERVISIBLE, ::getBooleanCppuType(),                    0, 0},
-        { OUString("HeaderText"),                   WID_PAGE_HEADERTEXT, ::getCppuType((const OUString*)0),                0,  0},
+        { OUString("HeaderText"),                   WID_PAGE_HEADERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},
         { OUString("IsFooterVisible"),              WID_PAGE_FOOTERVISIBLE, ::getBooleanCppuType(),                    0, 0},
-        { OUString("FooterText"),                   WID_PAGE_FOOTERTEXT, ::getCppuType((const OUString*)0),                0,  0},
+        { OUString("FooterText"),                   WID_PAGE_FOOTERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},
         { OUString("IsPageNumberVisible"),          WID_PAGE_PAGENUMBERVISIBLE, ::getBooleanCppuType(),                    0, 0},
         { OUString("IsDateTimeVisible"),            WID_PAGE_DATETIMEVISIBLE, ::getBooleanCppuType(),                  0, 0},
         { OUString("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, ::getBooleanCppuType(),                    0, 0},
-        { OUString("DateTimeText"),                 WID_PAGE_DATETIMETEXT, ::getCppuType((const OUString*)0),              0,  0},
-        { OUString("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, ::getCppuType((const sal_Int32*)0),           0,  0},
+        { OUString("DateTimeText"),                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},
+        { OUString("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

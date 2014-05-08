@@ -184,9 +184,9 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
     {
         { OUString("BuildId"),                      WID_MODEL_BUILDID,            ::getCppuType(static_cast< const OUString * >(0)),                      0, 0},
         { OUString(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE,           ::getCppuType((const lang::Locale*)0),                                  0, 0},
-        { OUString(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,            ::getCppuType((const sal_Int32*)0),                                     0, 0},
+        { OUString(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,            ::cppu::UnoType<sal_Int32>::get(),                                     0, 0},
         { OUString(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,            ::getCppuType((const awt::Rectangle*)0),                                0, 0},
-        { OUString(sUNO_Prop_MapUnit),              WID_MODEL_MAPUNIT,            ::getCppuType((const sal_Int16*)0),                                     beans::PropertyAttribute::READONLY, 0},
+        { OUString(sUNO_Prop_MapUnit),              WID_MODEL_MAPUNIT,            ::cppu::UnoType<sal_Int16>::get(),                                     beans::PropertyAttribute::READONLY, 0},
         { OUString(sUNO_Prop_ForbiddenCharacters),  WID_MODEL_FORBCHARS,          ::getCppuType((const uno::Reference< i18n::XForbiddenCharacters > *)0), beans::PropertyAttribute::READONLY, 0},
         { OUString(sUNO_Prop_AutomContFocus),       WID_MODEL_CONTFOCUS,          ::getBooleanCppuType(),                                                 0, 0},
         { OUString(sUNO_Prop_ApplyFrmDsgnMode),     WID_MODEL_DSGNMODE,           ::getBooleanCppuType(),                                                 0, 0},

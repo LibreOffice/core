@@ -255,7 +255,7 @@ rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
 
             aProperties[0].Name = "Width";
             aProperties[0].Handle = Property_Width;
-            aProperties[0].Type = ::getCppuType((const sal_Int32*)0);
+            aProperties[0].Type = ::cppu::UnoType<sal_Int32>::get();
             aProperties[0].Attributes = 0;
 
             aProperties[1].Name = "OptimalWidth";
@@ -275,7 +275,7 @@ rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
 
             aProperties[4].Name = "Size";
             aProperties[4].Handle = Property_Width;
-            aProperties[4].Type = ::getCppuType((const sal_Int32*)0);
+            aProperties[4].Type = ::cppu::UnoType<sal_Int32>::get();
             aProperties[4].Attributes = 0;
 
             aProperties[5].Name = "OptimalSize";

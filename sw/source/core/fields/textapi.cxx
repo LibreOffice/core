@@ -40,7 +40,7 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
         {OUString("TextField"),                 EE_FEATURE_FIELD,
             ::getCppuType((const uno::Reference< text::XTextField >*)0), beans::PropertyAttribute::READONLY, 0 },
         {OUString("TextPortionType"),           WID_PORTIONTYPE,
-            ::getCppuType((const OUString*)0), beans::PropertyAttribute::READONLY, 0 },
+            ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString("TextUserDefinedAttributes"), EE_CHAR_XMLATTRIBS,
             ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0), 0, 0},
         {OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS,

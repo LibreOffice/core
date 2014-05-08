@@ -78,9 +78,9 @@ static SvxItemPropertySet& GetStylePropertySet()
 {
     static const SfxItemPropertyMapEntry aFullPropertyMap_Impl[] =
     {
-        { OUString("Family"),                 WID_STYLE_FAMILY,       ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
+        { OUString("Family"),                 WID_STYLE_FAMILY,       ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
         { OUString("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  cppu::UnoType<XNameContainer>::get(), 0,     0},
-        { OUString("DisplayName"),            WID_STYLE_DISPNAME,     ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
+        { OUString("DisplayName"),            WID_STYLE_DISPNAME,     ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
         { OUString("Hidden"),                 WID_STYLE_HIDDEN,       ::getCppuType((bool*)0),       0,     0},
 
         SVX_UNOEDIT_NUMBERING_PROPERTIE,
@@ -1175,7 +1175,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
         if( pEntry->aType != aAny.getValueType() )
         {
             // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            if( ( pEntry->aType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            if( ( pEntry->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
             {
                 sal_Int32 nValue = 0;
                 aAny >>= nValue;

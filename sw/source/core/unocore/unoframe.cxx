@@ -2281,7 +2281,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         throw uno::RuntimeException();
 
     //UUUU
-    if(pEntry && pEntry->aType == ::getCppuType((const sal_Int16*)0) && pEntry->aType != aAny.getValueType())
+    if(pEntry && pEntry->aType == ::cppu::UnoType<sal_Int16>::get() && pEntry->aType != aAny.getValueType())
     {
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
         sal_Int32 nValue = 0;

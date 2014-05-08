@@ -100,7 +100,7 @@ NameOrIndex* SvxUnoBitmapTable::createItem() const throw()
 uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType( (const OUString*)0 );
+    return ::cppu::UnoType<OUString>::get();
 }
 
 /**

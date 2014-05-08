@@ -341,7 +341,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
     else
     {
         // all string properties:
-        if(rVal.getValueType() != ::getCppuType((OUString*)0))
+        if(rVal.getValueType() != ::cppu::UnoType<OUString>::get())
             return false;
 
         switch(nMemberId)

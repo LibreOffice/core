@@ -2026,7 +2026,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
         if( pMap->aType != aAny.getValueType() )
         {
             // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            if( ( pMap->aType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            if( ( pMap->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
             {
                 sal_Int32 nValue = 0;
                 aAny >>= nValue;

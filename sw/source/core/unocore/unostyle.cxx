@@ -1930,7 +1930,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             if (MID_PAGEDESC_PAGEDESCNAME != nMemberId)
                 break;
             // special handling for RES_PAGEDESC
-            if(aValue.getValueType() != ::getCppuType((const OUString*)0))
+            if(aValue.getValueType() != ::cppu::UnoType<OUString>::get())
                 throw lang::IllegalArgumentException();
             SfxItemSet& rStyleSet = rBase.GetItemSet();
 
@@ -2124,7 +2124,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         {
             if( MID_DROPCAP_CHAR_STYLE_NAME == nMemberId)
             {
-                if(aValue.getValueType() == ::getCppuType((const OUString*)0))
+                if(aValue.getValueType() == ::cppu::UnoType<OUString>::get())
                 {
                     SfxItemSet& rStyleSet = rBase.GetItemSet();
 
@@ -2557,7 +2557,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             rPropSet.getPropertyValue(rEntry, rSet, aRet);
 
             //UUUU
-            if(rEntry.aType == ::getCppuType((const sal_Int16*)0) && rEntry.aType != aRet.getValueType())
+            if(rEntry.aType == ::cppu::UnoType<sal_Int16>::get() && rEntry.aType != aRet.getValueType())
             {
                 // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
                 sal_Int32 nValue = 0;

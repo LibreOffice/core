@@ -469,7 +469,7 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
 
         if ( rLocalName == "color-table" )
         {
-            if( aType == ::getCppuType((const sal_Int32*)0) )
+            if( aType == ::cppu::UnoType<sal_Int32>::get() )
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_color, mrTable, bOOoFormat );
         }
         else if ( rLocalName == "marker-table" )
@@ -494,7 +494,7 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
         }
         else if ( rLocalName == "bitmap-table" )
         {
-            if( aType == ::getCppuType((const OUString*)0))
+            if( aType == ::cppu::UnoType<OUString>::get())
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_bitmap, mrTable, bOOoFormat );
         }
     }

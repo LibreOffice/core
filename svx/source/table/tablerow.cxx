@@ -329,7 +329,7 @@ rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
 
             aProperties[0].Name = "Height";
             aProperties[0].Handle = Property_Height;
-            aProperties[0].Type = ::getCppuType((const sal_Int32*)0);
+            aProperties[0].Type = ::cppu::UnoType<sal_Int32>::get();
             aProperties[0].Attributes = 0;
 
             aProperties[1].Name = "OptimalHeight";
@@ -349,7 +349,7 @@ rtl::Reference< FastPropertySetInfo > TableRow::getStaticPropertySetInfo()
 
             aProperties[4].Name = "Size";
             aProperties[4].Handle = Property_Height;
-            aProperties[4].Type = ::getCppuType((const sal_Int32*)0);
+            aProperties[4].Type = ::cppu::UnoType<sal_Int32>::get();
             aProperties[4].Attributes = 0;
 
             aProperties[5].Name = "OptimalSize";

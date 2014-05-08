@@ -293,7 +293,7 @@ XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const uno::A
 uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const sal_Int32*)0);
+    return ::cppu::UnoType<sal_Int32>::get();
 }
 
 // XServiceInfo
@@ -678,7 +678,7 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
 uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const OUString*)0);
+    return ::cppu::UnoType<OUString>::get();
 }
 
 // XServiceInfo

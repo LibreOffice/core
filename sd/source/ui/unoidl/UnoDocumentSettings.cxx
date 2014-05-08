@@ -154,23 +154,23 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("IsPrintNotes"),          HANDLE_PRINTNOTES,          ::getBooleanCppuType(),                0,  MID_PRINTER },
             { OUString("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        ::getBooleanCppuType(),                0,  MID_PRINTER },
             { OUString("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { OUString("SlidesPerHandout"),      HANDLE_SLIDESPERHANDOUT,    ::getCppuType((const sal_Int16*)0),    0,  MID_PRINTER },
+            { OUString("SlidesPerHandout"),      HANDLE_SLIDESPERHANDOUT,    ::cppu::UnoType<sal_Int16>::get(),    0,  MID_PRINTER },
             { OUString("HandoutsHorizontal"),    HANDLE_HANDOUTHORIZONTAL,   ::getBooleanCppuType(),                0,  MID_PRINTER },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
         static PropertyMapEntry const aDrawSettingsInfoMap[] =
         {
-            { OUString("MeasureUnit"),           HANDLE_MEASUREUNIT,         ::getCppuType((const sal_Int16*)0),    0,  0 },
-            { OUString("ScaleNumerator"),        HANDLE_SCALE_NUM,           ::getCppuType((const sal_Int32*)0),    0,  0 },
-            { OUString("ScaleDenominator"),      HANDLE_SCALE_DOM,           ::getCppuType((const sal_Int32*)0),    0,  0 },
+            { OUString("MeasureUnit"),           HANDLE_MEASUREUNIT,         ::cppu::UnoType<sal_Int16>::get(),    0,  0 },
+            { OUString("ScaleNumerator"),        HANDLE_SCALE_NUM,           ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
+            { OUString("ScaleDenominator"),      HANDLE_SCALE_DOM,           ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
         static PropertyMapEntry const aCommonSettingsInfoMap[] =
         {
-            { OUString("DefaultTabStop"),        HANDLE_TABSTOP,             ::getCppuType((const sal_Int32*)0),    0,  0 },
-            { OUString("PrinterName"),           HANDLE_PRINTERNAME,         ::getCppuType((const OUString*)0),     0,  0 },
+            { OUString("DefaultTabStop"),        HANDLE_TABSTOP,             ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
+            { OUString("PrinterName"),           HANDLE_PRINTERNAME,         ::cppu::UnoType<OUString>::get(),     0,  0 },
             { OUString("PrinterSetup"),          HANDLE_PRINTERJOB,          ::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
 
             { OUString("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       ::getBooleanCppuType(),                0,  MID_PRINTER },
@@ -182,23 +182,23 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("IsPrintBooklet"),        HANDLE_PRINTBOOKLET,        ::getBooleanCppuType(),                0,  MID_PRINTER },
             { OUString("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   ::getBooleanCppuType(),                0,  MID_PRINTER },
             { OUString("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { OUString("PrintQuality"),          HANDLE_PRINTQUALITY,        ::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
-            { OUString("ColorTableURL"),         HANDLE_COLORTABLEURL,       ::getCppuType((const OUString*)0),     0,  0 },
-            { OUString("DashTableURL"),          HANDLE_DASHTABLEURL,        ::getCppuType((const OUString*)0),     0,  0 },
-            { OUString("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     ::getCppuType((const OUString*)0),     0,  0 },
-            { OUString("HatchTableURL"),         HANDLE_HATCHTABLEURL,       ::getCppuType((const OUString*)0),     0,  0 },
-            { OUString("GradientTableURL"),      HANDLE_GRADIENTTABLEURL,    ::getCppuType((const OUString*)0),     0,  0 },
-            { OUString("BitmapTableURL"),        HANDLE_BITMAPTABLEURL,      ::getCppuType((const OUString*)0),     0,  0 },
+            { OUString("PrintQuality"),          HANDLE_PRINTQUALITY,        ::cppu::UnoType<sal_Int32>::get(),    0,  MID_PRINTER },
+            { OUString("ColorTableURL"),         HANDLE_COLORTABLEURL,       ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { OUString("DashTableURL"),          HANDLE_DASHTABLEURL,        ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { OUString("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { OUString("HatchTableURL"),         HANDLE_HATCHTABLEURL,       ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { OUString("GradientTableURL"),      HANDLE_GRADIENTTABLEURL,    ::cppu::UnoType<OUString>::get(),     0,  0 },
+            { OUString("BitmapTableURL"),        HANDLE_BITMAPTABLEURL,      ::cppu::UnoType<OUString>::get(),     0,  0 },
 
             { OUString("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      ::getCppuType((const Reference< XForbiddenCharacters >*)0),    0, 0 },
             { OUString("ApplyUserData"),         HANDLE_APPLYUSERDATA,       ::getBooleanCppuType(),                0,  0 },
 
-            { OUString("PageNumberFormat"),      HANDLE_PAGENUMFMT,          ::getCppuType((const sal_Int32*)0),    0,  0 },
+            { OUString("PageNumberFormat"),      HANDLE_PAGENUMFMT,          ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
             { OUString("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  ::getBooleanCppuType(),                0,  0 },
-            { OUString("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      ::getCppuType((sal_Int16*)0),          0,  0 },
+            { OUString("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      ::cppu::UnoType<sal_Int16>::get(),          0,  0 },
             { OUString("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          ::getBooleanCppuType(),                0,  0 },
             { OUString("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  ::getBooleanCppuType(),                0,  0 },
-            { OUString("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,::getCppuType((const sal_Int16*)0), 0,  0 },
+            { OUString("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,::cppu::UnoType<sal_Int16>::get(), 0,  0 },
             // --> #i33095#
             { OUString("LoadReadonly"),          HANDLE_LOAD_READONLY,       ::getBooleanCppuType(),                0,  0 },
             { OUString("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        ::getBooleanCppuType(),                0,  0 },

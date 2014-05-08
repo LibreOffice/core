@@ -262,7 +262,7 @@ sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (Runtim
 // XElementAccess
 Type SAL_CALL NamespaceMap::getElementType() throw (RuntimeException, std::exception)
 {
-    return ::getCppuType( (const OUString*) 0 );
+    return ::cppu::UnoType<OUString>::get();
 }
 
 sal_Bool SAL_CALL NamespaceMap::hasElements() throw (RuntimeException, std::exception)

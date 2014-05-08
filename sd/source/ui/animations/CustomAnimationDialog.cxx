@@ -1800,7 +1800,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
     if( pSet->getPropertyState( nHandleRepeat ) != STLPropertyState_AMBIGUOUS )
     {
         Any aRepeatCount( pSet->getPropertyValue( nHandleRepeat ) );
-        if( (aRepeatCount.getValueType() == ::getCppuType((const double*)0)) || !aRepeatCount.hasValue() )
+        if( (aRepeatCount.getValueType() == ::cppu::UnoType<double>::get()) || !aRepeatCount.hasValue() )
         {
             double fRepeat = 0.0;
             if( aRepeatCount.hasValue() )

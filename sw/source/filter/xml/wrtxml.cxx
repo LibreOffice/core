@@ -105,13 +105,13 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     comphelper::PropertyMapEntry const aInfoMap[] =
     {
         { OUString("ProgressRange"), 0,
-              ::getCppuType((sal_Int32*)0),
+              ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("ProgressMax"), 0,
-              ::getCppuType((sal_Int32*)0),
+              ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("ProgressCurrent"), 0,
-              ::getCppuType((sal_Int32*)0),
+              ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("WrittenNumberStyles"), 0,
               ::getCppuType((uno::Sequence<sal_Int32> *)0),

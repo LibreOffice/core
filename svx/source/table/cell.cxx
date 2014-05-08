@@ -76,10 +76,10 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType< ::com::sun::star::style::XStyle >::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          ::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
         { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
-        { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
         { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextVerticalAdjust*)0),    0,      0},\
         { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          ::getBooleanCppuType(),        0,      0}, \
 
@@ -988,7 +988,7 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMa
     if( pMap->aType != aAny.getValueType() )
     {
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-        if( ( pMap->aType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+        if( ( pMap->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
         {
             sal_Int32 nValue = 0;
             aAny >>= nValue;

@@ -727,7 +727,7 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
     aRet[0].MimeType = m_aMimeType;
     if( m_bIsBody )
     {
-        aRet[0].DataType = getCppuType((OUString*)0);
+        aRet[0].DataType = cppu::UnoType<OUString>::get();
     }
     else
     {

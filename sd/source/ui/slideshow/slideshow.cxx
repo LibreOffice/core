@@ -111,9 +111,9 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
     static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =
     {
         { OUString("AllowAnimations"),          ATTR_PRESENT_ANIMATION_ALLOWED, ::getBooleanCppuType(),                0, 0 },
-        { OUString("CustomShow"),               ATTR_PRESENT_CUSTOMSHOW,        ::getCppuType((const OUString*)0),     0, 0 },
-        { OUString("Display"),                  ATTR_PRESENT_DISPLAY,           ::getCppuType((const sal_Int32*)0),    0, 0 },
-        { OUString("FirstPage"),                ATTR_PRESENT_DIANAME,           ::getCppuType((const OUString*)0),     0, 0 },
+        { OUString("CustomShow"),               ATTR_PRESENT_CUSTOMSHOW,        ::cppu::UnoType<OUString>::get(),     0, 0 },
+        { OUString("Display"),                  ATTR_PRESENT_DISPLAY,           ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
+        { OUString("FirstPage"),                ATTR_PRESENT_DIANAME,           ::cppu::UnoType<OUString>::get(),     0, 0 },
         { OUString("IsAlwaysOnTop"),            ATTR_PRESENT_ALWAYS_ON_TOP,     ::getBooleanCppuType(),                0, 0 },
         { OUString("IsAutomatic"),              ATTR_PRESENT_MANUEL,            ::getBooleanCppuType(),                0, 0 },
         { OUString("IsEndless"),                ATTR_PRESENT_ENDLESS,           ::getBooleanCppuType(),                0, 0 },
@@ -122,7 +122,7 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
         { OUString("IsMouseVisible"),           ATTR_PRESENT_MOUSE,             ::getBooleanCppuType(),                0, 0 },
         { OUString("IsShowLogo"),               ATTR_PRESENT_SHOW_PAUSELOGO,    ::getBooleanCppuType(),                0, 0 },
         { OUString("IsTransitionOnClick"),      ATTR_PRESENT_CHANGE_PAGE,       ::getBooleanCppuType(),                0, 0 },
-        { OUString("Pause"),                    ATTR_PRESENT_PAUSE_TIMEOUT,     ::getCppuType((const sal_Int32*)0),    0, 0 },
+        { OUString("Pause"),                    ATTR_PRESENT_PAUSE_TIMEOUT,     ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         { OUString("StartWithNavigator"),       ATTR_PRESENT_NAVIGATOR,         ::getBooleanCppuType(),                0, 0 },
         { OUString("UsePen"),                   ATTR_PRESENT_PEN,               ::getBooleanCppuType(),                0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }

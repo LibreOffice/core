@@ -441,9 +441,9 @@ bool SdXMLFilter::Import( ErrCode& nError )
     PropertyMapEntry const aImportInfoMap[] =
     {
         // necessary properties for XML progress bar at load time
-        { OUString("ProgressRange"),   0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressMax"),     0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressCurrent"), 0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("ProgressRange"),   0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("ProgressMax"),     0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("Preview"),         0, ::getCppuType((const sal_Bool*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("PageLayouts"), 0, ::getCppuType((const uno::Reference< container::XNameAccess >*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
         { OUString("PrivateData"), 0,
@@ -819,12 +819,12 @@ bool SdXMLFilter::Export()
         /** property map for export info set */
         PropertyMapEntry const aExportInfoMap[] =
         {
-            { OUString("ProgressRange"),   0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressMax"),     0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressCurrent"), 0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressRange"),   0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressMax"),     0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("UsePrettyPrinting"),0, ::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
-            { OUString("PageLayoutNames"), 0, ::getCppuType((const OUString*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+            { OUString("PageLayoutNames"), 0, ::cppu::UnoType<OUString>::get(),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
             { OUString("BaseURI"), 0,
                   ::getCppuType( (OUString *)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
