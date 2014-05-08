@@ -21,7 +21,9 @@ endif
 $(eval $(call gb_UnpackedTarball_set_patchlevel,clucene,0))
 
 # clucene-multimap-put.patch was proposed upstream, see
-# http://sourceforge.net/mailarchive/message.php?msg_id=29143260
+#  http://sourceforge.net/mailarchive/message.php?msg_id=29143260
+# clucene-mutex.patch was proposed upstream, see
+#  http://sourceforge.net/mailarchive/message.php?msg_id=32314782
 $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-debug.patch \
 	external/clucene/patches/clucene-multimap-put.patch \
