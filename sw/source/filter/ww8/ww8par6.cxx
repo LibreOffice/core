@@ -121,8 +121,10 @@ ColorData SwWW8ImplReader::GetCol(sal_uInt8 nIco)
         COL_CYAN, COL_GREEN, COL_MAGENTA, COL_RED, COL_BROWN, COL_GRAY,
         COL_LIGHTGRAY
     };
-
-    return eSwWW8ColA[nIco];
+    SAL_WARN_IF(
+        nIco >= SAL_N_ELEMENTS(eSwWW8ColA), "sw.ww8",
+        "ico " << sal_uInt32(nIco) << " >= " << SAL_N_ELEMENTS(eSwWW8ColA));
+    return nIco < SAL_N_ELEMENTS(eSwWW8ColA) ? eSwWW8ColA[nIco] : COL_AUTO;
 }
 
 inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
