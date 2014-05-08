@@ -432,7 +432,7 @@ SwRect SwTxtFrm::Paint()
             pRepaint->Left( pRepaint->GetOfst() );
 
         l = pRepaint->GetRightOfst();
-        if( l && ( pRepaint->GetOfst() || l > pRepaint->Right() ) )
+        if( l && l > pRepaint->Right() )
              pRepaint->Right( l );
         pRepaint->SetOfst( 0 );
         aRet = *pRepaint;
