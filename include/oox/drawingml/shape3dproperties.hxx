@@ -53,6 +53,10 @@ struct Shape3DProperties
     RotationProperties maCameraRotation;
     RotationProperties maLightRigRotation;
 
+    OptValue< sal_Int32 > mnExtrusionH;
+    OptValue< sal_Int32 > mnContourW;
+    OptValue< sal_Int32 > mnShapeZ;
+
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const Shape3DProperties& rSourceProps );
 
@@ -62,6 +66,7 @@ struct Shape3DProperties
 
     css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
+    css::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes();
 };
 
 

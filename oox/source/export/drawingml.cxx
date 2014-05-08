@@ -2277,7 +2277,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         return;
 
     // extract the relevant properties from the grab bag
-    Sequence< PropertyValue > aGrabBag, aEffectProps, aLightRigProps;
+    Sequence< PropertyValue > aGrabBag, aEffectProps, aLightRigProps, aShape3DProps;
     mAny >>= aGrabBag;
     for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
         if( aGrabBag[i].Name == "3DEffectProperties" )
@@ -2290,10 +2290,12 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
                     a3DEffectProps[j].Value >>= aEffectProps;
                 else if( a3DEffectProps[j].Name == "LightRig" )
                     a3DEffectProps[j].Value >>= aLightRigProps;
+                else if( a3DEffectProps[j].Name == "Shape3D" )
+                    a3DEffectProps[j].Value >>= aShape3DProps;
             }
             break;
         }
-    if( aEffectProps.getLength() == 0 && aLightRigProps.getLength() == 0 )
+    if( aEffectProps.getLength() == 0 && aLightRigProps.getLength() == 0 && aShape3DProps.getLength() == 0 )
         return;
 
     bool bCameraRotationPresent = false;
@@ -2402,6 +2404,30 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         mpFS->singleElementNS( XML_a, XML_lightRig, XML_rig, "threePt", XML_dir, "t", FSEND );
 
     mpFS->endElementNS( XML_a, XML_scene3d );
+
+    if( aShape3DProps.getLength() == 0 )
+        return;
+
+    sax_fastparser::FastAttributeList *aShape3DAttrList = mpFS->createAttrList();
+    for( sal_Int32 i=0; i < aShape3DProps.getLength(); ++i )
+    {
+        if( aShape3DProps[i].Name == "extrusionH" || aShape3DProps[i].Name == "contourW" || aShape3DProps[i].Name == "z" )
+        {
+            sal_Int32 nVal = 0, nToken = XML_none;
+            aShape3DProps[i].Value >>= nVal;
+            if( aShape3DProps[i].Name == "extrusionH" )
+                nToken = XML_extrusionH;
+            else if( aShape3DProps[i].Name == "contourW" )
+                nToken = XML_contourW;
+            else if( aShape3DProps[i].Name == "z" )
+                nToken = XML_z;
+            aShape3DAttrList->add( nToken, OString::number( nVal ).getStr() );
+        }
+    }
+
+    sax_fastparser::XFastAttributeListRef xAttrList( aShape3DAttrList );
+    mpFS->startElementNS( XML_a, XML_sp3d, xAttrList );
+    mpFS->endElementNS( XML_a, XML_sp3d );
 }
 
 }

@@ -68,6 +68,18 @@ ContextHandlerRef Scene3DPropertiesContext::onCreateContext( sal_Int32 aElementT
     return 0;
 }
 
+Shape3DPropertiesContext::Shape3DPropertiesContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw()
+: ContextHandler2( rParent )
+, mr3DProperties( r3DProperties )
+{
+    if( rAttribs.hasAttribute( XML_extrusionH ) )
+        mr3DProperties.mnExtrusionH = rAttribs.getInteger( XML_extrusionH, 0 );
+    if( rAttribs.hasAttribute( XML_contourW ) )
+        mr3DProperties.mnContourW = rAttribs.getInteger( XML_contourW, 0 );
+    if( rAttribs.hasAttribute( XML_z ) )
+        mr3DProperties.mnShapeZ = rAttribs.getInteger( XML_z, 0 );
+}
+
 Scene3DRotationPropertiesContext::Scene3DRotationPropertiesContext( ContextHandler2Helper& rParent, RotationProperties& rRotationProperties ) throw()
 : ContextHandler2( rParent )
 , mrRotationProperties( rRotationProperties )

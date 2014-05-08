@@ -253,6 +253,32 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getLightRigAt
     return aSeq;
 }
 
+css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes()
+{
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(3);
+    sal_Int32 nSize = 0;
+    if( mnExtrusionH.has() )
+    {
+        aSeq[nSize].Name = "extrusionH";
+        aSeq[nSize].Value = css::uno::Any( mnExtrusionH.use() );
+        nSize++;
+    }
+    if( mnContourW.has() )
+    {
+        aSeq[nSize].Name = "contourW";
+        aSeq[nSize].Value = css::uno::Any( mnContourW.use() );
+        nSize++;
+    }
+    if( mnShapeZ.has() )
+    {
+        aSeq[nSize].Name = "z";
+        aSeq[nSize].Value = css::uno::Any( mnShapeZ.use() );
+        nSize++;
+    }
+    aSeq.realloc( nSize );
+    return aSeq;
+}
+
 
 
 } // namespace drawingml

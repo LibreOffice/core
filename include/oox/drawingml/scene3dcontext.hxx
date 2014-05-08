@@ -49,6 +49,15 @@ private:
     Shape3DProperties& mr3DProperties;
 };
 
+class Shape3DPropertiesContext : public ::oox::core::ContextHandler2
+{
+public:
+    Shape3DPropertiesContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw();
+
+private:
+    Shape3DProperties& mr3DProperties;
+};
+
 } }
 
 #endif // INCLUDED_OOX_DRAWINGML_SCENE3DCONTEXT_HXX

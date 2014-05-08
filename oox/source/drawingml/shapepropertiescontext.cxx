@@ -99,8 +99,9 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
         return new Scene3DPropertiesContext( *this, mrShape.get3DProperties() );
         break;
 
-    // todo
+    // todo not supported by core, only for preservation via grab bags
     case A_TOKEN( sp3d ):       // CT_Shape3D
+        return new Shape3DPropertiesContext( *this, rAttribs, mrShape.get3DProperties() );
         break;
     }
 
