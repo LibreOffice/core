@@ -93,9 +93,6 @@ namespace cairocanvas
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),
                                         aPixelSize.Height() );
 
-        ENSURE_ARG_OR_THROW( pParentWindow != NULL,
-                             "CairoSpriteCanvas::initialize: invalid Window pointer" );
-
         // setup helper
         maDeviceHelper.init( *pParentWindow,
                              *this,
