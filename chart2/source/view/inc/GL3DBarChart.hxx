@@ -25,11 +25,7 @@ namespace opengl3D {
 class Renderable3DObject;
 class OpenGL3DRenderer;
 
-namespace temporary {
-
-class TemporaryContext;
-
-} }
+}
 
 class GL3DBarChart
 {
