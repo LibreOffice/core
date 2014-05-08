@@ -772,10 +772,10 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     {
         ret = JFW_PLUGIN_E_ERROR;
     }
-#ifdef MACOSX
     //We can have the situation that the JavaVM runtime library is not
     //contained within JAVA_HOME. Then the check for JAVA_HOME would return
     //true although the runtime library may not be loadable.
+    //Or the JAVA_HOME directory of a deinstalled JRE left behind.
     if (ret == JFW_PLUGIN_E_NONE && *exist == sal_True)
     {
         OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
@@ -803,7 +803,6 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
                        + sRuntimeLib + " \n");
         }
     }
-#endif
     return ret;
 }
 
