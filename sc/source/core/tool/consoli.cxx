@@ -70,16 +70,9 @@ void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
 }
 
 template< typename T >
-static void lcl_AddString( OUString*& pData, T& nCount, const OUString& rInsert )
+static void lcl_AddString( ::std::vector<OUString>& rData, T& nCount, const OUString& rInsert )
 {
-    OUString* pOldData = pData;
-    pData = new OUString[ nCount+1 ];
-    if (pOldData)
-    {
-        memcpy( pData, pOldData, nCount * sizeof(OUString) );
-        delete[] pOldData;
-    }
-    pData[nCount] = rInsert;
+    rData.push_back( rInsert);
     ++nCount;
 }
 
@@ -95,11 +88,7 @@ ScConsData::ScConsData() :
     ppCount(NULL),
     ppSumSqr(NULL),
     ppRefs(NULL),
-    mpColHeaders(NULL),
-    mpRowHeaders(NULL),
     nDataCount(0),
-    nTitleCount(0),
-    mpTitles(NULL),
     ppTitlePos(NULL),
     bCornerUsed(false)
 {
@@ -140,16 +129,12 @@ void ScConsData::DeleteData()
     DELETEARR( ppSumSqr,nColCount );
     DELETEARR( ppUsed,  nColCount );                // erst nach ppRefs !!!
     DELETEARR( ppTitlePos, nRowCount );
-    delete[] mpColHeaders;
-    mpColHeaders = NULL;
-    delete[] mpRowHeaders;
-    mpRowHeaders = NULL;
-    delete[] mpTitles;
-    mpTitles = NULL;
-    nTitleCount = 0;
+    ::std::vector<OUString>().swap( maColHeaders);
+    ::std::vector<OUString>().swap( maRowHeaders);
+    ::std::vector<OUString>().swap( maTitles);
     nDataCount = 0;
 
-    if (bColByName) nColCount = 0;                  // sonst stimmt mpColHeaders nicht
+    if (bColByName) nColCount = 0;                  // sonst stimmt maColHeaders nicht
     if (bRowByName) nRowCount = 0;
 
     bCornerUsed = false;
@@ -256,10 +241,10 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
-                    if ( mpColHeaders[i] == aTitle )
+                    if ( maColHeaders[i] == aTitle )
                         bFound = true;
                 if (!bFound)
-                    lcl_AddString( mpColHeaders, nColCount, aTitle );
+                    lcl_AddString( maColHeaders, nColCount, aTitle );
             }
         }
     }
@@ -273,10 +258,10 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
-                    if ( mpRowHeaders[i] == aTitle )
+                    if ( maRowHeaders[i] == aTitle )
                         bFound = true;
                 if (!bFound)
-                    lcl_AddString( mpRowHeaders, nRowCount, aTitle );
+                    lcl_AddString( maRowHeaders, nRowCount, aTitle );
             }
         }
     }
@@ -289,7 +274,8 @@ void ScConsData::AddName( const OUString& rName )
 
     if (bReference)
     {
-        lcl_AddString( mpTitles, nTitleCount, rName );
+        maTitles.push_back( rName);
+        size_t nTitleCount = maTitles.size();
 
         for (nArrY=0; nArrY<nRowCount; nArrY++)
         {
@@ -528,7 +514,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
-                    if ( mpColHeaders[i] == aTitle )
+                    if ( maColHeaders[i] == aTitle )
                     {
                         nPos = static_cast<SCCOL>(i);
                         bFound = true;
@@ -549,7 +535,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
-                    if ( mpRowHeaders[i] == aTitle )
+                    if ( maRowHeaders[i] == aTitle )
                     {
                         nPos = static_cast<SCROW>(i);
                         bFound = true;
@@ -661,10 +647,10 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
     if (bColByName)
         for (SCSIZE i=0; i<nColCount; i++)
-            pDestDoc->SetString( sal::static_int_cast<SCCOL>(nStartCol+i), nRow, nTab, mpColHeaders[i] );
+            pDestDoc->SetString( sal::static_int_cast<SCCOL>(nStartCol+i), nRow, nTab, maColHeaders[i] );
     if (bRowByName)
         for (SCSIZE j=0; j<nRowCount; j++)
-            pDestDoc->SetString( nCol, sal::static_int_cast<SCROW>(nStartRow+j), nTab, mpRowHeaders[j] );
+            pDestDoc->SetString( nCol, sal::static_int_cast<SCROW>(nStartRow+j), nTab, maRowHeaders[j] );
 
     nCol = nStartCol;
     nRow = nStartRow;
@@ -774,7 +760,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                 //  Zwischentitel
 
-                if (ppTitlePos && mpTitles && mpRowHeaders)
+                if (ppTitlePos && !maTitles.empty() && !maRowHeaders.empty())
                 {
                     OUString aDelim( " / " );
                     for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
@@ -786,9 +772,9 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 bDo = false;                                    // leer
                         if ( bDo && nTPos < nNeeded )
                         {
-                            aString =  mpRowHeaders[nArrY];
+                            aString =  maRowHeaders[nArrY];
                             aString += aDelim;
-                            aString += mpTitles[nPos];
+                            aString += maTitles[nPos];
                             pDestDoc->SetString( nCol-1, nRow+nArrY+nTPos, nTab, aString );
                         }
                     }
