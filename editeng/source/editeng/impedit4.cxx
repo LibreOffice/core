@@ -2078,8 +2078,8 @@ void ImpEditEngine::AddPortionIterated(
                         _pFieldAttr->GetStart() != _pFieldAttr->GetEnd() &&
                         _pFieldAttr->Which() == EE_FEATURE_FIELD;
                 //on every new field move the end position
-                if(bIsField)
-                    nEndField = bIsField ? _pFieldAttr->GetEnd() : USHRT_MAX;
+                if (bIsField)
+                    nEndField = _pFieldAttr->GetEnd();
 
                 LanguageType eCurLanguage = GetLanguage( aCursor );
                 if(eCurLanguage != eStartLanguage || bIsField || bIsEndField)
