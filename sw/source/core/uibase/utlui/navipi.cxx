@@ -692,6 +692,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentToolBox.SetHelpId(HID_NAVIGATOR_TOOLBOX );
     aGlobalToolBox.SetHelpId(HID_NAVIGATOR_GLOBAL_TOOLBOX);
     aDocListBox.SetHelpId(HID_NAVIGATOR_LISTBOX );
+    aDocListBox.SetDropDownLineCount(9);
 
     nDocLBIniHeight = aDocListBox.GetSizePixel().Height();
     nZoomOutInit = nZoomOut = Resource::ReadShortRes();
