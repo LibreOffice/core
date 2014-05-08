@@ -20,6 +20,7 @@
 #define INCLUDED_TOOLS_URLOBJ_HXX
 
 #include <tools/toolsdllapi.h>
+#include <tools/inetmime.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
@@ -973,7 +974,6 @@ public:
     static sal_uInt32 scanDomain(sal_Unicode const *& rBegin,
                                  sal_Unicode const * pEnd,
                                  bool bEager = true);
-
     // OBSOLETE Hierarchical Path:
 
     OUString GetPartBeforeLastName(DecodeMechanism eMechanism

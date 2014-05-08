@@ -437,6 +437,41 @@ public:
      */
     static inline sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
                                                   sal_uInt32 nUTF32);
+
+    /** Parse the body of an RFC 2045 Content-Type header field.
+
+        @param pBegin  The range (that must be valid) from non-null pBegin,
+        inclusive. to non-null pEnd, exclusive, forms the body of the
+        Content-Type header field.  It must be of the form
+
+          token "/" token *(";" token "=" (token / quoted-string))
+
+        with intervening linear white space and comments (cf. RFCs 822, 2045).
+        The RFC 2231 extension are supported.  The encoding of rMediaType
+        should be US-ASCII, but any Unicode values in the range U+0080..U+FFFF
+        are interpretet 'as appropriate.'
+
+        @param pType  If not null, returns the type (the first of the above
+        tokens), in US-ASCII encoding and converted to lower case.
+
+        @param pSubType  If not null, returns the sub-type (the second of the
+        above tokens), in US-ASCII encoding and converted to lower case.
+
+        @param pParameters  If not null, returns the parameters as a list of
+        INetContentTypeParameters (the attributes are in US-ASCII encoding and
+        converted to lower case, the values are in Unicode encoding).  If
+        null, only the syntax of the parameters is checked, but they are not
+        returned.
+
+        @return  Null if the syntax of the field body is incorrect (i.e., does
+        not start with type and sub-type tokens).  Otherwise, a pointer past the
+        longest valid input prefix.  If null is returned, none of the output
+        parameters will be modified.
+     */
+    static sal_Unicode const * scanContentType(
+        sal_Unicode const *pBegin, sal_Unicode const * pEnd,
+        OUString * pType = 0, OUString * pSubType = 0,
+        INetContentTypeParameterList * pParameters = 0);
 };
 
 // static
@@ -650,6 +685,48 @@ inline sal_Unicode * INetMIME::putUTF32Character(sal_Unicode * pBuffer,
         *pBuffer++ = sal_Unicode(0xDC00 | (nUTF32 & 0x3FF));
     }
     return pBuffer;
+}
+
+// static
+inline sal_Unicode const * INetMIME::scanContentType(
+    sal_Unicode const * pBegin, sal_Unicode const * pEnd, OUString * pType,
+    OUString * pSubType, INetContentTypeParameterList * pParameters)
+{
+    sal_Unicode const * p = INetMIME::skipLinearWhiteSpaceComment(pBegin, pEnd);
+    sal_Unicode const * pTypeBegin = p;
+    while (p != pEnd && INetMIME::isTokenChar(*p))
+    {
+        ++p;
+    }
+    if (p == pTypeBegin)
+        return 0;
+    sal_Unicode const * pTypeEnd = p;
+
+    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
+    if (p == pEnd || *p++ != '/')
+        return 0;
+
+    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
+    sal_Unicode const * pSubTypeBegin = p;
+    while (p != pEnd && INetMIME::isTokenChar(*p))
+    {
+        ++p;
+    }
+    if (p == pSubTypeBegin)
+        return 0;
+    sal_Unicode const * pSubTypeEnd = p;
+
+    if (pType != 0)
+    {
+        *pType = OUString(pTypeBegin, pTypeEnd - pTypeBegin).toAsciiLowerCase();
+    }
+    if (pSubType != 0)
+    {
+        *pSubType = OUString(pSubTypeBegin, pSubTypeEnd - pSubTypeBegin)
+            .toAsciiLowerCase();
+    }
+
+    return INetMIME::scanParameters(p, pEnd, pParameters);
 }
 
 class INetMIMEOutputSink

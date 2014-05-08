@@ -434,11 +434,11 @@ OUString OFileAccess::getContentType( const OUString& FileURL )
     return aTypeStr;
 }
 
-DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
+::com::sun::star::util::DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
-    DateTime aDateTime;
+    ::com::sun::star::util::DateTime aDateTime;
 
     Reference< XCommandEnvironment > aCmdEnv;
     ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );

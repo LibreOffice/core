@@ -5089,6 +5089,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
     return nUTF32;
 }
 
+
 // static
 sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
                                      sal_Unicode const * pEnd,
