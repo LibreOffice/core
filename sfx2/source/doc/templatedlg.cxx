@@ -1263,6 +1263,8 @@ void SfxTemplateManagerDlg::OnFolderDelete()
                 aFolderList = aFolderList + "\n" + (*pIter)->maTitle;
 
             ++pIter;
+            if (pIter == aSelFolders.end())
+                break;
         }
     }
 
