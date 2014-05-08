@@ -1441,7 +1441,8 @@ elsif ($platform =~ m/cygwin/)
 elsif ($platform =~ m/darwin/)
 {
     $FRAMEWORKSHOME = "@MACOSX_SDK_PATH@/System/Library/Frameworks";
-    my $STLINC .= $I."/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/c++/v1/";
+    chomp( my $TOOLSPATH = `xcode-select --print-path` );
+    my $STLINC .= $I."$TOOLSPATH/Toolchains/XcodeDefault.xctoolchain/usr/lib/c++/v1/";
     $SOLARINC .= $STLINC . $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
     $GUIBASE  = "aqua";
 }
