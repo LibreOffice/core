@@ -622,7 +622,7 @@ void OReportSection::createDefault(const OUString& _sType)
 
 void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
 {
-    sal_Bool bAttributesAppliedFromGallery = sal_False;
+    bool bAttributesAppliedFromGallery = false;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
@@ -666,7 +666,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
                                 double a = nAngle * F_PI18000;
                                 _pObj->NbcRotate( _pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                             }
-                            bAttributesAppliedFromGallery = sal_True;
+                            bAttributesAppliedFromGallery = true;
                         }
                     }
                     break;

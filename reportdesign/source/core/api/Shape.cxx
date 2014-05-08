@@ -57,7 +57,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
-,m_bOpaque(sal_False)
+,m_bOpaque(false)
 {
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
 }
@@ -70,7 +70,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
-,m_bOpaque(sal_False)
+,m_bOpaque(false)
 ,m_sServiceName(_sServiceName)
 {
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());

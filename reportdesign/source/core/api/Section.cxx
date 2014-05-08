@@ -117,12 +117,12 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 ,m_nBackgroundColor(COL_TRANSPARENT)
 ,m_nForceNewPage(report::ForceNewPage::NONE)
 ,m_nNewRowOrCol(report::ForceNewPage::NONE)
-,m_bKeepTogether(sal_False)
+,m_bKeepTogether(false)
 ,m_bCanGrow(false)
 ,m_bCanShrink(false)
-,m_bRepeatSection(sal_False)
-,m_bVisible(sal_True)
-,m_bBacktransparent(sal_True)
+,m_bRepeatSection(false)
+,m_bVisible(true)
+,m_bBacktransparent(true)
 ,m_bInRemoveNotify(false)
 ,m_bInInsertNotify(false)
 {
@@ -261,7 +261,7 @@ void SAL_CALL OSection::setHeight( ::sal_uInt32 _height ) throw (uno::RuntimeExc
 
 void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException, std::exception)
 {
-    sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
+    bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
     setBackTransparent(bTransparent);
     if ( !bTransparent )
         set(PROPERTY_BACKCOLOR,_backgroundcolor,m_nBackgroundColor);

@@ -55,7 +55,7 @@ public:
     ::std::vector< uno::Reference< container::XChild> > m_aSections;
     ::osl::Mutex                                        m_aMutex;
     oslInterlockedCount                                 m_nLocks;
-    sal_Bool                                            m_bReadOnly;
+    bool                                                m_bReadOnly;
 
     OXReportControllerObserverImpl(const OReportController& _rController);
     ~OXReportControllerObserverImpl();
@@ -66,7 +66,7 @@ public:
     OXReportControllerObserverImpl::OXReportControllerObserverImpl(const OReportController& _rController)
             :m_rReportController(_rController)
             ,m_nLocks(0)
-            ,m_bReadOnly(sal_False)
+            ,m_bReadOnly(false)
     {
     }
 

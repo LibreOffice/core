@@ -985,7 +985,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    sal_Bool bForceBroadcast = sal_False;
+    bool bForceBroadcast = false;
     switch(_nId)
     {
         case SID_RPT_TEXTDOCUMENT:
@@ -1420,7 +1420,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 if (aArgs.getLength() == 1 )
                     aArgs[0].Value >>= xSection;
                 openPageDialog(xSection);
-                bForceBroadcast = sal_True;
+                bForceBroadcast = true;
             }
             break;
         case SID_SORTINGANDGROUPING:
@@ -1438,7 +1438,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                         xSection->setBackColor( aColor );
                     }
                 }
-                bForceBroadcast = sal_True;
+                bForceBroadcast = true;
             }
             break;
         case SID_ATTR_CHAR_WEIGHT:
@@ -1466,7 +1466,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 const SequenceAsHashMap aMap(aArgs);
                 const util::Color aColor = aMap.getUnpackedValueOrDefault(PROPERTY_FONTCOLOR,util::Color());
                 impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARCOLOR,uno::makeAny(aColor),aArgs);
-                bForceBroadcast = sal_True;
+                bForceBroadcast = true;
             }
             break;
         case SID_ATTR_CHAR_FONT:
@@ -2191,7 +2191,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
-        sal_Bool bShow = sal_False;
+        bool bShow = false;
         evt.NewValue >>= bShow;
         if ( evt.Source == m_xReportDefinition )
         {
@@ -2484,7 +2484,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_PAGE,true,&pItem))
                     {
                         const SvxPageItem* pPageItem = static_cast<const SvxPageItem*>(pItem);
-                        xProp->setPropertyValue(PROPERTY_ISLANDSCAPE,uno::makeAny(static_cast<sal_Bool>(pPageItem->IsLandscape())));
+                        xProp->setPropertyValue(PROPERTY_ISLANDSCAPE,uno::makeAny(pPageItem->IsLandscape()));
                         xProp->setPropertyValue(PROPERTY_NUMBERINGTYPE,uno::makeAny(static_cast<sal_Int16>(pPageItem->GetNumType())));
                         uno::Any aValue;
                         pPageItem->QueryValue(aValue,MID_PAGE_LAYOUT);
@@ -3018,7 +3018,7 @@ void OReportController::insertGraphic()
 
         if ( ERRCODE_NONE == aDialog.Execute() )
         {
-            sal_Bool bLink = sal_True;
+            bool bLink = true;
             xController->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
             uno::Sequence<beans::PropertyValue> aArgs(2);
             aArgs[0].Name = PROPERTY_IMAGEURL;
@@ -3042,7 +3042,7 @@ void OReportController::insertGraphic()
 sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if ( getDesignView() )
     {
         getDesignView()->unmarkAllObjects(NULL);
@@ -3250,13 +3250,13 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     uno::Reference< report::XSection> xSection = aMap.getUnpackedValueOrDefault(PROPERTY_SECTION,uno::Reference< report::XSection>());
     OUString sFunction;
 
-    sal_Bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE,sal_False);
+    bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE,sal_False);
     if ( bDate )
     {
         sFunction = "TODAY()";
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
-    sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
+    bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
     if ( bTime )
     {
         sFunction = "TIMEVALUE(NOW())";
@@ -3279,7 +3279,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     }
 
     SequenceAsHashMap aMap(_aArgs);
-    sal_Bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
+    bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
 
     OUString sFunction( ModuleRes(STR_RPT_PN_PAGE).toString() );
     sFunction = sFunction.replaceFirst("#PAGENUMBER#", "PageNumber()");
@@ -3290,7 +3290,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
         sFunction = sFunction.replaceFirst("#PAGECOUNT#", "PageCount()");
     }
 
-    sal_Bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON,sal_True);
+    bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON,sal_True);
     createControl(_aArgs,bInPageHeader ? m_xReportDefinition->getPageHeader() : m_xReportDefinition->getPageFooter(),sFunction);
 }
 
@@ -3343,7 +3343,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             // LLA: new feature, add the Label in dependency of the given DND_ACTION one section up, normal or one section down
             sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault("DNDAction", sal_Int8(0));
             pSectionWindow[1] = pSectionWindow[0];
-            sal_Bool bLabelAboveTextField = nDNDAction == DND_ACTION_COPY;
+            bool bLabelAboveTextField = nDNDAction == DND_ACTION_COPY;
             if ( bLabelAboveTextField || nDNDAction == DND_ACTION_LINK )
             {
                 // Add the Label one Section up
@@ -3902,7 +3902,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
     if ( m_xReportDefinition.is() )
     {
         const SequenceAsHashMap aMap(_aArgs);
-        const sal_Bool bSwitchOn = aMap.getUnpackedValueOrDefault(_bHeader ? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON), sal_False);
+        const bool bSwitchOn = aMap.getUnpackedValueOrDefault(_bHeader ? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON), sal_False);
         uno::Reference< report::XGroup> xGroup = aMap.getUnpackedValueOrDefault(PROPERTY_GROUP,uno::Reference< report::XGroup>());
         if ( xGroup.is() )
         {
@@ -3996,7 +3996,7 @@ void OReportController::checkChartEnabled()
             ::utl::OConfigurationTreeRoot aConfiguration(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, sConfigName ) );
 
-            sal_Bool bChartEnabled = sal_False;
+            bool bChartEnabled = false;
             if ( aConfiguration.hasByHierarchicalName(sPropertyName) )
                 aConfiguration.getNodeValue( sPropertyName ) >>= bChartEnabled;
             m_bChartEnabled = bChartEnabled;

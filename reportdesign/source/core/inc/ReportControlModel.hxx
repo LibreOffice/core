@@ -67,13 +67,13 @@ namespace reportdesign
         ::sal_Int16                                         nCharCaseMap;
         ::sal_Int16                                         nCharKerning;
         ::sal_Int8                                          nCharEscapementHeight;
-        sal_Bool                                          m_bBackgroundTransparent;
-        sal_Bool                                          bCharFlash;
-        sal_Bool                                          bCharAutoKerning;
-        sal_Bool                                          bCharCombineIsOn;
-        sal_Bool                                          bCharHidden;
-        sal_Bool                                          bCharShadowed;
-        sal_Bool                                          bCharContoured;
+        bool                                                m_bBackgroundTransparent;
+        bool                                                bCharFlash;
+        bool                                                bCharAutoKerning;
+        bool                                                bCharCombineIsOn;
+        bool                                                bCharHidden;
+        bool                                                bCharShadowed;
+        bool                                                bCharContoured;
         OFormatProperties();
     };
     class OReportControlModel
@@ -91,7 +91,7 @@ namespace reportdesign
         osl::Mutex&                                         m_rMutex;
         OUString                                            aDataField;
         OUString                                            aConditionalPrintExpression;
-        sal_Bool                                            bPrintWhenGroupChange;
+        bool                                                bPrintWhenGroupChange;
 
         OReportControlModel(osl::Mutex& _rMutex
                             ,::com::sun::star::container::XContainer* _pOwner

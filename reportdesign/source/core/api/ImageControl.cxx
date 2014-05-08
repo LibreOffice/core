@@ -118,7 +118,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
-,m_bPreserveIRI(sal_True)
+,m_bPreserveIRI(true)
 {
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
 }
@@ -130,7 +130,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
-,m_bPreserveIRI(sal_True)
+,m_bPreserveIRI(true)
 {
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
@@ -244,7 +244,7 @@ void SAL_CALL OImageControl::setHyperLinkName(const OUString & the_value) throw 
 
 void SAL_CALL OImageControl::setControlBackground( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
-    sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
+    bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
     setControlBackgroundTransparent(bTransparent);
     if ( !bTransparent )
         set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,m_aProps.aFormatProperties.nBackgroundColor);

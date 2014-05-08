@@ -585,10 +585,10 @@ struct OReportDefinitionImpl
     ::sal_Int16                                             m_nPageHeaderOption;
     ::sal_Int16                                             m_nPageFooterOption;
     ::sal_Int32                                             m_nCommandType;
-    sal_Bool                                                m_bControllersLocked;
-    sal_Bool                                                m_bModified;
-    sal_Bool                                                m_bEscapeProcessing;
-    sal_Bool                                                m_bSetModifiedEnabled;
+    bool                                                    m_bControllersLocked;
+    bool                                                    m_bModified;
+    bool                                                    m_bEscapeProcessing;
+    bool                                                    m_bSetModifiedEnabled;
 
     OReportDefinitionImpl(::osl::Mutex& _aMutex)
     :m_aStorageChangeListeners(_aMutex)
@@ -604,10 +604,10 @@ struct OReportDefinitionImpl
     ,m_nPageHeaderOption(0)
     ,m_nPageFooterOption(0)
     ,m_nCommandType(sdb::CommandType::TABLE)
-    ,m_bControllersLocked(sal_False)
-    ,m_bModified(sal_False)
-    ,m_bEscapeProcessing(sal_True)
-    ,m_bSetModifiedEnabled( sal_True )
+    ,m_bControllersLocked(false)
+    ,m_bModified(false)
+    ,m_bEscapeProcessing(true)
+    ,m_bSetModifiedEnabled( true )
     {}
 
     OReportDefinitionImpl(::osl::Mutex& _aMutex,const OReportDefinitionImpl& _aCopy)
@@ -1330,14 +1330,14 @@ void SAL_CALL OReportDefinition::lockControllers(  ) throw (uno::RuntimeExceptio
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    m_pImpl->m_bControllersLocked = sal_True;
+    m_pImpl->m_bControllersLocked = true;
 }
 
 void SAL_CALL OReportDefinition::unlockControllers(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    m_pImpl->m_bControllersLocked = sal_False;
+    m_pImpl->m_bControllersLocked = false;
 }
 
 sal_Bool SAL_CALL OReportDefinition::hasControllersLocked(  ) throw (uno::RuntimeException, std::exception)
@@ -1439,7 +1439,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     uno::Sequence < beans::PropertyValue > aProps;
 
     // export sub streams for package, else full stream into a file
-    sal_Bool bWarn = sal_False, bErr = sal_False;
+    bool bWarn = false, bErr = false;
     OUString sWarnFile, sErrFile;
 
     uno::Reference< beans::XPropertySet> xProp(_xStorageToSaveTo,uno::UNO_QUERY);
@@ -1502,7 +1502,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         {
             if( !bWarn )
             {
-                bWarn = sal_True;
+                bWarn = true;
                 sWarnFile = "settings.xml";
             }
         }
@@ -1518,7 +1518,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         {
             if( !bWarn )
             {
-                bWarn = sal_True;
+                bWarn = true;
                 sWarnFile = "meta.xml";
             }
         }
@@ -1534,7 +1534,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         {
             if( !bWarn )
             {
-                bWarn = sal_True;
+                bWarn = true;
                 sWarnFile = "styles.xml";
             }
         }
@@ -1548,7 +1548,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
                 "com.sun.star.comp.report.ExportFilter",
                 aDelegatorArguments, aProps, _xStorageToSaveTo ) )
         {
-            bErr = sal_True;
+            bErr = true;
             sErrFile = "content.xml";
         }
     }
@@ -1573,7 +1573,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
 
     if ( !bErr )
     {
-        sal_Bool bPersist = sal_False;
+        bool bPersist = false;
         if ( _xStorageToSaveTo == m_pImpl->m_xStorage )
             bPersist = m_pImpl->m_pObjectContainer->StoreChildren(true,false);
         else
@@ -1679,12 +1679,12 @@ bool OReportDefinition::WriteThroughComponent(
 
         // encrypt all streams
         xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",
-                                       uno::makeAny( (sal_Bool)sal_True ) );
+                                       uno::makeAny( true ) );
 
         // set buffer and create outputstream
 
         // write the stuff
-        sal_Bool bRet = WriteThroughComponent(
+        bool bRet = WriteThroughComponent(
             xOutputStream, xComponent,
             pServiceName, rArguments, rMediaDesc );
         // finally, commit stream.
@@ -1804,7 +1804,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
     size_t nFirstOpenMode = 0;
     if ( aArguments.has( "ReadOnly" ) )
     {
-        sal_Bool bReadOnly = sal_False;
+        bool bReadOnly = false;
         aArguments.get_ensureType( "ReadOnly", bReadOnly );
         nFirstOpenMode = bReadOnly ? 1 : 0;
     }
@@ -1894,8 +1894,8 @@ sal_Bool SAL_CALL OReportDefinition::disableSetModified(  ) throw (uno::RuntimeE
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
 
-    const sal_Bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
-    m_pImpl->m_bSetModifiedEnabled = sal_False;
+    const bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
+    m_pImpl->m_bSetModifiedEnabled = false;
     return bWasEnabled;
 }
 
@@ -1904,8 +1904,8 @@ sal_Bool SAL_CALL OReportDefinition::enableSetModified(  ) throw (uno::RuntimeEx
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
 
-    const sal_Bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
-    m_pImpl->m_bSetModifiedEnabled = sal_True;
+    const bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
+    m_pImpl->m_bSetModifiedEnabled = true;
     return bWasEnabled;
 }
 
@@ -1935,7 +1935,7 @@ void SAL_CALL OReportDefinition::setModified( sal_Bool _bModified ) throw (beans
 
     if ( m_pImpl->m_pReportModel->IsReadOnly() && _bModified )
         throw beans::PropertyVetoException();
-    if ( m_pImpl->m_bModified != _bModified )
+    if ( (m_pImpl->m_bModified ? 1 : 0) != _bModified )
     {
         m_pImpl->m_bModified = _bModified;
         if ( ( m_pImpl->m_pReportModel->IsChanged() ? 1 : 0 ) != _bModified )

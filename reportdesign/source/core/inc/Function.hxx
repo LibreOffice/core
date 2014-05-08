@@ -45,8 +45,8 @@ namespace reportdesign
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XFunctions >  m_xParent;
         OUString m_sName;
         OUString m_sFormula;
-        sal_Bool      m_bPreEvaluated;
-        sal_Bool      m_bDeepTraversing;
+        bool     m_bPreEvaluated;
+        bool     m_bDeepTraversing;
     private:
         OFunction(const OFunction&);
         OFunction& operator=(const OFunction&);
@@ -54,6 +54,18 @@ namespace reportdesign
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
+                _member = _Value;
+            }
+            l.notify();
+        }
+        void set(  const OUString& _sProperty
+                  ,bool _Value
+                  ,bool& _member)
         {
             BoundListeners l;
             {

@@ -262,7 +262,7 @@ NavigatorTree::~NavigatorTree()
 
 void NavigatorTree::Command( const CommandEvent& rEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     switch( rEvt.GetCommand() )
     {
         case COMMAND_CONTEXTMENU:
@@ -294,7 +294,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
             uno::Reference< report::XFunctionsSupplier> xSupplier(pData->getContent(),uno::UNO_QUERY);
             uno::Reference< report::XFunctions> xFunctions(pData->getContent(),uno::UNO_QUERY);
             uno::Reference< report::XGroup> xGroup(pData->getContent(),uno::UNO_QUERY);
-            sal_Bool bDeleteAllowed = m_rController.isEditable() && (xGroup.is() ||
+            bool bDeleteAllowed = m_rController.isEditable() && (xGroup.is() ||
                                       uno::Reference< report::XFunction>(pData->getContent(),uno::UNO_QUERY).is());
             PopupMenu aContextMenu( ModuleRes( RID_MENU_NAVIGATOR ) );
 
@@ -306,7 +306,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                     sal_uInt16 nId = aContextMenu.GetItemId(i);
 
                     aContextMenu.CheckItem(nId,m_rController.isCommandChecked(nId));
-                    sal_Bool bEnabled = m_rController.isCommandEnabled(nId);
+                    bool bEnabled = m_rController.isCommandEnabled(nId);
                     if ( nId == SID_RPT_NEW_FUNCTION )
                         aContextMenu.EnableItem(nId,m_rController.isEditable() && (xSupplier.is() || xFunctions.is()) );
                     // special condition, check for function and group
@@ -336,7 +336,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                 m_rController.executeUnChecked(nId,aArgs);
             }
 
-            bHandled = sal_True;
+            bHandled = true;
         } break;
     }
 
@@ -647,7 +647,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
     uno::Reference< report::XReportDefinition> xReport(_rEvent.Source,uno::UNO_QUERY);
     if ( xReport.is() )
     {
-        sal_Bool bEnabled = sal_False;
+        bool bEnabled = false;
         _rEvent.NewValue >>= bEnabled;
         if ( bEnabled )
         {

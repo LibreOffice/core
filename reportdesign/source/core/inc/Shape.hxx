@@ -47,8 +47,8 @@ namespace reportdesign
         ::std::auto_ptr< ::comphelper::OPropertyArrayAggregationHelper> m_pAggHelper;
         OReportControlModel                                             m_aProps;
         com::sun::star::drawing::HomogenMatrix3                         m_Transformation;
-        sal_Int32                                                     m_nZOrder;
-        sal_Bool                                                      m_bOpaque;
+        sal_Int32                                                       m_nZOrder;
+        bool                                                            m_bOpaque;
 
         OUString                                                 m_sServiceName;
         OUString                                                 m_CustomShapeEngine;
@@ -63,6 +63,18 @@ namespace reportdesign
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
+                _member = _Value;
+            }
+            l.notify();
+        }
+        void set(  const OUString& _sProperty
+                  ,bool _Value
+                  ,bool& _member)
         {
             BoundListeners l;
             {

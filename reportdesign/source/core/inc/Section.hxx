@@ -66,12 +66,12 @@ namespace reportdesign
         ::sal_Int32                                                                         m_nBackgroundColor;
         ::sal_Int16                                                                         m_nForceNewPage;
         ::sal_Int16                                                                         m_nNewRowOrCol;
-        sal_Bool                                                                          m_bKeepTogether;
-        bool                                                                          m_bCanGrow;
-        bool                                                                          m_bCanShrink;
-        sal_Bool                                                                          m_bRepeatSection;
-        sal_Bool                                                                          m_bVisible;
-        sal_Bool                                                                          m_bBacktransparent;
+        bool                                                                                m_bKeepTogether;
+        bool                                                                                m_bCanGrow;
+        bool                                                                                m_bCanShrink;
+        bool                                                                                m_bRepeatSection;
+        bool                                                                                m_bVisible;
+        bool                                                                                m_bBacktransparent;
         bool                                                                                m_bInRemoveNotify;
         bool                                                                                m_bInInsertNotify;
 
@@ -82,6 +82,21 @@ namespace reportdesign
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                if ( _member != _Value )
+                {
+                    prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
+                    _member = _Value;
+                }
+            }
+            l.notify();
+        }
+        void set(  const OUString& _sProperty
+                  ,bool _Value
+                  ,bool& _member)
         {
             BoundListeners l;
             {

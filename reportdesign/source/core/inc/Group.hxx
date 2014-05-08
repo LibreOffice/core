@@ -69,6 +69,21 @@ namespace reportdesign
             }
             l.notify();
         }
+        void set(  const OUString& _sProperty
+                  ,bool _Value
+                  ,bool& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                if ( _member != _Value )
+                {
+                    prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
+                    _member = _Value;
+                }
+            }
+            l.notify();
+        }
         void setSection(     const OUString& _sProperty
                             ,const bool& _bOn
                             ,const OUString& _sName

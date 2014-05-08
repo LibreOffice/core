@@ -288,7 +288,7 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
 {
     if ( _pMarker )
     {
-        sal_Bool bShow = !_pMarker->isCollapsed();
+        bool bShow = !_pMarker->isCollapsed();
         m_aReportSection.Show(bShow);
         m_aEndMarker.Show(bShow);
         m_aSplitter.Show(bShow);

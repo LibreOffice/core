@@ -45,7 +45,7 @@ namespace reportdesign
         OReportControlModel                 m_aProps;
         OUString                            m_aImageURL;
         sal_Int16                           m_nScaleMode;
-        sal_Bool                            m_bPreserveIRI;
+        bool                                m_bPreserveIRI;
     private:
         OImageControl(const OImageControl&);
         OImageControl& operator=(const OImageControl&);
@@ -53,6 +53,18 @@ namespace reportdesign
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
+                _member = _Value;
+            }
+            l.notify();
+        }
+        void set(  const OUString& _sProperty
+                  ,bool _Value
+                  ,bool& _member)
         {
             BoundListeners l;
             {

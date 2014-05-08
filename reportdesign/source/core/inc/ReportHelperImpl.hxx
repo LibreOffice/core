@@ -158,7 +158,7 @@ void SAL_CALL clazz::setDetailFields( const ::com::sun::star::uno::Sequence< OUS
  \
 void SAL_CALL clazz::setControlBackground( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
-    sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);\
+    bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);\
     setControlBackgroundTransparent(bTransparent);\
     if ( !bTransparent )\
         set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,varName.nBackgroundColor);\

@@ -117,6 +117,19 @@ namespace reportdesign
             l.notify();
         }
 
+        void set(  const OUString& _sProperty
+                  ,bool _Value
+                  ,bool& _member)
+        {
+            BoundListeners l;
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
+                _member = _Value;
+            }
+            l.notify();
+        }
+
         /// write a single XML stream into the package
         bool WriteThroughComponent(
             /// the component we export
