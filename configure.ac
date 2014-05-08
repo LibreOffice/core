@@ -6522,7 +6522,20 @@ _ACEOF
         if ! $CXX $CXXFLAGS $CPPFLAGS $LINKFLAGSSHL -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o libconftest1$DLLPOST >/dev/null 2>&5; then
             gccvisinlineshiddenok=no
         else
-            if ! $CXX $CXXFLAGS $CPPFLAGS $LINKFLAGSSHL -fPIC -fvisibility-inlines-hidden conftestlib2.cc -L. -lconftest1 $LINKFLAGSNOUNDEFS -o libconftest2$DLLPOST >/dev/null 2>&5; then
+            dnl At least Clang -fsanitize=address is known to not work with
+            dnl -z defs (unsetting which makes the test moot, though):
+            my_linkflagsnoundefs=$LINKFLAGSNOUNDEFS
+            if test "$COM_GCC_IS_CLANG" = TRUE; then
+                for i in $CXX; do
+                    case $i in
+                    -fsanitize=address)
+                        my_linkflagsnoundefs=
+                        break
+                        ;;
+                    esac
+                done
+            fi
+            if ! $CXX $CXXFLAGS $CPPFLAGS $LINKFLAGSSHL -fPIC -fvisibility-inlines-hidden conftestlib2.cc -L. -lconftest1 $my_linkflagsnoundefs -o libconftest2$DLLPOST >/dev/null 2>&5; then
                 gccvisinlineshiddenok=no
             fi
         fi
