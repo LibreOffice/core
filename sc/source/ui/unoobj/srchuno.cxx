@@ -47,12 +47,12 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
         {OUString(SC_UNO_SRCHCASE),     0,      getBooleanCppuType(),       0, 0},
         {OUString(SC_UNO_SRCHREGEXP),   0,      getBooleanCppuType(),       0, 0},
         {OUString(SC_UNO_SRCHSIM),      0,      getBooleanCppuType(),       0, 0},
-        {OUString(SC_UNO_SRCHSIMADD),   0,      getCppuType((sal_Int16*)0), 0, 0},
-        {OUString(SC_UNO_SRCHSIMEX),    0,      getCppuType((sal_Int16*)0), 0, 0},
+        {OUString(SC_UNO_SRCHSIMADD),   0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
+        {OUString(SC_UNO_SRCHSIMEX),    0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
         {OUString(SC_UNO_SRCHSIMREL),   0,      getBooleanCppuType(),       0, 0},
-        {OUString(SC_UNO_SRCHSIMREM),   0,      getCppuType((sal_Int16*)0), 0, 0},
+        {OUString(SC_UNO_SRCHSIMREM),   0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
         {OUString(SC_UNO_SRCHSTYLES),   0,      getBooleanCppuType(),       0, 0},
-        {OUString(SC_UNO_SRCHTYPE),     0,      getCppuType((sal_Int16*)0), 0, 0}, // enum TableSearch ist weg
+        {OUString(SC_UNO_SRCHTYPE),     0,      cppu::UnoType<sal_Int16>::get(), 0, 0}, // enum TableSearch ist weg
         {OUString(SC_UNO_SRCHWORDS),    0,      getBooleanCppuType(),       0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

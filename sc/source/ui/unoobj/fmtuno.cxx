@@ -54,7 +54,7 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
         {OUString(SC_UNONAME_INPTITLE), 0,  cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNONAME_SHOWERR),  0,  getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNONAME_SHOWINP),  0,  getBooleanCppuType(),                          0, 0},
-        {OUString(SC_UNONAME_SHOWLIST), 0,  getCppuType((sal_Int16*)0),                    0, 0},
+        {OUString(SC_UNONAME_SHOWLIST), 0,  cppu::UnoType<sal_Int16>::get(),                    0, 0},
         {OUString(SC_UNONAME_TYPE),     0,  getCppuType((sheet::ValidationType*)0),        0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

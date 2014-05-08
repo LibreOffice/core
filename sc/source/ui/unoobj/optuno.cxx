@@ -34,7 +34,7 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
     static const SfxItemPropertyMapEntry aMap[] =
     {
         {OUString(SC_UNO_CALCASSHOWN),  PROP_UNO_CALCASSHOWN ,  getBooleanCppuType(),          0, 0},
-        {OUString(SC_UNO_DEFTABSTOP),   PROP_UNO_DEFTABSTOP  ,  getCppuType((sal_Int16*)0),    0, 0},
+        {OUString(SC_UNO_DEFTABSTOP),   PROP_UNO_DEFTABSTOP  ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         {OUString(SC_UNO_IGNORECASE),   PROP_UNO_IGNORECASE  ,  getBooleanCppuType(),          0, 0},
         {OUString(SC_UNO_ITERENABLED),  PROP_UNO_ITERENABLED ,  getBooleanCppuType(),          0, 0},
         {OUString(SC_UNO_ITERCOUNT),    PROP_UNO_ITERCOUNT   ,  cppu::UnoType<sal_Int32>::get(),    0, 0},
@@ -43,7 +43,7 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
         {OUString(SC_UNO_MATCHWHOLE),   PROP_UNO_MATCHWHOLE  ,  getBooleanCppuType(),          0, 0},
         {OUString(SC_UNO_NULLDATE),     PROP_UNO_NULLDATE    ,  getCppuType((util::Date*)0),   0, 0},
         {OUString(SC_UNO_SPELLONLINE),  PROP_UNO_SPELLONLINE ,  getBooleanCppuType(),          0, 0},
-        {OUString(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  getCppuType((sal_Int16*)0),    0, 0},
+        {OUString(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         {OUString(SC_UNO_REGEXENABLED), PROP_UNO_REGEXENABLED,  getBooleanCppuType(),          0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

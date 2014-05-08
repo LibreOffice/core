@@ -111,7 +111,7 @@ const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
     {
         {OUString(SC_UNONAME_ANCTYPE),  0,  getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_ANCTYPES), 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {OUString(SC_UNONAME_FILEFORM), 0,  getCppuType((sal_Int16*)0),        0, 0 },
+        {OUString(SC_UNONAME_FILEFORM), 0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         {OUString(SC_UNONAME_TEXTWRAP), 0,  getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
