@@ -257,99 +257,88 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            bool bMacro = false;
-
-//          if (bMacro && pView->TakeMacroObject(aMDPos,pObj,pPV))
-            if (bMacro && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
-
+            if (pView->IsEditMode())
             {
-                pView->BegMacroObj(aMDPos,pObj,pPV,pWindow);
-            }
-            else
-            {
-                if (pView->IsEditMode())
+                bool bPointMode=pView->HasMarkablePoints();
+
+                if (!rMEvt.IsShift())
                 {
-                    bool bPointMode=pView->HasMarkablePoints();
-
-                    if (!rMEvt.IsShift())
+                    if (bPointMode)
                     {
-                        if (bPointMode)
-                        {
-                            pView->UnmarkAllPoints();
-                        }
-                        else
-                        {
-                            pView->UnmarkAll();
-                        }
-
-                        pView->SetDragMode(SDRDRAG_MOVE);
-                        SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-                        rBindings.Invalidate( SID_OBJECT_ROTATE );
-                        rBindings.Invalidate( SID_OBJECT_MIRROR );
-                    }
-
-                    if ( pView->MarkObj(aMDPos, -2, false, rMEvt.IsMod1()) )
-                    {
-                        aDragTimer.Start();
-
-                        pHdl=pView->PickHandle(aMDPos);
-
-                        if (pHdl!=NULL)
-                        {
-                            pView->MarkPoint(*pHdl);
-                            pHdl=pView->GetHdl(nHdlNum);
-                        }
-
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        pView->UnmarkAllPoints();
                     }
                     else
                     {
-                        if (bPointMode)
-                        {
-                            pView->BegMarkPoints(aMDPos);
-                        }
-                        else
-                        {
-                            pView->BegMarkObj(aMDPos);
-                        }
+                        pView->UnmarkAll();
                     }
-                }
-                else if (aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
-                {
-                    //  Notizen editieren -> keine neuen Textobjekte erzeugen,
-                    //  stattdessen Textmodus verlassen
 
-                    pViewShell->GetViewData()->GetDispatcher().
-                        Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    pView->SetDragMode(SDRDRAG_MOVE);
+                    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+                    rBindings.Invalidate( SID_OBJECT_ROTATE );
+                    rBindings.Invalidate( SID_OBJECT_MIRROR );
+                }
+
+                if ( pView->MarkObj(aMDPos, -2, false, rMEvt.IsMod1()) )
+                {
+                    aDragTimer.Start();
+
+                    pHdl=pView->PickHandle(aMDPos);
+
+                    if (pHdl!=NULL)
+                    {
+                        pView->MarkPoint(*pHdl);
+                        pHdl=pView->GetHdl(nHdlNum);
+                    }
+
+                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
                 }
                 else
                 {
-                    if (bStraightEnter)//Hack for that silly idea that creating text fields is inside the text routine
+                    if (bPointMode)
                     {
-                        /**********************************************************
-                        * Objekt erzeugen
-                        **********************************************************/
-                        // Hack  to align object to nearest grid position where object
-                        // would be anchored ( if it were cell anchored )
-                        // Get grid offset for current position ( note: aPnt is
-                        // also adjusted )
-                        Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
-
-                        bool bRet = pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
-                        if ( bRet )
-                        pView->GetCreateObj()->SetGridOffset( aGridOff );
+                        pView->BegMarkPoints(aMDPos);
                     }
-                    else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                    else
                     {
-                        pView->UnmarkAllObj();
-                        ScViewData& rViewData = *pViewShell->GetViewData();
-                        rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-                        pView->MarkObj(pObj,pPV,false,false);
-
-                        pHdl=pView->PickHandle(aMDPos);
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-                        return true;
+                        pView->BegMarkObj(aMDPos);
                     }
+                }
+            }
+            else if (aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
+            {
+                //  Notizen editieren -> keine neuen Textobjekte erzeugen,
+                //  stattdessen Textmodus verlassen
+
+                pViewShell->GetViewData()->GetDispatcher().
+                    Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            }
+            else
+            {
+                if (bStraightEnter)//Hack for that silly idea that creating text fields is inside the text routine
+                {
+                    /**********************************************************
+                    * Objekt erzeugen
+                    **********************************************************/
+                    // Hack  to align object to nearest grid position where object
+                    // would be anchored ( if it were cell anchored )
+                    // Get grid offset for current position ( note: aPnt is
+                    // also adjusted )
+                    Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
+
+                    bool bRet = pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
+                    if ( bRet )
+                    pView->GetCreateObj()->SetGridOffset( aGridOff );
+                }
+                else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                {
+                    pView->UnmarkAllObj();
+                    ScViewData& rViewData = *pViewShell->GetViewData();
+                    rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    pView->MarkObj(pObj,pPV,false,false);
+
+                    pHdl=pView->PickHandle(aMDPos);
+                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                    return true;
                 }
             }
         }
