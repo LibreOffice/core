@@ -89,7 +89,7 @@ namespace dxcanvas
         // At index 2, we expect the current window bound rect
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
                              maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
-                             "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+                             "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Sequence<sal_Int8> aSeq;
         maArguments[5] >>= aSeq;
@@ -98,9 +98,13 @@ namespace dxcanvas
         if( !pSysData || !pSysData->hDC )
             throw lang::NoSupportException("Passed SystemGraphicsData or HDC invalid!", NULL);
 
+        sal_Int64 nPtr = 0;
+        maArguments[0] >>= nPtr;
+        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
+        ENSURE_ARG_OR_THROW( pOutDev != NULL,"Canvas::initialize: invalid OutDev pointer" );
+
         // setup helper
-        maDeviceHelper.init( pSysData->hDC,
-                             *this );
+        maDeviceHelper.init( pSysData->hDC, pOutDev, *this );
         maCanvasHelper.setDevice( *this );
         maCanvasHelper.setTarget(
             GraphicsProviderSharedPtr(
@@ -146,7 +150,7 @@ namespace dxcanvas
         // At index 2, we expect the current window bound rect
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
                              maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
-                             "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+                             "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Sequence<sal_Int8> aSeq;
         maArguments[5] >>= aSeq;
@@ -155,9 +159,13 @@ namespace dxcanvas
         if( !pSysData || !pSysData->hDC )
             throw lang::NoSupportException( "Passed SystemGraphicsData or HDC invalid!", NULL);
 
+        sal_Int64 nPtr = 0;
+        maArguments[0] >>= nPtr;
+        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
+        ENSURE_ARG_OR_THROW( pOutDev != NULL,"Canvas::initialize: invalid OutDev pointer" );
+
         // setup helper
-        maDeviceHelper.init( pSysData->hDC,
-                             *this );
+        maDeviceHelper.init( pSysData->hDC, pOutDev, *this );
         maCanvasHelper.setDevice( *this );
 
         // check whether we can actually provide a BitmapCanvas

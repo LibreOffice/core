@@ -334,21 +334,7 @@ namespace slideshow
 
                         if( ::canvas::tools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
                         {
-                            OUString aImplName;
-
-                            aDeviceParams[ 0 ] >>= aImplName;
-
-                            if( aImplName.endsWithIgnoreAsciiCase( "VCL" ) ||
-                                aImplName.endsWithIgnoreAsciiCase( "Cairo" ) ||
-                                avmedia::IsModel(sMimeType))
-                            {
-                                implInitializeVCLBasedPlayerWindow( rBounds, aDeviceParams, sMimeType );
-                            }
-                            else if( aImplName.endsWithIgnoreAsciiCase("DX") ||
-                                     aImplName.endsWithIgnoreAsciiCase("DX9") )
-                            {
-                                implInitializeDXBasedPlayerWindow( rBounds, aDeviceParams );
-                            }
+                            implInitializePlayerWindow( rBounds, aDeviceParams, sMimeType );
                         }
 
                         // set player properties
@@ -444,7 +430,7 @@ namespace slideshow
 
 
 
-        bool ViewMediaShape::implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
+        bool ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams,
                                                                  const OUString& rMimeType )
         {
@@ -518,64 +504,6 @@ namespace slideshow
                                 //if there was no playerwindow, then clear the mpMediaWindow too
                                 //so that we can draw a placeholder instead in that space
                                 mpMediaWindow.reset();
-                            }
-                        }
-                    }
-                }
-                catch( uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch( uno::Exception& )
-                {
-                    OSL_FAIL( OUStringToOString(
-                                    comphelper::anyToString( cppu::getCaughtException() ),
-                                    RTL_TEXTENCODING_UTF8 ).getStr() );
-                }
-            }
-
-            return mxPlayerWindow.is();
-        }
-
-
-
-        bool ViewMediaShape::implInitializeDXBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
-                                                                const uno::Sequence< uno::Any >& rDXDeviceParams )
-        {
-            if( !mxPlayerWindow.is() )
-            {
-                try
-                {
-                    if( rDXDeviceParams.getLength() == 2 )
-                    {
-                        sal_Int64 aWNDVal=0;
-
-                        rDXDeviceParams[ 1 ] >>= aWNDVal;
-
-                        if( aWNDVal )
-                        {
-                            ::basegfx::B2DRange aTmpRange;
-                            ::canvas::tools::calcTransformedRectBounds( aTmpRange,
-                                                                        rBounds,
-                                                                        mpViewLayer->getTransformation() );
-                            const ::basegfx::B2IRange& rRangePix(
-                                ::basegfx::unotools::b2ISurroundingRangeFromB2DRange( aTmpRange ));
-
-                            if( !rRangePix.isEmpty() )
-                            {
-                                uno::Sequence< uno::Any >   aArgs( 2 );
-                                awt::Rectangle              aAWTRect( rRangePix.getMinX() + maWindowOffset.X,
-                                                                      rRangePix.getMinY() + maWindowOffset.Y,
-                                                                      rRangePix.getMaxX() - rRangePix.getMinX(),
-                                                                      rRangePix.getMaxY() - rRangePix.getMinY() );
-
-                                if( mxPlayer.is() )
-                                {
-                                    aArgs[ 0 ] = uno::makeAny( sal::static_int_cast< sal_Int32 >( aWNDVal) );
-                                    aArgs[ 1 ] = uno::makeAny( aAWTRect );
-
-                                    mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );
-                                }
                             }
                         }
                     }

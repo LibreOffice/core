@@ -141,12 +141,9 @@ namespace slideshow
             bool implInitialize( const ::basegfx::B2DRectangle& rBounds );
             void implSetMediaProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxProps );
             void implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType );
-            bool implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle& rBounds,
+            bool implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rVCLDeviceParams,
                                                      const OUString& rMimeType );
-            bool implInitializeDXBasedPlayerWindow( const ::basegfx::B2DRectangle& rBounds,
-                                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rDXDeviceParams );
-
             ViewLayerSharedPtr                    mpViewLayer;
             ::std::auto_ptr< SystemChildWindow >    mpMediaWindow;
             mutable ::com::sun::star::awt::Point  maWindowOffset;

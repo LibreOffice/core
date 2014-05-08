@@ -31,7 +31,7 @@
 
 #include <boost/utility.hpp>
 
-
+class OutputDevice;
 /* Definition of DeviceHelper class */
 
 namespace dxcanvas
@@ -50,7 +50,7 @@ namespace dxcanvas
             @param rDevice
             Ref back to owning UNO device
          */
-        void init( HDC                                        hdc,
+        void init( HDC hdc, OutputDevice* pOutputDev,
                    com::sun::star::rendering::XGraphicDevice& rDevice );
 
         /// Dispose all internal references
@@ -105,6 +105,7 @@ namespace dxcanvas
          */
         com::sun::star::rendering::XGraphicDevice* mpDevice;
         HDC                                        mnHDC;
+        OutputDevice* mpOutDev;
     };
 
     typedef ::rtl::Reference< com::sun::star::rendering::XGraphicDevice > DeviceRef;

@@ -99,8 +99,7 @@ namespace dxcanvas
                                false));
 
         // Assumes: SystemChildWindow() has CS_OWNDC
-        DeviceHelper::init(GetDC(mpRenderModule->getHWND()),
-                           rSpriteCanvas);
+        DeviceHelper::init(GetDC(mpRenderModule->getHWND()),rWindow.GetOutDev(), rSpriteCanvas);
     }
 
     void SpriteDeviceHelper::disposing()

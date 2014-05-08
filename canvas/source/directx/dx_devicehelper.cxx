@@ -44,6 +44,7 @@
 
 
 #include <vcl/sysdata.hxx>
+#include <vcl/outdev.hxx>
 
 using namespace ::com::sun::star;
 
@@ -51,15 +52,17 @@ namespace dxcanvas
 {
     DeviceHelper::DeviceHelper() :
         mpDevice( NULL ),
-        mnHDC(0)
+        mnHDC(0),
+        mpOutDev(0)
     {
     }
 
-    void DeviceHelper::init( HDC                        hdc,
+    void DeviceHelper::init( HDC hdc, OutputDevice* pOutDev,
                              rendering::XGraphicDevice& rDevice )
     {
         mnHDC    = hdc;
         mpDevice = &rDevice;
+        mpOutDev = pOutDev;
     }
 
     void DeviceHelper::disposing()
@@ -67,6 +70,7 @@ namespace dxcanvas
         // release all references
         mnHDC = 0;
         mpDevice = NULL;
+        mpOutDev = 0;
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
@@ -192,11 +196,7 @@ namespace dxcanvas
 
     uno::Any DeviceHelper::getDeviceHandle() const
     {
-        HDC hdc( getHDC() );
-        if( hdc )
-            return uno::makeAny( reinterpret_cast< sal_Int64 >(hdc) );
-        else
-            return uno::Any();
+        return uno::makeAny( reinterpret_cast< sal_Int64 >(mpOutDev) );
     }
 
     uno::Any DeviceHelper::getSurfaceHandle() const
