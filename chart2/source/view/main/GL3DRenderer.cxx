@@ -1082,7 +1082,8 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[surIndex]);
+    //TODO: moggi: startIndex is int!!!!
+    glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, &extrude3D.startIndex[surIndex]);
 }
 
 void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D)
@@ -1115,7 +1116,8 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[BOTTOM_SURFACE]);
+    //TODO: moggi: startIndex is int!!!!
+    glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[BOTTOM_SURFACE]);
 }
 
 void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
@@ -1150,7 +1152,7 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[MIDDLE_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[MIDDLE_SURFACE]);
 }
 
 void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
@@ -1186,7 +1188,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
     glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
-    glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, (void *)extrude3D.startIndex[TOP_SURFACE]);
+    glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, &extrude3D.startIndex[TOP_SURFACE]);
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
 }
 
