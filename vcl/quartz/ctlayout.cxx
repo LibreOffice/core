@@ -552,6 +552,7 @@ sal_Int32 CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFact
     CTTypesetterRef aCTTypeSetter = CTTypesetterCreateWithAttributedString( mpAttrString );
     const double fCTMaxWidth = (double)nMaxWidth / nFactor;
     CFIndex nIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
+    CFRelease( aCTTypeSetter );
 
     if( nIndex >= mnCharCount )
         return -1;

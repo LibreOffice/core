@@ -207,6 +207,7 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     const CGPathElement aClosingElement = { kCGPathElementCloseSubpath, NULL };
     MyCGPathApplierFunc( (void*)&aGgoData, &aClosingElement );
 #endif
+    CFRelease( xPath );
 
     return true;
 }
