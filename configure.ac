@@ -967,6 +967,15 @@ AC_ARG_ENABLE(symbols,
          This enables -g compiler flag for GCC or equivalent,
          without changing anything else compared to productive code.]))
 
+AC_ARG_ENABLE(runtime-optimizations,
+    AS_HELP_STRING([--disable-runtime-optimizations],
+        [Statically disable certain runtime optimizations (like rtl/alloc.h or
+         JVM JIT) that are known to interact badly with certain dynamic analysis
+         tools (like -fsanitize=address or Valgrind).  By default, disabled iff
+         CC contains "-fsanitize=address".  (For Valgrind, those runtime
+         optimizations are typcially disabled dynamically via
+         RUNNING_ON_VALGRIND.)]))
+
 AC_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
         [Enable compiler plugins that will perform additional checks during
@@ -5623,6 +5632,30 @@ AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFPOINTER,$SAL_TYPES_SIZEOFPOINTER)
 AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT2,$SAL_TYPES_ALIGNMENT2)
 AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT4,$SAL_TYPES_ALIGNMENT4)
 AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT8,$SAL_TYPES_ALIGNMENT8)
+
+dnl ===================================================================
+dnl Check whether to enable runtime optimizations
+dnl ===================================================================
+ENABLE_RUNTIME_OPTIMIZATIONS=
+AC_MSG_CHECKING([whether to enable runtime optimizations])
+if test -z "$enable_runtime_optimizations"; then
+    for i in $CC; do
+        case $i in
+        -fsanitize=address)
+            enable_runtime_optimizations=no
+            break
+            ;;
+        esac
+    done
+fi
+if test "$enable_runtime_optimizations" != no; then
+    ENABLE_RUNTIME_OPTIMIZATIONS=TRUE
+    AC_DEFINE(ENABLE_RUNTIME_OPTIMIZATIONS)
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST([ENABLE_RUNTIME_OPTIMIZATIONS])
 
 dnl ===================================================================
 dnl Check if valgrind headers are available

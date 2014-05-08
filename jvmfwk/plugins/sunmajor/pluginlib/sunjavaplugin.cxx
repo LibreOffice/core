@@ -34,6 +34,7 @@
 #include <string.h>
 
 #include "boost/scoped_array.hpp"
+#include "config_options.h"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -58,10 +59,13 @@
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
 #else
-#if defined HAVE_VALGRIND_HEADERS
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+#define FORCE_INTERPRETED 1
+#elif defined HAVE_VALGRIND_HEADERS
 #include <valgrind/valgrind.h>
+#define FORCE_INTERPRETED RUNNING_ON_VALGRIND
 #else
-#define RUNNING_ON_VALGRIND 0
+#define FORCE_INTERPRETED 0
 #endif
 #endif
 
@@ -627,7 +631,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
     // Valgrind typically emits many false errors when executing JIT'ed JVM
     // code, so force the JVM into interpreted mode:
-    bool forceInterpreted = RUNNING_ON_VALGRIND > 0;
+    bool forceInterpreted = FORCE_INTERPRETED > 0;
 
     // Some testing with Java 1.4 showed that JavaVMOption.optionString has to
     // be encoded with the system encoding (i.e., osl_getThreadTextEncoding):

@@ -20,7 +20,7 @@ $(eval $(call gb_Library_set_include,sal,\
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\
-	$(if $(filter $(ALLOC),SYS_ALLOC TCMALLOC JEMALLOC), \
+	$(if $(filter $(ALLOC),SYS_ALLOC TCMALLOC JEMALLOC)$(filter-out X$(ENABLE_RUNTIME_OPTIMIZATIONS),XTRUE), \
 		-DFORCE_SYSALLOC \
 	) \
 	$(if $(filter $(OS),IOS), \

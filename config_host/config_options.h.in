@@ -9,7 +9,8 @@
  * Whether we want to link as many object files as possible into one big object.
  * True in case of --enable-lto or --enable-mergelibs.
  */
-
 #define STATIC_LINKING 0
+
+#define ENABLE_RUNTIME_OPTIMIZATIONS 0
 
 #endif
