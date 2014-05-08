@@ -125,8 +125,13 @@ void GL3DBarChart::create3DShapes()
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
 
-    // Transfer all Y-axis text objects to the shape collection.
-    std::copy(aYAxisTexts.begin(), aYAxisTexts.end(), std::back_inserter(maShapes));
+    {
+        // Transfer all Y-axis text objects to the shape collection.
+        std::vector<opengl3D::Text*>::iterator itText = aYAxisTexts.begin(), itTextEnd = aYAxisTexts.end();
+        for (; itText != itTextEnd; ++itText)
+            maShapes.push_back(*itText);
+    }
+
     aYAxisTexts.clear();
 }
 
