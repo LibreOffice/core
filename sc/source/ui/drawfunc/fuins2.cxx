@@ -546,23 +546,20 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         bool bUndo (pScDoc->IsUndoEnabled());
 
         Window* pParentWindow = pData->GetActiveWin();
-        ScGridWindow* pGridWindow = dynamic_cast<ScGridWindow*>(pParentWindow);
-        if(pGridWindow)
-        {
-            pGridWindow->AddChildWindow(pGridWindow);
-        }
-        else
-            SAL_WARN("sc", "not a grid window. Youare in serious trouble");
         OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
         Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
         pChildWindow->SetSizePixel(aWindowSize);
-        Wallpaper aBackground = pChildWindow->GetBackground();
-        aBackground.SetColor(COL_BLUE);
-        pChildWindow->SetBackground(aBackground);
         pChildWindow->Show();
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( xChartModel, uno::UNO_QUERY_THROW );
         sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pChildWindow);
         x3DWindowProvider->setWindow(nWindowPtr);
+        ScGridWindow* pGridWindow = dynamic_cast<ScGridWindow*>(pParentWindow);
+        if(pGridWindow)
+        {
+            pGridWindow->AddChildWindow(pChildWindow);
+        }
+        else
+            SAL_WARN("sc", "not a grid window. You are in serious trouble");
 
         if( pReqArgs )
         {
