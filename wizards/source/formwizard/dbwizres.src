@@ -1401,7 +1401,7 @@ String RID_DB_REPORT_WIZARD_START + 73
 
 String RID_DB_REPORT_WIZARD_START + 74
 {
-    Text [ en-US ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text [ en-US ] = "The sort criterion '<FIELDNAME>' was chosen twice. Each criterion can only be chosen once.";
 };
 
 

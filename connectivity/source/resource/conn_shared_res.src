@@ -33,26 +33,26 @@
 
 String STR_MOZILLA_ADDRESSBOOKS
 {
-    Text [ en-US ] = "Mozilla/Seamonkey Addressbook Directory";
+    Text [ en-US ] = "Mozilla/Seamonkey Address Book Directory";
     Text [ x-comment ] = "This must be the term referring to address books in the user's "
         "Mozilla/Seamonkey profile in the system.";
 };
 
 String STR_THUNDERBIRD_ADDRESSBOOKS
 {
-    Text [ en-US ] = "Thunderbird Addressbook Directory";
+    Text [ en-US ] = "Thunderbird Address Book Directory";
     Text [ x-comment ] = "This must be the term referring to address books in the user's "
         "Thunderbird profile in the system.";
 };
 
 String STR_OE_ADDRESSBOOK
 {
-    Text [ en-US ] = "Outlook Express Addressbook";
+    Text [ en-US ] = "Outlook Express Address Book";
 };
 
 String STR_OUTLOOK_MAPI_ADDRESSBOOK
 {
-    Text [ en-US ] = "Outlook (MAPI) Addressbook";
+    Text [ en-US ] = "Outlook (MAPI) Address Book";
 };
 
 String STR_NO_TABLE_CREATION_SUPPORT
@@ -87,7 +87,7 @@ String STR_ERR_EXECUTING_QUERY
 
 String STR_MOZILLA_IS_RUNNIG_NO_CHANGES
 {
-    Text [ en-US ] = "You can't make any changes to mozilla address book when mozilla is running.";
+    Text [ en-US ] = "You can't make any changes to Mozilla Address Book when Mozilla is running.";
 };
 
 String STR_FOREIGN_PROCESS_CHANGED_AB

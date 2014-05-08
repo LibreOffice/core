@@ -347,7 +347,7 @@ Text [ en-US ] = "Architecture - overlay";
 
 String RID_GALLERYSTR_THEME_ARCHITECTURE_FURNITURES
 {
-Text [ en-US ] = "Architecture - furnitures";
+Text [ en-US ] = "Architecture - furniture";
 };
 
 String RID_GALLERYSTR_THEME_ARCHITECTURE_BUILDINGS
@@ -702,7 +702,7 @@ Text [ en-US ] = "Music - sheet music";
 
 String RID_GALLERYSTR_THEME_SPECIAL_PICTOGRAMM
 {
-Text [ en-US ] = "Special Pictogramms";
+Text [ en-US ] = "Special Pictograms";
 };
 
 String RID_GALLERYSTR_THEME_PHOTOS_CELEBRATION

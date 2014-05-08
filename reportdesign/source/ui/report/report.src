@@ -256,12 +256,12 @@ String RID_STR_UNDO_UNGROUP
 String RID_STR_GROUPHEADER
 {
     Text [ en-US ] = "GroupHeader";
-    Text [ x-comment ] = "Please try to avoid spaces in the name. It is used as a programatic one.";
+    Text [ x-comment ] = "Please try to avoid spaces in the name. It is used as a programmatic one.";
 };
 String RID_STR_GROUPFOOTER
 {
     Text [ en-US ] = "GroupFooter";
-    Text [ x-comment ] = "Please try to avoid spaces in the name. It is used as a programatic one.";
+    Text [ x-comment ] = "Please try to avoid spaces in the name. It is used as a programmatic one.";
 };
 Menu RID_MENU_REPORT
 {

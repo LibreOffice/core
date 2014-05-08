@@ -691,7 +691,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns the number of workdays between two dates using arguments to indicate weekenddays and holidays." ;
+            Text [ en-US ] = "Returns the number of workdays between two dates using arguments to indicate weekend days and holidays." ;
         };
         ExtraData =
         {
@@ -739,7 +739,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns the serial number of the date before or after a number of workdays using arguments to indicate weekenddays and holidays." ;
+            Text [ en-US ] = "Returns the serial number of the date before or after a number of workdays using arguments to indicate weekend days and holidays." ;
         };
         ExtraData =
         {

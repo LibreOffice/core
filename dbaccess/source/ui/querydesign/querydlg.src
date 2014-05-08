@@ -41,7 +41,7 @@ String STR_QUERY_FULL_JOIN
 
 String STR_QUERY_CROSS_JOIN
 {
-    Text [ en-US ] = "Contains the cartesian product of ALL records from '%1' and from '%2'.";
+    Text [ en-US ] = "Contains the Cartesian product of ALL records from '%1' and from '%2'.";
 };
 
 String STR_QUERY_NATURAL_JOIN

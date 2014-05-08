@@ -1469,7 +1469,7 @@ String RID_SVXSTR_BMP20_DEF
 /* do not translate */
 String RID_SVXSTR_BMP21_DEF
 {
-    Text = "Bitmape";
+    Text = "Bitmap";
 };
 
 String RID_SVXSTR_BMP0
