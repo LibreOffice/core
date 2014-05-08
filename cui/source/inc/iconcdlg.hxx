@@ -151,7 +151,6 @@ private :
     bool                    bHideResetBtn;
     bool                    bModal;
     bool                    bInOK;
-    bool                    bModified;
     bool                    bItemsReset;
 
     DECL_LINK ( ChosePageHdl_Impl, void * );

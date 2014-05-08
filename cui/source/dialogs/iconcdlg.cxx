@@ -214,7 +214,6 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     bHideResetBtn   ( false ),
     bModal          ( false ),
     bInOK           ( false ),
-    bModified       ( false ),
     bItemsReset     ( false )
 {
 
