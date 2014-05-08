@@ -570,7 +570,7 @@ void OpenGLContext::renderToFile()
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {
-        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
+        SAL_WARN("vcl.opengl", "Error writing png to " << aName);
     }
 }
 
