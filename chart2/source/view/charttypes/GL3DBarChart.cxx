@@ -16,16 +16,22 @@
 
 #include "3DChartObjects.hxx"
 #include "GL3DRenderer.hxx"
+#include <ExplicitCategoriesProvider.hxx>
+#include <DataSeriesHelper.hxx>
 
 using namespace com::sun::star;
 
 namespace chart {
 
-GL3DBarChart::GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries,
-        OpenGLWindow& rWindow):
+GL3DBarChart::GL3DBarChart(
+    const css::uno::Reference<css::chart2::XChartType>& xChartType,
+    const std::vector<VDataSeries*>& rDataSeries,
+    OpenGLWindow& rWindow, ExplicitCategoriesProvider& rCatProvider ) :
+    mxChartType(xChartType),
     maDataSeries(rDataSeries),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
-    mrWindow(rWindow)
+    mrWindow(rWindow),
+    mrCatProvider(rCatProvider)
 {
 }
 
@@ -40,15 +46,29 @@ void GL3DBarChart::create3DShapes()
     const float nBarDistanceX = nBarSizeX / 2;
     const float nBarDistanceY = nBarSizeY / 2;
 
+    sal_uInt32 nId = 1;
+
+    uno::Sequence<OUString> aCats = mrCatProvider.getSimpleCategories();
+    for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
+        // Category name text object.
+        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
+
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     sal_Int32 nSeriesIndex = 0;
-    sal_uInt32 nId = 1;
     for(std::vector<VDataSeries*>::const_iterator itr = maDataSeries.begin(),
             itrEnd = maDataSeries.end(); itr != itrEnd; ++itr)
     {
         VDataSeries* pDataSeries = *itr;
         sal_Int32 nPointCount = pDataSeries->getTotalPointCount();
+
+        // Create series name text object.
+        OUString aSeriesName =
+            DataSeriesHelper::getDataSeriesLabel(
+                pDataSeries->getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
+
+        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
+
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
             float nVal = pDataSeries->getYValue(nIndex);

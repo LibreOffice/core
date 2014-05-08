@@ -18,6 +18,8 @@
 
 namespace chart {
 
+class ExplicitCategoriesProvider;
+
 namespace opengl3D {
 
 class Renderable3DObject;
@@ -32,7 +34,11 @@ class TemporaryContext;
 class GL3DBarChart
 {
 public:
-    GL3DBarChart(const std::vector<VDataSeries*>& rDataSeries, OpenGLWindow& rContext);
+    GL3DBarChart(
+        const css::uno::Reference<css::chart2::XChartType>& xChartType,
+        const std::vector<VDataSeries*>& rDataSeries, OpenGLWindow& rContext,
+        ExplicitCategoriesProvider& rCatProvider );
+
     ~GL3DBarChart();
 
     void create3DShapes();
@@ -40,12 +46,13 @@ public:
     void render();
 
 private:
-
+    css::uno::Reference<css::chart2::XChartType> mxChartType;
     std::vector<VDataSeries*> maDataSeries;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
     boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
     OpenGLWindow& mrWindow;
+    ExplicitCategoriesProvider& mrCatProvider;
 };
 
 }

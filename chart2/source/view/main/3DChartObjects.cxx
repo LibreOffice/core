@@ -51,9 +51,10 @@ void Line::render()
     mpRenderer->EndAddShapePolygon3DObject();
 }
 
-Text::Text(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
+Text::Text(OpenGL3DRenderer* pRenderer, const OUString& /*rStr*/, sal_uInt32 nId):
     Renderable3DObject(pRenderer, nId)
 {
+    // TODO : convert OUString to BitmapEx.
 }
 
 void Text::render()
