@@ -137,7 +137,7 @@ String STR_INTERNAL_ERRMSG
 
 String STR_LO_MUST_BE_RESTARTED
 {
-    Text [ en-US ] = "LibreOffice must unfortunately be manually restarted once after installation or update." ;
+    Text [ en-US ] = "%PRODUCTNAME must unfortunately be manually restarted once after installation or update." ;
 };
 
 QueryBox QBX_USERDATALOCKED

@@ -1930,7 +1930,7 @@ String RID_SVXSTR_COLOR_USER
 
 String RID_SVXSTR_COLOR_LIBRE_GREEN_1
 {
-    Text [ en-US ] = "Green 1 (LibreOffice Main Color)" ;
+    Text [ en-US ] = "Green 1 (%PRODUCTNAME Main Color)" ;
 };
 
 String RID_SVXSTR_COLOR_LIBRE_GREEN_ACCENT
@@ -1965,7 +1965,7 @@ String RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT
 
 String RID_SVXSTR_COLOR_LIBRE_GREEN_1_DEF
 {
-    Text = "Green 1 (LibreOffice Main Color)" ;
+    Text = "Green 1 (%PRODUCTNAME Main Color)" ;
 };
 
 String RID_SVXSTR_COLOR_LIBRE_GREEN_ACCENT_DEF
