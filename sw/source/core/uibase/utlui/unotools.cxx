@@ -416,7 +416,10 @@ void SwOneExampleFrame::ClearDocument( bool bStartUpdateTimer )
             SwEditShell* pSh = pDoc->GetEditShell();
             pSh->LockPaint();
             pSh->StartAllAction();
+            pSh->KillPams();
+            pSh->ClearMark();
             pDoc->ClearDoc();
+            pSh->ClearUpCrsrs();
 
             if( aLoadedTimer.IsActive() || !bStartUpdateTimer )
             {
