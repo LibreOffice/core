@@ -114,7 +114,7 @@ struct MigrationItem
         return *this;
     }
 
-    sal_Bool operator==(const MigrationItem& aMigrationItem)
+    bool operator==(const MigrationItem& aMigrationItem)
     {
         return ( aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
             aMigrationItem.m_sPrevSibling    == m_sPrevSibling     &&
@@ -150,10 +150,10 @@ struct MigrationItemInfo
 struct MigrationModuleInfo
 {
     OUString sModuleShortName;
-    sal_Bool        bHasMenubar;
+    bool     bHasMenubar;
     ::std::vector< OUString > m_vToolbars;
 
-    MigrationModuleInfo():bHasMenubar(sal_False){};
+    MigrationModuleInfo() : bHasMenubar(false) {};
 };
 
 
@@ -205,7 +205,7 @@ private:
     // helpers
     strings_vr getAllFiles(const OUString& baseURL) const;
     strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const;
-    css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, sal_Bool rw=sal_False);
+    css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, bool rw=false);
 
     ::std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;
     void compareOldAndNewConfig(const OUString& sParentNodeName,
@@ -230,7 +230,7 @@ public:
     MigrationImpl();
     ~MigrationImpl();
     bool initializeMigration();
-    sal_Bool doMigration();
+    bool doMigration();
     OUString getOldVersionName();
 };
 }

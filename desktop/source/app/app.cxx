@@ -721,13 +721,13 @@ bool Desktop::QueryExit()
 
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);
-    xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any((sal_Bool)sal_True) );
+    xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any(true) );
 
-    sal_Bool bExit = xDesktop->terminate();
+    bool bExit = xDesktop->terminate();
 
     if ( !bExit )
     {
-        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any((sal_Bool)sal_False) );
+        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any(false) );
     }
     else
     {
@@ -780,7 +780,7 @@ OUString    Desktop::CreateErrorMsgString(
 {
     OUString        aMsg;
     OUString        aFilePath;
-    sal_Bool        bFileInfo = sal_True;
+    bool            bFileInfo = true;
 
     switch ( nFailureCode )
     {
@@ -789,7 +789,7 @@ OUString    Desktop::CreateErrorMsgString(
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_PATH_INVALID,
                         OUString( "The installation path is not available." ) );
-            bFileInfo = sal_False;
+            bFileInfo = false;
         }
         break;
 
@@ -840,7 +840,7 @@ OUString    Desktop::CreateErrorMsgString(
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
                         OUString( "An internal failure occurred." ) );
-            bFileInfo = sal_False;
+            bFileInfo = false;
         }
         break;
 
@@ -848,7 +848,7 @@ OUString    Desktop::CreateErrorMsgString(
         {
             // This needs to be improved, see #i67575#:
             aMsg = "Invalid version file entry";
-            bFileInfo = sal_False;
+            bFileInfo = false;
         }
         break;
 
@@ -1073,7 +1073,7 @@ void Desktop::HandleBootstrapErrors(
 }
 
 
-sal_Bool Desktop::isUIOnSessionShutdownAllowed()
+bool Desktop::isUIOnSessionShutdownAllowed()
 {
     return officecfg::Office::Recovery::SessionShutdown::DocumentStoreUIEnabled
         ::get();
@@ -1096,9 +1096,9 @@ sal_Bool Desktop::isUIOnSessionShutdownAllowed()
             Because the user may be logged out last time from it's
             unix session...
 */
-void impl_checkRecoveryState(sal_Bool& bCrashed           ,
-                             sal_Bool& bRecoveryDataExists,
-                             sal_Bool& bSessionDataExists )
+void impl_checkRecoveryState(bool& bCrashed           ,
+                             bool& bRecoveryDataExists,
+                             bool& bSessionDataExists )
 {
     bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get();
     bool elements = officecfg::Office::Recovery::RecoveryList::get()->
@@ -1115,8 +1115,8 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
     @param  bEmergencySave
             differs between EMERGENCY_SAVE and RECOVERY
 */
-sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
-                             sal_Bool bExistsRecoveryData)
+bool impl_callRecoveryUI(bool bEmergencySave     ,
+                         bool bExistsRecoveryData)
 {
     static OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
     static OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
@@ -1142,7 +1142,7 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
     xURLParser->parseStrict(aURL);
 
     css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     aRet >>= bRet;
     return !bEmergencySave || bRet;
 }
@@ -1155,11 +1155,11 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
  *
  */
 
-sal_Bool Desktop::SaveTasks()
+bool Desktop::SaveTasks()
 {
     return impl_callRecoveryUI(
-        sal_True , // sal_True => force emergency save
-        sal_False);
+        true , // sal_True => force emergency save
+        false);
 }
 
 namespace {
@@ -1248,7 +1248,7 @@ void restartOnMac(bool passArguments) {
 sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 {
     // protect against recursive calls
-    static sal_Bool bInException = sal_False;
+    static bool bInException = false;
 
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
@@ -1260,12 +1260,12 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
         Application::Abort( aDoubleExceptionString );
     }
 
-    bInException = sal_True;
+    bInException = true;
     const CommandLineArgs& rArgs = GetCommandLineArgs();
 
     // save all modified documents ... if it's allowed doing so.
-    sal_Bool bRestart                           = sal_False;
-    sal_Bool bAllowRecoveryAndSessionManagement = (
+    bool bRestart                           = false;
+    bool bAllowRecoveryAndSessionManagement = (
                                                     ( !rArgs.IsNoRestore()                    ) && // some use cases of office must work without recovery
                                                     ( !rArgs.IsHeadless()                     ) &&
                                                     (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
@@ -1323,14 +1323,14 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
 struct ExecuteGlobals
 {
     Reference < css::document::XEventListener > xGlobalBroadcaster;
-    sal_Bool bRestartRequested;
-    sal_Bool bUseSystemFileDialog;
+    bool bRestartRequested;
+    bool bUseSystemFileDialog;
     std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
     std::auto_ptr<SvtPathOptions> pPathOptions;
 
     ExecuteGlobals()
-    : bRestartRequested( sal_False )
-    , bUseSystemFileDialog( sal_True )
+    : bRestartRequested( false )
+    , bUseSystemFileDialog( true )
     {}
 };
 
@@ -1520,9 +1520,9 @@ int Desktop::Main()
         SetSplashScreenProgress(50);
 
         // Backing Component
-        sal_Bool bCrashed            = sal_False;
-        sal_Bool bExistsRecoveryData = sal_False;
-        sal_Bool bExistsSessionData  = sal_False;
+        bool bCrashed            = false;
+        bool bExistsRecoveryData = false;
+        bool bExistsSessionData  = false;
 
         SAL_INFO( "desktop.app", "{ impl_checkRecoveryState" );
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
@@ -1615,7 +1615,7 @@ int Desktop::Main()
     if ( !pExecGlobals->bRestartRequested )
     {
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
-        sal_Bool bTerminateRequested = sal_False;
+        bool bTerminateRequested = false;
 
         // Preload function depends on an initialized sfx application!
         SetSplashScreenProgress(75);
@@ -1775,7 +1775,7 @@ int Desktop::doShutdown()
     pExecGlobals->pPathOptions.reset( 0 );
     SAL_INFO( "desktop.app", "<- dispose path/language options" );
 
-    sal_Bool bRR = pExecGlobals->bRestartRequested;
+    bool bRR = pExecGlobals->bRestartRequested;
     delete pExecGlobals, pExecGlobals = NULL;
 
     SAL_INFO( "desktop.app", "FINISHED WITH Destop::Main" );
@@ -1870,7 +1870,7 @@ void Desktop::FlushConfiguration()
         css::uno::UNO_QUERY_THROW)->flush();
 }
 
-sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rxContext )
+bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rxContext )
 {
     try
     {
@@ -1879,7 +1879,7 @@ sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >
         // this will only be activated if --quickstart was specified on cmdline
         SAL_INFO( "desktop.app", "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
 
-        sal_Bool bQuickstart = shouldLaunchQuickstart();
+        bool bQuickstart = shouldLaunchQuickstart();
 
         // Try to instantiate quickstart service. This service is not mandatory, so
         // do nothing if service is not available
@@ -1898,11 +1898,11 @@ sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >
         {
             css::office::Quickstart::createStart(rxContext, bQuickstart);
         }
-        return sal_True;
+        return true;
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        return sal_False;
+        return false;
     }
 }
 
@@ -2227,28 +2227,28 @@ void Desktop::OpenClients()
 
     if (!rArgs.IsQuickstart())
     {
-        sal_Bool bShowHelp = sal_False;
+        bool bShowHelp = false;
         OUStringBuffer aHelpURLBuffer;
         if (rArgs.IsHelpWriter()) {
-            bShowHelp = sal_True;
+            bShowHelp = true;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
         } else if (rArgs.IsHelpCalc()) {
-            bShowHelp = sal_True;
+            bShowHelp = true;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
         } else if (rArgs.IsHelpDraw()) {
-            bShowHelp = sal_True;
+            bShowHelp = true;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
         } else if (rArgs.IsHelpImpress()) {
-            bShowHelp = sal_True;
+            bShowHelp = true;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
         } else if (rArgs.IsHelpBase()) {
-            bShowHelp = sal_True;
+            bShowHelp = true;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
         } else if (rArgs.IsHelpBasic()) {
-            bShowHelp = sal_True;
+            bShowHelp = true;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
         } else if (rArgs.IsHelpMath()) {
-            bShowHelp = sal_True;
+            bShowHelp = true;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
         }
         if (bShowHelp) {
@@ -2308,10 +2308,7 @@ void Desktop::OpenClients()
     // but no document inside memory corrspond to this data.
     // Furter it's not acceptable to recover such documents without any UI. It can
     // need some time, where the user wont see any results and wait for finishing the office startup ...
-    sal_Bool bAllowRecoveryAndSessionManagement = (
-                                                    ( !rArgs.IsNoRestore() ) &&
-                                                    ( !rArgs.IsHeadless()  )
-                                                  );
+    bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
 
     if ( ! bAllowRecoveryAndSessionManagement )
     {
@@ -2333,9 +2330,9 @@ void Desktop::OpenClients()
     }
     else
     {
-        sal_Bool bCrashed            = sal_False;
-        sal_Bool bExistsRecoveryData = sal_False;
-        sal_Bool bExistsSessionData  = sal_False;
+        bool bCrashed            = false;
+        bool bExistsRecoveryData = false;
+        bool bExistsSessionData  = false;
 
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
 
@@ -2349,7 +2346,7 @@ void Desktop::OpenClients()
             try
             {
                 bRecovery = impl_callRecoveryUI(
-                    sal_False          , // false => force recovery instead of emergency save
+                    false          , // false => force recovery instead of emergency save
                     bExistsRecoveryData);
             }
             catch(const css::uno::Exception& e)
@@ -2731,7 +2728,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 void Desktop::OpenSplashScreen()
 {
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
-    sal_Bool bVisible = sal_False;
+    bool bVisible = false;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
     if ( !rCmdLine.IsInvisible() &&
          !rCmdLine.IsHeadless() &&
@@ -2767,7 +2764,7 @@ void Desktop::OpenSplashScreen()
         if ( rCmdLine.HasSplashPipe() )
             aSplashService = "com.sun.star.office.PipeSplashScreen";
 
-        bVisible = sal_True;
+        bVisible = true;
         Sequence< Any > aSeq( 2 );
         aSeq[0] <<= bVisible;
         aSeq[1] <<= aAppName;

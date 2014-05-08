@@ -211,7 +211,7 @@ void Migration::migrateSettingsIfNecessary()
     if (! aImpl.initializeMigration() )
         return;
 
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     try
     {
         bResult = aImpl.doMigration();
@@ -236,12 +236,12 @@ MigrationImpl::~MigrationImpl()
 }
 
 // The main entry point for migrating settings
-sal_Bool MigrationImpl::doMigration()
+bool MigrationImpl::doMigration()
 {
     // compile file list for migration
     m_vrFileList = compileFileList();
 
-    sal_Bool result = sal_False;
+    bool result = false;
     try
     {
         NewVersionUIInfo aNewVersionUIInfo;
@@ -313,7 +313,7 @@ sal_Bool MigrationImpl::doMigration()
         runServices();
         refresh();
 
-        result = sal_True;
+        result = true;
     }
     catch (css::uno::Exception & e)
     {
@@ -352,7 +352,7 @@ void MigrationImpl::setMigrationCompleted()
 
 bool MigrationImpl::checkMigrationCompleted()
 {
-    sal_Bool bMigrationCompleted = sal_False;
+    bool bMigrationCompleted = false;
     try {
         uno::Reference< XPropertySet > aPropertySet(
             getConfigAccess("org.openoffice.Setup/Office"), uno::UNO_QUERY_THROW);
@@ -362,7 +362,7 @@ bool MigrationImpl::checkMigrationCompleted()
         {
             // migration prevented - fake it's success
             setMigrationCompleted();
-            bMigrationCompleted = sal_True;
+            bMigrationCompleted = true;
         }
     }
     catch (const Exception&)
@@ -859,7 +859,7 @@ void MigrationImpl::copyConfig() {
     }
 }
 
-uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate)
+uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPath, bool bUpdate)
 {
     uno::Reference< XNameAccess > xNameAccess;
     try{
@@ -1030,7 +1030,7 @@ void MigrationImpl::runServices()
                 if (xNameAccess->getElementNames().getLength() > 0)
                 {
                     aModuleInfo.sModuleShortName = sModuleShortName;
-                    aModuleInfo.bHasMenubar = sal_True;
+                    aModuleInfo.bHasMenubar = true;
                 }
             }
 

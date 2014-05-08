@@ -425,14 +425,14 @@ void OfficeIPCThread::EnableRequests( bool i_bEnable )
     }
 }
 
-sal_Bool OfficeIPCThread::AreRequestsPending()
+bool OfficeIPCThread::AreRequestsPending()
 {
     // Give info about pending requests
     ::osl::MutexGuard   aGuard( GetMutex() );
     if ( pGlobalOfficeIPCThread.is() )
         return ( pGlobalOfficeIPCThread->mnPendingRequests > 0 );
     else
-        return sal_False;
+        return false;
 }
 
 void OfficeIPCThread::RequestsCompleted( int nCount )
@@ -840,28 +840,28 @@ void OfficeIPCThread::execute()
                 }
 
                 if ( !aCmdLineArgs->IsQuickstart() ) {
-                    sal_Bool bShowHelp = sal_False;
+                    bool bShowHelp = false;
                     OUStringBuffer aHelpURLBuffer;
                     if (aCmdLineArgs->IsHelpWriter()) {
-                        bShowHelp = sal_True;
+                        bShowHelp = true;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
                     } else if (aCmdLineArgs->IsHelpCalc()) {
-                        bShowHelp = sal_True;
+                        bShowHelp = true;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
                     } else if (aCmdLineArgs->IsHelpDraw()) {
-                        bShowHelp = sal_True;
+                        bShowHelp = true;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
                     } else if (aCmdLineArgs->IsHelpImpress()) {
-                        bShowHelp = sal_True;
+                        bShowHelp = true;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
                     } else if (aCmdLineArgs->IsHelpBase()) {
-                        bShowHelp = sal_True;
+                        bShowHelp = true;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
                     } else if (aCmdLineArgs->IsHelpBasic()) {
-                        bShowHelp = sal_True;
+                        bShowHelp = true;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
                     } else if (aCmdLineArgs->IsHelpMath()) {
-                        bShowHelp = sal_True;
+                        bShowHelp = true;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
                     }
                     if (bShowHelp) {
@@ -1018,7 +1018,7 @@ static void AddConversionsToDispatchList(
 }
 
 
-sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
+bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest )
 {
     // protect the dispatch list
     osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -1036,7 +1036,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
     AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut );
-    sal_Bool bShutdown( sal_False );
+    bool bShutdown( false );
 
     if ( pGlobalOfficeIPCThread.is() )
     {

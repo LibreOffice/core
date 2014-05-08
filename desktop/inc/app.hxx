@@ -114,10 +114,10 @@ class Desktop : public Application
             return m_aBootstrapStatus;
         }
 
-        static sal_Bool         isCrashReporterEnabled();
+        static bool            isCrashReporterEnabled();
 
         // first-start (ever) related methods
-        static sal_Bool         CheckExtensionDependencies();
+        static bool             CheckExtensionDependencies();
 
         void                    SynchronizeExtensionRepositories();
         void                    SetSplashScreenText( const OUString& rText );
@@ -136,10 +136,10 @@ class Desktop : public Application
         void                    CreateTemporaryDirectory();
         void                    RemoveTemporaryDirectory();
 
-        sal_Bool                InitializeInstallation( const OUString& rAppFilename );
+        bool                    InitializeInstallation( const OUString& rAppFilename );
         bool                    InitializeConfiguration();
         void                    FlushConfiguration();
-        sal_Bool                InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        bool                    InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
         void                    StartSetup( const OUString& aParameters );
@@ -169,9 +169,9 @@ class Desktop : public Application
 
         static void             ShowBackingComponent(Desktop * progress);
 
-        static sal_Bool         SaveTasks();
+        static bool             SaveTasks();
 
-        static sal_Bool         isUIOnSessionShutdownAllowed();
+        static bool             isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
         static void             createAcceptor(const OUString& aDescription);

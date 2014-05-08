@@ -159,14 +159,14 @@ DispatchWatcher::~DispatchWatcher()
 }
 
 
-sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList, bool bNoTerminate )
+bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList, bool bNoTerminate )
 {
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
     DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
     OUString                 aAsTemplateArg( "AsTemplate" );
-    sal_Bool                        bSetInputFilter = sal_False;
+    bool                     bSetInputFilter = false;
     OUString                 aForcedInputFilter;
 
     for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); ++p )
@@ -181,7 +181,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         // Set Input Filter
         if ( aDispatchRequest.aRequestType == REQUEST_INFILTER )
         {
-            bSetInputFilter = sal_True;
+            bSetInputFilter = true;
             aForcedInputFilter = aDispatchRequest.aURL;
             OfficeIPCThread::RequestsCompleted( 1 );
             continue;
@@ -424,7 +424,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             OUString aFilterOut=aParam.copy( nPathIndex+1 );
                             OUString aFilter;
                             OUString aFilterExt;
-                            sal_Bool bGuess = sal_False;
+                            bool bGuess = false;
 
                             if( nFilterIndex >= 0 )
                             {
@@ -434,7 +434,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             else
                             {
                                 // Guess
-                                bGuess = sal_True;
+                                bGuess = true;
                                 aFilterExt = aParam.copy( 0, nPathIndex );
                             }
                             INetURLObject aOutFilename( aObj );
@@ -515,7 +515,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         aPrinterArgs[0].Name = "FileName";
                         aPrinterArgs[0].Value <<= aOutFile;
                         aPrinterArgs[1].Name = "Wait";
-                        aPrinterArgs[1].Value <<= ( sal_Bool ) sal_True;
+                        aPrinterArgs[1].Value <<= true;
                         xDoc->print( aPrinterArgs );
                     } else {
                         if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
@@ -530,7 +530,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         // print ( also without user interaction )
                         Sequence < PropertyValue > aPrinterArgs( 1 );
                         aPrinterArgs[0].Name = "Wait";
-                        aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
+                        aPrinterArgs[0].Value <<= true;
                         xDoc->print( aPrinterArgs );
                     }
                 }
@@ -607,7 +607,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 

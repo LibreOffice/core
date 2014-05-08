@@ -384,7 +384,7 @@ static bool impl_needsCompatCheck()
 
 // Do we need to check the dependencies of the extensions?
 // When there are unresolved issues, we can't continue with startup
-sal_Bool Desktop::CheckExtensionDependencies()
+bool Desktop::CheckExtensionDependencies()
 {
     if (!impl_needsCompatCheck())
     {

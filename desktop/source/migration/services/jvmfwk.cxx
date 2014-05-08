@@ -257,8 +257,8 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
         *pIter >>= aValue;
         if ( aValue.Name == "OldConfiguration" )
         {
-            sal_Bool bSuccess = aValue.Value >>= aOldConfigValues;
-            OSL_ENSURE(bSuccess == sal_True, "[Service implementation " IMPL_NAME
+            bool bSuccess = aValue.Value >>= aOldConfigValues;
+            OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XInitialization::initialize: Argument OldConfiguration has wrong type.");
             if (bSuccess)
             {
@@ -307,10 +307,10 @@ void JavaMigration::migrateJavarc()
 
     OUString sValue;
     rtl::Bootstrap javaini(m_sUserDir + "/user/config/" + SAL_CONFIGFILE("java"));
-    sal_Bool bSuccess = javaini.getFrom("Home", sValue);
+    bool bSuccess = javaini.getFrom("Home", sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");
-    if (bSuccess == sal_True && !sValue.isEmpty())
+    if (bSuccess && !sValue.isEmpty())
     {
         //get the directory
         CJavaInfo aInfo;
@@ -416,7 +416,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
         {
         case ENABLE_JAVA:
         {
-            sal_Bool val = sal_Bool();
+            bool val;
             if (!(aValue >>= val))
                 throw MalformedDataException(
                        OUString("[Service implementation ") + IMPL_NAME +

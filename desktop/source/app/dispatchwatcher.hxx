@@ -92,7 +92,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
         static DispatchWatcher* GetDispatchWatcher();
 
         // execute new dispatch request
-        sal_Bool executeDispatchRequests( const DispatchList& aDispatches, bool bNoTerminate = false );
+        bool executeDispatchRequests( const DispatchList& aDispatches, bool bNoTerminate = false );
 
     private:
         DispatchWatcher();

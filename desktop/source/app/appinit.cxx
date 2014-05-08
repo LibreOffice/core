@@ -129,7 +129,7 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
         // Headless mode for FAT Office
-        sal_Bool bHeadlessMode = rCmdLine.IsHeadless();
+        bool bHeadlessMode = rCmdLine.IsHeadless();
         if ( bHeadlessMode )
             Application::EnableHeadlessMode(false);
 
@@ -160,7 +160,7 @@ namespace
     struct CurrentTempURL : public rtl::Static< OUString, CurrentTempURL > {};
 }
 
-static sal_Bool bAccept = sal_False;
+static bool bAccept = false;
 
 void Desktop::createAcceptor(const OUString& aAcceptString)
 {
@@ -219,7 +219,7 @@ void Desktop::enableAcceptors()
     if (!bAccept)
     {
         // from now on, all new acceptors are enabled
-        bAccept = sal_True;
+        bAccept = true;
         // enable existing acceptors by calling initialize(true)
         // on all existing acceptors
         AcceptorMap &rMap = acceptorMap::get();

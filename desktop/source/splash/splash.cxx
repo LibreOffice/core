@@ -75,17 +75,17 @@ private:
     sal_Int32   _iMax;
     sal_Int32   _iProgress;
     BitmapMode  _eBitmapMode;
-    sal_Bool    _bPaintBitmap;
-    sal_Bool    _bPaintProgress;
-    sal_Bool    _bVisible;
-    sal_Bool    _bShowLogo;
-    sal_Bool    _bFullScreenSplash;
-    sal_Bool    _bProgressEnd;
-    long _height, _width, _tlx, _tly, _barwidth;
-    long _barheight, _barspace, _textBaseline;
-    double _fXPos, _fYPos;
-    double _fWidth, _fHeight;
-    const long _xoffset, _yoffset;
+    bool        _bPaintBitmap;
+    bool        _bPaintProgress;
+    bool        _bVisible;
+    bool        _bShowLogo;
+    bool        _bFullScreenSplash;
+    bool        _bProgressEnd;
+    long        _height, _width, _tlx, _tly, _barwidth;
+    long        _barheight, _barspace, _textBaseline;
+    double      _fXPos, _fYPos;
+    double      _fWidth, _fHeight;
+    const long  _xoffset, _yoffset;
 
 public:
     SplashScreen();
@@ -128,12 +128,12 @@ SplashScreen::SplashScreen()
     , _iMax(100)
     , _iProgress(0)
     , _eBitmapMode(BM_DEFAULTMODE)
-    , _bPaintBitmap(sal_True)
-    , _bPaintProgress(sal_False)
+    , _bPaintBitmap(true)
+    , _bPaintProgress(false)
     , _bVisible(true)
-    , _bShowLogo(sal_True)
-    , _bFullScreenSplash(sal_False)
-    , _bProgressEnd(sal_False)
+    , _bShowLogo(true)
+    , _bFullScreenSplash(false)
+    , _bProgressEnd(false)
     , _height(0)
     , _width(0)
     , _tlx(NOT_LOADED)
@@ -166,7 +166,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
 {
     _iMax = nRange;
     if (_bVisible) {
-        _bProgressEnd = sal_False;
+        _bProgressEnd = false;
         SolarMutexGuard aSolarGuard;
         if ( _eBitmapMode == BM_FULLSCREEN )
             ShowFullScreenMode( true );
@@ -186,7 +186,7 @@ void SAL_CALL SplashScreen::end()
             EndFullScreenMode();
         Hide();
     }
-    _bProgressEnd = sal_True;
+    _bProgressEnd = true;
 }
 
 void SAL_CALL SplashScreen::reset()
@@ -325,7 +325,7 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
 void SplashScreen::updateStatus()
 {
     if (!_bVisible || _bProgressEnd) return;
-    if (!_bPaintProgress) _bPaintProgress = sal_True;
+    if (!_bPaintProgress) _bPaintProgress = true;
     Paint(Rectangle());
     Flush();
 }
@@ -584,7 +584,7 @@ void SplashScreen::Paint( const Rectangle&)
     if(!_bVisible) return;
 
     //native drawing
-    sal_Bool bNativeOK = sal_False;
+    bool bNativeOK = false;
 
     // in case of native controls we need to draw directly to the window
     if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
@@ -605,7 +605,7 @@ void SplashScreen::Paint( const Rectangle&)
         }
 
         if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != sal_False )
+                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) )
         {
             return;
         }
