@@ -517,9 +517,8 @@ void MediaWindowImpl::onURLChanged()
         uno::Reference< media::XPlayerWindow > xPlayerWindow;
         const Point                            aPoint;
         const Size                             aSize( mpChildWindow->GetSizePixel() );
-        const sal_Int32                        nWndHandle = 0;
 
-        aArgs[ 0 ] = uno::makeAny( nWndHandle );
+        aArgs[ 0 ] = uno::makeAny( mpChildWindow->GetParentWindowHandle() );
         aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
         aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( mpChildWindow.get() ) );
 
