@@ -730,7 +730,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                         sal_Int16 nDialogRet = xDialog->execute();
                         if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                         {
-                            delete pChildWindow;
+                            pGridWindow->DeleteChildWindow(pChildWindow);
                             // leave OLE inplace mode and unmark
                             OSL_ASSERT( pViewShell );
                             OSL_ASSERT( pView );
