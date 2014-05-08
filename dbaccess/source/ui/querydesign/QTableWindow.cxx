@@ -73,7 +73,7 @@ OQueryTableWindow::~OQueryTableWindow()
 bool OQueryTableWindow::Init()
 {
     bool bSuccess = OTableWindow::Init();
-    if(!bSuccess)
+    if (!bSuccess)
         return bSuccess;
 
     OQueryTableView* pContainer = static_cast<OQueryTableView*>(getTableView());
@@ -104,24 +104,6 @@ bool OQueryTableWindow::Init()
     // reset the title
     m_aTitle.SetText( pWinData->GetWinName() );
     m_aTitle.Show();
-
-    if (!bSuccess)
-    {   // it should just open a dummy window...
-        OSL_ENSURE(!GetAliasName().isEmpty(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
-            // .. but that needs at least an Alias
-
-        // create ::com::sun::star::form::ListBox
-        if (!m_pListBox)
-            m_pListBox = CreateListBox();
-
-        // set title
-        m_aTitle.SetText(GetAliasName());
-        m_aTitle.Show();
-
-        clearListBox();
-            // don't need to refill them as I don't have a table
-        m_pListBox->Show();
-    }
 
     getTableView()->getDesignView()->getController().InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
     return bSuccess;
