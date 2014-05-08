@@ -719,6 +719,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             (SwNodeIndex( GetNodes().GetEndOfAutotext()),
              GetTxtCollFromPool( nCollId ));
         SwCntntNode * pAnchorNode = pAnchorPos->nNode.GetNode().GetCntntNode();
+        assert(pAnchorNode); // pAnchorNode from cursor, must be valid
 
         const SfxPoolItem * pItem = NULL;
 
