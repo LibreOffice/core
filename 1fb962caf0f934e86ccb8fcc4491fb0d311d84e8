@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_54587afa",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-05-08T16:24:00Z",
+      "side": 1,
+      "message": "Yes that is the intention. I use sort to speed up the find, but I now have doubts whether this actually helps.\n\nI have no previous experience with std::set and will study this class before implementing it.",
+      "parentUuid": "5a72e520_145e02ea",
+      "revId": "1fb962caf0f934e86ccb8fcc4491fb0d311d84e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_f45166d9",
         "filename": "sc/source/ui/inc/inputhdl.hxx",
         "patchSetId": 5
@@ -48,6 +66,24 @@
       "writtenOn": "2014-05-08T15:59:14Z",
       "side": 1,
       "message": "I don\u0027t understand why this should be a std::deque.\n\nHowever, I think it should be a std::set instead, see my comment in inputhdl.cxx",
+      "revId": "1fb962caf0f934e86ccb8fcc4491fb0d311d84e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_745d76e9",
+        "filename": "sc/source/ui/inc/inputhdl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-05-08T16:24:00Z",
+      "side": 1,
+      "message": "I will study the std::set.",
+      "parentUuid": "5a72e520_f45166d9",
       "revId": "1fb962caf0f934e86ccb8fcc4491fb0d311d84e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
