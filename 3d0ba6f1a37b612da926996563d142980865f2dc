@@ -22,6 +22,47 @@
       "revId": "3d0ba6f1a37b612da926996563d142980865f2dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_b43d2ebe",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-08T06:57:40Z",
+      "side": 1,
+      "message": "Sure, but why that \"\\\" is necessary?",
+      "parentUuid": "5a72e520_5926f369",
+      "range": {
+        "startLine": 425,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 8
+      },
+      "revId": "3d0ba6f1a37b612da926996563d142980865f2dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_d44aaa54",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-08T06:57:40Z",
+      "side": 1,
+      "message": "\"(a !\u003d b) || (a \u0026\u0026 b)\" can be simplified to \"(a || b)\".\n\nAdditionally, you already have \"isTextNodeEmpty ||\" before, so what you do here is a simple \"isTextNodeEmpty || bPrevTextNodeIsEmpty\". If that\u0027s what you want, please just write that, and avoid the whole unnecessary \"( bPrevTextNodeIsEmpty !\u003d isTextNodeEmpty ) || ( bPrevTextNodeIsEmpty \u0026\u0026\" part. :-)",
+      "revId": "3d0ba6f1a37b612da926996563d142980865f2dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
