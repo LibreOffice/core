@@ -33,20 +33,20 @@ private:
     VbaCommandBarHelperRef                              pCBarHelper;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
     OUString                                            m_sResourceUrl;
-    sal_Bool                                            m_bIsMenu;
+    bool                                                m_bIsMenu;
 
     css::uno::Sequence< css::beans::PropertyValue > CreateMenuItemData( const OUString& sCommandURL,
                                                                         const OUString& sHelpURL,
                                                                         const OUString& sLabel,
                                                                         sal_uInt16 nType,
                                                                         const css::uno::Any& aSubMenu,
-                                                                        sal_Bool isVisible,
-                                                                        sal_Bool isEnabled );
-    css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const css::uno::Any& aSubMenu, sal_Bool isVisible, sal_Int32 nStyle );
+                                                                        bool isVisible,
+                                                                        bool isEnabled );
+    css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const css::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
 
 public:
     ScVbaCommandBarControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw( css::uno::RuntimeException );
-    sal_Bool IsMenu(){ return m_bIsMenu; }
+    bool IsMenu(){ return m_bIsMenu; }
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;

@@ -62,7 +62,7 @@ public:
             if( sResourceUrl.indexOf( "private:resource/toolbar/" ) != -1 )
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
-                uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False ) );
+                uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, false ) );
                 // Strange, shouldn't the Enumeration support match/share the
                 // iteration code? ( e.g. ScVbaCommandBars::Item(...) )
                 // and we at least should return here ( something ) it seems
@@ -106,7 +106,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     OUString sResourceUrl;
     uno::Reference< container::XIndexAccess > xBarSettings;
     OUString sBarName;
-    sal_Bool bMenu = sal_False;
+    bool bMenu = false;
     uno::Any aRet;
 
     if( aSource >>= sBarName )
@@ -118,7 +118,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             {
                 // spreadsheet menu bar
                 sResourceUrl = ITEM_MENUBAR_URL;
-                bMenu = sal_True;
+                bMenu = true;
             }
             else if( sBarName.equalsIgnoreAsciiCase( "Cell" ) )
             {
@@ -132,7 +132,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             {
                 // text processor menu bar
                 sResourceUrl = ITEM_MENUBAR_URL;
-                bMenu = sal_True;
+                bMenu = true;
             }
         }
 
@@ -140,7 +140,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
         if( !aRet.hasValue() && sResourceUrl.isEmpty() )
         {
             sResourceUrl = m_pCBarHelper->findToolbarByName( m_xNameAccess, sBarName );
-            bMenu = sal_False;
+            bMenu = false;
         }
     }
 
@@ -181,7 +181,7 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
 
     sResourceUrl = VbaCommandBarHelper::generateCustomURL();
     uno::Reference< container::XIndexAccess > xBarSettings( m_pCBarHelper->getSettings( sResourceUrl ), uno::UNO_QUERY_THROW );
-    uno::Reference< XCommandBar > xCBar( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, sal_False ) );
+    uno::Reference< XCommandBar > xCBar( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, false ) );
     xCBar->setName( sName );
     return xCBar;
 }

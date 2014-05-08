@@ -57,8 +57,8 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
                                                                                    const OUString& sLabel,
                                                                                    sal_uInt16 nType,
                                                                                    const uno::Any& aSubMenu,
-                                                                                   sal_Bool isVisible,
-                                                                                   sal_Bool isEnabled )
+                                                                                   bool isVisible,
+                                                                                   bool isEnabled )
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
@@ -80,7 +80,13 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
     return aProps;
 }
 
-uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const uno::Any& aSubMenu, sal_Bool isVisible, sal_Int32 nStyle )
+uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItemData( const OUString& sCommandURL,
+                                                                                      const OUString& sHelpURL,
+                                                                                      const OUString& sLabel,
+                                                                                      sal_uInt16 nType,
+                                                                                      const uno::Any& aSubMenu,
+                                                                                      bool isVisible,
+                                                                                      sal_Int32 nStyle )
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
@@ -126,9 +132,9 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     getPropertyValue( aProps, ITEM_DESCRIPTOR_CONTAINER ) >>= xSubMenu;
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( xSubMenu.is() )
-        pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True );
+        pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, true );
     else
-        pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True );
+        pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, true );
 
     return uno::makeAny( uno::Reference< XCommandBarControl > ( pNewCommandBarControl ) );
 }
@@ -166,7 +172,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     OUString sCommandUrl( CUSTOM_MENU_STR + sLabel);
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     sal_Int32 nPosition = 0;
-    sal_Bool bTemporary = sal_True;
+    bool bTemporary = true;
 
     if( Type.hasValue() )
     {
@@ -208,7 +214,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     }
     else
     {
-        sal_Bool isVisible = sal_True;
+        bool isVisible = true;
         sal_Int32 nStyle = 0;
         aProps = CreateToolbarItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu, isVisible, nStyle );
     }

@@ -37,13 +37,13 @@ class ScVbaCommandBar : public CommandBar_BASE
 private:
     VbaCommandBarHelperRef pCBarHelper;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
-    OUString   m_sResourceUrl;
-    sal_Bool        m_bIsMenu;
+    OUString    m_sResourceUrl;
+    bool        m_bIsMenu;
 
 public:
-    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Bool bIsMenu ) throw( css::uno::RuntimeException );
+    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, bool bIsMenu ) throw( css::uno::RuntimeException );
 
-    sal_Bool IsMenu() const { return m_bIsMenu; }
+    bool IsMenu() const { return m_bIsMenu; }
 
     // Attributes
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

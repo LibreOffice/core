@@ -29,7 +29,12 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > xParent, const uno::Reference< uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const uno::Reference< container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Bool bIsMenu ) throw( uno::RuntimeException ) : CommandBar_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl ), m_bIsMenu( bIsMenu )
+ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > xParent,
+                                  const uno::Reference< uno::XComponentContext > xContext,
+                                  VbaCommandBarHelperRef pHelper,
+                                  const uno::Reference< container::XIndexAccess >& xBarSettings,
+                                  const OUString& sResourceUrl, bool bIsMenu ) throw( uno::RuntimeException )
+   : CommandBar_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl ), m_bIsMenu( bIsMenu )
 {
 }
 
@@ -80,7 +85,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
     if( m_bIsMenu )
         return sal_True;
 
-    sal_Bool bVisible = sal_False;
+    bool bVisible = false;
     try
     {
         uno::Reference< container::XNameAccess > xNameAccess = pCBarHelper->getPersistentWindowState();

@@ -210,7 +210,7 @@ VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xP
 
 namespace {
 
-void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, sal_Bool bScreenUpdating, sal_Bool bInteractive )
+void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, bool bScreenUpdating, bool bInteractive )
 {
     if( !bScreenUpdating ) try
     {
@@ -238,8 +238,8 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
-    sal_Bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
-    sal_Bool bInteractive = !xApplication.is() || xApplication->getInteractive();
+    bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
+    bool bInteractive = !xApplication.is() || xApplication->getInteractive();
 
     uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create(mxContext);
     OUString sURL;
@@ -284,8 +284,8 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
-    sal_Bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
-    sal_Bool bInteractive = !xApplication.is() || xApplication->getInteractive();
+    bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
+    bool bInteractive = !xApplication.is() || xApplication->getInteractive();
 
     // we need to detect if this is a URL, if not then assume it's a file path
         OUString aURL;
@@ -305,7 +305,8 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
 
     if ( ReadOnly.hasValue()  )
     {
-        sal_Bool bIsReadOnly = sal_False; ReadOnly >>= bIsReadOnly;
+        bool bIsReadOnly = false;
+        ReadOnly >>= bIsReadOnly;
         if ( bIsReadOnly )
         {
             sProps.realloc( sProps.getLength() + 1 );

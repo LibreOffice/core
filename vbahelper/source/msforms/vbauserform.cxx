@@ -301,7 +301,7 @@ ScVbaUserForm::hasProperty( const OUString& aName ) throw (uno::RuntimeException
         if ( xDlgProps.is() )
         {
             uno::Reference< container::XNameContainer > xAllChildren( xDlgProps->getPropertyValue( "AllDialogChildren" ), uno::UNO_QUERY_THROW );
-            sal_Bool bRes =  xAllChildren->hasByName( aName );
+            bool bRes =  xAllChildren->hasByName( aName );
             SAL_INFO("vbahelper", "ScVbaUserForm::hasProperty(" << aName << ") " << xAllChildren.is() << " ---> " << bRes );
             return bRes;
         }

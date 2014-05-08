@@ -40,7 +40,7 @@ protected:
     css::uno::Sequence< css::beans::PropertyValue >     m_aPropertyValues;
 
     sal_Int32           m_nPosition;
-    sal_Bool            m_bTemporary;
+    bool                m_bTemporary;
 
 private:
     void ApplyChange() throw (css::uno::RuntimeException);
@@ -77,7 +77,7 @@ typedef cppu::ImplInheritanceHelper1< ScVbaCommandBarControl, ov::XCommandBarPop
 class ScVbaCommandBarPopup : public CommandBarPopup_BASE
 {
 public:
-    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary ) throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
@@ -92,7 +92,7 @@ typedef cppu::ImplInheritanceHelper1< ScVbaCommandBarControl, ov::XCommandBarBut
 class ScVbaCommandBarButton : public CommandBarButton_BASE
 {
 public:
-    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, sal_Bool bTemporary ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary ) throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
