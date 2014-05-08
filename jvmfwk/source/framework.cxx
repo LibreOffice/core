@@ -171,7 +171,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             rtl_freeMemory(arInfos);
 
             //Check if the current plugin can detect JREs at the location
-            // of the paths added by jfw_setJRELocations or jfw_addJRELocation
+            // of the paths added by jfw_addJRELocation
             //get the function from the plugin
 #ifndef DISABLE_DYNLOADING
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
@@ -591,7 +591,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 if (!pluginLib.is())
                     return JFW_E_NO_PLUGIN;
                 //Check if the current plugin can detect JREs at the location
-                // of the paths added by jfw_setJRELocations or jfw_addJRELocation
+                // of the paths added by jfw_addJRELocation
                 //get the function from the plugin
                 jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                     (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
@@ -1105,31 +1105,6 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
         OSL_FAIL(e.message.getStr());
     }
 
-    return errcode;
-
-}
-
-javaFrameworkError SAL_CALL jfw_setJRELocations(
-    rtl_uString ** arLocations, sal_Int32 nLen)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    try
-    {
-        osl::MutexGuard guard(jfw::FwkMutex::get());
-        if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
-            return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node(jfw::NodeJava::USER);
-        if (arLocations == NULL && nLen != 0)
-            return JFW_E_INVALID_ARG;
-        node.setJRELocations(arLocations, nLen);
-        node.write();
-    }
-    catch (const jfw::FrameworkException& e)
-    {
-        errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
-    }
     return errcode;
 
 }

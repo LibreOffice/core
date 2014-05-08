@@ -337,7 +337,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
     installation and checks if they there is one among them that supports
     a set of features (currently only accessibilty is possible). If none was
     found then it also uses a list of paths, which have been registered
-    by <code>jfw_addJRELocation</code> or <code>jfw_setJRELocations</code>
+    by <code>jfw_addJRELocation</code>
     to find JREs. Found JREs are examined in the same way.</p>
     <p>
     A JRE installation is only selected if it meets the version requirements.
@@ -394,7 +394,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pIn
     the plug-in libraries to provide lists of available <code>JavaInfo</code>
     objects where each object represents a JRE (see vendorplugin.h,
     getAllJavaInfos). It also uses a list of paths, which have been registered
-    by <code>jfw_addJRELocation</code> or <code>jfw_setJRELocations</code>.
+    by <code>jfw_addJRELocation</code>.
     It is checked if the path still contains a valid JRE and if so the respective
     <code>JavaInfo</code> object will be appended to the array unless there is
     already an equal object.</p>
@@ -729,38 +729,9 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString **
     JFW_E_CONFIGURATION mode was not properly set or their prerequisites
     were not met.<br/>
     JFW_E_DIRECT_MODE the function cannot be used in this mode.
-    @see jfw_setJRELocations
  */
 JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
 
-/** saves the locations of a number of JREs.
-
-    <p>
-    The function does not verify if the paths points to JRE. However,
-    it makes sure that every path is unique. That is, if the array
-    contains strings which are the same then only one is stored.</p>
-    <p>
-    If <code>arLocations</code> is NULL or it has the length null (nSize = 0)
-    then all previously stored paths are deleted. Otherwise,
-    the old values are overwritten.</p>
-
-    @param arLocations
-    [in] array of paths to locations of JREs.
-
-    @param nSize
-    [in] the size of the array <code>arLocations</code>
-
-    @return
-    JFW_E_NONE function ran successfully.<br/>
-    JFW_E_INVALIDARG arLocation is NULL and nSize is not null.<br/>
-    JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
-    were not met.<br/>
-    JFW_E_DIRECT_MODE the function cannot be used in this mode.
-    @see jfw_addJRELocations
- */
-JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_setJRELocations(
-    rtl_uString ** arLocations, sal_Int32 nSize);
 /** obtains an array containing paths to JRE installations.
 
     <p>
