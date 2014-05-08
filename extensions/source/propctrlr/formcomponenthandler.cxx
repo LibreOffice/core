@@ -548,7 +548,7 @@ namespace pcr
             ::std::vector< OUString > aListEntries;
             tools::StringListResource aRes( PcrRes( RID_RSC_ENUM_SHOWHIDE ), aListEntries );
             OSL_ENSURE( aListEntries.size() == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!" );
-            sal_Bool bShow = ( aListEntries.size() < 2 ) || ( sControlValue == aListEntries[1] );
+            bool bShow = ( aListEntries.size() < 2 ) || ( sControlValue == aListEntries[1] );
 
             aPropertyValue <<= bShow;
         }
@@ -999,7 +999,7 @@ namespace pcr
 
         // for the moment, assume a text field
         sal_Int16 nControlType = PropertyControlType::TextField;
-        sal_Bool bReadOnly = sal_False;
+        bool bReadOnly = false;
         aDescriptor.Control.clear();
 
 
@@ -1043,7 +1043,7 @@ namespace pcr
         break;
 
         case PROPERTY_ID_FONT:
-            bReadOnly = sal_True;
+            bReadOnly = true;
             aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_FONT_TYPE);
             break;
 
@@ -1099,7 +1099,7 @@ namespace pcr
             break;
 
         case PROPERTY_ID_CONTROLLABEL:
-            bReadOnly = sal_True;
+            bReadOnly = true;
             aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_CONTROLLABEL);
             break;
 
@@ -1120,7 +1120,7 @@ namespace pcr
 
                 if (pSupplier != NULL)
                 {
-                    sal_Bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
+                    bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
 
                     bReadOnly = bIsFormatKey;
 
@@ -1619,7 +1619,7 @@ namespace pcr
         // ----- Repeat -----
         case PROPERTY_ID_REPEAT:
         {
-            sal_Bool bIsRepeating = sal_False;
+            bool bIsRepeating = false;
             OSL_VERIFY( _rNewValue >>= bIsRepeating );
             _rxInspectorUI->enablePropertyUI( PROPERTY_REPEAT_DELAY, bIsRepeating );
         }
@@ -1630,7 +1630,7 @@ namespace pcr
         {
             if ( !impl_componentHasProperty_throw( PROPERTY_TABINDEX ) )
                 break;
-            sal_Bool bHasTabStop = sal_False;
+            bool bHasTabStop = false;
             _rNewValue >>= bHasTabStop;
             _rxInspectorUI->enablePropertyUI( PROPERTY_TABINDEX, bHasTabStop );
         }
@@ -1650,7 +1650,7 @@ namespace pcr
         {
             if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_LINECOUNT ) )
             {
-                sal_Bool bDropDown = sal_True;
+                bool bDropDown = true;
                 _rNewValue >>= bDropDown;
                 _rxInspectorUI->enablePropertyUI( PROPERTY_LINECOUNT, bDropDown );
             }
@@ -1697,9 +1697,9 @@ namespace pcr
         // ----- ShowThousandsSeparator -----
         case PROPERTY_ID_SHOWTHOUSANDSEP:
         {
-            sal_Bool bAccuracy = (PROPERTY_ID_DECIMAL_ACCURACY == nActuatingPropId);
+            bool        bAccuracy = (PROPERTY_ID_DECIMAL_ACCURACY == nActuatingPropId);
             sal_uInt16  nNewDigits = 0;
-            sal_Bool    bUseSep = sal_False;
+            bool        bUseSep = false;
             if ( bAccuracy )
                 OSL_VERIFY( _rNewValue >>= nNewDigits );
             else
@@ -1776,7 +1776,7 @@ namespace pcr
 
         case PROPERTY_ID_TOGGLE:
         {
-            sal_Bool bIsToggleButton = sal_False;
+            bool bIsToggleButton = false;
             OSL_VERIFY( _rNewValue >>= bIsToggleButton );
             _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_STATE, bIsToggleButton );
         }
@@ -1826,8 +1826,8 @@ namespace pcr
                         OSL_VERIFY( aListSourceValue >>= sListSource );
                 }
 
-                sal_Bool bIsEnabled =   (  ( eLSType == ListSourceType_VALUELIST )
-                                        || ( sListSource.isEmpty() )
+                bool bIsEnabled =   (  ( eLSType == ListSourceType_VALUELIST )
+                                    || ( sListSource.isEmpty() )
                                         );
                 _rxInspectorUI->enablePropertyUI( PROPERTY_STRINGITEMLIST, bIsEnabled );
             }
@@ -1868,8 +1868,8 @@ namespace pcr
                 OUString sControlSource;
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_CONTROLSOURCE ) >>= sControlSource );
 
-                sal_Bool bEmptyIsNULL = sal_False;
-                sal_Bool bHasEmptyIsNULL = impl_componentHasProperty_throw( PROPERTY_EMPTY_IS_NULL );
+                bool bEmptyIsNULL = false;
+                bool bHasEmptyIsNULL = impl_componentHasProperty_throw( PROPERTY_EMPTY_IS_NULL );
                 if ( bHasEmptyIsNULL )
                     OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_EMPTY_IS_NULL ) >>= bEmptyIsNULL );
 
@@ -1930,7 +1930,7 @@ namespace pcr
                 bool bAllowEmptyDS = ::dbtools::isEmbeddedInDatabase( m_xComponent, xConnection );
 
                 // if there's no escape processing, we cannot enter any values for this property
-                sal_Bool  bDoEscapeProcessing( sal_False );
+                bool  bDoEscapeProcessing( false );
                 impl_getPropertyValue_throw( PROPERTY_ESCAPE_PROCESSING ) >>= bDoEscapeProcessing;
                 _rxInspectorUI->enablePropertyUI(
                     impl_getPropertyNameFromId_nothrow( _nPropId ),
@@ -2185,10 +2185,10 @@ namespace pcr
                 case ControlType::FORMATTEDFIELD:
                 case FormComponentType::CURRENCYFIELD:
                 case FormComponentType::PATTERNFIELD:
-                    _rValue = makeAny( (sal_Bool)sal_True );
+                    _rValue = makeAny( true );
                     break;
                 default:
-                    _rValue = makeAny( (sal_Bool)sal_False );
+                    _rValue = makeAny( false );
                     break;
                 }
             }
@@ -2534,7 +2534,7 @@ namespace pcr
         Sequence< OUString> aQueryNames = _xQueryNames->getElementNames();
         sal_uInt32 nCount = aQueryNames.getLength();
         const OUString* pQueryNames = aQueryNames.getConstArray();
-        sal_Bool bAdd = !_sName.isEmpty();
+        bool bAdd = !_sName.isEmpty();
 
         for ( sal_uInt32 i=0; i<nCount; i++, ++pQueryNames )
         {
@@ -3005,8 +3005,8 @@ namespace pcr
             FormSQLCommandUI( const Reference< XPropertySet >& _rxForm );
 
             // ISQLCommandAdapter
-            virtual OUString getSQLCommand() const SAL_OVERRIDE;
-            virtual sal_Bool        getEscapeProcessing() const SAL_OVERRIDE;
+            virtual OUString        getSQLCommand() const SAL_OVERRIDE;
+            virtual bool            getEscapeProcessing() const SAL_OVERRIDE;
             virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
             virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const SAL_OVERRIDE;
 
@@ -3032,9 +3032,9 @@ namespace pcr
         }
 
 
-        sal_Bool FormSQLCommandUI::getEscapeProcessing() const
+        bool FormSQLCommandUI::getEscapeProcessing() const
         {
-            sal_Bool bEscapeProcessing( sal_False );
+            bool bEscapeProcessing( false );
             OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
             return bEscapeProcessing;
         }
@@ -3072,8 +3072,8 @@ namespace pcr
             ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo );
 
             // ISQLCommandAdapter
-            virtual OUString getSQLCommand() const SAL_OVERRIDE;
-            virtual sal_Bool        getEscapeProcessing() const SAL_OVERRIDE;
+            virtual OUString        getSQLCommand() const SAL_OVERRIDE;
+            virtual bool            getEscapeProcessing() const SAL_OVERRIDE;
             virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
             virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const SAL_OVERRIDE;
 
@@ -3118,7 +3118,7 @@ namespace pcr
         }
 
 
-        sal_Bool ValueListCommandUI::getEscapeProcessing() const
+        bool ValueListCommandUI::getEscapeProcessing() const
         {
             enum ListSourceType eType( ListSourceType_SQL );
             OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eType );

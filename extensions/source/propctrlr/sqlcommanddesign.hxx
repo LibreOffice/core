@@ -195,7 +195,7 @@ namespace pcr
         /// retrieves the current SQL command of the component
         virtual OUString getSQLCommand() const = 0;
         /// retrieves the current value of the EscapeProcessing property of the component
-        virtual sal_Bool getEscapeProcessing() const = 0;
+        virtual bool     getEscapeProcessing() const = 0;
 
         /// sets a new SQL command
         virtual void     setSQLCommand( const OUString& _rCommand ) const = 0;

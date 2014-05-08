@@ -167,7 +167,7 @@ namespace pcr
     //= OEditControl
 
 
-    OEditControl::OEditControl(Window* _pParent, sal_Bool _bPW, WinBits _nWinStyle)
+    OEditControl::OEditControl(Window* _pParent, bool _bPW, WinBits _nWinStyle)
         :OEditControl_Base( _bPW ? PropertyControlType::CharacterField : PropertyControlType::TextField, _pParent, _nWinStyle )
     {
         m_bIsPassword = _bPW;
@@ -1028,7 +1028,7 @@ namespace pcr
         ,m_pImplEdit( NULL )
         ,m_pDropdownButton( NULL )
         ,m_nOperationMode( eStringList )
-        ,m_bDropdown( sal_False )
+        ,m_bDropdown( false )
     {
         SetCompoundControl( true );
 
@@ -1115,7 +1115,7 @@ namespace pcr
             else if ( nKey == KEY_DOWN && aKeyCode.IsMod2() )
             {
                 Invalidate();
-                ShowDropDown( sal_True );
+                ShowDropDown( true );
             }
             else if (   KEYGROUP_CURSOR == aKeyCode.GetGroup()
                     ||  nKey == KEY_HELP
@@ -1139,7 +1139,7 @@ namespace pcr
                     aSel.Max() = aSel.Min();
                 }
                 Invalidate();
-                ShowDropDown( sal_True );
+                ShowDropDown( true );
                 m_pFloatingEdit->getEdit()->GrabFocus();
                 m_pFloatingEdit->getEdit()->SetSelection( aSel );
                 Window* pFocusWin = Application::GetFocusWindow();
@@ -1201,7 +1201,7 @@ namespace pcr
 
 
     #define STD_HEIGHT  100
-    sal_Bool DropDownEditControl::ShowDropDown( sal_Bool bShow )
+    bool DropDownEditControl::ShowDropDown( bool bShow )
     {
         if (bShow)
         {
@@ -1216,7 +1216,7 @@ namespace pcr
             m_pFloatingEdit->Show();
             m_pFloatingEdit->getEdit()->GrabFocus();
             m_pFloatingEdit->getEdit()->SetSelection(Selection(m_pFloatingEdit->getEdit()->GetText().getLength()));
-            m_bDropdown=sal_True;
+            m_bDropdown = true;
             if ( m_nOperationMode == eMultiLineText )
                 m_pFloatingEdit->getEdit()->SetText( m_pImplEdit->GetText() );
             m_pImplEdit->SetText("");
@@ -1234,7 +1234,7 @@ namespace pcr
 
             m_pImplEdit->SetText( sDisplayText );
             GetParent()->Invalidate( INVALIDATE_CHILDREN );
-            m_bDropdown = sal_False;
+            m_bDropdown = false;
             m_pImplEdit->GrabFocus();
         }
         return m_bDropdown;
@@ -1304,7 +1304,7 @@ namespace pcr
 
         OUString aStr = m_pFloatingEdit->getEdit()->GetText();
         OUString aStr2 = GetText();
-        ShowDropDown(sal_False);
+        ShowDropDown(false);
 
         if (aStr!=aStr2 || ( m_nOperationMode == eStringList ) )
         {

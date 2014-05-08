@@ -114,8 +114,8 @@ namespace pcr
         // make some FormattedField methods available
         void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->SetDecimalDigits(nPrecision); m_nLastDecimalDigits = nPrecision; }
         void SetDefaultValue(double dDef) { getTypedControlWindow()->SetDefaultValue(dDef); }
-        void EnableEmptyField(sal_Bool bEnable) { getTypedControlWindow()->EnableEmptyField(bEnable); }
-        void SetThousandsSep(sal_Bool bEnable) { getTypedControlWindow()->SetThousandsSep(bEnable); }
+        void EnableEmptyField(bool bEnable) { getTypedControlWindow()->EnableEmptyField(bEnable); }
+        void SetThousandsSep(bool bEnable) { getTypedControlWindow()->SetThousandsSep(bEnable); }
 
     protected:
         virtual ~OFormattedNumericControl();

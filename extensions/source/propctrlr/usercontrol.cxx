@@ -210,7 +210,7 @@ namespace pcr
 
     void OFormattedNumericControl::SetFormatDescription(const FormatDescription& rDesc)
     {
-        sal_Bool bFallback = sal_True;
+        bool bFallback = true;
 
         if (rDesc.pSupplier)
         {
@@ -243,7 +243,7 @@ namespace pcr
                         m_nLastDecimalDigits = 0;
                         break;
                 }
-                bFallback = sal_False;
+                bFallback = false;
             }
 
         }

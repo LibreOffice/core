@@ -242,7 +242,7 @@ namespace pcr
         // stop the inspection
         void stopInspection( bool _bCommitModified );
 
-        sal_Bool haveView() const { return NULL != m_pView; }
+        bool haveView() const { return NULL != m_pView; }
         OPropertyEditor&    getPropertyBox() { return m_pView->getPropertyBox(); }
 
         // does the inspection of the objects as indicated by our model
@@ -287,10 +287,10 @@ namespace pcr
                         impl_getPropertyValue_throw( const OUString& _rPropertyName );
 
         /// calls XPropertyHandler::suspend for all our property handlers
-        sal_Bool    suspendPropertyHandlers_nothrow( sal_Bool _bSuspend );
+        bool    suspendPropertyHandlers_nothrow( bool _bSuspend );
 
         /// suspends the complete inspector
-        sal_Bool    suspendAll_nothrow();
+        bool    suspendAll_nothrow();
 
         /** selects a page according to our current view data
         */
@@ -311,7 +311,7 @@ namespace pcr
         */
         bool impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = NULL );
 
-        sal_Bool Construct(Window* _pParentWin);
+        bool Construct(Window* _pParentWin);
 
         /** retrieves the property handler for a given property name
             @param  _rPropertyName

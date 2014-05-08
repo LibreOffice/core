@@ -130,10 +130,10 @@ namespace pcr
     class OEditControl : public OEditControl_Base
     {
     protected:
-        sal_Bool m_bIsPassword : 1;
+        bool m_bIsPassword : 1;
 
     public:
-        OEditControl( Window* _pParent, sal_Bool _bPassWord, WinBits nWinStyle );
+        OEditControl( Window* _pParent, bool _bPassWord, WinBits nWinStyle );
 
         // XPropertyControl
         virtual ::com::sun::star::uno::Any SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -378,7 +378,7 @@ namespace pcr
         MultiLineEdit*                      m_pImplEdit;
         PushButton*                         m_pDropdownButton;
         MultiLineOperationMode              m_nOperationMode;
-        sal_Bool                            m_bDropdown : 1;
+        bool                                m_bDropdown : 1;
 
     public:
         DropDownEditControl( Window* _pParent, WinBits _nStyle );
@@ -409,7 +409,7 @@ namespace pcr
         DECL_LINK( ReturnHdl, OMultilineFloatingEdit* );
         DECL_LINK( DropDownHdl, PushButton* );
 
-        sal_Bool ShowDropDown( sal_Bool bShow );
+        bool ShowDropDown( bool bShow );
     };
 
 

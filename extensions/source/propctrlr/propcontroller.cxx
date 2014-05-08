@@ -406,26 +406,26 @@ namespace pcr
     }
 
 
-    sal_Bool OPropertyBrowserController::suspendAll_nothrow()
+    bool OPropertyBrowserController::suspendAll_nothrow()
     {
         // if there is a handle inside its "onInteractivePropertySelection" method,
         // then veto
         // Normally, we could expect every handler to do this itself, but being
         // realistic, it's safer to handle this here in general.
         if ( m_xInteractiveHandler.is() )
-            return sal_False;
+            return false;
 
         m_bSuspendingPropertyHandlers = true;
-        sal_Bool bHandlerVeto = !suspendPropertyHandlers_nothrow( sal_True );
+        bool bHandlerVeto = !suspendPropertyHandlers_nothrow( true );
         m_bSuspendingPropertyHandlers = false;
         if ( bHandlerVeto )
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool OPropertyBrowserController::suspendPropertyHandlers_nothrow( sal_Bool _bSuspend )
+    bool OPropertyBrowserController::suspendPropertyHandlers_nothrow( bool _bSuspend )
     {
         PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once
         for (   PropertyHandlerRepository::const_iterator handler = m_aPropertyHandlers.begin();
@@ -450,14 +450,14 @@ namespace pcr
                 if ( !(*loop)->suspend( _bSuspend ) )
                     if ( _bSuspend )
                         // if we're not suspending, but reactivating, ignore the error
-                        return sal_False;
+                        return false;
             }
             catch( const Exception& )
             {
                 OSL_FAIL( "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
             }
         }
-        return sal_True;
+        return true;
     }
 
 
@@ -468,7 +468,7 @@ namespace pcr
 
         if ( !_bSuspend )
         {   // this means a "suspend" is to be "revoked"
-            suspendPropertyHandlers_nothrow( sal_False );
+            suspendPropertyHandlers_nothrow( false );
             // we ourself cannot revoke our suspend
             return sal_False;
         }
@@ -696,7 +696,7 @@ namespace pcr
     }
 
 
-    sal_Bool OPropertyBrowserController::Construct(Window* _pParentWin)
+    bool OPropertyBrowserController::Construct(Window* _pParentWin)
     {
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
         DBG_ASSERT(_pParentWin, "OPropertyBrowserController::Construct: invalid parent window!");
@@ -718,7 +718,7 @@ namespace pcr
 
         m_pView->Show();
 
-        return sal_True;
+        return true;
     }
 
 
@@ -770,7 +770,7 @@ namespace pcr
         WinBits nWinBits = WB_BORDER;
 
         // read-only-ness
-        _CreateReadOnly |= (sal_Bool)impl_isReadOnlyModel_throw();
+        _CreateReadOnly |= impl_isReadOnlyModel_throw() ? 1 : 0;
         if ( _CreateReadOnly )
             nWinBits |= WB_READONLY;
 
@@ -793,11 +793,11 @@ namespace pcr
                 break;
 
             case PropertyControlType::TextField:
-                xControl = new OEditControl( &getPropertyBox(), sal_False, nWinBits | WB_TABSTOP );
+                xControl = new OEditControl( &getPropertyBox(), false, nWinBits | WB_TABSTOP );
                 break;
 
             case PropertyControlType::CharacterField:
-                xControl = new OEditControl( &getPropertyBox(), sal_True, nWinBits | WB_TABSTOP );
+                xControl = new OEditControl( &getPropertyBox(), true, nWinBits | WB_TABSTOP );
                 break;
 
             case PropertyControlType::NumericField:
@@ -1205,7 +1205,7 @@ namespace pcr
 
             getPropertyBox().DisableUpdate();
 
-            sal_Bool bHaveFocus = getPropertyBox().HasChildPathFocus();
+            bool bHaveFocus = getPropertyBox().HasChildPathFocus();
 
             // create our tab pages
             impl_buildCategories_throw();

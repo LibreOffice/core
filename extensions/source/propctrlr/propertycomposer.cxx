@@ -239,7 +239,7 @@ namespace pcr
                     check != m_aSupportedProperties.end();
                 )
             {
-                sal_Bool bIsComposable = isComposable( check->Name );
+                bool bIsComposable = isComposable( check->Name );
                 if ( !bIsComposable )
                 {
                     PropertyBag::iterator next = check; ++next;
