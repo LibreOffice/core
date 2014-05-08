@@ -16,6 +16,24 @@
       "revId": "06c1c582804219ea07a453dc4215471e0453a236",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_b447ee1c",
+        "filename": "sw/qa/extras/inc/bordertest.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2014-05-08T14:06:50Z",
+      "side": 1,
+      "message": "No, it wouldn\u0027t help.\nThe problem is - that creating a proper DOC file with \u0027outset\u0027 (0x1A) and \u0027inset\u0027 (0x1B) was not possible.\n\nIf I were able to convert the working DOCX sample file to a DOC file, that has \u00270x1A\u0027 for \u0027inset\u0027 and \u00270x1B\u0027 for \u0027outset\u0027 - then I wouldn\u0027t need this \u0027if\\else\u0027 here in \u0027bordertest.hxx\u0027 and I would indeed [have to] remove the \u0027if\u0027 in \u0027ww8par6.cxx\u0027 in line 1313.",
+      "parentUuid": "5a72e520_54ca3aa2",
+      "revId": "06c1c582804219ea07a453dc4215471e0453a236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
