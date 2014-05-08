@@ -22,9 +22,9 @@
 
 #define GL_PI 3.14159f
 #define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
-#define BMP_HEADER_LEN 54
 
 #define DEBUG_FBO 0
+
 using namespace com::sun::star;
 
 namespace chart {
@@ -1535,36 +1535,6 @@ void OpenGL3DRenderer::CreateSceneBoxView()
     m_bCameraUpdated = true;
 }
 
-void OpenGL3DRenderer::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
-{
-    unsigned char header[BMP_HEADER_LEN] = {
-        0x42, 0x4d, 0, 0, 0, 0, 0, 0, 0, 0,
-        54, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0
-    };
-
-    long file_size = (long)xsize * (long)ysize * 3 + 54;
-    header[2] = (unsigned char)(file_size &0x000000ff);
-    header[3] = (file_size >> 8) & 0x000000ff;
-    header[4] = (file_size >> 16) & 0x000000ff;
-    header[5] = (file_size >> 24) & 0x000000ff;
-
-    long width = xsize;
-    header[18] = width & 0x000000ff;
-    header[19] = (width >> 8) &0x000000ff;
-    header[20] = (width >> 16) &0x000000ff;
-    header[21] = (width >> 24) &0x000000ff;
-
-    long height = -ysize;
-    header[22] = height &0x000000ff;
-    header[23] = (height >> 8) &0x000000ff;
-    header[24] = (height >> 16) &0x000000ff;
-    header[25] = (height >> 24) &0x000000ff;
-    memcpy(bmpHeader, header, BMP_HEADER_LEN);
-}
-
-
 void OpenGL3DRenderer::ProcessUnrenderedShape()
 {
     CreateSceneBoxView();
@@ -1592,15 +1562,8 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     glViewport(0, 0, m_iWidth, m_iHeight);
     RenderTexture(m_TextureObj[0]);
 #if DEBUG_FBO
-    char fileName[256] = {0};
-    sprintf(fileName, "D://shaderout_%d_%d.bmp", m_iWidth, m_iHeight);
-    FILE *pfile = fopen(fileName,"wb");
-    sal_uInt8 *Tmp = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
-    CreateBMPHeader(Tmp, m_iWidth, m_iHeight);
-    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, Tmp + BMP_HEADER_LEN);
-    fwrite(Tmp, m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN, 1, pfile);
-    fclose(pfile);
-    free(Tmp);
+    OUString aFileName = OUString("D://shaderout_") + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
+    OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
 #endif
 //    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
