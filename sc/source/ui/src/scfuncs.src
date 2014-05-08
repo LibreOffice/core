@@ -723,7 +723,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Optional number or string to indicate to indicate when weekends occur. When omitted, weekend is Saturday and Sunday." ;
+            Text [ en-US ] = "Optional number or string to indicate when weekends occur. When omitted, weekend is Saturday and Sunday." ;
         };
         String 8 // Name of Parameter 4
         {
@@ -763,7 +763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "RThe number of workdays before or after start date." ;
+            Text [ en-US ] = "The number of workdays before or after start date." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -771,7 +771,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Optional number or string to indicate to indicate when weekends occur. When omitted, weekend is Saturday and Sunday." ;
+            Text [ en-US ] = "Optional number or string to indicate when weekends occur. When omitted, weekend is Saturday and Sunday." ;
         };
         String 8 // Name of Parameter 4
         {
