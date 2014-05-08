@@ -1075,7 +1075,6 @@ bool IconChoiceDialog::OK_Impl()
         if ( pSet )
         {
             SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
-            bool bRet = false;
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
@@ -1086,8 +1085,6 @@ bool IconChoiceDialog::OK_Impl()
                 pExampleSet->Put( aTmp );
                 pOutSet->Put( aTmp );
             }
-            else if ( bRet )
-                bModified |= true;
         }
         else
             nRet = pPage->DeactivatePage( NULL );
