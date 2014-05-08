@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_7473b6b1",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-08T07:26:14Z",
+      "side": 1,
+      "message": "equalsIgnoreAsciiCase() already can take a string literal, and then you can avoid harcoding \"4\" there.",
+      "revId": "853071d354199f135e1353bb1a227cb6dbab5c60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
