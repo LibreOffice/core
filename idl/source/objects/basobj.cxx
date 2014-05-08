@@ -55,18 +55,18 @@ void SvMetaObject::WriteStars( SvStream & rOutStm )
     rOutStm.WriteChar( '/' ) << endl;
 }
 
-sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegPos )
+bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegPos )
 {
     // write no empty brackets
     sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nBegPos );
-    sal_Bool bOnlySpace = sal_True;
+    bool bOnlySpace = true;
     while( bOnlySpace && rOutStm.Tell() < nPos )
     {
         char c;
         rOutStm.ReadChar( c );
         if( !isspace( c ) )
-            bOnlySpace = sal_False;
+            bOnlySpace = false;
     }
     if( bOnlySpace )
         // nothing written
@@ -96,9 +96,9 @@ void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
         rOutStm.Seek( nPos );
 }
 
-sal_Bool SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
+bool SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
-    return sal_False;
+    return false;
 }
 
 void SvMetaObject::WriteSvIdl( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
@@ -152,13 +152,13 @@ void SvMetaName::Save( SvPersistStream & rStm )
     if( nMask & 0x10 ) WriteSvString( rStm, aDescription );
 }
 
-sal_Bool SvMetaName::SetName( const OString& rName, SvIdlDataBase * )
+bool SvMetaName::SetName( const OString& rName, SvIdlDataBase * )
 {
     aName.setString(rName);
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
+bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
                                 SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -167,10 +167,10 @@ sal_Bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
     // read module name
     if( pTok->IsIdentifier() )
         if( SetName( pTok->GetString(), &rBase ) )
-            return sal_True;
+            return true;
 
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
 void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -208,9 +208,9 @@ void SvMetaName::ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
 }
 
-sal_Bool SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
+bool SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
 {
-    return sal_True;
+    return true;
 }
 
 void SvMetaName::WriteContextSvIdl( SvIdlDataBase &, SvStream &, sal_uInt16 )
@@ -263,10 +263,10 @@ void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-sal_Bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     if( rInStm.Read( '[' ) )
     {
         sal_uInt32 nBeginPos = 0; // can not happen with Tell
@@ -343,13 +343,13 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     // write no empty brackets
     sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nOldPos );
-    sal_Bool bOnlySpace = sal_True;
+    bool bOnlySpace = true;
     while( bOnlySpace && rOutStm.Tell() < nPos )
     {
         char c;
         rOutStm.ReadChar( c );
         if( !isspace( c ) )
-            bOnlySpace = sal_False;
+            bOnlySpace = false;
     }
     if( bOnlySpace )
         // nothing written
@@ -435,8 +435,8 @@ SV_IMPL_META_FACTORY1( SvMetaExtern, SvMetaReference );
 
 SvMetaExtern::SvMetaExtern()
     : pModule( NULL )
-    , bReadUUId( sal_False )
-    , bReadVersion( sal_False )
+    , bReadUUId( false )
+    , bReadVersion( false )
 {
 }
 
@@ -455,8 +455,8 @@ void SvMetaExtern::Load( SvPersistStream & rStm )
     if( nMask & 0x01 ) rStm >> pModule;
     if( nMask & 0x02 ) rStm >> aUUId;
     if( nMask & 0x04 ) rStm >> aVersion;
-    if( nMask & 0x08 ) bReadUUId = sal_True;
-    if( nMask & 0x10 ) bReadVersion = sal_True;
+    if( nMask & 0x08 ) bReadUUId = true;
+    if( nMask & 0x10 ) bReadVersion = true;
 }
 
 void SvMetaExtern::Save( SvPersistStream & rStm )
@@ -501,9 +501,9 @@ void SvMetaExtern::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
     if( aUUId.ReadSvIdl( rBase, rInStm ) )
-        bReadUUId = sal_True;
+        bReadUUId = true;
     if( aVersion.ReadSvIdl( rInStm ) )
-        bReadVersion = sal_True;
+        bReadVersion = true;
 }
 
 void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
@@ -530,7 +530,7 @@ void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-sal_Bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     SetModule( rBase );
     GetUUId(); // id gets created

@@ -32,29 +32,29 @@ class SvHashTable
     sal_uInt32       lAsk;                 // number of requests
     sal_uInt32       lTry;                 // number of tries
 protected:
-    sal_Bool        Test_Insert( const OString&, sal_Bool bInsert, sal_uInt32 * pInsertPos );
+    bool                Test_Insert( const OString&, bool bInsert, sal_uInt32 * pInsertPos );
 
                             // compare element with entry
-    virtual bool equals( const OString& , sal_uInt32 ) const = 0;
+    virtual bool       equals( const OString& , sal_uInt32 ) const = 0;
                             // get hash value from subclass
-    virtual sal_uInt32          HashFunc( const OString& ) const = 0;
+    virtual sal_uInt32 HashFunc( const OString& ) const = 0;
 public:
                 SvHashTable( sal_uInt32 nMaxEntries );
                 virtual ~SvHashTable();
 
-    sal_uInt32      GetMax() const { return nMax; }
+    sal_uInt32         GetMax() const { return nMax; }
 
-    virtual sal_Bool            IsEntry( sal_uInt32 ) const = 0;
+    virtual bool       IsEntry( sal_uInt32 ) const = 0;
 };
 
 class SvStringHashTable;
 class SvStringHashEntry : public SvRefBase
 {
 friend class SvStringHashTable;
-    OString aName;
+    OString     aName;
     sal_uInt32  nHashId;
     sal_uLong   nValue;
-    sal_Bool    bHasId;
+    bool        bHasId;
 public:
     SvStringHashEntry()
         : nHashId(0)
@@ -72,15 +72,15 @@ public:
     virtual ~SvStringHashEntry();
 
     const OString&  GetName() const { return aName; }
-    sal_Bool        HasId() const { return bHasId; }
+    bool            HasId() const { return bHasId; }
     sal_uInt32      GetId() const { return nHashId; }
 
     void            SetValue( sal_uLong n ) { nValue = n; }
-    sal_uLong           GetValue() const { return nValue; }
+    sal_uLong       GetValue() const { return nValue; }
 
-    sal_Bool        operator == ( const SvStringHashEntry & rRef )
+    bool            operator == ( const SvStringHashEntry & rRef )
                     { return nHashId == rRef.nHashId; }
-    sal_Bool        operator != ( const SvStringHashEntry & rRef )
+    bool            operator != ( const SvStringHashEntry & rRef )
                     { return ! operator == ( rRef ); }
     SvStringHashEntry & operator = ( const SvStringHashEntry & rRef )
         { SvRefBase::operator=( rRef );
@@ -107,10 +107,10 @@ public:
             virtual ~SvStringHashTable();
 
     OString GetNearString( const OString& rName ) const;
-    virtual sal_Bool    IsEntry( sal_uInt32 nIndex ) const SAL_OVERRIDE;
+    virtual bool    IsEntry( sal_uInt32 nIndex ) const SAL_OVERRIDE;
 
-    sal_Bool    Insert( const OString& rStr, sal_uInt32 * pHash ); // insert string
-    sal_Bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; // test of insert string
+    bool    Insert( const OString& rStr, sal_uInt32 * pHash ); // insert string
+    bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; // test of insert string
     SvStringHashEntry * Get ( sal_uInt32 nIndex ) const; // return pointer to string
     SvStringHashEntry & operator []( sal_uInt32 nPos ) const
             { return pEntries[ nPos ]; }

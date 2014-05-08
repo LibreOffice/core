@@ -81,90 +81,90 @@ class SvMetaSlot : public SvMetaAttribute
     void            SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }
 protected:
-    void    SetCachable( sal_Bool bSet )
+    void    SetCachable( bool bSet )
             {
                 aCachable = bSet;
                 if( bSet )
-                    aVolatile = sal_False;
+                    aVolatile = false;
             }
-    void    SetVolatile( sal_Bool bSet )
+    void    SetVolatile( bool bSet )
             {
                 aVolatile = bSet;
                 if( bSet )
-                    aCachable = sal_False;
+                    aCachable = false;
             }
-    void    SetToggle( sal_Bool bSet )
+    void    SetToggle( bool bSet )
             {
                 aToggle = bSet;
             }
-    void    SetAutoUpdate( sal_Bool bSet )
+    void    SetAutoUpdate( bool bSet )
             {
                 aAutoUpdate = bSet;
             }
 
-    void    SetSynchron( sal_Bool bSet )
+    void    SetSynchron( bool bSet )
             {
                 aSynchron = bSet;
                 if( bSet )
-                    aAsynchron = sal_False;
+                    aAsynchron = false;
             }
-    void    SetAsynchron( sal_Bool bSet )
+    void    SetAsynchron( bool bSet )
             {
                 aAsynchron = bSet;
                 if( bSet )
-                    aSynchron = sal_False;
+                    aSynchron = false;
             }
 
-    void    SetRecordPerItem( sal_Bool bSet )
+    void    SetRecordPerItem( bool bSet )
             {
                 aRecordPerItem = bSet;
                 if( bSet )
-                    aRecordPerSet = aRecordManual = aNoRecord = sal_False;
+                    aRecordPerSet = aRecordManual = aNoRecord = false;
             }
-    void    SetRecordPerSet( sal_Bool bSet )
+    void    SetRecordPerSet( bool bSet )
             {
                 aRecordPerSet = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordManual = aNoRecord = sal_False;
+                    aRecordPerItem = aRecordManual = aNoRecord = false;
             }
-    void    SetRecordManual( sal_Bool bSet )
+    void    SetRecordManual( bool bSet )
             {
                 aRecordManual = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordPerSet = aNoRecord = sal_False;
+                    aRecordPerItem = aRecordPerSet = aNoRecord = false;
             }
-    void    SetNoRecord( sal_Bool bSet )
+    void    SetNoRecord( bool bSet )
             {
                 aNoRecord = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordPerSet = aRecordManual = sal_False;
+                    aRecordPerItem = aRecordPerSet = aRecordManual = false;
             }
-    void    SetRecordAbsolute( sal_Bool bSet )
+    void    SetRecordAbsolute( bool bSet )
             { aRecordAbsolute = bSet; }
-    void    SetHasDialog( sal_Bool bSet )
+    void    SetHasDialog( bool bSet )
             { aHasDialog = bSet; }
-    void    SetMenuConfig( sal_Bool bSet )
+    void    SetMenuConfig( bool bSet )
             { aMenuConfig = bSet; }
-    void    SetToolBoxConfig( sal_Bool bSet )
+    void    SetToolBoxConfig( bool bSet )
             { aToolBoxConfig = bSet; }
-    void    SetStatusBarConfig( sal_Bool bSet )
+    void    SetStatusBarConfig( bool bSet )
             { aStatusBarConfig = bSet; }
-    void    SetAccelConfig( sal_Bool bSet )
+    void    SetAccelConfig( bool bSet )
             { aAccelConfig = bSet; }
-    void    SetAllConfig( sal_Bool bSet )
+    void    SetAllConfig( bool bSet )
             {
                 aMenuConfig     = bSet;
                 aToolBoxConfig  = bSet;
                 aStatusBarConfig = bSet;
                 aAccelConfig    = bSet;
             }
-    void    SetFastCall( sal_Bool bSet )
+    void    SetFastCall( bool bSet )
             { aFastCall = bSet; }
-    void    SetContainer( sal_Bool bSet )
+    void    SetContainer( bool bSet )
             { aContainer = bSet; }
-    void    SetImageRotation( sal_Bool bSet )
+    void    SetImageRotation( bool bSet )
             { aImageRotation = bSet; }
-    void    SetImageReflection( sal_Bool bSet )
+    void    SetImageReflection( bool bSet )
             { aImageReflection = bSet; }
 
 public:
@@ -175,45 +175,45 @@ public:
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 
-    virtual sal_Bool    IsVariable() const SAL_OVERRIDE;
-    virtual sal_Bool    IsMethod() const SAL_OVERRIDE;
-    virtual OString GetMangleName( sal_Bool bVariable ) const SAL_OVERRIDE;
+    virtual bool    IsVariable() const SAL_OVERRIDE;
+    virtual bool    IsMethod() const SAL_OVERRIDE;
+    virtual OString GetMangleName( bool bVariable ) const SAL_OVERRIDE;
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
-    sal_Bool                GetHasCoreId() const;
+    bool                GetHasCoreId() const;
     const OString&     GetGroupId() const;
     const OString&     GetConfigId() const;
     const OString&     GetExecMethod() const;
     const OString&     GetStateMethod() const;
     const OString&     GetDefault() const;
     const OString&     GetDisableFlags() const;
-    sal_Bool                GetPseudoSlots() const;
-    sal_Bool                GetCachable() const;
-    sal_Bool                GetVolatile() const;
-    sal_Bool                GetToggle() const;
-    sal_Bool                GetAutoUpdate() const;
+    bool                GetPseudoSlots() const;
+    bool                GetCachable() const;
+    bool                GetVolatile() const;
+    bool                GetToggle() const;
+    bool                GetAutoUpdate() const;
 
-    sal_Bool                GetSynchron() const;
-    sal_Bool                GetAsynchron() const;
+    bool                GetSynchron() const;
+    bool                GetAsynchron() const;
 
-    sal_Bool                GetRecordPerItem() const;
-    sal_Bool                GetRecordPerSet() const;
-    sal_Bool                GetRecordManual() const;
-    sal_Bool                GetNoRecord() const;
-    sal_Bool                GetRecordAbsolute() const;
+    bool                GetRecordPerItem() const;
+    bool                GetRecordPerSet() const;
+    bool                GetRecordManual() const;
+    bool                GetNoRecord() const;
+    bool                GetRecordAbsolute() const;
 
-    sal_Bool                GetHasDialog() const;
+    bool                GetHasDialog() const;
     const OString&     GetPseudoPrefix() const;
     const OString&     GetUnoName() const;
-    sal_Bool                GetMenuConfig() const;
-    sal_Bool                GetToolBoxConfig() const;
-    sal_Bool                GetStatusBarConfig() const;
-    sal_Bool                GetAccelConfig() const;
-    sal_Bool                GetFastCall() const;
-    sal_Bool                GetContainer() const;
-    sal_Bool                GetImageRotation() const;
-    sal_Bool                GetImageReflection() const;
+    bool                GetMenuConfig() const;
+    bool                GetToolBoxConfig() const;
+    bool                GetStatusBarConfig() const;
+    bool                GetAccelConfig() const;
+    bool                GetFastCall() const;
+    bool                GetContainer() const;
+    bool                GetImageRotation() const;
+    bool                GetImageReflection() const;
     SvMetaSlot*         GetLinkedSlot() const
                         { return pLinkedSlot; }
     SvMetaSlot*         GetNextSlot() const
@@ -227,12 +227,12 @@ public:
 
     SvMetaEnumValue*    GetEnumValue() const
                         { return pEnumValue; }
-    virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                               SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
@@ -247,7 +247,7 @@ public:
                                     const OString&,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
-    sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
+    sal_uInt16          WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   HelpIdTable& rIdTable ) SAL_OVERRIDE;

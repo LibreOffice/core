@@ -41,7 +41,7 @@ SvHashTable::~SvHashTable()
 {
 }
 
-sal_Bool SvHashTable::Test_Insert( const OString& rElement, sal_Bool bInsert,
+bool SvHashTable::Test_Insert( const OString& rElement, bool bInsert,
                                sal_uInt32 * pInsertPos )
 {
     sal_uInt32    nHash;
@@ -61,7 +61,7 @@ sal_Bool SvHashTable::Test_Insert( const OString& rElement, sal_Bool bInsert,
         {
             if( pInsertPos )
                 *pInsertPos = nIndex;               // place of Element
-            return sal_True;
+            return true;
         }
         nLoop++;
         lTry++;
@@ -75,10 +75,10 @@ sal_Bool SvHashTable::Test_Insert( const OString& rElement, sal_Bool bInsert,
         {
             nFill++;
             *pInsertPos = nIndex;                       // return free place
-            return sal_True;
+            return true;
         }
     }
-    return( sal_False );
+    return false;
 }
 
 SvStringHashTable::SvStringHashTable( sal_uInt32 nMaxEntries )
@@ -149,30 +149,30 @@ OString SvStringHashTable::GetNearString( const OString& rName ) const
     return OString();
 }
 
-sal_Bool SvStringHashTable::IsEntry( sal_uInt32 nIndex ) const
+bool SvStringHashTable::IsEntry( sal_uInt32 nIndex ) const
 {
     if( nIndex >= GetMax() )
-        return sal_False;
+        return false;
     return pEntries[ nIndex ].HasId();
 }
 
-sal_Bool SvStringHashTable::Insert( const OString& rName, sal_uInt32 * pIndex )
+bool SvStringHashTable::Insert( const OString& rName, sal_uInt32 * pIndex )
 {
     sal_uInt32 nIndex;
 
     if( !pIndex ) pIndex = &nIndex;
 
-    if( !SvHashTable::Test_Insert( rName, sal_True, pIndex ) )
-        return sal_False;
+    if( !SvHashTable::Test_Insert( rName, true, pIndex ) )
+        return false;
 
     if( !IsEntry( *pIndex ) )
         pEntries[ *pIndex ] = SvStringHashEntry( rName, *pIndex );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvStringHashTable::Test( const OString& rName, sal_uInt32 * pPos ) const
+bool SvStringHashTable::Test( const OString& rName, sal_uInt32 * pPos ) const
 {
-    return const_cast<SvStringHashTable*>(this)->Test_Insert( rName, sal_False, pPos );
+    return const_cast<SvStringHashTable*>(this)->Test_Insert( rName, false, pPos );
 }
 
 SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nIndex ) const

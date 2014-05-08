@@ -29,23 +29,23 @@
 
 SV_IMPL_META_FACTORY1( SvMetaAttribute, SvMetaReference );
 SvMetaAttribute::SvMetaAttribute()
-    : aAutomation( sal_True, sal_False )
-    , aExport( sal_True, sal_False )
-    , aIsCollection ( sal_False, sal_False )
-    , aReadOnlyDoc ( sal_True, sal_False )
-    , aHidden( sal_False, sal_False )
-    , bNewAttr( sal_False )
+    : aAutomation( true, false )
+    , aExport( true, false )
+    , aIsCollection ( false, false )
+    , aReadOnlyDoc ( true, false )
+    , aHidden( false, false )
+    , bNewAttr( false )
 {
 }
 
 SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
-    , aAutomation( sal_True, sal_False )
-    , aExport( sal_True, sal_False )
-    , aIsCollection ( sal_False, sal_False)
-    , aReadOnlyDoc ( sal_True, sal_False)
-    , aHidden( sal_False, sal_False )
-    , bNewAttr( sal_False )
+    , aAutomation( true, false )
+    , aExport( true, false )
+    , aIsCollection ( false, false)
+    , aReadOnlyDoc ( true, false)
+    , aHidden( false, false )
+    , bNewAttr( false )
 {
 }
 
@@ -109,19 +109,19 @@ const SvNumberIdentifier & SvMetaAttribute::GetSlotId() const
     return ((SvMetaAttribute *)GetRef())->GetSlotId();
 }
 
-sal_Bool SvMetaAttribute::GetReadonly() const
+bool SvMetaAttribute::GetReadonly() const
 {
     if( aReadonly.IsSet() || !GetRef() ) return aReadonly;
     return ((SvMetaAttribute *)GetRef())->GetReadonly();
 }
 
-sal_Bool SvMetaAttribute::GetExport() const
+bool SvMetaAttribute::GetExport() const
 {
     if( aExport.IsSet() || !GetRef() ) return aExport;
     return ((SvMetaAttribute *)GetRef())->GetExport();
 }
 
-sal_Bool SvMetaAttribute::GetHidden() const
+bool SvMetaAttribute::GetHidden() const
 {
     // when export is set, but hidden is not the default is used
     if ( aExport.IsSet() && !aHidden.IsSet() )
@@ -132,15 +132,15 @@ sal_Bool SvMetaAttribute::GetHidden() const
         return ((SvMetaAttribute *)GetRef())->GetHidden();
 }
 
-sal_Bool SvMetaAttribute::GetAutomation() const
+bool SvMetaAttribute::GetAutomation() const
 {
     if( aAutomation.IsSet() || !GetRef() ) return aAutomation;
     return ((SvMetaAttribute *)GetRef())->GetAutomation();
 }
 
-sal_Bool SvMetaAttribute::GetIsCollection() const
+bool SvMetaAttribute::GetIsCollection() const
 {
-    sal_Bool bRet;
+    bool bRet;
     if( aIsCollection.IsSet() || !GetRef() )
     {
         if ( aIsCollection.IsSet() )
@@ -155,57 +155,57 @@ sal_Bool SvMetaAttribute::GetIsCollection() const
     return ((SvMetaSlot *)GetRef())->GetIsCollection();
 }
 
-sal_Bool SvMetaAttribute::GetReadOnlyDoc() const
+bool SvMetaAttribute::GetReadOnlyDoc() const
 {
     if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
     return ((SvMetaSlot *)GetRef())->GetReadOnlyDoc();
 }
 
-sal_Bool SvMetaAttribute::IsMethod() const
+bool SvMetaAttribute::IsMethod() const
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
     return pType->GetType() == TYPE_METHOD;
 }
 
-sal_Bool SvMetaAttribute::IsVariable() const
+bool SvMetaAttribute::IsVariable() const
 {
     SvMetaType * pType = GetType();
     return pType->GetType() != TYPE_METHOD;
 }
 
-OString SvMetaAttribute::GetMangleName( sal_Bool ) const
+OString SvMetaAttribute::GetMangleName( bool ) const
 {
     return GetName().getString();
 }
 
-sal_Bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
+bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
                             SvTokenStream & rInStm )
 {
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     if( GetType()->IsItem() && !GetSlotId().IsSet() )
     {
         rBase.SetError( "slot without id declared", rInStm.GetToken() );
         rBase.WriteError( rInStm );
-        bOk = sal_False;
+        bOk = false;
     }
     return bOk;
 }
 
-sal_Bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
-                                     SvTokenStream & rInStm )
+bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
+                                 SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos     = rInStm.Tell();
     if( !GetType() )
         // no type in ctor passed on
         aType = rBase.ReadKnownType( rInStm );
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     if( GetType() )
     {
         ReadNameSvIdl( rBase, rInStm );
         aSlotId.ReadSvIdl( rBase, rInStm );
 
-        bOk = sal_True;
+        bOk = true;
         SvToken * pTok  = rInStm.GetToken();
         if( bOk && pTok->IsChar() && pTok->GetChar() == '(' )
         {
@@ -379,7 +379,7 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
     }
 }
 
-sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVar ) const
+sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, bool bVar ) const
 {
     const SvNumberIdentifier & rId = GetSlotId();
     sal_uLong n = rId.GetValue();
@@ -404,14 +404,14 @@ void SvMetaAttribute::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm
     if( nT == WRITE_ODL  )
     {
         const SvNumberIdentifier & rId = GetSlotId();
-        sal_Bool bReadonly = GetReadonly() || ( nA & WA_READONLY );
+        bool bReadonly = GetReadonly() || ( nA & WA_READONLY );
         if( (rId.IsSet() && !(nA & WA_STRUCT)) || bReadonly )
         {
-            sal_Bool bVar = IsVariable();
+            bool bVar = IsVariable();
             if( nA & WA_VARIABLE )
-                bVar = sal_True;
+                bVar = true;
             else if( nA & WA_METHOD )
-                bVar = sal_False;
+                bVar = false;
 
             WriteTab( rOutStm, nTab );
             rOutStm.WriteCharPtr( "//class SvMetaAttribute" ) << endl;
@@ -432,14 +432,14 @@ void SvMetaAttribute::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm
 }
 
 void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                    sal_Bool bSet )
+                                    bool bSet )
 {
     rOutStm << endl;
     SvMetaType * pType = GetType();
     SvMetaType * pBaseType = pType->GetBaseType();
 
     // for Set the return is always void
-    sal_Bool bVoid = bSet;
+    bool bVoid = bSet;
     if( pBaseType->GetType() == TYPE_METHOD )
         bVoid = pBaseType->GetReturnType()->GetBaseType()->GetName().getString() == "void";
 
@@ -547,11 +547,11 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     else if ( !GetAutomation() || !GetExport() )
         return;
 
-    sal_Bool bVariable;
+    bool bVariable;
     if( nA & WA_VARIABLE )
-        bVariable = sal_True;
+        bVariable = true;
     else if( nA & WA_METHOD )
-        bVariable = sal_False;
+        bVariable = false;
     else
         bVariable = IsVariable();
 
@@ -596,7 +596,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             if( nT == WRITE_C_HEADER )
                 rOutStm.WriteChar( ';' ) << endl << endl;
             else
-                WriteCSource( rBase, rOutStm, sal_False );
+                WriteCSource( rBase, rOutStm, false );
         }
         else if ( bVariable && IsVariable() )
         {
@@ -611,7 +611,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             {
                 OString name = GetName().getString();
 
-                sal_Bool bReadonly = GetReadonly() || ( nA & WA_READONLY );
+                bool bReadonly = GetReadonly() || ( nA & WA_READONLY );
                 if ( !bReadonly && !IsMethod() )
                 {
                     // allocation
@@ -626,7 +626,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                     if( nT == WRITE_C_HEADER )
                         rOutStm.WriteChar( ';' ) << endl << endl;
                     else
-                        WriteCSource( rBase, rOutStm, sal_True );
+                        WriteCSource( rBase, rOutStm, true );
                 }
 
                 // access
@@ -639,7 +639,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 if( nT == WRITE_C_HEADER )
                     rOutStm.WriteChar( ';' ) << endl << endl;
                 else
-                    WriteCSource( rBase, rOutStm, sal_False );
+                    WriteCSource( rBase, rOutStm, false );
             }
         }
     }
@@ -743,13 +743,13 @@ void SvMetaAttribute::WriteHelpId( SvIdlDataBase &, SvStream &, HelpIdTable& )
 
 SV_IMPL_META_FACTORY1( SvMetaType, SvMetaExtern );
 #define CTOR                            \
-    : aCall0( CALL_VALUE, sal_False )       \
-    , aCall1( CALL_VALUE, sal_False )       \
-    , aSbxDataType( 0, sal_False )          \
+    : aCall0( CALL_VALUE, false )       \
+    , aCall1( CALL_VALUE, false )       \
+    , aSbxDataType( 0, false )          \
     , pAttrList( NULL )                 \
     , nType( TYPE_BASE )                \
-    , bIsItem( sal_False )                  \
-    , bIsShell( sal_False )                 \
+    , bIsItem( false )                  \
+    , bIsShell( false )                 \
     , cParserChar( 'h' )
 
 SvMetaType::SvMetaType()
@@ -799,8 +799,8 @@ void SvMetaType::Load( SvPersistStream & rStm )
     if( nMask & 0x0040 ) rStm >> aSbxName;
     if( nMask & 0x0080 ) rStm >> aOdlName;
     if( nMask & 0x0100 ) rStm >> GetAttrList();
-    if( nMask & 0x0200 ) bIsItem = sal_True;
-    if( nMask & 0x0400 ) bIsShell = sal_True;
+    if( nMask & 0x0200 ) bIsItem = true;
+    if( nMask & 0x0400 ) bIsShell = true;
     if( nMask & 0x0800 )
     {
         sal_uInt16 nT;
@@ -906,7 +906,7 @@ OString SvMetaType::GetBasicPostfix() const
         makeStringAndClear();
 }
 
-sal_Bool SvMetaType::GetIn() const
+bool SvMetaType::GetIn() const
 {
     if( aIn.IsSet() || !GetRef() )
         return aIn;
@@ -914,7 +914,7 @@ sal_Bool SvMetaType::GetIn() const
         return ((SvMetaType *)GetRef())->GetIn();
 }
 
-sal_Bool SvMetaType::GetOut() const
+bool SvMetaType::GetOut() const
 {
     if( aOut.IsSet() || !GetRef() )
         return aOut;
@@ -1002,7 +1002,7 @@ const OString& SvMetaType::GetCName() const
         return ((SvMetaType *)GetRef())->GetCName();
 }
 
-sal_Bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
+bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
 {
     aSvName.setString(rName);
     aSbxName.setString(rName);
@@ -1026,10 +1026,10 @@ OString SvMetaType::GetCString() const
     return out.makeStringAndClear();
 }
 
-sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
-                                     SvTokenStream & rInStm )
+bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
+                                  SvTokenStream & rInStm )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
@@ -1037,7 +1037,7 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
       || pTok->Is( SvHash_shell() ) )
     {
         if( pTok->Is( SvHash_shell() ) )
-            bIsShell = sal_True;
+            bIsShell = true;
         SetType( TYPE_CLASS );
         bOk = ReadNamesSvIdl( rBase, rInStm );
 
@@ -1051,7 +1051,7 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
     {
         SetType( TYPE_UNION );
         if( ReadNameSvIdl( rBase, rInStm ) )
-            return sal_True;
+            return true;
     }
     else if( pTok->Is( SvHash_enum() ) )
     {
@@ -1062,7 +1062,7 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
       || pTok->Is( SvHash_item() ) )
     {
           if( pTok->Is( SvHash_item() ) )
-            bIsItem = sal_True;
+            bIsItem = true;
 
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
         if( pType )
@@ -1076,12 +1076,12 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
                     if( rInStm.Read( ')' ) )
                     {
                         SetType( TYPE_METHOD );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
                 else
                 {
-                    bOk = sal_True;
+                    bOk = true;
                 }
             }
         }
@@ -1099,15 +1099,15 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
     return bOk;
 }
 
-sal_Bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
-                             SvTokenStream & rInStm )
+bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
+                            SvTokenStream & rInStm )
 {
     if( ReadHeaderSvIdl( rBase, rInStm ) )
     {
         rBase.Write(OString('.'));
         return SvMetaExtern::ReadSvIdl( rBase, rInStm );
     }
-    return sal_False;
+    return false;
 }
 
 void SvMetaType::WriteSvIdl
@@ -1229,10 +1229,10 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-sal_Bool SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
-                                     SvTokenStream & rInStm )
+bool SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
+                                 SvTokenStream & rInStm )
 {
-    sal_Bool bOk = ReadNameSvIdl( rBase, rInStm );
+    bool bOk = ReadNameSvIdl( rBase, rInStm );
 
     return bOk;
 }
@@ -1467,8 +1467,8 @@ void SvMetaType::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     }
 }
 
-sal_Bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm )
+bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
+                                 SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos = rInStm.Tell();
     if( rInStm.Read( '(' ) )
@@ -1477,11 +1477,11 @@ sal_Bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
         if( rInStm.Read( ')' ) )
         {
             SetType( TYPE_METHOD );
-            return sal_True;
+            return true;
         }
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
 void SvMetaType::WriteMethodArgs
@@ -1604,8 +1604,8 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
 
         case WRITE_ODL:
         {
-            sal_Bool bIn = GetIn();
-            sal_Bool bOut = GetOut();
+            bool bIn = GetIn();
+            bool bOut = GetOut();
             if( bIn || bOut )
             {
                 if( bIn && bOut )
@@ -1808,12 +1808,12 @@ void SvMetaEnumValue::Save( SvPersistStream & rStm )
     if( nMask & 0x01 ) write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aEnumValue);
 }
 
-sal_Bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
+bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
                                  SvTokenStream & rInStm )
 {
     if( !ReadNameSvIdl( rBase, rInStm ) )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 void SvMetaEnumValue::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
@@ -1889,7 +1889,7 @@ void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
     sal_uInt32 nTokPos = rInStm.Tell();
 
     SvMetaEnumValueRef aEnumVal = new SvMetaEnumValue();
-    sal_Bool bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
+    bool bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
     if( bOk )
     {
         if( aEnumValueList.empty() )
@@ -1922,7 +1922,7 @@ void SvMetaTypeEnum::WriteContextSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-sal_Bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
+bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
                                 SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos = rInStm.Tell();
@@ -1930,10 +1930,10 @@ sal_Bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
       && GetType() == TYPE_ENUM )
     {
         if( SvMetaName::ReadSvIdl( rBase, rInStm ) )
-             return sal_True;
+             return true;
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
 void SvMetaTypeEnum::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,

@@ -54,9 +54,9 @@ public:
     const OString&  GetPrefix() const
                     { return aPrefix; }
 
-    void            SetAutomation( sal_Bool rAutomation )
+    void            SetAutomation( bool rAutomation )
                     { aAutomation = rAutomation; }
-    sal_Bool            GetAutomation() const
+    bool            GetAutomation() const
                     { return aAutomation; }
 
     void            SetClass( SvMetaClass * pClass )
@@ -79,7 +79,7 @@ class SvMetaClass : public SvMetaType
     SvBOOL                      aAutomation;
     SvMetaClassRef              xAutomationInterface;
 
-    sal_Bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
+    bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
     void                WriteSlotStubs( const OString& rShellName,
                                         SvSlotElementList & rSlotList,
@@ -107,14 +107,14 @@ protected:
     virtual void    WriteContextSvIdl( SvIdlDataBase & rBase,
                                      SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     void            WriteOdlMembers( ByteStringList & rSuperList,
-                                    sal_Bool bVariable, sal_Bool bWriteTab,
+                                    bool bVariable, bool bWriteTab,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
 public:
             SV_DECL_META_FACTORY1( SvMetaClass, SvMetaType, 6 )
             SvMetaClass();
 
-    sal_Bool                GetAutomation() const
+    bool                GetAutomation() const
                         { return aAutomation; }
     SvMetaClass *       GetSuperClass() const
                         { return aSuperClass; }
@@ -125,7 +125,7 @@ public:
                         GetClassList() const
                         { return aClassList; }
 
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                                  sal_uInt16 nTab,

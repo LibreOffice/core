@@ -34,10 +34,10 @@ SvMetaObject *SvMetaSlot::MakeClone() const
 }
 
 SvMetaSlot::SvMetaSlot()
-    : aCachable( sal_True, sal_False )
-    , aSynchron( sal_True, sal_False )
-    , aRecordPerSet( sal_True, sal_False )
-    , aRecordAbsolute( sal_False, sal_False )
+    : aCachable( true, false )
+    , aSynchron( true, false )
+    , aRecordPerSet( true, false )
+    , aRecordAbsolute( false, false )
     , pLinkedSlot(0)
     , pNextSlot(0)
     , nListPos(0)
@@ -47,10 +47,10 @@ SvMetaSlot::SvMetaSlot()
 
 SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     : SvMetaAttribute( pType )
-    , aCachable( sal_True, sal_False )
-    , aSynchron( sal_True, sal_False )
-    , aRecordPerSet( sal_True, sal_False )
-    , aRecordAbsolute( sal_False, sal_False )
+    , aCachable( true, false )
+    , aSynchron( true, false )
+    , aRecordPerSet( true, false )
+    , aRecordAbsolute( false, false )
     , pLinkedSlot(0)
     , pNextSlot(0)
     , nListPos(0)
@@ -281,19 +281,19 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( nMask & 0x0002 ) rStm.WriteUChar( aImageReflection );
 }
 
-sal_Bool SvMetaSlot::IsVariable() const
+bool SvMetaSlot::IsVariable() const
 {
     return SvMetaAttribute::IsVariable();
 }
 
-sal_Bool SvMetaSlot::IsMethod() const
+bool SvMetaSlot::IsMethod() const
 {
     bool b = SvMetaAttribute::IsMethod();
     b |= NULL != GetMethod();
     return b;
 }
 
-OString SvMetaSlot::GetMangleName( sal_Bool bVariable ) const
+OString SvMetaSlot::GetMangleName( bool bVariable ) const
 {
     if( !bVariable )
     {
@@ -321,7 +321,7 @@ SvMetaAttribute * SvMetaSlot::GetMethod() const
     if( aMethod.Is() || !GetRef() ) return aMethod;
     return ((SvMetaSlot *)GetRef())->GetMethod();
 }
-sal_Bool SvMetaSlot::GetHasCoreId() const
+bool SvMetaSlot::GetHasCoreId() const
 {
     if( aHasCoreId.IsSet() || !GetRef() ) return aHasCoreId;
     return ((SvMetaSlot *)GetRef())->GetHasCoreId();
@@ -356,50 +356,50 @@ const OString& SvMetaSlot::GetDefault() const
     if( !aDefault.getString().isEmpty() || !GetRef() ) return aDefault.getString();
     return ((SvMetaSlot *)GetRef())->GetDefault();
 }
-sal_Bool SvMetaSlot::GetPseudoSlots() const
+bool SvMetaSlot::GetPseudoSlots() const
 {
     if( aPseudoSlots.IsSet() || !GetRef() ) return aPseudoSlots;
     return ((SvMetaSlot *)GetRef())->GetPseudoSlots();
 }
-sal_Bool SvMetaSlot::GetCachable() const
+bool SvMetaSlot::GetCachable() const
 {
     // Cachable and Volatile are exclusive
     if( !GetRef() || aCachable.IsSet() || aVolatile.IsSet() )
          return aCachable;
     return ((SvMetaSlot *)GetRef())->GetCachable();
 }
-sal_Bool SvMetaSlot::GetVolatile() const
+bool SvMetaSlot::GetVolatile() const
 {
     // Cachable and Volatile are exclusive
     if( !GetRef() || aVolatile.IsSet() || aCachable.IsSet() )
         return aVolatile;
     return ((SvMetaSlot *)GetRef())->GetVolatile();
 }
-sal_Bool SvMetaSlot::GetToggle() const
+bool SvMetaSlot::GetToggle() const
 {
     if( aToggle.IsSet() || !GetRef() ) return aToggle;
     return ((SvMetaSlot *)GetRef())->GetToggle();
 }
-sal_Bool SvMetaSlot::GetAutoUpdate() const
+bool SvMetaSlot::GetAutoUpdate() const
 {
     if( aAutoUpdate.IsSet() || !GetRef() ) return aAutoUpdate;
     return ((SvMetaSlot *)GetRef())->GetAutoUpdate();
 }
-sal_Bool SvMetaSlot::GetSynchron() const
+bool SvMetaSlot::GetSynchron() const
 {
     // Synchron and Asynchron are exclusive
     if( !GetRef() || aSynchron.IsSet() || aAsynchron.IsSet() )
         return aSynchron;
     return ((SvMetaSlot *)GetRef())->GetSynchron();
 }
-sal_Bool SvMetaSlot::GetAsynchron() const
+bool SvMetaSlot::GetAsynchron() const
 {
     // Synchron and Asynchron are exclusive
     if( !GetRef() || aAsynchron.IsSet() || aSynchron.IsSet() )
         return aAsynchron;
     return ((SvMetaSlot *)GetRef())->GetAsynchron();
 }
-sal_Bool SvMetaSlot::GetRecordPerItem() const
+bool SvMetaSlot::GetRecordPerItem() const
 {
     // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
@@ -407,7 +407,7 @@ sal_Bool SvMetaSlot::GetRecordPerItem() const
         return aRecordPerItem;
     return ((SvMetaSlot *)GetRef())->GetRecordPerItem();
 }
-sal_Bool SvMetaSlot::GetRecordPerSet() const
+bool SvMetaSlot::GetRecordPerSet() const
 {
     // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
@@ -415,7 +415,7 @@ sal_Bool SvMetaSlot::GetRecordPerSet() const
         return aRecordPerSet;
     return ((SvMetaSlot *)GetRef())->GetRecordPerSet();
 }
-sal_Bool SvMetaSlot::GetRecordManual() const
+bool SvMetaSlot::GetRecordManual() const
 {
     // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
@@ -423,7 +423,7 @@ sal_Bool SvMetaSlot::GetRecordManual() const
         return aRecordManual;
     return ((SvMetaSlot *)GetRef())->GetRecordManual();
 }
-sal_Bool SvMetaSlot::GetNoRecord() const
+bool SvMetaSlot::GetNoRecord() const
 {
     // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
@@ -431,13 +431,13 @@ sal_Bool SvMetaSlot::GetNoRecord() const
         return aNoRecord;
     return ((SvMetaSlot *)GetRef())->GetNoRecord();
 }
-sal_Bool SvMetaSlot::GetRecordAbsolute() const
+bool SvMetaSlot::GetRecordAbsolute() const
 {
     if( !GetRef() || aRecordAbsolute.IsSet() )
         return aRecordAbsolute;
     return ((SvMetaSlot *)GetRef())->GetRecordAbsolute();
 }
-sal_Bool SvMetaSlot::GetHasDialog() const
+bool SvMetaSlot::GetHasDialog() const
 {
     if( aHasDialog.IsSet() || !GetRef() ) return aHasDialog;
     return ((SvMetaSlot *)GetRef())->GetHasDialog();
@@ -447,44 +447,44 @@ const OString& SvMetaSlot::GetPseudoPrefix() const
     if( !aPseudoPrefix.getString().isEmpty() || !GetRef() ) return aPseudoPrefix.getString();
     return ((SvMetaSlot *)GetRef())->GetPseudoPrefix();
 }
-sal_Bool SvMetaSlot::GetMenuConfig() const
+bool SvMetaSlot::GetMenuConfig() const
 {
     if( aMenuConfig.IsSet() || !GetRef() ) return aMenuConfig;
     return ((SvMetaSlot *)GetRef())->GetMenuConfig();
 }
-sal_Bool SvMetaSlot::GetToolBoxConfig() const
+bool SvMetaSlot::GetToolBoxConfig() const
 {
     if( aToolBoxConfig.IsSet() || !GetRef() ) return aToolBoxConfig;
     return ((SvMetaSlot *)GetRef())->GetToolBoxConfig();
 }
-sal_Bool SvMetaSlot::GetStatusBarConfig() const
+bool SvMetaSlot::GetStatusBarConfig() const
 {
     if( aStatusBarConfig.IsSet() || !GetRef() ) return aStatusBarConfig;
     return ((SvMetaSlot *)GetRef())->GetStatusBarConfig();
 }
-sal_Bool SvMetaSlot::GetAccelConfig() const
+bool SvMetaSlot::GetAccelConfig() const
 {
     if( aAccelConfig.IsSet() || !GetRef() ) return aAccelConfig;
     return ((SvMetaSlot *)GetRef())->GetAccelConfig();
 }
-sal_Bool SvMetaSlot::GetFastCall() const
+bool SvMetaSlot::GetFastCall() const
 {
     if( aFastCall.IsSet() || !GetRef() ) return aFastCall;
     return ((SvMetaSlot *)GetRef())->GetFastCall();
 }
-sal_Bool SvMetaSlot::GetContainer() const
+bool SvMetaSlot::GetContainer() const
 {
     if( aContainer.IsSet() || !GetRef() ) return aContainer;
     return ((SvMetaSlot *)GetRef())->GetContainer();
 }
 
-sal_Bool SvMetaSlot::GetImageRotation() const
+bool SvMetaSlot::GetImageRotation() const
 {
     if( aImageRotation.IsSet() || !GetRef() ) return aImageRotation;
     return ((SvMetaSlot *)GetRef())->GetImageRotation();
 }
 
-sal_Bool SvMetaSlot::GetImageReflection() const
+bool SvMetaSlot::GetImageReflection() const
 {
     if( aImageReflection.IsSet() || !GetRef() ) return aImageReflection;
     return ((SvMetaSlot *)GetRef())->GetImageReflection();
@@ -501,7 +501,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaAttribute::ReadAttributesSvIdl( rBase, rInStm );
 
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     bOk |= aDefault.ReadSvIdl( SvHash_Default(), rInStm );
     bOk |= aPseudoSlots.ReadSvIdl( SvHash_PseudoSlots(), rInStm );
     bOk |= aHasCoreId.ReadSvIdl( SvHash_HasCoreId(), rInStm );
@@ -525,29 +525,29 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     }
 
     if( aCachable.ReadSvIdl( SvHash_Cachable(), rInStm ) )
-        SetCachable( aCachable ), bOk = sal_True;
+        SetCachable( aCachable ), bOk = true;
     if( aVolatile.ReadSvIdl( SvHash_Volatile(), rInStm ) )
-        SetVolatile( aVolatile ), bOk = sal_True;
+        SetVolatile( aVolatile ), bOk = true;
     if( aToggle.ReadSvIdl( SvHash_Toggle(), rInStm ) )
-        SetToggle( aToggle ), bOk = sal_True;
+        SetToggle( aToggle ), bOk = true;
     if( aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm ) )
-        SetAutoUpdate( aAutoUpdate ), bOk = sal_True;
+        SetAutoUpdate( aAutoUpdate ), bOk = true;
 
     if( aSynchron.ReadSvIdl( SvHash_Synchron(), rInStm ) )
-        SetSynchron( aSynchron ), bOk = sal_True;
+        SetSynchron( aSynchron ), bOk = true;
     if( aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm ) )
-        SetAsynchron( aAsynchron ), bOk = sal_True;
+        SetAsynchron( aAsynchron ), bOk = true;
 
     if( aRecordAbsolute.ReadSvIdl( SvHash_RecordAbsolute(), rInStm ) )
-        SetRecordAbsolute( aRecordAbsolute), bOk = sal_True;
+        SetRecordAbsolute( aRecordAbsolute), bOk = true;
     if( aRecordPerItem.ReadSvIdl( SvHash_RecordPerItem(), rInStm ) )
-        SetRecordPerItem( aRecordPerItem ), bOk = sal_True;
+        SetRecordPerItem( aRecordPerItem ), bOk = true;
     if( aRecordPerSet.ReadSvIdl( SvHash_RecordPerSet(), rInStm ) )
-        SetRecordPerSet( aRecordPerSet ), bOk = sal_True;
+        SetRecordPerSet( aRecordPerSet ), bOk = true;
     if( aRecordManual.ReadSvIdl( SvHash_RecordManual(), rInStm ) )
-        SetRecordManual( aRecordManual ), bOk = sal_True;
+        SetRecordManual( aRecordManual ), bOk = true;
     if( aNoRecord.ReadSvIdl( SvHash_NoRecord(), rInStm ) )
-        SetNoRecord( aNoRecord ), bOk = sal_True;
+        SetNoRecord( aNoRecord ), bOk = true;
 
     bOk |= aHasDialog.ReadSvIdl( SvHash_HasDialog(), rInStm );
     bOk |= aPseudoPrefix.ReadSvIdl( SvHash_PseudoPrefix(), rInStm );
@@ -558,7 +558,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 
     SvBOOL aAllConfig;
     if( aAllConfig.ReadSvIdl( SvHash_AllConfig(), rInStm ) )
-        SetAllConfig( aAllConfig ), bOk = sal_True;
+        SetAllConfig( aAllConfig ), bOk = true;
     bOk |= aFastCall.ReadSvIdl( SvHash_FastCall(), rInStm );
     bOk |= aContainer.ReadSvIdl( SvHash_Container(), rInStm );
     bOk |= aImageRotation.ReadSvIdl( SvHash_ImageRotation(), rInStm );
@@ -573,7 +573,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
             SvToken * pTok = rInStm.GetToken_Next();
             if( pTok->Is( SvHash_SlotType() ) )
             {
-                sal_Bool bBraket = rInStm.Read( '(' );
+                bool bBraket = rInStm.Read( '(' );
                 if( bBraket || rInStm.Read( '=' ) )
                 {
                     aSlotType = rBase.ReadKnownType( rInStm );
@@ -800,9 +800,9 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 }
 
 
-sal_Bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    sal_Bool bOk = SvMetaAttribute::Test( rBase, rInStm );
+    bool bOk = SvMetaAttribute::Test( rBase, rInStm );
     if( bOk )
     {
         SvMetaType * pType = GetType();
@@ -812,17 +812,17 @@ sal_Bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         {
             rBase.SetError( "this attribute is not a slot", rInStm.GetToken() );
             rBase.WriteError( rInStm );
-            bOk = sal_False;
+            bOk = false;
         }
     }
 
     return bOk;
 }
 
-sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos     = rInStm.Tell();
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
 
     SvMetaAttribute * pAttr = rBase.ReadKnownAttr( rInStm, GetType() );
     if( pAttr )
@@ -842,7 +842,7 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             aStr.append(" is method or variable but not a slot");
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
-            bOk = sal_False;
+            bOk = false;
         }
     }
     else
@@ -863,7 +863,7 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
                 {
                     OSL_FAIL("Illegal definition!");
                     rInStm.Seek( nTokPos );
-                    return sal_False;
+                    return false;
                 }
 
                   SetName( pKnownSlot->GetName().getString(), &rBase );
@@ -875,7 +875,7 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
                 aStr.append(" is method or variable but not a slot");
                 rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
                 rBase.WriteError( rInStm );
-                bOk = sal_False;
+                bOk = false;
             }
         }
     }
@@ -941,7 +941,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
     {
         sal_uInt16 nMid = 0, nLow = 0;
         sal_uInt16 nHigh = nListCount - 1;
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         while ( !bFound && nLow <= nHigh )
         {
             nMid = (nLow + nHigh) >> 1;
@@ -960,7 +960,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
                 break;
             }
             else
-                bFound = sal_True;
+                bFound = true;
         }
 
         DBG_ASSERT(!bFound, "Duplicate SlotId!");
@@ -1041,7 +1041,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
             }
 
             // The slaves are no master!
-            xEnumSlot->aPseudoSlots = sal_False;
+            xEnumSlot->aPseudoSlots = false;
             xEnumSlot->SetEnumValue(enumValue);
 
             if ( !pFirstEnumSlot || xEnumSlot->GetSlotId().GetValue() < pFirstEnumSlot->GetSlotId().GetValue() )
@@ -1094,12 +1094,12 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
     if ( !aMethodName.isEmpty() &&
          aMethodName != "NoExec" )
     {
-        sal_Bool bIn = sal_False;
+        bool bIn = false;
         for( size_t n = 0; n < rList.size(); n++ )
         {
             if (rList[n]->equals(aMethodName))
             {
-                bIn=sal_True;
+                bIn = true;
                 break;
             }
         }
@@ -1119,12 +1119,12 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
     if (!aMethodName.isEmpty() &&
         aMethodName != "NoState")
     {
-        sal_Bool bIn = sal_False;
+        bool bIn = false;
         for ( size_t n=0; n < rList.size(); n++ )
         {
             if (rList[n]->equals(aMethodName))
             {
-                bIn=sal_True;
+                bIn = true;
                 break;
             }
         }
@@ -1151,7 +1151,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     if ( !GetExport() && !GetHidden() )
         return;
 
-    sal_Bool bIsEnumSlot = 0 != pEnumValue;
+    bool bIsEnumSlot = 0 != pEnumValue;
 
     rOutStm.WriteCharPtr( "// Slot Nr. " )
        .WriteCharPtr( OString::number(nListPos).getStr() )
@@ -1393,7 +1393,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
             rOutStm.WriteChar( '.' );
             if ( !IsVariable() || !GetType() ||
                  GetType()->GetBaseType()->GetType() != TYPE_STRUCT )
-                rOutStm.WriteCharPtr( GetMangleName( sal_False ).getStr() );
+                rOutStm.WriteCharPtr( GetMangleName( false ).getStr() );
             rOutStm.WriteCharPtr( "\"," );
         }
         else
@@ -1414,7 +1414,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
     {
         rOutStm.WriteCharPtr( ",\"" );
-        rOutStm.WriteCharPtr( GetMangleName( sal_False ).getStr() );
+        rOutStm.WriteCharPtr( GetMangleName( false ).getStr() );
         rOutStm.WriteCharPtr( "\"" );
     }
 
@@ -1517,11 +1517,11 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             OString aSId = aBuf.makeStringAndClear();
 
             sal_uLong nSId2;
-            sal_Bool bIdOk = sal_False;
+            bool bIdOk = false;
             if( rBase.FindId( aSId, &nSId2 ) )
             {
                 aSId = OString::number(nSId2);
-                bIdOk = sal_True;
+                bIdOk = true;
             }
 
             // if id not found, write always
@@ -1538,7 +1538,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-void WriteBool( sal_Bool bSet, SvStream& rStream )
+void WriteBool( bool bSet, SvStream& rStream )
 {
     if ( bSet )
         rStream.WriteCharPtr( "TRUE" ).WriteChar( ',' );

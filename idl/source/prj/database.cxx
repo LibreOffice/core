@@ -28,7 +28,7 @@
 #include <osl/file.hxx>
 
 SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
-    : bExport( sal_False )
+    : bExport( false )
     , nUniqueId( 0 )
     , nVerbosity( rCmd.nVerbosity )
     , aPersStream( *IDLAPP->pClassMgr, NULL )
@@ -84,7 +84,7 @@ SvMetaModule * SvIdlDataBase::GetModule( const OString& rName )
 
 #define DATABASE_SIGNATURE  (sal_uInt32)0x13B799F2
 #define DATABASE_VER 0x0006
-sal_Bool SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
+bool SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
 {
     sal_uInt32  nSig = 0;
     sal_uLong   nPos = rStm.Tell();
@@ -132,9 +132,9 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     aPStm.WriteUInt32( (sal_uInt32)DATABASE_SIGNATURE );
     aPStm.WriteUInt16( (sal_uInt16)DATABASE_VER );
 
-    sal_Bool bOnlyStreamedObjs = sal_False;
+    bool bOnlyStreamedObjs = false;
     if( nFlags & IDL_WRITE_CALLING )
-        bOnlyStreamedObjs = sal_True;
+        bOnlyStreamedObjs = true;
 
     if( bOnlyStreamedObjs )
     {
@@ -174,7 +174,7 @@ void SvIdlDataBase::Push( SvMetaObject * pObj )
     GetStack().Push( pObj );
 }
 
-sal_Bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
+bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
 {
     if( pIdTable )
     {
@@ -182,13 +182,13 @@ sal_Bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
         if( pIdTable->Test( rIdName, &nHash ) )
         {
             *pVal = pIdTable->Get( nHash )->GetValue();
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
+bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
 {
     if( !pIdTable )
         pIdTable = new SvStringHashTable( 20003 );
@@ -197,12 +197,12 @@ sal_Bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
     if( pIdTable->Insert( rIdName, &nHash ) )
     {
         pIdTable->Get( nHash )->SetValue( nVal );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
+bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
 {
     OUString aFullName;
     osl::File::searchFileURL( rFileName, GetPath(), aFullName);
@@ -210,7 +210,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
 
     for ( size_t i = 0, n = aIdFileList.size(); i < n; ++i )
         if ( aIdFileList[ i ] == rFileName )
-            return sal_True;
+            return true;
 
     aIdFileList.push_back( rFileName );
     this->AddDepFile( aFullName );
@@ -236,11 +236,11 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         // set error
                         SetError( aStr, pTok );
                         WriteError( aTokStm );
-                        return sal_False;
+                        return false;
                     }
 
                     sal_uLong nVal = 0;
-                    sal_Bool bOk = sal_True;
+                    bool bOk = true;
                     while( bOk )
                     {
                         pTok = aTokStm.GetToken_Next();
@@ -250,7 +250,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                             if( FindId( pTok->GetString(), &n ) )
                                 nVal += n;
                             else
-                                bOk = sal_False;
+                                bOk = false;
                         }
                         else if( pTok->IsChar() )
                         {
@@ -268,7 +268,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                                 // set error
                                 SetError( aStr.makeStringAndClear(), pTok );
                                 WriteError( aTokStm );
-                                return sal_False;
+                                return false;
                             }
                             if( pTok->GetChar() != '+'
                               && pTok->GetChar() != '('
@@ -291,7 +291,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                             OString aStr("hash table overflow: ");
                             SetError( aStr, pTok );
                             WriteError( aTokStm );
-                            return sal_False;
+                            return false;
                         }
                     }
                 }
@@ -316,7 +316,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                             // set error
                             SetError(aStr, pTok);
                             WriteError( aTokStm );
-                            return sal_False;
+                            return false;
                         }
                     }
                     if (!ReadIdFile(OStringToOUString(aName.toString(),
@@ -326,7 +326,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         aStr.append(aName.makeStringAndClear());
                         SetError(aStr.makeStringAndClear(), pTok);
                         WriteError( aTokStm );
-                        return sal_False;
+                        return false;
                     }
                 }
             }
@@ -335,8 +335,8 @@ sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
         }
     }
     else
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
@@ -358,11 +358,11 @@ SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 
 SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 {
-    sal_Bool bIn    = sal_False;
-    sal_Bool bOut   = sal_False;
+    bool bIn    = false;
+    bool bOut   = false;
     int nCall0  = CALL_VALUE;
     int nCall1  = CALL_VALUE;
-    sal_Bool bSet   = sal_False; // any attribute set
+    bool bSet   = false; // any attribute set
 
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
@@ -375,22 +375,22 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
             nBeginPos = rInStm.Tell();
             if( pTok->Is( SvHash_in() ) )
             {
-                bIn  = sal_True;
+                bIn  = true;
                 pTok = rInStm.GetToken_Next();
-                bSet = sal_True;
+                bSet = true;
             }
             if( pTok->Is( SvHash_out() ) )
             {
-                bOut = sal_True;
+                bOut = true;
                 pTok = rInStm.GetToken_Next();
-                bSet = sal_True;
+                bSet = true;
             }
             if( pTok->Is( SvHash_inout() ) )
             {
-                bIn  = sal_True;
-                bOut = sal_True;
+                bIn  = true;
+                bOut = true;
                 pTok = rInStm.GetToken_Next();
-                bSet = sal_True;
+                bSet = true;
             }
         }
     }
@@ -427,7 +427,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                                                             CALL_POINTER;
                         rInStm.GetToken_Next();
                     }
-                    bSet = sal_True;
+                    bSet = true;
                 }
             }
 
@@ -616,10 +616,10 @@ SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 {
 }
 
-sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported, const OUString & rPath )
+bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const OUString & rPath )
 {
     aPath = rPath; // only valid for this iteration
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     SvToken * pTok = rInStm.GetToken();
     // only one import at the very beginning
     if( pTok->Is( SvHash_import() ) )
@@ -647,22 +647,22 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
                         aStr.append(OUStringToOString( aFullName, RTL_TEXTENCODING_UTF8));
                         SetError(aStr.makeStringAndClear(), pTok);
                         WriteError( rInStm );
-                        bOk = sal_False;
+                        bOk = false;
                     }
                     else
                     {
                         aStm.Seek( 0 );
                         aStm.ResetError();
                         SvTokenStream aTokStm( aStm, aFullName );
-                        bOk = ReadSvIdl( aTokStm, sal_True, rPath );
+                        bOk = ReadSvIdl( aTokStm, true, rPath );
                     }
                 }
             }
             else
-                bOk = sal_False;
+                bOk = false;
         }
         else
-            bOk = sal_False;
+            bOk = false;
     }
 
     sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
@@ -672,9 +672,9 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
         nBeginPos = rInStm.Tell();
         pTok = rInStm.GetToken();
         if( pTok->IsEof() )
-            return sal_True;
+            return true;
         if( pTok->IsEmpty() )
-            bOk = sal_False;
+            bOk = false;
 
         // only one import at the very beginning
         if( pTok->Is( SvHash_module() ) )
@@ -683,24 +683,24 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
             if( aModule->ReadSvIdl( *this, rInStm ) )
                 GetModuleList().push_back( aModule );
             else
-                bOk = sal_False;
+                bOk = false;
         }
         else
-            bOk = sal_False;
+            bOk = false;
     }
     if( !bOk || !pTok->IsEof() )
     {
          // error treatment
          WriteError( rInStm );
-         return sal_False;
+         return false;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
+bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return sal_False;
+        return false;
 
     SvStringHashList aList;
     if( GetIdTable() )
@@ -721,13 +721,13 @@ sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
         SvMetaModule * pModule = GetModuleList()[n];
         pModule->WriteSvIdl( *this, rOutStm, 0 );
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
+bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return sal_False;
+        return false;
 
     // reset all tmp variables for writing
     WriteReset();
@@ -747,13 +747,13 @@ sal_Bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     }
     aUsedTypes.clear();
     rOutStm.WriteStream( aTmpStm );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
+bool SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return sal_False;
+        return false;
 
     HelpIdTable aIdTable;
     sal_uLong n;
@@ -770,12 +770,12 @@ sal_Bool SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
         pAttr->WriteHelpId( *this, rOutStm, aIdTable );
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvIdlWorkingBase::WriteSfxItem( SvStream & )
+bool SvIdlWorkingBase::WriteSfxItem( SvStream & )
 {
-    return sal_False;
+    return false;
 }
 
 void SvIdlDataBase::StartNewFile( const OUString& rName )
@@ -787,10 +787,10 @@ void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
 {
     aAttrList.push_back( pAttr );
     if ( bExport )
-        pAttr->SetNewAttribute( sal_True );
+        pAttr->SetNewAttribute( true );
 }
 
-sal_Bool SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
+bool SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
 {
     SvMetaAttributeMemberList &rList = GetAttrList();
     sal_uLong nCount = rList.size();
@@ -803,15 +803,15 @@ sal_Bool SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
     }
 
     if ( rStrm.GetError() != SVSTREAM_OK )
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
-sal_Bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
+bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
-        return sal_False;
+        return false;
 
     for( sal_uLong n = 0; n < GetModuleList().size(); n++ )
     {
@@ -819,7 +819,7 @@ sal_Bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
         if( !pModule->IsImported() )
             pModule->Write( *this, rOutStm, 0, WRITE_DOCU );
     }
-    return sal_True;
+    return true;
 }
 
 void SvIdlDataBase::AddDepFile(OUString const& rFileName)

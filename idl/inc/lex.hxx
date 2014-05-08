@@ -41,7 +41,7 @@ friend class SvTokenStream;
     union
     {
         sal_uLong           nLong;
-        sal_Bool            bBool;
+        bool                bBool;
         char                cChar;
         SvStringHashEntry * pHash;
     };
@@ -49,37 +49,37 @@ public:
             SvToken();
             SvToken( const SvToken & rObj );
             SvToken( sal_uLong n );
-            SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b );
+            SvToken( SVTOKEN_ENUM nTypeP, bool b );
             SvToken( char c );
             SvToken( SVTOKEN_ENUM nTypeP, const OString& rStr );
             SvToken( SVTOKEN_ENUM nTypeP );
 
     SvToken & operator = ( const SvToken & rObj );
 
-    OString GetTokenAsString() const;
+    OString     GetTokenAsString() const;
     SVTOKEN_ENUM    GetType() const { return nType; }
 
     void        SetLine( sal_uLong nLineP )     { nLine = nLineP;       }
-    sal_uLong       GetLine() const             { return nLine;         }
+    sal_uLong   GetLine() const             { return nLine;         }
 
     void        SetColumn( sal_uLong nColumnP ) { nColumn = nColumnP;   }
-    sal_uLong       GetColumn() const           { return nColumn;       }
+    sal_uLong   GetColumn() const           { return nColumn;       }
 
-    sal_Bool        IsEmpty() const     { return nType == SVTOKEN_EMPTY; }
-    sal_Bool        IsComment() const   { return nType == SVTOKEN_COMMENT; }
-    sal_Bool        IsInteger() const   { return nType == SVTOKEN_INTEGER; }
-    sal_Bool        IsString() const    { return nType == SVTOKEN_STRING; }
-    sal_Bool        IsBool() const      { return nType == SVTOKEN_BOOL; }
-    sal_Bool        IsIdentifierHash() const
+    bool        IsEmpty() const     { return nType == SVTOKEN_EMPTY; }
+    bool        IsComment() const   { return nType == SVTOKEN_COMMENT; }
+    bool        IsInteger() const   { return nType == SVTOKEN_INTEGER; }
+    bool        IsString() const    { return nType == SVTOKEN_STRING; }
+    bool        IsBool() const      { return nType == SVTOKEN_BOOL; }
+    bool        IsIdentifierHash() const
                 { return nType == SVTOKEN_HASHID; }
-    sal_Bool        IsIdentifier() const
+    bool        IsIdentifier() const
                 {
                     return nType == SVTOKEN_IDENTIFIER
                             || nType == SVTOKEN_HASHID;
                 }
-    sal_Bool        IsChar() const      { return nType == SVTOKEN_CHAR; }
-    sal_Bool        IsRttiBase() const  { return nType == SVTOKEN_RTTIBASE; }
-    sal_Bool        IsEof() const       { return nType == SVTOKEN_EOF; }
+    bool        IsChar() const      { return nType == SVTOKEN_CHAR; }
+    bool        IsRttiBase() const  { return nType == SVTOKEN_RTTIBASE; }
+    bool        IsEof() const       { return nType == SVTOKEN_EOF; }
 
     const OString& GetString() const
                 {
@@ -87,16 +87,16 @@ public:
                         ? pHash->GetName()
                         : aString;
                 }
-    sal_uLong       GetNumber() const       { return nLong;         }
-    sal_Bool        GetBool() const         { return bBool;         }
+    sal_uLong   GetNumber() const       { return nLong;         }
+    bool        GetBool() const         { return bBool;         }
     char        GetChar() const         { return cChar;         }
 
     void        SetHash( SvStringHashEntry * pHashP )
                 { pHash = pHashP; nType = SVTOKEN_HASHID; }
-    sal_Bool        HasHash() const
+    bool        HasHash() const
                 { return nType == SVTOKEN_HASHID; }
     SvStringHashEntry * GetHash() const { return pHash; }
-    sal_Bool        Is( SvStringHashEntry * pEntry ) const
+    bool        Is( SvStringHashEntry * pEntry ) const
                 { return IsIdentifierHash() && pHash == pEntry; }
 };
 
@@ -110,7 +110,7 @@ inline SvToken::SvToken()
 inline SvToken::SvToken( sal_uLong n )
     : nType( SVTOKEN_INTEGER ), nLong( n ) {}
 
-inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b )
+inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, bool b )
     : nType( nTypeP ), bBool( b ) {}
 
 inline SvToken::SvToken( char c )
@@ -138,9 +138,10 @@ class SvTokenStream
     boost::ptr_vector<SvToken> aTokList;
     boost::ptr_vector<SvToken>::iterator pCurToken;
 
+    OString aBufStr;
+
     void        InitCtor();
 
-    OString aBufStr;
     int             GetNextChar();
     int             GetFastNextChar()
                     {
@@ -150,9 +151,9 @@ class SvTokenStream
                     }
 
     void            FillTokenList();
-    sal_uLong           GetNumber();
-    sal_Bool            MakeToken( SvToken & );
-    sal_Bool            IsEof() const { return rInStream.IsEof(); }
+    sal_uLong       GetNumber();
+    bool            MakeToken( SvToken & );
+    bool            IsEof() const { return rInStream.IsEof(); }
     void            SetMax()
                     {
                         sal_uLong n = Tell();
@@ -213,19 +214,19 @@ public:
 
     SvToken* GetToken() const { return &(*pCurToken); }
 
-    sal_Bool            Read( char cChar )
+    bool     Read( char cChar )
                     {
                         if( pCurToken->IsChar()
                           && cChar == pCurToken->GetChar() )
                         {
                             GetToken_Next();
-                            return sal_True;
+                            return true;
                         }
                         else
-                            return sal_False;
+                            return false;
                     }
 
-    void            ReadDelemiter()
+    void     ReadDelemiter()
                     {
                         if( pCurToken->IsChar()
                           && (';' == pCurToken->GetChar()

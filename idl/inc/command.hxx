@@ -50,7 +50,7 @@ public:
 
 void Init();
 class SvIdlWorkingBase;
-sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand );
+bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand );
 void DeInit();
 
 #endif // INCLUDED_IDL_INC_COMMAND_HXX

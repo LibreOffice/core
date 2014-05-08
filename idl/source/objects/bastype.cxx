@@ -26,14 +26,14 @@
 #include <hash.hxx>
 #include <database.hxx>
 
-static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
+static bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
                             sal_uLong nMin, sal_uLong nMax, sal_uLong* pValue )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
     if( pTok->Is( pName ) )
     {
-        sal_Bool bOk = sal_False;
+        bool bOk = false;
         if( rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken_Next();
@@ -43,17 +43,17 @@ static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInSt
                 if ( n >= nMin && n <= nMax )
                 {
                     *pValue = n;
-                    bOk = sal_True;
+                    bOk = true;
                 }
             }
         }
 
         if( bOk )
-            return sal_True;
+            return true;
     }
 
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
 sal_uInt32 SvUINT32::Read( SvStream & rStm )
@@ -127,15 +127,15 @@ SvStream& operator >> (SvStream & rStm, SvVersion & r )
 }
 
 
-sal_Bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
+bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( pName ) )
     {
-        sal_Bool bOk = sal_True;
-        sal_Bool bBraket = rInStm.Read( '(' );
+        bool bOk = true;
+        bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -149,21 +149,21 @@ sal_Bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
                 bOk = rInStm.Read( ')' );
         }
         else
-            *this = sal_True; //default action set to TRUE
+            *this = true; //default action set to TRUE
         if( bOk )
-            return sal_True;
+            return true;
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
+bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
 {
     if( nVal )
         rOutStm.WriteCharPtr( pName->GetName().getStr() );
     else
         rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteCharPtr( "(FALSE)" );
-    return sal_True;
+    return true;
 }
 
 OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
@@ -176,15 +176,15 @@ OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
         makeStringAndClear();
 }
 
-sal_Bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
+bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( pName ) )
     {
-        sal_Bool bOk = sal_True;
-        sal_Bool bBraket = rInStm.Read( '(' );
+        bool bOk = true;
+        bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -197,19 +197,19 @@ sal_Bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rIn
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
-            return sal_True;
+            return true;
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
+bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
                                SvStream & rOutStm,
                                sal_uInt16 /*nTab */ )
 {
     rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteChar( '(' );
     rOutStm.WriteCharPtr( getString().getStr() ).WriteChar( ')' );
-    return sal_True;
+    return true;
 }
 
 SvStream& WriteSvIdentifier(SvStream & rStm, const SvIdentifier & r )
@@ -225,7 +225,7 @@ SvStream& operator >> (SvStream & rStm, SvIdentifier & r )
 }
 
 
-sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvStringHashEntry * pName,
                                     SvTokenStream & rInStm )
 {
@@ -235,7 +235,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         if( rBase.FindId( getString(), &n ) )
         {
             nValue = n;
-            return sal_True;
+            return true;
         }
         else
         {
@@ -245,10 +245,10 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
             rBase.WriteError( rInStm );
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -261,7 +261,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         {
             setString(pTok->GetString());
             nValue = n;
-            return sal_True;
+            return true;
         }
         else
         {
@@ -272,7 +272,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
 SvStream& WriteSvNumberIdentifier(SvStream & rStm, const SvNumberIdentifier & r )
@@ -290,15 +290,15 @@ SvStream& operator >> (SvStream & rStm, SvNumberIdentifier & r )
 }
 
 
-sal_Bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
+bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( pName ) )
     {
-        sal_Bool bOk = sal_True;
-        sal_Bool bBraket = rInStm.Read( '(' );
+        bool bOk = true;
+        bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -311,18 +311,18 @@ sal_Bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
-            return sal_True;
+            return true;
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
+bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                            sal_uInt16 /*nTab */ )
 {
     rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteCharPtr( "(\"" );
     rOutStm.WriteCharPtr( m_aStr.getStr() ).WriteCharPtr( "\")" );
-    return sal_True;
+    return true;
 }
 
 SvStream& WriteSvString(SvStream & rStm, const SvString & r )
@@ -338,25 +338,25 @@ SvStream& operator >> (SvStream & rStm, SvString & r )
 }
 
 
-sal_Bool SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
+bool SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
     return SvString::ReadSvIdl( SvHash_HelpText(), rInStm );
 }
 
-sal_Bool SvHelpText::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 nTab )
+bool SvHelpText::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 nTab )
 {
     return SvString::WriteSvIdl( SvHash_HelpText(), rOutStm, nTab );
 }
 
-sal_Bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
+bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( SvHash_uuid() ) )
     {
-        sal_Bool bOk = sal_True;
-        sal_Bool bBraket = rInStm.Read( '(' );
+        bool bOk = true;
+        bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -369,22 +369,22 @@ sal_Bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
-            return sal_True;
+            return true;
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvUUId::WriteSvIdl( SvStream & rOutStm )
+bool SvUUId::WriteSvIdl( SvStream & rOutStm )
 {
     // write global id
     rOutStm.WriteCharPtr( SvHash_uuid()->GetName().getStr() ).WriteCharPtr( "(\"" );
     rOutStm.WriteCharPtr( OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() ).WriteCharPtr( "\")" );
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
+bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 {
     sal_uLong n = 0;
 
@@ -398,24 +398,24 @@ sal_Bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
             if( pTok->IsInteger() && pTok->GetNumber() <= 0xFFFF )
             {
                 nMinorVersion = (sal_uInt16)pTok->GetNumber();
-                return sal_True;
+                return true;
             }
         }
         else
-            return sal_True;
+            return true;
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvVersion::WriteSvIdl( SvStream & rOutStm )
+bool SvVersion::WriteSvIdl( SvStream & rOutStm )
 {
     rOutStm.WriteCharPtr( SvHash_Version()->GetName().getStr() ).WriteChar( '(' )
        .WriteCharPtr( OString::number(nMajorVersion).getStr() )
        .WriteChar( '.' )
        .WriteCharPtr( OString::number(nMinorVersion).getStr() )
        .WriteChar( ')' );
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

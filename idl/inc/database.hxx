@@ -43,7 +43,7 @@ public:
 
     const OString&  GetText() const { return aText; }
     void SetText( const OString& rT ) { aText = rT; }
-    sal_Bool            IsError() const { return nLine != 0; }
+    bool            IsError() const { return nLine != 0; }
     void            Clear() { nLine = nColumn = 0; }
     SvIdlError &    operator = ( const SvIdlError & rRef )
     { aText   = rRef.aText;
@@ -55,7 +55,7 @@ public:
 
 class SvIdlDataBase
 {
-    sal_Bool                        bExport;
+    bool                        bExport;
     OUString                    aExportFile;
     sal_uInt32                  nUniqueId;
     sal_uInt32                  nVerbosity;
@@ -85,7 +85,7 @@ public:
 
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
-    static sal_Bool IsBinaryFormat( SvStream & rInStm );
+    static bool IsBinaryFormat( SvStream & rInStm );
 
     void        Load( SvStream & rInStm );
     void        Save( SvStream & rInStm, sal_uInt32 nContextFlags );
@@ -121,7 +121,7 @@ public:
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const OString& rError, SvToken * pTok );
     void                    Push( SvMetaObject * pObj );
-    sal_Bool                    Pop( sal_Bool bOk, SvTokenStream & rInStm, sal_uInt32 nTokPos )
+    bool                    Pop( bool bOk, SvTokenStream & rInStm, sal_uInt32 nTokPos )
                             {
                                 GetStack().Pop();
                                 if( bOk )
@@ -131,9 +131,9 @@ public:
                                 return bOk;
                             }
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
-    sal_Bool                FindId( const OString& rIdName, sal_uLong * pVal );
-    sal_Bool                InsertId( const OString& rIdName, sal_uLong nVal );
-    sal_Bool                ReadIdFile( const OUString & rFileName );
+    bool                    FindId( const OString& rIdName, sal_uLong * pVal );
+    bool                    InsertId( const OString& rIdName, sal_uLong nVal );
+    bool                    ReadIdFile( const OUString & rFileName );
 
     SvMetaType *            FindType( const OString& rName );
     static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
@@ -152,14 +152,14 @@ class SvIdlWorkingBase : public SvIdlDataBase
 public:
                 explicit SvIdlWorkingBase( const SvCommand& rCmd );
 
-    sal_Bool        ReadSvIdl( SvTokenStream &, sal_Bool bImported, const OUString & rPath );
-    sal_Bool        WriteSvIdl( SvStream & );
+    bool        ReadSvIdl( SvTokenStream &, bool bImported, const OUString & rPath );
+    bool        WriteSvIdl( SvStream & );
 
-    sal_Bool        WriteSfx( SvStream & );
-    sal_Bool        WriteHelpIds( SvStream & );
-    sal_Bool        WriteSfxItem( SvStream & );
-    sal_Bool        WriteCSV( SvStream& );
-    sal_Bool        WriteDocumentation( SvStream& );
+    bool        WriteSfx( SvStream & );
+    bool        WriteHelpIds( SvStream & );
+    bool        WriteSfxItem( SvStream & );
+    bool        WriteCSV( SvStream& );
+    bool        WriteDocumentation( SvStream& );
 };
 
 #endif // INCLUDED_IDL_INC_DATABASE_HXX

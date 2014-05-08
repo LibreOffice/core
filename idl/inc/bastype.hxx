@@ -52,45 +52,45 @@ public:
 class Svint
 {
     int     nVal;
-    sal_Bool    bSet;
+    bool    bSet;
 public:
-                Svint() { nVal = bSet = 0; }
-                Svint( int n ) : nVal( n ), bSet( sal_True ) {}
-                Svint( int n, sal_Bool bSetP ) : nVal( n ), bSet( bSetP ) {}
-    Svint    &  operator = ( int n ) { nVal = n; bSet = sal_True; return *this; }
+                Svint() { nVal = 0; bSet = false; }
+                Svint( int n ) : nVal( n ), bSet( true ) {}
+                Svint( int n, bool bSetP ) : nVal( n ), bSet( bSetP ) {}
+    Svint    &  operator = ( int n ) { nVal = n; bSet = true; return *this; }
 
     operator    int ()const { return nVal; }
-    sal_Bool        IsSet() const { return bSet; }
+    bool        IsSet() const { return bSet; }
 
     friend SvStream& WriteSvint(SvStream & rStm, const Svint & r )
                 { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); rStm.WriteUInt8( r.bSet ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, Svint & r )
-                { r.nVal = (int)SvUINT32::Read( rStm ); rStm.ReadUChar( r.bSet ); return rStm; }
+                { r.nVal = (int)SvUINT32::Read( rStm ); rStm.ReadCharAsBool( r.bSet ); return rStm; }
 };
 
 
 class SvBOOL
 {
-    sal_Bool  nVal:1,
+    bool  nVal:1,
           bSet:1;
 public:
-                SvBOOL() { bSet = nVal = sal_False; }
-                SvBOOL( sal_Bool n ) : nVal( n ), bSet( sal_True ) {}
-                SvBOOL( sal_Bool n, sal_Bool bSetP ) : nVal( n ), bSet( bSetP ) {}
-    SvBOOL &    operator = ( sal_Bool n ) { nVal = n; bSet = sal_True; return *this; }
+                SvBOOL() { bSet = nVal = false; }
+                SvBOOL( bool n ) : nVal( n ), bSet( true ) {}
+                SvBOOL( bool n, bool bSetP ) : nVal( n ), bSet( bSetP ) {}
+    SvBOOL &    operator = ( bool n ) { nVal = n; bSet = true; return *this; }
 
-    operator    sal_Bool() const { return nVal; }
+    operator    bool() const { return nVal; }
 #ifdef STC
     operator    int() const { return nVal; }
 #endif
-    sal_Bool        Is() const { return nVal; }
-    sal_Bool        IsSet() const { return bSet; }
+    bool        Is() const { return nVal; }
+    bool        IsSet() const { return bSet; }
 
     friend SvStream& WriteSvBOOL(SvStream &, const SvBOOL &);
     friend SvStream& operator >> (SvStream &, SvBOOL &);
 
-    sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
+    bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
     OString    GetSvIdlString( SvStringHashEntry * pName );
 };
 
@@ -114,12 +114,12 @@ public:
     friend SvStream& WriteSvIdentifier(SvStream &, const SvIdentifier &);
     friend SvStream& operator >> (SvStream &, SvIdentifier &);
 
-    sal_Bool IsSet() const
+    bool IsSet() const
     {
         return !m_aStr.isEmpty();
     }
-    sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
+    bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                             sal_uInt16 nTab );
 };
 
@@ -128,10 +128,10 @@ class SvNumberIdentifier : public SvIdentifier
 {
     sal_uInt32  nValue;
     // must not be used
-    sal_Bool    ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    bool    ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
 public:
                 SvNumberIdentifier() : nValue( 0 ) {};
-    sal_Bool        IsSet() const
+    bool        IsSet() const
                 {
                     return SvIdentifier::IsSet() || nValue != 0;
                 }
@@ -140,8 +140,8 @@ public:
 
     friend SvStream& WriteSvNumberIdentifier(SvStream &, const SvNumberIdentifier &);
     friend SvStream& operator >> (SvStream &, SvNumberIdentifier &);
-    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
+    bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    bool        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
                            SvTokenStream & rInStm );
 };
 
@@ -160,15 +160,15 @@ public:
     {
         return m_aStr;
     }
-    sal_Bool IsSet() const
+    bool IsSet() const
     {
         return !m_aStr.isEmpty();
     }
     friend SvStream& WriteSvString(SvStream &, const SvString &);
     friend SvStream& operator >> (SvStream &, SvString &);
 
-    sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
+    bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
+    bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                             sal_uInt16 nTab );
 };
 
@@ -177,8 +177,8 @@ class SvHelpText : public SvString
 {
 public:
                 SvHelpText() {}
-    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    sal_Bool        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
+    bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    bool        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                             sal_uInt16 nTab );
 };
 
@@ -191,8 +191,8 @@ class SvUUId : public SvGlobalName
 {
 public:
                 SvUUId() {}
-    sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    sal_Bool        WriteSvIdl( SvStream & rOutStm );
+    bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    bool        WriteSvIdl( SvStream & rOutStm );
 };
 
 
@@ -202,12 +202,12 @@ class SvVersion
     sal_uInt16  nMinorVersion;
 public:
                 SvVersion() : nMajorVersion( 1 ), nMinorVersion( 0 ) {}
-    sal_Bool        operator == ( const SvVersion & r )
+    bool        operator == ( const SvVersion & r )
                 {
                     return (r.nMajorVersion == nMajorVersion)
                              && (r.nMinorVersion == nMinorVersion);
                 }
-    sal_Bool        operator != ( const SvVersion & r )
+    bool        operator != ( const SvVersion & r )
                 {
                     return !(*this == r);
                 }
@@ -217,8 +217,8 @@ public:
 
     friend SvStream& WriteSvVersion(SvStream &, const SvVersion &);
     friend SvStream& operator >> (SvStream &, SvVersion &);
-    sal_Bool        ReadSvIdl( SvTokenStream & rInStm );
-    sal_Bool        WriteSvIdl( SvStream & rOutStm );
+    bool        ReadSvIdl( SvTokenStream & rInStm );
+    bool        WriteSvIdl( SvStream & rOutStm );
 };
 
 

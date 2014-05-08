@@ -62,11 +62,11 @@ public:
             SvMetaObject();
 
     static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
-    static sal_Bool         TestAndSeekSpaceOnly( SvStream &, sal_uLong nBegPos );
+    static bool         TestAndSeekSpaceOnly( SvStream &, sal_uLong nBegPos );
     static void         Back2Delemitter( SvStream & );
     static void         WriteStars( SvStream & );
 
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
@@ -107,7 +107,7 @@ class SvMetaName : public SvMetaObject
     SvString      aDescription;
 
 protected:
-    virtual sal_Bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
                                      char c = '\0' );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -125,7 +125,7 @@ public:
             SV_DECL_META_FACTORY1( SvMetaName, SvMetaObject, 15 )
             SvMetaName();
 
-    virtual sal_Bool            SetName( const OString& rName, SvIdlDataBase * = NULL  );
+    virtual bool                SetName( const OString& rName, SvIdlDataBase * = NULL  );
     void                        SetDescription( const OString& rText )
                                 { aDescription.setString(rText); }
     const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
@@ -134,8 +134,8 @@ public:
     virtual const SvString &    GetConfigName() const{ return aConfigName; }
     virtual const SvString&     GetDescription() const{ return aDescription; }
 
-    virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                        WriteType, WriteAttribute = 0) SAL_OVERRIDE;
@@ -201,8 +201,8 @@ class SvMetaExtern : public SvMetaReference
 
     SvUUId                  aUUId;
     SvVersion               aVersion;
-    sal_Bool                    bReadUUId;
-    sal_Bool                    bReadVersion;
+    bool                    bReadUUId;
+    bool                    bReadVersion;
 public:
                         SV_DECL_META_FACTORY1( SvMetaExtern, SvMetaName, 16 )
                         SvMetaExtern();
@@ -212,7 +212,7 @@ public:
     const SvGlobalName &GetUUId() const;
     const SvVersion &   GetVersion() const { return aVersion; }
     void                SetModule( SvIdlDataBase & rBase );
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,

@@ -210,7 +210,7 @@ sal_uLong SvTokenStream::GetNumber()
     return( l );
 }
 
-sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
+bool SvTokenStream::MakeToken( SvToken & rToken )
 {
     do
     {
@@ -253,7 +253,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
                     {
                         c = GetNextChar();
                         if( IsEof() )
-                            return sal_False;
+                            return false;
                     }
                     else
                         c = GetFastNextChar();
@@ -262,7 +262,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
             }
             while( '/' != c && !IsEof() && ( SVSTREAM_OK == rInStream.GetError() ) );
             if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
-                return sal_False;
+                return false;
             c = GetNextChar();
             rToken.nType = SVTOKEN_COMMENT;
             CalcColumn();
@@ -276,7 +276,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     else if( c == '"' )
     {
         OStringBuffer aStr;
-        sal_Bool bDone = sal_False;
+        bool bDone = false;
         while( !bDone && !IsEof() && c )
         {
             c = GetFastNextChar();
@@ -286,7 +286,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
                 aStr.append('\n');
                 c = GetNextChar();
                 if( IsEof() )
-                    return sal_False;
+                    return false;
             }
             if( c == '"' )
             {
@@ -297,7 +297,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
                     aStr.append('"');
                 }
                 else
-                    bDone = sal_True;
+                    bDone = true;
             }
             else if( c == '\\' )
             {
@@ -310,7 +310,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
                 aStr.append(static_cast<char>(c));
         }
         if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
-            return sal_False;
+            return false;
         rToken.nType   = SVTOKEN_STRING;
         rToken.aString = aStr.makeStringAndClear();
     }
@@ -332,12 +332,12 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
         if( aStr.equalsIgnoreAsciiCase( aStrTrue ) )
         {
             rToken.nType = SVTOKEN_BOOL;
-            rToken.bBool = sal_True;
+            rToken.bBool = true;
         }
         else if( aStr.equalsIgnoreAsciiCase( aStrFalse ) )
         {
             rToken.nType = SVTOKEN_BOOL;
-            rToken.bBool = sal_False;
+            rToken.bBool = false;
         }
         else
         {

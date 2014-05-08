@@ -30,21 +30,21 @@
 SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
 
 SvMetaModule::SvMetaModule()
-    : bImported( sal_False )
-    , bIsModified( sal_False )
+    : bImported( false )
+    , bIsModified( false )
 {
 }
 
-SvMetaModule::SvMetaModule( const OUString & rIdlFileName, sal_Bool bImp )
+SvMetaModule::SvMetaModule( const OUString & rIdlFileName, bool bImp )
     : aIdlFileName( rIdlFileName )
-    , bImported( bImp ), bIsModified( sal_False )
+    , bImported( bImp ), bIsModified( false )
 {
 }
 
 #define MODULE_VER      0x0001
 void SvMetaModule::Load( SvPersistStream & rStm )
 {
-    bImported = sal_True; // import always
+    bImported = true; // import always
     SvMetaExtern::Load( rStm );
 
     sal_uInt16 nVer;
@@ -100,27 +100,27 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm.Seek( nPos );
 }
 
-sal_Bool SvMetaModule::SetName( const OString& rName, SvIdlDataBase * pBase )
+bool SvMetaModule::SetName( const OString& rName, SvIdlDataBase * pBase )
 {
     if( pBase )
     {
         if( pBase->GetModule( rName ) )
-            return sal_False;
+            return false;
     }
     return SvMetaExtern::SetName( rName );
 }
 
-sal_Bool SvMetaModule::FillNextName( SvGlobalName * pName )
+bool SvMetaModule::FillNextName( SvGlobalName * pName )
 {
     *pName = aNextName;
 
     if( aNextName < aEndName )
     {
         ++aNextName;
-        bIsModified = sal_True;
-        return sal_True;
+        bIsModified = true;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -217,7 +217,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
     }
     else if( rInStm.GetToken()->Is( SvHash_include() ) )
     {
-        sal_Bool bOk = sal_False;
+        bool bOk = false;
         rInStm.GetToken_Next();
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
@@ -313,13 +313,13 @@ void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    bIsModified = sal_True; // up to now always when compiler running
+    bIsModified = true; // up to now always when compiler running
 
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok  = rInStm.GetToken_Next();
-    sal_Bool bOk = pTok->Is( SvHash_module() );
+    bool bOk = pTok->Is( SvHash_module() );
     if( bOk )
     {
         pTok = rInStm.GetToken_Next();

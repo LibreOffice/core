@@ -70,7 +70,7 @@ void SvClassElement::Save( SvPersistStream & rStm )
 
 SV_IMPL_META_FACTORY1( SvMetaClass, SvMetaType );
 SvMetaClass::SvMetaClass()
-    : aAutomation( sal_True, sal_False )
+    : aAutomation( true, false )
 {
 }
 
@@ -179,7 +179,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                             rBase.WriteError( rInStm );
                         }
                         xAutomationInterface = pClass;
-                        xEle->SetAutomation( sal_True );
+                        xEle->SetAutomation( true );
                     }
                     else
                     {
@@ -216,7 +216,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         rInStm.Seek( nTokPos );
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
 
-        sal_Bool bOk = sal_False;
+        bool bOk = false;
         SvMetaAttributeRef xAttr;
         if( !pType || pType->IsItem() )
         {
@@ -277,12 +277,12 @@ void SvMetaClass::WriteContextSvIdl
     }
 }
 
-sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uLong nTokPos = rInStm.Tell();
     if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm ) && GetType() == TYPE_CLASS )
     {
-        sal_Bool bOk = sal_True;
+        bool bOk = true;
         if( rInStm.Read( ':' ) )
         {
             aSuperClass = rBase.ReadKnownClass( rInStm );
@@ -304,10 +304,10 @@ sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             return bOk;
     }
     rInStm.Seek( nTokPos );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
+bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                  SvMetaAttribute & rAttr ) const
 {
     if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
@@ -334,7 +334,7 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 aStr.append(" with different id's");
                 rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
-                return sal_False;
+                return false;
              }
         }
         else
@@ -355,14 +355,14 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 aStr.append(" with equal id's");
                 rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
-                return sal_False;
+                return false;
              }
         }
     }
     SvMetaClass * pSC = aSuperClass;
     if( pSC )
         return pSC->TestAttribute( rBase, rInStm, rAttr );
-    return sal_True;
+    return true;
 }
 
 void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,

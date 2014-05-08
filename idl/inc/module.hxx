@@ -44,7 +44,7 @@ class SvMetaModule : public SvMetaExtern
     SvString                aTypeLibFile;
     SvString                aModulePrefix;
 
-    sal_Bool                    bImported   : 1,
+    bool                    bImported   : 1,
                             bIsModified : 1;
     SvGlobalName            aBeginName;
     SvGlobalName            aEndName;
@@ -61,7 +61,7 @@ public:
     const OUString &    GetIdlFileName() const { return aIdlFileName; }
     const OString& GetModulePrefix() const { return aModulePrefix.getString(); }
 
-    virtual sal_Bool    SetName( const OString& rName, SvIdlDataBase * = NULL  ) SAL_OVERRIDE;
+    virtual bool    SetName( const OString& rName, SvIdlDataBase * = NULL  ) SAL_OVERRIDE;
 
     const OString& GetHelpFileName() const { return aHelpFileName.getString(); }
     const OString& GetTypeLibFileName() const { return aTypeLibFile.getString(); }
@@ -71,13 +71,13 @@ public:
     const SvMetaClassMemberList & GetClassList() const { return aClassList; }
 
                         SvMetaModule( const OUString & rIdlFileName,
-                                      sal_Bool bImported );
+                                      bool bImported );
 
-    sal_Bool                FillNextName( SvGlobalName * );
-    sal_Bool                IsImported() const { return bImported; }
-    sal_Bool                IsModified() const { return bIsModified; }
+    bool                FillNextName( SvGlobalName * );
+    bool                IsImported() const { return bImported; }
+    bool                IsModified() const { return bIsModified; }
 
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void        WriteAttributes( SvIdlDataBase & rBase,

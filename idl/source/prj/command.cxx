@@ -130,7 +130,7 @@ void DeInit()
     delete IDLAPP;
 }
 
-sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
+bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 {
     for( size_t n = 0; n < rCommand.aInFileList.size(); ++n )
     {
@@ -154,14 +154,14 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
                     aStr.append(OUStringToOString(aFileName,
                         RTL_TEXTENCODING_UTF8));
                     fprintf( stderr, "%s\n", aStr.getStr() );
-                    return sal_False;
+                    return false;
                 }
             }
             else
             {
                 SvTokenStream aTokStm( aStm, aFileName );
-                if( !pDataBase->ReadSvIdl( aTokStm, sal_False, rCommand.aPath ) )
-                    return sal_False;
+                if( !pDataBase->ReadSvIdl( aTokStm, false, rCommand.aPath ) )
+                    return false;
             }
         }
         else
@@ -169,13 +169,13 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
             const OString aStr(OUStringToOString(aFileName,
                 RTL_TEXTENCODING_UTF8));
             fprintf( stderr, "unable to read input file: %s\n", aStr.getStr() );
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
-static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
+static bool ResponseFile( StringList * pList, int argc, char ** argv )
 {
     // program name
     pList->push_back( OUString::createFromAscii(*argv) );
@@ -185,7 +185,7 @@ static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
         { // when @, then response file
             SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
-                return sal_False;
+                return false;
 
             OString aStr;
             while( aStm.ReadLine( aStr ) )
@@ -207,7 +207,7 @@ static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
         else if( argv[ i ] )
             pList->push_back( OUString::createFromAscii( argv[ i ] ) );
     }
-    return sal_True;
+    return true;
 }
 
 SvCommand::SvCommand( int argc, char ** argv )

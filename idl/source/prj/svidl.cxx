@@ -27,7 +27,7 @@
 #include <osl/file.hxx>
 
 #define BR 0x8000
-sal_Bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, sal_Bool bImmerVerschieben )
+bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImmerVerschieben )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
     sal_uLong nC1 = 0;
@@ -73,9 +73,9 @@ sal_Bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, sal_Bo
             // delete both files
             osl::File::remove( fileURL1 );
             osl::File::remove( fileURL2 );
-            return sal_False;
+            return false;
         }
-        return sal_True;
+        return true;
     }
     return osl::FileBase::E_None == osl::File::remove( fileURL2 );
 }
@@ -239,7 +239,7 @@ int main ( int argc, char ** argv)
     if( nExit == 0 )
     {
         bool bErr = false;
-        sal_Bool bDoMove = aCommand.aTargetFile.isEmpty();
+        bool bDoMove = aCommand.aTargetFile.isEmpty();
         OUString aErrFile, aErrFile2;
         if( !bErr && !aCommand.aListFile.isEmpty() )
         {
