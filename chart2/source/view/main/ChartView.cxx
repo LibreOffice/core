@@ -3120,7 +3120,7 @@ void ChartView::createShapes3D()
         return;
 
     uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    std::vector<VDataSeries*> aDataSeries;
+    boost::ptr_vector<VDataSeries> aDataSeries;
 
     if (aCooSysList.getLength() != 1)
         // Supporting multiple coordinates in a truly 3D chart (which implies
@@ -3155,8 +3155,7 @@ void ChartView::createShapes3D()
         if(!xDataSeries.is())
             continue;
 
-        VDataSeries* pSeries = new VDataSeries( xDataSeries );
-        aDataSeries.push_back(pSeries);
+        aDataSeries.push_back(new VDataSeries(xDataSeries));
     }
 
     OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();

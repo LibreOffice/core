@@ -25,7 +25,7 @@ namespace chart {
 
 GL3DBarChart::GL3DBarChart(
     const css::uno::Reference<css::chart2::XChartType>& xChartType,
-    const std::vector<VDataSeries*>& rDataSeries,
+    const boost::ptr_vector<VDataSeries>& rDataSeries,
     OpenGLWindow& rWindow, ExplicitCategoriesProvider& rCatProvider ) :
     mxChartType(xChartType),
     maDataSeries(rDataSeries),
@@ -56,22 +56,22 @@ void GL3DBarChart::create3DShapes()
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     sal_Int32 nSeriesIndex = 0;
-    for(std::vector<VDataSeries*>::const_iterator itr = maDataSeries.begin(),
+    for (boost::ptr_vector<VDataSeries>::const_iterator itr = maDataSeries.begin(),
             itrEnd = maDataSeries.end(); itr != itrEnd; ++itr)
     {
-        VDataSeries* pDataSeries = *itr;
-        sal_Int32 nPointCount = pDataSeries->getTotalPointCount();
+        const VDataSeries& rDataSeries = *itr;
+        sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
 
         // Create series name text object.
         OUString aSeriesName =
             DataSeriesHelper::getDataSeriesLabel(
-                pDataSeries->getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
+                rDataSeries.getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
 
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
-            float nVal = pDataSeries->getYValue(nIndex);
+            float nVal = rDataSeries.getYValue(nIndex);
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
             float nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY);
 
