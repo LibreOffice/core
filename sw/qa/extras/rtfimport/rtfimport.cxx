@@ -652,7 +652,7 @@ DECLARE_RTFIMPORT_TEST(testFdo47495, "fdo47495.rtf")
 DECLARE_RTFIMPORT_TEST(testAllGapsWord, "all_gaps_word.rtf")
 {
     BorderTest borderTest;
-    borderTest.testTheBorders(mxComponent);
+    borderTest.testTheBorders(mxComponent, false);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo52052, "fdo52052.rtf")

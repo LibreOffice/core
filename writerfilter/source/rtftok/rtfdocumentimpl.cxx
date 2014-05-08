@@ -2510,10 +2510,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             nParam = 25;
             break;
         case RTF_BRDROUTSET:
-            nParam = 18;
+            nParam = 26;
             break;
         case RTF_BRDRINSET:
-            nParam = 17;
+            nParam = 27;
             break;
         case RTF_BRDRNONE:
             nParam = 0;
