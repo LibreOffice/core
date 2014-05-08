@@ -18,6 +18,7 @@
  */
 
 #include <tools/wldcrd.hxx>
+#include <tools/inetmime.hxx>
 #include <rtl/instance.hxx>
 #include <svl/inettype.hxx>
 #include <svl/svl.hrc>
@@ -778,48 +779,6 @@ bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
     return false;
 }
 
-// static
-sal_Unicode const * INetContentTypes::scan(
-    sal_Unicode const * pBegin, sal_Unicode const * pEnd, OUString * pType,
-    OUString * pSubType, INetContentTypeParameterList * pParameters)
-{
-    sal_Unicode const * p = INetMIME::skipLinearWhiteSpaceComment(pBegin, pEnd);
-    sal_Unicode const * pTypeBegin = p;
-    while (p != pEnd && INetMIME::isTokenChar(*p))
-    {
-        ++p;
-    }
-    if (p == pTypeBegin)
-        return 0;
-    sal_Unicode const * pTypeEnd = p;
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    if (p == pEnd || *p++ != '/')
-        return 0;
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    sal_Unicode const * pSubTypeBegin = p;
-    while (p != pEnd && INetMIME::isTokenChar(*p))
-    {
-        ++p;
-    }
-    if (p == pSubTypeBegin)
-        return 0;
-    sal_Unicode const * pSubTypeEnd = p;
-
-    if (pType != 0)
-    {
-        *pType = OUString(pTypeBegin, pTypeEnd - pTypeBegin).toAsciiLowerCase();
-    }
-    if (pSubType != 0)
-    {
-        *pSubType = OUString(pSubTypeBegin, pSubTypeEnd - pSubTypeBegin)
-            .toAsciiLowerCase();
-    }
-
-    return INetMIME::scanParameters(p, pEnd, pParameters);
-}
-
 bool INetContentTypes::parse(
     OUString const & rMediaType, OUString & rType, OUString & rSubType,
     INetContentTypeParameterList * pParameters)
@@ -829,7 +788,7 @@ bool INetContentTypes::parse(
     OUString t;
     OUString s;
     INetContentTypeParameterList p;
-    if (scan(b, e, &t, &s, pParameters == 0 ? 0 : &p) == e) {
+    if (INetMIME::scanContentType(b, e, &t, &s, pParameters == 0 ? 0 : &p) == e) {
         rType = t;
         rSubType = s;
         if (pParameters != 0) {

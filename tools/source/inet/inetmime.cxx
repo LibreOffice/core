@@ -956,6 +956,48 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
 }
 
 // static
+sal_Unicode const * INetMIME::scanContentType(
+    sal_Unicode const * pBegin, sal_Unicode const * pEnd, OUString * pType,
+    OUString * pSubType, INetContentTypeParameterList * pParameters)
+{
+    sal_Unicode const * p = INetMIME::skipLinearWhiteSpaceComment(pBegin, pEnd);
+    sal_Unicode const * pTypeBegin = p;
+    while (p != pEnd && INetMIME::isTokenChar(*p))
+    {
+        ++p;
+    }
+    if (p == pTypeBegin)
+        return 0;
+    sal_Unicode const * pTypeEnd = p;
+
+    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
+    if (p == pEnd || *p++ != '/')
+        return 0;
+
+    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
+    sal_Unicode const * pSubTypeBegin = p;
+    while (p != pEnd && INetMIME::isTokenChar(*p))
+    {
+        ++p;
+    }
+    if (p == pSubTypeBegin)
+        return 0;
+    sal_Unicode const * pSubTypeEnd = p;
+
+    if (pType != 0)
+    {
+        *pType = OUString(pTypeBegin, pTypeEnd - pTypeBegin).toAsciiLowerCase();
+    }
+    if (pSubType != 0)
+    {
+        *pSubType = OUString(pSubTypeBegin, pSubTypeEnd - pSubTypeBegin)
+            .toAsciiLowerCase();
+    }
+
+    return INetMIME::scanParameters(p, pEnd, pParameters);
+}
+
+// static
 const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
 {
     if (rtl_isOctetTextEncoding(eEncoding))
