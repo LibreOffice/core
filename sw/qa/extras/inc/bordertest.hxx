@@ -26,7 +26,7 @@ public:
     {
 
     }
-    void testTheBorders(uno::Reference<lang::XComponent> mxComponent)
+    void testTheBorders(uno::Reference<lang::XComponent> mxComponent, bool isBinaryDoc)
     {
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);
@@ -69,25 +69,58 @@ public:
     map3.insert(StringBorderPair(OUString("H1"), table::BorderLine(0, 53, 26, 159)));
     map3.insert(StringBorderPair(OUString("I1"), table::BorderLine(0, 53, 26, 212)));
     map3.insert(StringBorderPair(OUString("A1"), table::BorderLine(0, 53, 26, 9)));
+
+    // Binary-DOC importer changes 'inset' and 'outset' border styles to other styles
+    // during import, so for now - leaving binary-doc results as they were.
     BorderLineMap map4;
-    map4.insert(StringBorderPair(OUString("B1"), table::BorderLine(0, 53, 26, 18)));
-    map4.insert(StringBorderPair(OUString("C1"), table::BorderLine(0, 53, 26, 26)));
-    map4.insert(StringBorderPair(OUString("D1"), table::BorderLine(0, 53, 26, 35)));
-    map4.insert(StringBorderPair(OUString("E1"), table::BorderLine(0, 53, 26, 35)));
-    map4.insert(StringBorderPair(OUString("F1"), table::BorderLine(0, 53, 26, 79)));
-    map4.insert(StringBorderPair(OUString("G1"), table::BorderLine(0, 53, 26, 106)));
-    map4.insert(StringBorderPair(OUString("H1"), table::BorderLine(0, 53, 26, 159)));
-    map4.insert(StringBorderPair(OUString("I1"), table::BorderLine(0, 53, 26, 212)));
+    if (isBinaryDoc)
+    {
+        map4.insert(StringBorderPair(OUString("B1"), table::BorderLine(0, 53, 26, 18)));
+        map4.insert(StringBorderPair(OUString("C1"), table::BorderLine(0, 53, 26, 26)));
+        map4.insert(StringBorderPair(OUString("D1"), table::BorderLine(0, 53, 26, 35)));
+        map4.insert(StringBorderPair(OUString("E1"), table::BorderLine(0, 53, 26, 35)));
+        map4.insert(StringBorderPair(OUString("F1"), table::BorderLine(0, 53, 26, 79)));
+        map4.insert(StringBorderPair(OUString("G1"), table::BorderLine(0, 53, 26, 106)));
+        map4.insert(StringBorderPair(OUString("H1"), table::BorderLine(0, 53, 26, 159)));
+        map4.insert(StringBorderPair(OUString("I1"), table::BorderLine(0, 53, 26, 212)));
+    }
+    else
+    {
+        map4.insert(StringBorderPair(OUString("A1"), table::BorderLine(0, 0, 26, 4)));
+        map4.insert(StringBorderPair(OUString("B1"), table::BorderLine(0, 5, 26, 5)));
+        map4.insert(StringBorderPair(OUString("C1"), table::BorderLine(0, 14, 26, 14)));
+        map4.insert(StringBorderPair(OUString("D1"), table::BorderLine(0, 23, 26, 23)));
+        map4.insert(StringBorderPair(OUString("E1"), table::BorderLine(0, 41, 26, 41)));
+        map4.insert(StringBorderPair(OUString("F1"), table::BorderLine(0, 67, 26, 67)));
+        map4.insert(StringBorderPair(OUString("G1"), table::BorderLine(0, 93, 26, 93)));
+        map4.insert(StringBorderPair(OUString("H1"), table::BorderLine(0, 146, 26, 146)));
+        map4.insert(StringBorderPair(OUString("I1"), table::BorderLine(0, 199, 26, 199)));
+    }
     BorderLineMap map5;
-    map5.insert(StringBorderPair(OUString("A1"), table::BorderLine(0, 26, 53, 9)));
-    map5.insert(StringBorderPair(OUString("B1"), table::BorderLine(0, 26, 53, 18)));
-    map5.insert(StringBorderPair(OUString("C1"), table::BorderLine(0, 26, 53, 26)));
-    map5.insert(StringBorderPair(OUString("D1"), table::BorderLine(0, 26, 53, 35)));
-    map5.insert(StringBorderPair(OUString("E1"), table::BorderLine(0, 26, 53, 53)));
-    map5.insert(StringBorderPair(OUString("F1"), table::BorderLine(0, 26, 53, 79)));
-    map5.insert(StringBorderPair(OUString("G1"), table::BorderLine(0, 26, 53, 106)));
-    map5.insert(StringBorderPair(OUString("H1"), table::BorderLine(0, 26, 53, 159)));
-    map5.insert(StringBorderPair(OUString("I1"), table::BorderLine(0, 26, 53, 212)));
+    if (isBinaryDoc)
+    {
+        map5.insert(StringBorderPair(OUString("A1"), table::BorderLine(0, 26, 53, 9)));
+        map5.insert(StringBorderPair(OUString("B1"), table::BorderLine(0, 26, 53, 18)));
+        map5.insert(StringBorderPair(OUString("C1"), table::BorderLine(0, 26, 53, 26)));
+        map5.insert(StringBorderPair(OUString("D1"), table::BorderLine(0, 26, 53, 35)));
+        map5.insert(StringBorderPair(OUString("E1"), table::BorderLine(0, 26, 53, 53)));
+        map5.insert(StringBorderPair(OUString("F1"), table::BorderLine(0, 26, 53, 79)));
+        map5.insert(StringBorderPair(OUString("G1"), table::BorderLine(0, 26, 53, 106)));
+        map5.insert(StringBorderPair(OUString("H1"), table::BorderLine(0, 26, 53, 159)));
+        map5.insert(StringBorderPair(OUString("I1"), table::BorderLine(0, 26, 53, 212)));
+    }
+    else
+    {
+        map5.insert(StringBorderPair(OUString("A1"), table::BorderLine(0, 26, 2, 4)));
+        map5.insert(StringBorderPair(OUString("B1"), table::BorderLine(0, 26, 5, 5)));
+        map5.insert(StringBorderPair(OUString("C1"), table::BorderLine(0, 26, 14, 14)));
+        map5.insert(StringBorderPair(OUString("D1"), table::BorderLine(0, 26, 23, 23)));
+        map5.insert(StringBorderPair(OUString("E1"), table::BorderLine(0, 26, 41, 41)));
+        map5.insert(StringBorderPair(OUString("F1"), table::BorderLine(0, 26, 67, 67)));
+        map5.insert(StringBorderPair(OUString("G1"), table::BorderLine(0, 26, 93, 93)));
+        map5.insert(StringBorderPair(OUString("H1"), table::BorderLine(0, 26, 146, 146)));
+        map5.insert(StringBorderPair(OUString("I1"), table::BorderLine(0, 26, 199, 199)));
+    }
     BorderLineMap map6;
     map6.insert(StringBorderPair(OUString("A1"), table::BorderLine(0, 14, 14, 26)));
     map6.insert(StringBorderPair(OUString("B1"), table::BorderLine(0, 26, 26, 53)));

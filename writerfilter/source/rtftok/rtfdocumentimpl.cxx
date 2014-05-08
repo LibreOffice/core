@@ -2365,8 +2365,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             case RTF_BRDRTHTNLG: nParam = 18; break;
             case RTF_BRDREMBOSS: nParam = 24; break;
             case RTF_BRDRENGRAVE: nParam = 25; break;
-            case RTF_BRDROUTSET: nParam = 18; break;
-            case RTF_BRDRINSET: nParam = 17; break;
+            case RTF_BRDROUTSET: nParam = 26; break;
+            case RTF_BRDRINSET: nParam = 27; break;
             case RTF_BRDRNONE: nParam = 0; break;
             default: break;
         }

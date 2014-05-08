@@ -606,7 +606,7 @@ DECLARE_OOXMLIMPORT_TEST(testBnc773061, "bnc773061.docx")
 DECLARE_OOXMLIMPORT_TEST(testAllGapsWord, "all_gaps_word.docx")
 {
     BorderTest borderTest;
-    borderTest.testTheBorders(mxComponent);
+    borderTest.testTheBorders(mxComponent, false);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN775906, "n775906.docx")
