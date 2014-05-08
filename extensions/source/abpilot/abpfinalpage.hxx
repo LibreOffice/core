@@ -52,7 +52,7 @@ namespace abp
 
     public:
         FinalPage( OAddessBookSourcePilot* _pParent );
-        ~FinalPage();
+        virtual ~FinalPage();
 
     protected:
         // OWizardPage overridables
