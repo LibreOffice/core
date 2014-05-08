@@ -458,8 +458,8 @@ sal_Int32 Parser::parseFontCheckForString(
         if (tolower(pCopy[i]) != pAttrib[i]
             && toupper(pCopy[i]) != pAttrib[i])
             return 0;
-    rResult.isItalic = bItalic;
-    rResult.isBold = bBold;
+    rResult.isItalic |= bItalic;
+    rResult.isBold |= bBold;
     return nAttribLen;
 }
 
@@ -488,6 +488,7 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
         nLen -= 7;
     }
 
+    // TODO: Looks like this block needs to be refactored
     while( nLen )
     {
         if (parseFontRemoveSuffix(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("PSMT")))
