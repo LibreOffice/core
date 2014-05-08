@@ -373,7 +373,7 @@ namespace offapp
 
         bool bModified = false;
         // the enabled flag
-        if (m_pEnablePooling->GetSavedValue() != TriState(m_pEnablePooling->IsChecked()))
+        if (m_pEnablePooling->IsValueChangedFromSaved())
         {
             _rSet.Put(SfxBoolItem(SID_SB_POOLING_ENABLED, m_pEnablePooling->IsChecked()), SID_SB_POOLING_ENABLED);
             bModified = true;

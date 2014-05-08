@@ -109,36 +109,36 @@ SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
 bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     bool bRet = false;
-    if( pFormulaCB ->GetSavedValue() != TriState(pFormulaCB ->IsChecked()) ||
-        pNilCB     ->GetSavedValue() != TriState(pNilCB     ->IsChecked()) ||
-        pAnnotCB   ->GetSavedValue() != TriState(pAnnotCB   ->IsChecked()) ||
-        pValueCB   ->GetSavedValue() != TriState(pValueCB   ->IsChecked()) ||
-        pAnchorCB  ->GetSavedValue() != TriState(pAnchorCB  ->IsChecked()) ||
-        pClipMarkCB->GetSavedValue() != TriState(pClipMarkCB->IsChecked()) ||
-        pObjGrfLB  ->GetSavedValue() != pObjGrfLB  ->GetSelectEntryPos() ||
-        pDiagramLB ->GetSavedValue() != pDiagramLB ->GetSelectEntryPos() ||
-        pDrawLB    ->GetSavedValue() != pDrawLB    ->GetSelectEntryPos() ||
-        pGridLB        ->GetSavedValue() != pGridLB->GetSelectEntryPos() ||
-        pRowColHeaderCB->GetSavedValue() != TriState(pRowColHeaderCB->IsChecked()) ||
-        pHScrollCB     ->GetSavedValue() != TriState(pHScrollCB     ->IsChecked()) ||
-        pVScrollCB     ->GetSavedValue() != TriState(pVScrollCB     ->IsChecked()) ||
-        pTblRegCB      ->GetSavedValue() != TriState(pTblRegCB      ->IsChecked()) ||
-        pOutlineCB     ->GetSavedValue() != TriState(pOutlineCB     ->IsChecked()) ||
-        pColorLB       ->GetSavedValue() != pColorLB       ->GetSelectEntryPos() ||
-        pBreakCB       ->GetSavedValue() != TriState(pBreakCB       ->IsChecked()) ||
-        pGuideLineCB   ->GetSavedValue() != TriState(pGuideLineCB   ->IsChecked()))
+    if( pFormulaCB ->IsValueChangedFromSaved() ||
+        pNilCB     ->IsValueChangedFromSaved() ||
+        pAnnotCB   ->IsValueChangedFromSaved() ||
+        pValueCB   ->IsValueChangedFromSaved() ||
+        pAnchorCB  ->IsValueChangedFromSaved() ||
+        pClipMarkCB->IsValueChangedFromSaved() ||
+        pObjGrfLB  ->IsValueChangedFromSaved() ||
+        pDiagramLB ->IsValueChangedFromSaved() ||
+        pDrawLB    ->IsValueChangedFromSaved() ||
+        pGridLB        ->IsValueChangedFromSaved() ||
+        pRowColHeaderCB->IsValueChangedFromSaved() ||
+        pHScrollCB     ->IsValueChangedFromSaved() ||
+        pVScrollCB     ->IsValueChangedFromSaved() ||
+        pTblRegCB      ->IsValueChangedFromSaved() ||
+        pOutlineCB     ->IsValueChangedFromSaved() ||
+        pColorLB       ->IsValueChangedFromSaved() ||
+        pBreakCB       ->IsValueChangedFromSaved() ||
+        pGuideLineCB   ->IsValueChangedFromSaved())
     {
         pLocalOptions->SetGridColor( pColorLB->GetSelectEntryColor(),
                                      pColorLB->GetSelectEntry() );
         rCoreSet.Put(ScTpViewItem(SID_SCVIEWOPTIONS, *pLocalOptions));
         bRet = true;
     }
-    if(pRangeFindCB->GetSavedValue() != TriState(pRangeFindCB->IsChecked()))
+    if(pRangeFindCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, pRangeFindCB->IsChecked()));
         bRet = true;
     }
-    if(pSyncZoomCB->GetSavedValue() != TriState(pSyncZoomCB->IsChecked()))
+    if(pSyncZoomCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, pSyncZoomCB->IsChecked()));
         bRet = true;
@@ -427,7 +427,7 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     bool bRet = true;
     const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
-    if ( nMPos != m_pUnitLB->GetSavedValue() )
+    if ( m_pUnitLB->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pUnitLB->GetEntryData( nMPos );
         rCoreSet.Put( SfxUInt16Item( SID_ATTR_METRIC,
@@ -435,7 +435,7 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         bRet = true;
     }
 
-    if(m_pTabMF->GetText() != m_pTabMF->GetSavedValue())
+    if(m_pTabMF->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     sal::static_int_cast<sal_uInt16>( m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP)) )));
@@ -453,8 +453,8 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         nSet=LM_NEVER;
     }
 
-    if(m_pRequestRB->IsChecked() != m_pRequestRB->GetSavedValue() ||
-            m_pNeverRB->IsChecked() != m_pNeverRB->GetSavedValue() )
+    if(m_pRequestRB->IsValueChangedFromSaved() ||
+       m_pNeverRB->IsValueChangedFromSaved() )
     {
         if(pDoc)
             pDoc->SetLinkMode(nSet);
@@ -463,56 +463,56 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         SC_MOD()->SetAppOptions(aAppOptions);
         bRet = true;
     }
-    if(m_pAlignCB->GetSavedValue() != TriState(m_pAlignCB->IsChecked()))
+    if(m_pAlignCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_SELECTION, m_pAlignCB->IsChecked()));
         bRet = true;
     }
 
-    if(m_pAlignLB->GetSavedValue() != m_pAlignLB->GetSelectEntryPos())
+    if(m_pAlignLB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectEntryPos()));
         bRet = true;
     }
 
-    if(m_pEditModeCB->GetSavedValue() != TriState(m_pEditModeCB->IsChecked()))
+    if(m_pEditModeCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, m_pEditModeCB->IsChecked()));
         bRet = true;
     }
 
-    if(m_pFormatCB->GetSavedValue() != TriState(m_pFormatCB->IsChecked()))
+    if(m_pFormatCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, m_pFormatCB->IsChecked()));
         bRet = true;
     }
 
 
-    if(m_pExpRefCB->GetSavedValue() != TriState(m_pExpRefCB->IsChecked()))
+    if(m_pExpRefCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_pExpRefCB->IsChecked()));
         bRet = true;
     }
 
-    if(m_pMarkHdrCB->GetSavedValue() != TriState(m_pMarkHdrCB->IsChecked()))
+    if(m_pMarkHdrCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_pMarkHdrCB->IsChecked()));
         bRet = true;
     }
 
-    if(m_pTextFmtCB->GetSavedValue() != TriState(m_pTextFmtCB->IsChecked()))
+    if(m_pTextFmtCB->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_pTextFmtCB->IsChecked()));
         bRet = true;
     }
 
-    if( m_pReplWarnCB->GetSavedValue() != TriState(m_pReplWarnCB->IsChecked()) )
+    if( m_pReplWarnCB->IsValueChangedFromSaved() )
     {
         rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_pReplWarnCB->IsChecked() ) );
         bRet = true;
     }
 
-    if( m_pLegacyCellSelectionCB->GetSavedValue() != TriState(m_pLegacyCellSelectionCB->IsChecked()) )
+    if( m_pLegacyCellSelectionCB->IsValueChangedFromSaved() )
     {
         rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, m_pLegacyCellSelectionCB->IsChecked() ) );
         bRet = true;

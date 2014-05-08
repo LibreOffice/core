@@ -252,7 +252,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( !bDisable )
     {
         TriState eState = m_pTsbShowShadow->GetState();
-        if( eState != m_pTsbShowShadow->GetSavedValue() )
+        if( m_pTsbShowShadow->IsValueChangedFromSaved() )
         {
             SdrShadowItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOW );
@@ -321,7 +321,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         // ShadowColor
         sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-            nPos != m_pLbShadowColor->GetSavedValue() )
+            m_pLbShadowColor->IsValueChangedFromSaved() )
         {
             SdrShadowColorItem aItem(m_pLbShadowColor->GetSelectEntryColor());
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWCOLOR );
@@ -334,7 +334,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         // transparency
         sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
-        if( nVal != (sal_uInt16)m_pMtrTransparent->GetSavedValue().toInt32() )
+        if( m_pMtrTransparent->IsValueChangedFromSaved() )
         {
             SdrShadowTransparenceItem aItem( nVal );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWTRANSPARENCE );

@@ -399,7 +399,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
         Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
 
         sal_Int32 nSelPos = m_pProxyModeLB->GetSelectEntryPos();
-        if(m_pProxyModeLB->GetSavedValue() != nSelPos)
+        if(m_pProxyModeLB->IsValueChangedFromSaved())
         {
             if( nSelPos == 1 )
             {
@@ -412,43 +412,43 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
             bModified = true;
         }
 
-        if(m_pHttpProxyED->GetSavedValue() != m_pHttpProxyED->GetText())
+        if(m_pHttpProxyED->IsValueChangedFromSaved())
         {
             xPropertySet->setPropertyValue( aHttpProxyPN, makeAny(m_pHttpProxyED->GetText()));
             bModified = true;
         }
 
-        if ( m_pHttpPortED->GetSavedValue() != m_pHttpPortED->GetText() )
+        if ( m_pHttpPortED->IsValueChangedFromSaved())
         {
             xPropertySet->setPropertyValue( aHttpPortPN, makeAny(m_pHttpPortED->GetText().toInt32()));
             bModified = true;
         }
 
-        if( m_pHttpsProxyED->GetSavedValue() != m_pHttpsProxyED->GetText() )
+        if( m_pHttpsProxyED->IsValueChangedFromSaved() )
         {
             xPropertySet->setPropertyValue( aHttpsProxyPN, makeAny(m_pHttpsProxyED->GetText()) );
             bModified = true;
         }
 
-        if ( m_pHttpsPortED->GetSavedValue() != m_pHttpsPortED->GetText() )
+        if ( m_pHttpsPortED->IsValueChangedFromSaved() )
         {
             xPropertySet->setPropertyValue( aHttpsPortPN, makeAny(m_pHttpsPortED->GetText().toInt32()) );
             bModified = true;
         }
 
-        if( m_pFtpProxyED->GetSavedValue() != m_pFtpProxyED->GetText())
+        if( m_pFtpProxyED->IsValueChangedFromSaved())
         {
             xPropertySet->setPropertyValue( aFtpProxyPN, makeAny(m_pFtpProxyED->GetText()) );
             bModified = true;
         }
 
-        if ( m_pFtpPortED->GetSavedValue() != m_pFtpPortED->GetText() )
+        if ( m_pFtpPortED->IsValueChangedFromSaved() )
         {
             xPropertySet->setPropertyValue( aFtpPortPN, makeAny(m_pFtpPortED->GetText().toInt32()));
             bModified = true;
         }
 
-        if ( m_pNoProxyForED->GetSavedValue() != m_pNoProxyForED->GetText() )
+        if ( m_pNoProxyForED->IsValueChangedFromSaved() )
         {
             xPropertySet->setPropertyValue( aNoProxyDescPN, makeAny( m_pNoProxyForED->GetText()));
             bModified = true;
@@ -1235,7 +1235,7 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 {
     bool bMailModified = false;
-    if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->GetSavedValue() != m_pMailerURLED->GetText())
+    if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->IsValueChangedFromSaved())
     {
         pImpl->aMailConfig.sProgram = m_pMailerURLED->GetText();
         bMailModified = true;

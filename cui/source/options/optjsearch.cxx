@@ -225,133 +225,133 @@ bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
     bool bNewVal, bChanged;
 
     bNewVal  = m_pMatchCase->IsChecked();  //! treat as equal uppercase/lowercase
-    bChanged = bNewVal != (m_pMatchCase->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchCase->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchCase(!bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchFullHalfWidth->IsChecked();
-    bChanged = bNewVal != (m_pMatchFullHalfWidth->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchFullHalfWidth->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchFullHalfWidthForms( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchHiraganaKatakana->IsChecked();
-    bChanged = bNewVal != (m_pMatchHiraganaKatakana->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchHiraganaKatakana->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchHiraganaKatakana( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchContractions->IsChecked();
-    bChanged = bNewVal != (m_pMatchContractions->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchContractions->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchContractions( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchMinusDashChoon->IsChecked();
-    bChanged = bNewVal != (m_pMatchMinusDashChoon->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchMinusDashChoon->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchMinusDashChoon( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchRepeatCharMarks->IsChecked();
-    bChanged = bNewVal != (m_pMatchRepeatCharMarks->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchRepeatCharMarks->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchRepeatCharMarks( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchVariantFormKanji->IsChecked();
-    bChanged = bNewVal != (m_pMatchVariantFormKanji->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchVariantFormKanji->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchVariantFormKanji( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchOldKanaForms->IsChecked();
-    bChanged = bNewVal != (m_pMatchOldKanaForms->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchOldKanaForms->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchOldKanaForms( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchDiziDuzu->IsChecked();
-    bChanged = bNewVal != (m_pMatchDiziDuzu->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchDiziDuzu->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchDiziDuzu( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchBavaHafa->IsChecked();
-    bChanged = bNewVal != (m_pMatchBavaHafa->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchBavaHafa->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchBavaHafa( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchTsithichiDhizi->IsChecked();
-    bChanged = bNewVal != (m_pMatchTsithichiDhizi->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchTsithichiDhizi->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchTsithichiDhizi( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchHyuiyuByuvyu->IsChecked();
-    bChanged = bNewVal != (m_pMatchHyuiyuByuvyu->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchHyuiyuByuvyu->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchHyuiyuByuvyu( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchSesheZeje->IsChecked();
-    bChanged = bNewVal != (m_pMatchSesheZeje->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchSesheZeje->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchSesheZeje( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchIaiya->IsChecked();
-    bChanged = bNewVal != (m_pMatchIaiya->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchIaiya->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchIaiya( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchKiku->IsChecked();
-    bChanged = bNewVal != (m_pMatchKiku->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchKiku->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetMatchKiku( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pIgnorePunctuation->IsChecked();
-    bChanged = bNewVal != (m_pIgnorePunctuation->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pIgnorePunctuation->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetIgnorePunctuation( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pIgnoreWhitespace->IsChecked();
-    bChanged = bNewVal != (m_pIgnoreWhitespace->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pIgnoreWhitespace->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetIgnoreWhitespace( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pMatchProlongedSoundMark->IsChecked();
-    bChanged = bNewVal != (m_pMatchProlongedSoundMark->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pMatchProlongedSoundMark->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetIgnoreProlongedSoundMark( bNewVal );
         bModified = true;
     }
     bNewVal  = m_pIgnoreMiddleDot->IsChecked();
-    bChanged = bNewVal != (m_pIgnoreMiddleDot->GetSavedValue() == TRISTATE_TRUE);
+    bChanged = m_pIgnoreMiddleDot->IsValueChangedFromSaved();
     if (bChanged)
     {
         aOpt.SetIgnoreMiddleDot( bNewVal );

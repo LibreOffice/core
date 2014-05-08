@@ -173,11 +173,11 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
     pConfig->Apply();
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
-    if(m_pFontHeightLB->GetSavedValue() != m_pFontHeightLB->GetSelectEntryPos())
+    if(m_pFontHeightLB->IsValueChangedFromSaved())
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(
             static_cast< sal_Int16 >(m_pFontHeightLB->GetSelectEntry().toInt32()),
             batch);
-    if(m_pNonPropFontsOnlyCB->GetSavedValue() != TriState(m_pNonPropFontsOnlyCB->IsChecked()))
+    if(m_pNonPropFontsOnlyCB->IsValueChangedFromSaved())
         officecfg::Office::Common::Font::SourceViewFont::
             NonProportionalFontsOnly::set(
                 m_pNonPropFontsOnlyCB->IsChecked(), batch);

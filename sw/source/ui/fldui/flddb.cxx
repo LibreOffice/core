@@ -236,7 +236,7 @@ bool SwFldDBPage::FillItemSet(SfxItemSet& )
         bool bDBListBoxChanged = m_sOldDBName != sTempDBName ||
             m_sOldTableName != sTempTableName || m_sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
-            m_pConditionED->GetSavedValue() != m_pConditionED->GetText() ||
+            m_pConditionED->IsValueChangedFromSaved() ||
             m_pValueED->GetSavedValue() != aVal ||
              bDBListBoxChanged ||
              m_nOldFormat != nFormat || m_nOldSubType != nSubType)

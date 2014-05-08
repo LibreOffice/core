@@ -282,7 +282,7 @@ namespace dbaui
     {
         bool bChangedSomething = false;
 
-        if (m_aUserName.GetText() != m_aUserName.GetSavedValue())
+        if (m_aUserName.IsValueChangedFromSaved())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aUserName.GetText()));
             _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));

@@ -676,13 +676,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_ULSPACE );
     SvxULSpaceItem aTopMargin( (const SvxULSpaceItem&)rOldSet.Get( nWhich ) );
 
-    if ( m_pLeftMarginEdit->GetText() != m_pLeftMarginEdit->GetSavedValue() )
+    if ( m_pLeftMarginEdit->IsValueChangedFromSaved() )
     {
         aMargin.SetLeft( (sal_uInt16)GetCoreValue( *m_pLeftMarginEdit, eUnit ) );
         bModified = true;
     }
 
-    if ( m_pRightMarginEdit->GetText() != m_pRightMarginEdit->GetSavedValue() )
+    if ( m_pRightMarginEdit->IsValueChangedFromSaved() )
     {
         aMargin.SetRight( (sal_uInt16)GetCoreValue( *m_pRightMarginEdit, eUnit ) );
         bModified = true;
@@ -701,13 +701,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     bool bMod = false;
 
-    if ( m_pTopMarginEdit->GetText() != m_pTopMarginEdit->GetSavedValue() )
+    if ( m_pTopMarginEdit->IsValueChangedFromSaved() )
     {
         aTopMargin.SetUpper( (sal_uInt16)GetCoreValue( *m_pTopMarginEdit, eUnit ) );
         bMod = true;
     }
 
-    if ( m_pBottomMarginEdit->GetText() != m_pBottomMarginEdit->GetSavedValue() )
+    if ( m_pBottomMarginEdit->IsValueChangedFromSaved() )
     {
         aTopMargin.SetLower( (sal_uInt16)GetCoreValue( *m_pBottomMarginEdit, eUnit ) );
         bMod = true;
@@ -748,7 +748,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         if ( nOld != nPos                       ||
              m_pPaperWidthEdit->IsValueModified()  ||
              m_pPaperHeightEdit->IsValueModified() ||
-             bChecked != m_pLandscapeBtn->GetSavedValue() )
+             m_pLandscapeBtn->IsValueChangedFromSaved() )
         {
             Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                         GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
@@ -763,7 +763,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     }
     else
     {
-        if ( nOld != nPos || bChecked != m_pLandscapeBtn->GetSavedValue() )
+        if ( nOld != nPos || m_pLandscapeBtn->IsValueChangedFromSaved() )
         {
             Size aSize( SvxPaperInfo::GetPaperSize( ePaper, (MapUnit)eUnit ) );
 
@@ -782,13 +782,13 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_PAGE );
     SvxPageItem aPage( (const SvxPageItem&)rOldSet.Get( nWhich ) );
-    bMod =  m_pLayoutBox->GetSelectEntryPos()  != m_pLayoutBox->GetSavedValue();
+    bMod = m_pLayoutBox->IsValueChangedFromSaved();
 
     if ( bMod )
         aPage.SetPageUsage(
             ::PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() ) );
 
-    if ( bChecked != m_pLandscapeBtn->GetSavedValue() )
+    if ( m_pLandscapeBtn->IsValueChangedFromSaved() )
     {
         aPage.SetLandscape(bChecked);
         bMod = true;
@@ -797,7 +797,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     //Get the NumType value
     nPos = m_pNumberFormatBox->GetSelectEntryPos();
     sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)m_pNumberFormatBox->GetEntryData(nPos);
-    if ( nPos != m_pNumberFormatBox->GetSavedValue() )
+    if ( m_pNumberFormatBox->IsValueChangedFromSaved() )
     {
         aPage.SetNumType( (SvxNumType)nEntryData );
         bMod = true;
@@ -824,7 +824,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     {
         case SVX_PAGE_MODE_CENTER:
         {
-            if ( TriState(m_pHorzBox->IsChecked()) != m_pHorzBox->GetSavedValue() )
+            if ( m_pHorzBox->IsValueChangedFromSaved() )
             {
                 SfxBoolItem aHorz( GetWhich( SID_ATTR_PAGE_EXT1 ),
                                    m_pHorzBox->IsChecked() );
@@ -832,7 +832,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
                 bModified = true;
             }
 
-            if ( TriState(m_pVertBox->IsChecked()) != m_pVertBox->GetSavedValue() )
+            if ( m_pVertBox->IsValueChangedFromSaved() )
             {
                 SfxBoolItem aVert( GetWhich( SID_ATTR_PAGE_EXT2 ),
                                    m_pVertBox->IsChecked() );
@@ -855,7 +855,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     }
 
     if(m_pRegisterCB->IsVisible() &&
-       (m_pRegisterCB->IsChecked() || m_pRegisterCB->GetSavedValue() != TriState(m_pRegisterCB->IsChecked())))
+       (m_pRegisterCB->IsChecked() || m_pRegisterCB->IsValueChangedFromSaved()))
     {
         const SfxBoolItem& rRegItem = (const SfxBoolItem&)rOldSet.Get(SID_SWREGISTER_MODE);
         SfxBoolItem* pRegItem = (SfxBoolItem*)rRegItem.Clone();
@@ -873,7 +873,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     }
 
     SvxFrameDirection eDirection = m_pTextFlowBox->GetSelectEntryValue();
-    if( m_pTextFlowBox->IsVisible() && (eDirection != m_pTextFlowBox->GetSavedValue()) )
+    if( m_pTextFlowBox->IsVisible() && m_pTextFlowBox->IsValueChangedFromSaved() )
     {
         rSet.Put( SvxFrameDirectionItem( eDirection, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
         bModified = true;
@@ -1619,7 +1619,7 @@ bool SvxPageDescPage::IsPrinterRangeOverflow(
     long nValue = static_cast<long>(rField.GetValue());
     if ( bCheck &&
          (  nValue < nFirstMargin || nValue > nLastMargin ) &&
-         rField.GetText() != rField.GetSavedValue() )
+         rField.IsValueChangedFromSaved() )
     {
         rField.SetValue( nValue < nFirstMargin ? nFirstMargin : nLastMargin );
          bRet = true;
@@ -1653,19 +1653,19 @@ void SvxPageDescPage::CheckMarginEdits( bool _bClear )
 bool SvxPageDescPage::IsMarginOutOfRange()
 {
     bool bRet = ( ( ( !( pImpl->m_nPos & MARGIN_LEFT ) &&
-                      ( m_pLeftMarginEdit->GetText() != m_pLeftMarginEdit->GetSavedValue() ) ) &&
+                      m_pLeftMarginEdit->IsValueChangedFromSaved() ) &&
                     ( m_pLeftMarginEdit->GetValue() < nFirstLeftMargin ||
                       m_pLeftMarginEdit->GetValue() > nLastLeftMargin ) ) ||
                   ( ( !( pImpl->m_nPos & MARGIN_RIGHT ) &&
-                      ( m_pRightMarginEdit->GetText() != m_pRightMarginEdit->GetSavedValue() ) ) &&
+                      m_pRightMarginEdit->IsValueChangedFromSaved() ) &&
                     ( m_pRightMarginEdit->GetValue() < nFirstRightMargin ||
                       m_pRightMarginEdit->GetValue() > nLastRightMargin ) ) ||
                   ( ( !( pImpl->m_nPos & MARGIN_TOP ) &&
-                      ( m_pTopMarginEdit->GetText() != m_pTopMarginEdit->GetSavedValue() ) ) &&
+                      m_pTopMarginEdit->IsValueChangedFromSaved() ) &&
                     ( m_pTopMarginEdit->GetValue() < nFirstTopMargin ||
                       m_pTopMarginEdit->GetValue() > nLastTopMargin ) ) ||
                   ( ( !( pImpl->m_nPos & MARGIN_BOTTOM ) &&
-                      ( m_pBottomMarginEdit->GetText() != m_pBottomMarginEdit->GetSavedValue() ) ) &&
+                      m_pBottomMarginEdit->IsValueChangedFromSaved() ) &&
                     ( m_pBottomMarginEdit->GetValue() < nFirstBottomMargin ||
                       m_pBottomMarginEdit->GetValue() > nLastBottomMargin ) ) );
     return bRet;

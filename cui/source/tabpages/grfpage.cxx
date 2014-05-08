@@ -240,8 +240,8 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 {
     const SfxItemPool& rPool = *rSet.GetPool();
     bool bModified = false;
-    if( m_pWidthMF->GetSavedValue() != m_pWidthMF->GetText() ||
-        m_pHeightMF->GetSavedValue() != m_pHeightMF->GetText() )
+    if( m_pWidthMF->IsValueChangedFromSaved() ||
+        m_pHeightMF->IsValueChangedFromSaved() )
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
@@ -259,9 +259,9 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
             aSz = (const SvxSizeItem&)GetItemSet().Get( nW );
 
         Size aTmpSz( aSz.GetSize() );
-        if( m_pWidthMF->GetText() != m_pWidthMF->GetSavedValue() )
+        if( m_pWidthMF->IsValueChangedFromSaved() )
             aTmpSz.Width() = lcl_GetValue( *m_pWidthMF, eUnit );
-        if( m_pHeightMF->GetText() != m_pHeightMF->GetSavedValue() )
+        if( m_pHeightMF->IsValueChangedFromSaved() )
             aTmpSz.Height() = lcl_GetValue( *m_pHeightMF, eUnit );
         aSz.SetSize( aTmpSz );
         m_pWidthMF->SaveValue();
@@ -290,7 +290,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
         delete pNew;
     }
 
-    if( m_pZoomConstRB->GetSavedValue() != m_pZoomConstRB->IsChecked() )
+    if( m_pZoomConstRB->IsValueChangedFromSaved() )
     {
         bModified |= 0 != rSet.Put( SfxBoolItem( rPool.GetWhich(
                     SID_ATTR_GRAF_KEEP_ZOOM), m_pZoomConstRB->IsChecked() ) );

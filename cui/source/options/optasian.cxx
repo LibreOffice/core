@@ -162,7 +162,7 @@ SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet& rAttr
 
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
 {
-    if(m_pCharKerningRB->IsChecked() != m_pCharKerningRB->GetSavedValue())
+    if(m_pCharKerningRB->IsValueChangedFromSaved())
     {
         pImpl->aConfig.SetKerningWesternTextOnly(m_pCharKerningRB->IsChecked());
         OUString sPunct(cIsKernAsianPunctuation);
@@ -175,8 +175,8 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
         }
     }
 
-    if(m_pNoCompressionRB->IsChecked() != m_pNoCompressionRB->GetSavedValue() ||
-            m_pPunctCompressionRB->IsChecked() != m_pPunctCompressionRB->GetSavedValue())
+    if(m_pNoCompressionRB->IsValueChangedFromSaved() ||
+       m_pPunctCompressionRB->IsValueChangedFromSaved())
     {
         sal_Int16 nSet = m_pNoCompressionRB->IsChecked() ? 0 :
                             m_pPunctCompressionRB->IsChecked() ? 1 : 2;

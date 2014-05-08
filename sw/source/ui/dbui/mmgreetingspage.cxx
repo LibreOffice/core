@@ -324,7 +324,7 @@ bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason 
 {
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
 
-    if (m_pFemaleColumnLB->GetSelectEntryPos() != m_pFemaleColumnLB->GetSavedValue())
+    if (m_pFemaleColumnLB->IsValueChangedFromSaved())
     {
         const SwDBData& rDBData = rConfig.GetCurrentDBData();
         Sequence< OUString> aAssignment = rConfig.GetColumnAssignment( rDBData );
@@ -333,7 +333,7 @@ bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason 
         aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectEntry();
         rConfig.SetColumnAssignment( rDBData, aAssignment );
     }
-    if (m_pFemaleFieldCB->GetText() != m_pFemaleFieldCB->GetSavedValue())
+    if (m_pFemaleFieldCB->IsValueChangedFromSaved())
         rConfig.SetFemaleGenderValue(m_pFemaleFieldCB->GetText());
 
     lcl_StoreGreetingsBox(*m_pFemaleLB, rConfig, SwMailMergeConfigItem::FEMALE);
@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
     rConfigItem.SetIndividualGreeting(
                 m_aPersonalizedCB.IsChecked(), false);
 
-    if(m_aFemaleColumnLB.GetSelectEntryPos() != m_aFemaleColumnLB.GetSavedValue())
+    if(m_aFemaleColumnLB.IsValueChangedFromSaved())
     {
         const SwDBData& rDBData = rConfigItem.GetCurrentDBData();
         Sequence< OUString> aAssignment = rConfigItem.GetColumnAssignment( rDBData );
@@ -518,7 +518,7 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
             aAssignment[MM_PART_GENDER] = OUString();
         rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
-    if(m_aFemaleFieldCB.GetText() != m_aFemaleFieldCB.GetSavedValue())
+    if(m_aFemaleFieldCB.IsValueChangedFromSaved())
         rConfigItem.SetFemaleGenderValue(m_aFemaleFieldCB.GetText());
 
     EndDialog(RET_OK);

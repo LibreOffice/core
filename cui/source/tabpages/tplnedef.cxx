@@ -206,13 +206,13 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     // is here used to NOT lose changes
     //XDashStyle eXDS;
 
-    if( m_pNumFldNumber1->GetText()     != m_pNumFldNumber1->GetSavedValue() ||
-        m_pMtrLength1->GetText()        != m_pMtrLength1->GetSavedValue() ||
-        m_pLbType1->GetSelectEntryPos() != m_pLbType1->GetSavedValue() ||
-        m_pNumFldNumber2->GetText()     != m_pNumFldNumber2->GetSavedValue() ||
-        m_pMtrLength2->GetText()        != m_pMtrLength2->GetSavedValue() ||
-        m_pLbType2->GetSelectEntryPos() != m_pLbType2->GetSavedValue() ||
-        m_pMtrDistance->GetText()       != m_pMtrDistance->GetSavedValue() )
+    if( m_pNumFldNumber1->IsValueChangedFromSaved() ||
+        m_pMtrLength1->IsValueChangedFromSaved() ||
+        m_pLbType1->IsValueChangedFromSaved() ||
+        m_pNumFldNumber2->IsValueChangedFromSaved() ||
+        m_pMtrLength2->IsValueChangedFromSaved() ||
+        m_pLbType2->IsValueChangedFromSaved() ||
+        m_pMtrDistance->IsValueChangedFromSaved() )
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();

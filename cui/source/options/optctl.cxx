@@ -73,29 +73,28 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 
     // Sequence checking
     bool bChecked = m_pSequenceCheckingCB->IsChecked();
-    if ( (bChecked ? 1 : 0) != m_pSequenceCheckingCB->GetSavedValue() )
+    if ( m_pSequenceCheckingCB->IsValueChangedFromSaved() )
     {
         aCTLOptions.SetCTLSequenceChecking( bChecked );
         bModified = true;
     }
 
     bChecked = m_pRestrictedCB->IsChecked();
-    if( (bChecked ? 1 : 0) != m_pRestrictedCB->GetSavedValue() )
+    if( m_pRestrictedCB->IsValueChangedFromSaved() )
     {
         aCTLOptions.SetCTLSequenceCheckingRestricted( bChecked );
         bModified = true;
     }
     bChecked = m_pTypeReplaceCB->IsChecked();
-    if( (bChecked ? 1 : 0) != m_pTypeReplaceCB->GetSavedValue())
+    if( m_pTypeReplaceCB->IsValueChangedFromSaved())
     {
         aCTLOptions.SetCTLSequenceCheckingTypeAndReplace(bChecked);
         bModified = true;
     }
 
     bool bLogicalChecked = m_pMovementLogicalRB->IsChecked();
-    bool bVisualChecked = m_pMovementVisualRB->IsChecked();
-    if ( bLogicalChecked != m_pMovementLogicalRB->GetSavedValue() ||
-         bVisualChecked != m_pMovementVisualRB->GetSavedValue() )
+    if ( m_pMovementLogicalRB->IsValueChangedFromSaved() ||
+         m_pMovementVisualRB->IsValueChangedFromSaved() )
     {
         SvtCTLOptions::CursorMovement eMovement =
             bLogicalChecked ? SvtCTLOptions::MOVEMENT_LOGICAL : SvtCTLOptions::MOVEMENT_VISUAL;
@@ -103,9 +102,9 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
         bModified = true;
     }
 
-    sal_uInt16 nPos = m_pNumeralsLB->GetSelectEntryPos();
-    if ( nPos != m_pNumeralsLB->GetSavedValue() )
+    if ( m_pNumeralsLB->IsValueChangedFromSaved() )
     {
+        sal_uInt16 nPos = m_pNumeralsLB->GetSelectEntryPos();
         aCTLOptions.SetCTLTextNumerals( (SvtCTLOptions::TextNumerals)nPos );
         bModified = true;
     }

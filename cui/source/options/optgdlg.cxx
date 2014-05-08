@@ -248,35 +248,34 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     bool bModified = false;
 
     SvtHelpOptions aHelpOptions;
-    bool bChecked = m_pToolTipsCB->IsChecked();
-    if ( bChecked != (m_pToolTipsCB->GetSavedValue() == TRISTATE_TRUE) )
-        aHelpOptions.SetHelpTips( bChecked );
-    bChecked = ( m_pExtHelpCB->IsChecked() && m_pToolTipsCB->IsChecked() );
+    if ( m_pToolTipsCB->IsValueChangedFromSaved() )
+        aHelpOptions.SetHelpTips( m_pToolTipsCB->IsChecked() );
+    bool bChecked = ( m_pExtHelpCB->IsChecked() && m_pToolTipsCB->IsChecked() );
     if ( bChecked != (m_pExtHelpCB->GetSavedValue() == TRISTATE_TRUE) )
         aHelpOptions.SetExtendedHelp( bChecked );
 
-    if ( TriState(m_pFileDlgCB->IsChecked()) != m_pFileDlgCB->GetSavedValue() )
+    if ( m_pFileDlgCB->IsValueChangedFromSaved() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetUseSystemFileDialog( !m_pFileDlgCB->IsChecked() );
         bModified = true;
     }
 
-    if ( TriState(m_pPrintDlgCB->IsChecked()) != m_pPrintDlgCB->GetSavedValue() )
+    if ( m_pPrintDlgCB->IsValueChangedFromSaved() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetUseSystemPrintDialog( !m_pPrintDlgCB->IsChecked() );
         bModified = true;
     }
 
-    if ( TriState(m_pDocStatusCB->IsChecked()) != m_pDocStatusCB->GetSavedValue() )
+    if ( m_pDocStatusCB->IsValueChangedFromSaved() )
     {
         SvtPrintWarningOptions aPrintOptions;
         aPrintOptions.SetModifyDocumentOnPrintingAllowed( m_pDocStatusCB->IsChecked() );
         bModified = true;
     }
 
-    if ( TriState(m_pSaveAlwaysCB->IsChecked()) != m_pSaveAlwaysCB->GetSavedValue() )
+    if ( m_pSaveAlwaysCB->IsValueChangedFromSaved() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetSaveAlwaysAllowed( m_pSaveAlwaysCB->IsChecked() );
@@ -732,26 +731,26 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     }
 
 #if defined( UNX )
-    if ( TriState(m_pFontAntiAliasing->IsChecked()) != m_pFontAntiAliasing->GetSavedValue() )
+    if ( m_pFontAntiAliasing->IsValueChangedFromSaved() )
     {
         pAppearanceCfg->SetFontAntiAliasing( m_pFontAntiAliasing->IsChecked() );
         bAppearanceChanged = true;
     }
 
-    if ( m_pAAPointLimit->GetValue() != m_pAAPointLimit->GetSavedValue().toInt32() )
+    if ( m_pAAPointLimit->IsValueChangedFromSaved() )
     {
         pAppearanceCfg->SetFontAntialiasingMinPixelHeight( m_pAAPointLimit->GetValue() );
         bAppearanceChanged = true;
     }
 #endif
 
-    if ( TriState(m_pFontShowCB->IsChecked()) != m_pFontShowCB->GetSavedValue() )
+    if ( m_pFontShowCB->IsValueChangedFromSaved() )
     {
         aFontOpt.EnableFontWYSIWYG( m_pFontShowCB->IsChecked() );
         bModified = true;
     }
 
-    if(m_pMenuIconsLB->GetSelectEntryPos() != m_pMenuIconsLB->GetSavedValue())
+    if(m_pMenuIconsLB->IsValueChangedFromSaved())
     {
         aMenuOpt.SetMenuIconsState(m_pMenuIconsLB->GetSelectEntryPos() == 0 ?
             TRISTATE_INDET :
@@ -761,7 +760,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         bAppearanceChanged = true;
     }
 
-    if ( TriState(m_pFontHistoryCB->IsChecked()) != m_pFontHistoryCB->GetSavedValue() )
+    if ( m_pFontHistoryCB->IsValueChangedFromSaved() )
     {
         aFontOpt.EnableFontHistory( m_pFontHistoryCB->IsChecked() );
         bModified = true;
@@ -770,7 +769,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     // #i95644#  if disabled, do not use value, see in ::Reset()
     if(m_pUseHardwareAccell->IsEnabled())
     {
-        if(TriState(m_pUseHardwareAccell->IsChecked()) != m_pUseHardwareAccell->GetSavedValue())
+        if(m_pUseHardwareAccell->IsValueChangedFromSaved())
         {
             pCanvasSettings->EnabledHardwareAcceleration(m_pUseHardwareAccell->IsChecked());
             bModified = true;
@@ -1195,7 +1194,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     if (
          m_pCTLSupportCB->IsChecked() &&
          (m_pCTLSupportCB->GetSavedValue() != TRISTATE_TRUE ||
-         m_pComplexLanguageLB->GetSavedValue() != m_pComplexLanguageLB->GetSelectEntryPos())
+         m_pComplexLanguageLB->IsValueChangedFromSaved())
        )
     {
         //sequence checking has to be switched on depending on the selected CTL language
@@ -1279,10 +1278,10 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         aCompatOpts.SetDefault( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE, !bNewCJK );
     }
 
-    if(m_pDecimalSeparatorCB->GetSavedValue() != TriState(m_pDecimalSeparatorCB->IsChecked()))
+    if(m_pDecimalSeparatorCB->IsValueChangedFromSaved())
         pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(m_pDecimalSeparatorCB->IsChecked());
 
-    if(m_pIgnoreLanguageChangeCB->GetSavedValue() != TriState(m_pIgnoreLanguageChangeCB->IsChecked()))
+    if(m_pIgnoreLanguageChangeCB->IsValueChangedFromSaved())
         pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(m_pIgnoreLanguageChangeCB->IsChecked());
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
@@ -1299,7 +1298,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     // Configured date acceptance patterns, for example Y-M-D;M-D or empty for
     // locale default.
-    if (m_pDatePatternsED->GetText() != m_pDatePatternsED->GetSavedValue())
+    if (m_pDatePatternsED->IsValueChangedFromSaved())
         pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( m_pDatePatternsED->GetText());
 
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
@@ -1307,9 +1306,9 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     bool bCurrentDocCBChecked = m_pCurrentDocCB->IsChecked();
     if(m_pCurrentDocCB->IsEnabled())
         bLanguageCurrentDoc_Impl = bCurrentDocCBChecked;
-    bool bCurrentDocCBChanged = bCurrentDocCBChecked != (m_pCurrentDocCB->GetSavedValue() == TRISTATE_TRUE);
+    bool bCurrentDocCBChanged = m_pCurrentDocCB->IsValueChangedFromSaved();
 
-    bool bValChanged = m_pWesternLanguageLB->GetSavedValue() != m_pWesternLanguageLB->GetSelectEntryPos();
+    bool bValChanged = m_pWesternLanguageLB->IsValueChangedFromSaved();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
         LanguageType eSelectLang = m_pWesternLanguageLB->GetSelectLanguage();
@@ -1329,7 +1328,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
                 SID_ATTR_LANGUAGE));
         }
     }
-    bValChanged = m_pAsianLanguageLB->GetSavedValue() != m_pAsianLanguageLB->GetSelectEntryPos();
+    bValChanged = m_pAsianLanguageLB->IsValueChangedFromSaved();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
         LanguageType eSelectLang = m_pAsianLanguageLB->GetSelectLanguage();
@@ -1349,7 +1348,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
                 SID_ATTR_CHAR_CJK_LANGUAGE));
         }
     }
-    bValChanged = m_pComplexLanguageLB->GetSavedValue() != m_pComplexLanguageLB->GetSelectEntryPos();
+    bValChanged = m_pComplexLanguageLB->IsValueChangedFromSaved();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
         LanguageType eSelectLang = m_pComplexLanguageLB->GetSelectLanguage();
@@ -1370,7 +1369,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    if(m_pAsianSupportCB->GetSavedValue() != TriState(m_pAsianSupportCB->IsChecked()) )
+    if(m_pAsianSupportCB->IsValueChangedFromSaved() )
     {
         bool bChecked = m_pAsianSupportCB->IsChecked();
         pLangConfig->aLanguageOptions.SetAll(bChecked);
@@ -1389,7 +1388,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
-    if ( m_pCTLSupportCB->GetSavedValue() != TriState(m_pCTLSupportCB->IsChecked()) )
+    if ( m_pCTLSupportCB->IsValueChangedFromSaved() )
     {
         SvtSearchOptions aOpt;
         aOpt.SetIgnoreDiacritics_CTL (true);

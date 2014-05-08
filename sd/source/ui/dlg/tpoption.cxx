@@ -140,10 +140,10 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
     bool bModified = false;
 
-    if( m_pCbxRuler->GetSavedValue()           != TriState(m_pCbxRuler->IsChecked()) ||
-        m_pCbxMoveOutline->GetSavedValue()     != TriState(m_pCbxMoveOutline->IsChecked()) ||
-        m_pCbxDragStripes->GetSavedValue()     != TriState(m_pCbxDragStripes->IsChecked()) ||
-        m_pCbxHandlesBezier->GetSavedValue()   != TriState(m_pCbxHandlesBezier->IsChecked()) )
+    if( m_pCbxRuler->IsValueChangedFromSaved() ||
+        m_pCbxMoveOutline->IsValueChangedFromSaved() ||
+        m_pCbxDragStripes->IsValueChangedFromSaved() ||
+        m_pCbxHandlesBezier->IsValueChangedFromSaved() )
     {
         SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
 
@@ -368,16 +368,16 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
     bool bModified = false;
 
-    if( m_pCbxStartWithTemplate->GetSavedValue()   != TriState(m_pCbxStartWithTemplate->IsChecked()) ||
-        m_pCbxMarkedHitMovesAlways->GetSavedValue()!= TriState(m_pCbxMarkedHitMovesAlways->IsChecked()) ||
-        m_pCbxQuickEdit->GetSavedValue()           != TriState(m_pCbxQuickEdit->IsChecked()) ||
-        m_pCbxPickThrough->GetSavedValue()         != TriState(m_pCbxPickThrough->IsChecked()) ||
-        m_pCbxMasterPageCache->GetSavedValue()     != TriState(m_pCbxMasterPageCache->IsChecked()) ||
-        m_pCbxCopy->GetSavedValue()                != TriState(m_pCbxCopy->IsChecked()) ||
-        m_pCbxEnableSdremote->GetSavedValue()      != TriState(m_pCbxEnableSdremote->IsChecked()) ||
-        m_pCbxEnablePresenterScreen->GetSavedValue()!= TriState(m_pCbxEnablePresenterScreen->IsChecked()) ||
-        m_pCbxCompatibility->GetSavedValue()       != TriState(m_pCbxCompatibility->IsChecked()) ||
-        m_pCbxUsePrinterMetrics->GetSavedValue()   != TriState(m_pCbxUsePrinterMetrics->IsChecked()) )
+    if( m_pCbxStartWithTemplate->IsValueChangedFromSaved()     ||
+        m_pCbxMarkedHitMovesAlways->IsValueChangedFromSaved()  ||
+        m_pCbxQuickEdit->IsValueChangedFromSaved()             ||
+        m_pCbxPickThrough->IsValueChangedFromSaved()           ||
+        m_pCbxMasterPageCache->IsValueChangedFromSaved()       ||
+        m_pCbxCopy->IsValueChangedFromSaved()                  ||
+        m_pCbxEnableSdremote->IsValueChangedFromSaved()        ||
+        m_pCbxEnablePresenterScreen->IsValueChangedFromSaved() ||
+        m_pCbxCompatibility->IsValueChangedFromSaved()         ||
+        m_pCbxUsePrinterMetrics->IsValueChangedFromSaved() )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
 
@@ -401,7 +401,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 
     // metric
     const sal_Int32 nMPos = m_pLbMetric->GetSelectEntryPos();
-    if ( nMPos != m_pLbMetric->GetSavedValue() )
+    if ( m_pLbMetric->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbMetric->GetEntryData( nMPos );
         rAttrs.Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
@@ -410,7 +410,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     }
 
     // tabulator space
-    if( m_pMtrFldTabstop->GetText() != m_pMtrFldTabstop->GetSavedValue() )
+    if( m_pMtrFldTabstop->IsValueChangedFromSaved() )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
         SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWh );

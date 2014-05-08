@@ -699,7 +699,7 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
 {
     const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
 
-    if(LISTBOX_ENTRY_NOTFOUND != nPos && nPos != mpLBStyle->GetSavedValue())
+    if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBStyle->IsValueChangedFromSaved())
     {
         if(0 == nPos)
         {
@@ -738,7 +738,7 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
 IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
 {
     sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != mpLBStart->GetSavedValue() )
+    if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBStart->IsValueChangedFromSaved() )
     {
         XLineStartItem* pItem = NULL;
         if( nPos == 0 )
@@ -757,7 +757,7 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
 IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
 {
     sal_Int32  nPos = mpLBEnd->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != mpLBEnd->GetSavedValue() )
+    if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBEnd->IsValueChangedFromSaved() )
     {
         XLineEndItem* pItem = NULL;
         if( nPos == 0 )
@@ -777,7 +777,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
 {
     const sal_Int32 nPos(mpLBEdgeStyle->GetSelectEntryPos());
 
-    if(LISTBOX_ENTRY_NOTFOUND != nPos && nPos != mpLBEdgeStyle->GetSavedValue())
+    if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBEdgeStyle->IsValueChangedFromSaved())
     {
         XLineJointItem* pItem = 0;
 
@@ -818,7 +818,7 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
 {
     const sal_Int32 nPos(mpLBCapStyle->GetSelectEntryPos());
 
-    if(LISTBOX_ENTRY_NOTFOUND != nPos && nPos != mpLBCapStyle->GetSavedValue())
+    if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBCapStyle->IsValueChangedFromSaved())
     {
         XLineCapItem* pItem = 0;
 

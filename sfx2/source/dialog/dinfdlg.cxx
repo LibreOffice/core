@@ -941,7 +941,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
     bool bRet = false;
 
     if ( !bHandleDelete && bEnableUseUserData &&
-         m_pUseUserDataCB->GetState() != m_pUseUserDataCB->GetSavedValue() &&
+         m_pUseUserDataCB->IsValueChangedFromSaved() &&
          GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
         const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();

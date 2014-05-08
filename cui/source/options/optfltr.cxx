@@ -80,25 +80,24 @@ bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
-    bool bFlag;
-    if( (aWBasicCodeCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aWBasicCodeCB->IsChecked()))
-        rOpt.SetLoadWordBasicCode( bFlag );
-    if( (aWBasicWbctblCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aWBasicWbctblCB->IsChecked()))
-        rOpt.SetLoadWordBasicExecutable( bFlag );
-    if( (aWBasicStgCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aWBasicStgCB->IsChecked()))
-        rOpt.SetLoadWordBasicStorage( bFlag );
+    if( aWBasicCodeCB->IsValueChangedFromSaved() )
+        rOpt.SetLoadWordBasicCode( aWBasicCodeCB->IsChecked() );
+    if( aWBasicWbctblCB->IsValueChangedFromSaved() )
+        rOpt.SetLoadWordBasicExecutable( aWBasicWbctblCB->IsChecked() );
+    if( aWBasicStgCB->IsValueChangedFromSaved() )
+        rOpt.SetLoadWordBasicStorage( aWBasicStgCB->IsChecked() );
 
-    if( (aEBasicCodeCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aEBasicCodeCB->IsChecked()))
-        rOpt.SetLoadExcelBasicCode( bFlag );
-    if( (aEBasicExectblCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aEBasicExectblCB->IsChecked()))
-        rOpt.SetLoadExcelBasicExecutable( bFlag );
-    if( (aEBasicStgCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aEBasicStgCB->IsChecked()))
-        rOpt.SetLoadExcelBasicStorage( bFlag );
+    if( aEBasicCodeCB->IsValueChangedFromSaved())
+        rOpt.SetLoadExcelBasicCode( aEBasicCodeCB->IsChecked() );
+    if( aEBasicExectblCB->IsValueChangedFromSaved())
+        rOpt.SetLoadExcelBasicExecutable( aEBasicExectblCB->IsChecked() );
+    if( aEBasicStgCB->IsValueChangedFromSaved())
+        rOpt.SetLoadExcelBasicStorage( aEBasicStgCB->IsChecked() );
 
-    if( (aPBasicCodeCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aPBasicCodeCB->IsChecked()))
-        rOpt.SetLoadPPointBasicCode( bFlag );
-    if( (aPBasicStgCB->GetSavedValue() == TRISTATE_TRUE) != (bFlag = aPBasicStgCB->IsChecked()))
-        rOpt.SetLoadPPointBasicStorage( bFlag );
+    if( aPBasicCodeCB->IsValueChangedFromSaved())
+        rOpt.SetLoadPPointBasicCode( aPBasicCodeCB->IsChecked() );
+    if( aPBasicStgCB->IsValueChangedFromSaved())
+        rOpt.SetLoadPPointBasicStorage( aPBasicStgCB->IsChecked() );
 
     return false;
 }

@@ -242,69 +242,69 @@ bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 {
     bool bModified = false;
     SvtSaveOptions aSaveOpt;
-    if(TriState(aLoadUserSettingsCB->IsChecked()) != aLoadUserSettingsCB->GetSavedValue())
+    if(aLoadUserSettingsCB->IsValueChangedFromSaved())
     {
         aSaveOpt.SetLoadUserSettings(aLoadUserSettingsCB->IsChecked());
     }
 
-    if ( TriState(aLoadDocPrinterCB->IsChecked()) != aLoadDocPrinterCB->GetSavedValue() )
+    if ( aLoadDocPrinterCB->IsValueChangedFromSaved() )
         aSaveOpt.SetLoadDocumentPrinter( aLoadDocPrinterCB->IsChecked() );
 
-    if ( aODFVersionLB->GetSelectEntryPos() != aODFVersionLB->GetSavedValue() )
+    if ( aODFVersionLB->IsValueChangedFromSaved() )
     {
         sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetEntryData( aODFVersionLB->GetSelectEntryPos() ) );
         aSaveOpt.SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion( nVersion ) );
     }
 
-    if ( TriState(aDocInfoCB->IsChecked()) != aDocInfoCB->GetSavedValue() )
+    if ( aDocInfoCB->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
                                aDocInfoCB->IsChecked() ) );
         bModified |= true;
     }
 
-    if ( aBackupCB->IsEnabled() && TriState(aBackupCB->IsChecked()) != aBackupCB->GetSavedValue() )
+    if ( aBackupCB->IsEnabled() && aBackupCB->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
                                aBackupCB->IsChecked() ) );
         bModified |= true;
     }
 
-    if ( TriState(aAutoSaveCB->IsChecked()) != aAutoSaveCB->GetSavedValue() )
+    if ( aAutoSaveCB->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
                                aAutoSaveCB->IsChecked() ) );
         bModified |= true;
     }
-    if ( TriState(aWarnAlienFormatCB->IsChecked()) != aWarnAlienFormatCB->GetSavedValue() )
+    if ( aWarnAlienFormatCB->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
                                aWarnAlienFormatCB->IsChecked() ) );
         bModified |= true;
     }
 
-    if ( aAutoSaveEdit->GetText() != aAutoSaveEdit->GetSavedValue() )
+    if ( aAutoSaveEdit->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
                                  (sal_uInt16)aAutoSaveEdit->GetValue() ) );
         bModified |= true;
     }
 
-    if ( TriState(aUserAutoSaveCB->IsChecked()) != aUserAutoSaveCB->GetSavedValue() )
+    if ( aUserAutoSaveCB->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_USERAUTOSAVE ),
                                aUserAutoSaveCB->IsChecked() ) );
         bModified |= true;
     }
     // save relatively
-    if ( TriState(aRelativeFsysCB->IsChecked()) != aRelativeFsysCB->GetSavedValue() )
+    if ( aRelativeFsysCB->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
                                aRelativeFsysCB->IsChecked() ) );
         bModified |= true;
     }
 
-    if ( TriState(aRelativeInetCB->IsChecked()) != aRelativeInetCB->GetSavedValue() )
+    if ( aRelativeInetCB->IsValueChangedFromSaved() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
                                aRelativeInetCB->IsChecked() ) );

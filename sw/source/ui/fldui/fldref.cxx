@@ -929,11 +929,11 @@ bool SwFldRefPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() || bModified ||
-        m_pNameED->GetSavedValue() != m_pNameED->GetText() ||
-        m_pValueED->GetSavedValue() != m_pValueED->GetText() ||
-        m_pTypeLB->GetSavedValue() != m_pTypeLB->GetSelectEntryPos() ||
-        m_pSelectionLB->GetSavedValue() != m_pSelectionLB->GetSelectEntryPos() ||
-        m_pFormatLB->GetSavedValue() != m_pFormatLB->GetSelectEntryPos())
+        m_pNameED->IsValueChangedFromSaved() ||
+        m_pValueED->IsValueChangedFromSaved() ||
+        m_pTypeLB->IsValueChangedFromSaved() ||
+        m_pSelectionLB->IsValueChangedFromSaved() ||
+        m_pFormatLB->IsValueChangedFromSaved())
     {
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }

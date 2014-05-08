@@ -395,7 +395,7 @@ bool SvxGeneralTabPage::GetAddress_Impl()
 
     // modified?
     for (unsigned i = 0; i != vFields.size(); ++i)
-        if (vFields[i]->pEdit->GetSavedValue() != vFields[i]->pEdit->GetText())
+        if (vFields[i]->pEdit->IsValueChangedFromSaved())
             return true;
     return false;
 }

@@ -1203,14 +1203,14 @@ bool SwFldVarPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() ||
-        m_pNameED->GetSavedValue() != m_pNameED->GetText() ||
-        m_pValueED->GetSavedValue() != m_pValueED->GetText() ||
-        m_pSelectionLB->GetSavedValue() != m_pSelectionLB->GetSelectEntryPos() ||
-        m_pFormatLB->GetSavedValue() != m_pFormatLB->GetSelectEntryPos() ||
+        m_pNameED->IsValueChangedFromSaved() ||
+        m_pValueED->IsValueChangedFromSaved() ||
+        m_pSelectionLB->IsValueChangedFromSaved() ||
+        m_pFormatLB->IsValueChangedFromSaved() ||
         nOldFormat != m_pNumFormatLB->GetFormat() ||
-        m_pInvisibleCB->GetState() != m_pInvisibleCB->GetSavedValue() ||
-        m_pChapterLevelLB->GetSavedValue() != m_pChapterLevelLB->GetSelectEntryPos() ||
-        m_pSeparatorED->GetSavedValue() != m_pSeparatorED->GetText())
+        m_pInvisibleCB->IsValueChangedFromSaved() ||
+        m_pChapterLevelLB->IsValueChangedFromSaved() ||
+        m_pSeparatorED->IsValueChangedFromSaved())
     {
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat,
                     cSeparator, m_pNumFormatLB->IsAutomaticLanguage() );

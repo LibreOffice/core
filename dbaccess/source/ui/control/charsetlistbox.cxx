@@ -75,7 +75,7 @@ namespace dbaui
     bool CharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId )
     {
         bool bChangedSomething = false;
-        if ( GetSelectEntryPos() != GetSavedValue() )
+        if ( IsValueChangedFromSaved() )
         {
             OCharsetDisplay::const_iterator aFind = m_aCharSets.findDisplayName( GetSelectEntry() );
             OSL_ENSURE( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );

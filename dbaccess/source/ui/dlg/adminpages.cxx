@@ -193,7 +193,7 @@ namespace dbaui
     }
     void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, bool& _bChangedSomething, bool _bRevertValue )
     {
-        if ( (_pCheckBox != NULL ) && ( _pCheckBox->GetState() != _pCheckBox->GetSavedValue() ) )
+        if ( _pCheckBox && _pCheckBox->IsValueChangedFromSaved() )
         {
             bool bValue = _pCheckBox->IsChecked();
             if ( _bRevertValue )
@@ -214,7 +214,7 @@ namespace dbaui
     }
     void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, NumericField* _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
-        if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().toInt32()) )
+        if( _pEdit && _pEdit->IsValueChangedFromSaved() )
         {
             _rSet.Put(SfxInt32Item(_nID, static_cast<sal_Int32>(_pEdit->GetValue())));
             _bChangedSomething = true;
@@ -222,7 +222,7 @@ namespace dbaui
     }
     void OGenericAdministrationPage::fillString(SfxItemSet& _rSet, Edit* _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
-        if( (_pEdit != NULL) && (_pEdit->GetText() != _pEdit->GetSavedValue()) )
+        if( _pEdit && _pEdit->IsValueChangedFromSaved() )
         {
             _rSet.Put(SfxStringItem(_nID, _pEdit->GetText()));
             _bChangedSomething = true;

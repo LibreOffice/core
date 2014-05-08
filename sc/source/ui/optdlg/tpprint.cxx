@@ -91,9 +91,9 @@ bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     rCoreAttrs.ClearItem( SID_PRINT_SELECTEDSHEET );
 
-    bool bSkipEmptyChanged = ( m_pSkipEmptyPagesCB->GetSavedValue() != TriState(m_pSkipEmptyPagesCB->IsChecked()) );
-    bool bSelectedSheetsChanged = ( m_pSelectedSheetsCB->GetSavedValue() != TriState(m_pSelectedSheetsCB->IsChecked()) );
-    bool bForceBreaksChanged = ( m_pForceBreaksCB->GetSavedValue() != TriState(m_pForceBreaksCB->IsChecked()) );
+    bool bSkipEmptyChanged = m_pSkipEmptyPagesCB->IsValueChangedFromSaved();
+    bool bSelectedSheetsChanged = m_pSelectedSheetsCB->IsValueChangedFromSaved();
+    bool bForceBreaksChanged = m_pForceBreaksCB->IsValueChangedFromSaved();
 
     if ( bSkipEmptyChanged || bSelectedSheetsChanged || bForceBreaksChanged )
     {

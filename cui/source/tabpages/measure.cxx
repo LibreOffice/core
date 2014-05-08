@@ -425,35 +425,35 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     sal_Int32    nValue;
     TriState eState;
 
-    if( m_pMtrFldLineDist->GetText() != m_pMtrFldLineDist->GetSavedValue() )
+    if( m_pMtrFldLineDist->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLineDist, eUnit );
         rAttrs.Put( SdrMeasureLineDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelplineOverhang->GetText() != m_pMtrFldHelplineOverhang->GetSavedValue() )
+    if( m_pMtrFldHelplineOverhang->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelplineOverhang, eUnit );
         rAttrs.Put( SdrMeasureHelplineOverhangItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelplineDist->GetText() != m_pMtrFldHelplineDist->GetSavedValue() )
+    if( m_pMtrFldHelplineDist->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelplineDist, eUnit );
         rAttrs.Put( SdrMeasureHelplineDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelpline1Len->GetText() != m_pMtrFldHelpline1Len->GetSavedValue() )
+    if( m_pMtrFldHelpline1Len->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelpline1Len, eUnit );
         rAttrs.Put( SdrMeasureHelpline1LenItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelpline2Len->GetText() != m_pMtrFldHelpline2Len->GetSavedValue() )
+    if( m_pMtrFldHelpline2Len->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHelpline2Len, eUnit );
         rAttrs.Put( SdrMeasureHelpline2LenItem( nValue ) );
@@ -461,13 +461,13 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     eState = m_pTsbBelowRefEdge->GetState();
-    if( eState != m_pTsbBelowRefEdge->GetSavedValue() )
+    if( m_pTsbBelowRefEdge->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrMeasureBelowRefEdgeItem( TRISTATE_TRUE == eState ) );
         bModified = true;
     }
 
-    if( m_pMtrFldDecimalPlaces->GetText() != m_pMtrFldDecimalPlaces->GetSavedValue() )
+    if( m_pMtrFldDecimalPlaces->IsValueChangedFromSaved() )
     {
         nValue = static_cast<sal_Int32>(m_pMtrFldDecimalPlaces->GetValue());
         rAttrs.Put(
@@ -477,21 +477,21 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     eState = m_pTsbParallel->GetState();
-    if( eState != m_pTsbParallel->GetSavedValue() )
+    if( m_pTsbParallel->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrMeasureTextRota90Item( TRISTATE_FALSE == eState ) );
         bModified = true;
     }
 
     eState = m_pTsbShowUnit->GetState();
-    if( eState != m_pTsbShowUnit->GetSavedValue() )
+    if( m_pTsbShowUnit->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrMeasureShowUnitItem( TRISTATE_TRUE == eState ) );
         bModified = true;
     }
 
     sal_Int32 nPos = m_pLbUnit->GetSelectEntryPos();
-    if( nPos != m_pLbUnit->GetSavedValue() )
+    if( m_pLbUnit->IsValueChangedFromSaved() )
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {

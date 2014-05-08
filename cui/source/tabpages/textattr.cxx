@@ -331,62 +331,62 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     sal_Int32    nValue;
     TriState eState;
 
-    if( m_pMtrFldLeft->GetText() != m_pMtrFldLeft->GetSavedValue() )
+    if( m_pMtrFldLeft->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLeft, eUnit );
         rAttrs.Put( SdrTextLeftDistItem( nValue ) );
     }
 
-    if( m_pMtrFldRight->GetText() != m_pMtrFldRight->GetSavedValue() )
+    if( m_pMtrFldRight->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldRight, eUnit );
         rAttrs.Put( SdrTextRightDistItem( nValue ) );
     }
 
-    if( m_pMtrFldTop->GetText() != m_pMtrFldTop->GetSavedValue() )
+    if( m_pMtrFldTop->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldTop, eUnit );
         rAttrs.Put( SdrTextUpperDistItem( nValue ) );
     }
 
-    if( m_pMtrFldBottom->GetText() != m_pMtrFldBottom->GetSavedValue() )
+    if( m_pMtrFldBottom->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldBottom, eUnit );
         rAttrs.Put( SdrTextLowerDistItem( nValue ) );
     }
 
     eState = m_pTsbAutoGrowHeight->GetState();
-    if( eState != m_pTsbAutoGrowHeight->GetSavedValue() )
+    if( m_pTsbAutoGrowHeight->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowWidth->GetState();
-    if( eState != m_pTsbAutoGrowWidth->GetSavedValue() )
+    if( m_pTsbAutoGrowWidth->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextAutoGrowWidthItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowSize->GetState();
-    if( eState != m_pTsbAutoGrowSize->GetSavedValue() )
+    if( m_pTsbAutoGrowSize->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbWordWrapText->GetState();
-    if( eState != m_pTsbWordWrapText->GetSavedValue() )
+    if( m_pTsbWordWrapText->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextWordWrapItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbContour->GetState();
-    if( eState != m_pTsbContour->GetSavedValue() )
+    if( m_pTsbContour->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextContourFrameItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbFitToSize->GetState();
-    if( eState != m_pTsbFitToSize->GetSavedValue() )
+    if( m_pTsbFitToSize->IsValueChangedFromSaved() )
     {
         SdrFitToSizeType eFTS;
         switch( eState )

@@ -240,7 +240,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
 
     sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
     sal_Int32 nGlobalMetricPos = nMPos;
-    if ( nMPos != m_pMetricLB->GetSavedValue() )
+    if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
@@ -249,7 +249,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     }
 
     nMPos = m_pHMetric->GetSelectEntryPos();
-    if ( nMPos != m_pHMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
+    if ( m_pHMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
@@ -257,7 +257,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
         bRet = true;
     }
     nMPos = m_pVMetric->GetSelectEntryPos();
-    if ( nMPos != m_pVMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
+    if ( m_pVMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
@@ -629,11 +629,11 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
     const OUString sLabel       = pLabelBox->GetText();
     const OUString sIdx         = pIdxBox->GetText();
 
-    bool bStandardHeightChanged = pStandardHeightLB->GetSavedValue() != pStandardHeightLB->GetText();
-    bool bTitleHeightChanged = pTitleHeightLB->GetSavedValue() != pTitleHeightLB->GetText();
-    bool bListHeightChanged = pListHeightLB->GetSavedValue() != pListHeightLB->GetText() && (!bListHeightDefault || !bSetListHeightDefault );
-    bool bLabelHeightChanged = pLabelHeightLB->GetSavedValue() != pLabelHeightLB->GetText() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
-    bool bIndexHeightChanged = pIndexHeightLB->GetSavedValue() != pIndexHeightLB->GetText() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
+    bool bStandardHeightChanged = pStandardHeightLB->IsValueChangedFromSaved();
+    bool bTitleHeightChanged = pTitleHeightLB->IsValueChangedFromSaved();
+    bool bListHeightChanged = pListHeightLB->IsValueChangedFromSaved() && (!bListHeightDefault || !bSetListHeightDefault );
+    bool bLabelHeightChanged = pLabelHeightLB->IsValueChangedFromSaved() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
+    bool bIndexHeightChanged = pIndexHeightLB->IsValueChangedFromSaved() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
     if(bNotDocOnly)
     {
         pFontConfig->SetFontStandard(sStandard, nFontGroup);
@@ -1159,27 +1159,27 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
     if (pBorderCB->IsChecked())
         aInsOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
 
-    if (pHeaderCB->GetSavedValue() != pHeaderCB->GetState() ||
-        pRepeatHeaderCB->GetSavedValue() != pRepeatHeaderCB->GetState() ||
-        pDontSplitCB->GetSavedValue() != pDontSplitCB->GetState() ||
-        pBorderCB->GetSavedValue() != pBorderCB->GetState())
+    if (pHeaderCB->IsValueChangedFromSaved() ||
+        pRepeatHeaderCB->IsValueChangedFromSaved() ||
+        pDontSplitCB->IsValueChangedFromSaved() ||
+        pBorderCB->IsValueChangedFromSaved())
     {
         pModOpt->SetInsTblFlags(bHTMLMode, aInsOpts);
     }
 
-    if (pNumFormattingCB->GetSavedValue() != pNumFormattingCB->GetState())
+    if (pNumFormattingCB->IsValueChangedFromSaved())
     {
         pModOpt->SetInsTblFormatNum(bHTMLMode, pNumFormattingCB->IsChecked());
         bRet = true;
     }
 
-    if (pNumFmtFormattingCB->GetSavedValue() != pNumFmtFormattingCB->GetState())
+    if (pNumFmtFormattingCB->IsValueChangedFromSaved())
     {
         pModOpt->SetInsTblChangeNumFormat(bHTMLMode, pNumFmtFormattingCB->IsChecked());
         bRet = true;
     }
 
-    if (pNumAlignmentCB->GetSavedValue() != pNumAlignmentCB->GetState())
+    if (pNumAlignmentCB->IsValueChangedFromSaved())
     {
         pModOpt->SetInsTblAlignNum(bHTMLMode, pNumAlignmentCB->IsChecked());
         bRet = true;
@@ -1369,10 +1369,10 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     if (m_pWrtShell) {
         m_pWrtShell->GetDoc()->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
                                     m_pMathBaselineAlignmentCB->IsChecked() );
-        bRet |= TriState(m_pMathBaselineAlignmentCB->IsChecked()) != m_pMathBaselineAlignmentCB->GetSavedValue();
+        bRet |= m_pMathBaselineAlignmentCB->IsValueChangedFromSaved();
     }
 
-    if( TriState(m_pCrsrInProtCB->IsChecked()) != m_pCrsrInProtCB->GetSavedValue())
+    if( m_pCrsrInProtCB->IsValueChangedFromSaved())
     {
         rSet.Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCrsrInProtCB->IsChecked()));
         bRet = true;
@@ -2246,9 +2246,9 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
     bool bRet = false;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
 
-    if( m_pAutoRB->IsChecked() != m_pAutoRB->GetSavedValue() ||
-        m_pWordRB->IsChecked() != m_pWordRB->GetSavedValue() ||
-        m_pCharRB->IsChecked() != m_pCharRB->GetSavedValue() )
+    if( m_pAutoRB->IsValueChangedFromSaved() ||
+        m_pWordRB->IsValueChangedFromSaved() ||
+        m_pCharRB->IsValueChangedFromSaved() )
     {
         SvxCompareMode eCmpMode = SVX_CMP_AUTO;
 
@@ -2260,13 +2260,13 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
         bRet = true;
     }
 
-    if( TriState(m_pRsidCB->IsChecked()) != m_pRsidCB->GetSavedValue() )
+    if( m_pRsidCB->IsValueChangedFromSaved() )
     {
         pOpt->SetUseRsid( m_pRsidCB->IsChecked() );
         bRet = true;
     }
 
-    if( TriState(m_pIgnoreCB->IsChecked()) != m_pIgnoreCB->GetSavedValue() )
+    if( m_pIgnoreCB->IsValueChangedFromSaved() )
     {
         pOpt->SetIgnorePieces( m_pIgnoreCB->IsChecked() );
         bRet = true;

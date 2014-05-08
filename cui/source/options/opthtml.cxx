@@ -97,43 +97,43 @@ SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    if(aSize1NF->GetSavedValue() != aSize1NF->GetText())
+    if(aSize1NF->IsValueChangedFromSaved())
         rHtmlOpt.SetFontSize(0, (sal_uInt16)aSize1NF->GetValue());
-    if(aSize2NF->GetSavedValue() != aSize2NF->GetText())
+    if(aSize2NF->IsValueChangedFromSaved())
         rHtmlOpt.SetFontSize(1, (sal_uInt16)aSize2NF->GetValue());
-    if(aSize3NF->GetSavedValue() != aSize3NF->GetText())
+    if(aSize3NF->IsValueChangedFromSaved())
         rHtmlOpt.SetFontSize(2, (sal_uInt16)aSize3NF->GetValue());
-    if(aSize4NF->GetSavedValue() != aSize4NF->GetText())
+    if(aSize4NF->IsValueChangedFromSaved())
         rHtmlOpt.SetFontSize(3, (sal_uInt16)aSize4NF->GetValue());
-    if(aSize5NF->GetSavedValue() != aSize5NF->GetText())
+    if(aSize5NF->IsValueChangedFromSaved())
         rHtmlOpt.SetFontSize(4, (sal_uInt16)aSize5NF->GetValue());
-    if(aSize6NF->GetSavedValue() != aSize6NF->GetText())
+    if(aSize6NF->IsValueChangedFromSaved())
         rHtmlOpt.SetFontSize(5, (sal_uInt16)aSize6NF->GetValue());
-    if(aSize7NF->GetSavedValue() != aSize7NF->GetText())
+    if(aSize7NF->IsValueChangedFromSaved())
         rHtmlOpt.SetFontSize(6, (sal_uInt16)aSize7NF->GetValue());
 
-    if(TriState(aNumbersEnglishUSCB->IsChecked()) != aNumbersEnglishUSCB->GetSavedValue())
+    if(aNumbersEnglishUSCB->IsValueChangedFromSaved())
         rHtmlOpt.SetNumbersEnglishUS(aNumbersEnglishUSCB->IsChecked());
 
-    if(TriState(aUnknownTagCB->IsChecked()) != aUnknownTagCB->GetSavedValue())
+    if(aUnknownTagCB->IsValueChangedFromSaved())
         rHtmlOpt.SetImportUnknown(aUnknownTagCB->IsChecked());
 
-    if(TriState(aIgnoreFontNamesCB->IsChecked()) != aIgnoreFontNamesCB->GetSavedValue())
+    if(aIgnoreFontNamesCB->IsValueChangedFromSaved())
         rHtmlOpt.SetIgnoreFontFamily(aIgnoreFontNamesCB->IsChecked());
 
-    if(aExportLB->GetSelectEntryPos() != aExportLB->GetSavedValue())
+    if(aExportLB->IsValueChangedFromSaved())
         rHtmlOpt.SetExportMode(aPosToExportArr[aExportLB->GetSelectEntryPos()]);
 
-    if(TriState(aStarBasicCB->IsChecked()) != aStarBasicCB->GetSavedValue())
+    if(aStarBasicCB->IsValueChangedFromSaved())
         rHtmlOpt.SetStarBasic(aStarBasicCB->IsChecked());
 
-    if(TriState(aStarBasicWarningCB->IsChecked()) != aStarBasicWarningCB->GetSavedValue())
+    if(aStarBasicWarningCB->IsValueChangedFromSaved())
         rHtmlOpt.SetStarBasicWarning(aStarBasicWarningCB->IsChecked());
 
-    if(TriState(aSaveGrfLocalCB->IsChecked()) != aSaveGrfLocalCB->GetSavedValue())
+    if(aSaveGrfLocalCB->IsValueChangedFromSaved())
         rHtmlOpt.SetSaveGraphicsLocal(aSaveGrfLocalCB->IsChecked());
 
-    if(TriState(aPrintExtensionCB->IsChecked()) != aPrintExtensionCB->GetSavedValue())
+    if(aPrintExtensionCB->IsValueChangedFromSaved())
         rHtmlOpt.SetPrintLayoutExtension(aPrintExtensionCB->IsChecked());
 
     if( aCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )

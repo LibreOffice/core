@@ -162,7 +162,7 @@ using namespace ::com::sun::star;
         fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
 
-        if ( m_aETHostServer.GetText() != m_aETHostServer.GetSavedValue() )
+        if ( m_aETHostServer.IsValueChangedFromSaved() )
         {
             DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
@@ -738,7 +738,7 @@ using namespace ::com::sun::star;
     {
         bool bChangedSomething = false;
 
-        if (m_aETUserName.GetText() != m_aETUserName.GetSavedValue())
+        if (m_aETUserName.IsValueChangedFromSaved())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
             _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));

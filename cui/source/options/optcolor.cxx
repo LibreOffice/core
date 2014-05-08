@@ -1057,7 +1057,7 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 {
     //when the dialog is cancelled but the color scheme ListBox has been changed these
     //changes need to be undone
-    if(!bFillItemSetCalled && m_pColorSchemeLB->GetSavedValue() != m_pColorSchemeLB->GetSelectEntryPos())
+    if(!bFillItemSetCalled && m_pColorSchemeLB->IsValueChangedFromSaved())
     {
         OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
         if(!sOldScheme.isEmpty())
@@ -1082,7 +1082,7 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
     bFillItemSetCalled = true;
-    if(m_pColorSchemeLB->GetSavedValue() != m_pColorSchemeLB->GetSelectEntryPos())
+    if(m_pColorSchemeLB->IsValueChangedFromSaved())
     {
         pColorConfig->SetModified();
         pExtColorConfig->SetModified();

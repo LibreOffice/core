@@ -249,9 +249,9 @@ bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 
     SwFmtINetFmt aINetFmt(sURL, m_pTargetFrmLB->GetText());
     aINetFmt.SetName(m_pNameED->GetText());
-    bModified |= m_pURLED->GetText() != m_pURLED->GetSavedValue();
+    bModified |= m_pURLED->IsValueChangedFromSaved();
     bModified |= m_pNameED->IsModified();
-    bModified |= m_pTargetFrmLB->GetSavedValue() != m_pTargetFrmLB->GetText();
+    bModified |= m_pTargetFrmLB->IsValueChangedFromSaved();
 
     // set valid settings first
     OUString sEntry = m_pVisitedLB->GetSelectEntry();
@@ -265,10 +265,10 @@ bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     if( pINetItem && !pINetItem->GetMacroTable().empty() )
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );
 
-    if(m_pVisitedLB->GetSavedValue() != m_pVisitedLB->GetSelectEntryPos())
+    if(m_pVisitedLB->IsValueChangedFromSaved())
         bModified = true;
 
-    if(m_pNotVisitedLB->GetSavedValue() != m_pNotVisitedLB->GetSelectEntryPos())
+    if(m_pNotVisitedLB->IsValueChangedFromSaved())
         bModified = true;
 
     if(m_pTextED->IsModified())

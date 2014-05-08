@@ -621,10 +621,10 @@ bool SwFldDokPage::FillItemSet(SfxItemSet& )
     if (!IsFldEdit() ||
         nOldSel != m_pSelectionLB->GetSelectEntryPos() ||
         nOldFormat != nFormat ||
-        m_pFixedCB->GetState() != m_pFixedCB->GetSavedValue() ||
-        m_pValueED->GetText() != m_pValueED->GetSavedValue() ||
-        m_pLevelED->GetText() != m_pLevelED->GetSavedValue() ||
-        m_pDateOffsetED->GetText() != m_pDateOffsetED->GetSavedValue())
+        m_pFixedCB->IsValueChangedFromSaved() ||
+        m_pValueED->IsValueChangedFromSaved() ||
+        m_pLevelED->IsValueChangedFromSaved() ||
+        m_pDateOffsetED->IsValueChangedFromSaved())
     {
         InsertFld( nTypeId, nSubType, aEmptyOUStr, aVal, nFormat, ' ', m_pNumFormatLB->IsAutomaticLanguage() );
     }

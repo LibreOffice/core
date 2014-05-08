@@ -318,7 +318,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
     {
         // linear transparence
         sal_uInt16 nPos = (sal_uInt16)m_pMtrTransparent->GetValue();
-        if(nPos != (sal_uInt16)m_pMtrTransparent->GetSavedValue().toInt32() || !bLinearActive)
+        if(m_pMtrTransparent->IsValueChangedFromSaved() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
             SdrShadowTransparenceItem aShadowItem(nPos);
@@ -336,13 +336,13 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
     {
         // transparence gradient, fill ItemSet from values
         if(!bGradActive
-            || (XGradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos() != (XGradientStyle)m_pLbTrgrGradientType->GetSavedValue()
-            || (sal_uInt16)m_pMtrTrgrAngle->GetValue() != (sal_uInt16)m_pMtrTrgrAngle->GetSavedValue().toInt32()
-            || (sal_uInt16)m_pMtrTrgrCenterX->GetValue() != (sal_uInt16)m_pMtrTrgrCenterX->GetSavedValue().toInt32()
-            || (sal_uInt16)m_pMtrTrgrCenterY->GetValue() != (sal_uInt16)m_pMtrTrgrCenterY->GetSavedValue().toInt32()
-            || (sal_uInt16)m_pMtrTrgrBorder->GetValue() != (sal_uInt16)m_pMtrTrgrBorder->GetSavedValue().toInt32()
-            || (sal_uInt16)m_pMtrTrgrStartValue->GetValue() != (sal_uInt16)m_pMtrTrgrStartValue->GetSavedValue().toInt32()
-            || (sal_uInt16)m_pMtrTrgrEndValue->GetValue() != (sal_uInt16)m_pMtrTrgrEndValue->GetSavedValue().toInt32() )
+            || m_pLbTrgrGradientType->IsValueChangedFromSaved()
+            || m_pMtrTrgrAngle->IsValueChangedFromSaved()
+            || m_pMtrTrgrCenterX->IsValueChangedFromSaved()
+            || m_pMtrTrgrCenterY->IsValueChangedFromSaved()
+            || m_pMtrTrgrBorder->IsValueChangedFromSaved()
+            || m_pMtrTrgrStartValue->IsValueChangedFromSaved()
+            || m_pMtrTrgrEndValue->IsValueChangedFromSaved() )
         {
             sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)m_pMtrTrgrStartValue->GetValue() * 255) / 100);
             sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)m_pMtrTrgrEndValue->GetValue() * 255) / 100);
@@ -1017,7 +1017,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             {
                 _nPos = m_pLbColor->GetSelectEntryPos();
                  if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
-                     _nPos != m_pLbColor->GetSavedValue() )
+                     m_pLbColor->IsValueChangedFromSaved() )
                  {
                      XFillColorItem aItem( m_pLbColor->GetSelectEntry(),
                                            m_pLbColor->GetSelectEntryColor() );
@@ -1047,7 +1047,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             {
                 _nPos = m_pLbGradient->GetSelectEntryPos();
                 if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
-                    _nPos != m_pLbGradient->GetSavedValue() )
+                    m_pLbGradient->IsValueChangedFromSaved() )
                 {
                     XGradient aGradient = pGradientList->GetGradient( _nPos )->GetGradient();
                     OUString aString = m_pLbGradient->GetSelectEntry();
@@ -1078,7 +1078,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             {
                 _nPos = m_pLbHatching->GetSelectEntryPos();
                 if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
-                   _nPos != m_pLbHatching->GetSavedValue() )
+                   m_pLbHatching->IsValueChangedFromSaved() )
                 {
                     XHatch aHatching = pHatchingList->GetHatch( _nPos )->GetHatch();
                     OUString aString = m_pLbHatching->GetSelectEntry();
@@ -1094,7 +1094,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 rAttrs.Put( aItem );
                 nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
                 if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                     nPos != m_pLbHatchBckgrdColor->GetSavedValue() )
+                    m_pLbHatchBckgrdColor->IsValueChangedFromSaved() )
                 {
                     XFillColorItem aFillColorItem( m_pLbHatchBckgrdColor->GetSelectEntry(),
                                           m_pLbHatchBckgrdColor->GetSelectEntryColor() );
@@ -1134,7 +1134,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 {
                     nPos = m_pLbBitmap->GetSelectEntryPos();
                     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                        nPos != m_pLbBitmap->GetSavedValue() )
+                        m_pLbBitmap->IsValueChangedFromSaved() )
                     {
                         const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
                         const OUString aString(m_pLbBitmap->GetSelectEntry());
@@ -1172,7 +1172,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             TriState eState = m_pTsbStepCount->GetState();
             if( eState == TRISTATE_TRUE )
             {
-                if( eState != m_pTsbStepCount->GetSavedValue() )
+                if( m_pTsbStepCount->IsValueChangedFromSaved() )
                     bValueModified = true;
             }
             else
@@ -1181,7 +1181,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 if( !m_pNumFldStepCount->GetText().isEmpty() )
                 {
                     nValue = (sal_uInt16) m_pNumFldStepCount->GetValue();
-                    if( nValue != (sal_uInt16) m_pNumFldStepCount->GetSavedValue().toInt32() )
+                    if( m_pNumFldStepCount->IsValueChangedFromSaved() )
                         bValueModified = true;
                 }
             }
@@ -1200,7 +1200,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( m_pTsbTile->IsEnabled() )
         {
             TriState eState = m_pTsbTile->GetState();
-            if( eState != m_pTsbTile->GetSavedValue() )
+            if( m_pTsbTile->IsValueChangedFromSaved() )
             {
                 XFillBmpTileItem aFillBmpTileItem(
                     sal::static_int_cast< sal_Bool >( eState ) );
@@ -1216,7 +1216,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( m_pTsbStretch->IsEnabled() )
         {
             TriState eState = m_pTsbStretch->GetState();
-            if( eState != m_pTsbStretch->GetSavedValue() )
+            if( m_pTsbStretch->IsValueChangedFromSaved() )
             {
                 XFillBmpStretchItem aFillBmpStretchItem(
                     sal::static_int_cast< sal_Bool >( eState ) );
@@ -1235,7 +1235,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         //aTsbScale
         TriState eState = m_pTsbScale->GetState();
-        if( eState != m_pTsbScale->GetSavedValue() ||
+        if( m_pTsbScale->IsValueChangedFromSaved() ||
             ( !m_pTsbScale->IsEnabled() &&
               m_pTsbOriginal->IsEnabled() &&
               m_pTsbScale->GetSavedValue() != TRISTATE_TRUE ) )
@@ -1339,8 +1339,8 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             OUString aMtrString = m_pMtrFldOffset->GetText();
             if( ( !aMtrString.isEmpty()  &&
                   aMtrString != m_pMtrFldOffset->GetSavedValue() ) ||
-                  m_pRbtRow->GetSavedValue() != m_pRbtRow->IsChecked() ||
-                  m_pRbtColumn->GetSavedValue() != m_pRbtColumn->IsChecked() )
+                  m_pRbtRow->IsValueChangedFromSaved() ||
+                  m_pRbtColumn->IsValueChangedFromSaved() )
             {
                 if( m_pRbtRow->IsChecked() )
                 {
@@ -1398,7 +1398,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         {
             OUString sMtrXOffset = m_pMtrFldXOffset->GetText();
             if( !sMtrXOffset.isEmpty()  &&
-                sMtrXOffset != m_pMtrFldXOffset->GetSavedValue() )
+                m_pMtrFldXOffset->IsValueChangedFromSaved() )
             {
                 XFillBmpPosOffsetXItem aFillBmpPosOffsetXItem( (sal_uInt16) m_pMtrFldXOffset->GetValue() );
                 pOld = GetOldItem( rAttrs, XATTR_FILLBMP_POSOFFSETX );
@@ -1415,7 +1415,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
         {
             OUString sMtrYOffset = m_pMtrFldYOffset->GetText();
             if( !sMtrYOffset.isEmpty() &&
-                sMtrYOffset != m_pMtrFldYOffset->GetSavedValue() )
+                m_pMtrFldYOffset->IsValueChangedFromSaved() )
             {
                 XFillBmpPosOffsetYItem aFillBmpPosOffsetYItem( (sal_uInt16) m_pMtrFldYOffset->GetValue() );
                 pOld = GetOldItem( rAttrs, XATTR_FILLBMP_POSOFFSETY );

@@ -315,7 +315,7 @@ void ScPrintAreasDlg::Impl_Reset()
 bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 {
     OUString  aRangeStr = pEd->GetText();
-    bool bDataChanged = (pEd->GetSavedValue() != aRangeStr);
+    bool bDataChanged = pEd->IsValueChangedFromSaved();
 
     if ( !aRangeStr.isEmpty() && pEdPrintArea != pEd )
     {

@@ -161,20 +161,18 @@ SfxTabPage *SwTextGridPage::Create(Window *pParent, const SfxItemSet &rSet)
 bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bRet = false;
-    if(m_pNoGridRB->GetSavedValue() != m_pNoGridRB->IsChecked()||
-        m_pLinesGridRB->GetSavedValue() != m_pLinesGridRB->IsChecked()||
-        m_pLinesPerPageNF->GetSavedValue().toInt32()
-           != m_pLinesPerPageNF->GetValue()||
-        m_pTextSizeMF->GetSavedValue().toInt32() != m_pTextSizeMF->GetValue()||
-        m_pCharsPerLineNF->GetSavedValue().toInt32()
-           != m_pCharsPerLineNF->GetValue()||
-        m_pSnapToCharsCB->GetSavedValue() != TriState(m_pSnapToCharsCB->IsChecked()) ||
-        m_pRubySizeMF->GetSavedValue().toInt32() != m_pRubySizeMF->GetValue()||
-        m_pCharWidthMF->GetSavedValue().toInt32() != m_pCharWidthMF->GetValue()||
-        m_pRubyBelowCB->GetSavedValue() != TriState(m_pRubyBelowCB->IsChecked())||
-        m_pDisplayCB->GetSavedValue() != TriState(m_pDisplayCB->IsChecked())||
-        m_pPrintCB->GetSavedValue() != TriState(m_pPrintCB->IsChecked())||
-        m_pColorLB->GetSavedValue() != m_pColorLB->GetSelectEntryPos())
+    if(m_pNoGridRB->IsValueChangedFromSaved() ||
+        m_pLinesGridRB->IsValueChangedFromSaved() ||
+        m_pLinesPerPageNF->IsValueChangedFromSaved() ||
+        m_pTextSizeMF->IsValueChangedFromSaved() ||
+        m_pCharsPerLineNF->IsValueChangedFromSaved() ||
+        m_pSnapToCharsCB->IsValueChangedFromSaved() ||
+        m_pRubySizeMF->IsValueChangedFromSaved() ||
+        m_pCharWidthMF->IsValueChangedFromSaved() ||
+        m_pRubyBelowCB->IsValueChangedFromSaved() ||
+        m_pDisplayCB->IsValueChangedFromSaved() ||
+        m_pPrintCB->IsValueChangedFromSaved() ||
+        m_pColorLB->IsValueChangedFromSaved())
     {
         PutGridItem(rSet);
         bRet = true;

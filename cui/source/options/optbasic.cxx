@@ -71,14 +71,14 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     bool bModified = false;
     boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
 
-    if( TriState(pAutocloseProcChk->IsChecked()) != pAutocloseProcChk->GetSavedValue() )
+    if( pAutocloseProcChk->IsValueChangedFromSaved() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( pAutocloseProcChk->IsChecked(), batch );
         CodeCompleteOptions::SetProcedureAutoCompleteOn( pAutocloseProcChk->IsChecked() );
         bModified = true;
     }
 
-    if( TriState(pCodeCompleteChk->IsChecked()) != pCodeCompleteChk->GetSavedValue() )
+    if( pCodeCompleteChk->IsValueChangedFromSaved() )
     {
         //boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
@@ -86,28 +86,28 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = true;
     }
 
-    if( TriState(pUseExtendedTypesChk->IsChecked()) != pUseExtendedTypesChk->GetSavedValue() )
+    if( pUseExtendedTypesChk->IsValueChangedFromSaved() )
     {
         officecfg::Office::BasicIDE::Autocomplete::UseExtended::set( pUseExtendedTypesChk->IsChecked(), batch );
         CodeCompleteOptions::SetExtendedTypeDeclaration( pUseExtendedTypesChk->IsChecked() );
         bModified = true;
     }
 
-    if( TriState(pAutocloseParenChk->IsChecked()) != pAutocloseParenChk->GetSavedValue() )
+    if( pAutocloseParenChk->IsValueChangedFromSaved() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( pAutocloseParenChk->IsChecked(), batch );
         CodeCompleteOptions::SetAutoCloseParenthesisOn( pAutocloseParenChk->IsChecked() );
         bModified = true;
     }
 
-    if( TriState(pAutocloseQuotesChk->IsChecked()) != pAutocloseQuotesChk->GetSavedValue() )
+    if( pAutocloseQuotesChk->IsValueChangedFromSaved() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( pAutocloseQuotesChk->IsChecked(), batch );
         CodeCompleteOptions::SetAutoCloseQuotesOn( pAutocloseQuotesChk->IsChecked() );
         bModified = true;
     }
 
-    if( TriState(pAutoCorrectChk->IsChecked()) != pAutoCorrectChk->GetSavedValue() )
+    if( pAutoCorrectChk->IsValueChangedFromSaved() )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::set( pAutoCorrectChk->IsChecked(), batch );
         CodeCompleteOptions::SetAutoCorrectOn( pAutoCorrectChk->IsChecked() );

@@ -473,7 +473,7 @@ namespace dbaui
         sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
         OUString sURLPrefix = m_aURLPrefixes[ nEntry ];
 
-        if ( m_pDatasourceType->GetSavedValue() != nEntry )
+        if ( m_pDatasourceType->IsValueChangedFromSaved() )
         {
             _rCoreAttrs.Put( SfxStringItem( DSID_CONNECTURL, sURLPrefix ) );
             bChangedSomething = true;
@@ -640,7 +640,7 @@ namespace dbaui
         }
         else if ( m_pRB_OpenExistingDatabase->IsChecked() )
         {
-            if ( m_pRB_OpenExistingDatabase->GetSavedValue() != m_pRB_OpenExistingDatabase->IsChecked() )
+            if ( m_pRB_OpenExistingDatabase->IsValueChangedFromSaved() )
                 bChangedSomething = true;
 
             // TODO
@@ -652,7 +652,7 @@ namespace dbaui
             sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
             OUString sURLPrefix = m_aURLPrefixes[nEntry];
 
-            if  (  ( m_pDatasourceType->GetSavedValue() != nEntry )
+            if  (  m_pDatasourceType->IsValueChangedFromSaved()
                 || ( GetDatabaseCreationMode() != m_eOriginalCreationMode )
                 )
             {

@@ -474,7 +474,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
     bool  bModified = false;
     OUString aStr = m_pMtrRadius->GetText();
 
-    if( aStr != m_pMtrRadius->GetSavedValue() )
+    if( m_pMtrRadius->IsValueChangedFromSaved() )
     {
         Fraction aUIScale = pView->GetModel()->GetUIScale();
         long nTmp = GetCoreValue( *m_pMtrRadius, ePoolUnit );
@@ -486,7 +486,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 
     aStr = m_pMtrAngle->GetText();
 
-    if( aStr != m_pMtrAngle->GetSavedValue() )
+    if( m_pMtrAngle->IsValueChangedFromSaved() )
     {
         sal_Int32 nValue = static_cast<sal_Int32>(m_pMtrAngle->GetValue());
         rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
@@ -810,7 +810,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             bModified = true;
         }
 
-        if ( m_pTsbPosProtect->GetState() != m_pTsbPosProtect->GetSavedValue() )
+        if ( m_pTsbPosProtect->IsValueChangedFromSaved() )
         {
             if( m_pTsbPosProtect->GetState() == TRISTATE_INDET )
             {
@@ -852,7 +852,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         bModified = true;
     }
 
-    if ( m_pTsbSizeProtect->GetState() != m_pTsbSizeProtect->GetSavedValue() )
+    if ( m_pTsbSizeProtect->IsValueChangedFromSaved() )
     {
         if ( m_pTsbSizeProtect->GetState() == TRISTATE_INDET )
             rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
@@ -863,7 +863,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         bModified = true;
     }
 
-    if ( m_pTsbAutoGrowWidth->GetState() != m_pTsbAutoGrowWidth->GetSavedValue() )
+    if ( m_pTsbAutoGrowWidth->IsValueChangedFromSaved() )
     {
         if ( !m_pTsbAutoGrowWidth->IsTriStateEnabled() )
         {
@@ -877,7 +877,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         bModified = true;
     }
 
-    if ( m_pTsbAutoGrowHeight->GetState() != m_pTsbAutoGrowHeight->GetSavedValue() )
+    if ( m_pTsbAutoGrowHeight->IsValueChangedFromSaved() )
     {
         if ( !m_pTsbAutoGrowHeight->IsTriStateEnabled() )
         {

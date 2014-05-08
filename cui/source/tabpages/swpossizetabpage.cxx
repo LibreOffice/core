@@ -736,7 +736,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
         rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
         bModified = true;
     }
-    if ( m_pPositionCB->GetState() != m_pPositionCB->GetSavedValue() )
+    if ( m_pPositionCB->IsValueChangedFromSaved() )
     {
         if( m_pPositionCB->GetState() == TRISTATE_INDET )
             rSet.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
@@ -747,7 +747,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
         bModified = true;
     }
 
-    if ( m_pSizeCB->GetState() != m_pSizeCB->GetSavedValue() )
+    if ( m_pSizeCB->IsValueChangedFromSaved() )
     {
         if ( m_pSizeCB->GetState() == TRISTATE_INDET )
             rSet.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
@@ -814,7 +814,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                     bModified = true;
                 }
             }
-            if(m_pHoriMirrorCB->IsEnabled() && TriState(m_pHoriMirrorCB->IsChecked()) != m_pHoriMirrorCB->GetSavedValue())
+            if(m_pHoriMirrorCB->IsEnabled() && m_pHoriMirrorCB->IsValueChangedFromSaved())
                 bModified |= 0 != rSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, m_pHoriMirrorCB->IsChecked()));
 
             if ( m_pVMap )
@@ -851,7 +851,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
             }
 
             // #i18732#
-            if(TriState(m_pFollowCB->IsChecked()) != m_pFollowCB->GetSavedValue())
+            if(m_pFollowCB->IsValueChangedFromSaved())
             {
                 //Writer internal type - based on SfxBoolItem
                 const SfxPoolItem* pItem = GetItem( rOldSet, SID_SW_FOLLOW_TEXT_FLOW);
@@ -1097,7 +1097,7 @@ short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
     if(pbHasChanged)
     {
          if(pCheckedButton)
-             *pbHasChanged = pCheckedButton->IsChecked() != pCheckedButton->GetSavedValue();
+             *pbHasChanged = pCheckedButton->IsValueChangedFromSaved();
          else
              *pbHasChanged = false;
     }

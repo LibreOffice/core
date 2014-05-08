@@ -48,7 +48,7 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
     OUString aSheetPrefix = m_pEdSheetPrefix->GetText();
 
 
-    if ( m_pEdNSheets->GetSavedValue() != m_pEdNSheets->GetText()
+    if ( m_pEdNSheets->IsValueChangedFromSaved()
          || m_pEdSheetPrefix->GetSavedValue() != aSheetPrefix )
     {
         aOpt.SetInitTabCount( nTabCount );

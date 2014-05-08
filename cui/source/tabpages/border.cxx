@@ -660,10 +660,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                                         rCoreAttrs, SID_ATTR_BORDER_INNER );
                     if (
                         !pOldBoxItem ||
-                        m_pLeftMF->GetText() != m_pLeftMF->GetSavedValue() ||
-                        m_pRightMF->GetText() != m_pRightMF->GetSavedValue() ||
-                        m_pTopMF->GetText() != m_pTopMF->GetSavedValue() ||
-                        m_pBottomMF->GetText() != m_pBottomMF->GetSavedValue() ||
+                        m_pLeftMF->IsValueChangedFromSaved() ||
+                        m_pRightMF->IsValueChangedFromSaved() ||
+                        m_pTopMF->IsValueChangedFromSaved() ||
+                        m_pBottomMF->IsValueChangedFromSaved() ||
                         nMinValue == m_pLeftMF->GetValue() ||
                         nMinValue == m_pRightMF->GetValue() ||
                         nMinValue == m_pTopMF->GetValue() ||

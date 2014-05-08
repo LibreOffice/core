@@ -141,8 +141,8 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     SwFldUpdateFlags eFldFlags = m_pAutoUpdateFields->IsChecked() ?
         m_pAutoUpdateCharts->IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
 
-    if(TriState(m_pAutoUpdateFields->IsChecked()) != m_pAutoUpdateFields->GetSavedValue() ||
-       TriState(m_pAutoUpdateCharts->IsChecked()) != m_pAutoUpdateCharts->GetSavedValue())
+    if(m_pAutoUpdateFields->IsValueChangedFromSaved() ||
+       m_pAutoUpdateCharts->IsValueChangedFromSaved())
     {
         pMod->ApplyFldUpdateFlags(eFldFlags);
         if(m_pWrtShell)
@@ -165,7 +165,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     }
 
     const sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
-    if ( nMPos != m_pMetricLB->GetSavedValue() )
+    if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
@@ -173,7 +173,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         bRet = true;
     }
 
-    if(m_pTabMF->IsVisible() && m_pTabMF->GetText() != m_pTabMF->GetSavedValue())
+    if(m_pTabMF->IsVisible() && m_pTabMF->IsValueChangedFromSaved())
     {
         rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     (sal_uInt16)m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP))));
@@ -182,14 +182,14 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 
     bool bIsUseCharUnitFlag = m_pUseCharUnit->IsChecked();
     SvtCJKOptions aCJKOptions;
-        bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
+    bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
     if( (bIsUseCharUnitFlag ? 1 : 0) != m_pUseCharUnit->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
         bRet = true;
     }
 
-    if (m_pWordCountED->GetText() != m_pWordCountED->GetSavedValue())
+    if( m_pWordCountED->IsValueChangedFromSaved() )
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
@@ -199,7 +199,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     }
 
     bool bIsSquaredPageModeFlag = m_pUseSquaredPageMode->IsChecked();
-    if ( (bIsSquaredPageModeFlag ? 1 : 0) != m_pUseSquaredPageMode->GetSavedValue() )
+    if ( m_pUseSquaredPageMode->IsValueChangedFromSaved() )
     {
         pMod->ApplyDefaultPageMode( bIsSquaredPageModeFlag );
         if ( m_pWrtShell )

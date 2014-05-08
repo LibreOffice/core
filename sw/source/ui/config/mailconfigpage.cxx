@@ -145,15 +145,15 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
-    if(m_pDisplayNameED->GetText() != m_pDisplayNameED->GetSavedValue())
+    if(m_pDisplayNameED->IsValueChangedFromSaved())
         m_pConfigItem->SetMailDisplayName(m_pDisplayNameED->GetText());
-    if(m_pAddressED->GetText() != m_pAddressED->GetSavedValue())
+    if(m_pAddressED->IsValueChangedFromSaved())
         m_pConfigItem->SetMailAddress(m_pAddressED->GetText());
-    if( m_pReplyToCB->GetSavedValue() != TriState(m_pReplyToCB->IsChecked()))
+    if( m_pReplyToCB->IsValueChangedFromSaved() )
         m_pConfigItem->SetMailReplyTo(m_pReplyToCB->IsChecked());
-    if(m_pReplyToED->GetText() != m_pReplyToED->GetSavedValue())
+    if(m_pReplyToED->IsValueChangedFromSaved())
         m_pConfigItem->SetMailReplyTo(m_pReplyToED->GetText());
-    if(m_pServerED->GetText() != m_pServerED->GetSavedValue())
+    if(m_pServerED->IsValueChangedFromSaved())
         m_pConfigItem->SetMailServer(m_pServerED->GetText());
 
     if(m_pPortNF->IsModified())

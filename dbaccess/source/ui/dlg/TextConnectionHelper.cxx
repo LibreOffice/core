@@ -378,7 +378,7 @@ namespace dbaui
 
         if ( ( m_nAvailableSections & TC_HEADER ) != 0 )
         {
-            if( (m_aRowHeader.GetState() != m_aRowHeader.GetSavedValue()) )
+            if( m_aRowHeader.IsValueChangedFromSaved() )
             {
                 rSet.Put(SfxBoolItem(DSID_TEXTFILEHEADER, m_aRowHeader.IsChecked()));
                 bChangedSomething = true;
@@ -387,23 +387,23 @@ namespace dbaui
 
         if ( ( m_nAvailableSections & TC_SEPARATORS ) != 0 )
         {
-            if( m_aFieldSeparator.GetText() != m_aFieldSeparator.GetSavedValue() )
+            if( m_aFieldSeparator.IsValueChangedFromSaved() )
             {
                 rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( m_aFieldSeparator, m_aFieldSeparatorList) ) );
                 bChangedSomething = true;
             }
-            if( m_aTextSeparator.GetText() != m_aTextSeparator.GetSavedValue() )
+            if( m_aTextSeparator.IsValueChangedFromSaved() )
             {
                 rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( m_aTextSeparator, m_aTextSeparatorList) ) );
                 bChangedSomething = true;
             }
 
-            if( m_aDecimalSeparator.GetText() != m_aDecimalSeparator.GetSavedValue() )
+            if( m_aDecimalSeparator.IsValueChangedFromSaved() )
             {
                 rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_aDecimalSeparator.GetText().copy(0, 1) ) );
                 bChangedSomething = true;
             }
-            if( m_aThousandsSeparator.GetText() != m_aThousandsSeparator.GetSavedValue() )
+            if( m_aThousandsSeparator.IsValueChangedFromSaved() )
             {
                 rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().copy(0,1) ) );
                 bChangedSomething = true;

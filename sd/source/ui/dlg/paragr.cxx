@@ -92,9 +92,9 @@ const sal_uInt16* SdParagraphNumTabPage::GetRanges()
 
 bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if(m_pNewStartCB->GetState() != m_pNewStartCB->GetSavedValue() ||
-        m_pNewStartNumberCB->GetState() != m_pNewStartNumberCB->GetSavedValue()||
-       m_pNewStartNF->GetText() != m_pNewStartNF->GetSavedValue())
+    if(m_pNewStartCB->IsValueChangedFromSaved() ||
+       m_pNewStartNumberCB->IsValueChangedFromSaved()||
+       m_pNewStartNF->IsValueChangedFromSaved())
     {
         mbModified = true;
         bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();

@@ -440,7 +440,7 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
         nFormat = m_pFormatLB->GetFormat();
 
     if (!IsFldEdit() || nOldSel != m_pSelectionLB->GetSelectEntryPos() ||
-        nOldFormat != nFormat || m_pFixedCB->GetState() != m_pFixedCB->GetSavedValue()
+        nOldFormat != nFormat || m_pFixedCB->IsValueChangedFromSaved()
         || (DI_CUSTOM == nSubType && aName != m_sOldCustomFieldName ))
     {
         InsertFld(TYP_DOCINFOFLD, nSubType, aName, aEmptyOUStr, nFormat,

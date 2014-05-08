@@ -61,9 +61,9 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 {
     SvxFieldData* pNewField = NULL;
 
-    if( m_pRbtFix->IsChecked() != m_pRbtFix->GetSavedValue() ||
-        m_pRbtVar->IsChecked() != m_pRbtVar->GetSavedValue() ||
-        m_pLbFormat->GetSelectEntryPos() != m_pLbFormat->GetSavedValue() )
+    if( m_pRbtFix->IsValueChangedFromSaved() ||
+        m_pRbtVar->IsValueChangedFromSaved() ||
+        m_pLbFormat->IsValueChangedFromSaved() )
     {
         if( pField->ISA( SvxDateField ) )
         {
@@ -311,7 +311,7 @@ SfxItemSet SdModifyFieldDlg::GetItemSet()
 {
     SfxItemSet aOutput( *maInputSet.GetPool(), EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL );
 
-    if( m_pLbLanguage->GetSelectEntryPos() != m_pLbLanguage->GetSavedValue() )
+    if( m_pLbLanguage->IsValueChangedFromSaved() )
     {
         LanguageType eLangType = m_pLbLanguage->GetSelectLanguage();
         SvxLanguageItem aItem( eLangType, EE_CHAR_LANGUAGE );

@@ -768,7 +768,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, false);
     const SfxItemSet& rOldSet = GetItemSet();
 
-    bool bGraphTransparencyChanged = bGraphTransparency && (m_pGraphTransMF->GetText() != m_pGraphTransMF->GetSavedValue());
+    bool bGraphTransparencyChanged = bGraphTransparency && m_pGraphTransMF->IsValueChangedFromSaved();
     if ( pOld )
     {
         const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
@@ -922,7 +922,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
         }
 
-        if( m_pTblLBox->GetSavedValue() != m_pTblLBox->GetSelectEntryPos() )
+        if( m_pTblLBox->IsValueChangedFromSaved() )
         {
             rCoreSet.Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          m_pTblLBox->GetSelectEntryPos() ) );
@@ -960,7 +960,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
         }
 
-        if( m_pParaLBox->GetSavedValue() != m_pParaLBox->GetSelectEntryPos() )
+        if( m_pParaLBox->IsValueChangedFromSaved() )
         {
             rCoreSet.Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          m_pParaLBox->GetSelectEntryPos() ) );

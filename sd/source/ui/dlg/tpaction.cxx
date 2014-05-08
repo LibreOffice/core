@@ -273,7 +273,7 @@ bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
     if( m_pLbAction->GetSelectEntryCount() )
         eCA = GetActualClickAction();
 
-    if( m_pLbAction->GetSavedValue() != m_pLbAction->GetSelectEntryPos() )
+    if( m_pLbAction->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, (sal_uInt16)eCA ) );
         bModified = true;

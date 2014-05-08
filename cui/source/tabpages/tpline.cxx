@@ -679,7 +679,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     {
         nPos = m_pLbLineStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-            nPos != m_pLbLineStyle->GetSavedValue() )
+            m_pLbLineStyle->IsValueChangedFromSaved() )
         {
             XLineStyleItem* pStyleItem = NULL;
 
@@ -715,7 +715,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     }
     // Line width
     // GetSavedValue() returns OUString!
-    if( m_pMtrLineWidth->GetText() != m_pMtrLineWidth->GetSavedValue() )
+    if( m_pMtrLineWidth->IsValueChangedFromSaved() )
     {
         XLineWidthItem aItem( GetCoreValue( *m_pMtrLineWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINEWIDTH );
@@ -726,7 +726,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
     // Width line start
-    if( m_pMtrStartWidth->GetText() != m_pMtrStartWidth->GetSavedValue() )
+    if( m_pMtrStartWidth->IsValueChangedFromSaved() )
     {
         XLineStartWidthItem aItem( GetCoreValue( *m_pMtrStartWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINESTARTWIDTH );
@@ -737,7 +737,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
     // Width line end
-    if( m_pMtrEndWidth->GetText() != m_pMtrEndWidth->GetSavedValue() )
+    if( m_pMtrEndWidth->IsValueChangedFromSaved() )
     {
         XLineEndWidthItem aItem( GetCoreValue( *m_pMtrEndWidth, ePoolUnit ) );
         pOld = GetOldItem( rAttrs, XATTR_LINEENDWIDTH );
@@ -749,7 +749,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     }
 
     // Line color
-    if( m_pLbColor->GetSelectEntryPos() != m_pLbColor->GetSavedValue() )
+    if( m_pLbColor->IsValueChangedFromSaved() )
     {
         XLineColorItem aItem( m_pLbColor->GetSelectEntry(), m_pLbColor->GetSelectEntryColor() );
         pOld = GetOldItem( rAttrs, XATTR_LINECOLOR );
@@ -764,7 +764,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     {
         // Line start
         nPos = m_pLbStartStyle->GetSelectEntryPos();
-        if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbStartStyle->GetSavedValue() )
+        if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbStartStyle->IsValueChangedFromSaved() )
         {
             XLineStartItem* pItem = NULL;
             if( nPos == 0 )
@@ -781,7 +781,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
         // Line end
         nPos = m_pLbEndStyle->GetSelectEntryPos();
-        if( nPos != LISTBOX_ENTRY_NOTFOUND &&  nPos != m_pLbEndStyle->GetSavedValue() )
+        if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbEndStyle->IsValueChangedFromSaved() )
         {
             XLineEndItem* pItem = NULL;
             if( nPos == 0 )
@@ -801,7 +801,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     // Centered line end
     TriState eState = m_pTsbCenterStart->GetState();
-    if( eState != m_pTsbCenterStart->GetSavedValue() )
+    if( m_pTsbCenterStart->IsValueChangedFromSaved() )
     {
         XLineStartCenterItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
         pOld = GetOldItem( rAttrs, XATTR_LINESTARTCENTER );
@@ -812,7 +812,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
     eState = m_pTsbCenterEnd->GetState();
-    if( eState != m_pTsbCenterEnd->GetSavedValue() )
+    if( m_pTsbCenterEnd->IsValueChangedFromSaved() )
     {
         XLineEndCenterItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
         pOld = GetOldItem( rAttrs, XATTR_LINEENDCENTER );
@@ -825,7 +825,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     // Transparency
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
-    if( nVal != (sal_uInt16)m_pMtrTransparent->GetSavedValue().toInt32() )
+    if( m_pMtrTransparent->IsValueChangedFromSaved() )
     {
         XLineTransparenceItem aItem( nVal );
         pOld = GetOldItem( rAttrs, XATTR_LINETRANSPARENCE );
@@ -838,7 +838,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     // #116827#
     nPos = m_pLBEdgeStyle->GetSelectEntryPos();
-    if( LISTBOX_ENTRY_NOTFOUND != nPos && nPos != m_pLBEdgeStyle->GetSavedValue() )
+    if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBEdgeStyle->IsValueChangedFromSaved() )
     {
         XLineJointItem* pNew = 0L;
 
@@ -882,7 +882,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     // LineCaps
     nPos = m_pLBCapStyle->GetSelectEntryPos();
-    if( LISTBOX_ENTRY_NOTFOUND != nPos && nPos != m_pLBCapStyle->GetSavedValue() )
+    if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBCapStyle->IsValueChangedFromSaved() )
     {
         XLineCapItem* pNew = 0L;
 

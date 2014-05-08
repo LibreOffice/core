@@ -230,11 +230,11 @@ int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 long SvxHatchTabPage::CheckChanges_Impl()
 {
-    if( m_pMtrDistance->GetText()           != m_pMtrDistance->GetSavedValue() ||
-        m_pMtrAngle->GetText()              != m_pMtrAngle->GetSavedValue() ||
-        m_pLbLineType->GetSelectEntryPos()  != m_pLbLineType->GetSavedValue()  ||
-        m_pLbLineColor->GetSelectEntryPos() != m_pLbLineColor->GetSavedValue() ||
-        m_pLbHatchings->GetSelectEntryPos() != m_pLbHatchings->GetSavedValue() )
+    if( m_pMtrDistance->IsValueChangedFromSaved() ||
+        m_pMtrAngle->IsValueChangedFromSaved() ||
+        m_pLbLineType->IsValueChangedFromSaved()  ||
+        m_pLbLineColor->IsValueChangedFromSaved() ||
+        m_pLbHatchings->IsValueChangedFromSaved() )
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();

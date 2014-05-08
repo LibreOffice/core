@@ -129,7 +129,7 @@ namespace svt
 
     bool ComboBoxCellController::IsModified() const
     {
-        return GetComboBox().GetSavedValue() != GetComboBox().GetText();
+        return GetComboBox().IsValueChangedFromSaved();
     }
 
 
@@ -225,7 +225,7 @@ namespace svt
 
     bool ListBoxCellController::IsModified() const
     {
-        return GetListBox().GetSelectEntryPos() != GetListBox().GetSavedValue();
+        return GetListBox().IsValueChangedFromSaved();
     }
 
 
@@ -353,7 +353,7 @@ namespace svt
 
     bool CheckBoxCellController::IsModified() const
     {
-        return GetCheckBox().GetSavedValue() != GetCheckBox().GetState();
+        return GetCheckBox().IsValueChangedFromSaved();
     }
 
 

@@ -274,7 +274,7 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
         && (    (!bUseValue && (bUseValue ? 1 : 0) == m_pBtnPageNo->GetSavedValue())
             || (   bUseValue && (bUseValue ? 1 : 0) == m_pBtnPageNo->GetSavedValue()
-                   && m_pEdPageNo->GetText() == m_pEdPageNo->GetSavedValue() ) ) )
+                   && ! m_pEdPageNo->IsValueChangedFromSaved() ) ) )
     {
             rCoreSet.ClearItem( nWhichPageNo );
     }
@@ -422,7 +422,7 @@ static bool lcl_PutScaleItem( sal_uInt16               nWhich,
 {
     bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
     bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
-        (rEd.GetSavedValue() != rEd.GetText()) ||
+                        rEd.IsValueChangedFromSaved() ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
     if( bDataChanged )
@@ -446,8 +446,8 @@ static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
     sal_uInt16 nValue2 = (sal_uInt16)rEd2.GetValue();
     bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
     bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
-        (rEd1.GetSavedValue() != rEd1.GetText()) ||
-        (rEd2.GetSavedValue() != rEd2.GetText()) ||
+                        rEd1.IsValueChangedFromSaved() ||
+                        rEd2.IsValueChangedFromSaved() ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
     if( bDataChanged )

@@ -82,23 +82,23 @@ SdPrintOptions::~SdPrintOptions()
 
 bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 {
-    if( m_pCbxDraw->GetSavedValue() != TriState(m_pCbxDraw->IsChecked()) ||
-        m_pCbxNotes->GetSavedValue() != TriState(m_pCbxNotes->IsChecked()) ||
-        m_pCbxHandout->GetSavedValue() != TriState(m_pCbxHandout->IsChecked()) ||
-        m_pCbxOutline->GetSavedValue() != TriState(m_pCbxOutline->IsChecked()) ||
-        m_pCbxDate->GetSavedValue() != TriState(m_pCbxDate->IsChecked()) ||
-        m_pCbxTime->GetSavedValue() != TriState(m_pCbxTime->IsChecked()) ||
-        m_pCbxPagename->GetSavedValue() != TriState(m_pCbxPagename->IsChecked()) ||
-        m_pCbxHiddenPages->GetSavedValue() != TriState(m_pCbxHiddenPages->IsChecked()) ||
-        m_pRbtPagesize->GetSavedValue() != m_pRbtPagesize->IsChecked() ||
-        m_pRbtPagetile->GetSavedValue() != m_pRbtPagetile->IsChecked() ||
-        m_pRbtBooklet->GetSavedValue() != m_pRbtBooklet->IsChecked() ||
-        m_pCbxFront->GetSavedValue() != TriState(m_pCbxFront->IsChecked()) ||
-        m_pCbxBack->GetSavedValue() != TriState(m_pCbxBack->IsChecked()) ||
-        m_pCbxPaperbin->GetSavedValue() != TriState(m_pCbxPaperbin->IsChecked()) ||
-        m_pRbtColor->GetSavedValue() != m_pRbtColor->IsChecked() ||
-        m_pRbtGrayscale->GetSavedValue() != m_pRbtGrayscale->IsChecked() ||
-        m_pRbtBlackWhite->GetSavedValue() != m_pRbtBlackWhite->IsChecked() )
+    if( m_pCbxDraw->IsValueChangedFromSaved() ||
+        m_pCbxNotes->IsValueChangedFromSaved() ||
+        m_pCbxHandout->IsValueChangedFromSaved() ||
+        m_pCbxOutline->IsValueChangedFromSaved() ||
+        m_pCbxDate->IsValueChangedFromSaved() ||
+        m_pCbxTime->IsValueChangedFromSaved() ||
+        m_pCbxPagename->IsValueChangedFromSaved() ||
+        m_pCbxHiddenPages->IsValueChangedFromSaved() ||
+        m_pRbtPagesize->IsValueChangedFromSaved() ||
+        m_pRbtPagetile->IsValueChangedFromSaved() ||
+        m_pRbtBooklet->IsValueChangedFromSaved() ||
+        m_pCbxFront->IsValueChangedFromSaved() ||
+        m_pCbxBack->IsValueChangedFromSaved() ||
+        m_pCbxPaperbin->IsValueChangedFromSaved() ||
+        m_pRbtColor->IsValueChangedFromSaved() ||
+        m_pRbtGrayscale->IsValueChangedFromSaved()||
+        m_pRbtBlackWhite->IsValueChangedFromSaved())
     {
         SdOptionsPrintItem aOptions( ATTR_OPTIONS_PRINT );
 

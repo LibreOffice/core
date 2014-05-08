@@ -655,7 +655,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if ( !pActFieldDescr )
         return 0;
 
-    if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
+    if ( pListBox->IsValueChangedFromSaved() )
         SetModified(true);
 
     // Special treatment for Boold fields

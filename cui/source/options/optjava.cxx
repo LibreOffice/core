@@ -646,14 +646,14 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
     bool bModified = false;
 
-    if ( TriState(m_pExperimentalCB->IsChecked()) != m_pExperimentalCB->GetSavedValue() )
+    if ( m_pExperimentalCB->IsValueChangedFromSaved() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalMode( m_pExperimentalCB->IsChecked() );
         bModified = true;
     }
 
-    if ( TriState(m_pMacroCB->IsChecked()) != m_pMacroCB->GetSavedValue() )
+    if ( m_pMacroCB->IsValueChangedFromSaved() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetMacroRecorderMode( m_pMacroCB->IsChecked() );

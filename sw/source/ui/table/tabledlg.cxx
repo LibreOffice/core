@@ -390,8 +390,8 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 
     if(bModified)
     {
-        if( m_pBottomMF->GetText() != m_pBottomMF->GetSavedValue() ||
-            m_pTopMF->GetText() != m_pTopMF->GetSavedValue() )
+        if( m_pBottomMF->IsValueChangedFromSaved() ||
+            m_pTopMF->IsValueChangedFromSaved() )
         {
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
             aULSpace.SetUpper( m_pTopMF->Denormalize(m_pTopMF->GetValue( FUNIT_TWIP )));
@@ -400,7 +400,7 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
         }
 
     }
-    if(m_pNameED->GetText() != m_pNameED->GetSavedValue())
+    if(m_pNameED->IsValueChangedFromSaved())
     {
         rCoreSet.Put(SfxStringItem( FN_PARAM_TABLE_NAME, m_pNameED->GetText()));
         bModified = true;
@@ -409,7 +409,7 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
     if( m_pTextDirectionLB->IsVisible() )
     {
         const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
-        if ( nPos != m_pTextDirectionLB->GetSavedValue() )
+        if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
             const sal_uInt32 nDirection =
                              (sal_uInt32)(sal_uIntPtr)m_pTextDirectionLB->GetEntryData( nPos );
@@ -616,7 +616,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             SwTwips lRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
 
             if( m_aLeftMF.GetText() != m_aLeftMF.GetSavedValue() ||
-                                    m_aRightMF.GetText() != m_aRightMF.GetSavedValue() )
+                m_aRightMF.GetText() != m_aRightMF.GetSavedValue() )
             {
                 pTblData->SetWidthChanged();
                 pTblData->SetLeftSpace( lLeft);
@@ -1326,19 +1326,19 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     bool bModified = false;
 
     //Repeat Heading
-    if(TriState(m_pHeadLineCB->IsChecked()) != m_pHeadLineCB->GetSavedValue() ||
-        OUString::number( static_cast< sal_Int32 >(m_pRepeatHeaderNF->GetValue()) ) != m_pRepeatHeaderNF->GetSavedValue() )
+    if(m_pHeadLineCB->IsValueChangedFromSaved() ||
+       m_pRepeatHeaderNF->IsValueChangedFromSaved() )
     {
         bModified |= 0 != rSet.Put(
             SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));
     }
-    if(TriState(m_pKeepCB->IsChecked()) != m_pKeepCB->GetSavedValue())
+    if(m_pKeepCB->IsValueChangedFromSaved())
         bModified |= 0 != rSet.Put( SvxFmtKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
 
-    if(TriState(m_pSplitCB->IsChecked()) != m_pSplitCB->GetSavedValue())
+    if(m_pSplitCB->IsValueChangedFromSaved())
         bModified |= 0 != rSet.Put( SwFmtLayoutSplit( m_pSplitCB->IsChecked()));
 
-    if(TriState(m_pSplitRowCB->IsChecked()) != m_pSplitRowCB->GetSavedValue())
+    if(m_pSplitRowCB->IsValueChangedFromSaved())
         bModified |= 0 != rSet.Put( SwFmtRowSplit( m_pSplitRowCB->IsChecked()));
 
     const SvxFmtBreakItem* pBreak = (const SvxFmtBreakItem*)GetOldItem( rSet, RES_BREAK );
@@ -1350,7 +1350,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     bool bPageItemPut = false;
     if ( bState != (m_pPageCollCB->GetSavedValue() == 1) ||
          ( bState &&
-           m_pPageCollLB->GetSelectEntryPos() != m_pPageCollLB->GetSavedValue() )
+           m_pPageCollLB->IsValueChangedFromSaved() )
            || (m_pPageNoNF->IsEnabled() && m_pPageNoNF->IsValueModified()) )
     {
         OUString sPage;
@@ -1374,8 +1374,8 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     if ( !bPageItemPut &&
         (   bState != (m_pPageCollCB->GetSavedValue() == 1) ||
             bIsChecked != (m_pPgBrkCB->GetSavedValue() ==1) ||
-            m_pPgBrkBeforeRB->IsChecked() != m_pPgBrkBeforeRB->GetSavedValue()    ||
-            m_pPgBrkRB->IsChecked() != m_pPgBrkRB->GetSavedValue() ))
+            m_pPgBrkBeforeRB->IsValueChangedFromSaved()    ||
+            m_pPgBrkRB->IsValueChangedFromSaved() ))
     {
         SvxFmtBreakItem aBreak(
             (const SvxFmtBreakItem&)GetItemSet().Get( RES_BREAK ) );
@@ -1410,7 +1410,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    if(m_pTextDirectionLB->GetSelectEntryPos() != m_pTextDirectionLB->GetSavedValue())
+    if(m_pTextDirectionLB->IsValueChangedFromSaved())
     {
           bModified |= 0 != rSet.Put(
                     SvxFrameDirectionItem(
@@ -1418,7 +1418,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
                         , FN_TABLE_BOX_TEXTORIENTATION));
     }
 
-    if(m_pVertOrientLB->GetSelectEntryPos() != m_pVertOrientLB->GetSavedValue())
+    if(m_pVertOrientLB->IsValueChangedFromSaved())
     {
         sal_uInt16 nOrient = USHRT_MAX;
         switch(m_pVertOrientLB->GetSelectEntryPos())

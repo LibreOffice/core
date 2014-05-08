@@ -204,7 +204,7 @@ bool OCopyTable::LeavePage()
         }
     }
 
-    if ( m_edTableName.GetSavedValue() != m_edTableName.GetText() )
+    if ( m_edTableName.IsValueChangedFromSaved() )
     { // table exists and name has changed
         if ( m_pParent->getOperation() == CopyTableOperation::AppendData )
         {

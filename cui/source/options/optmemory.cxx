@@ -162,7 +162,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
 
-    if ( m_pUndoEdit->GetText() != m_pUndoEdit->GetSavedValue() )
+    if ( m_pUndoEdit->IsValueChangedFromSaved() )
         officecfg::Office::Common::Undo::Steps::set(
             m_pUndoEdit->GetValue(), batch);
 
@@ -196,7 +196,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     batch->commit();
 
-    if( TriState(m_pQuickLaunchCB->IsChecked()) != m_pQuickLaunchCB->GetSavedValue())
+    if( m_pQuickLaunchCB->IsValueChangedFromSaved())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
         bModified = true;

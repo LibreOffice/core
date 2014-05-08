@@ -341,17 +341,17 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     // animation type
     nPos = m_pLbEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-        nPos != m_pLbEffect->GetSavedValue() )
+        m_pLbEffect->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextAniKindItem( (SdrTextAniKind) nPos ) );
         bModified = true;
     }
 
     // animation direction
-    if( m_pBtnUp->GetSavedValue() != TriState(m_pBtnUp->IsChecked()) ||
-        m_pBtnLeft->GetSavedValue() != TriState(m_pBtnLeft->IsChecked()) ||
-        m_pBtnRight->GetSavedValue() != TriState(m_pBtnRight->IsChecked()) ||
-        m_pBtnDown->GetSavedValue() != TriState(m_pBtnDown->IsChecked()) )
+    if( m_pBtnUp->IsValueChangedFromSaved() ||
+        m_pBtnLeft->IsValueChangedFromSaved() ||
+        m_pBtnRight->IsValueChangedFromSaved() ||
+        m_pBtnDown->IsValueChangedFromSaved() )
     {
         SdrTextAniDirection eValue = (SdrTextAniDirection) GetSelectedDirection();
         rAttrs.Put( SdrTextAniDirectionItem( eValue ) );
@@ -360,7 +360,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
 
     // Start inside
     eState = m_pTsbStartInside->GetState();
-    if( eState != m_pTsbStartInside->GetSavedValue() )
+    if( m_pTsbStartInside->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextAniStartInsideItem( TRISTATE_TRUE == eState ) );
         bModified = true;
@@ -368,7 +368,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
 
     // Stop inside
     eState = m_pTsbStopInside->GetState();
-    if( eState != m_pTsbStopInside->GetSavedValue() )
+    if( m_pTsbStopInside->IsValueChangedFromSaved() )
     {
         rAttrs.Put( SdrTextAniStopInsideItem( TRISTATE_TRUE == eState ) );
         bModified = true;
@@ -377,15 +377,15 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     // quantity
     eState = m_pTsbEndless->GetState();
     OUString aStr = m_pNumFldCount->GetText();
-    if( eState != m_pTsbEndless->GetSavedValue() ||
-        aStr != m_pNumFldCount->GetSavedValue() )
+    if( m_pTsbEndless->IsValueChangedFromSaved() ||
+        m_pNumFldCount->IsValueChangedFromSaved() )
     {
         sal_Int64 nValue = 0;
         if( eState == TRISTATE_TRUE /*#89844#*/ && m_pTsbEndless->IsEnabled())
             bModified = true;
         else
         {
-            if( aStr != m_pNumFldCount->GetSavedValue() )
+            if( m_pNumFldCount->IsValueChangedFromSaved() )
             {
                 nValue = m_pNumFldCount->GetValue();
                 bModified = true;
@@ -398,15 +398,15 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     // delay
     eState = m_pTsbAuto->GetState();
     aStr = m_pMtrFldDelay->GetText();
-    if( eState != m_pTsbAuto->GetSavedValue() ||
-        aStr != m_pMtrFldDelay->GetSavedValue() )
+    if( m_pTsbAuto->IsValueChangedFromSaved() ||
+        m_pMtrFldDelay->IsValueChangedFromSaved() )
     {
         sal_Int64 nValue = 0;
         if( eState == TRISTATE_TRUE )
             bModified = true;
         else
         {
-            if( aStr != m_pMtrFldDelay->GetSavedValue() )
+            if( m_pMtrFldDelay->IsValueChangedFromSaved() )
             {
                 nValue = m_pMtrFldDelay->GetValue();
                 bModified = true;
@@ -419,8 +419,8 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     // step size
     eState = m_pTsbPixel->GetState();
     aStr = m_pMtrFldAmount->GetText();
-    if( eState != m_pTsbPixel->GetSavedValue() ||
-        aStr != m_pMtrFldAmount->GetSavedValue() )
+    if( m_pTsbPixel->IsValueChangedFromSaved() ||
+        m_pMtrFldAmount->IsValueChangedFromSaved() )
     {
         sal_Int64 nValue = 0;
         if( eState == TRISTATE_TRUE )

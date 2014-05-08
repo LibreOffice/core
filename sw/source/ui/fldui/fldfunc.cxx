@@ -562,11 +562,11 @@ bool SwFldFuncPage::FillItemSet(SfxItemSet& )
     }
 
     if (!IsFldEdit() ||
-        m_pNameED->GetSavedValue() != m_pNameED->GetText() ||
-        m_pValueED->GetSavedValue() != m_pValueED->GetText() ||
-        m_pCond1ED->GetSavedValue() != m_pCond1ED->GetText() ||
-        m_pCond2ED->GetSavedValue() != m_pCond2ED->GetText() ||
-        m_pListNameED->GetSavedValue() != m_pListNameED->GetText() ||
+        m_pNameED->IsValueChangedFromSaved() ||
+        m_pValueED->IsValueChangedFromSaved() ||
+        m_pCond1ED->IsValueChangedFromSaved() ||
+        m_pCond2ED->IsValueChangedFromSaved() ||
+        m_pListNameED->IsValueChangedFromSaved() ||
         bDropDownLBChanged ||
         nOldFormat != nFormat)
     {

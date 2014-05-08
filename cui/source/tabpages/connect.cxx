@@ -312,49 +312,49 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
     bool         bModified = false;
     sal_Int32    nValue;
 
-    if( m_pMtrFldHorz1->GetText() != m_pMtrFldHorz1->GetSavedValue() )
+    if( m_pMtrFldHorz1->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHorz1, eUnit );
         rAttrs.Put( SdrEdgeNode1HorzDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHorz2->GetText() != m_pMtrFldHorz2->GetSavedValue() )
+    if( m_pMtrFldHorz2->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHorz2, eUnit );
         rAttrs.Put( SdrEdgeNode2HorzDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldVert1->GetText() != m_pMtrFldVert1->GetSavedValue() )
+    if( m_pMtrFldVert1->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldVert1, eUnit );
         rAttrs.Put( SdrEdgeNode1VertDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldVert2->GetText() != m_pMtrFldVert2->GetSavedValue() )
+    if( m_pMtrFldVert2->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldVert2, eUnit );
         rAttrs.Put( SdrEdgeNode2VertDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldLine1->GetText() != m_pMtrFldLine1->GetSavedValue() )
+    if( m_pMtrFldLine1->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine1, eUnit );
         rAttrs.Put( SdrEdgeLine1DeltaItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldLine2->GetText() != m_pMtrFldLine2->GetSavedValue() )
+    if( m_pMtrFldLine2->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine2, eUnit );
         rAttrs.Put( SdrEdgeLine2DeltaItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldLine3->GetText() != m_pMtrFldLine3->GetSavedValue() )
+    if( m_pMtrFldLine3->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine3, eUnit );
         rAttrs.Put( SdrEdgeLine3DeltaItem( nValue ) );
@@ -363,7 +363,7 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
 
 
     sal_Int32 nPos = m_pLbType->GetSelectEntryPos();
-    if( nPos != m_pLbType->GetSavedValue() )
+    if( m_pLbType->IsValueChangedFromSaved() )
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {

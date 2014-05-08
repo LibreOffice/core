@@ -450,7 +450,7 @@ namespace
         FontInfo aFontInfo;
         OUString sFontName(_pFontNameLB->GetText());
         bool bFontAvailable = _pFontList->IsAvailable( sFontName );
-        if (bFontAvailable  || _pFontNameLB->GetSavedValue() != sFontName)
+        if (bFontAvailable  || _pFontNameLB->IsValueChangedFromSaved())
             aFontInfo = _pFontList->Get( sFontName, _pFontStyleLB->GetText() );
         else
         {
@@ -2279,7 +2279,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     }
 
     if ( rOldSet.GetItemState( nWhich ) == SFX_ITEM_DONTCARE &&
-         TriState(m_pIndividualWordsBtn->IsChecked()) == m_pIndividualWordsBtn->GetSavedValue() )
+         ! m_pIndividualWordsBtn->IsValueChangedFromSaved() )
         bChanged = false;
 
     if ( bChanged )
@@ -2366,7 +2366,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 
     //Relief
     nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
-    if(m_pReliefLB->GetSelectEntryPos() != m_pReliefLB->GetSavedValue())
+    if(m_pReliefLB->IsValueChangedFromSaved())
     {
         m_pReliefLB->SaveValue();
         SvxCharReliefItem aRelief((FontRelief)m_pReliefLB->GetSelectEntryPos(), nWhich);
@@ -3231,7 +3231,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     // Pair-Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
 
-    if ( TriState(m_pPairKerningBtn->IsChecked()) != m_pPairKerningBtn->GetSavedValue() )
+    if ( m_pPairKerningBtn->IsValueChangedFromSaved() )
     {
         rSet.Put( SvxAutoKernItem( m_pPairKerningBtn->IsChecked(), nWhich ) );
         bModified = true;
@@ -3241,7 +3241,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if ( m_pScaleWidthMF->GetText() != m_pScaleWidthMF->GetSavedValue() )
+    if ( m_pScaleWidthMF->IsValueChangedFromSaved() )
     {
         rSet.Put( SvxCharScaleWidthItem( (sal_uInt16)m_pScaleWidthMF->GetValue(), nWhich ) );
         bModified = true;
@@ -3251,10 +3251,10 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
-    if ( m_p0degRB->IsChecked() != m_p0degRB->GetSavedValue()  ||
-         m_p90degRB->IsChecked() != m_p90degRB->GetSavedValue()  ||
-         m_p270degRB->IsChecked() != m_p270degRB->GetSavedValue()  ||
-         TriState(m_pFitToLineCB->IsChecked()) != m_pFitToLineCB->GetSavedValue() )
+    if ( m_p0degRB->IsValueChangedFromSaved()  ||
+         m_p90degRB->IsValueChangedFromSaved()  ||
+         m_p270degRB->IsValueChangedFromSaved()  ||
+         m_pFitToLineCB->IsValueChangedFromSaved() )
     {
         SvxCharRotateItem aItem( 0, m_pFitToLineCB->IsChecked(), nWhich );
         if (m_p90degRB->IsChecked())

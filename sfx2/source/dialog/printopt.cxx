@@ -122,12 +122,12 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
     bool                    bModified = false;
 
 
-    if( TriState(m_pPaperSizeCB->IsChecked()) != m_pPaperSizeCB->GetSavedValue())
+    if( m_pPaperSizeCB->IsValueChangedFromSaved())
         aWarnOptions.SetPaperSize(m_pPaperSizeCB->IsChecked());
-    if( TriState(m_pPaperOrientationCB->IsChecked()) != m_pPaperOrientationCB->GetSavedValue() )
+    if( m_pPaperOrientationCB->IsValueChangedFromSaved() )
         aWarnOptions.SetPaperOrientation(m_pPaperOrientationCB->IsChecked());
 
-    if( TriState(m_pTransparencyCB->IsChecked()) != m_pTransparencyCB->GetSavedValue() )
+    if( m_pTransparencyCB->IsValueChangedFromSaved() )
         aWarnOptions.SetTransparency( m_pTransparencyCB->IsChecked() );
 
     ImplSaveControls( m_pPrinterOutputRB->IsChecked() ? &maPrinterOptions : &maPrintFileOptions );

@@ -1130,7 +1130,7 @@ void AssignmentPersistentData::Commit()
 
     IMPL_LINK(AddressBookSourceDialog, OnComboLoseFocus, ComboBox*, _pBox)
     {
-        if (_pBox->GetSavedValue() != _pBox->GetText())
+        if ( _pBox->IsValueChangedFromSaved() )
         {
             if (_pBox == m_pDatasource)
                 resetTables();

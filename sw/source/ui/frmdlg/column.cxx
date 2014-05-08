@@ -657,7 +657,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
     if( m_pTextDirectionLB->IsVisible())
     {
         const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
-        if ( nPos != m_pTextDirectionLB->GetSavedValue() )
+        if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
             sal_uInt32 nDirection = (sal_uInt32)(sal_IntPtr)m_pTextDirectionLB->GetEntryData( nPos );
             rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));

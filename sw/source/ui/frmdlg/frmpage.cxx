@@ -1057,8 +1057,8 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         aHoriOrient.SetRelationOrient( eRel );
         aHoriOrient.SetPosToggle(m_pMirrorPagesCB->IsChecked());
 
-        bool bMod = m_pAtHorzPosED->GetText() != m_pAtHorzPosED->GetSavedValue();
-        bMod |= m_pMirrorPagesCB->GetState() != m_pMirrorPagesCB->GetSavedValue();
+        bool bMod = m_pAtHorzPosED->IsValueChangedFromSaved();
+        bMod |= m_pMirrorPagesCB->IsValueChangedFromSaved();
 
         if ( eHOri == text::HoriOrientation::NONE &&
              (bNew || (bAtHorzPosModified || bMod) || nOldH != eHOri ) )
@@ -1092,7 +1092,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         aVertOrient.SetVertOrient    ( eVOri);
         aVertOrient.SetRelationOrient( eRel );
 
-        bool bMod = m_pAtVertPosED->GetText() != m_pAtVertPosED->GetSavedValue();
+        bool bMod = m_pAtVertPosED->IsValueChangedFromSaved();
 
         if ( eVOri == text::VertOrientation::NONE &&
              ( bNew || (bAtVertPosModified || bMod) || nOldV != eVOri) )
@@ -1148,8 +1148,8 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     }
 
     bool bValueModified = (m_aWidthED.IsValueModified() || m_aHeightED.IsValueModified());
-    bool bCheckChanged = (m_pRelWidthCB->GetSavedValue() != TriState(m_pRelWidthCB->IsChecked())
-                          || m_pRelHeightCB->GetSavedValue() != TriState(m_pRelHeightCB->IsChecked()));
+    bool bCheckChanged = m_pRelWidthCB->IsValueChangedFromSaved()
+                         || m_pRelHeightCB->IsValueChangedFromSaved();
 
     bool bLegalValue = !(!rOldSize.GetWidth () && !rOldSize.GetHeight() &&
                             m_aWidthED .GetValue() == m_aWidthED .GetMin() &&
@@ -1183,20 +1183,20 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     }
     if( !IsInGraficMode() )
     {
-        if( m_pAutoHeightCB->GetState() != m_pAutoHeightCB->GetSavedValue() )
+        if( m_pAutoHeightCB->IsValueChangedFromSaved() )
         {
             SwFrmSize eFrmSize = m_pAutoHeightCB->IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
             if( eFrmSize != aSz.GetHeightSizeType() )
                 aSz.SetHeightSizeType(eFrmSize);
         }
-        if( m_pAutoWidthCB->GetState() != m_pAutoWidthCB->GetSavedValue() )
+        if( m_pAutoWidthCB->IsValueChangedFromSaved() )
         {
             SwFrmSize eFrmSize = m_pAutoWidthCB->IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
             if( eFrmSize != aSz.GetWidthSizeType() )
                 aSz.SetWidthSizeType( eFrmSize );
         }
     }
-    if( !bFormat && m_pFixedRatioCB->GetSavedValue() != TriState(m_pFixedRatioCB->IsChecked()))
+    if( !bFormat && m_pFixedRatioCB->IsValueChangedFromSaved() )
         bRet |= 0 != rSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, m_pFixedRatioCB->IsChecked()));
 
     pOldItem = GetOldItem(rSet, RES_FRM_SIZE);
@@ -1211,7 +1211,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
         bRet |= 0 != rSet.Put( aSz );
     }
-    if(TriState(m_pFollowTextFlowCB->IsChecked()) != m_pFollowTextFlowCB->GetSavedValue())
+    if(m_pFollowTextFlowCB->IsValueChangedFromSaved())
     {
         bRet |= 0 != rSet.Put(SwFmtFollowTextFlow(m_pFollowTextFlowCB->IsChecked()));
     }
@@ -2487,11 +2487,11 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 {
     bool bModified = false;
-    if ( m_pMirrorHorzBox->GetSavedValue() != TriState(m_pMirrorHorzBox->IsChecked()) ||
-         m_pMirrorVertBox->GetSavedValue() != TriState(m_pMirrorVertBox->IsChecked()) ||
-         m_pAllPagesRB->GetSavedValue() != m_pAllPagesRB->IsChecked() ||
-         m_pLeftPagesRB->GetSavedValue() != m_pLeftPagesRB->IsChecked() ||
-         m_pRightPagesRB->GetSavedValue() != m_pRightPagesRB->IsChecked())
+    if ( m_pMirrorHorzBox->IsValueChangedFromSaved() ||
+         m_pMirrorVertBox->IsValueChangedFromSaved() ||
+         m_pAllPagesRB->IsValueChangedFromSaved() ||
+         m_pLeftPagesRB->IsValueChangedFromSaved() ||
+         m_pRightPagesRB->IsValueChangedFromSaved() )
     {
         bModified = true;
 
@@ -3047,9 +3047,9 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bRet = false;
-    if (pNameED->GetText() != pNameED->GetSavedValue())
+    if (pNameED->IsValueChangedFromSaved())
         bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_NAME, pNameED->GetText()));
-    if (pAltNameED->GetText()  != pAltNameED->GetSavedValue())
+    if (pAltNameED->IsValueChangedFromSaved())
         bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, pAltNameED->GetText()));
 
     const SfxPoolItem* pOldItem;
@@ -3061,18 +3061,17 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
                 aProt != *pOldItem )
         bRet |= 0 != rSet.Put( aProt);
 
-    bool bChecked;
-    if ( (bChecked = pEditInReadonlyCB->IsChecked()) != (pEditInReadonlyCB->GetSavedValue() == 1) )
-        bRet |= 0 != rSet.Put( SwFmtEditInReadonly( RES_EDIT_IN_READONLY, bChecked));
+    if ( pEditInReadonlyCB->IsValueChangedFromSaved() )
+        bRet |= 0 != rSet.Put( SwFmtEditInReadonly( RES_EDIT_IN_READONLY, pEditInReadonlyCB->IsChecked()));
 
-    if ( (bChecked = pPrintFrameCB->IsChecked()) != (pPrintFrameCB->GetSavedValue() == 1) )
-        bRet |= 0 != rSet.Put( SvxPrintItem( RES_PRINT, bChecked));
+    if ( pPrintFrameCB->IsValueChangedFromSaved() )
+        bRet |= 0 != rSet.Put( SvxPrintItem( RES_PRINT, pPrintFrameCB->IsChecked()));
 
     // textflow
     if( pTextFlowLB->IsVisible() )
     {
         sal_Int32 nPos = pTextFlowLB->GetSelectEntryPos();
-        if( nPos != pTextFlowLB->GetSavedValue() )
+        if( pTextFlowLB->IsValueChangedFromSaved() )
         {
             sal_uInt16 nData = (sal_uInt16)(sal_IntPtr)pTextFlowLB->GetEntryData( nPos );
             bRet |= 0 != rSet.Put( SvxFrameDirectionItem(
@@ -3104,7 +3103,7 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
         }
     }
 
-    if(m_pVertAlignLB->GetSelectEntryPos() != m_pVertAlignLB->GetSavedValue())
+    if(m_pVertAlignLB->IsValueChangedFromSaved())
     {
         SdrTextVertAdjust nAdjust;
         switch(m_pVertAlignLB->GetSelectEntryPos())

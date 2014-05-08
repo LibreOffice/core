@@ -1522,9 +1522,9 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         }
         pAutoCorrect->SaveCplSttExceptList(eLang);
     }
-    if(TriState(m_pAutoAbbrevCB->IsChecked()) != m_pAutoAbbrevCB->GetSavedValue())
+    if(m_pAutoAbbrevCB->IsValueChangedFromSaved())
         pAutoCorrect->SetAutoCorrFlag( SaveWordCplSttLst, m_pAutoAbbrevCB->IsChecked());
-    if(TriState(m_pAutoCapsCB->IsChecked()) != m_pAutoCapsCB->GetSavedValue())
+    if(m_pAutoCapsCB->IsValueChangedFromSaved())
         pAutoCorrect->SetAutoCorrFlag( SaveWordWrdSttLst, m_pAutoCapsCB->IsChecked());
     return false;
 }

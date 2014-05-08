@@ -105,7 +105,7 @@ const sal_uInt16* SwParagraphNumTabPage::GetRanges()
 
 bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    if( m_pOutlineLvLB->GetSelectEntryPos() != m_pOutlineLvLB->GetSavedValue())
+    if( m_pOutlineLvLB->IsValueChangedFromSaved())
     {
         const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectEntryPos();
         const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
@@ -116,7 +116,7 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = true;
     }
 
-    if( m_pNumberStyleLB->GetSelectEntryPos() != m_pNumberStyleLB->GetSavedValue())
+    if( m_pNumberStyleLB->IsValueChangedFromSaved())
     {
         OUString aStyle;
         if(m_pNumberStyleLB->GetSelectEntryPos())
@@ -131,9 +131,9 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
             bModified = true;
         }
     }
-    if(m_pNewStartCB->GetState() != m_pNewStartCB->GetSavedValue() ||
-        m_pNewStartNumberCB->GetState() != m_pNewStartNumberCB->GetSavedValue()||
-       m_pNewStartNF->GetText() != m_pNewStartNF->GetSavedValue())
+    if(m_pNewStartCB->IsValueChangedFromSaved() ||
+       m_pNewStartNumberCB->IsValueChangedFromSaved()||
+       m_pNewStartNF->IsValueChangedFromSaved())
     {
         bModified = true;
         bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
@@ -143,9 +143,9 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
                   bNumberNewStartChecked && bNewStartChecked ? (sal_uInt16)m_pNewStartNF->GetValue() : USHRT_MAX));
     }
 
-    if(m_pCountParaCB->GetSavedValue() != m_pCountParaCB->GetState() ||
-        m_pRestartParaCountCB->GetSavedValue() != m_pRestartParaCountCB->GetState() ||
-       m_pRestartNF->GetSavedValue() != m_pRestartNF->GetText() )
+    if(m_pCountParaCB->IsValueChangedFromSaved()||
+       m_pRestartParaCountCB->IsValueChangedFromSaved() ||
+       m_pRestartNF->IsValueChangedFromSaved() )
     {
         SwFmtLineNumber aFmt;
         aFmt.SetStartValue( static_cast< sal_uLong >(m_pRestartParaCountCB->GetState() == TRISTATE_TRUE ?

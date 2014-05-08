@@ -282,7 +282,7 @@ namespace dbaui
         // the non-boolean items
         if ( m_bHasBooleanComparisonMode )
         {
-            if ( m_pBooleanComparisonMode->GetSelectEntryPos() != m_pBooleanComparisonMode->GetSavedValue() )
+            if ( m_pBooleanComparisonMode->IsValueChangedFromSaved() )
             {
                 _rSet.Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectEntryPos() ) );
                 bChangedSomething = true;

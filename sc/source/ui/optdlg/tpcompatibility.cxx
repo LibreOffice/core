@@ -33,7 +33,7 @@ SfxTabPage* ScTpCompatOptions::Create(Window *pParent, const SfxItemSet &rCoreAt
 bool ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
     bool bRet = false;
-    if (m_pLbKeyBindings->GetSavedValue() != m_pLbKeyBindings->GetSelectEntryPos())
+    if (m_pLbKeyBindings->IsValueChangedFromSaved())
     {
         rCoreAttrs.Put(
             SfxUInt16Item(
