@@ -711,6 +711,10 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
 
+    //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
+    //So clearing the alternate content graphic cache.
+    m_pAttrOutput->ClearGraphicCache();
+
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     m_pVMLExport->SetFS( m_pDocumentFS );

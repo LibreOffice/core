@@ -3567,6 +3567,11 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
     }
 }
 
+void DocxAttributeOutput::ClearGraphicCache()
+{
+    m_aRelIdCache.clear();
+}
+
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj )
 {
     OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );

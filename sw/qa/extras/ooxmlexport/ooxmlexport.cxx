@@ -3283,6 +3283,21 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
                 "/word/embeddings/oleObject1.xlsx");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo78420, "fdo78420.docx")
+{
+    xmlDocPtr pXmlHeader = parseExport("word/header3.xml");
+
+    if (!pXmlHeader)
+       return;
+
+    xmlDocPtr pXmlHeaderRels = parseExport("word/_rels/header3.xml.rels");
+    if(!pXmlHeaderRels)
+       return;
+
+    assertXPath(pXmlHeaderRels,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testPageBreakInFirstPara,"fdo77727.docx")
 {
     /* Break to next page was not exported if it is in first paragraph of the section.
