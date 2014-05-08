@@ -331,6 +331,7 @@ private:
     BookmarkMap_t                                                                   m_aBookmarkMap;
 
     _PageMar                                                                        m_aPageMargins;
+    sal_Int32                                                                       m_nSymboldata;
 
 
     // TableManagers are stacked: one for each stream to avoid any confusion
@@ -466,6 +467,9 @@ public:
     bool GetIsTextFrameInserted();
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr();
+
+    void SetSymbolData( bool nSymbolData );
+    sal_Int32 GetSymbolData();
     /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
     /// Getter method for m_bSdt.
