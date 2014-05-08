@@ -136,10 +136,6 @@ void SvxModifyControl::_repaint()
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
 }
 
-
-
-namespace {
-
 /**
  * Given a bounding rectangle and an image, determine the top-left position
  * of the image so that the image would look centered both horizontally and
@@ -160,9 +156,6 @@ Point centerImage(const Rectangle& rBoundingRect, const Image& rImg)
     aPt += Point(nXOffset, nYOffset);
     return aPt;
 }
-
-}
-
 
 void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
 {

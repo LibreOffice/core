@@ -239,6 +239,7 @@ void SdDLL::RegisterControllers()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
     // register StatusBarControls
+    SvxZoomPageStatusBarControl::RegisterControl( SID_ZOOM_ENTIRE_PAGE, pMod );
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pMod );
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );

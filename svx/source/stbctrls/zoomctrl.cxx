@@ -28,7 +28,8 @@
 
 #include <svx/dialogs.hrc>
 
-#include "svx/zoomctrl.hxx"
+#include <svx/zoomctrl.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <sfx2/zoomitem.hxx>
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
@@ -97,7 +98,6 @@ void ZoomPopup_Impl::Select()
 }
 
 // class SvxZoomStatusBarControl ------------------------------------------
-
 SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
                                                   sal_uInt16 _nId,
                                                   StatusBar& rStb ) :
@@ -107,8 +107,6 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
     nValueSet( SVX_ZOOM_ENABLE_ALL )
 {
 }
-
-
 
 void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
@@ -138,15 +136,11 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     }
 }
 
-
-
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
     OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
     GetStatusBar().SetItemText( GetId(), aStr );
 }
-
-
 
 void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {
@@ -184,5 +178,41 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         SfxStatusBarControl::Command( rCEvt );
 }
 
+SFX_IMPL_STATUSBAR_CONTROL(SvxZoomPageStatusBarControl,SfxVoidItem);
+
+SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
+    sal_uInt16 _nId, StatusBar& rStb)
+    : SfxStatusBarControl(_nSlotId, _nId, rStb)
+    , maImage(SVX_RES(RID_SVXBMP_ZOOM_PAGE))
+{
+    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_FIT_SLIDE));
+}
+
+extern Point centerImage(const Rectangle& rBoundingRect, const Image& rImg);
+
+void SvxZoomPageStatusBarControl::Paint(const UserDrawEvent& rUsrEvt)
+{
+    OutputDevice* pDev = rUsrEvt.GetDevice();
+    Rectangle aRect = rUsrEvt.GetRect();
+    Point aPt = centerImage(aRect, maImage);
+    pDev->DrawImage(aPt, maImage);
+}
+
+bool SvxZoomPageStatusBarControl::MouseButtonDown(const MouseEvent&)
+{
+    SvxZoomItem aZoom( SVX_ZOOM_WHOLEPAGE, 0, GetId() );
+
+    ::com::sun::star::uno::Any a;
+    INetURLObject aObj( m_aCommandURL );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name  = aObj.GetURLPath();
+    aZoom.QueryValue( a );
+    aArgs[0].Value = a;
+
+    execute( aArgs );
+
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

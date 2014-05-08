@@ -116,6 +116,11 @@ String RID_SVXSTR_DOC_LOAD
     Text [ en-US ] = "Loading document...";
 };
 
+String RID_SVXSTR_FIT_SLIDE
+{
+    Text [ en-US ] = "Fit slide to current window.";
+};
+
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
 {
@@ -330,6 +335,14 @@ Image RID_SVXBMP_DOC_MODIFIED_FEEDBACK
     ImageBitmap = Bitmap
     {
         File = "doc_modified_feedback.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_ZOOM_PAGE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "zoom_page_statusbar.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };

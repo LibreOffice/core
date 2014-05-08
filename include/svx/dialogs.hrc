@@ -981,12 +981,14 @@
 #define RID_SVXSTR_DOC_LOAD              (SVX_OOO_BUILD_START + 6) // 1236
 #define RID_SVXSTR_ERR_OLD_PASSWD        (SVX_OOO_BUILD_START + 7) // 1237
 #define RID_SVXSTR_ERR_REPEAT_PASSWD     (SVX_OOO_BUILD_START + 8) // 1238
+#define RID_SVXBMP_ZOOM_PAGE             (SVX_OOO_BUILD_START + 9) // 1239
+#define RID_SVXSTR_FIT_SLIDE             (SVX_OOO_BUILD_START + 10) // 1240
 
 // sidebar-related resources (defined in the appropriate .hrc's)
-#define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1240)
+#define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1241)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1270)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1271)
 
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead

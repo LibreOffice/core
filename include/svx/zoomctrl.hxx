@@ -21,8 +21,7 @@
 
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
-
-// class SvxZoomToolBoxControl -------------------------------------------
+#include <vcl/image.hxx>
 
 class SVX_DLLPUBLIC SvxZoomStatusBarControl : public SfxStatusBarControl
 {
@@ -42,6 +41,18 @@ public:
 
 };
 
+class SVX_DLLPUBLIC SvxZoomPageStatusBarControl : public SfxStatusBarControl
+{
+private:
+    Image maImage;
+public:
+    virtual void    Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
+    virtual bool    MouseButtonDown( const MouseEvent & rEvt ) SAL_OVERRIDE;
+
+    SFX_DECL_STATUSBAR_CONTROL();
+
+    SvxZoomPageStatusBarControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
+};
 
 #endif
 
