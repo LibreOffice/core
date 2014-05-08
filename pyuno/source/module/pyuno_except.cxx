@@ -92,9 +92,9 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
     }
 
-    sal_Bool isStruct = desc.get()->eTypeClass == typelib_TypeClass_STRUCT;
-    sal_Bool isExc = desc.get()->eTypeClass == typelib_TypeClass_EXCEPTION;
-    sal_Bool isInterface = desc.get()->eTypeClass == typelib_TypeClass_INTERFACE;
+    bool isStruct = desc.get()->eTypeClass == typelib_TypeClass_STRUCT;
+    bool isExc = desc.get()->eTypeClass == typelib_TypeClass_EXCEPTION;
+    bool isInterface = desc.get()->eTypeClass == typelib_TypeClass_INTERFACE;
     if( !isStruct  && !isExc && ! isInterface )
     {
         OUStringBuffer buf;
@@ -206,7 +206,7 @@ bool isInstanceOfStructOrException( PyObject *obj)
         return false;
 }
 
-sal_Bool isInterfaceClass( const Runtime &runtime, PyObject * obj )
+bool isInterfaceClass( const Runtime &runtime, PyObject * obj )
 {
     const ClassSet & set = runtime.getImpl()->cargo->interfaceSet;
     return set.find( obj ) != set.end();

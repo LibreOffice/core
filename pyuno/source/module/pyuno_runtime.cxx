@@ -393,7 +393,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_BOOLEAN:
     {
-        sal_Bool b = sal_Bool();
+        bool b;
         if ((a >>= b) && b)
             return Py_True;
         else

@@ -250,7 +250,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
 com::sun::star::uno::Any PyEnum2Enum( PyObject *obj )
     throw ( com::sun::star::uno::RuntimeException );
-sal_Bool PyBool2Bool( PyObject *o, const Runtime & r )
+bool PyBool2Bool( PyObject *o, const Runtime & r )
     throw ( com::sun::star::uno::RuntimeException );
 sal_Unicode PyChar2Unicode( PyObject *o )
     throw ( com::sun::star::uno::RuntimeException );
@@ -263,7 +263,7 @@ const char *typeClassToString( com::sun::star::uno::TypeClass t );
 PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object )
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool isInterfaceClass( const Runtime &, PyObject *obj );
+bool isInterfaceClass( const Runtime &, PyObject *obj );
 bool isInstanceOfStructOrException( PyObject *obj);
 com::sun::star::uno::Sequence<com::sun::star::uno::Type> implementsInterfaces(
     const Runtime & runtime, PyObject *obj );

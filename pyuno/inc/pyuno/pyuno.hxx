@@ -131,7 +131,7 @@ public:
     /** returns 1 when the reference points to a python object python object,
         otherwise 0.
     */
-    sal_Bool is() const
+    bool is() const
     {
         return m != 0;
     }
