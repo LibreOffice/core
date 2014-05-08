@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_54ca3aa2",
+        "filename": "sw/qa/extras/inc/bordertest.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-05-08T12:51:10Z",
+      "side": 1,
+      "message": "would it help to remove the if block in ww8par6.cxx line 1313?",
+      "revId": "06c1c582804219ea07a453dc4215471e0453a236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
