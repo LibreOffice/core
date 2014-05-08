@@ -1029,6 +1029,9 @@ public:
     void                                SetData( void* pNewData );
     void*                               GetData() const;
 
+    /// Add all children to @rAllChildren recursively.
+    SAL_DLLPRIVATE void                 CollectChildren(::std::vector<Window *>& rAllChildren );
+
     void                                ShowFocus( const Rectangle& rRect );
     void                                HideFocus();
 

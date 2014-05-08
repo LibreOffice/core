@@ -4727,6 +4727,18 @@ void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
     }
 }
 
+void Window::CollectChildren(::std::vector<Window *>& rAllChildren )
+{
+    rAllChildren.push_back( this );
+
+    Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
+    {
+        pChild->CollectChildren( rAllChildren );
+        pChild = pChild->mpWindowImpl->mpNext;
+    }
+}
+
 void Window::SetPointFont( const Font& rFont )
 {
 

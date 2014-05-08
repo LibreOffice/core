@@ -37,6 +37,7 @@
 #include "vcl/configsettings.hxx"
 #include "vcl/lazydelete.hxx"
 #include "vcl/embeddedfontshelper.hxx"
+#include "vcl/debugevent.hxx"
 
 #ifdef WNT
 #include <svsys.h>
@@ -287,6 +288,10 @@ bool InitVCL()
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
 
     DBGGUI_INIT_SOLARMUTEXCHECK();
+
+#if OSL_DEBUG_LEVEL > 0
+    DebugEventInjector::getCreate();
+#endif
 
     return true;
 }

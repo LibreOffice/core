@@ -116,6 +116,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/builder \
     vcl/source/window/cmdevt \
     vcl/source/window/cursor \
+    vcl/source/window/debugevent \
     vcl/source/window/decoview \
     vcl/source/window/dialog \
     vcl/source/window/dlgctrl \
