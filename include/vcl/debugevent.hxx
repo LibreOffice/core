@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_VCL_DEBUGEVENT_HXX
+#define INCLUDED_VCL_DEBUGEVENT_HXX
+
+#include <vcl/dllapi.h>
+#include <vcl/timer.hxx>
+#include <sal/types.h>
+#include <vcl/window.hxx>
+
+class VCL_DLLPUBLIC DebugEventInjector : Timer {
+  sal_uInt32 mnEventsLeft;
+  DebugEventInjector( sal_uInt32 nMaxEvents );
+
+  Window *ChooseWindow();
+  void InjectKeyEvent();
+  void InjectMenuEvent();
+  void InjectMouseEvent();
+  void InjectEvent();
+  void InjectKeyNavEdit();
+  virtual void Timeout();
+
+  public:
+     static DebugEventInjector *getCreate();
+};
+
+#endif // INCLUDED_VCL_DEBUGEVENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

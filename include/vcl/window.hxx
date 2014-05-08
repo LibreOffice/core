@@ -1036,6 +1036,9 @@ public:
     bool                IsChild( const Window* pWindow, bool bSystemWindow = false ) const;
     bool                IsWindowOrChild( const Window* pWindow, bool bSystemWindow = false  ) const;
 
+    /// Add all children to @rAllChildren recursively.
+    SAL_DLLPRIVATE void CollectChildren(::std::vector<Window *>& rAllChildren );
+
     void                SetData( void* pNewData );
     void*               GetData() const;
 
