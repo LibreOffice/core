@@ -324,7 +324,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
             // values have to match
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
-                OSL_FAIL( "Gleicher Name in MetaClass : " );
+                OSL_FAIL( "Same Name in MetaClass : " );
                 OSL_FAIL( pS->GetName().getString().getStr() );
                 OSL_FAIL( pS->GetSlotId().getString().getStr() );
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
