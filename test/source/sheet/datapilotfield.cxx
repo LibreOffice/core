@@ -50,7 +50,7 @@ void DataPilotField::testSortInfo()
             && aNewSortInfoValue.Mode == aSortInfoValue.Mode && aNewSortInfoValue.IsAscending == aSortInfoValue.IsAscending);
 
     //setting HasSortInfo only makes sense for false, for true the uno implementation does nothing
-    bool bHasSortInfo;
+    bool bHasSortInfo(false);
     OUString aHasSortInfo("HasSortInfo");
     xValue = xPropSet->getPropertyValue(aHasSortInfo);
     CPPUNIT_ASSERT( xValue >>= bHasSortInfo );
@@ -83,7 +83,7 @@ void DataPilotField::testLayoutInfo()
             aNewLayoutInfoValue.AddEmptyLines == aLayoutInfoValue.AddEmptyLines);
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
-    bool bHasLayoutInfo;
+    bool bHasLayoutInfo(false);
     OUString aHasLayoutInfo("HasLayoutInfo");
     xValue = xPropSet->getPropertyValue(aHasLayoutInfo);
     CPPUNIT_ASSERT( xValue >>= bHasLayoutInfo );
@@ -116,7 +116,7 @@ void DataPilotField::testAutoShowInfo()
             aNewAutoShowInfoValue.IsEnabled == aAutoShowInfoValue.IsEnabled);
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
-    bool bHasAutoShowInfo;
+    bool bHasAutoShowInfo(false);
     OUString aHasAutoShowInfo("HasAutoShowInfo");
     xValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
     CPPUNIT_ASSERT( xValue >>= bHasAutoShowInfo );
@@ -149,7 +149,7 @@ void DataPilotField::testReference()
             && aReferenceValue.ReferenceItemType == aNewReferenceValue.ReferenceItemType);
 
     //setting HasReference only makes sense for false, tor true the uno implementation does nothing
-    bool bHasReference;
+    bool bHasReference(false);
     OUString aHasReference("HasReference");
     xValue = xPropSet->getPropertyValue(aHasReference);
     CPPUNIT_ASSERT( xValue >>= bHasReference );
@@ -169,7 +169,7 @@ void DataPilotField::testIsGroupField()
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     uno::Any xValue;
     OUString aIsGroupField("IsGroupField");
-    bool bIsGroupField;
+    bool bIsGroupField(false);
 
     xValue = xPropSet->getPropertyValue(aIsGroupField);
     CPPUNIT_ASSERT( xValue >>= bIsGroupField);
