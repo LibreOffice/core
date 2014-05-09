@@ -19,21 +19,10 @@
 
 
 #ifdef WNT
-
-#undef WB_LEFT
-#undef WB_RIGHT
-
-#include <tools/presys.h>
-#if defined _MSC_VER
-#pragma warning(push, 1)
+#include <prewin.h>
+#include <postwin.h>
 #endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#include <tools/postsys.h>
 
-#endif
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
