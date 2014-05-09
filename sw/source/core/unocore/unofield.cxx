@@ -837,7 +837,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             }
             aRet <<= aRetSeq;
         }
-        else if(pType)
+        else
         {
             //TODO: Properties fuer die uebrigen Feldtypen einbauen
             sal_uInt16 nMId = GetFieldTypeMId( rPropertyName, *pType );
@@ -869,11 +869,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 if (pStr)
                     aRet <<= *pStr;
             }
-        }
-        else
-        {
-            if(rPropertyName == UNO_NAME_DATA_COMMAND_TYPE)
-                aRet <<= m_pImpl->m_nParam2;
         }
     }
     else
