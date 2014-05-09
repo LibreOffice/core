@@ -790,12 +790,10 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
 
     if (_osl_isFullQualifiedDomainName(he->h_name))
     {
-        cn= (sal_Char *)malloc(strlen (he->h_name) + 1);
+        cn= (sal_Char *)strdup(he->h_name);
         OSL_ASSERT(cn);
         if (cn == NULL)
             return ((oslHostAddr)NULL);
-
-        strcpy(cn, he->h_name);
     }
     else
     {
@@ -889,12 +887,10 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
     if ((pszHostname == NULL) || (pAddr == NULL))
         return ((oslHostAddr)NULL);
 
-    cn = (sal_Char *)malloc(strlen (pszHostname) + 1);
+    cn = (sal_Char *) strdup(pszHostname);
     OSL_ASSERT(cn);
     if (cn == NULL)
         return ((oslHostAddr)NULL);
-
-    strcpy (cn, pszHostname);
 
     pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
     OSL_ASSERT(pHostAddr);

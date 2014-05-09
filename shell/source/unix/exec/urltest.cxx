@@ -47,10 +47,8 @@ int main(int argc, const char *argv[])
 
     // expect urltest.sh beside this binary
     char line[LINE_MAX];
-    size_t len = strlen(argv[0]);
     strcpy( line, argv[0] );
-    strcpy( line + len, ".sh " );
-    len += 4;
+    strcat( line, ".sh " );
 
     unsigned int errors = 0;
 
@@ -69,7 +67,7 @@ int main(int argc, const char *argv[])
         escapeForShell(aBuffer, aURL);
 
         // append encoded URL as (only) parameter to the script
-        strcpy( line + len, aBuffer.getStr() );
+        strcat( line, aBuffer.getStr() );
 
         printf( "Command line: %s\n", line );
 
