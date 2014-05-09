@@ -307,7 +307,7 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
                     <child>
-                      <object class="svxlo-GradientLB" id="gradientslb">
+                      <object class="svxlo-GradientLB" id="gradientslb:border">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="entry_text_column">0</property>
