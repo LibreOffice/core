@@ -1418,8 +1418,8 @@ bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines) const
     }
     else
     {
-        const SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
-        const SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj);
+        const SdrPathObj* pPath = dynamic_cast<const SdrPathObj*>(pObj);
+        const SdrObjCustomShape* pCustomShape = dynamic_cast<const SdrObjCustomShape*>(pObj);
 
         // #i37011#
         if(pPath)
