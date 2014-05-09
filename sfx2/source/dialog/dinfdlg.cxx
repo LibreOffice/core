@@ -2297,7 +2297,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     }
     else if ( sType == CMIS_TYPE_BOOL )
     {
-        Sequence< bool > seqValue;
+        Sequence<sal_Bool> seqValue;
         rAny >>= seqValue;
         sal_Int32 m_nNumValue = seqValue.getLength( );
         for ( sal_Int32 i = 0; i < m_nNumValue; ++i )
@@ -2407,7 +2407,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             }
             else if ( CMIS_TYPE_BOOL == sType )
             {
-                Sequence< bool > seqValue( pLine->m_aYesNos.size( ) );
+                Sequence<sal_Bool> seqValue( pLine->m_aYesNos.size( ) );
                 sal_Int32 k = 0;
                 for ( std::vector< CmisYesNo*>::const_iterator it = pLine->m_aYesNos.begin();
                     it != pLine->m_aYesNos.end(); ++it, ++k)
