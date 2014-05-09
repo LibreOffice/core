@@ -1008,12 +1008,19 @@ void SdDrawDocument::InitLayoutVector()
         const Reference<XDocumentBuilder> xDocBuilder(
             DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
-        // loop over every layout entry in current file
-        const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
-        const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName("layout");
-        const int nElements = layoutlist->getLength();
-        for(int index=0; index < nElements; index++)
-            maLayoutInfo.push_back( layoutlist->item(index) );
+        try
+        {
+            // loop over every layout entry in current file
+            const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
+            const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName("layout");
+            const int nElements = layoutlist->getLength();
+            for(int index=0; index < nElements; index++)
+                maLayoutInfo.push_back( layoutlist->item(index) );
+        }
+        catch (const uno::Exception &)
+        {
+            // skip missing config. files
+        }
     }
 }
 
@@ -1037,12 +1044,19 @@ void SdDrawDocument::InitObjectVector()
         const Reference<XDocumentBuilder> xDocBuilder(
             DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
-        // loop over every object entry in current file
-        const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
-        const Reference<XNodeList> objectlist = xDoc->getElementsByTagName("object");
-        const int nElements = objectlist->getLength();
-        for(int index=0; index < nElements; index++)
-            maPresObjectInfo.push_back( objectlist->item(index) );
+        try
+        {
+            // loop over every object entry in current file
+            const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
+            const Reference<XNodeList> objectlist = xDoc->getElementsByTagName("object");
+            const int nElements = objectlist->getLength();
+            for(int index=0; index < nElements; index++)
+                maPresObjectInfo.push_back( objectlist->item(index) );
+        }
+        catch (const uno::Exception &)
+        {
+            // skip missing config. files
+        }
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
