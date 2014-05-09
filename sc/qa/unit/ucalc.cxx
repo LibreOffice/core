@@ -5176,6 +5176,15 @@ void Test::testNoteBasic()
 {
     m_pDoc->InsertTab(0, "PostIts");
 
+    CPPUNIT_ASSERT(!m_pDoc->HasNotes());
+
+    // Check for note's presence in all tables before inserting any notes.
+    for (SCTAB i = 0; i <= MAXTAB; ++i)
+    {
+        bool bHasNotes = m_pDoc->HasTabNotes(i);
+        CPPUNIT_ASSERT(!bHasNotes);
+    }
+
     ScAddress aAddr(2, 2, 0); // cell C3
     ScPostIt *pNote = m_pDoc->GetOrCreateNote(aAddr);
 
