@@ -80,6 +80,32 @@ Shape3DPropertiesContext::Shape3DPropertiesContext( ContextHandler2Helper& rPare
         mr3DProperties.mnShapeZ = rAttribs.getInteger( XML_z, 0 );
 }
 
+ContextHandlerRef Shape3DPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+{
+    switch( aElementToken )
+    {
+    case A_TOKEN( bevelT ):
+    case A_TOKEN( bevelB ):
+    {
+        BevelProperties aProps;
+        if( rAttribs.hasAttribute( XML_w ) )
+            aProps.mnWidth = rAttribs.getInteger( XML_w, 0 );
+        if( rAttribs.hasAttribute( XML_h ) )
+            aProps.mnHeight = rAttribs.getInteger( XML_h, 0 );
+        if( rAttribs.hasAttribute( XML_prst ) )
+            aProps.mnPreset = rAttribs.getToken( XML_prst, XML_none );
+
+        if( aElementToken == A_TOKEN( bevelT ) )
+            mr3DProperties.maTopBevelProperties.set( aProps );
+        else
+            mr3DProperties.maBottomBevelProperties.set( aProps );
+
+        break;
+    }
+    }
+    return 0;
+}
+
 Scene3DRotationPropertiesContext::Scene3DRotationPropertiesContext( ContextHandler2Helper& rParent, RotationProperties& rRotationProperties ) throw()
 : ContextHandler2( rParent )
 , mrRotationProperties( rRotationProperties )

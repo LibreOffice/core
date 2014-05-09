@@ -171,6 +171,27 @@ OUString Shape3DProperties::getLightRigDirName( sal_Int32 nElement )
     return OUString();
 }
 
+OUString Shape3DProperties::getBevelPresetTypeString( sal_Int32 nType )
+{
+    switch (nType)
+    {
+        case XML_relaxedInset:  return OUString("relaxedInset");
+        case XML_circle:        return OUString("circle");
+        case XML_slope:         return OUString("slope");
+        case XML_cross:         return OUString("cross");
+        case XML_angle:         return OUString("angle");
+        case XML_softRound:     return OUString("softRound");
+        case XML_convex:        return OUString("convex");
+        case XML_coolSlant:     return OUString("coolSlant");
+        case XML_divot:         return OUString("divot");
+        case XML_riblet:        return OUString("riblet");
+        case XML_hardEdge:      return OUString("hardEdge");
+        case XML_artDeco:       return OUString("artDeco");
+    }
+    SAL_WARN( "oox.drawingml", "Shape3DProperties::getBevelPresetTypeString - unexpected token" );
+    return OUString();
+}
+
 css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttributes()
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
@@ -253,9 +274,35 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getLightRigAt
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes()
+css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getBevelAttributes( BevelProperties rProps )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(3);
+    sal_Int32 nSize = 0;
+    if( rProps.mnPreset.has() )
+    {
+        aSeq[nSize].Name = "prst";
+        aSeq[nSize].Value = css::uno::Any( getBevelPresetTypeString( rProps.mnPreset.use() ) );
+        nSize++;
+    }
+    if( rProps.mnWidth.has() )
+    {
+        aSeq[nSize].Name = "w";
+        aSeq[nSize].Value = css::uno::Any( rProps.mnWidth.use() );
+        nSize++;
+    }
+    if( rProps.mnHeight.has() )
+    {
+        aSeq[nSize].Name = "h";
+        aSeq[nSize].Value = css::uno::Any( rProps.mnHeight.use() );
+        nSize++;
+    }
+    aSeq.realloc( nSize );
+    return aSeq;
+}
+
+css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes()
+{
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(5);
     sal_Int32 nSize = 0;
     if( mnExtrusionH.has() )
     {
@@ -273,6 +320,18 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAtt
     {
         aSeq[nSize].Name = "z";
         aSeq[nSize].Value = css::uno::Any( mnShapeZ.use() );
+        nSize++;
+    }
+    if( maTopBevelProperties.has() )
+    {
+        aSeq[nSize].Name = "bevelT";
+        aSeq[nSize].Value = css::uno::Any( getBevelAttributes( maTopBevelProperties.use() ) );
+        nSize++;
+    }
+    if( maBottomBevelProperties.has() )
+    {
+        aSeq[nSize].Name = "bevelB";
+        aSeq[nSize].Value = css::uno::Any( getBevelAttributes( maBottomBevelProperties.use() ) );
         nSize++;
     }
     aSeq.realloc( nSize );

@@ -43,6 +43,13 @@ struct RotationProperties
     OptValue< sal_Int32 > mnRevolution;
 };
 
+struct BevelProperties
+{
+    OptValue< sal_Int32 > mnPreset;
+    OptValue< sal_Int32 > mnWidth;
+    OptValue< sal_Int32 > mnHeight;
+};
+
 struct Shape3DProperties
 {
     OptValue< sal_Int32 > mnPreset;
@@ -57,16 +64,21 @@ struct Shape3DProperties
     OptValue< sal_Int32 > mnContourW;
     OptValue< sal_Int32 > mnShapeZ;
 
+    OptValue< BevelProperties > maTopBevelProperties;
+    OptValue< BevelProperties > maBottomBevelProperties;
+
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const Shape3DProperties& rSourceProps );
 
     OUString            getCameraPrstName( sal_Int32 nElement );
     OUString            getLightRigName( sal_Int32 nElement );
     OUString            getLightRigDirName( sal_Int32 nElement );
+    OUString            getBevelPresetTypeString( sal_Int32 nType );
 
     css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes();
+    css::uno::Sequence< css::beans::PropertyValue > getBevelAttributes( BevelProperties rProps );
 };
 
 

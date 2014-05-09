@@ -2408,6 +2408,9 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     if( aShape3DProps.getLength() == 0 )
         return;
 
+    bool bBevelTPresent = false, bBevelBPresent = false;
+    sax_fastparser::FastAttributeList *aBevelTAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aBevelBAttrList = mpFS->createAttrList();
     sax_fastparser::FastAttributeList *aShape3DAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aShape3DProps.getLength(); ++i )
     {
@@ -2423,10 +2426,59 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
                 nToken = XML_z;
             aShape3DAttrList->add( nToken, OString::number( nVal ).getStr() );
         }
+        if( aShape3DProps[i].Name == "bevelT" || aShape3DProps[i].Name == "bevelB" )
+        {
+            Sequence< PropertyValue > aBevelProps;
+            aShape3DProps[i].Value >>= aBevelProps;
+            if ( aBevelProps.getLength() == 0 )
+                continue;
+
+            sax_fastparser::FastAttributeList *aBevelAttrList = NULL;
+            if( aShape3DProps[i].Name == "bevelT" )
+            {
+                bBevelTPresent = true;
+                aBevelAttrList = aBevelTAttrList;
+            }
+            else
+            {
+                bBevelBPresent = true;
+                aBevelAttrList = aBevelBAttrList;
+            }
+            for( sal_Int32 j=0; j < aBevelProps.getLength(); ++j )
+            {
+                if( aBevelProps[j].Name == "w" || aBevelProps[j].Name == "h" )
+                {
+                    sal_Int32 nVal = 0, nToken = XML_none;
+                    aBevelProps[j].Value >>= nVal;
+                    if( aBevelProps[j].Name == "w" )
+                        nToken = XML_w;
+                    else if( aBevelProps[j].Name == "h" )
+                        nToken = XML_h;
+                    aBevelAttrList->add( nToken, OString::number( nVal ).getStr() );
+                }
+                else  if( aBevelProps[j].Name == "prst" )
+                {
+                    OUString sVal;
+                    aBevelProps[j].Value >>= sVal;
+                    aBevelAttrList->add( XML_prst, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
+
+        }
     }
 
     sax_fastparser::XFastAttributeListRef xAttrList( aShape3DAttrList );
     mpFS->startElementNS( XML_a, XML_sp3d, xAttrList );
+    if( bBevelTPresent )
+    {
+        sax_fastparser::XFastAttributeListRef xBevelAttrList( aBevelTAttrList );
+        mpFS->singleElementNS( XML_a, XML_bevelT, xBevelAttrList );
+    }
+    if( bBevelBPresent )
+    {
+        sax_fastparser::XFastAttributeListRef xBevelAttrList( aBevelBAttrList );
+        mpFS->singleElementNS( XML_a, XML_bevelB, xBevelAttrList );
+    }
     mpFS->endElementNS( XML_a, XML_sp3d );
 }
 

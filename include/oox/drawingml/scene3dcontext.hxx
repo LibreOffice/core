@@ -54,6 +54,8 @@ class Shape3DPropertiesContext : public ::oox::core::ContextHandler2
 public:
     Shape3DPropertiesContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw();
 
+    ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+
 private:
     Shape3DProperties& mr3DProperties;
 };
