@@ -22,48 +22,37 @@
 #include "admininvokationimpl.hxx"
 #include "comphelper/processfactory.hxx"
 
-
 namespace abp
 {
-
-
-
     //= AdminDialogInvokationPage
-
     AdminDialogInvokationPage::AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent )
-        :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_ADMININVOKATION))
-        ,m_aExplanation         (this, ModuleRes(FT_ADMINEXPLANATION))
-        ,m_aInvokeAdminDialog   (this, ModuleRes(PB_INVOKE_ADMIN_DIALOG))
-        ,m_aErrorMessage        (this, ModuleRes(FT_ERROR))
-        ,m_bSuccessfullyExecutedDialog(false)
+        : AddressBookSourcePage(_pParent, "InvokeAdminPage",
+            "modules/sabpilot/ui/invokeadminpage.ui")
+        , m_bSuccessfullyExecutedDialog(false)
     {
-        FreeResource();
-
-        m_aInvokeAdminDialog.SetClickHdl( LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog) );
+        get(m_pInvokeAdminDialog, "settings");
+        get(m_pErrorMessage, "warning");
+        m_pInvokeAdminDialog->SetClickHdl( LINK(this, AdminDialogInvokationPage, OnInvokeAdminDialog) );
     }
-
 
     void AdminDialogInvokationPage::ActivatePage()
     {
         AddressBookSourcePage::ActivatePage();
-        m_aInvokeAdminDialog.GrabFocus();
+        m_pInvokeAdminDialog->GrabFocus();
     }
-
 
     void AdminDialogInvokationPage::implUpdateErrorMessage()
     {
         const bool bIsConnected = getDialog()->getDataSource().isConnected();
-        m_aErrorMessage.Show( !bIsConnected );
+        m_pErrorMessage->Show( !bIsConnected );
     }
-
 
     void AdminDialogInvokationPage::initializePage()
     {
         AddressBookSourcePage::initializePage();
-        m_aErrorMessage.Hide();
+        m_pErrorMessage->Hide();
             // if we're entering this page, we assume we had no connection trial with this data source
     }
-
 
     void AdminDialogInvokationPage::implTryConnect()
     {
@@ -80,12 +69,10 @@ namespace abp
             getDialog()->travelNext();
     }
 
-
     bool AdminDialogInvokationPage::canAdvance() const
     {
         return AddressBookSourcePage::canAdvance() && getDialog()->getDataSource().isConnected();
     }
-
 
     IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, /*NOTINTERESTEDIN*/ )
     {
@@ -99,8 +86,6 @@ namespace abp
         return 0L;
     }
 
-
 }   // namespace abp
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

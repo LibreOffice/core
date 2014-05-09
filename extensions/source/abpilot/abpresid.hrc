@@ -41,15 +41,6 @@
 
 #define RID_DIALOG_END                  RID_DLG_ADDRESSBOOKSOURCEPILOT
 
-
-// tab pages
-
-#define RID_PAGE_ADMININVOKATION        ( RID_PAGE_START +  1 )
-// please adjust RID_PAGE_END (below) when adding new tab pages
-
-#define RID_PAGE_END                    RID_PAGE_ADMININVOKATION
-
-
 // strings
 
 #define RID_STR_DEFAULT_NAME            ( RID_STRING_START +  0 )
@@ -103,9 +94,6 @@
 #if RID_DIALOG_END > RID_ABP_END
     #error "please adjust the resource id ranges!!"
 #endif
-#if RID_PAGE_END > RID_ABP_END
-    #error "please adjust the resource id ranges!!"
-#endif
 #if RID_STRING_END > RID_ABP_END
     #error "please adjust the resource id ranges!!"
 #endif
@@ -126,11 +114,7 @@
 // local resource ids
 #define FL_SEPARATOR            1
 
-#define FT_ADMINEXPLANATION      3
 #define FT_NAME_EXPL             4
-#define FT_ERROR                 5
-
-#define PB_INVOKE_ADMIN_DIALOG  1
 
 #define STR_SELECT_ABTYPE           1
 #define STR_INVOKE_ADMIN_DIALOG     2

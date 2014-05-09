@@ -25,17 +25,12 @@
 
 namespace abp
 {
-
-
-
     //= AdminDialogInvokationPage
-
     class AdminDialogInvokationPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aExplanation;
-        PushButton      m_aInvokeAdminDialog;
-        FixedText       m_aErrorMessage;
+        PushButton* m_pInvokeAdminDialog;
+        FixedText*  m_pErrorMessage;
 
         bool        m_bSuccessfullyExecutedDialog;
 

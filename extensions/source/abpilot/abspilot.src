@@ -58,41 +58,6 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     };
 };
 
-TabPage RID_PAGE_ADMININVOKATION
-{
-    HelpID = "extensions:TabPage:RID_PAGE_ADMININVOKATION";
-    SVLook  = TRUE ;
-    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-
-    FixedText FT_ADMINEXPLANATION
-    {
-        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
-        WordBreak = TRUE;
-
-        Text [ en-US ] = "To set up the new data source, additional information is required.\n\nClick the following button to open another dialog in which you then enter the necessary information.";
-    };
-
-    PushButton PB_INVOKE_ADMIN_DIALOG
-    {
-        HelpID = "extensions:PushButton:RID_PAGE_ADMININVOKATION:PB_INVOKE_ADMIN_DIALOG";
-        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 60 ) ;
-        Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
-
-        Text [ en-US ] = "Settings";
-    };
-
-    FixedText FT_ERROR
-    {
-        Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 48 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
-        WordBreak = TRUE;
-        Hide = TRUE;
-
-        Text [ en-US ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
-    };
-};
-
 ErrorBox RID_ERR_NEEDTYPESELECTION
 {
     Buttons = WB_OK;
