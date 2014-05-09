@@ -42,15 +42,6 @@
 #include <shellapi.h>
 #include <commdlg.h>
 #include <dlgs.h>
-#ifdef USE_TOOLHELP
-#include <tlhelp32.h>
-#endif
-#ifdef USE_IMAGEHLP
-#include <imagehlp.h>
-#endif
-#ifdef INCLUDE_MMSYSTEM
-#include <mmsystem.h>
-#endif
 #ifdef _MSC_VER
 #pragma warning(push, 1)
 #endif
