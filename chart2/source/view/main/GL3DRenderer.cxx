@@ -80,7 +80,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_Polygon3DInfo.normals = NULL;
     m_Polygon3DInfo.lineWidth = 0.001f;
 
-
     m_Extrude3DInfo.lineOnly = false;
     m_Extrude3DInfo.twoSidesLighting = false;
     m_Extrude3DInfo.lineWidth = 0.001f;
@@ -99,6 +98,27 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_CameraInfo.useDefault = true;
     m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
     m_RoundBarMesh.iMeshSizes = 0;
+}
+
+OpenGL3DRenderer::~OpenGL3DRenderer()
+{
+    // delete programs
+    glDeleteProgram(m_CommonProID);
+    glDeleteProgram(m_RenderProID);
+    glDeleteProgram(m_TextProID);
+    glDeleteProgram(m_3DProID);
+
+    // delete buffers
+    glDeleteBuffers(1, &m_CubeVertexBuf);
+    glDeleteBuffers(1, &m_CubeNormalBuf);
+    glDeleteBuffers(1, &m_CubeElementBuf);
+    glDeleteBuffers(1, &m_BoundBox);
+    glDeleteBuffers(1, &m_BoundBoxNormal);
+    glDeleteBuffers(1, &m_CoordinateBuf);
+    glDeleteBuffers(1, &m_TextTexCoordBuf);
+    glDeleteBuffers(1, &m_RenderTexCoordBuf);
+    glDeleteBuffers(1, &m_RenderVertexBuf);
+    glDeleteBuffers(1, &m_3DUBOBuffer);
 }
 
 void OpenGL3DRenderer::LoadShaders()

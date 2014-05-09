@@ -168,6 +168,7 @@ class OpenGL3DRenderer
 {
 public:
     OpenGL3DRenderer();
+    ~OpenGL3DRenderer();
 
     void CreateFrameBufferObj();
     void CreateTextureObj(int,int);
