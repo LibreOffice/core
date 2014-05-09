@@ -1919,10 +1919,7 @@ namespace osl_ThreadData
                 // at first, set the data a value
                 char* pc = new char[2];
                 char m_nData = 'm';
-// LLA: this is a copy functions only and really only for \0 terminated strings
-//      m_nData is not a string, it's a character
-//          strcpy(pc, &m_nData);
-                memcpy(pc, &m_nData, 1);
+                pc[0] = m_nData;
                 pc[1] = '\0';
 
                 myThreadData.setData(pc);
