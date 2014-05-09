@@ -55,6 +55,13 @@ int static checkGLError(const char *file, int line)
 
 #define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__)
 
+GLfloat texCoords[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f
+};
+
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
@@ -92,17 +99,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_CameraInfo.useDefault = true;
     m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
     m_RoundBarMesh.iMeshSizes = 0;
-}
-
-namespace {
-
-GLfloat texCoords[] = {
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f
-};
-
 }
 
 void OpenGL3DRenderer::LoadShaders()
