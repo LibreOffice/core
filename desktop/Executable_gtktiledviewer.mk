@@ -25,6 +25,7 @@ $(eval $(call gb_Executable_use_static_libraries,gtktiledviewer,\
 $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lX11 \
     -lXext \
+    -lXrender \
     -lSM \
     -lICE \
 ))
