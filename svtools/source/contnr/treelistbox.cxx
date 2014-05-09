@@ -3836,7 +3836,7 @@ bool SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
 void SvTreeListBox::EnableList( bool _bEnable )
 {
     // call base class method
-    Window::Enable( _bEnable != false );
+    Window::Enable(_bEnable);
     // then paint immediately
     Paint( Rectangle( Point(), GetSizePixel() ) );
 }

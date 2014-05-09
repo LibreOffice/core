@@ -46,7 +46,7 @@ void SvLBoxButtonData::InitData( bool bImagesFromDefault, bool _bRadioBtn, const
     bDataOk = false;
     eState = SV_BUTTON_UNCHECKED;
     pImpl->bDefaultImages = bImagesFromDefault;
-    pImpl->bShowRadioButton = ( _bRadioBtn != false );
+    pImpl->bShowRadioButton = _bRadioBtn;
 
     if ( bImagesFromDefault )
         SetDefaultImages( pCtrl );

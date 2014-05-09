@@ -1018,12 +1018,12 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
                 case SC_CAT_DELETE_COLS :
                     if ( !(aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL) )
                     {   // Only if not TabDelete
-                        if ( ( bOk = pDoc->CanInsertCol( aRange ) ) != false )
+                        if ( bOk = pDoc->CanInsertCol( aRange ) )
                             bOk = pDoc->InsertCol( aRange );
                     }
                 break;
                 case SC_CAT_DELETE_ROWS :
-                    if ( ( bOk = pDoc->CanInsertRow( aRange ) ) != false )
+                    if ( bOk = pDoc->CanInsertRow( aRange ) )
                         bOk = pDoc->InsertRow( aRange );
                 break;
                 case SC_CAT_DELETE_TABS :
@@ -1031,7 +1031,7 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
                     //TODO: Remember table names?
                     OUString aName;
                     pDoc->CreateValidTabName( aName );
-                    if ( ( bOk = pDoc->ValidNewTabName( aName ) ) != false )
+                    if ( bOk = pDoc->ValidNewTabName( aName ) )
                         bOk = pDoc->InsertTab( aRange.aStart.Tab(), aName );
                 }
                 break;
@@ -4224,7 +4224,7 @@ bool ScChangeTrack::Reject(
                     bOk = Reject( itChangeAction->second, NULL, true ); //! Recursion
             }
         }
-        if ( bOk && (bRejected = pAct->Reject( pDoc )) != false )
+        if ( bOk && (bRejected = pAct->Reject( pDoc )) )
         {
             // pRefDoc NULL := Do not save deleted Cells
             AppendDeleteRange( pAct->GetBigRange().MakeRange(), NULL, (short) 0,
@@ -4337,7 +4337,7 @@ bool ScChangeTrack::Reject(
                 bOk = Reject( itChangeAction->second, NULL, true );//! Recursion
             }
         }
-        if ( bOk && (bRejected = pAct->Reject( pDoc )) != false )
+        if ( bOk && (bRejected = pAct->Reject( pDoc )) )
         {
             ScChangeActionMove* pReject = new ScChangeActionMove(
                 pAct->GetBigRange().MakeRange(),
@@ -4361,7 +4361,7 @@ bool ScChangeTrack::Reject(
             aCell.assign(*pDoc, aRange.aStart);
             pReject->SetOldValue(aCell, pDoc, pDoc);
         }
-        if ( (bRejected = pAct->Reject( pDoc )) != false && !bRecursion )
+        if ( (bRejected = pAct->Reject( pDoc )) && !bRecursion )
         {
             ScCellValue aCell;
             aCell.assign(*pDoc, aRange.aStart);

@@ -144,11 +144,11 @@ public class GlobalFile {
       StringTokenizer st;
       String s;
       boolean start = false;
-      while(inReader.ready()!=false){
+      while(inReader.ready()){
         st = new StringTokenizer(inReader.readLine());
         over:{
         while(!st.hasMoreTokens()){//Justify blank lines.
-          if(inReader.ready()!=false){
+          if(inReader.ready()){
             st = new StringTokenizer(inReader.readLine());
           }else
             break over;

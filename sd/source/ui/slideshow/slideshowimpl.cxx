@@ -1056,7 +1056,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             aProperties.push_back(
                 beans::PropertyValue( "ImageAnimationsAllowed" ,
-                    -1, Any( maPresSettings.mbAnimationAllowed != false ),
+                    -1, Any( maPresSettings.mbAnimationAllowed ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             const bool bZOrderEnabled(
@@ -1068,7 +1068,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             aProperties.push_back(
                 beans::PropertyValue( "ForceManualAdvance" ,
-                    -1, Any( maPresSettings.mbManual != false ),
+                    -1, Any( maPresSettings.mbManual ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             if( mbUsePen )

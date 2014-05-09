@@ -2265,9 +2265,9 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                xSrchDesc->setPropertyValue( "SearchWords", makeAny( pDlg->IsOnlyWholeWords() != false ) );
-                xSrchDesc->setPropertyValue( "SearchCaseSensitive", makeAny( pDlg->IsMarchCase() != false ) );
-                xSrchDesc->setPropertyValue( "SearchBackwards", makeAny( pDlg->IsSearchBackwards() != false ) );
+                xSrchDesc->setPropertyValue( "SearchWords", makeAny(pDlg->IsOnlyWholeWords()) );
+                xSrchDesc->setPropertyValue( "SearchCaseSensitive", makeAny(pDlg->IsMarchCase()) );
+                xSrchDesc->setPropertyValue( "SearchBackwards", makeAny(pDlg->IsSearchBackwards()) );
                 xSrchDesc->setSearchString( sSearchText );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();

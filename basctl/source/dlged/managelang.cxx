@@ -209,10 +209,10 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
     bool bEmpty = ( !nCount ||
                     m_pLanguageLB->GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
     bool bSelect = ( m_pLanguageLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
-    bool bEnable = ( !bEmpty && bSelect != false );
+    bool bEnable = !bEmpty && bSelect;
 
-    m_pDeletePB->Enable( bEnable != false );
-    m_pMakeDefPB->Enable( bEnable != false && nCount > 1 && m_pLanguageLB->GetSelectEntryCount() == 1 );
+    m_pDeletePB->Enable(bEnable);
+    m_pMakeDefPB->Enable(bEnable && nCount > 1 && m_pLanguageLB->GetSelectEntryCount() == 1);
 
     return 1;
 }

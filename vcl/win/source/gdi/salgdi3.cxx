@@ -169,7 +169,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 aCacheFile.WriteInt16(rDFA.GetPitch());
                 aCacheFile.WriteInt16(rDFA.GetWidthType());
                 aCacheFile.WriteInt16(rDFA.GetFamilyType());
-                aCacheFile.WriteInt16(rDFA.IsSymbolFont() != false);
+                aCacheFile.WriteInt16(rDFA.IsSymbolFont());
 
                 write_uInt16_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.GetStyleName(), RTL_TEXTENCODING_UTF8);
 

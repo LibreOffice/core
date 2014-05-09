@@ -2118,11 +2118,11 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             break;
 
         case MYWIN_ITEMID_TIMING:
-            m_bTiming = m_pTool->IsItemChecked(MYWIN_ITEMID_TIMING) != false;
+            m_bTiming = m_pTool->IsItemChecked(MYWIN_ITEMID_TIMING);
             break;
 
         case MYWIN_ITEMID_SORT:
-            m_bSort = m_pTool->IsItemChecked(MYWIN_ITEMID_SORT) != false;
+            m_bSort = m_pTool->IsItemChecked(MYWIN_ITEMID_SORT);
             break;
 
         case MYWIN_ITEMID_FETCHSIZE:

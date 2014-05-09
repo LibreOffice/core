@@ -433,7 +433,7 @@ void Cell::SetModel(SdrModel* pNewModel)
 
 void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 {
-    if( (mnColSpan != nColumnSpan) || (mnRowSpan != nRowSpan) || (mbMerged != false) )
+    if ((mnColSpan != nColumnSpan) || (mnRowSpan != nRowSpan) || mbMerged)
     {
         mnColSpan = nColumnSpan;
         mnRowSpan = nRowSpan;

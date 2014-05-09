@@ -93,7 +93,7 @@ namespace
                                                           const cppcanvas::CanvasSharedPtr& rCanvas )
     {
         // set rIsColorSet and check for true at the same time
-        if( (rIsColorSet=pAct->IsSetting()) != false )
+        if (rIsColorSet = pAct->IsSetting())
         {
             ::Color aColor( pAct->GetColor() );
 

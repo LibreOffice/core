@@ -1992,7 +1992,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     nPrivEntryCount += int(mpCffLocal->mfExpFactor != 0.0);
     nPrivEntryCount += int(mpCffLocal->mnLangGroup != 0);
     nPrivEntryCount += int(mpCffLocal->mnLangGroup == 1);
-    nPrivEntryCount += int(mpCffLocal->mbForceBold != false);
+    nPrivEntryCount += int(mpCffLocal->mbForceBold);
 #endif // IGNORE_HINTS
     // emit the privdict header
     pOut += sprintf( pOut,

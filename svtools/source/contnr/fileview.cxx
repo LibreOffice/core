@@ -545,7 +545,7 @@ inline bool SvtFileView_Impl::EnableNameReplacing( bool bEnable )
 inline void SvtFileView_Impl::EndEditing( bool _bCancel )
 {
     if ( mpView->IsEditingActive() )
-        mpView->EndEditing( _bCancel != false );
+        mpView->EndEditing(_bCancel);
 }
 
 // functions -------------------------------------------------------------

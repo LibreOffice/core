@@ -315,7 +315,7 @@ namespace
     {
         bool bInputRequired = true;
         OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_INPUT_REQUIRED ) >>= bInputRequired );
-        return ( bInputRequired != false );
+        return bInputRequired;
     }
 
     void lcl_resetColumnControlInfo( ColumnInfo& _rColInfo )
