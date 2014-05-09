@@ -117,6 +117,10 @@ struct CameraInfo
     glm::vec3 cameraPos;
     glm::vec3 cameraOrg;
     glm::vec3 cameraUp;
+
+    CameraInfo():
+        useDefault(true),
+        cameraUp(glm::vec3(0, 1, 0)) {}
 };
 
 struct CoordinateAxisInfo
@@ -161,6 +165,14 @@ struct SceneBox
     float minYCoord;
     float maxZCoord;
     float minZCoord;
+
+    SceneBox():
+        maxXCoord(-1*FLT_MAX),
+        minXCoord(FLT_MAX),
+        maxYCoord(-1*FLT_MAX),
+        minYCoord(FLT_MAX),
+        maxZCoord(-1*FLT_MAX),
+        minZCoord(FLT_MAX) {}
 };
 
 

@@ -66,12 +66,16 @@ GLfloat texCoords[] = {
 
 OpenGL3DRenderer::OpenGL3DRenderer():
     m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
+    , m_bCameraUpdated(false)
     , m_TextProID(0)
     , m_TextMatrixID(0)
     , m_TextVertexID(0)
     , m_TextTexCoordID(0)
     , m_TextTexCoordBuf(0)
     , m_TextTexID(0)
+    , m_uiSelectFrameCounter(0)
+    , m_fViewAngle(30.0f)
+    , m_fHeightWeight(1.0f)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -84,19 +88,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_Extrude3DInfo.twoSidesLighting = false;
     m_Extrude3DInfo.lineWidth = 0.001f;
 
-    m_bCameraUpdated = false;
     GetFreq();
-    m_fViewAngle = 30.0f;
-    m_SenceBox.maxXCoord = -1.0 * FLT_MAX;
-    m_SenceBox.minXCoord = FLT_MAX;
-    m_SenceBox.maxYCoord =  -1.0 * FLT_MAX;
-    m_SenceBox.minYCoord = FLT_MAX;
-    m_SenceBox.maxZCoord =  -1.0 * FLT_MAX;
-    m_SenceBox.minZCoord = FLT_MAX;
-    m_uiSelectFrameCounter = 0;
-    m_fHeightWeight = 1.0f;
-    m_CameraInfo.useDefault = true;
-    m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
     m_RoundBarMesh.iMeshSizes = 0;
 }
 
