@@ -3646,7 +3646,10 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
             size_t nPos = 0;
             pData = pItemList->GetData( pData->nId, nPos );
             assert(pData);
-            pData->bIsTemporary = true;
+            if (pData)
+            {
+                pData->bIsTemporary = true;
+            }
             ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED, nPos);
         }
     }
