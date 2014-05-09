@@ -1020,7 +1020,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
                 SvMetaAttribute * pAttr = rBase.GetAttrList()[m];
                 if (aSId.equals(pAttr->GetSlotId().getString()))
                 {
-                    SvMetaSlot* pSlot = PTR_CAST( SvMetaSlot, pAttr );
+                    SvMetaSlot* pSlot = dynamic_cast<SvMetaSlot*>(pAttr);
                     xEnumSlot = pSlot->Clone();
                     break;
                 }
