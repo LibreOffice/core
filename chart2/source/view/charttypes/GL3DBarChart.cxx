@@ -169,6 +169,7 @@ void GL3DBarChart::render()
     {
         itr->render();
     }
+    mpRenderer->ProcessUnrenderedShape();
     mrWindow.getContext()->swapBuffers();
 }
 
