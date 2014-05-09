@@ -47,9 +47,8 @@ int main(int argc, const char *argv[])
 
     // expect urltest.sh beside this binary
     char line[LINE_MAX];
-    size_t len = strlen(argv[0]);
     strcpy( line, argv[0] );
-    strcpy( line + len, ".sh " );
+    strcat( line, ".sh " );
     len += 4;
 
     unsigned int errors = 0;
