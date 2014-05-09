@@ -724,7 +724,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
     {
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 
-        const SdrObjGroup* pObjGroup = PTR_CAST(SdrObjGroup, sdrObj);
+        const SdrObjGroup* pObjGroup = dynamic_cast<const SdrObjGroup*>(sdrObj);
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Choice,
                                                XML_Requires, (pObjGroup ? "wpg" : "wps"),
                                                FSEND);
