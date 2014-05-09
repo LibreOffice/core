@@ -544,7 +544,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             break;
         case PROT_MOVE_FWD: bTmp = true; // NoBreak
         case PROT_MOVE_BWD:
-                            if (nFunction == (bTmp ? 1 : 0))
+                            if (nFunction == (bTmp ? 1U : 0U))
                                 aOut.append("Fwd");
                             else
                                 aOut.append("Bwd");
