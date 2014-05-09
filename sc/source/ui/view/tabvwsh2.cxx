@@ -36,7 +36,6 @@
 #include "fuconuno.hxx"
 #include "fusel.hxx"
 #include "futext.hxx"
-#include "fumark.hxx"
 #include "fuinsert.hxx"
 #include "global.hxx"
 #include "sc.hrc"

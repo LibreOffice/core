@@ -86,7 +86,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/evtlistenerhlp \
     comphelper/source/misc/evtmethodhelper \
     comphelper/source/misc/expandmacro \
-    comphelper/source/misc/ihwrapnofilter \
     comphelper/source/misc/instancelocker \
     comphelper/source/misc/interaction \
     comphelper/source/misc/listenernotification \

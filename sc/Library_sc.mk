@@ -441,7 +441,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/drawfunc/fudraw \
     sc/source/ui/drawfunc/fuins1 \
     sc/source/ui/drawfunc/fuins2 \
-    sc/source/ui/drawfunc/fumark \
     sc/source/ui/drawfunc/fupoor \
     sc/source/ui/drawfunc/fusel \
     sc/source/ui/drawfunc/fusel2 \
