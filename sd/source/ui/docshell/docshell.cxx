@@ -224,17 +224,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             break;
 
             case SID_CLOSEDOC:
-            {
-                bool bDisabled = false;
-                if (bDisabled)
-                {
-                    rSet.DisableItem(SID_CLOSEDOC);
-                }
-                else
-                {
-                    GetSlotState(SID_CLOSEDOC, SfxObjectShell::GetInterface(), &rSet);
-                }
-            }
+                GetSlotState(SID_CLOSEDOC, SfxObjectShell::GetInterface(), &rSet);
             break;
 
             case SID_SEARCH_OPTIONS:
