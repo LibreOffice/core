@@ -205,12 +205,13 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
                     pTextObj->NbcSetStyleSheet(pSheet, false);
 
+                    SdrTextObj* pOutlineObj = NULL;
                     sal_Int32 nChildCount = pOutl->GetChildCount(pPara);
-
                     if (nChildCount > 0)
+                        pOutlineObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
+                    if (pOutlineObj)
                     {
                         // create structuring text objects
-                        SdrTextObj* pOutlineObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
                         OutlinerParaObject* pOPO = pOutl->CreateParaObject( nParaPos, nChildCount);
