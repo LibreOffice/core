@@ -873,7 +873,7 @@ public:
             case sc::element_type_string:
             {
                 if (!bString)
-                    return;
+                    break;
 
                 sc::string_block::const_iterator it = sc::string_block::begin(*node.data);
                 std::advance(it, nOffset);
@@ -897,7 +897,7 @@ public:
             case sc::element_type_edittext:
             {
                 if (!bString)
-                    return;
+                    break;
 
                 sc::edittext_block::const_iterator it = sc::edittext_block::begin(*node.data);
                 std::advance(it, nOffset);
