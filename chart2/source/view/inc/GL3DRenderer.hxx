@@ -303,12 +303,6 @@ private:
 
     GLint m_MatrixID;
 
-    GLuint m_TextureObj[2];
-
-    GLuint m_FboID[2];
-
-    GLuint m_RboID[2];
-
     Extrude3DInfo m_Extrude3DInfo;
 
     std::vector <Extrude3DInfo> m_Extrude3DList;

@@ -92,8 +92,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_CameraInfo.useDefault = true;
     m_CameraInfo.cameraUp = glm::vec3(0, 1, 0);
     m_RoundBarMesh.iMeshSizes = 0;
-    m_FboID[0] = 0;
-    m_FboID[1] = 0;
 }
 
 namespace {
@@ -134,60 +132,6 @@ void OpenGL3DRenderer::LoadShaders()
     m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
     printf("m_RenderProID = %d, m_RenderVertexID = %d\n", m_RenderProID, m_RenderVertexID);
     CHECK_GL_ERROR();
-}
-
-void OpenGL3DRenderer::CreateTextureObj(int width, int height)
-{
-    glGenTextures(2, m_TextureObj);
-    for (int i = 0; i < 2; i++)
-    {
-        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-        CHECK_GL_ERROR();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-}
-
-void OpenGL3DRenderer::CreateRenderObj(int width, int height)
-{
-    glGenRenderbuffers(2, m_RboID);
-    for (int i = 0; i < 2; i++)
-    {
-        CHECK_GL_ERROR();
-        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
-        CHECK_GL_ERROR();
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-        CHECK_GL_ERROR();
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        CHECK_GL_ERROR();
-    }
-}
-
-void OpenGL3DRenderer::CreateFrameBufferObj()
-{
-    CreateTextureObj(m_iWidth, m_iHeight);
-    CreateRenderObj(m_iWidth, m_iHeight);
-    // create a framebuffer object, you need to delete them when program exits.
-    glGenFramebuffers(2, m_FboID);
-    glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    for (int i = 0; i < 2; i++)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[i]);
-        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
-        // attach a texture to FBO color attachement point
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[i], 0);
-        glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        // attach a renderbuffer to depth attachment point
-        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[i]);
-        glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    }
 }
 
 void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut)
@@ -1540,13 +1484,6 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     CreateSceneBoxView();
     glViewport(0, 0, m_iWidth, m_iHeight);
     glClearDepth(1.0f);
-#if 1
-    if ((!m_FboID[0]) || (!m_FboID[1]))
-    {
-        CreateFrameBufferObj();
-    }
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
-#endif
     glViewport(0, 0, m_iWidth, m_iHeight);
     glClearColor(0.0, 0.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1558,9 +1495,7 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderTextShape();
     //render the axis
     RenderCoordinateAxis();
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
     glViewport(0, 0, m_iWidth, m_iHeight);
-    RenderTexture(m_TextureObj[0]);
 #if DEBUG_FBO
     OUString aFileName = OUString("D://shaderout_") + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
     OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
@@ -1584,7 +1519,6 @@ sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uIn
 void OpenGL3DRenderer::ProcessPickingBox()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
     glClearDepth(1.0f);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     if(ProcessExtrude3DPickingBox() == 1)
@@ -1592,7 +1526,6 @@ void OpenGL3DRenderer::ProcessPickingBox()
         //the picked object has been processed, return
         return ;
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 int OpenGL3DRenderer::ProcessExtrude3DPickingBox()

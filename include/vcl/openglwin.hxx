@@ -26,6 +26,8 @@ public:
     virtual ~OpenGLWindow();
     OpenGLContext* getContext();
 
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE {}
+
 private:
     boost::scoped_ptr<OpenGLWindowImpl> mpImpl;
 };
