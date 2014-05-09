@@ -30,6 +30,17 @@ typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 
 #define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
 
+#ifdef LOK_USE_UNSTABLE_API
+typedef enum
+{
+  WRITER,
+  SPREADSHEET,
+  PRESENTATION,
+  OTHER
+}
+LibreOfficeKitDocumentType;
+#endif // LOK_USE_UNSTABLE_API
+
 struct _LibreOfficeKit
 {
     LibreOfficeKitClass* pClass;
@@ -60,6 +71,37 @@ struct _LibreOfficeKitDocumentClass
                      const char *pUrl,
                      const char *pFormat,
                      const char *pFilterOptions);
+  int (*saveAsWithOptions) (LibreOfficeKitDocument* pThis,
+                            const char *pUrl,
+                            const char *pFormat,
+                            const char *pFilterOptions);
+#ifdef LOK_USE_UNSTABLE_API
+  LibreOfficeKitDocumentType (*getDocumentType) (LibreOfficeKitDocument* pThis);
+
+  // Part refers to either indivual sheets in a Spreadsheet, or slides
+  // in a Slideshow, and has no relevance for wrtier documents.
+  int (*getNumberOfParts) (LibreOfficeKitDocument* pThis);
+
+  void (*setPart)         (LibreOfficeKitDocument* pThis,
+                           int nPart);
+
+  // pCanvas is a pointer to the appropriate type of graphics object:
+  // Windows: HDC
+  // iOS/OSX: CGContextRef
+  // Unx: A full SystemGraphicsData
+  // (This is as we need multiple pieces of data on Unx -- in the future
+  // it would potentially be best to define our own simple equivalent
+  // structure here which can then be copied into a SystemGraphicsData
+  // within the paintTile implementation.)
+  void (*paintTile)       (LibreOfficeKitDocument* pThis,
+                           void* Canvas,
+                           const int nCanvasWidth,
+                           const int nCanvasHeight,
+                           const int nTilePosX,
+                           const int nTilePosY,
+                           const int nTileWidth,
+                           const int nTileHeight);
+#endif // LOK_USE_UNSTABLE_API
 };
 
 LibreOfficeKit* lok_init (const char* pInstallPath);

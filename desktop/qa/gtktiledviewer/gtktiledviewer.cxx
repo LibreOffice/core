@@ -12,6 +12,7 @@
 
 #include <gtk/gtk.h>
 
+#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
 static int help()

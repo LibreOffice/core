@@ -40,7 +40,37 @@ public:
     {
         return mpDoc->pClass->saveAs(mpDoc, pUrl, pFormat, pFilterOptions);
     }
+
     inline LibreOfficeKitDocument *get() { return mpDoc; }
+
+#ifdef LOK_USE_UNSTABLE_API
+    inline LibreOfficeKitDocumentType getDocumentType()
+    {
+        return mpDoc->pClass->getDocumentType(mpDoc);
+    }
+
+    inline int getNumberOfParts()
+    {
+        return mpDoc->pClass->getNumberOfParts(mpDoc);
+    }
+
+    inline void setPart(int nPart)
+    {
+        mpDoc->pClass->setPart(mpDoc, nPart);
+    }
+
+    inline void paintTile(void* pHandle,
+                          const int nCanvasWidth,
+                          const int nCanvasHeight,
+                          const int nTilePosX,
+                          const int nTilePosY,
+                          const int nTileWidth,
+                          const int nTileHeight)
+    {
+        mpDoc->pClass->paintTile(mpDoc, pHandle, nCanvasWidth, nCanvasHeight,
+                         nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    }
+#endif // LOK_USE_UNSTABLE_API
 };
 
 class Office
