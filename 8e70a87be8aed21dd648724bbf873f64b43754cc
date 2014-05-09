@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_3494de36",
+        "filename": "external/opencollada/StaticLibrary_opencollada_parser.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-05-09T12:30:02Z",
+      "side": 1,
+      "message": "oh that\u0027s the thermo-nuclear approach to warning suppression :) this is likely compiler-specific, does MSVC understand it too?",
+      "revId": "8e70a87be8aed21dd648724bbf873f64b43754cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
