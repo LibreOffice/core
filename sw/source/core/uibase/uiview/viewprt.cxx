@@ -75,7 +75,7 @@ SfxPrinter* SwView::GetPrinter( bool bCreate )
     SfxPrinter *pPrt = pIDDA->getPrinter( bCreate );
     if ( pOld != pPrt )
     {
-        bool bWeb = 0 != PTR_CAST(SwWebView, this);
+        bool bWeb = 0 != dynamic_cast<SwWebView*>(this);
         ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     }
     return pPrt;
