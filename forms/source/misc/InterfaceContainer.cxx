@@ -272,7 +272,7 @@ void OInterfaceContainer::disposing()
     m_aMap.clear();
     m_aItems.clear();
 
-    EventObject aEvt(static_cast<XContainer*>(this));
+    css::lang::EventObject aEvt(static_cast<XContainer*>(this));
     m_aContainerListeners.disposeAndClear(aEvt);
 }
 
@@ -634,7 +634,7 @@ void SAL_CALL OInterfaceContainer::removeContainerListener(const Reference<XCont
 
 // XEventListener
 
-void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw( RuntimeException, std::exception )
+void SAL_CALL OInterfaceContainer::disposing(const css::lang::EventObject& _rSource) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 

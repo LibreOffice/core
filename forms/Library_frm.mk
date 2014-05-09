@@ -16,6 +16,8 @@ $(eval $(call gb_Library_set_include,frm,\
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,frm,$(SRCDIR)/forms/inc/pch/precompiled_frm))
+
 $(eval $(call gb_Library_use_api,frm,\
     offapi \
     oovbaapi \

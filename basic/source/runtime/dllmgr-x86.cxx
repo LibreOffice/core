@@ -20,8 +20,8 @@
 #include <sal/config.h>
 
 #if defined(WNT)
-#include <windows.h>
-#undef GetObject
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
 #include <algorithm>

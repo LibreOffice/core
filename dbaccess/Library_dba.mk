@@ -20,6 +20,8 @@ $(eval $(call gb_Library_add_defs,dba,\
     -DOOO_DLLIMPLEMENTATION_DBA \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,dba,$(SRCDIR)/dbaccess/inc/pch/precompiled_dba))
+
 $(eval $(call gb_Library_use_external,dba,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,dba))

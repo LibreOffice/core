@@ -22,6 +22,8 @@ $(eval $(call gb_Library_set_include,dbtools,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
+#$(eval $(call gb_Library_set_precompiled_header,dbtools,$(SRCDIR)/connectivity/inc/pch/precompiled_dbtools))
+
 $(eval $(call gb_Library_use_external,dbtools,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,dbtools))
