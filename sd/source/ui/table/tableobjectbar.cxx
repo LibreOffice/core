@@ -109,17 +109,8 @@ TableObjectBar::~TableObjectBar()
     SetRepeatTarget( NULL );
 }
 
-
-
 void TableObjectBar::GetState( SfxItemSet& rSet )
 {
-    bool bReadOnly = false;
-
-    if( bReadOnly )
-    {
-        rSet.DisableItem (SID_INSERT_TABLE );
-    }
-
     if( mpView )
     {
         rtl::Reference< sdr::SelectionController > xController( mpView->getSelectionController() );
@@ -129,8 +120,6 @@ void TableObjectBar::GetState( SfxItemSet& rSet )
         }
     }
 }
-
-
 
 void TableObjectBar::GetAttrState( SfxItemSet& rSet )
 {
