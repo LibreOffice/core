@@ -462,7 +462,29 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
     UIElement aToolbarElement = implts_findToolbar( rResourceURL );
     if ( !aToolbarElement.m_xUIElement.is()  )
     {
-        uno::Reference< ui::XUIElement > xUIElement = implts_createElement( rResourceURL );
+        uno::Reference< ui::XUIElement > xUIElement;
+
+        uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
+        aPropSeq[0].Name = "Frame";
+        aPropSeq[0].Value <<= m_xFrame;
+        aPropSeq[1].Name = "Persistent";
+        aPropSeq[1].Value <<= true;
+        uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
+        aReadLock.clear();
+
+        implts_setToolbarCreation( true );
+        try
+        {
+            if ( xUIElementFactory.is() )
+                xUIElement = xUIElementFactory->createUIElement( rResourceURL, aPropSeq );
+        }
+        catch (const container::NoSuchElementException&)
+        {
+        }
+        catch (const lang::IllegalArgumentException&)
+        {
+        }
+        implts_setToolbarCreation( false );
 
         bool bVisible( false );
         bool bFloating( false );
@@ -1372,36 +1394,6 @@ bool ToolbarLayoutManager::implts_isToolbarCreationActive()
 {
     SolarMutexGuard g;
     return m_bToolbarCreation;
-}
-
-uno::Reference< ui::XUIElement > ToolbarLayoutManager::implts_createElement( const OUString& aName )
-{
-    uno::Reference< ui::XUIElement > xUIElement;
-
-    SolarMutexClearableGuard aReadLock;
-    uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = "Frame";
-    aPropSeq[0].Value <<= m_xFrame;
-    aPropSeq[1].Name = "Persistent";
-    aPropSeq[1].Value <<= true;
-    uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
-    aReadLock.clear();
-
-    implts_setToolbarCreation( true );
-    try
-    {
-        if ( xUIElementFactory.is() )
-            xUIElement = xUIElementFactory->createUIElement( aName, aPropSeq );
-    }
-    catch (const container::NoSuchElementException&)
-    {
-    }
-    catch (const lang::IllegalArgumentException&)
-    {
-    }
-    implts_setToolbarCreation( false );
-
-    return xUIElement;
 }
 
 void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno::Reference< awt::XDockableWindow >& rDockWindow )
