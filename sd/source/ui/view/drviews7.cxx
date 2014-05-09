@@ -1395,7 +1395,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         bool bFoundBitmap         = false;
         bool bFoundMetafile       = false;
-        bool bFoundObjNoLine      = false;
         bool bFoundObjNoArea      = false;
         bool bFoundNoGraphicObj = false;
         bool bFoundAny            = false;
@@ -1471,10 +1470,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             // Disable menuitem for area-dialog
             if( bFoundObjNoArea ) // #i25616#
                 rSet.DisableItem( SID_ATTRIBUTES_AREA );
-
-            // Disable menuitem for line-dialog
-            if( bFoundObjNoLine )
-                rSet.DisableItem( SID_ATTRIBUTES_LINE );
 
             if( bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj )    // only Bitmaps marked
                 rSet.DisableItem( SID_CONVERT_TO_BITMAP );
