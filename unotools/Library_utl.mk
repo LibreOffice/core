@@ -26,6 +26,8 @@ $(eval $(call gb_Library_add_defs,utl,\
     -DUNOTOOLS_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,utl,$(SRCDIR)/unotools/inc/pch/precompiled_utl))
+
 $(eval $(call gb_Library_use_sdk_api,utl))
 
 # add libraries to be linked to utl; again these names need to be given as

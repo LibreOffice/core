@@ -30,6 +30,8 @@ $(eval $(call gb_Library_set_include,comphelper,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,comphelper,$(SRCDIR)/comphelper/inc/pch/precompiled_comphelper))
+
 $(eval $(call gb_Library_add_defs,comphelper,\
        -DCOMPHELPER_DLLIMPLEMENTATION \
 ))

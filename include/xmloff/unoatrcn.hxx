@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_XMLOFF_UNOATRCN_HXX
+#define INCLUDED_XMLOFF_UNOATRCN_HXX
+
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
@@ -75,5 +78,7 @@ public:
 
     friend  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SvUnoAttributeContainer_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ) throw( ::com::sun::star::uno::Exception );
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
