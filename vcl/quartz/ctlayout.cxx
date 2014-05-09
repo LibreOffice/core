@@ -175,7 +175,8 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if(rArgs.mpDXArray)
         {
             int nFullPixelWidth = nPixelWidth;
-            nPixelWidth = rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
+            nPixelWidth = mnTrailingSpaceCount == mnCharCount
+                ? 0 : rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
             mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
         }
         else
