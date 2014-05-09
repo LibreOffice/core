@@ -1136,7 +1136,7 @@ OUString EditorWindow::GetActualSubName( sal_uLong nLine )
     for( sal_uInt16 i=0; i < pMethods->Count(); i++ )
     {
         SbxVariable* p = PTR_CAST( SbMethod, pMethods->Get( i ) );
-        SbMethod* pMeth = p ? PTR_CAST( SbMethod, p ) : NULL;
+        SbMethod* pMeth = PTR_CAST( SbMethod, p );
         if( pMeth )
         {
             sal_uInt16 l1,l2;
