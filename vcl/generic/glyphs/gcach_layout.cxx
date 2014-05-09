@@ -27,6 +27,7 @@
 #include <i18nlangtag/mslangid.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <sal/alloca.h>
 #include <rtl/instance.hxx>
@@ -34,15 +35,13 @@
 #include <hb-icu.h>
 #include <hb-ot.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <comphelper/processfactory.hxx>
 
 // layout implementation for ServerFont
-
 ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 :   mrServerFont( rFont )
-{ }
+{
+}
 
 void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 {
@@ -86,12 +85,7 @@ void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     using namespace ::com::sun::star;
 
     if (!mxBreak.is())
-    {
-        uno::Reference< lang::XMultiServiceFactory > xFactory =
-            comphelper::getProcessServiceFactory();
-        mxBreak = uno::Reference< i18n::XBreakIterator >(xFactory->createInstance(
-            "com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY);
-    }
+        mxBreak = vcl::unohelper::CreateBreakIterator();
 
     lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
 
