@@ -19,14 +19,8 @@
 #ifndef DBAUI_WIZARD_PAGES_HRC
 #define DBAUI_WIZARD_PAGES_HRC
 
-
-#define LB_ORG_COLUMN_NAMES     1
 #define LB_NEW_COLUMN_NAMES     2
 
-#define IB_COLUMN_RH                    1
-#define IB_COLUMN_LH                    2
-#define IB_COLUMNS_RH                   3
-#define IB_COLUMNS_LH                   4
 #define PB_AUTO                 5
 #define PB_OK                   6
 #define PB_CANCEL               7
@@ -50,7 +44,6 @@
 #define FT_TABLENAME            4
 #define FT_KEYNAME              5
 
-#define FL_COLUMN_SELECT                1
 #define FL_COLUMN_NAME                  2
 #define FL_AUTO_TYPE                    3
 #define FL_OPTIONS                              5

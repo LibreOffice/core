@@ -33,6 +33,7 @@ namespace dbaui
         bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
 
         OWizardPage( Window* pParent, const ResId& rResId );
+        OWizardPage( Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
 
     public:
         virtual void        Reset ( )           = 0;

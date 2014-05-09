@@ -51,49 +51,60 @@ OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
 {
 }
 
+OWizardPage::OWizardPage(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+    : TabPage(pParent, rID, rUIXMLDescription)
+     ,m_pParent(static_cast<OCopyTableWizard*>(pParent))
+     ,m_bFirstTime(true)
+{
+}
+
 // OWizColumnSelect
 OWizColumnSelect::OWizColumnSelect( Window* pParent)
-    :OWizardPage( pParent, ModuleRes( TAB_WIZ_COLUMN_SELECT ))
-    ,m_flColumns( this, ModuleRes( FL_COLUMN_SELECT ) )
-    ,m_lbOrgColumnNames( this, ModuleRes( LB_ORG_COLUMN_NAMES ) )
-    ,m_ibColumn_RH( this, ModuleRes( IB_COLUMN_RH ) )
-    ,m_ibColumns_RH( this, ModuleRes( IB_COLUMNS_RH ) )
-    ,m_ibColumn_LH( this, ModuleRes( IB_COLUMN_LH ) )
-    ,m_ibColumns_LH( this, ModuleRes( IB_COLUMNS_LH ) )
-    ,m_lbNewColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
+    :OWizardPage( pParent, "ApplyColPage", "dbaccess/ui/applycolpage.ui")
 {
-    m_ibColumn_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_ibColumn_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_ibColumns_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_ibColumns_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    get(m_pOrgColumnNames, "from");
+    get(m_pColumn_RH, "colrh");
+    get(m_pColumns_RH, "colsrh");
+    get(m_pColumn_LH, "collh");
+    get(m_pColumns_LH, "colslh");
+    get(m_pNewColumnNames, "to");
 
-    m_lbOrgColumnNames.EnableMultiSelection(true);
-    m_lbNewColumnNames.EnableMultiSelection(true);
+    Size aSize(approximate_char_width() * 30, GetTextHeight() * 40);
+    m_pOrgColumnNames->set_width_request(aSize.Width());
+    m_pOrgColumnNames->set_height_request(aSize.Height());
+    m_pNewColumnNames->set_width_request(aSize.Width());
+    m_pNewColumnNames->set_height_request(aSize.Height());
 
-    m_lbOrgColumnNames.SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
-    m_lbNewColumnNames.SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
-    FreeResource();
+    m_pColumn_RH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_pColumn_LH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_pColumns_RH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_pColumns_LH->SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+
+    m_pOrgColumnNames->EnableMultiSelection(true);
+    m_pNewColumnNames->EnableMultiSelection(true);
+
+    m_pOrgColumnNames->SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
+    m_pNewColumnNames->SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
 }
 
 OWizColumnSelect::~OWizColumnSelect()
 {
-    while ( m_lbNewColumnNames.GetEntryCount() )
+    while ( m_pNewColumnNames->GetEntryCount() )
     {
-        void* pData = m_lbNewColumnNames.GetEntryData(0);
+        void* pData = m_pNewColumnNames->GetEntryData(0);
         if ( pData )
             delete static_cast<OFieldDescription*>(pData);
 
-        m_lbNewColumnNames.RemoveEntry(0);
+        m_pNewColumnNames->RemoveEntry(0);
     }
-    m_lbNewColumnNames.Clear();
+    m_pNewColumnNames->Clear();
 }
 
 void OWizColumnSelect::Reset()
 {
     // restore original state
-
-    clearListBox(m_lbOrgColumnNames);
-    clearListBox(m_lbNewColumnNames);
+    clearListBox(*m_pOrgColumnNames);
+    clearListBox(*m_pNewColumnNames);
     m_pParent->m_mNameMapping.clear();
 
     // insert the source columns in the left listbox
@@ -103,12 +114,12 @@ void OWizColumnSelect::Reset()
 
     for(;aIter != aEnd;++aIter)
     {
-        sal_uInt16 nPos = m_lbOrgColumnNames.InsertEntry((*aIter)->first);
-        m_lbOrgColumnNames.SetEntryData(nPos,(*aIter)->second);
+        sal_uInt16 nPos = m_pOrgColumnNames->InsertEntry((*aIter)->first);
+        m_pOrgColumnNames->SetEntryData(nPos,(*aIter)->second);
     }
 
-    if(m_lbOrgColumnNames.GetEntryCount())
-        m_lbOrgColumnNames.SelectEntryPos(0);
+    if(m_pOrgColumnNames->GetEntryCount())
+        m_pOrgColumnNames->SelectEntryPos(0);
 
     m_bFirstTime = false;
 }
@@ -119,7 +130,7 @@ void OWizColumnSelect::ActivatePage( )
     if(m_pParent->getDestColumns()->empty())
         Reset();
 
-    clearListBox(m_lbNewColumnNames);
+    clearListBox(*m_pNewColumnNames);
 
     const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
 
@@ -127,13 +138,13 @@ void OWizColumnSelect::ActivatePage( )
     ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
     for(;aIter != aEnd;++aIter)
     {
-        sal_uInt16 nPos = m_lbNewColumnNames.InsertEntry((*aIter)->first);
-        m_lbNewColumnNames.SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
-        m_lbOrgColumnNames.RemoveEntry((*aIter)->first);
+        sal_uInt16 nPos = m_pNewColumnNames->InsertEntry((*aIter)->first);
+        m_pNewColumnNames->SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
+        m_pOrgColumnNames->RemoveEntry((*aIter)->first);
     }
-    m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
-    m_ibColumns_RH.GrabFocus();
+    m_pParent->GetOKButton().Enable(m_pNewColumnNames->GetEntryCount() != 0);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_pNewColumnNames->GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
+    m_pColumns_RH->GrabFocus();
 }
 
 bool OWizColumnSelect::LeavePage()
@@ -141,14 +152,14 @@ bool OWizColumnSelect::LeavePage()
 
     m_pParent->clearDestColumns();
 
-    for(sal_uInt16 i=0 ; i< m_lbNewColumnNames.GetEntryCount();++i)
+    for(sal_uInt16 i=0 ; i< m_pNewColumnNames->GetEntryCount();++i)
     {
-        OFieldDescription* pField = static_cast<OFieldDescription*>(m_lbNewColumnNames.GetEntryData(i));
+        OFieldDescription* pField = static_cast<OFieldDescription*>(m_pNewColumnNames->GetEntryData(i));
         OSL_ENSURE(pField,"The field information can not be null!");
         m_pParent->insertColumn(i,pField);
     }
 
-    clearListBox(m_lbNewColumnNames);
+    clearListBox(*m_pNewColumnNames);
 
     if  (   m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_NEXT
         ||  m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_FINISH
@@ -160,30 +171,30 @@ bool OWizColumnSelect::LeavePage()
 
 IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 {
-    MultiListBox *pLeft = NULL;
-    MultiListBox *pRight = NULL;
+    ListBox *pLeft = NULL;
+    ListBox *pRight = NULL;
     bool bAll = false;
 
-    if(pButton == &m_ibColumn_RH)
+    if (pButton == m_pColumn_RH)
     {
-        pLeft  = &m_lbOrgColumnNames;
-        pRight = &m_lbNewColumnNames;
+        pLeft  = m_pOrgColumnNames;
+        pRight = m_pNewColumnNames;
     }
-    else if(pButton == &m_ibColumn_LH)
+    else if(pButton == m_pColumn_LH)
     {
-        pLeft  = &m_lbNewColumnNames;
-        pRight = &m_lbOrgColumnNames;
+        pLeft  = m_pNewColumnNames;
+        pRight = m_pOrgColumnNames;
     }
-    else if(pButton == &m_ibColumns_RH)
+    else if(pButton == m_pColumns_RH)
     {
-        pLeft  = &m_lbOrgColumnNames;
-        pRight = &m_lbNewColumnNames;
+        pLeft  = m_pOrgColumnNames;
+        pRight = m_pNewColumnNames;
         bAll   = true;
     }
-    else if(pButton == &m_ibColumns_LH)
+    else if(pButton == m_pColumns_LH)
     {
-        pLeft  = &m_lbNewColumnNames;
-        pRight = &m_lbOrgColumnNames;
+        pLeft  = m_pNewColumnNames;
+        pRight = m_pOrgColumnNames;
         bAll   = true;
     }
     // else ????
@@ -215,24 +226,24 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 
     enableButtons();
 
-    if(m_lbOrgColumnNames.GetEntryCount())
-        m_lbOrgColumnNames.SelectEntryPos(0);
+    if(m_pOrgColumnNames->GetEntryCount())
+        m_pOrgColumnNames->SelectEntryPos(0);
 
     return 0;
 }
 
-IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
+IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox *, pListBox )
 {
-    MultiListBox *pLeft,*pRight;
-    if(pListBox == &m_lbOrgColumnNames)
+    ListBox *pLeft,*pRight;
+    if(pListBox == m_pOrgColumnNames)
     {
-        pLeft  = &m_lbOrgColumnNames;
-        pRight = &m_lbNewColumnNames;
+        pLeft  = m_pOrgColumnNames;
+        pRight = m_pNewColumnNames;
     }
     else
     {
-        pRight = &m_lbOrgColumnNames;
-        pLeft  = &m_lbNewColumnNames;
+        pRight = m_pOrgColumnNames;
+        pLeft  = m_pNewColumnNames;
     }
 
     // If database is able to process PrimaryKeys, set PrimaryKey
@@ -253,7 +264,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     return 0;
 }
 
-void OWizColumnSelect::clearListBox(MultiListBox& _rListBox)
+void OWizColumnSelect::clearListBox(ListBox& _rListBox)
 {
     while(_rListBox.GetEntryCount())
         _rListBox.RemoveEntry(0);
@@ -302,7 +313,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
                                     sal_Int32               _nMaxNameLen,
                                     const ::comphelper::UStringMixEqual& _aCase)
 {
-    if(_pRight == &m_lbNewColumnNames)
+    if(_pRight == m_pNewColumnNames)
     {
         // we copy the column into the new format for the dest
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(OUString(_sColumnName))));
@@ -350,7 +361,7 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
 
     // if returning all entries to their original position,
     // then there is no need to adjust the positions.
-    if (m_ibColumns_LH.HasFocus())
+    if (m_pColumns_LH->HasFocus())
         return nAdjustedPos;
 
     sal_uInt16 nCount = _pLeft->GetEntryCount();
@@ -389,7 +400,7 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
 
 void OWizColumnSelect::enableButtons()
 {
-    bool bEntries = m_lbNewColumnNames.GetEntryCount() != 0;
+    bool bEntries = m_pNewColumnNames->GetEntryCount() != 0;
     if(!bEntries)
         m_pParent->m_mNameMapping.clear();
 

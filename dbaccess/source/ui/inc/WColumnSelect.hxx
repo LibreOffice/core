@@ -35,19 +35,17 @@ namespace dbaui
 
     class OWizColumnSelect : public OWizardPage
     {
-
-        FixedLine               m_flColumns;
-        MultiListBox            m_lbOrgColumnNames; // left side
-        ImageButton             m_ibColumn_RH;
-        ImageButton             m_ibColumns_RH;
-        ImageButton             m_ibColumn_LH;
-        ImageButton             m_ibColumns_LH;
-        MultiListBox            m_lbNewColumnNames; // right side
+        ListBox*      m_pOrgColumnNames; // left side
+        PushButton*   m_pColumn_RH;
+        PushButton*   m_pColumns_RH;
+        PushButton*   m_pColumn_LH;
+        PushButton*   m_pColumns_LH;
+        ListBox*      m_pNewColumnNames; // right side
 
         DECL_LINK( ButtonClickHdl, Button * );
-        DECL_LINK( ListDoubleClickHdl, MultiListBox * );
+        DECL_LINK( ListDoubleClickHdl, ListBox * );
 
-        void clearListBox(MultiListBox& _rListBox);
+        void clearListBox(ListBox& _rListBox);
         void fillColumns(       ListBox* pRight,
                                 ::std::vector< OUString> &_rRightColumns);
 
