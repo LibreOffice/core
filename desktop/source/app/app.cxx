@@ -1493,7 +1493,6 @@ int Desktop::Main()
            the main thread is not yet in the event loop.
         */
         Application::GetDefaultDevice();
-        Application::InitAppFontData();
 
 #if HAVE_FEATURE_EXTENSIONS
         // Check if bundled or shared extensions were added /removed

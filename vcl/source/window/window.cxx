@@ -533,6 +533,50 @@ bool Window::HasMirroredGraphics() const
     return pOutDev->OutputDevice::HasMirroredGraphics();
 }
 
+void Window::ImplInitAppFontData( Window* pWindow )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    long nTextHeight = pWindow->GetTextHeight();
+    long nTextWidth = pWindow->approximate_char_width() * 8;
+    long nSymHeight = nTextHeight*4;
+    // Make the basis wider if the font is too narrow
+    // such that the dialog looks symmetrical and does not become too narrow.
+    // Add some extra space when the dialog has the same width,
+    // as a little more space is better.
+    if ( nSymHeight > nTextWidth )
+        nTextWidth = nSymHeight;
+    else if ( nSymHeight+5 > nTextWidth )
+        nTextWidth = nSymHeight+5;
+    pSVData->maGDIData.mnAppFontX = nTextWidth * 10 / 8;
+    pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
+
+    // FIXME: this is currently only on OS X, check with other
+    // platforms
+    if( pSVData->maNWFData.mbNoFocusRects )
+    {
+        // try to find out whether there is a large correction
+        // of control sizes, if yes, make app font scalings larger
+        // so dialog positioning is not completely off
+        ImplControlValue aControlValue;
+        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
+        Rectangle aBoundingRgn( aCtrlRegion );
+        Rectangle aContentRgn( aCtrlRegion );
+        if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                             CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                             aBoundingRgn, aContentRgn ) )
+        {
+            // comment: the magical +6 is for the extra border in bordered
+            // (which is the standard) edit fields
+            if( aContentRgn.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
+                pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
+        }
+    }
+
+    pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
+    if ( pSVData->maAppData.mnDialogScaleX )
+        pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
+}
+
 bool Window::ImplCheckUIFont( const Font& rFont )
 {
     if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
@@ -1153,6 +1197,10 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     }
 
     ImplUpdatePos();
+
+    // calculate app font res (except for the Intro Window or the default window)
+    if ( mpWindowImpl->mbFrame && !pSVData->maGDIData.mnAppFontX && ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN)) )
+        ImplInitAppFontData( this );
 
     if ( GetAccessibleParentWindow()  && GetParent() != Application::GetDefDialogParent() )
         GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
