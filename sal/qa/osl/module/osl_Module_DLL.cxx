@@ -27,9 +27,9 @@
 // But we instatiate a test plugin to fake the build process.
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL firstfunc( sal_Bool )
 {
-   return ( bRes = sal_True );
+   return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
