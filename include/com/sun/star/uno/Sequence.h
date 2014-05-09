@@ -248,6 +248,12 @@ public:
         { return _pSequence; }
 };
 
+// Find uses of illegal Sequence<bool> (instead of Sequence<sal_Bool>) during
+// compilation:
+template<> class Sequence<bool> {
+    Sequence(Sequence<bool> const &) SAL_DELETED_FUNCTION;
+};
+
 /** Creates a UNO byte sequence from a SAL byte sequence.
 
     @param rByteSequence a byte sequence
