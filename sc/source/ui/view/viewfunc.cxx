@@ -76,6 +76,7 @@
 #include "cellsuno.hxx"
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
+#include <boost/scoped_ptr.hpp>
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
@@ -625,7 +626,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         bool bSimple = false;
         bool bCommon = false;
-        ScPatternAttr* pCellAttrs = NULL;
+        boost::scoped_ptr<ScPatternAttr> pCellAttrs;
         OUString aString;
 
         const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -650,7 +651,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             if (bCommon)                // attribute for tab
             {
-                pCellAttrs = new ScPatternAttr( *pOldPattern );
+                pCellAttrs.reset(new ScPatternAttr( *pOldPattern ));
                 pCellAttrs->GetFromEditItemSet( &aAttrTester.GetAttribs() );
                 //! remove common attributes from EditEngine?
             }
@@ -726,8 +727,6 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             aModificator.SetDocumentModified();
         }
         lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
-
-        delete pCellAttrs;
     }
     else
     {
@@ -1207,7 +1206,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         }
 
         aChangeRanges.Append(aPos);
-        ScPatternAttr* pOldPat = new ScPatternAttr(*pDoc->GetPattern( nCol, nRow, nTab ));
+        boost::scoped_ptr<ScPatternAttr> pOldPat(new ScPatternAttr(*pDoc->GetPattern( nCol, nRow, nTab )));
 
         pDoc->ApplyPattern( nCol, nRow, nTab, rAttr );
 
@@ -1216,11 +1215,11 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         if (bRecord)
         {
             ScUndoCursorAttr* pUndo = new ScUndoCursorAttr(
-                pDocSh, nCol, nRow, nTab, pOldPat, pNewPat, &rAttr, false );
+                pDocSh, nCol, nRow, nTab, pOldPat.get(), pNewPat, &rAttr, false );
             pUndo->SetEditData(pOldEditData, pNewEditData);
             pDocSh->GetUndoManager()->AddUndoAction(pUndo);
         }
-        delete pOldPat;     // is copied in undo (Pool)
+        pOldPat.reset();     // is copied in undo (Pool)
 
         pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
         pDocSh->UpdateOle(GetViewData());

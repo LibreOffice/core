@@ -92,7 +92,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         const bool bRecord (pDoc->IsUndoEnabled());
 
         const ScPatternAttr* pPattern = pDoc->GetPattern( nStartCol, nStartRow, nTab );
-        ScTabEditEngine* pEngine = new ScTabEditEngine( *pPattern, pDoc->GetEnginePool() );
+        boost::scoped_ptr<ScTabEditEngine> pEngine(new ScTabEditEngine( *pPattern, pDoc->GetEnginePool() ));
         pEngine->EnableUndo( false );
 
         Window* pActWin = GetActiveWin();
@@ -100,7 +100,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         {
             pEngine->SetPaperSize(Size(100000,100000));
             Window aWin( pActWin );
-            EditView aEditView( pEngine, &aWin );
+            EditView aEditView( pEngine.get(), &aWin );
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 
             // same method now for clipboard or drag&drop
@@ -152,7 +152,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             }
         }
 
-        delete pEngine;
+        pEngine.reset();
 
         ShowAllCursors();
     }
@@ -495,23 +495,23 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
 
     // *** create and init the edit engine *** --------------------------------
 
-    ScConversionEngineBase* pEngine = NULL;
+    boost::scoped_ptr<ScConversionEngineBase> pEngine;
     switch( rConvParam.GetType() )
     {
         case SC_CONVERSION_SPELLCHECK:
-            pEngine = new ScSpellingEngine(
-                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, LinguMgr::GetSpellChecker() );
+            pEngine.reset(new ScSpellingEngine(
+                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, LinguMgr::GetSpellChecker() ));
         break;
         case SC_CONVERSION_HANGULHANJA:
         case SC_CONVERSION_CHINESE_TRANSL:
-            pEngine = new ScTextConversionEngine(
-                pDoc->GetEnginePool(), rViewData, rConvParam, pUndoDoc, pRedoDoc );
+            pEngine.reset(new ScTextConversionEngine(
+                pDoc->GetEnginePool(), rViewData, rConvParam, pUndoDoc, pRedoDoc ));
         break;
         default:
             OSL_FAIL( "ScViewFunc::DoSheetConversion - unknown conversion type" );
     }
 
-    MakeEditView( pEngine, nCol, nRow );
+    MakeEditView( pEngine.get(), nCol, nRow );
     pEngine->SetRefDevice( rViewData.GetActiveWin() );
                                         // dummy Zelle simulieren:
     pEditView = rViewData.GetEditView( rViewData.GetActivePart() );
@@ -558,7 +558,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
 
     rViewData.SetSpellingView( NULL );
     KillEditView(true);
-    delete pEngine;
+    pEngine.reset();
     pDocSh->PostPaintGridAll();
     rViewData.GetViewShell()->UpdateInputHandler();
     pDoc->EnableIdle(bOldEnabled);

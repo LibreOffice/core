@@ -67,6 +67,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dbaexchange.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -139,7 +140,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                     ScMarkData aSrcMark;
                     aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
-                    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+                    boost::scoped_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
@@ -151,15 +152,14 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         nFirstRow = nLastRow = 0;
                     }
                     ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
-                    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSrcMark);
+                    pSrcDoc->CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 
                     SetCursor( nPosX, nPosY );
                     Unmark();
-                    PasteFromClip( IDF_ALL, pClipDoc,
+                    PasteFromClip( IDF_ALL, pClipDoc.get(),
                                     PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
                                     bAllowDialogs );
-                    delete pClipDoc;
                     bRet = true;
                 }
 
@@ -333,9 +333,9 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     ScImportStringStream aStrm( aStr);
                     ScAbstractDialogFactory* pFact =
                         ScAbstractDialogFactory::Create();
-                    AbstractScImportAsciiDlg *pDlg =
+                    boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(
                         pFact->CreateScImportAsciiDlg( NULL, OUString(), &aStrm,
-                                SC_PASTETEXT);
+                                                       SC_PASTETEXT));
 
                     if (pDlg->Execute() == RET_OK)
                     {
@@ -356,7 +356,6 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         bRet = true;
                         // Yes, no failure, don't raise a "couldn't paste"
                         // dialog if user cancelled.
-                    delete pDlg;
                 }
                 else
                     bRet = aObj.ImportString( aStr, nFormatId );
@@ -491,13 +490,13 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
             ScDocShellRef aDragShellRef( new ScDocShell );
             aDragShellRef->DoInitNew(NULL);
-            FmFormModel* pModel = new FmFormModel( aPath, NULL, aDragShellRef );
+            boost::scoped_ptr<FmFormModel> pModel(new FmFormModel( aPath, NULL, aDragShellRef ));
 
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);
 
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
-            SvxDrawingLayerImport( pModel, xInputStream );
+            SvxDrawingLayerImport( pModel.get(), xInputStream );
 
             // set everything to right layer:
             sal_uLong nObjCount = 0;
@@ -519,8 +518,8 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 nObjCount += pPage->GetObjCount();          // count group object only once
             }
 
-            PasteDraw( aPos, pModel, (nObjCount > 1) );     // grouped if more than 1 object
-            delete pModel;
+            PasteDraw( aPos, pModel.get(), (nObjCount > 1) );     // grouped if more than 1 object
+            pModel.reset();
             aDragShellRef->DoClose();
             bRet = true;
         }
