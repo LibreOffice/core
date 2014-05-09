@@ -28,6 +28,17 @@ struct _LibreOffice
   char*                (*getError)      (LibreOffice *pThis);
 };
 
+#ifdef LLO_USE_UNSTABLE_API
+typedef enum
+{
+    WRITER,
+    SPREADSHEET,
+    PRESENTATION,
+    OTHER
+}
+LibreOfficeDocumentType;
+#endif // LLO_USE_UNSTABLE_API
+
 struct _LibreOfficeDocument
 {
   int  nSize;
@@ -40,6 +51,34 @@ struct _LibreOfficeDocument
                             const char *pUrl,
                             const char *pFormat,
                             const char *pFilterOptions);
+
+#ifdef LLO_USE_UNSTABLE_API
+  LibreOfficeDocumentType (*getDocumentType)    (LibreOfficeDocument* pThis);
+
+  // Part refers to either indivual sheets in a Spreadsheet, or slides
+  // in a Slideshow, and has no relevance for wrtier documents.
+  int (*getNumberOfParts)    (LibreOfficeDocument* pThis);
+
+  void (*setPart)            (LibreOfficeDocument* pThis,
+                              int nPart);
+
+  // pCanvas is a pointer to the appropriate type of graphics object:
+  // Windows: HDC
+  // iOS/OSX: CGContextRef
+  // Unx:     A full SystemGraphicsData
+  // (This is as we need multiple pieces of data on Unx -- in the future
+  // it would potentially be best to define our own simple equivalent
+  // structure here which can then be copied into a SystemGraphicsData
+  // within the paintTile implementation.)
+  void (*paintTile)  (LibreOfficeDocument* pThis,
+                     void* Canvas,
+                     const int nCanvasWidth,
+                     const int nCanvasHeight,
+                     const int nTilePosX,
+                     const int nTilePosY,
+                     const int nTileWidth,
+                     const int nTileHeight);
+#endif // LLO_USE_UNSTABLE_API
 };
 
 LibreOffice* lo_init (const char* pInstallPath);

@@ -14,6 +14,7 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     -I$(SRCDIR)/desktop/inc \
     -I$(SRCDIR)/desktop/source/inc \
     -I$(SRCDIR)/desktop/source/deployment/inc \
+    -I$(SRCDIR)/sw/inc \
 ))
 
 $(eval $(call gb_Library_use_external,sofficeapp,boost_headers))

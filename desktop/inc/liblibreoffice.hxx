@@ -48,6 +48,35 @@ public:
 
         return mpDoc->saveAsWithOptions(mpDoc, pUrl, pFormat, pFilterOptions);
     }
+
+#ifdef LLO_USE_UNSTABLE_API
+    inline LibreOfficeDocumentType getDocumentType()
+    {
+        return mpDoc->getDocumentType(mpDoc);
+    }
+
+    inline int getNumberOfParts()
+    {
+        return mpDoc->getNumberOfParts(mpDoc);
+    }
+
+    inline void setPart(int nPart)
+    {
+        mpDoc->setPart(mpDoc, nPart);
+    }
+
+    inline void paintTile(void* pHandle,
+                          const int nCanvasWidth,
+                          const int nCanvasHeight,
+                          const int nTilePosX,
+                          const int nTilePosY,
+                          const int nTileWidth,
+                          const int nTileHeight)
+    {
+        mpDoc->paintTile(mpDoc, pHandle, nCanvasWidth, nCanvasHeight,
+                         nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    }
+#endif // LLO_USE_UNSTABLE_API
 };
 
 class LibLibreOffice

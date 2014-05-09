@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define LLO_USE_UNSTABLE_API
 #include "liblibreoffice.h"
 
 #include <tools/errinf.hxx>
@@ -36,8 +37,17 @@
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/virdev.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
+
+// Dirty hack -- we go directly into sw -- ideally we need some sort of
+// layer to get the writer shell for tiled rendering
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <viewsh.hxx>
 
 using namespace css;
 using namespace utl;
@@ -147,6 +157,13 @@ extern "C"
 static void doc_destroy(LibreOfficeDocument* pThis);
 static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat);
 static int  doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static LibreOfficeDocumentType doc_getDocumentType(LibreOfficeDocument* pThis);
+static int doc_getNumberOfParts(LibreOfficeDocument* pThis);
+static void doc_setPart(LibreOfficeDocument* pThis, int nPart);
+static void doc_paintTile(LibreOfficeDocument* pThis, void* pCanvas,
+                          const int nCanvasWidth, const int nCanvasHeight,
+                          const int nTilePosX, const int nTilePosY,
+                          const int nTileWidth, const int nTileHeight);
 
 struct LibLODocument_Impl : public _LibreOfficeDocument
 {
@@ -160,6 +177,10 @@ struct LibLODocument_Impl : public _LibreOfficeDocument
         destroy = doc_destroy;
         saveAs = doc_saveAs;
         saveAsWithOptions = doc_saveAsWithOptions;
+        getDocumentType = doc_getDocumentType;
+        getNumberOfParts = doc_getNumberOfParts;
+        setPart = doc_setPart;
+        paintTile = doc_paintTile;
     }
 };
 
@@ -315,6 +336,63 @@ static int doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* sUrl, c
     }
     return false;
 }
+
+static LibreOfficeDocumentType doc_getDocumentType (LibreOfficeDocument* pThis)
+{
+    (void) pThis;
+    return WRITER;
+}
+
+static int doc_getNumberOfParts (LibreOfficeDocument* pThis)
+{
+    (void) pThis;
+    // Assume writer document for now.
+    return 1;
+}
+
+static void doc_setPart(LibreOfficeDocument* pThis, int nPart)
+{
+    (void) pThis;
+    (void) nPart;
+}
+
+static void doc_paintTile (LibreOfficeDocument* pThis, void* pCanvas,
+                           const int nCanvasWidth, const int nCanvasHeight,
+                           const int nTilePosX, const int nTilePosY,
+                           const int nTileWidth, const int nTileHeight)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    // We can't use this on anything but Linux for now, so the following is
+    // likely unusable for now.
+    SystemGraphicsData aSystemGraphicsData;
+#if defined( WNT )
+    aSystemGraphicsData.hDC = *static_cast< HDC* >(pCanvas);
+#elif defined( MACOSX )
+    aSystemGraphicsData.rCGContext = *static_cast< CGContextRef* >(pCanvas);
+#elif defined( ANDROID )
+    assert(false); // We can't use tiled rendering on Android in any case yet...
+#elif defined( IOS )
+    aSystemGraphicsData.rCGContext = *static_cast< CGContextRef* >(pCanvas);
+#elif defined( UNX )
+    aSystemGraphicsData = *static_cast< SystemGraphicsData*> (pCanvas);
+#endif
+
+    Application::AcquireSolarMutex(1);
+    {
+        SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >( pDocument->mxComponent.get() );
+        SwDocShell* pDocShell = pTxtDoc->GetDocShell();
+        SwDoc* pDoc = pDocShell->GetDoc();
+        SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+
+        VirtualDevice aDevice(&aSystemGraphicsData, (sal_uInt16)0);
+        pViewShell->PaintTile(aDevice, nCanvasWidth, nCanvasHeight,
+                                nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    }
+    Application::ReleaseSolarMutex();
+}
+
+
 
 static char* lo_getError (LibreOffice *pThis)
 {
