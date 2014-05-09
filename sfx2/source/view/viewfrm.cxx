@@ -658,11 +658,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( pSalvageItem )
                 {
                     aURL = pSalvageItem->GetValue();
-                    if (pNewSet)
-                    {
-                        pNewSet->ClearItem( SID_ORIGURL );
-                        pNewSet->ClearItem( SID_DOC_SALVAGE );
-                    }
+                    pNewSet->ClearItem( SID_ORIGURL );
+                    pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
