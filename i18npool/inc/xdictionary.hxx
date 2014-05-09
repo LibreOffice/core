@@ -40,17 +40,29 @@ struct WordBreakCache {
     bool equals(const sal_Unicode *str, Boundary& boundary);    // checking cached string
 };
 
+struct xdictionarydata
+{
+    const sal_uInt8  * existMark;
+    const sal_Int16  * index1;
+    const sal_Int32  * index2;
+    const sal_Int32  * lenArray;
+    const sal_Unicode* dataArea;
+    xdictionarydata() :
+        existMark( NULL ),
+        index1( NULL ),
+        index2( NULL ),
+        lenArray( NULL ),
+        dataArea( NULL )
+    {
+    }
+};
+
 class xdictionary
 {
 private:
-    const sal_uInt8  * existMark;
-    const sal_Int16  * index1;
-    const sal_Int32 * index2;
-    const sal_Int32 * lenArray;
-    const sal_Unicode* dataArea;
-#ifndef DISABLE_DYNLOADING
-    oslModule hModule;
-#endif
+    xdictionarydata data;
+    void initDictionaryData(const sal_Char *lang);
+
     Boundary boundary;
     bool japaneseWordBreak;
 

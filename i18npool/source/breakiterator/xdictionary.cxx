@@ -20,6 +20,7 @@
 #include <config_folders.h>
 
 #include <osl/file.h>
+#include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -57,22 +58,9 @@ sal_Unicode* getDataArea_zh();
 #endif
 
 xdictionary::xdictionary(const sal_Char *lang) :
-    existMark( NULL ),
-    index1( NULL ),
-    index2( NULL ),
-    lenArray( NULL ),
-    dataArea( NULL ),
-#ifndef DISABLE_DYNLOADING
-    hModule( NULL ),
-#endif
     boundary(),
     japaneseWordBreak( false )
 {
-    existMark = NULL;
-    index1 = NULL;
-    index2 = NULL;
-    lenArray = NULL;
-    dataArea = NULL;
 
 #ifdef DICT_JA_ZH_IN_DATAFILE
 
@@ -96,53 +84,33 @@ xdictionary::xdictionary(const sal_Char *lang) :
             // We have the offsets to the parts of the file at its end, see gendict.cxx
             sal_Int64 *pEOF = (sal_Int64*)(pMapping + nFileSize);
 
-            existMark = (sal_uInt8*) (pMapping + pEOF[-1]);
-            index2 = (sal_Int32*) (pMapping + pEOF[-2]);
-            index1 = (sal_Int16*) (pMapping + pEOF[-3]);
-            lenArray = (sal_Int32*) (pMapping + pEOF[-4]);
-            dataArea = (sal_Unicode*) (pMapping + pEOF[-5]);
+            data.existMark = (sal_uInt8*) (pMapping + pEOF[-1]);
+            data.index2 = (sal_Int32*) (pMapping + pEOF[-2]);
+            data.index1 = (sal_Int16*) (pMapping + pEOF[-3]);
+            data.lenArray = (sal_Int32*) (pMapping + pEOF[-4]);
+            data.dataArea = (sal_Unicode*) (pMapping + pEOF[-5]);
         }
     }
 
 #elif !defined DISABLE_DYNLOADING
 
-#ifdef SAL_DLLPREFIX
-    OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
-    aBuf.appendAscii( SAL_DLLPREFIX );
-#else
-    OUStringBuffer aBuf( strlen(lang) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
-#endif
-    aBuf.appendAscii( "dict_" ).appendAscii( lang ).appendAscii( SAL_DLLEXTENSION );
-    hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
-    if( hModule ) {
-        sal_IntPtr (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getExistMark").pData );
-        existMark = (sal_uInt8*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex1").pData );
-        index1 = (sal_Int16*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex2").pData );
-        index2 = (sal_Int32*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getLenArray").pData );
-        lenArray = (sal_Int32*) (*func)();
-        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getDataArea").pData );
-        dataArea = (sal_Unicode*) (*func)();
-    }
+    initDictionaryData( lang );
 
 #else
 
     if( strcmp( lang, "ja" ) == 0 ) {
-        existMark = getExistMark_ja();
-        index1 = getIndex1_ja();
-        index2 = getIndex2_ja();
-        lenArray = getLenArray_ja();
-        dataArea = getDataArea_ja();
+        data.existMark = getExistMark_ja();
+        data.index1 = getIndex1_ja();
+        data.index2 = getIndex2_ja();
+        data.lenArray = getLenArray_ja();
+        data.dataArea = getDataArea_ja();
     }
     else if( strcmp( lang, "zh" ) == 0 ) {
-        existMark = getExistMark_zh();
-        index1 = getIndex1_zh();
-        index2 = getIndex2_zh();
-        lenArray = getLenArray_zh();
-        dataArea = getDataArea_zh();
+        data.existMark = getExistMark_zh();
+        data.index1 = getIndex1_zh();
+        data.index2 = getIndex2_zh();
+        data.lenArray = getLenArray_zh();
+        data.dataArea = getDataArea_zh();
     }
 
 #endif
@@ -155,15 +123,65 @@ xdictionary::xdictionary(const sal_Char *lang) :
 
 xdictionary::~xdictionary()
 {
-#ifndef DISABLE_DYNLOADING
-        osl_unloadModule(hModule);
-#endif
-        for (sal_Int32 i = 0; i < CACHE_MAX; i++) {
-            if (cache[i].size > 0) {
-                delete [] cache[i].contents;
-                delete [] cache[i].wordboundary;
-            }
+    for (sal_Int32 i = 0; i < CACHE_MAX; i++) {
+        if (cache[i].size > 0) {
+            delete [] cache[i].contents;
+            delete [] cache[i].wordboundary;
         }
+    }
+}
+
+namespace {
+    struct datacache {
+        oslModule       mhModule;
+        OString         maLang;
+        xdictionarydata maData;
+    };
+}
+
+void xdictionary::initDictionaryData(const sal_Char *pLang)
+{
+    // Global cache, never released for performance
+    static std::vector< datacache > aLoadedCache;
+
+    osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    for( size_t i = 0; i < aLoadedCache.size(); ++i )
+    {
+        if( !strcmp( pLang, aLoadedCache[ i ].maLang.getStr() ) )
+        {
+            data = aLoadedCache[ i ].maData;
+            return;
+        }
+    }
+
+    // otherwise add to the cache, positive or negative.
+    datacache aEntry;
+    aEntry.maLang = OString( pLang, strlen( pLang ) );
+
+#ifdef SAL_DLLPREFIX
+    OUStringBuffer aBuf( strlen( pLang ) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
+    aBuf.appendAscii( SAL_DLLPREFIX );
+#else
+    OUStringBuffer aBuf( strlen( pLang ) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
+#endif
+    aBuf.appendAscii( "dict_" ).appendAscii( pLang ).appendAscii( SAL_DLLEXTENSION );
+    aEntry.mhModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+    if( aEntry.mhModule ) {
+        sal_IntPtr (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getExistMark").pData );
+        aEntry.maData.existMark = (sal_uInt8*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getIndex1").pData );
+        aEntry.maData.index1 = (sal_Int16*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getIndex2").pData );
+        aEntry.maData.index2 = (sal_Int32*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getLenArray").pData );
+        aEntry.maData.lenArray = (sal_Int32*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( aEntry.mhModule, OUString("getDataArea").pData );
+        aEntry.maData.dataArea = (sal_Unicode*) (*func)();
+    }
+
+    data = aEntry.maData;
+    aLoadedCache.push_back( aEntry );
 }
 
 void xdictionary::setJapaneseWordBreak()
@@ -173,8 +191,8 @@ void xdictionary::setJapaneseWordBreak()
 
 bool xdictionary::exists(const sal_uInt32 c)
 {
-    // 0x1FFF is the hardcoded limit in gendict for existMarks
-    bool exist = (existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
+    // 0x1FFF is the hardcoded limit in gendict for data.existMarks
+    bool exist = (data.existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((data.existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
     if (!exist && japaneseWordBreak)
         return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
     else
@@ -183,24 +201,23 @@ bool xdictionary::exists(const sal_uInt32 c)
 
 sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen)
 {
+    if ( !data.index1 ) return 0;
 
-    if ( !index1 ) return 0;
-
-    sal_Int16 idx = index1[str[0] >> 8];
+    sal_Int16 idx = data.index1[str[0] >> 8];
 
     if (idx == 0xFF) return 0;
 
     idx = (idx<<8) | (str[0]&0xff);
 
-    sal_uInt32 begin = index2[idx], end = index2[idx+1];
+    sal_uInt32 begin = data.index2[idx], end = data.index2[idx+1];
 
     if (begin == 0) return 0;
 
     str++; sLen--; // first character is not stored in the dictionary
     for (sal_uInt32 i = end; i > begin; i--) {
-        sal_Int32 len = lenArray[i] - lenArray[i - 1];
+        sal_Int32 len = data.lenArray[i] - data.lenArray[i - 1];
         if (sLen >= len) {
-            const sal_Unicode *dstr = dataArea + lenArray[i-1];
+            const sal_Unicode *dstr = data.dataArea + data.lenArray[i-1];
             sal_Int32 pos = 0;
 
             while (pos < len && dstr[pos] == str[pos]) { pos++; }

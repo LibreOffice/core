@@ -68,6 +68,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
+    void doTestJapanese(uno::Reference< i18n::XBreakIterator > &xBreak);
 };
 
 void TestBreakIterator::testLineBreaking()
@@ -906,7 +907,7 @@ void TestBreakIterator::testKhmer()
 }
 #endif
 
-void TestBreakIterator::testJapanese()
+void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > &xBreak)
 {
     lang::Locale aLocale;
     aLocale.Language = "ja";
@@ -917,7 +918,7 @@ void TestBreakIterator::testJapanese()
         const sal_Unicode JAPANESE[] = { 0x30B7, 0x30E3, 0x30C3, 0x30C8, 0x30C0, 0x30A6, 0x30F3 };
 
         OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
-        aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
+        aBounds = xBreak->getWordBoundary(aTest, 5, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
@@ -927,16 +928,27 @@ void TestBreakIterator::testJapanese()
         const sal_Unicode JAPANESE[] = { 0x9EBB, 0x306E, 0x8449, 0x9EBB, 0x306E, 0x8449 };
 
         OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
-        aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale,
+        aBounds = xBreak->getWordBoundary(aTest, 1, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 3);
 
-        aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
+        aBounds = xBreak->getWordBoundary(aTest, 5, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
         CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 6);
     }
+}
+
+void TestBreakIterator::testJapanese()
+{
+    doTestJapanese(m_xBreak);
+
+    // fdo#78479 - test second / cached instantiation of xdictionary
+    uno::Reference< i18n::XBreakIterator > xTmpBreak(m_xSFactory->createInstance(
+        "com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY_THROW);
+
+    doTestJapanese(xTmpBreak);
 }
 
 void TestBreakIterator::testChinese()
