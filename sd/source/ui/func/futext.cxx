@@ -291,7 +291,6 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         if (rMEvt.IsLeft() || rMEvt.IsRight())
         {
             mpWindow->CaptureMouse();
-            SdrObject* pObj;
             SdrPageView* pPV = mpView->GetSdrPageView();
 
             if (eHit == SDRHIT_TEXTEDIT)
@@ -300,145 +299,134 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                bool bMacro = false;
-
-                if (bMacro && mpView->PickObj(aMDPos,mpView->getHitTolLog(),pObj,pPV,SDRSEARCH_PICKMACRO))
+                if (eHit != SDRHIT_HANDLE)
                 {
-                    // Macro
-                    sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-                    mpView->BegMacroObj(aMDPos,nHitLog,pObj,pPV,mpWindow);
-                }
-                else
-                {
-                    if (eHit != SDRHIT_HANDLE)
+                    // deselect selection
+                    if (!rMEvt.IsShift() && eHit == SDRHIT_TEXTEDITOBJ)
                     {
-                        // deselect selection
-                        if (!rMEvt.IsShift() && eHit == SDRHIT_TEXTEDITOBJ)
-                        {
-                            mpView->UnmarkAll();
-                            mpView->SetDragMode(SDRDRAG_MOVE);
-                        }
+                        mpView->UnmarkAll();
+                        mpView->SetDragMode(SDRDRAG_MOVE);
                     }
+                }
 
-                    if ( aVEvt.eEvent == SDREVENT_EXECUTEURL                   ||
-                         eHit == SDRHIT_HANDLE                                 ||
-                         eHit == SDRHIT_MARKEDOBJECT                           ||
-                         eHit == SDRHIT_TEXTEDITOBJ                            ||
-                         ( eHit == SDRHIT_UNMARKEDOBJECT && bFirstObjCreated &&
-                           !bPermanent ) )
+                if ( aVEvt.eEvent == SDREVENT_EXECUTEURL                   ||
+                     eHit == SDRHIT_HANDLE                                 ||
+                     eHit == SDRHIT_MARKEDOBJECT                           ||
+                     eHit == SDRHIT_TEXTEDITOBJ                            ||
+                     ( eHit == SDRHIT_UNMARKEDOBJECT && bFirstObjCreated &&
+                       !bPermanent ) )
+                {
+                    // Handle, hit marked or umarked object
+                    if (eHit == SDRHIT_TEXTEDITOBJ)
                     {
-                        // Handle, hit marked or umarked object
-                        if (eHit == SDRHIT_TEXTEDITOBJ)
+                        /* hit text of unmarked object:
+                           select object and set to EditMode */
+                        mpView->MarkObj(aVEvt.pRootObj, pPV);
+
+                        if (aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))
                         {
-                            /* hit text of unmarked object:
-                               select object and set to EditMode */
-                            mpView->MarkObj(aVEvt.pRootObj, pPV);
-
-                            if (aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))
-                            {
-                                mxTextObj.reset( static_cast<SdrTextObj*>(aVEvt.pObj) );
-                            }
-
-                            SetInEditMode(rMEvt, true);
+                            mxTextObj.reset( static_cast<SdrTextObj*>(aVEvt.pObj) );
                         }
-                        else if (aVEvt.eEvent == SDREVENT_EXECUTEURL && !rMEvt.IsMod2())
-                        {
-                            // execute URL
-                            mpWindow->ReleaseMouse();
-                            SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
-                            SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
-                            SfxBoolItem aBrowseItem( SID_BROWSE, true );
-                            SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
-                            mpWindow->ReleaseMouse();
 
-                            if (rMEvt.IsMod1())
-                            {
-                                // open in new frame
-                                pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                                            &aStrItem, &aBrowseItem, &aReferer, 0L);
-                            }
-                            else
-                            {
-                                // open in current frame
-                                SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                                pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                                            &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
-                            }
+                        SetInEditMode(rMEvt, true);
+                    }
+                    else if (aVEvt.eEvent == SDREVENT_EXECUTEURL && !rMEvt.IsMod2())
+                    {
+                        // execute URL
+                        mpWindow->ReleaseMouse();
+                        SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
+                        SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
+                        SfxBoolItem aBrowseItem( SID_BROWSE, true );
+                        SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+                        mpWindow->ReleaseMouse();
+
+                        if (rMEvt.IsMod1())
+                        {
+                            // open in new frame
+                            pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                        &aStrItem, &aBrowseItem, &aReferer, 0L);
                         }
                         else
                         {
-                            // drag object or handle
-
-                            // #i78748#
-                            // do the EndTextEdit first, it will delete the handles and force a
-                            // recreation. This will make aVEvt.pHdl to point to a deleted handle,
-                            // thus it is necessary to reset it and to get it again.
-
-                            // #i112855#
-                            // cl: I'm not sure why we checked here also for mxTextObj->GetOutlinerParaObjet
-                            // this caused SdrEndTextEdit() to be called also when not in text editing and
-                            // this does not make sense and caused troubles. (see issue 112855)
-
-                            if( mpView->IsTextEdit() )
-                            {
-                                mpView->SdrEndTextEdit();
-                                bJustEndedEdit = true;
-
-                                if(aVEvt.pHdl)
-                                {
-                                    // force new handle identification, the pointer will be dead here
-                                    // since SdrEndTextEdit has resetted (deleted) the handles.
-                                    aVEvt.pHdl = 0;
-                                    mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-                                }
-                            }
-
-                            if (!aVEvt.pHdl)
-                            {
-                                if( eHit == SDRHIT_UNMARKEDOBJECT )
-                                {
-                                    if ( !rMEvt.IsShift() )
-                                        mpView->UnmarkAll();
-
-                                    mpView->MarkObj(aVEvt.pRootObj, pPV);
-                                }
-
-                                // Drag object
-                                bFirstMouseMove = true;
-                                aDragTimer.Start();
-                            }
-
-
-                            if ( ! rMEvt.IsRight())
-                            {
-                                // we need to pick again since SdrEndTextEdit can rebuild the handles list
-                                eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-                                if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
-                                {
-                                    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                                    mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
-                                }
-                            }
-                            bReturn = true;
+                            // open in current frame
+                            SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
+                            pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                        &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
                         }
-                    }
-                    else if ( nSlotId != SID_TEXTEDIT &&
-                              (bPermanent || !bFirstObjCreated) )
-                    {
-                        // create object
-                        mpView->SetCurrentObj(OBJ_TEXT);
-                        mpView->SetEditMode(SDREDITMODE_CREATE);
-                        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                        mpView->BegCreateObj(aMDPos, (OutputDevice*) NULL, nDrgLog);
                     }
                     else
                     {
-                        // select
-                        if( !rMEvt.IsShift() )
-                            mpView->UnmarkAll();
+                        // drag object or handle
 
-                        mpView->BegMarkObj( aMDPos );
+                        // #i78748#
+                        // do the EndTextEdit first, it will delete the handles and force a
+                        // recreation. This will make aVEvt.pHdl to point to a deleted handle,
+                        // thus it is necessary to reset it and to get it again.
+
+                        // #i112855#
+                        // cl: I'm not sure why we checked here also for mxTextObj->GetOutlinerParaObjet
+                        // this caused SdrEndTextEdit() to be called also when not in text editing and
+                        // this does not make sense and caused troubles. (see issue 112855)
+
+                        if( mpView->IsTextEdit() )
+                        {
+                            mpView->SdrEndTextEdit();
+                            bJustEndedEdit = true;
+
+                            if(aVEvt.pHdl)
+                            {
+                                // force new handle identification, the pointer will be dead here
+                                // since SdrEndTextEdit has resetted (deleted) the handles.
+                                aVEvt.pHdl = 0;
+                                mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                            }
+                        }
+
+                        if (!aVEvt.pHdl)
+                        {
+                            if( eHit == SDRHIT_UNMARKEDOBJECT )
+                            {
+                                if ( !rMEvt.IsShift() )
+                                    mpView->UnmarkAll();
+
+                                mpView->MarkObj(aVEvt.pRootObj, pPV);
+                            }
+
+                            // Drag object
+                            bFirstMouseMove = true;
+                            aDragTimer.Start();
+                        }
+
+
+                        if ( ! rMEvt.IsRight())
+                        {
+                            // we need to pick again since SdrEndTextEdit can rebuild the handles list
+                            eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                            if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
+                            {
+                                sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+                                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                            }
+                        }
+                        bReturn = true;
                     }
+                }
+                else if ( nSlotId != SID_TEXTEDIT &&
+                          (bPermanent || !bFirstObjCreated) )
+                {
+                    // create object
+                    mpView->SetCurrentObj(OBJ_TEXT);
+                    mpView->SetEditMode(SDREDITMODE_CREATE);
+                    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+                    mpView->BegCreateObj(aMDPos, (OutputDevice*) NULL, nDrgLog);
+                }
+                else
+                {
+                    // select
+                    if( !rMEvt.IsShift() )
+                        mpView->UnmarkAll();
+
+                    mpView->BegMarkObj( aMDPos );
                 }
             }
         }
