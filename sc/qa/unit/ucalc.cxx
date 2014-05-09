@@ -5400,6 +5400,61 @@ void Test::testNoteLifeCycle()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testNoteCopyPaste()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
+    // Insert in B2 a text and cell comment.
+    ScAddress aPos(1,1,0);
+    m_pDoc->SetString(aPos, "Text");
+    ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
+    CPPUNIT_ASSERT(pNote);
+    pNote->SetText(aPos, "Note1");
+
+    // Insert in B4 a number and cell comment.
+    aPos.SetRow(3);
+    m_pDoc->SetValue(aPos, 1.1);
+    pNote = m_pDoc->GetOrCreateNote(aPos);
+    CPPUNIT_ASSERT(pNote);
+    pNote->SetText(aPos, "Note2");
+
+    // Copy B2:B4 to clipboard.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScRange aCopyRange(1,1,0,1,3,0);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScClipParam aClipParam(aCopyRange, false);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false, false, true, false);
+
+    // Make sure the notes are in the clipboard.
+    pNote = aClipDoc.GetNote(ScAddress(1,1,0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Note1"), pNote->GetText());
+
+    pNote = aClipDoc.GetNote(ScAddress(1,3,0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Note2"), pNote->GetText());
+
+    // Paste to B6:B8 but only cell notes.
+    ScRange aDestRange(1,5,0,1,7,0);
+    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_NOTE, NULL, &aClipDoc);
+
+    // Make sure the notes are there.
+    pNote = m_pDoc->GetNote(ScAddress(1,5,0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Note1"), pNote->GetText());
+
+    pNote = m_pDoc->GetNote(ScAddress(1,7,0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(OUString("Note2"), pNote->GetText());
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testAreasWithNotes()
 {
     ScDocument* pDoc = getDocShell().GetDocument();
