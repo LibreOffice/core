@@ -582,7 +582,7 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
     pLang = ustr_to_str (pLoc->Language);
     pCountry = ustr_to_str (pLoc->Country);
 
-    nLocSize = strlen (pLang->buffer) + strlen (pCountry->buffer) + 8;
+    nLocSize = strlen (pLang->buffer) + strlen (pCountry->buffer) + 3;
     pLocale = malloc (nLocSize);
     pLocale[0] = '-';
     strcpy (pLocale + 1, pLang->buffer);

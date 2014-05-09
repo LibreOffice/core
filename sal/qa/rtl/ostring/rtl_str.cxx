@@ -711,10 +711,9 @@ namespace rtl_str
         void trim_WithLength_001()
         {
             char const *pStr = "  trim this";
-            sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
+            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
             if (pStr2)
             {
-                strcpy(pStr2, pStr);
                 rtl_str_trim_WithLength( pStr2, 2 );
 
                 CPPUNIT_ASSERT_MESSAGE("string should be empty", strlen(pStr2) == 0);
@@ -725,10 +724,9 @@ namespace rtl_str
         void trim_WithLength_002()
         {
             char const *pStr = "trim this";
-            sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
+            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
             if (pStr2)
             {
-                strcpy(pStr2, pStr);
                 rtl_str_trim_WithLength( pStr2, 5 );
 
                 CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
@@ -739,7 +737,7 @@ namespace rtl_str
         void trim_WithLength_003()
         {
             char const *pStr = "     trim   this";
-            sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
+            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
@@ -753,10 +751,9 @@ namespace rtl_str
         void trim_WithLength_004()
         {
             char const *pStr = "\r\n\t \n\r    trim  \n this";
-            sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
+            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
             if (pStr2)
             {
-                strcpy(pStr2, pStr);
                 rtl_str_trim_WithLength( pStr2, 17 );
 
                 CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
@@ -767,10 +764,9 @@ namespace rtl_str
         void trim_WithLength_005()
         {
             char const *pStr = "\r\n\t \n\r    trim \t this \n\r\t\t     ";
-            sal_Char *pStr2 = (sal_Char*)malloc(strlen(pStr) + 1);
+            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
             if (pStr2)
             {
-                strcpy(pStr2, pStr);
                 rtl_str_trim_WithLength( pStr2, strlen(pStr2) );
 
                 CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 11);
