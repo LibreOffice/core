@@ -39,7 +39,6 @@
 
 using namespace ::std;
 using namespace ::utl;
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

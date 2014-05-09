@@ -18,6 +18,8 @@ $(eval $(call gb_Library_set_include,scui,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,scui,$(SRCDIR)/sc/inc/pch/precompiled_scui))
+
 $(eval $(call gb_Library_use_sdk_api,scui))
 
 $(eval $(call gb_Library_use_externals,scui,\

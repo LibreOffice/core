@@ -35,6 +35,8 @@ $(eval $(call gb_Library_use_custom_headers,basctl,\
 	officecfg/registry \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,basctl,$(SRCDIR)/basctl/inc/pch/precompiled_basctl))
+
 $(eval $(call gb_Library_use_sdk_api,basctl))
 
 $(eval $(call gb_Library_use_libraries,basctl,\

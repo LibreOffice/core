@@ -28,6 +28,8 @@ $(eval $(call gb_Library_set_include,swui,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,swui,$(SRCDIR)/sw/inc/pch/precompiled_swui))
+
 $(eval $(call gb_Library_use_externals,swui,\
 	boost_headers \
 	icu_headers \

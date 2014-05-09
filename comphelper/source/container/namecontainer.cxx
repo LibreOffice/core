@@ -79,7 +79,6 @@ namespace comphelper
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
