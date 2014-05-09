@@ -752,7 +752,11 @@ void SmMathConfig::SaveFontFormatList()
     for (size_t i = 0;  i < nCount;  ++i)
     {
         OUString aFntFmtId( rFntFmtList.GetFontFormatId( i ) );
-        const SmFontFormat aFntFmt( *rFntFmtList.GetFontFormat( aFntFmtId ) );
+        const SmFontFormat *pFntFmt = rFntFmtList.GetFontFormat( aFntFmtId );
+        assert(pFntFmt);
+        if (!pFntFmt)
+            continue;
+        const SmFontFormat aFntFmt( *pFntFmt );
 
         OUString  aNodeNameDelim( FONT_FORMAT_LIST );
         aNodeNameDelim += aDelim;
