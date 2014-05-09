@@ -135,8 +135,10 @@ static char* platformSpecific()
     env = getenv( PATHVARNAME );
     if (env == NULL)
         return NULL;
-    str = (char*) malloc( strlen( env ) + 1 );
-    strcpy( str, env );
+
+    str = strdup( env );
+    if (str == NULL)
+        return NULL;
 
     /* get the tokens separated by ':' */
     dir = strtok( str, PATHSEPARATOR );
@@ -145,6 +147,12 @@ static char* platformSpecific()
     {
         /* construct soffice file path */
         file = (char*) malloc( strlen( dir ) + strlen( APPENDIX ) + 1 );
+        if (file == NULL)
+        {
+            free(str);
+            return NULL;
+        }
+
         strcpy( file, dir );
         strcat( file, APPENDIX );
 

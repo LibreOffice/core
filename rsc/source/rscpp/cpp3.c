@@ -387,8 +387,7 @@ readoptions(char* filename, char*** pfargv)
                     *poptbuff=EOS;
                     if (strlen(optbuff)>0)
                     {
-                        pfa[fargc+1]=malloc(strlen(optbuff)+1);
-                        strcpy(pfa[fargc+1],optbuff);
+                        pfa[fargc+1]=strdup(optbuff);
                         fargc++;
                         pfa[fargc+1]=0;
                         poptbuff=&optbuff[0];
