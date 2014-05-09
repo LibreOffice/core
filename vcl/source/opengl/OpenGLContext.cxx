@@ -509,16 +509,6 @@ bool OpenGLContext::ImplInit()
 
     //rGLRender.InitOpenGL(m_aGLWin);
 
-#ifdef DBG_UTIL
-    // only enable debug output in dbgutil build
-    if( GLEW_ARB_debug_output )
-    {
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(&debug_callback, NULL);
-    }
-
-#endif
-
     static bool bGlewInit = false;
     if(!bGlewInit)
     {
@@ -532,6 +522,16 @@ bool OpenGLContext::ImplInit()
         else
             bGlewInit = true;
     }
+
+#ifdef DBG_UTIL
+    // only enable debug output in dbgutil build
+    if( GLEW_ARB_debug_output )
+    {
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(&debug_callback, NULL);
+    }
+
+#endif
 
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
     mbInitialized = true;
