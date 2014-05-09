@@ -752,16 +752,16 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
     pFSPA->nXaRight     = SVBT32ToUInt32( pFSPAS->nXaRight );
     pFSPA->nYaBottom    = SVBT32ToUInt32( pFSPAS->nYaBottom );
 
-    sal_uInt16 nBits        = SVBT16ToShort( pFSPAS->aBits1 );
+    sal_uInt16 nBits    = SVBT16ToShort( pFSPAS->aBits1 );
 
-    pFSPA->bHdr         = sal_uInt16(0 !=  ( nBits & 0x0001 ));
-    pFSPA->nbx          =       ( nBits & 0x0006 ) >> 1;
-    pFSPA->nby          =       ( nBits & 0x0018 ) >> 3;
-    pFSPA->nwr          =       ( nBits & 0x01E0 ) >> 5;
-    pFSPA->nwrk         =       ( nBits & 0x1E00 ) >> 9;
-    pFSPA->bRcaSimple   = sal_uInt16(0 !=  ( nBits & 0x2000 ));
-    pFSPA->bBelowText   = sal_uInt16(0 !=  ( nBits & 0x4000 ));
-    pFSPA->bAnchorLock  = sal_uInt16(0 !=  ( nBits & 0x8000 ));
+    pFSPA->bHdr         = (0 !=  ( nBits & 0x0001 ));
+    pFSPA->nbx          = ( nBits & 0x0006 ) >> 1;
+    pFSPA->nby          = ( nBits & 0x0018 ) >> 3;
+    pFSPA->nwr          = ( nBits & 0x01E0 ) >> 5;
+    pFSPA->nwrk         = ( nBits & 0x1E00 ) >> 9;
+    pFSPA->bRcaSimple   = (0 !=  ( nBits & 0x2000 ));
+    pFSPA->bBelowText   = (0 !=  ( nBits & 0x4000 ));
+    pFSPA->bAnchorLock  = (0 !=  ( nBits & 0x8000 ));
     pFSPA->nTxbx = SVBT32ToUInt32( pFSPAS->nTxbx );
 }
 

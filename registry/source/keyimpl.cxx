@@ -36,8 +36,8 @@ namespace { static char const VALUE_PREFIX[] = "$VL_"; }
 ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
     : m_refCount(1)
     , m_name(keyName)
-    , m_bDeleted(0)
-    , m_bModified(0)
+    , m_bDeleted(false)
+    , m_bModified(false)
     , m_pRegistry(pReg)
 {
 }

@@ -3922,25 +3922,25 @@ std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx)
     std::vector<sal_uInt8> aRet;
 
     aRet.push_back(60);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fBold) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fBold ? 1 : 0)) );
 
     aRet.push_back(61);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fItalic) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fItalic ? 1 : 0)) );
 
     aRet.push_back(62);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fStrike) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fStrike ? 1 : 0)) );
 
     aRet.push_back(63);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fOutline) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fOutline ? 1 : 0)) );
 
     aRet.push_back(65);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fSmallCaps) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fSmallCaps ? 1 : 0)) );
 
     aRet.push_back(66);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fCaps) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fCaps ? 1 : 0)) );
 
     aRet.push_back(67);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fVanish) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fVanish ? 1 : 0)) );
 
     if (rChpx.fsFtc)
     {
@@ -3988,16 +3988,16 @@ std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx)
     }
 
     aRet.push_back(80);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fBoldBi) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fBoldBi ? 1 : 0)) );
 
     aRet.push_back(81);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fItalicBi) );
+    aRet.push_back( static_cast< sal_uInt8 >(128 + (rChpx.fItalicBi ? 1 : 0)) );
 
     if (rChpx.fsFtcBi)
     {
         aRet.push_back(82);
         SVBT16 a;
-        ShortToSVBT16(rChpx.fsFtcBi, a);
+        ShortToSVBT16(rChpx.fsFtcBi ? 1 : 0, a);
         aRet.push_back(a[1]);
         aRet.push_back(a[0]);
     }

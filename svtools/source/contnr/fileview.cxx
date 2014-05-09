@@ -433,7 +433,7 @@ public:
     bool                    mbAscending     : 1;
     bool                    mbOnlyFolder    : 1;
     bool                    mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
-    sal_Int16               mnSuspendSelectCallback : 1;
+    bool                    mbSuspendSelectCallback : 1;
     bool                    mbIsFirstResort : 1;
 
     IntlWrapper             aIntlWrapper;
@@ -1661,7 +1661,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mbAscending                ( true )
     ,mbOnlyFolder               ( bOnlyFolder )
     ,mbReplaceNames             ( false )
-    ,mnSuspendSelectCallback    ( 0 )
+    ,mbSuspendSelectCallback    ( false )
     ,mbIsFirstResort            ( true )
     ,aIntlWrapper               ( Application::GetSettings().GetLanguageTag() )
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
@@ -1918,7 +1918,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
 IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, void*, _pSource )
 {
-    return mnSuspendSelectCallback ? 0L : m_aSelectHandler.Call( _pSource );
+    return mbSuspendSelectCallback ? 0L : m_aSelectHandler.Call( _pSource );
 }
 
 
@@ -1969,9 +1969,9 @@ void SvtFileView_Impl::OpenFolder_Impl()
 
     InitSelection();
 
-    ++mnSuspendSelectCallback;
+    mbSuspendSelectCallback = true;
     mpView->SetUpdateMode( true );
-    --mnSuspendSelectCallback;
+    mbSuspendSelectCallback = false;
 
     ResetCursor();
 }
@@ -2241,9 +2241,9 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, bool bAscending )
         {
             pEntry = mpView->GetEntry( nPos );
 
-            ++mnSuspendSelectCallback;  // #i15668#
+            mbSuspendSelectCallback = true;  // #i15668#
             mpView->SetCurEntry( pEntry );
-            --mnSuspendSelectCallback;
+            mbSuspendSelectCallback = false;
         }
     }
     else

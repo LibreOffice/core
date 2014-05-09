@@ -53,39 +53,39 @@ inline void Set_UInt32( sal_uInt8 *& p, sal_uInt32 n )
 
 struct Word2CHPX
 {
-    sal_uInt16 fBold:1;
-    sal_uInt16 fItalic:1;
-    sal_uInt16 fRMarkDel:1;
-    sal_uInt16 fOutline:1;
-    sal_uInt16 fFldVanish:1;
-    sal_uInt16 fSmallCaps:1;
-    sal_uInt16 fCaps:1;
-    sal_uInt16 fVanish:1;
-    sal_uInt16 fRMark:1;
-    sal_uInt16 fSpec:1;
-    sal_uInt16 fStrike:1;
-    sal_uInt16 fObj:1;
-    sal_uInt16 fBoldBi:1;
-    sal_uInt16 fItalicBi:1;
-    sal_uInt16 fBiDi:1;
-    sal_uInt16 fDiacUSico:1;
-    sal_uInt16 fsIco:1;
-    sal_uInt16 fsFtc:1;
-    sal_uInt16 fsHps:1;
-    sal_uInt16 fsKul:1;
-    sal_uInt16 fsPos:1;
-    sal_uInt16 fsSpace:1;
-    sal_uInt16 fsLid:1;
-    sal_uInt16 fsIcoBi:1;
-    sal_uInt16 fsFtcBi:1;
-    sal_uInt16 fsHpsBi:1;
-    sal_uInt16 fsLidBi:1;
+    bool fBold:1;
+    bool fItalic:1;
+    bool fRMarkDel:1;
+    bool fOutline:1;
+    bool fFldVanish:1;
+    bool fSmallCaps:1;
+    bool fCaps:1;
+    bool fVanish:1;
+    bool fRMark:1;
+    bool fSpec:1;
+    bool fStrike:1;
+    bool fObj:1;
+    bool fBoldBi:1;
+    bool fItalicBi:1;
+    bool fBiDi:1;
+    bool fDiacUSico:1;
+    bool fsIco:1;
+    bool fsFtc:1;
+    bool fsHps:1;
+    bool fsKul:1;
+    bool fsPos:1;
+    bool fsSpace:1;
+    bool fsLid:1;
+    bool fsIcoBi:1;
+    bool fsFtcBi:1;
+    bool fsHpsBi:1;
+    bool fsLidBi:1;
 
     sal_uInt16 ftc;
     sal_uInt16 hps;
     sal_uInt8 qpsSpace:6;
-    sal_uInt8 fSysVanish:1;
-    sal_uInt8 fNumRun:1;
+    bool      fSysVanish:1;
+    bool      fNumRun:1;
     sal_uInt8 ico:5;
     sal_uInt8 kul:3;
     sal_uInt8 hpsPos;
@@ -98,39 +98,39 @@ struct Word2CHPX
 
     Word2CHPX()
     {
-        fBold = 0;
-        fItalic = 0;
-        fRMarkDel = 0;
-        fOutline = 0;
-        fFldVanish = 0;
-        fSmallCaps = 0;
-        fCaps = 0;
-        fVanish = 0;
-        fRMark = 0;
-        fSpec = 0;
-        fStrike = 0;
-        fObj = 0;
-        fBoldBi = 0;
-        fItalicBi = 0;
-        fBiDi = 0;
-        fDiacUSico = 0;
-        fsIco = 0;
-        fsFtc = 0;
-        fsHps = 0;
-        fsKul = 0;
-        fsPos = 0;
-        fsSpace = 0;
-        fsLid = 0;
-        fsIcoBi = 0;
-        fsFtcBi = 0;
-        fsHpsBi = 0;
-        fsLidBi = 0;
+        fBold = false;
+        fItalic = false;
+        fRMarkDel = false;
+        fOutline = false;
+        fFldVanish = false;
+        fSmallCaps = false;
+        fCaps = false;
+        fVanish = false;
+        fRMark = false;
+        fSpec = false;
+        fStrike = false;
+        fObj = false;
+        fBoldBi = false;
+        fItalicBi = false;
+        fBiDi = false;
+        fDiacUSico = false;
+        fsIco = false;
+        fsFtc = false;
+        fsHps = false;
+        fsKul = false;
+        fsPos = false;
+        fsSpace = false;
+        fsLid = false;
+        fsIcoBi = false;
+        fsFtcBi = false;
+        fsHpsBi = false;
+        fsLidBi = false;
 
         ftc = 0;
         hps = 0;
         qpsSpace = 0;
-        fSysVanish = 0;
-        fNumRun = 0;
+        fSysVanish = false;
+        fNumRun = false;
         ico = 0;
         kul = 0;
         hpsPos = 0;
@@ -165,11 +165,11 @@ struct WW8_STD
 {
     // Base part of STD:
     sal_uInt16  sti : 12;          // invariant style identifier
-    sal_uInt16  fScratch : 1;      // spare field for any temporary use,
+    bool        fScratch : 1;      // spare field for any temporary use,
                                                          // always reset back to zero!
-    sal_uInt16  fInvalHeight : 1;  // PHEs of all text with this style are wrong
-    sal_uInt16  fHasUpe : 1;       // UPEs have been generated
-    sal_uInt16  fMassCopy : 1;     // std has been mass-copied; if unused at
+    bool        fInvalHeight : 1;  // PHEs of all text with this style are wrong
+    bool        fHasUpe : 1;       // UPEs have been generated
+    bool        fMassCopy : 1;     // std has been mass-copied; if unused at
                                                          // save time, style should be deleted
     sal_uInt16  sgc : 4;           // style type code
     sal_uInt16  istdBase : 12;     // base style
@@ -178,9 +178,9 @@ struct WW8_STD
     sal_uInt16  bchUpe;            // offset to end of upx's, start of upe's
     //-------- jetzt neu:
     // ab Ver8 gibts zwei Felder mehr:
-  sal_uInt16    fAutoRedef : 1;    /* auto redefine style when appropriate */
-  sal_uInt16    fHidden : 1;       /* hidden from UI? */
-  sal_uInt16    : 14;              /* unused bits */
+    bool        fAutoRedef : 1;    /* auto redefine style when appropriate */
+    bool        fHidden : 1;       /* hidden from UI? */
+    sal_uInt16    : 14;            /* unused bits */
 
     // Variable length part of STD:
     //  sal_uInt8   stzName[2];        /* sub-names are separated by chDelimStyle
@@ -200,10 +200,10 @@ struct WW8_FFN_BASE     // Font Descriptor
     sal_uInt8    cbFfnM1;        //  0x0     total length of FFN - 1.
 
     sal_uInt8    prg: 2;         //  0x1:03  pitch request
-    sal_uInt8    fTrueType : 1;  //  0x1:04  when 1, font is a TrueType font
-    sal_uInt8    _reserved1 : 1; //  0x1:08  reserved
+    bool         fTrueType : 1;  //  0x1:04  when 1, font is a TrueType font
+    bool         _reserved1 : 1; //  0x1:08  reserved
     sal_uInt8    ff : 3;         //  0x1:70  font family id
-    sal_uInt8    _reserved2 : 1; //  0x1:80  reserved
+    bool         _reserved2 : 1; //  0x1:80  reserved
 
     short wWeight;          //  0x2     base weight of font
     sal_uInt8    chs;            //  0x4     character set identifier
@@ -390,7 +390,7 @@ public:
     //Maps what I think is the language this is to affect to the OOo language
     sal_uInt16 GetConvertedLang() const;
 
-    sal_uInt16 fKerningPunct  : 1;  // true if we're kerning punctuation
+    bool       fKerningPunct  : 1;  // true if we're kerning punctuation
     sal_uInt16 iJustification : 2;  // Kinsoku method of justification:
                                 //  0 = always expand
                                 //  1 = compress punctuation
@@ -399,7 +399,7 @@ public:
                                 //  0 = Level 1
                                 //  1 = Level 2
                                 //  2 = Custom
-    sal_uInt16 f2on1          : 1;  // 2-page-on-1 feature is turned on.
+    bool       f2on1          : 1;  // 2-page-on-1 feature is turned on.
     sal_uInt16 reserved1      : 4;  // in 97 its marked as reserved BUT
     sal_uInt16 reserved2      : 6;  // reserved ?
     //we find that the following applies,
@@ -441,11 +441,11 @@ struct WW8_DOGRID
     short dyGridDisplay:7;  // the number of grid squares (in the y direction)
                                                     // between each gridline drawn on the screen. 0 means
                                                     // don't display any gridlines in the y direction.
-    short fTurnItOff   :1;  // suppress display of gridlines
+    bool  fTurnItOff   :1;  // suppress display of gridlines
     short dxGridDisplay:7;  // the number of grid squares (in the x direction)
                                                     // between each gridline drawn on the screen. 0 means
                                                     // don't display any gridlines in the y direction.
-    short fFollowMargins:1; // if true, the grid will start at the left and top
+    bool  fFollowMargins:1; // if true, the grid will start at the left and top
                                                     // margins and ignore xaGrid and yaGrid.
 };
 
@@ -473,10 +473,10 @@ struct WW8_PIC
     sal_Int16 dxaCropRight; // 0x28 the amount the picture has been cropped on the right in twips.
     sal_Int16 dyaCropBottom;// 0x2a the amount the picture has been cropped on the bottom in twips.
     sal_Int16 brcl : 4;     // 000F Obsolete, superseded by brcTop, etc.  In
-    sal_Int16 fFrameEmpty : 1;  // 0010 picture consists of a single frame
-    sal_Int16 fBitmap : 1;      // 0020 ==1, when picture is just a bitmap
-    sal_Int16 fDrawHatch : 1;   // 0040 ==1, when picture is an active OLE object
-    sal_Int16 fError : 1;       // 0080 ==1, when picture is just an error message
+    bool      fFrameEmpty : 1;  // 0010 picture consists of a single frame
+    bool      fBitmap : 1;      // 0020 ==1, when picture is just a bitmap
+    bool      fDrawHatch : 1;   // 0040 ==1, when picture is an active OLE object
+    bool      fError : 1;       // 0080 ==1, when picture is just an error message
     sal_Int16 bpp : 8;      // FF00 bits per pixel, 0 = unknown
     WW8_BRC rgbrc[4];
 //  BRC brcTop;         // 0x2e specification for border above picture
@@ -535,13 +535,13 @@ struct WW8_TBD
 
 struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend dem Ver8-Format)
 {
-    sal_uInt8 bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
-    sal_uInt8 bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
-    sal_uInt8 bVertical      : 1;// set to 1 when cell has vertical text flow
-    sal_uInt8 bBackward      : 1;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
-    sal_uInt8 bRotateFont    : 1;// set to 1 when cell has rotated characters (i.e. uses @font)
-    sal_uInt8 bVertMerge     : 1;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
-    sal_uInt8 bVertRestart   : 1;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
+    bool bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
+    bool bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
+    bool bVertical      : 1;// set to 1 when cell has vertical text flow
+    bool bBackward      : 1;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
+    bool bRotateFont    : 1;// set to 1 when cell has rotated characters (i.e. uses @font)
+    bool bVertMerge     : 1;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
+    bool bVertRestart   : 1;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
     sal_uInt8 nVertAlign     : 2;// specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary):
                                                     //          0 top
                                                     //          1 center
@@ -905,7 +905,7 @@ public:
     sal_Int32 nYaTop;        //top of rectangle enclosing shape relative to the origin of the shape
     sal_Int32 nXaRight;  //right of rectangle enclosing shape relative to the origin of the shape
     sal_Int32 nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
-    sal_uInt16 bHdr:1;
+    bool      bHdr:1;
     //0001 1 in the undo doc when shape is from the header doc, 0 otherwise (undefined when not in the undo doc)
     sal_uInt16 nbx:2;
     //0006 x position of shape relative to anchor CP
@@ -933,13 +933,13 @@ public:
     //1 wrap only on left
     //2 wrap only on right
     //3 wrap only on largest side
-    sal_uInt16 bRcaSimple:1;
+    bool bRcaSimple:1;
     //2000 when set, temporarily overrides bx, by, forcing the xaLeft, xaRight, yaTop, and yaBottom fields to all be page relative.
-    sal_uInt16 bBelowText:1;
+    bool bBelowText:1;
     //4000
     //1 shape is below text
     //0 shape is above text
-    sal_uInt16 bAnchorLock:1;
+    bool bAnchorLock:1;
     //8000  1 anchor is locked
     //      0 anchor is not locked
     sal_Int32 nTxbx; //count of textboxes in shape (undo doc only)

@@ -5913,7 +5913,7 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs)
 }
 
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
-    : rFib(rFibPara), rSt(rStream), cstd(0), cbSTDBaseInFile(0), fStdStylenamesWritten(0)
+    : rFib(rFibPara), rSt(rStream), cstd(0), cbSTDBaseInFile(0), fStdStylenamesWritten(false)
     , stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0), nVerBuiltInNamesWhenSaved(0)
     , ftcAsci(0), ftcFE(0), ftcOther(0), ftcBi(0)
 {
@@ -6029,11 +6029,11 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             if( 2 > nRead ) break;
             a16Bit = 0;
             rSt.ReadUInt16( a16Bit );
-            pStd->sti          =        a16Bit & 0x0fff  ;
-            pStd->fScratch     = sal_uInt16(0 != ( a16Bit & 0x1000 ));
-            pStd->fInvalHeight = sal_uInt16(0 != ( a16Bit & 0x2000 ));
-            pStd->fHasUpe      = sal_uInt16(0 != ( a16Bit & 0x4000 ));
-            pStd->fMassCopy    = sal_uInt16(0 != ( a16Bit & 0x8000 ));
+            pStd->sti          =         a16Bit & 0x0fff  ;
+            pStd->fScratch     = (0 != ( a16Bit & 0x1000 ));
+            pStd->fInvalHeight = (0 != ( a16Bit & 0x2000 ));
+            pStd->fHasUpe      = (0 != ( a16Bit & 0x4000 ));
+            pStd->fMassCopy    = (0 != ( a16Bit & 0x8000 ));
 
             if( 4 > nRead ) break;
             a16Bit = 0;
@@ -6282,8 +6282,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
             {
                 p->cbFfnM1   = pVer2->cbFfnM1;
 
-                p->prg       =  0;
-                p->fTrueType = 0;
+                p->prg       = 0;
+                p->fTrueType = false;
                 p->ff        = 0;
 
                 p->wWeight   = ( *(((sal_uInt8*)pVer2) + 1) );

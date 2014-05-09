@@ -329,8 +329,8 @@ struct WW8LST   // nur DIE Eintraege, die WIR benoetigen!
                             //   nIStDNil if no style linked
     sal_uInt32 nIdLst;     // Unique List ID
     sal_uInt32 nTplC;      // Unique template code - Was ist das bloss?
-    sal_uInt8 bSimpleList:1; // Flag: Liste hat nur EINEN Level
-    sal_uInt8 bRestartHdn:1; // WW6-Kompatibilitaets-Flag:
+    bool bSimpleList:1; // Flag: Liste hat nur EINEN Level
+    bool bRestartHdn:1; // WW6-Kompatibilitaets-Flag:
                                                         //   true if the list should start numbering over
 };                                                      //   at the beginning of each section
 
@@ -360,12 +360,12 @@ struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
     sal_uInt8   nLenGrpprlChpx; // length, in bytes, of the LVL's grpprlChpx
     sal_uInt8   nLenGrpprlPapx; // length, in bytes, of the LVL's grpprlPapx
     sal_uInt8   nAlign: 2;  // alignment (left, right, centered) of the number
-    sal_uInt8 bLegal:    1;  // egal
-    sal_uInt8 bNoRest:1; // egal
-    sal_uInt8 bV6Prev:1; // Ver6-Compatible: number will include previous levels
-    sal_uInt8 bV6PrSp:1; // Ver6-Compatible: egal
-    sal_uInt8 bV6:       1;  // falls true , beachte die V6-Compatible Eintraege!
-    sal_uInt8   bDummy: 1;  // (macht das Byte voll)
+    bool        bLegal :1;  // egal
+    bool        bNoRest:1;  // egal
+    bool        bV6Prev:1;  // Ver6-Compatible: number will include previous levels
+    bool        bV6PrSp:1;  // Ver6-Compatible: egal
+    bool        bV6    :1;  // falls true , beachte die V6-Compatible Eintraege!
+    bool        bDummy :1;  // (macht das Byte voll)
 
 };
 
@@ -377,11 +377,11 @@ struct WW8LFOLVL
     // dieses Byte ist _absichtlich_ nicht in das folgende Byte hineingepackt   !!
     // (siehe Kommentar unten bei struct WW8LFOInfo)
 
-    sal_uInt8 bStartAt :1;       // true if the start-at value is overridden
-    sal_uInt8 bFormat :1;        // true if the formatting is overridden
+    bool bStartAt :1;       // true if the start-at value is overridden
+    bool bFormat  :1;       // true if the formatting is overridden
 
     WW8LFOLVL() :
-        nStartAt(1), nLevel(0), bStartAt(1), bFormat(0) {}
+        nStartAt(1), nLevel(0), bStartAt(true), bFormat(false) {}
 };
 
 // in den ListenInfos zu speichernde Daten
@@ -394,14 +394,14 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
     WW8aCFmt    aCharFmt;        // Zeichen Style Pointer
 
     SwNumRule*  pNumRule;        // Zeiger auf entsprechende Listenvorlage im Writer
-    sal_uInt32      nIdLst;          // WW8Id dieser Liste
-    sal_uInt8 bSimpleList:1;// Flag, ob diese NumRule nur einen Level verwendet
-    sal_uInt8 bUsedInDoc :1;// Flag, ob diese NumRule im Doc verwendet wird,
+    sal_uInt32  nIdLst;          // WW8Id dieser Liste
+    bool        bSimpleList:1;   // Flag, ob diese NumRule nur einen Level verwendet
+    bool        bUsedInDoc :1;   // Flag, ob diese NumRule im Doc verwendet wird,
                                                      //   oder beim Reader-Ende geloescht werden sollte
 
     WW8LSTInfo(SwNumRule* pNumRule_, WW8LST& aLST)
         : pNumRule(pNumRule_), nIdLst(aLST.nIdLst),
-        bSimpleList(aLST.bSimpleList), bUsedInDoc(0)
+        bSimpleList(aLST.bSimpleList), bUsedInDoc(false)
     {
         memcpy( aIdSty, aLST.aIdSty, sizeof( aIdSty   ));
         memset(&aItemSet, 0,  sizeof( aItemSet ));
@@ -426,12 +426,12 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
     // Byte mit hineinpacken, doch waere das eine ziemliche Fehlerquelle,
     // an dem Tag, wo MS ihr Listenformat auf mehr als 15 Level aufbohren.
 
-    sal_uInt8 bOverride  :1;// Flag, ob die NumRule nicht in maLSTInfos steht,
+    bool bOverride  :1;// Flag, ob die NumRule nicht in maLSTInfos steht,
                                                      //   sondern fuer pLFOInfos NEU angelegt wurde
-    sal_uInt8 bSimpleList:1;// Flag, ob diese NumRule nur einen Level verwendet
-    sal_uInt8 bUsedInDoc :1;// Flag, ob diese NumRule im Doc verwendet wird,
+    bool bSimpleList:1;// Flag, ob diese NumRule nur einen Level verwendet
+    bool bUsedInDoc :1;// Flag, ob diese NumRule im Doc verwendet wird,
                                                      //   oder beim Reader-Ende geloescht werden sollte
-    sal_uInt8 bLSTbUIDSet    :1;// Flag, ob bUsedInDoc in maLSTInfos gesetzt wurde,
+    bool bLSTbUIDSet:1;// Flag, ob bUsedInDoc in maLSTInfos gesetzt wurde,
                                                      //   und nicht nochmals gesetzt zu werden braucht
     WW8LFOInfo(const WW8LFO& rLFO);
 };
@@ -444,8 +444,8 @@ WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
     , nLfoLvl(rLFO.nLfoLvl)
     , bOverride(rLFO.nLfoLvl ? true : false)
     , bSimpleList(rLFO.bSimpleList)
-    , bUsedInDoc(0)
-    , bLSTbUIDSet(0)
+    , bUsedInDoc(false)
+    , bLSTbUIDSet(false)
 {
 }
 

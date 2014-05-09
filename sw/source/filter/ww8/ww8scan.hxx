@@ -611,8 +611,8 @@ private:
     WW8PLCFx_PCD* pPcd;
     WW8PLCFpcd_Iter *pPieceIter;
     WW8_CP nAttrStart, nAttrEnd;
-    sal_uInt8 bLineEnd : 1;
-    sal_uInt8 bComplex : 1;
+    bool bLineEnd : 1;
+    bool bComplex : 1;
 
     //No copying
     WW8PLCFx_Cp_FKP(const WW8PLCFx_Cp_FKP&);
@@ -1442,7 +1442,7 @@ protected:
 
     sal_uInt16  cstd;                      // Count of styles in stylesheet
     sal_uInt16  cbSTDBaseInFile;           // Length of STD Base as stored in a file
-    sal_uInt16  fStdStylenamesWritten : 1; // Are built-in stylenames stored?
+    bool        fStdStylenamesWritten : 1; // Are built-in stylenames stored?
     sal_uInt16  : 15;                      // Spare flags
     sal_uInt16  stiMaxWhenSaved;           // Max sti known when file was written
     sal_uInt16  istdMaxFixedWhenSaved;     // How many fixed-index istds are there?
@@ -1514,7 +1514,7 @@ public:
     bool        fPMHMainDoc : 1;    // 1 when doc is a main doc for Print Merge Helper, 0 when not; default=0
     sal_uInt16  grfSuppression : 2; // 0 Default line suppression storage; 0= form letter line suppression; 1= no line suppression; default=0
     sal_uInt16  fpc : 2;            // 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
-    sal_uInt16  : 1;                // 0 unused
+    bool  : 1;                      // 0 unused
 
     sal_uInt16  grpfIhdt : 8;           // 0 specification of document headers and footers. See explanation under Headers and Footers topic.
 
@@ -1647,11 +1647,11 @@ public:
                                       // 2 for email.
     WW8DopTypography doptypography;   // see WW8STRUC.HXX
     WW8_DOGRID dogrid;                // see WW8STRUC.HXX
-    sal_uInt16 : 1;                   // reserved
+    bool : 1;                         // reserved
     sal_uInt16 lvl : 4;               // Which outline levels are showing in outline view
     sal_uInt16 : 4;                   // reserved
     bool       fHtmlDoc : 1;          // This file is based upon an HTML file
-    sal_uInt16 : 1;                   // reserved
+    bool : 1;                         // reserved
     bool       fSnapBorder : 1;       // Snap table and page borders to page border
     bool       fIncludeHeader : 1;    // Place header inside page border
     bool       fIncludeFooter : 1;    // Place footer inside page border

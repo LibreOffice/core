@@ -320,7 +320,7 @@ public:
     void WriteFontTable( const RtfAttributeOutput& rAttrOutput );
 
     /// If true, all fonts are loaded before processing the document.
-    sal_uInt8 bLoadAllFonts: 1;
+    bool bLoadAllFonts: 1;
 };
 
 class DrawObj
@@ -430,12 +430,12 @@ struct MSWordSaveData
     const sw::Frame* pOldFlyFmt;
     const SwPageDesc* pOldPageDesc;
 
-    sal_uInt8 bOldWriteAll : 1;          ///< WW8Export only
-    sal_uInt8 bOldOutTable : 1;
-    sal_uInt8 bOldIsInTable: 1;
-    sal_uInt8 bOldFlyFrmAttrs : 1;
-    sal_uInt8 bOldStartTOX : 1;
-    sal_uInt8 bOldInWriteTOX : 1;
+    bool bOldWriteAll : 1;          ///< WW8Export only
+    bool bOldOutTable : 1;
+    bool bOldIsInTable: 1;
+    bool bOldFlyFrmAttrs : 1;
+    bool bOldStartTOX : 1;
+    bool bOldInWriteTOX : 1;
     // bOutPageDesc muss nicht gesichert werden, da es nur nicht waehrend der
     // Ausgabe von Spezial-Texten veraendert wird.
 };
@@ -943,7 +943,7 @@ public:
     WW8_WrPlcFtnEdn *pEdn;              ///< Endnotes - structure to remember them, and output
     WW8_WrPlcSepx* pSepx;               ///< Sections/headers/footers
 
-    sal_uInt8 bWrtWW8 : 1;                   ///< Write WW95 (false) or WW97 (true) file format
+    bool bWrtWW8 : 1;                   ///< Write WW95 (false) or WW97 (true) file format
     bool m_bDot; ///< Template or document.
 
 protected:

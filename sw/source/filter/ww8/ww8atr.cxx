@@ -161,7 +161,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
             case RES_CHRATR_CTL_LANGUAGE:
             case RES_CHRATR_CTL_POSTURE:
             case RES_CHRATR_CTL_WEIGHT:
-                if (bWrtWW8 == 0)
+                if (bWrtWW8 == false)
                     bRet = false;
             default:
                 break;
@@ -172,7 +172,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
         //Complex is ok in ww8, but for ww6 there is only
         //one font, one fontsize, one fontsize (weight/posture)
         //and only one language
-        if ( bWrtWW8 == 0 )
+        if ( bWrtWW8 == false )
         {
             switch ( nWhich )
             {
@@ -212,7 +212,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
             case RES_CHRATR_CTL_LANGUAGE:
             case RES_CHRATR_CTL_POSTURE:
             case RES_CHRATR_CTL_WEIGHT:
-                if ( bWrtWW8 == 0 )
+                if ( bWrtWW8 == false )
                     bRet = false;
             default:
                 break;

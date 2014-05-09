@@ -119,7 +119,7 @@ SvDDEObject::SvDDEObject()
     : pConnection( 0 ), pLink( 0 ), pRequest( 0 ), pGetData( 0 ), nError( 0 )
 {
     SetUpdateTimeout( 100 );
-    bWaitForData = sal_False;
+    bWaitForData = false;
 }
 
 SvDDEObject::~SvDDEObject()
@@ -151,7 +151,7 @@ bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
         return false;
 
     // Lock against Reentrance
-    bWaitForData = sal_True;
+    bWaitForData = true;
 
     // if you want to print, we'll wait until the data is available
     if( bSynchron )
@@ -169,7 +169,7 @@ bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
         if( pConnection->GetError() )
             nError = DDELINK_ERROR_DATA;
 
-        bWaitForData = sal_False;
+        bWaitForData = false;
     }
     else
     {
@@ -390,7 +390,7 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
                 aVal <<= aSeq;
                 DataChanged( SotExchange::GetFormatMimeType(
                                                 pData->GetFormat() ), aVal );
-                bWaitForData = sal_False;
+                bWaitForData = false;
             }
         }
     }
@@ -417,13 +417,13 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
             }
             else if( pReq == pRequest )
             {
-                bWaitForData = sal_False;
+                bWaitForData = false;
             }
         }
     }
     else
         // End waiting
-        bWaitForData = sal_False;
+        bWaitForData = false;
 
     return 0;
 }

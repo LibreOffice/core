@@ -616,17 +616,17 @@ protected:
 public:
     WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rR)
         : rRdr(rR), fUnknown(0), fDropdownIndex(0),
-        fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
+        fToolTip(false), fNoMark(false), fUseSize(false), fNumbersOnly(false), fDateOnly(false),
         fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), sName( rN )
     {
     }
     sal_uInt8 fUnknown:2;
     sal_uInt8 fDropdownIndex:6;
-    sal_uInt8 fToolTip:1;
-    sal_uInt8 fNoMark:1;
-    sal_uInt8 fUseSize:1;
-    sal_uInt8 fNumbersOnly:1;
-    sal_uInt8 fDateOnly:1;
+    bool fToolTip:1;
+    bool fNoMark:1;
+    bool fUseSize:1;
+    bool fNumbersOnly:1;
+    bool fDateOnly:1;
     sal_uInt8 fUnused:3;
     sal_uInt16 nSize;
 

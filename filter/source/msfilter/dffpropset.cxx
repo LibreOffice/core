@@ -1146,11 +1146,11 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
         {
             bool bSetProperty = !bSetUninitializedOnly || ( !IsProperty( nRecType ) || !IsHardAttribute( nRecType ) );
 
-            DffPropFlags aPropFlag = { 1, 0, 0, 0 };
+            DffPropFlags aPropFlag = { true, false, false, false };
             if ( nTmp & 0x4000 )
-                aPropFlag.bBlip = sal_True;
+                aPropFlag.bBlip = true;
             if ( nTmp & 0x8000 )
-                aPropFlag.bComplex = sal_True;
+                aPropFlag.bComplex = true;
             if ( aPropFlag.bComplex && nContent && ( nComplexDataFilePos < aHd.GetRecEndFilePos() ) )
             {
                 // normally nContent is the complete size of the complex property,
@@ -1201,7 +1201,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                     nComplexDataFilePos += nContent;                    // store filepos, that is used for the next complex property
                 }
                 else                                                    // a complex property needs content
-                    aPropFlag.bSet = sal_False;                         // otherwise something is wrong
+                    aPropFlag.bSet = false;                             // otherwise something is wrong
             }
             if ( bSetProperty )
             {
@@ -1272,7 +1272,7 @@ bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
         bRetValue = (mpPropSetEntries[nId | 0x3f].nComplexIndexOrFlagsHAttr
                         & (1 << (0xf - (nId & 0xf)))) != 0;
     else
-        bRetValue = ( mpPropSetEntries[ nId ].aFlags.bSoftAttr == 0 );
+        bRetValue = ( mpPropSetEntries[ nId ].aFlags.bSoftAttr == false );
     return bRetValue;
 };
 
