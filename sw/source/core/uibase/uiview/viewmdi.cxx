@@ -222,11 +222,9 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
         if ( nColumns  != pUsrPref->GetViewLayoutColumns() ||
              bBookMode != pUsrPref->IsViewLayoutBookMode() )
         {
-            pUsrPref->SetViewLayoutColumns( nColumns );
-            pUsrPref->SetViewLayoutBookMode( bBookMode );
-            SW_MOD()->ApplyUsrPref( *pUsrPref,
-                    bViewOnly ? this: 0,
-                    bViewOnly ? VIEWOPT_DEST_VIEW_ONLY : 0 );
+            pUsrPref->SetViewLayoutColumns(nColumns);
+            pUsrPref->SetViewLayoutBookMode(bBookMode);
+            SW_MOD()->ApplyUsrPref(*pUsrPref, 0, 0);
             pUsrPref->SetModified();
         }
     }
