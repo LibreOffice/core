@@ -58,7 +58,7 @@ bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
 {
     if (nMaxLen == 0)
         return false;
-    switch (nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK)
+    switch (nFlags & RTL_UNICODETOTEXT_FLAGS_INVALID_MASK)
     {
     case RTL_UNICODETOTEXT_FLAGS_INVALID_0:
         *pBuf = 0x00;
