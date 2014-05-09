@@ -21,11 +21,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
 #define INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
 
-#ifdef WIN32
-
-#undef WB_LEFT
-#undef WB_RIGHT
-
+#ifdef WNT
 #include <prewin.h>
 #include <postwin.h>
 
@@ -36,6 +32,7 @@
 
 #endif
 #endif
+
 #include <basic/sbx.hxx>
 
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
