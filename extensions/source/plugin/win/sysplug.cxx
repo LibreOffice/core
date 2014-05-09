@@ -29,7 +29,6 @@
 
 #include <prewin.h>
 #include <postwin.h>
-#undef OPTIONAL
 
 #include <plugin/impl.hxx>
 

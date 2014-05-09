@@ -36,7 +36,6 @@
 #ifdef WNT
 #include <prewin.h>
 #include <postwin.h>
-#undef OPTIONAL
 #endif
 
 #ifdef SOLARIS

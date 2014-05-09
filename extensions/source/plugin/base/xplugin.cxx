@@ -35,7 +35,6 @@
 #ifdef WNT
 #include <prewin.h>
 #include <postwin.h>
-#undef OPTIONAL
 #endif
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
