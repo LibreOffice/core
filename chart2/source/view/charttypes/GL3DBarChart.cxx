@@ -55,6 +55,7 @@ void GL3DBarChart::create3DShapes()
     const float nBarDistanceY = nBarSizeY / 2;
 
     sal_uInt32 nId = 1;
+    float nXEnd = 0.0;
     float nYPos = 0.0;
 
     maShapes.clear();
@@ -98,10 +99,45 @@ void GL3DBarChart::create3DShapes()
             maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId++));
         }
 
+        float nThisXEnd = nPointCount * (nBarSizeX + nBarDistanceX);
+        if (nXEnd < nThisXEnd)
+            nXEnd = nThisXEnd;
+
         ++nSeriesIndex;
     }
 
     nYPos += nBarSizeY + nBarDistanceY;
+
+    // X axis
+    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId++));
+    opengl3D::Line* pAxis = static_cast<opengl3D::Line*>(&maShapes.back());
+    glm::vec3 aBegin;
+    aBegin.y = nYPos;
+    glm::vec3 aEnd = aBegin;
+    aEnd.x = nXEnd;
+    pAxis->setPosition(aBegin, aEnd);
+    pAxis->setLineColor(COL_WHITE);
+
+    // Y axis
+    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId++));
+    pAxis = static_cast<opengl3D::Line*>(&maShapes.back());
+    aBegin.x = aBegin.y = 0;
+    aEnd = aBegin;
+    aEnd.y = nYPos;
+    pAxis->setPosition(aBegin, aEnd);
+    pAxis->setLineColor(COL_WHITE);
+
+    // Chart background.
+    maShapes.push_back(new opengl3D::Rectangle(mpRenderer.get(), nId++));
+    opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
+    glm::vec3 aTopLeft;
+    glm::vec3 aTopRight = aTopLeft;
+    aTopRight.x = nXEnd;
+    glm::vec3 aBottomRight = aTopRight;
+    aBottomRight.y = nYPos;
+    pRect->setPosition(aTopLeft, aTopRight, aBottomRight);
+    pRect->setFillColor(COL_BLACK);
+    pRect->setLineColor(COL_WHITE);
 
     // Create category texts along X-axis at the bottom.
     uno::Sequence<OUString> aCats = mrCatProvider.getSimpleCategories();
@@ -112,12 +148,11 @@ void GL3DBarChart::create3DShapes()
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
         Size aTextSize = p->getSize();
-        glm::vec3 aTopLeft;
         aTopLeft.x = nXPos;
         aTopLeft.y = nYPos;
-        glm::vec3 aTopRight = aTopLeft;
+        aTopRight = aTopLeft;
         aTopRight.x += aTextSize.getWidth();
-        glm::vec3 aBottomRight = aTopRight;
+        aBottomRight = aTopRight;
         aBottomRight.y += aTextSize.getHeight();
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }

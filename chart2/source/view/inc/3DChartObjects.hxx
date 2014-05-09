@@ -53,6 +53,9 @@ public:
 
     virtual void render() SAL_OVERRIDE;
 
+    void setPosition(const glm::vec3& rBegin, const glm::vec3& rEnd);
+    void setLineColor(const Color& rColor);
+
 private:
     glm::vec3 maPosBegin;
     glm::vec3 maPosEnd;
@@ -81,6 +84,11 @@ class Rectangle : public Renderable3DObject
 public:
     Rectangle(OpenGL3DRenderer* pRenderer, sal_uInt32 nId);
     virtual void render() SAL_OVERRIDE;
+
+    void setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight);
+    void setFillColor(const Color& rColor);
+    void setLineColor(const Color& rColor);
+
 private:
     glm::vec3 maTopLeft;
     glm::vec3 maTopRight;

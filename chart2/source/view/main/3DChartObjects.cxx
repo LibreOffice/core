@@ -53,6 +53,17 @@ void Line::render()
     mpRenderer->EndAddShapePolygon3DObject();
 }
 
+void Line::setPosition(const glm::vec3& rBegin, const glm::vec3& rEnd)
+{
+    maPosBegin = rBegin;
+    maPosEnd = rEnd;
+}
+
+void Line::setLineColor(const Color& rColor)
+{
+    maLineColor = rColor;
+}
+
 Text::Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId):
     Renderable3DObject(pRenderer, nId)
 {
@@ -122,6 +133,23 @@ void Rectangle::render()
         mpRenderer->EndAddPolygon3DObjectPoint();
     }
     mpRenderer->EndAddShapePolygon3DObject();
+}
+
+void Rectangle::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight)
+{
+    maTopLeft = rTopLeft;
+    maTopRight = rTopRight;
+    maBottomRight = rBottomRight;
+}
+
+void Rectangle::setFillColor(const Color& rColor)
+{
+    maColor = rColor;
+}
+
+void Rectangle::setLineColor(const Color& rColor)
+{
+    maLineColor = rColor;
 }
 
 Camera::Camera(OpenGL3DRenderer* pRenderer):
