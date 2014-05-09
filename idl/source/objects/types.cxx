@@ -388,7 +388,7 @@ sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, bool bVar ) con
         n = n << 20;
         n += rBase.aStructSlotId.GetValue();
     }
-    if( PTR_CAST( SvMetaSlot, this ) )
+    if (dynamic_cast<const SvMetaSlot*>(this))
         n |= 0x20000;
     if( !bVar )
         n += 0x10000;
