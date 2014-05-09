@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_54ddda41",
+        "filename": "sfx2/source/appl/impldde.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-09T08:58:11Z",
+      "side": 1,
+      "message": "Note 424717f44c3c63569d1d321611ff5a3d3b7a7ff5 \"MSVC apparently does not pack bitfields of different type.\"\n\nIf the bitfields here are just premature optimization, I\u0027d suggest to rather stop using bitfields here.  If they are necessary for layout constraints, you cannot do the change.\n\n(Might hit other places, too.  Didn\u0027t check any more of the patch.)",
+      "revId": "ac0a615b6131b63c10b3b4c83cf4eff79387fb45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
