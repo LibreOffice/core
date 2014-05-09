@@ -1051,7 +1051,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             aProperties.push_back(
                 beans::PropertyValue( "AdvanceOnClick" ,
-                    -1, Any( maPresSettings.mbLockedPages ),
+                    -1, Any( !maPresSettings.mbLockedPages ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
             aProperties.push_back(
