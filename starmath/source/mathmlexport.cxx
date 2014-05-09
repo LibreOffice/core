@@ -148,13 +148,13 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
               ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("BaseURI"), 0,
-              ::getCppuType( (OUString *)0 ),
+              ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamRelPath"), 0,
-              ::getCppuType( (OUString *)0 ),
+              ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamName"), 0,
-              ::getCppuType( (OUString *)0 ),
+              ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

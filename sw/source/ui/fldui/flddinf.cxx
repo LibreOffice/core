@@ -251,15 +251,15 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
                     {
                         uno::Any aVal = xCustomPropertySet->getPropertyValue( sName );
                         const uno::Type& rValueType = aVal.getValueType();
-                        if( rValueType == ::getCppuType( (util::DateTime*)0 ))
+                        if( rValueType == ::cppu::UnoType<util::DateTime>::get())
                         {
                             nNewType = NUMBERFORMAT_DATETIME;
                         }
-                        else if( rValueType == ::getCppuType( (util::Date*)0 ))
+                        else if( rValueType == ::cppu::UnoType<util::Date>::get())
                         {
                             nNewType = NUMBERFORMAT_DATE;
                         }
-                        else if( rValueType == ::getCppuType( (util::Time*)0 ))
+                        else if( rValueType == ::cppu::UnoType<util::Time>::get())
                         {
                             nNewType = NUMBERFORMAT_TIME;
                         }

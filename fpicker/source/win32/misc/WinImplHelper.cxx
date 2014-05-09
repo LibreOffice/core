@@ -136,7 +136,7 @@ void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInt
     OSL_ASSERT( IsWindow( hwnd ) );
 
     if ( !aItem.hasValue( ) ||
-         aItem.getValueType( ) != getCppuType((OUString*)0) )
+         aItem.getValueType( ) != cppu::UnoType<OUString>::get() )
          throw IllegalArgumentException(
             OUString( "invalid value type or any has no value" ),
             rXInterface,
@@ -184,9 +184,9 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
     OSL_ASSERT( IsWindow( hwnd ) );
 
     if ( !aPosition.hasValue( ) ||
-         ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
-           (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
-           (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
+         ( (aPosition.getValueType( ) != cppu::UnoType<sal_Int32>::get()) &&
+           (aPosition.getValueType( ) != cppu::UnoType<sal_Int16>::get()) &&
+           (aPosition.getValueType( ) != cppu::UnoType<sal_Int8>::get()) ) )
          throw IllegalArgumentException(
             OUString( "invalid value type or any has no value" ),
             rXInterface,
@@ -236,9 +236,9 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
     OSL_ASSERT( IsWindow( hwnd ) );
 
      if ( !aPosition.hasValue( ) ||
-         ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
-           (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
-           (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
+         ( (aPosition.getValueType( ) != cppu::UnoType<sal_Int32>::get()) &&
+           (aPosition.getValueType( ) != cppu::UnoType<sal_Int16>::get()) &&
+           (aPosition.getValueType( ) != cppu::UnoType<sal_Int8>::get()) ) )
          throw IllegalArgumentException(
             OUString( "invalid value type or any has no value" ),
             rXInterface,

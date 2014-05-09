@@ -561,13 +561,13 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
               ::getCppuType( (uno::Reference<XInterface> *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("BaseURI"), 0,
-              ::getCppuType( (OUString *)0 ),
+              ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamRelPath"), 0,
-              ::getCppuType( (OUString *)0 ),
+              ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamName"), 0,
-              ::getCppuType( (OUString *)0 ),
+              ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // properties for insert modes
         { OUString("StyleInsertModeFamilies"), 0,
@@ -594,7 +594,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
         { OUString("BuildId"), 0,
-              ::getCppuType( (OUString *)0 ),
+              ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
         // Add property, which indicates, if a text document in OpenOffice.org

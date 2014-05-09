@@ -46,9 +46,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::lang;
 
-const Type       CPPUTYPE_SALINT32   = getCppuType((sal_Int32*)0);
-const Type       CPPUTYPE_SALINT8    = getCppuType((sal_Int8*)0);
-const Type       CPPUTYPE_OUSTRING   = getCppuType((OUString*)0);
+const Type       CPPUTYPE_SALINT32   = cppu::UnoType<sal_Int32>::get();
+const Type       CPPUTYPE_SALINT8    = cppu::UnoType<sal_Int8>::get();
+const Type       CPPUTYPE_OUSTRING   = cppu::UnoType<OUString>::get();
 const Type       CPPUTYPE_SEQSALINT8 = getCppuType((Sequence< sal_Int8>*)0);
 const sal_Int32  MAX_CLIPFORMAT_NAME = 256;
 

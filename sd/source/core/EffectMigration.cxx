@@ -691,7 +691,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
             for( aIter = rEffects.begin(); aIter != rEffects.end(); ++aIter )
             {
                 // only work on paragraph targets
-                if( (*aIter)->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+                if( (*aIter)->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
                 {
                     if( ((*aIter)->getPresetId() != aPresetId) ||
                         ((*aIter)->getPresetSubType() != aPresetSubType) )

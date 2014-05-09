@@ -1445,7 +1445,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
 void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
 {
     if (!mxNumberStyles.is())
-        mxNumberStyles = uno::Reference< container::XNameContainer >( comphelper::NameContainer_createInstance( ::getCppuType((const sal_Int32*)0)) );
+        mxNumberStyles = uno::Reference< container::XNameContainer >( comphelper::NameContainer_createInstance( ::cppu::UnoType<sal_Int32>::get()) );
     if (mxNumberStyles.is())
     {
         uno::Any aAny;

@@ -376,10 +376,10 @@ BoundFrameSets::BoundFrameSets(const Reference<XInterface> xModel)
 
 void FieldParamExporter::Export()
 {
-    const Type aStringType = ::getCppuType((OUString*)0);
+    const Type aStringType = ::cppu::UnoType<OUString>::get();
     const Type aBoolType = ::getCppuType((sal_Bool*)0);
     const Type aSeqType = ::getCppuType((Sequence<OUString>*)0);
-    const Type aIntType = ::getCppuType((sal_Int32*)0);
+    const Type aIntType = ::cppu::UnoType<sal_Int32>::get();
     Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
     for(const OUString* pCurrent = vParameters.begin(); pCurrent != vParameters.end(); ++pCurrent)
     {

@@ -110,7 +110,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
             case XML_SCH_TYPE_ERROR_BAR_STYLE:
                 // here we have a constant rather than an enum
                 pHdl = new XMLErrorBarStylePropertyHdl( aXMLChartErrorBarStyleEnumMap,
-                                               ::getCppuType((const sal_Int32*)0) );
+                                               ::cppu::UnoType<sal_Int32>::get() );
                 break;
 
             case XML_SCH_TYPE_ERROR_INDICATOR_LOWER:
@@ -123,12 +123,12 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
             case XML_SCH_TYPE_SOLID_TYPE:
                 // here we have a constant rather than an enum
                 pHdl = new XMLEnumPropertyHdl( aXMLChartSolidTypeEnumMap,
-                                               ::getCppuType((const sal_Int32*)0) );
+                                               ::cppu::UnoType<sal_Int32>::get() );
                 break;
             case XML_SCH_TYPE_LABEL_PLACEMENT_TYPE:
                 // here we have a constant rather than an enum
                 pHdl = new XMLEnumPropertyHdl( aXMLChartDataLabelPlacementEnumMap,
-                                                ::getCppuType((const sal_Int32*)0) );
+                                                ::cppu::UnoType<sal_Int32>::get() );
                 break;
             case XML_SCH_TYPE_DATAROWSOURCE:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartDataRowSourceTypeEnumMap,
@@ -140,7 +140,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
             case XML_SCH_TYPE_INTERPOLATION:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartInterpolationTypeEnumMap,
-                                               ::getCppuType((const sal_Int32*)0) );
+                                               ::cppu::UnoType<sal_Int32>::get() );
                 break;
             case XML_SCH_TYPE_SYMBOL_TYPE:
                 pHdl = new XMLSymbolTypePropertyHdl( false );
@@ -152,7 +152,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
             case XML_SCH_TYPE_MISSING_VALUE_TREATMENT:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartMissingValueTreatmentEnumMap,
-                                               ::getCppuType((const sal_Int32*)0) );
+                                               ::cppu::UnoType<sal_Int32>::get() );
                 break;
         }
         if( pHdl )

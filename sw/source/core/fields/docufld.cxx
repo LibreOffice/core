@@ -1820,7 +1820,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             aSetDate.Day = aDateTime.GetDay();
             aSetDate.Month = aDateTime.GetMonth();
             aSetDate.Year = aDateTime.GetYear();
-            rAny.setValue(&aSetDate, ::getCppuType((util::Date*)0));
+            rAny.setValue(&aSetDate, ::cppu::UnoType<util::Date>::get());
         }
         break;
     case FIELD_PROP_DATE_TIME:
@@ -1868,7 +1868,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         OSL_FAIL("Not implemented!");
         break;
     case FIELD_PROP_DATE:
-        if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
+        if( rAny.getValueType() == ::cppu::UnoType<util::Date>::get() )
         {
             util::Date aSetDate = *(util::Date*)rAny.getValue();
             aDateTime = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);

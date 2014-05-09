@@ -1461,7 +1461,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
 
 uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() const
 {
-    uno::Reference< container::XNameContainer > xLayouts( comphelper::NameContainer_createInstance( ::getCppuType((const sal_Int32*)0)) );
+    uno::Reference< container::XNameContainer > xLayouts( comphelper::NameContainer_createInstance( ::cppu::UnoType<sal_Int32>::get()) );
 
     for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
     {

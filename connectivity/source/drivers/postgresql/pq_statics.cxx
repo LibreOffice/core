@@ -197,8 +197,8 @@ Statics & getStatics()
 
             statics.CATALOG = "Catalog";
 
-            Type tString = getCppuType( (OUString *) 0 );
-            Type tInt = getCppuType( (sal_Int32 * ) 0 );
+            Type tString = cppu::UnoType<OUString>::get();
+            Type tInt = cppu::UnoType<sal_Int32>::get();
             Type tBool = getBooleanCppuType();
             Type tStringSequence = getCppuType( (com::sun::star::uno::Sequence< OUString > *) 0);
 

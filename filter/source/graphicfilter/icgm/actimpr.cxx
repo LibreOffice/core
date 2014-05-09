@@ -481,7 +481,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
     if ( ImplCreateShape( "com.sun.star.drawing.EllipseShape" ) )
     {
         drawing::CircleKind eCircleKind = drawing::CircleKind_FULL;
-        uno::Any aAny( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
+        uno::Any aAny( &eCircleKind, ::cppu::UnoType<drawing::CircleKind>::get() );
         maXPropSet->setPropertyValue( "CircleKind", aAny );
 
         long nXSize = (long)( rSize.X * 2.0 );      // strange behaviour with a awt::Size of 0
@@ -540,11 +540,11 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
         if ( (long)fStartAngle == (long)fEndAngle )
         {
             eCircleKind = drawing::CircleKind_FULL;
-            aAny.setValue( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
+            aAny.setValue( &eCircleKind, ::cppu::UnoType<drawing::CircleKind>::get() );
         }
         else
         {
-            aAny.setValue( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
+            aAny.setValue( &eCircleKind, ::cppu::UnoType<drawing::CircleKind>::get() );
             maXPropSet->setPropertyValue( "CircleKind", aAny );
             aAny <<= (sal_Int32)( (long)( fStartAngle * 100 ) );
             maXPropSet->setPropertyValue( "CircleStartAngle", aAny );

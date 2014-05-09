@@ -3731,7 +3731,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
         case MID_GRAPHIC_URL:
         {
-            if ( rVal.getValueType() == ::getCppuType( (OUString*)0 ) )
+            if ( rVal.getValueType() == ::cppu::UnoType<OUString>::get() )
             {
                 OUString sLink;
                 rVal >>= sLink;
@@ -3763,7 +3763,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
         case MID_GRAPHIC_FILTER:
         {
-            if( rVal.getValueType() == ::getCppuType( (OUString*)0 ) )
+            if( rVal.getValueType() == ::cppu::UnoType<OUString>::get() )
             {
                 OUString sLink;
                 rVal >>= sLink;

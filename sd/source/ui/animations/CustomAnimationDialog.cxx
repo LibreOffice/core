@@ -1826,7 +1826,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             else
                 mpCBRepeat->SetText(OUString::number(fRepeat));
         }
-        else if( aRepeatCount.getValueType() == ::getCppuType((const Timing*)0) )
+        else if( aRepeatCount.getValueType() == ::cppu::UnoType<Timing>::get() )
         {
             Any aEnd;
             if( pSet->getPropertyState( nHandleEnd ) != STLPropertyState_AMBIGUOUS )

@@ -112,14 +112,14 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
         { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_CHANGE),           WID_PAGE_CHANGE,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_DURATION),         WID_PAGE_DURATION,  ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { OUString(UNO_NAME_PAGE_EFFECT),           WID_PAGE_EFFECT,    ::getCppuType((const presentation::FadeEffect*)0),     0,  0},
+        { OUString(UNO_NAME_PAGE_EFFECT),           WID_PAGE_EFFECT,    ::cppu::UnoType<presentation::FadeEffect>::get(),     0,  0},
         { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                          beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
-        { OUString(UNO_NAME_PAGE_SPEED),            WID_PAGE_SPEED,     ::getCppuType((const presentation::AnimationSpeed*)0), 0,  0},
+        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},
+        { OUString(UNO_NAME_PAGE_SPEED),            WID_PAGE_SPEED,     ::cppu::UnoType<presentation::AnimationSpeed>::get(), 0,  0},
         { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_PREVIEWBITMAP),    WID_PAGE_PREVIEWBITMAP, ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
@@ -158,7 +158,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                          beans::PropertyAttribute::READONLY, 0},                                \
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},                                \
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                \
-        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},                                                                \
+        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},                                                                \
         { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},\
         { OUString("IsHeaderVisible"),              WID_PAGE_HEADERVISIBLE, ::getBooleanCppuType(),                    0, 0},                                                                 \
@@ -194,7 +194,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                           beans::PropertyAttribute::READONLY, 0},                                             \
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},                                             \
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                             \
-        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},                                                                             \
+        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},                                                                             \
         { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
         { OUString(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},    \
         { OUString(UNO_NAME_PAGE_PREVIEWBITMAP),    WID_PAGE_PREVIEWBITMAP, ::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
@@ -268,7 +268,7 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
         { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                           beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
-        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
+        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},
         { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString("BackgroundFullSize"),           WID_PAGE_BACKFULL,  ::getBooleanCppuType(),                        0, 0},
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
@@ -283,7 +283,7 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
         { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
+        { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
         { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},
@@ -1004,10 +1004,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= (sal_Int32)( GetPage()->GetSize().getHeight() );
         break;
     case WID_PAGE_ORIENT:
-        aAny = ::cppu::int2enum( (sal_Int32)((GetPage()->GetOrientation() == ORIENTATION_PORTRAIT)? view::PaperOrientation_PORTRAIT: view::PaperOrientation_LANDSCAPE), ::getCppuType((const view::PaperOrientation*)0) );
+        aAny = ::cppu::int2enum( (sal_Int32)((GetPage()->GetOrientation() == ORIENTATION_PORTRAIT)? view::PaperOrientation_PORTRAIT: view::PaperOrientation_LANDSCAPE), ::cppu::UnoType<view::PaperOrientation>::get() );
         break;
     case WID_PAGE_EFFECT:
-        aAny = ::cppu::int2enum( (sal_Int32)GetPage()->GetFadeEffect(), ::getCppuType((const presentation::FadeEffect*)0) );
+        aAny = ::cppu::int2enum( (sal_Int32)GetPage()->GetFadeEffect(), ::cppu::UnoType<presentation::FadeEffect>::get() );
         break;
     case WID_PAGE_CHANGE:
         aAny <<= (sal_Int32)( GetPage()->GetPresChange() );
@@ -1015,7 +1015,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_SPEED:
         {
             const double fDuration = GetPage()->getTransitionDuration();
-            aAny = ::cppu::int2enum( fDuration < 2.0 ? 2 : (fDuration > 2.0 ? 0 : 1), ::getCppuType((const presentation::AnimationSpeed*)0) );
+            aAny = ::cppu::int2enum( fDuration < 2.0 ? 2 : (fDuration > 2.0 ? 0 : 1), ::cppu::UnoType<presentation::AnimationSpeed>::get() );
         }
         break;
     case WID_PAGE_LAYOUT:

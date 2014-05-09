@@ -538,7 +538,7 @@ bool CustomAnimationEffect::checkForText()
 
     Reference< XText > xText;
 
-    if( maTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    if( maTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
     {
         // calc para depth
         ParagraphTarget aParaTarget;
@@ -1740,7 +1740,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
             Any aTarget( rTarget );
             sal_Int16 nSubItem = ShapeAnimationSubType::AS_WHOLE;
 
-            if( aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+            if( aTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
             {
                 nSubItem = ShapeAnimationSubType::ONLY_TEXT;
             }
@@ -1792,7 +1792,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
 
         sal_Int16 nSubItem = ShapeAnimationSubType::AS_WHOLE;
 
-        if( rTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+        if( rTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
             nSubItem = ShapeAnimationSubType::ONLY_TEXT;
 
         pEffect.reset( new CustomAnimationEffect( xEffectContainer ) );
@@ -2245,7 +2245,7 @@ void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTa
     while( aIter != maEffects.end() )
     {
         Any aIterTarget( (*aIter)->getTarget() );
-        if( aIterTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+        if( aIterTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
         {
             ParagraphTarget aIterParaTarget;
             if( (aIterTarget >>= aIterParaTarget) && (aIterParaTarget.Shape == aParaTarget.Shape) )
@@ -2312,7 +2312,7 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
     maEffects.push_back( pEffect );
 
     Any aTarget( pEffect->getTarget() );
-    if( aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    if( aTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
     {
         // now look at the paragraph
         ParagraphTarget aParaTarget;
@@ -2572,7 +2572,7 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
         {
             CustomAnimationEffectPtr pEffect( (*aIter++) );
 
-            if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+            if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
                 remove( pEffect );
             else
                 pTextGroup->addEffect( pEffect );
@@ -2593,7 +2593,7 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
         {
             CustomAnimationEffectPtr pEffect( (*aIter++) );
 
-            if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+            if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
             {
                 // set correct node type
                 if( pEffect->getParaDepth() < nTextGrouping )
@@ -2648,7 +2648,7 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
             EffectSequence::iterator aInsertIter( find( (*aIter) ) );
 
             CustomAnimationEffectPtr pEffect;
-            if( (aEffects.size() == 1) && ((*aIter)->getTarget().getValueType() != ::getCppuType((const ParagraphTarget*)0) ) )
+            if( (aEffects.size() == 1) && ((*aIter)->getTarget().getValueType() != ::cppu::UnoType<ParagraphTarget>::get() ) )
             {
                 // special case, only one effect and that targets whole text,
                 // convert this to target whole shape
@@ -2680,7 +2680,7 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
             {
                 CustomAnimationEffectPtr pEffect( (*aIter++) );
 
-                if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+                if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
                 {
                     pTextGroup->addEffect( pEffect );
                 }
@@ -2708,7 +2708,7 @@ void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTex
     {
         CustomAnimationEffectPtr pEffect( (*aIter++) );
 
-        if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+        if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
         {
             // set correct node type
             if( pEffect->getParaDepth() < nTextGrouping )
@@ -2748,7 +2748,7 @@ struct ImplStlTextGroupSortHelper
 sal_Int32 ImplStlTextGroupSortHelper::getTargetParagraph( const CustomAnimationEffectPtr& p1 )
 {
     const Any aTarget(p1->getTarget());
-    if( aTarget.hasValue() && aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    if( aTarget.hasValue() && aTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
     {
         ParagraphTarget aParaTarget;
         aTarget >>= aParaTarget;

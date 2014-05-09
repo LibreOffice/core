@@ -136,18 +136,18 @@ static SdTypesCache gImplTypesCache;
         { OUString(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         ::getBooleanCppuType(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_DIMPREV),       WID_DIMPREV,         ::getBooleanCppuType(),                                   0, 0},\
-        { OUString(UNO_NAME_OBJ_EFFECT),        WID_EFFECT,          ::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
+        { OUString(UNO_NAME_OBJ_EFFECT),        WID_EFFECT,          ::cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
         { OUString(UNO_NAME_OBJ_ISEMPTYPRESOBJ),WID_ISEMPTYPRESOBJ,  ::getBooleanCppuType(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_ISPRESOBJ),     WID_ISPRESOBJ,       ::getBooleanCppuType(),                                   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
         { OUString(UNO_NAME_OBJ_MASTERDEPENDENT),WID_MASTERDEPEND,   ::getBooleanCppuType(),                                   0, 0},\
-        { OUString(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,     ::getCppuType((const presentation::ClickAction*)0),       0, 0},\
+        { OUString(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,     ::cppu::UnoType<presentation::ClickAction>::get(),       0, 0},\
         { OUString(UNO_NAME_OBJ_PLAYFULL),      WID_PLAYFULL,        ::getBooleanCppuType(),                                   0, 0},\
         { OUString(UNO_NAME_OBJ_PRESORDER),     WID_PRESORDER,       ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString(UNO_NAME_OBJ_STYLE),         WID_STYLE,           cppu::UnoType<style::XStyle>::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
         { OUString(UNO_NAME_OBJ_SOUNDFILE),     WID_SOUNDFILE,       ::cppu::UnoType<OUString>::get(),                        0, 0},\
         { OUString(UNO_NAME_OBJ_SOUNDON),       WID_SOUNDON,         ::getBooleanCppuType(),                                   0, 0},\
-        { OUString(UNO_NAME_OBJ_SPEED),         WID_SPEED,           ::getCppuType((const presentation::AnimationSpeed*)0),    0, 0},\
-        { OUString(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      ::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
+        { OUString(UNO_NAME_OBJ_SPEED),         WID_SPEED,           ::cppu::UnoType<presentation::AnimationSpeed>::get(),    0, 0},\
+        { OUString(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      ::cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
         { OUString(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString(UNO_NAME_OBJ_VERB),          WID_VERB,            ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString("IsAnimation"),              WID_ISANIMATION,     ::getBooleanCppuType(),                                   0, 0},\
@@ -179,7 +179,7 @@ static SdTypesCache gImplTypesCache;
 
     #define DRAW_MAP_ENTRIES\
         { OUString(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       ::cppu::UnoType<OUString>::get(),                 0, 0},\
-        { OUString(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    ::getCppuType((const presentation::ClickAction*)0),0, 0},\
+        { OUString(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    ::cppu::UnoType<presentation::ClickAction>::get(),0, 0},\
         { OUString(UNO_NAME_OBJ_STYLE),         WID_STYLE,          cppu::UnoType<style::XStyle>::get(),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
         { OUString("NavigationOrder"),          WID_NAVORDER,       ::cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { OUString(), 0, css::uno::Type(), 0, 0 }

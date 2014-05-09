@@ -423,13 +423,13 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                     if (var.decVal.sign == 0)
                     {
                         // positive value
-                        variantToAny( & var, rAny, getCppuType( (sal_uInt64*) 0),
+                        variantToAny( & var, rAny, cppu::UnoType<sal_uInt64>::get(),
                                       bReduceValueRange);
                     }
                     else
                     {
                         //negative value
-                        variantToAny( & var, rAny, getCppuType( (sal_Int64*) 0),
+                        variantToAny( & var, rAny, cppu::UnoType<sal_Int64>::get(),
                                       bReduceValueRange);
                     }
                 }
@@ -719,7 +719,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
                     bIllegal = true;
                 }
             }
-            else if(rAny.getValueType() == getCppuType((Decimal*)0))
+            else if(rAny.getValueType() == cppu::UnoType<Decimal>::get())
             {
                 Decimal d;
                 if (rAny >>= d)
@@ -736,7 +736,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
                     bIllegal = true;
                 }
             }
-            else if (rAny.getValueType() == getCppuType((Currency*)0))
+            else if (rAny.getValueType() == cppu::UnoType<Currency>::get())
             {
                 Currency c;
                 if (rAny >>= c)
@@ -749,7 +749,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
                     bIllegal = true;
                 }
             }
-            else if(rAny.getValueType() == getCppuType((SCode*)0))
+            else if(rAny.getValueType() == cppu::UnoType<SCode>::get())
             {
                 SCode s;
                 if (rAny >>= s)
@@ -1491,16 +1491,16 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                     rAny.setValue( & var.iVal, getCppuType( (sal_Int16*)0));
                     break;
                 case VT_I4:
-                    rAny.setValue( & var.lVal, getCppuType( (sal_Int32*)0));
+                    rAny.setValue( & var.lVal, cppu::UnoType<sal_Int32>::get());
                     // necessary for use in JavaScript ( see "reduceRange")
                     if( bReduceValueRange)
                         reduceRange(rAny);
                     break;
                 case VT_R4:
-                    rAny.setValue( & var.fltVal, getCppuType( (float*)0));
+                    rAny.setValue( & var.fltVal, cppu::UnoType<float>::get());
                     break;
                 case VT_R8:
-                    rAny.setValue(& var.dblVal, getCppuType( (double*)0));
+                    rAny.setValue(& var.dblVal, cppu::UnoType<double>::get());
                     break;
                 case VT_CY:
                 {
@@ -1566,22 +1566,22 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                     break;
                 }
                 case VT_I1:
-                    rAny.setValue( & var.cVal, getCppuType((sal_Int8*)0));
+                    rAny.setValue( & var.cVal, cppu::UnoType<sal_Int8>::get());
                     break;
                 case VT_UI1: // there is no unsigned char in UNO
-                    rAny.setValue( & var.bVal, getCppuType( (sal_Int8*)0));
+                    rAny.setValue( & var.bVal, cppu::UnoType<sal_Int8>::get());
                     break;
                 case VT_UI2:
                     rAny.setValue( & var.uiVal, getCppuType( (sal_uInt16*)0));
                     break;
                 case VT_UI4:
-                    rAny.setValue( & var.ulVal, getCppuType( (sal_uInt32*)0));
+                    rAny.setValue( & var.ulVal, cppu::UnoType<sal_uInt32>::get());
                     break;
                 case VT_INT:
-                    rAny.setValue( & var.intVal, getCppuType( (sal_Int32*)0));
+                    rAny.setValue( & var.intVal, cppu::UnoType<sal_Int32>::get());
                     break;
                 case VT_UINT:
-                    rAny.setValue( & var.uintVal, getCppuType( (sal_uInt32*)0));
+                    rAny.setValue( & var.uintVal, cppu::UnoType<sal_uInt32>::get());
                     break;
                 case VT_VOID:
                     rAny.setValue( NULL, Type());
@@ -2398,7 +2398,7 @@ inline void reduceRange( Any& any)
     if( value <= 0x7f &&  value >= -0x80)
     {// -128 bis 127
         sal_Int8 charVal= static_cast<sal_Int8>( value);
-        any.setValue( &charVal, getCppuType( (sal_Int8*)0));
+        any.setValue( &charVal, cppu::UnoType<sal_Int8>::get());
     }
     else if( value <= 0x7fff && value >= -0x8000)
     {// -32768 bis 32767

@@ -355,7 +355,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             aSize >>= aPSize;
             //TODO: set page width to card width
             aPSize.Width = 10000;
-            aSize.setValue(&aPSize, ::getCppuType((awt::Size*)0));
+            aSize.setValue(&aPSize, ::cppu::UnoType<awt::Size>::get());
             xPProp->setPropertyValue(UNO_NAME_SIZE, aSize);
 
             uno::Any aZero; aZero <<= (sal_Int32)0;

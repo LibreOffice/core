@@ -848,30 +848,30 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
     switch( eType )
     {
         case SbxNULL:       aRetType = ::getCppuType( (const Reference< XInterface > *)0 ); break;
-        case SbxINTEGER:    aRetType = ::getCppuType( (sal_Int16*)0 ); break;
-        case SbxLONG:       aRetType = ::getCppuType( (sal_Int32*)0 ); break;
-        case SbxSINGLE:     aRetType = ::getCppuType( (float*)0 ); break;
-        case SbxDOUBLE:     aRetType = ::getCppuType( (double*)0 ); break;
+        case SbxINTEGER:    aRetType = ::cppu::UnoType<sal_Int16>::get(); break;
+        case SbxLONG:       aRetType = ::cppu::UnoType<sal_Int32>::get(); break;
+        case SbxSINGLE:     aRetType = ::cppu::UnoType<float>::get(); break;
+        case SbxDOUBLE:     aRetType = ::cppu::UnoType<double>::get(); break;
         case SbxCURRENCY:   aRetType = ::getCppuType( (oleautomation::Currency*)0 ); break;
         case SbxDECIMAL:    aRetType = ::getCppuType( (oleautomation::Decimal*)0 ); break;
         case SbxDATE:       {
                             SbiInstance* pInst = GetSbData()->pInst;
                             if( pInst && pInst->IsCompatibility() )
-                                aRetType = ::getCppuType( (double*)0 );
+                                aRetType = ::cppu::UnoType<double>::get();
                             else
                                 aRetType = ::getCppuType( (oleautomation::Date*)0 );
                             }
                             break;
-        case SbxSTRING:     aRetType = ::getCppuType( (OUString*)0 ); break;
+        case SbxSTRING:     aRetType = ::cppu::UnoType<OUString>::get(); break;
         case SbxBOOL:       aRetType = ::getCppuType( (sal_Bool*)0 ); break;
         case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
         case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
-        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
+        case SbxBYTE:       aRetType = ::cppu::UnoType<sal_Int8>::get(); break;
         case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
-        case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
+        case SbxULONG:      aRetType = ::cppu::UnoType<sal_uInt32>::get(); break;
         // map machine-dependent ones to long for consistency
-        case SbxINT:        aRetType = ::getCppuType( (sal_Int32*)0 ); break;
-        case SbxUINT:       aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
+        case SbxINT:        aRetType = ::cppu::UnoType<sal_Int32>::get(); break;
+        case SbxUINT:       aRetType = ::cppu::UnoType<sal_uInt32>::get(); break;
         default: break;
     }
     return aRetType;
@@ -1059,11 +1059,11 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
                 if( d == floor( d ) )
                 {
                     if( d >= -128 && d <= 127 )
-                        aType = ::getCppuType( (sal_Int8*)0 );
+                        aType = ::cppu::UnoType<sal_Int8>::get();
                     else if( d >= SbxMININT && d <= SbxMAXINT )
-                        aType = ::getCppuType( (sal_Int16*)0 );
+                        aType = ::cppu::UnoType<sal_Int16>::get();
                     else if( d >= -SbxMAXLNG && d <= SbxMAXLNG )
-                        aType = ::getCppuType( (sal_Int32*)0 );
+                        aType = ::cppu::UnoType<sal_Int32>::get();
                 }
                 break;
             }
@@ -1071,16 +1071,16 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
             {
                 sal_Int16 n = pVar->GetInteger();
                 if( n >= -128 && n <= 127 )
-                    aType = ::getCppuType( (sal_Int8*)0 );
+                    aType = ::cppu::UnoType<sal_Int8>::get();
                 break;
             }
             case TypeClass_LONG:
             {
                 sal_Int32 n = pVar->GetLong();
                 if( n >= -128 && n <= 127 )
-                    aType = ::getCppuType( (sal_Int8*)0 );
+                    aType = ::cppu::UnoType<sal_Int8>::get();
                 else if( n >= SbxMININT && n <= SbxMAXINT )
-                    aType = ::getCppuType( (sal_Int16*)0 );
+                    aType = ::cppu::UnoType<sal_Int16>::get();
                 break;
             }
             case TypeClass_UNSIGNED_SHORT:

@@ -146,7 +146,7 @@ bool checkOutArgs(const Sequence<Any> & outArgs,
         NamedArgument naOut;
         value >>= naVal;
         out >>= naOut;
-        if (values[i].getValueType() == getCppuType((NamedArgument *) 0))
+        if (values[i].getValueType() == cppu::UnoType<NamedArgument>::get())
         {
             NamedArgument inNamed;
             values[i] >>= inNamed;

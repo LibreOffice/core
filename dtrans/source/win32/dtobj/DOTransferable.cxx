@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 namespace
 {
     const Type CPPUTYPE_SEQINT8  = getCppuType( ( Sequence< sal_Int8 >* )0 );
-    const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
+    const Type CPPUTYPE_OUSTRING = cppu::UnoType<OUString>::get();
 
     inline
     sal_Bool isValidFlavor( const DataFlavor& aFlavor )
@@ -536,7 +536,7 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
         {
             IDataObject* pObj= m_rDataObject.get();
             pObj->AddRef();
-            retVal.setValue( &pObj, getCppuType((sal_uInt32*)0));
+            retVal.setValue( &pObj, cppu::UnoType<sal_uInt32>::get());
         }
     }
     return retVal;

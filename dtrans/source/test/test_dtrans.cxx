@@ -187,7 +187,7 @@ StringTransferable::StringTransferable( ) :
 
     /*
     df.MimeType = L"text/plain; charset=unicode";
-    df.DataType = getCppuType( ( OUString* )0 );
+    df.DataType = cppu::UnoType<OUString>::get();
 
     m_seqDFlv[0] = df;
     */

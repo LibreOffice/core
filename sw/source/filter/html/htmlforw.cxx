@@ -781,7 +781,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             aTmp = xPropSet->getPropertyValue(
                             OUString("ButtonType") );
             if( aTmp.getValueType() ==
-                            ::getCppuType((const form::FormButtonType*)0) )
+                            ::cppu::UnoType<form::FormButtonType>::get() )
                 eButtonType = *( form::FormButtonType*)aTmp.getValue();
 
             switch( eButtonType )

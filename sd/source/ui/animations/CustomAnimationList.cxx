@@ -161,7 +161,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
 {
     OUString aDescription;
 
-    if( rTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+    if( rTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
     {
         ParagraphTarget aParaTarget;
         rTarget >>= aParaTarget;

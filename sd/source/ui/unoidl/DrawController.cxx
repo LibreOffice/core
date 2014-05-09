@@ -700,7 +700,7 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property("VisibleArea",
             PROPERTY_WORKAREA,
-            ::getCppuType((const ::com::sun::star::awt::Rectangle*)0),
+            ::cppu::UnoType< ::com::sun::star::awt::Rectangle>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY));
     rProperties.push_back(
         beans::Property(
@@ -742,12 +742,12 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property("ViewOffset",
             PROPERTY_VIEWOFFSET,
-            ::getCppuType((const ::com::sun::star::awt::Point*)0),
+            ::cppu::UnoType< ::com::sun::star::awt::Point>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("DrawViewMode",
             PROPERTY_DRAWVIEWMODE,
-            ::getCppuType((const ::com::sun::star::awt::Point*)0),
+            ::cppu::UnoType< ::com::sun::star::awt::Point>::get(),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
     // add new property to update current page's acc information
     rProperties.push_back(

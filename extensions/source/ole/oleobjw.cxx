@@ -774,7 +774,7 @@ Any SAL_CALL IUnknownWrapper_Impl::createBridge( const Any& modelDepObject,
                 pVariant->punkVal->AddRef();
             }
 
-            ret.setValue((void*)&pVariant, getCppuType( (sal_uInt32*) 0));
+            ret.setValue((void*)&pVariant, cppu::UnoType<sal_uInt32>::get());
         }
     }
 
@@ -1354,7 +1354,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
 
         // Determine the number of named arguments
         for ( sal_Int32 nInd = 0; nInd < aParams.getLength(); nInd++ )
-            if ( aParams[nInd].getValueType() == getCppuType((NamedArgument*) 0) )
+            if ( aParams[nInd].getValueType() == cppu::UnoType<NamedArgument>::get() )
                 dispparams.cNamedArgs ++;
 
         // fill the named arguments
@@ -1372,7 +1372,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
             int cNamedArg = 0;
             for ( size_t nInd = 0; nInd < dispparams.cArgs; nInd++ )
             {
-                if ( aParams[nInd].getValueType() == getCppuType((NamedArgument*) 0))
+                if ( aParams[nInd].getValueType() == cppu::UnoType<NamedArgument>::get())
                 {
                     const NamedArgument& arg = *(NamedArgument const*)aParams[nInd].getValue();
 
@@ -1435,14 +1435,14 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
                     anyArg = aParams.getConstArray()[nInd];
 
                 // Property Put arguments
-                if ( anyArg.getValueType() == getCppuType((PropertyPutArgument*)0) )
+                if ( anyArg.getValueType() == cppu::UnoType<PropertyPutArgument>::get() )
                 {
                     PropertyPutArgument arg;
                     anyArg >>= arg;
                     anyArg <<= arg.Value;
                 }
                 // named argument
-                if (anyArg.getValueType() == getCppuType((NamedArgument*) 0))
+                if (anyArg.getValueType() == cppu::UnoType<NamedArgument>::get())
                 {
                     NamedArgument aNamedArgument;
                     anyArg >>= aNamedArgument;
@@ -1751,7 +1751,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     for (int iParam = 0; iParam < nUnoArgs; iParam ++)
     {
         const Any & curArg = Params[iParam];
-        if (curArg.getValueType() == getCppuType((NamedArgument*) 0))
+        if (curArg.getValueType() == cppu::UnoType<NamedArgument>::get())
             dispparams.cNamedArgs ++;
     }
     //In a property put operation a property value is a named argument (DISPID_PROPERTYPUT).
@@ -1817,7 +1817,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
         for (size_t iParams = 0; iParams < dispparams.cArgs; iParams ++)
         {
             const Any &  curArg = Params[iParams];
-            if (curArg.getValueType() == getCppuType((NamedArgument*) 0))
+            if (curArg.getValueType() == cppu::UnoType<NamedArgument>::get())
             {
                 const NamedArgument& arg = *(NamedArgument const*) curArg.getValue();
                 //We put the parameter names in reverse order into the array,
@@ -1910,14 +1910,14 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             }
 
             // Property Put arguments
-            if (anyArg.getValueType() == getCppuType((PropertyPutArgument*)0))
+            if (anyArg.getValueType() == cppu::UnoType<PropertyPutArgument>::get())
             {
                 PropertyPutArgument arg;
                 anyArg >>= arg;
                 anyArg <<= arg.Value;
             }
             // named argument
-            if (anyArg.getValueType() == getCppuType((NamedArgument*) 0))
+            if (anyArg.getValueType() == cppu::UnoType<NamedArgument>::get())
             {
                 NamedArgument aNamedArgument;
                 anyArg >>= aNamedArgument;
@@ -2080,7 +2080,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                 int realParamIndex = paramIndex;
                 int revParamIndex = dispparams.cArgs - paramIndex - 1;
                 if (Params[paramIndex].getValueType()
-                    == getCppuType((NamedArgument*) 0))
+                    == cppu::UnoType<NamedArgument>::get())
                 {
                     //dispparams.rgdispidNamedArgs contains the mapping from index
                     //of named args list to index of parameter list
@@ -2206,7 +2206,7 @@ void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
     //or in a list of named arguments. A PropertyPutArgument is actually a named argument
     //hence it must not be put in an extra NamedArgument structure
     if (nUnoArgs > 0 &&
-        arArgs[nUnoArgs - 1].getValueType() == getCppuType((PropertyPutArgument*) 0))
+        arArgs[nUnoArgs - 1].getValueType() == cppu::UnoType<PropertyPutArgument>::get())
     {
         // DISPATCH_PROPERTYPUT
         FuncDesc aDescGet(pInfo);

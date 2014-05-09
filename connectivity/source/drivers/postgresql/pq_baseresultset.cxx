@@ -104,25 +104,25 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
                     // At least use for the handles the #define'd values in .hxx file...
                     Property(
                         OUString("CursorName"), 0,
-                        ::getCppuType( (OUString *)0) , 0 ),
+                        ::cppu::UnoType<OUString>::get() , 0 ),
                     Property(
                         OUString("EscapeProcessing"), 1,
                         ::getBooleanCppuType() , 0 ),
                     Property(
                         OUString("FetchDirection"), 2,
-                        ::getCppuType( (sal_Int32 *)0) , 0 ),
+                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
                     Property(
                         OUString("FetchSize"), 3,
-                        ::getCppuType( (sal_Int32 *)0) , 0 ),
+                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
                     Property(
                         OUString("IsBookmarkable"), 4,
                         ::getBooleanCppuType() , 0 ),
                     Property(
                         OUString("ResultSetConcurrency"), 5,
-                        ::getCppuType( (sal_Int32 *)0) , 0 ),
+                        ::cppu::UnoType<sal_Int32>::get() , 0 ),
                     Property(
                         OUString("ResultSetType"), 6,
-                        ::getCppuType( (sal_Int32 *)0) , 0 )
+                        ::cppu::UnoType<sal_Int32>::get() , 0 )
                 };
             OSL_ASSERT( sizeof(aTable) / sizeof(Property) == BASERESULTSET_SIZE );
             static ::cppu::OPropertyArrayHelper arrayHelper( aTable, BASERESULTSET_SIZE, sal_True );

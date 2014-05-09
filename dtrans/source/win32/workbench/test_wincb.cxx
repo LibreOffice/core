@@ -130,7 +130,7 @@ CTransferable::CTransferable( ) :
     DataFlavor df;
 
     //df.MimeType = L"text/plain;charset=utf-16";
-    //df.DataType = getCppuType( ( OUString* )0 );
+    //df.DataType = cppu::UnoType<OUString>::get();
 
     df.MimeType = L"text/plain;charset=Windows1252";
     df.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );

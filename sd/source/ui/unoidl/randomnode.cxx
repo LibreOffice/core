@@ -246,7 +246,7 @@ void SAL_CALL RandomAnimationNode::initialize( const Sequence< Any >& aArguments
     {
         aArguments[0] >>= mnPresetClass;
     }
-    else if( aArguments[0].getValueType() != ::getCppuType((const ParagraphTarget*)0) )
+    else if( aArguments[0].getValueType() != ::cppu::UnoType<ParagraphTarget>::get() )
     {
         Reference< XShape > xShape;
         aArguments[0] >>= xShape;

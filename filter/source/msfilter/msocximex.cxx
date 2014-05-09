@@ -126,7 +126,7 @@ const uno::Reference< container::XIndexContainer >&
                 uno::Reference< beans::XPropertySet > xFormPropSet( xCreate,
                     uno::UNO_QUERY );
 
-                uno::Any aTmp(&sName,getCppuType((OUString *)0));
+                uno::Any aTmp(&sName,cppu::UnoType<OUString>::get());
                 xFormPropSet->setPropertyValue( "Name", aTmp );
 
                 uno::Reference< form::XForm > xForm( xCreate, uno::UNO_QUERY );

@@ -1513,7 +1513,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
             awt::Size aAwtSize(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height()));
-            pData = new PropValData((void*)&aAwtSize, UNO_NAME_GRAPHIC_SIZE, ::getCppuType((const awt::Size*)0));
+            pData = new PropValData((void*)&aAwtSize, UNO_NAME_GRAPHIC_SIZE, ::cppu::UnoType<awt::Size>::get());
             aPropertyValues.push_back(pData);
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
@@ -2013,7 +2013,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     assert( !pDocShell );
                     if(!pSetSize)
                         pSetSize = new Size;
-                    if(pData->aVal.getValueType() == ::getCppuType((awt::Size*)0))
+                    if(pData->aVal.getValueType() == ::cppu::UnoType<awt::Size>::get())
                     {
                          awt::Size* pSize =  (awt::Size*)pData->aVal.getValue();
                         pSize->Width = convertMm100ToTwip(pSize->Width);

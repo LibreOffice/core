@@ -135,7 +135,7 @@ bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aDrop.Lines = nLines   ;
             aDrop.Count = nChars   ;
             aDrop.Distance  = convertTwipToMm100(nDistance);
-            rVal.setValue(&aDrop, ::getCppuType((const style::DropCapFormat*)0));
+            rVal.setValue(&aDrop, ::cppu::UnoType<style::DropCapFormat>::get());
         }
         break;
         case MID_DROPCAP_WHOLE_WORD:
@@ -185,7 +185,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         case MID_DROPCAP_FORMAT:
         {
-            if(rVal.getValueType()  == ::getCppuType((const style::DropCapFormat*)0))
+            if(rVal.getValueType()  == ::cppu::UnoType<style::DropCapFormat>::get())
             {
                 const style::DropCapFormat* pDrop = (const style::DropCapFormat*)rVal.getValue();
                 nLines      = pDrop->Lines;

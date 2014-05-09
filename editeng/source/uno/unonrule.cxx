@@ -217,7 +217,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     {
         awt::FontDescriptor aDesc;
         SvxUnoFontDescriptor::ConvertFromFont( *rFmt.GetBulletFont(), aDesc );
-        aVal.setValue(&aDesc, ::getCppuType((const awt::FontDescriptor*)0));
+        aVal.setValue(&aDesc, ::cppu::UnoType<awt::FontDescriptor>::get());
         pArray[nIdx++] = beans::PropertyValue( OUString(UNO_NAME_NRULE_BULLET_FONT), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     }
 

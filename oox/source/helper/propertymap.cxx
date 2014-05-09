@@ -442,7 +442,7 @@ static void lclDumpAnyValue( Any value)
         fprintf (stderr, "%s\n", s);
     } else if( value >>= spacing ) {
         fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
-    } else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
+    } else if( value.isExtractableTo(::cppu::UnoType<sal_Int32>::get())) {
         fprintf (stderr,"is extractable to int32\n");
     }
 //         else if( value >>= pointValue )
@@ -893,7 +893,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
         fprintf (stderr, "aSize.Height = %" SAL_PRIdINT32 ";\n", size.Height);
         return "aSize";
     }
-    else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
+    else if( value.isExtractableTo(::cppu::UnoType<sal_Int32>::get())) {
         fprintf (stderr,"is extractable to int32\n");
     }
     else

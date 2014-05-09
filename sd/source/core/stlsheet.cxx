@@ -92,10 +92,10 @@ static SvxItemPropertySet& GetStylePropertySet()
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
-        { OUString("TopBorder"),                    SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
-        { OUString("BottomBorder"),                 SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
-        { OUString("LeftBorder"),                   SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
-        { OUString("RightBorder"),                  SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
+        { OUString("TopBorder"),                    SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER }, \
+        { OUString("BottomBorder"),                 SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER }, \
+        { OUString("LeftBorder"),                   SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER }, \
+        { OUString("RightBorder"),                  SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER }, \
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

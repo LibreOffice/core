@@ -886,7 +886,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_LINECAP :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_LineCap_EnumMap, ::getCppuType((const drawing::LineCap*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_LineCap_EnumMap, ::cppu::UnoType<drawing::LineCap>::get() );
                 break;
             }
             case XML_SD_TYPE_FILLSTYLE :
@@ -896,7 +896,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_PRESPAGE_TYPE :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_PresChange_EnumMap, ::getCppuType((const sal_Int32*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_PresChange_EnumMap, ::cppu::UnoType<sal_Int32>::get() );
                 break;
             }
             case XML_SD_TYPE_SHADOW :
@@ -911,7 +911,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_PRESPAGE_STYLE :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_FadeEffect_EnumMap, ::getCppuType((const presentation::FadeEffect*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_FadeEffect_EnumMap, ::cppu::UnoType<presentation::FadeEffect>::get() );
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_SPEED :
@@ -1061,7 +1061,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 }
                 break;
             case XML_SD_TYPE_MEASURE_UNIT:
-                pHdl = new XMLEnumPropertyHdl( pXML_MeasureUnit_Enum, ::getCppuType((const sal_Int32*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_MeasureUnit_Enum, ::cppu::UnoType<sal_Int32>::get() );
                 break;
             case XML_SD_TYPE_MEASURE_HALIGN:
                 pHdl = new XMLEnumPropertyHdl( pXML_Measure_HAlign_Enum, ::getCppuType((const com::sun::star::drawing::MeasureTextHorzPos*)0) );
@@ -1083,16 +1083,16 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
             // #FontWork#
             case XML_SD_TYPE_FONTWORK_STYLE     :
-                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Style_Enum , ::getCppuType((const sal_Int32*)0));
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Style_Enum , ::cppu::UnoType<sal_Int32>::get());
                 break;
             case XML_SD_TYPE_FONTWORK_ADJUST        :
-                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Adjust_Enum , ::getCppuType((const sal_Int32*)0));
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Adjust_Enum , ::cppu::UnoType<sal_Int32>::get());
                 break;
             case XML_SD_TYPE_FONTWORK_SHADOW        :
-                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Shadow_Enum , ::getCppuType((const sal_Int32*)0));
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Shadow_Enum , ::cppu::UnoType<sal_Int32>::get());
                 break;
             case XML_SD_TYPE_FONTWORK_FORM      :
-                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Form_Enum , ::getCppuType((const sal_Int32*)0));
+                pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Form_Enum , ::cppu::UnoType<sal_Int32>::get());
                 break;
 
             case XML_SD_TYPE_CONTROL_BORDER:
@@ -1123,10 +1123,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLPercentOrMeasurePropertyHandler( false );
                 break;
             case XML_SD_TYPE_CAPTION_ESC_DIR:
-                pHdl = new XMLEnumPropertyHdl( pXML_Caption_Esc_Dir_Enum , ::getCppuType((const sal_Int32*)0));
+                pHdl = new XMLEnumPropertyHdl( pXML_Caption_Esc_Dir_Enum , ::cppu::UnoType<sal_Int32>::get());
                 break;
             case XML_SD_TYPE_CAPTION_TYPE:
-                pHdl = new XMLEnumPropertyHdl( pXML_Caption_Type_Enum , ::getCppuType((const sal_Int32*)0));
+                pHdl = new XMLEnumPropertyHdl( pXML_Caption_Type_Enum , ::cppu::UnoType<sal_Int32>::get());
                 break;
             case XML_SD_TYPE_DATETIMEUPDATE:
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FIXED), GetXMLToken(XML_VARIABLE) );
@@ -1135,10 +1135,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLDateTimeFormatHdl( mpExport );
                 break;
             case XML_SD_TYPE_TRANSITION_TYPE:
-                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionType) , ::getCppuType((const sal_Int16*)0));
+                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionType) , ::cppu::UnoType<sal_Int16>::get());
                 break;
             case XML_SD_TYPE_TRANSTIION_SUBTYPE:
-                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionSubType) , ::getCppuType((const sal_Int16*)0));
+                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionSubType) , ::cppu::UnoType<sal_Int16>::get());
                 break;
             case XML_SD_TYPE_TRANSTIION_DIRECTION:
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FORWARD), GetXMLToken(XML_REVERSE) );

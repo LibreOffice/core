@@ -490,7 +490,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     aAny <<= (sal_Int16)1;
                     xPropSet->setPropertyValue("BoundColumn", aAny);
                     ListSourceType eSet = ListSourceType_VALUELIST;
-                    aAny.setValue( &eSet, ::getCppuType((const ListSourceType*)0) );
+                    aAny.setValue( &eSet, ::cppu::UnoType<ListSourceType>::get() );
                     xPropSet->setPropertyValue("ListSourceType", aAny);
 
                     uno::Sequence<OUString> aListSource(TYPE_COUNT);

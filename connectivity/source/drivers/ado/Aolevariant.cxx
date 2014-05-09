@@ -699,16 +699,16 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
             aValue.setValue(NULL, Type());
             break;
         case VT_I2:
-            aValue.setValue( & iVal, getCppuType( (sal_Int16*)0));
+            aValue.setValue( & iVal, cppu::UnoType<sal_Int16>::get());
             break;
         case VT_I4:
-            aValue.setValue( & lVal, getCppuType( (sal_Int32*)0));
+            aValue.setValue( & lVal, cppu::UnoType<sal_Int32>::get());
             break;
         case VT_R4:
-            aValue.setValue( & fltVal, getCppuType( (float*)0));
+            aValue.setValue( & fltVal, cppu::UnoType<float>::get());
             break;
         case VT_R8:
-            aValue.setValue(& dblVal, getCppuType( (double*)0));
+            aValue.setValue(& dblVal, cppu::UnoType<double>::get());
             break;
         case VT_CY:
          {
@@ -746,7 +746,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
             aValue.setValue( & ulVal, getCppuType( (sal_uInt32*)0));
             break;
         case VT_INT:
-            aValue.setValue( & intVal, getCppuType( (sal_Int32*)0));
+            aValue.setValue( & intVal, cppu::UnoType<sal_Int32>::get());
             break;
         case VT_UINT:
             aValue.setValue( & uintVal, getCppuType( (sal_uInt32*)0));

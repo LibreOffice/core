@@ -531,8 +531,8 @@ throw( uno::Exception, uno::RuntimeException )
 
     aAny = aArguments[0];
 
-    if( ( aAny.getValueType() != ::getCppuType( ( sal_Int16* )0 ) ) &&
-        (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
+    if( ( aAny.getValueType() != ::cppu::UnoType<sal_Int16>::get() ) &&
+        (aAny.getValueType() != ::cppu::UnoType<sal_Int8>::get() ) )
         throw lang::IllegalArgumentException(rtl::OUString( "invalid argument type" ),
                                              static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
 

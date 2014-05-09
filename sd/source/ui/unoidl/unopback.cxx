@@ -124,7 +124,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         case XATTR_FILLFLOATTRANSPARENCE :
                         case XATTR_FILLGRADIENT :
                         {
-                            if ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::awt::Gradient*)0) )
+                            if ( ( pAny->getValueType() == ::cppu::UnoType< ::com::sun::star::awt::Gradient>::get() )
                                 && ( aIt->nMemberId == MID_FILLGRADIENT ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
@@ -138,7 +138,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         break;
                         case XATTR_FILLHATCH :
                         {
-                            if ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::drawing::Hatch*)0) )
+                            if ( ( pAny->getValueType() == ::cppu::UnoType< ::com::sun::star::drawing::Hatch>::get() )
                                 && ( aIt->nMemberId == MID_FILLHATCH ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );

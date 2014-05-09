@@ -125,7 +125,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
             }
         }
         else if ( pMap->aType.getTypeClass() == uno::TypeClass_ENUM &&
-              aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
+              aVal.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
         {
             // convert typeless SfxEnumItem to enum type
             sal_Int32 nEnum;
@@ -237,7 +237,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     }
 
     if ( pMap->aType.getTypeClass() == uno::TypeClass_ENUM &&
-          aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
+          aVal.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
     {
         sal_Int32 nEnum;
         aVal >>= nEnum;

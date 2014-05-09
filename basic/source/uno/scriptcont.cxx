@@ -1240,7 +1240,7 @@ Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create( const Refere
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI )
-    : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xContext, xSFI )
+    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xContext, xSFI )
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
 {
@@ -1252,7 +1252,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     bool ReadOnly )
-    : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xContext, xSFI,
+    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xContext, xSFI,
                         aLibInfoFileURL, aStorageURL, ReadOnly)
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
