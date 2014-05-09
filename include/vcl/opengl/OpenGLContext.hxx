@@ -23,7 +23,6 @@
 #  include <postx.h>
 #elif defined( _WIN32 )
 #  include "prewin.h"
-#  include "windows.h"
 #  include "postwin.h"
 #endif
 

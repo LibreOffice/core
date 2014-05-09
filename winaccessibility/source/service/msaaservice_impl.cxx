@@ -32,7 +32,6 @@
 #include <vcl/window.hxx>
 
 #include <prewin.h>
-#include <windows.h>
 #include <postwin.h>
 
 using namespace ::com::sun::star; // for odk interfaces
