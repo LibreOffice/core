@@ -30,6 +30,9 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <unotools/fontdefs.hxx>
 
+namespace
+{
+
 inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 {
     rPt.X() = FRound( fScaleX * rPt.X() );
@@ -67,10 +70,7 @@ inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScal
     }
 }
 
-#define COMPAT( _def_rIStm ) VersionCompat aCompat( ( _def_rIStm ), STREAM_READ );
-#define WRITE_BASE_COMPAT( _def_rOStm, _def_nVer, _pWriteData )         \
-    MetaAction::Write( ( _def_rOStm ), _pWriteData );                   \
-    VersionCompat aCompat( ( _def_rOStm ), STREAM_WRITE, ( _def_nVer ) );
+} //anonymous namespace
 
 MetaAction::MetaAction() :
     mnRefCount( 1 ),
@@ -110,6 +110,12 @@ bool MetaAction::Compare( const MetaAction& ) const
     return true;
 }
 
+void MetaAction::WriteWithVersion( SvStream& rStream, ImplMetaWriteData* pWriteData, sal_uInt16 nVersion)
+{
+    MetaAction::Write(rStream, pWriteData);
+    VersionCompat aCompat(rStream, STREAM_WRITE, nVersion);
+}
+
 void MetaAction::Write( SvStream& rOStm, ImplMetaWriteData* )
 {
     rOStm.WriteUInt16( mnType );
@@ -131,66 +137,64 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
 
     switch( nType )
     {
-        case( META_NULL_ACTION ): pAction = new MetaAction; break;
-        case( META_PIXEL_ACTION ): pAction = new MetaPixelAction; break;
-        case( META_POINT_ACTION ): pAction = new MetaPointAction; break;
-        case( META_LINE_ACTION ): pAction = new MetaLineAction; break;
-        case( META_RECT_ACTION ): pAction = new MetaRectAction; break;
-        case( META_ROUNDRECT_ACTION ): pAction = new MetaRoundRectAction; break;
-        case( META_ELLIPSE_ACTION ): pAction = new MetaEllipseAction; break;
-        case( META_ARC_ACTION ): pAction = new MetaArcAction; break;
-        case( META_PIE_ACTION ): pAction = new MetaPieAction; break;
-        case( META_CHORD_ACTION ): pAction = new MetaChordAction; break;
-        case( META_POLYLINE_ACTION ): pAction = new MetaPolyLineAction; break;
-        case( META_POLYGON_ACTION ): pAction = new MetaPolygonAction; break;
-        case( META_POLYPOLYGON_ACTION ): pAction = new MetaPolyPolygonAction; break;
-        case( META_TEXT_ACTION ): pAction = new MetaTextAction; break;
-        case( META_TEXTARRAY_ACTION ): pAction = new MetaTextArrayAction; break;
-        case( META_STRETCHTEXT_ACTION ): pAction = new MetaStretchTextAction; break;
-        case( META_TEXTRECT_ACTION ): pAction = new MetaTextRectAction; break;
-        case( META_TEXTLINE_ACTION ): pAction = new MetaTextLineAction; break;
-        case( META_BMP_ACTION ): pAction = new MetaBmpAction; break;
-        case( META_BMPSCALE_ACTION ): pAction = new MetaBmpScaleAction; break;
-        case( META_BMPSCALEPART_ACTION ): pAction = new MetaBmpScalePartAction; break;
-        case( META_BMPEX_ACTION ): pAction = new MetaBmpExAction; break;
-        case( META_BMPEXSCALE_ACTION ): pAction = new MetaBmpExScaleAction; break;
-        case( META_BMPEXSCALEPART_ACTION ): pAction = new MetaBmpExScalePartAction; break;
-        case( META_MASK_ACTION ): pAction = new MetaMaskAction; break;
-        case( META_MASKSCALE_ACTION ): pAction = new MetaMaskScaleAction; break;
-        case( META_MASKSCALEPART_ACTION ): pAction = new MetaMaskScalePartAction; break;
-        case( META_GRADIENT_ACTION ): pAction = new MetaGradientAction; break;
-        case( META_GRADIENTEX_ACTION ): pAction = new MetaGradientExAction; break;
-        case( META_HATCH_ACTION ): pAction = new MetaHatchAction; break;
-        case( META_WALLPAPER_ACTION ): pAction = new MetaWallpaperAction; break;
-        case( META_CLIPREGION_ACTION ): pAction = new MetaClipRegionAction; break;
-        case( META_ISECTRECTCLIPREGION_ACTION ): pAction = new MetaISectRectClipRegionAction; break;
-        case( META_ISECTREGIONCLIPREGION_ACTION ): pAction = new MetaISectRegionClipRegionAction; break;
-        case( META_MOVECLIPREGION_ACTION ): pAction = new MetaMoveClipRegionAction; break;
-        case( META_LINECOLOR_ACTION ): pAction = new MetaLineColorAction; break;
-        case( META_FILLCOLOR_ACTION ): pAction = new MetaFillColorAction; break;
-        case( META_TEXTCOLOR_ACTION ): pAction = new MetaTextColorAction; break;
-        case( META_TEXTFILLCOLOR_ACTION ): pAction = new MetaTextFillColorAction; break;
-        case( META_TEXTLINECOLOR_ACTION ): pAction = new MetaTextLineColorAction; break;
-        case( META_OVERLINECOLOR_ACTION ): pAction = new MetaOverlineColorAction; break;
-        case( META_TEXTALIGN_ACTION ): pAction = new MetaTextAlignAction; break;
-        case( META_MAPMODE_ACTION ): pAction = new MetaMapModeAction; break;
-        case( META_FONT_ACTION ): pAction = new MetaFontAction; break;
-        case( META_PUSH_ACTION ): pAction = new MetaPushAction; break;
-        case( META_POP_ACTION ): pAction = new MetaPopAction; break;
-        case( META_RASTEROP_ACTION ): pAction = new MetaRasterOpAction; break;
-        case( META_TRANSPARENT_ACTION ): pAction = new MetaTransparentAction; break;
-        case( META_FLOATTRANSPARENT_ACTION ): pAction = new MetaFloatTransparentAction; break;
-        case( META_EPS_ACTION ): pAction = new MetaEPSAction; break;
-        case( META_REFPOINT_ACTION ): pAction = new MetaRefPointAction; break;
-        case( META_COMMENT_ACTION ): pAction = new MetaCommentAction; break;
-        case( META_LAYOUTMODE_ACTION ): pAction = new MetaLayoutModeAction; break;
-        case( META_TEXTLANGUAGE_ACTION ): pAction = new MetaTextLanguageAction; break;
+        case META_NULL_ACTION: pAction = new MetaAction; break;
+        case META_PIXEL_ACTION: pAction = new MetaPixelAction; break;
+        case META_POINT_ACTION: pAction = new MetaPointAction; break;
+        case META_LINE_ACTION: pAction = new MetaLineAction; break;
+        case META_RECT_ACTION: pAction = new MetaRectAction; break;
+        case META_ROUNDRECT_ACTION: pAction = new MetaRoundRectAction; break;
+        case META_ELLIPSE_ACTION: pAction = new MetaEllipseAction; break;
+        case META_ARC_ACTION: pAction = new MetaArcAction; break;
+        case META_PIE_ACTION: pAction = new MetaPieAction; break;
+        case META_CHORD_ACTION: pAction = new MetaChordAction; break;
+        case META_POLYLINE_ACTION: pAction = new MetaPolyLineAction; break;
+        case META_POLYGON_ACTION: pAction = new MetaPolygonAction; break;
+        case META_POLYPOLYGON_ACTION: pAction = new MetaPolyPolygonAction; break;
+        case META_TEXT_ACTION: pAction = new MetaTextAction; break;
+        case META_TEXTARRAY_ACTION: pAction = new MetaTextArrayAction; break;
+        case META_STRETCHTEXT_ACTION: pAction = new MetaStretchTextAction; break;
+        case META_TEXTRECT_ACTION: pAction = new MetaTextRectAction; break;
+        case META_TEXTLINE_ACTION: pAction = new MetaTextLineAction; break;
+        case META_BMP_ACTION: pAction = new MetaBmpAction; break;
+        case META_BMPSCALE_ACTION: pAction = new MetaBmpScaleAction; break;
+        case META_BMPSCALEPART_ACTION: pAction = new MetaBmpScalePartAction; break;
+        case META_BMPEX_ACTION: pAction = new MetaBmpExAction; break;
+        case META_BMPEXSCALE_ACTION: pAction = new MetaBmpExScaleAction; break;
+        case META_BMPEXSCALEPART_ACTION: pAction = new MetaBmpExScalePartAction; break;
+        case META_MASK_ACTION: pAction = new MetaMaskAction; break;
+        case META_MASKSCALE_ACTION: pAction = new MetaMaskScaleAction; break;
+        case META_MASKSCALEPART_ACTION: pAction = new MetaMaskScalePartAction; break;
+        case META_GRADIENT_ACTION: pAction = new MetaGradientAction; break;
+        case META_GRADIENTEX_ACTION: pAction = new MetaGradientExAction; break;
+        case META_HATCH_ACTION: pAction = new MetaHatchAction; break;
+        case META_WALLPAPER_ACTION: pAction = new MetaWallpaperAction; break;
+        case META_CLIPREGION_ACTION: pAction = new MetaClipRegionAction; break;
+        case META_ISECTRECTCLIPREGION_ACTION: pAction = new MetaISectRectClipRegionAction; break;
+        case META_ISECTREGIONCLIPREGION_ACTION: pAction = new MetaISectRegionClipRegionAction; break;
+        case META_MOVECLIPREGION_ACTION: pAction = new MetaMoveClipRegionAction; break;
+        case META_LINECOLOR_ACTION: pAction = new MetaLineColorAction; break;
+        case META_FILLCOLOR_ACTION: pAction = new MetaFillColorAction; break;
+        case META_TEXTCOLOR_ACTION: pAction = new MetaTextColorAction; break;
+        case META_TEXTFILLCOLOR_ACTION: pAction = new MetaTextFillColorAction; break;
+        case META_TEXTLINECOLOR_ACTION: pAction = new MetaTextLineColorAction; break;
+        case META_OVERLINECOLOR_ACTION: pAction = new MetaOverlineColorAction; break;
+        case META_TEXTALIGN_ACTION: pAction = new MetaTextAlignAction; break;
+        case META_MAPMODE_ACTION: pAction = new MetaMapModeAction; break;
+        case META_FONT_ACTION: pAction = new MetaFontAction; break;
+        case META_PUSH_ACTION: pAction = new MetaPushAction; break;
+        case META_POP_ACTION: pAction = new MetaPopAction; break;
+        case META_RASTEROP_ACTION: pAction = new MetaRasterOpAction; break;
+        case META_TRANSPARENT_ACTION: pAction = new MetaTransparentAction; break;
+        case META_FLOATTRANSPARENT_ACTION: pAction = new MetaFloatTransparentAction; break;
+        case META_EPS_ACTION: pAction = new MetaEPSAction; break;
+        case META_REFPOINT_ACTION: pAction = new MetaRefPointAction; break;
+        case META_COMMENT_ACTION: pAction = new MetaCommentAction; break;
+        case META_LAYOUTMODE_ACTION: pAction = new MetaLayoutModeAction; break;
+        case META_TEXTLANGUAGE_ACTION: pAction = new MetaTextLanguageAction; break;
 
         default:
         {
-            // Action ueberlesen durch Kombination Ctor/Dtor,
-            // new/delete, weil Compiler sonst vielleicht wegoptimieren
-            delete ( new VersionCompat( rIStm, STREAM_READ ) );
+            VersionCompat aCompat(rIStm, STREAM_READ);
         }
         break;
     }
@@ -201,14 +205,18 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
     return pAction;
 }
 
-IMPL_META_ACTION( Pixel, META_PIXEL_ACTION )
+MetaPixelAction::MetaPixelAction() :
+    MetaAction(META_PIXEL_ACTION)
+{}
+
+MetaPixelAction::~MetaPixelAction()
+{}
 
 MetaPixelAction::MetaPixelAction( const Point& rPt, const Color& rColor ) :
     MetaAction  ( META_PIXEL_ACTION ),
     maPt        ( rPt ),
     maColor     ( rColor )
-{
-}
+{}
 
 void MetaPixelAction::Execute( OutputDevice* pOut )
 {
@@ -240,25 +248,29 @@ bool MetaPixelAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WritePair( rOStm, maPt );
     maColor.Write( rOStm, true );
 }
 
 void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPair( rIStm, maPt );
     maColor.Read( rIStm, true );
 }
 
-IMPL_META_ACTION( Point, META_POINT_ACTION )
+MetaPointAction::MetaPointAction() :
+    MetaAction(META_POINT_ACTION)
+{}
+
+MetaPointAction::~MetaPointAction()
+{}
 
 MetaPointAction::MetaPointAction( const Point& rPt ) :
     MetaAction  ( META_POINT_ACTION ),
     maPt        ( rPt )
-{
-}
+{}
 
 void MetaPointAction::Execute( OutputDevice* pOut )
 {
@@ -289,24 +301,28 @@ bool MetaPointAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WritePair( rOStm, maPt );
 }
 
 void MetaPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPair( rIStm, maPt );
 }
 
-IMPL_META_ACTION( Line, META_LINE_ACTION )
+MetaLineAction::MetaLineAction() :
+    MetaAction(META_LINE_ACTION)
+{}
+
+MetaLineAction::~MetaLineAction()
+{}
 
 MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd ) :
     MetaAction  ( META_LINE_ACTION ),
     maStartPt   ( rStart ),
     maEndPt     ( rEnd )
-{
-}
+{}
 
 MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd,
                                 const LineInfo& rLineInfo ) :
@@ -314,8 +330,7 @@ MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd,
     maLineInfo  ( rLineInfo ),
     maStartPt   ( rStart ),
     maEndPt     ( rEnd )
-{
-}
+{}
 
 void MetaLineAction::Execute( OutputDevice* pOut )
 {
@@ -354,7 +369,7 @@ bool MetaLineAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
 
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );  // Version 1
@@ -363,7 +378,7 @@ void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
 
     // Version 1
     ReadPair( rIStm, maStartPt );
@@ -376,13 +391,17 @@ void MetaLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-IMPL_META_ACTION( Rect, META_RECT_ACTION )
+MetaRectAction::MetaRectAction() :
+    MetaAction(META_RECT_ACTION)
+{}
+
+MetaRectAction::~MetaRectAction()
+{}
 
 MetaRectAction::MetaRectAction( const Rectangle& rRect ) :
     MetaAction  ( META_RECT_ACTION ),
     maRect      ( rRect )
-{
-}
+{}
 
 void MetaRectAction::Execute( OutputDevice* pOut )
 {
@@ -413,13 +432,13 @@ bool MetaRectAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
 }
 
 void MetaRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
 }
 
@@ -427,12 +446,10 @@ MetaRoundRectAction::MetaRoundRectAction() :
     MetaAction  ( META_ROUNDRECT_ACTION ),
     mnHorzRound ( 0 ),
     mnVertRound ( 0 )
-{
-}
+{}
 
 MetaRoundRectAction::~MetaRoundRectAction()
-{
-}
+{}
 
 MetaRoundRectAction::MetaRoundRectAction( const Rectangle& rRect,
                                           sal_uInt32 nHorzRound, sal_uInt32 nVertRound ) :
@@ -440,8 +457,7 @@ MetaRoundRectAction::MetaRoundRectAction( const Rectangle& rRect,
     maRect      ( rRect ),
     mnHorzRound ( nHorzRound ),
     mnVertRound ( nVertRound )
-{
-}
+{}
 
 void MetaRoundRectAction::Execute( OutputDevice* pOut )
 {
@@ -476,24 +492,28 @@ bool MetaRoundRectAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
     rOStm.WriteUInt32( mnHorzRound ).WriteUInt32( mnVertRound );
 }
 
 void MetaRoundRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect ).ReadUInt32( mnHorzRound ).ReadUInt32( mnVertRound );
 }
 
-IMPL_META_ACTION( Ellipse, META_ELLIPSE_ACTION )
+MetaEllipseAction::MetaEllipseAction() :
+    MetaAction(META_ELLIPSE_ACTION)
+{}
+
+MetaEllipseAction::~MetaEllipseAction()
+{}
 
 MetaEllipseAction::MetaEllipseAction( const Rectangle& rRect ) :
     MetaAction  ( META_ELLIPSE_ACTION ),
     maRect      ( rRect )
-{
-}
+{}
 
 void MetaEllipseAction::Execute( OutputDevice* pOut )
 {
@@ -524,17 +544,22 @@ bool MetaEllipseAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaEllipseAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
 }
 
 void MetaEllipseAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
 }
 
-IMPL_META_ACTION( Arc, META_ARC_ACTION )
+MetaArcAction::MetaArcAction() :
+    MetaAction(META_ARC_ACTION)
+{}
+
+MetaArcAction::~MetaArcAction()
+{}
 
 MetaArcAction::MetaArcAction( const Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
@@ -542,8 +567,7 @@ MetaArcAction::MetaArcAction( const Rectangle& rRect,
     maRect      ( rRect ),
     maStartPt   ( rStart ),
     maEndPt     ( rEnd )
-{
-}
+{}
 
 void MetaArcAction::Execute( OutputDevice* pOut )
 {
@@ -580,7 +604,7 @@ bool MetaArcAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );
@@ -588,13 +612,18 @@ void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaArcAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
     ReadPair( rIStm, maStartPt );
     ReadPair( rIStm, maEndPt );
 }
 
-IMPL_META_ACTION( Pie, META_PIE_ACTION )
+MetaPieAction::MetaPieAction() :
+    MetaAction(META_PIE_ACTION)
+{}
+
+MetaPieAction::~MetaPieAction()
+{}
 
 MetaPieAction::MetaPieAction( const Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
@@ -602,8 +631,7 @@ MetaPieAction::MetaPieAction( const Rectangle& rRect,
     maRect      ( rRect ),
     maStartPt   ( rStart ),
     maEndPt     ( rEnd )
-{
-}
+{}
 
 void MetaPieAction::Execute( OutputDevice* pOut )
 {
@@ -640,7 +668,7 @@ bool MetaPieAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );
@@ -648,13 +676,18 @@ void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPieAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
     ReadPair( rIStm, maStartPt );
     ReadPair( rIStm, maEndPt );
 }
 
-IMPL_META_ACTION( Chord, META_CHORD_ACTION )
+MetaChordAction::MetaChordAction() :
+    MetaAction(META_CHORD_ACTION)
+{}
+
+MetaChordAction::~MetaChordAction()
+{}
 
 MetaChordAction::MetaChordAction( const Rectangle& rRect,
                                   const Point& rStart, const Point& rEnd ) :
@@ -662,8 +695,7 @@ MetaChordAction::MetaChordAction( const Rectangle& rRect,
     maRect      ( rRect ),
     maStartPt   ( rStart ),
     maEndPt     ( rEnd )
-{
-}
+{}
 
 void MetaChordAction::Execute( OutputDevice* pOut )
 {
@@ -700,7 +732,7 @@ bool MetaChordAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );
@@ -708,26 +740,29 @@ void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaChordAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
     ReadPair( rIStm, maStartPt );
     ReadPair( rIStm, maEndPt );
 }
 
-IMPL_META_ACTION( PolyLine, META_POLYLINE_ACTION )
+MetaPolyLineAction::MetaPolyLineAction() :
+    MetaAction(META_POLYLINE_ACTION)
+{}
+
+MetaPolyLineAction::~MetaPolyLineAction()
+{}
 
 MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly ) :
     MetaAction  ( META_POLYLINE_ACTION ),
     maPoly      ( rPoly )
-{
-}
+{}
 
 MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly, const LineInfo& rLineInfo ) :
     MetaAction  ( META_POLYLINE_ACTION ),
     maLineInfo  ( rLineInfo ),
     maPoly      ( rPoly )
-{
-}
+{}
 
 void MetaPolyLineAction::Execute( OutputDevice* pOut )
 {
@@ -768,7 +803,7 @@ bool MetaPolyLineAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 3, pData );
+    WriteWithVersion(rOStm, pData, 3);
 
     Polygon aSimplePoly;
     maPoly.AdaptiveSubdivide( aSimplePoly );
@@ -784,7 +819,7 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
 
     // Version 1
     ReadPolygon( rIStm, maPoly );
@@ -801,13 +836,17 @@ void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-IMPL_META_ACTION( Polygon, META_POLYGON_ACTION )
+MetaPolygonAction::MetaPolygonAction() :
+    MetaAction(META_POLYGON_ACTION)
+{}
+
+MetaPolygonAction::~MetaPolygonAction()
+{}
 
 MetaPolygonAction::MetaPolygonAction( const Polygon& rPoly ) :
     MetaAction  ( META_POLYGON_ACTION ),
     maPoly      ( rPoly )
-{
-}
+{}
 
 void MetaPolygonAction::Execute( OutputDevice* pOut )
 {
@@ -838,7 +877,7 @@ bool MetaPolygonAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
 
     Polygon aSimplePoly;                            // Version 1
     maPoly.AdaptiveSubdivide( aSimplePoly );
@@ -852,9 +891,9 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
 
-    ReadPolygon( rIStm, maPoly );                    // Version 1
+    ReadPolygon( rIStm, maPoly );       // Version 1
 
     if( aCompat.GetVersion() >= 2 )     // Version 2
     {
@@ -865,13 +904,17 @@ void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-IMPL_META_ACTION( PolyPolygon, META_POLYPOLYGON_ACTION )
+MetaPolyPolygonAction::MetaPolyPolygonAction() :
+    MetaAction(META_POLYPOLYGON_ACTION)
+{}
+
+MetaPolyPolygonAction::~MetaPolyPolygonAction()
+{}
 
 MetaPolyPolygonAction::MetaPolyPolygonAction( const PolyPolygon& rPolyPoly ) :
     MetaAction  ( META_POLYPOLYGON_ACTION ),
     maPolyPoly  ( rPolyPoly )
-{
-}
+{}
 
 void MetaPolyPolygonAction::Execute( OutputDevice* pOut )
 {
@@ -903,7 +946,7 @@ bool MetaPolyPolygonAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
 
     sal_uInt16 nNumberOfComplexPolygons = 0;
     sal_uInt16 i, nPolyCount = maPolyPoly.Count();
@@ -935,7 +978,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPolyPolygon( rIStm, maPolyPoly );                // Version 1
 
     if ( aCompat.GetVersion() >= 2 )    // Version 2
@@ -957,12 +1000,10 @@ MetaTextAction::MetaTextAction() :
     MetaAction  ( META_TEXT_ACTION ),
     mnIndex     ( 0 ),
     mnLen       ( 0 )
-{
-}
+{}
 
 MetaTextAction::~MetaTextAction()
-{
-}
+{}
 
 MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
                                 sal_Int32 nIndex, sal_Int32 nLen ) :
@@ -971,8 +1012,7 @@ MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
     maStr       ( rStr ),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
-{
-}
+{}
 
 void MetaTextAction::Execute( OutputDevice* pOut )
 {
@@ -1006,7 +1046,7 @@ bool MetaTextAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
     WritePair( rOStm, maPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16(mnIndex);
@@ -1017,7 +1057,7 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     sal_uInt16 nTmpIndex(0);
@@ -1036,8 +1076,7 @@ MetaTextArrayAction::MetaTextArrayAction() :
     mpDXAry     ( NULL ),
     mnIndex     ( 0 ),
     mnLen       ( 0 )
-{
-}
+{}
 
 MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
     MetaAction  ( META_TEXTARRAY_ACTION ),
@@ -1125,7 +1164,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     const sal_Int32 nAryLen = mpDXAry ? mnLen : 0;
 
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
     WritePair( rOStm, maStartPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16(mnIndex);
@@ -1144,7 +1183,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     delete[] mpDXAry;
 
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPair( rIStm, maStartPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     sal_uInt16 nTmpIndex(0);
@@ -1207,12 +1246,10 @@ MetaStretchTextAction::MetaStretchTextAction() :
     mnWidth     ( 0 ),
     mnIndex     ( 0 ),
     mnLen       ( 0 )
-{
-}
+{}
 
 MetaStretchTextAction::~MetaStretchTextAction()
-{
-}
+{}
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                               const OUString& rStr,
@@ -1223,8 +1260,7 @@ MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidt
     mnWidth     ( nWidth ),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
-{
-}
+{}
 
 void MetaStretchTextAction::Execute( OutputDevice* pOut )
 {
@@ -1260,7 +1296,7 @@ bool MetaStretchTextAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
     WritePair( rOStm, maPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt32( mnWidth );
@@ -1272,7 +1308,7 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm.ReadUInt32( mnWidth );
@@ -1290,12 +1326,10 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 MetaTextRectAction::MetaTextRectAction() :
     MetaAction  ( META_TEXTRECT_ACTION ),
     mnStyle     ( 0 )
-{
-}
+{}
 
 MetaTextRectAction::~MetaTextRectAction()
-{
-}
+{}
 
 MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
                                         const OUString& rStr, sal_uInt16 nStyle ) :
@@ -1303,8 +1337,7 @@ MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
     maRect      ( rRect ),
     maStr       ( rStr ),
     mnStyle     ( nStyle )
-{
-}
+{}
 
 void MetaTextRectAction::Execute( OutputDevice* pOut )
 {
@@ -1337,7 +1370,7 @@ bool MetaTextRectAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
     WriteRectangle( rOStm, maRect );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16( mnStyle );
@@ -1347,7 +1380,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm  .ReadUInt16( mnStyle );
@@ -1362,12 +1395,10 @@ MetaTextLineAction::MetaTextLineAction() :
     meStrikeout ( STRIKEOUT_NONE ),
     meUnderline ( UNDERLINE_NONE ),
     meOverline  ( UNDERLINE_NONE )
-{
-}
+{}
 
 MetaTextLineAction::~MetaTextLineAction()
-{
-}
+{}
 
 MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
                                         FontStrikeout eStrikeout,
@@ -1379,8 +1410,7 @@ MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
     meStrikeout ( eStrikeout ),
     meUnderline ( eUnderline ),
     meOverline  ( eOverline )
-{
-}
+{}
 
 void MetaTextLineAction::Execute( OutputDevice* pOut )
 {
@@ -1416,7 +1446,7 @@ bool MetaTextLineAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 2, pData );
+    WriteWithVersion(rOStm, pData, 2);
 
     //#fdo39428 SvStream no longer supports operator<<(long)
     WritePair( rOStm, maPos );
@@ -1429,7 +1459,7 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
 
     //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTempWidth(0);
@@ -1449,14 +1479,18 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-IMPL_META_ACTION( Bmp, META_BMP_ACTION )
+MetaBmpAction::MetaBmpAction() :
+    MetaAction(META_BMP_ACTION)
+{}
+
+MetaBmpAction::~MetaBmpAction()
+{}
 
 MetaBmpAction::MetaBmpAction( const Point& rPt, const Bitmap& rBmp ) :
     MetaAction  ( META_BMP_ACTION ),
     maBmp       ( rBmp ),
     maPt        ( rPt )
-{
-}
+{}
 
 void MetaBmpAction::Execute( OutputDevice* pOut )
 {
@@ -1490,7 +1524,7 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
     }
@@ -1498,12 +1532,17 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
 }
 
-IMPL_META_ACTION( BmpScale, META_BMPSCALE_ACTION )
+MetaBmpScaleAction::MetaBmpScaleAction() :
+    MetaAction(META_BMPSCALE_ACTION)
+{}
+
+MetaBmpScaleAction::~MetaBmpScaleAction()
+{}
 
 MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
                                         const Bitmap& rBmp ) :
@@ -1511,8 +1550,7 @@ MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
     maBmp       ( rBmp ),
     maPt        ( rPt ),
     maSz        ( rSz )
-{
-}
+{}
 
 void MetaBmpScaleAction::Execute( OutputDevice* pOut )
 {
@@ -1550,7 +1588,7 @@ void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
         WritePair( rOStm, maSz );
@@ -1559,13 +1597,18 @@ void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
     ReadPair( rIStm, maSz );
 }
 
-IMPL_META_ACTION( BmpScalePart, META_BMPSCALEPART_ACTION )
+MetaBmpScalePartAction::MetaBmpScalePartAction() :
+    MetaAction(META_BMPSCALEPART_ACTION)
+{}
+
+MetaBmpScalePartAction::~MetaBmpScalePartAction()
+{}
 
 MetaBmpScalePartAction::MetaBmpScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                 const Point& rSrcPt, const Size& rSrcSz,
@@ -1576,8 +1619,7 @@ MetaBmpScalePartAction::MetaBmpScalePartAction( const Point& rDstPt, const Size&
     maDstSz     ( rDstSz ),
     maSrcPt     ( rSrcPt ),
     maSrcSz     ( rSrcSz )
-{
-}
+{}
 
 void MetaBmpScalePartAction::Execute( OutputDevice* pOut )
 {
@@ -1617,7 +1659,7 @@ void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maDstPt );
         WritePair( rOStm, maDstSz );
@@ -1628,7 +1670,7 @@ void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maDstPt );
     ReadPair( rIStm, maDstSz );
@@ -1636,14 +1678,18 @@ void MetaBmpScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-IMPL_META_ACTION( BmpEx, META_BMPEX_ACTION )
+MetaBmpExAction::MetaBmpExAction() :
+    MetaAction(META_BMPEX_ACTION)
+{}
+
+MetaBmpExAction::~MetaBmpExAction()
+{}
 
 MetaBmpExAction::MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx ) :
     MetaAction  ( META_BMPEX_ACTION ),
     maBmpEx     ( rBmpEx ),
     maPt        ( rPt )
-{
-}
+{}
 
 void MetaBmpExAction::Execute( OutputDevice* pOut )
 {
@@ -1677,7 +1723,7 @@ void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmpEx.GetBitmap() )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         WritePair( rOStm, maPt );
     }
@@ -1685,12 +1731,17 @@ void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     ReadPair( rIStm, maPt );
 }
 
-IMPL_META_ACTION( BmpExScale, META_BMPEXSCALE_ACTION )
+MetaBmpExScaleAction::MetaBmpExScaleAction() :
+    MetaAction(META_BMPEXSCALE_ACTION)
+{}
+
+MetaBmpExScaleAction::~MetaBmpExScaleAction()
+{}
 
 MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
                                             const BitmapEx& rBmpEx ) :
@@ -1698,8 +1749,7 @@ MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
     maBmpEx     ( rBmpEx ),
     maPt        ( rPt ),
     maSz        ( rSz )
-{
-}
+{}
 
 void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
@@ -1737,7 +1787,7 @@ void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmpEx.GetBitmap() )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         WritePair( rOStm, maPt );
         WritePair( rOStm, maSz );
@@ -1746,13 +1796,18 @@ void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpExScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     ReadPair( rIStm, maPt );
     ReadPair( rIStm, maSz );
 }
 
-IMPL_META_ACTION( BmpExScalePart, META_BMPEXSCALEPART_ACTION )
+MetaBmpExScalePartAction::MetaBmpExScalePartAction() :
+    MetaAction(META_BMPEXSCALEPART_ACTION)
+{}
+
+MetaBmpExScalePartAction::~MetaBmpExScalePartAction()
+{}
 
 MetaBmpExScalePartAction::MetaBmpExScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                     const Point& rSrcPt, const Size& rSrcSz,
@@ -1763,8 +1818,7 @@ MetaBmpExScalePartAction::MetaBmpExScalePartAction( const Point& rDstPt, const S
     maDstSz     ( rDstSz ),
     maSrcPt     ( rSrcPt ),
     maSrcSz     ( rSrcSz )
-{
-}
+{}
 
 void MetaBmpExScalePartAction::Execute( OutputDevice* pOut )
 {
@@ -1804,7 +1858,7 @@ void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
 {
     if( !!maBmpEx.GetBitmap() )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         WritePair( rOStm, maDstPt );
         WritePair( rOStm, maDstSz );
@@ -1815,7 +1869,7 @@ void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
 
 void MetaBmpExScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     ReadPair( rIStm, maDstPt );
     ReadPair( rIStm, maDstSz );
@@ -1823,7 +1877,12 @@ void MetaBmpExScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-IMPL_META_ACTION( Mask, META_MASK_ACTION )
+MetaMaskAction::MetaMaskAction() :
+    MetaAction(META_MASK_ACTION)
+{}
+
+MetaMaskAction::~MetaMaskAction()
+{}
 
 MetaMaskAction::MetaMaskAction( const Point& rPt,
                                 const Bitmap& rBmp,
@@ -1832,8 +1891,7 @@ MetaMaskAction::MetaMaskAction( const Point& rPt,
     maBmp       ( rBmp ),
     maColor     ( rColor ),
     maPt        ( rPt )
-{
-}
+{}
 
 void MetaMaskAction::Execute( OutputDevice* pOut )
 {
@@ -1868,7 +1926,7 @@ void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
     }
@@ -1876,12 +1934,17 @@ void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
 }
 
-IMPL_META_ACTION( MaskScale, META_MASKSCALE_ACTION )
+MetaMaskScaleAction::MetaMaskScaleAction() :
+    MetaAction(META_MASKSCALE_ACTION)
+{}
+
+MetaMaskScaleAction::~MetaMaskScaleAction()
+{}
 
 MetaMaskScaleAction::MetaMaskScaleAction( const Point& rPt, const Size& rSz,
                                           const Bitmap& rBmp,
@@ -1891,8 +1954,7 @@ MetaMaskScaleAction::MetaMaskScaleAction( const Point& rPt, const Size& rSz,
     maColor     ( rColor ),
     maPt        ( rPt ),
     maSz        ( rSz )
-{
-}
+{}
 
 void MetaMaskScaleAction::Execute( OutputDevice* pOut )
 {
@@ -1931,7 +1993,7 @@ void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
         WritePair( rOStm, maSz );
@@ -1940,13 +2002,18 @@ void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
     ReadPair( rIStm, maSz );
 }
 
-IMPL_META_ACTION( MaskScalePart, META_MASKSCALEPART_ACTION )
+MetaMaskScalePartAction::MetaMaskScalePartAction() :
+    MetaAction(META_MASKSCALEPART_ACTION)
+{}
+
+MetaMaskScalePartAction::~MetaMaskScalePartAction()
+{}
 
 MetaMaskScalePartAction::MetaMaskScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                   const Point& rSrcPt, const Size& rSrcSz,
@@ -1959,8 +2026,7 @@ MetaMaskScalePartAction::MetaMaskScalePartAction( const Point& rDstPt, const Siz
     maDstSz     ( rDstSz ),
     maSrcPt     ( rSrcPt ),
     maSrcSz     ( rSrcSz )
-{
-}
+{}
 
 void MetaMaskScalePartAction::Execute( OutputDevice* pOut )
 {
@@ -2001,7 +2067,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
     {
-        WRITE_BASE_COMPAT( rOStm, 1, pData );
+        WriteWithVersion(rOStm, pData, 1);
         WriteDIB(maBmp, rOStm, false, true);
         maColor.Write( rOStm, true );
         WritePair( rOStm, maDstPt );
@@ -2013,7 +2079,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadDIB(maBmp, rIStm, true);
     maColor.Read( rIStm, true );
     ReadPair( rIStm, maDstPt );
@@ -2022,14 +2088,18 @@ void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-IMPL_META_ACTION( Gradient, META_GRADIENT_ACTION )
+MetaGradientAction::MetaGradientAction() :
+    MetaAction(META_GRADIENT_ACTION)
+{}
+
+MetaGradientAction::~MetaGradientAction()
+{}
 
 MetaGradientAction::MetaGradientAction( const Rectangle& rRect, const Gradient& rGradient ) :
     MetaAction  ( META_GRADIENT_ACTION ),
     maRect      ( rRect ),
     maGradient  ( rGradient )
-{
-}
+{}
 
 void MetaGradientAction::Execute( OutputDevice* pOut )
 {
@@ -2061,33 +2131,30 @@ bool MetaGradientAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
     WriteGradient( rOStm, maGradient );
 }
 
 void MetaGradientAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
     ReadGradient( rIStm, maGradient );
 }
 
 MetaGradientExAction::MetaGradientExAction() :
     MetaAction  ( META_GRADIENTEX_ACTION )
-{
-}
+{}
 
 MetaGradientExAction::MetaGradientExAction( const PolyPolygon& rPolyPoly, const Gradient& rGradient ) :
     MetaAction  ( META_GRADIENTEX_ACTION ),
     maPolyPoly  ( rPolyPoly ),
     maGradient  ( rGradient )
-{
-}
+{}
 
 MetaGradientExAction::~MetaGradientExAction()
-{
-}
+{}
 
 void MetaGradientExAction::Execute( OutputDevice* pOut )
 {
@@ -2124,7 +2191,7 @@ bool MetaGradientExAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
     PolyPolygon aNoCurvePolyPolygon;
@@ -2136,19 +2203,23 @@ void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaGradientExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPolyPolygon( rIStm, maPolyPoly );
     ReadGradient( rIStm, maGradient );
 }
 
-IMPL_META_ACTION( Hatch, META_HATCH_ACTION )
+MetaHatchAction::MetaHatchAction() :
+    MetaAction(META_HATCH_ACTION)
+{}
+
+MetaHatchAction::~MetaHatchAction()
+{}
 
 MetaHatchAction::MetaHatchAction( const PolyPolygon& rPolyPoly, const Hatch& rHatch ) :
     MetaAction  ( META_HATCH_ACTION ),
     maPolyPoly  ( rPolyPoly ),
     maHatch     ( rHatch )
-{
-}
+{}
 
 void MetaHatchAction::Execute( OutputDevice* pOut )
 {
@@ -2181,7 +2252,7 @@ bool MetaHatchAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
     PolyPolygon aNoCurvePolyPolygon;
@@ -2193,20 +2264,24 @@ void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaHatchAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPolyPolygon( rIStm, maPolyPoly );
     ReadHatch( rIStm, maHatch );
 }
 
-IMPL_META_ACTION( Wallpaper, META_WALLPAPER_ACTION )
+MetaWallpaperAction::MetaWallpaperAction() :
+    MetaAction(META_WALLPAPER_ACTION)
+{}
+
+MetaWallpaperAction::~MetaWallpaperAction()
+{}
 
 MetaWallpaperAction::MetaWallpaperAction( const Rectangle& rRect,
                                           const Wallpaper& rPaper ) :
     MetaAction  ( META_WALLPAPER_ACTION ),
     maRect      ( rRect ),
     maWallpaper ( rPaper )
-{
-}
+{}
 
 void MetaWallpaperAction::Execute( OutputDevice* pOut )
 {
@@ -2238,32 +2313,29 @@ bool MetaWallpaperAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaWallpaperAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteWallpaper( rOStm, maWallpaper );
 }
 
 void MetaWallpaperAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadWallpaper( rIStm, maWallpaper );
 }
 
 MetaClipRegionAction::MetaClipRegionAction() :
     MetaAction  ( META_CLIPREGION_ACTION ),
     mbClip      ( false )
-{
-}
+{}
 
 MetaClipRegionAction::~MetaClipRegionAction()
-{
-}
+{}
 
 MetaClipRegionAction::MetaClipRegionAction( const Region& rRegion, bool bClip ) :
     MetaAction  ( META_CLIPREGION_ACTION ),
     maRegion    ( rRegion ),
     mbClip      ( bClip )
-{
-}
+{}
 
 void MetaClipRegionAction::Execute( OutputDevice* pOut )
 {
@@ -2298,25 +2370,29 @@ bool MetaClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRegion( rOStm, maRegion );
     rOStm.WriteUChar( mbClip );
 }
 
 void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRegion( rIStm, maRegion );
     rIStm.ReadCharAsBool( mbClip );
 }
 
-IMPL_META_ACTION( ISectRectClipRegion, META_ISECTRECTCLIPREGION_ACTION )
+MetaISectRectClipRegionAction::MetaISectRectClipRegionAction() :
+    MetaAction(META_ISECTRECTCLIPREGION_ACTION)
+{}
+
+MetaISectRectClipRegionAction::~MetaISectRectClipRegionAction()
+{}
 
 MetaISectRectClipRegionAction::MetaISectRectClipRegionAction( const Rectangle& rRect ) :
     MetaAction  ( META_ISECTRECTCLIPREGION_ACTION ),
     maRect      ( rRect )
-{
-}
+{}
 
 void MetaISectRectClipRegionAction::Execute( OutputDevice* pOut )
 {
@@ -2347,17 +2423,22 @@ bool MetaISectRectClipRegionAction::Compare( const MetaAction& rMetaAction ) con
 
 void MetaISectRectClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRectangle( rOStm, maRect );
 }
 
 void MetaISectRectClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRectangle( rIStm, maRect );
 }
 
-IMPL_META_ACTION( ISectRegionClipRegion, META_ISECTREGIONCLIPREGION_ACTION )
+MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction() :
+    MetaAction(META_ISECTREGIONCLIPREGION_ACTION)
+{}
+
+MetaISectRegionClipRegionAction::~MetaISectRegionClipRegionAction()
+{}
 
 MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( const Region& rRegion ) :
     MetaAction  ( META_ISECTREGIONCLIPREGION_ACTION ),
@@ -2394,13 +2475,13 @@ bool MetaISectRegionClipRegionAction::Compare( const MetaAction& rMetaAction ) c
 
 void MetaISectRegionClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteRegion( rOStm, maRegion );
 }
 
 void MetaISectRegionClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadRegion( rIStm, maRegion );
 }
 
@@ -2408,19 +2489,16 @@ MetaMoveClipRegionAction::MetaMoveClipRegionAction() :
     MetaAction  ( META_MOVECLIPREGION_ACTION ),
     mnHorzMove  ( 0 ),
     mnVertMove  ( 0 )
-{
-}
+{}
 
 MetaMoveClipRegionAction::~MetaMoveClipRegionAction()
-{
-}
+{}
 
 MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMove ) :
     MetaAction  ( META_MOVECLIPREGION_ACTION ),
     mnHorzMove  ( nHorzMove ),
     mnVertMove  ( nVertMove )
-{
-}
+{}
 
 void MetaMoveClipRegionAction::Execute( OutputDevice* pOut )
 {
@@ -2448,14 +2526,14 @@ bool MetaMoveClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     //#fdo39428 SvStream no longer supports operator<<(long)
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(mnHorzMove) ).WriteInt32( sal::static_int_cast<sal_Int32>(mnVertMove) );
 }
 
 void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     //#fdo39428 SvStream no longer supports operator>>(long&)
     sal_Int32 nTmpHM(0), nTmpVM(0);
     rIStm.ReadInt32( nTmpHM ).ReadInt32( nTmpVM );
@@ -2466,19 +2544,16 @@ void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaLineColorAction::MetaLineColorAction() :
     MetaAction  ( META_LINECOLOR_ACTION ),
     mbSet       ( false )
-{
-}
+{}
 
 MetaLineColorAction::~MetaLineColorAction()
-{
-}
+{}
 
 MetaLineColorAction::MetaLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_LINECOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
-{
-}
+{}
 
 void MetaLineColorAction::Execute( OutputDevice* pOut )
 {
@@ -2503,14 +2578,14 @@ bool MetaLineColorAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2518,19 +2593,16 @@ void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaFillColorAction::MetaFillColorAction() :
     MetaAction  ( META_FILLCOLOR_ACTION ),
     mbSet       ( false )
-{
-}
+{}
 
 MetaFillColorAction::~MetaFillColorAction()
-{
-}
+{}
 
 MetaFillColorAction::MetaFillColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_FILLCOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
-{
-}
+{}
 
 void MetaFillColorAction::Execute( OutputDevice* pOut )
 {
@@ -2555,25 +2627,29 @@ bool MetaFillColorAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
 
-IMPL_META_ACTION( TextColor, META_TEXTCOLOR_ACTION )
+MetaTextColorAction::MetaTextColorAction() :
+    MetaAction(META_TEXTCOLOR_ACTION)
+{}
+
+MetaTextColorAction::~MetaTextColorAction()
+{}
 
 MetaTextColorAction::MetaTextColorAction( const Color& rColor ) :
     MetaAction  ( META_TEXTCOLOR_ACTION ),
     maColor     ( rColor )
-{
-}
+{}
 
 void MetaTextColorAction::Execute( OutputDevice* pOut )
 {
@@ -2594,32 +2670,29 @@ bool MetaTextColorAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     maColor.Write( rOStm, true );
 }
 
 void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     maColor.Read( rIStm, true );
 }
 
 MetaTextFillColorAction::MetaTextFillColorAction() :
     MetaAction  ( META_TEXTFILLCOLOR_ACTION ),
     mbSet       ( false )
-{
-}
+{}
 
 MetaTextFillColorAction::~MetaTextFillColorAction()
-{
-}
+{}
 
 MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_TEXTFILLCOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
-{
-}
+{}
 
 void MetaTextFillColorAction::Execute( OutputDevice* pOut )
 {
@@ -2644,14 +2717,14 @@ bool MetaTextFillColorAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2659,19 +2732,16 @@ void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaTextLineColorAction::MetaTextLineColorAction() :
     MetaAction  ( META_TEXTLINECOLOR_ACTION ),
     mbSet       ( false )
-{
-}
+{}
 
 MetaTextLineColorAction::~MetaTextLineColorAction()
-{
-}
+{}
 
 MetaTextLineColorAction::MetaTextLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_TEXTLINECOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
-{
-}
+{}
 
 void MetaTextLineColorAction::Execute( OutputDevice* pOut )
 {
@@ -2696,14 +2766,14 @@ bool MetaTextLineColorAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2711,19 +2781,16 @@ void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaOverlineColorAction::MetaOverlineColorAction() :
     MetaAction  ( META_OVERLINECOLOR_ACTION ),
     mbSet       ( false )
-{
-}
+{}
 
 MetaOverlineColorAction::~MetaOverlineColorAction()
-{
-}
+{}
 
 MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_OVERLINECOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
-{
-}
+{}
 
 void MetaOverlineColorAction::Execute( OutputDevice* pOut )
 {
@@ -2748,14 +2815,14 @@ bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2763,18 +2830,15 @@ void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaTextAlignAction::MetaTextAlignAction() :
     MetaAction  ( META_TEXTALIGN_ACTION ),
     maAlign     ( ALIGN_TOP )
-{
-}
+{}
 
 MetaTextAlignAction::~MetaTextAlignAction()
-{
-}
+{}
 
 MetaTextAlignAction::MetaTextAlignAction( TextAlign aAlign ) :
     MetaAction  ( META_TEXTALIGN_ACTION ),
     maAlign     ( aAlign )
-{
-}
+{}
 
 void MetaTextAlignAction::Execute( OutputDevice* pOut )
 {
@@ -2795,7 +2859,7 @@ bool MetaTextAlignAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     rOStm.WriteUInt16( (sal_uInt16) maAlign );
 }
 
@@ -2803,17 +2867,21 @@ void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     sal_uInt16 nTmp16(0);
 
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     rIStm.ReadUInt16( nTmp16 ); maAlign = (TextAlign) nTmp16;
 }
 
-IMPL_META_ACTION( MapMode, META_MAPMODE_ACTION )
+MetaMapModeAction::MetaMapModeAction() :
+    MetaAction(META_MAPMODE_ACTION)
+{}
+
+MetaMapModeAction::~MetaMapModeAction()
+{}
 
 MetaMapModeAction::MetaMapModeAction( const MapMode& rMapMode ) :
     MetaAction  ( META_MAPMODE_ACTION ),
     maMapMode   ( rMapMode )
-{
-}
+{}
 
 void MetaMapModeAction::Execute( OutputDevice* pOut )
 {
@@ -2842,17 +2910,22 @@ bool MetaMapModeAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaMapModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteMapMode( rOStm, maMapMode );
 }
 
 void MetaMapModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadMapMode( rIStm, maMapMode );
 }
 
-IMPL_META_ACTION( Font, META_FONT_ACTION )
+MetaFontAction::MetaFontAction() :
+    MetaAction(META_FONT_ACTION)
+{}
+
+MetaFontAction::~MetaFontAction()
+{}
 
 MetaFontAction::MetaFontAction( const Font& rFont ) :
     MetaAction  ( META_FONT_ACTION ),
@@ -2896,7 +2969,7 @@ bool MetaFontAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteFont( rOStm, maFont );
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -2905,7 +2978,7 @@ void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadFont( rIStm, maFont );
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -2915,18 +2988,15 @@ void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 MetaPushAction::MetaPushAction() :
     MetaAction  ( META_PUSH_ACTION ),
     mnFlags     ( 0 )
-{
-}
+{}
 
 MetaPushAction::~MetaPushAction()
-{
-}
+{}
 
 MetaPushAction::MetaPushAction( sal_uInt16 nFlags ) :
     MetaAction  ( META_PUSH_ACTION ),
     mnFlags     ( nFlags )
-{
-}
+{}
 
 void MetaPushAction::Execute( OutputDevice* pOut )
 {
@@ -2947,17 +3017,22 @@ bool MetaPushAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     rOStm.WriteUInt16( mnFlags );
 }
 
 void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     rIStm.ReadUInt16( mnFlags );
 }
 
-IMPL_META_ACTION( Pop, META_POP_ACTION )
+MetaPopAction::MetaPopAction() :
+    MetaAction(META_POP_ACTION)
+{}
+
+MetaPopAction::~MetaPopAction()
+{}
 
 void MetaPopAction::Execute( OutputDevice* pOut )
 {
@@ -2973,23 +3048,21 @@ MetaAction* MetaPopAction::Clone()
 
 void MetaPopAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
 }
 
 void MetaPopAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
 }
 
 MetaRasterOpAction::MetaRasterOpAction() :
     MetaAction  ( META_RASTEROP_ACTION ),
     meRasterOp  ( ROP_OVERPAINT )
-{
-}
+{}
 
 MetaRasterOpAction::~MetaRasterOpAction()
-{
-}
+{}
 
 MetaRasterOpAction::MetaRasterOpAction( RasterOp eRasterOp ) :
     MetaAction  ( META_RASTEROP_ACTION ),
@@ -3016,7 +3089,7 @@ bool MetaRasterOpAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     rOStm.WriteUInt16( (sal_uInt16) meRasterOp );
 }
 
@@ -3024,26 +3097,23 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     sal_uInt16 nTmp16(0);
 
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
 }
 
 MetaTransparentAction::MetaTransparentAction() :
     MetaAction      ( META_TRANSPARENT_ACTION ),
     mnTransPercent  ( 0 )
-{
-}
+{}
 
 MetaTransparentAction::~MetaTransparentAction()
-{
-}
+{}
 
 MetaTransparentAction::MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
     MetaAction      ( META_TRANSPARENT_ACTION ),
     maPolyPoly      ( rPolyPoly ),
     mnTransPercent  ( nTransPercent )
-{
-}
+{}
 
 void MetaTransparentAction::Execute( OutputDevice* pOut )
 {
@@ -3076,7 +3146,7 @@ bool MetaTransparentAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
 
     // #i105373# The PolyPolygon in this action may be a curve; this
     // was ignored until now what is an error. To make older office
@@ -3096,12 +3166,17 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPolyPolygon( rIStm, maPolyPoly );
     rIStm.ReadUInt16( mnTransPercent );
 }
 
-IMPL_META_ACTION( FloatTransparent, META_FLOATTRANSPARENT_ACTION )
+MetaFloatTransparentAction::MetaFloatTransparentAction() :
+    MetaAction(META_FLOATTRANSPARENT_ACTION)
+{}
+
+MetaFloatTransparentAction::~MetaFloatTransparentAction()
+{}
 
 MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
                                                         const Size& rSize, const Gradient& rGradient ) :
@@ -3110,8 +3185,7 @@ MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf,
     maPoint         ( rPos ),
     maSize          ( rSize ),
     maGradient      ( rGradient )
-{
-}
+{}
 
 void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
 {
@@ -3148,7 +3222,7 @@ bool MetaFloatTransparentAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
 
     maMtf.Write( rOStm );
     WritePair( rOStm,  maPoint );
@@ -3158,14 +3232,19 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
 
 void MetaFloatTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadGDIMetaFile( rIStm, maMtf );
     ReadPair( rIStm, maPoint );
     ReadPair( rIStm, maSize );
     ReadGradient( rIStm, maGradient );
 }
 
-IMPL_META_ACTION( EPS, META_EPS_ACTION )
+MetaEPSAction::MetaEPSAction() :
+    MetaAction(META_EPS_ACTION)
+{}
+
+MetaEPSAction::~MetaEPSAction()
+{}
 
 MetaEPSAction::MetaEPSAction( const Point& rPoint, const Size& rSize,
                               const GfxLink& rGfxLink, const GDIMetaFile& rSubst ) :
@@ -3174,8 +3253,7 @@ MetaEPSAction::MetaEPSAction( const Point& rPoint, const Size& rSize,
     maSubst     ( rSubst ),
     maPoint     ( rPoint ),
     maSize      ( rSize )
-{
-}
+{}
 
 void MetaEPSAction::Execute( OutputDevice* pOut )
 {
@@ -3212,7 +3290,7 @@ bool MetaEPSAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WriteGfxLink( rOStm, maGfxLink );
     WritePair( rOStm, maPoint );
     WritePair( rOStm, maSize );
@@ -3221,7 +3299,7 @@ void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadGfxLink( rIStm, maGfxLink );
     ReadPair( rIStm, maPoint );
     ReadPair( rIStm, maSize );
@@ -3231,19 +3309,16 @@ void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaRefPointAction::MetaRefPointAction() :
     MetaAction  ( META_REFPOINT_ACTION ),
     mbSet       ( false )
-{
-}
+{}
 
 MetaRefPointAction::~MetaRefPointAction()
-{
-}
+{}
 
 MetaRefPointAction::MetaRefPointAction( const Point& rRefPoint, bool bSet ) :
     MetaAction  ( META_REFPOINT_ACTION ),
     maRefPoint  ( rRefPoint ),
     mbSet       ( bSet )
-{
-}
+{}
 
 void MetaRefPointAction::Execute( OutputDevice* pOut )
 {
@@ -3268,14 +3343,14 @@ bool MetaRefPointAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     WritePair( rOStm, maRefPoint );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     ReadPair( rIStm, maRefPoint ).ReadCharAsBool( mbSet );
 }
 
@@ -3465,7 +3540,7 @@ bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, maComment);
     rOStm.WriteInt32( mnValue ).WriteUInt32( mnDataSize );
 
@@ -3475,7 +3550,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     maComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
     rIStm.ReadInt32( mnValue ).ReadUInt32( mnDataSize );
 
@@ -3495,18 +3570,15 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaLayoutModeAction::MetaLayoutModeAction() :
     MetaAction  ( META_LAYOUTMODE_ACTION ),
     mnLayoutMode( 0 )
-{
-}
+{}
 
 MetaLayoutModeAction::~MetaLayoutModeAction()
-{
-}
+{}
 
 MetaLayoutModeAction::MetaLayoutModeAction( sal_uInt32 nLayoutMode ) :
     MetaAction  ( META_LAYOUTMODE_ACTION ),
     mnLayoutMode( nLayoutMode )
-{
-}
+{}
 
 void MetaLayoutModeAction::Execute( OutputDevice* pOut )
 {
@@ -3527,31 +3599,28 @@ bool MetaLayoutModeAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     rOStm.WriteUInt32( mnLayoutMode );
 }
 
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     rIStm.ReadUInt32( mnLayoutMode );
 }
 
 MetaTextLanguageAction::MetaTextLanguageAction() :
     MetaAction  ( META_TEXTLANGUAGE_ACTION ),
     meTextLanguage( LANGUAGE_DONTKNOW )
-{
-}
+{}
 
 MetaTextLanguageAction::~MetaTextLanguageAction()
-{
-}
+{}
 
 MetaTextLanguageAction::MetaTextLanguageAction( LanguageType eTextLanguage ) :
     MetaAction  ( META_TEXTLANGUAGE_ACTION ),
     meTextLanguage( eTextLanguage )
-{
-}
+{}
 
 void MetaTextLanguageAction::Execute( OutputDevice* pOut )
 {
@@ -3572,13 +3641,13 @@ bool MetaTextLanguageAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WriteWithVersion(rOStm, pData, 1);
     rOStm.WriteUInt16( meTextLanguage );
 }
 
 void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    COMPAT( rIStm );
+    VersionCompat aCompat(rIStm, STREAM_READ);
     rIStm.ReadUInt16( meTextLanguage );
 }
 
