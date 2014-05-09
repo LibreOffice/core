@@ -55,9 +55,6 @@ void GL3DBarChart::create3DShapes()
     const float nBarDistanceY = nBarSizeY / 2;
 
     sal_uInt32 nId = 1;
-
-    std::vector<opengl3D::Text*> aYAxisTexts;
-
     float nYPos = 0.0;
 
     maShapes.clear();
@@ -76,8 +73,8 @@ void GL3DBarChart::create3DShapes()
             DataSeriesHelper::getDataSeriesLabel(
                 rDataSeries.getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
 
-        aYAxisTexts.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
-        opengl3D::Text* p = aYAxisTexts.back();
+        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
+        opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
         Size aTextSize = p->getSize();
         glm::vec3 aTopLeft, aTopRight, aBottomRight;
         aTopLeft.x = aTextSize.getWidth() * -1.0;
@@ -124,15 +121,6 @@ void GL3DBarChart::create3DShapes()
         aBottomRight.y += aTextSize.getHeight();
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
-
-    {
-        // Transfer all Y-axis text objects to the shape collection.
-        std::vector<opengl3D::Text*>::iterator itText = aYAxisTexts.begin(), itTextEnd = aYAxisTexts.end();
-        for (; itText != itTextEnd; ++itText)
-            maShapes.push_back(*itText);
-    }
-
-    aYAxisTexts.clear();
 }
 
 void GL3DBarChart::render()
