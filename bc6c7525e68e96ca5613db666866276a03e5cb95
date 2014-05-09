@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_749e5658",
+        "filename": "external/collada2gltf/StaticLibrary_collada2gltf.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-05-09T12:36:01Z",
+      "side": 1,
+      "message": "this needs a $COM check",
+      "revId": "bc6c7525e68e96ca5613db666866276a03e5cb95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_94a2f298",
+        "filename": "external/collada2gltf/StaticLibrary_collada2gltf.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-05-09T12:36:01Z",
+      "side": 1,
+      "message": "this needs to check $(COM), not $(OS) because MinGW",
+      "revId": "bc6c7525e68e96ca5613db666866276a03e5cb95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
