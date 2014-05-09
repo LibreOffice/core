@@ -40,7 +40,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
         ::osl::FileBase::createTempFile(0, 0, &sTempFileURL);
     if (::osl::FileBase::E_None != aErr)
     {
-        SAL_WARN("avmedia.model", "cannot create temp file");
+        SAL_WARN("avmedia.opengl", "Cannot create temp file");
         return;
     }
     try
@@ -53,7 +53,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("avmedia.model", "exception: '" << e.Message << "'");
+        SAL_WARN("avmedia.opengl", "Exception: '" << e.Message << "'");
         return;
     }
 
@@ -96,7 +96,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
     }
     catch ( boost::exception const& )
     {
-        SAL_WARN("avmedia.model", "failed to parse json file");
+        SAL_WARN("avmedia.opengl", "Exception while parsing *.json file");
         return;
     }
 
@@ -121,7 +121,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
 
         if (!aContent.openStream(xOutStream))
         {
-            SAL_WARN("avmedia.model", "openStream to storage failed");
+            SAL_WARN("avmedia.opengl", "openStream to storage failed");
             return;
         }
     }
@@ -164,7 +164,7 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
 
         if (!aSourceContent.openStream(xOutStream))
         {
-            SAL_INFO("avmedia.model", "openStream to storage failed");
+            SAL_WARN("avmedia.opengl", "openStream to storage failed");
             return false;
         }
 
@@ -189,7 +189,7 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
     }
     catch (uno::Exception const&)
     {
-        SAL_WARN("avmedia.model", "Exception while trying to embed model");
+        SAL_WARN("avmedia.opengl", "Exception while trying to embed model");
     }
     return false;
 }

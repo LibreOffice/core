@@ -61,12 +61,18 @@ bool OGLPlayer::create( const OUString& rURL )
     OString sFileName = OUStringToOString(INetURLObject(m_sURL).GetLastName(),RTL_TEXTENCODING_UTF8);
     aJsonFile.filename = (char*)sFileName.getStr();
     if( !lcl_LoadFile(&aJsonFile, m_sURL) )
+    {
+        SAL_WARN("avmedia.opengl", "Can't load *.json file: " + sFileName);
         return false;
+    }
 
     m_pHandle = gltf_renderer_init(&aJsonFile);
 
     if( !m_pHandle || !m_pHandle->files )
+    {
+        SAL_WARN("avmedia.opengl", "gltf_renderer_init returned an invalid glTFHandle");
         return false;
+    }
 
     // Load external resources
     for( size_t i = 0; i < m_pHandle->size; ++i )
@@ -90,7 +96,10 @@ bool OGLPlayer::create( const OUString& rURL )
             else if( pFile->type == GLTF_BINARY || pFile->type == GLTF_GLSL )
             {
                 if( !lcl_LoadFile(pFile, sFilesURL) )
+                {
+                    SAL_WARN("avmedia.opengl", "Can't load glTF file: " + sFilesURL);
                     return false;
+                }
             }
         }
     }
@@ -184,19 +193,24 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if( rArguments.getLength() > 2 )
+    assert( rArguments.getLength() >= 3 );
+
+    sal_IntPtr pIntPtr = 0;
+    rArguments[ 2 ] >>= pIntPtr;
+    SystemChildWindow *pChildWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+
+    if( !m_aContext.init(pChildWindow) )
     {
-        sal_IntPtr pIntPtr = 0;
-        rArguments[ 2 ] >>= pIntPtr;
-        SystemChildWindow *pChildWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
-        m_aContext.init(pChildWindow);
-        Size aSize = pChildWindow->GetSizePixel();
-        m_aContext.setWinSize(aSize);
-        m_pHandle->viewport.x = 0;
-        m_pHandle->viewport.y = 0;
-        m_pHandle->viewport.width = aSize.Width();
-        m_pHandle->viewport.height = aSize.Height();
+        SAL_WARN("avmedia.opengl", "Context initialization failed");
+        return uno::Reference< media::XPlayerWindow >();
     }
+
+    Size aSize = pChildWindow->GetSizePixel();
+    m_aContext.setWinSize(aSize);
+    m_pHandle->viewport.x = 0;
+    m_pHandle->viewport.y = 0;
+    m_pHandle->viewport.width = aSize.Width();
+    m_pHandle->viewport.height = aSize.Height();
     OGLWindow* pWindow = new OGLWindow(m_pHandle, &m_aContext);
     return uno::Reference< media::XPlayerWindow >( pWindow );
 }
@@ -205,7 +219,13 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
      throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    m_aContext.init();
+
+    if( !m_aContext.init() )
+    {
+        SAL_WARN("avmedia.opengl", "Offscreen context initialization failed");
+        return uno::Reference< media::XFrameGrabber >();
+    }
+
     m_pHandle->viewport.x = 0;
     m_pHandle->viewport.y = 0;
     m_pHandle->viewport.width = getPreferredPlayerWindowSize().Width;

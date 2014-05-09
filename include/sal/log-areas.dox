@@ -457,7 +457,7 @@ certain functionality.
 @section avmedia
 
 @li @c avmedia
-@li @c avmedia.model - 3D models
+@li @c avmedia.opengl - OpenGL models
 
 @section other
 
