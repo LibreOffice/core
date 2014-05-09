@@ -1893,7 +1893,7 @@ void ScModule::EndReference()
                 pRefDlg->SetActive();
             }
         }
-        else
+        else if (pModalDlg)
             pModalDlg->SetActive();
     }
 }
