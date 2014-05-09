@@ -1404,11 +1404,9 @@ namespace
     FmFilterItems* getTargetItems(SvTreeListEntry* _pTarget)
     {
         FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
-        FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems)
-                                        ?
-                                        PTR_CAST(FmFilterItems,pData)
-                                        :
-                                    PTR_CAST(FmFilterItems,pData->GetParent());
+        FmFilterItems*  pTargetItems = dynamic_cast<FmFilterItems*>(pData);
+        if (!pTargetItems)
+            pTargetItems = dynamic_cast<FmFilterItems*>(pData->GetParent());
         return pTargetItems;
     }
 }
