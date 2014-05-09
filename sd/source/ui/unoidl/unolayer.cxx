@@ -22,6 +22,7 @@
 #include "unolayer.hxx"
 #include <osl/mutex.hxx>
 
+#include <comphelper/extract.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdobj.hxx>
@@ -192,26 +193,17 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     {
     case WID_LAYER_LOCKED:
     {
-        bool bValue = false;
-        if(!sd::any2bool( aValue, bValue ))
-            throw lang::IllegalArgumentException();
-        set( LOCKED, bValue );
+        set(LOCKED, cppu::any2bool(aValue));
         break;
     }
     case WID_LAYER_PRINTABLE:
     {
-        bool bValue = false;
-        if(!sd::any2bool( aValue, bValue ))
-            throw lang::IllegalArgumentException();
-        set( PRINTABLE, bValue );
+        set(PRINTABLE, cppu::any2bool(aValue));
         break;
     }
     case WID_LAYER_VISIBLE:
     {
-        bool bValue = false;
-        if(!sd::any2bool( aValue, bValue ))
-            throw lang::IllegalArgumentException();
-        set( VISIBLE, bValue );
+        set(VISIBLE, cppu::any2bool(aValue));
         break;
     }
     case WID_LAYER_NAME:
