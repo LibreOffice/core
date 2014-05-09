@@ -16,6 +16,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
+#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
 #include <tools/errinf.hxx>
@@ -39,9 +40,18 @@
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/virdev.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
+
+// Dirty hack -- we go directly into sw -- ideally we need some sort of
+// layer to get the writer shell for tiled rendering
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <viewsh.hxx>
 
 using namespace css;
 using namespace utl;
@@ -154,6 +164,13 @@ extern "C"
 
 static void doc_destroy(LibreOfficeKitDocument* pThis);
 static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static LibreOfficeKitDocumentType doc_getDocumentType(LibreOfficeKitDocument* pThis);
+static int doc_getNumberOfParts(LibreOfficeKitDocument* pThis);
+static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
+static void doc_paintTile(LibreOfficeKitDocument* pThis, void* pCanvas,
+                          const int nCanvasWidth, const int nCanvasHeight,
+                          const int nTilePosX, const int nTilePosY,
+                          const int nTileWidth, const int nTileHeight);
 
 struct LibLODocument_Impl : public _LibreOfficeKitDocument
 {
@@ -171,6 +188,10 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
 
             m_pDocumentClass->destroy = doc_destroy;
             m_pDocumentClass->saveAs = doc_saveAs;
+            m_pDocumentClass->getDocumentType = doc_getDocumentType;
+            m_pDocumentClass->getNumberOfParts = doc_getNumberOfParts;
+            m_pDocumentClass->setPart = doc_setPart;
+            m_pDocumentClass->paintTile = doc_paintTile;
 
             gDocumentClass = m_pDocumentClass;
         }
@@ -336,6 +357,61 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         gImpl->maLastExceptionMsg = "exception: " + exception.Message;
     }
     return false;
+}
+
+static LibreOfficeKitDocumentType doc_getDocumentType (LibreOfficeKitDocument* pThis)
+{
+    (void) pThis;
+    return WRITER;
+}
+
+static int doc_getNumberOfParts (LibreOfficeKitDocument* pThis)
+{
+    (void) pThis;
+    // Assume writer document for now.
+    return 1;
+}
+
+static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
+{
+    (void) pThis;
+    (void) nPart;
+}
+
+static void doc_paintTile (LibreOfficeKitDocument* pThis, void* pCanvas,
+                           const int nCanvasWidth, const int nCanvasHeight,
+                           const int nTilePosX, const int nTilePosY,
+                           const int nTileWidth, const int nTileHeight)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    // We can't use this on anything but Linux for now, so the following is
+    // likely unusable for now.
+    SystemGraphicsData aSystemGraphicsData;
+#if defined( WNT )
+    aSystemGraphicsData.hDC = *static_cast< HDC* >(pCanvas);
+#elif defined( MACOSX )
+    aSystemGraphicsData.rCGContext = *static_cast< CGContextRef* >(pCanvas);
+#elif defined( ANDROID )
+    assert(false); // We can't use tiled rendering on Android in any case yet...
+#elif defined( IOS )
+    aSystemGraphicsData.rCGContext = *static_cast< CGContextRef* >(pCanvas);
+#elif defined( UNX )
+    aSystemGraphicsData = *static_cast< SystemGraphicsData*> (pCanvas);
+#endif
+
+    Application::AcquireSolarMutex(1);
+    {
+        SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >( pDocument->mxComponent.get() );
+        SwDocShell* pDocShell = pTxtDoc->GetDocShell();
+        SwDoc* pDoc = pDocShell->GetDoc();
+        SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+
+        VirtualDevice aDevice(&aSystemGraphicsData, (sal_uInt16)0);
+        pViewShell->PaintTile(aDevice, nCanvasWidth, nCanvasHeight,
+                                nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    }
+    Application::ReleaseSolarMutex();
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
