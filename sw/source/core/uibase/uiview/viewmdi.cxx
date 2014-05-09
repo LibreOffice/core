@@ -149,11 +149,9 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                 (sal_uInt16(nFac)      != pUsrPref->GetZoom() ||
                 sal_uInt8  (eZoomType) != pUsrPref->GetZoomType()) )
         {
-            pUsrPref->SetZoom    ( sal_uInt16(nFac) );
-            pUsrPref->SetZoomType( eZoomType );
-            SW_MOD()->ApplyUsrPref( *pUsrPref,
-                    bViewOnly ? this: 0,
-                    bViewOnly ? VIEWOPT_DEST_VIEW_ONLY : 0 );
+            pUsrPref->SetZoom(sal_uInt16(nFac));
+            pUsrPref->SetZoomType(eZoomType);
+            SW_MOD()->ApplyUsrPref(*pUsrPref, 0, 0);
             pUsrPref->SetModified();
         }
         if ( pOpt->GetZoom() != (sal_uInt16) nFac )
