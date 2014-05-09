@@ -163,6 +163,12 @@ const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool b
         << std::hex << eType
         << " with unknown name, so returning lang-tag of: "
         << sLangTag);
+
+    // And add it to the table if it is an on-the-fly-id, which it usually is,
+    // so it is available in all subsequent language boxes.
+    if (LanguageTag::isOnTheFlyID( eType))
+        const_cast<SvtLanguageTableImpl*>(this)->AddItem( sLangTag, eType);
+
     return sLangTag;
 }
 
