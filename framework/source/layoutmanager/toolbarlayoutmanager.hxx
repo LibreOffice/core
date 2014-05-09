@@ -258,7 +258,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void             implts_createNonContextSensitiveToolBars();
         void             implts_createCustomToolBars( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& aCustomTbxSeq );
         void             implts_createCustomToolBar( const OUString& aTbxResName, const OUString& aTitle );
-        void             implts_createToolBar( const OUString& aName, bool& bNotify, ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& rUIElement );
         css::uno::Reference< css::ui::XUIElement > implts_createElement( const OUString& aName );
         void             implts_setToolbarCreation( bool bStart = true );
         bool             implts_isToolbarCreationActive();
