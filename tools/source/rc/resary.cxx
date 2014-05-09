@@ -60,4 +60,10 @@ sal_uInt32 ResStringArray::FindIndex( sal_IntPtr nValue ) const
     return RESARRAY_INDEX_NOTFOUND;
 }
 
+sal_uInt32 ResStringArray::AddItem( const OUString& rString, sal_IntPtr nValue )
+{
+    m_aStrings.push_back( ImplResStringItem( rString, nValue));
+    return m_aStrings.size();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

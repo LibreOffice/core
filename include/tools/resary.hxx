@@ -53,6 +53,8 @@ public:
     sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }
 
     sal_uInt32          FindIndex( sal_IntPtr nValue ) const;
+
+    sal_uInt32          AddItem( const OUString& rString, sal_IntPtr nValue );
 };
 
 #endif
