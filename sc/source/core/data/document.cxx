@@ -6135,14 +6135,30 @@ bool ScDocument::HasNote(const ScAddress& rPos) const
 {
     return HasNote(rPos.Col(), rPos.Row(), rPos.Tab());
 }
+
 bool ScDocument::HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
-    const ScPostIt* pNote = maTabs[nTab]->aCol[nCol].GetCellNote(nRow);
+    if (!ValidColRow(nCol, nRow))
+        return false;
+
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    const ScPostIt* pNote = pTab->aCol[nCol].GetCellNote(nRow);
     return pNote != NULL;
 }
+
 bool ScDocument::HasColNotes(SCCOL nCol, SCTAB nTab) const
 {
-    return maTabs[nTab]->aCol[nCol].HasCellNotes();
+    if (!ValidCol(nCol))
+        return false;
+
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    return pTab->aCol[nCol].HasCellNotes();
 }
 
 bool ScDocument::HasTabNotes(SCTAB nTab) const
