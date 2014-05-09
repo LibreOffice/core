@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
 
-/* wrap all includes that need to be wrapped by presys.h/postsys.h here */
+/* wrap all includes that need to be wrapped by prewin.h/postwin.h here */
 
 #define STRICT
 
@@ -37,7 +37,7 @@
 #include <tchar.h>
 #include <dispex.h>
 
-#include <tools/presys.h>
+#include <prewin.h>
 #include <list>
 
 // from oleobjw.hxx
@@ -49,7 +49,7 @@ extern CComModule _Module;
 // from unoobjw.cxx
 #include <olectl.h>
 
-#include <tools/postsys.h>
+#include <postwin.h>
 
 #pragma warning (pop)
 

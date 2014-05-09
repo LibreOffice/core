@@ -23,15 +23,8 @@
 
 
 #ifdef WNT
-#include <tools/presys.h>
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#include <tools/postsys.h>
+#include <prewin.h>
+#include <postwin.h>
 #else
 // From MinGW
 typedef unsigned short WORD;
