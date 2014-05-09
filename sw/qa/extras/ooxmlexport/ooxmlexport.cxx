@@ -2181,7 +2181,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO71834, "fdo71834.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[4]/w:tr[2]/w:tc[1]/w:tcPr[1]/w:tcW[1]","type", "dxa");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[2]/w:tc[1]/w:tcPr[1]/w:tcW[1]","type", "dxa");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
