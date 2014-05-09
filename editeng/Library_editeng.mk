@@ -24,6 +24,8 @@ $(eval $(call gb_Library_set_include,editeng,\
     -I$(SRCDIR)/editeng/inc \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,editeng,$(SRCDIR)/editeng/inc/pch/precompiled_editeng))
+
 $(eval $(call gb_Library_add_defs,editeng,\
     -DEDITENG_DLLIMPLEMENTATION \
 ))

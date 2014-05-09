@@ -124,7 +124,7 @@ namespace frm
 
 
     FontControlModel::FontControlModel( bool _bToolkitCompatibleDefaults )
-        :m_nFontRelief( FontRelief::NONE )
+        :m_nFontRelief( css::awt::FontRelief::NONE )
         ,m_nFontEmphasis( FontEmphasisMark::NONE )
         ,m_bToolkitCompatibleDefaults( _bToolkitCompatibleDefaults )
     {
@@ -509,7 +509,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONTRELIEF:
-            aReturn <<= FontRelief::NONE;
+            aReturn <<= css::awt::FontRelief::NONE;
             bHandled = true;
             break;
         }

@@ -52,7 +52,6 @@ AutoOGuardArray::~AutoOGuardArray()
 
 
 
-using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
