@@ -180,4 +180,30 @@ oslMutex * SAL_CALL osl_getGlobalMutex()
     return &globalMutex;
 }
 
+static oslMutexImpl umaskMutexImpl;
+
+static void umaskMutexInitImpl(void) {
+    pthread_mutexattr_t attr;
+    if (pthread_mutexattr_init(&attr) != 0 ||
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE) ||
+        pthread_mutex_init(&umaskMutexImpl.mutex, &attr) != 0 ||
+        pthread_mutexattr_destroy(&attr) != 0)
+    {
+        abort();
+    }
+}
+
+oslMutex * SAL_CALL osl_getUmaskMutex()
+{
+    /* necessary to get a "oslMutex *" */
+    static oslMutex umaskMutex = (oslMutex) &umaskMutexImpl;
+
+    static pthread_once_t once = PTHREAD_ONCE_INIT;
+    if (pthread_once(&once, &umaskMutexInitImpl) != 0) {
+        abort();
+    }
+
+    return &umaskMutex;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

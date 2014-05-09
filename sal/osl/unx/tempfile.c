@@ -28,6 +28,7 @@
 #include <rtl/ustrbuf.h>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
+#include <osl/mutex.h>
 
 #include "file_url.h"
 
@@ -234,6 +235,7 @@ static oslFileError osl_create_temp_file_impl_(
         if (osl_File_E_None == osl_error)
         {
             /* RW permission for the user only! */
+            osl_acquireMutex(*osl_getUmaskMutex());
             mode_t old_mode = umask(077);
 
             osl_error = osl_openFile(
@@ -244,6 +246,7 @@ static oslFileError osl_create_temp_file_impl_(
                 osl_File_OpenFlag_Create);
 
             umask(old_mode);
+            osl_releaseMutex(*osl_getUmaskMutex());
         }
 
         /* in case of error osl_File_E_EXIST we simply try again else we give up */

@@ -42,6 +42,7 @@ extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
 extern oslMutex         g_Mutex;
 extern oslMutex         g_CurrentDirectoryMutex;
+extern oslMutex         u_Mutex;
 
 #ifdef __MINGW32__
 
@@ -157,6 +158,9 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
                 /* initialize global mutex */
                 g_Mutex = osl_createMutex();
 
+                /* initialize umask mutex */
+                u_Mutex = osl_createMutex();
+
                 /* initialize "current directory" mutex */
                 g_CurrentDirectoryMutex = osl_createMutex();
 
@@ -185,6 +189,7 @@ void do_cleanup( void )
             DeleteCriticalSection( &g_ThreadKeyListCS );
 
             osl_destroyMutex( g_Mutex );
+            osl_destroyMutex( u_Mutex );
 
             osl_destroyMutex( g_CurrentDirectoryMutex );
 

@@ -65,6 +65,18 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex);
 */
 SAL_DLLPUBLIC oslMutex * SAL_CALL osl_getGlobalMutex(void);
 
+/** Returns the mutex which should be locked before calling the umask-function
+
+    Sometimes umask is called to retrieve the actual umask, temporarily set it
+    to another value (as in osl_createTempFile), do something, and then umask is
+    reset to the original value. To assure that this retrieving/restoring is not
+    disturbed by different threads, this mutex should be locked before the first
+    (retrieving) call to umask and released after the second (restoring) call.
+
+    @return the mutex for umask calls
+ */
+SAL_DLLPUBLIC oslMutex * SAL_CALL osl_getUmaskMutex(void);
+
 #ifdef __cplusplus
 }
 #endif

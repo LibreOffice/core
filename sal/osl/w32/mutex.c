@@ -110,4 +110,16 @@ oslMutex * SAL_CALL osl_getGlobalMutex(void)
     return &g_Mutex;
 }
 
+/*****************************************************************************/
+/* osl_getUmaskMutex */
+/*****************************************************************************/
+
+/* initialized in dllentry.c */
+oslMutex u_Mutex;
+
+oslMutex * SAL_CALL osl_getUmaskMutex(void)
+{
+    return &u_Mutex;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

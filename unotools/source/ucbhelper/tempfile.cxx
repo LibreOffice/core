@@ -34,6 +34,7 @@
 
 #ifdef UNX
 #include <sys/stat.h>
+#include <osl/mutex.h>
 #endif
 
 using namespace osl;
@@ -92,11 +93,14 @@ bool ensuredir( const OUString& rUnqPath )
     osl::Directory aDirectory( aPath );
 #ifdef UNX
 /* RW permission for the user only! */
+ osl_acquireMutex(*osl_getUmaskMutex());
  mode_t old_mode = umask(077);
+
 #endif
     osl::FileBase::RC nError = aDirectory.open();
 #ifdef UNX
 umask(old_mode);
+osl_releaseMutex(*osl_getUmaskMutex());
 #endif
     aDirectory.close();
     if( nError == osl::File::E_None )
@@ -210,11 +214,13 @@ void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
         if ( bDir )
         {
 #ifdef UNX /* RW permission for the user only! */
+            osl_acquireMutex(*osl_getUmaskMutex());
             mode_t old_mode = umask(077);
 #endif
             FileBase::RC err = Directory::create( aTmp );
 #ifdef UNX
             umask(old_mode);
+            osl_releaseMutex(*osl_getUmaskMutex());
 #endif
             if ( err == FileBase::E_None )
             {
@@ -234,11 +240,13 @@ void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
             DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
             File aFile( aTmp );
 #ifdef UNX /* RW permission for the user only! */
+            osl_acquireMutex(*osl_getUmaskMutex());
             mode_t old_mode = umask(077);
 #endif
             FileBase::RC err = aFile.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 #ifdef UNX
             umask(old_mode);
+            osl_releaseMutex(*osl_getUmaskMutex());
 #endif
             if (  err == FileBase::E_None )
             {
@@ -300,11 +308,13 @@ void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _b
             File aFile( aTmp );
 #ifdef UNX
 /* RW permission for the user only! */
+ osl_acquireMutex(*osl_getUmaskMutex());
  mode_t old_mode = umask(077);
 #endif
             FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
 #ifdef UNX
 umask(old_mode);
+osl_releaseMutex(*osl_getUmaskMutex());
 #endif
             if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
