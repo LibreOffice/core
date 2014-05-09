@@ -111,24 +111,24 @@ typedef struct Extrude3DInfo
 }Extrude3DInfo;
 
 
-typedef struct CameraInfo
+struct CameraInfo
 {
     bool useDefault;
     glm::vec3 cameraPos;
     glm::vec3 cameraOrg;
     glm::vec3 cameraUp;
-}CameraInfo;
+};
 
-typedef struct CoordinateAxisInfo
+struct CoordinateAxisInfo
 {
     int pickingFlg;
     int reverse;
     glm::vec4 color;
     PosVecf3 trans;
     PosVecf3 scale;
-}CoordinateAxisInfo;
+};
 
-typedef struct RoundBarMesh
+struct RoundBarMesh
 {
     float topThreshold;
     float bottomThreshold;
@@ -136,7 +136,7 @@ typedef struct RoundBarMesh
     int iMeshSizes;
     int iElementStartIndices[5];
     int iElementSizes[5];
-}RoundBarMesh;
+};
 
 struct PackedVertex{
     glm::vec3 position;
@@ -146,14 +146,14 @@ struct PackedVertex{
     };
 };
 
-typedef struct TextInfo
+struct TextInfo
 {
     GLuint texture;
     float vertex[12];
-}TextInfo;
+};
 
 
-typedef struct SceneBox
+struct SceneBox
 {
     float maxXCoord;
     float minXCoord;
@@ -161,7 +161,7 @@ typedef struct SceneBox
     float minYCoord;
     float maxZCoord;
     float minZCoord;
-}SceneBox;
+};
 
 
 class OpenGL3DRenderer
