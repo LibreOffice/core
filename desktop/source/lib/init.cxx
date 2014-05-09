@@ -49,6 +49,9 @@
 #include <unotxdoc.hxx>
 #include <viewsh.hxx>
 
+// We also need to hackily be able to start the main libreoffice thread
+#include "../app/sofficemain.h"
+
 using namespace css;
 using namespace utl;
 
@@ -426,16 +429,19 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 
 static void initialize_uno(const OUString &aAppURL)
 {
-    rtl::Bootstrap::setIniFilename( aAppURL + "/fundamentalrc" );
+    // without rendering we can simply use fundamentalrc, and manually add some
+    // parameters below, however we won't be able to run the soffice_main
+    // thread in that case.
+    rtl::Bootstrap::setIniFilename( aAppURL + "/sofficerc" );
 
-    rtl::Bootstrap::set( "CONFIGURATION_LAYERS",
-                         "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
-                         "res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
-//                       "bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini " );
-//                       "sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
-//                       "userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
-//                         "user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstraprc:UserInstallation}/user/registrymodifications.xcu"
-                         );
+//     rtl::Bootstrap::set( "CONFIGURATION_LAYERS",
+//                          "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
+//                          "res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
+// //                       "bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini " );
+// //                       "sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
+// //                       "userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
+// //                         "user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstraprc:UserInstallation}/user/registrymodifications.xcu"
+//                          );
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
     fprintf(stderr, "Uno initialized %d\n", xContext.is());
@@ -447,6 +453,13 @@ static void initialize_uno(const OUString &aAppURL)
 //    rtl::Bootstrap aDefaultVars;
 //    aDefaultVars.set(OUString("UserInstallation"), aAppURL + "../registry" );
     // configmgr setup ?
+}
+
+
+static void* lo_startmain(void*)
+{
+    soffice_main();
+    return 0;
 }
 
 static int lo_initialize(LibreOffice* pThis, const char* pAppPath)
@@ -472,8 +485,27 @@ static int lo_initialize(LibreOffice* pThis, const char* pAppPath)
         force_c_locale();
 
         // Force headless
-        rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
-        InitVCL();
+        // the "svp" headless vcl backend isn't able to do tiled rendering for
+        // us -- we need to use a full featured backend, i.e. "gen" or "gtk",
+        // gtk seems to be somewhat better.
+        rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "gtk");
+//         InitVCL();
+        // happens in soffice_main for us -- and we can't call InitVCL twice
+        // unfortunately -- which is annoying since (see below)
+
+        pthread_t thread;
+        pthread_create(&thread, 0, lo_startmain, NULL);
+        sleep(10);
+        // We'll segfault trying to access Application if we're too fast...
+        // Specifically pImplSVData doesn't exist until InitVCL has been called,
+        // and that won't be immediate, but we can't call InitVCL ourselves
+        // as soffice_main already does so, but InitVCL would then fail
+        // within soffice_main if we have already called it earlier.
+        //
+        // And there's also a chance of deadlock if we try to open documents
+        // too early -- when running in a debugger we therefore need quite
+        // a large delay here (for now).
+
         Application::EnableHeadlessMode(true);
 
         ErrorHandler::RegisterDisplay(aBasicErrorFunc);
