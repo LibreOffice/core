@@ -129,6 +129,7 @@ RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName, sal_Int32 lDefId 
 RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName,
                       RscExpression * pExpression  )
     : StringNode( rDefName )
+    , lId(0)
 {
     nRefCount = 0;
     lFileKey  = lKey;
@@ -138,8 +139,7 @@ RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName,
 
 RscDefine::~RscDefine()
 {
-    if( pExp )
-        delete pExp;
+    delete pExp;
     if( nRefCount )
         RscExit( 14 );
 }
