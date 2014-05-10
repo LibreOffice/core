@@ -63,7 +63,6 @@ GLfloat texCoords[] = {
 
 OpenGL3DRenderer::OpenGL3DRenderer():
     m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
-    , m_bCameraUpdated(false)
     , m_TextProID(0)
     , m_TextMatrixID(0)
     , m_TextVertexID(0)
@@ -792,10 +791,6 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
 
 void OpenGL3DRenderer::RenderPolygon3DObject()
 {
-    if (!m_bCameraUpdated)
-    {
-        return;
-    }
     glDepthMask(GL_FALSE);
     size_t polygonNum = m_Polygon3DInfoList.size();
     for (size_t i = 0; i < polygonNum; i++)
@@ -1424,7 +1419,6 @@ void OpenGL3DRenderer::CreateSceneBoxView()
                m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
                );
     m_3DViewBack = m_3DView;
-    m_bCameraUpdated = true;
 }
 
 void OpenGL3DRenderer::ProcessUnrenderedShape()
