@@ -176,9 +176,9 @@ void Rectangle::setLineColor(const Color& rColor)
 
 Camera::Camera(OpenGL3DRenderer* pRenderer):
     Renderable3DObject(pRenderer, 0),
-    maPos(10,-50,10),
+    maPos(10,-50,20),
     maUp(0, 0, 1),
-    maDirection(glm::vec3(0,1,-0.2))
+    maDirection(glm::vec3(0,1,-0.5))
 {
 }
 
