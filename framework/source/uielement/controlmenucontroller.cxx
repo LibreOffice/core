@@ -321,10 +321,13 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
         }
     }
 
-    if ( nMenuId )
-    {
-        VCLXPopupMenu*  pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
+    VCLXPopupMenu*  pPopupMenu = NULL;
 
+    if ( nMenuId )
+        pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
+
+    if (pPopupMenu)
+    {
         SolarMutexGuard aSolarMutexGuard;
 
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
