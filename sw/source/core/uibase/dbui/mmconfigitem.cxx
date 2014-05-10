@@ -186,10 +186,12 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         bIsOutputToLetter(true),
         bIncludeCountry(false),
         bIsGreetingLine(true),
+        bIsIndividualGreetingLine(false),
         nCurrentFemaleGreeting(0),
         nCurrentMaleGreeting(0),
         nCurrentNeutralGreeting(0),
-
+        bIsGreetingLineInMail(false),
+        bIsIndividualGreetingLineInMail(false),
         bIsSMPTAfterPOP(false),
         nInServerPort( POP_PORT ),
         bInServerPOP( true ),
