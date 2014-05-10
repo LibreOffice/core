@@ -19,7 +19,7 @@
 
 #include "SharedConnection.hxx"
 #include <tools/debug.hxx>
-
+#include <comphelper/uno3.hxx>
 
 namespace dbaccess
 {
@@ -150,6 +150,8 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OSharedConnection
 
     return m_xConnection->getTypeMap();
 }
+
+IMPLEMENT_GET_IMPLEMENTATION_ID( OSharedConnection )
 
 }   // namespace dbaccess
 

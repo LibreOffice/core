@@ -16,6 +16,8 @@ $(eval $(call gb_Library_set_include,dba,\
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,dba,$(SRCDIR)/dbaccess/inc/pch/precompiled_dba))
+
 $(eval $(call gb_Library_add_defs,dba,\
     -DOOO_DLLIMPLEMENTATION_DBA \
 ))
