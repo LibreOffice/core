@@ -132,7 +132,9 @@
 #define PRIVATE_ESCAPE_UNICODE          2
 
 WMFWriter::WMFWriter()
-    : pWMF(NULL)
+    : bStatus(false)
+    , nLastPercent(0)
+    , pWMF(NULL)
     , pVirDev(NULL)
     , nMetafileHeaderPos(0)
     , nMaxRecordSize(0)
