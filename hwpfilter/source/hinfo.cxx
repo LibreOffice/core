@@ -37,13 +37,32 @@ static bool HWPReadInfoBlock(void *ptr, int len, HWPFile & hwpf)
 
 
 // Document Information
-
-HWPInfo::HWPInfo(void)
+HWPInfo::HWPInfo()
+    : cur_col(0)
+    , cur_row(0)
+    , readonly(false)
+    , encrypted(false)
+    , beginpagenum(0)
+    , beginfnnum(0)
+    , countfn(0)
+    , splinetext(0)
+    , splinefn(0)
+    , spfnfn(0)
+    , fnchar(0)
+    , fnlinetype(0)
+    , borderline(0)
+    , empty_line_hide(0)
+    , table_move(0)
+    , compressed(0)
+    , reserved3(0)
+    , info_block_len(0)
+    , info_block(NULL)
 {
-    info_block = 0;
-     back_info.isset = false;
+    back_info.isset = false;
+    memset(reserved1, 0, sizeof(reserved1));
+    memset(annotation, 0, sizeof(annotation));
+    memset(bordermargin, 0, sizeof(bordermargin));
 }
-
 
 HWPInfo::~HWPInfo(void)
 {
