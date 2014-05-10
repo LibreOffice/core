@@ -16,8 +16,13 @@ namespace core {
 
 using namespace std;
 
-Crypto::Crypto(CryptoType type) :
-    mType(type)
+Crypto::Crypto(CryptoType type)
+    : mType(type)
+#if USE_TLS_NSS
+    , mContext(NULL)
+    , mSecParam(NULL)
+    , mSymKey(NULL)
+#endif
 {
 #if USE_TLS_NSS
     // Initialize NSS, database functions are not needed

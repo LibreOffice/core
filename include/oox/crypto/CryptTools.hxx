@@ -53,6 +53,7 @@ public:
     };
 
 protected:
+    CryptoType mType;
 #if USE_TLS_OPENSSL
     EVP_CIPHER_CTX mContext;
 #endif
@@ -61,7 +62,6 @@ protected:
     SECItem*     mSecParam;
     PK11SymKey*  mSymKey;
 #endif
-    CryptoType mType;
 
 #if USE_TLS_OPENSSL
     const EVP_CIPHER* getCipher(CryptoType type);
