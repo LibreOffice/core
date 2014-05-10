@@ -269,6 +269,7 @@ class SVX_DLLPUBLIC SvxColorExtToolBoxControl : public SfxToolBoxControl
 
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
     Color                               mLastColor;
+    bool                                bChoiceFromPalette;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
