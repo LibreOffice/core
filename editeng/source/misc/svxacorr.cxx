@@ -2200,11 +2200,16 @@ bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew)
 
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
 {
-    SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_True );
-    OUString sTemp ( pXMLImplCplStt_ExcptLstStr );
-    if( xStg.Is() && xStg->IsContained( sTemp ) )
-        LoadXMLExceptList_Imp( pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
-
+    try
+    {
+        SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_True );
+        OUString sTemp ( pXMLImplCplStt_ExcptLstStr );
+        if( xStg.Is() && xStg->IsContained( sTemp ) )
+            LoadXMLExceptList_Imp( pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
+    }
+    catch (const css::ucb::ContentCreationException&)
+    {
+    }
     return pCplStt_ExcptLst;
 }
 
