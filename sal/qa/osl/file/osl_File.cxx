@@ -2871,7 +2871,11 @@ namespace osl_File
         ::rtl::ByteSequence      aSequence;
 
         public:
-        readLine() :nError1(FileBase::E_None) {}
+        readLine()
+            : nError1(FileBase::E_None)
+            , nCount_write(0)
+        {
+        }
         // initialization
         void setUp() SAL_OVERRIDE
         {
