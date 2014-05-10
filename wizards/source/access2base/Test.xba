@@ -4,14 +4,28 @@
 &apos;Option Compatible
 
 Sub Main
-	Application._RootInit()
+	&apos;Application._RootInit()
 	_A2B_.CalledSub = &quot;&quot;
 	Application.SysCmd(acSysCmdRemoveMeter)
 Dim a as variant, b as variant, c as variant, d as variant, i as integer, s as string,f as variant, h as variant, j as long, k as integer, l as integer, sFile As String
-Dim lTime1 as Date, lTime2 as Long
+Dim lTime1 as Long, lTime2 as Long
 	lTime1=getsystemticks()
 &apos;	TraceConsole()
-
+	_ErrorHandler(False)
+	traceconsole()
+	exit sub
+	CurrentDb().CloseAllrecordsets()
+	Set a = CurrentDb().TableDefs(&quot;Alltypes&quot;)
+	Set b = a.OpenRecordset( , , dbreadOnly)
+Dim vVar() As Variant
+	Set vVar = b.GetRows(1000)
+	b.mClose()
+	DebugPrint UBound(vVar, 1), UBound(vVar, 2)
+	For i = 0 To UBound(vVar, 2)
+		For j = 0 To UBound(vVar, 1)
+			DebugPrint i, j, vVar(j, i)
+		Next j
+	Next i
 	lTime2=getsystemticks
 	debugprint lTime2 - lTime1
 	exit sub

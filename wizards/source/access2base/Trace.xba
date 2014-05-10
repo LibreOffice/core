@@ -35,8 +35,13 @@ Dim sLineBreak As String, oDialogLib As Object, oTraceDialog As Object
 	sLineBreak = Chr(10)
 	 
 	Set oDialogLib = DialogLibraries
-	If Not oDialogLib.IsLibraryLoaded(&quot;Access2Base&quot;) Then oDialogLib.loadLibrary(&quot;Access2Base&quot;)
-	Set oTraceDialog = CreateUnoDialog(DialogLibraries.Access2Base.dlgTrace)
+	If oDialogLib.hasByName(&quot;Access2BaseDev&quot;) Then
+		If Not oDialogLib.IsLibraryLoaded(&quot;Access2BaseDev&quot;) Then oDialogLib.loadLibrary(&quot;Access2BaseDev&quot;)
+		Set oTraceDialog = CreateUnoDialog(DialogLibraries.Access2BaseDev.dlgTrace)
+	Else
+		If Not oDialogLib.IsLibraryLoaded(&quot;Access2Base&quot;) Then oDialogLib.loadLibrary(&quot;Access2Base&quot;)
+		Set oTraceDialog = CreateUnoDialog(DialogLibraries.Access2Base.dlgTrace)
+	EndIf
 	oTraceDialog.Title = _GetLabel(&quot;DLGTRACE_TITLE&quot;)	&apos;	HelpText ???
 	
 Dim oEntries As Object, oTraceLog As Object, oClear As Object, oMinLevel As Object, oNbEntries As Object, oDump As Object
@@ -138,7 +143,7 @@ Error_Sub:
 		.TraceLogLast = 0
 	End With
 	GoTo Exit_Sub	
-End Sub		&apos;	TraceConsole	V1.0.0
+End Sub		&apos;	TraceConsole	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub TraceError(ByVal psErrorLevel As String _
@@ -399,22 +404,4 @@ Dim vTraces As Variant, i As Integer
 							
 End Function	&apos;	TraceLevel
 
-REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _TraceStandalone(ByVal Optional psCall As String) As Boolean
-&apos;	Display error when property or method or action not applicable from a standalone form
-&apos;	If 2nd argument = SILENT set silent mode. Silent mode = no error message (for tests purpose only)
-
-Static sMode As String
-Const cstSilent = &quot;SILENT&quot;
-	If Not IsMissing(psCall) Then
-		If psCall = cstSilent Then sMode = cstSilent Else Utils._SetCalledSub(psCall)
-	End If
-	If Application._CurrentDb()._Standalone Then
-		If sMode &lt;&gt; cstSilent Then TraceError(TRACEFATAL, ERRSTANDALONE, Utils._CalledSub(), 0)
-		_TraceStandalone = True
-	Else
-		_TraceStandalone = False
-	End If
-							
-End Function	&apos;	TraceStandalone
 </script:module>

@@ -18,6 +18,7 @@ Private	_Type					As String				&apos;	Must be FIELD
 Private _Name					As String
 Private _ParentName				As String
 Private _ParentType				As String
+Private _ParentDatabase			As Object
 Private Column					As Object				&apos;	com.sun.star.sdb.OTableColumnWrapper
 											&apos;			or	org.openoffice.comp.dbaccess.OQueryColumn
 											&apos;			or	com.sun.star.sdb.ODataColumn
@@ -54,14 +55,22 @@ Property Get DbType() As Long		&apos;	MSAccess type
 End Property		&apos;	DbType (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get DefaultValue() As String
+Property Get DefaultValue() As Variant
 	DefaultValue = _PropertyGet(&quot;DefaultValue&quot;)
 End Property		&apos;	DefaultValue (get)
 
+Property Let DefaultValue(ByVal pvDefaultValue As Variant)
+	Call _PropertySet(&quot;DefaultValue&quot;, pvDefaultValue)
+End Property		&apos;	DefaultValue (set)
+
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get Description() As String
+Property Get Description() As Variant
 	Description = _PropertyGet(&quot;Description&quot;)
 End Property		&apos;	Description (get)
+
+Property Let Description(ByVal pvDescription As Variant)
+	Call _PropertySet(&quot;Description&quot;, pvDescription)
+End Property		&apos;	Description (set)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get FieldSize() As Long
@@ -153,6 +162,7 @@ Const cstThisSub = &quot;Field.Properties&quot;
 		vProperty = PropertiesGet._Properties(sObject, sName, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
+	Set vProperty._ParentDatabase = _ParentDatabase
 	
 Exit_Function:
 	Set Properties = vProperty
@@ -304,7 +314,7 @@ Const cstMaxTextLength = 65535
 		Case UCase(&quot;DefaultValue&quot;)
 			If Utils._hasUNOProperty(Column, &quot;DefaultValue&quot;) Then			&apos;	Default value in database set via SQL statement
 				_PropertyGet = Column.DefaultValue
-			ElseIf Utils._hasUNOProperty(Column, &quot;ControlDefault&quot;) Then	&apos;	Default value set in Base via table edition
+			ElseIf Utils._hasUNOProperty(Column, &quot;ControlDefault&quot;) Then		&apos;	Default value set in Base via table edition
 			 	If IsEmpty(Column.ControlDefault) Then _PropertyGet = &quot;&quot; Else _PropertyGet = Column.ControlDefault
 			Else
 			 	_PropertyGet = &quot;&quot;
@@ -388,9 +398,9 @@ Const cstMaxTextLength = 65535
 						If Utils._hasUNOProperty(Column, &quot;Scale&quot;) Then
 							If Column.Scale &gt; 0 Then
 								vValue = Column.getDouble()
-							Else		&apos;	CDec checks local decimal point, getString does not !
+							Else		&apos;	CLng checks local decimal point, getString does not !
 								sValue = Join(Split(Column.getString(), &quot;.&quot;), Utils._DecimalPoint())
-								vValue = CDec(sValue)
+								vValue = CLng(sValue)		&apos;	CDec disappeared from LO ?!?
 							End If
 						Else
 							vValue = CDec(Column.getString())
@@ -444,7 +454,7 @@ Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Trace_Error:
-	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
+	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
 	_PropertyGet = vEMPTY
 	Goto Exit_Function
 Trace_Length:
@@ -455,7 +465,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	_PropertyGet = vEMPTY
 	GoTo Exit_Function
-End Function		&apos;	_PropertyGet
+End Function		&apos;	_PropertyGet	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Variant) As Boolean
@@ -478,11 +488,21 @@ Dim oParent As Object
 	If Not hasProperty(psProperty) Then Goto Trace_Error
 
 	Select Case UCase(psProperty)
+		Case UCase(&quot;DefaultValue&quot;)
+			If _ParentType &lt;&gt; OBJTABLEDEF Then Goto Trace_Error
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If Utils._hasUNOProperty(Column, &quot;ControlDefault&quot;) Then			&apos;	Default value set in Base via table edition
+			 	Column.ControlDefault = pvValue
+			End If
+		Case UCase(&quot;Description&quot;)
+			If _ParentType &lt;&gt; OBJTABLEDEF Then Goto Trace_Error
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			Column.HelpText = pvValue
 		Case UCase(&quot;Value&quot;)
 			If _ParentType &lt;&gt; OBJRECORDSET Then Goto Trace_Error		&apos;	Not on table- or querydefs ... !
 			If Not Column.IsWritable Then Goto Trace_Error_Updatable
 			If Column.IsReadOnly Then Goto Trace_Error_Updatable
-			If Application._CurrentDb().Recordsets(_ParentName)._EditMode = dbEditNone Then Goto Trace_Error_Update
+			If _ParentDatabase.Recordsets(_ParentName)._EditMode = dbEditNone Then Goto Trace_Error_Update
 			With com.sun.star.sdbc.DataType
 				If IsNull(pvValue) Then
 					If Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then Column.updateNull() Else Goto Trace_Null
@@ -610,12 +630,12 @@ Public Function _ReadAll(ByVal psFile As String, ByVal psMethod As String) As Bo
 	If _ParentType &lt;&gt; OBJRECORDSET Then Goto Trace_Error		&apos;	Not on table- or querydefs ... !
 	If Not Column.IsWritable Then Goto Trace_Error_Updatable
 	If Column.IsReadOnly Then Goto Trace_Error_Updatable
-	If Application._CurrentDb().Recordsets(_ParentName)._EditMode = dbEditNone Then Goto Trace_Error_Update
+	If _ParentDatabase.Recordsets(_ParentName)._EditMode = dbEditNone Then Goto Trace_Error_Update
 
 Dim sFile As String, oSimpleFileAccess As Object, sMethod As String, oStream As Object
 Dim lFileLength As Long, sBuffer As String, sMemo As String, iFile As Integer
 Const cstMaxLength = 64000
-	sFile = _ConvertToURL(psFile)
+	sFile = ConvertToURL(psFile)
 
 	oSimpleFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	If Not oSimpleFileAccess.exists(sFile) Then Goto Trace_File
@@ -685,7 +705,7 @@ Public Function _WriteAll(ByVal psFile As String, ByVal psMethod As String) As B
 	_WriteAll = False
 
 Dim sFile As String, oSimpleFileAccess As Object, sMethod As String, oStream As Object
-	sFile = _ConvertToURL(psFile)
+	sFile = ConvertToURL(psFile)
 
 	oSimpleFileAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	With com.sun.star.sdbc.DataType
@@ -735,6 +755,14 @@ REM ----------------------------------------------------------------------------
 REM --- CLASS PROPERTY SETs								        														---
 REM --- Workaround to bug https://www.libreoffice.org/bugzilla/show_bug.cgi?id=60752 (LibreOffice 4.0)					---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+Property Set DefaultValue(ByVal pvDefaultValue As Variant)
+	Call _PropertySet(&quot;DefaultValue&quot;, pvDefaultValue)
+End Property		&apos;	DefaultValue (set)
+
+Property Set Description(ByVal pvDescription As Variant)
+	Call _PropertySet(&quot;Description&quot;, pvDescription)
+End Property		&apos;	Description (set)
 
 Property Set Value(ByVal pvValue As Variant)
 	Call _PropertySet(&quot;Value&quot;, pvValue)

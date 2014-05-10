@@ -16,11 +16,12 @@ REM ----------------------------------------------------------------------------
 REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
-Private _Type		As String		&apos;	Must be COLLECTION
-Private _CollType	As String
-Private _ParentType	As String
-Private _ParentName	As String		&apos;	Name or shortcut
-Private _Count		As Long
+Private _Type			As String		&apos;	Must be COLLECTION
+Private _CollType		As String
+Private _ParentType		As String
+Private _ParentName		As String		&apos;	Name or shortcut
+Private _ParentDatabase	As Object
+Private _Count			As Long
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CONSTRUCTORS / DESTRUCTORS						        														---
@@ -51,7 +52,7 @@ Property Get Item(ByVal Optional pvItem As Variant) As Variant
 
 Const cstThisSub = &quot;Collection.getItem&quot;
 	Utils._SetCalledSub(cstThisSub)
-	If IsMissing(pvItem) Then Call _TraceArguments()
+	If IsMissing(pvItem) Then Goto Exit_Function	&apos;	To allow object watching in Basic IDE, do not generate error
 	If Not Utils._CheckArgument(pvItem, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 
 Dim vNames() As Variant, oProperty As Object
@@ -78,47 +79,47 @@ Dim vNames() As Variant, oProperty As Object
 		Case COLLFIELDS
 			Select Case _ParentType
 				Case OBJQUERYDEF
-					Set Item = Application.CurrentDb().QueryDefs(_ParentName).Fields(pvItem)
+					Set Item = _ParentDatabase.QueryDefs(_ParentName).Fields(pvItem)	&apos;	&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
 				Case OBJRECORDSET
-					Set Item = Application.CurrentDb().Recordsets(_ParentName).Fields(pvItem)
+					Set Item = _ParentDatabase.Recordsets(_ParentName).Fields(pvItem)
 				Case OBJTABLEDEF
-					Set Item = Application.CurrentDb().TableDefs(_ParentName).Fields(pvItem)
+					Set Item = _ParentDatabase.TableDefs(_ParentName).Fields(pvItem)
 			End Select
 		Case COLLPROPERTIES
 			Select Case _ParentType
 				Case OBJCONTROL, OBJSUBFORM
 					Set Item = getObject(_ParentName).Properties(pvItem)
 				Case OBJDATABASE
-					Set Item = Application.CurrentDb().Properties(pvItem)
+					Set Item = _ParentDatabase.Properties(pvItem)
 				Case OBJDIALOG
 					Set Item = Application.AllDialogs(_ParentName).Properties(pvItem)
 				Case OBJFIELD
 					vNames() = Split(_ParentName, &quot;/&quot;)
 					Select Case vNames(0)
 						Case OBJQUERYDEF
-							Set Item = Application.CurrentDb().QueryDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
+							Set Item = _ParentDatabase.QueryDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
 						Case OBJRECORDSET
-							Set Item = Application.CurrentDb().Recordsets(vNames(1)).Fields(vNames(2)).Properties(pvItem)
+							Set Item = _ParentDatabase.Recordsets(vNames(1)).Fields(vNames(2)).Properties(pvItem)
 						Case OBJTABLEDEF
-							Set Item = Application.CurrentDb().TableDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
+							Set Item = _ParentDatabase.TableDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
 					End Select
 				Case OBJFORM
 					Set Item = Application.Forms(_ParentName).Properties(pvItem)
 				Case OBJQUERYDEF
-					Set Item = Application.CurrentDb().QueryDefs(_ParentName).Properties(pvItem)
+					Set Item = _ParentDatabase.QueryDefs(_ParentName).Properties(pvItem)
 				Case OBJRECORDSET
-					Set Item = Application.CurrentDb().Recordsets(_ParentName).Properties(pvItem)
+					Set Item = _ParentDatabase.Recordsets(_ParentName).Properties(pvItem)
 				Case OBJTABLEDEF
-					Set Item = Application.CurrentDb().TableDefs(_ParentName).Properties(pvItem)
-				Case OBJCOLLECTION, OBJEVENT, OBJOPTIONGROUP
+					Set Item = _ParentDatabase.TableDefs(_ParentName).Properties(pvItem)
+				Case OBJCOLLECTION, OBJEVENT, OBJOPTIONGROUP, OBJPROPERTY
 					&apos; NOT SUPPORTED
 			End Select
 		Case COLLQUERYDEFS
-			Set Item = Application.CurrentDb().QueryDefs(pvItem)
+			Set Item = _ParentDatabase.QueryDefs(pvItem)
 		Case COLLRECORDSETS
-			Set Item = Application.CurrentDb().Recordsets(pvItem)
+			Set Item = _ParentDatabase.Recordsets(pvItem)
 		Case COLLTABLEDEFS
-			Set Item = Application.CurrentDb().TableDefs(pvItem)
+			Set Item = _ParentDatabase.TableDefs(pvItem)
 		Case Else
 	End Select
 
@@ -128,7 +129,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
 	Set Item = Nothing
 	GoTo Exit_Function
-End Property		&apos;	V0.9.5
+End Property		&apos;	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get ObjectType() As String
@@ -160,6 +161,100 @@ REM ----------------------------------------------------------------------------
 REM --- CLASS METHODS	 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
+Public Function Append(Optional pvObject As Variant) As Boolean
+&apos;	Append a new TableDef or Field object to the TableDefs/Fields collections
+
+Const cstThisSub = &quot;Collection.Append&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	
+Dim odbDatabase As Object, oConnection As Object, oTables As Object, sName As String, oTable As Object
+	Append = False
+	If IsMissing(pvObject) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvObject, 1, vbObject) Then Goto Exit_Function
+
+	With pvObject
+		Select Case ._Type
+			Case OBJTABLEDEF
+				Set odbDatabase = ._ParentDatabase
+				If odbDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+				Set oConnection = odbDatabase.Connection
+				If IsNull(.TableDescriptor) Or .TableFieldsCount = 0 Then Goto Error_Sequence
+				Set oTables = oConnection.getTables()
+				oTables.appendByDescriptor(.TableDescriptor)
+				Set .Table = oTables.getByName(._Name)
+				.TableDescriptor.dispose()
+				Set .TableDescriptor = Nothing
+				.TableFieldsCount = 0
+				.TableKeysCount = 0
+			Case Else
+				Goto Error_NotApplicable
+		End Select
+	End With
+
+	Append = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_Sequence:
+	TraceError(TRACEFATAL, ERRTABLECREATION, Utils._CalledSub(), 0, 1, pvObject._Name)
+	Goto Exit_Function
+End Function		&apos;	Append	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Delete(ByVal Optional pvName As Variant) As Boolean
+&apos;	Delete a TableDef or QueryDef object in the TableDefs/QueryDefs collections
+
+Const cstThisSub = &quot;Collection.Delete&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	
+Dim odbDatabase As Object, oColl As Object, vName As Variant
+	Delete = False
+	If IsMissing(pvName) Then pvName = &quot;&quot;
+	If Not Utils._CheckArgument(pvName, 1, vbString) Then Goto Exit_Function
+	If pvName = &quot;&quot; Then Call _TraceArguments()
+
+	Select Case _CollType
+		Case COLLTABLEDEFS, COLLQUERYDEFS
+			If Application._CurrentDoc &lt;&gt; 0 Then Goto Error_NotApplicable 
+			Set odbDatabase = Application._CurrentDb()
+			If odbDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+			If _CollType = COLLTABLEDEFS Then Set oColl = odbDatabase.Connection.getTables() Else Set oColl = odbDatabase.Connection.getQueries()
+			With oColl
+				vName = _InList(pvName, .getElementNames(), True)
+				If vName = False Then Goto trace_NotFound
+				.dropByName(vName)
+			End With
+			odbDatabase.Document.store()
+		Case Else
+			Goto Error_NotApplicable
+	End Select
+
+	Delete = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(Left(_CollType, 5)), pvName))
+	Goto Exit_Function
+End Function		&apos;	Delete	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
 &apos;	Return property value of psProperty property name
 
@@ -183,7 +278,7 @@ REM ----------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
-	 _PropertiesList = Array(&quot;Count&quot;, &quot;ObjectType&quot;)
+	 _PropertiesList = Array(&quot;Count&quot;, &quot;Item&quot;, &quot;ObjectType&quot;)
 End Function	&apos;	_PropertiesList
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -197,6 +292,7 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Count&quot;)
 			_PropertyGet = _Count
+		Case UCase(&quot;Item&quot;)
 		Case UCase(&quot;ObjectType&quot;)
 			_PropertyGet = _Type
 		Case Else
@@ -207,7 +303,7 @@ Exit_Function:
 	Utils._ResetCalledSub(&quot;Collection.get&quot; &amp; psProperty)
 	Exit Function
 Trace_Error:
-	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, 1, psProperty)
+	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
 	_PropertyGet = Nothing
 	Goto Exit_Function
 Error_Function:

@@ -8,7 +8,7 @@ REM ============================================================================
 Option Explicit
 
 REM Access2Base -----------------------------------------------------
-Global Const Access2Base_Version = &quot;1.0.0&quot;
+Global Const Access2Base_Version = &quot;1.1.0&quot;
 
 REM AcCloseSave
 REM -----------------------------------------------------------------
@@ -49,9 +49,10 @@ Global Const acForm = 2
 Global Const acQuery = 1
 Global Const acReport = 3
 Global Const acTable = 0
-
+&apos;			Unexisting in MS/Access
 Global Const acBasicIDE = 101
 Global Const acDatabaseWindow = 102
+Global Const acDocument = 111
 
 REM AcWindowMode
 REM -----------------------------------------------------------------

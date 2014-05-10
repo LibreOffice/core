@@ -14,9 +14,10 @@ REM ----------------------------------------------------------------------------
 REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
-Private _Type		As String		&apos;	Must be PROPERTY
-Private _Name		As String
-Private _Value		As Variant
+Private _Type			As String		&apos;	Must be PROPERTY
+Private _Name			As String
+Private _Value			As Variant
+Private _ParentDatabase	As Object
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CONSTRUCTORS / DESTRUCTORS						        														---

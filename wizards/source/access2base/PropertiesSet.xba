@@ -96,6 +96,12 @@ Public Function setDefaultValue(Optional pvObject As Variant, ByVal Optional pvV
 End Function		&apos;	setDefaultValue
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setDescription(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setDescription&quot;)
+	setDescription = PropertiesSet._setProperty(pvObject, &quot;Description&quot;, pvValue)
+End Function		&apos;	setDescription
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setEnabled(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
 	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setEnabled&quot;)
 	setEnabled = PropertiesSet._setProperty(pvObject, &quot;Enabled&quot;, pvValue)
@@ -241,6 +247,24 @@ Public Function setSelected(Optional pvObject As Variant, ByVal Optional pvValue
 		setSelected = PropertiesSet._setProperty(pvObject, &quot;Selected&quot;, pvValue, pvIndex)
 	End If
 End Function		&apos;	setSelected
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setSelLength(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setSelLength&quot;)
+	setSelLength = PropertiesSet._setProperty(pvObject, &quot;SelLength&quot;, pvValue)
+End Function		&apos;	setSelLength
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setSelStart(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setSelStart&quot;)
+	setSelStart = PropertiesSet._setProperty(pvObject, &quot;SelStart&quot;, pvValue)
+End Function		&apos;	setSelStart
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setSelText(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setSelText&quot;)
+	setSelText = PropertiesSet._setProperty(pvObject, &quot;SelText&quot;, pvValue)
+End Function		&apos;	setSelText
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setSpecialEffect(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
@@ -390,7 +414,10 @@ Dim ocButton As Variant, iRadioIndex As Integer
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			pvItem.Default = pvValue
 		Case UCase(&quot;DefaultValue&quot;)
-			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJCONTROL, OBJFIELD)) Then Goto Exit_Function
+			pvItem.DefaultValue = pvValue
+		Case UCase(&quot;Description&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJFIELD) Then Goto Exit_Function
 			pvItem.DefaultValue = pvValue
 		Case UCase(&quot;Enabled&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
@@ -455,6 +482,15 @@ Dim ocButton As Variant, iRadioIndex As Integer
 		Case UCase(&quot;Selected&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			If IsMissing(pvIndex) Then pvItem.Selected = pvValue Else pvItem.SelectedI(pvValue, pvIndex)
+		Case UCase(&quot;SelLength&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
+			pvItem.SelLength = pvValue
+		Case UCase(&quot;SelStart&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
+			pvItem.SelStart = pvValue
+		Case UCase(&quot;SelText&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
+			pvItem.SelText = pvValue
 		Case UCase(&quot;SpecialEffect&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			pvItem.SpecialEffect = pvValue

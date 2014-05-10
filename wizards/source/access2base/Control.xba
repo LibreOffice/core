@@ -21,6 +21,8 @@ Private	_ParentType				As String				&apos;	One of CTLPARENTISxxxx constants
 Private	_Shortcut				As String
 Private	_Name					As String
 Private _FormComponent			As Object				&apos;	com.sun.star.text.TextDocument
+Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root structure
+Private _DbEntry				As Integer
 Private	_ControlType			As Integer
 Private	_SubType				As String
 Private	ControlModel			As Object				&apos;	com.sun.star.comp.forms.XXXModel
@@ -37,6 +39,9 @@ Private Sub Class_Initialize()
 	_ParentType			= &quot;&quot;
 	_Shortcut			= &quot;&quot;
 	_Name				= &quot;&quot;
+	Set _FormComponent	= Nothing
+	_DocEntry = -1
+	_DbEntry = -1
 	_SubType			= &quot;&quot;
 	Set ControlModel	= Nothing
 	Set ControlView		= Nothing
@@ -358,6 +363,33 @@ Public Function SelectedI(ByVal pvValue As variant, ByVal pvIndex As Variant)
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Property Get SelLength() As Variant
+	SelLength = _PropertyGet(&quot;SelLength&quot;)
+End Property		&apos;	SelLength (get)
+
+Property Let SelLength(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SelLength&quot;, pvValue)
+End Property		&apos;	SelLength (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get SelStart() As Variant
+	SelStart = _PropertyGet(&quot;SelStart&quot;)
+End Property		&apos;	SelStart (get)
+
+Property Let SelStart(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SelStart&quot;, pvValue)
+End Property		&apos;	SelStart (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get SelText() As Variant
+	SelText = _PropertyGet(&quot;SelText&quot;)
+End Property		&apos;	SelText (get)
+
+Property Let SelText(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SelText&quot;, pvValue)
+End Property		&apos;	SelText (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Property Get SpecialEffect() As Variant
 	SpecialEffect = _PropertyGet(&quot;SpecialEffect&quot;)
 End Property		&apos;	SpecialEffect (get)
@@ -569,21 +601,19 @@ Dim j As Integer, oView As Object
 	Next i
 
 	ocControl._Initialize()
+	ocControl._DocEntry = _DocEntry
+	ocControl._DbEntry = _DbEntry
 	Set Controls = ocControl
 	
 Exit_Function:
 	Utils._ResetCalledSub(&quot;Grid.Controls&quot;)
 	Exit Function
-Trace_Error:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , 1)
-	Set Controls = Nothing
-	Goto Exit_Function
 Trace_Error_Index:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
 	Set Controls = Nothing
 	Goto Exit_Function
 Trace_NotFound:
-	TraceError(TRACEFATAL, ERRCONTROLNOTFOUND, Utils._CalledSub(), 0, , Array(pvIndex, vObject._Name))
+	TraceError(TRACEFATAL, ERRCONTROLNOTFOUND, Utils._CalledSub(), 0, , Array(pvIndex, _Name))
 	Set Controls = Nothing
 	Goto Exit_Function
 Trace_Error_Context:
@@ -684,11 +714,11 @@ Error_Function:
 	RemoveItem = False
 	GoTo Exit_Function
 Error_Control:
-	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0)
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, &quot;Control.RemoveItem&quot;)
 	RemoveItem = False
 	Goto Exit_Function
 Error_Index:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), False, ,2)
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), False, ,Array(2, pvIndex))
 	RemoveItem = False
 	Goto Exit_Function
 End Function		&apos;	RemoveItem	V0.9.1
@@ -720,7 +750,7 @@ Exit_Function:
 	Utils._ResetCalledSub(&quot;Control.Requery&quot;)
 	Exit Function
 Error_Control:
-	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0)
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, &quot;Control.Requery&quot;)
 	Requery = False
 	Goto Exit_Function
 Error_Function:
@@ -981,6 +1011,9 @@ Dim vFullPropertiesList() As Variant
 		, &quot;RowSource&quot; _
 		, &quot;RowSourceType&quot; _
 		, &quot;Selected&quot; _
+		, &quot;SelLength&quot; _
+		, &quot;SelStart&quot; _
+		, &quot;Seltext&quot; _
 		, &quot;SpecialEffect&quot; _
 		, &quot;SubType&quot; _
 		, &quot;TabIndex&quot; _
@@ -995,65 +1028,65 @@ Dim vFullPropertiesList() As Variant
 Dim vPropertiesMatrix(25) As Variant
 	Select Case _ParentType
 		Case CTLPARENTISFORM, CTLPARENTISSUBFORM
-			vPropertiesMatrix(acCheckBox) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,31,32,36,37,38,39,40,42,43,44,45)
-			vPropertiesMatrix(acComboBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,27,28,31,32,33,34,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,9,10,11,12,13,14,15,16,17,27,28,31,37,38,39,40,42,45)
-			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acDateField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,37,38,39,40,41,44,45)
+			vPropertiesMatrix(acCheckBox) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,31,32,39,40,41,42,43,45,46,47,48)
+			vPropertiesMatrix(acComboBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,27,28,31,32,33,34,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,31,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acDateField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,40,41,42,43,44,47,48)
 			vPropertiesMatrix(acFixedLine) = Array()
-			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,31,37,40,42,45)
-			vPropertiesMatrix(acFormattedField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acGridControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,27,28,31,37,38,39,40,45)
-			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,31,37,40,45)
-			vPropertiesMatrix(acHiddenControl) = Array(7,27,28,31,37,40,44,45)
-			vPropertiesMatrix(acImageButton) = Array(0,1,2,6,7,10,27,28,31,37,38,39,40,45)
-			vPropertiesMatrix(acImageControl) = Array(0,1,2,5,6,7,10,25,27,28,31,32,37,38,39,40,45)
-			vPropertiesMatrix(acListBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,31,32,33,34,35,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acNavigationBar) = Array(0,2,6,7,10,11,12,13,14,15,16,17,27,28,31,37,38,39,40,45)
-			vPropertiesMatrix(acNumericField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acPatternField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,37,38,39,40,41,42,44,45)
+			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,31,40,43,45,48)
+			vPropertiesMatrix(acFormattedField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acGridControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,27,28,31,40,41,42,43,48)
+			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,31,40,43,48)
+			vPropertiesMatrix(acHiddenControl) = Array(7,27,28,31,40,43,47,48)
+			vPropertiesMatrix(acImageButton) = Array(0,1,2,6,7,10,27,28,31,40,41,42,43,48)
+			vPropertiesMatrix(acImageControl) = Array(0,1,2,5,6,7,10,25,27,28,31,32,40,41,42,43,48)
+			vPropertiesMatrix(acListBox) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,31,32,33,34,35,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acNavigationBar) = Array(0,2,6,7,10,11,12,13,14,15,16,17,27,28,31,40,41,42,43,48)
+			vPropertiesMatrix(acNumericField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acPatternField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,36,37,38,40,41,42,43,44,45,47,48)
 			vPropertiesMatrix(acProgressBar) = Array()
-			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,32,36,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,31,37,38,39,40,44,45)
-			vPropertiesMatrix(acSpinButton) = Array(0,1,2,6,7,9,10,27,28,31,37,38,39,40,44,45)
-			vPropertiesMatrix(0) = Array(7,18,21,22,27,28,31,37)
-			vPropertiesMatrix(acTextField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acTimeField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,37,38,39,40,41,42,44,45)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,32,39,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,31,40,41,42,43,47,48)
+			vPropertiesMatrix(acSpinButton) = Array(0,1,2,6,7,9,10,27,28,31,40,41,42,43,47,48)
+			vPropertiesMatrix(0) = Array(7,18,21,22,27,28,31,40)
+			vPropertiesMatrix(acTextField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,25,27,28,31,32,36,37,38,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acTimeField) = Array(0,1,2,5,6,7,9,10,11,12,13,14,15,16,17,19,25,27,28,31,32,40,41,42,43,44,45,47,48)
 		Case CTLPARENTISGROUP
 			&apos;	To be duplicated from above !!!
-			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,32,36,37,38,39,40,42,44,45)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,5,6,7,9,10,11,12,13,14,15,16,17,27,28,29,31,32,39,40,41,42,43,45,47,48)
 		Case CTLPARENTISGRID
-			vPropertiesMatrix(acCheckBox) = Array(4,5,6,7,9,10,27,28,31,32,36,37,40,42,43,44)
-			vPropertiesMatrix(acComboBox) = Array(4,5,6,7,9,10,20,23,24,25,27,28,31,32,33,34,37,40,41,42,44)
-			vPropertiesMatrix(acCurrencyField) = Array(4,5,6,7,9,10,25,27,28,31,32,37,40,42,44)
-			vPropertiesMatrix(acDateField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,37,40,41,42,44)
-			vPropertiesMatrix(acFormattedField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,37,40,41,42,44)
-			vPropertiesMatrix(acListBox) = Array(4,5,6,7,9,10,20,23,24,25,26,27,28,31,32,33,34,35,37,40,42,44)
-			vPropertiesMatrix(acNumericField) = Array(4,5,6,7,9,10,25,27,28,31,32,37,40,42,44)
-			vPropertiesMatrix(acPatternField) = Array(4,5,6,7,9,10,25,27,28,31,32,37,40,41,42,44)
-			vPropertiesMatrix(acTextField) = Array(4,5,6,7,9,10,25,27,28,31,32,37,40,41,42,44)
-			vPropertiesMatrix(acTimeField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,37,40,41,42,44)
+			vPropertiesMatrix(acCheckBox) = Array(4,5,6,7,9,10,27,28,31,32,39,40,43,45,46,47)
+			vPropertiesMatrix(acComboBox) = Array(4,5,6,7,9,10,20,23,24,25,27,28,31,32,33,34,40,43,44,45,47)
+			vPropertiesMatrix(acCurrencyField) = Array(4,5,6,7,9,10,25,27,28,31,32,40,43,45,47)
+			vPropertiesMatrix(acDateField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,40,43,44,45,47)
+			vPropertiesMatrix(acFormattedField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,40,43,44,45,47)
+			vPropertiesMatrix(acListBox) = Array(4,5,6,7,9,10,20,23,24,25,26,27,28,31,32,33,34,35,40,43,45,47)
+			vPropertiesMatrix(acNumericField) = Array(4,5,6,7,9,10,25,27,28,31,32,40,43,45,47)
+			vPropertiesMatrix(acPatternField) = Array(4,5,6,7,9,10,25,27,28,31,32,36,37,38,40,43,44,45,47)
+			vPropertiesMatrix(acTextField) = Array(4,5,6,7,9,10,25,27,28,31,32,36,37,38,40,43,44,45,47)
+			vPropertiesMatrix(acTimeField) = Array(4,5,6,7,9,10,19,25,27,28,31,32,40,43,44,45,47)
 		Case CTLPARENTISDIALOG
-			vPropertiesMatrix(acCheckBox) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,36,37,38,39,40,42,43,44,45)
-			vPropertiesMatrix(acComboBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,27,28,30,31,33,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,30,31,37,38,39,40,42,45)
-			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acDateField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acFixedLine) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,37,38,40,45)
-			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,37,38,39,40,42,45)
-			vPropertiesMatrix(acFormattedField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,37,38,40,45)
-			vPropertiesMatrix(acImageControl) = Array(0,1,2,6,7,10,27,28,30,31,37,38,39,40,45)
-			vPropertiesMatrix(acListBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,30,31,33,35,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acNumericField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acPatternField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acProgressBar) = Array(0,1,2,6,7,10,27,28,30,31,37,38,40,44,45)
-			vPropertiesMatrix(acRadioButton) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,29,30,31,36,37,38,39,40,42,44,45)
-			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,30,31,37,38,39,40,44,45)
-			vPropertiesMatrix(acTextField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,37,38,39,40,41,42,44,45)
-			vPropertiesMatrix(acTimeField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,37,38,39,40,41,42,44,45)
+			vPropertiesMatrix(acCheckBox) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,39,40,41,42,43,45,46,47,48)
+			vPropertiesMatrix(acComboBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,27,28,30,31,33,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acCommandButton) = Array(0,3,4,6,7,8,10,11,12,13,14,15,16,17,27,28,30,31,40,41,42,43,45,48)
+			vPropertiesMatrix(acCurrencyField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acDateField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acFileControl) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acFixedLine) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,43,48)
+			vPropertiesMatrix(acFixedText) = Array(0,1,2,4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,42,43,45,48)
+			vPropertiesMatrix(acFormattedField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acGroupBox) = Array(4,6,7,10,11,12,13,14,15,16,17,27,28,30,31,40,41,43,48)
+			vPropertiesMatrix(acImageControl) = Array(0,1,2,6,7,10,27,28,30,31,40,41,42,43,48)
+			vPropertiesMatrix(acListBox) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,20,23,24,25,26,27,28,30,31,33,35,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acNumericField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acPatternField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,36,37,38,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acProgressBar) = Array(0,1,2,6,7,10,27,28,30,31,40,41,43,47,48)
+			vPropertiesMatrix(acRadioButton) = Array(0,4,6,7,10,11,12,13,14,15,16,17,27,28,29,30,31,39,40,41,42,43,45,47,48)
+			vPropertiesMatrix(acScrollBar) = Array(0,1,2,6,7,10,27,28,30,31,40,41,42,43,47,48)
+			vPropertiesMatrix(acTextField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,25,27,28,30,31,36,37,38,40,41,42,43,44,45,47,48)
+			vPropertiesMatrix(acTimeField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,30,31,40,41,42,43,44,45,47,48)
 	End Select
 	
 Dim vProperties() As Variant, i As Integer, iIndex As Integer
@@ -1097,6 +1130,7 @@ Dim vListboxValue As Variant, vListSource, bSelected() As Boolean, bListboxBound
 Dim vGet As Variant, vDate As Variant
 Dim ofSubForm As Object
 Dim vFormats() As Variant
+Dim vSelection As Variant, sSelectedText As String
 	
 	If Not hasProperty(psProperty) Then Goto Trace_Error
 
@@ -1121,7 +1155,7 @@ Dim vFormats() As Variant
 			If Utils._hasUNOProperty(ControlModel, &quot;DefaultButton&quot;) Then _PropertyGet = ControlModel.DefaultButton
 		Case UCase(&quot;DefaultValue&quot;)
 			Select Case _SubType
-				Case CTLCHECKBOX, CTLCOMMANDBUTTON, CTLRADIOBUTTON
+				Case CTLCHECKBOX, CTLRADIOBUTTON
 					If Utils._hasUNOProperty(ControlModel, &quot;DefaultState&quot;) Then _PropertyGet = ControlModel.DefaultState
 				Case CTLCOMBOBOX, CTLFILECONTROL, CTLPATTERNFIELD, CTLTEXTFIELD
 					If Utils._hasUNOProperty(ControlModel, &quot;DefaultText&quot;) Then _PropertyGet = ControlModel.DefaultText
@@ -1188,10 +1222,15 @@ Dim vFormats() As Variant
 			If Utils._hasUNOProperty(ControlModel, &quot;TextColor&quot;) Then _PropertyGet = ControlModel.TextColor
 		Case UCase(&quot;Form&quot;)
 			Set ofSubForm = New SubForm		&apos;	Start building the SUBFORM object
-			Set ofSubForm.DatabaseForm = ControlModel
-			ofSubForm._Name = _Name
-			ofSubForm._Shortcut = _Shortcut &amp; &quot;.Form&quot;
-			ofSubForm.ParentComponent = _FormComponent
+			With ofSubForm
+				Set ._This = ofSubForm
+				Set .DatabaseForm = ControlModel
+				._Name = _Name
+				._Shortcut = _Shortcut &amp; &quot;.Form&quot;
+				.ParentComponent = _FormComponent
+				._DocEntry = _DocEntry
+				._DbEntry = _DbEntry
+			End With
 			set _PropertyGet = ofSubForm
 		Case UCase(&quot;Format&quot;)
 			vFormats = _Formats(_Subtype)
@@ -1332,6 +1371,34 @@ Dim vFormats() As Variant
 					If IsMissing(pvIndex) Then _PropertyGet = bSelected Else _PropertyGet = bSelected(pvIndex)
 				End If	
 			End If
+		Case UCase(&quot;SelLength&quot;)
+			If Utils._hasUNOProperty(ControlView, &quot;Selection&quot;) Then
+				vSelection = ControlView.getSelection()
+				If vSelection.Max &gt;= vSelection.Min Then
+					_PropertyGet = vSelection.Max - vSelection.Min
+				Else
+					_PropertyGet = 0				&apos;	probably control does not have focus
+				End If
+			Else
+				_PropertyGet = 0
+			End If
+		Case UCase(&quot;SelStart&quot;)
+			If Utils._hasUNOProperty(ControlView, &quot;Selection&quot;) Then
+				vSelection = ControlView.getSelection()
+				If vSelection.Max &gt;= vSelection.Min Then
+					_PropertyGet = vSelection.Min + 1
+				Else
+					_PropertyGet = 1				&apos;	probably control does not have focus
+				End If
+			Else
+				_PropertyGet = 1
+			End If
+		Case UCase(&quot;SelText&quot;)
+			If Utils._hasUNOProperty(ControlView, &quot;SelectedText&quot;) Then
+				_PropertyGet = ControlView.getSelectedText()
+			Else
+				_PropertyGet = &quot;&quot;
+			End If
 		Case UCase(&quot;SpecialEffect&quot;)
 			If Utils._hasUNOProperty(ControlModel, &quot;VisualEffect&quot;) Then _PropertyGet = ControlModel.VisualEffect
 		Case UCase(&quot;SubType&quot;)
@@ -1381,6 +1448,11 @@ Dim vFormats() As Variant
 			Select Case _SubType
 				Case CTLCHECKBOX
 					If Utils._hasUNOProperty(ControlModel, &quot;State&quot;) Then vGet = ControlModel.State
+				Case CTLCOMMANDBUTTON
+					vGet = False
+					If Utils._hasUNOProperty(ControlModel, &quot;Toggle&quot;) Then
+						If Utils._hasUNOProperty(ControlModel, &quot;State&quot;) Then vGet = ( ControlModel.State = 1 )
+					End If
 				Case CTLCOMBOBOX, CTLFILECONTROL, CTLPATTERNFIELD, CTLTEXTFIELD
 					If Utils._hasUNOProperty(ControlModel, &quot;Text&quot;) Then vGet = ControlModel.Text
 				Case CTLCURRENCYFIELD
@@ -1514,6 +1586,7 @@ Dim odbDatabase As Object, vNames() As Variant, bFound As Boolean, sName As Stri
 Dim bMultiSelect As Boolean, iCount As Integer, iSelectedItems() As Integer, lListCount As Long, bSelected() As Boolean
 Dim vItemList() As Variant, vFormats() As Variant
 Dim oStruct As Object, sValue As String
+Dim vSelection As Variant, sText As String, lStart As long
 
 	_PropertySet = True
 	Select Case UCase(_A2B_.CalledSub)
@@ -1749,7 +1822,7 @@ Dim oStruct As Object, sValue As String
 						Case		com.sun.star.form.ListSourceType.QUERY _
 								,	com.sun.star.form.ListSourceType.TABLE _
 								,	com.sun.star.form.ListSourceType.TABLEFIELDS
-							Set odbDatabase = Application._CurrentDb()
+							Set odbDatabase = Application._CurrentDb(_DocEntry, _DbEntry)
 							If ControlModel.ListSourceType = com.sun.star.form.ListSourceType.QUERY	Then vNames = odbDatabase.Connection.getQueries.GetElementNames _
 																									Else vNames = odbDatabase.Connection.getTables.GetElementNames
 							bFound = False			&apos;	Check existence of table or query and find its correct (case-sensitive) name
@@ -1764,7 +1837,8 @@ Dim oStruct As Object, sValue As String
 							If _SubType = CTLCOMBOBOX Then ControlModel.ListSource = sName Else ControlModel.ListSource = Array(sName)
 							ControlModel.refresh()
 						Case com.sun.star.form.ListSourceType.SQL
-							If _SubType = CTLCOMBOBOX Then ControlModel.ListSource = Utils._ReplaceSquareBrackets(pvValue) Else ControlModel.ListSource = Array(Utils._ReplaceSquareBrackets(pvValue))
+							Set odbDatabase = Application._CurrentDb(_DocEntry, _DbEntry)
+							If _SubType = CTLCOMBOBOX Then ControlModel.ListSource = odbDatabase._ReplaceSquareBrackets(pvValue) Else ControlModel.ListSource = Array(odbDatabase._ReplaceSquareBrackets(pvValue))
 							ControlModel.refresh()
 						Case com.sun.star.form.ListSourceType.VALUELIST			&apos;	Forbidden for COMBOBOX !
 							If _SubType = CTLCOMBOBOX Then Goto Trace_Error
@@ -1862,6 +1936,35 @@ Dim oStruct As Object, sValue As String
 					ControlModel.SelectedItems = Array()
 				End If					
 			End If
+		Case UCase(&quot;SelLength&quot;)
+			If Not Utils._hasUNOProperty(ControlView, &quot;Selection&quot;) Then Goto trace_Error
+			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+			If pvValue &lt; 0 Then Goto Trace_Error_Value
+			vSelection = ControlView.getSelection()
+			vSelection.Max = vSelection.Min + pvValue
+			ControlView.setSelection(vSelection)
+		Case UCase(&quot;SelStart&quot;)
+			If Not Utils._hasUNOProperty(ControlView, &quot;Selection&quot;) Then Goto trace_Error
+			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+			If pvValue &lt; 1 Or pvValue &gt; Len(ControlModel.Text) + 1 Then Goto Trace_Error_Value
+			vSelection = ControlView.getSelection()
+			vSelection.Min = pvValue - 1
+			vSelection.Max = pvValue - 1		&apos;	Also reset length to 0
+			ControlView.setSelection(vSelection)
+		Case UCase(&quot;SelText&quot;)
+			If Not Utils._hasUNOProperty(ControlView, &quot;Selection&quot;) Then Goto trace_Error
+			If Not Utils._hasUNOProperty(ControlModel, &quot;Text&quot;) Then Goto trace_Error
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If Len(pvValue) &gt; 0 Then
+				vSelection = ControlView.getSelection()
+				sText = ControlModel.Text
+				lStart = InStr(1, sText, pvValue, 0)		&apos;	Case sensitive !
+				If lStart &gt; 0 Then
+					vSelection.Min = lStart - 1
+					vSelection.Max = lStart + Len(pvValue) - 1
+					ControlView.setSelection(vSelection)
+				End If
+			End If
 		Case UCase(&quot;SpecialEffect&quot;)
 			If Not Utils._hasUNOProperty(ControlModel, &quot;VisualEffect&quot;) Then Goto Trace_Error
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
@@ -1897,6 +2000,11 @@ Dim oStruct As Object, sValue As String
 					If VarType(pvValue) = vbBoolean Then pvValue = Iif(pvValue, 1, 0)
 					If pvValue &lt; 0 Or pvValue &gt; 2 Then Goto Trace_Error_Value		&apos;	0 = Not checked		1 = Checked		2 = don&apos;t know
 					ControlModel.State = pvValue
+				Case CTLCOMMANDBUTTON
+					If Not Utils._hasUNOProperty(ControlModel, &quot;State&quot;) Then Goto Trace_Error
+					If Not Utils._hasUNOProperty(ControlModel, &quot;Toggle&quot;) Then Goto Trace_Error
+					If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+					If pvValue Then ControlModel.State = 1 Else ControlModel.State = 0
 				Case CTLCOMBOBOX
 					If Not Utils._hasUNOProperty(ControlModel, &quot;Text&quot;) Or Not Utils._hasUNOProperty(ControlModel, &quot;StringItemList&quot;) _
 							Then Goto Trace_Error
@@ -2043,7 +2151,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Control._PropertySet&quot;, Erl)
 	_PropertySet = False
 	GoTo Exit_Function
-End Function			&apos;	_PropertySet	V1.0.0
+End Function			&apos;	_PropertySet	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS PROPERTY SETs								        														---
@@ -2154,6 +2262,18 @@ Property Set Selected(ByVal pvValue As Variant)		&apos;	, ByVal Optional pvIndex
 &apos;	If IsMissing(pvIndex) Then Call _PropertySet(&quot;Selected&quot;, pvValue) Else Call _PropertySet(&quot;Selected&quot;, pvValue, pvIndex)
 	Call _PropertySet(&quot;Selected&quot;, pvValue)
 End Property		&apos;	Selected (set)
+
+Property Set SelLength(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SelLength&quot;, pvValue)
+End Property		&apos;	SelLength (set)
+
+Property Set SelStart(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SelStart&quot;, pvValue)
+End Property		&apos;	SelStart (set)
+
+Property Set SelText(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SelText&quot;, pvValue)
+End Property		&apos;	SelText (set)
 
 Property Set SpecialEffect(ByVal pvValue As Variant)
 	Call _PropertySet(&quot;SpecialEffect&quot;, pvValue)

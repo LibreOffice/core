@@ -174,33 +174,32 @@ Error_Function:
 End Function	&apos;	Requery		V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function setFocus(Optional pvObject As Variant) As Boolean
-&apos;	Execute setFocus method
+Public Function SetFocus(Optional pvObject As Variant) As Boolean
+&apos;	Execute SetFocus method
 	Utils._SetCalledSub(&quot;setFocus&quot;)
 	If IsMissing(pvObject) Then Call _TraceArguments()
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	If Not Utils._CheckArgument(pvObject, 1, Array(OBJFORM, OBJCONTROL)) Then Goto Exit_Function	
 
-	setFocus = pvObject.setFocus()
+	SetFocus = pvObject.setFocus()
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;setFocus&quot;)
+	Utils._ResetCalledSub(&quot;SetFocus&quot;)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;setFocus&quot;, Erl)
+	TraceError(TRACEABORT, Err, &quot;SetFocus&quot;, Erl)
 	Goto Exit_Function
 Error_Grid:
 	TraceError(TRACEFATAL, ERRFOCUSINGRID, Utils._CalledSub(), 0, 1, Array(pvObject._Name, ocGrid._Name))
 	Goto Exit_Function
-End Function	&apos;	setFocus	V0.9.0
+End Function	&apos;	SetFocus	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _OptionGroup(ByVal pvGroupName As Variant _
 					, ByVal psParentType As String _
-					, Optional pvDatabaseForm As Object _
-					, Optional pvComponent As Object _
+					, pvForm As Object _
 					) As Variant
 &apos;	Return either an error or an object of type OPTIONGROUP based on its name
 
@@ -215,59 +214,63 @@ Dim vOptionButtons() As Variant, sGroupName As String
 Dim lXY() As Long, iIndex() As Integer		&apos;	Two indexes X-Y coordinates
 Dim oView As Object
 
-	bFound = False
-	For i = 0 To pvDatabaseForm.GroupCount - 1		&apos;	Does a group with the right name exist ?
-		pvDatabaseForm.getGroup(i, vOptionButtons, sGroupName)
-		If UCase(sGroupName) = UCase(Utils._Trim(pvGroupName)) Then
-			bFound = True
-			Exit For
-		End If
-	Next i
-	
-	If bFound Then
-		ogGroup = New Optiongroup
-		ogGroup._Name = sGroupName
-		ogGroup._ButtonsGroup = vOptionButtons
-		ogGroup._Count = UBound(vOptionButtons) + 1
-		ogGroup._ParentType = psParentType
-		Set ogGroup._ParentComponent = pvComponent
-
-		ReDim lXY(1, ogGroup._Count - 1)
-		ReDim iIndex(ogGroup._Count - 1)
-		For i = 0 To ogGroup._Count - 1			&apos;	Find the position of each radiobutton
-			Set oView = pvComponent.CurrentController.getControl(ogGroup._ButtonsGroup(i))
-			lXY(0, i) = oView.PosSize.X
-			lXY(1, i) = oView.PosSize.Y
-		Next i
 Const cstPixels = 10							&apos;	Tolerance on coordinates when drawed approximately
-		For i = 0 To ogGroup._Count - 1			&apos;	Sort them on XY coordinates		
-			If i = 0 Then
-				iIndex(0) = 0
-			Else
-				iIndex(i) = i
-				For j = i - 1 To 0 Step -1
-					If lXY(1, i) - lXY(1, j) &lt; - cstPixels Or ( Abs(lXY(1, i) - lXY(1, j)) &lt;= cstPixels And lXY(0, i) - lXY(0, j) &lt; - cstPixels ) Then
-						iIndex(i) = iIndex(j)
-						iIndex(j) = iIndex(j) + 1
-					End If
-				Next j
+	With pvForm
+		bFound = False
+		For i = 0 To .DatabaseForm.GroupCount - 1		&apos;	Does a group with the right name exist ?
+			.DatabaseForm.getGroup(i, vOptionButtons, sGroupName)
+			If UCase(sGroupName) = UCase(Utils._Trim(pvGroupName)) Then
+				bFound = True
+				Exit For
 			End If
 		Next i
-		ogGroup._ButtonsIndex = iIndex()
 
-		Set _OptionGroup = ogGroup
+		If bFound Then
+			ogGroup = New Optiongroup
+			ogGroup._Name = sGroupName
+			ogGroup._ButtonsGroup = vOptionButtons
+			ogGroup._Count = UBound(vOptionButtons) + 1
+			ogGroup._ParentType = psParentType
+			Set ogGroup._ParentComponent = .Component
+			ogGroup._DocEntry = ._DocEntry
+			ogGroup._DbEntry = ._DbEntry
 
-	Else
+			ReDim lXY(1, ogGroup._Count - 1)
+			ReDim iIndex(ogGroup._Count - 1)
+			For i = 0 To ogGroup._Count - 1			&apos;	Find the position of each radiobutton
+				Set oView = .Component.CurrentController.getControl(ogGroup._ButtonsGroup(i))
+				lXY(0, i) = oView.PosSize.X
+				lXY(1, i) = oView.PosSize.Y
+			Next i
+			For i = 0 To ogGroup._Count - 1			&apos;	Sort them on XY coordinates		
+				If i = 0 Then
+					iIndex(0) = 0
+				Else
+					iIndex(i) = i
+					For j = i - 1 To 0 Step -1
+						If lXY(1, i) - lXY(1, j) &lt; - cstPixels Or ( Abs(lXY(1, i) - lXY(1, j)) &lt;= cstPixels And lXY(0, i) - lXY(0, j) &lt; - cstPixels ) Then
+							iIndex(i) = iIndex(j)
+							iIndex(j) = iIndex(j) + 1
+						End If
+					Next j
+				End If
+			Next i
+			ogGroup._ButtonsIndex = iIndex()
 
-		Set _OptionGroup = Nothing
-		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvGroupName))
+			Set _OptionGroup = ogGroup
 
-	End If
+		Else
+
+			Set _OptionGroup = Nothing
+			TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvGroupName))
+
+		End If
+	End With
 	
 Exit_Function:
 	Exit Function
 Error_Function:
 	TraceError(TRACEABORT, Err,&quot;_OptionGroup&quot;, Erl)
 	GoTo Exit_Function
-End Function		&apos;	_OptionGroup	V0.9.0
+End Function		&apos;	_OptionGroup	V1.1.0
 </script:module>

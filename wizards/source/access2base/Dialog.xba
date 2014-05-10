@@ -288,7 +288,7 @@ Exit_Function:
 	Utils._ResetCalledSub(&quot;Dialog.Controls&quot;)
 	Exit Function
 Trace_Error:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , iArg)
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(iArg, pvIndex))
 	Set Controls = Nothing
 	Goto Exit_Function
 Trace_Error_NotOpen:
@@ -420,12 +420,19 @@ Dim iArgNr As Integer
 	If Not Utils._CheckArgument(pvWidth,	iArgNr + 3, Utils._AddNumeric()) Then Goto Exit_Function
 	If Not Utils._CheckArgument(pvHeight, iArgNr + 4, Utils._AddNumeric()) Then Goto Exit_Function
 	
-Dim iArg As Integer		&apos;	Check arguments values
+Dim iArg As Integer, iWrong As Integer		&apos;	Check arguments values
 	iArg = 0
-	If pvHeight &lt; -1 Then iArg = 4	:	If pvWidth &lt; -1 Then iArg = 3
-	If pvTop &lt; -1 Then iArg = 2		:	If pvLeft &lt; -1 Then iArg = 1
+	If pvHeight &lt; -1 Then
+		iArg = 4		:		iWrong = pvHeight
+	ElseIf pvWidth &lt; -1 Then
+		iArg = 3		:		iWrong = pvWidth
+	ElseIf pvTop &lt; -1 Then
+		iArg = 2		:		iWrong = pvTop
+	ElseIf pvLeft &lt; -1 Then
+		iArg = 1		:		iWrong = pvLeft
+	End If
 	If iArg &gt; 0 Then
-		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, iArgNr + iArg)
+		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(iArgNr + iArg, iWrong))
 		Goto Exit_Function
 	End If
 	
@@ -461,7 +468,7 @@ Public Function Start() As Boolean
 If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Dialog.Start&quot;)
 
-Dim oStart As Object, oDatabase As Object
+Dim oStart As Object
 	Start = False
 	If IsNull(_Dialog) Then Goto Error_Start
 	If Not IsNull(UnoDialog) Then Goto Error_Yet_Started
@@ -471,9 +478,8 @@ Dim oStart As Object, oDatabase As Object
 	Else
 		Start = True
 		Set UnoDialog = oStart
-		Set oDatabase = Application._CurrentDb()
-		With oDatabase
-			If ._hasDialog(_Name) Then .Dialogs.Remove(_Name)		&apos;	Inserted to solve errors, when aborts between start and terminate
+		With _A2B_
+			If Application._hasDialog(_Name) Then .Dialogs.Remove(_Name)		&apos;	Inserted to solve errors, when aborts between start and terminate
 			.Dialogs.Add(UnoDialog, UCase(_Name))
 		End With
 	End If
@@ -504,7 +510,7 @@ If _ErrorHandler() Then On Local Error Goto Error_Function
 	If IsNull(UnoDialog) Then Goto Error_Not_Started
 	UnoDialog.Dispose()
 	Set UnoDialog = Nothing
-	Application._CurrentDb().Dialogs.Remove(_Name)
+	_A2B_.Dialogs.Remove(_Name)
 	Terminate = True
 
 Exit_Function:
@@ -546,7 +552,7 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 	Utils._SetCalledSub(&quot;Dialog.get&quot; &amp; psProperty)
 	
 &apos;Execute
-Dim oDatabase As Object, vEMPTY As Variant
+Dim vEMPTY As Variant
 	_PropertyGet = vEMPTY
 
 	Select Case UCase(psProperty)
@@ -560,8 +566,7 @@ Dim oDatabase As Object, vEMPTY As Variant
 		Case UCase(&quot;Height&quot;)
 			_PropertyGet = UnoDialog.getPosSize().Height
 		Case UCase(&quot;IsLoaded&quot;)
-			Set oDatabase = Application._CurrentDb()
-			_PropertyGet = oDatabase._hasDialog(_Name)
+			_PropertyGet = Application._hasDialog(_Name)
 		Case UCase(&quot;Name&quot;)
 			_PropertyGet = _Name
 		Case UCase(&quot;ObjectType&quot;)
@@ -602,7 +607,6 @@ Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Varia
 
 &apos;Execute
 Dim iArgNr As Integer
-Dim oDatabase As Object
 
 	If Len(_A2B_.CalledSub) &gt; 7 And Left(_A2B_.CalledSub, 7) = &quot;Dialog.&quot; Then iArgNr = 1 Else iArgNr = 2
 	If IsNull(UnoDialog) Then Goto Trace_Error_Dialog

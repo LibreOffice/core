@@ -162,6 +162,29 @@ Public Function _DecimalPoint() As String
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _Dump_A2B() As Variant
+&apos;	For debugging purposes
+Dim i As Integer, j As Integer, vCurrentDoc As Variant
+	On Local Error Resume Next
+		With _A2B_
+			DebugPrint &quot;Version&quot;, .VersionNumber
+			DebugPrint &quot;TraceLevel&quot;, .MinimalTraceLevel
+			DebugPrint &quot;TraceCount&quot;, .TraceLogCount
+			DebugPrint &quot;CalledSub&quot;, .CalledSub
+			If IsArray(.CurrentDoc) Then
+				For i = 0 To UBound(.CurrentDoc)
+					vCurrentDoc = .CurrentDoc(i)
+					DebugPrint i, &quot;URL&quot;, vCurrentDoc.URL
+					For j = 0 To UBound(vCurrentDoc.DbContainers)
+						DebugPrint i, j, &quot;Form&quot;, vCurrentDoc.DbContainers(j).FormName
+						DebugPrint i, j, &quot;Database&quot;, vCurrentDoc.DbContainers(j).Database.Title
+					Next j
+				Next i
+			End If
+		End With
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _ExtensionLocation() As String
 &apos;	Return the URL pointing to the location where OO installed the Access2Base extension
 &apos;	Adapted from http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Extensions/Location_of_Installed_Extensions
@@ -179,40 +202,56 @@ REM get the data for the column specified by ColIndex
 REM get type name from metadata
 	
 Dim vValue As Variant, sType As String, vDateTime As Variant
+Dim bNullable As Boolean, bNull As Boolean, oValue As Object
 
+	On Local Error Goto 0			&apos;	Disable error handler
+	vValue = Null					&apos;	Default value if error
 	sType = poResultSet.MetaData.getColumnTypeName(piColIndex)
-	Select Case sType
-		Case &quot;ARRAY&quot;:							vValue = poResultSet.getArray(piColIndex)
-		Case &quot;BLOB&quot;:							vValue = poResultSet.getBlob(piColIndex)
-		Case &quot;BIT&quot;, &quot;BOOLEAN&quot;:					vValue = poResultSet.getBoolean(piColIndex)
-		Case &quot;BYTE&quot;:							vValue = poResultSet.getByte(piColIndex)
-		Case &quot;BYTES&quot;:							vValue = poResultSet.getBytes(piColIndex)
-		Case &quot;CLOB&quot;:							vValue = poResultSet.getClob(piColIndex)
-		Case &quot;DATE&quot;:							vDateTime = poResultSet.getDate(piColIndex)
-												vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
-		Case &quot;DOUBLE&quot;, &quot;REAL&quot;:					vValue = poResultSet.getDouble(piColIndex)
-		Case &quot;FLOAT&quot;:							vValue = poResultSet.getFloat(piColIndex)
-		Case &quot;INTEGER&quot;, &quot;SMALLINT&quot;:				vValue = poResultSet.getInt(piColIndex)
-		Case &quot;LONG&quot;, &quot;BIGINT&quot;: 					vValue = poResultSet.getLong(piColIndex)
-		Case &quot;DECIMAL&quot;, &quot;NUMERIC&quot;:				vValue = poResultSet.getDouble(piColIndex)
-		Case &quot;NULL&quot;:							vValue = poResultSet.getNull(piColIndex)
-		Case &quot;OBJECT&quot;:							vValue = poResultSet.getObject(piColIndex)
-		Case &quot;REF&quot;:								vValue = poResultSet.getRef(piColIndex)
-		Case &quot;SHORT&quot;, &quot;TINYINT&quot;:				vValue = poResultSet.getShort(piColIndex)
-		Case &quot;CHAR&quot;, &quot;VARCHAR&quot;, &quot;LONGVARCHAR&quot;:	vValue = poResultSet.getString(piColIndex)
-		Case &quot;TIME&quot;:							vDateTime = poResultSet.getTime(piColIndex)
-												vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
-		Case &quot;TIMESTAMP&quot;:						vDateTime = poResultSet.getTimeStamp(piColIndex)
-												vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day)) _
-															+ TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
-		Case Else
-			vValue = poResultSet.getString(piColIndex)			&apos;GIVE STRING A TRY
-			If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
-	End Select
+	With poResultSet
+		bNullable = ( .MetaData.IsNullable(piColIndex) = com.sun.star.sdbc.ColumnValue.NULLABLE )
+		Select Case sType
+			Case &quot;ARRAY&quot;:							vValue = .getArray(piColIndex)
+			Case &quot;BINARY&quot;, &quot;VARBINARY&quot;, &quot;LONGVARBINARY&quot;
+													Set oValue = .getBinaryStream(piColIndex)
+													If bNullable Then bNull = .wasNull()
+													If Not bNull Then vValue = CLng(oValue.getLength())		&apos;	Return length, not content
+													oValue.closeInput()
+			Case &quot;BLOB&quot;:							vValue = .getBlob(piColIndex)
+			Case &quot;BIT&quot;, &quot;BOOLEAN&quot;:					vValue = .getBoolean(piColIndex)
+			Case &quot;BYTE&quot;:							vValue = .getByte(piColIndex)
+			Case &quot;BYTES&quot;:							vValue = .getBytes(piColIndex)
+			Case &quot;CLOB&quot;:							vValue = .getClob(piColIndex)
+			Case &quot;DATE&quot;:							vDateTime = .getDate(piColIndex)
+													If bNullable Then bNull = .wasNull()
+													If Not bNull Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
+			Case &quot;DOUBLE&quot;, &quot;REAL&quot;:					vValue = .getDouble(piColIndex)
+			Case &quot;FLOAT&quot;:							vValue = .getFloat(piColIndex)
+			Case &quot;INTEGER&quot;, &quot;SMALLINT&quot;:				vValue = .getInt(piColIndex)
+			Case &quot;LONG&quot;, &quot;BIGINT&quot;: 					vValue = .getLong(piColIndex)
+			Case &quot;DECIMAL&quot;, &quot;NUMERIC&quot;:				vValue = .getDouble(piColIndex)
+			Case &quot;NULL&quot;:							vValue = .getNull(piColIndex)
+			Case &quot;OBJECT&quot;:							vValue = Null	&apos;	.getObject(piColIndex)	does not work that well in Basic ...
+			Case &quot;REF&quot;:								vValue = .getRef(piColIndex)
+			Case &quot;SHORT&quot;, &quot;TINYINT&quot;:				vValue = .getShort(piColIndex)
+			Case &quot;CHAR&quot;, &quot;VARCHAR&quot;, &quot;LONGVARCHAR&quot;:	vValue = .getString(piColIndex)
+			Case &quot;TIME&quot;:							vDateTime = .getTime(piColIndex)
+													If bNullable Then bNull = .wasNull()
+													If Not bNull Then vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
+			Case &quot;TIMESTAMP&quot;:						vDateTime = .getTimeStamp(piColIndex)
+													If bNullable Then bNull = .wasNull()
+													If Not bNull Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day)) _
+																+ TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
+			Case Else
+				vValue = .getString(piColIndex)						&apos;GIVE STRING A TRY
+				If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
+		End Select
+		If bNullable Then bNull = .wasNull()
+		If bNull Then vValue = Null
+	End With
 	
 	_getResultSetColumnValue = vValue
 	
-End Function	&apos;	getResultSetColumnValue		V 0.9.5
+End Function	&apos;	getResultSetColumnValue		V 1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _FinalProperty(psShortcut As String) As String
@@ -339,10 +378,16 @@ Public Function _InList(ByVal pvItem As Variant, pvList As Variant, ByVal Option
 Dim i As Integer, bFound As Boolean, iListVarType As Integer, iItemVarType As Integer
 Dim iTop As Integer, iBottom As Integer, iFound As Integer
 	iItemVarType = VarType(pvItem)
+	If IsMissing(pvReturnValue) Then pvReturnValue = False
 	If iItemVarType = vbNull Or IsNull(pvList) Then
 		_InList = False
 	ElseIf Not IsArray(pvList) Then
-		_InList = ( pvItem = pvList )
+		If iItemVarType = vbString Then bFound = ( UCase(pvItem) = UCase(pvList) ) Else bFound = ( pvItem = pvList )
+		If Not pvReturnValue Then
+			_InList = bFound
+		Else
+			If bFound Then _InList = pvList Else _InList = False
+		End If
 	ElseIf UBound(pvList) &lt; LBound(pvList) Then		&apos;	Array not initialized
 		_InList = False
 	Else
@@ -358,7 +403,7 @@ Dim iTop As Integer, iBottom As Integer, iFound As Integer
 			If IsMissing(pbBinarySearch) Then pbBinarySearch = False
 			If Not pbBinarySearch Then			&apos;	Linear search
 				For i = LBound(pvList) To UBound(pvList)
-					If iItemVarType = vbString Then bFound = ( pvList(i) &lt;&gt; &quot;&quot; And UCase(pvItem) = UCase(pvList(i)) ) Else bFound = ( pvItem = pvList(i) )
+					If iItemVarType = vbString Then bFound = ( UCase(pvItem) = UCase(pvList(i)) ) Else bFound = ( pvItem = pvList(i) )
 					If bFound Then
 						iFound = i
 						Exit For
@@ -374,18 +419,18 @@ Dim iTop As Integer, iBottom As Integer, iFound As Integer
 					Else
 						iTop = iFound - 1
 					End If
-					If iItemVarType = vbString Then bFound = ( pvList(i) &lt;&gt; &quot;&quot; And UCase(pvItem) = UCase(pvList(iFound)) ) Else bFound = ( pvItem = pvList(iFound) )
+					If iItemVarType = vbString Then bFound = ( UCase(pvItem) = UCase(pvList(iFound)) ) Else bFound = ( pvItem = pvList(iFound) )
 				Loop Until ( bFound ) Or ( iBottom &gt; iTop )
 			End If
 			If bFound Then
-				If IsMissing(pvReturnValue) Then _InList = True Else _InList = pvList(iFound)
+				If Not pvReturnValue Then _InList = True Else _InList = pvList(iFound)
 			End If
 		End If
 	End If
 	
 	Exit Function				
 		
-End Function	&apos;	InList V0.9.0
+End Function	&apos;	InList V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _InspectPropertyType(poObject As Object, psProperty As String) As String
@@ -438,27 +483,26 @@ Dim bIsPseudo As Boolean, bPseudoExists As Boolean, vObject As Variant
 	
 	If Not bIsPseudo Then Goto Exit_Function
 	
-Dim oDatabase As Variant, oForms As Variant
+Dim oDoc As Object, oForms As Variant
 	
 	bPseudoExists = False
 	With vObject
 		Select Case ._Type
 			Case OBJFORM
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of form name
-					Set oDatabase = _CurrentDb
-					If oDatabase._Standalone Then
+					Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+					If oDoc.DbConnect = DBCONNECTFORM Then
 						bPseudoExists = True
 					Else
-						Set oForms = oDatabase.Document.getFormDocuments()
+						Set oForms = oDoc.Document.getFormDocuments()
 						bPseudoExists = ( oForms.HasByName(._Name) )
 					End If
 				End If
 			Case OBJDATABASE
-				If ._Standalone Then bPseudoExists = True Else bPseudoExists = .Document.CurrentController.IsConnected
+				If ._DbConnect = DBCONNECTFORM Then bPseudoExists = True Else bPseudoExists = .Document.CurrentController.IsConnected
 			Case OBJDIALOG
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of dialog name
-					Set oDatabase = _CurrentDb
-					bPseudoExists = ( oDatabase._hasDialog(._Name) )
+					bPseudoExists = ( Application._hasDialog(._Name) )
 				End If			
 			Case OBJCOLLECTION
 				bPseudoExists = True
@@ -499,7 +543,7 @@ Exit_Function:
 Exit_False:
 	_IsPseudo = False
 	Goto Exit_Function
-End Function	&apos;	IsPseudo		V0.9.1
+End Function	&apos;	IsPseudo		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _IsScalar(ByVal pvArg As Variant, Byval pvType As Variant, ByVal Optional pvValid As Variant) As Boolean
@@ -543,31 +587,6 @@ Dim vSubStrings() As Variant, i As Integer, iLen As Integer
 	_PCase = Join(vSubStrings, &quot; &quot;)
 	
 End Function	&apos;	PCase		V0.9.0
-
-REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _ReplaceSquareBrackets(ByVal psSql As String) As String
-&apos; Returns psSql after substitution of [] by quote character
-&apos; [] square brackets in quoted strings not affected
-
-Dim sQuote As String		&apos;RDBMS specific quote character
-Dim vSubStrings() As Variant, i As Integer
-	
-	sQuote = CurrentDb.MetaData.IdentifierQuoteString
-	If sQuote = &quot; &quot; Then		&apos;	What&apos;s the string used to quote SQL identifiers? This returns a space &quot; &quot; if identifier quoting is not supported.
-		_QuoteString = psSql
-		Exit Function
-	End If
-	vSubStrings() = Split(psSql, sQuote)
-	For i = 0 To UBound(vSubStrings)
-		If (i Mod 2) = 0 Then		&apos;	Only even substrings are parsed for square brackets
-			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;[&quot;), sQuote)
-			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;]&quot;), sQuote)
-		End If
-	Next i
-	
-	_ReplaceSquareBrackets = Join(vSubStrings, sQuote)
-	
-End Function	&apos;	ReplaceSquareBrackets		V0.7.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub _ResetCalledSub(ByVal psSub As String) As String

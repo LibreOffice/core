@@ -43,7 +43,8 @@ Public Function mClose(Optional ByVal pvObjectType As Variant _
 					) As Boolean
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
-	Utils._SetCalledSub(&quot;Close&quot;)
+Const cstThisSub = &quot;Close&quot;
+	Utils._SetCalledSub(cstThisSub)
 	mClose = False
 	If IsMissing(pvObjectType) Or IsMissing(pvObjectName) Then Call _TraceArguments()
 	If IsMissing(pvSave) Then pvSave = acSavePrompt
@@ -56,10 +57,10 @@ Public Function mClose(Optional ByVal pvObjectType As Variant _
 Dim sObjects() As String, sObjectName As String, oController As Object, oObject As Object
 Dim i As Integer, bFound As Boolean, lComponent As Long
 Dim oDatabase As Object
-	If _TraceStandalone() Then Goto Exit_Function
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 	
 	&apos;	Check existence of object and find its exact (case-sensitive) name
-	Set oDatabase = Application._CurrentDb()
 	Select Case pvObjectType
 		Case acForm
 			sObjects = oDatabase.Document.getFormDocuments.ElementNames()
@@ -102,7 +103,7 @@ Dim oDatabase As Object
 Exit_Function:
 	Set oObject = Nothing
 	Set oController = Nothing
-	Utils._ResetCalledSub(&quot;Close&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Close&quot;, Erl)
@@ -113,7 +114,148 @@ Trace_Error:
 Trace_NotFound:
 	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(Array(&quot;Table&quot;, &quot;Query&quot;, &quot;Form&quot;, &quot;Report&quot;)(pvObjectType)), pvObjectName))
 	Goto Exit_Function
-End Function	&apos;	(m)Close
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+End Function	&apos;	(m)Close	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function CopyObject(ByVal Optional pvDestinationDatabase As Variant _
+							, ByVal Optional pvNewName As Variant _
+							, ByVal Optional pvSourceType As Variant _
+							, ByVal Optional pvSourceName As Variant _
+							) As Boolean
+&apos;	Copies tables and queries into identical (new) objects
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;CopyObject&quot;
+	Utils._SetCalledSub(cstThisSub)
+	CopyObject = False
+
+	If IsMissing(pvDestinationDatabase) Then pvDestinationDatabase = &quot;&quot;
+	If Not Utils._CheckArgument(pvDestinationDatabase, 1, vbString, &quot;&quot;) Then Goto Exit_Function
+	If IsMissing(pvNewName) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvNewName, 2, vbString) Then Goto Exit_Function
+	If IsMissing(pvSourceType) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvSourceType, 1, Utils._AddNumeric(), Array(acQuery, acTable) _
+			) Then Goto Exit_Function
+	If IsMissing(pvSourceName) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvSourceName, 2, vbString) Then Goto Exit_Function
+	
+Dim oSource As Object, oTarget As Object, oDatabase As Object
+Dim oSourceTable As Object, oSourceColumns As Object, oSourceCol As Object, oTargetCol As Object
+Dim oSourceKeys As Object, oSourceKey As Object, oTargetKey As Object
+Dim i As Integer, j As Integer, sSql As String, vPrimaryKeys() As Variant
+
+	Set oDatabase = Application._CurrentDb()
+	
+	With oDatabase
+		If ._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+		Select Case pvSourceType
+
+			Case acQuery
+				Set oSource = .QueryDefs(pvSourceName, True)
+				If IsNull(oSource) Then Goto Error_NotFound
+				Set oTarget = .QueryDefs(pvNewName, True)
+				If Not IsNull(oTarget) Then .Connection.getQueries.dropByName(oTarget.Name)		&apos;	a query with same name exists already ... drop it
+				If oSource.Query.EscapeProcessing Then
+					Set oTarget = .CreateQueryDef(pvNewName, oSource.SQL)
+				Else
+					Set oTarget = .CreateQueryDef(pvNewName, oSource.SQL, dbSQLPassThrough)
+				End If
+				&apos;	Save .odb document
+				.Document.store()
+
+			Case acTable
+				Set oSource = .TableDefs(pvSourceName, True)
+				If IsNull(oSource) Then Goto Error_NotFound
+				Set oTarget = .TableDefs(pvNewName, True)
+				If Not IsNull(oTarget) Then .Connection.getTables.dropByName(oTarget.Name)		&apos;	a table with same name exists already ... drop it
+				&apos;	Copy source table columns
+				Set oSourceTable = oSource.Table
+				Set oTarget = .Connection.getTables.createDataDescriptor
+				oTarget.Description = oSourceTable.Description
+				oTarget.Name = pvNewName
+				oTarget.Type = oSourceTable.Type
+				Set oSourceColumns = oSourceTable.Columns
+				Set oTargetCol = oTarget.Columns.createDataDescriptor
+				For i = 0 To oSourceColumns.getCount() - 1
+					&apos;	Append each individual column to the table descriptor
+					Set oSourceCol = oSourceColumns.getByIndex(i)
+					oTargetCol.Name = oSourceCol.Name
+					oTargetCol.ControlDefault = oSourceCol.ControlDefault
+					oTargetCol.Description = oSourceCol.Description
+					oTargetCol.FormatKey = oSourceCol.FormatKey
+					oTargetCol.HelpText = oSourceCol.HelpText
+					oTargetCol.Hidden = oSourceCol.Hidden
+					oTargetCol.IsCurrency = oSourceCol.IsCurrency
+					oTargetCol.IsNullable = oSourceCol.IsNullable
+					oTargetCol.Precision = oSourceCol.Precision
+					oTargetCol.Scale = oSourceCol.Scale
+					oTargetCol.Type = oSourceCol.Type
+					oTargetCol.TypeName = oSourceCol.TypeName
+					oTarget.Columns.appendByDescriptor(oTargetCol)
+				Next i
+				&apos;	Copy keys
+				Set oSourceKeys = oSourceTable.Keys
+				Set oTargetKey = oTarget.Keys.createDataDescriptor()
+				For i = 0 To oSourceKeys.getCount() - 1
+					&apos;	Append each key to table descriptor
+					Set oSourceKey = oSourceKeys.getByIndex(i)
+					oTargetKey.DeleteRule = oSourceKey.DeleteRule
+					oTargetKey.Name = oSourceKey.Name
+					oTargetKey.ReferencedTable = oSourceKey.ReferencedTable
+					oTargetKey.Type = oSourceKey.Type
+&apos;					If oSourceKey.Type = com.sun.star.sdbcx.KeyType.PRIMARY Then vPrimaryKeys = oSourceKey.Columns.getElementNames()
+					oTargetKey.UpdateRule = oSourceKey.UpdateRule
+					Set oTargetCol = oTargetKey.Columns.createDataDescriptor()
+ 					For j = 0 To oSourceKey.Columns.getCount() - 1
+						Set oSourceCol = oSourceKey.Columns.getByIndex(j)
+						oTargetCol.Name = oSourceCol.Name
+						oTargetCol.Description = oSourceCol.Description
+						oTargetCol.IsCurrency = oSourceCol.IsCurrency
+						oTargetCol.IsNullable = oSourceCol.IsNullable
+						oTargetCol.Precision = oSourceCol.Precision
+						oTargetCol.Scale = oSourceCol.Scale
+						oTargetCol.Type = oSourceCol.Type
+						oTargetCol.TypeName = oSourceCol.TypeName
+						oTargetKey.Columns.appendByDescriptor(oTargetCol)
+					Next j
+					oTarget.Keys.appendByDescriptor(oTargetKey)
+				Next i
+				&apos;	Duplicate table whole design
+				.Connection.getTables.appendByDescriptor(oTarget)
+				&apos;	Copy data
+				sSql = &quot;INSERT INTO [&quot; &amp; pvNewName &amp; &quot;] SELECT [&quot; &amp; oSource.Name &amp; &quot;].* FROM [&quot; &amp; oSource.Name &amp; &quot;]&quot;
+				DoCmd.RunSQL(sSql, dbSQLPassthrough)
+				
+			Case Else
+		End Select
+	End With
+	
+	CopyObject = True
+	
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Set oSourceCol = Nothing
+	Set oSourceKey = Nothing
+	Set oSourceKeys = Nothing
+	Set oSource = Nothing
+	Set oSourceTable = Nothing
+	Set oSourceColumns = Nothing
+	Set oTargetCol = Nothing
+	Set oTargetKey = Nothing
+	Set oTarget = Nothing
+	Exit Function
+Error_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(Iif(pvSourceType = acQuery, _GetLabel(&quot;QUERY&quot;), _GetLabel(&quot;TABLE&quot;)), pvSourceName))
+	Goto Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function	&apos;	CopyObject V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function FindNext() As Boolean
@@ -129,12 +271,13 @@ Dim i As Integer, lInitialRow As Long, lFindRow As Long
 Dim bFound As Boolean, b2ndRound As Boolean, bStop As Boolean
 Dim vFindValue As Variant, oFindrecord As Object
 
-	oFindRecord = Application.CurrentDb().FindRecord
+	Set oFindRecord = _A2B_.FindRecord
 	With oFindRecord
 
 		If .FindRecord = 0 Then Goto Error_FindRecord
 		.FindRecord = 0
 		Set ofForm = getObject(.Form)
+		If ofForm._Type = OBJCONTROL Then Set ofForm = ofForm.Form		&apos;	Bug Tombola
 		Set ocGrid = getObject(.GridControl)
 
 		&apos;	Move cursor to the initial row. Operation based on last FindRecord, not on user interactions done inbetween
@@ -232,7 +375,7 @@ Error_Function:
 Error_FindRecord:
 	TraceError(TRACEERRORS, ERRFINDRECORD, Utils._CalledSub(), 0)
 	Goto Exit_Function
-End Function	&apos;	FindNext	V0.9.0
+End Function	&apos;	FindNext	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function FindRecord(Optional ByVal pvFindWhat As Variant _
@@ -330,6 +473,7 @@ Dim oFindRecord As _FindParams
 					If vParentGrid.SubType &lt;&gt; CTLGRIDCONTROL Then Goto Error_Target
 					.GridControl = vParentGrid._Shortcut
 					ofParentForm = getObject(_getUpperShortcut(vParentGrid._Shortcut, vParentGrid._Name))
+					If ofParentForm._Type = OBJCONTROL Then Set ofParentForm = ofParentForm.Form		&apos;	Bug Tombola
 					If IsNull(ofParentForm.DatabaseForm) Then Goto Error_DatabaseForm
 					.Target = ocTarget._Shortcut
 					Set vDataField = ocTarget.ControlModel.BoundField
@@ -444,7 +588,7 @@ Dim oFindRecord As _FindParams
 		.FindRecord = 1
 		
 	End With
-	Set Application.CurrentDb().FindRecord = oFindRecord
+	Set _A2B_.FindRecord = oFindRecord
 	FindRecord = DoCmd.Findnext()
 	
 Exit_Function:
@@ -465,7 +609,46 @@ Error_Target:
 Error_NoGrid:
 	TraceError(TRACEFATAL, ERRNOGRIDINFORM, Utils._CalledSub(), 0, 1, vParentForm._Name)
 	Goto Exit_Function
-End Function		&apos;	FindRecord		V0.9.1
+End Function		&apos;	FindRecord		V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function GetHiddenAttribute(ByVal Optional pvObjectType As Variant _
+								, ByVal Optional pvObjectName As Variant _
+								) As Boolean
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;GetHiddenAttribute&quot;
+	Utils._SetCalledSub(cstThisSub)
+	
+	If IsMissing(pvObjectType) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric(), _
+			Array(acDiagram, acForm, acQuery, acTable, acReport, acBasicIDE, acDatabaseWindow, acDocument) _
+			) Then Goto Exit_Function
+	If IsMissing(pvObjectName) Then
+		Select Case pvObjectType
+			Case acForm, acQuery, acTable, acReport, acDocument		:	Call _TraceArguments()
+			Case Else
+		End Select
+		pvObjectName = &quot;&quot;
+	Else
+		If Not Utils._CheckArgument(pvObjectName, 2, vbString) Then Goto Exit_Function
+	End If
+	
+Dim oWindow As Object
+	Set oWindow = _SelectWindow(pvObjectType, pvObjectName)
+	If IsNull(oWindow.Frame) Then Goto Error_NotFound
+	GetHiddenAttribute = Not oWindow.Frame.ContainerWindow.isVisible()
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;OBJECT&quot;), pvObjectName))
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	GetHiddenAttribute	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function GoToControl(Optional ByVal pvControlName As variant) As Boolean
@@ -617,10 +800,10 @@ Error_ActiveForm:
 	TraceError(TRACEERRORS, ERRNOACTIVEFORM, Utils._CalledSub(), 0)
 	Goto Exit_Function
 Error_Target:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, 2)
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(2, pvObjectName))
 	Goto Exit_Function
 Error_Offset:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, 4)
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(4, pvOffset))
 	Goto Exit_Function
 End Function		&apos;	GoToRecord
 
@@ -659,8 +842,8 @@ Dim oWindow As Object
 End Function	&apos;	Minimize	V0.8.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function MoveSize(ByVal Optional pvRight As Variant _
-						, ByVal Optional pvDown As Variant _
+Public Function MoveSize(ByVal Optional pvLeft As Variant _
+						, ByVal Optional pvTop As Variant _
 						, ByVal Optional pvWidth As Variant _
 						, ByVal Optional pvHeight As Variant _
 						) As Variant
@@ -668,28 +851,35 @@ Public Function MoveSize(ByVal Optional pvRight As Variant _
 	Utils._SetCalledSub(&quot;MoveSize&quot;)
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	MoveSize = False
-	If IsMissing(pvRight) Then pvRight = -1
-	If IsMissing(pvDown) Then pvDown = -1
+	If IsMissing(pvLeft) Then pvLeft = -1
+	If IsMissing(pvTop) Then pvTop = -1
 	If IsMissing(pvWidth) Then pvWidth = -1
 	If IsMissing(pvHeight) Then pvHeight = -1
-	If Not Utils._CheckArgument(pvRight,	1, Utils._AddNumeric()) Then Goto Exit_Function
-	If Not Utils._CheckArgument(pvDown,	2, Utils._AddNumeric()) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvLeft,	1, Utils._AddNumeric()) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvTop,	2, Utils._AddNumeric()) Then Goto Exit_Function
 	If Not Utils._CheckArgument(pvWidth,	3, Utils._AddNumeric()) Then Goto Exit_Function
 	If Not Utils._CheckArgument(pvHeight, 4, Utils._AddNumeric()) Then Goto Exit_Function
 	
-Dim iArg As Integer			&apos;	Check argument values
+Dim iArg As Integer, iWrong As Integer		&apos;	Check arguments values
 	iArg = 0
-	If pvHeight &lt; -1 Then iArg = 4	:	If pvWidth &lt; -1 Then iArg = 3
-	If pvDown &lt; -1 Then iArg = 2	:	If pvRight &lt; -1 Then iArg = 2
+	If pvHeight &lt; -1 Then
+		iArg = 4		:		iWrong = pvHeight
+	ElseIf pvWidth &lt; -1 Then
+		iArg = 3		:		iWrong = pvWidth
+	ElseIf pvTop &lt; -1 Then
+		iArg = 2		:		iWrong = pvTop
+	ElseIf pvLeft &lt; -1 Then
+		iArg = 1		:		iWrong = pvLeft
+	End If
 	If iArg &gt; 0 Then
-		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, iArg)
+		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(iArg, iWrong))
 		Goto Exit_Function
 	End If
-	
+
 Dim iPosSize As Integer
 	iPosSize = 0
-	If pvRight &gt;= 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.X
-	If pvDown &gt;= 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.Y
+	If pvLeft &gt;= 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.X
+	If pvTop &gt;= 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.Y
 	If pvWidth &gt; 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.WIDTH
 	If pvHeight &gt; 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.HEIGHT
 
@@ -701,7 +891,7 @@ Dim oWindow As Object
 				.Frame.ContainerWindow.IsMaximized = False
 				.Frame.ContainerWindow.IsMinimized = False
 			End If
-			.Frame.ContainerWindow.setPosSize(pvRight, pvDown, pvWidth, pvHeight, iPosSize)
+			.Frame.ContainerWindow.setPosSize(pvLeft, pvTop, pvWidth, pvHeight, iPosSize)
 			MoveSize = True
 		End If
 	End With
@@ -712,7 +902,7 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;MoveSize&quot;, Erl)
 	GoTo Exit_Function
-End Function		&apos;	MoveSize	V0.8.5
+End Function		&apos;	MoveSize	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function OpenForm(Optional ByVal pvFormName As Variant _
@@ -744,9 +934,10 @@ Public Function OpenForm(Optional ByVal pvFormName As Variant _
 			) Then Goto Exit_Function
 			
 Dim ofForm As Object, sWarning As String
-Dim oOpenForm As Object, bOpenMode As Boolean, oController As Object
+Dim oDatabase As Object, oOpenForm As Object, bOpenMode As Boolean, oController As Object
 
-	If _TraceStandalone() Then Goto Exit_Function
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 	
 	Set ofForm = Application.AllForms(pvFormName)
 	If ofForm.IsLoaded Then
@@ -761,7 +952,7 @@ Dim oOpenForm As Object, bOpenMode As Boolean, oController As Object
 		Case acNormal, acPreview:	bOpenMode = False
 		Case acDesign			:	bOpenMode = True
 	End Select
-	Set oController = Application._CurrentDb().Document.CurrentController
+	Set oController = oDatabase.Document.CurrentController
 	Set oOpenForm = oController.loadComponent(com.sun.star.sdb.application.DatabaseObject.FORM, ofForm._Name, bOpenMode)
 
 &apos; Apply the filters (FilterName) AND (WhereCondition)
@@ -784,7 +975,7 @@ Dim sFilter As String, oForm As Object, oFormsCollection As Object
 		Goto Trace_Error
 	End If
 	If sFilter &lt;&gt; &quot;&quot; Then
-		oForm.Filter = Utils._ReplaceSquareBrackets(sFilter)
+		oForm.Filter = oDatabase._ReplaceSquareBrackets(sFilter)
 		oForm.ApplyFilter = True
 		oForm.reload()
 	ElseIf oForm.Filter &lt;&gt; &quot;&quot; Then			&apos;	If a filter has been set previously it must be removed
@@ -828,6 +1019,9 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;OpenForm&quot;, Erl)
 	Set OpenForm = Nothing
 	GoTo Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
 Trace_Error:
 	TraceError(TRACEFATAL, ERROPENFORM, Utils._CalledSub(), 0, , pvFormName)
 	Set OpenForm = Nothing
@@ -885,7 +1079,6 @@ Public Function OpenSQL(Optional ByVal pvSQL As Variant _
 &apos;	Return True if the execution of the SQL statement was successful
 &apos;	SQL must contain a SELECT query
 &apos;	pvOption can force pass through mode
-&apos;	Derived from BaseTools
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
@@ -901,26 +1094,7 @@ Const cstNull = -1
 		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
 	End If
 
-Dim oDatabase As Object, oURL As New com.sun.star.util.URL, oDispatch As Object
-Dim vArgs(8) as New com.sun.star.beans.PropertyValue
-
-	Set oDatabase = _CurrentDb
-
-	oURL.Complete = &quot;.component:DB/DataSourceBrowser&quot;
-	oDispatch = StarDesktop.queryDispatch(oURL, &quot;_Blank&quot;, 8)
-
-	vArgs(0).Name = &quot;ActiveConnection&quot;		:	vArgs(0).Value = CurrentDb.Connection
-	vArgs(1).Name = &quot;CommandType&quot;			:	vArgs(1).Value = com.sun.star.sdb.CommandType.COMMAND
-	vArgs(2).Name = &quot;Command&quot;				:	vArgs(2).Value = Utils._ReplaceSquareBrackets(pvSQL)
-	vArgs(3).Name = &quot;ShowMenu&quot;				:	vArgs(3).Value = True
-	vArgs(4).Name = &quot;ShowTreeView&quot;			:	vArgs(4).Value = False
-	vArgs(5).Name = &quot;ShowTreeViewButton&quot;	:	vArgs(5).Value = False
-	vArgs(6).Name = &quot;Filter&quot;				:	vArgs(6).Value = &quot;&quot;
-	vArgs(7).Name = &quot;ApplyFilter&quot;			:	vArgs(7).Value = False
-	vArgs(8).Name = &quot;EscapeProcessing&quot;		:	vArgs(8).Value = CBool(Not ( pvOption = dbSQLPassThrough ))
-
-	oDispatch.dispatch(oURL, vArgs)
-	OpenSQL = True
+	OpenSQL = Application._CurrentDb.OpenSQL(pvSQL, pvOption)
 
 Exit_Function:
 	Utils._ResetCalledSub(&quot;OpenSQL&quot;)
@@ -928,10 +1102,7 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;OpenSQL&quot;, Erl)
 	GoTo Exit_Function
-SQL_Error:
-	TraceError(TRACEFATAL, ERRSQLSTATEMENT, Utils._CalledSub(), 0, , pvSQL)
-	Goto Exit_Function
-End Function		&apos;	OpenSQL		V0.9.5
+End Function		&apos;	OpenSQL		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function OpenTable(Optional ByVal pvTableName As Variant _
@@ -1049,7 +1220,7 @@ Dim sOutputFormat As String, sFilter As String, oFilterData As Object, oExport A
 	Else
 		sOutputFile = pvOutputFile
 	End If	
-	sOutputFile = _ConvertToURL(sOutputFile)
+	sOutputFile = ConvertToURL(sOutputFile)
 
 	&apos;Create file
 	On Local Error Goto Error_File
@@ -1065,7 +1236,7 @@ Exit_Function:
 	Utils._ResetCalledSub(&quot;OutputTo&quot;)
 	Exit Function
 Error_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Object&quot;, pvObjectName))
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;OBJECT&quot;), pvObjectName))
 	Goto Exit_Function
 Error_Action:
 	TraceError(TRACEFATAL, ERRACTION, Utils._CalledSub(), 0)
@@ -1084,21 +1255,22 @@ Public Function Quit(Optional ByVal pvSave As Variant) As Variant
 &apos;	Modified from Andrew Pitonyak&apos;s Base Macro Programming §5.8.1
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
-	Utils._SetCalledSub(&quot;Quit&quot;)
+Const cstThisSub = &quot;Quit&quot;
+	Utils._SetCalledSub(cstThisSub)
 	
 	If IsMissing(pvSave) Then pvSave = acQuitSaveAll
 	If Not Utils._CheckArgument(pvSave, 1, Utils._AddNumeric(), _
 			Array(acQuitPrompt, acQuitSaveAll, acQuitSaveNone) _
 			) Then Goto Exit_Function
 	
-Dim vDatabase As Variant, oDoc As Object
-	vDatabase = CurrentDb
-	If Not IsNull(vDatabase) Then
-		Set oDoc = vDatabase.Document
+Dim oDatabase As Object, oDoc As Object
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+	If Not IsNull(oDatabase) Then
+		Set oDoc = oDatabase.Document
 		Select Case pvSave
 			Case acQuitPrompt
-				If MsgBox(_GetLabel(&quot;QUIT&quot;), _
-					vbYesNo + vbQuestion, _GetLabel(&quot;QUITSHORT&quot;)) = vbNo Then Exit Function
+				If MsgBox(_GetLabel(&quot;QUIT&quot;), vbYesNo + vbQuestion, _GetLabel(&quot;QUITSHORT&quot;)) = vbNo Then Exit Function
 			Case acQuitSaveNone
 				oDoc.setModified(False)
 			Case Else
@@ -1116,15 +1288,18 @@ Dim vDatabase As Variant, oDoc As Object
 	End If
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;Quit&quot;)
-	Set vDatabase = Nothing
+	Utils._ResetCalledSub(cstThisSub)
+	Set oDatabase = Nothing
 	Set oDoc = Nothing
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;Quit&quot;, Erl)
+	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
 	Set OpenForm = Nothing
 	GoTo Exit_Function
-End Function		&apos;	Quit
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+End Function		&apos;	Quit	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub RunApp(Optional ByVal pvCommandLine As Variant)
@@ -1137,7 +1312,7 @@ Public Sub RunApp(Optional ByVal pvCommandLine As Variant)
 	If IsMissing(pvCommandLine) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvCommandLine, 1, vbString) Then Goto Exit_Sub
 
-	_ShellExecute(_ConvertToURL(pvCommandLine))
+	_ShellExecute(ConvertToURL(pvCommandLine))
 
 Exit_Sub:
 	Utils._ResetCalledSub(&quot;RunApp&quot;)
@@ -1384,15 +1559,7 @@ Const cstNull = -1
 		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
 	End If
 
-Dim oDatabase As Object, oStatement As Object, vResult As Variant
-    Set oDatabase = _CurrentDb
-
-	Set oStatement = oDatabase.Connection.createStatement()
-	oStatement.EscapeProcessing = Not ( pvOption = dbSQLPassThrough )
-	On Local Error Goto SQL_Error
-	vResult = oStatement.executeUpdate(Utils._ReplaceSquareBrackets(pvSQL))
-	On Local Error Goto Error_Function
-	RunSQL = True
+	RunSQL = Application._CurrentDb.RunSQL(pvSQL, pvOption)
 
 Exit_Function:
 	Utils._ResetCalledSub(&quot;RunSQL&quot;)
@@ -1400,27 +1567,25 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;RunSQL&quot;, Erl)
 	GoTo Exit_Function
-SQL_Error:
-	TraceError(TRACEFATAL, ERRSQLSTATEMENT, Utils._CalledSub(), 0, , pvSQL)
-	Goto Exit_Function
-End Function		&apos;	RunSQL		V0.7.5
+End Function		&apos;	RunSQL		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function SelectObject(	Optional pvObjectType As Variant _
-								, Optional pvObjectName As Variant _
-								, Optional pvInDatabaseWindow As Variant _
+Public Function SelectObject(	ByVal Optional pvObjectType As Variant _
+								, ByVal Optional pvObjectName As Variant _
+								, ByVal Optional pvInDatabaseWindow As Variant _
 								) As Boolean
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
-	Utils._SetCalledSub(&quot;SelectObject&quot;)
+Const cstThisSub = &quot;SelectObject&quot;
+	Utils._SetCalledSub(cstThisSub)
 	
 	If IsMissing(pvObjectType) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric(), _
-			Array(acDiagram, acForm, acQuery, acTable, acReport, acBasicIDE, acDatabaseWindow) _
+			Array(acDiagram, acForm, acQuery, acTable, acReport, acBasicIDE, acDatabaseWindow, acDocument) _
 			) Then Goto Exit_Function
 	If IsMissing(pvObjectName) Then
 		Select Case pvObjectType
-			Case acForm, acQuery, acTable, acReport		:	Call _TraceArguments()
+			Case acForm, acQuery, acTable, acReport, acDocument		:	Call _TraceArguments()
 			Case Else
 		End Select
 		pvObjectName = &quot;&quot;
@@ -1434,19 +1599,24 @@ Public Function SelectObject(	Optional pvObjectType As Variant _
 Dim oWindow As Object
 	Set oWindow = _SelectWindow(pvObjectType, pvObjectName)
 	If IsNull(oWindow.Frame) Then Goto Error_NotFound
-	oWindow.Frame.ContainerWindow.setFocus()
-	oWindow.Frame.ContainerWindow.setEnable(True)		&apos;	Added to try to bypass desynchro issue in Linux
+	With oWindow.Frame.ContainerWindow
+		If .isVisible() = False Then .setVisible(True)
+		.IsMinimized = False
+		.setFocus()
+		.setEnable(True)		&apos;	Added to try to bypass desynchro issue in Linux
+		.toFront()				&apos;	Added to force window change in Linux
+	End With
 
 Exit_Function:
-	Utils._ResetCalledSub(&quot;SelectObject&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Object&quot;, pvObjectName))
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;OBJECT&quot;), pvObjectName))
 	Goto Exit_Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;SelectObject&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
-End Function		&apos;	SelectObject	V0.8.5
+End Function		&apos;	SelectObject	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function SendObject(ByVal Optional pvObjectType As Variant _
@@ -1537,7 +1707,7 @@ Exit_Function:
 	Utils._ResetCalledSub(&quot;SendObject&quot;)
 	Exit Function
 Error_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Object&quot;, pvObjectName))
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;OBJECT&quot;), pvObjectName))
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;SendObject&quot;, Erl)
@@ -1551,12 +1721,65 @@ Error_File:
 End Function		&apos;	SendObject		V0.8.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function SetHiddenAttribute(ByVal Optional pvObjectType As Variant _
+								, ByVal Optional pvObjectName As Variant _
+								, ByVal Optional pvHidden As Variant _
+								) As Boolean
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	SetHiddenAttribute = False
+Const cstThisSub = &quot;SetHiddenAttribute&quot;
+	Utils._SetCalledSub(cstThisSub)
+	
+	If IsMissing(pvObjectType) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric(), _
+			Array(acDiagram, acForm, acQuery, acTable, acReport, acBasicIDE, acDatabaseWindow), acDocument _
+			) Then Goto Exit_Function
+	If IsMissing(pvObjectName) Then
+		Select Case pvObjectType
+			Case acForm, acQuery, acTable, acReport, acDocument		:	Call _TraceArguments()
+			Case Else
+		End Select
+		pvObjectName = &quot;&quot;
+	Else
+		If Not Utils._CheckArgument(pvObjectName, 2, vbString) Then Goto Exit_Function
+	End If
+	If IsMissing(pvHidden) Then
+		pvHidden = True
+	Else
+		If Not Utils._CheckArgument(pvHidden, 3, vbBoolean) Then Goto Exit_Function
+	End If
+	
+Dim oWindow As Object
+	Set oWindow = _SelectWindow(pvObjectType, pvObjectName)
+	If IsNull(oWindow.Frame) Then Goto Error_NotFound
+	oWindow.Frame.ContainerWindow.setVisible(Not pvHidden)
+	SetHiddenAttribute = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;OBJECT&quot;), pvObjectName))
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	SetHiddenAttribute	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function ShowAllrecords() As Boolean
 &apos;	Removes any existing filter that exists on the current table, query or form
 
-	Utils._SetCalledSub(&quot;ShowAllrecords&quot;)
+Const cstThisSub = &quot;ShowAllRecords&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 	ShowAllRecords = False
-Dim oWindow As Object
+
+Dim oWindow As Object, oDatabase As Object
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+
 	Set oWindow = _SelectWindow()
 	Select Case oWindow.WindowType
 		Case acForm, acQuery, acTable
@@ -1566,9 +1789,15 @@ Dim oWindow As Object
 	End Select
 
 Exit_Function:
-	Utils._ResetCalledSub(&quot;ShowAllrecords&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function		
-End Function		&apos;	ShowAllrecords	V0.7.5
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	ShowAllrecords	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 																								---
@@ -1594,22 +1823,6 @@ Dim bFound As Boolean
 	_CheckColumnType = bFound
 	
 End Function		&apos;	_CheckColumnType	V0.9.1
-
-REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _ConvertToURL(psFile As String) As String
-&apos;	Convert psFile to URL only if necessary
-
-Dim bURL As Boolean
-	Select Case True
-		Case Len(psFile &lt; 7)					:	bURL = False
-		Case LCase(Left(psFile, 7)) = &quot;file://&quot;	:	bURL = True
-		Case LCase(Left(psFile, 6)) = &quot;ftp://&quot;	:	bURL = True
-		Case Else								:	bURL = False
-	End Select
-	
-	If bURL Then _ConvertToURL = psFile Else _ConvertToURL = ConvertToURL(psFile)
-	
-End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _getTempDirectoryURL()	As String
@@ -1668,12 +1881,12 @@ Private Function _OpenObject(ByVal psObjectType As String _
 		And Utils._CheckArgument(pvView, 2, Utils._AddNumeric(), Array(acViewNormal, acViewPreview, acViewDesign)) _
 		And Utils._CheckArgument(pvDataMode, 3, Utils._AddNumeric(), Array(acEdit)) _
 			) Then Goto Exit_Function
-	If _TraceStandalone() Then Goto Exit_Function
+Dim oDatabase As Object
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 			
 Dim sObjects() As String, sObjectName As String, oController As Object, oObject As Object
 Dim i As Integer, bFound As Boolean, lComponent As Long
-Dim oDatabase As Object
-	Set oDatabase = Application._CurrentDb()
 	
 	&apos;	Check existence of object and find its exact (case-sensitive) name
 	Select Case psObjectType
@@ -1711,6 +1924,9 @@ Error_Function:
 Trace_Error:
 	TraceError(TRACEFATAL, ERROPENOBJECT, Utils._CalledSub(), 0, , Array(_GetLabel(psObjectType), pvObjectName))
 	Goto Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
 Trace_NotFound:
 	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(psObjectType), pvObjectName))
 	Goto Exit_Function
@@ -1722,8 +1938,13 @@ Private Function _PromptFormat() As String
 
 Dim oDialog As Object, oDialogLib As Object, iOKCancel As Integer, oControl As Object
 	Set oDialogLib = DialogLibraries
-	If Not oDialogLib.IsLibraryLoaded(&quot;Access2Base&quot;) Then oDialogLib.loadLibrary(&quot;Access2Base&quot;)
-	Set oDialog = CreateUnoDialog(DialogLibraries.Access2Base.dlgFormat)
+	If oDialogLib.hasByName(&quot;Access2BaseDev&quot;) Then
+		If Not oDialogLib.IsLibraryLoaded(&quot;Access2BaseDev&quot;) Then oDialogLib.loadLibrary(&quot;Access2BaseDev&quot;)
+		Set oDialog = CreateUnoDialog(DialogLibraries.Access2BaseDev.dlgFormat)
+	Else
+		If Not oDialogLib.IsLibraryLoaded(&quot;Access2Base&quot;) Then oDialogLib.loadLibrary(&quot;Access2Base&quot;)
+		Set oDialog = CreateUnoDialog(DialogLibraries.Access2Base.dlgFormat)
+	End If
 	oDialog.Title = _GetLabel(&quot;DLGFORMAT_TITLE&quot;)
 
 	Set oControl = oDialog.Model.getByName(&quot;lblFormat&quot;)
@@ -1760,13 +1981,14 @@ Public Function _SelectWindow(Optional ByVal piWindowType As Integer, Optional B
 &apos;	Return a _Window object type describing the found window
 
 Dim oEnum As Object, oDesk As Object, oComp As Object, oFrame As Object, i As Integer
-Dim bFound As Boolean, bActive As Boolean, bValid As Boolean, sName As String, iType As Integer
-Dim sImplementation As String
+Dim bFound As Boolean, bActive As Boolean, bName As Boolean, sName As String, iType As Integer
+Dim sImplementation As String, vLocation() As Variant
 Dim oWindow As _Window
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 	bActive = IsMissing(piWindowType)
+	If IsMissing(psWindow) Then psWindow = &quot;&quot;
 	Set oWindow.Frame = Nothing
 	If bActive Then
 		oWindow.WindowType = -1
@@ -1783,7 +2005,7 @@ Dim oWindow As _Window
 	Set oDesk = CreateUnoService(&quot;com.sun.star.frame.Desktop&quot;)
 	Set oEnum = oDesk.Components().createEnumeration
 	Do While oEnum.hasMoreElements
-		oComp = oEnum.nextElement
+		Set oComp = oEnum.nextElement
 		If Utils._hasUNOProperty(oComp, &quot;ImplementationName&quot;) Then sImplementation = oComp.ImplementationName Else sImplementation = &quot;&quot;
 		Select Case sImplementation
 			Case &quot;com.sun.star.comp.basic.BasicIDE&quot;
@@ -1795,27 +2017,28 @@ Dim oWindow As _Window
 				iType = acDatabaseWindow
 				sName = &quot;&quot;
 			Case &quot;SwXTextDocument&quot;
-				bValid = True
+				bName = False
 				If HasUnoInterfaces(oComp, &quot;com.sun.star.frame.XModule&quot;) Then
 					Select Case oComp.Identifier
 						Case &quot;com.sun.star.sdb.FormDesign&quot;			&apos;	Form
 							iType = acForm
 						Case &quot;com.sun.star.sdb.TextReportDesign&quot;	&apos;	Report
 							iType = acReport
-						Case &quot;com.sun.star.text.TextDocument&quot;		&apos;	Potential standalone form
-							If Not IsNull(CurrentDb(oComp.URL)) Then iType = acForm Else bValid = False
-						Case Else
-							bValid = False	&apos;	Ignore other Writer documents
+						Case &quot;com.sun.star.text.TextDocument&quot;		&apos;	Writer
+							vLocation = Split(oComp.getLocation(), &quot;/&quot;)
+							sName = Join(Split(vLocation(UBound(vLocation)), &quot;%20&quot;), &quot; &quot;)
+							bName = True
+							iType = acDocument
 					End Select
-					If bValid Then
+					If Not bName Then		&apos;	Identify Form or Report name
 						For i = 0 To UBound(oComp.Args())
-							If oComp.Args(i).Name = &quot;DocumentTitle&quot; Or oComp.Args(i).Name = &quot;Title&quot; Then		&apos;	Title for standalone forms
+							If oComp.Args(i).Name = &quot;DocumentTitle&quot; Then
 								sName = oComp.Args(i).Value
 								Exit For
 							End If
 						Next i
-						Set oFrame = oComp.CurrentController.Frame
 					End If
+					Set oFrame = oComp.CurrentController.Frame
 				End If
 			Case &quot;org.openoffice.comp.dbu.ODatasourceBrowser&quot;
 				Set oFrame = oComp.Frame
@@ -1853,8 +2076,13 @@ Dim oWindow As _Window
 				Set oFrame = oComp.Frame
 				iType = acDiagram
 				sName = &quot;&quot;
-			Case Else		&apos;	Ignore other Calc, ..., whatever documents
-				Set oFrame = Nothing
+			Case Else		&apos;	Other Calc, ..., whatever documents
+				If Utils._hasUNOProperty(oComp, &quot;Location&quot;) Then
+					vLocation = Split(oComp.getLocation(), &quot;/&quot;)
+					sName = Join(Split(vLocation(UBound(vLocation)), &quot;%20&quot;), &quot; &quot;)
+					iType = acDocument
+					Set oFrame = oComp.CurrentController.Frame
+				End If
 		End Select
 		If bActive And Not IsNull(oFrame) Then
 			If oFrame.ContainerWindow.IsActive() Then
@@ -1881,7 +2109,7 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;SelectWindow&quot;, Erl)
 	GoTo Exit_Function
-End Function		&apos;	_SelectWindow	V0.9.0
+End Function		&apos;	_SelectWindow	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _SendWithAttachment( _
