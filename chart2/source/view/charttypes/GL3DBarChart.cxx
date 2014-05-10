@@ -90,7 +90,7 @@ void GL3DBarChart::create3DShapes()
             float nVal = rDataSeries.getYValue(nIndex);
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
 
-            sal_Int32 nColor = COL_BLUE;
+            sal_Int32 nColor = COL_RED;
 
             glm::mat4 aBarPosition;
             aBarPosition = glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
