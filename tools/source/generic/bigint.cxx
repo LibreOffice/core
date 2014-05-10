@@ -531,6 +531,7 @@ BigInt::BigInt( double nValue )
     {
         bIsBig = false;
         nVal   = 0;
+        nLen   = 0;
     }
     else
     {
