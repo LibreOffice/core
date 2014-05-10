@@ -350,6 +350,9 @@ void XMLFile2UTFConverter::initializeDecoding()
 
 
 Text2UnicodeConverter::Text2UnicodeConverter( const OString &sEncoding )
+    : m_convText2Unicode(NULL)
+    , m_contextText2Unicode(NULL)
+    , m_rtlEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( sEncoding.getStr() );
     if( RTL_TEXTENCODING_DONTKNOW == encoding )
