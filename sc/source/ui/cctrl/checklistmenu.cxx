@@ -860,8 +860,11 @@ ScCheckListMenuWindow::Config::Config() :
 {
 }
 
-ScCheckListMenuWindow::Member::Member() :
-    mbVisible(true), mbDate(false), mbLeaf(false)
+ScCheckListMenuWindow::Member::Member()
+    : mbVisible(true)
+    , mbDate(false)
+    , mbLeaf(false)
+    , mpParent(NULL)
 {
 }
 
