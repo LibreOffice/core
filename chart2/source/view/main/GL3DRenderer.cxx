@@ -924,17 +924,7 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
     float actualX = x;
     float actualY = y;
     float actualZ = z;
-    float maxCoord = std::max(actualX, std::max(actualY, actualZ));
-    m_fZmax = std::max(maxCoord, m_fZmax);
     m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, actualY, actualZ));
-    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, actualX);
-    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, actualX);
-
-    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, actualY);
-    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, actualY);
-
-    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, actualZ);
-    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, actualZ);
 }
 
 void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
@@ -993,15 +983,6 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 col
     m_Vertices.clear();
     m_Normals.clear();
     m_Indeices.clear();
-    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, m_Extrude3DInfo.xTransform + m_Extrude3DInfo.xScale);
-    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, m_Extrude3DInfo.xTransform);
-
-    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, m_Extrude3DInfo.yTransform + m_Extrude3DInfo.yScale);
-    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, m_Extrude3DInfo.yTransform );
-
-    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, m_Extrude3DInfo.zTransform + m_Extrude3DInfo.zScale);
-    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, m_Extrude3DInfo.zTransform);
-
 }
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
@@ -1281,11 +1262,6 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
 void OpenGL3DRenderer::SetFPS(float fps)
 {
     m_fFPS = fps;
-}
-
-void OpenGL3DRenderer::SetClickPos(Point aMPos)
-{
-    m_aMPos = aMPos;
 }
 
 void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft)

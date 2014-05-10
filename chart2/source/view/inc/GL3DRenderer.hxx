@@ -154,26 +154,6 @@ struct TextInfo
     float vertex[12];
 };
 
-
-struct SceneBox
-{
-    float maxXCoord;
-    float minXCoord;
-    float maxYCoord;
-    float minYCoord;
-    float maxZCoord;
-    float minZCoord;
-
-    SceneBox():
-        maxXCoord(-1*FLT_MAX),
-        minXCoord(FLT_MAX),
-        maxYCoord(-1*FLT_MAX),
-        minYCoord(FLT_MAX),
-        maxZCoord(-1*FLT_MAX),
-        minZCoord(FLT_MAX) {}
-};
-
-
 class OpenGL3DRenderer
 {
 public:
@@ -198,7 +178,6 @@ public:
     void EndAddShape3DExtrudeObject();
     double GetTime();
     void SetFPS(float fps);
-    void SetClickPos(Point aMPos);
     void RenderClickPos(Point aMPos);
     void SetSize(const Size& rSize);
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
@@ -370,13 +349,6 @@ private:
     GLint m_RenderVertexID;
 
     GLint m_RenderTexCoordID;
-    //TODO: moggi: kill the following parts
-    // don't add anything below or I will remove it
-#if 0
-    size_t m_iPointNum;
-#endif
-
-    SceneBox m_SenceBox;
 
     float m_fViewAngle;
 
