@@ -698,12 +698,13 @@ bool PageNumCtrl::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // mail merge(22)
-MailMerge::MailMerge():HBox(CH_MAIL_MERGE)
+MailMerge::MailMerge()
+    : HBox(CH_MAIL_MERGE)
+    , dummy(0)
 {
+    memset(field_name, 0, sizeof(field_name));
 }
-
 
 bool MailMerge::Read(HWPFile & hwpf)
 {
