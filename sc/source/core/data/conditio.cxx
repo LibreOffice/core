@@ -336,6 +336,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
 
         if ( !rExpr1.isEmpty() )
         {
+            delete pFormula1;
             aComp.SetGrammar( eGrammar1 );
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
@@ -373,6 +374,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
 
         if ( !rExpr2.isEmpty() )
         {
+            delete pFormula2;
             aComp.SetGrammar( eGrammar2 );
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
