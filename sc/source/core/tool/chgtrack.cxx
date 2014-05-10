@@ -1018,12 +1018,12 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
                 case SC_CAT_DELETE_COLS :
                     if ( !(aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL) )
                     {   // Only if not TabDelete
-                        if ( bOk = pDoc->CanInsertCol( aRange ) )
+                        if ( ( bOk = pDoc->CanInsertCol( aRange ) ) )
                             bOk = pDoc->InsertCol( aRange );
                     }
                 break;
                 case SC_CAT_DELETE_ROWS :
-                    if ( bOk = pDoc->CanInsertRow( aRange ) )
+                    if ( ( bOk = pDoc->CanInsertRow( aRange ) ) )
                         bOk = pDoc->InsertRow( aRange );
                 break;
                 case SC_CAT_DELETE_TABS :
@@ -1031,7 +1031,7 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
                     //TODO: Remember table names?
                     OUString aName;
                     pDoc->CreateValidTabName( aName );
-                    if ( bOk = pDoc->ValidNewTabName( aName ) )
+                    if ( ( bOk = pDoc->ValidNewTabName( aName ) ) )
                         bOk = pDoc->InsertTab( aRange.aStart.Tab(), aName );
                 }
                 break;
