@@ -742,7 +742,7 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     //update ubo
     Update3DUniformBlock();
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
-    glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(Material), &polygon.material);
+    glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &polygon.material);
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     glUseProgram(m_3DProID);
@@ -1269,7 +1269,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         extrude3DInfo.yTransform *= m_fHeightWeight;
         extrude3DInfo.yScale *= m_fHeightWeight;
         glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
-        glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(Material), &extrude3DInfo.material);
+        glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &extrude3DInfo.material);
         CHECK_GL_ERROR();
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
         extrude3DInfo.reverse = 0;

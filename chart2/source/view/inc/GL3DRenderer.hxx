@@ -42,7 +42,7 @@ typedef std::vector <glm::vec3> Vertices3D;
 typedef std::vector <glm::vec2> UVs3D;
 typedef std::vector <glm::vec3> Normals3D;
 
-typedef struct MaterialParameters
+struct MaterialParameters
 {
     glm::vec4 ambient;
     glm::vec4 diffuse;
@@ -53,9 +53,9 @@ typedef struct MaterialParameters
     float shininess;
     float pad;
     float pad1;
-}Material;
+};
 
-typedef struct LightSource
+struct LightSource
 {
     glm::vec4   lightColor;
     glm::vec4   positionWorldspace;
@@ -63,16 +63,16 @@ typedef struct LightSource
     float  pad1;
     float  pad2;
     float  pad3;
-}LightSource;
+};
 
-typedef struct GlobalLights
+struct GlobalLights
 {
     int lightNum;
     glm::vec4 ambient;
     LightSource light[MAX_LIGHT_NUM];
-}Lights;
+};
 
-typedef struct Polygon3DInfo
+struct Polygon3DInfo
 {
     bool lineOnly;
     float lineWidth;
@@ -85,10 +85,10 @@ typedef struct Polygon3DInfo
     std::list <Vertices3D *> verticesList;
     std::list <UVs3D *> uvsList;
     std::list <Normals3D *> normalsList;
-    Material material;
-}Polygon3DInfo;
+    MaterialParameters material;
+};
 
-typedef struct Extrude3DInfo
+struct Extrude3DInfo
 {
     int pickingFlg;
     bool rounded;
@@ -104,11 +104,11 @@ typedef struct Extrude3DInfo
     float yTransform;
     float zTransform;
     glm::mat4 rotation;
-    Material material;
+    MaterialParameters material;
     int startIndex[5];
     int size[5];
     int reverse;
-}Extrude3DInfo;
+};
 
 
 struct CameraInfo
@@ -268,7 +268,7 @@ private:
 
     float m_fZmax;
 
-    Lights m_LightsInfo;
+    GlobalLights m_LightsInfo;
 
     CameraInfo m_CameraInfo;
 
