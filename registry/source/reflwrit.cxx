@@ -700,6 +700,7 @@ TypeWriter::TypeWriter(typereg_Version version,
     , m_fileName(fileName)
     , m_fieldCount(fieldCount)
     , m_methodCount(methodCount)
+    , m_methods(NULL)
     , m_referenceCount(referenceCount)
     , m_references(NULL)
     , m_blop(NULL)
