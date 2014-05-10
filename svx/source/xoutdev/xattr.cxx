@@ -90,8 +90,9 @@ NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const OUString& rName) :
 {
 }
 
-NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, SvStream& rIn) :
-    SfxStringItem(_nWhich, rIn)
+NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, SvStream& rIn)
+    : SfxStringItem(_nWhich, rIn)
+    , nPalIndex(-1)
 {
     rIn.ReadInt32( nPalIndex );
 }
