@@ -688,32 +688,30 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                 bAddToList = true;
             }
         }
+        // we do not already have a sheet with the same name and contents. Create a new one.
+        if (!pExistingSheet)
         {
-            // we do not already have a sheet with the same name and contents. Create a new one.
-            if (!pExistingSheet)
-            {
-                assert(!Find(aName, eFamily));
-                rtl::Reference< SfxStyleSheetBase > xNewSheet( &Make( aName, eFamily ) );
+            assert(!Find(aName, eFamily));
+            rtl::Reference< SfxStyleSheetBase > xNewSheet( &Make( aName, eFamily ) );
 
-                xNewSheet->SetMask( xSheet->GetMask() );
+            xNewSheet->SetMask( xSheet->GetMask() );
 
-                // Also set parent relation for copied style sheets
-                OUString aParent( xSheet->GetParent() );
-                if( !aParent.isEmpty() )
-                    aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, OUString >( xNewSheet, aParent ) );
+            // Also set parent relation for copied style sheets
+            OUString aParent( xSheet->GetParent() );
+            if( !aParent.isEmpty() )
+                aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, OUString >( xNewSheet, aParent ) );
 
-                xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
-                xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
+            xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
+            xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
 
-                rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
-                aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
-            }
-            else if (bAddToList)
-            {
-                // Add to list - used for renaming
-                rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pExistingSheet ) ) );
-                aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
-            }
+            rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
+            aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
+        }
+        else if (bAddToList)
+        {
+            // Add to list - used for renaming
+            rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pExistingSheet ) ) );
+            aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
         }
     }
 
