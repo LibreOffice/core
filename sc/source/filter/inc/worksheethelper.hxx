@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_WORKSHEETHELPER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_WORKSHEETHELPER_HXX
 
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/progressbar.hxx"
-#include "oox/ole/olehelper.hxx"
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/progressbar.hxx>
+#include <oox/ole/olehelper.hxx>
 #include "addressconverter.hxx"
 #include "formulabase.hxx"
 

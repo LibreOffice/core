@@ -23,8 +23,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
-#include "svl/zforlist.hxx"
-#include "svl/zformat.hxx"
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include "viewfunc.hxx"
 #include "detfunc.hxx"

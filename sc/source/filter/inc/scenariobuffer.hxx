@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_SCENARIOBUFFER_HXX
 
 #include <com/sun/star/table/CellAddress.hpp>
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox {

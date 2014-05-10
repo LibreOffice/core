@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_ORCUSFILTERS_HXX
 #define INCLUDED_SC_INC_ORCUSFILTERS_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 class ScDocument;
 class SvTreeListBox;

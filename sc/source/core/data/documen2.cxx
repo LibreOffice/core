@@ -36,7 +36,7 @@
 #include <vcl/virdev.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/crc.h>

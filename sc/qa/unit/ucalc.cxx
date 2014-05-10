@@ -64,21 +64,21 @@
 #include <globalnames.hxx>
 #include <inputopt.hxx>
 
-#include "formula/IFunctionDescription.hxx"
+#include <formula/IFunctionDescription.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
-#include "editeng/wghtitem.hxx"
-#include "editeng/postitem.hxx"
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
-#include "svl/srchitem.hxx"
-#include "svl/sharedstringpool.hxx"
+#include <svl/srchitem.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include <sfx2/docfile.hxx>
 

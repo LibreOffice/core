@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_CACHEDATTRACCESS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_CACHEDATTRACCESS_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 class ScDocument;
 

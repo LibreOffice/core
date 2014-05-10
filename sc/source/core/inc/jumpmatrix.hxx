@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
 
-#include "formula/token.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/token.hxx>
+#include <formula/errorcodes.hxx>
 #include <vector>
 #include "types.hxx"
 #include "address.hxx"

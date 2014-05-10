@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <CellBorderUpdater.hxx>
+#include "CellBorderUpdater.hxx"
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

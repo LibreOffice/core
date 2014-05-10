@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_BIFFINPUTSTREAM_HXX
 
 #include <vector>
-#include "oox/helper/binaryinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 #include "biffhelper.hxx"
 #include "biffcodec.hxx"
 

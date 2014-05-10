@@ -26,8 +26,8 @@
 
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include "tools/link.hxx"
-#include "vcl/vclevent.hxx"
+#include <tools/link.hxx>
+#include <vcl/vclevent.hxx>
 #include <editeng/svxenum.hxx>
 
 #include <set>

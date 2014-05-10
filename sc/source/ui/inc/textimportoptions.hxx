@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TEXTIMPORTOPTIONS_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TEXTIMPORTOPTIONS_HXX
 
-#include "vcl/dialog.hxx"
-#include "vcl/button.hxx"
-#include "vcl/fixed.hxx"
-#include "i18nlangtag/lang.h"
-#include "svx/langbox.hxx"
+#include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <i18nlangtag/lang.h>
+#include <svx/langbox.hxx>
 
 class ScTextImportOptionsDlg : public ModalDialog
 {

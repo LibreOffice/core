@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_STARCALC_COLLECT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_STARCALC_COLLECT_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 class ScDataObject
 {

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_DRAWINGBASE_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_DRAWINGBASE_HXX
 
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 #include "worksheethelper.hxx"
 
 #include <com/sun/star/drawing/XShape.hpp>

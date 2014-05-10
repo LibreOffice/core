@@ -14,8 +14,8 @@
 
 #include "clcc/clew.h"
 
-#include "formula/token.hxx"
-#include "formula/vectortoken.hxx"
+#include <formula/token.hxx>
+#include <formula/vectortoken.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <set>

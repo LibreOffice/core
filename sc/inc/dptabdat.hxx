@@ -26,7 +26,7 @@
 #include "dpcache.hxx"
 #include "calcmacros.hxx"
 
-#include "svl/zforlist.hxx"
+#include <svl/zforlist.hxx>
 
 #include <vector>
 #include <set>

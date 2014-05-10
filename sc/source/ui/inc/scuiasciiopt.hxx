@@ -22,7 +22,7 @@
 
 
 #include "asciiopt.hxx"
-#include "svx/langbox.hxx"
+#include <svx/langbox.hxx>
 
 class ScImportAsciiDlg : public ModalDialog
 {

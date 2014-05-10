@@ -32,7 +32,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 #include "scdllapi.h"
 
 #include <boost/noncopyable.hpp>

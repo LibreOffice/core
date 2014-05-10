@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_OVERLAYOBJECT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_OVERLAYOBJECT_HXX
 
-#include "svx/sdr/overlay/overlayobject.hxx"
+#include <svx/sdr/overlay/overlayobject.hxx>
 
 class ScOverlayDashedBorder : public ::sdr::overlay::OverlayObject
 {

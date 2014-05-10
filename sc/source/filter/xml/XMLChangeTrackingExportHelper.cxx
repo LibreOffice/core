@@ -36,7 +36,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"
 

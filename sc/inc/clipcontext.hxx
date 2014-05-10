@@ -11,7 +11,7 @@
 #define INCLUDED_SC_INC_CLIPCONTEXT_HXX
 
 #include "address.hxx"
-#include <cellvalue.hxx>
+#include "cellvalue.hxx"
 
 #include <vector>
 #include <boost/unordered_map.hpp>

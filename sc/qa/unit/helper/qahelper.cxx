@@ -14,8 +14,8 @@
 #include "conditio.hxx"
 #include "stlsheet.hxx"
 #include "formulacell.hxx"
-#include "svx/svdpage.hxx"
-#include "svx/svdoole2.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdoole2.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 

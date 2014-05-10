@@ -21,7 +21,7 @@
 
 #include <osl/thread.h>
 #include <string.h>
-#include "oox/core/filterbase.hxx"
+#include <oox/core/filterbase.hxx>
 #include "biffinputstream.hxx"
 
 namespace oox {

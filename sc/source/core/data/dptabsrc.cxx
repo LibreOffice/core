@@ -56,7 +56,7 @@
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include "comphelper/string.hxx"
+#include <comphelper/string.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>

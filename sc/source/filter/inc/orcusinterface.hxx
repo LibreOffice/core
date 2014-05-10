@@ -15,7 +15,7 @@
 
 #include "sharedformulagroups.hxx"
 
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 
 #define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>

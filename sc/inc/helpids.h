@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/sfxcommands.h"
-#include "svx/svxcommands.h"
+#include <sfx2/sfxcommands.h>
+#include <svx/svxcommands.h>
 #include "sccommands.h"
 
 #define HID_INSWIN_POS                                          "SC_HID_INSWIN_POS"

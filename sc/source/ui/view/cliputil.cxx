@@ -19,7 +19,7 @@
 #include "viewutil.hxx"
 #include "markdata.hxx"
 
-#include "vcl/waitobj.hxx"
+#include <vcl/waitobj.hxx>
 
 void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
 {

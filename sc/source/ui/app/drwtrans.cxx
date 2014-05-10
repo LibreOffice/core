@@ -57,7 +57,7 @@
 #include "scmod.hxx"
 #include "chartlis.hxx"
 #include "rangeutl.hxx"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 #include "dragdata.hxx"
 #include "clipdata.hxx"
 

@@ -23,8 +23,8 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertyset.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/propertyset.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "formulaparser.hxx"

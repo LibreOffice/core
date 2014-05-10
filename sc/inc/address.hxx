@@ -26,7 +26,7 @@
 
 #include <limits>
 #include "scdllapi.h"
-#include <types.hxx>
+#include "types.hxx"
 #include <formula/grammar.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>

@@ -21,7 +21,7 @@
 #define INCLUDED_SC_INC_EDITDATAARRAY_HXX
 
 #include "address.hxx"
-#include "editeng/editobj.hxx"
+#include <editeng/editobj.hxx>
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

@@ -11,7 +11,7 @@
 #define INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
 
 #include "address.hxx"
-#include "editeng/misspellrange.hxx"
+#include <editeng/misspellrange.hxx>
 
 #include <boost/unordered_map.hpp>
 

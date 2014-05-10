@@ -23,12 +23,12 @@
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 
-#include "formula/opcode.hxx"
+#include <formula/opcode.hxx>
 #include "refdata.hxx"
 #include <tools/mempool.hxx>
 #include "scdllapi.h"
-#include "formula/IFunctionDescription.hxx"
-#include "formula/token.hxx"
+#include <formula/IFunctionDescription.hxx>
+#include <formula/token.hxx>
 #include "scmatrix.hxx"
 #include "calcmacros.hxx"
 

@@ -21,7 +21,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include "scdlgfact.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 
 namespace scui
 {

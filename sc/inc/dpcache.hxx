@@ -22,7 +22,7 @@
 #include "global.hxx"
 #include "dpnumgroupinfo.hxx"
 #include "calcmacros.hxx"
-#include "tools/date.hxx"
+#include <tools/date.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>

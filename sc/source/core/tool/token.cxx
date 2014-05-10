@@ -42,7 +42,7 @@
 #include "types.hxx"
 #include "globstr.hrc"
 #include "addincol.hxx"
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
 using ::std::vector;
 

@@ -30,7 +30,7 @@
 
 #include "compiler.hxx"
 
-#include "formula/formula.hxx"
+#include <formula/formula.hxx>
 #include "IAnyRefDialog.hxx"
 
 class ScViewData;

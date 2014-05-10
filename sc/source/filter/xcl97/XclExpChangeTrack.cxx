@@ -30,7 +30,7 @@
 
 #include <oox/token/tokens.hxx>
 #include <rtl/strbuf.hxx>
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
 using namespace oox;
 

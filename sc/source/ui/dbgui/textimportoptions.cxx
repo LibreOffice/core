@@ -21,10 +21,10 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include "textimportoptions.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/msgbox.hxx"
-#include "vcl/window.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/window.hxx>
+#include <vcl/settings.hxx>
 
 ScTextImportOptionsDlg::ScTextImportOptionsDlg(Window* pParent)
     : ModalDialog(pParent, "TextImportOptionsDialog", "modules/scalc/ui/textimportoptions.ui")

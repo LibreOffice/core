@@ -18,8 +18,8 @@
 #include "scmatrix.hxx"
 #include "globalnames.hxx"
 
-#include "formula/vectortoken.hxx"
-#include "rtl/bootstrap.hxx"
+#include <formula/vectortoken.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <vector>
 #include <boost/scoped_array.hpp>

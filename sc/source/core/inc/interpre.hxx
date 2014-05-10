@@ -23,8 +23,8 @@
 #include <math.h>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
-#include "formula/errorcodes.hxx"
-#include "formula/tokenarray.hxx"
+#include <formula/errorcodes.hxx>
+#include <formula/tokenarray.hxx>
 #include "scdll.hxx"
 #include "types.hxx"
 #include "externalrefmgr.hxx"

@@ -26,7 +26,7 @@
 #include "queryentry.hxx"
 #include "document.hxx"
 
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>

@@ -22,7 +22,7 @@
 
 #include "address.hxx"
 #include "global.hxx"
-#include "formula/token.hxx"
+#include <formula/token.hxx>
 #include <svl/listener.hxx>
 
 #include <boost/unordered_map.hpp>

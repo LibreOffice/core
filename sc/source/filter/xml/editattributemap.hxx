@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_EDITATTRIBUTEMAP_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_EDITATTRIBUTEMAP_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <boost/unordered_map.hpp>
 

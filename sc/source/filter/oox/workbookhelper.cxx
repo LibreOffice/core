@@ -35,11 +35,11 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <osl/thread.h>
-#include "oox/drawingml/theme.hxx"
-#include "oox/helper/progressbar.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/ole/vbaproject.hxx"
-#include "vcl/msgbox.hxx"
+#include <oox/drawingml/theme.hxx>
+#include <oox/helper/progressbar.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <vcl/msgbox.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "biffcodec.hxx"
@@ -77,9 +77,9 @@
 #include "globstr.hrc"
 
 #include "formulabuffer.hxx"
-#include "vcl/mapmod.hxx"
+#include <vcl/mapmod.hxx>
 #include "editutil.hxx"
-#include "editeng/editstat.hxx"
+#include <editeng/editstat.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Calc.hxx>

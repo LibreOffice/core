@@ -10,7 +10,7 @@
 #include "typedstrdata.hxx"
 #include "global.hxx"
 
-#include "unotools/collatorwrapper.hxx"
+#include <unotools/collatorwrapper.hxx>
 
 bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {

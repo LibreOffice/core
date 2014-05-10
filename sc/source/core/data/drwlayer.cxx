@@ -74,7 +74,7 @@
 #include "postit.hxx"
 #include "attrib.hxx"
 #include "charthelper.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vcl/field.hxx>
 #include <boost/scoped_array.hpp>

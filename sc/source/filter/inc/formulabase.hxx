@@ -26,8 +26,8 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/propertyset.hxx>
+#include <oox/helper/refvector.hxx>
 #include "addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {

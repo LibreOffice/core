@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_RICHSTRING_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_RICHSTRING_HXX
 
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/refvector.hxx>
 #include "stylesbuffer.hxx"
 
 class EditTextObject;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_BIFFHELPER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_BIFFHELPER_HXX
 
-#include "oox/helper/binarystreambase.hxx"
+#include <oox/helper/binarystreambase.hxx>
 
 namespace oox { class SequenceInputStream; }
 

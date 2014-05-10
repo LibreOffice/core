@@ -40,9 +40,9 @@
 #include "scmatrix.hxx"
 #include <rowheightcontext.hxx>
 
-#include "tools/fract.hxx"
-#include "editeng/editobj.hxx"
-#include "svl/sharedstring.hxx"
+#include <tools/fract.hxx>
+#include <editeng/editobj.hxx>
+#include <svl/sharedstring.hxx>
 
 #include <vector>
 

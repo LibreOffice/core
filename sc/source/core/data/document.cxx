@@ -22,7 +22,7 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include "editeng/editobj.hxx"
+#include <editeng/editobj.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/sdrundomanager.hxx>
@@ -98,7 +98,7 @@
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 
-#include "formula/vectortoken.hxx"
+#include <formula/vectortoken.hxx>
 
 #include <map>
 #include <limits>

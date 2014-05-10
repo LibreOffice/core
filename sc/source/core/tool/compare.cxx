@@ -22,7 +22,7 @@
 #include "document.hxx"
 #include "docoptio.hxx"
 
-#include "unotools/textsearch.hxx"
+#include <unotools/textsearch.hxx>
 
 namespace sc {
 

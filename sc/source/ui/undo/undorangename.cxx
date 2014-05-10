@@ -14,7 +14,7 @@
 #include "docfunc.hxx"
 #include "sc.hrc"
 
-#include "sfx2/app.hxx"
+#include <sfx2/app.hxx>
 
 #include <memory>
 

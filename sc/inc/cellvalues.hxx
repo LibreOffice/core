@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_CELLVALUES_HXX
 #define INCLUDED_SC_INC_CELLVALUES_HXX
 
-#include <address.hxx>
+#include "address.hxx"
 
 class ScColumn;
 

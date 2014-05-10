@@ -21,7 +21,7 @@
 #include "XclImpChangeTrack.hxx"
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include "chgviset.hxx"
 #include "formulacell.hxx"
 #include "chgtrack.hxx"

@@ -21,7 +21,7 @@
 #include "queryentry.hxx"
 #include "scmatrix.hxx"
 
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 namespace {
 

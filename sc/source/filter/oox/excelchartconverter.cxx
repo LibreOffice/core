@@ -24,9 +24,9 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XSheetDataProvider.hpp>
 
-#include "oox/core/filterbase.hxx"
-#include "oox/drawingml/chart/datasourcemodel.hxx"
-#include "oox/helper/containerhelper.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
+#include <oox/helper/containerhelper.hxx>
 #include "formulaparser.hxx"
 
 namespace oox {

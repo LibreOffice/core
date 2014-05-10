@@ -11,8 +11,8 @@
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
 
-#include "xmloff/nmspmap.hxx"
-#include "comphelper/string.hxx"
+#include <xmloff/nmspmap.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 

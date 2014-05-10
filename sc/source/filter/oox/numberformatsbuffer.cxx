@@ -32,9 +32,9 @@
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertymap.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/propertymap.hxx>
 #include "biffinputstream.hxx"
 #include "scitems.hxx"
 #include "document.hxx"

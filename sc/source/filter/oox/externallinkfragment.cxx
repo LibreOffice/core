@@ -20,7 +20,7 @@
 #include "externallinkfragment.hxx"
 
 #include <com/sun/star/sheet/XExternalSheetCache.hpp>
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"
 #include "sheetdatacontext.hxx"

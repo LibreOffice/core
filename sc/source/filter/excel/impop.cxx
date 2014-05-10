@@ -36,7 +36,7 @@
 #include <svl/zforlist.hxx>
 
 #include <sfx2/objsh.hxx>
-#include "tools/urlobj.hxx"
+#include <tools/urlobj.hxx>
 #include "docuno.hxx"
 
 #include "formulacell.hxx"

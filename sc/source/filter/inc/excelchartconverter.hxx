@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCELCHARTCONVERTER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXCELCHARTCONVERTER_HXX
 
-#include "oox/drawingml/chart/chartconverter.hxx"
+#include <oox/drawingml/chart/chartconverter.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox {

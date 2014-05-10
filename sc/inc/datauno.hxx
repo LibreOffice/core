@@ -48,8 +48,8 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-#include "svl/itemprop.hxx"
-#include "svl/lstner.hxx"
+#include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class ScDBData;

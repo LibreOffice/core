@@ -34,9 +34,9 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/token/properties.hxx>
 #include "biffinputstream.hxx"
 
 namespace oox {

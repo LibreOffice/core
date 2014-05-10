@@ -29,7 +29,7 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "compiler.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "callform.hxx"
 #include "addincol.hxx"
 #include "rangeseq.hxx"

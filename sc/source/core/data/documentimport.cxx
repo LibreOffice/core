@@ -21,7 +21,7 @@
 #include "paramisc.hxx"
 #include "listenercontext.hxx"
 
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 struct ScDocumentImportImpl
 {

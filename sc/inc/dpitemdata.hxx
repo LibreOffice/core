@@ -13,8 +13,8 @@
 #include "scdllapi.h"
 #include "address.hxx"
 
-#include "sal/types.h"
-#include "rtl/ustring.hxx"
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
 #include "calcmacros.hxx"
 #include "dpglobal.hxx"
 

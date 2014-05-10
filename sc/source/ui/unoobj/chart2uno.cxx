@@ -39,8 +39,8 @@
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
 
-#include "formula/opcode.hxx"
-#include "svl/sharedstring.hxx"
+#include <formula/opcode.hxx>
+#include <svl/sharedstring.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>

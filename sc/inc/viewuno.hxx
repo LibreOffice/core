@@ -41,7 +41,7 @@
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 
 #include "address.hxx"
-#include "boost/ptr_container/ptr_vector.hpp"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScTabViewShell;
 class ScPreviewShell;

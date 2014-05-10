@@ -11,8 +11,8 @@
 #include "sc.hrc"
 #include "scresid.hxx"
 
-#include "svtools/svlbitm.hxx"
-#include "svtools/treelistentry.hxx"
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 
 #if HAVE_FEATURE_OPENCL
 #include "formulagroup.hxx"

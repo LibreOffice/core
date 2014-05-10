@@ -29,7 +29,7 @@
 #include <tools/stream.hxx>
 #include <svx/txencbox.hxx>
 #include "csvtablebox.hxx"
-#include "i18nlangtag/lang.h"
+#include <i18nlangtag/lang.h>
 
 class ScAsciiOptions
 {

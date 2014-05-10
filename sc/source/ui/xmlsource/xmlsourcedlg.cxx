@@ -16,12 +16,12 @@
 #include "reffact.hxx"
 #include "tabvwsh.hxx"
 
-#include "unotools/pathoptions.hxx"
-#include "tools/urlobj.hxx"
-#include "svtools/svlbitm.hxx"
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
-#include "sfx2/objsh.hxx"
+#include <unotools/pathoptions.hxx>
+#include <tools/urlobj.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>

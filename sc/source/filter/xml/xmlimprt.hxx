@@ -30,7 +30,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include "xmlsubti.hxx"
 #include "global.hxx"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 #include "compiler.hxx"
 
 #include "xmlstyle.hxx"

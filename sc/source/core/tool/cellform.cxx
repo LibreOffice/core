@@ -22,12 +22,12 @@
 #include <sfx2/objsh.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "cellvalue.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "sc.hrc"
 #include <editutil.hxx>
 

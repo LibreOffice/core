@@ -44,7 +44,7 @@
 #include "unonames.hxx"
 #include "document.hxx"
 #include "conditio.hxx"
-#include "svl/intitem.hxx"
+#include <svl/intitem.hxx>
 #include "rangelst.hxx"
 #include "rangeutl.hxx"
 #include "docfunc.hxx"

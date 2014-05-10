@@ -19,7 +19,7 @@
 
 #include "pivotcachefragment.hxx"
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "pivotcachebuffer.hxx"

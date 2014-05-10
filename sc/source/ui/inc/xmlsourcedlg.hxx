@@ -13,7 +13,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include "svtools/treelistbox.hxx"
+#include <svtools/treelistbox.hxx>
 
 #include "anyrefdg.hxx"
 #include "orcusxml.hxx"

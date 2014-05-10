@@ -87,7 +87,7 @@
 
 #include "AccessibleCell.hxx"
 
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include "scmod.hxx"
 
 #ifdef indices

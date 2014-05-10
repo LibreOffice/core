@@ -29,7 +29,7 @@
 #include "xistring.hxx"
 #include <boost/shared_ptr.hpp>
 #include <oox/ole/olehelper.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShape; }

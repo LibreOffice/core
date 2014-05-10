@@ -66,8 +66,8 @@
 #include "dbdocutl.hxx"
 #include "dociter.hxx"
 #include "globstr.hrc"
-#include "svl/zformat.hxx"
-#include "svl/intitem.hxx"
+#include <svl/zformat.hxx>
+#include <svl/intitem.hxx>
 #include "patattr.hxx"
 #include "scitems.hxx"
 #include "docpool.hxx"

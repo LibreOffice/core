@@ -24,7 +24,7 @@
 #include "formulacell.hxx"
 #include "globstr.hrc"
 #include "dptabdat.hxx"
-#include "rtl/math.hxx"
+#include <rtl/math.hxx>
 
 const sal_Int32 ScDPItemData::DateFirst = -1;
 const sal_Int32 ScDPItemData::DateLast  = 10000;

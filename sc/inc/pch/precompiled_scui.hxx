@@ -14,17 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "formula/grammar.hxx"
-#include "formula/opcode.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "sal/types.h"
-#include "svl/sharedstringpool.hxx"
-#include "svtools/svlbitm.hxx"
-#include "svtools/treelistentry.hxx"
-#include "vcl/msgbox.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
@@ -66,12 +55,16 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <formula/grammar.hxx>
+#include <formula/opcode.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <limits.h>
 #include <math.h>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/ustrbuf.hxx>
+#include <sal/types.h>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
@@ -88,12 +81,15 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/sharedstringpool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/collatorres.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
@@ -116,6 +112,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/window.hxx>
 #include <vector>
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

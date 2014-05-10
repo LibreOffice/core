@@ -16,7 +16,7 @@
 #include "tokenarray.hxx"
 #include "refupdatecontext.hxx"
 
-#include "formula/token.hxx"
+#include <formula/token.hxx>
 
 #include <algorithm>
 

@@ -20,7 +20,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <CellAppearancePropertyPanel.hxx>
+#include "CellAppearancePropertyPanel.hxx"
 #include <CellAppearancePropertyPanel.hrc>
 #include "sc.hrc"
 #include "scresid.hxx"
@@ -38,11 +38,11 @@
 #include <svx/sidebar/ColorControl.hxx>
 #include <boost/bind.hpp>
 #include <svx/sidebar/PopupContainer.hxx>
-#include <CellLineStyleControl.hxx>
-#include <CellLineStylePopup.hxx>
-#include <CellBorderUpdater.hxx>
-#include <CellBorderStyleControl.hxx>
-#include <CellBorderStylePopup.hxx>
+#include "CellLineStyleControl.hxx"
+#include "CellLineStylePopup.hxx"
+#include "CellBorderUpdater.hxx"
+#include "CellBorderStyleControl.hxx"
+#include "CellBorderStylePopup.hxx"
 
 using namespace css;
 using namespace cssu;

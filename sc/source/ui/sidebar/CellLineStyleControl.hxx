@@ -21,7 +21,7 @@
 
 #include <svx/sidebar/PopupControl.hxx>
 #include <vcl/button.hxx>
-#include <CellLineStyleValueSet.hxx>
+#include "CellLineStyleValueSet.hxx"
 
 namespace sc { namespace sidebar {
 

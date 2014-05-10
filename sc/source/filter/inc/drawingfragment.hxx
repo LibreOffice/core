@@ -22,13 +22,13 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include "oox/drawingml/shapegroupcontext.hxx"
-#include "oox/ole/axcontrol.hxx"
-#include "oox/drawingml/shape.hxx"
-#include "oox/ole/vbaproject.hxx"
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/vml/vmldrawingfragment.hxx"
-#include "oox/vml/vmltextbox.hxx"
+#include <oox/drawingml/shapegroupcontext.hxx>
+#include <oox/ole/axcontrol.hxx>
+#include <oox/drawingml/shape.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmldrawingfragment.hxx>
+#include <oox/vml/vmltextbox.hxx>
 #include "drawingbase.hxx"
 #include "excelhandlers.hxx"
 

@@ -25,7 +25,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

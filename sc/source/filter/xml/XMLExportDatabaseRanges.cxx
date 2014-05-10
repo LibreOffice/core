@@ -36,7 +36,7 @@
 #include "queryparam.hxx"
 #include "queryentry.hxx"
 
-#include "svx/dataaccessdescriptor.hxx"
+#include <svx/dataaccessdescriptor.hxx>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/table/TableSortField.hpp>

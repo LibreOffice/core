@@ -26,8 +26,8 @@
 #include <com/sun/star/sheet/NameToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
-#include "oox/core/filterbase.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/token/properties.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"

@@ -22,7 +22,7 @@
 
 #include <svl/lstner.hxx>
 #include "address.hxx"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>

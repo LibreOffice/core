@@ -12,7 +12,7 @@
 
 #include <com/sun/star/container/XContainerListener.hpp>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "scdllapi.h"
 
 #include <boost/unordered_map.hpp>

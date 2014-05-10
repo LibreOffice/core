@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include "docoptio.hxx"
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
 class ScDocument;
 class ScDocumentPool;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_CONNECTIONSBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_CONNECTIONSBUFFER_HXX
 
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox {

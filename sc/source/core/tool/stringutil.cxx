@@ -19,7 +19,7 @@
 
 #include "stringutil.hxx"
 #include "global.hxx"
-#include "svl/zforlist.hxx"
+#include <svl/zforlist.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>

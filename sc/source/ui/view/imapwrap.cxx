@@ -20,7 +20,7 @@
 #include <svx/imapdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <imapwrap.hxx>
+#include "imapwrap.hxx"
 
 sal_uInt16 ScIMapChildWindowId()
 {

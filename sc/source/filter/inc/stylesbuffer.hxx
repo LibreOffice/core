@@ -26,10 +26,10 @@
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
-#include "oox/drawingml/color.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/drawingml/color.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
 #include "numberformatsbuffer.hxx"
 #include "patattr.hxx"
 #include "stlsheet.hxx"

@@ -34,14 +34,14 @@
 #include <postit.hxx>
 #include <tokenstringcontext.hxx>
 
-#include "svx/svdoole2.hxx"
+#include <svx/svdoole2.hxx>
 #include "tabprotection.hxx"
-#include "editeng/wghtitem.hxx"
-#include "editeng/postitem.hxx"
-#include "editeng/editdata.hxx"
-#include "editeng/eeitem.hxx"
-#include "editeng/editobj.hxx"
-#include "editeng/section.hxx"
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/section.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/borderline.hxx>
 #include <formula/grammar.hxx>

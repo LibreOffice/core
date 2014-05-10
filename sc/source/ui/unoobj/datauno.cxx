@@ -21,7 +21,7 @@
 
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>

@@ -21,7 +21,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include <simplehintids.hxx>
+#include "simplehintids.hxx"
 #include <tools/rtti.hxx>
 #include <svl/hint.hxx>
 

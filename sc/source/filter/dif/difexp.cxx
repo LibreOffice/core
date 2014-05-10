@@ -31,7 +31,7 @@
 #include <rtl/tencinfo.h>
 #include "ftools.hxx"
 #include "cellvalue.hxx"
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const rtl_TextEncoding eNach, sal_uInt32 nDifOption )

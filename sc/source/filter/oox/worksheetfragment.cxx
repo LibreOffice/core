@@ -19,9 +19,9 @@
 
 #include "worksheetfragment.hxx"
 
-#include "oox/core/filterbase.hxx"
-#include "oox/core/relations.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/core/relations.hxx>
+#include <oox/helper/attributelist.hxx>
 #include "addressconverter.hxx"
 #include "autofilterbuffer.hxx"
 #include "autofiltercontext.hxx"

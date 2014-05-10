@@ -26,9 +26,9 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <rtl/math.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
 #include "stylesbuffer.hxx"
 
 namespace oox {

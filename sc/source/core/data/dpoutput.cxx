@@ -33,7 +33,7 @@
 #include "docpool.hxx"
 #include "markdata.hxx"
 #include "attrib.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "miscuno.hxx"
 #include "globstr.hrc"
 #include "stlpool.hxx"

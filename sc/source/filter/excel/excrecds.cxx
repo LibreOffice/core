@@ -67,7 +67,7 @@
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "editutil.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "queryentry.hxx"
 #include "queryparam.hxx"
 

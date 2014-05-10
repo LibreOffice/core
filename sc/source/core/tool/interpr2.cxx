@@ -25,7 +25,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
 
 #include "attrib.hxx"

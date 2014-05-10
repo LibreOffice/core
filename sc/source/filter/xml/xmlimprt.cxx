@@ -40,7 +40,7 @@
 
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
-#include "editeng/editstat.hxx"
+#include <editeng/editstat.hxx>
 
 #include "appluno.hxx"
 #include "xmlimprt.hxx"

@@ -12,12 +12,12 @@
 
 #include "address.hxx"
 #include "formulacell.hxx"
-#include "svl/broadcast.hxx"
-#include "svl/sharedstring.hxx"
-#include "editeng/editobj.hxx"
+#include <svl/broadcast.hxx>
+#include <svl/sharedstring.hxx>
+#include <editeng/editobj.hxx>
 #include "calcmacros.hxx"
 #include "postit.hxx"
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
 #if DEBUG_COLUMN_STORAGE
 #ifdef NDEBUG

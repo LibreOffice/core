@@ -23,14 +23,14 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/docfilt.hxx>
-#include "sfx2/docfile.hxx"
-#include "svl/stritem.hxx"
-#include "formula/grammar.hxx"
+#include <sfx2/docfile.hxx>
+#include <svl/stritem.hxx>
+#include <formula/grammar.hxx>
 
 #include <string>
 #include <sstream>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(SCQAHELPER_DLLIMPLEMENTATION)
 #define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

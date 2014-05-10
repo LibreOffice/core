@@ -25,9 +25,9 @@
 #include "xcl97rec.hxx"
 #include "xlescher.hxx"
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include "svx/sdtaitm.hxx"
+#include <svx/sdtaitm.hxx>
 #include <boost/shared_ptr.hpp>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 class ScPostIt;
 

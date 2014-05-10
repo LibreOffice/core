@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_IMPORTFILTERDATA_HXX
 #define INCLUDED_SC_INC_IMPORTFILTERDATA_HXX
 
-#include <address.hxx>
+#include "address.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>

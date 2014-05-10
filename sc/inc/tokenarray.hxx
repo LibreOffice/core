@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_TOKENARRAY_HXX
 #define INCLUDED_SC_INC_TOKENARRAY_HXX
 
-#include "formula/token.hxx"
+#include <formula/token.hxx>
 #include "scdllapi.h"
 #include "types.hxx"
 #include "calcmacros.hxx"

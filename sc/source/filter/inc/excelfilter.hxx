@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCELFILTER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXCELFILTER_HXX
 
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/core/xmlfilterbase.hxx>
 
 namespace oox {
 namespace xls {

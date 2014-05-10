@@ -20,12 +20,12 @@
 #include "workbookfragment.hxx"
 
 #include <com/sun/star/table/CellAddress.hpp>
-#include "oox/core/filterbase.hxx"
-#include "oox/drawingml/themefragmenthandler.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/progressbar.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/ole/olestorage.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/progressbar.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/ole/olestorage.hxx>
 
 #include "biffinputstream.hxx"
 #include "chartsheetfragment.hxx"
@@ -62,7 +62,7 @@
 #include <queue>
 #include <boost/scoped_ptr.hpp>
 
-#include "oox/ole/vbaproject.hxx"
+#include <oox/ole/vbaproject.hxx>
 
 namespace oox {
 namespace xls {

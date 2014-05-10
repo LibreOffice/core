@@ -12,12 +12,12 @@
 
 #include <config_features.h>
 
-#include "vcl/dialog.hxx"
-#include "vcl/button.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/lstbox.hxx"
-#include "svx/checklbx.hxx"
-#include "svtools/treelistbox.hxx"
+#include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <svx/checklbx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include "calcconfig.hxx"
 

@@ -11,10 +11,10 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_FORMULABUFFER_HXX
 
 #include <utility>
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
-#include "salhelper/thread.hxx"
-#include "osl/mutex.hxx"
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
+#include <salhelper/thread.hxx>
+#include <osl/mutex.hxx>
 #include "workbookhelper.hxx"
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>

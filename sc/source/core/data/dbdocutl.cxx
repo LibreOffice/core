@@ -24,7 +24,7 @@
 
 #include "dbdocutl.hxx"
 #include "document.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "stringutil.hxx"
 #include "globalnames.hxx"
 

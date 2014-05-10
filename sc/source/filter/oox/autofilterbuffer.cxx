@@ -26,10 +26,10 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor3.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <rtl/ustrbuf.hxx>
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"

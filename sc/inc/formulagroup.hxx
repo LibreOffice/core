@@ -13,9 +13,9 @@
 #include "address.hxx"
 #include "types.hxx"
 #include "platforminfo.hxx"
-#include <stlalgorithm.hxx>
+#include "stlalgorithm.hxx"
 
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <vector>
 #include <boost/noncopyable.hpp>

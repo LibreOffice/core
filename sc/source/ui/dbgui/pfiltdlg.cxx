@@ -40,7 +40,7 @@
 #include "pfiltdlg.hxx"
 #undef _PFILTDLG_CXX
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 ScPivotFilterDlg::ScPivotFilterDlg(Window* pParent, const SfxItemSet& rArgSet,
     SCTAB nSourceTab )

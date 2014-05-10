@@ -19,7 +19,7 @@
 
 
 #include "appluno.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 

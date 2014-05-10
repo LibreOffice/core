@@ -11,9 +11,9 @@
 #define INCLUDED_SC_INC_CALCCONFIG_HXX
 
 #include "scdllapi.h"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 // have to match the registry values
 enum ScRecalcOptions

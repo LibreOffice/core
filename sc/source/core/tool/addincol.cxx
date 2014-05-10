@@ -43,14 +43,14 @@
 #include "compiler.hxx"
 #include "scmatrix.hxx"
 #include "addinlis.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "scfuncs.hrc"
 #include "optutil.hxx"
 #include "addincfg.hxx"
 #include "scmod.hxx"
 #include "rangeseq.hxx"
 #include "funcdesc.hxx"
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 #include "formulaopt.hxx"
 #include <boost/scoped_array.hpp>
 

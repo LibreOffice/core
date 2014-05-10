@@ -26,7 +26,7 @@
 #include "dociter.hxx"
 #include "mtvcellfunc.hxx"
 
-#include "formula/token.hxx"
+#include <formula/token.hxx>
 
 using namespace formula;
 

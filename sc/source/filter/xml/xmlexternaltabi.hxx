@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXTERNALTABI_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 class ScXMLImport;
 struct ScXMLExternalTabData;

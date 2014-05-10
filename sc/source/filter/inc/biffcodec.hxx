@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <comphelper/docpasswordhelper.hxx>
-#include "oox/core/binarycodec.hxx"
+#include <oox/core/binarycodec.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox {

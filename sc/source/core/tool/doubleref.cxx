@@ -26,7 +26,7 @@
 #include "globstr.hrc"
 #include "scmatrix.hxx"
 
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <memory>
 #include <vector>

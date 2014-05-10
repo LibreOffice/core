@@ -22,7 +22,7 @@
 
 #include "address.hxx"
 #include "global.hxx"
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
 #include <vector>
 

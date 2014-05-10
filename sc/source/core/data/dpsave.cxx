@@ -27,7 +27,7 @@
 #include "dputil.hxx"
 
 #include <sal/types.h>
-#include "comphelper/string.hxx"
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>

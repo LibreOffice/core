@@ -35,10 +35,10 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/eitem.hxx>
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/tokens.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "formulaparser.hxx"

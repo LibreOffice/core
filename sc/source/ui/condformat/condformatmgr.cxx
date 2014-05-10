@@ -12,7 +12,7 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "condformatdlg.hxx"
-#include "vcl/msgbox.hxx"
+#include <vcl/msgbox.hxx>
 #include "document.hxx"
 
 #define ITEMID_RANGE 1

@@ -45,10 +45,10 @@
 #include "tokenarray.hxx"
 #include "clkernelthread.hxx"
 
-#include "formula/errorcodes.hxx"
-#include "formula/vectortoken.hxx"
-#include "svl/intitem.hxx"
-#include "rtl/strbuf.hxx"
+#include <formula/errorcodes.hxx>
+#include <formula/vectortoken.hxx>
+#include <svl/intitem.hxx>
+#include <rtl/strbuf.hxx>
 #include "formulagroup.hxx"
 #include "listenercontext.hxx"
 #include "types.hxx"

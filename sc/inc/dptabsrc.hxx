@@ -44,7 +44,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 #include "dptabdat.hxx"
 #include "dpglobal.hxx"

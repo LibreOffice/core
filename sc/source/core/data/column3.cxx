@@ -26,8 +26,8 @@
 #include "patattr.hxx"
 #include "cellform.hxx"
 #include "typedstrdata.hxx"
-#include "formula/errorcodes.hxx"
-#include "formula/token.hxx"
+#include <formula/errorcodes.hxx>
+#include <formula/token.hxx>
 #include "brdcst.hxx"
 #include "docoptio.hxx"
 #include "subtotal.hxx"
@@ -58,8 +58,8 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/broadcast.hxx>
-#include "svl/sharedstringpool.hxx"
-#include "editeng/editstat.hxx"
+#include <svl/sharedstringpool.hxx>
+#include <editeng/editstat.hxx>
 
 #include <cstdio>
 

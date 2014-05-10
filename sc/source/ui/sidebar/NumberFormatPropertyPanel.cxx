@@ -20,7 +20,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <NumberFormatPropertyPanel.hxx>
+#include "NumberFormatPropertyPanel.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
 #include <sfx2/bindings.hxx>

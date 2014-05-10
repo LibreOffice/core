@@ -22,8 +22,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
-#include "oox/helper/storagebase.hxx"
-#include "oox/drawingml/chart/chartconverter.hxx"
+#include <oox/helper/storagebase.hxx>
+#include <oox/drawingml/chart/chartconverter.hxx>
 #include "biffhelper.hxx"
 #include "rangenam.hxx"
 

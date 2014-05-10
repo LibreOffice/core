@@ -29,7 +29,7 @@
 #include "tokenarray.hxx"
 #include "externalrefmgr.hxx"
 #include "scmatrix.hxx"
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>

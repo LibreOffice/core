@@ -19,7 +19,7 @@
 
 #include "connectionsbuffer.hxx"
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "biffinputstream.hxx"
 
 namespace oox {

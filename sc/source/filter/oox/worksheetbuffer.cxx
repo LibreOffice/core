@@ -26,11 +26,11 @@
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
 #include "biffinputstream.hxx"
 #include "excelhandlers.hxx"
 

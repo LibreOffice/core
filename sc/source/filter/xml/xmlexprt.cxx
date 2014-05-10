@@ -76,27 +76,27 @@
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/txtparae.hxx>
-#include "editeng/autokernitem.hxx"
-#include "editeng/charreliefitem.hxx"
-#include "editeng/charscaleitem.hxx"
-#include "editeng/colritem.hxx"
-#include "editeng/contouritem.hxx"
-#include "editeng/crossedoutitem.hxx"
-#include "editeng/emphasismarkitem.hxx"
-#include "editeng/escapementitem.hxx"
-#include "editeng/fhgtitem.hxx"
-#include "editeng/fontitem.hxx"
-#include "editeng/kernitem.hxx"
-#include "editeng/langitem.hxx"
-#include "editeng/postitem.hxx"
-#include "editeng/section.hxx"
-#include "editeng/shdditem.hxx"
-#include "editeng/udlnitem.hxx"
-#include "editeng/wghtitem.hxx"
-#include "editeng/wrlmitem.hxx"
-#include "editeng/xmlcnitm.hxx"
-#include "editeng/flditem.hxx"
-#include "editeng/eeitem.hxx"
+#include <editeng/autokernitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/section.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/xmlcnitm.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/eeitem.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventExport.hxx>
 
@@ -104,7 +104,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include "tools/color.hxx"
+#include <tools/color.hxx>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>

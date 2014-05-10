@@ -35,7 +35,7 @@
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"
-#include "i18nlangtag/lang.h"
+#include <i18nlangtag/lang.h>
 
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>

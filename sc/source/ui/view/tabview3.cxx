@@ -62,7 +62,7 @@
 #include "client.hxx"
 #include "tabprotection.hxx"
 #include "markdata.hxx"
-#include "formula/FormulaCompiler.hxx"
+#include <formula/FormulaCompiler.hxx>
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 

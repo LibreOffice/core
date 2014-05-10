@@ -14,14 +14,13 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "formula/vectortoken.hxx"
-#include "sal/config.h"
 #include <algorithm>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cmath>
 #include <config_folders.h>
 #include <float.h>
+#include <formula/vectortoken.hxx>
 #include <iostream>
 #include <list>
 #include <map>
@@ -31,6 +30,7 @@
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>

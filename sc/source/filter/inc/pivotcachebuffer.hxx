@@ -23,8 +23,8 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {

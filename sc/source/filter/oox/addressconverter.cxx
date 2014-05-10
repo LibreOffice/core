@@ -25,7 +25,7 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/filterbase.hxx"
+#include <oox/core/filterbase.hxx>
 #include "biffinputstream.hxx"
 
 namespace oox {

@@ -20,9 +20,9 @@
 #include <tokenstringcontext.hxx>
 #include <globalnames.hxx>
 
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 
 void Test::testSharedFormulas()
 {

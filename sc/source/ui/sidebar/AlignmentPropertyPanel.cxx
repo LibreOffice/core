@@ -20,7 +20,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <AlignmentPropertyPanel.hxx>
+#include "AlignmentPropertyPanel.hxx"
 #include <editeng/justifyitem.hxx>
 #include <svx/dialmgr.hxx>
 #include "sc.hrc"

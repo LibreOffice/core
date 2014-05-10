@@ -28,11 +28,11 @@
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <unotools/mediadescriptor.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "unitconverter.hxx"

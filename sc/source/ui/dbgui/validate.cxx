@@ -40,7 +40,7 @@
 #include "validat.hxx"
 #include "validate.hxx"
 #include "compiler.hxx"
-#include "formula/opcode.hxx"
+#include <formula/opcode.hxx>
 
 // cell range picker
 #include "tabvwsh.hxx"

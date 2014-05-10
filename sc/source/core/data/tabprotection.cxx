@@ -18,7 +18,7 @@
  */
 
 #include "tabprotection.hxx"
-#include "svl/PasswordHelper.hxx"
+#include <svl/PasswordHelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include "document.hxx"
 

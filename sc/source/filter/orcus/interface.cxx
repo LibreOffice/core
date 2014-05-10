@@ -18,8 +18,8 @@
 #include "globstr.hrc"
 #include "compiler.hxx"
 
-#include "formula/token.hxx"
-#include "tools/datetime.hxx"
+#include <formula/token.hxx>
+#include <tools/datetime.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>

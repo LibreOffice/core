@@ -14,10 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
-#include "comphelper/servicedecl.hxx"
-#include "cppuhelper/implementationentry.hxx"
 #include <algorithm>
 #include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>
@@ -88,8 +84,10 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -203,6 +201,7 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicedecl.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -210,6 +209,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/util.hxx>
@@ -327,5 +327,4 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

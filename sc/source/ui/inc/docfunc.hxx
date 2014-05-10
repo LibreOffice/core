@@ -22,7 +22,7 @@
 
 #include <tools/link.hxx>
 #include "global.hxx"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 #include "tabbgcolor.hxx"
 #include "token.hxx"
 #include "rangenam.hxx"

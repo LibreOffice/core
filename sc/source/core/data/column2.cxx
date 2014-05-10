@@ -62,8 +62,8 @@
 #include <svl/zforlist.hxx>
 #include <svl/broadcast.hxx>
 #include <vcl/outdev.hxx>
-#include "formula/errorcodes.hxx"
-#include "formula/vectortoken.hxx"
+#include <formula/errorcodes.hxx>
+#include <formula/vectortoken.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

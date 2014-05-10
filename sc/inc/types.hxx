@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_TYPES_HXX
 #define INCLUDED_SC_INC_TYPES_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/unordered_map.hpp>

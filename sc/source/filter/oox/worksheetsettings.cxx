@@ -20,9 +20,9 @@
 #include "worksheetsettings.hxx"
 
 #include <com/sun/star/util/XProtectable.hpp>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/properties.hxx>
 #include "biffinputstream.hxx"
 #include "pagesettings.hxx"
 #include "workbooksettings.hxx"

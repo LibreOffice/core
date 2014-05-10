@@ -108,7 +108,7 @@
 #include "scslots.hxx"
 
 #include "scabstdlg.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "formulagroup.hxx"
 #include <documentlinkmgr.hxx>
 

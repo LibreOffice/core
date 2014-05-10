@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include "XMLTableShapeResizer.hxx"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 #include "tabprotection.hxx"
 #include "rangelst.hxx"
 

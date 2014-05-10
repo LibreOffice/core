@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <ucalc.hxx>
+#include "ucalc.hxx"
 #include <editutil.hxx>
 #include <cellvalue.hxx>
 #include <svl/languageoptions.hxx>

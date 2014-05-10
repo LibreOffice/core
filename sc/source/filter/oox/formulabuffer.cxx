@@ -27,7 +27,7 @@
 #include "sharedformulagroups.hxx"
 #include "externalrefmgr.hxx"
 #include "tokenstringcontext.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/token/tokens.hxx>
 #include <svl/sharedstringpool.hxx>
 
 using namespace com::sun::star;

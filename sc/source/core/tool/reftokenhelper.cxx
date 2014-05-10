@@ -23,9 +23,9 @@
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 
-#include "rtl/ustring.hxx"
-#include "formula/grammar.hxx"
-#include "formula/token.hxx"
+#include <rtl/ustring.hxx>
+#include <formula/grammar.hxx>
+#include <formula/token.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

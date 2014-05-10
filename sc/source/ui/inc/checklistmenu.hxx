@@ -10,11 +10,11 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
 
-#include "vcl/popupmenuwindow.hxx"
-#include "vcl/button.hxx"
-#include "vcl/scrbar.hxx"
-#include "vcl/timer.hxx"
-#include "svx/checklbx.hxx"
+#include <vcl/popupmenuwindow.hxx>
+#include <vcl/button.hxx>
+#include <vcl/scrbar.hxx>
+#include <vcl/timer.hxx>
+#include <svx/checklbx.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <boost/scoped_ptr.hpp>

@@ -9,9 +9,9 @@
 
 #include "editattributemap.hxx"
 
-#include "editeng/eeitem.hxx"
-#include "editeng/memberids.hrc"
-#include "xmloff/xmlnmspe.hxx"
+#include <editeng/eeitem.hxx>
+#include <editeng/memberids.hrc>
+#include <xmloff/xmlnmspe.hxx>
 
 ScXMLEditAttributeMap::Entry aEntries[] = {
 

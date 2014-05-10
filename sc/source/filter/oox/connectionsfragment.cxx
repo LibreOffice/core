@@ -19,7 +19,7 @@
 
 #include "connectionsfragment.hxx"
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "biffhelper.hxx"
 #include "connectionsbuffer.hxx"
 

@@ -12,7 +12,7 @@
 
 #include "scdllapi.h"
 #include "address.hxx"
-#include "vcl/image.hxx"
+#include <vcl/image.hxx>
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>

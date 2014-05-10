@@ -31,7 +31,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbuno.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
@@ -58,7 +58,7 @@
 #include "jumpmatrix.hxx"
 #include "parclass.hxx"
 #include "externalrefmgr.hxx"
-#include "formula/FormulaCompiler.hxx"
+#include <formula/FormulaCompiler.hxx>
 #include "macromgr.hxx"
 #include "doubleref.hxx"
 #include "queryparam.hxx"

@@ -24,7 +24,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <tools/solar.h>

@@ -30,7 +30,7 @@
 #include "globalnames.hxx"
 #include "tokenarray.hxx"
 
-#include "sfx2/app.hxx"
+#include <sfx2/app.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>

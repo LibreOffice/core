@@ -22,7 +22,7 @@
 
 #include <tools/solar.h>
 #include "scdllapi.h"
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 class SvNumberFormatter;
 class Color;

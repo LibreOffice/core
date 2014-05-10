@@ -20,14 +20,14 @@
 #include "scmatrix.hxx"
 #include "global.hxx"
 #include "address.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "interpre.hxx"
 #include "mtvelements.hxx"
 #include "compare.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 

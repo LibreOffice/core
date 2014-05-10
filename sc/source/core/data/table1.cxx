@@ -50,7 +50,7 @@
 #include "refupdatecontext.hxx"
 #include <rowheightcontext.hxx>
 
-#include "formula/vectortoken.hxx"
+#include <formula/vectortoken.hxx>
 
 #include <vector>
 #include <boost/scoped_array.hpp>

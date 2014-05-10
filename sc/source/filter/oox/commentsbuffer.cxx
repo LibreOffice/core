@@ -26,12 +26,12 @@
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
-#include "oox/helper/attributelist.hxx"
-#include "oox/vml/vmlshape.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/vml/vmlshape.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "drawingfragment.hxx"
-#include "svx/sdtaitm.hxx"
+#include <svx/sdtaitm.hxx>
 #include "unitconverter.hxx"
 #include "drawingmanager.hxx"
 

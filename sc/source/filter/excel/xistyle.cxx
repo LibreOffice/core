@@ -57,7 +57,7 @@
 
 #include "root.hxx"
 #include "colrowst.hxx"
-#include "svl/poolcach.hxx"
+#include <svl/poolcach.hxx>
 
 #include <list>
 

@@ -37,7 +37,7 @@
 
 #include "filtdlg.hxx"
 #include <vcl/msgbox.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <limits>
 

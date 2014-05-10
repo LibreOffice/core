@@ -26,9 +26,9 @@
 #include "formulaopt.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 #include "calcoptionsdlg.hxx"
-#include "vcl/msgbox.hxx"
+#include <vcl/msgbox.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

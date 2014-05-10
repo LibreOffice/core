@@ -14,7 +14,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <formula/grammar.hxx>
 #include <tools/color.hxx>
-#include <rangelst.hxx>
+#include "rangelst.hxx"
 #include "conditio.hxx"
 
 #include <svl/listener.hxx>

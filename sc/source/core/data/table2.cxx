@@ -55,7 +55,7 @@
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
-#include "editeng/editobj.hxx"
+#include <editeng/editobj.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>

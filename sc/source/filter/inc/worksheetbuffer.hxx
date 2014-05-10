@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_WORKSHEETBUFFER_HXX
 
 #include <utility>
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {

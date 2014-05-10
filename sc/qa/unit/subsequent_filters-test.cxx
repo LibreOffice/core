@@ -20,14 +20,14 @@
 #include <svl/stritem.hxx>
 
 #include "drwlayer.hxx"
-#include "svx/svdpage.hxx"
-#include "svx/svdoole2.hxx"
-#include "editeng/wghtitem.hxx"
-#include "editeng/postitem.hxx"
-#include "editeng/udlnitem.hxx"
-#include "editeng/editobj.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdoole2.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/editobj.hxx>
 #include <editeng/borderline.hxx>
-#include "editeng/flditem.hxx"
+#include <editeng/flditem.hxx>
 #include <dbdata.hxx>
 #include "validat.hxx"
 #include "formulacell.hxx"

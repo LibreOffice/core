@@ -12,11 +12,11 @@
 
 #include "document.hxx"
 
-#include "tools/urlobj.hxx"
-#include "sfx2/docfile.hxx"
-#include "sfx2/frame.hxx"
-#include "sfx2/sfxsids.hrc"
-#include "svl/itemset.hxx"
+#include <tools/urlobj.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <svl/itemset.hxx>
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_INC_DPFILTEREDCACHE_HXX
 #define INCLUDED_SC_INC_DPFILTEREDCACHE_HXX
 
-#include "sal/types.h"
-#include "osl/mutex.hxx"
+#include <sal/types.h>
+#include <osl/mutex.hxx>
 #include "global.hxx"
 #include "dpitemdata.hxx"
 #include "calcmacros.hxx"

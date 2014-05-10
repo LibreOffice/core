@@ -24,7 +24,7 @@
 #include "tokenstringcontext.hxx"
 #include "dbdata.hxx"
 
-#include "formula/vectortoken.hxx"
+#include <formula/vectortoken.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

@@ -13,7 +13,7 @@
 #include "column.hxx"
 #include "mtvelements.hxx"
 
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 namespace sc {
 

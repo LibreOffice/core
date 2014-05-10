@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_TYPEDSTRDATA_HXX
 #define INCLUDED_SC_INC_TYPEDSTRDATA_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "scdllapi.h"
 
 #include <set>

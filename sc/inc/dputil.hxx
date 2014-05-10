@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_DPUTIL_HXX
 #define INCLUDED_SC_INC_DPUTIL_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
 

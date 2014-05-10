@@ -38,7 +38,7 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include "editeng/misspellrange.hxx"
+#include <editeng/misspellrange.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

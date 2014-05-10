@@ -19,7 +19,7 @@
 
 #include "chartsheetfragment.hxx"
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 #include "biffinputstream.hxx"
 #include "pagesettings.hxx"
 #include "viewsettings.hxx"

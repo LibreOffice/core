@@ -19,9 +19,9 @@
 
 #include "ScPanelFactory.hxx"
 
-#include <AlignmentPropertyPanel.hxx>
-#include <CellAppearancePropertyPanel.hxx>
-#include <NumberFormatPropertyPanel.hxx>
+#include "AlignmentPropertyPanel.hxx"
+#include "CellAppearancePropertyPanel.hxx"
+#include "NumberFormatPropertyPanel.hxx"
 #include <navipi.hxx>
 #include <dwfunctr.hxx>
 #include "sc.hrc"

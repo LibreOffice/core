@@ -19,7 +19,7 @@
 
 #include "stylesfragment.hxx"
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 namespace oox {
 namespace xls {

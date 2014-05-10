@@ -54,7 +54,7 @@
 #include <sot/exchange.hxx>
 
 #include <svl/stritem.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>

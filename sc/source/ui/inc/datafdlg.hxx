@@ -16,7 +16,7 @@
 
 #include "global.hxx"
 
-#include <tabvwsh.hxx>
+#include "tabvwsh.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 

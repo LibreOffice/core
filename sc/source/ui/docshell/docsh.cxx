@@ -37,7 +37,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <com/sun/star/awt/Key.hpp>

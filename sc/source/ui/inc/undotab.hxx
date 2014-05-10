@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOTAB_HXX
 
 #include "undobase.hxx"
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 #include <tools/color.hxx>
 #include "tabbgcolor.hxx"
 

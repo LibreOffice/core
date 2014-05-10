@@ -31,8 +31,8 @@
 #include "tabopparams.hxx"
 #include "sortparam.hxx"
 #include "types.hxx"
-#include "formula/grammar.hxx"
-#include "formula/types.hxx"
+#include <formula/grammar.hxx>
+#include <formula/types.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "typedstrdata.hxx"
 #include "compressedarray.hxx"

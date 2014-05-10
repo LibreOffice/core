@@ -20,7 +20,7 @@
 #include "cellform.hxx"
 #include "cellvalue.hxx"
 
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 
 #include <test/bootstrapfixture.hxx>
 

@@ -48,9 +48,9 @@
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include "editeng/fieldupdater.hxx"
+#include <editeng/fieldupdater.hxx>
 
 #include <cstring>
 #include <map>

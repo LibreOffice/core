@@ -19,7 +19,7 @@
 
 #include "excelhandlers.hxx"
 
-#include "oox/core/filterbase.hxx"
+#include <oox/core/filterbase.hxx>
 #include "biffinputstream.hxx"
 
 namespace oox {

@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SC_INC_REFHINT_HXX
 #define INCLUDED_SC_INC_REFHINT_HXX
 
-#include <address.hxx>
-#include <simplehintids.hxx>
+#include "address.hxx"
+#include "simplehintids.hxx"
 
 namespace sc {
 

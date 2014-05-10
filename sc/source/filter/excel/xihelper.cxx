@@ -19,7 +19,7 @@
 
 #include "xihelper.hxx"
 #include <svl/itemset.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <editeng/editobj.hxx>
 #include <tools/urlobj.hxx>
 #include "scitems.hxx"

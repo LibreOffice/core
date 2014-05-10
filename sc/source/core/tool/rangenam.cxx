@@ -35,7 +35,7 @@
 #include "refupdatecontext.hxx"
 #include <tokenstringcontext.hxx>
 
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 
 using namespace formula;
 using ::std::pair;

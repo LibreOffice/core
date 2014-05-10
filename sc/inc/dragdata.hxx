@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_DRAGDATA_HXX
 #define INCLUDED_SC_INC_DRAGDATA_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 class ScTransferObj;
 class ScDrawTransferObj;

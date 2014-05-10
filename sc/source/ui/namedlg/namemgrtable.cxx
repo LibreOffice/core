@@ -18,7 +18,7 @@
 #include "viewdata.hxx"
 #include "globalnames.hxx"
 
-#include "sfx2/app.hxx"
+#include <sfx2/app.hxx>
 
 #define ITEMID_NAME 1
 #define ITEMID_RANGE 2

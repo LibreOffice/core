@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <CellLineStyleControl.hxx>
+#include "CellLineStyleControl.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
 #include <CellAppearancePropertyPanel.hrc>
-#include <CellLineStyleValueSet.hxx>
+#include "CellLineStyleValueSet.hxx"
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lineitem.hxx>
-#include <CellAppearancePropertyPanel.hxx>
+#include "CellAppearancePropertyPanel.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 

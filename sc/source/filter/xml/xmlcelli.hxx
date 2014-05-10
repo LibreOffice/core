@@ -22,10 +22,10 @@
 #include "XMLDetectiveContext.hxx"
 #include "XMLCellRangeSourceContext.hxx"
 #include "importcontext.hxx"
-#include "formula/grammar.hxx"
-#include "svl/itemset.hxx"
-#include "editeng/editdata.hxx"
-#include "editeng/flditem.hxx"
+#include <formula/grammar.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/flditem.hxx>
 
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>

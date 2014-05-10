@@ -27,9 +27,9 @@
 #include <editeng/editstat.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
-#include "editeng/unolingu.hxx"
-#include "editeng/langitem.hxx"
-#include "editeng/misspellrange.hxx"
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/misspellrange.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
@@ -38,7 +38,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svl/urlbmk.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>

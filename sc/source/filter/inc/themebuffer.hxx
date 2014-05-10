@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_THEMEBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_THEMEBUFFER_HXX
 
-#include "oox/drawingml/theme.hxx"
+#include <oox/drawingml/theme.hxx>
 #include "workbookhelper.hxx"
 
 namespace oox {

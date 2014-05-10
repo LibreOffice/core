@@ -17,7 +17,7 @@
 #include <rtl/bootstrap.hxx>
 #include <boost/scoped_array.hpp>
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <osl/file.hxx>
 #include "opencl_device.hxx"
 

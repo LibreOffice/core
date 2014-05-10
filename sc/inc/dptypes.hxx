@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_DPTYPES_HXX
 #define INCLUDED_SC_INC_DPTYPES_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <boost/unordered_set.hpp>
 

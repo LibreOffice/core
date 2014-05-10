@@ -24,12 +24,12 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include "oox/core/filterbase.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/token/tokens.hxx>
 #include "biffinputstream.hxx"
 #include "unitconverter.hxx"
 

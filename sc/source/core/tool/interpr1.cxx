@@ -62,7 +62,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <stdlib.h>
 #include <string.h>

@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXTERNALLINKBUFFER_HXX
 
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
-#include "oox/helper/containerhelper.hxx"
+#include <oox/helper/containerhelper.hxx>
 #include "defnamesbuffer.hxx"
 
 namespace com { namespace sun { namespace star {

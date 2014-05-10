@@ -29,7 +29,7 @@
 
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 

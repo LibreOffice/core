@@ -12,9 +12,9 @@
 #include "orcusxml.hxx"
 #include "document.hxx"
 
-#include "svtools/treelistbox.hxx"
-#include "svtools/treelistentry.hxx"
-#include "ucbhelper/content.hxx"
+#include <svtools/treelistbox.hxx>
+#include <svtools/treelistentry.hxx>
+#include <ucbhelper/content.hxx>
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/xml_structure_tree.hpp>

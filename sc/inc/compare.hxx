@@ -22,7 +22,7 @@
 
 #include "queryentry.hxx"
 
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
 class ScDocument;
 

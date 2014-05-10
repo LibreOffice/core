@@ -31,7 +31,7 @@
 #include "postit.hxx"
 #include "types.hxx"
 #include "cellvalue.hxx"
-#include "formula/types.hxx"
+#include <formula/types.hxx>
 #include "calcmacros.hxx"
 
 #include <set>

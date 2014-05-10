@@ -13,7 +13,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 
-#include <datastream.hxx>
+#include "datastream.hxx"
 
 class ScDocShell;
 class SvtURLBox;

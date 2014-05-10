@@ -42,8 +42,8 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/propertyset.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/propertyset.hxx>
 #include "addressconverter.hxx"
 #include "autofilterbuffer.hxx"
 #include "commentsbuffer.hxx"

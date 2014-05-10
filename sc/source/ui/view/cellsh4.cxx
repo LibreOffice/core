@@ -28,7 +28,7 @@
 #include "document.hxx"
 #include "sc.hrc"
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 {

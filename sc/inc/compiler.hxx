@@ -26,8 +26,8 @@
 #include "scdllapi.h"
 #include "global.hxx"
 #include "refdata.hxx"
-#include "formula/token.hxx"
-#include "formula/grammar.hxx"
+#include <formula/token.hxx>
+#include <formula/grammar.hxx>
 #include <unotools/charclass.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>

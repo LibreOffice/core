@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DPCONTROL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DPCONTROL_HXX
 
-#include "rtl/ustring.hxx"
-#include "tools/gen.hxx"
-#include "tools/fract.hxx"
+#include <rtl/ustring.hxx>
+#include <tools/gen.hxx>
+#include <tools/fract.hxx>
 
 class OutputDevice;
 class Point;

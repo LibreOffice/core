@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_PARCLASS_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_PARCLASS_HXX
 
-#include "formula/opcode.hxx"
+#include <formula/opcode.hxx>
 #include <sys/types.h>
 
 namespace formula

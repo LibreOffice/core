@@ -46,7 +46,7 @@
 #include "appoptio.hxx"
 #include "docsh.hxx"
 #include "funcdesc.hxx"
-#include "formula/token.hxx"
+#include <formula/token.hxx>
 #include "tokenarray.hxx"
 #include "sc.hrc"
 #include "servuno.hxx"

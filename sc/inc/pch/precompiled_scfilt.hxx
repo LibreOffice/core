@@ -14,54 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "editeng/editstat.hxx"
-#include "formula/errorcodes.hxx"
 #include "officecfg/Office/Common.hxx"
-#include "oox/core/filterbase.hxx"
-#include "oox/core/relations.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/chart/datasourcemodel.hxx"
-#include "oox/drawingml/connectorshapecontext.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/graphicshapecontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/themefragmenthandler.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/helper/helper.hxx"
-#include "oox/helper/progressbar.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/ole/olestorage.hxx"
-#include "oox/ole/vbaproject.hxx"
-#include "oox/token/properties.hxx"
-#include "oox/token/tokens.hxx"
-#include "oox/vml/vmlshape.hxx"
-#include "oox/vml/vmlshapecontainer.hxx"
-#include "rtl/strbuf.hxx"
-#include "sal/config.h"
-#include "sal/types.h"
-#include "svl/poolcach.hxx"
-#include "svl/sharedstring.hxx"
-#include "svl/sharedstringpool.hxx"
-#include "svx/algitem.hxx"
-#include "svx/sdr/properties/properties.hxx"
-#include "svx/sdtaitm.hxx"
-#include "svx/sxmspitm.hxx"
-#include "svx/unoapi.hxx"
-#include "svx/xflclit.hxx"
-#include "svx/xlnstit.hxx"
-#include "svx/xlnstwit.hxx"
-#include "tools/urlobj.hxx"
-#include "vcl/mapmod.hxx"
-#include "vcl/msgbox.hxx"
 #include <algorithm>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -341,7 +294,9 @@
 #include <comphelper/types.hxx>
 #include <config_orcus.h>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cstring>
 #include <ctype.h>
@@ -388,6 +343,7 @@
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <filter/msfilter/util.hxx>
+#include <formula/errorcodes.hxx>
 #include <formula/grammar.hxx>
 #include <fstream>
 #include <iostream>
@@ -403,14 +359,28 @@
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/fastparser.hxx>
 #include <oox/core/filterbase.hxx>
+#include <oox/core/relations.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
+#include <oox/drawingml/connectorshapecontext.hxx>
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/drawingml/graphicshapecontext.hxx>
+#include <oox/drawingml/lineproperties.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/helper/attributelist.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
 #include <oox/helper/containerhelper.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/helper/helper.hxx>
+#include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/olehelper.hxx>
@@ -418,6 +388,8 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/vml/vmlshape.hxx>
+#include <oox/vml/vmlshapecontainer.hxx>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
@@ -437,6 +409,7 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/mathconf.h>
+#include <sal/types.h>
 #include <salhelper/thread.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/tools/converter.hxx>
@@ -463,7 +436,9 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/poolcach.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -488,6 +463,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/sdasitm.hxx>
+#include <svx/sdr/properties/properties.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svditer.hxx>
@@ -505,6 +481,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdxcgv.hxx>
+#include <svx/sxmspitm.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unomid.hxx>
 #include <svx/xbitmap.hxx>
@@ -515,6 +492,8 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xlinjoit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnstwit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xoutbmp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -546,6 +525,8 @@
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -553,5 +534,4 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

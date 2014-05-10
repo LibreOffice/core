@@ -11,13 +11,13 @@
 #include "document.hxx"
 #include "column.hxx"
 #include "formulacell.hxx"
-#include "editeng/editobj.hxx"
-#include "editeng/editstat.hxx"
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
 #include "stringutil.hxx"
 #include "editutil.hxx"
 #include "tokenarray.hxx"
-#include "formula/token.hxx"
-#include "svl/sharedstring.hxx"
+#include <formula/token.hxx>
+#include <svl/sharedstring.hxx>
 
 namespace {
 

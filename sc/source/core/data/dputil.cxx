@@ -13,11 +13,11 @@
 #include "globalnames.hxx"
 #include "globstr.hrc"
 
-#include "comphelper/string.hxx"
-#include "unotools/localedatawrapper.hxx"
-#include "unotools/calendarwrapper.hxx"
-#include "svl/zforlist.hxx"
-#include "rtl/math.hxx"
+#include <comphelper/string.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/calendarwrapper.hxx>
+#include <svl/zforlist.hxx>
+#include <rtl/math.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>

@@ -23,7 +23,7 @@
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
 #include "formulacell.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "scerrors.hxx"
 #include "docoptio.hxx"
 #include "refupdat.hxx"

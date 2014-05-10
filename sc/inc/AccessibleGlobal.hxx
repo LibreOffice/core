@@ -21,7 +21,7 @@
 #define INCLUDED_SC_INC_ACCESSIBLEGLOBAL_HXX
 
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase1.hxx>
 
 #include <set>
 

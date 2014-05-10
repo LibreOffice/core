@@ -27,7 +27,7 @@
 #include "scmod.hxx"
 #include "optutil.hxx"
 
-#include "formula/grammar.hxx"
+#include <formula/grammar.hxx>
 
 class SC_DLLPUBLIC ScDocOptions
 {

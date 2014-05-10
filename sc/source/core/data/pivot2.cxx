@@ -33,7 +33,7 @@
 #include "userlist.hxx"
 #include "pivot.hxx"
 #include "rechead.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"

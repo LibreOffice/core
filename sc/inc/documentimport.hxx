@@ -13,7 +13,7 @@
 #include "scdllapi.h"
 #include "address.hxx"
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <boost/noncopyable.hpp>
 

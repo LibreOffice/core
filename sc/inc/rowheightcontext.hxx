@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_ROWHEIGHTCONTEXT_HXX
 #define INCLUDED_SC_INC_ROWHEIGHTCONTEXT_HXX
 
-#include <scdllapi.h>
+#include "scdllapi.h"
 
 #include <tools/fract.hxx>
 

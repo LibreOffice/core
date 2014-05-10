@@ -16,7 +16,7 @@
 #include "refundo.hxx"
 #include "undodat.hxx"
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )
 

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
-#include "oox/helper/binaryinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 #include "biffinputstream.hxx"
 #include "excelchartconverter.hxx"
 #include "excelvbaproject.hxx"

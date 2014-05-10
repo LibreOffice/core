@@ -30,7 +30,7 @@
 #include "otlnbuff.hxx"
 #include "colrowst.hxx"
 #include "excdefs.hxx"
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>

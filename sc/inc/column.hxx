@@ -26,7 +26,7 @@
 #include "rangenam.hxx"
 #include "types.hxx"
 #include "mtvelements.hxx"
-#include "formula/types.hxx"
+#include <formula/types.hxx>
 
 #include <set>
 #include <vector>

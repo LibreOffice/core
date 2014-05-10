@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_SCOPETOOLS_HXX
 #define INCLUDED_SC_INC_SCOPETOOLS_HXX
 
-#include <scdllapi.h>
+#include "scdllapi.h"
 
 class ScDocument;
 

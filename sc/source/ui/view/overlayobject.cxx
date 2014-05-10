@@ -18,15 +18,15 @@
  */
 
 #include "overlayobject.hxx"
-#include "vcl/outdev.hxx"
-#include "vcl/lineinfo.hxx"
-#include "tools/fract.hxx"
-#include "basegfx/range/b2drange.hxx"
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolygontools.hxx"
-#include "svx/sdr/overlay/overlaymanager.hxx"
-#include "drawinglayer/primitive2d/baseprimitive2d.hxx"
-#include "drawinglayer/primitive2d/polypolygonprimitive2d.hxx"
+#include <vcl/outdev.hxx>
+#include <vcl/lineinfo.hxx>
+#include <tools/fract.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
 using ::sdr::overlay::OverlayObject;
 using ::sdr::overlay::OverlayManager;

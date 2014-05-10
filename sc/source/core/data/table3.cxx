@@ -62,7 +62,7 @@
 #include <sharedformula.hxx>
 #include <refhint.hxx>
 
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
