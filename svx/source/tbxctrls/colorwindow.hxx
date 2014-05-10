@@ -42,7 +42,7 @@ private:
     const sal_uInt16 theSlotId;
     SvxColorValueSet aColorSet;
     OUString  maCommand;
-    const Color    mLastColor;
+    Link maSelectedLink;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -55,8 +55,7 @@ public:
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
-                         Window* pParentWindow,
-                         const Color rLastColor = COL_AUTO);
+                         Window* pParentWindow);
     virtual ~SvxColorWindow_Impl();
     void                StartSelection();
 
@@ -64,6 +63,7 @@ public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
+    void SetSelectedHdl( const Link& rLink ) { maSelectedLink = rLink; }
 };
 
 #endif

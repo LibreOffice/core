@@ -772,8 +772,8 @@ SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG
     GroupId = GID_OPTIONS;
 ]
 
-SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
-
+SfxVoidItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
+(SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -782,13 +782,14 @@ SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
+    Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -798,8 +799,8 @@ SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
     GroupId = GID_FORMAT;
 ]
 
-SfxBoolItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
-
+SfxVoidItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
+(SvxColorItem FontColor SID_ATTR_CHAR_COLOR_EXT)
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -808,13 +809,14 @@ SfxBoolItem CharColorExt SID_ATTR_CHAR_COLOR_EXT
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
+    Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = FALSE,

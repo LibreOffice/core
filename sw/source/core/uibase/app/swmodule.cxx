@@ -51,7 +51,6 @@
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
-#include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/modctrl.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
@@ -311,7 +310,7 @@ void SwDLL::RegisterControls()
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
 
-    svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
+    SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
@@ -326,14 +325,14 @@ void SwDLL::RegisterControls()
     SvxLineEndToolBoxControl::RegisterControl(SID_ATTR_LINEEND_STYLE, pMod );
 
     SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
-    SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
-    SvxColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
-    SvxColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
+    SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
+    SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
+    SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
     SvxStyleToolBoxControl::RegisterControl(SID_STYLE_APPLY, pMod );
-    SvxColorExtToolBoxControl::RegisterControl( SID_BACKGROUND_COLOR, pMod );
+    SvxColorToolBoxControl::RegisterControl( SID_BACKGROUND_COLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
-    SvxColorExtToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
+    SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
 
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME_INTERACT, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );

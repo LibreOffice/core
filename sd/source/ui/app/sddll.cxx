@@ -65,7 +65,6 @@
 #include <svx/svxids.hrc>
 #include <svx/bmpmask.hxx>
 #include <svx/clipboardctl.hxx>
-#include <svx/extrusioncolorcontrol.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/fntctl.hxx>
@@ -218,7 +217,7 @@ void SdDLL::RegisterControllers()
 
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
     SvxFontNameToolBoxControl::RegisterControl(0, pMod);
-    SvxFontColorToolBoxControl::RegisterControl(0, pMod);
+    SvxColorToolBoxControl::RegisterControl(0, pMod);
 
     SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
     SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
@@ -262,7 +261,7 @@ void SdDLL::RegisterControllers()
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
     SvxClipBoardControl::RegisterControl( SID_PASTE_UNFORMATTED, pMod );
 
-    svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
+    SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
@@ -270,7 +269,7 @@ void SdDLL::RegisterControllers()
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
     SvxTableToolBoxControl::RegisterControl(SID_INSERT_TABLE, pMod );
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
-    SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
+    SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
 }

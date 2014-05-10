@@ -39,17 +39,8 @@
         Additional information
         from DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
 
-        SvxFontColorToolBoxControl
-        --------------------------
-        Item type:      SvxFontColorItem
-        Execute-Id:     SID_ATTR_CHAR_COLOR
-                        -> SvxFontColorItem
-        Additional information
-        from DocShell:  presently none
-                        in future: color palette
-
-        class SvxColorExtToolBoxControl
-        -----------------------------------
+        SvxColorToolBoxControl
+        ----------------------
         Item type:      SvxColorItem
                     and SfxBoolItem
 
@@ -57,7 +48,8 @@
         Execute-Id      SID_ATTR_CHAR_COLOR2
                     and SID_ATTR_CHAR_COLOR_EXT
 
-        for cell color (calc)
+        for font color
+        (calc/impress/draw and writer drawing objects)
         Execute-Id      SID_ATTR_CHAR_COLOR
 
         for character background color (writer)
@@ -65,19 +57,14 @@
                     and SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 
         for paragraph background color (writer)
+        and cell background color (calc)
         Execute-Id      SID_BACKGROUND_COLOR
-
-        for  cell background color (calc)
-        Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
 
         for table/cell border color (writer, calc)
         Execute-Id      SID_FRAME_LINECOLOR
 
-        SvxColorToolBoxControl
-        --------------------------------
-        Item type:      SvxBrushItem
-        Execute-Id:     SID_BACKGROUND_COLOR
-                        -> SvxColorItem
+        for 3D extrusion
+        Execute-Id      SID_EXTRUSION_3D_COLOR
 
         SvxPatternToolBoxControl
         ------------------------
@@ -119,14 +106,6 @@
         Bemerkung:      provides a SvxLineItem, which provides a SvxBorderLine
                         without color information.
 
-        SvxFrameLineColorToolBoxControl
-        -------------------------------
-        Item type:      SvxColorItem
-        Execute-Id:     SID_FRAME_LINECOLOR
-                        -> SvxColorItem
-        Additional information
-        from DocShell:   none
-
         SvxStyleToolBoxControl
         ----------------------
         Item type:      SfxTemplateItem
@@ -147,7 +126,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/strarray.hxx>
 #include <svx/svxdllapi.h>
-
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 // important im tbxctrls.hxx created HeDaBu !!!
@@ -162,7 +141,6 @@ namespace svx
 {
     class ToolboxButtonColorUpdater;
 }
-
 
 
 // class SvxStyleToolBoxControl ------------------------------------------
@@ -218,8 +196,6 @@ friend class SfxStyleControllerItem_Impl;
 
 // class SvxFontNameToolBoxControl ---------------------------------------
 
-
-
 class SVX_DLLPUBLIC SvxFontNameToolBoxControl : public SfxToolBoxControl
 {
 public:
@@ -232,49 +208,19 @@ public:
 };
 
 
+// class SvxColorToolBoxControl --------------------------------------
 
-
-// class SvxFontColorToolBoxControl --------------------------------------
-
-
-
-
-class SVX_DLLPUBLIC SvxFontColorToolBoxControl : public SfxToolBoxControl
-{
-    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
-    Color                               mLastColor;
-
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxFontColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxFontColorToolBoxControl();
-
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
-};
-
-
-
-
-// class SvxColorExtToolBoxControl --------------------------------------
-
-
-
-
-class SVX_DLLPUBLIC SvxColorExtToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
     using SfxToolBoxControl::StateChanged;
 
-    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
     Color                               mLastColor;
-    bool                                bChoiceFromPalette;
-
+    DECL_LINK( SelectedHdl, Color* );
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxColorExtToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxColorExtToolBoxControl();
+    SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    virtual ~SvxColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -284,33 +230,7 @@ public:
 };
 
 
-
-
-// class SvxColorToolBoxControl ------------------------------------------
-
-
-
-class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
-{
-    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
-    Color                               mLastColor;
-
-public:
-    SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxColorToolBoxControl();
-
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
-};
-
-
-
-
 // class SvxFrameToolBoxControl ------------------------------------------
-
-
 
 class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl
 {
@@ -326,11 +246,7 @@ public:
 };
 
 
-
-
 // class SvxLineStyleToolBoxControl --------------------------------------
-
-
 
 class SVX_DLLPUBLIC SvxFrameLineStyleToolBoxControl : public SfxToolBoxControl
 {
@@ -344,30 +260,6 @@ public:
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
-
-
-
-// class SvxFrameLineColorToolBoxControl ---------------------------------
-
-
-
-class SVX_DLLPUBLIC SvxFrameLineColorToolBoxControl : public SfxToolBoxControl
-{
-    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
-    Color                               mLastColor;
-
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxFrameLineColorToolBoxControl( sal_uInt16 nSlotId,
-                                     sal_uInt16 nId,
-                                     ToolBox& rTbx );
-    virtual ~SvxFrameLineColorToolBoxControl();
-
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
-    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
-};
 
 class SVX_DLLPUBLIC SvxSimpleUndoRedoController : public SfxToolBoxControl
 {

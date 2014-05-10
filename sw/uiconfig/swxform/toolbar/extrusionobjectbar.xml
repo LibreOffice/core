@@ -29,5 +29,5 @@
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionDirectionFloater" toolbar:style="dropdownonly"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionLightingFloater" toolbar:style="dropdownonly"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionSurfaceFloater" toolbar:style="dropdownonly"/>
- <toolbar:toolbaritem xlink:href=".uno:Extrusion3DColor" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:Extrusion3DColor" toolbar:style="dropdown"/>
 </toolbar:toolbar>

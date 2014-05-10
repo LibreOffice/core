@@ -36,7 +36,6 @@
 #include <svx/svdtrans.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/extrusioncolorcontrol.hxx"
 
 #include "coreservices.hxx"
 #include "helpid.hrc"
@@ -954,75 +953,6 @@ OUString SAL_CALL ExtrusionSurfaceControl::getImplementationName(  ) throw (Runt
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionSurfaceControl_getSupportedServiceNames();
-}
-
-
-
-SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SvxColorItem );
-
-ExtrusionColorControl::ExtrusionColorControl(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
-: SfxToolBoxControl ( nSlotId, nId, rTbx ),
-  mLastColor( COL_AUTO )
-{
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    mpBtnUpdater = new ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
-}
-
-
-
-ExtrusionColorControl::~ExtrusionColorControl()
-{
-    delete mpBtnUpdater;
-}
-
-
-
-SfxPopupWindowType ExtrusionColorControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
-
-
-SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
-{
-    SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-        OUString( ".uno:Extrusion3DColor" ),
-        SID_EXTRUSION_3D_COLOR,
-        m_xFrame,
-        SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ),
-        &GetToolBox(),
-        mLastColor );
-    pColorWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
-    pColorWin->StartSelection();
-    SetPopupWindow( pColorWin );
-    return pColorWin;
-}
-
-
-
-void ExtrusionColorControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    sal_uInt16 nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    if( nSID == SID_EXTRUSION_3D_COLOR )
-    {
-        const SvxColorItem* pItem = 0;
-
-        if( SFX_ITEM_DONTCARE != eState )
-            pItem = PTR_CAST( SvxColorItem, pState );
-
-        if ( pItem )
-        {
-            mpBtnUpdater->Update( pItem->GetValue());
-            mLastColor = pItem->GetValue();
-        }
-    }
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 }

@@ -1161,44 +1161,47 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         {
-            SwEditWin& rEdtWin = GetView().GetEditWin();
-            SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-            Color aSet;
             if(pItem)
             {
-                aSet = ((const SvxColorItem*)pItem)->GetValue();
-                rEdtWin.SetTextBackColor(aSet); //select last color
-            }
-            else
-                rEdtWin.SetTextBackColor(Color(COL_TRANSPARENT)); //if last was "no fill"
-            if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
-            {
-                SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
-                if(pItem)
-                    aBrushItem.SetColor(aSet); //set the selected color
-                else
-                    aBrushItem.SetColor(Color(COL_TRANSPARENT));//set "no fill" color
-                rWrtSh.SetAttrItem( aBrushItem );
-            }
-            else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
-            {
-                GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
-            }
+                Color aSet = ((const SvxColorItem*)pItem)->GetValue();
+                SwEditWin& rEdtWin = GetView().GetEditWin();
+                rEdtWin.SetTextBackColor(aSet);
+                SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
 
-            rReq.Done();
+                if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
+                {
+                    SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
+                    aBrushItem.SetColor(aSet);
+                    rWrtSh.SetAttrItem( aBrushItem );
+                }
+                else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
+                {
+                    GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
+                }
 
+                rReq.Done();
+            }
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             SwEditWin& rEdtWin = GetView().GetEditWin();
+            if (pItem)
+            {
+                // The reason we need this argument here is that when a toolbar is closed
+                // and reopened, its color resets, while SwEditWin still holds the old one.
+                Color aSet = ((const SvxColorItem*)pItem)->GetValue();
+                if( nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
+                    rEdtWin.SetTextBackColor(aSet);
+                else
+                    rEdtWin.SetTextColor(aSet);
+            }
+
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
             SwApplyTemplate aTempl;
-            bool bSelection = rWrtSh.HasSelection();
-            if(bSelection)
+            if ( rWrtSh.HasSelection() )
             {
-
                 if(nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
                 {
                     rWrtSh.SetAttrItem(
@@ -1542,12 +1545,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case SID_ATTR_CHAR_COLOR2:
             {
-                rSet.Put(SvxColorItem(GetView().GetEditWin().GetTextColor(), SID_ATTR_CHAR_COLOR2));
+                SfxItemSet aSet( GetPool() );
+                rSh.GetCurAttr( aSet );
+                const SvxColorItem& aColorItem = static_cast< const SvxColorItem& >( aSet.Get(RES_CHRATR_COLOR) );
+                rSet.Put( aColorItem, SID_ATTR_CHAR_COLOR2 );
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
-                rSet.Put(SvxColorItem(GetView().GetEditWin().GetTextBackColor(), SID_ATTR_CHAR_COLOR_BACKGROUND));
+                SfxItemSet aSet( GetPool() );
+                rSh.GetCurAttr( aSet );
+                const SvxColorItem& aColorItem = static_cast< const SvxColorItem& >( aSet.Get(RES_CHRATR_BACKGROUND) );
+                rSet.Put( aColorItem, SID_ATTR_CHAR_COLOR_BACKGROUND );
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:

@@ -34,7 +34,6 @@
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
 #include <comphelper/types.hxx>
-#include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/tbxcustomshapes.hxx>
 
@@ -188,11 +187,11 @@ void ScDLL::Init()
     SvxLineEndToolBoxControl        ::RegisterControl(SID_ATTR_LINEEND_STYLE,   pMod);
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
     SvxFontNameToolBoxControl       ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);
-    SvxColorExtToolBoxControl       ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
-    SvxColorExtToolBoxControl       ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
+    SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
+    SvxColorToolBoxControl          ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
     SvxFrameToolBoxControl          ::RegisterControl(SID_ATTR_BORDER,          pMod);
     SvxFrameLineStyleToolBoxControl ::RegisterControl(SID_FRAME_LINESTYLE,      pMod);
-    SvxColorExtToolBoxControl       ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
+    SvxColorToolBoxControl          ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
@@ -237,7 +236,7 @@ void ScDLL::Init()
     SvxFontSizeMenuControl          ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
 
     // CustomShape extrusion controller
-    svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
+    SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
     // Child Windows

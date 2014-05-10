@@ -177,9 +177,9 @@ long    SwEditWin::m_nDDStartPosX = 0;
  * The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
  * (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
  * The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
- * (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
- * and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
- * (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+ * (SvxColorToolBoxControl::SvxColorToolBoxControl())
+ * and in case of writer for text(background)color also in /core/sw/source/core/uibase/docvw/edtwin.cxx
+ * (SwEditWin::m_aTextBackColor and SwEditWin::m_aTextColor)
  */
 Color   SwEditWin::m_aTextBackColor(COL_YELLOW);
 Color   SwEditWin::m_aTextColor(COL_RED);

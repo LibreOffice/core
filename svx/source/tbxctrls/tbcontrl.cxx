@@ -114,11 +114,9 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxFontColorToolBoxControl, SvxColorItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxColorExtToolBoxControl, SvxColorItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 
 
@@ -1079,15 +1077,13 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
-                                          Window*                    pParentWindow,
-                                          const ::Color              rLastColor ) :
+                                          Window*                    pParentWindow ):
 
     SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
 
     theSlotId( nSlotId ),
     aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
-    maCommand( rCommand ),
-    mLastColor( rLastColor )
+    maCommand( rCommand )
 
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -1138,17 +1134,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
         aColorSet.Clear();
         aColorSet.addEntriesForXColorList(*pColorList);
-
-        short i = 0;
-        long nCount = pColorList->Count();
-        XColorEntry* pEntry = NULL;
-
-        for ( i = 0; i < nCount; i++ )
-        {
-            pEntry = pColorList->GetColor(i);
-            if( pEntry->GetColor() == mLastColor )
-                aColorSet.SelectItem( i+1 );
-        }
     }
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
@@ -1158,6 +1143,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     aColorSet.Show();
 
     AddStatusListener( OUString( ".uno:ColorTableState" ));
+    AddStatusListener( maCommand );
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1171,15 +1157,21 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 
 SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 {
-    return new SvxColorWindow_Impl( maCommand, theSlotId, GetFrame(), GetText(), GetParent(), mLastColor );
+    return new SvxColorWindow_Impl( maCommand, theSlotId, GetFrame(), GetText(), GetParent() );
 }
-
-
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 {
     sal_uInt16 nItemId = aColorSet.GetSelectItemId();
-    SvxColorItem aColorItem( aColorSet.GetItemColor( nItemId ), theSlotId );
+    Color aColor;
+    if ( !nItemId && ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId  || SID_BACKGROUND_COLOR == theSlotId ) )
+        aColor = COL_TRANSPARENT;
+    else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId) )
+        aColor = COL_AUTO;
+    else
+        aColor = aColorSet.GetItemColor( nItemId );
+
+    SvxColorItem aColorItem( aColor, theSlotId );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
@@ -1188,67 +1180,37 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    if ( !nItemId && ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId  || SID_BACKGROUND_COLOR == theSlotId ) )
-    {
-        Sequence< PropertyValue > aArgs;
-        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     maCommand,
-                                     aArgs );
-    }
-    else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId) )
-    {
-        SvxColorItem _aColorItem( COL_AUTO, theSlotId );
-        INetURLObject aObj( maCommand );
+    INetURLObject aObj( maCommand );
 
-        Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        _aColorItem.QueryValue( a );
-        aArgs[0].Value = a;
-        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     maCommand,
-                                     aArgs );
-    }
-    else
-    {
-        INetURLObject aObj( maCommand );
+    Any a;
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = aObj.GetURLPath();
+    aColorItem.QueryValue( a );
+    aArgs[0].Value = a;
+    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
+                                 maCommand,
+                                 aArgs );
 
-        Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        aColorItem.QueryValue( a );
-        aArgs[0].Value = a;
-        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     maCommand,
-                                     aArgs );
-        aColorSet.SelectItem( nItemId );
-    }
+    if ( maSelectedLink.IsSet() )
+        maSelectedLink.Call(&aColor);
 
     return 0;
 }
-
-
 
 void SvxColorWindow_Impl::Resize()
 {
     lcl_ResizeValueSet( *this, aColorSet);
 }
 
-
-
 void SvxColorWindow_Impl::StartSelection()
 {
     aColorSet.StartSelection();
 }
 
-
-
 bool SvxColorWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
-
-
 
 void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -1256,18 +1218,30 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
-            if ( pState )
-            {
-                XColorListRef pColorList = ((SvxColorListItem *)pState)->GetColorList();
-                const long nColorCount(pColorList->Count());
-                const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
-                aColorSet.SetOutputSizePixel(aNewSize);
-                static sal_Int32 nAdd = 4;
+            XColorListRef pColorList = ((SvxColorListItem *)pState)->GetColorList();
+            const long nColorCount(pColorList->Count());
+            const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
+            aColorSet.SetOutputSizePixel(aNewSize);
+            static sal_Int32 nAdd = 4;
 
-                SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
-                aColorSet.Clear();
-                aColorSet.addEntriesForXColorList(*pColorList);
+            SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
+            aColorSet.Clear();
+            aColorSet.addEntriesForXColorList(*pColorList);
+        }
+        else if ((SFX_ITEM_DEFAULT <= eState ) && ( pState->ISA( SvxColorItem )))
+        {
+            aColorSet.SetNoSelection();
+            const Color rColor = ((const SvxColorItem*)pState)->GetValue();
+            for ( size_t i = 1; i < aColorSet.GetItemCount(); i++ )
+            {
+                if ( rColor == aColorSet.GetItemColor(i) )
+                {
+                    aColorSet.SelectItem(i);
+                    return;
+                }
             }
+            if ( rColor == COL_AUTO || rColor == COL_TRANSPARENT )
+                aColorSet.SelectItem(0);
         }
     }
 }
@@ -2314,175 +2288,27 @@ Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
 }
 
 
-// class SvxFontColorToolBoxControl --------------------------------------
 
-
-SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
-    sal_uInt16          nSlotId,
-    sal_uInt16          nId,
-    ToolBox&        rTbx )
-
-    :   SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pBtnUpdater( new ::svx::ToolboxButtonColorUpdater(
-                    nSlotId, nId, &GetToolBox() )),
-    mLastColor( COL_AUTO )
-{
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-
-
-SvxFontColorToolBoxControl::~SvxFontColorToolBoxControl()
-{
-    delete pBtnUpdater;
-}
-
-
-
-SfxPopupWindowType SvxFontColorToolBoxControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
-
-
-SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
-{
-    SvxColorWindow_Impl* pColorWin =
-        new SvxColorWindow_Impl(
-                OUString( ".uno:Color" ),
-                SID_ATTR_CHAR_COLOR,
-                m_xFrame,
-                SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
-                &GetToolBox(),
-                mLastColor);
-
-    pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-    pColorWin->StartSelection();
-    SetPopupWindow( pColorWin );
-    return pColorWin;
-}
-
-
-
-void SvxFontColorToolBoxControl::StateChanged(
-
-    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
-
-{
-    sal_uInt16 nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-    const SvxColorItem* pItem = 0;
-
-    if ( SFX_ITEM_DONTCARE != eState )
-       pItem = PTR_CAST( SvxColorItem, pState );
-
-    if ( pItem )
-    {
-        pBtnUpdater->Update( pItem->GetValue() );
-        mLastColor= pItem->GetValue();
-    }
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
-}
-
-
-// class SvxColorToolBoxControl --------------------------------
-
-
-SvxColorToolBoxControl::SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    mLastColor( COL_AUTO )
-{
-    if ( nSlotId == SID_BACKGROUND_COLOR )
-        rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    else
-        rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
-    rTbx.Invalidate();
-    pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
-}
-
-
-
-SvxColorToolBoxControl::~SvxColorToolBoxControl()
-{
-    delete pBtnUpdater;
-}
-
-
-
-SfxPopupWindowType SvxColorToolBoxControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
-
-
-SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
-{
-    sal_uInt16 nResId = GetSlotId() == SID_BACKGROUND_COLOR ?
-                        RID_SVXSTR_BACKGROUND : RID_SVXSTR_COLOR;
-    SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-        OUString( ".uno:BackgroundColor" ),
-                                    SID_BACKGROUND_COLOR,
-                                    m_xFrame,
-                                    SVX_RESSTR(nResId),
-                                    &GetToolBox(),
-                                    mLastColor);
-
-    pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-    pColorWin->StartSelection();
-    SetPopupWindow( pColorWin );
-    return pColorWin;
-}
-
-
-
-void SvxColorToolBoxControl::StateChanged(
-    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
-{
-    const SvxColorItem* pItem = 0;
-    if ( SFX_ITEM_DONTCARE != eState )
-        pItem = PTR_CAST( SvxColorItem, pState );
-
-    if ( pItem ) {
-        pBtnUpdater->Update( pItem->GetValue() );
-        mLastColor= pItem->GetValue();
-    }
-
-    sal_uInt16 nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
-}
-
-
-// class SvxColorExtToolBoxControl ----------------------------------------
+// class SvxColorToolBoxControl ----------------------------------------
 
 /* Note:
    The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
    (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
    The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
-   (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
-   and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
-   (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+   (SvxColorToolBoxControl::SvxColorToolBoxControl())
+   and in case of writer for text(background)color also in /core/sw/source/core/uibase/docvw/edtwin.cxx
+   (SwEditWin::m_aTextBackColor and SwEditWin::m_aTextColor)
  */
 
-SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
+SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pBtnUpdater(0),
     mLastColor( COL_AUTO )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
-    bChoiceFromPalette = false;
 
     // The following commands are available at the various modules
     switch( nSlotId )
@@ -2498,8 +2324,11 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
             break;
 
         case SID_BACKGROUND_COLOR:
+            addStatusListener( OUString( ".uno:BackgroundColor" ));
+            mLastColor = COL_YELLOW;
+            break;
+
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
-        default:
             addStatusListener( OUString( ".uno:CharBackgroundExt" ));
             mLastColor = COL_YELLOW;
             break;
@@ -2508,28 +2337,25 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
             addStatusListener( OUString( ".uno:FrameLineColor" ));
             mLastColor = COL_BLUE;
             break;
+
+        case SID_EXTRUSION_3D_COLOR:
+            addStatusListener( OUString( ".uno:Extrusion3DColor"));
+            break;
     }
 
-    pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
+    pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
 }
 
-
-
-SvxColorExtToolBoxControl::~SvxColorExtToolBoxControl()
+SvxColorToolBoxControl::~SvxColorToolBoxControl()
 {
-    delete pBtnUpdater;
 }
 
-
-
-SfxPopupWindowType SvxColorExtToolBoxControl::GetPopupWindowType() const
+SfxPopupWindowType SvxColorToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONTIMEOUT;
 }
 
-
-
-SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
+SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
@@ -2537,8 +2363,7 @@ SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
-                            &GetToolBox(),
-                            mLastColor );
+                            &GetToolBox() );
 
     switch( GetSlotId() )
     {
@@ -2553,61 +2378,57 @@ SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
         case SID_FRAME_LINECOLOR:
             pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
             break;
+
+        case SID_EXTRUSION_3D_COLOR:
+            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ) );
+            break;
     }
 
     pColorWin->StartPopupMode( &GetToolBox(),
         FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
-    bChoiceFromPalette = true;
+    pColorWin->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
     return pColorWin;
 }
 
+IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, aColor)
+{
+    pBtnUpdater->Update( *aColor );
+    mLastColor = *aColor;
+    return 0;
+}
 
-
-void SvxColorExtToolBoxControl::StateChanged(
+void SvxColorToolBoxControl::StateChanged(
 
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    if (nSID == GetSlotId())
+    ToolBox& rTbx = GetToolBox();
+    sal_uInt16 nId = GetId();
+    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+
+    if ( nSID == SID_ATTR_CHAR_COLOR_EXT || nSID == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
     {
-        ToolBox& rTbx = GetToolBox();
-        sal_uInt16 nId = GetId();
-        rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-        rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
-
-        if (bChoiceFromPalette)
+        if ( pState && SFX_ITEM_DONTCARE != eState )
         {
-            bChoiceFromPalette = false;
-
-            const SvxColorItem* pItem = 0;
-            if ( SFX_ITEM_DONTCARE != eState )
-                pItem = PTR_CAST( SvxColorItem, pState );
-
-            if ( pItem )
-            {
-                pBtnUpdater->Update( pItem->GetValue() );
-                mLastColor = pItem->GetValue();
-            }
+            const SfxBoolItem* pBool = static_cast< const SfxBoolItem* >( pState );
+            rTbx.CheckItem( nId, pBool && pBool->GetValue() );
         }
     }
 }
 
-
-
-void SvxColorExtToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
+void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 {
     OUString aCommand;
     OUString aParamName;
-    bool bNoArgs = false;
 
     switch( GetSlotId() )
     {
         case SID_ATTR_CHAR_COLOR2 :
-            bNoArgs     = true;
             aCommand    = ".uno:CharColorExt";
-            aParamName  = "CharColorExt";
+            aParamName  = "FontColor";
             break;
 
         case SID_ATTR_CHAR_COLOR  :
@@ -2621,23 +2442,24 @@ void SvxColorExtToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
-            bNoArgs     = true;
             aCommand    = ".uno:CharBackgroundExt";
-            aParamName  = "CharBackgroundExt";
+            aParamName  = "BackColor";
             break;
 
         case SID_FRAME_LINECOLOR  :
             aCommand    = ".uno:FrameLineColor";
             aParamName  = "FrameLineColor";
             break;
+
+        case SID_EXTRUSION_3D_COLOR:
+            aCommand    = ".uno:Extrusion3DColor";
+            aParamName  = "Extrusion3DColor";
+            break;
     }
 
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aParamName;
-    if ( bNoArgs )
-        aArgs[0].Value = makeAny( GetToolBox().IsItemChecked( GetId() ));
-    else
-        aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
+    aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
     Dispatch( aCommand, aArgs );
 }
 
@@ -2743,78 +2565,6 @@ void SvxFrameLineStyleToolBoxControl::StateChanged(
     rTbx.SetItemState( nId, (SFX_ITEM_DONTCARE == eState)
                                 ? TRISTATE_INDET
                                 : TRISTATE_FALSE );
-}
-
-
-// class SvxFrameLineColorToolBoxControl ---------------------------------
-
-
-SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl(
-    sal_uInt16      nSlotId,
-    sal_uInt16      nId,
-    ToolBox&    rTbx ) :
-
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pBtnUpdater(new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() )),
-    mLastColor( COL_AUTO )
-{
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-
-
-SvxFrameLineColorToolBoxControl::~SvxFrameLineColorToolBoxControl()
-{
-
-    delete pBtnUpdater;
-}
-
-
-
-SfxPopupWindowType SvxFrameLineColorToolBoxControl::GetPopupWindowType() const
-{
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
-
-
-SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
-{
-    SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-                                        OUString( ".uno:FrameLineColor" ),
-                                        SID_FRAME_LINECOLOR,
-                                        m_xFrame,
-                                        SVX_RESSTR(RID_SVXSTR_FRAME_COLOR),
-                                        &GetToolBox(),
-                                        mLastColor);
-
-    pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-    pColorWin->StartSelection();
-    SetPopupWindow( pColorWin );
-    return pColorWin;
-}
-
-
-
-void SvxFrameLineColorToolBoxControl::StateChanged(
-    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
-{
-    sal_uInt16 nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
-
-    const SvxColorItem* pItem = 0;
-    if ( SFX_ITEM_DONTCARE != eState )
-    {
-        pItem = PTR_CAST( SvxColorItem, pState );
-        if ( pItem )
-        {
-            pBtnUpdater->Update( pItem->GetValue());
-            mLastColor = pItem->GetValue();
-        }
-    }
 }
 
 

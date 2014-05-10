@@ -715,7 +715,6 @@
 #include <svx/drawitem.hxx>
 #include <svx/extedit.hxx>
 #include <svx/extrusionbar.hxx>
-#include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmglob.hxx>
