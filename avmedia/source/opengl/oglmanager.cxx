@@ -34,7 +34,10 @@ uno::Reference< media::XPlayer > SAL_CALL OGLManager::createPlayer( const OUStri
     if( pPlayer->create(rURL) )
         return uno::Reference< media::XPlayer >(pPlayer);
     else
+    {
+        delete pPlayer;
         return uno::Reference< media::XPlayer >();
+    }
 }
 
 OUString SAL_CALL OGLManager::getImplementationName() throw ( uno::RuntimeException, std::exception )
