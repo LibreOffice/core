@@ -90,7 +90,6 @@ struct Polygon3DInfo
 
 struct Extrude3DInfo
 {
-    int pickingFlg;
     bool rounded;
     bool lineOnly;
     float lineWidth;

@@ -985,7 +985,6 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 col
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
 {
-    m_Extrude3DInfo.pickingFlg = 0;
     m_Extrude3DList.push_back(m_Extrude3DInfo);
 }
 
@@ -1467,11 +1466,6 @@ sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uIn
 
 void OpenGL3DRenderer::RenderCoordinateAxis()
 {
-    if (!m_coordinateAxisinfo.pickingFlg)
-    {
-        return;
-    }
-
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     MoveModelf(m_coordinateAxisinfo.trans, angle, m_coordinateAxisinfo.scale);
     glm::mat4 reverseMatrix = glm::scale(glm::vec3(1.0, m_coordinateAxisinfo.reverse, 1.0));
