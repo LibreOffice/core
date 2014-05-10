@@ -184,12 +184,6 @@ void OpenGL3DRenderer::RenderTexture(GLuint TexID)
 
 void OpenGL3DRenderer::init()
 {
-    if (glewIsSupported("framebuffer_object") != GLEW_OK)
-    {
-        SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
-        return;
-    }
-
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
