@@ -58,6 +58,10 @@ void GL3DBarChart::create3DShapes()
     float nXEnd = 0.0;
     float nYPos = 0.0;
 
+    const Color aSeriesColor[] = {
+        COL_RED, COL_GREEN, COL_YELLOW, COL_BROWN, COL_GRAY
+    };
+
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     sal_Int32 nSeriesIndex = 0;
@@ -85,12 +89,12 @@ void GL3DBarChart::create3DShapes()
         aBottomRight.y += aTextSize.getHeight();
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
 
+        sal_Int32 nColor = aSeriesColor[nSeriesIndex % SAL_N_ELEMENTS(aSeriesColor)].GetColor();
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
             float nVal = rDataSeries.getYValue(nIndex);
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
 
-            sal_Int32 nColor = COL_RED;
 
             glm::mat4 aBarPosition;
             aBarPosition = glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
