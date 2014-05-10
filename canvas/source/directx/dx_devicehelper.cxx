@@ -36,12 +36,7 @@
 #include "dx_spritecanvas.hxx"
 #include "dx_canvasbitmap.hxx"
 #include "dx_devicehelper.hxx"
-
-
-#undef WB_LEFT
-#undef WB_RIGHT
 #include "dx_winstuff.hxx"
-
 
 #include <vcl/sysdata.hxx>
 #include <vcl/outdev.hxx>
