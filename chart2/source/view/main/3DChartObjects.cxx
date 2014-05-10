@@ -11,9 +11,30 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 
+#include <ostream>
+
 namespace chart {
 
 namespace opengl3D {
+
+namespace {
+
+std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
+{
+    for(int i = 0; i < 4; ++i)
+    {
+        rStrm << "( ";
+        for(int j = 0; j < 4; ++j)
+        {
+            rStrm << rMatrix[j][i];
+            rStrm << " ";
+        }
+        rStrm << ")\n";
+    }
+    return rStrm;
+}
+
+}
 
 Renderable3DObject::Renderable3DObject(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
     mpRenderer(pRenderer),
@@ -32,6 +53,7 @@ Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_Int32 aCol
     , maPos(rPosition)
     , maColor(aColor)
 {
+    SAL_INFO("chart2.3dopengl", rPosition);
 }
 
 void Bar::render()
