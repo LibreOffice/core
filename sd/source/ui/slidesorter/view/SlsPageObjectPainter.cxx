@@ -94,7 +94,8 @@ void PageObjectPainter::PaintPageObject (
         PaintPreview(rDevice, rpDescriptor);
         PaintPageNumber(rDevice, rpDescriptor);
         PaintTransitionEffect(rDevice, rpDescriptor);
-        PaintCustomAnimationEffect(rDevice, rpDescriptor);
+        if (rpDescriptor->GetPage()->hasAnimationNode())
+            PaintCustomAnimationEffect(rDevice, rpDescriptor);
         rDevice.SetAntialiasing(nSavedAntialiasingMode);
     }
 }
