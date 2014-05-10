@@ -2024,11 +2024,11 @@ lcl_DebugCellProperties(
             for (sal_Int32  nDebugProperty = 0;
                  nDebugProperty < nDebugCellProperties; ++nDebugProperty)
             {
-                sNames += rDebugCellProperties[nDebugProperty].Name + OUString('-');
+                sNames += rDebugCellProperties[nDebugProperty].Name + "-";
             }
-            sNames += OUString('+');
+            sNames += "+";
         }
-        sNames += OUString('|');
+        sNames += "|";
     }
     (void)sNames;
 }
