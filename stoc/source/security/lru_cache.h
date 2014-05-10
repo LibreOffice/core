@@ -136,6 +136,8 @@ template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKe
 inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache() SAL_THROW(())
     : m_size( 0 )
     , m_block( 0 )
+    , m_head( 0 )
+    , m_tail( 0 )
 {
 }
 
