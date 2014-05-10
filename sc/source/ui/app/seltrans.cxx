@@ -342,7 +342,7 @@ void ScSelectionTransferObj::CreateDrawData()
             ScDocShellRef aDragShellRef;
             if (bAnyOle)
             {
-                aDragShellRef = new ScDocShell;     // ohne Ref lebt die DocShell nicht !!!
+                aDragShellRef = new ScDocShell; // Without Ref the DocShell does not live
                 aDragShellRef->DoInitNew(NULL);
             }
 

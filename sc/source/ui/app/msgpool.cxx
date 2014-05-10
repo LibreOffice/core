@@ -27,7 +27,7 @@
 static SfxItemInfo const aMsgItemInfos[] =
 {
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_STRING
-    { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_SEARCHDATA - nicht mehr benutzt !!!
+    { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_SEARCHDATA - stop using this!
     { SID_SORT,                  SFX_ITEM_POOLABLE },   // SCITEM_SORTDATA
     { SID_QUERY,                 SFX_ITEM_POOLABLE },   // SCITEM_QUERYDATA
     { SID_SUBTOTALS,             SFX_ITEM_POOLABLE },   // SCITEM_SUBTDATA
@@ -79,7 +79,7 @@ ScMessagePool::ScMessagePool()
 ScMessagePool::~ScMessagePool()
 {
     Delete();
-    SetSecondaryPool( NULL );       // before deleting defaults (accesses defaults)
+    SetSecondaryPool( NULL ); // before deleting defaults (accesses defaults)
 
     for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
         SetRefCount( *ppPoolDefaults[i], 0 );
@@ -92,14 +92,11 @@ ScMessagePool::~ScMessagePool()
 
 SfxMapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 {
-    //  eigene Attribute: Twips, alles andere 1/100 mm
-
+    // Own attributes: Twips, everything else 1/100 mm
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
         return SFX_MAPUNIT_TWIP;
     else
         return SFX_MAPUNIT_100TH_MM;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

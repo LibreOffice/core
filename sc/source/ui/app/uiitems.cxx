@@ -42,9 +42,9 @@ TYPEINIT1(ScEditViewHint,       SfxHint);
 TYPEINIT1(ScIndexHint,          SfxHint);
 
 
-//      ScInputStatusItem - Status-Update fuer Eingabezeile
-
-
+/**
+ * Status update for entry field
+ */
 ScInputStatusItem::ScInputStatusItem(
     sal_uInt16 nWhichP, const ScAddress& rCurPos, const ScAddress& rStartPos,
     const ScAddress& rEndPos, const OUString& rString, const EditTextObject* pData ) :
@@ -87,7 +87,7 @@ bool ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
              && (aEndPos    == ((ScInputStatusItem&)rItem).aEndPos)
              && (aCursorPos == ((ScInputStatusItem&)rItem).aCursorPos)
              && (aString    == ((ScInputStatusItem&)rItem).aString) );
-                                                        //! Edit-Daten vergleichen!
+             //TODO: Compare Edit data!
 }
 
 SfxPoolItem* ScInputStatusItem::Clone( SfxItemPool * ) const
@@ -106,11 +106,11 @@ const std::vector<editeng::MisspellRanges>* ScInputStatusItem::GetMisspellRanges
 }
 
 
-//  ScPaintHint ist nach schints.cxx verschoben
+// ScPaintHint was moved to schints.cxx
 
-//  ScTablesHint - Views anpassen, wenn Tabellen eingefuegt / geloescht
-
-
+/**
+ * Adapt Views when inserting/deleting a table
+ */
 ScTablesHint::ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2) :
     nId( nNewId ),
     nTab1( nTable1 ),
@@ -122,9 +122,6 @@ ScTablesHint::~ScTablesHint()
 {
 }
 
-//  ScIndexHint
-
-
 ScIndexHint::ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx) :
     nId( nNewId ),
     nIndex( nIdx )
@@ -135,9 +132,9 @@ ScIndexHint::~ScIndexHint()
 {
 }
 
-//      ScEditViewHint - neue EditView fuer Cursorposition anlegen
-
-
+/**
+ * Create new EditView for Cursorposition
+ */
 ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos ) :
     pEditEngine( pEngine ),
     aCursorPos( rCurPos )
@@ -149,9 +146,9 @@ ScEditViewHint::~ScEditViewHint()
 }
 
 
-//      ScSortItem - Daten fuer den Sortierdialog
-
-
+/**
+ * Data for the sorting dialog
+ */
 ScSortItem::ScSortItem( sal_uInt16              nWhichP,
                         ScViewData*         ptrViewData,
                         const ScSortParam*  pSortData ) :
@@ -208,9 +205,9 @@ bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMembe
 }
 
 
-//      ScQueryItem - Daten fuer den Filterdialog
-
-
+/**
+ * Data for the Filter dialog
+ */
 ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           ScViewData*           ptrViewData,
                           const ScQueryParam*   pQueryData ) :
@@ -296,9 +293,9 @@ SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
 }
 
 
-//      ScSubTotalItem - Daten fuer den Zwischenergebnisdialog
-
-
+/**
+ * Data for the SubTotal dialog
+ */
 ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
                                 ScViewData*             ptrViewData,
                                 const ScSubTotalParam*  pSubTotalData ) :
@@ -355,9 +352,9 @@ bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nM
 }
 
 
-//      ScUserListItem - Transporter fuer den Benutzerlisten-TabPage
-
-
+/**
+ * Transporter for the UserLIst dialog
+ */
 ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
     :   SfxPoolItem ( nWhichP ),
         pUserList   ( NULL )
@@ -411,9 +408,9 @@ void ScUserListItem::SetUserList( const ScUserList& rUserList )
 }
 
 
-//      ScConsolidateItem - Daten fuer den Konsolidieren-Dialog
-
-
+/**
+ * Data for the Consolidate dialog
+ */
 ScConsolidateItem::ScConsolidateItem(
                             sal_uInt16                      nWhichP,
                             const ScConsolidateParam*   pConsolidateData ) :
@@ -451,14 +448,14 @@ SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
     return new ScConsolidateItem( *this );
 }
 
-//      ScPivotItem - Daten fuer den Pivot-Dialog
-
-
+/**
+ * Data for the Pivot dialog
+ */
 ScPivotItem::ScPivotItem( sal_uInt16 nWhichP, const ScDPSaveData* pData,
                              const ScRange* pRange, bool bNew ) :
         SfxPoolItem ( nWhichP )
 {
-    //  pSaveData must always exist
+    // pSaveData must always exist
     if ( pData )
         pSaveData = new ScDPSaveData(*pData);
     else
@@ -502,9 +499,9 @@ SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
     return new ScPivotItem( *this );
 }
 
-//      ScSolveItem - Daten fuer den Solver-Dialog
-
-
+/**
+ * Data for the Solver dialog
+ */
 ScSolveItem::ScSolveItem( sal_uInt16                nWhichP,
                           const ScSolveParam*   pSolveData )
     :   SfxPoolItem ( nWhichP )
@@ -542,9 +539,9 @@ SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
 }
 
 
-//      ScTabOpItem - Daten fuer den TabOp-Dialog
-
-
+/**
+ * Data for the TabOp dialog
+ */
 ScTabOpItem::ScTabOpItem( sal_uInt16                nWhichP,
                           const ScTabOpParam*   pTabOpData )
     :   SfxPoolItem ( nWhichP )
