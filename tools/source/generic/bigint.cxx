@@ -570,7 +570,9 @@ BigInt::BigInt( sal_uInt32 nValue )
     else
     {
         bIsBig = false;
+        bIsNeg = false;
         nVal   = nValue;
+        nLen   = 0;
     }
 }
 
