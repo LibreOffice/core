@@ -49,7 +49,7 @@ void Renderable3DObject::render()
 
 Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_Int32 aColor, sal_uInt32 nId)
     : Renderable3DObject(pRenderer, nId)
-    , mbRoundedCorners(false)
+    , mbRoundedCorners(true)
     , maPos(rPosition)
     , maColor(aColor)
 {
