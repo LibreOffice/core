@@ -1427,7 +1427,7 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     glViewport(0, 0, m_iWidth, m_iHeight);
     glClearDepth(1.0f);
     glViewport(0, 0, m_iWidth, m_iHeight);
-    glClearColor(0.0, 0.0, 1.0, 1.0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Polygon
     RenderPolygon3DObject();

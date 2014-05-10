@@ -120,7 +120,7 @@ void GL3DBarChart::create3DShapes()
     glm::vec3 aEnd = aBegin;
     aEnd.x = nXEnd;
     pAxis->setPosition(aBegin, aEnd);
-    pAxis->setLineColor(COL_WHITE);
+    pAxis->setLineColor(COL_BLUE);
 
     // Y axis
     maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId++));
@@ -129,7 +129,7 @@ void GL3DBarChart::create3DShapes()
     aEnd = aBegin;
     aEnd.y = nYPos;
     pAxis->setPosition(aBegin, aEnd);
-    pAxis->setLineColor(COL_WHITE);
+    pAxis->setLineColor(COL_BLUE);
 
     // Chart background.
     maShapes.push_back(new opengl3D::Rectangle(mpRenderer.get(), nId++));
@@ -141,7 +141,7 @@ void GL3DBarChart::create3DShapes()
     aBottomRight.y = nYPos;
     pRect->setPosition(aTopLeft, aTopRight, aBottomRight);
     pRect->setFillColor(COL_BLACK);
-    pRect->setLineColor(COL_WHITE);
+    pRect->setLineColor(COL_BLUE);
 
     // Create category texts along X-axis at the bottom.
     uno::Sequence<OUString> aCats = mrCatProvider.getSimpleCategories();
