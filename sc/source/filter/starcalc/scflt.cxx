@@ -490,25 +490,32 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
 
 
 // Vorlagen
-
-
 Sc10PatternData::Sc10PatternData(SvStream& rStream)
+    : Attr(0)
+    , Justify(0)
+    , Frame(0)
+    , Raster(0)
+    , nColor(0)
+    , FrameColor(0)
+    , Flags(0)
+    , FormatFlags(0)
 {
-  lcl_ReadFixedString( rStream, Name, sizeof(Name));
-  lcl_ReadValueFormat(rStream, ValueFormat);
-  lcl_ReadLogFont(rStream, LogFont);
+    memset(Name, 0, sizeof(Name));
+    memset(Reserved, 0, sizeof(Reserved));
+    lcl_ReadFixedString( rStream, Name, sizeof(Name));
+    lcl_ReadValueFormat(rStream, ValueFormat);
+    lcl_ReadLogFont(rStream, LogFont);
 
-  rStream.ReadUInt16( Attr );
-  rStream.ReadUInt16( Justify );
-  rStream.ReadUInt16( Frame );
-  rStream.ReadUInt16( Raster );
-  rStream.ReadUInt16( nColor );
-  rStream.ReadUInt16( FrameColor );
-  rStream.ReadUInt16( Flags );
-  rStream.ReadUInt16( FormatFlags );
-  rStream.Read(Reserved, sizeof(Reserved));
+    rStream.ReadUInt16( Attr );
+    rStream.ReadUInt16( Justify );
+    rStream.ReadUInt16( Frame );
+    rStream.ReadUInt16( Raster );
+    rStream.ReadUInt16( nColor );
+    rStream.ReadUInt16( FrameColor );
+    rStream.ReadUInt16( Flags );
+    rStream.ReadUInt16( FormatFlags );
+    rStream.Read(Reserved, sizeof(Reserved));
 }
-
 
 Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   ScCollection (4, 4),

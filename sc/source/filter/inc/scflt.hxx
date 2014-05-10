@@ -192,6 +192,11 @@ struct Sc10ValueFormat
 {
     sal_uInt8       Format;         // Zahl, Waehrung, Prozent etc.
     sal_uInt8       Info;           // Anzahl Nachkommastellen, Anzahl Stellen, bzw. Datums/Zeitformat
+    Sc10ValueFormat()
+        : Format(0)
+        , Info(0)
+    {
+    }
 };
 
 // Fontbeschreibung
@@ -211,6 +216,24 @@ struct Sc10LogFont
     sal_uInt8       lfQuality;
     sal_uInt8       lfPitchAndFamily;
     sal_Char    lfFaceName[32];
+
+    Sc10LogFont()
+        : lfHeight(0)
+        , lfWidth(0)
+        , lfEscapement(0)
+        , lfOrientation(0)
+        , lfWeight(0)
+        , lfItalic(0)
+        , lfUnderline(0)
+        , lfStrikeOut(0)
+        , lfCharSet(0)
+        , lfOutPrecision(0)
+        , lfClipPrecision(0)
+        , lfQuality(0)
+        , lfPitchAndFamily(0)
+    {
+        memset(lfFaceName, 0, sizeof(lfFaceName));
+    }
 
     bool operator==( const Sc10LogFont& rData ) const;
 };
