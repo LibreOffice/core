@@ -93,18 +93,25 @@ PrinterGfx::GetBitCount ()
     return mnDepth;
 }
 
-PrinterGfx::PrinterGfx() :
-        mpPageHeader (NULL),
-        mpPageBody (NULL),
-        mnFontID (0),
-        mnFallbackID (0),
-        mnTextAngle (0),
-        mbTextVertical (false),
-        mrFontMgr (PrintFontManager::get()),
-        mbCompressBmp (true),
-        maFillColor (0xff,0,0),
-        maTextColor (0,0,0),
-        maLineColor (0, 0xff, 0)
+PrinterGfx::PrinterGfx()
+    : mfScaleX(0.0)
+    , mfScaleY(0.0)
+    , mnDpi(0)
+    , mnDepth(0)
+    , mnPSLevel(0)
+    , mbColor(false)
+    , mbUploadPS42Fonts(false)
+    , mpPageHeader(NULL)
+    , mpPageBody(NULL)
+    , mnFontID(0)
+    , mnFallbackID(0)
+    , mnTextAngle(0)
+    , mbTextVertical(false)
+    , mrFontMgr(PrintFontManager::get())
+    , mbCompressBmp(true)
+    , maFillColor(0xff,0,0)
+    , maTextColor(0,0,0)
+    , maLineColor(0, 0xff, 0)
 {
     maVirtualStatus.mfLineWidth = 1.0;
     maVirtualStatus.mnTextHeight = 12;
