@@ -50,7 +50,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         beans::Property(
             "ContentType",
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
+            cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     props[idx++] =
@@ -85,7 +85,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         beans::Property(
             "Title",
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
+            cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     if( withMediaType )
@@ -93,7 +93,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 "MediaType",
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     if( isModule )
@@ -102,7 +102,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 "Order",
                 -1,
-                getCppuType( static_cast< sal_Int32* >( 0 ) ),
+                cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         props[idx++] =
@@ -147,7 +147,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 "AnchorName",
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
     }
 

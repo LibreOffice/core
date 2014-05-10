@@ -930,7 +930,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
             beans::Property* pProps = aProps.getArray();
             pProps[ 0 ].Name   = "Title";
             pProps[ 0 ].Handle = -1; // Important!
-/**/        pProps[ 0 ].Type = getCppuType(static_cast< OUString * >(0));
+/**/        pProps[ 0 ].Type = cppu::UnoType<OUString>::get();
                 // HACK for sorting...
             pProps[ 1 ].Name   = "DateCreated";
             pProps[ 1 ].Handle = -1; // Important!
@@ -938,7 +938,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
             pProps[ 2 ].Handle = -1; // Important!
             pProps[ 3 ].Name   = "IsFolder";
             pProps[ 3 ].Handle = -1; // Important!
-/**/        pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
+/**/        pProps[ 3 ].Type = cppu::UnoType<sal_Bool>::get();
                 // HACK for sorting...
             pProps[ 4 ].Name   = "IsDocument";
             pProps[ 4 ].Handle = -1; // Important!
@@ -1379,7 +1379,7 @@ uno::Any UcbContent::getPropertyValue( const OUString& rName )
 OUString UcbContent::getStringPropertyValue( const OUString& rName )
 {
     uno::Any aAny = getPropertyValue( rName );
-    if ( aAny.getValueType() == getCppuType( (const OUString *)0 ) )
+    if ( aAny.getValueType() == cppu::UnoType<OUString>::get() )
     {
         const OUString aValue(
             * static_cast< const OUString * >( aAny.getValue() ) );

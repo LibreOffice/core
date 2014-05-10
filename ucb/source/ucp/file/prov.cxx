@@ -336,17 +336,17 @@ XPropertySetInfoImpl2::XPropertySetInfoImpl2()
 {
     m_seq[0] = Property( OUString("HostName"),
                          -1,
-                         getCppuType( static_cast< OUString* >( 0 ) ),
+                         cppu::UnoType<OUString>::get(),
                          PropertyAttribute::READONLY );
 
     m_seq[1] = Property( OUString("HomeDirectory"),
                          -1,
-                         getCppuType( static_cast< OUString* >( 0 ) ),
+                         cppu::UnoType<OUString>::get(),
                          PropertyAttribute::READONLY );
 
     m_seq[2] = Property( OUString("FileSystemNotation"),
                          -1,
-                         getCppuType( static_cast< sal_Int32* >( 0 ) ),
+                         cppu::UnoType<sal_Int32>::get(),
                          PropertyAttribute::READONLY );
 }
 

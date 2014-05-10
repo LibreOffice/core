@@ -109,7 +109,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
         aProps.getArray()[ 0 ] = beans::Property(
                     OUString("Title"),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
 
         uno::Sequence< ucb::ContentInfo > aSeq( 2 );
@@ -924,7 +924,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("ContentType"),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY ),
             rData.aContentType );
@@ -932,7 +932,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("Title"),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             rData.aTitle );
         xRow->appendBoolean(
@@ -965,7 +965,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("MediaType"),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             rData.aMediaType );
 
@@ -976,7 +976,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 beans::Property(
                     OUString("Size"),
                     -1,
-                    getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                    cppu::UnoType<sal_Int64>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
                 rData.nSize );

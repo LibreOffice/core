@@ -66,7 +66,7 @@ namespace
             virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XElementAccessBase
             virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-                { return ::getCppuType(static_cast< OUString*>(0)); };
+                { return ::cppu::UnoType<OUString>::get(); };
     };
 
     class ResourceStringListIndexAccess : public ResourceIndexAccessBase

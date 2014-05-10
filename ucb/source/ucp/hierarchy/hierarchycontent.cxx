@@ -1005,14 +1005,14 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
         xRow->appendString (
             beans::Property( OUString("ContentType"),
                       -1,
-                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      cppu::UnoType<OUString>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getContentType() );
         xRow->appendString (
             beans::Property( OUString("Title"),
                       -1,
-                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      cppu::UnoType<OUString>::get(),
                           // @@@ Might actually be read-only!
                       beans::PropertyAttribute::BOUND ),
             rData.getTitle() );
@@ -1873,7 +1873,7 @@ HierarchyContentProperties::getCreatableContentsInfo() const
         aFolderProps.getArray()[ 0 ] = beans::Property(
                     OUString("Title"),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
         aSeq.getArray()[ 0 ].Properties = aFolderProps;
 
@@ -1885,12 +1885,12 @@ HierarchyContentProperties::getCreatableContentsInfo() const
         aLinkProps.getArray()[ 0 ] = beans::Property(
                     OUString("Title"),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
         aLinkProps.getArray()[ 1 ] = beans::Property(
                     OUString("TargetURL"),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
         aSeq.getArray()[ 1 ].Properties = aLinkProps;
 

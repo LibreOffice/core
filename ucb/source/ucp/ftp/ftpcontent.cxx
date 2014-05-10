@@ -661,7 +661,7 @@ FTPContent::queryCreatableContentsInfo_Static(  )
     props[0] = Property(
         OUString("Title"),
         -1,
-        getCppuType( static_cast< OUString* >( 0 ) ),
+        cppu::UnoType<OUString>::get(),
         PropertyAttribute::MAYBEVOID
         | PropertyAttribute::BOUND );
     seq[0].Properties = props;

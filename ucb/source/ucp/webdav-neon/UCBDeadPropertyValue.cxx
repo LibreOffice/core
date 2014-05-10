@@ -309,23 +309,23 @@ static OUString decodeValue( const OUString & rValue )
 // static
 bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 {
-    if ( ( rType != getCppuType( static_cast< const OUString * >( 0 ) ) )
+    if ( ( rType != cppu::UnoType<OUString>::get() )
          &&
-         ( rType != getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
+         ( rType != cppu::UnoType<sal_Int32>::get() )
          &&
-         ( rType != getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
+         ( rType != cppu::UnoType<sal_Int16>::get() )
          &&
          ( rType != getCppuBooleanType() )
          &&
          ( rType != getCppuCharType() )
          &&
-         ( rType != getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
+         ( rType != cppu::UnoType<sal_Int8>::get() )
          &&
-         ( rType != getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
+         ( rType != cppu::UnoType<sal_Int64>::get() )
          &&
-         ( rType != getCppuType( static_cast< const float * >( 0 ) ) )
+         ( rType != cppu::UnoType<float>::get() )
          &&
-         ( rType != getCppuType( static_cast< const double * >( 0 ) ) ) )
+         ( rType != cppu::UnoType<double>::get() ) )
     {
         return false;
     }
@@ -430,13 +430,13 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     OUString aStringValue;
     OUString aStringType;
 
-    if ( rType == getCppuType( static_cast< const OUString * >( 0 ) ) )
+    if ( rType == cppu::UnoType<OUString>::get() )
     {
         // string
         rInData >>= aStringValue;
         aStringType = aTypeString;
     }
-    else if ( rType == getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int32>::get() )
     {
         // long
         sal_Int32 nValue = 0;
@@ -444,7 +444,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         aStringValue = OUString::number( nValue );
         aStringType = aTypeLong;
     }
-    else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int16>::get() )
     {
         // short
         sal_Int32 nValue = 0;
@@ -468,7 +468,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         aStringValue = OUString( cValue );
         aStringType = aTypeChar;
     }
-    else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int8>::get() )
     {
         // byte
         sal_Int8 nValue = 0;
@@ -476,7 +476,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         aStringValue = OUString( sal_Unicode( nValue ) );
         aStringType = aTypeByte;
     }
-    else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int64>::get() )
     {
         // hyper
         sal_Int64 nValue = 0;
@@ -484,7 +484,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         aStringValue = OUString::number( nValue );
         aStringType = aTypeHyper;
     }
-    else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<float>::get() )
     {
         // float
         float nValue = 0;
@@ -492,7 +492,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         aStringValue = OUString::number( nValue );
         aStringType = aTypeFloat;
     }
-    else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<double>::get() )
     {
         // double
         double nValue = 0;

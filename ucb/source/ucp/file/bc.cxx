@@ -398,7 +398,7 @@ BaseContent::execute( const Command& aCommand,
         seq[0] = beans::Property(
             OUString("CasePreservingURL"),
             -1,
-            getCppuType( static_cast< sal_Bool* >(0) ),
+            cppu::UnoType<sal_Bool>::get(),
             0 );
         Reference< sdbc::XRow > xRow = getPropertyValues( CommandId,seq );
         OUString CasePreservingURL = xRow->getString(1);
@@ -507,7 +507,7 @@ BaseContent::getContentType()
                 Sequence< beans::Property > seq(1);
                 seq[0] = beans::Property( OUString("IsDocument"),
                                           -1,
-                                          getCppuType( static_cast< sal_Bool* >(0) ),
+                                          cppu::UnoType<sal_Bool>::get(),
                                           0 );
                 Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
                 bool IsDocument = xRow->getBoolean( 1 );
@@ -644,7 +644,7 @@ BaseContent::createNewContent(
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property( OUString("IsDocument"),
                                   -1,
-                                  getCppuType( static_cast< sal_Bool* >(0) ),
+                                  cppu::UnoType<sal_Bool>::get(),
                                   0 );
         Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
         IsDocument = xRow->getBoolean( 1 );
@@ -1101,7 +1101,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     Sequence< beans::Property > seq(1);
     seq[0] = beans::Property( OUString("IsDocument"),
                               -1,
-                              getCppuType( static_cast< sal_Bool* >(0) ),
+                              cppu::UnoType<sal_Bool>::get(),
                               0 );
     Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,seq );
     bool IsDocument = xRow->getBoolean( 1 );
@@ -1170,7 +1170,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     Sequence< beans::Property > seq(1);
     seq[0] = beans::Property( OUString("IsDocument"),
                               -1,
-                              getCppuType( static_cast< sal_Bool* >(0) ),
+                              cppu::UnoType<sal_Bool>::get(),
                               0 );
 
     Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );

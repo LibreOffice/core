@@ -489,7 +489,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     {
         Property& rMyProp = (*m_pProperties)[ nOrigProps - nDeleted ];
         rMyProp.Name = m_aPropertyNameForFetchSize;
-        rMyProp.Type = getCppuType( static_cast< const sal_Int32 * >( 0 ) );
+        rMyProp.Type = cppu::UnoType<sal_Int32>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
         if( nFetchSize != -1 )
@@ -503,7 +503,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     {
         Property& rMyProp = (*m_pProperties)[ nOrigProps - nDeleted + 1 ];
         rMyProp.Name = m_aPropertyNameForFetchDirection;
-        rMyProp.Type = getCppuType( static_cast< const sal_Bool * >( 0 ) );
+        rMyProp.Type = cppu::UnoType<sal_Bool>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
         if( nFetchDirection != -1 )

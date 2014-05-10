@@ -180,15 +180,15 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName( CCA_VISUAL_EFFECT ), PROPERTY_VISUAL_EFFECT,
         VisualEffect::LOOK3D, OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
-        &::getCppuType( static_cast< sal_Int16* >( NULL ) ) );
+        &::cppu::UnoType<sal_Int16>::get() );
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName( CCA_ORIENTATION ), PROPERTY_ORIENTATION,
         ScrollBarOrientation::HORIZONTAL, OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
-        &::getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+        &::cppu::UnoType<sal_Int32>::get() );
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_BUTTON_TYPE), PROPERTY_BUTTONTYPE,
         FormButtonType_PUSH, OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
-        &::getCppuType( static_cast<FormButtonType*>(NULL) ));
+        &::cppu::UnoType<FormButtonType>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE_TYPE), PROPERTY_LISTSOURCETYPE,
         ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
@@ -196,19 +196,19 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, TRISTATE_FALSE,
         OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
-        &::getCppuType( static_cast< sal_Int16* >(NULL)));
+        &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE), PROPERTY_STATE, TRISTATE_FALSE,
         OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
-        &::getCppuType( static_cast< sal_Int16* >(NULL)));
+        &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
         FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
-        &::getCppuType( static_cast<FormSubmitEncoding*>(NULL) ));
+        &::cppu::UnoType<FormSubmitEncoding>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
         FormSubmitMethod_GET, OEnumMapper::getEnumMap(OEnumMapper::epSubmitMethod),
-        &::getCppuType( static_cast<FormSubmitMethod*>(NULL) ));
+        &::cppu::UnoType<FormSubmitMethod>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faCommandType), PROPERTY_COMMAND_TYPE,
         CommandType::COMMAND, OEnumMapper::getEnumMap(OEnumMapper::epCommandType));

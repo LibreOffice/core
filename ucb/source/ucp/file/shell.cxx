@@ -177,7 +177,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              Title,
                                              -1 ,
-                                             getCppuType( static_cast< OUString* >( 0 ) ),
+                                             cppu::UnoType<OUString>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -188,7 +188,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
         MyProperty( true,
                     CasePreservingURL,
                     -1 ,
-                    getCppuType( static_cast< OUString* >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     uno::Any(),
                     beans::PropertyState_DEFAULT_VALUE,
                     beans::PropertyAttribute::MAYBEVOID
@@ -200,7 +200,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsFolder,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -212,7 +212,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsDocument,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -223,7 +223,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsVolume,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -235,7 +235,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsRemoveable,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -246,7 +246,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsRemote,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -257,7 +257,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsCompactDisc,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -268,7 +268,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsFloppy,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -281,7 +281,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
             true,
             IsHidden,
             -1 ,
-            getCppuType( static_cast< sal_Bool* >( 0 ) ),
+            cppu::UnoType<sal_Bool>::get(),
             uno::Any(),
             beans::PropertyState_DEFAULT_VALUE,
             beans::PropertyAttribute::MAYBEVOID
@@ -299,7 +299,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( false,
                                              ContentType,
                                              -1 ,
-                                             getCppuType( static_cast< OUString* >( 0 ) ),
+                                             cppu::UnoType<OUString>::get(),
                                              aAny,
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -311,7 +311,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              DateModified,
                                              -1 ,
-                                             getCppuType( static_cast< util::DateTime* >( 0 ) ),
+                                             cppu::UnoType<util::DateTime>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -321,7 +321,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              Size,
                                              -1,
-                                             getCppuType( static_cast< sal_Int64* >( 0 ) ),
+                                             cppu::UnoType<sal_Int64>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -331,7 +331,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsReadOnly,
                                              -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             cppu::UnoType<sal_Bool>::get(),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -376,7 +376,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
 
     m_sCommandInfo[6].Name = "delete";
     m_sCommandInfo[6].Handle = -1;
-    m_sCommandInfo[6].ArgType = getCppuType( static_cast< sal_Bool* >( 0 ) );
+    m_sCommandInfo[6].ArgType = cppu::UnoType<sal_Bool>::get();
 
     m_sCommandInfo[7].Name = "insert";
     m_sCommandInfo[7].Handle = -1;
@@ -384,7 +384,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
 
     m_sCommandInfo[7].Name = "createNewContent";
     m_sCommandInfo[7].Handle = -1;
-    m_sCommandInfo[7].ArgType = getCppuType( static_cast< ucb::ContentInfo * > ( 0 ) );
+    m_sCommandInfo[7].ArgType = cppu::UnoType<ucb::ContentInfo>::get();
 
     if(m_bWithConfig)
     {
@@ -3019,7 +3019,7 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
     props[0] = beans::Property(
         OUString("Title"),
         -1,
-        getCppuType( static_cast< OUString* >( 0 ) ),
+        cppu::UnoType<OUString>::get(),
         beans::PropertyAttribute::MAYBEVOID
         | beans::PropertyAttribute::BOUND );
     seq[0].Properties = props;

@@ -445,7 +445,7 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         props[0] = beans::Property(
             OUString("Title"),
             -1,
-            getCppuType( static_cast< OUString* >( 0 ) ),
+            cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
         // file
@@ -1301,7 +1301,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 {
     static const beans::Property aGenericProperties[] = {
                 beans::Property( OUString(  "ContentType"  ),
-                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                 -1, cppu::UnoType<OUString>::get(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( OUString(  "IsDocument"  ),
                  -1, getCppuBooleanType(),
@@ -1310,21 +1310,21 @@ uno::Sequence< beans::Property > Content::getProperties(
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( OUString(  "Title"  ),
-                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                 -1, cppu::UnoType<OUString>::get(),
                  beans::PropertyAttribute::BOUND ),
         // Optional ...
         beans::Property( OUString(  "DateCreated"  ),
-                 -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
+                 -1, cppu::UnoType<util::DateTime>::get(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( OUString(  "DateModified"  ),
-                 -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
+                 -1, cppu::UnoType<util::DateTime>::get(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
 // FIXME: Too expensive for now (?)
 //                beans::Property( OUString(  "MediaType"  ),
-//                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+//                 -1, cppu::UnoType<OUString>::get(),
 //                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( OUString(  "Size"  ),
-                 -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                 -1, cppu::UnoType<sal_Int64>::get(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
                 beans::Property( OUString(  "IsReadOnly"  ),
                  -1, getCppuBooleanType(),
@@ -1373,18 +1373,18 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
           -1, getCppuBooleanType() ),
         ucb::CommandInfo
         ( OUString(  "insert"  ),
-          -1, getCppuType( static_cast<ucb::InsertCommandArgument * >( 0 ) ) ),
+          -1, cppu::UnoType<ucb::InsertCommandArgument>::get() ),
         ucb::CommandInfo
         ( OUString(  "open"  ),
-          -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
+          -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
 
         // Folder Only, omitted if not a folder
         ucb::CommandInfo
         ( OUString(  "transfer"  ),
-          -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
+          -1, cppu::UnoType<ucb::TransferInfo>::get() ),
         ucb::CommandInfo
         ( OUString(  "createNewContent"  ),
-          -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
+          -1, cppu::UnoType<ucb::ContentInfo>::get() )
     };
 
     const int nProps

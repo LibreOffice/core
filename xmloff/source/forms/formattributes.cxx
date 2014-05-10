@@ -239,7 +239,7 @@ namespace xmloff
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Char* _pAttributeDefault)
     {
-        implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< OUString* >(NULL) ),
+        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<OUString>::get(),
             _pAttributeDefault ? OUString::createFromAscii(_pAttributeDefault) : OUString());
     }
 
@@ -259,7 +259,7 @@ namespace xmloff
     {
         OUStringBuffer aDefault;
         ::sax::Converter::convertNumber(aDefault, (sal_Int32)_nAttributeDefault);
-        implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int16* >(NULL) ), aDefault.makeStringAndClear());
+        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int16>::get(), aDefault.makeStringAndClear());
     }
 
     void OAttribute2Property::addInt32Property(
@@ -268,7 +268,7 @@ namespace xmloff
     {
         OUStringBuffer aDefault;
         ::sax::Converter::convertNumber( aDefault, _nAttributeDefault );
-        implAdd( _pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int32* >(NULL) ), aDefault.makeStringAndClear() );
+        implAdd( _pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), aDefault.makeStringAndClear() );
     }
 
     void OAttribute2Property::addEnumProperty(
@@ -279,7 +279,7 @@ namespace xmloff
         OUStringBuffer aDefault;
         SvXMLUnitConverter::convertEnum(aDefault, _nAttributeDefault, _pValueMap);
         AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName,
-            _pType ? *_pType : ::getCppuType( static_cast< sal_Int32* >(NULL) ),
+            _pType ? *_pType : ::cppu::UnoType<sal_Int32>::get(),
                 // this assumes that the setPropertyValue for enums can handle int32's ....
             aDefault.makeStringAndClear());
         aAssignment.pEnumMap = _pValueMap;

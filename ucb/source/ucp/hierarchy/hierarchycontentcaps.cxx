@@ -104,7 +104,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -125,7 +125,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -135,7 +135,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "TargetURL" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -163,7 +163,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -184,7 +184,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                 ),
 
@@ -193,7 +193,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "TargetURL" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                 ),
                 beans::Property(
@@ -229,7 +229,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -250,7 +250,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -281,7 +281,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -302,7 +302,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 beans::Property(
                     OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                 ),
 
@@ -342,7 +342,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
             beans::Property(
                 OUString( "ContentType" ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
@@ -363,7 +363,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
             beans::Property(
                 OUString( "Title" ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
@@ -596,12 +596,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "transfer" ),
                     -1,
-                    getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
+                    cppu::UnoType<ucb::TransferInfo>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "createNewContent" ),
                     -1,
-                    getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
+                    cppu::UnoType<ucb::ContentInfo>::get()
                 )
 
                 // New commands
@@ -705,12 +705,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "transfer" ),
                     -1,
-                    getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
+                    cppu::UnoType<ucb::TransferInfo>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "createNewContent" ),
                     -1,
-                    getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
+                    cppu::UnoType<ucb::ContentInfo>::get()
                 )
 
                 // New commands

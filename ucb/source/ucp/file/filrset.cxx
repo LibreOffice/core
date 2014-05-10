@@ -743,12 +743,12 @@ XResultSet_impl::getPropertySetInfo()
     uno::Sequence< beans::Property > seq(2);
     seq[0].Name = "RowCount";
     seq[0].Handle = -1;
-    seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
+    seq[0].Type = cppu::UnoType<sal_Int32>::get();
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
     seq[0].Name = "IsRowCountFinal";
     seq[0].Handle = -1;
-    seq[0].Type = getCppuType( static_cast< sal_Bool* >(0) );
+    seq[0].Type = cppu::UnoType<sal_Bool>::get();
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
     XPropertySetInfo_impl* p = new XPropertySetInfo_impl( m_pMyShell,

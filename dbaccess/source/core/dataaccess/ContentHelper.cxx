@@ -449,13 +449,13 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
         // Append all Core Properties.
         xRow->appendString (
             Property( "ContentType", -1,
-                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      cppu::UnoType<OUString>::get(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             getContentType() );
         xRow->appendString (
             Property( "Title", -1,
-                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      cppu::UnoType<OUString>::get(),
                       PropertyAttribute::BOUND ),
             m_pImpl->m_aProps.aTitle );
         xRow->appendBoolean(

@@ -1674,7 +1674,7 @@ namespace xmloff
             sal_Int16 nLinkageType = 0;
             PropertyConversion::convertString(
                 m_rContext.getGlobalContext(),
-                ::getCppuType( static_cast< sal_Int16* >( NULL ) ),
+                ::cppu::UnoType<sal_Int16>::get(),
                 _rValue,
                 OEnumMapper::getEnumMap( OEnumMapper::epListLinkageType )
             ) >>= nLinkageType;

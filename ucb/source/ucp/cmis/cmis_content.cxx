@@ -1448,31 +1448,31 @@ namespace cmis
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "Title" ),
-                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "ObjectId" ),
-                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "TitleOnServer" ),
-                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "IsReadOnly" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "DateCreated" ),
-                -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
+                -1, cppu::UnoType<util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "DateModified" ),
-                -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
+                -1, cppu::UnoType<util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "Size" ),
-                -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                -1, cppu::UnoType<sal_Int64>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "CreatableContentsInfo" ),
                 -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "MediaType" ),
-                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "CmisProperties" ),
                 -1, getCppuType( static_cast< const uno::Sequence< document::CmisProperty> * >( 0 ) ),
@@ -1523,13 +1523,13 @@ namespace cmis
               -1, getCppuType( static_cast<ucb::InsertCommandArgument2 * >( 0 ) ) ),
             ucb::CommandInfo
             ( OUString( "open" ),
-              -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
+              -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
 
             // Mandatory CMIS-only commands
             ucb::CommandInfo ( OUString( "checkout" ), -1, getCppuVoidType() ),
             ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, getCppuVoidType() ),
             ucb::CommandInfo ( OUString( "checkIn" ), -1,
-                    getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
+                    cppu::UnoType<ucb::TransferInfo>::get() ),
             ucb::CommandInfo ( OUString( "updateProperties" ), -1, getCppuVoidType() ),
             ucb::CommandInfo
             ( OUString( "getAllVersions" ),
@@ -1539,10 +1539,10 @@ namespace cmis
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
             ( OUString( "transfer" ),
-              -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
+              -1, cppu::UnoType<ucb::TransferInfo>::get() ),
             ucb::CommandInfo
             ( OUString( "createNewContent" ),
-              -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
+              -1, cppu::UnoType<ucb::ContentInfo>::get() )
         };
 
         const int nProps = SAL_N_ELEMENTS( aCommandInfoTable );
@@ -1829,7 +1829,7 @@ namespace cmis
             props[0] = beans::Property(
                 OUString("Title"),
                 -1,
-                getCppuType( static_cast< OUString* >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
             // file

@@ -107,7 +107,7 @@ OKeyColumn::~OKeyColumn()
 void OKeyColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(static_cast< OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::cppu::UnoType<OUString>::get());
 }
 
 

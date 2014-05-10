@@ -61,31 +61,31 @@ struct PropertyTableEntry
 
 static const com::sun::star::uno::Type& OUString_getCppuType()
 {
-    return getCppuType( static_cast< const OUString * >( 0 ) );
+    return cppu::UnoType<OUString>::get();
 }
 
 static const com::sun::star::uno::Type& sal_uInt16_getCppuType()
 {
     // ! uInt -> Int, because of Java !!!
-    return getCppuType( static_cast< const sal_Int16 * >( 0 ) );
+    return cppu::UnoType<sal_Int16>::get();
 }
 
 static const com::sun::star::uno::Type& sal_uInt32_getCppuType()
 {
     // ! uInt -> Int, because of Java !!!
-    return getCppuType( static_cast< const sal_Int32 * >( 0 ) );
+    return cppu::UnoType<sal_Int32>::get();
 }
 
 static const com::sun::star::uno::Type& sal_uInt64_getCppuType()
 {
     // ! uInt -> Int, because of Java !!!
-    return getCppuType( static_cast< const sal_Int64 * >( 0 ) );
+    return cppu::UnoType<sal_Int64>::get();
 }
 
 static const com::sun::star::uno::Type& enum_getCppuType()
 {
     // ! enum -> Int, because of Java !!!
-    return getCppuType( static_cast< const sal_Int16 * >( 0 ) );
+    return cppu::UnoType<sal_Int16>::get();
 }
 
 static const com::sun::star::uno::Type& sal_Bool_getCppuType()
@@ -95,7 +95,7 @@ static const com::sun::star::uno::Type& sal_Bool_getCppuType()
 
 static const com::sun::star::uno::Type& byte_getCppuType()
 {
-    return getCppuType( static_cast< const sal_Int8 * >( 0 ) );
+    return cppu::UnoType<sal_Int8>::get();
 }
 
 static const com::sun::star::uno::Type& Sequence_CrossReference_getCppuType()

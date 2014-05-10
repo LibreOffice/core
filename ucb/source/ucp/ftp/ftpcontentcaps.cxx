@@ -43,7 +43,7 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
         beans::Property(
             OUString( "ContentType" ),
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
+            cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
@@ -64,21 +64,21 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
         beans::Property(
             OUString( "Title" ),
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
+            cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND
             //  | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
             OUString( "Size" ),
             -1,
-            getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+            cppu::UnoType<sal_Int64>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
             OUString( "DateCreated" ),
             -1,
-            getCppuType( static_cast< util::DateTime * >( 0 ) ),
+            cppu::UnoType<util::DateTime>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
@@ -165,7 +165,7 @@ uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
         ucb::CommandInfo(
             OUString( "createNewContent" ),
             -1,
-            getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
+            cppu::UnoType<ucb::ContentInfo>::get()
         )
     };
 

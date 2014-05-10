@@ -1037,7 +1037,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         xRow->appendString (
             beans::Property( OUString("ContentType"),
                       -1,
-                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      cppu::UnoType<OUString>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getContentType() );
@@ -1047,7 +1047,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         xRow->appendString (
             beans::Property( OUString("Title"),
                       -1,
-                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      cppu::UnoType<OUString>::get(),
                       // Title is read-only for root and documents.
                       beans::PropertyAttribute::BOUND |
                       ( ( eType == ROOT ) || ( eType == DOCUMENT )
@@ -2943,7 +2943,7 @@ ContentProperties::getCreatableContentsInfo() const
         aProps.getArray()[ 0 ] = beans::Property(
                     OUString("Title"),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
 
 #ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT

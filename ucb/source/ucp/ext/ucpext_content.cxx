@@ -435,12 +435,12 @@ namespace ucb { namespace ucp { namespace ext
             // Append all Core Properties.
             xRow->appendString ( Property( OUString("ContentType"),
                           -1,
-                          getCppuType( static_cast< const OUString * >( 0 ) ),
+                          cppu::UnoType<OUString>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 ContentProvider::getArtificialNodeContentType() );
             xRow->appendString ( Property( OUString("Title"),
                           -1,
-                          getCppuType( static_cast< const OUString * >( 0 ) ),
+                          cppu::UnoType<OUString>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 i_rTitle );
             xRow->appendBoolean( Property( OUString("IsDocument"),
@@ -594,7 +594,7 @@ namespace ucb { namespace ucp { namespace ext
             Property(
                 OUString(  "ContentType"  ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
@@ -612,7 +612,7 @@ namespace ucb { namespace ucp { namespace ext
             Property(
                 OUString(  "Title"  ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
+                cppu::UnoType<OUString>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             )
         };

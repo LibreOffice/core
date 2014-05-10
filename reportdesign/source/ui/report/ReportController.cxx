@@ -304,7 +304,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     m_pReportControllerObserver->acquire();
     registerProperty(OUString("ZoomValue"), PROPERTY_ID_ZOOMVALUE,
                      beans::PropertyAttribute::BOUND | beans::PropertyAttribute::TRANSIENT,
-                     &m_nZoomValue, ::getCppuType(static_cast< sal_Int16*>(0)));
+                     &m_nZoomValue, ::cppu::UnoType<sal_Int16>::get());
 
 }
 

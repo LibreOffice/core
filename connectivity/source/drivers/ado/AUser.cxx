@@ -136,7 +136,7 @@ OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase, const OUString& _Na
 void OUserExtend::construct()
 {
     OUser_TYPEDEF::construct();
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(static_cast< OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::cppu::UnoType<OUString>::get());
 }
 
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const

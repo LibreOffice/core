@@ -306,7 +306,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_LISTSOURCETYPE :
-            DBG_ASSERT(_rValue.getValueType().equals(::getCppuType(static_cast<ListSourceType*>(0))),
+            DBG_ASSERT(_rValue.getValueType().equals(::cppu::UnoType<ListSourceType>::get()),
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_eListSourceType;
             break;
@@ -399,7 +399,7 @@ namespace frm
         switch (_nHandle)
         {
         case PROPERTY_ID_BOUNDCOLUMN :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aBoundColumn, ::getCppuType(static_cast<sal_Int16*>(0)));
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aBoundColumn, ::cppu::UnoType<sal_Int16>::get());
             break;
 
         case PROPERTY_ID_LISTSOURCETYPE:

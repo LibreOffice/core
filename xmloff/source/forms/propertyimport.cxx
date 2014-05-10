@@ -242,7 +242,7 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
     {
         s_aTypeNameMap[ token::GetXMLToken( token::XML_BOOLEAN ) ] = ::getBooleanCppuType();
         s_aTypeNameMap[ token::GetXMLToken( token::XML_FLOAT )   ] = ::getCppuType( static_cast< double* >(NULL) );
-        s_aTypeNameMap[ token::GetXMLToken( token::XML_STRING )  ] = ::getCppuType( static_cast< OUString* >(NULL) );
+        s_aTypeNameMap[ token::GetXMLToken( token::XML_STRING )  ] = ::cppu::UnoType<OUString>::get();
         s_aTypeNameMap[ token::GetXMLToken( token::XML_VOID )    ] = ::getVoidCppuType();
     }
 

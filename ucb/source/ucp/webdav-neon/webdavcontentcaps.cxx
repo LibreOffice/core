@@ -81,7 +81,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -105,7 +105,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND ) );
 
             // Optional UCB properties.
@@ -114,7 +114,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "DateCreated" ),
                     -1,
-                    getCppuType( static_cast< const util::DateTime * >( 0 ) ),
+                    cppu::UnoType<util::DateTime>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -122,7 +122,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "DateModified" ),
                     -1,
-                    getCppuType( static_cast< const util::DateTime * >( 0 ) ),
+                    cppu::UnoType<util::DateTime>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -130,7 +130,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "MediaType" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -138,7 +138,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "Size" ),
                     -1,
-                    getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                    cppu::UnoType<sal_Int64>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -146,7 +146,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     OUString( "BaseURI" ),
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -166,7 +166,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::CREATIONDATE,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -174,14 +174,14 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::DISPLAYNAME,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND ) );
 
             m_pProps->insert(
                 beans::Property(
                     DAVProperties::GETCONTENTLANGUAGE,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -189,7 +189,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::GETCONTENTLENGTH,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -197,7 +197,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::GETCONTENTTYPE ,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -205,7 +205,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::GETETAG,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -213,7 +213,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::GETLASTMODIFIED,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -230,7 +230,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::RESOURCETYPE,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -256,7 +256,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::EXECUTABLE,
                     -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND ) );
         }
     }
@@ -281,7 +281,7 @@ bool ContentProvider::getProperty(
         rProp = beans::Property(
                     rPropName,
                     - 1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
     }
 
@@ -625,14 +625,14 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "transfer" ),
                 -1,
-                getCppuType( static_cast< ucb::TransferInfo * >( 0 ) ) );
+                cppu::UnoType<ucb::TransferInfo>::get() );
         nPos++;
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
                 OUString(
                     "createNewContent" ),
                 -1,
-                getCppuType( static_cast< ucb::ContentInfo * >( 0 ) ) );
+                cppu::UnoType<ucb::ContentInfo>::get() );
         nPos++;
     }
     else

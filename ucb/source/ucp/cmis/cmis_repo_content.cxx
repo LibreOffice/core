@@ -221,7 +221,7 @@ namespace cmis
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( OUString( "Title" ),
-                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "IsReadOnly" ),
                 -1, getCppuBooleanType(),
@@ -254,7 +254,7 @@ namespace cmis
             // Optional standard commands
             ucb::CommandInfo
             ( OUString( "open" ),
-              -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
+              -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
         };
 
         const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
