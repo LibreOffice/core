@@ -6089,19 +6089,49 @@ void Test::testMixData()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    m_pDoc->SetValue(1,0,0,2);
-    m_pDoc->SetValue(0,1,0,3);
+    m_pDoc->SetValue(ScAddress(1,0,0), 2.0); // B1
+    m_pDoc->SetValue(ScAddress(0,1,0), 3.0); // A2
+
+    // Copy A1:B1 to the clip document.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,1,0,0), &aClipDoc);
+    copyToClip(m_pDoc, ScRange(0,0,0,1,0,0), &aClipDoc); // A1:B1
 
+    // Copy A2:B2 to the mix document (for arithemetic paste).
     ScDocument aMixDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,1,0,1,1,0), &aMixDoc);
+    copyToClip(m_pDoc, ScRange(0,1,0,1,1,0), &aMixDoc); // A2:B2
 
+    // Paste A1:B1 to A2:B2 and perform addition.
     pasteFromClip(m_pDoc, ScRange(0,1,0,1,1,0), &aClipDoc);
-    m_pDoc->MixDocument(ScRange(0,1,0,1,1,0), 1, false, &aMixDoc);
+    m_pDoc->MixDocument(ScRange(0,1,0,1,1,0), PASTE_ADD, false, &aMixDoc);
 
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,1,0));
-    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,1,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,1,0)); // A2
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,1,0)); // B2
+
+    // Clear everything and start over.
+    clearSheet(m_pDoc, 0);
+    clearSheet(&aClipDoc, 0);
+    clearSheet(&aMixDoc, 0);
+
+    // Set values to A1, A2, and B1.  B2 will remain empty.
+    m_pDoc->SetValue(ScAddress(0,0,0), 15.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 16.0);
+    m_pDoc->SetValue(ScAddress(1,0,0), 12.0);
+    CPPUNIT_ASSERT_MESSAGE("B2 should be empty.", m_pDoc->GetCellType(ScAddress(1,1,0)) == CELLTYPE_NONE);
+
+    // Copy A1:A2 and paste it onto B1:B2 with subtraction operation.
+    copyToClip(m_pDoc, ScRange(0,0,0,0,1,0), &aClipDoc);
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(0,0,0)), aClipDoc.GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(0,1,0)), aClipDoc.GetValue(ScAddress(0,1,0)));
+
+    copyToClip(m_pDoc, ScRange(1,0,0,1,1,0), &aMixDoc);
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(1,0,0)), aMixDoc.GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(1,1,0)), aMixDoc.GetValue(ScAddress(1,1,0)));
+
+    pasteFromClip(m_pDoc, ScRange(1,0,0,1,1,0), &aClipDoc);
+    m_pDoc->MixDocument(ScRange(1,0,0,1,1,0), PASTE_SUB, false, &aMixDoc);
+
+    CPPUNIT_ASSERT_EQUAL( -3.0, m_pDoc->GetValue(ScAddress(1,0,0))); // 12 - 15
+    CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(ScAddress(1,1,0))); //  0 - 16
 
     m_pDoc->DeleteTab(0);
 }
