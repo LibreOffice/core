@@ -227,7 +227,8 @@ void ScQueryParamBase::FillInExcelSyntax(
     }
 }
 
-ScQueryParamTable::ScQueryParamTable()
+ScQueryParamTable::ScQueryParamTable() :
+    nCol1(0),nRow1(0),nCol2(0),nRow2(0),nTab(0)
 {
 }
 
