@@ -223,6 +223,13 @@ struct Sc10Color
     sal_uInt8       Green;
     sal_uInt8       Red;
     bool operator==( const Sc10Color& rColor ) const;
+    Sc10Color()
+        : Dummy(0)
+        , Blue(0)
+        , Green(0)
+        , Red(0)
+    {
+    }
 };
 
 // Blockbeschreibung
@@ -334,6 +341,12 @@ struct Sc10SheetProtect
     sal_Char    PassWord[16];
     sal_uInt16      Flags;
     sal_uInt8       Protect;
+    Sc10SheetProtect()
+        : Flags(0)
+        , Protect(0)
+    {
+        memset(PassWord, 0, sizeof(PassWord));
+    }
 };
 
 // Dateikopf StarCalc 1.0 Datei
