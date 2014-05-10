@@ -188,6 +188,8 @@ drawing::Direction3D GetDirection3D( SdrCustomShapeGeometryItem& rItem, const OU
 EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const Rectangle& /*rBoundRect*/, const double *pM )
     : aCenter( pCustomShape->GetSnapRect().Center() )
     , eProjectionMode( drawing::ProjectionMode_PARALLEL )
+    , fSkewAngle(0.0)
+    , fSkew(0.0)
     , fZScreen(0.0)
     , fOriginX(0.0)
     , fOriginY(0.0)
