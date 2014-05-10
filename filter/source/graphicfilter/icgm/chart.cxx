@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <main.hxx>
 #include <chart.hxx>
 
 
-
-CGMChart::CGMChart( CGM& rCGM ) :
-    mpCGM       ( &rCGM )
+CGMChart::CGMChart(CGM& rCGM)
+    : mpCGM(&rCGM)
+    , mnCurrentFileType(0)
 {
     for ( sal_Int8 i = 0; i < 7; i++ )
     {
@@ -33,9 +32,7 @@ CGMChart::CGMChart( CGM& rCGM ) :
 
         mDataNode[ i ].nZoneEnum = i;
     }
-};
-
-
+}
 
 CGMChart::~CGMChart()
 {
@@ -45,9 +42,7 @@ CGMChart::~CGMChart()
     {
         DeleteTextEntry( maTextEntryList[ 0 ] );
     }
-};
-
-
+}
 
 void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
 {
@@ -71,28 +66,21 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
         }
         delete pTextEntry;
     }
-};
-
-
+}
 
 void CGMChart::InsertTextEntry( TextEntry* pTextEntry )
 {
     maTextEntryList.push_back( pTextEntry );
-};
-
-
-
+}
 
 void CGMChart::ResetAnnotation()
 {
     mDataNode[ 0 ].nZoneEnum = 0;
 }
 
-
-
 bool CGMChart::IsAnnotation()
 {
     return ( mDataNode[ 0 ].nZoneEnum == 0 );
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

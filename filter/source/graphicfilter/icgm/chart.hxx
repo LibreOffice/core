@@ -143,13 +143,20 @@ struct BulletOption
     }
 };
 
-typedef struct BulDef
+struct BulDef
 {
     char            btype;
     char            bsize;
     char            bcolor;
     char            bnumber;
-} BulDef;
+    BulDef()
+        : btype(0)
+        , bsize(0)
+        , bcolor(0)
+        , bnumber(0)
+    {
+    }
+};
 
 typedef struct BulletLines
 {
@@ -179,24 +186,39 @@ struct IntSettings
     }
 };
 
-typedef struct PageOrientDim
+struct PageOrientDim
 {
     char            nOrientation;
     char            nDimension;
     float           nPageX;
     float           nPageY;
-} PageOrientDim;
+    PageOrientDim()
+        : nOrientation(0)
+        , nDimension(0)
+        , nPageX(0.0)
+        , nPageY(0.0)
+    {
+    }
+};
 
-typedef struct DataNode
+struct DataNode
 {
     sal_Int16           nBoxX1;
     sal_Int16           nBoxY1;
     sal_Int16           nBoxX2;
     sal_Int16           nBoxY2;
     sal_Int8            nZoneEnum;
-} DataNode;
+    DataNode()
+        : nBoxX1(0)
+        , nBoxY1(0)
+        , nBoxX2(0)
+        , nBoxY2(0)
+        , nZoneEnum(0)
+    {
+    }
+};
 
-typedef struct ChartZone
+struct ChartZone
 {
     sal_Int16           nMinX;
     sal_Int16           nMinY;
@@ -204,7 +226,16 @@ typedef struct ChartZone
     sal_Int16           nMaxY;
     char            nUserDef;
     char            nPad1;
-} ChartZone;
+    ChartZone()
+        : nMinX(0)
+        , nMinY(0)
+        , nMaxX(0)
+        , nMaxY(0)
+        , nUserDef(0)
+        , nPad1(0)
+    {
+    }
+};
 
 class CGM;
 class CGMImpressOutAct;
