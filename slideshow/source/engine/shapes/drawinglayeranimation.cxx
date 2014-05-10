@@ -754,7 +754,8 @@ ActivityImpl::ActivityImpl(
       meAnimKind(drawing::TextAnimationKind_NONE),
       mbVisibleWhenStopped(false),
       mbVisibleWhenStarted(false),
-      mnStartTime(0L)
+      mnStartTime(0L),
+      mnStepWidth(0)
 {
     // get doctreenode:
     sal_Int32 const nNodes = pParentDrawShape->getNumberOfTreeNodes(
