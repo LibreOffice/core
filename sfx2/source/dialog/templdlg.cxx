@@ -783,6 +783,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Win
     pModule                 ( NULL ),
     pTimer                  ( NULL ),
     m_pStyleFamiliesId      ( NULL ),
+    pStyleFamilies          ( NULL ),
     pStyleSheetPool         ( NULL ),
     pTreeBox                ( NULL ),
     pCurObjShell            ( NULL ),
@@ -821,17 +822,16 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Win
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb.SetFont( aFont );
+
+    memset(pBoundItems, 0, sizeof(pBoundItems));
+    memset(pFamilyState, 0, sizeof(pFamilyState));
 }
-
-
 
 sal_uInt16 SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(sal_uInt16 nId)
 {
     const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nId );
     return SfxFamilyIdToNId(pItem->GetFamily())-1;
 }
-
-
 
 void SfxTemplateDialog_Impl::EnableEdit(bool bEnable)
 {
