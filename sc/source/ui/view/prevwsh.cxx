@@ -81,6 +81,8 @@ using namespace com::sun::star;
 #define ScPreviewShell
 #include "scslots.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 TYPEINIT1( ScPreviewShell, SfxViewShell );
 
 SFX_IMPL_INTERFACE(ScPreviewShell, SfxViewShell, ScResId(SCSTR_PREVIEWSHELL))
@@ -651,7 +653,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet);
+                        boost::scoped_ptr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(NULL, aSet));
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZOOMBTN_OPTIMAL );
@@ -666,8 +668,6 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                             eZoom = rZoomItem.GetType();
                             nZoom = rZoomItem.GetValue();
                         }
-
-                        delete pDlg;
                     }
                 }
 
