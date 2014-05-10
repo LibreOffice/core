@@ -239,6 +239,13 @@ struct Sc10BlockRect
     sal_Int16       y1;
     sal_Int16       x2;
     sal_Int16       y2;
+    Sc10BlockRect()
+        : x1(0)
+        , y1(0)
+        , x2(0)
+        , y2(0)
+    {
+    }
 };
 
 // Datenbank-Bereich
@@ -272,6 +279,36 @@ struct Sc10DataBaseRec
     sal_uInt8           QueryByString2;
     sal_Char        QueryString2[64];
     double          QueryValue2;
+    Sc10DataBaseRec()
+        : Tab(0)
+        , RowHeader(0)
+        , SortField0(0)
+        , SortUpOrder0(0)
+        , SortField1(0)
+        , SortUpOrder1(0)
+        , SortField2(0)
+        , SortUpOrder2(0)
+        , IncludeFormat(0)
+        , QueryField0(0)
+        , QueryOp0(0)
+        , QueryByString0(0)
+        , QueryValue0(0.0)
+        , QueryConnect1(0)
+        , QueryField1(0)
+        , QueryOp1(0)
+        , QueryByString1(0)
+        , QueryValue1(0.0)
+        , QueryConnect2(0)
+        , QueryField2(0)
+        , QueryOp2(0)
+        , QueryByString2(0)
+        , QueryValue2(0.0)
+    {
+        memset(Name, 0, sizeof(Name));
+        memset(QueryString0, 0, sizeof(QueryString0));
+        memset(QueryString1, 0, sizeof(QueryString1));
+        memset(QueryString2, 0, sizeof(QueryString2));
+    }
 };
 
 // Kopf/Fusszeilen-Beschreibung
