@@ -325,11 +325,12 @@ const ScMatrix& XclImpExtName::MOper::GetCache() const
     return *mxCached;
 }
 
-XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv ) :
-    mpMOper(NULL)
+XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv )
+    : mpMOper(NULL)
+    , mnStorageId(0)
 {
-    sal_uInt16 nFlags;
-    sal_uInt8 nLen;
+    sal_uInt16 nFlags(0);
+    sal_uInt8 nLen(0);
 
     rStrm >> nFlags >> mnStorageId >> nLen ;
     maName = rStrm.ReadUniString( nLen );
