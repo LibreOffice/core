@@ -775,14 +775,15 @@ bool TocMark::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // index mark(26)
 IndexMark::IndexMark()
     : HBox(CH_INDEX_MARK)
+    , pgno(0)
     , dummy(0)
 {
+    memset(keyword1, 0, sizeof(keyword1));
+    memset(keyword2, 0, sizeof(keyword2));
 }
-
 
 bool IndexMark::Read(HWPFile & hwpf)
 {
