@@ -654,7 +654,8 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
     for (std::vector<unsigned>::const_iterator it = aSheetsWithFamily.begin();
          it != aSheetsWithFamily.end(); ++it )
     {
-        rtl::Reference< SfxStyleSheetBase > xSheet = GetStyleSheetByPositionInIndex( *it );
+        rtl::Reference<SfxStyleSheetBase> const xSheet =
+            rSourcePool.GetStyleSheetByPositionInIndex( *it );
         if( !xSheet.is() )
             continue;
         rtl::OUString aName( xSheet->GetName() );
@@ -662,12 +663,15 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
         // now check whether we already have a sheet with the same name
         std::vector<unsigned> aSheetsWithName = GetIndexedStyleSheets().FindPositionsByName(aName);
         bool bAddToList = false;
-        if (!aSheetsWithName.empty() && !rRenameSuffix.isEmpty())
+        SfxStyleSheetBase * pExistingSheet = 0;
+        if (!aSheetsWithName.empty())
         {
             // if we have a rename suffix, try to find a new name
-            SfxStyleSheetBase* pExistingSheet = GetStyleSheetByPositionInIndex(aSheetsWithName.front()).get();
+            pExistingSheet =
+                GetStyleSheetByPositionInIndex(aSheetsWithName.front()).get();
             sal_Int32 nHash = xSheet->GetItemSet().getHash();
-            if( pExistingSheet->GetItemSet().getHash() != nHash )
+            if (!rRenameSuffix.isEmpty() &&
+                pExistingSheet->GetItemSet().getHash() != nHash)
             {
                 // we have found a sheet with the same name, but different contents. Try to find a new name.
                 // If we already have a sheet with the new name, and it is equal to the one in the source pool,
@@ -683,10 +687,12 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                 aName = aTmpName;
                 bAddToList = true;
             }
-
+        }
+        {
             // we do not already have a sheet with the same name and contents. Create a new one.
-            if ( !pExistingSheet )
+            if (!pExistingSheet)
             {
+                assert(!Find(aName, eFamily));
                 rtl::Reference< SfxStyleSheetBase > xNewSheet( &Make( aName, eFamily ) );
 
                 xNewSheet->SetMask( xSheet->GetMask() );
@@ -702,7 +708,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
                 aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
             }
-            else if( bAddToList )
+            else if (bAddToList)
             {
                 // Add to list - used for renaming
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pExistingSheet ) ) );
@@ -939,7 +945,7 @@ struct StyleSheetIsUserDefinedPredicate : svl::StyleSheetPredicate
 
     bool Check(const SfxStyleSheetBase& sheet) SAL_OVERRIDE
     {
-        return sheet.IsUserDefined();
+        return !sheet.IsUserDefined();
     }
 };
 }
