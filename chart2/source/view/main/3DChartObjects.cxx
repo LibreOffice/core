@@ -154,15 +154,15 @@ void Rectangle::setLineColor(const Color& rColor)
 
 Camera::Camera(OpenGL3DRenderer* pRenderer):
     Renderable3DObject(pRenderer, 0),
-    maPos(10,10,-10),
-    maUp(0, 1, 0),
-    maDirection(glm::vec3(0,0,0)-maPos)
+    maPos(10,-50,10),
+    maUp(0, 0, 1),
+    maDirection(glm::vec3(0,1,-0.2))
 {
 }
 
 void Camera::render()
 {
-    mpRenderer->SetCameraInfo(maPos, maDirection, maUp, true);
+    mpRenderer->SetCameraInfo(maPos, maDirection, maUp, false);
 }
 
 void Camera::zoom(sal_uInt32 /*nId*/)
