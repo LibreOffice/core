@@ -932,7 +932,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             aOut.EnableOutput( false );
             aOut.SetMapMode( aMap );
             if( rSettings.mbUseHighContrast )
-                aOut.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+                aOut.SetDrawMode( aOut.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
             GDIMetaFile aMtf;
             aMtf.Clear();
