@@ -481,8 +481,9 @@ void AssignmentPersistentData::Commit()
             ,bWorkingPersistent( true )
             ,pConfigData( new AssignmentPersistentData )
         {
+            memset(pFieldLabels, 0, sizeof(pFieldLabels));
+            memset(pFields, 0, sizeof(pFields));
         }
-
 
         AddressBookSourceDialogData( const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
             const OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
