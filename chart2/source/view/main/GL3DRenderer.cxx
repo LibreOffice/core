@@ -1418,7 +1418,6 @@ void OpenGL3DRenderer::CreateSceneBoxView()
                m_CameraInfo.cameraOrg, // and looks at the origin
                m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
                );
-    m_3DViewBack = m_3DView;
 }
 
 void OpenGL3DRenderer::ProcessUnrenderedShape()

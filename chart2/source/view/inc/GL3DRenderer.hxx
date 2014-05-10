@@ -253,8 +253,6 @@ private:
 
     glm::mat4 m_3DView;
 
-    glm::mat4 m_3DViewBack;
-
     glm::mat4 m_3DMVP;
 
     glm::mat4 m_TranslationMatrix;
