@@ -63,6 +63,7 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -1033,6 +1034,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
 
 bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, bool bInfosOnly )
 {
+    try {
     DBG_ASSERT( pLibInfo, "LibInfo!?" );
 
     OUString aStorageName( pLibInfo->GetStorageName() );
@@ -1131,6 +1133,10 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
             }
             return bLoaded;
         }
+    }
+    }
+    catch (const css::ucb::ContentCreationException&)
+    {
     }
     return false;
 }
