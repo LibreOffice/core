@@ -18,7 +18,7 @@
  */
 
 
-#include "comphelper/sharedmutex.hxx"
+#include <comphelper/sharedmutex.hxx>
 
 
 namespace comphelper

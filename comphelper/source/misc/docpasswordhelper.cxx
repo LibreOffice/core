@@ -18,7 +18,7 @@
  */
 
 
-#include "comphelper/docpasswordhelper.hxx"
+#include <comphelper/docpasswordhelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 

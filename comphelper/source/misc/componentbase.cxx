@@ -18,7 +18,7 @@
  */
 
 
-#include "comphelper/componentbase.hxx"
+#include <comphelper/componentbase.hxx>
 
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

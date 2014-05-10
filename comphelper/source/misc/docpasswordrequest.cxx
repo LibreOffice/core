@@ -18,7 +18,7 @@
  */
 
 
-#include "comphelper/docpasswordrequest.hxx"
+#include <comphelper/docpasswordrequest.hxx>
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/PasswordRequest.hpp>

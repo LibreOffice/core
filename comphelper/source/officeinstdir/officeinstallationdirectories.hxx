@@ -20,12 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_SOURCE_OFFICEINSTDIR_OFFICEINSTALLATIONDIRECTORIES_HXX
 #define INCLUDED_COMPHELPER_SOURCE_OFFICEINSTDIR_OFFICEINSTALLATIONDIRECTORIES_HXX
 
-#include "osl/mutex.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include <osl/mutex.hxx>
+#include <cppuhelper/implbase2.hxx>
 
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/util/XOfficeInstallationDirectories.hpp"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 
 namespace comphelper {
 

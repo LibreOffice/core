@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/containermultiplexer.hxx"
-#include "comphelper/uno3.hxx"
+#include <comphelper/containermultiplexer.hxx>
+#include <comphelper/uno3.hxx>
 #include <osl/diagnose.h>
 
 namespace comphelper

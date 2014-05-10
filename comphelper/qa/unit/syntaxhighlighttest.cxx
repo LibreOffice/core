@@ -12,7 +12,7 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <cassert>
 #include <vector>

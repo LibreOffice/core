@@ -18,8 +18,8 @@
  */
 
 
-#include "comphelper/documentinfo.hxx"
-#include "comphelper/namedvaluecollection.hxx"
+#include <comphelper/documentinfo.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

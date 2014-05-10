@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/evtmethodhelper.hxx"
-#include "cppuhelper/typeprovider.hxx"
+#include <comphelper/evtmethodhelper.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Type;

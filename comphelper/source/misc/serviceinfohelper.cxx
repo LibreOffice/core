@@ -18,7 +18,7 @@
  */
 
 
-#include "comphelper/serviceinfohelper.hxx"
+#include <comphelper/serviceinfohelper.hxx>
 #include <stdarg.h>
 
 // #####################################################################

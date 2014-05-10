@@ -29,9 +29,9 @@
 
  *************************************************************************/
 
-#include "osl/file.hxx"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/util/theMacroExpander.hpp"
+#include <osl/file.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 
 #include "officeinstallationdirectories.hxx"
 

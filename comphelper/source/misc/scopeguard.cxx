@@ -18,9 +18,9 @@
  */
 
 
-#include "comphelper/flagguard.hxx"
-#include "osl/diagnose.h"
-#include "com/sun/star/uno/Exception.hpp"
+#include <comphelper/flagguard.hxx>
+#include <osl/diagnose.h>
+#include <com/sun/star/uno/Exception.hpp>
 
 namespace comphelper {
 

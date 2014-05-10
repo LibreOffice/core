@@ -18,13 +18,13 @@
  */
 
 
-#include "comphelper/servicedecl.hxx"
-#include "osl/diagnose.h"
-#include "rtl/string.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "comphelper/sequence.hxx"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
+#include <comphelper/servicedecl.hxx>
+#include <osl/diagnose.h>
+#include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <comphelper/sequence.hxx>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <vector>
 
 using namespace com::sun::star;

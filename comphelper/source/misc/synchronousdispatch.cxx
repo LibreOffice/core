@@ -18,14 +18,14 @@
  */
 
 
-#include "com/sun/star/frame/XDispatchProvider.hpp"
-#include "com/sun/star/frame/XSynchronousDispatch.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/util/URLTransformer.hpp"
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XSynchronousDispatch.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
-#include "comphelper/synchronousdispatch.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/synchronousdispatch.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 

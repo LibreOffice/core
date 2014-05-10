@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/evtlistenerhlp.hxx"
+#include <comphelper/evtlistenerhlp.hxx>
 
 namespace comphelper
 {

@@ -25,8 +25,8 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 namespace {
 

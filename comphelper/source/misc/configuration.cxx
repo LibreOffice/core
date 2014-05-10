@@ -7,29 +7,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/configuration/ReadOnlyAccess.hpp"
-#include "com/sun/star/configuration/ReadWriteAccess.hpp"
-#include "com/sun/star/configuration/XReadWriteAccess.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/container/XHierarchicalNameReplace.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/container/XNameContainer.hpp"
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/lang/XLocalizable.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "comphelper/configuration.hxx"
-#include "rtl/instance.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "i18nlangtag/languagetag.hxx"
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/configuration/ReadOnlyAccess.hpp>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/configuration/XReadWriteAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XHierarchicalNameReplace.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/configuration.hxx>
+#include <rtl/instance.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace {
 

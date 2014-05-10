@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_MODULE_HXX
 #define INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_MODULE_HXX
 
-#include "comphelper/componentmodule.hxx"
+#include <comphelper/componentmodule.hxx>
 
 
 namespace comphelper { namespace module

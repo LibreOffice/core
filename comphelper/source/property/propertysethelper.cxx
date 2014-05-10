@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/propertysetinfo.hxx"
-#include "comphelper/propertysethelper.hxx"
+#include <comphelper/propertysetinfo.hxx>
+#include <comphelper/propertysethelper.hxx>
 #include <boost/scoped_array.hpp>
 
 using namespace ::comphelper;

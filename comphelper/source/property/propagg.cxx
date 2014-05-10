@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/propagg.hxx"
-#include "comphelper/property.hxx"
+#include <comphelper/propagg.hxx>
+#include <comphelper/property.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

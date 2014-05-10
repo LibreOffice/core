@@ -18,7 +18,7 @@
  */
 
 
-#include "comphelper/propertysetinfo.hxx"
+#include <comphelper/propertysetinfo.hxx>
 
 using namespace ::rtl;
 using namespace ::comphelper;

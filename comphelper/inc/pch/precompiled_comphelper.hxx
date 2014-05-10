@@ -14,42 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/configuration/ReadOnlyAccess.hpp"
-#include "com/sun/star/configuration/ReadWriteAccess.hpp"
-#include "com/sun/star/configuration/XReadWriteAccess.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/container/XHierarchicalNameReplace.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/container/XNameContainer.hpp"
-#include "com/sun/star/frame/XDispatchProvider.hpp"
-#include "com/sun/star/frame/XSynchronousDispatch.hpp"
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XLocalizable.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/util/URLTransformer.hpp"
-#include "com/sun/star/util/theMacroExpander.hpp"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/typeprovider.hxx"
-#include "i18nlangtag/languagetag.hxx"
-#include "osl/diagnose.h"
-#include "osl/file.hxx"
-#include "rtl/instance.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/config.h"
-#include "typelib/typedescription.h"
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/current_function.hpp>
@@ -84,10 +48,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
+#include <com/sun/star/configuration/ReadOnlyAccess.hpp>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/configuration/XReadWriteAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumerableMap.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XHierarchicalNameReplace.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -116,7 +85,9 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
@@ -143,9 +114,11 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
@@ -175,6 +148,9 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -184,10 +160,12 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
@@ -215,12 +193,14 @@
 #include <cstddef>
 #include <deque>
 #include <functional>
+#include <i18nlangtag/languagetag.hxx>
 #include <iterator>
 #include <limits>
 #include <map>
 #include <memory.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
@@ -239,10 +219,10 @@
 #include <set>
 #include <stdarg.h>
 #include <string.h>
+#include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 #include <ucbhelper/content.hxx>
 #include <unicode/uchar.h>
 #include <uno/data.h>
 #include <vector>
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

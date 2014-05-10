@@ -18,11 +18,11 @@
  */
 
 
-#include "comphelper/anytostring.hxx"
-#include "osl/diagnose.h"
-#include "rtl/ustrbuf.hxx"
-#include "typelib/typedescription.h"
-#include "com/sun/star/lang/XServiceInfo.hpp"
+#include <comphelper/anytostring.hxx>
+#include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
+#include <typelib/typedescription.h>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace ::com::sun::star;
 

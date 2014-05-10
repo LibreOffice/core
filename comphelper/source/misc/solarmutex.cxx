@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "comphelper/solarmutex.hxx"
+#include <comphelper/solarmutex.hxx>
 
 comphelper::SolarMutex::SolarMutex() {}
 
