@@ -159,10 +159,6 @@ public:
     OpenGL3DRenderer();
     ~OpenGL3DRenderer();
 
-    void CreateFrameBufferObj();
-    void CreateTextureObj(int,int);
-    void CreateRenderObj(int, int);
-    void LoadShaders();
     void init();
     void Set3DSenceInfo(sal_Int32 color = 255, bool twoSidesLighting = true);
     void SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction);
@@ -185,6 +181,7 @@ public:
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
+    void LoadShaders();
     void GetFreq();
     void RenderPolygon3DObject();
     void RenderLine3D(Polygon3DInfo &polygon);
