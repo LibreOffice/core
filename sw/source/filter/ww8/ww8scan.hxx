@@ -833,7 +833,8 @@ struct WW8PLCFxDesc
     //GetSprms will not search for the sprms, but instead take the
     //existing ones.
     WW8PLCFxDesc()
-        : pIdStk(0)
+        : pPLCFx(0)
+        , pIdStk(0)
         , pMemPos(0)
         , nOrigSprmsLen(0)
         , nStartPos(WW8_CP_MAX)
