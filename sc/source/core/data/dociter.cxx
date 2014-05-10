@@ -2406,6 +2406,8 @@ ScUsedAreaIterator::ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
     , aAttrIter( pDocument, nTable, nCol1, nRow1, nCol2, nRow2 )
     , nNextCol( nCol1 )
     , nNextRow( nRow1 )
+    , nCellCol( 0 )
+    , nCellRow( 0 )
     , nFoundStartCol( 0 )
     , nFoundEndCol( 0 )
     , nFoundRow( 0 )
