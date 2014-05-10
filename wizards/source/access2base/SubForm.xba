@@ -15,8 +15,11 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be SUBFORM
+Private _This					As Object
 Private	_Shortcut				As String
 Private	_Name					As String
+Private _DocEntry				As Integer
+Private _DbEntry				As Integer
 Public	ParentComponent			As Object				&apos;	com.sun.star.text.TextDocument
 Public	DatabaseForm			As Object				&apos;	com.sun.star.form.component.DataForm and com.sun.star.sdb.ResultSet (a.o.)
 
@@ -27,6 +30,8 @@ Private Sub Class_Initialize()
 	_Type = OBJSUBFORM
 	_Shortcut = &quot;&quot;
 	_Name = &quot;&quot;
+	_DocEntry = -1
+	_DbEntry = -1
 	Set ParentComponent = Nothing
 	Set DatabaseForm = Nothing
 End Sub		&apos;	Constructor
@@ -118,19 +123,20 @@ REM ----------------------------------------------------------------------------
 Public Function OptionGroup(ByVal Optional pvGroupName As Variant) As Variant
 &apos;	Return either an error or an object of type OPTIONGROUP based on its name
 
-	Utils._SetCalledSub(&quot;SubForm.OptionGroup&quot;)
+Const cstThisSub = &quot;SubForm.OptionGroup&quot;
+	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvGroupName) Then Call _TraceArguments()
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	
-	Set OptionGroup = _OptionGroup(pvGroupName, CTLPARENTISSUBFORM, DatabaseForm, ParentComponent)
+	Set OptionGroup = _OptionGroup(pvGroupName, CTLPARENTISSUBFORM, _This)
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;SubForm.OptionGroup&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;SubForm.OptionGroup&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
-End Function		&apos;	OptionGroup
+End Function		&apos;	OptionGroup	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Parent() As Object
@@ -245,15 +251,13 @@ Dim j As Integer
 	End If
 
 	ocControl._Initialize()
+	ocControl._DocEntry = _DocEntry
+	ocControl._DbEntry = _DbEntry
 	Set Controls = ocControl
 	
 Exit_Function:
 	Utils._ResetCalledSub(&quot;SubForm.Controls&quot;)
 	Exit Function
-Trace_Error:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , 1)
-	Set Controls = Nothing
-	Goto Exit_Function
 Trace_Error_Index:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
 	Set Controls = Nothing
@@ -266,7 +270,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;SubForm.Controls&quot;, Erl)
 	Set Controls = Nothing
 	GoTo Exit_Function
-End Function		&apos;	Controls
+End Function		&apos;	Controls	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
@@ -409,16 +413,18 @@ Dim oDatabase As Object, vBookmark As Variant, vEMPTY As Variant
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
 			With DatabaseForm
-				oObject._CommandType = DatabaseForm.CommandType
-				oObject._Command = DatabaseForm.Command
+				oObject._CommandType = .CommandType
+				oObject._Command = .Command
 				oObject._ParentName = _Name
 				oObject._ParentType = _Type
+				Set oDatabase = Application._CurrentDb(_DocEntry, _DbEntry)
+				Set oObject._ParentDatabase = oDatabase
+				Set oObject._ParentDatabase.Connection = .ActiveConnection
 				oObject._ForwardOnly = ( .ResultSetType = com.sun.star.sdbc.ResultSetType.FORWARD_ONLY )
 				oObject._PassThrough = ( .EscapeProcessing = False )
 				oObject._ReadOnly = ( .ResultSetConcurrency = com.sun.star.sdbc.ResultSetConcurrency.READ_ONLY )
 				Call oObject._Initialize()
 			End With
-			Set oDatabase = Application._CurrentDb()
 			With oDatabase
 				.RecordsetMax = .RecordsetMax + 1
 				oObject._Name = Format(.RecordsetMax, &quot;0000000&quot;)
@@ -477,14 +483,14 @@ Dim iArgNr As Integer
 			DatabaseForm.absolute(pvValue)
 		Case UCase(&quot;Filter&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			DatabaseForm.Filter = Utils._ReplaceSquareBrackets(pvValue)
+			DatabaseForm.Filter = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
 		Case UCase(&quot;FilterOn&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
 			DatabaseForm.ApplyFilter = pvValue
 			DatabaseForm.reload()
 		Case UCase(&quot;RecordSource&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			DatabaseForm.Command = Utils._ReplaceSquareBrackets(pvValue)
+			DatabaseForm.Command = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
 			DatabaseForm.CommandType = com.sun.star.sdb.CommandType.COMMAND
 			DatabaseForm.Filter = &quot;&quot;
 			DatabaseForm.reload()
