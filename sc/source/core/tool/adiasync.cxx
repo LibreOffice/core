@@ -40,7 +40,9 @@ ScAddInAsync::ScAddInAsync() :
     SvtBroadcaster(),
     pDocs( NULL ),
     mpFuncData( NULL ),
-    nHandle( 0 )
+    nHandle( 0 ),
+    meType( NONE ),
+    bValid( false )
 {   // nur fuer aSeekObj !
 }
 
