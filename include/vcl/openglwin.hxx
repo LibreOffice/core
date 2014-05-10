@@ -27,6 +27,7 @@ public:
     OpenGLContext* getContext();
 
     virtual void Paint(const Rectangle&) SAL_OVERRIDE {}
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 private:
     boost::scoped_ptr<OpenGLWindowImpl> mpImpl;

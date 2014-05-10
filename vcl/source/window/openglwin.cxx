@@ -9,6 +9,7 @@
 
 #include <vcl/openglwin.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/event.hxx>
 
 class OpenGLWindowImpl
 {
@@ -42,6 +43,14 @@ OpenGLWindow::~OpenGLWindow()
 OpenGLContext* OpenGLWindow::getContext()
 {
     return mpImpl->getContext();
+}
+
+void OpenGLWindow::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    Point aPoint = rMEvt.GetPosPixel();
+
+    Color aColor = GetPixel(aPoint);
+    SAL_WARN("vcl.opengl", aColor.GetColor());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
