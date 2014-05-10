@@ -578,6 +578,7 @@ ScMyCell::ScMyCell() :
     nValidationIndex(-1),
     nStyleIndex(-1),
     nNumberFormat(-1),
+    nType(table::CellContentType_EMPTY),
     bIsAutoStyle( false ),
     bHasShape( false ),
     bIsMergedBase( false ),
