@@ -100,6 +100,9 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     , nDestEndNode(0)
     , nInsPosNode(0)
     , nMvDestNode(rMvPos.GetIndex())
+    , nDestSttCntnt(0)
+    , nDestEndCntnt(0)
+    , nInsPosCntnt(0)
     , bMoveRedlines(false)
 {
     bMoveRange = true;
