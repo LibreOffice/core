@@ -235,8 +235,8 @@ void ScXMLBodyContext::EndElement()
     if (!bHadCalculationSettings)
     {
         // #111055#; set calculation settings defaults if there is no calculation settings element
-        SvXMLImportContext *pContext = new ScXMLCalculationSettingsContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
-        pContext->EndElement();
+        ScXMLCalculationSettingsContext aContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
+        aContext.EndElement();
     }
 
     ScXMLImport::MutexGuard aGuard(GetScImport());
