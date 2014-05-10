@@ -936,6 +936,7 @@ struct ImplPPTCharPropSet
         : mnRefCount ( 1 )
         , mnAttrSet( 0 )
         , mnFlags( 0 )
+        , mnColor( 0 )
         , mnFont( 0 )
         , mnAsianOrComplexFont( 0 )
         , mnANSITypeface( 0 )
