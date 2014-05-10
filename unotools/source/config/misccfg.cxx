@@ -18,7 +18,7 @@
  */
 
 #include <unotools/misccfg.hxx>
-#include "rtl/instance.hxx"
+#include <rtl/instance.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>

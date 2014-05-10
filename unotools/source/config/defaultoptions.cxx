@@ -29,7 +29,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <rtl/instance.hxx>
 
-#include <itemholder1.hxx>
+#include "itemholder1.hxx"
 
 using namespace osl;
 using namespace utl;

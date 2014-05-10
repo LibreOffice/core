@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#include "unotools/bootstrap.hxx"
+#include <unotools/bootstrap.hxx>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -32,7 +32,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <osl/process.h>
-#include "tools/getprocessworkingdir.hxx"
+#include <tools/getprocessworkingdir.hxx>
 
 // #define this to true, if remembering defaults is not supported properly
 #define RTL_BOOTSTRAP_DEFAULTS_BROKEN true

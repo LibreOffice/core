@@ -40,7 +40,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <itemholder1.hxx>
+#include "itemholder1.hxx"
 
 using namespace com::sun::star;
 

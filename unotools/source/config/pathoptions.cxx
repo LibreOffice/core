@@ -42,7 +42,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/instance.hxx>
 
-#include <itemholder1.hxx>
+#include "itemholder1.hxx"
 
 #include <vector>
 #include <boost/unordered_map.hpp>

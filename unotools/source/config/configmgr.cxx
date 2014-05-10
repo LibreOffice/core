@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <list>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "osl/diagnose.h"
-#include "rtl/instance.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "unotools/configitem.hxx"
-#include "unotools/configmgr.hxx"
-#include "comphelper/processfactory.hxx"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <osl/diagnose.h>
+#include <rtl/instance.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <unotools/configitem.hxx>
+#include <unotools/configmgr.hxx>
+#include <comphelper/processfactory.hxx>
 
 namespace {
 

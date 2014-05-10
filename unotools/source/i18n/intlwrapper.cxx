@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unotools/intlwrapper.hxx"
+#include <unotools/intlwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <comphelper/processfactory.hxx>

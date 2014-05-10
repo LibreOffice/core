@@ -17,47 +17,47 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <vector>
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/sdbc/XResultSet.hpp"
-#include "com/sun/star/task/XInteractionHandler.hpp"
-#include "com/sun/star/ucb/CommandAbortedException.hpp"
-#include "com/sun/star/ucb/ContentInfo.hpp"
-#include "com/sun/star/ucb/ContentInfoAttribute.hpp"
-#include "com/sun/star/ucb/IOErrorCode.hpp"
-#include "com/sun/star/ucb/InteractiveIOException.hpp"
-#include "com/sun/star/ucb/NameClashException.hpp"
-#include "com/sun/star/ucb/UniversalContentBroker.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "com/sun/star/ucb/XContentAccess.hpp"
-#include "com/sun/star/ucb/XContentIdentifier.hpp"
-#include "com/sun/star/ucb/XProgressHandler.hpp"
-#include "com/sun/star/ucb/XUniversalContentBroker.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/util/DateTime.hpp"
-#include "comphelper/processfactory.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "osl/file.hxx"
-#include "rtl/string.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "tools/datetime.hxx"
-#include "tools/urlobj.hxx"
-#include "ucbhelper/commandenvironment.hxx"
-#include "ucbhelper/content.hxx"
-#include "unotools/localfilehelper.hxx"
-#include "unotools/ucbhelper.hxx"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/ContentInfo.hpp>
+#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XContentAccess.hpp>
+#include <com/sun/star/ucb/XContentIdentifier.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <osl/file.hxx>
+#include <rtl/string.h>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <tools/datetime.hxx>
+#include <tools/urlobj.hxx>
+#include <ucbhelper/commandenvironment.hxx>
+#include <ucbhelper/content.hxx>
+#include <unotools/localfilehelper.hxx>
+#include <unotools/ucbhelper.hxx>
 
 namespace {
 

@@ -30,7 +30,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <itemholder1.hxx>
+#include "itemholder1.hxx"
 
 #define PACKAGE_VIEWS                           "org.openoffice.Office.Views"
 

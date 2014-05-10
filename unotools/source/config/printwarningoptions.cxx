@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <itemholder1.hxx>
+#include "itemholder1.hxx"
 
 //  namespaces
 

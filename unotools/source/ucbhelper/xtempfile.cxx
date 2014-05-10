@@ -23,7 +23,7 @@
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
-#include <XTempFile.hxx>
+#include "XTempFile.hxx"
 
 OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< css::io::XTempFile >(

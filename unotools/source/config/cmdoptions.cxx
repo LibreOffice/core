@@ -27,7 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 
-#include <itemholder1.hxx>
+#include "itemholder1.hxx"
 
 #include <algorithm>
 #include <boost/unordered_map.hpp>

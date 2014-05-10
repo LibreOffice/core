@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unotools/accessiblestatesethelper.hxx"
+#include <unotools/accessiblestatesethelper.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/servicehelper.hxx>
 

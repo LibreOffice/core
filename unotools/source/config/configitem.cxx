@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unotools/configitem.hxx"
-#include "unotools/configmgr.hxx"
-#include "unotools/configpaths.hxx"
+#include <unotools/configitem.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/configpaths.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
