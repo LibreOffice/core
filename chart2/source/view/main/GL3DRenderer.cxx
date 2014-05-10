@@ -20,8 +20,6 @@
 #include <StaticGeometry.h>
 #include "glm/gtc/matrix_inverse.hpp"
 
-#define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
-
 #define DEBUG_FBO 0
 
 using namespace com::sun::star;
@@ -1465,109 +1463,6 @@ glm::vec4 OpenGL3DRenderer::GetColorByIndex(int index)
 sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uInt32 b)
 {
     return r | (g << 8) | (b << 16);
-}
-
-void OpenGL3DRenderer::ProcessPickingBox()
-{
-    glViewport(0, 0, m_iWidth, m_iHeight);
-    glClearDepth(1.0f);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    if(ProcessExtrude3DPickingBox() == 1)
-    {
-        //the picked object has been processed, return
-        return ;
-    }
-}
-
-int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //render the bounding box
-    Extrude3DInfo extrude3DInfo;
-    glUseProgram(m_CommonProID);
-
-    // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(m_2DVertexID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_BoundBox);
-    glVertexAttribPointer(m_2DVertexID,       // attribute. No particular reason for 0, but must match the layout in the shader.
-                          3,                  // size
-                          GL_FLOAT,           // type
-                          GL_FALSE,           // normalized?
-                          0,                  // stride
-                          (void*)0            // array buffer offset
-                          );
-    for (unsigned int i = 0; i < m_Extrude3DList.size(); i++)
-    {
-        extrude3DInfo = m_Extrude3DList[i];
-        extrude3DInfo.yTransform *= m_fHeightWeight;
-        extrude3DInfo.yScale *= m_fHeightWeight;
-        PosVecf3 trans = {extrude3DInfo.xTransform,//m_Extrude3DInfo.xTransform + 140,
-                          -extrude3DInfo.yTransform,
-                          extrude3DInfo.zTransform};
-        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {extrude3DInfo.xScale,
-                          extrude3DInfo.yScale,
-                          extrude3DInfo.xScale};
-        MoveModelf(trans, angle, scale);
-        glm::mat4 boundMVP = m_3DProjection * m_3DView * m_Model;
-        glm::vec4 boundColor = GetColorByIndex(i);
-        int reverse = 1;
-        if (reverse < 0)
-        {
-            glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
-            boundMVP = boundMVP * reverseMatrix;
-        }
-        glUniform4fv(m_2DColorID, 1, &boundColor[0]);
-        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &boundMVP[0][0]);
-
-        glDrawArrays(GL_TRIANGLES, 0, sizeof(boundBox) / sizeof(GLfloat) / 3);
-    }
-    glDisableVertexAttribArray(m_2DVertexID);
-    glUseProgram(0);
-    //read pixel to get the index
-    Point select = Point(m_aMPos.X(), m_aMPos.Y());
-    sal_uInt8 selectColor[4] = {0};
-
-    glReadPixels(select.X(), select.Y(), 1, 1, GL_RGB, GL_UNSIGNED_BYTE, selectColor);
-    int selectID = GetIndexByColor(selectColor[0], selectColor[1], selectColor[2]);
-
-    if (selectID == RGB_WHITE)
-    {
-        if (m_uiSelectFrameCounter <= 0)
-        {
-            m_3DView = m_3DViewBack;
-            m_uiSelectFrameCounter = 0;
-            m_coordinateAxisinfo.pickingFlg = 0;
-        }
-        else
-        {
-            m_uiSelectFrameCounter--;
-        }
-        return 0;
-    }
-
-    extrude3DInfo = m_Extrude3DList[selectID];
-    extrude3DInfo.yTransform *= m_fHeightWeight;
-    extrude3DInfo.yScale *= m_fHeightWeight;
-    int reverse = 1;
-    m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
-               m_CameraInfo.cameraOrg, // and looks at the origin
-               m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
-               );
-    m_uiSelectFrameCounter = 5;
-
-    m_coordinateAxisinfo.pickingFlg = 1;
-    m_coordinateAxisinfo.reverse = reverse;
-    m_coordinateAxisinfo.trans.x = extrude3DInfo.xTransform + extrude3DInfo.xScale / 2;
-    m_coordinateAxisinfo.trans.y = -extrude3DInfo.yTransform + (extrude3DInfo.yScale + 1.5) * reverse;
-    m_coordinateAxisinfo.trans.z = extrude3DInfo.zTransform + extrude3DInfo.xScale / 2;
-
-    m_coordinateAxisinfo.scale.x = 4 * extrude3DInfo.xScale;
-    m_coordinateAxisinfo.scale.y = 4 * extrude3DInfo.xScale;
-    m_coordinateAxisinfo.scale.z = 4 * extrude3DInfo.xScale;
-    m_coordinateAxisinfo.color = glm::vec4(0.5, 1.0, 0.8, 1.0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    return 1;
 }
 
 void OpenGL3DRenderer::RenderCoordinateAxis()
