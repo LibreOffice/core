@@ -100,7 +100,7 @@
 #include <svx/zoomsliderctrl.hxx>
 
 #include <svx/xmlsecctrl.hxx>
-// Child-Windows
+// Child windows
 #include "reffact.hxx"
 #include "navipi.hxx"
 #include "inputwin.hxx"
@@ -130,24 +130,22 @@ void ScDLL::Init()
     if ( *ppShlPtr )
         return;
 
-    ScDocumentPool::InitVersionMaps();  // wird im ScModule ctor gebraucht
+    ScDocumentPool::InitVersionMaps(); // Is needed in the ScModule ctor
 
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
     (*ppShlPtr) = pMod;
 
     ScDocShell::Factory().SetDocumentServiceName( OUString( "com.sun.star.sheet.SpreadsheetDocument" ) );
 
-    ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
-                            //  erst nach ScGlobal::Init duerfen die App-Optionen
-                            //  initialisiert werden
+    // Not until the ResManager is initialized
+    // The AppOptions must be initialized not until after ScGlobal::Init
+    ScGlobal::Init();
 
     // register your view-factories here
-
     ScTabViewShell      ::RegisterFactory(1);
     ScPreviewShell      ::RegisterFactory(2);
 
     // register your shell-interfaces here
-
     ScModule            ::RegisterInterface(pMod);
     ScDocShell          ::RegisterInterface(pMod);
     ScTabViewShell      ::RegisterInterface(pMod);
@@ -168,13 +166,13 @@ void ScDLL::Init()
 
     SfxRecentFilesToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
 
-    //  eigene Controller
+    // Own Controller
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSOBJ, pMod);
     ScZoomSliderControl ::RegisterControl(SID_PREVIEW_SCALINGFACTOR, pMod);
 
-    //  Svx-Toolbox-Controller
+    // SvxToolboxController
     SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);
     SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_BASIC,     pMod);
     SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_SYMBOL,    pMod);
@@ -217,14 +215,14 @@ void ScDLL::Init()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
-    //Media Controller
+    // Media Controller
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
 
-    // common SFX controller
+    // Common SFX Controller
     ::sfx2::TaskPaneWrapper::RegisterChildWindow( false, pMod );
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
 
-    // Svx-StatusBar-Controller
+    // SvxStatusBar Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
     SvxSelectionModeControl         ::RegisterControl(SID_STATUS_SELMODE,   pMod);
     SvxZoomStatusBarControl         ::RegisterControl(SID_ATTR_ZOOM,        pMod);
@@ -234,7 +232,7 @@ void ScDLL::Init()
 
     SvxPosSizeStatusBarControl      ::RegisterControl(SID_ATTR_SIZE,        pMod);
 
-    // Svx-Menue-Controller
+    // SvxMenu Controller
     SvxFontMenuControl              ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);
     SvxFontSizeMenuControl          ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
 
@@ -242,7 +240,7 @@ void ScDLL::Init()
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
-    //  Child-Windows
+    // Child Windows
 
     ScInputWindowWrapper        ::RegisterChildWindow(true, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(static_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
@@ -275,7 +273,7 @@ void ScDLL::Init()
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);
 
-    // Redlining- Window
+    // Redlining Window
     ScAcceptChgDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScSimpleRefDlgWrapper       ::RegisterChildWindow(false, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
     ScHighlightChgDlgWrapper    ::RegisterChildWindow(false, pMod);
@@ -289,19 +287,18 @@ void ScDLL::Init()
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
 
-    //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
-
+    // EditEngine Field; insofar not already defined in OfficeApplication::Init
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
     rClassManager.Register(SvxPagesField::StaticClassId(), SvxPagesField::CreateInstance);
     rClassManager.Register(SvxFileField::StaticClassId(),  SvxFileField::CreateInstance);
     rClassManager.Register(SvxTableField::StaticClassId(), SvxTableField::CreateInstance);
 
-    SdrRegisterFieldClasses();      // SvDraw-Felder registrieren
+    SdrRegisterFieldClasses(); // Register SvDraw fields
 
-    // 3D-Objekt-Factory eintragen
+    // Add 3DObject Factory
     E3dObjFactory();
 
-    // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
+    // Add ::com::sun::star::form::component::FormObject Factory
     FmFormObjFactory();
 
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, sal::static_int_cast<sal_uInt16>(pMod->GetAppOptions().GetAppMetric()) ) );
