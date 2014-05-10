@@ -184,7 +184,7 @@ Camera::Camera(OpenGL3DRenderer* pRenderer):
 
 void Camera::render()
 {
-    mpRenderer->SetCameraInfo(maPos, maDirection, maUp, false);
+    mpRenderer->SetCameraInfo(maPos, maDirection, maUp);
 }
 
 void Camera::zoom(sal_uInt32 /*nId*/)

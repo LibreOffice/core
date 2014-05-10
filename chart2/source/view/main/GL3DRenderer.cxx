@@ -20,7 +20,6 @@
 #include <StaticGeometry.h>
 #include "glm/gtc/matrix_inverse.hpp"
 
-#define GL_PI 3.14159f
 #define RGB_WHITE (0xFF | (0xFF << 8) | (0xFF << 16))
 
 #define DEBUG_FBO 0
@@ -141,13 +140,8 @@ void OpenGL3DRenderer::LoadShaders()
     CHECK_GL_ERROR();
 }
 
-void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut)
+void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up)
 {
-    m_CameraInfo.useDefault = useDefalut;
-    if (m_CameraInfo.useDefault)
-    {
-        return;
-    }
     m_CameraInfo.cameraPos = pos;
     m_CameraInfo.cameraOrg = pos + direction;
     m_CameraInfo.cameraUp = up;
@@ -1458,26 +1452,6 @@ void OpenGL3DRenderer::RenderClickPos(Point aMPos)
 
 void OpenGL3DRenderer::CreateSceneBoxView()
 {
-    if (m_CameraInfo.useDefault)
-    {
-        float senceBoxWidth = m_SenceBox.maxXCoord - m_SenceBox.minXCoord;
-        float senceBoxHeight = m_SenceBox.maxYCoord - m_SenceBox.minYCoord;
-        float senceBoxDepth = m_SenceBox.maxZCoord - m_SenceBox.minZCoord;
-        float distanceZ = m_SenceBox.maxZCoord + senceBoxWidth / 2 / tan(m_fViewAngle / 2 * GL_PI / 180.0f);
-        float veriticalAngle = atan((float)m_iHeight / (float)m_iWidth);
-        float distance = distanceZ / cos(veriticalAngle);
-        float horizontalAngle = 0;
-        m_fHeightWeight = senceBoxWidth * (float)m_iHeight / (float)m_iWidth / senceBoxHeight;
-        m_SenceBox.maxYCoord *= m_fHeightWeight;
-        m_SenceBox.minYCoord *= m_fHeightWeight;
-        m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
-                                           m_SenceBox.minYCoord + senceBoxHeight * m_fHeightWeight/ 2,
-                                           m_SenceBox.minZCoord + senceBoxDepth * 2);
-        //update the camera position and org
-        m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
-        m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
-        m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * sin(veriticalAngle);
-    }
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
                m_CameraInfo.cameraOrg, // and looks at the origin
                m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
@@ -1601,25 +1575,11 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
         }
         return 0;
     }
-    //reset the camera by index
-    //update the camera position and org
-    float distance = 500;
-    float veriticalAngle = GL_PI / 3.25f;
-    float horizontalAngle = GL_PI / 6.0f;
+
     extrude3DInfo = m_Extrude3DList[selectID];
     extrude3DInfo.yTransform *= m_fHeightWeight;
     extrude3DInfo.yScale *= m_fHeightWeight;
     int reverse = 1;
-    if (m_CameraInfo.useDefault)
-    {
-        m_CameraInfo.cameraOrg = glm::vec3(extrude3DInfo.xTransform + extrude3DInfo.xScale / 2,
-                                           -extrude3DInfo.yTransform + extrude3DInfo.yScale *reverse,
-                                           extrude3DInfo.zTransform + extrude3DInfo.xScale / 2);
-
-        m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x - distance * cos(veriticalAngle) * sin(horizontalAngle);
-        m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * cos(veriticalAngle) * cos(horizontalAngle);
-        m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * sin(horizontalAngle) * reverse;
-    }
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
                m_CameraInfo.cameraOrg, // and looks at the origin
                m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)

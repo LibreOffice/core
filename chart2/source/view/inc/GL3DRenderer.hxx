@@ -113,14 +113,12 @@ struct Extrude3DInfo
 
 struct CameraInfo
 {
-    bool useDefault;
     glm::vec3 cameraPos;
     glm::vec3 cameraOrg;
     glm::vec3 cameraUp;
 
     CameraInfo():
-        useDefault(true),
-        cameraUp(glm::vec3(0, 1, 0)) {}
+        cameraUp(glm::vec3(0, 0, 1)) {}
 };
 
 struct CoordinateAxisInfo
@@ -203,7 +201,7 @@ public:
     void SetClickPos(Point aMPos);
     void RenderClickPos(Point aMPos);
     void SetSize(const Size& rSize);
-    void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up, bool useDefalut);
+    void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
     void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
     void ProcessUnrenderedShape();
 private:
