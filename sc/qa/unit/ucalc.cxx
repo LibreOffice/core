@@ -5950,6 +5950,7 @@ void Test::testIconSet()
         m_pDoc->SetValue(0,0,0,aTests[i].nVal);
         ScIconSetInfo* pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
         CPPUNIT_ASSERT_EQUAL(aTests[i].nIndex, pInfo->nIconIndex);
+        delete pInfo;
     }
 
     delete pEntry;
