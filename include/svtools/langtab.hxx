@@ -23,6 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
 
+class LanguageTag;
+
 class SVT_DLLPUBLIC SvtLanguageTable
 {
 public:
