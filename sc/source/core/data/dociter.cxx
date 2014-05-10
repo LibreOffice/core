@@ -357,10 +357,12 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDat
     , mpDoc(pDoc)
     , pAttrArray(0)
     , nNumFormat(0) // Initialized in GetNumberFormat
+    , nNumFmtIndex(0)
     , nCol(mpParam->mnField)
     , nRow(mpParam->nRow1)
     , nAttrEndRow(0)
     , nTab(mpParam->nTab)
+    , nNumFmtType(0)
     , bCalcAsShown(pDoc->GetDocOptions().IsCalcAsShown())
 {
     SCSIZE i;
