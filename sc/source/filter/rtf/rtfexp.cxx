@@ -199,8 +199,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         }
     }
 
-    bool bResetPar, bResetAttr;
-    bResetPar = bResetAttr = false;
+    bool bResetAttr(false);
 
     const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY );
     const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT );
@@ -243,8 +242,6 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     RTFOutFuncs::Out_String( rStrm, aContent );
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
 
-    if ( bResetPar )
-        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
     if ( bResetAttr )
         rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
 }
