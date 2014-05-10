@@ -28,11 +28,6 @@
 
 #include <svl/itempool.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-
-
-
 class SfxItemDesruptor_Impl: private boost::noncopyable
 {
     SfxPoolItem *pItem;
@@ -46,7 +41,6 @@ public:
     void LaunchDeleteOnIdle();
     ~SfxItemDesruptor_Impl();
 };
-
 
 SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
@@ -63,7 +57,6 @@ void SfxItemDesruptor_Impl::LaunchDeleteOnIdle()
     GetpApp()->InsertIdleHdl( aLink, 1 );
 }
 
-
 SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 {
 
@@ -75,7 +68,6 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 
     delete pItem;
 }
-
 
 IMPL_LINK_NOARG(SfxItemDesruptor_Impl, Delete)
 {
