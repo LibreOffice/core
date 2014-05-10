@@ -76,15 +76,14 @@ hunit HBox::Height(CharShape *csty)
     return( csty->size );
 }
 
-
 // skip block
 SkipData::SkipData(hchar hch)
     : HBox(hch)
     , data_block_len(0)
+    , dummy(0)
     , data_block(0)
 {
 }
-
 
 SkipData::~SkipData(void)
 {
