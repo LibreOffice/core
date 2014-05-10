@@ -829,6 +829,7 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::ve
     {
         return;
     }
+
     if (lightOn)
     {
         m_LightsInfo.light[m_LightsInfo.lightNum].lightColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
@@ -866,7 +867,7 @@ void OpenGL3DRenderer::AddShapePolygon3DObject(sal_Int32 color,bool lineOnly,sal
 
 
     //material specular;
-     m_Polygon3DInfo.material.specular = glm::vec4((float)(((specular) & 0x00FF0000) >> 16) / 255.0f,
+    m_Polygon3DInfo.material.specular = glm::vec4((float)(((specular) & 0x00FF0000) >> 16) / 255.0f,
                                         (float)(((specular) & 0x0000FF00) >> 8) / 255.0f,
                                         (float)(((specular) & 0x000000FF)) / 255.0f,
                                         1.0);
