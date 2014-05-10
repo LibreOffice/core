@@ -21,6 +21,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_HINFO_H
 
 #include "hwplib.h"
+#include "string.h"
 
 #define CHAIN_MAX_PATH  40
 #define ANNOTATION_LEN  24
@@ -87,12 +88,18 @@ struct PaperBackInfo
 /**
  * Information of printing for chained page
  */
-typedef struct
+struct DocChainInfo
 {
     unsigned char chain_page_no;
     unsigned char chain_footnote_no;
     unsigned char chain_filename[CHAIN_MAX_PATH];
-} DocChainInfo;
+    DocChainInfo()
+        : chain_page_no(0)
+        , chain_footnote_no(0)
+    {
+        memset(chain_filename, 0, sizeof(chain_filename));
+    }
+};
 
 /* ???? ???? */
 /**
