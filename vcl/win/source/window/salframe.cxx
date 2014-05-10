@@ -50,7 +50,7 @@
 
 // Warning in SDK header
 #ifdef _MSC_VER
-#pragma warning( disable: 4242 4244 )
+#pragma warning( disable: 4242 )
 #endif
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>

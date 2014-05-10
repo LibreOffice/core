@@ -90,10 +90,6 @@ void * ClassName::Cast( const SotFactory * pFact )                \
     return pRet;                                                          \
 }
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4250)
-#endif
-
 struct IUnknown;
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {

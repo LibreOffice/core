@@ -24,9 +24,6 @@
 
 #include "resource.h"
 
-#pragma warning (disable:4505)
-    // permanently suppress "unreferenced local function has been removed" warning
-
 #pragma warning (push,1)
 #pragma warning (disable:4265)
 

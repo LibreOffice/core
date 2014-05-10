@@ -17,7 +17,6 @@
 #pragma warning(push)
 #pragma warning(push, 1)
 #pragma warning(disable: 4548)
-#pragma warning(disable: 4505)
 #endif
 #include <atlbase.h>
 //You may derive a class from CComModule and use it if you want to override

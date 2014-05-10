@@ -1432,11 +1432,4 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
     }
 }
 
-// Fix strange warnings about some
-// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
-// warning C4505: 'xxx' : unreferenced local function has been removed
-#ifdef _MSC_VER
-#pragma warning(disable: 4505)
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

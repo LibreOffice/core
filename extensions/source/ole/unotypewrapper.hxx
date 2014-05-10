@@ -21,9 +21,6 @@
 
 #include <wincrap.hxx>
 
-#pragma warning (disable:4505)
-    // disable "unreferenced local function has been removed" globally
-
 #include "comifaces.hxx"
 
 /* creates an UnoTypWrapper and sets the Name property to the value

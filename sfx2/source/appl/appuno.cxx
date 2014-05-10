@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4290 )
-#endif
-
 #include "fltoptint.hxx"
 #include "objshimp.hxx"
 #include <sfx2/app.hxx>

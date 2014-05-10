@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma warning (disable : 4800)
-#endif
-
 #ifndef _PATH_HELPER_HXX_
 #define _PATH_HELPER_HXX_
 

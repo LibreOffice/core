@@ -35,9 +35,6 @@
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY
 
-#pragma warning (disable:4505)
-    //  globally disable "unreferenced local function has been removed"
-
 #pragma warning (push,1)
 #pragma warning (disable:4548)
     //  expression before comma has no effect; expected expression with side-effect

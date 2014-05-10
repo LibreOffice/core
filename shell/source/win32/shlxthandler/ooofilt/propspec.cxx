@@ -26,9 +26,6 @@
 #pragma warning(push, 1)
 #endif
 #include <windows.h>
-#ifdef _MSC_VER
-#pragma warning(disable: 4512)
-#endif
 #include <filter.h>
 #if defined _MSC_VER
 #pragma warning(pop)

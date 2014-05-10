@@ -526,11 +526,4 @@ Interceptor::setMasterDispatchProvider(
     m_xMasterDispatchProvider = NewSupplier;
 }
 
-// Fix strange warnings about some
-// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
-// warning C4505: 'xxx' : unreferenced local function has been removed
-#if defined(_MSC_VER)
-#pragma warning(disable: 4505)
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
