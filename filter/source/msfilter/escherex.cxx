@@ -151,12 +151,13 @@ void EscherPropertyContainer::ImplInit()
     pSortStruct = new EscherPropSortStruct[ nSortBufSize ];
 }
 
-EscherPropertyContainer::EscherPropertyContainer() :
-    pGraphicProvider    ( NULL ),
-    pPicOutStrm         ( NULL )
+EscherPropertyContainer::EscherPropertyContainer()
+    : pGraphicProvider(NULL)
+    , pPicOutStrm(NULL)
+    , pShapeBoundRect(NULL)
 {
     ImplInit();
-};
+}
 
 EscherPropertyContainer::EscherPropertyContainer(
     EscherGraphicProvider& rGraphProv,
