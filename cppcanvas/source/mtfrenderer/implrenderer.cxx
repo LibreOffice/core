@@ -92,8 +92,8 @@ namespace
                                                           uno::Sequence< double >&          rColorSequence,
                                                           const cppcanvas::CanvasSharedPtr& rCanvas )
     {
-        // set rIsColorSet and check for true at the same time
-        if (rIsColorSet = pAct->IsSetting())
+        rIsColorSet = pAct->IsSetting();
+        if (rIsColorSet)
         {
             ::Color aColor( pAct->GetColor() );
 
