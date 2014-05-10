@@ -238,10 +238,10 @@ Public Sub _Initialize(poEvent As Object)
 Dim oObject As Object, i As Integer
 Dim sShortcut As String, sAddShortcut As String, sArray() As String
 Dim sImplementation As String, oSelection As Object
-Dim oDatabase As Object
+Dim iCurrentDoc As Integer, oDoc As Object
 Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 
-	If _ErrorHandler() Then On Local Error Goto trace_Error
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 	Set oObject = poEvent.Source
 	_EventSource = oObject
@@ -297,8 +297,9 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 	End Select
 
 	&apos;	Evaluate ContextShortcut
-	oDatabase = Application.CurrentDb()
-	If IsNull(oDatabase) Then Goto Exit_Function
+	iCurrentDoc = Application._CurrentDoc()
+	If iCurrentDoc &lt; 0 Then Goto Exit_Function
+	Set oDoc = _A2B_.CurrentDoc(iCurrentDoc)
 	sShortcut = &quot;&quot;
 	sImplementation = Utils._ImplementationName(oObject)
 	
@@ -327,7 +328,7 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 					If oObject.Name &lt;&gt; &quot;MainForm&quot; And  oObject.Name &lt;&gt; &quot;Form&quot; Then sAddShortcut = Utils._Surround(oObject.Name)
 				End If
 				If sAddShortcut &lt;&gt; &quot;&quot; Then
-					If sImplementation = cstDatabaseForm And Not oDatabase._Standalone Then sAddShortcut = sAddShortcut &amp; &quot;.Form&quot;
+					If sImplementation = cstDatabaseForm And oDoc.DbConnect = DBCONNECTBASE Then sAddShortcut = sAddShortcut &amp; &quot;.Form&quot;
 					sShortcut = sAddShortcut &amp; Iif(Len(sShortcut) &gt; 0, &quot;!&quot; &amp; sShortcut, &quot;&quot;)
 				End If
 		End Select
@@ -342,8 +343,8 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 		sImplementation = Utils._ImplementationName(oObject)
 	Loop
 	&apos;	Add Forms! prefix
-	Select Case oDatabase._Standalone
-		Case False
+&apos;	Select Case oDoc.DbConnect
+&apos;		Case DBCONNECTBASE
 			If Utils._hasUNOProperty(oObject, &quot;Args&quot;) Then		&apos;	Current object is a SwXTextDocument
 				For i = 0 To UBound(oObject.Args)
 					If oObject.Args(i).Name = &quot;DocumentTitle&quot; Then
@@ -353,24 +354,21 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 				Next i
 			End If
 			sShortcut = &quot;Forms!&quot; &amp; sAddShortcut &amp; &quot;!&quot; &amp; sShortcut
-		Case True
-			sShortcut = &quot;Forms!0!&quot; &amp; sShortcut
-	End Select
+&apos;		Case DBCONNECTFORM
+&apos;			sShortcut = &quot;Forms!0!&quot; &amp; sShortcut
+&apos;	End Select
 
 	sArray = Split(sShortcut, &quot;!&quot;)
 	&apos;	If presence of &quot;Forms!myform!myform.Form&quot;, eliminate 2nd element
+	&apos;	Eliminate anyway blanco subcomponents (e.g; Forms!!myForm)
 	If UBound(sArray) &gt;= 2 Then
-		If UCase(sArray(1)) &amp; &quot;.FORM&quot; = UCase(sArray(2)) Then
-			sArray(1) = &quot;&quot;
-			sArray = Utils._TrimArray(sArray)
-		End If
+		If UCase(sArray(1)) &amp; &quot;.FORM&quot; = UCase(sArray(2)) Then sArray(1) = &quot;&quot;
+		sArray = Utils._TrimArray(sArray)
 	End If
 	&apos;	If first element ends with .Form, remove suffix
 	If UBound(sArray) &gt;= 1 Then
-		If Len(sArray(1)) &gt; 5 And Right(sArray(1), 5) = &quot;.Form&quot; Then
-			sArray(1) = left(sArray(1), Len(sArray(1)) - 5) 
-			sShortcut = Join(sArray, &quot;!&quot;)
-		End If
+		If Len(sArray(1)) &gt; 5 And Right(sArray(1), 5) = &quot;.Form&quot; Then sArray(1) = left(sArray(1), Len(sArray(1)) - 5)
+		sShortcut = Join(sArray, &quot;!&quot;)
 	End If
 	If Len(sShortcut) &gt;= 2 Then
 		If Right(sShortcut, 1) = &quot;!&quot; Then
@@ -385,10 +383,6 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEWARNING, Err, &quot;Event.Initialize&quot;, Erl)
 	GoTo Exit_Function
-Trace_Error:
-	&apos;	Errors are not displayed to avoid display infinite cycling
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, False, 1)
-	Goto Exit_Function
 End Sub			&apos;	_Initialize		V0.9.1
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -456,16 +450,16 @@ Dim vEMPTY As Variant
 			_PropertyGet = _Recommendation
 		Case UCase(&quot;RowChangeAction&quot;)
 			_PropertyGet = _RowChangeAction
+		Case UCase(&quot;Source&quot;)
+			If _ContextShortcut = &quot;&quot; Then
+				_PropertyGet = _EventSource
+			Else
+				_PropertyGet = getObject(_ContextShortcut)
+			End If
 		Case UCase(&quot;SubComponentName&quot;)
 			_PropertyGet = _SubComponentName
 		Case UCase(&quot;SubComponentType&quot;)
 			_PropertyGet = _SubComponentType
-		Case UCase(&quot;Source&quot;)
-			If _ContextShortcut = &quot;&quot; Then
-				_PropertyGet = Application.CurrentDb()
-			Else
-				_PropertyGet = getObject(_ContextShortcut)
-			End If
 		Case UCase(&quot;XPos&quot;)
 			If IsNull(_XPos) Then Goto Trace_Error
 			_PropertyGet = _XPos
@@ -488,5 +482,5 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Event._PropertyGet&quot;, Erl)
 	_PropertyGet = vEMPTY
 	GoTo Exit_Function
-End Function		&apos;	_PropertyGet
+End Function		&apos;	_PropertyGet	V1.1.0
 </script:module>

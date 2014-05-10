@@ -18,6 +18,7 @@ Private	_Type					As String				&apos;	Must be RECORDSET
 Private _Name					As String				&apos;	Unique, generated
 Private _ParentName				As String
 Private _ParentType				As String
+Private _ParentDatabase			As Object
 Private _ForwardOnly			As Boolean
 Private _PassThrough			As Boolean
 Private _ReadOnly				As Boolean
@@ -40,6 +41,7 @@ Private Sub Class_Initialize()
 	_Type = OBJRECORDSET
 	_Name = &quot;&quot;
 	_ParentName = &quot;&quot;
+	Set _ParentDatabase = Nothing
 	_ParentType = &quot;&quot;
 	_ForwardOnly = False
 	_PassThrough = False
@@ -368,6 +370,8 @@ Const cstThisSub = &quot;Recordset.Close&quot;
 	_ReadOnly = False
 	_CommandType = 0
 	_Command = &quot;&quot;
+	_ParentName = &quot;&quot;
+	_ParentType = &quot;&quot;
 	_DataSet = False
 	_BOF = True
 	_EOF = True
@@ -378,7 +382,8 @@ Const cstThisSub = &quot;Recordset.Close&quot;
 	_IsClone = False
 	Set RowSet = Nothing
 	If IsMissing(pbRemove) Then pbRemove = True
-	If pbRemove Then Application.CurrentDb().RecordsetsColl.Remove(_Name)
+	If pbRemove Then _ParentDatabase.RecordsetsColl.Remove(_Name)
+	Set _ParentDatabase = Nothing
 
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
@@ -478,6 +483,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 			oObject._CollType = COLLFIELDS
 			oObject._ParentType = OBJRECORDSET
 			oObject._ParentName = _Name
+			Set oObject._ParentDatabase = _ParentDatabase
 			oObject._Count = UBound(sObjects) + 1
 			Goto Exit_Function
 		Case VarType(pvIndex) = vbString
@@ -501,6 +507,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 	Set oObject.Column = oFields.getByName(sObjectName)
 	oObject._ParentName = _Name
 	oObject._ParentType = _Type
+	Set oObject._ParentDatabase = _ParentDatabase
 
 Exit_Function:
 	Set Fields = oObject
@@ -511,7 +518,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 Trace_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Field&quot;, pvIndex))
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;FIELD&quot;), pvIndex))
 	Goto Exit_Function
 Trace_IndexError:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
@@ -529,6 +536,58 @@ Const cstThisSub = &quot;Recordset.getProperty&quot;
 	Utils._ResetCalledSub(cstThisSub)
 	
 End Function		&apos;	getProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function GetRows(ByVal Optional pvNumRows As variant) As Variant
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;Recordset.GetRows&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+Dim vMatrix() As Variant, lSize As Long, iNumFields As Integer, i As Integer
+	vMatrix() = Array()
+	If IsMissing(pvNumRows) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvNumRows, 1, Utils._AddNumeric()) Then Goto Exit_Function
+	If pvNumRows &lt; 1 Then Goto Trace_Error
+	If IsNull(RowSet) Then Goto Trace_Closed
+	If Not _DataSet Then Goto Exit_Function
+
+	If _EditMode &lt;&gt; dbEditNone Then CancelUpdate()
+	
+	If _EOF Then Goto Exit_Function
+
+	lSize = -1
+	iNumFields = RowSet.getColumns().Count - 1
+	If iNumFields &lt; 0 Then Goto Exit_Function
+
+	ReDim vMatrix(0 To pvNumRows - 1, 0 To iNumFields)			&apos;	Conscious opposite of MSAccess !!
+	
+	Do While Not _EOF And lSize &lt; pvNumRows - 1
+		lSize = lSize + 1
+		For i = 0 To iNumFields
+			vMatrix(lSize, i) = _getResultSetColumnValue(RowSet, i + 1)
+		Next i
+		_Move(&quot;NEXT&quot;)
+	Loop
+	If lSize &lt; pvNumRows - 1 Then				&apos;	Resize to number of fetched records
+		ReDim Preserve vMatrix(0 To lSize, 0 To iNumFields)
+	End If
+
+Exit_Function:
+	GetRows() = vMatrix()
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvNumRows))
+	Set Controls = Nothing
+	Goto Exit_Function
+Trace_Closed:
+	TraceError(TRACEFATAL, ERRRECORDSETCLOSED, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	GetRows	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function hasProperty(ByVal Optional pvProperty As Variant) As Boolean
@@ -589,7 +648,7 @@ Dim cstThisSub As String
 	Set OpenRecordset = Nothing
 Const cstNull = -1
 
-Dim oObject As Object, odbDatabase As Object
+Dim oObject As Object
 	Set oObject = Nothing
 	If IsMissing(pvType) Then
 		pvType = cstNull
@@ -614,17 +673,17 @@ Dim oObject As Object, odbDatabase As Object
 		._Command = _Command
 		._ParentName = _Name
 		._ParentType = _Type
+		Set ._ParentDatabase = _ParentDatabase
 		._ForwardOnly = ( pvType = dbOpenForwardOnly )
 		._PassThrough = ( pvOptions = dbSQLPassThrough )
-		._ReadOnly = ( pvLockEdit = dbReadOnly )
+		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
 		Select Case True
 			Case pbClone		:	Call ._Initialize(, RowSet)
 			Case _Filter &lt;&gt; &quot;&quot; 	:	Call ._Initialize(_Filter)
 			Case Else			:	Call ._Initialize()
 		End Select
 	End With
-	Set odbDatabase = Application._CurrentDb()
-	With odbDatabase
+	With _ParentDatabase
 		.RecordsetMax = .RecordsetMax + 1
 		oObject._Name = Format(.RecordsetMax, &quot;0000000&quot;)
 		.RecordsetsColl.Add(oObject, UCase(oObject._Name))
@@ -659,6 +718,7 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
+	Set vProperty._ParentDatabase = _ParentDatabase
 	
 Exit_Function:
 	Set Properties = vProperty
@@ -740,7 +800,7 @@ Public Sub _Initialize(ByVal Optional pvFilter As Variant, Optional poRowSet As 
 		Set RowSet = CreateUnoService(&quot;com.sun.star.sdb.RowSet&quot;)
 		_IsClone = False
 		With RowSet
-			If IsNull(.ActiveConnection) Then Set .ActiveConnection = Application._CurrentDb().Connection				&apos;	Error forced if connection broken
+			If IsNull(.ActiveConnection) Then Set .ActiveConnection = _ParentDatabase.Connection
 			.CommandType = _CommandType
 			.Command = _Command
 			If _ForwardOnly	Then .ResultSetType = com.sun.star.sdbc.ResultSetType.FORWARD_ONLY _
@@ -1016,7 +1076,7 @@ Dim oObject As Object
 		Case UCase(&quot;Filter&quot;)
 			If IsNull(RowSet) Then Goto Trace_Closed
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			_Filter = Utils._ReplaceSquareBrackets(pvValue)
+			_Filter = _ParentDatabase._ReplaceSquareBrackets(pvValue)
 		Case Else
 			Goto Trace_Error
 	End Select

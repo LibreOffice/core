@@ -15,17 +15,16 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be DATABASE
-Private	_Standalone				As Boolean
+Private _This					As Object				&apos;	Workaround for absence of This builtin function
+Private	_DbConnect				As Integer				&apos;	DBCONNECTxxx constants
 Private	Title					As String
-Private	Document				As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or	SwXTextDocument
-Private	Connection				As Object				&apos;	com.sun.star.sdbc.drivers.OConnectionWrapper
+Private	Document				As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or SwXTextDocument or ScModelObj
+Private	Connection				As Object				&apos;	com.sun.star.sdbc.drivers.OConnectionWrapper or com.sun.star.sdbc.XConnection
 Private	URL						As String
+Private _ReadOnly				As Boolean
 Private	MetaData				As Object				&apos;	interface XDatabaseMetaData
 Private	Form					As Object				&apos;	com.sun.star.form.XForm
-Private	FormName				As String				&apos;	name of standalone form
-Private FindRecord				As Object
-Private StatusBar				As Object
-Private Dialogs					As Object				&apos;	Collection
+Private FormName				As String
 Private RecordsetMax			As Integer
 Private	RecordsetsColl			As Object				&apos;	Collection of active recordsets
 
@@ -34,17 +33,16 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJDATABASE
-	_Standalone = False
+	Set _This = Nothing
+	_DbConnect = 0
 	Title = &quot;&quot;
 	Set Document = Nothing
 	Set Connection = Nothing
 	URL = &quot;&quot;
+	_ReadOnly = False
 	Set MetaData = Nothing
 	Set Form = Nothing
 	FormName = &quot;&quot;
-	Set FindRecord = Nothing
-	Set StatusBar = Nothing
-	Set Dialogs = New Collection
 	RecordsetMax = 0
 	Set RecordsetsColl = New Collection
 End Sub		&apos;	Constructor
@@ -63,6 +61,31 @@ End Property		&apos;	ObjectType (get)
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS METHODS	 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function mClose() As Variant
+&apos;	Close the form
+
+If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;Database.Close&quot;
+	Utils._SetCalledSub(cstThisSub)
+	mClose = False
+	If _DbConnect &lt;&gt; DBCONNECTANY Then Goto Error_NotApplicable
+
+	Connection.close()
+	Connection.dispose()
+	mClose = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
+	GoTo Exit_Function
+End Function		&apos;	(m)Close
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub CloseAllRecordsets()
@@ -94,12 +117,12 @@ Const cstThisSub = &quot;Database.CreateQueryDef&quot;
 	Utils._SetCalledSub(cstThisSub)
 
 Const cstNull = -1
-Dim oQuery As Object, oQueries As Object
+Dim oQuery As Object, oQueries As Object, i As Integer, sQueryName As String
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 	Set CreateQueryDef = Nothing
-	If _Standalone() Then Goto Error_Standalone
+	If _DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 	If IsMissing(pvQueryName) Then Call _TraceArguments()
 	If IsMissing(pvSql) Then Call _TraceArguments()
 	If IsMissing(pvOption) Then pvOption = cstNull
@@ -110,17 +133,23 @@ Dim oQuery As Object, oQueries As Object
 	If pvSql = &quot;&quot; Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvOption, 3, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
 	
+	If _ReadOnly Then Goto Error_NoUpdate
+	
 	Set oQuery = CreateUnoService(&quot;com.sun.star.sdb.QueryDefinition&quot;)
 	oQuery.rename(pvQueryName)
-	oQuery.Command = Utils._ReplaceSquareBrackets(pvSql)
+	oQuery.Command = _ReplaceSquareBrackets(pvSql)
 	oQuery.EscapeProcessing = Not ( pvOption = dbSQLPassThrough )
 	
 	Set oQueries = Document.DataSource.getQueryDefinitions()
 	With oQueries
-		If .hasByName(pvQueryName) Then
-			TraceError(TRACEWARNING, ERRQUERYDEFDELETED, Utils._CalledSub(), 0, False, pvQueryName)
-			.removeByName(pvQueryName)
-		End If
+		For i = 0 To .getCount() - 1
+			sQueryName = .getByIndex(i).Name
+			If UCase(sQueryName) = UCase(pvQueryName) Then
+				TraceError(TRACEWARNING, ERRQUERYDEFDELETED, Utils._CalledSub(), 0, False, sQueryName)
+				.removeByName(sQueryName)
+				Exit For
+			End If
+		Next i
 		.insertByName(pvQueryName, oQuery)
 	End With
 	Set CreateQueryDef = QueryDefs(pvQueryName)
@@ -128,13 +157,229 @@ Dim oQuery As Object, oQueries As Object
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
-Error_Standalone:
-	TraceError(TRACEFATAL, ERRSTANDALONE, Utils._CalledSub(), 0)
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
-End Function	&apos;	CreateQueryDef	V0.9.5
+End Function	&apos;	CreateQueryDef	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function CreateTableDef(ByVal Optional pvTableName As Variant) As Object
+&apos;Return a (new/empty) TableDef object
+Const cstThisSub = &quot;Database.CreateTableDef&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+Dim oTable As Object, oTables As Object, sTables() As String
+Dim i As Integer, sTableName As String, oNewTable As Object
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+
+	Set CreateTableDef = Nothing
+	If _DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+	If IsMissing(pvTableName) Then Call _TraceArguments()
+
+	If Not Utils._CheckArgument(pvTableName, 1, vbString) Then Goto Exit_Function
+	If pvTableName = &quot;&quot; Then Call _TraceArguments()
+	
+	If _ReadOnly Then Goto Error_NoUpdate
+	
+	Set oTables = Connection.getTables
+	With oTables
+		sTables = .ElementNames()
+		&apos;	Check existence of object and find its exact (case-sensitive) name
+		For i = 0 To UBound(sTables)
+			If UCase(pvTableName) = UCase(sTables(i)) Then
+				sTableName = sTables(i)
+				TraceError(TRACEWARNING, ERRTABLEDEFDELETED, Utils._CalledSub(), 0, False, sTableName)
+				.dropByName(sTableName)
+				Exit For
+			End If
+		Next i
+		Set oNewTable = New DataDef
+		oNewTable._Type = OBJTABLEDEF
+		oNewTable._Name = pvTableName
+		Set oNewTable._ParentDatabase = _This
+		Set oNewTable.TableDescriptor = .createDataDescriptor()
+		oNewTable.TableDescriptor.Name = pvTableName
+	End With
+
+	Set CreateTabledef = oNewTable
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function	&apos;	CreateTableDef	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DAvg( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return average of scope
+Const cstThisSub = &quot;Database.DAvg&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DAvg = _DFunction(&quot;AVG&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DAvg
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DCount( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return # of occurrences of scope
+Const cstThisSub = &quot;Database.DCount&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DCount = _DFunction(&quot;COUNT&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DCount
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DLookup( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					, ByVal Optional pvOrderClause As Variant _
+					) As Variant
+
+&apos;	Return a value within a table
+    &apos;Arguments: psExpr:			an SQL expression
+    &apos;			psDomain:		a table- or queryname
+    &apos;			pvCriteria:		an optional WHERE clause
+    &apos;			pcOrderClause:	an optional order clause incl. &quot;DESC&quot; if relevant
+    &apos;Return:    Value of the psExpr if found, else Null.
+    &apos;Author:    inspired from Allen Browne. http://allenbrowne.com/ser-42.html
+    &apos;Examples:
+    &apos;           1. To find the last value, include DESC in the OrderClause, e.g.:
+    &apos;               DLookup(&quot;[Surname] &amp; [FirstName]&quot;, &quot;tblClient&quot;, , &quot;ClientID DESC&quot;)
+    &apos;           2. To find the lowest non-null value of a field, use the Criteria, e.g.:
+    &apos;               DLookup(&quot;ClientID&quot;, &quot;tblClient&quot;, &quot;Surname Is Not Null&quot; , &quot;Surname&quot;)
+
+Const cstThisSub = &quot;Database.DLookup&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DLookup = _DFunction(&quot;&quot;, psExpr, psDomain _
+					, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria) _
+					, Iif(IsMissing(pvOrderClause), &quot;&quot;, pvOrderClause) _
+					)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DLookup
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DMax( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return maximum of scope
+Const cstThisSub = &quot;Database.DMax&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DMax = _DFunction(&quot;MAX&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DMax
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DMin( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return minimum of scope
+Const cstThisSub = &quot;Database.DMin&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DMin = _DFunction(&quot;MIN&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DMin
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DStDev( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return standard deviation of scope
+Const cstThisSub = &quot;Database.DStDev&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DStDev = _DFunction(&quot;STDDEV_SAMP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)	&apos;	STDDEV not STDEV !
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DStDev
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DStDevP( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return standard deviation of scope
+Const cstThisSub = &quot;Database.DStDevP&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DStDevP = _DFunction(&quot;STDDEV_POP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)	&apos;	STDDEV not STDEV !
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DStDevP
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DSum( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return sum of scope
+Const cstThisSub = &quot;Database.DSum&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DSum = _DFunction(&quot;SUM&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DSum
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DVar( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return variance of scope
+Const cstThisSub = &quot;Database.DVar&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DVar = _DFunction(&quot;VAR_SAMP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DVar
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function DVarP( _
+					ByVal Optional psExpr As String _
+					, ByVal Optional psDomain As String _
+					, ByVal Optional pvCriteria As Variant _
+					) As Variant
+&apos;	Return variance of scope
+Const cstThisSub = &quot;Database.DVarP&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
+	DVarP = _DFunction(&quot;VAR_POP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	Utils._ResetCalledSub(cstThisSub)
+End Function	&apos;	DVarP
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
@@ -196,7 +441,7 @@ Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Obje
 	Select Case True
 		Case sSource = &quot;SELECT&quot;
 			lCommandType = com.sun.star.sdb.CommandType.COMMAND
-			sCommand = Trim(Utils._ReplaceSquareBrackets(pvSource))
+			sCommand = _ReplaceSquareBrackets(pvSource)
 		Case Else
 			sSource = UCase(Trim(pvSource))
 			REM Explore tables
@@ -236,7 +481,8 @@ Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Obje
 		._ParentType = _Type
 		._ForwardOnly = ( pvType = dbOpenForwardOnly )
 		._PassThrough = ( pvOptions = dbSQLPassThrough )
-		._ReadOnly = ( pvLockEdit = dbReadOnly )
+		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
+		Set ._ParentDatabase = _This
 		Call ._Initialize()
 		RecordsetMax = RecordsetMax + 1
 		._Name = Format(RecordsetMax, &quot;0000000&quot;)
@@ -254,9 +500,65 @@ Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 Trace_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Table/Query&quot;, pvSource))
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;TABLE&quot;) &amp; &quot;/&quot; &amp; _GetLabel(&quot;QUERY&quot;), pvSource))
 	Goto Exit_Function
-End Function	&apos;	OpenRecordset	V0.9.5
+End Function	&apos;	OpenRecordset	V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function OpenSQL(Optional ByVal pvSQL As Variant _
+						, Optional ByVal pvOption As Variant _
+						) As Boolean
+&apos;	Return True if the execution of the SQL statement was successful
+&apos;	SQL must contain a SELECT query
+&apos;	pvOption can force pass through mode
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+
+Const cstThisSub = &quot;Database.OpenSQL&quot;
+	Utils._SetCalledSub(cstThisSub)
+	
+	OpenSQL = False
+	If IsMissing(pvSQL) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvSQL, 1, vbString) Then Goto Exit_Function
+Const cstNull = -1
+	If IsMissing(pvOption) Then
+		pvOption = cstNull
+	Else
+		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+	End If
+	If _DbConnect &lt;&gt; DBCONNECTBASE And _DbConnect &lt;&gt; DBCONNECTFORM Then Goto Error_NotApplicable
+
+Dim oURL As New com.sun.star.util.URL, oDispatch As Object
+Dim vArgs(8) as New com.sun.star.beans.PropertyValue
+
+	oURL.Complete = &quot;.component:DB/DataSourceBrowser&quot;
+	oDispatch = StarDesktop.queryDispatch(oURL, &quot;_Blank&quot;, 8)
+
+	vArgs(0).Name = &quot;ActiveConnection&quot;		:	vArgs(0).Value = Connection
+	vArgs(1).Name = &quot;CommandType&quot;			:	vArgs(1).Value = com.sun.star.sdb.CommandType.COMMAND
+	vArgs(2).Name = &quot;Command&quot;				:	vArgs(2).Value = _ReplaceSquareBrackets(pvSQL)
+	vArgs(3).Name = &quot;ShowMenu&quot;				:	vArgs(3).Value = True
+	vArgs(4).Name = &quot;ShowTreeView&quot;			:	vArgs(4).Value = False
+	vArgs(5).Name = &quot;ShowTreeViewButton&quot;	:	vArgs(5).Value = False
+	vArgs(6).Name = &quot;Filter&quot;				:	vArgs(6).Value = &quot;&quot;
+	vArgs(7).Name = &quot;ApplyFilter&quot;			:	vArgs(7).Value = False
+	vArgs(8).Name = &quot;EscapeProcessing&quot;		:	vArgs(8).Value = CBool(Not ( pvOption = dbSQLPassThrough ))
+
+	oDispatch.dispatch(oURL, vArgs)
+	OpenSQL = True
+
+Exit_Function:
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;OpenSQL&quot;, Erl)
+	GoTo Exit_Function
+SQL_Error:
+	TraceError(TRACEFATAL, ERRSQLSTATEMENT, Utils._CalledSub(), 0, , pvSQL)
+	Goto Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+End Function		&apos;	OpenSQL		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
@@ -274,6 +576,7 @@ Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
 		vProperty = PropertiesGet._Properties(sObject, &quot;&quot;, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
+	Set vProperty._ParentDatabase = _This
 	
 Exit_Function:
 	Set Properties = vProperty
@@ -282,21 +585,21 @@ Exit_Function:
 End Function	&apos;	Properties
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function QueryDefs(ByVal Optional pvIndex As variant) As Object
+Public Function QueryDefs(ByVal Optional pvIndex As Variant, ByVal Optional pbCheck As Boolean) As Object
 &apos;	Collect all Queries in the database
-&apos;	Check when standalone &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+&apos;	pbCheck unpublished
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Database.QueryDefs&quot;)
+	If IsMissing(pbCheck) Then pbCheck = False
 
-	Set QueryDefs = Nothing
+Dim sObjects() As String, sObjectName As String, oObject As Object
+Dim i As Integer, bFound As Boolean, oQueries As Object
+	Set oObject = Nothing
 	If Not IsMissing(pvIndex) Then
 		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 	End If
 			
-Dim sObjects() As String, sObjectName As String, oObject As Object
-Dim i As Integer, bFound As Boolean, oQueries As Object
-
 	Set oQueries = Connection.getQueries
 	sObjects = oQueries.ElementNames()
 	Select Case True
@@ -305,6 +608,7 @@ Dim i As Integer, bFound As Boolean, oQueries As Object
 			oObject._CollType = COLLQUERYDEFS
 			oObject._ParentType = OBJDATABASE
 			oObject._ParentName = &quot;&quot;
+			Set oObject._ParentDatabase = _This
 			oObject._Count = UBound(sObjects) + 1
 			Goto Exit_Function
 		Case VarType(pvIndex) = vbString
@@ -326,6 +630,8 @@ Dim i As Integer, bFound As Boolean, oQueries As Object
 	Set oObject = New DataDef
 	oObject._Type = OBJQUERYDEF
 	oObject._Name = sObjectName
+	Set oObject._ParentDatabase = _This
+	oObject._readOnly = _ReadOnly
 	Set oObject.Query = oQueries.getByName(sObjectName)
 
 Exit_Function:
@@ -337,15 +643,15 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Database.QueryDefs&quot;, Erl)
 	GoTo Exit_Function
 Trace_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Query&quot;, pvIndex))
+	If Not pbCheck Then TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;QUERY&quot;), pvIndex))
 	Goto Exit_Function
 Trace_IndexError:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
 	Goto Exit_Function
-End Function		&apos;	QueryDefs	V0.9.5
+End Function		&apos;	QueryDefs	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function Recordsets(ByVal Optional pvIndex As variant) As Object
+Public Function Recordsets(ByVal Optional pvIndex As Variant) As Object
 &apos;	Collect all active recordsets
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
@@ -365,6 +671,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 			oObject._CollType = COLLRECORDSETS
 			oObject._ParentType = OBJDATABASE
 			oObject._ParentName = &quot;&quot;
+			Set oObject._ParentDatabase = _This
 			oObject._Count = RecordsetsColl.Count
 		Case VarType(pvIndex) = vbString
 			bFound = _hasRecordset(pvIndex)
@@ -384,7 +691,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Database.Recordsets&quot;, Erl)
 	GoTo Exit_Function
 Trace_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Recordset&quot;, pvIndex))
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;RECORDSET&quot;), pvIndex))
 	Goto Exit_Function
 Trace_IndexError:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
@@ -392,21 +699,60 @@ Trace_IndexError:
 End Function		&apos;	Recordsets	V0.9.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function TableDefs(ByVal Optional pvIndex As variant) As Object
+Public Function RunSQL(Optional ByVal pvSQL As Variant _
+						, Optional ByVal pvOption As Variant _
+						) As Boolean
+&apos;	Return True if the execution of the SQL statement was successful
+&apos;	SQL must contain an ACTION query
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+
+	Utils._SetCalledSub(&quot;RunSQL&quot;)
+	
+	RunSQL = False
+	If IsMissing(pvSQL) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvSQL, 1, vbString) Then Goto Exit_Function
+Const cstNull = -1
+	If IsMissing(pvOption) Then
+		pvOption = cstNull
+	Else
+		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
+	End If
+
+Dim oStatement As Object, vResult As Variant
+	Set oStatement = Connection.createStatement()
+	oStatement.EscapeProcessing = Not ( pvOption = dbSQLPassThrough )
+	On Local Error Goto SQL_Error
+	vResult = oStatement.executeUpdate(_ReplaceSquareBrackets(pvSQL))
+	On Local Error Goto Error_Function
+	RunSQL = True
+
+Exit_Function:
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;RunSQL&quot;, Erl)
+	GoTo Exit_Function
+SQL_Error:
+	TraceError(TRACEFATAL, ERRSQLSTATEMENT, Utils._CalledSub(), 0, , pvSQL)
+	Goto Exit_Function
+End Function		&apos;	RunSQL		V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function TableDefs(ByVal Optional pvIndex As Variant, ByVal Optional pbCheck As Boolean) As Object
 &apos;	Collect all tables in the database
-&apos;	Check when standalone &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+&apos;	pbCheck unpublished
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Database.TableDefs&quot;)
+	If IsMissing(pbCheck) Then pbCheck = False
 
-	Set TableDefs = Nothing
+Dim sObjects() As String, sObjectName As String, oObject As Object
+Dim i As Integer, bFound As Boolean, oTables As Object
+	Set oObject = Nothing
 	If Not IsMissing(pvIndex) Then
 		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 	End If
 			
-Dim sObjects() As String, sObjectName As String, oObject As Object
-Dim i As Integer, bFound As Boolean, oTables As Object
-
 	Set oTables = Connection.getTables
 	sObjects = oTables.ElementNames()
 	Select Case True
@@ -415,6 +761,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 			oObject._CollType = COLLTABLEDEFS
 			oObject._ParentType = OBJDATABASE
 			oObject._ParentName = &quot;&quot;
+			Set oObject._ParentDatabase = _This
 			oObject._Count = UBound(sObjects) + 1
 			Goto Exit_Function
 		Case VarType(pvIndex) = vbString
@@ -436,6 +783,8 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 	Set oObject = New DataDef
 	oObject._Type = OBJTABLEDEF
 	oObject._Name = sObjectName
+	Set oObject._ParentDatabase = _This
+	oObject._ReadOnly = _ReadOnly
 	Set oObject.Table = oTables.getByName(sObjectName)
 
 Exit_Function:
@@ -447,32 +796,77 @@ Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Database.TableDefs&quot;, Erl)
 	GoTo Exit_Function
 Trace_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Table&quot;, pvIndex))
+	If Not pbCheck Then TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;TABLE&quot;), pvIndex))
 	Goto Exit_Function
 Trace_IndexError:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
 	Goto Exit_Function
-End Function		&apos;	TableDefs	V0.9.5
+End Function		&apos;	TableDefs	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _hasDialog(ByVal psName As String) As Boolean
-&apos;	Return True if psName if in the collection of started dialogs
+Private Function _DFunction(ByVal psFunction As String _
+							, ByVal psExpr As String _
+							, ByVal psDomain As String _
+							, ByVal pvCriteria As Variant _
+							, ByVal Optional pvOrderClause As Variant _
+							) As Variant
+    &apos;Arguments: psFunction		an optional aggregate function
+    &apos;			psExpr:			an SQL expression [might contain an aggregate function]
+    &apos;			psDomain:		a table- or queryname
+    &apos;			pvCriteria:		an optional WHERE clause
+    &apos;			pcOrderClause:	an optional order clause incl. &quot;DESC&quot; if relevant
 
-Dim oDialog As Object
-	If _ErrorHandler() Then On Local Error Goto Error_Function
-	Set oDialog = Dialogs.Item(UCase(psName))
-	_hasDialog = True
+If _ErrorHandler() Then On Local Error GoTo Error_Function
+
+Dim oResult As Object			&apos;To retrieve the value to find.
+Dim vResult As Variant			&apos;Return value for function.
+Dim sSql As String				&apos;SQL statement.
+Dim oStatement As Object		&apos;For CreateStatement method
+Dim sExpr As String				&apos;For inclusion of aggregate function
+Dim sTempField As String		&apos;Random temporary field in SQL expression
+
+    vResult = Null
+
+	If psFunction = &quot;&quot; Then sExpr = &quot;TOP 1 &quot; &amp; psExpr Else sExpr = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
+
+	Randomize 2^14-1
+	sTempField = &quot;TEMP&quot; &amp; Right(&quot;00000&quot; &amp; Int(100000 * Rnd), 5)
+    sSql = &quot;SELECT &quot; &amp; sExpr &amp; &quot; AS [&quot; &amp; sTempField &amp; &quot;] FROM &quot; &amp; psDomain
+    If pvCriteria &lt;&gt; &quot;&quot; Then
+        sSql = sSql &amp; &quot; WHERE &quot; &amp; pvCriteria
+    End If
+    If pvOrderClause &lt;&gt; &quot;&quot; Then
+        sSql = sSql &amp; &quot; ORDER BY &quot; &amp; pvOrderClause
+    End If
+
+    &apos;Lookup the value.
+    Set oStatement = Connection.createStatement()
+	With oStatement
+		.ResultSetType = com.sun.star.sdbc.ResultSetType.FORWARD_ONLY
+		.ResultSetConcurrency = com.sun.star.sdbc.ResultSetConcurrency.READ_ONLY
+		.EscapeProcessing = False
+	    sSql = _ReplaceSquareBrackets(sSql)		&apos;Substitute [] by quote string
+		Set oResult = .executeQuery(sSql)
+	    If Not IsNull(oResult) And Not IsEmpty(oResult) Then
+   				If Not oResult.next() Then Goto Exit_Function
+       		    vResult = Utils._getResultSetColumnValue(oResult, 1)
+    	End If
+   	End With
 
 Exit_Function:
-	Exit Function
-Error_Function:		&apos;	Item by key aborted
-	_hasDialog = False
-	GoTo Exit_Function
-End Function	&apos;	_hasDialog	V0.9.1
+    &apos;Assign the returned value.
+    _DFunction = vResult
+    Set oResult = Nothing
+    Set oStatement = Nothing
+    Exit Function
+Error_Function:
+    TraceError(TRACEABORT, ERRDFUNCTION, _A2B_.CalledSub, 0, , sSQL)
+    Goto Exit_Function
+End Function		&apos;	DFunction		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _hasRecordset(ByVal psName As String) As Boolean
@@ -525,4 +919,30 @@ Error_Function:
 	_PropertyGet = vEMPTY
 	GoTo Exit_Function
 End Function		&apos;	_PropertyGet
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _ReplaceSquareBrackets(ByVal psSql As String) As String
+&apos; Returns psSql after substitution of [] by quote character
+&apos; [] square brackets in (single) quoted strings not affected
+
+Dim sQuote As String		&apos;RDBMS specific quote character
+Dim vSubStrings() As Variant, i As Integer
+Const cstSingleQuote = &quot;&apos;&quot;
+	
+	sQuote = MetaData.IdentifierQuoteString
+	If sQuote = &quot; &quot; Then		&apos;	IdentifierQuoteString returns a space &quot; &quot; if identifier quoting is not supported.
+		_ReplaceSquareBrackets = Trim(psSql)
+		Exit Function
+	End If
+	vSubStrings() = Split(psSql, cstSingleQuote)
+	For i = 0 To UBound(vSubStrings)
+		If (i Mod 2) = 0 Then		&apos;	Only even substrings are parsed for square brackets
+			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;[&quot;), sQuote)
+			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;]&quot;), sQuote)
+		End If
+	Next i
+	
+	_ReplaceSquareBrackets = Trim(Join(vSubStrings, cstSingleQuote))
+	
+End Function	&apos;	ReplaceSquareBrackets		V1.1.0
 </script:module>

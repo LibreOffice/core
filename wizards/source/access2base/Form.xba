@@ -15,8 +15,11 @@ REM --- CLASS ROOT FIELDS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be FORM
+Private _This					As Object
 Private	_Shortcut				As String
 Private	_Name					As String
+Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root structure
+Private _DbEntry				As Integer
 Private	_IsLoaded				As Boolean
 Private	_OpenArgs				As Variant
 Public	Component				As Object				&apos;	com.sun.star.text.TextDocument
@@ -28,8 +31,11 @@ REM --- CONSTRUCTORS / DESTRUCTORS						        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = OBJFORM
+	Set _This = Nothing
 	_Shortcut = &quot;&quot;
 	_Name = &quot;&quot;
+	_DocEntry = -1
+	_DbEntry = -1
 	_IsLoaded = False
 	_OpenArgs = &quot;&quot;
 	Set Component = Nothing
@@ -135,16 +141,16 @@ Function IsLoaded() As Boolean
 	End If
 	IsLoaded = False
 	
-Dim oDatabase As Object, oEnum As Object, oDesk As Object, oComp As Object, bFound As Boolean
+Dim oDoc As Object, oDatabase As Object, oEnum As Object, oDesk As Object, oComp As Object, bFound As Boolean
 Dim i As Integer
-	Set oDatabase = Application._CurrentDb()
-	Set oDesk = CreateUnoService(&quot;com.sun.star.frame.Desktop&quot;)
-	Set oEnum = oDesk.Components().createEnumeration
-	bFound = False
-	While oEnum.hasMoreElements	And Not bFound			&apos;	Search in all open components if one corresponds with current form
-		oComp = oEnum.nextElement
-		Select Case oDatabase._Standalone
-			Case False
+	Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+	Select Case oDoc.DbConnect
+		Case DBCONNECTBASE
+			Set oDesk = CreateUnoService(&quot;com.sun.star.frame.Desktop&quot;)
+			Set oEnum = oDesk.Components().createEnumeration
+			bFound = False
+			Do While oEnum.hasMoreElements	And Not bFound			&apos;	Search in all open components if one corresponds with current form
+				oComp = oEnum.nextElement
 				If HasUnoInterfaces(oComp, &quot;com.sun.star.frame.XModule&quot;) Then
 					If oComp.Identifier = &quot;com.sun.star.sdb.FormDesign&quot; Then
 						For i = 0 To UBound(oComp.Args())
@@ -159,17 +165,11 @@ Dim i As Integer
 						Next i
 					End If
 				End If
-			Case True
-				If Utils._hasUNOProperty(oComp, &quot;ImplementationName&quot;) Then
-					If oComp.ImplementationName = &quot;SwXTextDocument&quot; Then
-						If oComp.Title = oDatabase.Title Then
-							_IsLoaded = True
-							Set Component = oDatabase.Document	&apos;	Form
-						End If
-					End If
-				End If
-		End Select
-	Wend
+			Loop
+		Case DBCONNECTFORM
+			Set Component = oDoc.Document	&apos;	Form
+			_IsLoaded = True				&apos;	Interactive form always loaded by design
+	End Select
 	Set oComp = Nothing
 	IsLoaded = _IsLoaded
 
@@ -179,7 +179,7 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Form.getIsLoaded&quot;, Erl)
 	GoTo Exit_Function
-End Function
+End Function	&apos;	IsLoaded	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get Name() As String
@@ -204,19 +204,20 @@ REM ----------------------------------------------------------------------------
 Public Function OptionGroup(ByVal Optional pvGroupName As Variant) As Variant
 &apos;	Return either an error or an object of type OPTIONGROUP based on its name
 
-	Utils._SetCalledSub(&quot;Form.OptionGroup&quot;)
+Const cstThisSub = &quot;Form.OptionGroup&quot;
+	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvGroupName) Then Call _TraceArguments()
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	
-	Set OptionGroup = _OptionGroup(pvGroupName, CTLPARENTISFORM, DatabaseForm, Component)
+	Set OptionGroup = _OptionGroup(pvGroupName, CTLPARENTISFORM, _This)
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;Form.OptionGroup&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;Form.OptionGroup&quot;, Erl)
+	TraceError(TRACEABORT, Err, Form.OptionGroup, Erl)
 	GoTo Exit_Function
-End Function		&apos;	OptionGroup
+End Function		&apos;	OptionGroup	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
@@ -281,16 +282,20 @@ Public Function mClose() As Variant
 If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Form.Close&quot;)
 	mClose = False
-	If _TraceStandalone() Then Goto Exit_Function
+Dim oDatabase As Object, oController As Object
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 
-Dim oController As Object
-	Set oController = Application.CurrentDb().Document.getFormDocuments.getByName(_Name)
+	Set oController = oDatabase.Document.getFormDocuments.getByName(_Name)
 	oController.close()
 	mClose = True
 
 Exit_Function:
 	Utils._ResetCalledSub(&quot;Form.Close&quot;)
 	Exit Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Form.Close&quot;, Erl)
 	GoTo Exit_Function
@@ -356,15 +361,13 @@ Dim j As Integer
 	End If
 
 	ocControl._Initialize()
+	ocControl._DocEntry = _DocEntry
+	ocControl._DbEntry = _DbEntry
 	Set Controls = ocControl
 	
 Exit_Function:
 	Utils._ResetCalledSub(&quot;Form.Controls&quot;)
 	Exit Function
-Trace_Error:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , iArg)
-	Set Controls = Nothing
-	Goto Exit_Function
 Trace_Error_NotOpen:
 	TraceError(TRACEFATAL, ERRFORMNOTOPEN, Utils._CalledSub(), 0, , _Name)
 	Set Controls = Nothing
@@ -382,6 +385,20 @@ Error_Function:
 	Set Controls = Nothing
 	GoTo Exit_Function
 End Function		&apos;	Controls
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function CurrentDb() As Object
+&apos;	Returns Database object related to current form
+
+Const cstThisSub = &quot;Form.CurrentDb&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+	Set CurrentDb = Application._CurrentDb(_DocEntry, _DbEntry)
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+End Function	&apos;	CurrentDb		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
@@ -428,12 +445,19 @@ Dim iArgNr As Integer
 	If Not Utils._CheckArgument(pvWidth,	iArgNr + 3, Utils._AddNumeric()) Then Goto Exit_Function
 	If Not Utils._CheckArgument(pvHeight, iArgNr + 4, Utils._AddNumeric()) Then Goto Exit_Function
 	
-Dim iArg As Integer		&apos;	Check arguments values
+Dim iArg As Integer, iWrong As Integer		&apos;	Check arguments values
 	iArg = 0
-	If pvHeight &lt; -1 Then iArg = 4	:	If pvWidth &lt; -1 Then iArg = 3
-	If pvTop &lt; -1 Then iArg = 2		:	If pvLeft &lt; -1 Then iArg = 1
+	If pvHeight &lt; -1 Then
+		iArg = 4		:		iWrong = pvHeight
+	ElseIf pvWidth &lt; -1 Then
+		iArg = 3		:		iWrong = pvWidth
+	ElseIf pvTop &lt; -1 Then
+		iArg = 2		:		iWrong = pvTop
+	ElseIf pvLeft &lt; -1 Then
+		iArg = 1		:		iWrong = pvLeft
+	End If
 	If iArg &gt; 0 Then
-		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, iArgNr + iArg)
+		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(iArgNr + iArg, iWrong))
 		Goto Exit_Function
 	End If
 	
@@ -504,20 +528,27 @@ End Function	&apos;	Requery
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setFocus() As Boolean
 &apos;	Execute setFocus method
-	Utils._SetCalledSub(&quot;Form.setFocus&quot;)
+Const cstThisSub = &quot;Form.setFocus&quot;
+	Utils._SetCalledSub(cstThisSub)
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	setFocus = False
 
-	ContainerWindow.toFront()
+	With ContainerWindow
+		If .isVisible() = False Then .setVisible(True)
+		.IsMinimized = False
+		.setFocus()
+		.setEnable(True)		&apos;	Added to try to bypass desynchro issue in Linux
+		.toFront()				&apos;	Added to force window change in Linux
+	End With
 	setFocus = True
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;Form.setFocus&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;Form.setFocus&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	Goto Exit_Function
-End Function	&apos;	setFocus
+End Function	&apos;	setFocus	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional pvValue As Variant) As Boolean
@@ -533,14 +564,14 @@ REM ----------------------------------------------------------------------------
 Public Sub _Initialize(psName As String)
 &apos;	Set pointers to UNO objects
 
-Dim oDatabase As Object, oFormsCollection As Object
+Dim oDoc As Object, oFormsCollection As Object
 	If _ErrorHandler() Then On Local Error Goto Trace_Error
 	_Name = psName
 	_Shortcut = &quot;Forms!&quot; &amp; Utils._Surround(psName)
-	Set oDatabase = Application._CurrentDb()
 	If IsLoaded Then
-		Select Case oDatabase._Standalone
-			Case False
+		Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+		Select Case oDoc.DbConnect
+			Case DBCONNECTBASE
 				If Not IsNull(Component.CurrentController) Then		&apos;	A form opened then closed afterwards keeps a Component attribute
 					Set ContainerWindow = Component.CurrentController.Frame.ContainerWindow
 					Set oFormsCollection = Component.getDrawPage.Forms
@@ -554,9 +585,9 @@ Dim oDatabase As Object, oFormsCollection As Object
 						Goto Trace_Internal_Error
 					End If
 				End If
-			Case True
-				Set ContainerWindow = oDatabase.Document.CurrentController.Frame.ContainerWindow
-				Set DatabaseForm = oDatabase.Form
+			Case DBCONNECTFORM
+				Set ContainerWindow = oDoc.Document.CurrentController.Frame.ContainerWindow
+				Set DatabaseForm = Application._CurrentDb(_DocEntry, _DbEntry).Form
 		End Select
 	Else
 		Set Component = Nothing
@@ -572,7 +603,7 @@ Trace_Error:
 Trace_Internal_Error:
 	TraceError(TRACEABORT, ERRFORMNOTIDENTIFIED, Utils._CalledSub(), 0, , _Name)
 	Goto Exit_Sub
-End Sub			&apos;	_Initialize
+End Sub			&apos;	_Initialize		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
@@ -620,10 +651,10 @@ Dim oObject As Object
 			If IsNull(vBookmark) Then Goto Trace_Error
 			_PropertyGet = vBookmark
 		Case UCase(&quot;Caption&quot;)
-			Set odatabase = Application._CurrentDb()
-			Select Case oDatabase._Standalone
-				Case True	:	_PropertyGet = oDatabase.Document.CurrentController.Frame.Title
-				Case False	:	_PropertyGet = Component.CurrentController.Frame.Title
+			Set odatabase = Application._CurrentDb(_DocEntry, _DbEntry)
+			Select Case oDatabase._DbConnect
+				Case DBCONNECTFORM		:	_PropertyGet = oDatabase.Document.CurrentController.Frame.Title
+				Case DBCONNECTBASE		:	_PropertyGet = Component.CurrentController.Frame.Title
 			End Select
 		Case UCase(&quot;CurrentRecord&quot;)
 			_PropertyGet = DatabaseForm.Row
@@ -645,21 +676,24 @@ Dim oObject As Object
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
 			With DatabaseForm
-				oObject._CommandType = DatabaseForm.CommandType
-				oObject._Command = DatabaseForm.Command
+				oObject._CommandType = .CommandType
+				oObject._Command = .Command
 				oObject._ParentName = _Name
 				oObject._ParentType = _Type
+				Set oDatabase = Application._CurrentDb(_DocEntry, _DbEntry)
+				Set oObject._ParentDatabase = oDatabase
+				Set oObject._ParentDatabase.Connection = .ActiveConnection
 				oObject._ForwardOnly = ( .ResultSetType = com.sun.star.sdbc.ResultSetType.FORWARD_ONLY )
 				oObject._PassThrough = ( .EscapeProcessing = False )
 				oObject._ReadOnly = ( .ResultSetConcurrency = com.sun.star.sdbc.ResultSetConcurrency.READ_ONLY )
 				Call oObject._Initialize()
 			End With
-			Set oDatabase = Application._CurrentDb()
 			With oDatabase
 				.RecordsetMax = .RecordsetMax + 1
 				oObject._Name = Format(.RecordsetMax, &quot;0000000&quot;)
 				.RecordsetsColl.Add(oObject, UCase(oObject._Name))
 			End With
+			If Not ( oObject._BOF And oObject._EOF ) Then oObject.MoveFirst()		&apos;	Do nothing if resultset empty
 			Set _PropertyGet = oObject
 		Case UCase(&quot;RecordSource&quot;)
 			_PropertyGet = DatabaseForm.ActiveCommand
@@ -720,10 +754,10 @@ Dim oDatabase As Object
 			DatabaseForm.MoveToBookmark(pvValue)
 		Case UCase(&quot;Caption&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			Set oDatabase = Application._CurrentDb()
-			Select Case oDatabase._Standalone
-				Case True	:	oDatabase.Document.CurrentController.Frame.Title = pvValue
-				Case False	:	Component.CurrentController.Frame.Title = pvValue
+			Set oDatabase = Application._CurrentDb(_DocEntry, _DbEntry)
+			Select Case oDatabase._DbConnect
+				Case DBCONNECTFORM		:	oDatabase.Document.CurrentController.Frame.Title = pvValue
+				Case DBCONNECTBASE		:	Component.CurrentController.Frame.Title = pvValue
 			End Select
 		Case UCase(&quot;CurrentRecord&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
@@ -731,7 +765,7 @@ Dim oDatabase As Object
 			DatabaseForm.absolute(pvValue)
 		Case UCase(&quot;Filter&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			DatabaseForm.Filter = Utils._ReplaceSquareBrackets(pvValue)
+			DatabaseForm.Filter = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
 		Case UCase(&quot;FilterOn&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
 			DatabaseForm.ApplyFilter = pvValue
@@ -745,7 +779,7 @@ Dim oDatabase As Object
 			ContainerWindow.setPosSize(0, 0, 0, pvValue, com.sun.star.awt.PosSize.HEIGHT)
 		Case UCase(&quot;RecordSource&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			DatabaseForm.Command = Utils._ReplaceSquareBrackets(pvValue)
+			DatabaseForm.Command = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
 			DatabaseForm.CommandType = com.sun.star.sdb.CommandType.COMMAND
 			DatabaseForm.Filter = &quot;&quot;
 			DatabaseForm.reload()

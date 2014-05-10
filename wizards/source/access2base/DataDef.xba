@@ -16,8 +16,13 @@ REM ----------------------------------------------------------------------------
 
 Private	_Type					As String				&apos;	Must be TABLEDEF or QUERYDEF
 Private _Name					As String
+Private _ParentDatabase			As Object
+Private _ReadOnly				As Boolean
 Private Table					As Object				&apos;	com.sun.star.sdb.dbaccess.ODBTable
 Private Query					As Object				&apos;	com.sun.star.sdb.dbaccess.OQuery
+Private TableDescriptor			As Object				&apos;	com.sun.star.sdb.dbaccess.ODBTable
+Private TableFieldsCount		As Integer
+Private TableKeysCount			As Integer
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CONSTRUCTORS / DESTRUCTORS						        														---
@@ -25,8 +30,13 @@ REM ----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	_Type = &quot;&quot;
 	_Name = &quot;&quot;
+	Set _ParentDatabase = Nothing
+	_ReadOnly = False
 	Set Table = Nothing
 	Set Query = Nothing
+	Set TableDescriptor = Nothing
+	TableFieldsCount = 0
+	TableKeysCount = 0
 End Sub		&apos;	Constructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -55,13 +65,122 @@ Property Let SQL(ByVal pvValue As Variant)
 End Property		&apos;	SQL (set)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get pType() As Integer
+Public Function pType() As Integer
 	pType = _PropertyGet(&quot;Type&quot;)
-End Property		&apos;	Type (get)
+End Function		&apos;	Type (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS METHODS	 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+Public Function CreateField(ByVal Optional pvFieldName As Variant _
+								, ByVal optional pvType As Variant _
+								, ByVal optional pvSize As Variant _
+								, ByVal optional pvAttributes As variant _
+								) As Object
+&apos;Return a Field object
+Const cstThisSub = &quot;TableDef.CreateField&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+
+Dim oTable As Object, oNewField As Object, oKeys As Object, oPrimaryKey As Object, oColumn As Object
+Const cstMaxKeyLength = 30
+
+	CreateField = Nothing
+	If _ParentDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+	If IsMissing(pvFieldName) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvFieldName, 1, vbString) Then Goto Exit_Function
+	If pvFieldName = &quot;&quot; Then Call _TraceArguments()
+	If IsMissing(pvType) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric( _
+						dbInteger, dbLong, dbBigInt, dbFloat, vbSingle, dbDouble _
+						, dbNumeric, dbDecimal, dbText, dbChar, dbMemo _
+						, dbDate, dbTime, dbTimeStamp _
+						, dbBinary, dbVarBinary, dbLongBinary, dbBoolean _
+					)) Then Goto Exit_Function
+	If IsMissing(pvSize) Then pvSize = 0
+	If pvSize &lt; 0 Then pvSize = 0
+	If Not Utils._CheckArgument(pvSize, 1, Utils._AddNumeric()) Then Goto Exit_Function
+	If IsMissing(pvAttributes) Then pvAttributes = 0
+	If Not Utils._CheckArgument(pvAttributes, 1, Utils._AddNumeric(), Array(0, dbAutoIncrField)) Then Goto Exit_Function
+
+	If _Type &lt;&gt; OBJTABLEDEF Then Goto Error_NotApplicable
+	If IsNull(Table) And IsNull(TableDescriptor) Then Goto Error_NotApplicable
+	
+	If _ReadOnly Then Goto Error_NoUpdate
+
+	Set oNewField = New Field
+	With oNewField
+		._Name = pvFieldName
+		._ParentName = _Name
+		._ParentType = OBJTABLEDEF
+		If IsNull(Table) Then Set oTable = TableDescriptor Else Set oTable = Table
+		Set .Column = oTable.Columns.createDataDescriptor()
+	End With
+	With oNewField.Column
+		.Name = pvFieldName
+		Select Case pvType
+			Case dbInteger				:	.Type = com.sun.star.sdbc.DataType.TINYINT
+			Case dbLong					:	.Type = com.sun.star.sdbc.DataType.INTEGER
+			Case dbBigInt				:	.Type = com.sun.star.sdbc.DataType.BIGINT
+			Case dbFloat				:	.Type = com.sun.star.sdbc.DataType.FLOAT
+			Case dbSingle				:	.Type = com.sun.star.sdbc.DataType.REAL
+			Case dbDouble				:	.Type = com.sun.star.sdbc.DataType.DOUBLE
+			Case dbNumeric, dbCurrency	:	.Type = com.sun.star.sdbc.DataType.NUMERIC
+			Case dbDecimal				:	.Type = com.sun.star.sdbc.DataType.DECIMAL
+			Case dbText					:	.Type = com.sun.star.sdbc.DataType.CHAR
+			Case dbChar					:	.Type = com.sun.star.sdbc.DataType.VARCHAR
+			Case dbMemo					:	.Type = com.sun.star.sdbc.DataType.LONGVARCHAR
+			Case dbDate					:	.Type = com.sun.star.sdbc.DataType.DATE
+			Case dbTime					:	.Type = com.sun.star.sdbc.DataType.TIME
+			Case dbTimeStamp			:	.Type = com.sun.star.sdbc.DataType.TIMESTAMP
+			Case dbBinary				:	.Type = com.sun.star.sdbc.DataType.BINARY
+			Case dbVarBinary			:	.Type = com.sun.star.sdbc.DataType.VARBINARY
+			Case dbLongBinary			:	.Type = com.sun.star.sdbc.DataType.LONGVARBINARY
+			Case dbBoolean				:	.Type = com.sun.star.sdbc.DataType.BOOLEAN
+		End Select
+		.Precision = Int(pvSize)
+		If pvType = dbNumeric Or pvType = dbDecimal Or pvType = dbCurrency Then .Scale = Int(pvSize * 10) - Int(pvSize) * 10
+		.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE
+		If Not IsNull(TableDescriptor) Then TableFieldsCount = TableFieldsCount + 1
+		If pvAttributes = dbAutoIncrField Then
+			If Not IsNull(Table) Then Goto Error_Sequence			&apos;	Do not accept adding an AutoValue field when table exists
+			Set oKeys = oTable.Keys
+			Set oPrimaryKey = oKeys.createDataDescriptor()
+			Set oColumn = oPrimaryKey.Columns.createDataDescriptor()
+			oColumn.Name = pvFieldName
+			oColumn.IsAutoIncrement = True
+			oPrimaryKey.Columns.appendByDescriptor(oColumn)
+			oPrimaryKey.Name = Left(&quot;PK_&quot; &amp; Join(Split(oNewField._ParentName, &quot; &quot;), &quot;_&quot;) &amp; &quot;_&quot; &amp; Join(Split(pvFieldName, &quot; &quot;), &quot;_&quot;), cstMaxKeyLength)
+			oKeys.appendByDescriptor(oPrimaryKey)
+			.IsAutoIncrement = True
+			.IsNullable = com.sun.star.sdbc.ColumnValue.NO_NULLS
+			oColumn.dispose()
+		Else
+			.IsAutoIncrement = False
+		End If
+	End With
+	oTable.Columns.appendByDescriptor(oNewfield.Column)
+	
+	Set CreateField = oNewField
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_Sequence:
+	TraceError(TRACEFATAL, ERRFIELDCREATION, Utils._CalledSub(), 0, 1, pvFieldName)
+	Goto Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function	&apos;	CreateField	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Execute(ByVal Optional pvOptions As Variant) As Boolean
@@ -81,19 +200,18 @@ Const cstNull = -1
 	End If
 	
 	&apos;Check action query
-Dim oDatabase As Object, oStatement As Object, vResult As Variant
+Dim oStatement As Object, vResult As Variant
 Dim iType As Integer, sSql As String
 	iType = pType
 	If ( (iType And DBQAction) = 0 ) And ( (iType And DBQDDL) = 0 ) Then Goto Trace_Action
 
 	&apos;Execute action query
-	Set oDatabase = Application._CurrentDb()
-	Set oStatement = oDatabase.Connection.createStatement()
+	Set oStatement = _ParentDatabase.Connection.createStatement()
 	sSql = Query.Command
 	If pvOptions = dbSQLPassThrough	Then oStatement.EscapeProcessing = False _
-									Else oStatement.EscapeProcessing = True
+									Else oStatement.EscapeProcessing = Query.EscapeProcessing
 	On Local Error Goto SQL_Error
-	vResult = oStatement.executeUpdate(Utils._ReplaceSquareBrackets(sSql))
+	vResult = oStatement.executeUpdate(_ParentDatabase._ReplaceSquareBrackets(sSql))
 	On Local Error Goto Error_Function
 	
 	Execute = True
@@ -113,7 +231,7 @@ SQL_Error:
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
-End Function		&apos;	Execute
+End Function		&apos;	Execute V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Fields(ByVal Optional pvIndex As variant) As Object
@@ -139,6 +257,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 			oObject._CollType = COLLFIELDS
 			oObject._ParentType = _Type
 			oObject._ParentName = _Name
+			Set oObject._ParentDatabase = _ParentDatabase
 			oObject._Count = UBound(sObjects) + 1
 			Goto Exit_Function
 		Case VarType(pvIndex) = vbString
@@ -162,6 +281,7 @@ Dim i As Integer, bFound As Boolean, oFields As Object
 	Set oObject.Column = oFields.getByName(sObjectName)
 	oObject._ParentName = _Name
 	oObject._ParentType = _Type
+	Set oObject._ParentDatabase = _ParentDatabase
 
 Exit_Function:
 	Set Fields = oObject
@@ -172,7 +292,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 Trace_NotFound:
-	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Field&quot;, pvIndex))
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(_GetLabel(&quot;FIELD&quot;), pvIndex))
 	Goto Exit_Function
 Trace_IndexError:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
@@ -207,14 +327,14 @@ End Function	&apos;	hasProperty
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function OpenRecordset(ByVal Optional pvType As Variant, ByVal Optional pvOptions As Variant, ByVal Optional pvLockEdit As Variant) As Object
-&apos;Return a Recordset object based on current tabledef object
+&apos;Return a Recordset object based on current table- or querydef object
 
 Dim cstThisSub As String
 	cstThisSub = Utils._PCase(_Type) &amp; &quot;.OpenRecordset&quot;
 	Utils._SetCalledSub(cstThisSub)
 Const cstNull = -1
-Dim lCommandType As Long, sCommand As String, oObject As Object
-Dim odbDatabase As Object
+Dim lCommandType As Long, sCommand As String, oObject As Object,bPassThrough As Boolean
+
 	Set oObject = Nothing
 	If IsMissing(pvType) Then
 		pvType = cstNull
@@ -239,6 +359,7 @@ Dim odbDatabase As Object
 		Case OBJQUERYDEF
 			lCommandType = com.sun.star.sdb.CommandType.QUERY
 			sCommand = _Name
+			If pvOptions = dbSQLPassThrough Then bPassThrough = True Else bPassThrough = Not Query.EscapeProcessing
 	End Select
 	
 	Set oObject = New Recordset
@@ -248,12 +369,12 @@ Dim odbDatabase As Object
 		._ParentName = _Name
 		._ParentType = _Type
 		._ForwardOnly = ( pvType = dbOpenForwardOnly )
-		._PassThrough = ( pvOptions = dbSQLPassThrough )
-		._ReadOnly = ( pvLockEdit = dbReadOnly )
+		._PassThrough = bPassThrough
+		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
+		Set ._ParentDatabase = _ParentDatabase
 		Call ._Initialize()
 	End With
-	Set odbDatabase = Application._CurrentDb()
-	With odbDatabase
+	With _ParentDatabase
 		.RecordsetMax = .RecordsetMax + 1
 		oObject._Name = Format(.RecordsetMax, &quot;0000000&quot;)
 		.RecordsetsColl.Add(oObject, UCase(oObject._Name))
@@ -270,7 +391,7 @@ Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	Set oObject = Nothing
 	GoTo Exit_Function
-End Function	&apos;	OpenRecordset
+End Function	&apos;	OpenRecordset V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
@@ -290,6 +411,7 @@ Dim cstThisSub As String
 		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
 		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
 	End If
+	Set vProperty._ParentDatabase = _ParentDatabase
 	
 Exit_Function:
 	Set Properties = vProperty
@@ -325,6 +447,7 @@ Dim cstThisSub As String
 	Utils._SetCalledSub(cstThisSub &amp; &quot;.get&quot; &amp; psProperty)
 Dim vEMPTY As Variant, sSql As String, sVerb As String, iType As Integer
 	_PropertyGet = vEMPTY
+	If Not hasProperty(psProperty) Then Goto Trace_Error
 	
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Name&quot;)
@@ -361,7 +484,7 @@ Exit_Function:
 	Utils._ResetCalledSub(cstThisSub &amp; &quot;.get&quot; &amp; psProperty)
 	Exit Function
 Trace_Error:
-	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
+	TraceError(TRACEWARNING, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
 	_PropertyGet = vEMPTY
 	Goto Exit_Function
 Error_Function:
@@ -390,6 +513,8 @@ Dim iArgNr As Integer
 	End Select
 	
 	If Not hasProperty(psProperty) Then Goto Trace_Error
+	
+	If _ReadOnly Then Goto Error_NoUpdate
 
 	Select Case UCase(psProperty)
 		Case UCase(&quot;SQL&quot;)
@@ -409,6 +534,9 @@ Trace_Error:
 Trace_Error_Value:
 	TraceError(TRACEFATAL, ERRPROPERTYVALUE, Utils._CalledSub(), 0, 1, Array(pvValue, psProperty))
 	_PropertySet = False
+	Goto Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub &amp; &quot;._PropertySet&quot;, Erl)

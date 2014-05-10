@@ -25,12 +25,10 @@ Dim sLocal As String
 	Select Case psLocale
 		Case &quot;EN&quot;, &quot;DEFAULT&quot;
 			Select Case UCase(psShortlabel)
-				Case &quot;ERR&quot; &amp; ERRNOTDATABASE			:	sLocal = &quot;The open document is not an OpenOffice/LibreOffice Database Document&quot;
-				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;Database connection not established&quot;
+				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;Connection to the database is not active&quot;
 				Case &quot;ERR&quot; &amp; ERRMISSINGARGUMENTS	:	sLocal = &quot;Arguments are missing or are not initialized&quot;
 				Case &quot;ERR&quot; &amp; ERRWRONGARGUMENT		:	sLocal = &quot;Argument nr. %0 [Value = &apos;%1&apos;] is invalid&quot;
-				Case &quot;ERR&quot; &amp; ERRMAINFORM			:	sLocal = &quot;Document &apos;%0&apos; does not contain exactly 1 main form (either none or &gt; 1)&quot;
-				Case &quot;ERR&quot; &amp; ERRSTANDALONE			:	sLocal = &quot;Property or method must not be called from a standalone form&quot;
+				Case &quot;ERR&quot; &amp; ERRMAINFORM			:	sLocal = &quot;Document &apos;%0&apos; does not contain any form&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMNOTIDENTIFIED	:	sLocal = &quot;Form &apos;%0&apos; not identified in database Forms set&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMNOTFOUND		:	sLocal = &quot;Form &apos;%0&apos; not found&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMNOTOPEN			:	sLocal = &quot;Form &apos;%0&apos; is currently not open&quot;
@@ -51,7 +49,6 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERROBJECTNOTFOUND		:	sLocal = &quot;%0 &apos;%1&apos; not found&quot;
 				Case &quot;ERR&quot; &amp; ERROPENOBJECT			:	sLocal = &quot;%0 &apos;%1&apos; could not be opened&quot;
 				Case &quot;ERR&quot; &amp; ERRCLOSEOBJECT			:	sLocal = &quot;%0 &apos;%1&apos; could not be closed&quot;
-				Case &quot;ERR&quot; &amp; ERRMETHOD				:	sLocal = &quot;Method not applicable in this context&quot;
 				Case &quot;ERR&quot; &amp; ERRACTION				:	sLocal = &quot;Action not applicable in this context&quot;
 				Case &quot;ERR&quot; &amp; ERRSENDMAIL			:	sLocal = &quot;Mail service could not be activated&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMYETOPEN			:	sLocal = &quot;Form %0 is already open&quot;
@@ -70,17 +67,23 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRFILEACCESS			:	sLocal = &quot;File access error on file &apos;%0&apos;&quot;
 				Case &quot;ERR&quot; &amp; ERRMEMOLENGTH			:	sLocal = &quot;Field length (%0) exceeds maximum length. Use WriteAllText instead&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTACTIONQUERY		:	sLocal = &quot;Query &apos;%0&apos; is not an action query&quot;
-				Case &quot;ERR&quot; &amp; ERRNOTUPDATABLE		:	sLocal = &quot;Recordset or field is not updatable&quot;
+				Case &quot;ERR&quot; &amp; ERRNOTUPDATABLE		:	sLocal = &quot;Database, recordset or field is read only&quot;
 				Case &quot;ERR&quot; &amp; ERRUPDATESEQUENCE		:	sLocal = &quot;Recordset update sequence error&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTNULLABLE			:	sLocal = &quot;Field &apos;%0&apos; must not contain a NULL value&quot;
-				Case &quot;ERR&quot; &amp; ERRROWDELETED			:	sLocal = &quot;Current row has been deleted&quot;
+				Case &quot;ERR&quot; &amp; ERRROWDELETED			:	sLocal = &quot;Current row has been deleted by another process or user&quot;
 				Case &quot;ERR&quot; &amp; ERRRECORDSETCLONE		:	sLocal = &quot;Cloning a cloned Recordset is forbidden&quot;
 				Case &quot;ERR&quot; &amp; ERRQUERYDEFDELETED		:	sLocal = &quot;Pre-existing query &apos;%0&apos; has been deleted&quot;
+				Case &quot;ERR&quot; &amp; ERRTABLEDEFDELETED		:	sLocal = &quot;Pre-existing table &apos;%0&apos; has been deleted&quot;
+				Case &quot;ERR&quot; &amp; ERRTABLECREATION		:	sLocal = &quot;Table &apos;%0&apos; could not be created&quot;
+				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Field &apos;%0&apos; could not be created&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
+				Case &quot;OBJECT&quot;						:	sLocal = &quot;Object&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
 				Case &quot;QUERY&quot;						:	slocal = &quot;Query&quot;
 				Case &quot;FORM&quot;							:	sLocal = &quot;Form&quot;
 				Case &quot;REPORT&quot;						:	sLocal = &quot;Report&quot;
+				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
+				Case &quot;FIELD&quot;						:	sLocal = &quot;Field&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;Error #&quot;
 				Case &quot;ERROCCUR&quot;						:	sLocal = &quot;occurred&quot;
@@ -126,12 +129,10 @@ Dim sLocal As String
 			End Select
 		Case &quot;FR&quot;
 			Select Case  UCase(psShortlabel)
-				Case &quot;ERR&quot; &amp; ERRNOTDATABASE			:	sLocal = &quot;Le document actuellement ouvert n&apos;est pas un document OpenOffice/LibreOffice de type Database&quot;
-				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;La connexion à la banque de données n&apos;est pas établie&quot;
+				Case &quot;ERR&quot; &amp; ERRDBNOTCONNECTED		:	sLocal = &quot;Pas de connexion active à la banque de données&quot;
 				Case &quot;ERR&quot; &amp; ERRMISSINGARGUMENTS	:	sLocal = &quot;Des arguments sont manquants ou non initialisés&quot;
 				Case &quot;ERR&quot; &amp; ERRWRONGARGUMENT		:	sLocal = &quot;L&apos;argument n° %0 [Valeur = &apos;%1&apos;] n&apos;est pas valable&quot;
-				Case &quot;ERR&quot; &amp; ERRMAINFORM			:	sLocal = &quot;Le document &apos;%0&apos; ne contient pas exactement un formulaire principal (soit il n&apos;en a aucun soit &gt; 1)&quot;
-				Case &quot;ERR&quot; &amp; ERRSTANDALONE			:	sLocal = &quot;La propriété ou la méthode ne peut pas être invoquée depuis un formulaire (Writer) autonome&quot;
+				Case &quot;ERR&quot; &amp; ERRMAINFORM			:	sLocal = &quot;Le document &apos;%0&apos; ne contient aucun formulaire&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMNOTIDENTIFIED	:	sLocal = &quot;Le formulaire &apos;%0&apos; n&apos;a pas pu être identifié parmi l&apos;ensemble des formulaires de la Database&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMNOTFOUND		:	sLocal = &quot;Formulaire &apos;%0&apos; non trouvé&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMNOTOPEN			:	sLocal = &quot;Le formulaire &apos;%0&apos; n&apos;est actuellement pas ouvert&quot;
@@ -152,7 +153,6 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERROBJECTNOTFOUND		:	sLocal = &quot;%0 &apos;%1&apos; non trouvé(e)&quot;
 				Case &quot;ERR&quot; &amp; ERROPENOBJECT			:	sLocal = &quot;%0 &apos;%1&apos;: ouverture en échec&quot;
 				Case &quot;ERR&quot; &amp; ERRCLOSEOBJECT			:	sLocal = &quot;%0 &apos;%1&apos;: fermeture en échec&quot;
-				Case &quot;ERR&quot; &amp; ERRMETHOD				:	sLocal = &quot;Méthode non applicable dans ce contexte&quot;
 				Case &quot;ERR&quot; &amp; ERRACTION				:	sLocal = &quot;Action non applicable dans ce contexte&quot;
 				Case &quot;ERR&quot; &amp; ERRSENDMAIL			:	sLocal = &quot;Le service de messagerie n&apos;a pas pu être activé&quot;
 				Case &quot;ERR&quot; &amp; ERRFORMYETOPEN			:	sLocal = &quot;Le formulaire %0 est déjà ouvert&quot;
@@ -171,17 +171,23 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRFILEACCESS			:	sLocal = &quot;Erreur d&apos;accès au fichier &apos;%0&apos;&quot;
 				Case &quot;ERR&quot; &amp; ERRMEMOLENGTH			:	sLocal = &quot;La longueur du champ (%0) dépasse la taille maximale autorisée.. Remplacer par WriteAllText&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTACTIONQUERY		:	sLocal = &quot;La requête &apos;%0&apos; n&apos;est pas une requête d&apos;action&quot;
-				Case &quot;ERR&quot; &amp; ERRNOTUPDATABLE		:	sLocal = &quot;Ce recordset ou ce champ ne peut pas être mis à jour&quot;
+				Case &quot;ERR&quot; &amp; ERRNOTUPDATABLE		:	sLocal = &quot;La banque de données, le recordset ou le champ sont en lecture seulement&quot;
 				Case &quot;ERR&quot; &amp; ERRUPDATESEQUENCE		:	sLocal = &quot;Erreur de séquence lors de la mise à jour d&apos;un Recordset&quot;
 				Case &quot;ERR&quot; &amp; ERRNOTNULLABLE			:	sLocal = &quot;Le champ &apos;%0&apos; ne peut pas recevoir une valeur NULLe&quot;
-				Case &quot;ERR&quot; &amp; ERRROWDELETED			:	sLocal = &quot;L&apos;enregistrement courant a été effacé&quot;
+				Case &quot;ERR&quot; &amp; ERRROWDELETED			:	sLocal = &quot;L&apos;enregistrement courant a été effacé par un autre processus ou un autre utilisateur&quot;
 				Case &quot;ERR&quot; &amp; ERRRECORDSETCLONE		:	sLocal = &quot;Le clonage d&apos;un Recordset cloné est interdit&quot;
-				Case &quot;ERR&quot; &amp; ERRQUERYDEFDELETED		:	sLocal = &quot;Le query existant &apos;%0&apos; a été supprimé&quot;
+				Case &quot;ERR&quot; &amp; ERRQUERYDEFDELETED		:	sLocal = &quot;La requête existante &apos;%0&apos; a été supprimée&quot;
+				Case &quot;ERR&quot; &amp; ERRTABLEDEFDELETED		:	sLocal = &quot;La table existante &apos;%0&apos; a été supprimée&quot;
+				Case &quot;ERR&quot; &amp; ERRTABLECREATION		:	sLocal = &quot;La table &apos;%0&apos; n&apos;a pas pu être créée&quot;
+				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être créé&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
+				Case &quot;OBJECT&quot;						:	sLocal = &quot;Objet&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
 				Case &quot;QUERY&quot;						:	slocal = &quot;Requête&quot;
 				Case &quot;FORM&quot;							:	sLocal = &quot;Formulaire&quot;
 				Case &quot;REPORT&quot;						:	sLocal = &quot;Rapport&quot;
+				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
+				Case &quot;FIELD&quot;						:	sLocal = &quot;Champ&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;L&apos;erreur #&quot;
 				Case &quot;ERROCCUR&quot;						:	sLocal = &quot;s&apos;est produite&quot;

@@ -400,14 +400,14 @@ Const cstDOT = &quot;.&quot;
 
 Dim iCurrentIndex As Integer, vCurrentObject As Variant, sCurrentProperty As String
 Dim sComponents() As String, sSubComponents() As String, sDialog As String
-Dim oDatabase As Object
+Dim oDoc As Object
 	Set vCurrentObject = Nothing
 	sComponents = Split(Trim(pvShortcut), cstEXCLAMATION)
 	If UBound(sComponents) = 0 Then Goto Trace_Error
 	If Not Utils._InList(UCase(sComponents(0)), Array(&quot;FORMS&quot;, &quot;DIALOGS&quot;)) Then Goto Trace_Error
 	If sComponents(1) = &quot;0&quot; Or Left(sComponents(1), 2) = &quot;0.&quot; Then
-		oDatabase = Application._CurrentDb()
-		If oDatabase._Standalone Then sComponents(1) = oDatabase.FormName Else Goto Trace_Error
+		Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+		If oDoc.DbConnect = DBCONNECTFORM Then sComponents(1) = oDoc.DbContainers(0).FormName Else Goto Trace_Error
 	End If
 
 	sSubComponents = Split(sComponents(UBound(sComponents)), cstDOT)
@@ -438,7 +438,7 @@ Dim oDatabase As Object
 						sDialog = UCase(sComponents(iCurrentIndex))
 						vCurrentObject = Application.AllDialogs(sDialog)
 						If Not vCurrentObject.IsLoaded Then Goto Trace_Error
-						Set vCurrentObject.UnoDialog = _CurrentDb.Dialogs.Item(sDialog)
+						Set vCurrentObject.UnoDialog = _A2B_.Dialogs.Item(sDialog)
 					&apos;Case Else
 				End Select
 			Case OBJFORM, OBJSUBFORM, OBJCONTROL, OBJDIALOG
@@ -453,7 +453,7 @@ Exit_Function:
 	Utils._ResetCalledSub(&quot;getObject&quot;)
 	Exit Function
 Trace_Error:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , 1)
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvShortcut))
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;getObject&quot;, Erl)

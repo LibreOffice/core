@@ -7,10 +7,6 @@ REM ============================================================================
 
 Option Explicit
 
-&apos;DATABASE
-&apos;	Name property
-&apos;	Path property
-
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const TRACEDEBUG			= &quot;DEBUG&quot;						&apos;	To report values of variables
 Global Const TRACEINFO			= &quot;INFO&quot;						&apos;	To report any event
@@ -23,12 +19,12 @@ Global Const TRACEANY			= &quot;===&gt;&quot;						&apos;	Always reported
 	&apos;	FATALs and ABORTs interrupt the program execution
 	
 Global Const ERRINIT				=	1500
-Global Const ERRNOTDATABASE			=	1501
-Global Const ERRDBNOTCONNECTED		=	1502
-Global Const ERRMISSINGARGUMENTS	=	1503
-Global Const ERRWRONGARGUMENT		=	1504
-Global Const ERRMAINFORM			=	1505
-Global Const ERRSTANDALONE			=	1506
+Global Const ERRDBNOTCONNECTED		=	1501
+Global Const ERRMISSINGARGUMENTS	=	1502
+Global Const ERRWRONGARGUMENT		=	1503
+Global Const ERRMAINFORM			=	1504
+Global Const ERRMETHOD				=	1505
+Global Const ERRFILEACCESS			=	1506
 Global Const ERRFORMNOTIDENTIFIED	=	1507
 Global Const ERRFORMNOTFOUND		=	1508
 Global Const ERRFORMNOTOPEN			=	1509
@@ -49,31 +45,36 @@ Global Const ERRSQLSTATEMENT		=	1523
 Global Const ERROBJECTNOTFOUND		=	1524
 Global Const ERROPENOBJECT			=	1525
 Global Const ERRCLOSEOBJECT			=	1526
-Global Const ERRMETHOD				=	1527
 Global Const ERRACTION				=	1528
 Global Const ERRSENDMAIL			=	1529
 Global Const ERRFORMYETOPEN			=	1530
-Global Const ERRMETHOD				=	1531
-Global Const ERRPROPERTYINIT		=	1532
-Global Const ERRFILENOTCREATED		=	1533
-Global Const ERRDIALOGNOTFOUND		=	1534
-Global Const ERRDIALOGUNDEFINED		=	1535
-Global Const ERRDIALOGSTARTED		=	1536
-Global Const ERRDIALOGNOTSTARTED	=	1537
-Global Const ERRRECORDSETNODATA		=	1538
-Global Const ERRRECORDSETCLOSED		=	1539
-Global Const ERRRECORDSETRANGE		=	1540
-Global Const ERRRECORDSETFORWARD	=	1541
-Global Const ERRFIELDNULL			=	1542
-Global Const ERRFILEACCESS			=	1543
-Global Const ERRMEMOLENGTH			=	1544
-Global Const ERRNOTACTIONQUERY		=	1545
-Global Const ERRNOTUPDATABLE		=	1546
-Global Const ERRUPDATESEQUENCE		=	1547
-Global Const ERRNOTNULLABLE			=	1548
-Global Const ERRROWDELETED			=	1549
-Global Const ERRRECORDSETCLONE		=	1550
-Global Const ERRQUERYDEFDELETED		=	1551
+Global Const ERRPROPERTYINIT		=	1531
+Global Const ERRFILENOTCREATED		=	1532
+Global Const ERRDIALOGNOTFOUND		=	1533
+Global Const ERRDIALOGUNDEFINED		=	1534
+Global Const ERRDIALOGSTARTED		=	1535
+Global Const ERRDIALOGNOTSTARTED	=	1536
+Global Const ERRRECORDSETNODATA		=	1537
+Global Const ERRRECORDSETCLOSED		=	1538
+Global Const ERRRECORDSETRANGE		=	1539
+Global Const ERRRECORDSETFORWARD	=	1540
+Global Const ERRFIELDNULL			=	1541
+Global Const ERRMEMOLENGTH			=	1542
+Global Const ERRNOTACTIONQUERY		=	1543
+Global Const ERRNOTUPDATABLE		=	1544
+Global Const ERRUPDATESEQUENCE		=	1545
+Global Const ERRNOTNULLABLE			=	1546
+Global Const ERRROWDELETED			=	1547
+Global Const ERRRECORDSETCLONE		=	1548
+Global Const ERRQUERYDEFDELETED		=	1549
+Global Const ERRTABLEDEFDELETED		=	1550
+Global Const ERRTABLECREATION		=	1551
+Global Const ERRFIELDCREATION		=	1552
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Global Const DBCONNECTBASE			=	1			&apos;	Connection from Base document (OpenConnection)
+Global Const DBCONNECTFORM			=	2			&apos;	Connection from a database-aware form (OpenConnection)
+Global Const DBCONNECTANY			=	3			&apos;	Connection from any document for data access only (OpenDatabase)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const COLLALLDIALOGS = &quot;ALLDIALOGS&quot;
@@ -139,7 +140,6 @@ Global Const CTLPARENTISGROUP	= &quot;OPTIONGROUP&quot;
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Type Root
-	&apos;	Single values
 	ErrorHandler		As Boolean
 	MinimalTraceLevel	As Integer
 	TraceLogs()			As Variant
@@ -149,7 +149,22 @@ Type Root
 	CalledSub			As String
 	Introspection		As Object				&apos;	com.sun.star.beans.Introspection	
 	VersionNumber		As String				&apos;	Actual Access2Base version number
-	CurrentDb()			As Object				&apos;	Array of database objects -{0] = Base file, [1..N] = Writer files
+	FindRecord			As Object
+	StatusBar			As Object
+	Dialogs				As Object				&apos;	Collection
+	CurrentDoc()		As Variant				&apos;	Array of document containers - [0] = Base document, [1 ... N] = other documents
+End Type
+
+Type DocContainer
+	Document			As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or SwXTextDocument or ScModelObj
+	DbConnect			As Integer				&apos;	DBCONNECTxxx constants
+	URL					As String
+	DbContainers()		As Variant				&apos;	One entry by (data-aware) form
+End Type
+
+Type DbContainer
+	FormName			As String				&apos;	name of data-aware form
+	Database			As Object				&apos;	Database type
 End Type
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -173,19 +188,19 @@ Const cstSepar = &quot;!&quot;
 	If IsMissing(pvIndex) Then
 		iMode = cstCount
 	Else
-		If Not Utils.Utils._CheckArgument(pvIndex, 1, Utils.Utils._AddNumeric(vbString)) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 		If VarType(pvIndex) = vbString Then iMode = cstByName Else iMode = cstByIndex
 	End If
 
 	Set vAllDialogs = Nothing
 
-	Set oDocLibraries = ThisComponent.DialogLibraries		&apos;_CurrentDb().Document.DialogLibraries
+	Set oDocLibraries = ThisComponent.DialogLibraries
 	vDocLibraries = oDocLibraries.getElementNames()
 	Set oMacLibraries = DialogLibraries
 	vMacLibraries = oMacLibraries.getElementNames()
 	&apos;Remove Access2Base from the list
 	For i = 0 To UBound(vMacLibraries)
-		If vMacLibraries(i) = &quot;Access2Base&quot; Then vMacLibraries(i) = &quot;&quot;
+		If Left(vMacLibraries(i), 11) = &quot;Access2Base&quot; Then vMacLibraries(i) = &quot;&quot;
 	Next i
 	vMacLibraries = Utils._TrimArray(vMacLibraries)
 
@@ -258,7 +273,7 @@ Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Trace_Not_Found:
-	TraceError(TRACEFATAL, ERRDIALOGNOTFOUND, Utils.Utils._CalledSub(), 0, , pvIndex)
+	TraceError(TRACEFATAL, ERRDIALOGNOTFOUND, Utils._CalledSub(), 0, , pvIndex)
 	Goto Exit_Function
 Trace_Error_Index:
 	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0, 1)
@@ -283,7 +298,7 @@ Dim iIndex As Integer, vAllForms As Variant
 	Set vAllForms = Nothing
 	
 	If Not IsMissing(pvIndex) Then
-		If Not Utils.Utils._CheckArgument(pvIndex, 1, Utils.Utils._AddNumeric(vbString)) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 		Select Case VarType(pvIndex)
 			Case vbString
 				iIndex = -1
@@ -292,16 +307,21 @@ Dim iIndex As Integer, vAllForms As Variant
 		End Select
 	End If
 
-Dim oDatabase As Variant, oForms As Variant, oCounter As Variant, oFormsCollection As Object
-	Set oDatabase = _CurrentDb()
-	If Not oDatabase._Standalone Then Set oForms = oDatabase.Document.getFormDocuments()
+Dim iCurrentDoc As Integer, vCurrentDoc As Variant, oForms As Variant, oCounter As Variant, oFormsCollection As Object
+	iCurrentDoc = Application._CurrentDoc()
+	If iCurrentDoc &gt;= 0 Then
+		vCurrentDoc = _A2B_.CurrentDoc(iCurrentDoc)
+	Else
+		Goto Exit_Function
+	End If
+	If vCurrentDoc.DbConnect = DBCONNECTBASE Then Set oForms = vCurrentDoc.Document.getFormDocuments()
 &apos; Process when NO ARGUMENT
 	If IsMissing(pvIndex) Then					&apos;	No argument
 		Set oCounter = New Collect
 		oCounter._CollType = COLLALLFORMS
 		oCounter._ParentType = OBJAPPLICATION
 		oCounter._ParentName = &quot;&quot;
-		If oDatabase._Standalone Then oCounter._Count = 1 Else oCounter._Count = oForms.getCount()
+		If vCurrentDoc.DbConnect = DBCONNECTFORM Then oCounter._Count = UBound(vCurrentDoc.DbContainers) + 1 Else oCounter._Count = oForms.getCount()
 		Set vAllForms = oCounter
 		Goto Exit_Function
 	End If
@@ -309,25 +329,43 @@ Dim oDatabase As Variant, oForms As Variant, oCounter As Variant, oFormsCollecti
 &apos; Process when ARGUMENT = STRING or INDEX =&gt; Initialize form object
 Dim ofForm As Object
 	Set ofForm = New Form
-Dim sAllForms As Variant, i As Integer, sSub As String, vName As Variant
-	Select Case oDatabase._Standalone
-		Case False
+	Set ofForm._This = ofForm
+Dim sAllForms As Variant, i As Integer, vName As Variant, oDatabase As Object, bFound As Boolean
+	Select Case vCurrentDoc.DbConnect
+		Case DBCONNECTBASE
 			sAllForms() = oForms.getElementNames()
-			If iIndex= -1 Then											&apos;	String argument
-				vName = Utils._InList(Utils.Utils._Trim(pvIndex), sAllForms, True)		&apos;	hasByName not used because case sensitive
+			ofForm._DocEntry = 0
+			ofForm._DbEntry = 0
+			If iIndex= -1 Then														&apos;	String argument
+				vName = Utils._InList(Utils._Trim(pvIndex), sAllForms, True)		&apos;	hasByName not used because case sensitive
 				If vName = False Then Goto Trace_Not_Found
 				ofForm._Initialize(vName)
 			Else	
 				If iIndex + 1 &gt; oForms.getCount() Or iIndex &lt; 0 Then Goto Trace_Error_Index	&apos;	Numeric argument OK but value nonsense
 				ofForm._Initialize(sAllForms(iIndex))
 			End If
-		Case True
-			If iIndex = -1 Then
-				If UCase(Utils.Utils._Trim(pvIndex)) &lt;&gt; UCase(oDatabase.FormName) Then Goto Trace_Not_Found
-			ElseIf iIndex &lt;&gt; 0 Then
-				Goto Trace_Error_Index
-			End If
+		Case DBCONNECTFORM
+			With vCurrentDoc
+				If iIndex = -1 Then
+					bFound = False
+					For i = 0 To UBound(vCurrentDoc.DbContainers)
+						Set oDatabase = vCurrentDoc.DbContainers(i).Database
+						If UCase(Utils._Trim(pvIndex)) = UCase(oDatabase.FormName) Then
+							bFound = True
+							ofForm._DbEntry = i
+							Exit For
+						End If
+					Next i
+					If Not bFound Then Goto Trace_Not_Found
+				ElseIf iIndex &lt; 0 Or iIndex &gt; UBound(vCurrentDoc.DbContainers) Then
+					Goto Trace_Error_Index
+				Else
+					ofForm._DbEntry = iIndex
+					Set oDatabase = vCurrentDoc.DbContainers(iIndex).Database
+				End If
+			End With
 			vName = oDatabase.FormName
+			ofForm._DocEntry = iCurrentDoc
 			ofForm._Initialize(vName)
 	End Select
 	
@@ -382,7 +420,7 @@ Const cstThisSub = &quot;Controls&quot;
 	If IsMissing(pvIndex) Then
 		Controls = vObject.Controls()
 	Else
-		If Not Utils._CheckArgument(pvIndex, 2, Utils.Utils._AddNumeric(vbString)) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvIndex, 2, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 		Controls = vObject.Controls(pvIndex)
 	End If
 	
@@ -396,44 +434,26 @@ End Function		&apos;	Controls	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function CurrentDb(Optional pvURL As String) As Object
-&apos;	Returns _A2B_.CurrentDb(.) as an object to allow access to its properties
+&apos;	Returns _A2B_.CurrentDoc(.).Database as an object to allow access to its properties
 &apos;	Parameter only for internal use
 
 Const cstThisSub = &quot;CurrentDb&quot;
 	Utils._SetCalledSub(cstThisSub)
-Dim i As Integer, bFound As Boolean, sURL As String, oCurrent As Object
+Dim i As Integer, bFound As Boolean, sURL As String, iCurrentDoc As Integer, oCurrentDoc As Object
 
 	bFound = False
 	Set CurrentDb = Nothing
 	With _A2B_
-		If Not IsArray(.CurrentDb) Then Goto Exit_Function
-		If UBound(.CurrentDb) &lt; 0 Then Goto Exit_Function
-		For i = 1 To UBound(.CurrentDb)					&apos;	[0] reserved to database .odb document
-			Set oCurrent = .CurrentDb(i)
-			If IsMissing(pvURL) Then					&apos;	Not on 1 single line ?!?
-				If Utils.Utils._hasUNOProperty(ThisComponent, &quot;URL&quot;) Then
-					sURL = ThisComponent.URL
-				Else
-					Exit For	&apos;	f.i. ThisComponent = Basic IDE ...
-				End If
-			Else
-				sURL = pvURL			&apos;	To support the SelectObject action
-			End If
-			If .CurrentDb(i).URL = sURL Then
-				Set CurrentDb = oCurrent
-				bFound = True
-				Exit For
-			End If
-		Next i
-		If Not bFound Then
-			If Not IsNull(.CurrentDb(0)) Then Set CurrentDb = .CurrentDb(0)
-		End If
+		If Not IsArray(.CurrentDoc) Then Goto Exit_Function
+		If UBound(.CurrentDoc) &lt; 0 Then Goto Exit_Function
+		iCurrentDoc = _CurrentDoc()
+		If iCurrentDoc &gt;= 0 Then Set CurrentDb = .CurrentDoc(iCurrentDoc).DbContainers(0).Database
 	End With
 
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
-End Function	&apos;	CurrentDb		V0.9.5
+End Function	&apos;	CurrentDb		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function CurrentUser() As String
@@ -461,7 +481,7 @@ Public Function DAvg( _
 Const cstThisSub = &quot;DAvg&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DAvg = Application._DFunction(&quot;AVG&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	DAvg = Application._CurrentDb()._DFunction(&quot;AVG&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DAvg
 
@@ -475,7 +495,7 @@ Public Function DCount( _
 Const cstThisSub = &quot;DCount&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DCount = Application._DFunction(&quot;COUNT&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	DCount = Application._CurrentDb()._DFunction(&quot;COUNT&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DCount
 
@@ -503,7 +523,7 @@ Public Function DLookup( _
 Const cstThisSub = &quot;DLookup&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DLookup = Application._DFunction(&quot;&quot;, psExpr, psDomain _
+	DLookup = Application._CurrentDb()._DFunction(&quot;&quot;, psExpr, psDomain _
 					, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria) _
 					, Iif(IsMissing(pvOrderClause), &quot;&quot;, pvOrderClause) _
 					)
@@ -520,7 +540,7 @@ Public Function DMax( _
 Const cstThisSub = &quot;DMax&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DMax = Application._DFunction(&quot;MAX&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	DMax = Application._CurrentDb()._DFunction(&quot;MAX&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DMax
 
@@ -534,7 +554,7 @@ Public Function DMin( _
 Const cstThisSub = &quot;DMin&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DMin = Application._DFunction(&quot;MIN&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	DMin = Application._CurrentDb()._DFunction(&quot;MIN&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DMin
 
@@ -548,7 +568,7 @@ Public Function DStDev( _
 Const cstThisSub = &quot;DStDev&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DStDev = Application._DFunction(&quot;STDDEV_SAMP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)	&apos;	STDDEV not STDEV !
+	DStDev = Application._CurrentDb()._DFunction(&quot;STDDEV_SAMP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)	&apos;	STDDEV not STDEV !
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DStDev
 
@@ -562,7 +582,7 @@ Public Function DStDevP( _
 Const cstThisSub = &quot;DStDevP&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DStDevP = Application._DFunction(&quot;STDDEV_POP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)	&apos;	STDDEV not STDEV !
+	DStDevP = Application._CurrentDb()._DFunction(&quot;STDDEV_POP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)	&apos;	STDDEV not STDEV !
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DStDevP
 
@@ -576,7 +596,7 @@ Public Function DSum( _
 Const cstThisSub = &quot;DSum&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DSum = Application._DFunction(&quot;SUM&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	DSum = Application._CurrentDb()._DFunction(&quot;SUM&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DSum
 
@@ -590,7 +610,7 @@ Public Function DVar( _
 Const cstThisSub = &quot;DVar&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DVar = Application._DFunction(&quot;VAR_SAMP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	DVar = Application._CurrentDb()._DFunction(&quot;VAR_SAMP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DVar
 
@@ -604,7 +624,7 @@ Public Function DVarP( _
 Const cstThisSub = &quot;DVarP&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(psExpr) Or IsMissing(psDomain) Then Call _TraceArguments()
-	DVarP = Application._DFunction(&quot;VAR_POP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
+	DVarP = Application._CurrentDb()._DFunction(&quot;VAR_POP&quot;, psExpr, psDomain, Iif(IsMissing(pvCriteria), &quot;&quot;, pvCriteria), &quot;&quot;)
 	Utils._ResetCalledSub(cstThisSub)
 End Function	&apos;	DVarP
 
@@ -621,7 +641,8 @@ Const cstThisSub = &quot;Events&quot;
 	If IsMissing(poEvent) Then Goto Exit_Function
 	If IsNull(poEvent) Then Goto Exit_Function
 
-	If Not Utils.Utils._hasUNOProperty(poEvent, &quot;Source&quot;) Then Goto Trace_Error
+	If Not Utils._CheckArgument(poEvent, 1, vbObject) Then Goto Exit_Function
+	If Not Utils._hasUNOProperty(poEvent, &quot;Source&quot;) Then Goto Trace_Error
 	Set vEvent = New Event
 	vEvent._Initialize(poEvent)
 
@@ -634,7 +655,7 @@ Error_Function:
 	GoTo Exit_Function
 Trace_Error:
 	&apos;	Errors are not displayed to avoid display infinite cycling
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, False, Utils.Utils._CStr(poEvent))
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, False, Array(1, Utils._CStr(poEvent)))
 	Set vEvent = Nothing
 	Goto Exit_Function
 End Function		&apos;	Events	V0.9.1
@@ -663,12 +684,12 @@ Dim iCount As Integer
 		Forms = oCounter
 		Exit Function
 	Else
-		If Not Utils._CheckArgument(pvIndex, 1, Utils.Utils._AddNumeric(vbString)) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 	End If
 	
 	Select Case VarType(pvIndex)
 		Case vbString
-			Set ofForm = Application.AllForms(Utils.Utils._Trim(pvIndex))
+			Set ofForm = Application.AllForms(Utils._Trim(pvIndex))
 		Case vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal
 			iCount = Application._CountOpenForms()
 			If iCount &lt;= pvIndex Then Goto Trace_Error_Index
@@ -690,7 +711,7 @@ Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function			
 Trace_Error:
-	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , 1)
+	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, , Array(1, pvIndex))
 	Set vForms = Nothing
 	Goto Exit_Function
 Trace_Error_Index:
@@ -703,119 +724,262 @@ Error_Function:
 End Function		&apos;	Forms	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Sub OpenConnection ( _
+Public Function OpenConnection ( _
 				Optional pvComponent As Variant _
 				, ByVal Optional pvUser As Variant _
 				, ByVal Optional pvPassword As Variant _
-				)
+				) As Object
 				
 &apos;	Establish connection with the database designated in the currently open front-end (.odb) document
 &apos;	Call template:
 &apos;		Call OpenConnection(ThisDatabaseDocument[, &quot;&quot;, &quot;&quot;])
 &apos;	Call stored in the OpenDocument event of the front-end database document
 &apos;OR
-&apos;	Initiates processing of a standalone (Writer) form		(V0.8.0)
+&apos;	Initiates processing of a (standalone ?) Writer, Calc, ... document with 1 or more data-aware forms
 &apos;	Call template:
 &apos;		Call OpenConnection(ThisComponent[, &quot;&quot;, &quot;&quot;])
-&apos;	Call stored in the OpenDocument event of the standalone form
+&apos;	Call stored in the OpenDocument event of the document
+&apos;
+&apos;	User and Password arguments are obsolete (still tolerated)
+&apos;		- because no mean has been found to connect protected db from .odb via API
+&apos;		- because having multiple forms with multiple db&apos;s and multiple passwords is meaningless
 
-Dim odbDatabase As Variant, oComponent As Object, oForm As Object, iCurrent As Integer
+Dim oComponent As Object, oForms As Object, iCurrent As Integer
 Dim i As Integer, bFound As Boolean
-Dim vCurrentDb() As Variant
+Dim vCurrentDoc() As Variant
+Dim oBaseContext As Object, sDbNames() As String, oBaseSource As Object
+Dim sDatabaseURL As String, oHandler As Object
+Dim vDbContainer As Variant, vDbContainers() As Variant, vDocContainer As Variant
+Dim sFormName As String, oConnection As Object
 
 	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current AOO/LibO session
+	Set OpenConnection = Nothing
 	
-	If _ErrorHandler() Then On Local Error Goto Error_Sub
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;OpenConnection&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvComponent) Then Call _TraceArguments()
-	If Not Utils._CheckArgument(pvComponent, 1, vbObject) Then Goto Exit_Sub
+	If Not Utils._CheckArgument(pvComponent, 1, vbObject) Then Goto Exit_Function
 	Set oComponent = pvComponent
 	If Not Utils._hasUNOProperty(oComponent, &quot;ImplementationName&quot;) Then
-		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, 1)
-		Exit Sub
+		TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(1, oComponent))
+		Exit Function
 	End If
 	If IsMissing(pvUser) Then pvUser = &quot;&quot;
 	If IsMissing(pvPassword) Then pvPassword = &quot;&quot;
-	If Not Utils._CheckArgument(pvUser, 2, vbString) Then Goto Exit_Sub
-	If Not Utils._CheckArgument(pvPassword, 3, vbString) Then Goto Exit_Sub
-	
-	If Not IsArray(_A2B_.CurrentDb) Then vCurrentDb = Array() Else vCurrentDb = _A2B_.CurrentDb
+	If Not Utils._CheckArgument(pvUser, 2, vbString) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvPassword, 3, vbString) Then Goto Exit_Function
 
-	Set odbDatabase = New Database
-	Select Case oComponent.ImplementationName
-		Case &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;
-			If Not oComponent.CurrentController.IsConnected Then oComponent.CurrentController.Connect(pvUser, pvPassword)
-			Set odbDatabase.Connection = oComponent.CurrentController.ActiveConnection
-			odbDatabase._Standalone = False
-		Case &quot;SwXTextDocument&quot;
-			Set oForm = oComponent.CurrentController.Model.DrawPage.Forms
-			If oForm.Count &lt;&gt; 1 Then Goto Error_MainForm
-			odbDatabase.FormName = oForm.ElementNames(0)
-			odbDatabase.Form = oForm.getByName(odbDatabase.FormName)
-			Set odbDatabase.Connection = odbDatabase.Form.ActiveConnection
-			odbDatabase._Standalone = True
-		Case Else
-			TraceError(TRACEFATAL, ERRNOTDATABASE, Utils._CalledSub(), 0, , 1)
-	End Select
-	
-	If Not IsNull(odbDatabase.Connection) Then				&apos;	Null when standalone and target db does not exist
-		Set odbDatabase.MetaData = odbDatabase.Connection.MetaData
-	End If
-	Set odbDatabase.Document = oComponent
-	odbDatabase.Title = oComponent.Title
-	odbDatabase.URL = oComponent.URL
-	
-	If UBound(vCurrentDb) &lt; 0 Then				&apos;	NOT ON 1 SINGLE LINE !!!
-		Redim vCurrentDb(0 To 0)
+	If Not IsArray(_A2B_.CurrentDoc) Then
+		vCurrentDoc() = Array()
+		Redim vCurrentDoc(0 To 0)		&apos;	Create at least one entry for database document
+	Else
+		vCurrentDoc() = _A2B_.CurrentDoc()
 	End If
 
-	Select Case odbDatabase._Standalone			&apos;	Find entry to use for new connection
-		Case True
-			If UBound(vCurrentDb) &lt;= 0 Then
-				iCurrent = 1
-			Else				&apos;	Search entry already used earlier by same component
-				bFound = False
-				For i = 1 To UBound(vCurrentDb)
-					If Not IsEmpty(vCurrentDb(i)) Then
-						If vCurrentDb(i)._Standalone And vCurrentDb(i).URL = odbDatabase.URL Then
-							iCurrent = i
-							bFound = True
-							Exit For
+	&apos;	Find index of entry to use for new connection
+	With oComponent
+		Select Case .ImplementationName
+			Case &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;
+				iCurrent = 0
+			Case Else		&apos;	&quot;SwXTextDocument&quot;, &quot;ScModelObj&quot;
+				If UBound(vCurrentDoc) &lt;= 0 Then		&apos;	First Calc or Writer during current session
+					iCurrent = 1
+				Else				&apos;	Search entry already used earlier by same component
+					bFound = False
+					For i = 1 To UBound(vCurrentDoc)
+						If Not IsEmpty(vCurrentDoc(i)) Then
+							If vCurrentDoc(i).URL = .URL Then
+								iCurrent = i
+								bFound = True
+								Exit For
+							End If
 						End If
-					End If
-				Next i
-			End If
-			If Not bFound Then
-				iCurrent = UBound(vCurrentDb) + 1			&apos;	No entry found, increment array
-				ReDim Preserve vCurrentDb(0 To iCurrent)
-			End If
-			Set vCurrentDb(iCurrent) = odbDatabase
-		Case False
-			Set vCurrentDb(0) = odbDatabase
-	End Select
+					Next i
+				End If
+				If Not bFound Then
+					iCurrent = UBound(vCurrentDoc) + 1			&apos;	No entry found, increment array
+					ReDim Preserve vCurrentDoc(0 To iCurrent)
+				End If
+		End Select
+	End With
+
+	&apos;	Initialize future entry
+	Set vDocContainer = New DocContainer
+	Set vDocContainer.Document = oComponent
+	vDocContainer.URL = oComponent.URL
+	&apos;	Initialize each DbContainer entry
+	vDbContainers() = Array()
+	TraceLog(TRACEANY, Utils._GetProductName() &amp; &quot; - &quot; &amp; Application.ProductCode(), False)
+	Select Case oComponent.ImplementationName
+		Case &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;		&apos;	Ignore pvUser and pvPassword arguments
+			vDbContainer = New DbContainer
+			vDbContainer.FormName = &quot;&quot;
+			Set vDbContainer.Database = New Database
+			Set vDbContainer.Database._This = vDbContainer.Database
+			With vDbContainer.Database
+				If Not oComponent.CurrentController.IsConnected Then
+					Set oHandler = createUnoService(&quot;com.sun.star.sdb.InteractionHandler&quot;)
+					Set .Connection = oComponent.DataSource.connectWithCompletion(oHandler)
+					oComponent.CurrentController.connect()
+				Else
+					Set .Connection = oComponent.CurrentController.ActiveConnection
+				End If
+				vDocContainer.DbConnect = DBCONNECTBASE
+				._DbConnect = DBCONNECTBASE
+				Set .MetaData = .Connection.MetaData
+				._ReadOnly = .Connection.isReadOnly()
+				Set .Document = oComponent
+				.Title = oComponent.Title
+				.URL = vDocContainer.URL
+				ReDim vDbContainers(0 To 0)
+				Set vDbContainers(0) = vDbContainer
+				TraceLog(TRACEANY, .MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; .MetaData.getDatabaseProductVersion, False)
+				TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; .URL, False)
+			End With
+		Case Else
+			Set oForms = oComponent.CurrentController.Model.DrawPage.Forms
+			If oForms.Count &lt; 1 Then Goto Error_MainForm
+			ReDim vDbContainers(0 To oForms.Count - 1)
+			For i = 0 To oForms.Count - 1
+				vDbContainer = New DbContainer					&apos;	To make distinct entries !!
+				sFormName = oForms.ElementNames(i)
+				Set oConnection = oForms.getByName(sFormName).ActiveConnection
+				If IsNull(oConnection) Then
+					Set vDbContainer.Database = Nothing			&apos;	Form is not data-aware
+				Else
+					Set vDbContainer.Database = New Database
+					Set vDbContainer.Database._This = vDbContainer.Database
+					With vDbContainer.Database
+						.FormName = sFormName
+						vDbContainer.FormName = sFormName
+						Set .Form = oForms.getByName(sFormName)
+						Set .Connection = oConnection
+						Set .MetaData = oConnection.MetaData
+						._ReadOnly = oConnection.isReadOnly()
+						Set .Document = oComponent
+						.Title = oComponent.Title
+						.URL = .Form.DataSourceName
+						._DbConnect = DBCONNECTFORM
+						Set vDbContainers(i) = vDbContainer
+						vDbContainers(i).FormName = sFormName
+						TraceLog(TRACEANY, .MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; .MetaData.getDatabaseProductVersion, False)
+						TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; .URL &amp; &quot; Form=&quot; &amp; vDbContainer.FormName, False)
+					End With
+				End If
+			Next i
+			vDocContainer.DbConnect = DBCONNECTFORM
+		End Select
 	
-	_A2B_.CurrentDb = vCurrentDb
+	vDocContainer.DbContainers() = vDbContainers()
+	Set vCurrentDoc(iCurrent) = vDocContainer
+
+	_A2B_.CurrentDoc = vCurrentDoc
+	Set OpenConnection = vDbContainers(0).Database
 	
-	TraceLog(TRACEANY, Utils._GetProductName() &amp; &quot; - Access2Base &quot; &amp; _A2B_.VersionNumber, False)
-	If IsNull(odbDatabase.Connection) Then Goto Trace_Error
-	TraceLog(TRACEANY, odbDatabase.MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; odbDatabase.MetaData.getDatabaseProductVersion, False)
 	
-Exit_Sub:
+Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
-	Exit Sub
-Error_Sub:
+	Exit Function
+Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
-	Set _A2B_.CurrentDb = Array()
-	GoTo Exit_Sub
+	Set _A2B_.CurrentDoc = Array()
+	GoTo Exit_Function
 Error_MainForm:
 	TraceError(TRACEFATAL, ERRMAINFORM, Utils._CalledSub(), False, ,oComponent.Title)
-	Set _A2B_.CurrentDb = Array()
-	GoTo Exit_Sub
+	Set _A2B_.CurrentDoc = Array()
+	GoTo Exit_Function
 Trace_Error:
 	TraceError(TRACEABORT, ERRDBNOTCONNECTED, Utils._CalledSub(), 0,1)
-	Goto Exit_Sub
-End Sub			&apos;	OpenConnection		V0.9.1
+	Goto Exit_Function
+End Function			&apos;	OpenConnection		V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function OpenDatabase ( _
+				ByVal Optional pvDatabaseURL As Variant _
+				, ByVal Optional pvUser As Variant _
+				, ByVal Optional pvPassword As Variant _
+				, ByVal Optional pvReadOnly As Variant _
+				) As Object
+				
+&apos;	Return a database object based on input arguments:
+&apos;	Call template:
+&apos;		Call OpenConnection(&quot;... databaseURL ...&quot;[, &quot;&quot;, &quot;&quot;, True/False])
+&apos;	pvDatabaseURL maby be the name of a registered database or the URL of the targeted .odb file
+&apos;	Might be called from any AOO/LibO application, independently from OpenConnection
+
+Dim odbDatabase As Variant, oBaseContext As Object, sDbNames() As String, oBaseSource As Object
+Dim i As Integer, bFound As Boolean
+Dim sDatabaseURL As String
+
+	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current AOO/LibO session
+	Set OpenDatabase = Nothing
+	
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;OpenDatabase&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If pvDatabaseURL = &quot;&quot; Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvDatabaseURL, 1, vbString) Then Goto Exit_Function
+	If IsMissing(pvUser) Then pvUser = &quot;&quot;
+	If IsMissing(pvPassword) Then pvPassword = &quot;&quot;
+	If Not Utils._CheckArgument(pvUser, 2, vbString) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvPassword, 3, vbString) Then Goto Exit_Function
+	If IsMissing(pvReadOnly) Then pvReadOnly = False
+	If Not Utils._CheckArgument(pvReadOnly, 3, vbBoolean) Then Goto Exit_Function
+	
+	Set odbDatabase = New Database
+	Set odbDatabase._This = odbDatabase
+	odbDatabase._DbConnect = DBCONNECTANY
+
+	Set oBaseContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)
+	sDbNames() = oBaseContext.getElementNames()
+	bFound = False
+	For i = 0 To UBound(sDbNames()		&apos;	Enumerate registered databases and check non case-sensitive equality
+		If UCase(sDbNames(i)) = UCase(pvDatabaseURL) Then
+			sDatabaseURL = sDbNames(i)
+			Set oBaseSource = oBaseContext.getByName(sDatabaseURL)
+			bFound = True
+			Exit For
+		End If
+	Next i
+	If Not bFound Then
+		sDatabaseURL = ConvertToURL(pvDatabaseURL)
+		If UCase(Right(sDatabaseURL, 4)) &lt;&gt; &quot;.ODB&quot; Then Goto Trace_Error
+		If Not FileExists(sDatabaseURL) Then Goto Trace_Error
+		Set oBaseSource = oBaseContext.getByName(sDatabaseURL)
+	End If
+
+	Set odbDatabase.Connection = oBaseSource.getConnection(pvUser, pvPassword)
+	If Not IsNull(odbDatabase.Connection) Then				&apos;	Null when standalone and target db does not exist
+		Set odbDatabase.MetaData = odbDatabase.Connection.MetaData
+	Else
+		Goto Trace_Error
+	End If
+
+	odbDatabase.URL = sDatabaseURL
+	
+	If pvReadOnly Then
+		odbDatabase.Connection.isReadOnly = True
+		odbDatabase._ReadOnly = True
+	End If
+
+	Set OpenDatabase = odbDatabase
+	
+	TraceLog(TRACEANY, Utils._GetProductName() &amp; &quot; - &quot; &amp; Application.ProductCode(), False)
+	TraceLog(TRACEANY, odbDatabase.MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; odbDatabase.MetaData.getDatabaseProductVersion, False)
+	TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; odbDatabase.URL, False)
+	
+	
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Trace_Error:
+	TraceError(TRACEABORT, ERRDBNOTCONNECTED, Utils._CalledSub(), 0,1)
+	Goto Exit_Function
+End Function			&apos;	OpenDatabase		V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function ProductCode()
@@ -838,7 +1002,7 @@ Const cstThisSub = &quot;SysCmd&quot;
 Const cstMissing = -1
 Const cstBarLength = 350
 	If IsMissing(pvAction) Then Call _TraceArguments()
-	If Not Utils._CheckArgument(pvAction, 1, Utils.Utils._AddNumeric(), Array( _
+	If Not Utils._CheckArgument(pvAction, 1, Utils._AddNumeric(), Array( _
 				acSysCmdAccessDir _
 				, acSysCmdAccessVer _
 				, acSysCmdClearHelpTopic _
@@ -854,7 +1018,7 @@ Const cstBarLength = 350
 				, acSysCmdUpdateMeter _
 				)) Then Goto Exit_Function
 	If IsMissing(pvValue) Then pvValue = cstMissing
-	If Not Utils._CheckArgument(pvAction, 1, Utils.Utils._AddNumeric()) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvAction, 1, Utils._AddNumeric()) Then Goto Exit_Function
 	Select Case pvAction
 		Case acSysCmdInitMeter, acSysCmdUpdateMeter, acSysCmdSetStatus
 			If IsMissing(pvText) Then Call _TraceArguments()
@@ -863,9 +1027,8 @@ Const cstBarLength = 350
 	End Select
 	If Not Utils._CheckArgument(pvValue, 3, Utils._AddNumeric()) Then Goto Exit_Function
 	
-Dim vBar As Variant, oDb As Object, iLen As Integer
-	Set oDb = _CurrentDb()
-	Set vBar = oDb.StatusBar
+Dim vBar As Variant, iLen As Integer
+	Set vBar = _A2B_.StatusBar
 	Select Case pvAction
 		Case acSysCmdAccessVer
 			SysCmd = Application.Version()
@@ -879,7 +1042,7 @@ Dim vBar As Variant, oDb As Object, iLen As Integer
 			If pvValue &lt;&gt; cstMissing Then Goto Error_Arg
 			If Not IsNull(vBar) Then
 				vBar.end()
-				Set oDb.StatusBar = Nothing
+				Set _A2B_.StatusBar = Nothing
 			End If
 		Case acSysCmdInitMeter
 			If pvValue = cstMissing Then Call _TraceArguments()
@@ -894,7 +1057,7 @@ Dim vBar As Variant, oDb As Object, iLen As Integer
 		Case acSysCmdRemoveMeter
 			If Not IsNull(vBar) Then
 				vBar.end()
-				Set oDb.StatusBar = Nothing
+				Set _A2B_.StatusBar = Nothing
 			End If
 		Case acSysCmdRuntime
 			SysCmd = False
@@ -934,6 +1097,7 @@ Dim i As Integer, iCount As Integer, iAllCount As Integer, ofForm As Variant
 	iCount = 0
 	If iAllCount &gt; 0 Then
 		Set ofForm = New Form
+		Set ofForm._This = ofForm
 		For i = 0 To iAllCount - 1
 			Set ofForm = Application.AllForms(i)
 			If ofForm.IsLoaded Then iCount = iCount + 1
@@ -948,103 +1112,106 @@ Dim i As Integer, iCount As Integer, iAllCount As Integer, ofForm As Variant
 
 	If IsMissing(piCountMax) Then _CountOpenForms = iCount
 	
-End Function		&apos;	CountOpenForms	V0.9.0
+End Function		&apos;	CountOpenForms	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _CurrentDb() As Variant
-REM Same as CurrentDb() except that it generates an error if database not connected (internal use)
+Public Function _CurrentDb(ByVal Optional piDocEntry As Integer, ByVal Optional piDbEntry As Integer) As Variant
+REM Without arguments same as CurrentDb() except that it generates an error if database not connected (internal use)
+REM With 2 arguments return the corresponding entry in Root
 
 Dim odbDatabase As Variant
-	Set odbDatabase = Application.CurrentDb()
+	If IsMissing(piDocEntry) Then
+		Set odbDatabase = Application.CurrentDb()
+	Else
+		With _A2B_
+			If Not IsArray(.CurrentDoc) Then Goto Trace_Error
+			If piDocEntry &lt; 0 Or piDbEntry &lt; 0 Then Goto Trace_Error
+			If piDocEntry &gt; UBound(.CurrentDoc) Then Goto Trace_Error
+			If piDbEntry &gt; UBound(.CurrentDoc(piDocEntry).DbContainers) Then Goto Trace_Error
+			Set odbDatabase = .CurrentDoc(piDocEntry).DbContainers(piDbEntry).Database
+		End With
+	End If
 	If IsNull(odbDatabase) Then GoTo Trace_Error
 
 Exit_Function:
 	Set _CurrentDb = odbDatabase
 	Exit Function	
 Trace_Error:
-	TraceError(TRACEABORT, ERRDBNOTCONNECTED, Utils._CalledSub(), 0,1)
+	TraceError(TRACEABORT, ERRDBNOTCONNECTED, Utils._CalledSub(), 0, 1)
 	Goto Exit_Function
-End Function		&apos;	_CurrentDb
+End Function		&apos;	_CurrentDb	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _DFunction(ByVal psFunction As String _
-							, ByVal psExpr As String _
-							, ByVal psDomain As String _
-							, ByVal pvCriteria As Variant _
-							, ByVal Optional pvOrderClause As Variant _
-							) As Variant
-    &apos;Arguments: psFunction		an optional aggregate function
-    &apos;			psExpr:			an SQL expression [might contain an aggregate function]
-    &apos;			psDomain:		a table- or queryname
-    &apos;			pvCriteria:		an optional WHERE clause
-    &apos;			pcOrderClause:	an optional order clause incl. &quot;DESC&quot; if relevant
+Public Function _CurrentDoc(Optional pvURL As String) As Integer
+&apos;	Returns the entry in _A2B_.CurrentDoc(...) referring to the current document
 
-If _ErrorHandler() Then On Local Error GoTo Error_Function
+Dim i As Integer, bFound As Boolean, sURL As String
 
-Dim oResult As Object			&apos;To retrieve the value to find.
-Dim vResult As Variant			&apos;Return value for function.
-Dim sSql As String				&apos;SQL statement.
-Dim oStatement As Object		&apos;For CreateStatement method
-Dim sExpr As String				&apos;For inclusion of aggregate function
-
-    vResult = Null
-
-	If psFunction = &quot;&quot; Then sExpr = &quot;TOP 1 &quot; &amp; psExpr Else sExpr = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
-
-    sSql = &quot;SELECT &quot; &amp; sExpr &amp; &quot; AS XXRESULTFIELDXX FROM &quot; &amp; psDomain
-    If pvCriteria &lt;&gt; &quot;&quot; Then
-        sSql = sSql &amp; &quot; WHERE &quot; &amp; pvCriteria
-    End If
-    If pvOrderClause &lt;&gt; &quot;&quot; Then
-        sSql = sSql &amp; &quot; ORDER BY &quot; &amp; pvOrderClause
-    End If
-    sSql = Utils._ReplaceSquareBrackets(sSql)		&apos;Substitute [] by quote string
-
-    &apos;Lookup the value.
-Dim oDatabase As Object
-    Set oStatement = _CurrentDb.Connection.createStatement()
-	With oStatement
-		.ResultSetType = com.sun.star.sdbc.ResultSetType.FORWARD_ONLY
-		.ResultSetConcurrency = com.sun.star.sdbc.ResultSetConcurrency.READ_ONLY
-		.EscapeProcessing = False
-		Set oResult = .executeQuery(sSql)
-	    If Not IsNull(oResult) And Not IsEmpty(oResult) Then
-    			If Not oResult.next() Then Goto Exit_Function
-        	    vResult = Utils._getResultSetColumnValue(oResult, 1)
-    	End If
-    End With
+	bFound = False
+	_CurrentDoc = -1		&apos;	Convention for _A2B_ not initalized or no entry found
+	With _A2B_
+		If Not IsArray(.CurrentDoc) Then Goto Exit_Function
+		If UBound(.CurrentDoc) &lt; 0 Then Goto Exit_Function
+		For i = 1 To UBound(.CurrentDoc)					&apos;	[0] reserved to database .odb document
+			If IsMissing(pvURL) Then					&apos;	Not on 1 single line ?!?
+				If Utils._hasUNOProperty(ThisComponent, &quot;URL&quot;) Then
+					sURL = ThisComponent.URL
+				Else
+					Exit For	&apos;	f.i. ThisComponent = Basic IDE ...
+				End If
+			Else
+				sURL = pvURL	&apos;	To support the SelectObject action
+			End If
+			If .CurrentDoc(i).URL = sURL Then
+				_CurrentDoc = i
+				bFound = True
+				Exit For
+			End If
+		Next  i
+		If Not bFound Then
+			If Not IsNull(.CurrentDoc(0)) Then _CurrentDoc = 0
+		End If
+	End With
 
 Exit_Function:
-    &apos;Assign the returned value.
-    _DFunction = vResult
-    Set oResult = Nothing
-    Set oStatement = Nothing
-    Exit Function
-Error_Function:
-    TraceError(TRACEABORT, ERRDFUNCTION, _A2B_.CalledSub, 0, , sSQL)
-    Goto Exit_Function
-End Function		&apos;	DFunction		V0.9.5
+	Exit Function
+End Function	&apos;	_CurrentDoc		V1.1.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _hasDialog(ByVal psName As String) As Boolean
+&apos;	Return True if psName if in the collection of started dialogs
+
+Dim oDialog As Object
+	On Local Error Goto Error_Function		&apos;	Whatever ErrorHandler !
+	Set oDialog = _A2B_.Dialogs.Item(UCase(psName))
+	_hasDialog = True
+
+Exit_Function:
+	Exit Function
+Error_Function:		&apos;	Item by key aborted
+	_hasDialog = False
+	GoTo Exit_Function
+End Function	&apos;	_hasDialog	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _NewBar() As Object
 &apos;	Close current status bar, if any, and initialize new one
 
-Dim vBar As Variant, vWindow As Variant, oDb As Object, vController As Object
+Dim vBar As Variant, vWindow As Variant, vController As Object
 	On Local Error Resume Next
 	Set _NewBar = Nothing
 
-	Set oDb = Application._CurrentDb()
-	Set vBar = oDb.StatusBar
+	Set vBar = _A2B_.StatusBar
 	If Not IsNull(vBar) Then
 		If Utils._hasUNOMethod(vBar, &quot;end&quot;) Then vBar.end()
-		Set oDb.StatusBar = Nothing
+		Set _A2B_.StatusBar = Nothing
 	End If
 	
 	Set vBar = Nothing
 	Set vWindow = _SelectWindow()
 	If IsNull(vWindow.Frame) Then Exit Function
 	Select Case vWindow.WindowType
-		Case acForm, acReport, acBasicIDE		&apos;	Not found how to make it work for acDatabaseWindow
+		Case acForm, acReport, acBasicIDE, acDocument		&apos;	Not found how to make it work for acDatabaseWindow
 		Case Else
 			Exit Function
 	End Select
@@ -1055,17 +1222,17 @@ Dim vBar As Variant, vWindow As Variant, oDb As Object, vController As Object
 	End If
 	
 	If Utils._hasUNOMethod(vController, &quot;getStatusIndicator&quot;) Then vBar = vController.getStatusIndicator()
-	Set oDb.StatusBar = vBar
+	Set _A2B_.StatusBar = vBar
 	Set _NewBar = vBar
 	Exit Function
 	
-End Function			&apos;	_NewBar				V0.9.1
+End Function			&apos;	_NewBar				V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub _RootInit()
 &apos;	Initialize _A2B_ global variable
 
-Dim vRoot As Root
+Dim vRoot As Root, vCurrentDoc() As Variant
 	If IsEmpty(_A2B_) Then
 		_A2B_ = vRoot
 		With _A2B_
@@ -1078,8 +1245,15 @@ Dim vRoot As Root
 			.TraceLogMaxEntries = 0
 			.CalledSub = &quot;&quot;
 			.Introspection = Nothing
+			Set .FindRecord = Nothing
+			Set .StatusBar = Nothing
+			Set .Dialogs = New Collection
+			vCurrentDoc() = Array()
+			ReDim vCurrentDoc(0 To 0)
+			Set vCurrentDoc(0) = Nothing
+			Set .CurrentDoc() = vCurrentDoc()
 		End With
 	End If
 	
-End Sub		&apos;	_RootInit	V0.9.1
+End Sub		&apos;	_RootInit	V1.1.0
 </script:module>
