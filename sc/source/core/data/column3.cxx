@@ -1158,6 +1158,23 @@ class MixDataHandler
 
     bool mbSkipEmpty;
 
+    void doFunction( size_t nDestRow, double fVal1, double fVal2 )
+    {
+        bool bOk = lcl_DoFunction(fVal1, fVal2, mnFunction);
+
+        if (bOk)
+            miNewCellsPos = maNewCells.set(miNewCellsPos, nDestRow-mnRowOffset, fVal1);
+        else
+        {
+            ScAddress aPos(mrDestColumn.GetCol(), nDestRow, mrDestColumn.GetTab());
+
+            ScFormulaCell* pFC = new ScFormulaCell(&mrDestColumn.GetDoc(), aPos);
+            pFC->SetErrCode(errNoValue);
+
+            miNewCellsPos = maNewCells.set(miNewCellsPos, nDestRow-mnRowOffset, pFC);
+        }
+    }
+
 public:
     MixDataHandler(
         sc::ColumnBlockPosition& rBlockPos,
@@ -1180,22 +1197,15 @@ public:
         mrBlockPos.miCellPos = aPos.first;
         switch (aPos.first->type)
         {
+            case sc::element_type_empty:
             case sc::element_type_numeric:
             {
+                double fSrcVal = 0.0;
+                if (aPos.first->type == sc::element_type_numeric)
+                    fSrcVal = sc::numeric_block::at(*aPos.first->data, aPos.second);
+
                 // Both src and dest are of numeric type.
-                bool bOk = lcl_DoFunction(f, sc::numeric_block::at(*aPos.first->data, aPos.second), mnFunction);
-
-                if (bOk)
-                    miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, f);
-                else
-                {
-                    ScFormulaCell* pFC =
-                        new ScFormulaCell(
-                            &mrDestColumn.GetDoc(), ScAddress(mrDestColumn.GetCol(), nRow, mrDestColumn.GetTab()));
-
-                    pFC->SetErrCode(errNoValue);
-                    miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, pFC);
-                }
+                doFunction(nRow, f, fSrcVal);
             }
             break;
             case sc::element_type_formula:
@@ -1229,7 +1239,6 @@ public:
             break;
             case sc::element_type_string:
             case sc::element_type_edittext:
-            case sc::element_type_empty:
             {
                 // Destination cell is not a number. Just take the source cell.
                 miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, f);
@@ -1346,9 +1355,9 @@ public:
             {
                 case sc::element_type_numeric:
                 {
-                    double fVal = sc::numeric_block::at(*aPos.first->data, aPos.second);
-                    miNewCellsPos = maNewCells.set(
-                            miNewCellsPos, nDestRow-mnRowOffset, fVal);
+                    double fVal1 = 0.0;
+                    double fVal2 = sc::numeric_block::at(*aPos.first->data, aPos.second);
+                    doFunction(nDestRow, fVal1, fVal2);
                 }
                 break;
                 case sc::element_type_string:
