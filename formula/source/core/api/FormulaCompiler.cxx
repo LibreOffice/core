@@ -540,22 +540,24 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         bCompileForFAP( false ),
         bIgnoreErrors( false ),
         glSubTotal( false )
-
 {
 }
 
 FormulaCompiler::FormulaCompiler()
         :
         pArr( NULL ),
+        pCode( NULL ),
         pStack( NULL ),
+        eLastOp( ocPush ),
         nRecursion(0),
         nNumFmt( NUMBERFORMAT_UNDEFINED ),
+        pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
         bCorrected( false ),
         bCompileForFAP( false ),
-        bIgnoreErrors( false )
-
+        bIgnoreErrors( false ),
+        glSubTotal( false )
 {
 }
 
