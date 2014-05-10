@@ -96,9 +96,9 @@ void GL3DBarChart::create3DShapes()
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
 
 
-            glm::mat4 aBarPosition;
-            aBarPosition = glm::scale(aBarPosition, nBarSizeX, nBarSizeY, nVal);
-            aBarPosition = glm::translate(aBarPosition, nXPos, nYPos, nVal/2);
+            glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, nVal);
+            glm::mat4 aTranslationMatrix = glm::translate(nXPos, nYPos, nVal/2);
+            glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
 
             maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId++));
         }
