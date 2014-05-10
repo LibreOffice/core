@@ -138,7 +138,6 @@ void OpenGL3DRenderer::LoadShaders()
     m_RenderVertexID = glGetAttribLocation(m_RenderProID, "vPosition");
     m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
     m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
-    printf("m_RenderProID = %d, m_RenderVertexID = %d\n", m_RenderProID, m_RenderVertexID);
     CHECK_GL_ERROR();
 }
 
@@ -1587,7 +1586,6 @@ int OpenGL3DRenderer::ProcessExtrude3DPickingBox()
 
     glReadPixels(select.X(), select.Y(), 1, 1, GL_RGB, GL_UNSIGNED_BYTE, selectColor);
     int selectID = GetIndexByColor(selectColor[0], selectColor[1], selectColor[2]);
-//    printf("selectColor[0] = %d, selectColor[1] = %d, selectColor[2] = %d, selectID = %d\n", selectColor[0], selectColor[1], selectColor[2], selectID);
 
     if (selectID == RGB_WHITE)
     {
