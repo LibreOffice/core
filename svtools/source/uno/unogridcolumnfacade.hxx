@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_UNO_UNOGRIDCOLUMNFACADE_HXX
 #define INCLUDED_SVTOOLS_SOURCE_UNO_UNOGRIDCOLUMNFACADE_HXX
 
-#include "svtools/table/tablemodel.hxx"
+#include <svtools/table/tablemodel.hxx>
 #include "table/tablecontrol.hxx"
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>

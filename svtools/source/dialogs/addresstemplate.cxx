@@ -47,7 +47,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <svtools/localresaccess.hxx>
-#include "svl/filenotation.hxx"
+#include <svl/filenotation.hxx>
 #include <tools/urlobj.hxx>
 #include <algorithm>
 #include <map>

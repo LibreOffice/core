@@ -19,8 +19,8 @@
 
 #include <svtools/treelistbox.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/button.hxx>
 #include <vcl/decoview.hxx>

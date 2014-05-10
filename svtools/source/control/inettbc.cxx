@@ -50,7 +50,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>

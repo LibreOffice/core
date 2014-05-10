@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_TABLE_TABLECONTROL_IMPL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_TABLE_TABLECONTROL_IMPL_HXX
 
-#include "svtools/table/tablemodel.hxx"
+#include <svtools/table/tablemodel.hxx>
 #include "table/tablecontrolinterface.hxx"
 
 #include "svtaccessiblefactory.hxx"

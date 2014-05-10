@@ -26,15 +26,15 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
-#include <treecontrolpeer.hxx>
+#include "treecontrolpeer.hxx"
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/ref.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/treelistbox.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include <svtools/svlbitm.hxx>
 
 #include <map>

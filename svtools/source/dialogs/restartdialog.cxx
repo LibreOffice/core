@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "com/sun/star/task/OfficeRestartManager.hpp"
-#include "com/sun/star/task/XInteractionHandler.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "svtools/restartdialog.hxx"
-#include "tools/link.hxx"
-#include "vcl/button.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/window.hxx"
+#include <com/sun/star/task/OfficeRestartManager.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <svtools/restartdialog.hxx>
+#include <tools/link.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/window.hxx>
 
 namespace {
 

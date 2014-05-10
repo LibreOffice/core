@@ -14,42 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/document/XDocumentProperties.hpp"
-#include "com/sun/star/script/Converter.hpp"
-#include "com/sun/star/script/XTypeConverter.hpp"
-#include "com/sun/star/task/OfficeRestartManager.hpp"
-#include "com/sun/star/task/XInteractionHandler.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "comphelper/processfactory.hxx"
-#include "comphelper/string.hxx"
-#include "osl/diagnose.h"
-#include "rtl/ustring.hxx"
-#include "sal/config.h"
-#include "sal/types.h"
-#include "svl/filenotation.hxx"
-#include "svl/inettype.hxx"
-#include "svl/pickerhistoryaccess.hxx"
-#include "svl/urihelper.hxx"
-#include "svl/urlbmk.hxx"
-#include "tools/datetime.hxx"
-#include "tools/debug.hxx"
-#include "tools/link.hxx"
-#include "tools/urlobj.hxx"
-#include "unotools/configmgr.hxx"
-#include "unotools/pathoptions.hxx"
-#include "unotools/ucbhelper.hxx"
-#include "vcl/button.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/graph.hxx"
-#include "vcl/image.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/txtattr.hxx"
-#include "vcl/window.hxx"
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -194,6 +158,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
@@ -214,6 +179,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -252,6 +218,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -375,9 +342,12 @@
 #include <svl/itemset.hxx>
 #include <svl/macitem.hxx>
 #include <svl/numuno.hxx>
+#include <svl/pickerhistoryaccess.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/urlbmk.hxx>
 #include <svl/urlfilter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -516,5 +486,4 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vector>
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

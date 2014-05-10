@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <ipwin.hxx>
+#include "ipwin.hxx"
 #include <hatchwindow.hxx>
 
 /************************************************************************/

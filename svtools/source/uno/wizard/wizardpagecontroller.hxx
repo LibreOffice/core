@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
 #define INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX
 
-#include "svtools/wizardmachine.hxx"
+#include <svtools/wizardmachine.hxx>
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 

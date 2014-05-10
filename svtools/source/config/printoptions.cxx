@@ -33,7 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <itemholder2.hxx>
+#include "itemholder2.hxx"
 
 #include <sal/macros.h>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_TABLE_MOUSEFUNCTION_HXX
 #define INCLUDED_SVTOOLS_SOURCE_TABLE_MOUSEFUNCTION_HXX
 
-#include "svtools/table/tabletypes.hxx"
+#include <svtools/table/tabletypes.hxx>
 
 #include <rtl/ref.hxx>
 

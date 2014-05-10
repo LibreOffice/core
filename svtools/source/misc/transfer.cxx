@@ -48,7 +48,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include "svl/urlbmk.hxx"
+#include <svl/urlbmk.hxx>
 #include <svtools/inetimg.hxx>
 #include <vcl/wmf.hxx>
 #include <svtools/imap.hxx>

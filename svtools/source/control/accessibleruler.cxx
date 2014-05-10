@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 
-#include "svtools/ruler.hxx"
+#include <svtools/ruler.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;

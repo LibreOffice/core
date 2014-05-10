@@ -47,7 +47,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/implbase4.hxx>
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
 using namespace com::sun::star;

@@ -31,8 +31,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 
-#include "vcl/graph.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/graph.hxx>
+#include <vcl/svapp.hxx>
 
 #define UNOGRAPHIC_GRAPHICTYPE  1
 #define UNOGRAPHIC_MIMETYPE     2

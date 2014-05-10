@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_FILEVIEW_HXX
 #define INCLUDED_SVTOOLS_SOURCE_CONTNR_FILEVIEW_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 OUString CreateExactSizeText(sal_Int64 nSize);

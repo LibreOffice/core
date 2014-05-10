@@ -37,7 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 
-#include <itemholder2.hxx>
+#include "itemholder2.hxx"
 
 using namespace utl;
 using namespace com::sun::star::uno;

@@ -18,15 +18,15 @@
  */
 
 #include "fileview.hxx"
-#include "sal/config.h"
-#include "svtools/treelistentry.hxx"
+#include <sal/config.h>
+#include <svtools/treelistentry.hxx>
 #include <svtools/fileview.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtools.hrc>
-#include "svtools/viewdataentry.hxx"
+#include <svtools/viewdataentry.hxx>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>

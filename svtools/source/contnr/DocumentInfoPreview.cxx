@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/document/XDocumentProperties.hpp"
-#include "com/sun/star/script/Converter.hpp"
-#include "com/sun/star/script/XTypeConverter.hpp"
-#include "comphelper/processfactory.hxx"
-#include "comphelper/string.hxx"
-#include "rtl/ustring.hxx"
-#include "svl/inettype.hxx"
-#include "svtools/DocumentInfoPreview.hxx"
-#include "svtools/imagemgr.hxx"
-#include "vcl/txtattr.hxx"
-#include "vcl/settings.hxx"
-#include "tools/datetime.hxx"
-#include "tools/urlobj.hxx"
-#include "unotools/pathoptions.hxx"
-#include "unotools/ucbhelper.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/script/Converter.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+#include <rtl/ustring.hxx>
+#include <svl/inettype.hxx>
+#include <svtools/DocumentInfoPreview.hxx>
+#include <svtools/imagemgr.hxx>
+#include <vcl/txtattr.hxx>
+#include <vcl/settings.hxx>
+#include <tools/datetime.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/ucbhelper.hxx>
 
 #include "fileview.hxx"
 #include "templwin.hrc"

@@ -37,8 +37,8 @@
 
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include "svimpbox.hxx"
 
 #include <set>

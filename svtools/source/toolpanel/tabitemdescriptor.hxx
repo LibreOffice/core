@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TABITEMDESCRIPTOR_HXX
 #define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TABITEMDESCRIPTOR_HXX
 
-#include "svtools/toolpanel/toolpanel.hxx"
-#include "svtools/toolpanel/tabitemcontent.hxx"
+#include <svtools/toolpanel/toolpanel.hxx>
+#include <svtools/toolpanel/tabitemcontent.hxx>
 
 #include <tools/gen.hxx>
 #include <osl/diagnose.h>

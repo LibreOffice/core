@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_DUMMYPANEL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_DUMMYPANEL_HXX
 
-#include "svtools/toolpanel/toolpanel.hxx"
-#include "svtools/toolpanel/refbase.hxx"
+#include <svtools/toolpanel/toolpanel.hxx>
+#include <svtools/toolpanel/refbase.hxx>
 
 
 namespace svt

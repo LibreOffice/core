@@ -26,7 +26,7 @@
 #include <svtools/headbar.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
-#include "toolkit/awt/vclxwindow.hxx"
+#include <toolkit/awt/vclxwindow.hxx>
 #endif
 class HeaderBar;
 

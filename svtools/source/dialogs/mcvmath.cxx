@@ -18,7 +18,7 @@
  */
 
 
-#include <mcvmath.hxx>
+#include "mcvmath.hxx"
 
 
 // die folgenden Tabellen enthalten     sin(phi) * 2**14

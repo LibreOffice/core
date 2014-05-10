@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/types.h"
-#include "rtl/ustring.hxx"
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include "svtools/miscopt.hxx"
-#include "svl/pickerhistoryaccess.hxx"
+#include <svtools/miscopt.hxx>
+#include <svl/pickerhistoryaccess.hxx>
 
-#include "vcl/svapp.hxx"
+#include <vcl/svapp.hxx>
 
-#include <fpicker.hxx>
+#include "fpicker.hxx"
 
 using css::uno::Reference;
 using css::uno::Sequence;

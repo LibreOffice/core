@@ -26,7 +26,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sot/formats.hxx>
 
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/imaprect.hxx>

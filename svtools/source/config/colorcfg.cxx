@@ -32,7 +32,7 @@
 #include <svl/smplhint.hxx>
 #include <osl/mutex.hxx>
 
-#include <itemholder2.hxx>
+#include "itemholder2.hxx"
 
  /* #100822# ----
 #include <vcl/wrkwin.hxx>

@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 #include <vector>
 #include <list>

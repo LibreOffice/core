@@ -28,8 +28,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
-#include "svtools/valueset.hxx"
-#include "svtools/toolbarmenu.hxx"
+#include <svtools/valueset.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include "toolbarmenuimp.hxx"
 
 using namespace ::com::sun::star::uno;

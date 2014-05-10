@@ -30,7 +30,7 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
-#include "svl/urihelper.hxx"
+#include <svl/urihelper.hxx>
 
 #include <sstream>
 

@@ -39,7 +39,7 @@
 #include <svtools/helpid.hrc>
 #include <unotools/viewoptions.hxx>
 #include <unotools/ucbhelper.hxx>
-#include "unotools/configmgr.hxx"
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/Frame.hpp>
