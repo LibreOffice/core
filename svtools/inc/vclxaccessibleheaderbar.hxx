@@ -19,15 +19,10 @@
 #ifndef INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX
 #define INCLUDED_SVTOOLS_VCLXACCESSIBLEHEADERBAR_HXX
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
-#ifndef _HEADBAR_HXX
 #include <svtools/headbar.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
+
 class HeaderBar;
 
 
