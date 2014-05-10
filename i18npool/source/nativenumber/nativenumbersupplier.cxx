@@ -224,7 +224,8 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                     len = 0;
                 }
                 if (i < nCount) {
-                    if (doDecimal = (!doDecimal && i < nCount-1 && isDecimal(str[i]) && isNumber(str[i+1])))
+                    doDecimal = (!doDecimal && i < nCount-1 && isDecimal(str[i]) && isNumber(str[i+1]));
+                    if (doDecimal)
                         newStr[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
                     else if (i < nCount-1 && isMinus(str[i]) && isNumber(str[i+1]))
                         newStr[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
