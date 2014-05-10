@@ -5951,6 +5951,8 @@ void Test::testIconSet()
         ScIconSetInfo* pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
         CPPUNIT_ASSERT_EQUAL(aTests[i].nIndex, pInfo->nIconIndex);
     }
+
+    delete pEntry;
 }
 
 void Test::testImportStream()
