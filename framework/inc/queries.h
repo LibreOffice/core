@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_QUERIES_H
 #define INCLUDED_FRAMEWORK_INC_QUERIES_H
 
-#include <general.h>
+#include "general.h"
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>

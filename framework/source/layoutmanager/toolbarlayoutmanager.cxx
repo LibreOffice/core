@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolbarlayoutmanager.hxx>
+#include "toolbarlayoutmanager.hxx"
 #include <uiconfiguration/windowstateproperties.hxx>
 #include <uielement/addonstoolbarwrapper.hxx>
-#include <helpers.hxx>
+#include "helpers.hxx"
 #include <services.h>
 #include <services/layoutmanager.hxx>
 #include <classes/resource.hrc>

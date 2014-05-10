@@ -25,9 +25,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "com/sun/star/util/XMacroExpander.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
+#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>

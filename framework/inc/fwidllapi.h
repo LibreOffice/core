@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_FWIDLLAPI_H
 #define INCLUDED_FRAMEWORK_INC_FWIDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined(FWI_DLLIMPLEMENTATION)
 #define FWI_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

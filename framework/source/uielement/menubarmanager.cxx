@@ -22,7 +22,7 @@
 #include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/imageproducer.hxx>
-#include "framework/addonsoptions.hxx"
+#include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/menumanager.hxx>
 #include <helper/mischelper.hxx>
@@ -72,7 +72,7 @@
 #include <osl/file.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include "svtools/miscopt.hxx"
+#include <svtools/miscopt.hxx>
 #include <uielement/menubarmerger.hxx>
 
 // Be careful removing this "bad" construct. There are serious problems

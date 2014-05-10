@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_FWKDLLAPI_H
 #define INCLUDED_FRAMEWORK_INC_FWKDLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
-#include <fwidllapi.h>
+#include "fwidllapi.h"
 
 #endif // INCLUDED_FRAMEWORK_INC_FWKDLLAPI_H
 

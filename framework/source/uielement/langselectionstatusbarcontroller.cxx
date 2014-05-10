@@ -33,7 +33,7 @@
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <svtools/langtab.hxx>
 #include <svtools/statusbarcontroller.hxx>
-#include "sal/types.h"
+#include <sal/types.h>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <i18nlangtag/mslangid.hxx>

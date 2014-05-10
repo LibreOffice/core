@@ -14,17 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "com/sun/star/beans/XFastPropertySet.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/frame/XModuleManager2.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/util/XMacroExpander.hpp"
-#include "com/sun/star/util/theMacroExpander.hpp"
 #include "officecfg/Office/Common.hxx"
-#include "rtl/bootstrap.hxx"
-#include "sal/types.h"
-#include "svtools/miscopt.hxx"
-#include "vcl/syswin.hxx"
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
@@ -70,6 +60,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
@@ -265,6 +256,7 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -411,5 +403,4 @@
 #include <vcl/wrkwin.hxx>
 #include <vector>
 #include <wchar.h>
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

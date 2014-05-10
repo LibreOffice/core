@@ -24,7 +24,7 @@
 #include <queue>
 #include <boost/unordered_map.hpp>
 
-#include <general.h>
+#include "general.h"
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 

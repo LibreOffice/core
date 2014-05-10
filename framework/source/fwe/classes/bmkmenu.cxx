@@ -19,7 +19,7 @@
 
 #include <limits.h>
 
-#include "framework/bmkmenu.hxx"
+#include <framework/bmkmenu.hxx>
 #include <general.h>
 #include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>

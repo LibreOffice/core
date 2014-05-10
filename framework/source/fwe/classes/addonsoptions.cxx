@@ -24,8 +24,8 @@
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "com/sun/star/util/theMacroExpander.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/util/theMacroExpander.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <comphelper/processfactory.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include <services/layoutmanager.hxx>
-#include <helpers.hxx>
+#include "helpers.hxx"
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
@@ -29,7 +29,7 @@
 #include <uielement/progressbarwrapper.hxx>
 #include <uiconfiguration/globalsettings.hxx>
 #include <uiconfiguration/windowstateproperties.hxx>
-#include <toolbarlayoutmanager.hxx>
+#include "toolbarlayoutmanager.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

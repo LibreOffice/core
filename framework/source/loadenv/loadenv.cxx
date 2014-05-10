@@ -79,7 +79,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "rtl/bootstrap.hxx"
+#include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 
 #include <config_orcus.h>

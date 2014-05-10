@@ -21,7 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_PROPERTIES_H
 
 #include <macros/generic.hxx>
-#include <general.h>
+#include "general.h"
 
 namespace framework{
 

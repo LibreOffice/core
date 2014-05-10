@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/undomanagerhelper.hxx"
+#include <framework/undomanagerhelper.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 

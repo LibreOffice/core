@@ -22,7 +22,7 @@
 #include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/imageproducer.hxx>
-#include "framework/addonsoptions.hxx"
+#include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
 #include <services.h>
 #include "classes/resource.hrc"

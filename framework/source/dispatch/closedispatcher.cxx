@@ -30,12 +30,12 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include "com/sun/star/beans/XFastPropertySet.hpp"
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include "vcl/syswin.hxx"
+#include <vcl/syswin.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/processfactory.hxx>

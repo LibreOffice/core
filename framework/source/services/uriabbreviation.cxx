@@ -20,11 +20,11 @@
 #include "services/uriabbreviation.hxx"
 #include "services.h"
 
-#include "sal/config.h"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
+#include <sal/config.h>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
-#include "tools/urlobj.hxx"
+#include <tools/urlobj.hxx>
 
 // framework namespace
 namespace framework

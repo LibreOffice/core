@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/addonmenu.hxx"
-#include "framework/addonsoptions.hxx"
+#include <framework/addonmenu.hxx>
+#include <framework/addonsoptions.hxx>
 #include <general.h>
 #include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
