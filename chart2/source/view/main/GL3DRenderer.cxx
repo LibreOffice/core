@@ -707,7 +707,6 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         glDrawArrays(GL_LINE_STRIP, 0, pointList->size());
         glDisableVertexAttribArray(m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        pointList->clear();
         delete pointList;
         polygon.verticesList.pop_front();
     }
@@ -779,9 +778,7 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         glDisableVertexAttribArray(m_3DVertexID);
         glDisableVertexAttribArray(m_3DNormalID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        pointList->clear();
         delete pointList;
-        normalList->clear();
         delete normalList;
         polygon.verticesList.pop_front();
         polygon.normalsList.pop_front();
@@ -884,6 +881,7 @@ void OpenGL3DRenderer::EndAddShapePolygon3DObject()
     m_Polygon3DInfoList.push_back(m_Polygon3DInfo);
     m_Polygon3DInfo.normals = NULL;
     m_Polygon3DInfo.vertices = NULL;
+    // TODO: moggi: memory leak???
     m_Polygon3DInfo.verticesList.clear();
     m_Polygon3DInfo.normalsList.clear();
 }
