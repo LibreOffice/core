@@ -518,6 +518,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mbSlideBorderVisible(false)
 , mbSetOnlineSpelling(false)
 , mbDisposed(false)
+, mbAutoSaveWasOn(false)
 , mbRehearseTimings(false)
 , mbDesignMode(false)
 , mbIsPaused(false)
