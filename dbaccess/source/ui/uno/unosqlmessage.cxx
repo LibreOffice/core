@@ -48,7 +48,7 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxOR
     :OSQLMessageDialogBase(_rxORB)
 {
     registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID,
-        &m_aException, ::getCppuType(static_cast<SQLException*>(NULL)));
+        &m_aException, ::cppu::UnoType<SQLException>::get());
     registerProperty( PROPERTY_HELP_URL, PROPERTY_ID_HELP_URL, PropertyAttribute::TRANSIENT,
         &m_sHelpURL, ::getCppuType( &m_sHelpURL ) );
 }

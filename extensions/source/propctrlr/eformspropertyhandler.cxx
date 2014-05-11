@@ -129,7 +129,7 @@ namespace pcr
                 if ( xBindingProps.is() )
                 {
                     aReturn = xBindingProps->getPropertyValue( _rPropertyName );
-                    DBG_ASSERT( aReturn.getValueType().equals( ::getCppuType( static_cast< OUString* >( NULL ) ) ),
+                    DBG_ASSERT( aReturn.getValueType().equals( ::cppu::UnoType<OUString>::get() ),
                         "EFormsPropertyHandler::getPropertyValue: invalid BindingExpression value type!" );
                 }
                 else
@@ -246,7 +246,7 @@ namespace pcr
                 DBG_ASSERT( xBindingProps.is(), "EFormsPropertyHandler::setPropertyValue: how can I set a property if there's no binding?" );
                 if ( xBindingProps.is() )
                 {
-                    DBG_ASSERT( _rValue.getValueType().equals( ::getCppuType( static_cast< OUString* >( NULL ) ) ),
+                    DBG_ASSERT( _rValue.getValueType().equals( ::cppu::UnoType<OUString>::get() ),
                         "EFormsPropertyHandler::setPropertyValue: invalid value type!" );
                     xBindingProps->setPropertyValue( _rPropertyName, _rValue );
                 }

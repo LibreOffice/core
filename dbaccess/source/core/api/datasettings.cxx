@@ -65,13 +65,13 @@ void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
                     &_pItem->m_aFont, ::getCppuType(&_pItem->m_aFont));
 
     registerMayBeVoidProperty(PROPERTY_ROW_HEIGHT, PROPERTY_ID_ROW_HEIGHT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &_pItem->m_aRowHeight, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &_pItem->m_aRowHeight, ::cppu::UnoType<sal_Int32>::get());
 
     registerMayBeVoidProperty(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &_pItem->m_aTextColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &_pItem->m_aTextColor, ::cppu::UnoType<sal_Int32>::get());
 
     registerMayBeVoidProperty(PROPERTY_TEXTLINECOLOR, PROPERTY_ID_TEXTLINECOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &_pItem->m_aTextLineColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &_pItem->m_aTextLineColor, ::cppu::UnoType<sal_Int32>::get());
 
     registerProperty(PROPERTY_TEXTEMPHASIS, PROPERTY_ID_TEXTEMPHASIS, PropertyAttribute::BOUND,
         &_pItem->m_nFontEmphasis, ::getCppuType(&_pItem->m_nFontEmphasis));

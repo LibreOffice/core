@@ -60,13 +60,13 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {OUString("PositiveError"),2,getCppuType((const double*)0),0,0},
         {OUString("NegativeError"),3,getCppuType((const double*)0), 0, 0},
         {OUString("PercentageError"),4,getCppuType((const double*)0), 0, 0},
-        {OUString("ErrorBarStyle"),5,getCppuType((sal_Int32*)0),0,0},
-        {OUString("ErrorBarRangePositive"),6,getCppuType((OUString*)0),0,0}, // read-only for export
-        {OUString("ErrorBarRangeNegative"),7,getCppuType((OUString*)0),0,0}, // read-only for export
+        {OUString("ErrorBarStyle"),5,cppu::UnoType<sal_Int32>::get()0),0,0},
+        {OUString("ErrorBarRangePositive"),6,cppu::UnoType<OUString>::get()0),0,0}, // read-only for export
+        {OUString("ErrorBarRangeNegative"),7,cppu::UnoType<OUString>::get()0),0,0}, // read-only for export
         {OUString("Weight"),8,getCppuType((const double*)0),0,0},
         {OUString("LineStyle"),9,getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
         {OUString("LineDash"),10,getCppuType((drawing::LineDash*)0),0,0},
-        {OUString("LineWidth"),11,getCppuType((sal_Int32*)0),0,0},
+        {OUString("LineWidth"),11,cppu::UnoType<sal_Int32>::get()0),0,0},
         {OUString("LineColor"),12,getCppuType((com::sun::star::util::Color*)0),0,0},
         {OUString("LineTransparence"),13,getCppuType((sal_Int16*)0),0,0},
         {OUString("LineJoint"),14,getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},

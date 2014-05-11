@@ -182,7 +182,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
     // Attention: the first parameter HAS TO BE sorted!!!
     const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
     {
-        { OUString("BuildId"),                      WID_MODEL_BUILDID,            ::getCppuType(static_cast< const OUString * >(0)),                      0, 0},
+        { OUString("BuildId"),                      WID_MODEL_BUILDID,            ::cppu::UnoType<OUString>::get(),                      0, 0},
         { OUString(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE,           ::cppu::UnoType<lang::Locale>::get(),                                  0, 0},
         { OUString(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,            ::cppu::UnoType<sal_Int32>::get(),                                     0, 0},
         { OUString(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,            ::cppu::UnoType<awt::Rectangle>::get(),                                0, 0},
@@ -192,8 +192,8 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { OUString(sUNO_Prop_ApplyFrmDsgnMode),     WID_MODEL_DSGNMODE,           ::getBooleanCppuType(),                                                 0, 0},
         { OUString("BasicLibraries"),               WID_MODEL_BASICLIBS,          ::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),  beans::PropertyAttribute::READONLY, 0},
         { OUString("DialogLibraries"),              WID_MODEL_DIALOGLIBS,         ::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),  beans::PropertyAttribute::READONLY, 0},
-        { OUString(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,         ::getCppuType(static_cast< const OUString * >(0)),                      beans::PropertyAttribute::READONLY, 0},
-        { OUString(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, ::getCppuType(static_cast< const sal_Bool * >(0)),                      beans::PropertyAttribute::READONLY, 0},
+        { OUString(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,         ::cppu::UnoType<OUString>::get(),                      beans::PropertyAttribute::READONLY, 0},
+        { OUString(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { OUString("Fonts"),                        WID_MODEL_FONTS,              ::getCppuType((uno::Sequence<uno::Any>*)0),                     beans::PropertyAttribute::READONLY, 0},
         { OUString(sUNO_Prop_InteropGrabBag),       WID_MODEL_INTEROPGRABBAG,     ::getCppuType((uno::Sequence< beans::PropertyValue >*)0),       0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }

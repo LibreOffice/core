@@ -63,8 +63,8 @@ namespace dbaccess
         const sal_Int32 nBoundAttr = PropertyAttribute::BOUND;
         const sal_Int32 nMayBeVoidAttr = PropertyAttribute::MAYBEVOID | nBoundAttr;
 
-        const Type& rSalInt32Type = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
-        const Type& rStringType = ::getCppuType( static_cast< OUString* >( NULL ) );
+        const Type& rSalInt32Type = ::cppu::UnoType<sal_Int32>::get();
+        const Type& rStringType = ::cppu::UnoType<OUString>::get();
 
         _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_ALIGN, PROPERTY_ID_ALIGN, nMayBeVoidAttr, &m_aAlignment, rSalInt32Type );
         _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_NUMBERFORMAT, PROPERTY_ID_NUMBERFORMAT, nMayBeVoidAttr, &m_aFormatKey, rSalInt32Type );

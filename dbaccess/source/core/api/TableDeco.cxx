@@ -314,7 +314,7 @@ void ODBTableDecorator::construct()
     }
     if ( bNotFound )
         registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND  | PropertyAttribute::READONLY,
-                        &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                        &m_nPrivileges, ::cppu::UnoType<sal_Int32>::get());
 }
 
 ::cppu::IPropertyArrayHelper* ODBTableDecorator::createArrayHelper(sal_Int32 /*_nId*/) const

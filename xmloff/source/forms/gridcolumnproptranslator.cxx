@@ -160,7 +160,7 @@ namespace xmloff
         {
             if ( aName == getParaAlignProperty() )
                 return Property( getParaAlignProperty(), -1,
-                    ::getCppuType( static_cast< const ParagraphAdjust* >( NULL ) ), 0 );
+                    ::cppu::UnoType<ParagraphAdjust>::get(), 0 );
 
             if ( !m_xMasterInfo.is() )
                 return Property();

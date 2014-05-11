@@ -215,7 +215,7 @@ namespace pcr
 
     Type SAL_CALL OEditControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return m_bIsPassword ? ::getCppuType( static_cast< sal_Int16* >( NULL ) ) : ::getCppuType( static_cast< OUString* >( NULL ) );
+        return m_bIsPassword ? ::cppu::UnoType<sal_Int16>::get() : ::cppu::UnoType<OUString>::get();
     }
 
 
@@ -436,7 +436,7 @@ namespace pcr
 
     Type SAL_CALL OHyperlinkControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< OUString* >( NULL ) );
+        return ::cppu::UnoType<OUString>::get();
     }
 
 
@@ -640,7 +640,7 @@ namespace pcr
 
     Type SAL_CALL ONumericControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< double* >( NULL ) );
+        return ::cppu::UnoType<double>::get();
     }
 
 
@@ -754,7 +754,7 @@ namespace pcr
 
     Type SAL_CALL OColorControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        return ::cppu::UnoType<sal_Int32>::get();
     }
 
 
@@ -823,7 +823,7 @@ namespace pcr
 
     Type SAL_CALL OListboxControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< OUString* >( NULL ) );
+        return ::cppu::UnoType<OUString>::get();
     }
 
 
@@ -914,7 +914,7 @@ namespace pcr
 
     Type SAL_CALL OComboboxControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< OUString* >( NULL ) );
+        return ::cppu::UnoType<OUString>::get();
     }
 
 
@@ -1412,7 +1412,7 @@ namespace pcr
     Type SAL_CALL OMultilineEditControl::getValueType() throw (RuntimeException, std::exception)
     {
         if ( getTypedControlWindow()->getOperationMode() == eMultiLineText )
-            return ::getCppuType( static_cast< OUString* >( NULL ) );
+            return ::cppu::UnoType<OUString>::get();
         return ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
     }
 

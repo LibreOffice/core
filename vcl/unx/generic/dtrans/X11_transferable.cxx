@@ -95,7 +95,7 @@ sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFla
     if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
     {
         if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( "text/plain;charset=utf-16" ) &&
-            aFlavor.DataType == getCppuType( (OUString*)0 ) )
+            aFlavor.DataType == cppu::UnoType<OUString>::get()0 ) )
             return false;
     }
 

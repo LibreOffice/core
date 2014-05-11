@@ -85,10 +85,10 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                     if (s_aTypeNameMap.empty())
                     {
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
-                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::getCppuType( static_cast< double* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::cppu::UnoType<double>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::cppu::UnoType<double>::get();
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< OUString* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::cppu::UnoType<sal_Int32>::get();
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_DATE)]      = ::getCppuType( static_cast< com::sun::star::util::Date* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_TIME)]      = ::getCppuType( static_cast< com::sun::star::util::Time* >(NULL) );
@@ -251,9 +251,9 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_STRUCT:
             {
                 // recognized structs:
-                static ::com::sun::star::uno::Type s_aDateType      = ::getCppuType(static_cast< ::com::sun::star::util::Date* >(NULL));
-                static ::com::sun::star::uno::Type s_aTimeType      = ::getCppuType(static_cast< ::com::sun::star::util::Time* >(NULL));
-                static ::com::sun::star::uno::Type s_aDateTimeType  = ::getCppuType(static_cast< ::com::sun::star::util::DateTime* >(NULL));
+                static ::com::sun::star::uno::Type s_aDateType      = ::cppu::UnoType<com::sun::star::util::Date>::get();
+                static ::com::sun::star::uno::Type s_aTimeType      = ::cppu::UnoType<com::sun::star::util::Time>::get();
+                static ::com::sun::star::uno::Type s_aDateTimeType  = ::cppu::UnoType<com::sun::star::util::DateTime>::get();
                 sal_Int32 nType = 0;
                 if  ( _rExpectedType.equals(s_aDateType) )
                     nType = TYPE_DATE;

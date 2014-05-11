@@ -300,37 +300,37 @@ namespace pcr
 
     inline void PropertyHandler::addStringPropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< OUString* >( NULL ) ), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<OUString>::get(), _nAttribs );
     }
 
     inline void PropertyHandler::addInt32PropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< sal_Int32* >( NULL ) ), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), _nAttribs );
     }
 
     inline void PropertyHandler::addInt16PropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< sal_Int16* >( NULL ) ), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<sal_Int16>::get(), _nAttribs );
     }
 
     inline void PropertyHandler::addDoublePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< double* >( NULL ) ), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<double>::get(), _nAttribs );
     }
 
     inline void PropertyHandler::addDatePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< com::sun::star::util::Date* >( NULL ) ), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<com::sun::star::util::Date>::get(), _nAttribs );
     }
 
     inline void PropertyHandler::addTimePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< com::sun::star::util::Time* >( NULL ) ), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<com::sun::star::util::Time>::get(), _nAttribs );
     }
 
     inline void PropertyHandler::addDateTimePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
-        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< com::sun::star::util::DateTime* >( NULL ) ), _nAttribs );
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<com::sun::star::util::DateTime>::get(), _nAttribs );
     }
 
     inline OUString PropertyHandler::impl_getPropertyNameFromId_nothrow( PropertyId _nPropId ) const

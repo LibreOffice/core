@@ -55,7 +55,7 @@ namespace pcr
 
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :CellBindingPropertyHandler_Base( _rxContext )
-        ,m_pCellExchangeConverter( new DefaultEnumRepresentation( *m_pInfoService, ::getCppuType( static_cast< sal_Int16* >( NULL ) ), PROPERTY_ID_CELL_EXCHANGE_TYPE ) )
+        ,m_pCellExchangeConverter( new DefaultEnumRepresentation( *m_pInfoService, ::cppu::UnoType<sal_Int16>::get(), PROPERTY_ID_CELL_EXCHANGE_TYPE ) )
     {
     }
 
@@ -466,17 +466,17 @@ namespace pcr
             if ( bAllowCellLinking )
             {
                 aProperties[ --nPos ] = Property( PROPERTY_BOUND_CELL, PROPERTY_ID_BOUND_CELL,
-                    ::getCppuType( static_cast< OUString* >( NULL ) ), 0 );
+                    ::cppu::UnoType<OUString>::get(), 0 );
             }
             if ( bAllowCellIntLinking )
             {
                 aProperties[ --nPos ] = Property( PROPERTY_CELL_EXCHANGE_TYPE, PROPERTY_ID_CELL_EXCHANGE_TYPE,
-                    ::getCppuType( static_cast< sal_Int16* >( NULL ) ), 0 );
+                    ::cppu::UnoType<sal_Int16>::get(), 0 );
             }
             if ( bAllowListCellRange )
             {
                 aProperties[ --nPos ] = Property( PROPERTY_LIST_CELL_RANGE, PROPERTY_ID_LIST_CELL_RANGE,
-                    ::getCppuType( static_cast< OUString* >( NULL ) ), 0 );
+                    ::cppu::UnoType<OUString>::get(), 0 );
             }
         }
 

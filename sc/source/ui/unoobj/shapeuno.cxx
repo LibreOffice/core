@@ -54,7 +54,7 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {OUString(SC_UNONAME_HORIPOS), 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_IMAGEMAP), 0, getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
         {OUString(SC_UNONAME_VERTPOS), 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
-        {OUString(SC_UNONAME_MOVEPROTECT), 0, getCppuType((sal_Bool*)0), 0, 0 },
+        {OUString(SC_UNONAME_MOVEPROTECT), 0, cppu::UnoType<sal_Bool>::get()0), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
         {OUString(SC_UNONAME_HYPERLINK), 0, cppu::UnoType<OUString>::get(), 0, 0 },
         {OUString(SC_UNONAME_URL), 0, cppu::UnoType<OUString>::get(), 0, 0 },

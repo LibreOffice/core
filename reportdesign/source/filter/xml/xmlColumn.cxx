@@ -130,8 +130,8 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
             PropertySetInfo* pInfo = new PropertySetInfo();
             static PropertyMapEntry const pMap[] =
             {
-                {OUString(PROPERTY_WIDTH),  PROPERTY_ID_WIDTH,          ::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
-                {OUString(PROPERTY_HEIGHT), PROPERTY_ID_HEIGHT,         ::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
+                {OUString(PROPERTY_WIDTH),  PROPERTY_ID_WIDTH,          ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
+                {OUString(PROPERTY_HEIGHT), PROPERTY_ID_HEIGHT,         ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
             pInfo->add(pMap);

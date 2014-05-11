@@ -187,7 +187,7 @@ namespace pcr
         if ( isNavigationCapableButton( m_xComponent ) )
         {
             addStringPropertyDescription( aProperties, PROPERTY_TARGET_URL );
-            implAddPropertyDescription( aProperties, PROPERTY_BUTTONTYPE, ::getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+            implAddPropertyDescription( aProperties, PROPERTY_BUTTONTYPE, ::cppu::UnoType<sal_Int32>::get() );
         }
 
         if ( aProperties.empty() )

@@ -189,16 +189,16 @@ void ODBTable::construct()
                     &m_aFont, ::getCppuType(&m_aFont));
 
     registerMayBeVoidProperty(PROPERTY_ROW_HEIGHT, PROPERTY_ID_ROW_HEIGHT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &m_aRowHeight, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &m_aRowHeight, ::cppu::UnoType<sal_Int32>::get());
 
     registerMayBeVoidProperty(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &m_aTextColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &m_aTextColor, ::cppu::UnoType<sal_Int32>::get());
 
     registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND | PropertyAttribute::READONLY,
-                    &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &m_nPrivileges, ::cppu::UnoType<sal_Int32>::get());
 
     registerMayBeVoidProperty(PROPERTY_TEXTLINECOLOR, PROPERTY_ID_TEXTLINECOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &m_aTextLineColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &m_aTextLineColor, ::cppu::UnoType<sal_Int32>::get());
 
     registerProperty(PROPERTY_TEXTEMPHASIS, PROPERTY_ID_TEXTEMPHASIS, PropertyAttribute::BOUND,
                     &m_nFontEmphasis, ::getCppuType(&m_nFontEmphasis));

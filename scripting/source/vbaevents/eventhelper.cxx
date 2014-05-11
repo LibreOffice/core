@@ -493,7 +493,7 @@ public:
 
     // XElementAccess
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
-    { return getCppuType(static_cast< const OUString * >(0) ); }
+    { return cppu::UnoType<OUString>::get(); }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:

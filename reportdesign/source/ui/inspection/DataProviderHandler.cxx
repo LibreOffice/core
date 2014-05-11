@@ -303,7 +303,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToPropertyValue(const OUString & _
         case PROPERTY_ID_PREVIEW_COUNT:
             try
             {
-                aPropertyValue = m_xTypeConverter->convertTo( _rControlValue, ::getCppuType((const sal_Int32*)0));
+                aPropertyValue = m_xTypeConverter->convertTo( _rControlValue, ::cppu::UnoType<sal_Int32>::get()0));
             }
             catch( const uno::Exception& )
             {

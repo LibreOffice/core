@@ -825,7 +825,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {OUString(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, cppu::UnoType<sal_Int32>::get(), 0, 0 },
-        {OUString(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, getCppuType(static_cast< const OUString * >(0)),    0, 0},
+        {OUString(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNO_NAMEDRANGES), SC_WID_UNO_NAMES, getCppuType((uno::Reference<sheet::XNamedRanges>*)0), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

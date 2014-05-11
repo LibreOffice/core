@@ -53,7 +53,7 @@ namespace // private
   {
     size_t len = aFlavor.MimeType.getLength();
     Type dtype = aFlavor.DataType;
-    return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == getCppuType( (OUString*)0 ))));
+    return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == cppu::UnoType<OUString>::get()0 ))));
   }
 
   OUString NSStringToOUString( const NSString* cfString)
@@ -137,7 +137,7 @@ namespace // private
 
   inline bool isOUStringType(const Type& theType)
   {
-    return (theType == getCppuType( (OUString*)0 ));
+    return (theType == cppu::UnoType<OUString>::get()0 ));
   }
 
 } // namespace private
@@ -486,7 +486,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
         {
           oOOFlavor.MimeType = OUString::createFromAscii(flavorMap[i].OOoFlavor);
           oOOFlavor.HumanPresentableName = OUString::createFromAscii(flavorMap[i].HumanPresentableName);
-          oOOFlavor.DataType = flavorMap[i].DataTypeOUString ? getCppuType( (OUString*)0 ) : getCppuType((Sequence<sal_Int8>*)0);
+          oOOFlavor.DataType = flavorMap[i].DataTypeOUString ? cppu::UnoType<OUString>::get()0 ) : getCppuType((Sequence<sal_Int8>*)0);
           return oOOFlavor;
         }
     } // for

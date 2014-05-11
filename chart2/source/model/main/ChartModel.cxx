@@ -103,7 +103,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_xDataProvider( 0 )
     , m_xInternalDataProvider( 0 )
     , m_xPageBackground( new PageBackground( m_xContext ) )
-    , m_xXMLNamespaceMap( createNameContainer( ::getCppuType( (const OUString*) 0 ),
+    , m_xXMLNamespaceMap( createNameContainer( ::cppu::UnoType<OUString>::get() 0 ),
                 "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
     , mnStart(0)
     , mnEnd(0)

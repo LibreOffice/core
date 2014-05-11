@@ -115,7 +115,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_AUTOCONTFOC),             0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_BASICLIBRARIES),          0, getCppuType((uno::Reference< script::XLibraryContainer >*)0),     beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_DIALOGLIBRARIES),         0, getCppuType((uno::Reference< script::XLibraryContainer >*)0),     beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_VBAGLOBNAME),             0, getCppuType(static_cast< const OUString * >(0)),                  beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNO_VBAGLOBNAME),             0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_CALCASSHOWN),             PROP_UNO_CALCASSHOWN, getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNONAME_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
         {OUString(SC_UNO_CJK_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
@@ -140,7 +140,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_SPELLONLINE),             PROP_UNO_SPELLONLINE, getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNO_STANDARDDEC),             PROP_UNO_STANDARDDEC, cppu::UnoType<sal_Int16>::get(),                    0, 0},
         {OUString(SC_UNO_REGEXENABLED),            PROP_UNO_REGEXENABLED, getBooleanCppuType(),                         0, 0},
-        {OUString(SC_UNO_RUNTIMEUID),              0, getCppuType(static_cast< const OUString * >(0)),                  beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNO_RUNTIMEUID),              0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_HASVALIDSIGNATURES),      0, getBooleanCppuType(),                                             beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_ISLOADED),                0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_ISUNDOENABLED),           0, getBooleanCppuType(),                                             0, 0},
@@ -148,8 +148,8 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_ISEXECUTELINKENABLED),    0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_ISCHANGEREADONLYENABLED), 0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_REFERENCEDEVICE),         0, getCppuType((uno::Reference<awt::XDevice>*)0),                    beans::PropertyAttribute::READONLY, 0},
-        {OUString("BuildId"),                      0, ::getCppuType(static_cast< const OUString * >(0)),                0, 0},
-        {OUString(SC_UNO_CODENAME),                0, getCppuType(static_cast< const OUString * >(0)),                  0, 0},
+        {OUString("BuildId"),                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
+        {OUString(SC_UNO_CODENAME),                0, cppu::UnoType<OUString>::get(),                  0, 0},
         {OUString(SC_UNO_INTEROPGRABBAG),          0, ::getCppuType((uno::Sequence< beans::PropertyValue >*)0), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

@@ -674,7 +674,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 rValue >>= m_pImpl->m_sParam1;
             else if(rPropertyName == UNO_NAME_VALUE)
             {
-                if(rValue.getValueType() != ::getCppuType(static_cast<const double*>(0)))
+                if(rValue.getValueType() != ::cppu::UnoType<double>::get())
                     throw lang::IllegalArgumentException();
                 rValue >>= m_pImpl->m_fParam1;
             }
@@ -2209,7 +2209,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case FIELD_PROP_DATE :
         {
-            if(rValue.getValueType() != ::getCppuType(static_cast<const util::Date*>(0)))
+            if(rValue.getValueType() != ::cppu::UnoType<util::Date>::get())
                 throw lang::IllegalArgumentException();
 
             util::Date aTemp = *(const util::Date*)rValue.getValue();
@@ -2231,7 +2231,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             rValue >>= m_pImpl->m_pProps->nSHORT1;
             break;
         case FIELD_PROP_DOUBLE:
-            if(rValue.getValueType() != ::getCppuType(static_cast<const double*>(0)))
+            if(rValue.getValueType() != ::cppu::UnoType<double>::get())
                 throw lang::IllegalArgumentException();
             rValue >>= m_pImpl->m_pProps->fDouble;
             break;
@@ -2414,7 +2414,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 aRet.setValue(&m_pImpl->m_pProps->bBool4, ::getCppuBooleanType());
                 break;
             case FIELD_PROP_DATE :
-                aRet.setValue(&m_pImpl->m_pProps->aDate, ::getCppuType(static_cast<const util::Date*>(0)));
+                aRet.setValue(&m_pImpl->m_pProps->aDate, ::cppu::UnoType<util::Date>::get());
                 break;
             case FIELD_PROP_USHORT1:
                 aRet <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);

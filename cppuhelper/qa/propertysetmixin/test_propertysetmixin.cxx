@@ -376,14 +376,14 @@ void Test::testFull(
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("First"), prop.Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), prop.Handle);
-    CPPUNIT_ASSERT_EQUAL(getCppuType(static_cast< sal_Int32 * >(0)), prop.Type);
+    CPPUNIT_ASSERT_EQUAL(cppu::UnoType<sal_Int32>::get(), prop.Type);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int16 >(0), prop.Attributes);
     prop = info->getPropertyByName(
         rtl::OUString("Second"));
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("Second"), prop.Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(1), prop.Handle);
-    CPPUNIT_ASSERT_EQUAL(getCppuType(static_cast< sal_Int32 * >(0)), prop.Type);
+    CPPUNIT_ASSERT_EQUAL(cppu::UnoType<sal_Int32>::get(), prop.Type);
     CPPUNIT_ASSERT_EQUAL(
         static_cast< sal_Int16 >(
             css::beans::PropertyAttribute::MAYBEVOID
@@ -403,7 +403,7 @@ void Test::testFull(
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("Fourth"), prop.Name);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(3), prop.Handle);
-    CPPUNIT_ASSERT_EQUAL(getCppuType(static_cast< sal_Int32 * >(0)), prop.Type);
+    CPPUNIT_ASSERT_EQUAL(cppu::UnoType<sal_Int32>::get(), prop.Type);
     CPPUNIT_ASSERT_EQUAL(
         static_cast< sal_Int16 >(css::beans::PropertyAttribute::OPTIONAL),
         prop.Attributes);

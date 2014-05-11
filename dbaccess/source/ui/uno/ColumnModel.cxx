@@ -90,7 +90,7 @@ void OColumnControlModel::registerProperties()
             &m_xColumn, ::getCppuType( &m_xColumn ) );
 
     registerMayBeVoidProperty( PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-            &m_aTabStop, ::getCppuType( static_cast<sal_Int16*>(NULL) ) );
+            &m_aTabStop, ::cppu::UnoType<sal_Int16>::get() );
     registerProperty( PROPERTY_DEFAULTCONTROL, PROPERTY_ID_DEFAULTCONTROL, PropertyAttribute::BOUND,
             &m_sDefaultControl, ::getCppuType( &m_sDefaultControl ) );
     registerProperty( PROPERTY_ENABLED, PROPERTY_ID_ENABLED, PropertyAttribute::BOUND,

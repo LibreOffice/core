@@ -615,7 +615,7 @@ bool SelectionManager::convertData(
         if( aFlavor.MimeType.getToken( 0, ';', nIndex ).equalsAscii( "text/plain" ) )
         {
             if( aFlavor.MimeType.getToken( 0, ';', nIndex ).equalsAscii( "charset=utf-16" ) )
-                aFlavor.DataType = getCppuType( (OUString *) 0 );
+                aFlavor.DataType = cppu::UnoType<OUString>::get() 0 );
             else
                 aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
         }
@@ -649,7 +649,7 @@ bool SelectionManager::convertData(
             if( aEncoding != RTL_TEXTENCODING_DONTKNOW || bCompoundText )
             {
                 aFlavor.MimeType = "text/plain;charset=utf-16";
-                aFlavor.DataType = getCppuType( (OUString *) 0 );
+                aFlavor.DataType = cppu::UnoType<OUString>::get() 0 );
                 if( xTransferable->isDataFlavorSupported( aFlavor ) )
                 {
                     Any aValue( xTransferable->getTransferData( aFlavor ) );
@@ -1331,7 +1331,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                     if( aToken.equalsAscii( "charset=utf-16" ) )
                     {
                         bHaveUTF16 = true;
-                        pFlavors->DataType = getCppuType( (OUString*)0 );
+                        pFlavors->DataType = cppu::UnoType<OUString>::get()0 );
                     }
                     else if( aToken.equalsAscii( "charset=utf-8" ) )
                     {
@@ -1356,7 +1356,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             for( i = 0; i < nNewFlavors-1; i++ )
                 aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
             aTemp.getArray()[0].MimeType = "text/plain;charset=utf-16";
-            aTemp.getArray()[0].DataType = getCppuType( (OUString*)0 );
+            aTemp.getArray()[0].DataType = cppu::UnoType<OUString>::get()0 );
             rTypes = aTemp;
 
             std::vector< Atom > aNativeTemp( nNewFlavors );

@@ -770,7 +770,7 @@ namespace pcr
         {
             aOrderedProperties[ loop->second.nId ] = Property(
                 loop->first, loop->second.nId,
-                ::getCppuType( static_cast< const OUString* >( NULL ) ),
+                ::cppu::UnoType<OUString>::get(),
                 PropertyAttribute::BOUND );
         }
 

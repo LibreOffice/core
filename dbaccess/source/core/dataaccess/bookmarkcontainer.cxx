@@ -212,7 +212,7 @@ Type SAL_CALL OBookmarkContainer::getElementType( ) throw (RuntimeException, std
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(false);
-    return ::getCppuType( static_cast< OUString* >(NULL) );
+    return ::cppu::UnoType<OUString>::get();
 }
 
 sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException, std::exception)

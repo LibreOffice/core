@@ -38,7 +38,7 @@ namespace // private
     {
       size_t len = aFlavor.MimeType.getLength();
       Type dtype = aFlavor.DataType;
-      return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == getCppuType((OUString*)0))));
+      return ((len > 0) && ((dtype == getCppuType((Sequence<sal_Int8>*)0)) || (dtype == cppu::UnoType<OUString>::get()0))));
     }
 
 } // namespace private
@@ -98,7 +98,7 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
 
 bool OSXTransferable::isUnicodeText(const DataFlavor& flavor)
 {
-  return (flavor.DataType == getCppuType((OUString*)0));
+  return (flavor.DataType == cppu::UnoType<OUString>::get()0));
 }
 
 Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  )

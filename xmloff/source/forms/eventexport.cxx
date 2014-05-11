@@ -125,7 +125,7 @@ namespace xmloff
 
     Type SAL_CALL OEventDescriptorMapper::getElementType(  ) throw(RuntimeException, std::exception)
     {
-        return ::getCppuType(static_cast< PropertyValue* >(NULL));
+        return ::cppu::UnoType<PropertyValue>::get();
     }
 
     sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  ) throw(RuntimeException, std::exception)

@@ -555,7 +555,7 @@ IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
     Sequence< Property > aManualProps( 1 );
     aManualProps[0].Name = PROPERTY_PERSISTENT_PATH;
     aManualProps[0].Handle = PROPERTY_ID_PERSISTENT_PATH;
-    aManualProps[0].Type = ::getCppuType( static_cast< const OUString* >( NULL ) );
+    aManualProps[0].Type = ::cppu::UnoType<OUString>::get();
     aManualProps[0].Attributes = PropertyAttribute::READONLY;
 
     return new OPropertyArrayHelper( ::comphelper::concatSequences( aProps, aManualProps ) );

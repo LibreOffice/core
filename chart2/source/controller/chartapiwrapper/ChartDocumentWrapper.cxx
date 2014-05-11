@@ -222,7 +222,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "NullDate",
                   PROP_DOCUMENT_NULL_DATE,
-                  ::getCppuType( static_cast< const ::com::sun::star::util::DateTime * >(0)),
+                  ::cppu::UnoType<com::sun::star::util::DateTime>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(

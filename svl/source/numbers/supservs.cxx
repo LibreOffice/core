@@ -88,7 +88,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         SetNumberFormatter(m_pOwnFormatter);
     }
 
-    Type aExpectedArgType = ::getCppuType(static_cast<Locale*>(NULL));
+    Type aExpectedArgType = ::cppu::UnoType<Locale>::get();
     LanguageType eNewFormatterLanguage = LANGUAGE_ENGLISH_US;
         // the default
 

@@ -172,7 +172,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
         pToolBar->EnableQuery(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
-        if(aState.getValueType()==::getCppuType((const OUString*)0))
+        if(aState.getValueType()==::cppu::UnoType<OUString>::get()0))
         {
             OUString aStr = *(OUString*) aState.getValue();
             pToolBar->SetQueryString(aStr);

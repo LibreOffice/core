@@ -192,7 +192,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE_TYPE), PROPERTY_LISTSOURCETYPE,
         ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
-        &::getCppuType( static_cast<ListSourceType*>(NULL) ));
+        &::cppu::UnoType<ListSourceType>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, TRISTATE_FALSE,
         OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
@@ -215,11 +215,11 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faNavigationMode), PROPERTY_NAVIGATION,
         NavigationBarMode_NONE, OEnumMapper::getEnumMap(OEnumMapper::epNavigationType),
-        &::getCppuType( static_cast<NavigationBarMode*>(NULL) ));
+        &::cppu::UnoType<NavigationBarMode>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faTabbingCycle), PROPERTY_CYCLE,
         TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
-        &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
+        &::cppu::UnoType<TabulatorCycle>::get());
 
     // 'initialize'
     m_aCurrentPageIds = m_aControlIds.end();

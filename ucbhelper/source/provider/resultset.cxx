@@ -46,7 +46,7 @@ struct PropertyInfo
 
 static const uno::Type& sal_Int32_getCppuType()
 {
-    return getCppuType( static_cast< const sal_Int32 * >( 0 ) );
+    return cppu::UnoType<sal_Int32>::get();
 }
 
 static const uno::Type& sal_Bool_getCppuType()

@@ -3321,7 +3321,7 @@ uno::Reference< table::XCellRange > processKey( const uno::Any& Key, uno::Refere
     {
         xKeyRange.set( Key, uno::UNO_QUERY_THROW );
     }
-    else if ( Key.getValueType() == ::getCppuType( static_cast< const OUString* >(0) )  )
+    else if ( Key.getValueType() == ::cppu::UnoType<OUString>::get()  )
 
     {
         OUString sRangeName = ::comphelper::getString( Key );

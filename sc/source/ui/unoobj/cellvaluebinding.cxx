@@ -168,13 +168,13 @@ namespace calc
         if ( m_xCell.is() )
         {
             // an XCell can be used to set/get "double" values
-            aTypes[0] = ::getCppuType( static_cast< double* >( NULL ) );
+            aTypes[0] = ::cppu::UnoType<double>::get();
             if ( m_xCellText.is() )
             {
                 // an XTextRange can be used to set/get "string" values
-                aTypes[1] = ::getCppuType( static_cast< OUString* >( NULL ) );
+                aTypes[1] = ::cppu::UnoType<OUString>::get();
                 // and additionally, we use it to handle booleans
-                aTypes[2] = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
+                aTypes[2] = ::cppu::UnoType<sal_Bool>::get();
             }
 
             // add sal_Int32 only if constructed as ListPositionCellBinding

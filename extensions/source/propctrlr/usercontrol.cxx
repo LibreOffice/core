@@ -162,7 +162,7 @@ namespace pcr
 
     Type SAL_CALL OFormatSampleControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        return ::cppu::UnoType<sal_Int32>::get();
     }
 
 
@@ -204,7 +204,7 @@ namespace pcr
 
     Type SAL_CALL OFormattedNumericControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< double* >( NULL ) );
+        return ::cppu::UnoType<double>::get();
     }
 
 
@@ -300,7 +300,7 @@ namespace pcr
 
     Type SAL_CALL OFileUrlControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< OUString* >( NULL ) );
+        return ::cppu::UnoType<OUString>::get();
     }
 
 

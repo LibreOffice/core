@@ -269,7 +269,7 @@ namespace pcr
         if ( m_pHelper.get() )
         {
             implAddPropertyDescription( aProperties, PROPERTY_SUBMISSION_ID, ::getCppuType( static_cast< Reference< submission::XSubmission > * >( NULL ) ) );
-            implAddPropertyDescription( aProperties, PROPERTY_XFORMS_BUTTONTYPE, ::getCppuType( static_cast< FormButtonType* >( NULL ) ) );
+            implAddPropertyDescription( aProperties, PROPERTY_XFORMS_BUTTONTYPE, ::cppu::UnoType<FormButtonType>::get() );
         }
         if ( aProperties.empty() )
             return Sequence< Property >();
@@ -369,7 +369,7 @@ namespace pcr
         case PROPERTY_ID_XFORMS_BUTTONTYPE:
         {
             ::rtl::Reference< IPropertyEnumRepresentation > aEnumConversion(
-                new DefaultEnumRepresentation( *m_pInfoService, ::getCppuType( static_cast< FormButtonType* >( NULL ) ), PROPERTY_ID_BUTTONTYPE ) );
+                new DefaultEnumRepresentation( *m_pInfoService, ::cppu::UnoType<FormButtonType>::get(), PROPERTY_ID_BUTTONTYPE ) );
             // TODO/UNOize: make aEnumConversion a member?
             aEnumConversion->getValueFromDescription( sControlValue, aPropertyValue );
         }

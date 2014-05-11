@@ -170,7 +170,7 @@ namespace pcr
         aProps[0] = Property(
             PROPERTY_CURRENTPAGE,
             OWN_PROPERTY_ID_CURRENTPAGE,
-            ::getCppuType( static_cast< OUString* >( NULL ) ),
+            ::cppu::UnoType<OUString>::get(),
             PropertyAttribute::TRANSIENT
         );
         aProps[1] = Property(

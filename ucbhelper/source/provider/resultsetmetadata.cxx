@@ -460,7 +460,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
         nType = DataType::VARCHAR;  // XRow::getString
     else if ( rType == getCppuBooleanType() )
         nType = DataType::BIT;      // XRow::getBoolean
-    else if ( rType == getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int32>::get() )
         nType = DataType::INTEGER;  // XRow::getInt
     else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
         nType = DataType::BIGINT;   // XRow::getLong
