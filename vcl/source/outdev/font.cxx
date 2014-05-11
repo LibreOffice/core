@@ -292,11 +292,8 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
     SystemFontData aSysFontData;
     aSysFontData.nSize = sizeof(aSysFontData);
 
-    if (!mpGraphics)
-    {
-        if (AcquireGraphics())
-            aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
-    }
+    if (!mpGraphics) AcquireGraphics();
+    if (mpGraphics) aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
 
     return aSysFontData;
 }
