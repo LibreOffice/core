@@ -62,7 +62,7 @@ extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
     destination->pub.next_output_byte = destination->buffer;
     destination->pub.free_in_buffer = BUFFER_SIZE;
 
-    return true;
+    return TRUE;
 }
 
 extern "C" void term_destination (j_compress_ptr cinfo)

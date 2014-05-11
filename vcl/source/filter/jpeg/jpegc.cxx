@@ -356,7 +356,7 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
     jpeg_svstream_src (&aSourceInfo, pInputStream);
 
     jcopy_markers_setup(&aSourceInfo, aCopyOption);
-    jpeg_read_header(&aSourceInfo, 1);
+    jpeg_read_header(&aSourceInfo, TRUE);
     jtransform_request_workspace(&aSourceInfo, &aTransformOption);
 
     aSourceCoefArrays = jpeg_read_coefficients(&aSourceInfo);
@@ -366,7 +366,7 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
     jpeg_svstream_dest (&aDestinationInfo, pOutputStream);
 
     // Compute optimal Huffman coding tables instead of precomuted tables
-    aDestinationInfo.optimize_coding = 1;
+    aDestinationInfo.optimize_coding = TRUE;
     jpeg_write_coefficients(&aDestinationInfo, aDestinationCoefArrays);
     jcopy_markers_execute(&aSourceInfo, &aDestinationInfo, aCopyOption);
     jtransform_execute_transformation(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
