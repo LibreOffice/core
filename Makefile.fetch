@@ -98,63 +98,42 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	-@mkdir -p $(TARFILE_LOCATION)/tmp
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
-		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 		$(call fetch_Optional,ABW,ABW_TARBALL) \
-		$(call fetch_Optional,APR,APR_TARBALL) \
-		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
-		$(call fetch_Optional,CDR,CDR_TARBALL) \
-		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
-		$(call fetch_Optional,EBOOK,EBOOK_TARBALL) \
-		$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
-		$(call fetch_Optional,ETONYEK,ETONYEK_TARBALL) \
-		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
-		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
-		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
-		$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
-		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
-		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
-		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
-		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \
-		$(call fetch_Optional,SERF,SERF_TARBALL) \
-		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
-	$(foreach item, \
 		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_CODEC_TARBALL) \
 		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_HTTPCLIENT_TARBALL) \
 		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_LANG_TARBALL) \
 		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_LOGGING_TARBALL) \
+		$(call fetch_Optional,APR,APR_TARBALL) \
+		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
 		$(call fetch_Optional,BOOST,BOOST_TARBALL) \
 		$(call fetch_Optional,BSH,BSH_TARBALL) \
 		$(call fetch_Optional,CAIRO,CAIRO_TARBALL) \
+		$(call fetch_Optional,CAIRO,PIXMAN_TARBALL) \
+		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,CLUCENE,CLUCENE_TARBALL) \
 		$(call fetch_Optional,CMIS,CMIS_TARBALL) \
+		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
 		$(call fetch_Optional,CPPUNIT,CPPUNIT_TARBALL) \
 		$(call fetch_Optional,CT2N,CT2N_TARBALL) \
 		$(call fetch_Optional,CURL,CURL_TARBALL) \
+		$(call fetch_Optional,EBOOK,EBOOK_TARBALL) \
 		$(call fetch_Optional,EPM,EPM_TARBALL) \
+		$(call fetch_Optional,ETONYEK,ETONYEK_TARBALL) \
 		$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
-		$(call fetch_Optional,MARIADB,MARIADB_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_CALADEA_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_CARLITO_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_DEJAVU_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_GENTIUM_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_NARROW_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_LINLIBERTINEG_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_PTSERIF_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_OPENSANS_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESANS_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_SOURCECODE_TARBALL) \
+		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
 		$(call fetch_Optional,FONTCONFIG,FONTCONFIG_TARBALL) \
+		$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
 		$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
-		$(call fetch_Optional_pack,GOOGLE_DOCS_EXTENSION_PACK) \
 		$(call fetch_Optional,GLEW,GLEW_TARBALL) \
 		$(call fetch_Optional,GLM,GLM_TARBALL) \
+		$(call fetch_Optional_pack,GOOGLE_DOCS_EXTENSION_PACK) \
+		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
+		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 		$(call fetch_Optional,HSQLDB,HSQLDB_TARBALL) \
 		$(call fetch_Optional,HUNSPELL,HUNSPELL_TARBALL) \
 		$(call fetch_Optional,HYPHEN,HYPHEN_TARBALL) \
-		$(call fetch_Optional,ICU,ICU_TARBALL) \
 		$(call fetch_Optional,ICU,ICU_51_LAYOUT_FIX_TARBALL) \
+		$(call fetch_Optional,ICU,ICU_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_FLOW_ENGINE_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_FLUTE_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBBASE_TARBALL) \
@@ -169,24 +148,41 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,JPEG,JPEG_TARBALL) \
 		$(call fetch_Optional,LANGUAGETOOL,LANGUAGETOOL_TARBALL) \
 		$(call fetch_Optional,LCMS2,LCMS2_TARBALL) \
+		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
+		$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
 		$(call fetch_Optional,LIBEXTTEXTCAT,LIBEXTTEXTCAT_TARBALL) \
 		$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
+		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
+		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
 		$(call fetch_Optional,LIBXML2,LIBXML_TARBALL) \
 		LIBXMLSEC_TARBALL \
 		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
 		$(call fetch_Optional,LPSOLVE,LPSOLVE_TARBALL) \
+		$(call fetch_Optional,MARIADB,MARIADB_TARBALL) \
 		$(call fetch_Optional,MDDS,MDDS_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_CALADEA_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_CARLITO_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_DEJAVU_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_GENTIUM_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_NARROW_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LINLIBERTINEG_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_OPENSANS_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_PTSERIF_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_SOURCECODE_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESANS_TARBALL) \
+		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
+		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,MYSQLCPPCONN,MYSQLCPPCONN_TARBALL) \
 		$(call fetch_Optional,MYTHES,MYTHES_TARBALL) \
 		$(call fetch_Optional,NEON,NEON_TARBALL) \
 		$(call fetch_Optional,NSS,NSS_TARBALL) \
 		$(call fetch_Optional_pack,NUMBERTEXT_EXTENSION_PACK) \
+		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \
 		$(call fetch_Optional,OPENLDAP,OPENLDAP_TARBALL) \
 		$(call fetch_Optional,OPENSSL,OPENSSL_TARBALL) \
 		$(call fetch_Optional,ORCUS,ORCUS_TARBALL) \
-		$(call fetch_Optional,CAIRO,PIXMAN_TARBALL) \
-		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
 		$(call fetch_Optional,POPPLER,POPPLER_TARBALL) \
 		$(call fetch_Optional,POSTGRESQL,POSTGRESQL_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
@@ -195,9 +191,11 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,REDLAND,REDLAND_TARBALL) \
 		$(call fetch_Optional,RHINO,RHINO_TARBALL) \
 		$(call fetch_Optional,RHINO,SWING_TARBALL) \
+		$(call fetch_Optional,SERF,SERF_TARBALL) \
 		$(call fetch_Optional,TOMCAT,TOMCAT_TARBALL) \
 		$(call fetch_Optional,UCPP,UCPP_TARBALL) \
 		$(call fetch_Optional,VIGRA,VIGRA_TARBALL) \
+		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 		$(call fetch_Optional,WPD,WPD_TARBALL) \
 		$(call fetch_Optional,WPG,WPG_TARBALL) \
 		$(call fetch_Optional,WPS,WPS_TARBALL) \
