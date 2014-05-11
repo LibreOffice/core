@@ -111,6 +111,7 @@ public:
 
 inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(())
     : _bInit( false )
+    , _hThreadKey( 0 )
     , _pCallback( pCallback )
 {
 }
