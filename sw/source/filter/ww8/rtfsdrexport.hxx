@@ -32,9 +32,9 @@ class RtfAttributeOutput;
 /// Handles export of drawings using RTF markup
 class RtfSdrExport : public EscherEx
 {
-    RtfExport &m_rExport;
+    RtfExport& m_rExport;
 
-    RtfAttributeOutput &m_rAttrOutput;
+    RtfAttributeOutput& m_rAttrOutput;
 
     const SdrObject* m_pSdrObject;
 
@@ -45,21 +45,21 @@ class RtfSdrExport : public EscherEx
     sal_uInt32 m_nShapeFlags;
 
     /// Remember style, the most important shape attribute ;-)
-    OStringBuffer *m_pShapeStyle;
+    OStringBuffer* m_pShapeStyle;
 
     std::map<OString,OString> m_aShapeProps;
 
     /// Remember which shape types we had already written.
-    bool *m_pShapeTypeWritten;
+    bool* m_pShapeTypeWritten;
 
 public:
-                        RtfSdrExport( RtfExport &rExport );
+    RtfSdrExport(RtfExport& rExport);
     virtual             ~RtfSdrExport();
 
     /// Export the sdr object as Sdr.
     ///
     /// Call this when you need to export the object as Sdr in RTF.
-    sal_uInt32 AddSdrObject( const SdrObject& rObj );
+    sal_uInt32 AddSdrObject(const SdrObject& rObj);
 
 protected:
     /// Start the shape for which we just collected the information.
@@ -72,26 +72,26 @@ protected:
     ///
     /// The parameter is just what we got from StartShape().
     using EscherEx::EndShape;
-    void        EndShape( sal_Int32 nShapeElement );
+    void        EndShape(sal_Int32 nShapeElement);
 
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Commit(EscherPropertyContainer& rProps, const Rectangle& rRect) SAL_OVERRIDE;
 
 private:
 
-    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 ) SAL_OVERRIDE;
+    virtual void OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance = 0) SAL_OVERRIDE;
     virtual void CloseContainer() SAL_OVERRIDE;
 
-    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 ) SAL_OVERRIDE;
+    virtual sal_uInt32 EnterGroup(const OUString& rShapeName, const Rectangle* pBoundRect = 0) SAL_OVERRIDE;
     virtual void LeaveGroup() SAL_OVERRIDE;
 
-    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 ) SAL_OVERRIDE;
+    virtual void AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0) SAL_OVERRIDE;
 
 private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.
-    void AddLineDimensions( const Rectangle& rRectangle );
+    void AddLineDimensions(const Rectangle& rRectangle);
 
     /// Add position and size to the OStringBuffer.
-    void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle );
+    void AddRectangleDimensions(OStringBuffer& rBuffer, const Rectangle& rRectangle);
 
     void WriteOutliner(const OutlinerParaObject& rParaObj);
 
