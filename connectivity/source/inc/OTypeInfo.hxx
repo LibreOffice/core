@@ -55,6 +55,7 @@ namespace connectivity
                 ,nMinimumScale(0)
                 ,nType( ::com::sun::star::sdbc::DataType::OTHER)
                 ,nSearchType( ::com::sun::star::sdbc::ColumnSearch::FULL)
+                ,nNumPrecRadix(0)
                 ,bCurrency(false)
                 ,bAutoIncrement(false)
                 ,bNullable(true)
