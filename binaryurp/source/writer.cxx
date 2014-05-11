@@ -52,7 +52,8 @@ Writer::Item::Item(
     std::vector< BinaryAny > const & inArguments,
     css::uno::UnoInterfaceReference const & theCurrentContext):
     request(true), tid(theTid), oid(theOid), type(theType), member(theMember),
-    arguments(inArguments), currentContext(theCurrentContext)
+    setter(false), arguments(inArguments), exception(false),
+    currentContext(theCurrentContext), setCurrentContextMode(false)
 {}
 
 Writer::Item::Item(
