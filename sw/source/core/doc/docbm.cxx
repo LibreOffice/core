@@ -541,9 +541,12 @@ namespace sw { namespace mark
             return true;
         if ( findMark(rNewName) != m_vAllMarks.end() )
             return false;
-        m_aMarkNamesSet.erase(dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->GetName());
-        m_aMarkNamesSet.insert(rNewName);
-        dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->SetName(rNewName);
+        if (::sw::mark::MarkBase* pMarkBase = dynamic_cast< ::sw::mark::MarkBase* >(io_pMark))
+        {
+            m_aMarkNamesSet.erase(pMarkBase->GetName());
+            m_aMarkNamesSet.insert(rNewName);
+            pMarkBase->SetName(rNewName);
+        }
         return true;
     }
 
