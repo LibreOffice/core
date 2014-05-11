@@ -104,6 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/abstdlg \
     vcl/source/window/accel \
     vcl/source/window/accmgr \
+    vcl/source/window/accessibility \
     vcl/source/window/brdwin \
     vcl/source/window/btndlg \
     vcl/source/window/builder \
