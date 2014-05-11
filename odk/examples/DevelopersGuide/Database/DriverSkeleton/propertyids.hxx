@@ -83,20 +83,6 @@ namespace skeleton
 }
 
 
-
-#define DECL_PROP1IMPL(varname, type) \
-pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_##varname), PROPERTY_ID_##varname, ::cppu::UnoType< type >::get(),
-
-#define DECL_PROP0(varname, type)   \
-    DECL_PROP1IMPL(varname, type) 0)
-
-#define DECL_BOOL_PROP1IMPL(varname) \
-        pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_##varname), PROPERTY_ID_##varname, ::getBooleanCppuType(),
-
-#define DECL_BOOL_PROP0(varname)    \
-    DECL_BOOL_PROP1IMPL(varname) 0)
-
-
 #define PROPERTY_ID_QUERYTIMEOUT                    1
 #define PROPERTY_ID_MAXFIELDSIZE                    2
 #define PROPERTY_ID_MAXROWS                         3
