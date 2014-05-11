@@ -482,9 +482,9 @@ namespace
     /** property map for import/exmport info set */
     comphelper::PropertyMapEntry const aExportInfoMap[] =
      {
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get()0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get()0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get()0), beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
      };
 }

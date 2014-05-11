@@ -143,14 +143,14 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         {
             if ( pArguments->Name == "ColumnType" )
             {
-                bool bCorrectType = pArguments->Value.getValueType().equals(::cppu::UnoType<OUString>::get()0));
+                bool bCorrectType = pArguments->Value.getValueType().equals(::cppu::UnoType<OUString>::get());
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnType\" !");
                 if (bCorrectType)
                     sControlType = ::comphelper::getString(pArguments->Value);
             }
             else if ( pArguments->Name == "ColumnPosition" )
             {
-                bool bCorrectType = pArguments->Value.getValueType().equals(::cppu::UnoType<sal_Int16>::get()0));
+                bool bCorrectType = pArguments->Value.getValueType().equals(::cppu::UnoType<sal_Int16>::get());
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnPosition\" !");
                 if (bCorrectType)
                     nControlPos = ::comphelper::getINT16(pArguments->Value);
