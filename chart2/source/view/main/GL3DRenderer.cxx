@@ -1159,7 +1159,7 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
     sal_uInt8 nGreen = sal_uInt8((nColor & 0xFF00) >> 8);
     sal_uInt8 nBlue = sal_uInt8((nColor & 0xFF));
     sal_uInt8 nAlpha = sal_uInt8((nColor & 0xFF000000) >> 24);
-    return glm::vec4(nRed/255.0, nGreen/255.0, nBlue/255.0, nAlpha/255.0);
+    return glm::vec4(nRed/255.0, nGreen/255.0, nBlue/255.0, (0xFF - nAlpha)/255.0);
 }
 
 std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos)
