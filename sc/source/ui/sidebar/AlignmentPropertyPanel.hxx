@@ -23,7 +23,6 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/fixed.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <editeng/svxenum.hxx>
 
 class ToolBox;
@@ -61,8 +60,6 @@ public:
 
 private:
     //ui controls
-    ToolBox*                                    mpTBHorizontal;
-    ToolBox*                                    mpTBVertical;
     FixedText*                                  mpFTLeftIndent;
     MetricField*                                mpMFLeftIndent;
     CheckBox*                                   mpCBXWrapText;
@@ -73,15 +70,11 @@ private:
     CheckBox*                                   mpCbStacked;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
-    ::sfx2::sidebar::ControllerItem             maAlignVerControl;
     ::sfx2::sidebar::ControllerItem             maLeftIndentControl;
     ::sfx2::sidebar::ControllerItem             maMergeCellControl;
     ::sfx2::sidebar::ControllerItem             maWrapTextControl;
     ::sfx2::sidebar::ControllerItem             maAngleControl;
     ::sfx2::sidebar::ControllerItem             maStackControl;
-
-    SvxCellHorJustify                           meHorAlignState;
-    SvxCellVerJustify                           meVerAlignState;
 
     /// bitfield
     bool                                        mbMultiDisable : 1;
@@ -90,8 +83,6 @@ private:
     ::sfx2::sidebar::EnumContext                maContext;
     SfxBindings*                                mpBindings;
 
-    DECL_LINK( TbxHorAlignSelectHdl, ToolBox* );
-    DECL_LINK( TbxVerAlignSelectHdl, ToolBox* );
     DECL_LINK( MFLeftIndentMdyHdl, void * );
     DECL_LINK( CBOXMergnCellClkHdl, void * );
     DECL_LINK( CBOXWrapTextClkHdl, void * );
@@ -107,8 +98,6 @@ private:
     virtual ~AlignmentPropertyPanel();
 
     void Initialize();
-    void UpdateHorAlign();
-    void UpdateVerAlign();
     void FormatDegrees(double& dTmp);
 };
 

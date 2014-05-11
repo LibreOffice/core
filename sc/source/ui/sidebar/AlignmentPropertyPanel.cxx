@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include "AlignmentPropertyPanel.hxx"
 #include <editeng/justifyitem.hxx>
-#include <svx/dialmgr.hxx>
 #include "sc.hrc"
 #include "scresid.hxx"
 #include <sfx2/bindings.hxx>
@@ -34,16 +30,6 @@
 
 using namespace css;
 using namespace cssu;
-using ::sfx2::sidebar::ControlFactory;
-
-const char UNO_ALIGNBLOCK[]            = ".uno:AlignBlock";
-const char UNO_ALIGNBOTTOM[]           = ".uno:AlignBottom";
-const char UNO_ALIGNLEFT[]             = ".uno:AlignLeft";
-const char UNO_ALIGNHORIZONTALCENTER[] = ".uno:AlignHorizontalCenter";
-const char UNO_ALIGNRIGHT[]            = ".uno:AlignRight";
-const char UNO_ALIGNTOP[]              = ".uno:AlignTop";
-const char UNO_ALIGNVCENTER[]          = ".uno:AlignVCenter";
-
 
 // namespace open
 
@@ -55,21 +41,16 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui", rxFrame),
       maAlignHorControl(SID_H_ALIGNCELL, *pBindings, *this),
-      maAlignVerControl(SID_V_ALIGNCELL, *pBindings, *this),
       maLeftIndentControl(SID_ATTR_ALIGN_INDENT, *pBindings, *this),
       maMergeCellControl(FID_MERGE_TOGGLE, *pBindings, *this),
       maWrapTextControl(SID_ATTR_ALIGN_LINEBREAK, *pBindings, *this),
       maAngleControl(SID_ATTR_ALIGN_DEGREES, *pBindings, *this),
       maStackControl(SID_ATTR_ALIGN_STACKED, *pBindings, *this),
-      meHorAlignState(SVX_HOR_JUSTIFY_STANDARD),
-      meVerAlignState(SVX_VER_JUSTIFY_STANDARD),
       mbMultiDisable(false),
       mxFrame(rxFrame),
       maContext(),
       mpBindings(pBindings)
 {
-    get(mpTBHorizontal, "horizontalalignment");
-    get(mpTBVertical, "verticalalignment");
     get(mpFTLeftIndent, "leftindentlabel");
     get(mpMFLeftIndent, "leftindent");
     get(mpCBXWrapText, "wraptext");
@@ -91,16 +72,10 @@ AlignmentPropertyPanel::~AlignmentPropertyPanel()
 
 void AlignmentPropertyPanel::Initialize()
 {
-    Link aLink = LINK(this, AlignmentPropertyPanel, TbxHorAlignSelectHdl);
-    mpTBHorizontal->SetSelectHdl ( aLink );
-
-    aLink = LINK(this, AlignmentPropertyPanel, TbxVerAlignSelectHdl);
-    mpTBVertical->SetSelectHdl ( aLink );
-
     mpFTLeftIndent->Disable();
     mpMFLeftIndent->Disable();
     mpMFLeftIndent->SetAccessibleName(OUString( "Left Indent"));    //wj acc
-    aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
+    Link aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
     mpMFLeftIndent->SetModifyHdl ( aLink );
 
     aLink = LINK(this, AlignmentPropertyPanel, CBOXMergnCellClkHdl);
@@ -131,13 +106,8 @@ void AlignmentPropertyPanel::Initialize()
     mpMtrAngle->InsertValue(315, FUNIT_CUSTOM);
     mpMtrAngle->SetDropDownLineCount(mpMtrAngle->GetEntryCount());
 
-    mpTBHorizontal->SetAccessibleRelationLabeledBy(mpTBHorizontal);
-    mpTBVertical->SetAccessibleRelationLabeledBy(mpTBVertical);
     mpMFLeftIndent->SetAccessibleRelationLabeledBy(mpFTLeftIndent);
     mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtRotate);
-#ifdef HAS_IA2
-    mpMtrAngle->SetMpSubEditAccLableBy(mpFtRotate);
-#endif
 }
 
 IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
@@ -177,75 +147,6 @@ IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
     SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_ALIGN_STACKED, SFX_CALLMODE_RECORD, &aStackItem, 0L );
-    return 0;
-}
-
-IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if(aCommand == UNO_ALIGNLEFT)
-    {
-        if(meHorAlignState != SVX_HOR_JUSTIFY_LEFT)
-            meHorAlignState = SVX_HOR_JUSTIFY_LEFT;
-        else
-            meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
-    }
-    else if(aCommand == UNO_ALIGNHORIZONTALCENTER )
-    {
-        if(meHorAlignState != SVX_HOR_JUSTIFY_CENTER)
-            meHorAlignState = SVX_HOR_JUSTIFY_CENTER;
-        else
-            meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
-    }
-    else if(aCommand == UNO_ALIGNRIGHT )
-    {
-        if(meHorAlignState != SVX_HOR_JUSTIFY_RIGHT)
-            meHorAlignState = SVX_HOR_JUSTIFY_RIGHT;
-        else
-            meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
-    }
-    else if(aCommand == UNO_ALIGNBLOCK )
-    {
-        if(meHorAlignState != SVX_HOR_JUSTIFY_BLOCK)
-            meHorAlignState = SVX_HOR_JUSTIFY_BLOCK;
-        else
-            meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
-    }
-    SvxHorJustifyItem aHorItem(meHorAlignState, SID_H_ALIGNCELL);
-    GetBindings()->GetDispatcher()->Execute(SID_H_ALIGNCELL, SFX_CALLMODE_RECORD, &aHorItem, 0L);
-    UpdateHorAlign();
-    return 0;
-}
-
-IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if(aCommand == UNO_ALIGNTOP)
-    {
-        if(meVerAlignState != SVX_VER_JUSTIFY_TOP)
-            meVerAlignState = SVX_VER_JUSTIFY_TOP;
-        else
-            meVerAlignState = SVX_VER_JUSTIFY_STANDARD;
-    }
-    else if(aCommand == UNO_ALIGNVCENTER)
-    {
-        if(meVerAlignState != SVX_VER_JUSTIFY_CENTER)
-            meVerAlignState = SVX_VER_JUSTIFY_CENTER;
-        else
-            meVerAlignState = SVX_VER_JUSTIFY_STANDARD;
-    }
-    else if(aCommand == UNO_ALIGNBOTTOM)
-    {
-        if(meVerAlignState != SVX_VER_JUSTIFY_BOTTOM)
-            meVerAlignState = SVX_VER_JUSTIFY_BOTTOM;
-        else
-            meVerAlignState = SVX_VER_JUSTIFY_STANDARD;
-    }
-    SvxVerJustifyItem aVerItem(meVerAlignState, SID_V_ALIGNCELL);
-    GetBindings()->GetDispatcher()->Execute(SID_V_ALIGNCELL, SFX_CALLMODE_RECORD, &aVerItem, 0L);
-    UpdateVerAlign();
     return 0;
 }
 
@@ -333,28 +234,31 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     switch(nSID)
     {
     case SID_H_ALIGNCELL:
-        if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SvxHorJustifyItem) )
         {
+            SvxCellHorJustify meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
+            if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SvxHorJustifyItem) )
+            {
                 const SvxHorJustifyItem* pItem = (const SvxHorJustifyItem*)pState;
                 meHorAlignState = (SvxCellHorJustify)pItem->GetValue();
+            }
+
+            if( meHorAlignState == SVX_HOR_JUSTIFY_REPEAT )
+            {
+                mpFtRotate->Disable();
+                mpCtrlDial->Disable();
+                mpMtrAngle->Disable();
+            }
+            else
+            {
+                mpFtRotate->Enable(!mbMultiDisable);
+                mpCtrlDial->Enable(!mbMultiDisable);
+                mpMtrAngle->Enable(!mbMultiDisable);
+            }
+
+            mpCbStacked->Enable( meHorAlignState != SVX_HOR_JUSTIFY_REPEAT );
+            mpFTLeftIndent->Enable( meHorAlignState == SVX_HOR_JUSTIFY_LEFT );
+            mpMFLeftIndent->Enable( meHorAlignState == SVX_HOR_JUSTIFY_LEFT );
         }
-        else
-        {
-            meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
-        }
-        UpdateHorAlign();
-        break;
-    case SID_V_ALIGNCELL:
-        if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SvxVerJustifyItem) )
-        {
-                const SvxVerJustifyItem* pItem = (const SvxVerJustifyItem*)pState;
-                meVerAlignState = (SvxCellVerJustify)pItem->GetValue();
-        }
-        else
-        {
-            meVerAlignState = SVX_VER_JUSTIFY_STANDARD;
-        }
-        UpdateVerAlign();
         break;
     case SID_ATTR_ALIGN_INDENT:
         if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SfxUInt16Item) )
@@ -374,11 +278,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         {
             mpCBXMergeCell->Enable();
             const SfxBoolItem* pItem = (const SfxBoolItem*)pState;
-            bool bVal = pItem->GetValue();
-            if(bVal)
-                mpCBXMergeCell->Check(true);
-            else
-                mpCBXMergeCell->Check(false);
+            mpCBXMergeCell->Check(pItem->GetValue());
         }
         else
         {
@@ -401,11 +301,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
             {
                 mpCBXWrapText->EnableTriState(false);
                 const SfxBoolItem* pItem = (const SfxBoolItem*)pState;
-                bool bVal = pItem->GetValue();
-                if(bVal)
-                    mpCBXWrapText->Check(true);
-                else
-                    mpCBXWrapText->Check(false);
+                mpCBXWrapText->Check(pItem->GetValue());
             }
             else if(eState == SFX_ITEM_DONTCARE)
             {
@@ -458,23 +354,11 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         {
             mpCbStacked->EnableTriState(false);
             const SfxBoolItem* aStackItem = (const SfxBoolItem*)pState;
-            bool IsChecked = (bool)aStackItem->GetValue();
-            if(IsChecked)
-            {
-                mpCbStacked->Check(IsChecked);
-                mpFtRotate->Disable();
-                mpMtrAngle->Disable();
-                mpCtrlDial->Disable();
-                mbMultiDisable = true;
-            }
-            else
-            {
-                mpCbStacked->Check(IsChecked);
-                mpFtRotate->Enable();
-                mpMtrAngle->Enable();
-                mpCtrlDial->Enable();
-                mbMultiDisable = false;
-            }
+            mbMultiDisable = aStackItem->GetValue();
+            mpCbStacked->Check(mbMultiDisable);
+            mpFtRotate->Enable(!mbMultiDisable);
+            mpMtrAngle->Enable(!mbMultiDisable);
+            mpCtrlDial->Enable(!mbMultiDisable);
         }
         else
         {
@@ -500,76 +384,6 @@ void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
     while (dTmp > 359)  //modify
         dTmp = 359;
 }
-
-void AlignmentPropertyPanel::UpdateHorAlign()
-{
-    const sal_uInt16 nIdLeft = mpTBHorizontal->GetItemId(UNO_ALIGNLEFT);
-    const sal_uInt16 nIdCenter = mpTBHorizontal->GetItemId(UNO_ALIGNHORIZONTALCENTER);
-    const sal_uInt16 nIdRight = mpTBHorizontal->GetItemId(UNO_ALIGNRIGHT);
-    const sal_uInt16 nIdBlock = mpTBHorizontal->GetItemId(UNO_ALIGNBLOCK);
-
-    mpTBHorizontal->SetItemState(nIdLeft, TRISTATE_FALSE);
-    mpTBHorizontal->SetItemState(nIdCenter, TRISTATE_FALSE);
-    mpTBHorizontal->SetItemState(nIdRight, TRISTATE_FALSE);
-    mpTBHorizontal->SetItemState(nIdBlock, TRISTATE_FALSE);
-    mpFTLeftIndent->Disable();
-    mpMFLeftIndent->Disable();
-    if(meHorAlignState==SVX_HOR_JUSTIFY_REPEAT)
-    {
-        mpFtRotate->Disable();
-        mpCtrlDial->Disable();
-        mpMtrAngle->Disable();
-        mpCbStacked->Disable();
-    }
-    else
-    {
-        if(!mbMultiDisable)
-        {
-            mpFtRotate->Enable();
-            mpCtrlDial->Enable();
-            mpMtrAngle->Enable();
-        }
-        else
-        {
-            mpFtRotate->Disable();
-            mpCtrlDial->Disable();
-            mpMtrAngle->Disable();
-        }
-        mpCbStacked->Enable();
-    }
-    switch(meHorAlignState)
-    {
-    case SVX_HOR_JUSTIFY_LEFT:
-        mpTBHorizontal->SetItemState(nIdLeft, TRISTATE_TRUE);
-        mpFTLeftIndent->Enable();
-        mpMFLeftIndent->Enable();
-        break;
-    case SVX_HOR_JUSTIFY_CENTER:mpTBHorizontal->SetItemState(nIdCenter, TRISTATE_TRUE);break;
-    case SVX_HOR_JUSTIFY_RIGHT: mpTBHorizontal->SetItemState(nIdRight, TRISTATE_TRUE);break;
-    case SVX_HOR_JUSTIFY_BLOCK: mpTBHorizontal->SetItemState(nIdBlock, TRISTATE_TRUE);break;
-    default:;
-    }
-}
-
-void AlignmentPropertyPanel::UpdateVerAlign()
-{
-    const sal_uInt16 nIdTop = mpTBVertical->GetItemId(UNO_ALIGNTOP);
-    const sal_uInt16 nIdVCenter = mpTBVertical->GetItemId(UNO_ALIGNVCENTER);
-    const sal_uInt16 nIdBottom = mpTBVertical->GetItemId(UNO_ALIGNBOTTOM);
-
-    mpTBVertical->SetItemState(nIdTop, TRISTATE_FALSE);
-    mpTBVertical->SetItemState(nIdVCenter, TRISTATE_FALSE);
-    mpTBVertical->SetItemState(nIdBottom, TRISTATE_FALSE);
-
-    switch(meVerAlignState)
-    {
-    case SVX_VER_JUSTIFY_TOP:   mpTBVertical->SetItemState(nIdTop, TRISTATE_TRUE);break;
-    case SVX_VER_JUSTIFY_CENTER:mpTBVertical->SetItemState(nIdVCenter, TRISTATE_TRUE);break;
-    case SVX_VER_JUSTIFY_BOTTOM:mpTBVertical->SetItemState(nIdBottom, TRISTATE_TRUE);break;
-    default:;
-    }
-}
-
 
 // namespace close
 
