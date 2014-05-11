@@ -96,18 +96,18 @@ namespace sfx2
 
 enum SdrHintKind
 {
-                  HINT_UNKNOWN,         // Unbekannt
-                  HINT_LAYERCHG,        // Layerdefinition geaendert
-                  HINT_LAYERORDERCHG,   // Layerreihenfolge geaendert (Insert/Remove/ChangePos)
-                  HINT_PAGEORDERCHG,    // Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
-                  HINT_OBJCHG,          // Objekt geaendert
-                  HINT_OBJINSERTED,     // Neues Zeichenobjekt eingefuegt
-                  HINT_OBJREMOVED,      // Zeichenobjekt aus Liste entfernt
-                  HINT_MODELCLEARED,    // gesamtes Model geloescht (keine Pages mehr da). not impl.
-                  HINT_REFDEVICECHG,    // RefDevice geaendert
-                  HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
-                  HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
-                  HINT_MODELSAVED,      // Dokument wurde gesichert
+                  HINT_UNKNOWN,         // Unknown
+                  HINT_LAYERCHG,        // changed layer definition
+                  HINT_LAYERORDERCHG,   // order of layer changed (Insert/Remove/ChangePos)
+                  HINT_PAGEORDERCHG,    // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
+                  HINT_OBJCHG,          // object changed
+                  HINT_OBJINSERTED,     // new object inserted
+                  HINT_OBJREMOVED,      // symbol object removed from list
+                  HINT_MODELCLEARED,    // deleted the whole model (no pages exist anymore). not impl.
+                  HINT_REFDEVICECHG,    // RefDevice changed
+                  HINT_DEFAULTTABCHG,   // Default tabulator width changed
+                  HINT_DEFFONTHGTCHG,   // Default FontHeight changed
+                  HINT_MODELSAVED,      // Document was saved
                   HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
                   HINT_BEGEDIT,         // Is called after the object has entered text edit mode
                   HINT_ENDEDIT          // Is called after the object has left text edit mode
@@ -139,8 +139,9 @@ public:
 
 
 
-// Flag um nach dem Laden des Pools Aufzuraeumen (d.h. die RefCounts
-// neu zu bestimmen und unbenutztes wegzuwerfen). sal_False == aktiv
+// Flag for cleaning up after the loading of the pools, meaning the
+// recalculate the RefCounts and dispose unused items)
+// sal_False == active
 #define LOADREFCOUNTS (false)
 
 struct SdrModelImpl;
@@ -148,16 +149,16 @@ struct SdrModelImpl;
 class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >
 {
 protected:
-    DateTime       aReadDate;  // Datum des Einstreamens
-    std::vector<SdrPage*> maMaPag;     // StammSeiten (Masterpages)
+    DateTime       aReadDate;  // date of the incoming stream
+    std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;
-    Link           aUndoLink;  // Link fuer einen NotifyUndo-Handler
+    Link           aUndoLink;  // link to a NotifyUndo-Handler
     Link           aIOProgressLink;
     OUString       aTablePath;
-    Size           aMaxObjSize; // z.B. fuer Autogrowing Text
-    Fraction       aObjUnit;   // Beschreibung der Koordinateneinheiten fuer ClipBoard, Drag&Drop, ...
+    Size           aMaxObjSize; // e.g. for auto-growing text
+    Fraction       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
     MapUnit        eObjUnit;   // see above
-    FieldUnit      eUIUnit;      // Masseinheit, Masstab (z.B. 1/1000) fuer die UI (Statuszeile) wird von ImpSetUIUnit() gesetzt
+    FieldUnit      eUIUnit;      // unit, scale (e.g. 1/1000) for the UI (status bar) is set by ImpSetUIUnit()
     Fraction       aUIScale;     // see above
     OUString       aUIUnitStr;   // see above
     Fraction       aUIUnitFact;  // see above
@@ -167,11 +168,11 @@ protected:
     SfxItemPool*    pItemPool;
     comphelper::IEmbeddedHelper*
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
-    SdrOutliner*    pDrawOutliner;  // ein Outliner zur Textausgabe
-    SdrOutliner*    pHitTestOutliner;// ein Outliner fuer den HitTest
-    sal_uIntPtr           nDefTextHgt;    // Default Texthoehe in logischen Einheiten
-    OutputDevice*   pRefOutDev;     // ReferenzDevice fuer die EditEngine
-    sal_uIntPtr           nProgressAkt;   // fuer den
+    SdrOutliner*    pDrawOutliner;  // an Outliner for outputting text
+    SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
+    sal_uIntPtr           nDefTextHgt;    // Default text heigth in logical units
+    OutputDevice*   pRefOutDev;     // ReferenceDevice for the EditEngine
+    sal_uIntPtr           nProgressAkt;   // for the
     sal_uIntPtr           nProgressMax;   // ProgressBar-
     sal_uIntPtr           nProgressOfs;   // -Handler
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
@@ -180,31 +181,31 @@ protected:
     sfx2::LinkManager* pLinkManager;   // LinkManager
     std::deque<SfxUndoAction*>* pUndoStack;
     std::deque<SfxUndoAction*>* pRedoStack;
-    SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
-    sal_uInt16          nUndoLevel;     // Undo-Klammerung
-    sal_uInt16          nProgressPercent; // fuer den ProgressBar-Handler
-    sal_uInt16          nLoadVersion;   // Versionsnummer der geladenen Datei
-    bool            bMyPool:1;        // zum Aufraeumen von pMyPool ab 303a
+    SdrUndoGroup*   pAktUndoGroup;  // for deeper
+    sal_uInt16          nUndoLevel;     // undo nesting
+    sal_uInt16          nProgressPercent; // for the ProgressBar-Handler
+    sal_uInt16          nLoadVersion;   // version number of the loaded file
+    bool            bMyPool:1;        // to clean up pMyPool from 303a
     bool            bUIOnlyKomma:1; // see eUIUnit
     bool            mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
-    bool            bExtColorTable:1; // Keinen eigenen ColorTable
+    bool            bExtColorTable:1; // ne separate ColorTable
     bool            mbChanged:1;
     bool            bInfoChanged:1;
     bool            bPagNumsDirty:1;
     bool            bMPgNumsDirty:1;
-    bool            bPageNotValid:1;  // TRUE=Doc ist nur ObjektTraeger. Page ist nicht gueltig.
-    bool            bSavePortable:1;  // Metafiles portabel speichern
-    bool            bNoBitmapCaching:1;   // Bitmaps fuer Screenoutput cachen
+    bool            bPageNotValid:1;  // TRUE=Doc is only object container. Page is invalid.
+    bool            bSavePortable:1;  // save metafiles portably
+    bool            bNoBitmapCaching:1;   // cache bitmaps for screen output
     bool            bReadOnly:1;
     bool            bTransparentTextFrames:1;
     bool            bSaveCompressed:1;
     bool            bSwapGraphics:1;
-    bool            bPasteResize:1; // Objekte werden gerade resized wegen Paste mit anderem MapMode
+    bool            bPasteResize:1; // Objects are beingresized due to Paste with different MapMode
     bool            bSaveOLEPreview:1;      // save preview metafile of OLE objects
     bool            bSaveNative:1;
     bool            bStarDrawPreviewMode:1;
     bool            mbDisableTextEditUsesCommonUndoManager:1;
-    sal_uInt16          nStreamCompressMode;  // Komprimiert schreiben?
+    sal_uInt16          nStreamCompressMode;  // write compressedly?
     sal_uInt16          nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
@@ -258,7 +259,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 
 private:
-    // Nicht implementiert:
+    // not implemented:
     SVX_DLLPRIVATE SdrModel(const SdrModel& rSrcModel);
     SVX_DLLPRIVATE void operator=(const SdrModel& rSrcModel);
     SVX_DLLPRIVATE bool operator==(const SdrModel& rCmpModel) const;
@@ -279,46 +280,44 @@ public:
     bool     IsPasteResize() const        { return bPasteResize; }
     void     SetPasteResize(bool bOn) { bPasteResize=bOn; }
     TYPEINFO_OVERRIDE();
-    // Steckt man hier seinen eigenen Pool rein, so wird die Klasse auch
-    // Aktionen an ihm vornehmen (Put(),Remove()). Bei Zerstoerung von
-    // SdrModel wird dieser Pool ver delete geloescht!
-    // Gibt man den Konstruktor stattdessen eine NULL mit, so macht sich
-    // die Klasse einen eigenen Pool (SdrItemPool), den sie dann auch im
-    // Destruktor zerstoert.
-    // Bei Verwendung eines eigenen Pools ist darauf zu achten, dass dieser
-    // von SdrItemPool abgeleitet ist, falls man von SdrAttrObj abgeleitete
-    // Zeichenobjekte verwenden moechte. Setzt man degegen nur vom abstrakten
-    // Basisobjekt SdrObject abgeleitete Objekte ein, so ist man frei in der
-    // Wahl des Pools.
+    // If a custom Pool is put here, the class will call methods
+    // on it (Put(), Remove()). On disposal of SdrModel the pool
+    // will be deleted with   delete.
+    // If you give NULL instead, it will create an own pool (SdrItemPool)
+    // which will also be disposed in the destructor.
+    // If you do use a custom Pool, make sure you inherit from SdrItemPool,
+    // if you want to use symbol objects inherited from SdrAttrObj.
+    // If, however, you use objects inheriting from SdrObject you are free
+    // to chose a pool of your liking.
     explicit SdrModel();
     explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts);
     explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts);
     virtual ~SdrModel();
     void ClearModel(bool bCalledFromDestructor);
 
-    // Hier kann man erfragen, ob das Model gerade eingrstreamt wird
+    // Whether the model is being streamed in at the moment
     bool IsLoading() const                  { return false /*BFS01 bLoading */; }
-    // Muss z.B. ueberladen werden, um das Swappen/LoadOnDemand von Grafiken
-    // zu ermoeglichen. Wird rbDeleteAfterUse auf sal_True gesetzt, so wird
-    // die SvStream-Instanz vom Aufrufer nach Gebrauch destruiert.
-    // Wenn diese Methode NULL liefert, wird zum Swappen eine temporaere
-    // Datei angelegt.
-    // Geliefert werden muss der Stream, aus dem das Model geladen wurde
-    // bzw. in den es zuletzt gespeichert wurde.
+    // Needs to be overladed to enable the Swap/LoadOnDemand of graphics.
+    // If rbDeleteAfterUse is set to sal_True the SvStream instance from
+    // the caller will be disposed after use.
+    // If this method returns NULL, a temporary file will be allocated for
+    // swapping.
+    // The stream from which the model was loaded or in which is was saved last
+    // needs to be delivered
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::embed::XStorage> GetDocumentStorage() const;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XInputStream >
         GetDocumentStream(OUString const& rURL,
                 ::comphelper::LifecycleProxy & rProxy) const;
-    // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
+    // Change the template attributes of the symbol objects to hard attributes
     void BurnInStyleSheetAttributes();
-    // Wer sich von SdrPage ableitet muss sich auch von SdrModel ableiten
-    // und diese beiden VM AllocPage() und AllocModel() ueberladen...
+    // If you inherit from SdrPage you also need to inherit from SdrModel
+    // and implement both VM AllocPage() and AllocModel()...
     virtual SdrPage*  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
 
-    // Aenderungen an den Layern setzen das Modified-Flag und broadcasten am Model!
+    // Changes on the layers set the modified flag and broadcast on the model!
     const SdrLayerAdmin& GetLayerAdmin() const                  { return *pLayerAdmin; }
     SdrLayerAdmin&       GetLayerAdmin()                        { return *pLayerAdmin; }
 
@@ -329,24 +328,24 @@ public:
 
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;
-    // Die TextDefaults (Font,Hoehe,Farbe) in ein Set putten
+    // put the TextDefaults (Font,Height,Color) in a Set
     void                 SetTextDefaults() const;
     static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
 
-    // ReferenzDevice fuer die EditEngine
+    // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
     OutputDevice*        GetRefDevice() const                   { return pRefOutDev; }
-    // Wenn ein neuer MapMode am RefDevice gesetzt wird o.ae.
-    void                 RefDeviceChanged(); // noch nicht implementiert
-    // Default-Schrifthoehe in logischen Einheiten
+    // If a new MapMode is set on the RefDevice (or similar)
+    void                 RefDeviceChanged(); // not yet implemented
+    // default font heigth in logical units
     void                 SetDefaultFontHeight(sal_uIntPtr nVal);
     sal_uIntPtr                GetDefaultFontHeight() const           { return nDefTextHgt; }
-    // Default-Tabulatorweite fuer die EditEngine
+    // default tabulator width for the EditEngine
     void                 SetDefaultTabulator(sal_uInt16 nVal);
     sal_uInt16               GetDefaultTabulator() const            { return nDefaultTabulator; }
 
-    // Der DefaultStyleSheet wird jedem Zeichenobjekt verbraten das in diesem
-    // Model eingefuegt wird und kein StyleSheet gesetzt hat.
+    // The DefaultStyleSheet will be used in every symbol object which is inserted
+    // in this model and does not have a StyleSheet set.
     SfxStyleSheet*       GetDefaultStyleSheet() const             { return pDefaultStyleSheet; }
     void                 SetDefaultStyleSheet(SfxStyleSheet* pDefSS) { pDefaultStyleSheet = pDefSS; }
 
@@ -361,9 +360,9 @@ public:
     void                 ClearPersist()                                 { m_pEmbeddedHelper = 0; }
     void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
 
-    // Masseinheit fuer die Zeichenkoordinaten.
-    // Default ist 1 logische Einheit = 1/100mm (Unit=MAP_100TH_MM, Fract=(1,1)).
-    // Beispiele:
+    // Unit for the symbol coordination
+    // Default is 1 logical unit = 1/100mm (Unit=MAP_100TH_MM, Fract=(1,1)).
+    // Examples:
     //   MAP_POINT,    Fraction(72,1)    : 1 log Einh = 72 Point   = 1 Inch
     //   MAP_POINT,    Fraction(1,20)    : 1 log Einh = 1/20 Point = 1 Twip
     //   MAP_TWIP,     Fraction(1,1)     : 1 log Einh = 1 Twip
@@ -371,28 +370,27 @@ public:
     //   MAP_MM,       Fraction(1000,1)  : 1 log Einh = 1000mm     = 1m
     //   MAP_CM,       Fraction(100,1)   : 1 log Einh = 100cm      = 1m
     //   MAP_CM,       Fraction(100000,1): 1 log Einh = 100000cm   = 1km
-    // (PS: Lichtjahre sind somit also nicht darstellbar).
-    // Die Skalierungseinheit wird benoetigt, damit die Engine das Clipboard
-    // mit den richtigen Groessen beliefern kann.
+    // (FWIW: you cannot represent light years).
+    // The scaling unit is needed for the Engine to serve the Clipboard
+    // with the correct sizes.
     MapUnit          GetScaleUnit() const                       { return eObjUnit; }
     void             SetScaleUnit(MapUnit eMap);
     const Fraction&  GetScaleFraction() const                   { return aObjUnit; }
     void             SetScaleFraction(const Fraction& rFrac);
-    // Beides gleichzeitig setzen ist etwas performanter
+    // Setting both simultaneously performs a little better
     void             SetScaleUnit(MapUnit eMap, const Fraction& rFrac);
 
-    // Maximale Groesse z.B. fuer Autogrowing-Texte
+    // maximal size e.g. for auto growing texts
     const Size&      GetMaxObjSize() const                      { return aMaxObjSize; }
     void             SetMaxObjSize(const Size& rSiz)            { aMaxObjSize=rSiz; }
 
-    // Damit die View! in der Statuszeile vernuenftige Zahlen anzeigen kann:
-    // Default ist mm.
+    // For the View! to display sane numbers in the status bar: Default is mm.
     void             SetUIUnit(FieldUnit eUnit);
     FieldUnit        GetUIUnit() const                          { return eUIUnit; }
-    // Der Masstab der Zeichnung. Default 1/1.
+    // The scale of the drawing. Default 1/1.
     void             SetUIScale(const Fraction& rScale);
     const Fraction&  GetUIScale() const                         { return aUIScale; }
-    // Beides gleichzeitig setzen ist etwas performanter
+    // Setting both simultaneously performs a little better
     void             SetUIUnit(FieldUnit eUnit, const Fraction& rScale);
 
     const Fraction&  GetUIUnitFact() const                      { return aUIUnitFact; }
@@ -405,14 +403,14 @@ public:
     void             TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar = false) const;
     void             TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar = false) const;
 
-    // RecalcPageNums wird idR. nur von der Page gerufen.
+    // RecalcPageNums is ordinarily only called by the Page.
     bool         IsPagNumsDirty() const                     { return bPagNumsDirty; };
     bool         IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
     void             RecalcPageNums(bool bMaster);
-    // Nach dem Insert gehoert die Page dem SdrModel.
+    // After the Insert the Page belongs to the SdrModel.
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual void     DeletePage(sal_uInt16 nPgNum);
-    // Remove bedeutet Eigentumsuebereignung an den Aufrufer (Gegenteil von Insert)
+    // Remove means transferring ownership to the caller (opposite of Insert)
     virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
     virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     const SdrPage* GetPage(sal_uInt16 nPgNum) const;
@@ -424,7 +422,7 @@ public:
     // Masterpages
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual void     DeleteMasterPage(sal_uInt16 nPgNum);
-    // Remove bedeutet Eigentumsuebereignung an den Aufrufer (Gegenteil von Insert)
+    // Remove means transferring ownership to the caller (opposite of Insert)
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
     virtual void     MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     const SdrPage* GetMasterPage(sal_uInt16 nPgNum) const;
@@ -433,47 +431,42 @@ public:
     // #109538#
     virtual void MasterPageListChanged();
 
-    // Modified-Flag. Wird automatisch gesetzt, wenn an den Pages oder
-    // Zeichenobjekten was geaendert wird. Zuruecksetzen muss man es
-    // jedoch selbst (z.B. bei Save() ...).
+    // modified flag. Is set automatically when something changes on the Pages
+    // symbol objects. You need to reset it yourself, however, e.g. on Save().
     bool IsChanged() const { return mbChanged; }
     virtual void SetChanged(bool bFlg = true);
 
-    // PageNotValid bedeutet, dass das Model lediglich Objekte traegt die zwar
-    // auf einer Page verankert sind, die Page aber nicht gueltig ist. Diese
-    // Kennzeichnung wird fuers Clipboard/Drag&Drop benoetigt.
+    // PageNotValid means that the model carries objects which are
+    // anchored on a Page but the Page is invalid. This mark is needed for
+    // Clipboard/Drag&Drop.
     bool            IsPageNotValid() const                     { return bPageNotValid; }
     void            SetPageNotValid(bool bJa = true)           { bPageNotValid=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden Grafikobjekte
-    // portabel gespeichert. Es findet dann beim Speichern ggf.
-    // eine implizite Wandlung von Metafiles statt.
-    // Default=FALSE. Flag ist nicht persistent.
+    // Setting this flag to sal_True, graphic objects are saved
+    // portably. Meta files will eventually implicitly changed, i.e. during save.
+    // Default=FALSE. Flag is not persistent.
     bool            IsSavePortable() const                     { return bSavePortable; }
     void            SetSavePortable(bool bJa = true)           { bSavePortable=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden
-    // Pixelobjekte (stark) komprimiert gespeichert.
-    // Default=FALSE. Flag ist nicht persistent.
+    // If you set this flag to sal_True, the
+    // pixel objects will be saved (heavily) compressed.
+    // Default=FALSE. Flag is not persistent.
     bool            IsSaveCompressed() const                   { return bSaveCompressed; }
     void            SetSaveCompressed(bool bJa = true)         { bSaveCompressed=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden
-    // Grafikobjekte mit gesetztem Native-Link
-    // native gespeichert.
-    // Default=FALSE. Flag ist nicht persistent.
+    // If true, graphic objects with set Native-Link
+    // native will be saved.
+    // Default=FALSE. Flag is not persistent.
     bool            IsSaveNative() const                       { return bSaveNative; }
     void            SetSaveNative(bool bJa = true)             { bSaveNative=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden die Grafiken
-    // von Grafikobjekten:
-    // - beim Laden eines Dokuments nicht sofort mitgeladen,
-    //   sondern erst wenn sie gebraucht (z.B. angezeigt) werden.
-    // - ggf. wieder aus dem Speicher geworfen, falls Sie gerade
-    //   nicht benoetigt werden.
-    // Damit das funktioniert, muss die virtuelle Methode
-    // GetDocumentStream() ueberladen werden.
-    // Default=FALSE. Flag ist nicht persistent.
+    // If set to sal_True, graphics from graphics objects will:
+    // - not be loaded immediately when loading a document,
+    //   but only once they are needed (e.g. displayed).
+    // - be pruned from memory if they are not needed.
+    // For that to work, the virtual method
+    // GetDocumentStream() needs to be overloaded.
+    // Default=FALSE. Flag is not persistent.
     bool            IsSwapGraphics() const { return bSwapGraphics; }
     void            SetSwapGraphics(bool bJa = true);
     void            SetSwapGraphicsMode(sal_uIntPtr nMode) { nSwapGraphicsMode = nMode; }
@@ -482,79 +475,76 @@ public:
     bool            IsSaveOLEPreview() const          { return bSaveOLEPreview; }
     void            SetSaveOLEPreview( bool bSet) { bSaveOLEPreview = bSet; }
 
-    // Damit die Bildschirmausgabe von Bitmaps (insbesondere bei gedrehten)
-    // etwas schneller wird, werden sie gecachet. Diesen Cache kann man mit
-    // diesem Flag ein-/ausschalten. Beim naechsten Paint wird an den Objekten
-    // dann ggf. ein Image gemerkt bzw. freigegeben. Wandert ein Bitmapobjekt
-    // in's Undo, so wird der Cache fuer dieses Objekt sofort ausgeschaltet
-    // (Speicher sparen).
-    // Default=Cache eingeschaltet. Flag ist nicht persistent.
+    // To accelarate the screen output of Bitmaps (especially rotated ones)
+    // they will be cached. The existence of that cache can be toggled with this
+    // flag. During the next Paint an image will be remembered or freed.
+    // If a Bitmap object is placed in Undo its Cache for this object is turned off
+    // immediately to save memory.
+    // Default=Cache activated. Flag is not persistent.
     bool            IsBitmapCaching() const                     { return !bNoBitmapCaching; }
     void            SetBitmapCaching(bool bJa = true)           { bNoBitmapCaching=!bJa; }
 
-    // Defaultmaessig (sal_False) kann man Textrahmen ohne Fuellung durch
-    // Mausklick selektieren. Nach Aktivierung dieses Flags trifft man sie
-    // nur noch in dem Bereich, wo sich auch tatsaechlich Text befindet.
+    // Text frames without filling can be select with a mouse click by default (sal_False).
+    // With this flag set to true you can hit them only in the area in which text is to be
+    // found.
     bool            IsPickThroughTransparentTextFrames() const  { return bTransparentTextFrames; }
     void            SetPickThroughTransparentTextFrames(bool bOn) { bTransparentTextFrames=bOn; }
 
-    // Darf denn das Model ueberhaupt veraendert werden?
-    // Wird nur von den Possibility-Methoden der View ausgewerdet.
-    // Direkte Manipulationen am Model, ... berueksichtigen dieses Flag nicht.
-    // Sollte ueberladen werden und entsprechend des ReadOnly-Status des Files
-    // sal_True oder sal_False liefern (Methode wird oeffters gerufen, also ein Flag
-    // verwenden!).
+    // Can the model be changed at all?
+    // Is only evaluated by the possibility methods of the View.
+    // Direct manipulations on the model, ... do not respect this flag.
+    // Should be overloaded and return the appriopriate ReadOnly status
+    // of the files, i.e. sal_True or sal_False. (Method is called multiple
+    // times, so use one flag only!)
     virtual bool IsReadOnly() const;
     virtual void     SetReadOnly(bool bYes);
 
-    // Vermischen zweier SdrModel. Zu beachten sei, dass rSourceModel nicht
-    // const ist. Die Pages werden beim einfuegen nicht kopiert, sondern gemoved.
-    // rSourceModel ist anschliessend u.U. weitgehend leer.
-    // nFirstPageNum,nLastPageNum: Die aus rSourceModel zu uebernehmenden Seiten
-    // nDestPos..................: Einfuegeposition
-    // bMergeMasterPages.........: sal_True =benoetigte MasterPages werden aus
-    //                                   rSourceModel ebenfalls uebernommen
-    //                             sal_False=Die MasterPageDescriptoren der Seiten
-    //                                   aus rSourceModel werden auf die
-    //                                   vorhandenen MasterPages gemappt.
-    // bUndo.....................: Fuer das Merging wird eine UndoAction generiert.
-    //                             Undo ist nur fuer das ZielModel, nicht fuer
+    // Mixing two SdrModels. Mind that rSourceModel is not const.
+    // The pages will not be copied but moved, when inserted.
+    // rSourceModel may very well be empty afterwards.
+    // nFirstPageNum,nLastPageNum: The pages to take from rSourceModel
+    // nDestPos..................: position to insert
+    // bMergeMasterPages.........: sal_True = needed MasterPages will be taken
+    //                                   from rSourceModel
+    //                             sal_False= the MasterPageDescriptors of
+    //                                   the pages of the rSourceModel will be
+    //                                   mapped on the exisiting  MasterPages.
+    // bUndo.....................: An undo action is generated for the merging.
+    //                             Undo is only for the target model, not for the
     //                             rSourceModel.
-    // bTreadSourceAsConst.......: sal_True=Das SourceModel wird nicht veraendert,.
-    //                             d.h die Seiten werden kopiert.
+    // bTreadSourceAsConst.......: sal_True=the SourceModel will not be changed,
+    //                             so pages will be copied.
     virtual void Merge(SdrModel& rSourceModel,
                sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
                sal_uInt16 nDestPos=0xFFFF,
                bool bMergeMasterPages = false, bool bAllMasterPages = false,
                bool bUndo = true, bool bTreadSourceAsConst = false);
 
-    // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
+    // Behaves like Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
     void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                    sal_uInt16 nDestPos,
                    bool bUndo = true, bool bMoveNoCopy = false);
 
-    // Mit BegUndo() / EndUndo() ist es moeglich beliebig viele UndoActions
-    // beliebig tief zu klammern. Als Kommentar der
-    // UndoAction wird der des ersten BegUndo(String) aller Klammerungen
-    // verwendet. Der NotifyUndoActionHdl wird in diesem Fall erst beim letzten
-    // EndUndo() gerufen. Bei einer leeren Klammerung wird keine UndoAction
-    // generiert.
-    // Alle direkten Aktionen am SdrModel erzeugen keine UndoActions, die
-    // Aktionen an der SdrView dagegen generieren solche.
-    void BegUndo();                       // Undo-Klammerung auf
-    void BegUndo(const OUString& rComment); // Undo-Klammerung auf
-    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE); // Undo-Klammerung auf
-    void EndUndo();                       // Undo-Klammerung zu
+    // BegUndo() / EndUndo() enables you to group arbitrarily many UndoActions
+    // arbitrarily deeply. As comment for the UndoAction the first BegUndo(String) of all
+    // nestings will be used.
+    // In that case the NotifyUndoActionHdl will be called on the last EndUndo().
+    // No UndoAction will be generated for an empty group.
+    // All direct modifications on the SdrModel do not create an UndoActions.
+    // Actions on the SdrView however do generate those.
+    void BegUndo();                       // open Undo group
+    void BegUndo(const OUString& rComment); // open Undo group
+    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE); // open Undo group
+    void EndUndo();                       // close Undo group
     void AddUndo(SdrUndoAction* pUndo);
     sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
     const SdrUndoGroup* GetAktUndoGroup() const              { return pAktUndoGroup; }
-    // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:
+    // only after the first BegUndo or before the last EndUndo:
     void SetUndoComment(const OUString& rComment);
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr);
 
-    // Das Undo-Management findet nur statt, wenn kein NotifyUndoAction-Handler
-    // gesetzt ist.
-    // Default ist 16. Minimaler MaxUndoActionCount ist 1!
+    // The Undo management is only done if not NotifyUndoAction-Handler is set.
+    // Default is 16. Minimal MaxUndoActionCount is 1!
     void  SetMaxUndoActionCount(sal_uIntPtr nAnz);
     sal_uIntPtr GetMaxUndoActionCount() const { return nMaxUndoCount; }
     void  ClearUndoBuffer();
@@ -565,15 +555,15 @@ public:
     bool Redo();
     bool Repeat(SfxRepeatTarget&);
 
-    // Hier kann die Applikation einen Handler setzen, der die auflaufenden
-    // UndoActions einsammelt. Der Handler hat folgendes Aussehen:
+    // The application can set a handler here which collects the UndoActions einsammelt.
+    // The handler has the following signature:
     //   void NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
-    // Beim Aufruf des Handlers findet eine Eigentumsuebereignung statt; die
-    // UndoAction gehoert somit dem Handler, nicht mehr dem SdrModel.
+    // When calling the handler ownership is transferred;
+    // The UndoAction belongs to the Handler, not the SdrModel.
     void        SetNotifyUndoActionHdl(const Link& rLink)    { aUndoLink=rLink; }
     const Link& GetNotifyUndoActionHdl() const               { return aUndoLink; }
 
-    /** application can set it's own undo manager, BegUndo, EndUndo and AddUndoAction
+    /** application can set its own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routet to this interface if given */
     void SetSdrUndoManager( SfxUndoManager* pUndoManager );
     SfxUndoManager* GetSdrUndoManager() const;
@@ -587,16 +577,16 @@ public:
         undo actions for this model. */
     SdrUndoFactory& GetSdrUndoFactory() const;
 
-    // Hier kann man einen Handler setzen der beim Streamen mehrfach gerufen
-    // wird und ungefaehre Auskunft ueber den Fortschreitungszustand der
-    // Funktion gibt. Der Handler muss folgendes Aussehen haben:
+    // You can set a handler which will be called multiple times while
+    // streaming and which estimates the progress of the function.
+    // The handler needs to have this signature:
     //   void class::IOProgressHdl(const USHORT& nPercent);
-    // Der erste Aufruf des Handlers erfolgt grundsaetzlich mit 0, der letzte
-    // mit 100. Dazwischen erfolgen maximal 99 Aufrufe mit Werten 1...99.
-    // Man kann also durchaus bei 0 den Progressbar Initiallisieren und bei
-    // 100 wieder schliessen. Zu beachten sei, dass der Handler auch gerufen
-    // wird, wenn die App Draw-Daten im officeweiten Draw-Exchange-Format
-    // bereitstellt, denn dies geschieht durch streamen in einen MemoryStream.
+    // The first call of the handler will be with 0. The last call with 100.
+    // In between there will at most be 99 calls with 1..99.
+    // You can thus initialise the progres bar with 0 and close it on 100.
+    // Mind that the handler will also be called if the App serves Draw data in the
+    // office wide Draw-Exchange-Format because that happens through streaming into
+    // a MemoryStream.
     void        SetIOProgressHdl(const Link& rLink)          { aIOProgressLink=rLink; }
     const Link& GetIOProgressHdl() const                     { return aIOProgressLink; }
 
@@ -613,8 +603,8 @@ public:
     XLineEndListRef  GetLineEndList() const  { return GetPropertyList( XLINE_END_LIST )->AsLineEndList(); }
     XGradientListRef GetGradientList() const { return GetPropertyList( XGRADIENT_LIST )->AsGradientList(); }
 
-    // Der StyleSheetPool wird der DrawingEngine nur bekanntgemacht.
-    // Zu loeschen hat ihn schliesslich der, der ihn auch konstruiert hat.
+    // The DrawingEngine only references the StyleSheetPool, whoever
+    // made it needs to delete it.
     SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
