@@ -45,6 +45,7 @@ namespace dbaui
 
     OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent)
         ,m_pData(_rConn.GetData()->NewInstance())
+        ,m_pParent(NULL)
     {
         *this = _rConn;
     }
