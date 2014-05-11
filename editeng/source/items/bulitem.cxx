@@ -109,11 +109,10 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
     nValidMask = 0xFFFF;
 }
 
-
-
 SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     : SfxPoolItem(_nWhich)
     , pGraphicObject(NULL)
+    , nStart(0)
     , nStyle(0)
 {
     rStrm.ReadUInt16( nStyle );
@@ -165,8 +164,6 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
 
     nValidMask = 0xFFFF;
 }
-
-
 
 SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 {
