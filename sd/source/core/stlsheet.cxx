@@ -330,20 +330,17 @@ bool SdStyleSheet::IsUsed() const
     bool bResult = false;
 
     const size_t nListenerCount = GetListenerCount();
-    if (nListenerCount > 0)
+    for (size_t n = 0; n < nListenerCount; ++n)
     {
-        for (size_t n = 0; n < nListenerCount; ++n)
-        {
-            SfxListener* pListener = GetListener(n);
-            if( pListener == this )
-                continue;
+        SfxListener* pListener = GetListener(n);
+        if( pListener == this )
+            continue;
 
-            const svl::StyleSheetUser* const pUser(dynamic_cast<svl::StyleSheetUser*>(pListener));
-            if (pUser)
-                bResult = pUser->isUsedByModel();
-            if (bResult)
-                break;
-        }
+        const svl::StyleSheetUser* const pUser(dynamic_cast<svl::StyleSheetUser*>(pListener));
+        if (pUser)
+            bResult = pUser->isUsedByModel();
+        if (bResult)
+            break;
     }
 
     if( !bResult )
