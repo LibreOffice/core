@@ -419,17 +419,14 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
     Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
     if ( aXShape.is() )
     {
-        if ( !aEngine.isEmpty() )
-        {
-            Sequence< Any > aArgument( 1 );
-            Sequence< PropertyValue > aPropValues( 1 );
-            aPropValues[ 0 ].Name = "CustomShape";
-            aPropValues[ 0 ].Value <<= aXShape;
-            aArgument[ 0 ] <<= aPropValues;
-            Reference< XInterface > xInterface( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aEngine, aArgument, xContext ) );
-            if ( xInterface.is() )
-                mxCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
-        }
+        Sequence< Any > aArgument( 1 );
+        Sequence< PropertyValue > aPropValues( 1 );
+        aPropValues[ 0 ].Name = "CustomShape";
+        aPropValues[ 0 ].Value <<= aXShape;
+        aArgument[ 0 ] <<= aPropValues;
+        Reference< XInterface > xInterface( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aEngine, aArgument, xContext ) );
+        if ( xInterface.is() )
+            mxCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
     }
 
     return mxCustomShapeEngine;
