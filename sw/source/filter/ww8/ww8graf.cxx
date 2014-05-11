@@ -1190,7 +1190,7 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
 
     long nStartCpFly,nEndCpFly;
     bool bContainsGraphics;
-    InsertTxbxText(PTR_CAST(SdrTextObj,pObj), &aSize, 0, 0, 0, 0, false,
+    InsertTxbxText(dynamic_cast<SdrTextObj*>(pObj), &aSize, 0, 0, 0, 0, false,
         bDummy,0,&nStartCpFly,&nEndCpFly,&bContainsGraphics);
 
     SetStdAttr( rSet, aTxtB.aLnt, aTxtB.aShd );
