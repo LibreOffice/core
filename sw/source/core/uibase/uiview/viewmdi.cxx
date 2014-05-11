@@ -215,7 +215,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 
     if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
-        const bool bWeb = 0 != PTR_CAST(SwWebView, this);
+        const bool bWeb = this->ISA(SwWebView);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
         // Update MasterUsrPrefs and after that update the ViewOptions of the current View.
