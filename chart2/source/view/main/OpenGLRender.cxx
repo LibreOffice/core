@@ -503,11 +503,16 @@ void OpenGLRender::Release()
     glDeleteRenderbuffers(1, &m_renderBufferDepthMS);
 }
 
-OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
-    mxTarget(xTarget)
+OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
+    : mxTarget(xTarget)
     , m_iWidth(1600)
     , m_iHeight(900)
     , m_Model(glm::mat4(1.0f))
+    , m_VertexBuffer(0)
+    , m_ColorBuffer(0)
+    , m_MatrixID(0)
+    , m_RenderVertexBuf(0)
+    , m_RenderTexCoordBuf(0)
 #if 0
     , m_iPointNum(0)
 #endif
