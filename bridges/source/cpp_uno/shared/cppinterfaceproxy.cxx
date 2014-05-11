@@ -154,6 +154,7 @@ CppInterfaceProxy::CppInterfaceProxy(
     , pTypeDescr( pTypeDescr_ )
     , oid( rOId_ )
 {
+    memset(vtables, 0, sizeof(vtables));
     pBridge->acquire();
     ::typelib_typedescription_acquire( (typelib_TypeDescription *)pTypeDescr );
     (*pUnoI->acquire)( pUnoI );
