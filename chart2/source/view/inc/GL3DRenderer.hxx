@@ -90,7 +90,6 @@ struct Polygon3DInfo
 
 struct Extrude3DInfo
 {
-    bool rounded;
     bool twoSidesLighting;
     glm::vec4 extrudeColor;
     float xScale;
@@ -157,7 +156,7 @@ public:
     void EndAddPolygon3DObjectNormalPoint();
     void AddPolygon3DObjectPoint(float x, float y, float z);
     void EndAddPolygon3DObjectPoint();
-    void AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 color, sal_Int32 specular, glm::mat4 modelMatrix);
+    void AddShape3DExtrudeObject(sal_Int32 color, sal_Int32 specular, glm::mat4 modelMatrix);
     void EndAddShape3DExtrudeObject();
     double GetTime();
     void SetFPS(float fps);
@@ -166,6 +165,8 @@ public:
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
     void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
     void ProcessUnrenderedShape();
+    void RenderNonRoundedBar(const glm::mat4& rModelMatrix, sal_uInt32 nColor);
+
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
@@ -189,7 +190,6 @@ private:
     void AddVertexData(GLuint vertexBuf);
     void AddNormalData(GLuint normalBuf);
     void AddIndexData(GLuint indexBuf);
-    void RenderNonRoundedBar(const Extrude3DInfo& extrude3D);
     bool GetSimilarVertexIndex(PackedVertex & packed,
         std::map<PackedVertex,unsigned short> & VertexToOutIndex,
         unsigned short & result
