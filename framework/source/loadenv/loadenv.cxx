@@ -131,7 +131,7 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xCont
     , m_eContentType(E_UNSUPPORTED_CONTENT)
     , m_bCloseFrameOnError(false)
     , m_bReactivateControllerOnError(false)
-    , m_bLoaded( 0 )
+    , m_bLoaded( false )
     , m_pQuietInteraction( 0 )
 {
 }
