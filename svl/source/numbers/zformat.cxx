@@ -5439,6 +5439,10 @@ sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
                                        sal_Unicode cQuote, sal_Unicode cEscIn,
                                        sal_Unicode cEscOut )
 {
+    if ( nPos < 0 )
+    {
+        return -1;
+    }
     sal_Int32 nLen = rStr.getLength();
     if ( nPos >= nLen )
     {
