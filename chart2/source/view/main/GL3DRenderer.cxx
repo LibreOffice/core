@@ -327,10 +327,12 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     m_RoundBarMesh.topThreshold = topThreshold;
     m_RoundBarMesh.bottomThreshold = bottomThreshold;
     m_RoundBarMesh.iMeshStartIndices = m_Vertices.size();
+
     for (int k = 0; k < 5; k++)
     {
         m_RoundBarMesh.iElementStartIndices[k] = indeices[k].size();
     }
+
     for (size_t i = 0; i < vertices.size(); i += 3)
     {
         for (int k = 0; k < 3; k++)
@@ -407,9 +409,12 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
         {
             fNextAngleY = 360.0f;
         }
-        float fSineY = sin(fCurAngleY/180.0f*PI), fCosY = cos(fCurAngleY/180.0f*PI);
-        float fNextSineY = sin(fNextAngleY/180.0f*PI), fNextCosY = cos(fNextAngleY/180.0f*PI);
-        glm::vec3 vDirY(fCosY, 0.0f, -fSineY), vNextDirY(fNextCosY, 0.0f, -fNextSineY);
+        float fSineY = sin(fCurAngleY/180.0f*PI);
+        float fCosY = cos(fCurAngleY/180.0f*PI);
+        float fNextSineY = sin(fNextAngleY/180.0f*PI);
+        float fNextCosY = cos(fNextAngleY/180.0f*PI);
+        glm::vec3 vDirY(fCosY, 0.0f, -fSineY);
+        glm::vec3 vNextDirY(fNextCosY, 0.0f, -fNextSineY);
         float fCurAngleZ = 0.0f;
         int iStepsZ = 1;
         int xzIndex = 0;
@@ -429,6 +434,7 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
         {
             xzIndex = 3;
         }
+
         while(iStepsZ <= iSubDivZ)
         {
             int yIndex = 0;
@@ -475,6 +481,7 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
                 glm::normalize(vQuadPoints[2]),
                 glm::normalize(vQuadPoints[3])
             };
+
             for (int i = 0; i < 6; i++)
             {
                 int index = iIndices[i];
@@ -930,7 +937,7 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(sal_Int32 color,sal_Int32 specula
     m_Extrude3DInfo.zScale = glm::length(DirY);
     glm::mat4 transformMatrixInverse = glm::inverse(glm::translate(glm::vec3(tranform)));
     glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.zScale, m_Extrude3DInfo.yScale));
-    //m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
+    m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
 
     //color
     m_Extrude3DInfo.extrudeColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
@@ -1165,7 +1172,7 @@ std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
 {
     for(int i = 0; i < 4; ++i)
     {
-        rStrm << "( ";
+        rStrm << "\n( ";
         for(int j = 0; j < 4; ++j)
         {
             rStrm << rMatrix[j][i];
@@ -1186,12 +1193,16 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const glm::mat4& modelMatrix, sal_uIn
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(cubeVertices); i += 3)
     {
-        glm::vec4 aPos(cubeVertices[i*3], cubeVertices[i*3+1], cubeVertices[i*3+2], 1.0);
+        glm::vec4 aPos(cubeVertices[i], cubeVertices[i+1], cubeVertices[i+2], 1.0);
+        SAL_INFO("chart2.3dopengl", aPos);
+        glm::vec4 aWorldPos = modelMatrix * aPos;
+        SAL_INFO("chart2.3dopengl", aWorldPos);
         glm::vec4 aNewPos = aMVP * aPos;
         SAL_INFO("chart2.3dopengl", aNewPos);
     }
 
     glm::vec4 aColor = getColorAsVector(nColor);
+    SAL_INFO("chart2.3dopengl", "Color: " << aColor);
     glUseProgram(m_CommonProID);
     //fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
