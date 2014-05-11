@@ -117,15 +117,6 @@ struct CameraInfo
         cameraUp(glm::vec3(0, 0, 1)) {}
 };
 
-struct CoordinateAxisInfo
-{
-    int pickingFlg;
-    int reverse;
-    glm::vec4 color;
-    PosVecf3 trans;
-    PosVecf3 scale;
-};
-
 struct RoundBarMesh
 {
     float topThreshold;
@@ -195,9 +186,6 @@ private:
     void RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex);
-    glm::vec4 GetColorByIndex(int index);
-    sal_uInt32 GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uInt32 b);
-    void RenderCoordinateAxis();
     void AddVertexData(GLuint vertexBuf);
     void AddNormalData(GLuint normalBuf);
     void AddIndexData(GLuint indexBuf);
@@ -226,15 +214,10 @@ private:
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
-#if 0
-    double m_dFreq;
-#endif
 
     sal_Int32 m_iWidth;
 
     sal_Int32 m_iHeight;
-
-    float m_fZmax;
 
     GlobalLights m_LightsInfo;
 
@@ -292,12 +275,6 @@ private:
 
     GLuint m_CubeNormalBuf;
 
-    bool m_bCameraUpdated;
-
-    float m_fFPS;
-
-    Point m_aMPos;
-
     GLuint m_BoundBox;
     GLuint m_BoundBoxNormal;
      // add for text
@@ -309,11 +286,7 @@ private:
     GLuint m_TextTexCoordBuf;
     GLint m_TextTexID;
 
-    GLuint m_CoordinateBuf;
-
     int m_uiSelectFrameCounter;
-
-    CoordinateAxisInfo m_coordinateAxisinfo;
 
     std::vector<glm::vec3> m_Vertices;
 

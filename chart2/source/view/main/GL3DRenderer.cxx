@@ -100,7 +100,6 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_CubeElementBuf);
     glDeleteBuffers(1, &m_BoundBox);
     glDeleteBuffers(1, &m_BoundBoxNormal);
-    glDeleteBuffers(1, &m_CoordinateBuf);
     glDeleteBuffers(1, &m_TextTexCoordBuf);
     glDeleteBuffers(1, &m_RenderTexCoordBuf);
     glDeleteBuffers(1, &m_RenderVertexBuf);
@@ -214,10 +213,6 @@ void OpenGL3DRenderer::init()
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBoxNormal), boundBoxNormal, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glGenBuffers(1, &m_CoordinateBuf);
-    glBindBuffer(GL_ARRAY_BUFFER, m_CoordinateBuf);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(coordinateAxis), coordinateAxis, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
     m_fViewAngle = 30.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
     LoadShaders();
@@ -1250,11 +1245,6 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     glDisable(GL_CULL_FACE);
 }
 
-void OpenGL3DRenderer::SetFPS(float fps)
-{
-    m_fFPS = fps;
-}
-
 void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft)
 {
     long bmpWidth = rBitmapEx.GetSizePixel().Width();
@@ -1433,55 +1423,12 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderExtrude3DObject();
     //render text
     RenderTextShape();
-    //render the axis
-    RenderCoordinateAxis();
     glViewport(0, 0, m_iWidth, m_iHeight);
 #if DEBUG_FBO
     OUString aFileName = OUString("D://shaderout_") + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
     OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
 #endif
 //    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-glm::vec4 OpenGL3DRenderer::GetColorByIndex(int index)
-{
-    sal_uInt8 r = index & 0xFF;
-    sal_uInt8 g = (index >> 8) & 0xFF;
-    sal_uInt8 b = (index >> 16) & 0xFF;
-    return glm::vec4(((float)r) / 255.0, ((float)g) / 255.0, ((float)b) / 255.0, 1.0);
-}
-
-sal_uInt32 OpenGL3DRenderer::GetIndexByColor(sal_uInt32 r, sal_uInt32 g, sal_uInt32 b)
-{
-    return r | (g << 8) | (b << 16);
-}
-
-void OpenGL3DRenderer::RenderCoordinateAxis()
-{
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    MoveModelf(m_coordinateAxisinfo.trans, angle, m_coordinateAxisinfo.scale);
-    glm::mat4 reverseMatrix = glm::scale(glm::vec3(1.0, m_coordinateAxisinfo.reverse, 1.0));
-    glm::mat4 axisMVP = m_3DProjection * m_3DView * m_Model * reverseMatrix;
-    glUseProgram(m_CommonProID);
-    glLineWidth(3.0);
-    glEnable(GL_POLYGON_OFFSET_FILL);
-    glPolygonOffset(2.0, 2.0);
-    // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(m_2DVertexID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_CoordinateBuf);
-    glVertexAttribPointer(m_2DVertexID,       // attribute. No particular reason for 0, but must match the layout in the shader.
-                          3,                  // size
-                          GL_FLOAT,           // type
-                          GL_FALSE,           // normalized?
-                          0,                  // stride
-                          (void*)0            // array buffer offset
-                          );
-    glUniform4fv(m_2DColorID, 1, &m_coordinateAxisinfo.color[0]);
-    glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &axisMVP[0][0]);
-    glDrawArrays(GL_LINES, 0, sizeof(coordinateAxis) / sizeof(GLfloat) / 3);
-    glDisableVertexAttribArray(m_2DVertexID);
-    glDisable(GL_POLYGON_OFFSET_FILL);
-    glUseProgram(0);
 }
 
 void OpenGL3DRenderer::MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale)

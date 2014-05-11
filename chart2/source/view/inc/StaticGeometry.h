@@ -116,15 +116,6 @@ static const GLfloat boundBoxNormal[] = {
     1.0f, 0.0f, 0.0f//12
 };
 
-static GLfloat coordinateAxis[] = {
-      -1.0, 0.0, 0.0,
-      1.0, 0.0, 0.0,//x
-      0.0, 0.0, -1.0,
-      0.0, 0.0, 1.0,//z
-      0.0, 0.0, 0.0,
-      0.0, 1.0, 0.0//y
-};
-
 static GLfloat coordReverseVertices[] = {
     0.0f, 1.0f,
     1.0f, 1.0f,
