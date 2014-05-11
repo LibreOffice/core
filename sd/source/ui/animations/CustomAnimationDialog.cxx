@@ -1349,7 +1349,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
         const Any aValue( pSet->getPropertyValue( nHandleSoundURL ) );
 
-        if( aValue.getValueType() == ::cppu::UnoType<sal_Bool>::get()0) )
+        if( aValue.getValueType() == ::cppu::UnoType<sal_Bool>::get() )
         {
             nPos = 1;
         }
