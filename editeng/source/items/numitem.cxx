@@ -178,9 +178,14 @@ SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
 }
 
 SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
+    : nStart(0)
+    , nFirstLineOffset(0)
+    , nAbsLSpace(0)
+    , nLSpace(0)
+    , nCharTextDistance(0)
 {
-    sal_uInt16 nTmp16;
-    sal_Int32  nTmp32;
+    sal_uInt16 nTmp16(0);
+    sal_Int32  nTmp32(0);
     rStream.ReadUInt16( nTmp16 ); // Version number
 
     rStream.ReadUInt16( nTmp16 ); SetNumberingType( nTmp16 );
@@ -228,8 +233,8 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadInt32( nTmp32 ); mnListtabPos = nTmp32;
     rStream.ReadInt32( nTmp32 ); mnFirstLineIndent = nTmp32;
     rStream.ReadInt32( nTmp32 ); mnIndentAt = nTmp32;
-
 }
+
 SvxNumberFormat::~SvxNumberFormat()
 {
     delete pGraphicBrush;
