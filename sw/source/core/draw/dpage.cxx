@@ -84,38 +84,35 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const Rectangle *pRect ) const
 {
     SwViewShell *pSh = ((SwDrawDocument*)GetModel())->GetDoc().GetCurrentViewShell();
-    if ( pSh )
+    while (pSh && pSh->Imp()->GetPageView() != pPV)
+        pSh = (SwViewShell*)pSh->GetNext();
+    if (pSh)
     {
-        while ( pSh->Imp()->GetPageView() != pPV )
-            pSh = (SwViewShell*)pSh->GetNext();
-        if ( pSh )
-        {
-            if ( pGridLst )
-                ((SwDPage*)this)->pGridLst->Clear();
-            else
-                ((SwDPage*)this)->pGridLst = new SdrPageGridFrameList;
+        if ( pGridLst )
+            ((SwDPage*)this)->pGridLst->Clear();
+        else
+            ((SwDPage*)this)->pGridLst = new SdrPageGridFrameList;
 
-            if ( pRect )
-            {
-                //The drawing demands all pages which overlap with the rest.
-                const SwRect aRect( *pRect );
-                const SwFrm *pPg = pSh->GetLayout()->Lower();
+        if ( pRect )
+        {
+            //The drawing demands all pages which overlap with the rest.
+            const SwRect aRect( *pRect );
+            const SwFrm *pPg = pSh->GetLayout()->Lower();
+            do
+            {   if ( pPg->Frm().IsOver( aRect ) )
+                    ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
+                pPg = pPg->GetNext();
+            } while ( pPg );
+        }
+        else
+        {
+            //The drawing demands all visible pages
+            const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
+            if ( pPg )
                 do
-                {   if ( pPg->Frm().IsOver( aRect ) )
-                        ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
+                {   ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
                     pPg = pPg->GetNext();
-                } while ( pPg );
-            }
-            else
-            {
-                //The drawing demands all visible pages
-                const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
-                if ( pPg )
-                    do
-                    {   ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
-                        pPg = pPg->GetNext();
-                    } while ( pPg && pPg->Frm().IsOver( pSh->VisArea() ) );
-            }
+                } while ( pPg && pPg->Frm().IsOver( pSh->VisArea() ) );
         }
     }
     return pGridLst;
