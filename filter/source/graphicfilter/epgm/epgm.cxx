@@ -56,6 +56,7 @@ public:
 //=================== Methoden von PGMWriter ==============================
 PGMWriter::PGMWriter(SvStream &rStream)
     : m_rOStm(rStream)
+    , mpOStmOldModus(0)
     , mbStatus(true)
     , mnMode(0)
     , mpAcc(NULL)
@@ -67,8 +68,6 @@ PGMWriter::PGMWriter(SvStream &rStream)
 PGMWriter::~PGMWriter()
 {
 }
-
-
 
 bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
