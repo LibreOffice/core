@@ -96,8 +96,8 @@ void Cli_environment::revokeInterface(System::String^ oid, System::Type^ type)
         i = 0;
     }
     Trace::WriteLine(System::String::Format(
-                         new System::String(S"cli uno bridge: {0} remaining registered interfaces"),
-                         __box(m_objects->get_Count() - 1)));
+                         gcnew System::String("cli uno bridge: {0} remaining registered interfaces"),
+                         m_objects->Count - 1));
 #endif
     m_objects->Remove(key);
 }
