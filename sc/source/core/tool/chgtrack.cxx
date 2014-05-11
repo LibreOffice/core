@@ -1496,7 +1496,7 @@ void ScChangeActionContent::GetDescription(
     if (aTmpStr.isEmpty())
         aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
 
-    nPos = aRsc.indexOfAsciiL("#3", 2, nPos);
+    nPos = nPos >= 0 ? aRsc.indexOfAsciiL("#3", 2, nPos) : -1;
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
