@@ -444,7 +444,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         { OUString("ProgressRange"),   0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("ProgressMax"),     0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("Preview"),         0, ::cppu::UnoType<sal_Bool>::get()0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("Preview"),         0, ::cppu::UnoType<sal_Bool>::get(),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("PageLayouts"), 0, ::getCppuType((const uno::Reference< container::XNameAccess >*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
         { OUString("PrivateData"), 0,
               ::getCppuType( (Reference<XInterface> *)0 ),

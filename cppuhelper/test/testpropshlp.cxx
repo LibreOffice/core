@@ -56,7 +56,7 @@ static Property * getPropertyTable1()
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //OUString
                 Property( OUString("b"), 1, getCppuCharType( ) ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //Char
-                Property( OUString("c"), 2, cppu::UnoType<sal_Int32>::get()0) ,
+                Property( OUString("c"), 2, cppu::UnoType<sal_Int32>::get(),
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //sal_Int32
                 Property( OUString("d"), 5, getCppuType( (double*)0)     ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //double
@@ -89,7 +89,7 @@ static Property * getPropertyTable2()
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
                 Property( OUString("d"), 5, getCppuType( (double*)0) ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Double
-                Property( OUString("c"), 2, cppu::UnoType<sal_Int32>::get()0),
+                Property( OUString("c"), 2, cppu::UnoType<sal_Int32>::get(),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // sal_Int32
                 Property( OUString("e"), 7, getCppuBooleanType()         ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Bool
@@ -411,8 +411,8 @@ Property * getBasicProps()
                  Property( OUString("BOOL")  , PROPERTY_BOOL , getCppuBooleanType(), PropertyAttribute::READONLY ),
                  Property( OUString("INT16") , PROPERTY_INT16,
                                  getCppuType( (sal_Int16*)0 ),  PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
-                 Property( OUString("INT32") , PROPERTY_INT32, cppu::UnoType<sal_Int32>::get()0 ), PropertyAttribute::BOUND ),
-                 Property( OUString("TEST")  , 55            , cppu::UnoType<sal_Int32>::get()0),  PropertyAttribute::BOUND )
+                 Property( OUString("INT32") , PROPERTY_INT32, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::BOUND ),
+                 Property( OUString("TEST")  , 55            , cppu::UnoType<sal_Int32>::get(),  PropertyAttribute::BOUND )
             };
             pTable = aBasicProps;
         }
