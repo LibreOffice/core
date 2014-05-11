@@ -86,8 +86,8 @@ ScriptingFrameworkURIHelper::initialize(
 throw ( uno::Exception, uno::RuntimeException, std::exception )
 {
     if ( args.getLength() != 2 ||
-         args[0].getValueType() != ::cppu::UnoType<OUString>::get()NULL) ||
-         args[1].getValueType() != ::cppu::UnoType<OUString>::get()NULL) )
+         args[0].getValueType() != ::cppu::UnoType<OUString>::get() ||
+         args[1].getValueType() != ::cppu::UnoType<OUString>::get() )
     {
         throw uno::RuntimeException( OUString(
             "ScriptingFrameworkURIHelper got invalid argument list" ),
