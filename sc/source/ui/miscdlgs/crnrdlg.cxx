@@ -515,16 +515,13 @@ void ScColRowNameRangesDlg::UpdateNames()
             if(q>nCol2) q=nCol2;
             //@008 Baue String zusammen
             strShow = " [";
-            if(pDoc!=NULL)
+            rString = pDoc->GetString(nCol1, nRow1, nTab1);
+            strShow += rString;
+            for(SCCOL i=nCol1+1;i<=q;i++)
             {
-                rString = pDoc->GetString(nCol1, nRow1, nTab1);
+                strShow += ", ";
+                rString = pDoc->GetString(i, nRow1, nTab1);
                 strShow += rString;
-                for(SCCOL i=nCol1+1;i<=q;i++)
-                {
-                    strShow += ", ";
-                    rString = pDoc->GetString(i, nRow1, nTab1);
-                    strShow += rString;
-                }
             }
             if(q<nCol2) // Zu lang? Ergaenzen um ",..."
             {
@@ -560,16 +557,13 @@ void ScColRowNameRangesDlg::UpdateNames()
             SCROW q=nRow1+3;
             if(q>nRow2) q=nRow2;
             strShow = " [";
-            if(pDoc!=NULL)
+            rString = pDoc->GetString(nCol1, nRow1, nTab1);
+            strShow += rString;
+            for(SCROW i=nRow1+1;i<=q;i++)
             {
-                rString = pDoc->GetString(nCol1, nRow1, nTab1);
+                strShow += ", ";
+                rString = pDoc->GetString(nCol1, i, nTab1);
                 strShow += rString;
-                for(SCROW i=nRow1+1;i<=q;i++)
-                {
-                    strShow += ", ";
-                    rString = pDoc->GetString(nCol1, i, nTab1);
-                    strShow += rString;
-                }
             }
             if(q<nRow2)
             {
