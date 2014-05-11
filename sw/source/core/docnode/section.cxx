@@ -620,7 +620,7 @@ const SwTOXBase* SwSection::GetTOXBase() const
 {
     const SwTOXBase* pRet = 0;
     if( TOX_CONTENT_SECTION == GetType() )
-        pRet = PTR_CAST( SwTOXBaseSection, this );
+        pRet = dynamic_cast<const SwTOXBaseSection*>(this);
     return pRet;
 }
 
