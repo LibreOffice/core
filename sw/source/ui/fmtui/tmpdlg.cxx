@@ -534,7 +534,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
              aList.push_back( rCharFmtLB.GetEntry(j) );
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
-        FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+        FieldUnit eMetric = ::GetDfltMetric(pDocShell->ISA(SwWebDocShell));
         aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
         rPage.PageCreated(aSet);
     }
