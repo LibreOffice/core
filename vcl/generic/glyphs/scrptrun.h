@@ -55,6 +55,11 @@ struct ParenStackEntry
 {
     int32_t pairIndex;
     UScriptCode scriptCode;
+    ParenStackEntry()
+      : pairIndex(0)
+      , scriptCode(USCRIPT_INVALID_CODE)
+    {
+    }
 };
 
 class ScriptRun : public UObject {
