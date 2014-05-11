@@ -73,11 +73,17 @@ namespace connectivity
                                 sal_uInt8    db_frei2[14];                   /* Reserved                    */
                             };
             struct DBFMemoHeader
-                            {
-                                DBFMemoType db_typ;                         /* File type                    */
-                                sal_uInt32  db_next;                        /* Next free block              */
-                                sal_uInt16  db_size;                        /* Block size: dBase 3 fixed    */
-                            };
+            {
+                DBFMemoType db_typ;                         /* File type                    */
+                sal_uInt32  db_next;                        /* Next free block              */
+                sal_uInt16  db_size;                        /* Block size: dBase 3 fixed    */
+                DBFMemoHeader()
+                    : db_typ(MemodBaseIII)
+                    , db_next(0)
+                    , db_size(0)
+                {
+                }
+            };
 
             ::std::vector<sal_Int32> m_aTypes;      // holds all types for columns just to avoid to ask the propertyset
             ::std::vector<sal_Int32> m_aPrecisions; // same as above
