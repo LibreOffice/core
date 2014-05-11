@@ -2641,7 +2641,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 if( bVert )
                 {
                     SwTwips nBot = Frm().Left() + Prt().Left();
-                    while ( pLowerFrm->GetPrev() && pLowerFrm->Frm().Left() < nBot )
+                    while ( pLowerFrm && pLowerFrm->GetPrev() && pLowerFrm->Frm().Left() < nBot )
                     {
                         pLowerFrm->_InvalidateAll();
                         pLowerFrm->InvalidatePage( pPage );
@@ -2651,7 +2651,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 else
                 {
                     SwTwips nBot = Frm().Top() + Prt().Bottom();
-                    while ( pLowerFrm->GetPrev() && pLowerFrm->Frm().Top() > nBot )
+                    while ( pLowerFrm && pLowerFrm->GetPrev() && pLowerFrm->Frm().Top() > nBot )
                     {
                         pLowerFrm->_InvalidateAll();
                         pLowerFrm->InvalidatePage( pPage );
