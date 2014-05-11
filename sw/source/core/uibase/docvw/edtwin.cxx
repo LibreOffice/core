@@ -183,7 +183,6 @@ long    SwEditWin::m_nDDStartPosX = 0;
  */
 Color   SwEditWin::m_aTextBackColor(COL_YELLOW);
 Color   SwEditWin::m_aTextColor(COL_RED);
-bool SwEditWin::m_bTransparentBackColor = false; // background not transparent
 
 extern bool     bExecuteDrag;
 
@@ -4679,14 +4678,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if( rSh.IsSelection() && !rSh.HasReadonlySel() )
                 {
                     if(nId == RES_CHRATR_BACKGROUND)
-                    {
-                        Color aColor( COL_TRANSPARENT  );
-                        if( !SwEditWin::m_bTransparentBackColor )
-                            aColor = SwEditWin::m_aTextBackColor;
-                        rSh.SetAttrItem( SvxBrushItem( aColor, nId ) );
-                    }
+                        rSh.SetAttrItem( SvxBrushItem( SwEditWin::m_aTextBackColor, nId ) );
                     else
-                        rSh.SetAttrItem( SvxColorItem(SwEditWin::m_aTextColor, nId) );
+                        rSh.SetAttrItem( SvxColorItem( SwEditWin::m_aTextColor, nId ) );
                     rSh.UnSetVisCrsr();
                     rSh.EnterStdMode();
                     rSh.SetVisCrsr(aDocPt);

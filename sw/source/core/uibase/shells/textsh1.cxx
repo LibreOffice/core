@@ -1163,7 +1163,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SwEditWin& rEdtWin = GetView().GetEditWin();
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-            rEdtWin.SetTextBackColorTransparent(0 == pItem);
             Color aSet;
             if(pItem)
             {
@@ -1548,10 +1547,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
-              if(GetView().GetEditWin().IsTextBackColorTransparent())
-                  rSet.Put(SvxColorItem(Color(COL_TRANSPARENT), SID_ATTR_CHAR_COLOR_BACKGROUND));
-              else
-                    rSet.Put(SvxColorItem(GetView().GetEditWin().GetTextBackColor(), SID_ATTR_CHAR_COLOR_BACKGROUND));
+                rSet.Put(SvxColorItem(GetView().GetEditWin().GetTextBackColor(), SID_ATTR_CHAR_COLOR_BACKGROUND));
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:

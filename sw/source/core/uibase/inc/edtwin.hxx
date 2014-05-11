@@ -73,7 +73,6 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     static  long    m_nDDStartPosX, m_nDDStartPosY;
 
     static  Color   m_aTextColor;     // text color; for the watering can
-    static  bool    m_bTransparentBackColor; // transparent background
     static  Color   m_aTextBackColor; // text background; for the watering can
 
     /*
@@ -260,10 +259,6 @@ public:
                                             { return m_aTextBackColor; }
     void            SetTextBackColor(const Color& rCol )
                                             { m_aTextBackColor = rCol; }
-    void            SetTextBackColorTransparent(bool bSet)
-                                    { m_bTransparentBackColor = bSet; }
-    bool            IsTextBackColorTransparent()
-                                    { return m_bTransparentBackColor; }
     void            LockKeyInput(bool bSet){m_bLockInput = bSet;}
 
     const SwView &GetView() const { return m_rView; }
