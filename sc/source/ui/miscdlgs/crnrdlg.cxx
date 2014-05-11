@@ -160,7 +160,7 @@ void ScColRowNameRangesDlg::Init()
 
     UpdateNames();
 
-    if ( pViewData && pDoc )
+    if (pViewData)
     {
         SCCOL nStartCol = 0;
         SCROW nStartRow = 0;
