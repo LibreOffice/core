@@ -3538,13 +3538,19 @@ MSWordExportBase::~MSWordExportBase()
 WW8Export::WW8Export( SwWW8Writer *pWriter,
         SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
         bool bIsWW8, bool bDot )
-    : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
-      pO( NULL ),
-      pSepx( NULL ),
-      bWrtWW8( bIsWW8 ),
-      m_bDot(bDot),
-      m_pWriter( pWriter ),
-      m_pAttrOutput( new WW8AttributeOutput( *this ) )
+    : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam )
+    , pO(NULL)
+    , pTableStrm(NULL)
+    , pDataStrm(NULL)
+    , pFib(NULL)
+    , pDop(NULL)
+    , pFtn(NULL)
+    , pEdn(NULL)
+    , pSepx(NULL)
+    , bWrtWW8(bIsWW8)
+    , m_bDot(bDot)
+    , m_pWriter(pWriter)
+    , m_pAttrOutput(new WW8AttributeOutput(*this))
 {
 }
 
