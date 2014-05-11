@@ -11,10 +11,13 @@
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
 #include <GL/glew.h>
+#include "glm/glm.hpp"
 #include <vcl/vclopengl_dllapi.hxx>
 #include <vcl/bitmapex.hxx>
 
 #include <rtl/ustring.hxx>
+
+#include <ostream>
 
 class VCLOPENGL_DLLPUBLIC OpenGLHelper
 {
@@ -27,6 +30,9 @@ public:
 
     static const char* GLErrorString(GLenum errorCode);
 };
+
+VCLOPENGL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix);
+VCLOPENGL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos);
 
 #endif
 

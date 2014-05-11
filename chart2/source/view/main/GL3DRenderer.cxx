@@ -1162,27 +1162,6 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
     return glm::vec4(nRed/255.0, nGreen/255.0, nBlue/255.0, (0xFF - nAlpha)/255.0);
 }
 
-std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos)
-{
-    rStrm << "( " << rPos[0] << ", " << rPos[1] << ", " << rPos[2] << ", " << rPos[3] << ")";
-    return rStrm;
-}
-
-std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
-{
-    for(int i = 0; i < 4; ++i)
-    {
-        rStrm << "\n( ";
-        for(int j = 0; j < 4; ++j)
-        {
-            rStrm << rMatrix[j][i];
-            rStrm << " ";
-        }
-        rStrm << ")\n";
-    }
-    return rStrm;
-}
-
 }
 
 void OpenGL3DRenderer::RenderNonRoundedBar(const glm::mat4& modelMatrix, sal_uInt32 nColor)
