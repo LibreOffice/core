@@ -670,8 +670,9 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
 }
 
 SvxNumRule::SvxNumRule( SvStream &rStream )
+    : nLevelCount(0)
 {
-    sal_uInt16 nTmp16;
+    sal_uInt16 nTmp16(0);
     rStream.ReadUInt16( nTmp16 ); // NUM_ITEM_VERSION
     rStream.ReadUInt16( nLevelCount );
 
