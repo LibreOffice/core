@@ -71,12 +71,12 @@ static ::com::sun::star::beans::Property aProps[] =
     ::com::sun::star::beans::Property(
         OUString::createFromAscii( aMime ),
         1,
-        ::cppu::UnoType<OUString>::get()0),
+        ::cppu::UnoType<OUString>::get(),
         ::com::sun::star::beans::PropertyAttribute::BOUND ),
     ::com::sun::star::beans::Property(
         OUString::createFromAscii( aCreationURL ),
         2,
-        ::cppu::UnoType<OUString>::get()0),
+        ::cppu::UnoType<OUString>::get(),
         ::com::sun::star::beans::PropertyAttribute::BOUND )
 };
 
