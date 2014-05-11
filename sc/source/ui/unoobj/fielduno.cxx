@@ -199,12 +199,9 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
     , nFieldPos(0)
     , nFieldIndex(0)
 {
-    if (pSource)
-    {
-        EditTextObject* pData = pSource->CreateTextObject();
-        SetText( *pData );
-        delete pData;
-    }
+    EditTextObject* pData = pSource->CreateTextObject();
+    SetText( *pData );
+    delete pData;
 }
 
 ScUnoEditEngine::~ScUnoEditEngine()
