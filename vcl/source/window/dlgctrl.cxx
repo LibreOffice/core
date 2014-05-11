@@ -137,7 +137,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
     return pFoundWindow;
 }
 
-static Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
+Window* ImplGetChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable )
 {
     pParent = ImplGetTopParentOfTabHierarchy( pParent );
 
@@ -284,8 +284,8 @@ Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
     return pWindow;
 }
 
-static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIndex,
-                                      sal_uInt16& rFormStart, sal_uInt16& rFormEnd )
+Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt16& rIndex,
+                               sal_uInt16& rFormStart, sal_uInt16& rFormEnd )
 {
     Window* pSWindow;
     Window* pSecondWindow = NULL;
@@ -378,8 +378,8 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
     return pSWindow;
 }
 
-static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
-                                    sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true )
+Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
+                             sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true )
 {
     DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
                 "Window::ImplFindAccelWindow() - rIndex not in Form" );
@@ -1077,7 +1077,7 @@ Window* Window::GetParentLabeledBy( const Window* ) const
     return NULL;
 }
 
-static sal_Unicode getAccel( const OUString& rStr )
+sal_Unicode getAccel( const OUString& rStr )
 {
     sal_Unicode nChar = 0;
     sal_Int32 nPos = 0;
@@ -1090,232 +1090,6 @@ static sal_Unicode getAccel( const OUString& rStr )
             nChar = 0;
     } while( nChar == '~' );
     return nChar;
-}
-
-static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window* pLabel, sal_Unicode nAccel )
-{
-    Window* pWindow = NULL;
-
-    if( nMyType == WINDOW_FIXEDTEXT     ||
-        nMyType == WINDOW_FIXEDLINE     ||
-        nMyType == WINDOW_GROUPBOX )
-    {
-        // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
-        // See tools/options/print for example.
-        bool bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
-        // get index, form start and form end
-        sal_uInt16 nIndex=0, nFormStart=0, nFormEnd=0;
-        ::ImplFindDlgCtrlWindow( pFrameWindow,
-                                           pLabel,
-                                           nIndex,
-                                           nFormStart,
-                                           nFormEnd );
-        if( nAccel )
-        {
-            // find the accelerated window
-            pWindow = ::ImplFindAccelWindow( pFrameWindow,
-                                             nIndex,
-                                             nAccel,
-                                             nFormStart,
-                                             nFormEnd,
-                                             false );
-        }
-        else
-        {
-            // find the next control; if that is a fixed text
-            // fixed line or group box, then return NULL
-            while( nIndex < nFormEnd )
-            {
-                nIndex++;
-                Window* pSWindow = ::ImplGetChildWindow( pFrameWindow,
-                                                 nIndex,
-                                                 nIndex,
-                                                 false );
-                if( pSWindow && isVisibleInLayout(pSWindow) && ! (pSWindow->GetStyle() & WB_NOLABEL) )
-                {
-                    WindowType nType = pSWindow->GetType();
-                    if( nType != WINDOW_FIXEDTEXT   &&
-                        nType != WINDOW_FIXEDLINE   &&
-                        nType != WINDOW_GROUPBOX )
-                    {
-                        pWindow = pSWindow;
-                    }
-                    else if( bThisIsAGroupControl && ( nType == WINDOW_FIXEDTEXT ) )
-                    {
-                        pWindow = pSWindow;
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    return pWindow;
-}
-
-Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
-{
-    Window* pWindow = NULL;
-    Window* pFrameWindow = ImplGetFrameWindow();
-
-    WinBits nFrameStyle = pFrameWindow->GetStyle();
-    if( ! ( nFrameStyle & WB_DIALOGCONTROL )
-        || ( nFrameStyle & WB_NODIALOGCONTROL )
-        )
-        return NULL;
-
-    if ( mpWindowImpl->mpRealParent )
-        pWindow = mpWindowImpl->mpRealParent->GetParentLabelFor( this );
-
-    if( pWindow )
-        return pWindow;
-
-    sal_Unicode nAccel = getAccel( GetText() );
-
-    pWindow = ImplGetLabelFor( pFrameWindow, GetType(), const_cast<Window*>(this), nAccel );
-    if( ! pWindow && mpWindowImpl->mpRealParent )
-        pWindow = ImplGetLabelFor( mpWindowImpl->mpRealParent, GetType(), const_cast<Window*>(this), nAccel );
-    return pWindow;
-}
-
-static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Window* pLabeled )
-{
-    Window* pWindow = NULL;
-    if ( (nMyType != WINDOW_GROUPBOX) && (nMyType != WINDOW_FIXEDLINE) )
-    {
-        // search for a control that labels this window
-        // a label is considered the last fixed text, fixed line or group box
-        // that comes before this control; with the exception of push buttons
-        // which are labeled only if the fixed text, fixed line or group box
-        // is directly before the control
-
-        // get form start and form end and index of this control
-        sal_uInt16 nIndex, nFormStart, nFormEnd;
-        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
-                                                    pLabeled,
-                                                    nIndex,
-                                                    nFormStart,
-                                                    nFormEnd );
-        if( pSWindow && nIndex != nFormStart )
-        {
-            if( nMyType == WINDOW_PUSHBUTTON        ||
-                nMyType == WINDOW_HELPBUTTON        ||
-                nMyType == WINDOW_OKBUTTON      ||
-                nMyType == WINDOW_CANCELBUTTON )
-            {
-                nFormStart = nIndex-1;
-            }
-            for( sal_uInt16 nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
-            {
-                sal_uInt16 nFoundIndex = 0;
-                pSWindow = ::ImplGetChildWindow( pFrameWindow,
-                                                 nSearchIndex,
-                                                 nFoundIndex,
-                                                 false );
-                if( pSWindow && isVisibleInLayout(pSWindow) && !(pSWindow->GetStyle() & WB_NOLABEL) )
-                {
-                    WindowType nType = pSWindow->GetType();
-                    if ( ( nType == WINDOW_FIXEDTEXT    ||
-                          nType == WINDOW_FIXEDLINE ||
-                          nType == WINDOW_GROUPBOX ) )
-                    {
-                        // a fixed text can't be labeld by a fixed text.
-                        if ( ( nMyType != WINDOW_FIXEDTEXT ) || ( nType != WINDOW_FIXEDTEXT ) )
-                            pWindow = pSWindow;
-                        break;
-                    }
-                }
-                if( nFoundIndex > nSearchIndex || nSearchIndex == 0 )
-                    break;
-            }
-        }
-    }
-    return pWindow;
-}
-
-Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
-{
-    Window* pWindow = NULL;
-    Window* pFrameWindow = ImplGetFrameWindow();
-
-    if ( mpWindowImpl->mpRealParent )
-    {
-        pWindow = mpWindowImpl->mpRealParent->GetParentLabeledBy( this );
-
-        if( pWindow )
-            return pWindow;
-    }
-
-    // #i62723#, #104191# checkboxes and radiobuttons are not supposed to have labels
-    if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
-        return NULL;
-
-//    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
-//            GetType() == WINDOW_FIXEDLINE     ||
-//            GetType() == WINDOW_GROUPBOX ) )
-    // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
-    // See tools/options/print for example.
-
-    pWindow = ImplGetLabeledBy( pFrameWindow, GetType(), const_cast<Window*>(this) );
-    if( ! pWindow && mpWindowImpl->mpRealParent )
-        pWindow = ImplGetLabeledBy( mpWindowImpl->mpRealParent, GetType(), const_cast<Window*>(this) );
-
-    return pWindow;
-}
-
-Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
-{
-    Window* pWindow = NULL;
-    Window* pFrameWindow = GetParent();
-    if ( !pFrameWindow )
-    {
-        pFrameWindow = ImplGetFrameWindow();
-    }
-    // if( ! ( GetType() == WINDOW_FIXEDTEXT        ||
-    if( !( GetType() == WINDOW_FIXEDLINE ||
-        GetType() == WINDOW_GROUPBOX ) )
-    {
-        // search for a control that makes member of this window
-        // it is considered the last fixed line or group box
-        // that comes before this control; with the exception of push buttons
-        // which are labeled only if the fixed line or group box
-        // is directly before the control
-        // get form start and form end and index of this control
-        sal_uInt16 nIndex, nFormStart, nFormEnd;
-        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
-            const_cast<Window*>(this),
-            nIndex,
-            nFormStart,
-            nFormEnd );
-        if( pSWindow && nIndex != nFormStart )
-        {
-            if( GetType() == WINDOW_PUSHBUTTON      ||
-                GetType() == WINDOW_HELPBUTTON      ||
-                GetType() == WINDOW_OKBUTTON        ||
-                GetType() == WINDOW_CANCELBUTTON )
-            {
-                nFormStart = nIndex-1;
-            }
-            for( sal_uInt16 nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
-            {
-                sal_uInt16 nFoundIndex = 0;
-                pSWindow = ::ImplGetChildWindow( pFrameWindow,
-                    nSearchIndex,
-                    nFoundIndex,
-                    false );
-                if( pSWindow && pSWindow->IsVisible() &&
-                    ( pSWindow->GetType() == WINDOW_FIXEDLINE   ||
-                    pSWindow->GetType() == WINDOW_GROUPBOX ) )
-                {
-                    pWindow = pSWindow;
-                    break;
-                }
-                if( nFoundIndex > nSearchIndex || nSearchIndex == 0 )
-                    break;
-            }
-        }
-    }
-    return pWindow;
 }
 
 KeyEvent Window::GetActivationKey() const
