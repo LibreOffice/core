@@ -2087,7 +2087,7 @@ void DrawGraphic(
             {
                 GraphicAttr pGrfAttr = pGrf->GetAttr();
                 if ( (pGrfAttr.GetTransparency() != 0) &&
-                     ( pBrush && (pBrush->GetColor() == COL_TRANSPARENT) )
+                     (pBrush->GetColor() == COL_TRANSPARENT)
                    )
                 {
                     bTransparentGrfWithNoFillBackgrd = true;
