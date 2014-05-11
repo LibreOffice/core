@@ -80,7 +80,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
     long nFac = nFactor;
 
-    bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    const bool bWeb = this->ISA(SwWebView);
     SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
     const SwPageDesc &rDesc = m_pWrtShell->GetPageDesc( m_pWrtShell->GetCurPageDesc() );
