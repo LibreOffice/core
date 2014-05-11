@@ -226,10 +226,10 @@ sal_Int8 SAL_CALL GalleryItem::getType()
         { OUString("GalleryItemType"), UNOGALLERY_GALLERYITEMTYPE, ::getCppuType( (const sal_Int8*)(0)),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { OUString("URL"), UNOGALLERY_URL, ::cppu::UnoType<OUString>::get()(0)),
+        { OUString("URL"), UNOGALLERY_URL, ::cppu::UnoType<OUString>::get(),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { OUString("Title"), UNOGALLERY_TITLE, ::cppu::UnoType<OUString>::get()(0)),
+        { OUString("Title"), UNOGALLERY_TITLE, ::cppu::UnoType<OUString>::get(),
           0, 0 },
 
         { OUString("Thumbnail"), UNOGALLERY_THUMBNAIL, ::getCppuType( (const uno::Reference< graphic::XGraphic >*)(0)),
