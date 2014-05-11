@@ -2930,7 +2930,7 @@ bool Content::exchangeIdentity(
 
 bool Content::isFolder(
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     {
         osl::MutexGuard aGuard( m_aMutex );
