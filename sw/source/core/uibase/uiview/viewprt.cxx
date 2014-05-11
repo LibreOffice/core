@@ -116,7 +116,7 @@ sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
         if ( nDiffFlags & SFX_PRINTER_PRINTER )
             rSh.SetModified();
     }
-    bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    bool bWeb = this->ISA(SwWebView);
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
