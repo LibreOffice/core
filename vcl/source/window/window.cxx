@@ -296,26 +296,6 @@ WindowImpl::~WindowImpl()
     delete mpControlFont;
 }
 
-// helper method to allow inline constructor even for pWindow!=NULL case
-void ImplDelData::AttachToWindow( const Window* pWindow )
-{
-    if( pWindow )
-        const_cast<Window*>(pWindow)->ImplAddDel( this );
-}
-
-// define dtor for ImplDelData
-ImplDelData::~ImplDelData()
-{
-    // #112873# auto remove of ImplDelData
-    // due to this code actively calling ImplRemoveDel() is not mandatory anymore
-    if( !mbDel && mpWindow )
-    {
-        // the window still exists but we were not removed
-        const_cast<Window*>(mpWindow)->ImplRemoveDel( this );
-        mpWindow = NULL;
-    }
-}
-
 #ifdef DBG_UTIL
 const char* ImplDbgCheckWindow( const void* pObj )
 {

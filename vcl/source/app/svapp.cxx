@@ -1653,4 +1653,25 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
     return pSVData->mpDefInst->createFolderPicker( xSM );
 }
 
+// helper method to allow inline constructor even for pWindow!=NULL case
+void ImplDelData::AttachToWindow( const Window* pWindow )
+{
+    if( pWindow )
+        const_cast<Window*>(pWindow)->ImplAddDel( this );
+}
+
+// define dtor for ImplDelData
+ImplDelData::~ImplDelData()
+{
+    // #112873# auto remove of ImplDelData
+    // due to this code actively calling ImplRemoveDel() is not mandatory anymore
+    if( !mbDel && mpWindow )
+    {
+        // the window still exists but we were not removed
+        const_cast<Window*>(mpWindow)->ImplRemoveDel( this );
+        mpWindow = NULL;
+    }
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
