@@ -213,6 +213,8 @@ EditUndoConnectParas::EditUndoConnectParas(
     EditUndo(EDITUNDO_CONNECTPARAS, pEE),
     aLeftParaAttribs(rLeftParaAttribs),
     aRightParaAttribs(rRightParaAttribs),
+    eLeftStyleFamily(SFX_STYLE_FAMILY_ALL),
+    eRightStyleFamily(SFX_STYLE_FAMILY_ALL),
     bBackward(bBkwrd)
 {
     nNode   = nN;
