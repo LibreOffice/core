@@ -4100,20 +4100,120 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     , pTableStream(0)
     , pDataStream(0)
     , rDoc(rD)
+    , pPaM(0)
+    , pCtrlStck(0)
+    , mpRedlineStack(0)
+    , pReffedStck(0)
+    , pReffingStck(0)
+    , pAnchorStck(0)
     , maSectionManager(*this)
     , m_aExtraneousParas(rD)
     , maInsertedTables(rD)
     , maSectionNameGenerator(rD, OUString("WW"))
+    , mpSprmParser(NULL)
     , maGrfNameGenerator(bNewDoc, OUString('G'))
     , maParaStyleMapper(rD)
     , maCharStyleMapper(rD)
+    , mpChosenOutlineNumRule(0)
+    , pFormImpl(0)
+    , pFlyFmtOfJustInsertedGraphic(0)
+    , pFmtOfJustInsertedApo(0)
+    , pPreviousNumPaM(0)
+    , pPrevNumRule(0)
+    , mpPostProcessAttrsInfo(0)
+    , pWwFib(0)
+    , pFonts(0)
+    , pWDop(0)
+    , pLstManager(0)
+    , pSBase(0)
+    , pPlcxMan(0)
     , maTxtNodesHavingFirstLineOfstSet()
     , maTxtNodesHavingLeftIndentSet()
+    , pStyles(0)
+    , pAktColl(0)
+    , pAktItemSet(0)
+    , pDfltTxtFmtColl(0)
+    , pStandardFmtColl(0)
+    , pHdFt(0)
+    , pWFlyPara(0)
+    , pSFlyPara(0)
+    , pTableDesc(0)
+    , pNumOlst(0)
+    , pNode_FLY_AT_PARA(0)
+    , pDrawModel(0)
+    , pDrawPg(0)
+    , mpDrawEditEngine(0)
+    , pWWZOrder(0)
+    , pNumFldType(0)
     , pMSDffManager(0)
     , mpAtnNames(0)
     , sBaseURL(rBaseURL)
+    , nIniFlags(0)
+    , nIniFlags1(0)
+    , nFieldFlags(0)
     , m_bRegardHindiDigits( false )
+    , nDrawCpO(0)
+    , nPicLocFc(0)
+    , nObjLocFc(0)
+    , nIniFlyDx(0)
+    , nIniFlyDy(0)
+    , eTextCharSet(RTL_TEXTENCODING_ASCII_US)
+    , eStructCharSet(RTL_TEXTENCODING_ASCII_US)
+    , eHardCharSet(RTL_TEXTENCODING_DONTKNOW)
+    , nProgress(0)
+    , nAktColl(0)
+    , nFldNum(0)
+    , nLFOPosition(USHRT_MAX)
+    , nCharFmt(0)
+    , nDrawXOfs(0)
+    , nDrawYOfs(0)
+    , nDrawXOfs2(0)
+    , nDrawYOfs2(0)
+    , cSymbol(0)
+    , nWantedVersion(nVersionPara)
+    , nSwNumLevel(0xff)
+    , nWwNumType(0xff)
+    , nListLevel(WW8ListManager::nMaxLevel)
+    , nPgChpDelim(0)
+    , nPgChpLevel(0)
     , mbNewDoc(bNewDoc)
+    , bReadNoTbl(false)
+    , bPgSecBreak(false)
+    , bSpec(false)
+    , bObj(false)
+    , bTxbxFlySection(false)
+    , bHasBorder(false)
+    , bSymbol(false)
+    , bIgnoreText(false)
+    , nInTable(0)
+    , bWasTabRowEnd(false)
+    , bWasTabCellEnd(false)
+    , bShdTxtCol(false)
+    , bCharShdTxtCol(false)
+    , bAnl(false)
+    , bHdFtFtnEdn(false)
+    , bFtnEdn(false)
+    , bIsHeader(false)
+    , bIsFooter(false)
+    , bIsUnicode(false)
+    , bCpxStyle(false)
+    , bStyNormal(false)
+    , bWWBugNormal(false)
+    , bNoAttrImport(false)
+    , bInHyperlink(false)
+    , bWasParaEnd(false)
+    , bVer67(false)
+    , bVer6(false)
+    , bVer7(false)
+    , bVer8(false)
+    , bEmbeddObj(false)
+    , bAktAND_fNumberAcross(false)
+    , bNoLnNumYet(true)
+    , bFirstPara(true)
+    , bFirstParaOfPage(false)
+    , bParaAutoBefore(false)
+    , bParaAutoAfter(false)
+    , bDropCap(false)
     , nDropCap(0)
     , nIdctHint(0)
     , bBidi(false)
@@ -4128,70 +4228,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     , mbOnLoadingMain(false)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    nWantedVersion = nVersionPara;
-    pCtrlStck   = 0;
-    mpRedlineStack = 0;
-    pReffedStck = 0;
-    pReffingStck = 0;
-    pAnchorStck = 0;
-    pFonts = 0;
-    pSBase = 0;
-    pPlcxMan = 0;
-    pStyles = 0;
-    pAktColl = 0;
-    pLstManager = 0;
-    pAktItemSet = 0;
-    pDfltTxtFmtColl = 0;
-    pStandardFmtColl = 0;
-    pHdFt = 0;
-    pWFlyPara = 0;
-    pSFlyPara = 0;
-    pFlyFmtOfJustInsertedGraphic   = 0;
-    pFmtOfJustInsertedApo = 0;
-    pPreviousNumPaM = 0;
-    pPrevNumRule = 0;
-    nAktColl = 0;
-    nObjLocFc = nPicLocFc = 0;
-    nInTable=0;
-    bReadNoTbl = bPgSecBreak = bSpec = bObj = bTxbxFlySection
-               = bHasBorder = bSymbol = bIgnoreText
-               = bWasTabRowEnd = bWasTabCellEnd = false;
-    bShdTxtCol = bCharShdTxtCol = bAnl = bHdFtFtnEdn = bFtnEdn
-               = bIsHeader = bIsFooter = bIsUnicode = bCpxStyle = bStyNormal =
-                 bWWBugNormal  = false;
-
-    mpPostProcessAttrsInfo = 0;
-
-    bNoAttrImport = bEmbeddObj = false;
-    bAktAND_fNumberAcross = false;
-    bNoLnNumYet = true;
-    bInHyperlink = false;
-    bWasParaEnd = false;
-    bDropCap = false;
-    bFirstPara = true;
-    bFirstParaOfPage = false;
-    bParaAutoBefore = false;
-    bParaAutoAfter = false;
-    nProgress = 0;
-    nSwNumLevel = nWwNumType = 0xff;
-    pTableDesc = 0;
-    pNumOlst = 0;
-    pNode_FLY_AT_PARA = 0;
-    pDrawModel = 0;
-    pDrawPg = 0;
-    mpDrawEditEngine = 0;
-    pWWZOrder = 0;
-    pFormImpl = 0;
-    mpChosenOutlineNumRule = 0;
-    pNumFldType = 0;
-    nFldNum = 0;
-
-    nLFOPosition = USHRT_MAX;
-    nListLevel = WW8ListManager::nMaxLevel;
-    eHardCharSet = RTL_TEXTENCODING_DONTKNOW;
-
-    nPgChpDelim = nPgChpLevel = 0;
-
     maApos.push_back(false);
 }
 
