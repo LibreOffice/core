@@ -91,11 +91,8 @@ struct Polygon3DInfo
 struct Extrude3DInfo
 {
     bool rounded;
-    bool lineOnly;
-    float lineWidth;
     bool twoSidesLighting;
     glm::vec4 extrudeColor;
-    long fillStyle;
     float xScale;
     float yScale;
     float zScale;

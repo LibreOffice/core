@@ -80,9 +80,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_Polygon3DInfo.normals = NULL;
     m_Polygon3DInfo.lineWidth = 0.001f;
 
-    m_Extrude3DInfo.lineOnly = false;
     m_Extrude3DInfo.twoSidesLighting = false;
-    m_Extrude3DInfo.lineWidth = 0.001f;
 
     GetFreq();
     m_RoundBarMesh.iMeshSizes = 0;
