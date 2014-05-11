@@ -2787,6 +2787,7 @@ EFieldInfo::~EFieldInfo()
 }
 
 EFieldInfo::EFieldInfo( const EFieldInfo& rFldInfo )
+    : pFieldItem(0)
 {
     *this = rFldInfo;
 }
