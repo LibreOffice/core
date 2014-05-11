@@ -1444,15 +1444,12 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     SdStyleSheetVector aResult;
 
     const size_t nListenerCount = pSheet->GetListenerCount();
-    if (nListenerCount > 0)
+    for (size_t n = 0; n < nListenerCount; ++n)
     {
-        for (size_t n = 0; n < nListenerCount; ++n)
+        SdStyleSheet* pChild = dynamic_cast< SdStyleSheet* >( pSheet->GetListener(n) );
+        if(pChild && pChild->GetParent() == pSheet->GetName())
         {
-            SdStyleSheet* pChild = dynamic_cast< SdStyleSheet* >( pSheet->GetListener(n) );
-            if(pChild && pChild->GetParent() == pSheet->GetName())
-            {
-                aResult.push_back( SdStyleSheetRef( pChild ) );
-            }
+            aResult.push_back( SdStyleSheetRef( pChild ) );
         }
     }
 
