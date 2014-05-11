@@ -280,6 +280,32 @@ WindowImpl::~WindowImpl()
     delete mpControlFont;
 }
 
+Window::Window( WindowType nType )
+{
+    ImplInitWindowData( nType );
+}
+
+Window::Window( Window* pParent, WinBits nStyle )
+{
+
+    ImplInitWindowData( WINDOW_WINDOW );
+    ImplInit( pParent, nStyle, NULL );
+}
+
+Window::Window( Window* pParent, const ResId& rResId )
+    : mpWindowImpl(NULL)
+{
+    rResId.SetRT( RSC_WINDOW );
+    WinBits nStyle = ImplInitRes( rResId );
+    ImplInitWindowData( WINDOW_WINDOW );
+    ImplInit( pParent, nStyle, NULL );
+    ImplLoadRes( rResId );
+
+    if ( !(nStyle & WB_HIDE) )
+        Show();
+}
+
+
 #ifdef DBG_UTIL
 const char* ImplDbgCheckWindow( const void* pObj )
 {
@@ -370,6 +396,38 @@ bool Window::AcquireGraphics() const
     return mpGraphics ? true : false;
 }
 
+void Window::ReleaseGraphics( bool bRelease )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( !mpGraphics )
+        return;
+
+    // release the fonts of the physically released graphics device
+    if( bRelease )
+        ImplReleaseFonts();
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    Window* pWindow = (Window*)this;
+
+    if ( bRelease )
+        pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
+    // remove from global LRU list of window graphics
+    if ( mpPrevGraphics )
+        mpPrevGraphics->mpNextGraphics = mpNextGraphics;
+    else
+        pSVData->maGDIData.mpFirstWinGraphics = mpNextGraphics;
+    if ( mpNextGraphics )
+        mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
+    else
+        pSVData->maGDIData.mpLastWinGraphics = mpPrevGraphics;
+
+    mpGraphics      = NULL;
+    mpPrevGraphics  = NULL;
+    mpNextGraphics  = NULL;
+}
+
 void Window::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
@@ -457,38 +515,6 @@ void Window::ClipToPaintRegion(Rectangle& rDstRect)
 
     if (!aPaintRgn.IsNull())
         rDstRect.Intersection(LogicToPixel(aPaintRgn.GetBoundRect()));
-}
-
-void Window::ReleaseGraphics( bool bRelease )
-{
-    DBG_TESTSOLARMUTEX();
-
-    if ( !mpGraphics )
-        return;
-
-    // release the fonts of the physically released graphics device
-    if( bRelease )
-        ImplReleaseFonts();
-
-    ImplSVData* pSVData = ImplGetSVData();
-
-    Window* pWindow = (Window*)this;
-
-    if ( bRelease )
-        pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
-    // remove from global LRU list of window graphics
-    if ( mpPrevGraphics )
-        mpPrevGraphics->mpNextGraphics = mpNextGraphics;
-    else
-        pSVData->maGDIData.mpFirstWinGraphics = mpNextGraphics;
-    if ( mpNextGraphics )
-        mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
-    else
-        pSVData->maGDIData.mpLastWinGraphics = mpPrevGraphics;
-
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
 }
 
 bool Window::HasMirroredGraphics() const
@@ -4253,31 +4279,6 @@ void Window::ImplNewInputContext()
 
     if ( pFontEntry )
         pFocusWin->mpFontCache->Release( pFontEntry );
-}
-
-Window::Window( WindowType nType )
-{
-    ImplInitWindowData( nType );
-}
-
-Window::Window( Window* pParent, WinBits nStyle )
-{
-
-    ImplInitWindowData( WINDOW_WINDOW );
-    ImplInit( pParent, nStyle, NULL );
-}
-
-Window::Window( Window* pParent, const ResId& rResId )
-    : mpWindowImpl(NULL)
-{
-    rResId.SetRT( RSC_WINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitWindowData( WINDOW_WINDOW );
-    ImplInit( pParent, nStyle, NULL );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
 }
 
 #if OSL_DEBUG_LEVEL > 0
