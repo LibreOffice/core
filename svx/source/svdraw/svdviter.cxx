@@ -141,11 +141,11 @@ SdrView* SdrViewIter::ImpFindView()
 {
     if(mpModel)
     {
-        sal_uInt32 nLsAnz(mpModel->GetListenerCount());
+        const size_t nLsAnz(mpModel->GetListenerCount());
 
         while(mnListenerNum < nLsAnz)
         {
-            SfxListener* pLs = mpModel->GetListener((sal_uInt16)mnListenerNum);
+            SfxListener* pLs = mpModel->GetListener(mnListenerNum);
             mpAktView = PTR_CAST(SdrView, pLs);
 
             if(mpAktView)

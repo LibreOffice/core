@@ -877,9 +877,9 @@ namespace sdr
 
                         if(pBC)
                         {
-                            sal_uInt16 nLstAnz(pBC->GetListenerCount());
+                            const size_t nLstAnz(pBC->GetListenerCount());
 
-                            for(sal_uInt16 nl(0); nl < nLstAnz; nl++)
+                            for(size_t nl=0; nl < nLstAnz; ++nl)
                             {
                                 SfxListener* pLst = pBC->GetListener(nl);
                                 SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, pLst);
