@@ -1034,9 +1034,9 @@ void SwXStyleFamily::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 SwXStyle*   SwXStyleFamily::_FindStyle(const OUString& rStyleName)const
 {
-    sal_uInt16  nLCount = pBasePool->GetListenerCount();
+    const size_t nLCount = pBasePool->GetListenerCount();
     SfxListener* pListener = 0;
-    for( sal_uInt16 i = 0; i < nLCount; i++)
+    for( size_t i = 0; i < nLCount; ++i)
     {
         pListener = pBasePool->GetListener( i );
         SwXStyle* pTempStyle = dynamic_cast<SwXStyle*>( pListener );

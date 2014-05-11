@@ -68,7 +68,7 @@ class SVX_DLLPUBLIC SdrViewIter
     const SdrObject*                                    mpObject;
     SdrView*                                            mpAktView;
 
-    sal_uInt32                                          mnListenerNum;
+    size_t                                              mnListenerNum;
     sal_uInt32                                          mnPageViewNum;
     sal_uInt32                                          mnOutDevNum;
 

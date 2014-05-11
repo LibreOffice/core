@@ -1443,10 +1443,10 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
 {
     SdStyleSheetVector aResult;
 
-    sal_uInt16 nListenerCount = pSheet->GetListenerCount();
+    const size_t nListenerCount = pSheet->GetListenerCount();
     if (nListenerCount > 0)
     {
-        for (sal_uInt16 n = 0; n < nListenerCount; n++)
+        for (size_t n = 0; n < nListenerCount; ++n)
         {
             SdStyleSheet* pChild = dynamic_cast< SdStyleSheet* >( pSheet->GetListener(n) );
             if(pChild && pChild->GetParent() == pSheet->GetName())

@@ -57,7 +57,7 @@ public:
     {
         return m_Listeners.size();
     }
-    SfxListener*            GetListener( sal_uInt16 nNo ) const
+    SfxListener*            GetListener( size_t nNo ) const
     {
         return m_Listeners[nNo];
     }

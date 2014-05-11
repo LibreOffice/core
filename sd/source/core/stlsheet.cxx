@@ -329,10 +329,10 @@ bool SdStyleSheet::IsUsed() const
 {
     bool bResult = false;
 
-    sal_uInt16 nListenerCount = GetListenerCount();
+    const size_t nListenerCount = GetListenerCount();
     if (nListenerCount > 0)
     {
-        for (sal_uInt16 n = 0; n < nListenerCount; n++)
+        for (size_t n = 0; n < nListenerCount; ++n)
         {
             SfxListener* pListener = GetListener(n);
             if( pListener == this )
