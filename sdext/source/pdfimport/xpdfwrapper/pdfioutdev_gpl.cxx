@@ -605,8 +605,8 @@ void PDFOutDev::setDefaultCTM(double *pMat)
 
     printf( "updateCtm %f %f %f %f %f %f\n",
             normalize(pMat[0]),
-            normalize(pMat[2]),
             normalize(pMat[1]),
+            normalize(pMat[2]),
             normalize(pMat[3]),
             normalize(pMat[4]),
             normalize(pMat[5]) );
@@ -624,8 +624,8 @@ void PDFOutDev::updateCTM(GfxState* state,
 
     printf( "updateCtm %f %f %f %f %f %f\n",
             normalize(pMat[0]),
-            normalize(pMat[2]),
             normalize(pMat[1]),
+            normalize(pMat[2]),
             normalize(pMat[3]),
             normalize(pMat[4]),
             normalize(pMat[5]) );
