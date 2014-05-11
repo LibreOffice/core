@@ -944,6 +944,10 @@ public:
 struct WW8PLCFxSaveAll
 {
     WW8PLCFxSave1 aS[WW8PLCFMan::MAN_ANZ_PLCF];
+    WW8PLCFxSaveAll()
+    {
+        memset(aS, 0, sizeof(aS));
+    }
 };
 
 #endif // !DUMP
