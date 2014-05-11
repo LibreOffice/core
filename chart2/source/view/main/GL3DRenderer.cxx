@@ -62,8 +62,7 @@ GLfloat texCoords[] = {
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
-    m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f)))
-    , m_TextProID(0)
+    m_TextProID(0)
     , m_TextMatrixID(0)
     , m_TextVertexID(0)
     , m_TextTexCoordID(0)
@@ -1030,9 +1029,9 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
                       -extrude3D.yTransform,
                       extrude3D.zTransform};
-    m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+    glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 flatScale = glm::scale(xzScale, xzScale, xzScale);
-    m_Model = m_TranslationMatrix * extrude3D.rotation * flatScale;
+    m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
@@ -1063,8 +1062,8 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     {
         glm::mat4 topTrans = glm::translate(glm::vec3(0.0, -actualYTrans, 0.0));
         glm::mat4 topScale = glm::scale(xzScale, xzScale, xzScale);
-        m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-        m_Model = m_TranslationMatrix * extrude3D.rotation * topTrans * topScale;
+        glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+        m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale;
     }
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
@@ -1092,8 +1091,8 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     else
     {
         glm::mat4 scale = glm::scale(xzScale, actualYScale, xzScale);
-        m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-        m_Model = m_TranslationMatrix * extrude3D.rotation * scale;
+        glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+        m_Model = aTranslationMatrix * extrude3D.rotation * scale;
     }
 
     if (extrude3D.reverse)
@@ -1125,8 +1124,8 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, -1.0, 0.0));
         glm::mat4 scale = glm::scale(xzScale, yScale, xzScale);
         //MoveModelf(trans, angle, scale);
-        m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-        m_Model = m_TranslationMatrix * extrude3D.rotation * scale * orgTrans;
+        glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+        m_Model = aTranslationMatrix * extrude3D.rotation * scale * orgTrans;
     }
     else
     {
@@ -1134,8 +1133,8 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, -1.0, 0.0));
         glm::mat4 topTrans = glm::translate(glm::vec3(0.0, actualYTrans, 0.0));
         glm::mat4 topScale = glm::scale(xzScale, xzScale, xzScale);
-        m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-        m_Model = m_TranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
+        glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+        m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);

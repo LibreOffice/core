@@ -235,8 +235,6 @@ private:
 
     glm::mat4 m_3DMVP;
 
-    glm::mat4 m_TranslationMatrix;
-
     GLint m_3DProID;
 
     GLuint m_3DProjectionID;
