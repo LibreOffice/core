@@ -18,12 +18,18 @@
 /* Define this if you get warnings about undefined structures. */
 /* #undef INCOMPLETE_TYPES_BROKEN */
 
-/* Define "boolean" as unsigned char, not int, on Windows systems. */
-#ifdef WNT
-#ifndef __RPCNDR_H__/* don't conflict if rpcndr.h already read */
+/* Define "boolean" as unsigned char, not enum, on Windows systems. */
+#ifdef _WIN32
+#ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */
 typedef unsigned char boolean;
 #endif
-#define HAVE_BOOLEAN/* prevent jmorecfg.h from redefining it */
+#ifndef FALSE			/* in case these macros already exist */
+#define FALSE	0		/* values of boolean */
+#endif
+#ifndef TRUE
+#define TRUE	1
+#endif
+#define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */
 #endif
 
 #ifdef JPEG_INTERNALS
