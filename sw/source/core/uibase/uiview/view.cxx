@@ -748,6 +748,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_aTimer.SetTimeout( 120 );
 
     SwDocShell* pDocSh = PTR_CAST( SwDocShell, _pFrame->GetObjectShell() );
+    OSL_ENSURE( pDocSh, "view without DocShell." );
     bool bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( false );
@@ -757,10 +758,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // manually.
     if( pDocSh->GetDoc()->get( IDocumentSettingAccess::EMBED_FONTS ))
         pDocSh->UpdateFontList();
-    OSL_ENSURE( pDocSh, "view without DocShell." );
-    SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
+    bool bWebDShell = pDocSh->ISA(SwWebDocShell);
 
-    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(0 != pWebDShell);
+    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(bWebDShell);
     SwViewOption aUsrPref( *pUsrPref);
 
     //! get lingu options without loading lingu DLL
@@ -804,7 +804,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
-        if( !bOldShellWasSrcView && pWebDShell && !m_bOldShellWasPagePreview )
+        if( !bOldShellWasSrcView && bWebDShell && !m_bOldShellWasPagePreview )
             aUsrPref.setBrowseMode( true );
         else
             aUsrPref.setBrowseMode( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) );
