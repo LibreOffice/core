@@ -599,6 +599,7 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
 XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > xShape , const Rectangle* pChildAnchor ) :
     XclObj( rRoot, EXC_OBJTYPE_UNKNOWN, true ),
     XclMacroHelper( rRoot ),
+    meEventType( EXC_TBX_EVENT_ACTION ),
     mnHeight( 0 ),
     mnState( 0 ),
     mnLineCount( 0 ),
