@@ -1510,19 +1510,13 @@ namespace rtl_OStringBuffer
 
         void getStr_002()
         {
-            // const sal_Char         tmpUC=0x0;
-            // const sal_Char*        expVal=&tmpUC;
             ::rtl::OStringBuffer   aStrBuf;
-            // sal_Int32              cmpLen = 1;
-
             const sal_Char* pstr = aStrBuf.getStr();
-            sal_Int32 nLen = strlen(pstr);
-
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test empty string",
                 pstr != 0 &&
-                nLen == 0
+                strlen(pstr) == 0
             );
 
         }
