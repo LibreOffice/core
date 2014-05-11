@@ -781,7 +781,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         { OUString("ProgressMax"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("WrittenNumberStyles"), 0, ::getCppuType((uno::Sequence<sal_Int32>*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get()0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },

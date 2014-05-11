@@ -158,7 +158,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
-        {OUString(SC_UNONAME_HIDDEN),   ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get()0),             0, 0 },
+        {OUString(SC_UNONAME_HIDDEN),   ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get(),             0, 0 },
         {OUString(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -280,7 +280,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {OUString(SC_UNONAME_USERDEF),      ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
         {OUString(SC_UNO_PAGE_WIDTH),       ATTR_PAGE_SIZE,     ::cppu::UnoType<sal_Int32>::get(),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
         {OUString(SC_UNONAME_WRITING),      ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
-        {OUString(SC_UNONAME_HIDDEN),       ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get()0),             0, 0 },
+        {OUString(SC_UNONAME_HIDDEN),       ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get(),             0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aPageStyleSet_Impl( aPageStyleMap_Impl );
