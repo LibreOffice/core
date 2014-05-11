@@ -665,19 +665,13 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromRa
 
 Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException, std::exception )
 {
-    xmlChar* chCert ;
-    xmlSecSize certSize ;
-
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
-
-    chCert = xmlStrndup( ( const xmlChar* )oscert.getStr(), ( int )oscert.getLength() ) ;
-
-    certSize = xmlSecBase64Decode( chCert, ( xmlSecByte* )chCert, xmlStrlen( chCert ) ) ;
-
-    if(certSize > 0)
+    xmlChar* chCert = xmlStrndup( ( const xmlChar* )oscert.getStr(), ( int )oscert.getLength() ) ;
+    int certSize = xmlSecBase64Decode( chCert, ( xmlSecByte* )chCert, xmlStrlen( chCert ) ) ;
+    if (certSize > 0)
     {
-        Sequence< sal_Int8 > rawCert( certSize ) ;
-        for( unsigned int i = 0 ; i < certSize ; i ++ )
+        Sequence< sal_Int8 > rawCert(certSize) ;
+        for (int i = 0 ; i < certSize; ++i)
             rawCert[i] = *( chCert + i ) ;
 
         xmlFree( chCert ) ;
