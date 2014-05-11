@@ -38,7 +38,12 @@
 
 namespace binaryurp {
 
-Writer::Item::Item() {}
+Writer::Item::Item()
+    : request(false)
+    , setter(false)
+    , exception(false)
+    , setCurrentContextMode(false)
+{}
 
 Writer::Item::Item(
     rtl::ByteSequence const & theTid, OUString const & theOid,
