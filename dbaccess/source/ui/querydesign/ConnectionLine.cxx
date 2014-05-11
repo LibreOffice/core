@@ -112,11 +112,12 @@ namespace
 // class OConnectionLine
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
-     ,m_pData( _pLineData )
+    , m_pData( _pLineData )
 {
 }
 
 OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
+    : m_pTabConn(NULL)
 {
     m_pData = new OConnectionLineData( *_rLine.GetData() );
     *this = _rLine;
