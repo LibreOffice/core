@@ -1488,7 +1488,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                     rAny.setValue(NULL, Type());
                     break;
                 case VT_I2:
-                    rAny.setValue( & var.iVal, cppu::UnoType<sal_Int16>::get()0));
+                    rAny.setValue( & var.iVal, cppu::UnoType<sal_Int16>::get());
                     break;
                 case VT_I4:
                     rAny.setValue( & var.lVal, cppu::UnoType<sal_Int32>::get());
@@ -2403,7 +2403,7 @@ inline void reduceRange( Any& any)
     else if( value <= 0x7fff && value >= -0x8000)
     {// -32768 bis 32767
         sal_Int16 shortVal= static_cast<sal_Int16>( value);
-        any.setValue( &shortVal, cppu::UnoType<sal_Int16>::get()0));
+        any.setValue( &shortVal, cppu::UnoType<sal_Int16>::get());
     }
 }
 #endif
