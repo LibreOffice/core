@@ -33,19 +33,18 @@ class OutputDevice;
 
 /*
 
-Beschreibung
+Description
 ============
 
 class FontList
 
-Diese Klasse verwaltet alle Fonts, die auf einem oder zwei Ausgabegeraeten
-dargestellt werden koennen. Zusaetzlich bietet die Klasse Methoden an, um
-aus Fett und Kursiv den StyleName zu generieren oder aus einem Stylename
-die fehlenden Attribute. Zusaetzlich kann diese Klasse syntetisch nachgebildete
-Fonts verarbeiten. Diese Klasse kann mit verschiedenen Standard-Controls und
-Standard-Menus zusammenarbeiten.
+This class manages all fonts which can be display on one or two output devices.
+Additionally, this class offers methods for generating the StyleName from
+bold and italics or the missing attributes from a StyleName.
+Furthermore, this class can handle synthetically reproduced fonts.
+It also works with several standard controls and standard menus.
 
-Querverweise
+Links:
 
 class FontNameBox, class FontStyleBox, class FontSizeBox,
 class FontNameMenu, class FontSizeMenu
@@ -55,53 +54,47 @@ class FontNameMenu, class FontSizeMenu
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2 = NULL,
                     bool bAll = true );
 
-Konstruktor der Klasse FontList. Vom uebergebenen OutputDevice werden die
-entsprechenden Fonts abgefragt. Das OutputDevice muss solange existieren,
-wie auch die Klasse FontList existiert. Optional kann noch ein 2tes
-Ausgabedevice uebergeben werden, damit man zum Beispiel die Fonts von
-einem Drucker und dem Bildschirm zusammen in einer FontListe verwalten kann
-und somit auch den FontListen und FontMenus die Fonts von beiden OutputDevices
-zu uebergeben. Auch das pDevice2 muss solange existieren, wie die Klasse
-FontList existiert.
+Constructor of the FontList class. The relevant fonts will be queried from
+the OutputDevice. The OutputDevice needs to exist as long as the FontList
+class exists. Optionally, a second output device can be given in order to,
+e.g., manage the fonts from both, a printer and a screen in a single FontList
+and thus also give FontMenus the fonts if both OutputDevices.
+The pDevice2 needs to exist as long as the FontList class exists.
 
-Das OutputDevice, welches als erstes uebergeben wird, sollte das bevorzugte
-sein. Dies sollte im normalfall der Drucker sein. Denn wenn 2 verschiede
-Device-Schriften (eine fuer Drucker und eine fuer den Bildschirm) vorhanden
-sind, wird die vom uebergebenen Device "pDevice" bevorzugt.
+The OutputDevice given first should be the preferred one. This is usually
+the printer. Because if two different device fonts (one for the printer and
+one for the screen) exist, the ones from the "pDevice" are preferred.
 
-Mit dem dritten Parameter kann man angeben, ob nur skalierbare Schriften
-abgefragt werden sollen oder alle. Wenn sal_True uebergeben wird, werden auch
-Bitmap-Schriften mit abgefragt. Bei sal_False werden Vector-Schriften und
-scalierbare Schriften abgefragt.
+The third paramter governs whether only scalable or all fonts shall be queried.
+With sal_True Bitmap-Schriften will also be queried.
+With sal_False vectorized and scalable fonts will be queried.
 
 --------------------------------------------------------------------------
 
 String FontList::GetStyleName( const FontInfo& rInfo ) const;
 
-Diese Methode gibt den StyleName von einer FontInfo zurueck. Falls kein
-StyleName gesetzt ist, wird aus den gesetzten Attributen ein entsprechender
-Name generiert, der dem Anwender praesentiert werden kann.
+This method returns the StyleName of a FontInfo.
+If no StyleName is set, a name will be generated from the set attributes.
 
 --------------------------------------------------------------------------
 
 OUString FontList::GetFontMapText( const FontInfo& rInfo ) const;
 
-Diese Methode gibt einen Matchstring zurueck, der dem Anwender
-anzeigen soll, welche Probleme es mit diesem Font geben kann.
+This method returns a Matchstring which indicates the problem that could
+arise when using a font. This string should be displayed to the user.
 
 --------------------------------------------------------------------------
 
 FontInfo FontList::Get( const String& rName, const String& rStyleName ) const;
 
-Diese Methode sucht aus dem uebergebenen Namen und dem uebergebenen StyleName
-die entsprechende FontInfo-Struktur raus. Der Stylename kann in dieser
-Methode auch ein syntetischer sein. In diesem Fall werden die entsprechenden
-Werte in der FontInfo-Struktur entsprechend gesetzt. Wenn ein StyleName
-uebergeben wird, kann jedoch eine FontInfo-Struktur ohne Stylename
-zurueckgegeben werden. Um den StyleName dem Anwender zu repraesentieren,
-muss GetStyleName() mit dieser FontInfo-Struktur aufgerufen werden.
+This method search a FontInfo for the given name and the given style name.
+The Stylename can also be a synthetic one.
+In that case the relevant FontInfo fields will be set.
+If a StyleName is provived, a FontInfo structure without a Stylename can be
+returned. To get a representation of the StyleName for displaying it to the user,
+call GetStyleName() on this FontInfo structure.
 
-Querverweise
+Links:
 
 FontList::GetStyleName()
 
@@ -110,13 +103,12 @@ FontList::GetStyleName()
 FontInfo FontList::Get( const String& rName, FontWeight eWeight,
                         FontItalic eItalic ) const;
 
-Diese Methode sucht aus dem uebergebenen Namen und den uebergebenen Styles
-die entsprechende FontInfo-Struktur raus. Diese Methode kann auch eine
-FontInfo-Struktur ohne Stylename zurueckgegeben. Um den StyleName dem
-Anwender zu repraesentieren, muss GetStyleName() mit dieser FontInfo-Struktur
-aufgerufen werden.
+This method search a FontInfo structure for a provided name and styles.
+This method can also return a FontInfo without a Stylename.
+To get a representation of the StyleName to be presented to the user
+call GetStyleName() with this FontInfo.
 
-Querverweise
+Links:
 
 FontList::GetStyleName()
 
@@ -124,13 +116,13 @@ FontList::GetStyleName()
 
 const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const;
 
-Diese Methode liefert zum uebergebenen Font die vorhandenen Groessen.
-Falls es sich dabei um einen skalierbaren Font handelt, werden Standard-
-Groessen zurueckgegeben. Das Array enthaelt die Hoehen des Fonts in 10tel
-Point. Der letzte Wert des Array ist 0. Das Array, was zurueckgegeben wird,
-wird von der FontList wieder zerstoert. Nach dem Aufruf der naechsten Methode
-von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
-
+This method returns the available sizes for the given font.
+If it is a scalable font, standard sizes are returned.
+The array contains the heights of the font in tenth (1/10) point.
+The last value of the array is 0.
+The returned array will destroyed by the FontList.
+You should thus not reference the array after the next method call on the
+FontList.
 */
 
 
