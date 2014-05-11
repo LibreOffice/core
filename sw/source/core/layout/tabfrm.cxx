@@ -979,7 +979,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
         {
             // Check if there are (first) rows inside this row,
             // which are not allowed to be split.
-            SwCellFrm* pLowerCell = pRow ? (SwCellFrm*)pRow->Lower() : 0;
+            SwCellFrm* pLowerCell = (SwCellFrm*)pRow->Lower();
             while ( pLowerCell )
             {
                 if ( pLowerCell->Lower() && pLowerCell->Lower()->IsRowFrm() )
