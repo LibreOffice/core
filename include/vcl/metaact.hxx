@@ -120,7 +120,6 @@ private:
     virtual bool    Compare( const MetaAction& ) const;
 
 protected:
-    void                WriteWithVersion(SvStream& rStream, ImplMetaWriteData* pWriteData, sal_uInt16 nVersion);
     virtual             ~MetaAction();
 
 public:
