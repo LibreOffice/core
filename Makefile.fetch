@@ -46,16 +46,26 @@ $(if $3,$(call fetch_Download__checksum_command,$2,$3)) \
 
 endef
 
-# fetch_Download_item url tarball-name no-sum?
+# fetch_Download__is_checksum checksum
+define fetch_Download__is_checksum
+$(filter 32,$(words $(shell echo $(1) | sed -e 's/./& /g')))
+endef
+
+# fetch_Download_item url variable-name
 define fetch_Download_item
-$(call fetch__Download_item,$1,$2,$(if $3,,$(firstword $(subst -, ,$2))))
+$(if $(filter undefined,$(origin $(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(2))))),\
+	$(if $(call fetch_Download__is_checksum,$(firstword $(subst -, ,$($(2))))),\
+		$(call fetch__Download_item,$1,$($2),$(firstword $(subst -, ,$($(2))))),\
+		$(error "fetch_Download_item: no checksum found for $($(2)). Please define $(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(2))) in download.lst.") \
+	),\
+	$(call fetch__Download_item,$(1),$($2),$($(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(2))))) \
+)
 
 endef
 
-# fetch_Download_item_special url variable-name
-define fetch_Download_item_special
-$(if $($(subst _TARBALL,_MD5SUM,$(2))),,$(error "fetch_Download_item_special: $2_MD5SUM can't be empty"))
-$(call fetch__Download_item,$1,$($2),$($(subst _TARBALL,_MD5SUM,$(2))))
+# fetch_Download_item url tarball-name
+define fetch_Download_item_unchecked
+$(call fetch__Download_item,$1,$2)
 
 endef
 
@@ -64,8 +74,22 @@ ifneq ($(CROSS_COMPILING),)
 fetch_BUILD_TYPE := $(sort $(fetch_BUILD_TYPE) $(shell . $(SRCDIR)/bin/get_config_variables --build BUILD_TYPE && echo $$BUILD_TYPE))
 endif
 
+# Return variable-name if this tarball should be fetched.
+#
+# This function is used for tarballs predefined in download.lst.
+#
+# fetch_Optional build-type variable-name
 define fetch_Optional
 $(if $(filter ALL,$(DO_FETCH_TARBALLS))$(filter $1,$(fetch_BUILD_TYPE)),$2)
+endef
+
+# Return variable-name if this pack should be fetched.
+#
+# This function is used for packs defined by configure.
+#
+# fetch_Optional_pack variable-name
+define fetch_Optional_pack
+$(if $(strip $($(1))),$(1))
 endef
 
 download: $(WORKDIR)/download
@@ -93,120 +117,120 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \
 		$(call fetch_Optional,SERF,SERF_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
-	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
-	$(foreach item, \
-		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_CODEC_TARBALL)) \
-		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_HTTPCLIENT_TARBALL)) \
-		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_LANG_TARBALL)) \
-		$(call fetch_Optional,APACHE_COMMONS,$(APACHE_COMMONS_LOGGING_TARBALL)) \
-		$(call fetch_Optional,BOOST,$(BOOST_TARBALL)) \
-		$(call fetch_Optional,BSH,$(BSH_TARBALL)) \
-		$(call fetch_Optional,CAIRO,$(CAIRO_TARBALL)) \
-		$(call fetch_Optional,CLUCENE,$(CLUCENE_TARBALL)) \
-		$(call fetch_Optional,CMIS,$(CMIS_TARBALL)) \
-		$(call fetch_Optional,CPPUNIT,$(CPPUNIT_TARBALL)) \
-		$(call fetch_Optional,CT2N,$(CT2N_TARBALL)) \
-		$(call fetch_Optional,CURL,$(CURL_TARBALL)) \
-		$(call fetch_Optional,EPM,$(EPM_TARBALL)) \
-		$(call fetch_Optional,EXPAT,$(EXPAT_TARBALL)) \
-		$(call fetch_Optional,MARIADB,$(MARIADB_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_CALADEA_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_CARLITO_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_DEJAVU_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_GENTIUM_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_LIBERATION_NARROW_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_LIBERATION_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_LINLIBERTINEG_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_PTSERIF_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_OPENSANS_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_SOURCESANS_TARBALL)) \
-		$(call fetch_Optional,MORE_FONTS,$(FONT_SOURCECODE_TARBALL)) \
-		$(call fetch_Optional,FONTCONFIG,$(FONTCONFIG_TARBALL)) \
-		$(call fetch_Optional,FREETYPE,$(FREETYPE_TARBALL)) \
-		$(GOOGLE_DOCS_EXTENSION_PACK) \
-		$(call fetch_Optional,GLEW,$(GLEW_TARBALL)) \
-		$(call fetch_Optional,GLM,$(GLM_TARBALL)) \
-		$(call fetch_Optional,HSQLDB,$(HSQLDB_TARBALL)) \
-		$(call fetch_Optional,HUNSPELL,$(HUNSPELL_TARBALL)) \
-		$(call fetch_Optional,HYPHEN,$(HYPHEN_TARBALL)) \
-		$(call fetch_Optional,ICU,$(ICU_TARBALL)) \
-		$(call fetch_Optional,ICU,$(ICU_51_LAYOUT_FIX_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_FLOW_ENGINE_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_FLUTE_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBBASE_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBFONTS_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBFORMULA_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBLAYOUT_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBLOADER_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBREPOSITORY_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBSERIALIZER_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBXML_TARBALL)) \
-		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_SAC_TARBALL)) \
-		$(call fetch_Optional,JPEG,$(JPEG_TARBALL)) \
-		$(call fetch_Optional,LANGUAGETOOL,$(LANGUAGETOOL_TARBALL)) \
-		$(call fetch_Optional,LCMS2,$(LCMS2_TARBALL)) \
-		$(call fetch_Optional,LIBEXTTEXTCAT,$(LIBEXTTEXTCAT_TARBALL)) \
-		$(call fetch_Optional,LIBGLTF,$(LIBGLTF_TARBALL)) \
-		$(call fetch_Optional,LIBLANGTAG,$(LIBLANGTAG_TARBALL)) \
-		$(call fetch_Optional,LIBXML2,$(LIBXML_TARBALL)) \
-		$(LIBXMLSEC_TARBALL) \
-		$(call fetch_Optional,LIBXSLT,$(LIBXSLT_TARBALL)) \
-		$(call fetch_Optional,LPSOLVE,$(LPSOLVE_TARBALL)) \
-		$(call fetch_Optional,MDDS,$(MDDS_TARBALL)) \
-		$(call fetch_Optional,MYSQLCPPCONN,$(MYSQLCPPCONN_TARBALL)) \
-		$(call fetch_Optional,MYTHES,$(MYTHES_TARBALL)) \
-		$(call fetch_Optional,NEON,$(NEON_TARBALL)) \
-		$(call fetch_Optional,NSS,$(NSS_TARBALL)) \
-		$(NUMBERTEXT_EXTENSION_PACK) \
-		$(call fetch_Optional,OPENLDAP,$(OPENLDAP_TARBALL)) \
-		$(call fetch_Optional,OPENSSL,$(OPENSSL_TARBALL)) \
-		$(call fetch_Optional,ORCUS,$(ORCUS_TARBALL)) \
-		$(call fetch_Optional,CAIRO,$(PIXMAN_TARBALL)) \
-		$(call fetch_Optional,LIBPNG,$(PNG_TARBALL)) \
-		$(call fetch_Optional,POPPLER,$(POPPLER_TARBALL)) \
-		$(call fetch_Optional,POSTGRESQL,$(POSTGRESQL_TARBALL)) \
-		$(call fetch_Optional,PYTHON,$(PYTHON_TARBALL)) \
-		$(call fetch_Optional,REDLAND,$(RAPTOR_TARBALL)) \
-		$(call fetch_Optional,REDLAND,$(RASQAL_TARBALL)) \
-		$(call fetch_Optional,REDLAND,$(REDLAND_TARBALL)) \
-		$(call fetch_Optional,RHINO,$(RHINO_TARBALL)) \
-		$(call fetch_Optional,RHINO,$(SWING_TARBALL)) \
-		$(call fetch_Optional,TOMCAT,$(TOMCAT_TARBALL)) \
-		$(call fetch_Optional,UCPP,$(UCPP_TARBALL)) \
-		$(call fetch_Optional,VIGRA,$(VIGRA_TARBALL)) \
-		$(call fetch_Optional,WPD,$(WPD_TARBALL)) \
-		$(call fetch_Optional,WPG,$(WPG_TARBALL)) \
-		$(call fetch_Optional,WPS,$(WPS_TARBALL)) \
-		$(call fetch_Optional,XSLTML,$(XSLTML_TARBALL)) \
-		$(call fetch_Optional,ZLIB,$(ZLIB_TARBALL)) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
-		$(call fetch_Optional,DBGHELP,$(DBGHELP_DLL)) \
-		$(call fetch_Optional,ODK,$(UNOWINREG_DLL)) \
+		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_CODEC_TARBALL) \
+		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_HTTPCLIENT_TARBALL) \
+		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_LANG_TARBALL) \
+		$(call fetch_Optional,APACHE_COMMONS,APACHE_COMMONS_LOGGING_TARBALL) \
+		$(call fetch_Optional,BOOST,BOOST_TARBALL) \
+		$(call fetch_Optional,BSH,BSH_TARBALL) \
+		$(call fetch_Optional,CAIRO,CAIRO_TARBALL) \
+		$(call fetch_Optional,CLUCENE,CLUCENE_TARBALL) \
+		$(call fetch_Optional,CMIS,CMIS_TARBALL) \
+		$(call fetch_Optional,CPPUNIT,CPPUNIT_TARBALL) \
+		$(call fetch_Optional,CT2N,CT2N_TARBALL) \
+		$(call fetch_Optional,CURL,CURL_TARBALL) \
+		$(call fetch_Optional,EPM,EPM_TARBALL) \
+		$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
+		$(call fetch_Optional,MARIADB,MARIADB_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_CALADEA_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_CARLITO_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_DEJAVU_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_GENTIUM_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_NARROW_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_LINLIBERTINEG_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_PTSERIF_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_OPENSANS_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESANS_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_SOURCECODE_TARBALL) \
+		$(call fetch_Optional,FONTCONFIG,FONTCONFIG_TARBALL) \
+		$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
+		$(call fetch_Optional_pack,GOOGLE_DOCS_EXTENSION_PACK) \
+		$(call fetch_Optional,GLEW,GLEW_TARBALL) \
+		$(call fetch_Optional,GLM,GLM_TARBALL) \
+		$(call fetch_Optional,HSQLDB,HSQLDB_TARBALL) \
+		$(call fetch_Optional,HUNSPELL,HUNSPELL_TARBALL) \
+		$(call fetch_Optional,HYPHEN,HYPHEN_TARBALL) \
+		$(call fetch_Optional,ICU,ICU_TARBALL) \
+		$(call fetch_Optional,ICU,ICU_51_LAYOUT_FIX_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_FLOW_ENGINE_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_FLUTE_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBBASE_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBFONTS_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBFORMULA_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBLAYOUT_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBLOADER_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBREPOSITORY_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBSERIALIZER_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBXML_TARBALL) \
+		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_SAC_TARBALL) \
+		$(call fetch_Optional,JPEG,JPEG_TARBALL) \
+		$(call fetch_Optional,LANGUAGETOOL,LANGUAGETOOL_TARBALL) \
+		$(call fetch_Optional,LCMS2,LCMS2_TARBALL) \
+		$(call fetch_Optional,LIBEXTTEXTCAT,LIBEXTTEXTCAT_TARBALL) \
+		$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
+		$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
+		$(call fetch_Optional,LIBXML2,LIBXML_TARBALL) \
+		LIBXMLSEC_TARBALL \
+		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
+		$(call fetch_Optional,LPSOLVE,LPSOLVE_TARBALL) \
+		$(call fetch_Optional,MDDS,MDDS_TARBALL) \
+		$(call fetch_Optional,MYSQLCPPCONN,MYSQLCPPCONN_TARBALL) \
+		$(call fetch_Optional,MYTHES,MYTHES_TARBALL) \
+		$(call fetch_Optional,NEON,NEON_TARBALL) \
+		$(call fetch_Optional,NSS,NSS_TARBALL) \
+		$(call fetch_Optional_pack,NUMBERTEXT_EXTENSION_PACK) \
+		$(call fetch_Optional,OPENLDAP,OPENLDAP_TARBALL) \
+		$(call fetch_Optional,OPENSSL,OPENSSL_TARBALL) \
+		$(call fetch_Optional,ORCUS,ORCUS_TARBALL) \
+		$(call fetch_Optional,CAIRO,PIXMAN_TARBALL) \
+		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
+		$(call fetch_Optional,POPPLER,POPPLER_TARBALL) \
+		$(call fetch_Optional,POSTGRESQL,POSTGRESQL_TARBALL) \
+		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
+		$(call fetch_Optional,REDLAND,RAPTOR_TARBALL) \
+		$(call fetch_Optional,REDLAND,RASQAL_TARBALL) \
+		$(call fetch_Optional,REDLAND,REDLAND_TARBALL) \
+		$(call fetch_Optional,RHINO,RHINO_TARBALL) \
+		$(call fetch_Optional,RHINO,SWING_TARBALL) \
+		$(call fetch_Optional,TOMCAT,TOMCAT_TARBALL) \
+		$(call fetch_Optional,UCPP,UCPP_TARBALL) \
+		$(call fetch_Optional,VIGRA,VIGRA_TARBALL) \
+		$(call fetch_Optional,WPD,WPD_TARBALL) \
+		$(call fetch_Optional,WPG,WPG_TARBALL) \
+		$(call fetch_Optional,WPS,WPS_TARBALL) \
+		$(call fetch_Optional,XSLTML,XSLTML_TARBALL) \
+		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
+	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
+	$(foreach item, \
+		$(call fetch_Optional,DBGHELP,DBGHELP_DLL) \
+		$(call fetch_Optional,ODK,UNOWINREG_DLL) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
 	$(foreach item, \
-		$(BARCODE_EXTENSION_PACK) \
-		$(DIAGRAM_EXTENSION_PACK) \
-		$(HUNART_EXTENSION_PACK) \
-		$(OOOP_FONTS_PACK) \
-		$(OOOP_GALLERY_PACK) \
-		$(OOOP_SAMPLES_PACK) \
-		$(OOOP_TEMPLATES_PACK) \
-		$(SUNTEMPLATES_DE_PACK) \
-		$(SUNTEMPLATES_EN_US_PACK) \
-		$(SUNTEMPLATES_ES_PACK) \
-		$(SUNTEMPLATES_FR_PACK) \
-		$(SUNTEMPLATES_HU_PACK) \
-		$(SUNTEMPLATES_IT_PACK) \
-		$(TYPO_EXTENSION_PACK) \
-		$(VALIDATOR_EXTENSION_PACK) \
-		$(WATCH_WINDOW_EXTENSION_PACK) \
+		$(call fetch_Optional_pack,BARCODE_EXTENSION_PACK) \
+		$(call fetch_Optional_pack,DIAGRAM_EXTENSION_PACK) \
+		$(call fetch_Optional_pack,HUNART_EXTENSION_PACK) \
+		$(call fetch_Optional_pack,OOOP_FONTS_PACK) \
+		$(call fetch_Optional_pack,OOOP_GALLERY_PACK) \
+		$(call fetch_Optional_pack,OOOP_SAMPLES_PACK) \
+		$(call fetch_Optional_pack,OOOP_TEMPLATES_PACK) \
+		$(call fetch_Optional_pack,SUNTEMPLATES_DE_PACK) \
+		$(call fetch_Optional_pack,SUNTEMPLATES_EN_US_PACK) \
+		$(call fetch_Optional_pack,SUNTEMPLATES_ES_PACK) \
+		$(call fetch_Optional_pack,SUNTEMPLATES_FR_PACK) \
+		$(call fetch_Optional_pack,SUNTEMPLATES_HU_PACK) \
+		$(call fetch_Optional_pack,SUNTEMPLATES_IT_PACK) \
+		$(call fetch_Optional_pack,TYPO_EXTENSION_PACK) \
+		$(call fetch_Optional_pack,VALIDATOR_EXTENSION_PACK) \
+		$(call fetch_Optional_pack,WATCH_WINDOW_EXTENSION_PACK) \
 	,$(call fetch_Download_item,http://ooo.itc.hu/oxygenoffice/download/libreoffice,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_INC)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_LIB)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_RUNTIME)) \
-	,$(call fetch_Download_item,http://dev-www.libreoffice.org/mozilla,$(item),no-sum))
+	,$(call fetch_Download_item_unchecked,http://dev-www.libreoffice.org/mozilla,$(item)))
 	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
