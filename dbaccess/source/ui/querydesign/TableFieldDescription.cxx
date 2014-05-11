@@ -46,7 +46,7 @@ OTableFieldDesc::OTableFieldDesc()
 
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     : ::salhelper::SimpleReferenceObject()
-
+    , m_pTabWindow(NULL)
 {
     *this = rRS;
 }
