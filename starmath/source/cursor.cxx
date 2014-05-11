@@ -809,7 +809,10 @@ bool SmCursor::InsertRow() {
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    OSL_ENSURE( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+
+    assert(nParentIndex != -1); //pLine must be a subnode of pLineParent
+    if (nParentIndex == -1)
+        return false;
 
     //Discover the context of this command
     SmTableNode  *pTable  = NULL;
