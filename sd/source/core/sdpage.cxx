@@ -694,7 +694,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
             case SDRUSERCALL_MOVEONLY:
             case SDRUSERCALL_RESIZE:
             {
-                if( pModel->isLocked() )
+                if (!pModel || pModel->isLocked())
                     break;
 
                 SdrObject* pObj = (SdrObject*) &rObj;
@@ -705,7 +705,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                     {
                         if( pObj->GetUserCall() )
                         {
-                            ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+                            ::svl::IUndoManager* pUndoManager = static_cast<SdDrawDocument*>(pModel)->GetUndoManager();
                             const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
                             if( bUndo )
@@ -715,7 +715,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                             pObj->SetUserCall(0);
                         }
                     }
-                    else if (pModel)
+                    else
                     {
                         // Object of the master page changed, therefore adjust
                         // object on all pages
