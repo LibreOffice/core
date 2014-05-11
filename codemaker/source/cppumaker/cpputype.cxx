@@ -2151,6 +2151,9 @@ sal_uInt32 PlainStructType::getTotalMemberCount(OUString const & base) const {
     rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
         dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
     assert(ent2.is());
+    if (!ent2.is()) {
+        return 0;
+    }
     return getTotalMemberCount(ent2->getDirectBase())
         + ent2->getDirectMembers().size(); //TODO: overflow
 }
