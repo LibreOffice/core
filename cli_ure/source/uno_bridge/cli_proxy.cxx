@@ -128,8 +128,8 @@ UnoInterfaceProxy::~UnoInterfaceProxy()
 {
 #if OSL_DEBUG_LEVEL >= 2
     sd::Trace::WriteLine(System::String::Format(
-               new System::String(S"cli uno bridge: Destroying proxy "
-               S"for UNO object, OID: \n\t{0} \n\twith uno interfaces: "),
+               gcnew System::String("cli uno bridge: Destroying proxy "
+               "for UNO object, OID: \n\t{0} \n\twith uno interfaces: "),
                m_oid));
 
     sd::Trace::WriteLine( mapUnoString(_sInterfaces));
@@ -166,14 +166,6 @@ void UnoInterfaceProxy::addUnoInterface(uno_Interface* pUnoI,
         {
             UnoInterfaceInfo^ info = static_cast<UnoInterfaceInfo^>(
                 enumInfos->Current);
-#if OSL_DEBUG_LEVEL > 1
-            System::Type * t1;
-            System::Type * t2;
-            t1 = mapUnoType(
-                reinterpret_cast<typelib_TypeDescription*>(info->m_typeDesc) );
-            t2 = mapUnoType(
-                reinterpret_cast<typelib_TypeDescription*>(pTd) );
-#endif
             if (typelib_typedescription_equals(
                reinterpret_cast<typelib_TypeDescription*>(info->m_typeDesc),
                reinterpret_cast<typelib_TypeDescription*>(pTd)))
@@ -189,21 +181,21 @@ void UnoInterfaceProxy::addUnoInterface(uno_Interface* pUnoI,
         m_listIfaces->Add(gcnew UnoInterfaceInfo(m_bridge, pUnoI, pTd));
         m_numUnoIfaces = m_listIfaces->Count;
 #if OSL_DEBUG_LEVEL >= 2
-        System::String * sInterfaceName = static_cast<UnoInterfaceInfo*>(
-            m_listIfaces->get_Item(m_numUnoIfaces - 1))->m_type->FullName;
+        System::String^ sInterfaceName = static_cast<UnoInterfaceInfo^>(
+            m_listIfaces[m_numUnoIfaces - 1])->m_type->FullName;
         sd::Trace::WriteLine(System::String::Format(
-             new System::String(S"cli uno bridge: Creating proxy for uno object, "
-                 S"id:\n\t{0}\n\t{1}"), m_oid, sInterfaceName));
+             gcnew System::String("cli uno bridge: Creating proxy for uno object, "
+                 "id:\n\t{0}\n\t{1}"), m_oid, sInterfaceName));
         // add to the string that contains all interface names
-         _numInterfaces ++;
-         OUStringBuffer buf(512);
+        _numInterfaces++;
+        OUStringBuffer buf(512);
         buf.append("\t");
-        buf.append( OUString::valueOf((sal_Int32)_numInterfaces));
+        buf.append( OUString::number(_numInterfaces));
         buf.append(". ");
         buf.append(mapCliString(sInterfaceName));
         buf.append("\n");
         OUString _sNewInterface = buf.makeStringAndClear();
-        rtl_uString * __pin * pp_sInterfaces = & _sInterfaces;
+        pin_ptr<rtl_uString *> pp_sInterfaces = &_sInterfaces;
         rtl_uString_newConcat( pp_sInterfaces, * pp_sInterfaces,
                                _sNewInterface.pData);
 #endif
@@ -366,8 +358,8 @@ srrm::IMessage^ UnoInterfaceProxy::invokeObject(
     {
         // Object.ToString
         st::StringBuilder^ sb = gcnew st::StringBuilder(256);
-//              sb->AppendFormat(S"Uno object proxy. Implemented interface: {0}"
-//                  S". OID: {1}", m_type->ToString(), m_oid);
+//              sb->AppendFormat("Uno object proxy. Implemented interface: {0}"
+//                  ". OID: {1}", m_type->ToString(), m_oid);
         sb->AppendFormat("Uno object proxy. OID: {0}", m_oid);
         retMethod = sb->ToString();
     }
@@ -447,7 +439,7 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
                 OUString::unacquired( & member_type->pTypeName );
 
 #if OSL_DEBUG_LEVEL >= 2
-        System::String * pTypeName;
+        System::String^ pTypeName;
         pTypeName = mapUnoString(usTypeName.pData);
 #endif
             sal_Int32 offset = usTypeName.indexOf( ':' ) + 2;
@@ -664,8 +656,8 @@ CliProxy::CliProxy(Bridge const* bridge, System::Object^ cliI,
     makeMethodInfos();
 #if OSL_DEBUG_LEVEL >= 2
     sd::Trace::WriteLine(System::String::Format(
-      new System::String(S"cli uno bridge: Creating proxy for cli object, "
-                         S"id:\n\t{0}\n\t{1}"), m_oid, m_type));
+      gcnew System::String("cli uno bridge: Creating proxy for cli object, "
+                         "id:\n\t{0}\n\t{1}"), m_oid, m_type));
 #endif
 
 }
@@ -673,8 +665,8 @@ CliProxy::CliProxy(Bridge const* bridge, System::Object^ cliI,
 void CliProxy::makeMethodInfos()
 {
 #if OSL_DEBUG_LEVEL >= 2
-    System::Object* cliI;
-    System::Type* type;
+    System::Object^ cliI;
+    System::Type^ type;
     cliI = m_cliI;
     type = m_type;
 #endif
@@ -705,16 +697,6 @@ void CliProxy::makeMethodInfos()
     // initialize with -1
     for (int i = 0; i < numMethods; i++)
         m_arUnoPosToCliPos[i] = -1;
-
-#if OSL_DEBUG_LEVEL >= 2
-    sr::MethodInfo* arMethodInfosDbg[];
-    sr::MethodInfo* arInterfaceMethodInfosDbg[];
-    System::Int32 arInterfaceMethodCountDbg[];
-    arMethodInfosDbg = m_arMethodInfos;
-    arInterfaceMethodInfosDbg = m_arInterfaceMethodInfos;
-    arInterfaceMethodCountDbg = m_arInterfaceMethodCount;
-#endif
-
 
     //fill m_arMethodInfos with the mappings
     // !!! InterfaceMapping.TargetMethods should be MethodInfo*[] according
@@ -770,18 +752,6 @@ sr::MethodInfo^ CliProxy::getMethodInfo(int nUnoFunctionPos,
                                            const OUString& usMethodName, MethodKind methodKind)
 {
     sr::MethodInfo^ ret = nullptr;
-#if OSL_DEBUG_LEVEL >= 2
-    System::String* sMethodNameDbg;
-    sr::MethodInfo* arMethodInfosDbg[];
-    sr::MethodInfo* arInterfaceMethodInfosDbg[];
-    System::Int32 arInterfaceMethodCountDbg[];
-    System::Int32 arUnoPosToCliPosDbg[];
-    sMethodNameDbg = mapUnoString(usMethodName.pData);
-    arMethodInfosDbg = m_arMethodInfos;
-    arInterfaceMethodInfosDbg = m_arInterfaceMethodInfos;
-    arInterfaceMethodCountDbg = m_arInterfaceMethodCount;
-    arUnoPosToCliPosDbg = m_arUnoPosToCliPos;
-#endif
     //deduct 3 for XInterface methods
     nUnoFunctionPos -= 3;
     System::Threading::Monitor::Enter(m_arUnoPosToCliPos);
@@ -855,9 +825,9 @@ CliProxy::~CliProxy()
 {
 #if OSL_DEBUG_LEVEL >= 2
     sd::Trace::WriteLine(System::String::Format(
-                  new System::String(
-                  S"cli uno bridge: Destroying proxy for cli object, "
-                  S"id:\n\t{0}\n\t{1}\n"),
+                  gcnew System::String(
+                  "cli uno bridge: Destroying proxy for cli object, "
+                  "id:\n\t{0}\n\t{1}\n"),
                   m_oid, m_type));
 #endif
     CliEnvHolder::g_cli_env->revokeInterface(m_oid, mapUnoType(m_unoType.get()));

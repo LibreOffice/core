@@ -1064,12 +1064,6 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 for (; nPos < nMembers; ++nPos)
                 {
                     member_type= comp_td->ppTypeRefs[nPos];
-#if OSL_DEBUG_LEVEL >= 2
-                    System::String* __s;
-                    sr::FieldInfo* arFields[];
-                    __s = mapUnoString(comp_td->ppMemberNames[nPos]);
-                    arFields = cliType != NULL ? cliType->GetFields() : NULL;
-#endif
                     System::Object^ val= nullptr;
                     if (cli_data != nullptr)
                     {
@@ -1614,10 +1608,6 @@ void Bridge::map_to_cli(
                 OUString usMessageMember("Message");
                 for (int i = 0; i < pCTD->nMembers; i ++)
                 {
-#if OSL_DEBUG_LEVEL >= 2
-                    System::String* sMember;
-                    sMember = mapUnoString(pCTD->ppMemberNames[i]);
-#endif
                     if (usMessageMember.equals(pCTD->ppMemberNames[i]))
                     {
                         nPos = i;
