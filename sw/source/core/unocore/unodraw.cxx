@@ -348,7 +348,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = 0;
             uno::Reference< beans::XPropertySet >  xPrSet;
-            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || ( PTR_CAST(E3dScene,pObj ) != NULL ) ) )
+            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || (pObj->ISA(E3dScene))) )
                 xPrSet = new SwXGroupShape( xCreate );
             else
                 xPrSet = new SwXShape( xCreate );
