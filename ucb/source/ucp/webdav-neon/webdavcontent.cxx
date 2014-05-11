@@ -3262,7 +3262,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw ( uno::Exception )
+    throw ( uno::Exception, std::exception )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
