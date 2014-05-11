@@ -345,7 +345,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         bool bLink = pDlg->IsLink();
         bool bReplace = false;
         SdPage* pPage = NULL;
-        ::sd::View* pView = mpViewShell->GetView();
+        ::sd::View* pView = mpViewShell ? mpViewShell->GetView() : NULL;
 
         if (pView->ISA(OutlineView))
         {
