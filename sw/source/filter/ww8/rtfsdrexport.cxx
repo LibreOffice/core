@@ -516,7 +516,7 @@ sal_Int32 RtfSdrExport::StartShape()
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString(m_pSdrObject->GetTitle(), m_rExport.eCurrentEncoding));
 
     // now check if we have some text
-    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
+    const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
     if (pTxtObj)
     {
         const OutlinerParaObject* pParaObj = 0;
