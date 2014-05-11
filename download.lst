@@ -120,7 +120,8 @@ export WPD_TARBALL := a3dcac551fae5ebbec16e844810828c4-libwpd-0.9.9.tar.bz2
 export WPG_TARBALL := b85436266b2ac91d351ab5684b181151-libwpg-0.2.2.tar.bz2
 export WPS_TARBALL := 46eb0e7f213ad61bd5dee0c494132cb0-libwps-0.2.9.tar.bz2
 export XSLTML_TARBALL := a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
-export ZLIB_TARBALL := 2ab442d169156f34c379c968f3f482dd-zlib-1.2.7.tar.bz2
+export ZLIB_MD5SUM := 44d667c142d7cda120332623eab69f40
+export ZLIB_TARBALL := zlib-1.2.8.tar.gz
 
 export MOZ_ZIP_INC := $(OS)$(COM)$(if $(filter INTEL,$(CPUNAME)),I,X)inc.zip
 export MOZ_ZIP_LIB := $(OS)$(COM)$(if $(filter INTEL,$(CPUNAME)),I,X)lib.zip
