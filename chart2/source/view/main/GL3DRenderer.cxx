@@ -136,7 +136,7 @@ void OpenGL3DRenderer::LoadShaders()
 void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up)
 {
     m_CameraInfo.cameraPos = pos;
-    m_CameraInfo.cameraOrg = pos + direction;
+    m_CameraInfo.cameraOrg = direction;
     m_CameraInfo.cameraUp = up;
 }
 
@@ -212,7 +212,7 @@ void OpenGL3DRenderer::init()
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBoxNormal), boundBoxNormal, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    m_fViewAngle = 30.0f;
+    m_fViewAngle = 60.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
     LoadShaders();
     glGenBuffers(1, &m_TextTexCoordBuf);
@@ -930,7 +930,8 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(sal_Int32 color,sal_Int32 specula
     m_Extrude3DInfo.zScale = glm::length(DirY);
     glm::mat4 transformMatrixInverse = glm::inverse(glm::translate(glm::vec3(tranform)));
     glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.zScale, m_Extrude3DInfo.yScale));
-    m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
+    //m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
+
     //color
     m_Extrude3DInfo.extrudeColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
                                              (float)(((color) & 0x0000FF00) >> 8) / 255.0f,
@@ -1443,10 +1444,9 @@ void OpenGL3DRenderer::RenderClickPos(Point aMPos)
 
 void OpenGL3DRenderer::CreateSceneBoxView()
 {
-    m_3DView = glm::lookAt(m_CameraInfo.cameraPos, // Camera is at (0,0,3), in World Space
-               m_CameraInfo.cameraOrg, // and looks at the origin
-               m_CameraInfo.cameraUp  // Head is up (set to 0,-1,0 to look upside-down)
-               );
+    m_3DView = glm::lookAt(m_CameraInfo.cameraPos,
+               m_CameraInfo.cameraOrg,
+               m_CameraInfo.cameraUp);
 }
 
 void OpenGL3DRenderer::ProcessUnrenderedShape()

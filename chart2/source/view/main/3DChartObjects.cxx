@@ -49,7 +49,7 @@ void Renderable3DObject::render()
 
 Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 aColor, sal_uInt32 nId)
     : Renderable3DObject(pRenderer, nId)
-    , mbRoundedCorners(false)
+    , mbRoundedCorners(true)
     , maPos(rPosition)
     , maColor(aColor)
 {
@@ -185,7 +185,7 @@ Camera::Camera(OpenGL3DRenderer* pRenderer):
     Renderable3DObject(pRenderer, 0),
     maPos(10,-50,20),
     maUp(0, 0, 1),
-    maDirection(glm::vec3(0,1,-0.5))
+    maDirection(glm::vec3(0,0,0))
 {
 }
 
