@@ -2447,7 +2447,16 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
             // new left margin = old left + label space
             const SwNumRule* pRule = rNode.GetNumRule();
-            const SwNumFmt& rNumFmt = pRule->Get( static_cast< sal_uInt16 >(rNode.GetActualListLevel()) );
+            int nLevel = rNode.GetActualListLevel();
+
+            if (nLevel < 0)
+                nLevel = 0;
+
+            if (nLevel >= MAXLEVEL)
+                nLevel = MAXLEVEL - 1;
+
+            const SwNumFmt& rNumFmt = pRule->Get( static_cast< sal_uInt16 >(nLevel) );
+
             // #i86652#
             if ( rNumFmt.GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
