@@ -479,7 +479,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
             SwTwips nCurrentHeight =
                     lcl_CalcMinRowHeight( pTmpLastLineRow,
                                           rTab.IsConsiderObjsForMinCellHeight() );
-            while ( pTmpLastLineRow && pTmpLastLineRow->GetNext() && nTmpCut > nCurrentHeight )
+            while ( pTmpLastLineRow->GetNext() && nTmpCut > nCurrentHeight )
             {
                 nTmpCut -= nCurrentHeight;
                 pTmpLastLineRow = (SwRowFrm*)pTmpLastLineRow->GetNext();
@@ -490,74 +490,71 @@ static void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
             }
 
             // pTmpLastLineRow does not fit to the line or it is the last line
-            if ( pTmpLastLineRow )
+            // Check if we can move pTmpLastLineRow to the follow table,
+            // or if we have to split the line:
+            SwFrm* pCell = pTmpLastLineRow->Lower();
+            bool bTableLayoutToComplex = false;
+            long nMinHeight = 0;
+
+            // We have to take into account:
+            // 1. The fixed height of the row
+            // 2. The borders of the cells inside the row
+            // 3. The minimum height of the row
+            if ( pTmpLastLineRow->HasFixSize() )
+                nMinHeight = (pTmpLastLineRow->Frm().*fnRect->fnGetHeight)();
+            else
             {
-                // Check if we can move pTmpLastLineRow to the follow table,
-                // or if we have to split the line:
-                SwFrm* pCell = pTmpLastLineRow->Lower();
-                bool bTableLayoutToComplex = false;
-                long nMinHeight = 0;
-
-                // We have to take into account:
-                // 1. The fixed height of the row
-                // 2. The borders of the cells inside the row
-                // 3. The minimum height of the row
-                if ( pTmpLastLineRow->HasFixSize() )
-                    nMinHeight = (pTmpLastLineRow->Frm().*fnRect->fnGetHeight)();
-                else
+                while ( pCell )
                 {
-                    while ( pCell )
+                    if ( ((SwCellFrm*)pCell)->Lower() &&
+                         ((SwCellFrm*)pCell)->Lower()->IsRowFrm() )
                     {
-                        if ( ((SwCellFrm*)pCell)->Lower() &&
-                             ((SwCellFrm*)pCell)->Lower()->IsRowFrm() )
-                        {
-                            bTableLayoutToComplex = true;
-                            break;
-                        }
-
-                        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
-                        const SwBorderAttrs &rAttrs = *aAccess.Get();
-                        nMinHeight = std::max( nMinHeight, lcl_CalcTopAndBottomMargin( *(SwLayoutFrm*)pCell, rAttrs ) );
-                        pCell = pCell->GetNext();
+                        bTableLayoutToComplex = true;
+                        break;
                     }
 
-                    const SwFmtFrmSize &rSz = pTmpLastLineRow->GetFmt()->GetFrmSize();
-                    if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
-                        nMinHeight = std::max( nMinHeight, rSz.GetHeight() );
+                    SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
+                    const SwBorderAttrs &rAttrs = *aAccess.Get();
+                    nMinHeight = std::max( nMinHeight, lcl_CalcTopAndBottomMargin( *(SwLayoutFrm*)pCell, rAttrs ) );
+                    pCell = pCell->GetNext();
                 }
 
-                // 1. Case:
-                // The line completely fits into the master table.
-                // Nevertheless, we build a follow (otherwise painting problems
-                // with empty cell).
+                const SwFmtFrmSize &rSz = pTmpLastLineRow->GetFmt()->GetFrmSize();
+                if ( rSz.GetHeightSizeType() == ATT_MIN_SIZE )
+                    nMinHeight = std::max( nMinHeight, rSz.GetHeight() );
+            }
 
-                // 2. Case:
-                // The line has to be split, the minimum height still fits into
-                // the master table, and the table structure is not to complex.
-                if ( nTmpCut > nCurrentHeight ||
-                     ( pTmpLastLineRow->IsRowSplitAllowed() &&
-                      !bTableLayoutToComplex && nMinHeight < nTmpCut ) )
-                {
-                    // The line has to be split:
-                    SwRowFrm* pNewRow = new SwRowFrm( *pTmpLastLineRow->GetTabLine(), &rTab, false );
-                    pNewRow->SetFollowFlowRow( true );
-                    pNewRow->SetFollowRow( pTmpLastLineRow->GetFollowRow() );
-                    pTmpLastLineRow->SetFollowRow( pNewRow );
-                    pNewRow->InsertBehind( pCurrFollowFlowLineCell, 0 );
-                    pTmpLastLineRow = (SwRowFrm*)pTmpLastLineRow->GetNext();
-                }
+            // 1. Case:
+            // The line completely fits into the master table.
+            // Nevertheless, we build a follow (otherwise painting problems
+            // with empty cell).
 
-                // The following lines have to be moved:
-                while ( pTmpLastLineRow )
-                {
-                    SwRowFrm* pTmp = (SwRowFrm*)pTmpLastLineRow->GetNext();
-                    lcl_MoveFootnotes( rTab, *rTab.GetFollow(), *pTmpLastLineRow );
-                    pTmpLastLineRow->Remove();
-                    pTmpLastLineRow->InsertBefore( pCurrFollowFlowLineCell, 0 );
-                    pTmpLastLineRow->Shrink( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
-                    pCurrFollowFlowLineCell->Grow( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
-                    pTmpLastLineRow = pTmp;
-                }
+            // 2. Case:
+            // The line has to be split, the minimum height still fits into
+            // the master table, and the table structure is not to complex.
+            if ( nTmpCut > nCurrentHeight ||
+                 ( pTmpLastLineRow->IsRowSplitAllowed() &&
+                  !bTableLayoutToComplex && nMinHeight < nTmpCut ) )
+            {
+                // The line has to be split:
+                SwRowFrm* pNewRow = new SwRowFrm( *pTmpLastLineRow->GetTabLine(), &rTab, false );
+                pNewRow->SetFollowFlowRow( true );
+                pNewRow->SetFollowRow( pTmpLastLineRow->GetFollowRow() );
+                pTmpLastLineRow->SetFollowRow( pNewRow );
+                pNewRow->InsertBehind( pCurrFollowFlowLineCell, 0 );
+                pTmpLastLineRow = (SwRowFrm*)pTmpLastLineRow->GetNext();
+            }
+
+            // The following lines have to be moved:
+            while ( pTmpLastLineRow )
+            {
+                SwRowFrm* pTmp = (SwRowFrm*)pTmpLastLineRow->GetNext();
+                lcl_MoveFootnotes( rTab, *rTab.GetFollow(), *pTmpLastLineRow );
+                pTmpLastLineRow->Remove();
+                pTmpLastLineRow->InsertBefore( pCurrFollowFlowLineCell, 0 );
+                pTmpLastLineRow->Shrink( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
+                pCurrFollowFlowLineCell->Grow( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
+                pTmpLastLineRow = pTmp;
             }
         }
 
