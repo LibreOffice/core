@@ -1208,7 +1208,7 @@ void ScChangeActionMove::GetDescription(
     }
 
     aTmpStr = ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D);
-    nPos = aRsc.indexOfAsciiL("#2", 2, nPos);
+    nPos = nPos >= 0 ? aRsc.indexOfAsciiL("#2", 2, nPos) : -1;
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
