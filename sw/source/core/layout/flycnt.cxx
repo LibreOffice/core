@@ -120,7 +120,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             // check, if at found anchor frame candidate already a fly frame
             // of the given fly frame format is registered.
             bFound = aOldIdx == aNewIdx;
-            if ( bFound && pCntnt->GetDrawObjs() )
+            if (bFound && pCntnt && pCntnt->GetDrawObjs())
             {
                 SwFrmFmt* pMyFlyFrmFmt( &GetFrmFmt() );
                 SwSortedObjs &rObjs = *pCntnt->GetDrawObjs();
