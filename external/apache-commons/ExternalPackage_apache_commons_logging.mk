@@ -11,6 +11,10 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,apache_commons_logging,apache_c
 
 $(eval $(call gb_ExternalPackage_use_external_project,apache_commons_logging,apache_commons_logging))
 
+ifeq ($(HAVE_JAVA6),yes)
 $(eval $(call gb_ExternalPackage_add_file,apache_commons_logging,$(LIBO_SHARE_JAVA_FOLDER)/commons-logging-1.1.3.jar,target/commons-logging-1.1.3.jar))
+else
+$(eval $(call gb_ExternalPackage_add_file,apache_commons_logging,$(LIBO_SHARE_JAVA_FOLDER)/commons-logging-1.1.1.jar,target/commons-logging-1.1.1.jar))
+endif
 
 # vim: set noet sw=4 ts=4:
