@@ -39,6 +39,7 @@ ResId SaneResId( sal_uInt32 nID )
 SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         ModalDialog( pParent, SaneResId( RID_SANE_DIALOG ) ),
         mrSane( rSane ),
+        mbDragEnable( false ),
         mbIsDragging( false ),
         mbScanEnabled( bScanEnabled ),
         mbDragDrawn( false ),
