@@ -327,12 +327,10 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     m_RoundBarMesh.topThreshold = topThreshold;
     m_RoundBarMesh.bottomThreshold = bottomThreshold;
     m_RoundBarMesh.iMeshStartIndices = m_Vertices.size();
-
     for (int k = 0; k < 5; k++)
     {
         m_RoundBarMesh.iElementStartIndices[k] = indeices[k].size();
     }
-
     for (size_t i = 0; i < vertices.size(); i += 3)
     {
         for (int k = 0; k < 3; k++)
@@ -409,12 +407,9 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
         {
             fNextAngleY = 360.0f;
         }
-        float fSineY = sin(fCurAngleY/180.0f*PI);
-        float fCosY = cos(fCurAngleY/180.0f*PI);
-        float fNextSineY = sin(fNextAngleY/180.0f*PI);
-        float fNextCosY = cos(fNextAngleY/180.0f*PI);
-        glm::vec3 vDirY(fCosY, 0.0f, -fSineY);
-        glm::vec3 vNextDirY(fNextCosY, 0.0f, -fNextSineY);
+        float fSineY = sin(fCurAngleY/180.0f*PI), fCosY = cos(fCurAngleY/180.0f*PI);
+        float fNextSineY = sin(fNextAngleY/180.0f*PI), fNextCosY = cos(fNextAngleY/180.0f*PI);
+        glm::vec3 vDirY(fCosY, 0.0f, -fSineY), vNextDirY(fNextCosY, 0.0f, -fNextSineY);
         float fCurAngleZ = 0.0f;
         int iStepsZ = 1;
         int xzIndex = 0;
@@ -434,7 +429,6 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
         {
             xzIndex = 3;
         }
-
         while(iStepsZ <= iSubDivZ)
         {
             int yIndex = 0;
@@ -481,7 +475,6 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
                 glm::normalize(vQuadPoints[2]),
                 glm::normalize(vQuadPoints[3])
             };
-
             for (int i = 0; i < 6; i++)
             {
                 int index = iIndices[i];
@@ -1159,7 +1152,7 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
     sal_uInt8 nGreen = sal_uInt8((nColor & 0xFF00) >> 8);
     sal_uInt8 nBlue = sal_uInt8((nColor & 0xFF));
     sal_uInt8 nAlpha = sal_uInt8((nColor & 0xFF000000) >> 24);
-    return glm::vec4(nRed/255.0, nGreen/255.0, nBlue/255.0, (0xFF - nAlpha)/255.0);
+    return glm::vec4(nRed/255.0, nGreen/255.0, nBlue/255.0, nAlpha/255.0);
 }
 
 }
@@ -1172,16 +1165,12 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const glm::mat4& modelMatrix, sal_uIn
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(cubeVertices); i += 3)
     {
-        glm::vec4 aPos(cubeVertices[i], cubeVertices[i+1], cubeVertices[i+2], 1.0);
-        SAL_INFO("chart2.3dopengl", aPos);
-        glm::vec4 aWorldPos = modelMatrix * aPos;
-        SAL_INFO("chart2.3dopengl", aWorldPos);
+        glm::vec4 aPos(cubeVertices[i*3], cubeVertices[i*3+1], cubeVertices[i*3+2], 1.0);
         glm::vec4 aNewPos = aMVP * aPos;
         SAL_INFO("chart2.3dopengl", aNewPos);
     }
 
     glm::vec4 aColor = getColorAsVector(nColor);
-    SAL_INFO("chart2.3dopengl", "Color: " << aColor);
     glUseProgram(m_CommonProID);
     //fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
