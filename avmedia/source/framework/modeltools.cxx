@@ -19,10 +19,17 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/localfilehelper.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
+
+#ifdef ENABLE_GLTF
+#include <COLLADA2GLTFWriter.h>
+#include <GLTFAsset.h>
+#endif
 
 #include <string>
 #include <vector>
@@ -109,6 +116,9 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
     for( std::vector<std::string>::iterator aCIter = vExternals.begin(); aCIter != vExternals.end(); ++aCIter )
     {
         const OUString sAbsURL = INetURLObject::GetAbsURL(rSourceURL,OUString::createFromAscii(aCIter->c_str()));
+        // FIXME .png file does not exist when we use collada2gltf to convert .dae -> .json
+        if (sAbsURL.endsWith(".png"))
+            continue;
 
         ::ucbhelper::Content aContent(sAbsURL,
                 uno::Reference<ucb::XCommandEnvironment>(),
@@ -130,9 +140,28 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
 bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
         const OUString& rSourceURL, OUString& o_rEmbeddedURL)
 {
+    OUString sSource = rSourceURL;
+#ifdef ENABLE_GLTF
+    if (rSourceURL.endsWith("dae"))
+    {
+        OUString sName = ::utl::TempFile::CreateTempName();
+        // replace .tmp extension with .json
+        sName = sName.copy(0, sName.getLength() - 4) + ".json";
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sName, sSource);
+        const INetURLObject aSourceURLObj(rSourceURL);
+        std::string sSourcePath = OUStringToOString( aSourceURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
+
+        std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
+        asset->setInputFilePath(sSourcePath);
+        asset->setOutputFilePath(OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr());
+        GLTF::COLLADA2GLTFWriter writer(asset);
+        writer.write();
+    }
+#endif
+
     try
     {
-        ::ucbhelper::Content aSourceContent(rSourceURL,
+        ::ucbhelper::Content aSourceContent(sSource,
                 uno::Reference<ucb::XCommandEnvironment>(),
                 comphelper::getProcessComponentContext());
 
@@ -148,13 +177,13 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
             xStorage->openStorageElement(sModel, embed::ElementModes::WRITE));
 
         // Own storage of the corresponding model
-        const OUString sFilename(GetFilename(rSourceURL));
+        const OUString sFilename(GetFilename(sSource));
         const OUString sGLTFDir(sFilename.copy(0,sFilename.lastIndexOf('.')));
         uno::Reference<embed::XStorage> const xSubStorage(
             xModelStorage->openStorageElement(sGLTFDir, embed::ElementModes::WRITE));
 
         // Embed external resources
-        lcl_EmbedExternals(rSourceURL, xSubStorage, aSourceContent);
+        lcl_EmbedExternals(sSource, xSubStorage, aSourceContent);
 
         // Save model file (.json)
         uno::Reference<io::XStream> const xStream(
