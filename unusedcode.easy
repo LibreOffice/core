@@ -2,9 +2,7 @@ BigInt::BigInt(unsigned int)
 CPhysicalCamera::CPhysicalCamera()
 CPhysicalCamera::GetAngleY()
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
-ConfigurationAccess::getPath(rtl::OUString const&)
 DocumentHandler::DocumentHandler(com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>&)
-DocxSdrExport::setFrameBtLr(bool)
 EditEngine::IsIdleFormatterActive() const
 FPSCounter::getGPUTime()
 FPSCounter::gpuAccumulationTimeclear()
@@ -43,27 +41,17 @@ RenderScene::loadScene(std::basic_string<char, std::char_traits<char>, std::allo
 RenderScene::renderMoveCamera(double, double, double, double)
 RenderScene::renderRotateCamera(double, double, double, double)
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
-ScBitMaskCompressedArray<int, unsigned char>::GetFirstForCondition(int, int, unsigned char const&, unsigned char const&) const
 ScDocument::CreateFormatTable() const
-ScDocument::GetRowFlagsArray(short) const
 ScExtIButton::GetSelected() const
 ScFormulaCellGroup::scheduleCompilation()
 ScTabView::DrawMarkRect(Rectangle const&)
 ScTabViewShell::SetChartArea(tools::SvRef<ScRangeList> const&, Rectangle const&)
-ScTable::GetCellTextAttr(short, int) const
-ScTable::TransferCellValuesFrom(short, int, sc::CellValues&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()
 SdrItemBrowser::SdrItemBrowser(SdrView&)
-SdrTextObj::NbcSetAutoGrowHeight(bool)
-SdrTextObj::NbcSetAutoGrowWidth(bool)
-SdrTextObj::NbcSetFitToSize(SdrFitToSizeType)
-SdrTextObj::NbcSetMaxTextFrameHeight(long)
-SdrTextObj::NbcSetMaxTextFrameWidth(long)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxInt64Item::SetValue(long)
-SfxVisibilityItem::GetValueCount() const
 ShaderProgram::createProgram(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 ShaderProgram::setUniform(unsigned int, char const*, float)
 ShaderProgram::setUniform(unsigned int, char const*, glm::detail::tvec2<float>)
@@ -84,7 +72,6 @@ SvtLanguageTable::AddLanguageTag(LanguageTag const&, rtl::OUString const&)
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxDummyShapeContainer::SvxDummyShapeContainer(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>)
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
-SvxUnoTextBase::SvxUnoTextBase()
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)
 SwAccessibleMap::FireColumnChangeEvent(unsigned short, unsigned short)
 SwAccessibleMap::FirePageChangeEvent(unsigned short, unsigned short)

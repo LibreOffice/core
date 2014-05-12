@@ -162,28 +162,6 @@ ConfigurationAccess::~ConfigurationAccess()
 {
 }
 
-OUString ConfigurationAccess::getPath( OUString const & token )
-{
-    OUString aPath;
-    try
-    {
-        static const OUString sProtocol( "vnd.sun.star.expand:" );
-        Reference< container::XNameAccess > xSet( OpenConfiguration( true ), UNO_QUERY_THROW );
-        if ( xSet->hasByName( token ) )
-            xSet->getByName( token ) >>= aPath;
-        if ( aPath.match( sProtocol, 0 ) )
-        {
-            OUString aTmp( aPath.copy( 20 ) );
-            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxContext);
-            aPath = xExpander->expandMacros( aTmp );
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-    return aPath;
-}
-
 OUString ConfigurationAccess::getString( const PPPOptimizerTokenEnum eToken ) const
 {
     std::map< PPPOptimizerTokenEnum, OUString, Compare >::const_iterator aIter( maStrings.find( eToken ) );

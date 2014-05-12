@@ -44,7 +44,6 @@ private:
 
 protected:
 public:
-    FillAttributes();
     FillAttributes(const Color& rColor);
     FillAttributes(const SfxItemSet& rSet);
     ~FillAttributes();
@@ -55,7 +54,6 @@ public:
     bool isTransparent() const;
 
     const drawinglayer::attribute::SdrFillAttribute& getFillAttribute() const;
-    const drawinglayer::attribute::FillGradientAttribute& getFillGradientAttribute() const;
     const drawinglayer::primitive2d::Primitive2DSequence& getPrimitive2DSequence(
         const basegfx::B2DRange& rPaintRange,
         const basegfx::B2DRange& rDefineRange) const;

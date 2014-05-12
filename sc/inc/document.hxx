@@ -1541,8 +1541,6 @@ public:
     SC_DLLPUBLIC sal_uInt8          GetColFlags( SCCOL nCol, SCTAB nTab ) const;
     SC_DLLPUBLIC sal_uInt8          GetRowFlags( SCROW nRow, SCTAB nTab ) const;
 
-    SC_DLLPUBLIC const ScBitMaskCompressedArray< SCROW, sal_uInt8> & GetRowFlagsArray( SCTAB nTab ) const;
-
     SC_DLLPUBLIC void           GetAllRowBreaks(::std::set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
     SC_DLLPUBLIC void           GetAllColBreaks(::std::set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
     SC_DLLPUBLIC ScBreakType    HasRowBreak(SCROW nRow, SCTAB nTab) const;

@@ -391,7 +391,6 @@ class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
 
-    SvxUnoTextBase( ) throw();
     SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
     SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();

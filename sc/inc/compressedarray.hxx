@@ -171,14 +171,6 @@ public:
                                     A nStart, A nEnd, const D& rValueToAnd,
                                     long nSourceDy = 0 );
 
-    /** Return the first row where an entry meets the condition:
-        ((aValue & rBitMask) == rMaskedCompare), searching between nStart and
-        nEnd. If no entry meets this condition, ::std::numeric_limits<A>::max()
-        is returned. */
-    SC_DLLPUBLIC A                           GetFirstForCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
     /** Return the last row where an entry meets the condition:
         ((aValue & rBitMask) != 0), start searching at nStart. If no entry
         meets this condition, ::std::numeric_limits<A>::max() is returned. */

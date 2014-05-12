@@ -401,25 +401,6 @@ void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
 }
 
 template< typename A, typename D >
-A ScBitMaskCompressedArray<A,D>::GetFirstForCondition( A nStart, A nEnd,
-        const D& rBitMask, const D& rMaskedCompare ) const
-{
-    size_t nIndex = this->Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
-        {
-            A nFound = nIndex > 0 ? this->pData[nIndex-1].nEnd + 1 : 0;
-            return ::std::max( nFound, nStart);
-        }
-        if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
-        ++nIndex;
-    } while (nIndex < this->nCount);
-    return ::std::numeric_limits<A>::max();
-}
-
-template< typename A, typename D >
 A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
         const D& rBitMask ) const
 {

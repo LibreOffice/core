@@ -544,26 +544,6 @@ bool SdrTextObj::NbcSetEckenradius(long nRad)
     return true;
 }
 
-bool SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextAutoGrowHeightItem(bAuto));
-        return true;
-    }
-    return false;
-}
-
-bool SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextMaxFrameHeightItem(nHgt));
-        return true;
-    }
-    return false;
-}
-
 // #115391# This implementation is based on the object size (aRect) and the
 // states of IsAutoGrowWidth/Height to correctly set TextMinFrameWidth/Height
 void SdrTextObj::AdaptTextMinSize()
@@ -613,36 +593,6 @@ void SdrTextObj::AdaptTextMinSize()
             NbcAdjustTextFrameWidthAndHeight();
         }
     }
-}
-
-bool SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextAutoGrowWidthItem(bAuto));
-        return true;
-    }
-    return false;
-}
-
-bool SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextMaxFrameWidthItem(nWdt));
-        return true;
-    }
-    return false;
-}
-
-bool SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
-{
-    if(bTextFrame)
-    {
-        SetObjectItem(SdrTextFitToSizeTypeItem(eFit));
-        return true;
-    }
-    return false;
 }
 
 void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const

@@ -1658,12 +1658,6 @@ OUString SAL_CALL SvxUnoTextRange::getImplementationName()
 // class SvxUnoText
 
 
-SvxUnoTextBase::SvxUnoTextBase() throw()
-: SvxUnoTextRangeBase( NULL )
-{
-
-}
-
 SvxUnoTextBase::SvxUnoTextBase( const SvxItemPropertySet* _pSet  ) throw()
 : SvxUnoTextRangeBase( _pSet )
 {
