@@ -437,6 +437,14 @@ SwRect SwTxtFrm::Paint()
         pRepaint->SetOfst( 0 );
         aRet = *pRepaint;
 
+        // In case our left edge is the same as the body frame's left edge,
+        // then extend the rectangle to include the page margin as well,
+        // otherwise some font will be clipped.
+        SwLayoutFrm* pBodyFrm = GetUpper();
+        if (pBodyFrm->IsBodyFrm() && aRet.Left() == (pBodyFrm->Frm().Left() + pBodyFrm->Prt().Left()))
+            if (SwLayoutFrm* pPageFrm = pBodyFrm->GetUpper())
+                aRet.Left(pPageFrm->Frm().Left());
+
         if ( IsRightToLeft() )
             SwitchLTRtoRTL( aRet );
 
