@@ -1,0 +1,20 @@
+diff --git libgltf/src/LoadScene.h libgltf/src/LoadScene.h
+index a5b854f..893424b 100644
+--- libgltf/src/LoadScene.h
++++ libgltf/src/LoadScene.h
+@@ -7,7 +7,7 @@
+  */
+ #ifndef LOADSCENE_H
+ #define LOADSCENE_H
+-#define CALC_PARSEING_TIME 1
++#define CALC_PARSEING_TIME 0
+ #include <string>
+ #include <vector>
+ #include <boost/foreach.hpp>
+@@ -78,4 +78,4 @@ private:
+ #endif
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
