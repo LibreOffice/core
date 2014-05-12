@@ -677,7 +677,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     }
 
     HINSTANCE hInstance = GetModuleHandle( FILE_PICKER_DLL_NAME );
-    SAL_WARN_IF( !hInstance, "fpicker", The name of the service dll must have changed" );
+    SAL_WARN_IF( !hInstance, "fpicker", "The name of the service dll must have changed" );
 
     // create a new impl-class here based on the
     // given string, if the given string is empty
