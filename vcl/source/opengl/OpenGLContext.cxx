@@ -525,7 +525,9 @@ bool OpenGLContext::ImplInit()
 
 #ifdef DBG_UTIL
     // only enable debug output in dbgutil build
-    if( GLEW_ARB_debug_output )
+    // somehow there are implementations where the feature is present and the function
+    // pointer is still NULL
+    if( GLEW_ARB_debug_output && glDebugMessageCallback )
     {
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(&debug_callback, NULL);
