@@ -139,6 +139,8 @@ namespace {
     };
 }
 
+#if !defined(DICT_JA_ZH_IN_DATAFILE) && !defined(DISABLE_DYNLOADING)
+
 void xdictionary::initDictionaryData(const sal_Char *pLang)
 {
     // Global cache, never released for performance
@@ -183,6 +185,8 @@ void xdictionary::initDictionaryData(const sal_Char *pLang)
     data = aEntry.maData;
     aLoadedCache.push_back( aEntry );
 }
+
+#endif
 
 void xdictionary::setJapaneseWordBreak()
 {
