@@ -1,3 +1,15 @@
+diff -ur libgltf/inc/libgltf.h libgltf/inc/libgltf.h
+--- libgltf/inc/libgltf.h	2014-05-05 14:26:11.911346850 +0200
++++ libgltf/inc/libgltf.h	2014-05-05 14:27:07.295349212 +0200
+@@ -9,7 +9,7 @@
+ #define LIBGLTF_H
+ #include <stddef.h>
+ #include "types.h"
+-#include <glew/glew.h>
++#include <GL/glew.h>
+ #include <glm/glm.hpp>
+ using namespace glTF;
+ 
 diff -ur libgltf.org/src/Camera.h libgltf/src/Camera.h
 --- libgltf.org/src/Camera.h	2014-05-05 14:26:11.911346850 +0200
 +++ libgltf/src/Camera.h	2014-05-05 14:27:07.295349212 +0200
@@ -10,13 +22,6 @@ diff -ur libgltf.org/src/Camera.h libgltf/src/Camera.h
  #include <glm/glm.hpp>
  
  class CPhysicalCamera
-@@ -45,4 +45,4 @@
-     int iForw, iBack, iLeft, iRight;
- };
- 
--#endif
-\ No newline at end of file
-+#endif
 diff -ur libgltf.org/src/Common.h libgltf/src/Common.h
 --- libgltf.org/src/Common.h	2014-05-05 14:26:11.911346850 +0200
 +++ libgltf/src/Common.h	2014-05-05 14:27:18.927349708 +0200
