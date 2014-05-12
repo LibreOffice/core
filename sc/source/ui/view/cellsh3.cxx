@@ -48,6 +48,8 @@
 #include "sccollaboration.hxx"
 #endif
 
+#include <boost/scoped_ptr.hpp>
+
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
 using sc::HMMToTwips;
@@ -323,15 +325,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // set cell attribute without dialog:
 
-                    SfxItemSet*     pEmptySet =
+                    boost::scoped_ptr<SfxItemSet> pEmptySet(
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END );
+                                                        ATTR_PATTERN_END ));
 
-                    SfxItemSet*     pNewSet =
+                    boost::scoped_ptr<SfxItemSet> pNewSet(
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END );
+                                                        ATTR_PATTERN_END ));
 
                     const SfxPoolItem*  pAttr = NULL;
                     sal_uInt16              nWhich = 0;
@@ -340,10 +342,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         if ( pReqArgs->GetItemState( nWhich, true, &pAttr ) == SFX_ITEM_SET )
                             pNewSet->Put( *pAttr );
 
-                    pTabViewShell->ApplyAttributes( pNewSet, pEmptySet );
+                    pTabViewShell->ApplyAttributes( pNewSet.get(), pEmptySet.get() );
 
-                    delete pNewSet;
-                    delete pEmptySet;
+                    pNewSet.reset();
+                    pEmptySet.reset();
 
                     rReq.Done();
                 }
@@ -491,7 +493,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                            AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg(pTabViewShell->GetDialogParent(), aName, false, bSheetProtected);
+                            boost::scoped_ptr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetDialogParent(), aName, false, bSheetProtected));
                             OSL_ENSURE(pNewDlg, "Dialog create fail!");
                             if ( pNewDlg->Execute() == RET_OK )
                             {
@@ -502,7 +504,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                 rReq.AppendItem( SfxStringItem( SID_NEW_TABLENAME, aComment ) );
                                 rReq.Done();
                             }
-                            delete pNewDlg;
                         }
                     }
                     else if( ! rReq.IsAPI() )
@@ -543,10 +544,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
-                        eMetric, 2, MAX_ROW_HEIGHT);
+                        eMetric, 2, MAX_ROW_HEIGHT));
                     assert(pDlg); //Dialog create fail
 
                     if ( pDlg->Execute() == RET_OK )
@@ -559,7 +560,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         rReq.Done();
 
                     }
-                    delete pDlg;
                 }
             }
             break;
@@ -585,9 +585,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "OptimalRowHeightDialog",
-                        ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT);
+                        ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT));
                     assert(pDlg); //Dialog create fail!
 
                     if ( pDlg->Execute() == RET_OK )
@@ -601,7 +601,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         rReq.Done();
 
                     }
-                    delete pDlg;
                 }
             }
             break;
@@ -628,9 +627,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "ColWidthDialog", nCurHeight,
-                        STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH);
+                        STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
                     assert(pDlg); //Dialog create fail!
 
                     if ( pDlg->Execute() == RET_OK )
@@ -643,7 +642,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         rReq.Done();
 
                     }
-                    delete pDlg;
                 }
             }
             break;
@@ -669,9 +667,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "OptimalColWidthDialog",
-                        ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH);
+                        ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH));
                     assert(pDlg); //Dialog create fail!
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -683,7 +681,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         rReq.AppendItem( SfxUInt16Item( FID_COL_OPT_WIDTH, (sal_uInt16)TwipsToEvenHMM(nVal) ) );
                         rReq.Done();
                     }
-                    delete pDlg;
                 }
             }
             break;
@@ -818,11 +815,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     else
                     {
                         ScGlobal::ClearAutoFormat();
-                        ScAutoFormatData* pNewEntry = pTabViewShell->CreateAutoFormatData();
+                        boost::scoped_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        AbstractScAutoFormatDlg* pDlg = pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry, GetViewData());
+                        boost::scoped_ptr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
@@ -840,8 +837,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                 rReq.Done();
                             }
                         }
-                        delete pDlg;
-                        delete pNewEntry;
                     }
                 }
                 else

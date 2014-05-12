@@ -75,6 +75,7 @@
 
 #include "scui_def.hxx"
 #include "scabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -413,17 +414,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell(), false );
+                boost::scoped_ptr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pViewData->GetDocShell(), false ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())
-                {
-                    delete pDlg;
                     return;
-                }
 
                 if ( nRet == BTN_PASTE_NAME )
                 {
@@ -441,7 +439,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->InsertText(aBuffer.makeStringAndClear());
                     }
                 }
-                delete pDlg;
+                pDlg.reset();
 
                 if (pTopView)
                     pTopView->GetWindow()->GrabFocus();
@@ -458,8 +456,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(
-                    pViewData->GetDialogParent(), &aAttrs, pObjSh);
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
+                    pViewData->GetDialogParent(), &aAttrs, pObjSh));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
@@ -470,17 +468,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())
-                {
-                    delete pDlg;
                     return;
-                }
 
                 if ( nRet == RET_OK )
                 {
                     const SfxItemSet* pOut = pDlg->GetOutputItemSet();
                     pTableView->SetAttribs( *pOut );
                 }
-                delete pDlg;
             }
             break;
 

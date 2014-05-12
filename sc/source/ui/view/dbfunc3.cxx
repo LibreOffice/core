@@ -1846,10 +1846,10 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 
                 // apply changes
                 ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-                ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+                boost::scoped_ptr<ScDPObject> pNewObj(new ScDPObject( *pDPObj ));
                 pNewObj->SetSaveData( aData );
-                aFunc.DataPilotUpdate( pDPObj, pNewObj, true, false );      //! bApi for drag&drop?
-                delete pNewObj;
+                aFunc.DataPilotUpdate( pDPObj, pNewObj.get(), true, false );      //! bApi for drag&drop?
+                pNewObj.reset();
 
                 Unmark();       // entry was moved - no use in leaving the old cell selected
 
@@ -1975,10 +1975,10 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
 
                 // apply changes
                 ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-                ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+                boost::scoped_ptr<ScDPObject> pNewObj(new ScDPObject( *pDPObj ));
                 pNewObj->SetSaveData( aData );
-                aFunc.DataPilotUpdate( pDPObj, pNewObj, true, false );
-                delete pNewObj;
+                aFunc.DataPilotUpdate( pDPObj, pNewObj.get(), true, false );
+                pNewObj.reset();
 
                 // unmark cell selection
                 Unmark();

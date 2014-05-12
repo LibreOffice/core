@@ -64,6 +64,8 @@
 
 #include <config_orcus.h>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
 
 static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
@@ -158,7 +160,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        AbstractScSortWarningDlg* pWarningDlg = pFact->CreateScSortWarningDlg( pTabViewShell->GetDialogParent(), aExtendStr, aCurrentStr );
+        boost::scoped_ptr<AbstractScSortWarningDlg> pWarningDlg(pFact->CreateScSortWarningDlg( pTabViewShell->GetDialogParent(), aExtendStr, aCurrentStr ));
         OSL_ENSURE(pWarningDlg, "Dialog create fail!");
         short bResult = pWarningDlg->Execute();
         if( bResult == BTN_EXTEND_RANGE || bResult == BTN_CURRENT_SELECTION )
@@ -175,7 +177,6 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
             pData->GetDocShell()->CancelAutoDBRange();
         }
 
-        delete pWarningDlg;
         pTabViewShell->ClearHighlightRanges();
     }
     return bSort;
@@ -467,7 +468,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if( lcl_GetSortParam( pData, aSortParam ) )
                     {
-                        SfxAbstractTabDialog* pDlg = NULL;
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
 
@@ -481,7 +481,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         assert(pFact); //ScAbstractFactory create fail!
 
-                        pDlg = pFact->CreateScSortDlg(pTabViewShell->GetDialogParent(),  &aArgSet);
+                        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScSortDlg(pTabViewShell->GetDialogParent(),  &aArgSet));
                         assert(pDlg); //Dialog create fail!
                         pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
 
@@ -536,8 +536,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         }
                         else
                             GetViewData()->GetDocShell()->CancelAutoDBRange();
-
-                        delete pDlg;
                     }
                 }
             }
@@ -724,8 +722,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        AbstractScSelEntryDlg* pDlg = pFact->CreateScSelEntryDlg( pTabViewShell->GetDialogParent(),
-                                                                                aList );
+                        boost::scoped_ptr<AbstractScSelEntryDlg> pDlg(pFact->CreateScSelEntryDlg( pTabViewShell->GetDialogParent(),
+                                                                                                  aList ));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -734,8 +732,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             rReq.AppendItem( SfxStringItem( SID_SELECT_DB, aName ) );
                             rReq.Done();
                         }
-
-                        delete pDlg;
                     }
                 }
             }
@@ -964,8 +960,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
-                    AbstractScImportAsciiDlg *pDlg = pFact->CreateScImportAsciiDlg(
-                        NULL, OUString(), &aStream, SC_TEXTTOCOLUMNS);
+                    boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
+                        NULL, OUString(), &aStream, SC_TEXTTOCOLUMNS));
                     OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
 
                     if ( pDlg->Execute() == RET_OK )
@@ -987,7 +983,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         pDocSh->GetUndoManager()->LeaveListAction();
                     }
-                    delete pDlg;
                 }
             }
             break;
