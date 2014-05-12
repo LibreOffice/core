@@ -1732,7 +1732,8 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 IMPL_LINK_NOARG_INLINE_START(SwInsertSectionTabPage, NameEditHdl)
 {
     const OUString aName = m_pCurName->GetText();
-    GetTabDialog()->GetOKButton().Enable(!aName.isEmpty() && m_pCurName->GetEntryPos( aName ) == USHRT_MAX);
+    GetTabDialog()->GetOKButton().Enable(!aName.isEmpty() &&
+            m_pCurName->GetEntryPos( aName ) == LISTBOX_ENTRY_NOTFOUND);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwInsertSectionTabPage, NameEditHdl)
