@@ -39,7 +39,7 @@ class ResMgr;
 #define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_QuickTime"
 #define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED            sal_False
 
-#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1           ""
+#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1           "com.sun.star.comp.avmedia.Manager_MacAVF"
 #define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1  sal_False
 
 #else
