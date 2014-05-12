@@ -86,43 +86,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star;
 
-/**
- * @brief
- * Implements the XFilter interface.
- * This is not the entry for the filter, but a proto of LwpFilterImportFilter.
- */
-class LWPFilterReader : public WeakImplHelper1< XFilter >
-{
-public:
-    LWPFilterReader();
-    virtual ~LWPFilterReader();
-
-public:
-    /**
-     * @descr   loading the file. It's call be SfxObejctShell::ImportFrom.
-     * @param   aDescriptor the parameters include file URL or XInputStream object, from which the filter can
-     *          get which file to import.
-     */
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
-        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    /**
-     * @descr   stop loading the file.
-     */
-    virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    /**
-     * @descr   get the XDocumentHandler interface.
-     */
-    void setDocumentHandler( uno::Reference< XDocumentHandler >& xHandler )
-    {
-        m_DocumentHandler = xHandler;
-    }
-
-private:
-    uno::Reference< XDocumentHandler > m_DocumentHandler;
-};
-
 //test code
 int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& XDoc);
 

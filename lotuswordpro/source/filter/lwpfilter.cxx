@@ -59,12 +59,9 @@
  ************************************************************************/
 #include "lwpfilter.hxx"
 #include "lwpresource.hxx"
-//for sax stream
 #include "xfilter/xfsaxstream.hxx"
-//for file parser
 #include "lwp9reader.hxx"
 #include "lwpsvstream.hxx"
-//for container reset
 #include "xfilter/xffontfactory.hxx"
 #include "xfilter/xfstylemanager.hxx"
 
@@ -80,7 +77,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-#include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <boost/scoped_ptr.hpp>
@@ -96,36 +92,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
-
-LWPFilterReader::LWPFilterReader()
-{
-}
-
-LWPFilterReader::~LWPFilterReader()
-{
-}
-
-sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
-    throw( RuntimeException, std::exception )
-{
-    OUString sURL;
-    for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
-    {
-        //Note we should attempt to use "InputStream" if it exists first!
-        if ( aDescriptor[i].Name == "URL" )
-            aDescriptor[i].Value >>= sURL;
-    }
-
-    SvFileStream inputStream( sURL, STREAM_READ );
-    if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
-        return sal_False;
-
-    return (ReadWordproFile(inputStream, m_DocumentHandler) == 0);
-}
-
-void LWPFilterReader::cancel() throw (com::sun::star::uno::RuntimeException, std::exception)
-{
-}
 
  /**
  * @descr   decompressed small file
