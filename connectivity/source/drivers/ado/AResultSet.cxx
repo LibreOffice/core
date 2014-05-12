@@ -1058,12 +1058,20 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
 
-    //  DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
-    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-    DECL_PROP0(FETCHSIZE,               sal_Int32);
-    DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+        PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
+
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+        PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
+
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+        PROPERTY_ID_ISBOOKMARKABLE, ::getBooleanCppuType(), PropertyAttribute::READONLY);
+
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+        PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
+
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+        PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
