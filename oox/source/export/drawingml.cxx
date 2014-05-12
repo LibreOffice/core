@@ -181,7 +181,7 @@ void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
     }
 }
 
-void DrawingML::WriteColor( const OUString& sColorSchemeName, Sequence< PropertyValue > aTransformations )
+void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< PropertyValue >& aTransformations )
 {
     // prevent writing a tag with empty val attribute
     if( sColorSchemeName.isEmpty() )
@@ -201,7 +201,7 @@ void DrawingML::WriteColor( const OUString& sColorSchemeName, Sequence< Property
                               FSEND );
 }
 
-void DrawingML::WriteColorTransformations( Sequence< PropertyValue > aTransformations )
+void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTransformations )
 {
     for( sal_Int32 i = 0; i < aTransformations.getLength(); i++ )
     {

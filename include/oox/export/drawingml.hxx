@@ -123,8 +123,8 @@ public:
     OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false);
 
     void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteColor( const OUString& sColorSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
-    void WriteColorTransformations( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
+    void WriteColor( const OUString& sColorSchemeName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aTransformations );
+    void WriteColorTransformations( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aTransformations );
     void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
     void WriteLineArrow( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
