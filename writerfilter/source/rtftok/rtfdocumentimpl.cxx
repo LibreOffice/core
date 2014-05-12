@@ -59,8 +59,6 @@
 
 #define MM100_TO_EMU(MM100)     (MM100 * 360)
 
-using std::make_pair;
-
 namespace writerfilter
 {
 namespace rtftok
