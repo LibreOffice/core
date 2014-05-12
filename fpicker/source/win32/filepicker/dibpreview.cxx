@@ -403,6 +403,7 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
             SAL_WARN("fpicker", "Could not register preview window class");
             throw std::runtime_error("Preview window class could not be registered");
         }
+    }
 
     // increment the register class counter
     // so that we keep track of the number
