@@ -19,10 +19,17 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/localfilehelper.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
+
+#ifdef ENABLE_COLLADA2GLTF
+#include <COLLADA2GLTFWriter.h>
+#include <GLTFAsset.h>
+#endif
 
 #include <string>
 #include <vector>
@@ -130,9 +137,29 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
 bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
         const OUString& rSourceURL, OUString& o_rEmbeddedURL)
 {
+    OUString sSource = rSourceURL;
+#ifdef ENABLE_COLLADA2GLTF
+    if (rSourceURL.endsWith("dae"))
+    {
+        OUString sName = ::utl::TempFile::CreateTempName();
+        // remove .tmp extension
+        sName = sName.copy(0, sName.getLength() - 4);
+        const INetURLObject aSourceURLObj(rSourceURL);
+        std::string sSourcePath = OUStringToOString( aSourceURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
+
+        std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
+        asset->setInputFilePath(sSourcePath);
+        asset->setBundleOutputPath(OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr());
+        GLTF::COLLADA2GLTFWriter writer(asset);
+        writer.write();
+        // Path to the .json file created by COLLADA2GLTFWriter
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sName + "/" + GetFilename(sName) + ".json", sSource);
+    }
+#endif
+
     try
     {
-        ::ucbhelper::Content aSourceContent(rSourceURL,
+        ::ucbhelper::Content aSourceContent(sSource,
                 uno::Reference<ucb::XCommandEnvironment>(),
                 comphelper::getProcessComponentContext());
 
@@ -148,13 +175,13 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
             xStorage->openStorageElement(sModel, embed::ElementModes::WRITE));
 
         // Own storage of the corresponding model
-        const OUString sFilename(GetFilename(rSourceURL));
+        const OUString sFilename(GetFilename(sSource));
         const OUString sGLTFDir(sFilename.copy(0,sFilename.lastIndexOf('.')));
         uno::Reference<embed::XStorage> const xSubStorage(
             xModelStorage->openStorageElement(sGLTFDir, embed::ElementModes::WRITE));
 
         // Embed external resources
-        lcl_EmbedExternals(rSourceURL, xSubStorage, aSourceContent);
+        lcl_EmbedExternals(sSource, xSubStorage, aSourceContent);
 
         // Save model file (.json)
         uno::Reference<io::XStream> const xStream(

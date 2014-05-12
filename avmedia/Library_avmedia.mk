@@ -46,6 +46,21 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	$(gb_UWINAPI) \
 ))
 
+ifneq (,$(filter COLLADA2GLTF,$(BUILD_TYPE)))
+$(eval $(call gb_Library_set_warnings_not_errors,avmedia))
+
+$(eval $(call gb_Library_use_externals,avmedia,\
+	collada2gltf \
+	libxml2 \
+	opencollada_parser \
+	png \
+))
+
+$(eval $(call gb_Library_add_defs,avmedia,\
+	-DENABLE_COLLADA2GLTF \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/framework/mediacontrol \
 	avmedia/source/framework/mediaitem \
