@@ -50,7 +50,7 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Edate,            UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
     FUNCDATA( Weeknum,          DOUBLE,     INTPAR,     2,          FDCat_DateTime ),
     FUNCDATA( Eomonth,          UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
-    FUNCDATA( Networkdays,      UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
+    FUNCDATA( Networkdays,      DOUBLE,     INTPAR,     3,          FDCat_DateTime ),
     FUNCDATA( Iseven,           DOUBLE,     STDPAR,     1,          FDCat_Inf ),
     FUNCDATA( Isodd,            DOUBLE,     STDPAR,     1,          FDCat_Inf ),
     FUNCDATA( Multinomial,      UNIQUE,     STDPAR,     1,          FDCat_Math ),
