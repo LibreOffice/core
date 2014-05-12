@@ -66,7 +66,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
                 , m_aTimerTriggeredControllerLock( xChartModel )
                 , m_bCanTravel( true )
 {
-    m_apDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
+    m_pDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
     // Do not call FreeResource(), because there are no sub-elements defined in
     // the dialog resource
     ShowButtonFixedLine( true );
@@ -124,21 +124,20 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
         ChartTypeTabPage* pChartTypeTabPage = new ChartTypeTabPage(this,m_xChartModel,m_xCC,bDoLiveUpdate);
         pRet  = pChartTypeTabPage;
         m_pTemplateProvider = pChartTypeTabPage;
-        if( m_pTemplateProvider &&
-            m_apDialogModel.get() )
-            m_apDialogModel->setTemplate( m_pTemplateProvider->getCurrentTemplate());
+        if (m_pTemplateProvider && m_pDialogModel)
+            m_pDialogModel->setTemplate( m_pTemplateProvider->getCurrentTemplate());
         }
         break;
     case STATE_SIMPLE_RANGE:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        pRet = new RangeChooserTabPage(this,*(m_apDialogModel.get()),m_pTemplateProvider,this);
+        pRet = new RangeChooserTabPage(this, *m_pDialogModel, m_pTemplateProvider, this);
         }
         break;
     case STATE_DATA_SERIES:
         {
         m_aTimerTriggeredControllerLock.startTimer();
-        pRet = new DataSourceTabPage(this,*(m_apDialogModel.get()),m_pTemplateProvider,this);
+        pRet = new DataSourceTabPage(this, *m_pDialogModel, m_pTemplateProvider, this);
         }
         break;
     case STATE_OBJECTS:
