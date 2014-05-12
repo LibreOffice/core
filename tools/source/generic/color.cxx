@@ -232,6 +232,13 @@ SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
     return rOStm;
 }
 
+OUString Color::AsRGBHexString()
+{
+    std::stringstream ss;
+    ss << std::hex << std::setfill ('0') << std::setw(6) << GetRGBColor();
+    return OUString::createFromAscii(ss.str().c_str());
+}
+
 #define COL_NAME_USER       ((sal_uInt16)0x8000)
 
 SvStream& ReadColor( SvStream& rIStream, Color& rColor )

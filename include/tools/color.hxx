@@ -162,6 +162,10 @@ public:
     TOOLS_DLLPUBLIC friend SvStream&    ReadColor( SvStream& rIStream, Color& rColor );
     TOOLS_DLLPUBLIC friend SvStream&    WriteColor( SvStream& rOStream, const Color& rColor );
 
+    // Return color as RGB hex string
+    // for example "00ff00" for green color
+    OUString AsRGBHexString();
+
     // get ::basegfx::BColor from this color
     ::basegfx::BColor getBColor() const { return ::basegfx::BColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0); }
 };
