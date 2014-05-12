@@ -10,15 +10,14 @@ diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
  {
      if (0 == pBone)
      {
-diff -ur libgltf.org/src/RenderScene.h libgltf/src/RenderScene.h
---- libgltf.org/src/RenderScene.h	2014-05-05 14:45:21.447395883 +0200
-+++ libgltf/src/RenderScene.h	2014-05-05 14:47:48.111402138 +0200
-@@ -170,7 +170,7 @@
-     void renderPrimitive(class RenderPrimitive* pPrimitive);
- 
+--- libgltf.orig/src/RenderScene.h	2014-05-12 09:37:18.241883560 +0200
++++ libgltf/src/RenderScene.h	2014-05-12 10:17:43.866897421 +0200
+@@ -159,7 +159,7 @@ private:
+                          unsigned int progId);
+     void renderShader(Technique* pTechnique);
      void updateJointInfo(Bone* pBone);
 -    void updateBoneMatrix(Bone* pBone, glm::mat4& matrix);
 +    void updateBoneMatrix(Bone* pBone, const glm::mat4& matrix);
- 
      glm::mat4* calcProjectionMatrix();
      glm::vec3* calcLightColor();
+     bool loadFPSShader();

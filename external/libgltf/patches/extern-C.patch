@@ -1,20 +1,33 @@
+diff --git libgltf/inc/libgltf.h libgltf/inc/libgltf.h
 --- libgltf/inc/libgltf.h
 +++ libgltf/inc/libgltf.h
-@@ -48,7 +48,6 @@
- void gltf_get_camera_pos(glm::vec3 *pos,glm::vec3 *view,glm::vec3 *up);
+@@ -44,12 +44,11 @@ extern "C"
+ void gltf_renderer_release(glTFHandle* handle);
+ 
+ /*get camera position information*/
+-extern "C"
+ void gltf_get_camera_pos(glm::vec3* pos, glm::vec3* view, glm::vec3* up);
  
  /*get model center position information*/
 -extern "C"
- glm::vec3 gltf_get_model_center_pos();
+ glm::vec3* gltf_get_model_center_pos();
++
  /*get camera position information*/
  extern "C"
+ double gltf_get_model_size();
 --- libgltf/src/libgltf.cpp
 +++ libgltf/src/libgltf.cpp
-@@ -59,7 +59,6 @@
+@@ -58,13 +58,11 @@ void gltf_renderer_release(glTFHandle* handle)
      return;
  }
  
 -extern "C"
-     glm::vec3 gltf_get_model_center_pos()
+ glm::vec3* gltf_get_model_center_pos()
  {
      return cameraScene->getModelCenterPos();
+ }
+ 
+-extern "C"
+ void gltf_get_camera_pos(glm::vec3* pos, glm::vec3* view, glm::vec3* up)
+ {
+     cameraScene->getCameraPos(pos, view, up);
