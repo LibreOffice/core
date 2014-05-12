@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#undef OSL_DEBUG_LEVEL
-
-
-#include <osl/diagnose.h>
-#include <sal/log.hxx>
-
 #include "internal/global.hxx"
 #include "classfactory.hxx"
 #include "internal/infotips.hxx"
@@ -122,7 +116,6 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 
     if (0 == pUnk)
     {
-        SAL_WARN("shell", "Could not create COM object");
         return E_OUTOFMEMORY;
     }
 
