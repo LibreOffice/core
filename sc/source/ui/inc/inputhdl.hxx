@@ -158,6 +158,8 @@ private:
     bool            CursorAtClosingPar();
     void            SkipClosingPar();
     bool            GetFuncName( OUString& aStart, OUString& aResult );  // fdo75264
+    void            ShowArgumentsTip( const OUString& rParagraph, OUString& rSelText, const ESelection& rSel,
+                                      bool bTryFirstSel );
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
     DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent* );

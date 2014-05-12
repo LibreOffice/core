@@ -792,185 +792,185 @@ void ScInputHandler::HideTipBelow()
     aManualTip = OUString();
 }
 
+void ScInputHandler::ShowArgumentsTip( const OUString& rParagraph, OUString& rSelText, const ESelection& rSel,
+        bool bTryFirstSel )
+{
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
+    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
+    FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
+    bool bFound = false;
+    while( !bFound )
+    {
+        rSelText += ")";
+        sal_Int32 nLeftParentPos = lcl_MatchParenthesis( rSelText, rSelText.getLength()-1 );
+        if( nLeftParentPos != -1 )
+        {
+            sal_Int32 nNextFStart = aHelper.GetFunctionStart( rSelText, nLeftParentPos, true);
+            const IFunctionDescription* ppFDesc;
+            ::std::vector< OUString> aArgs;
+            if( aHelper.GetNextFunc( rSelText, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
+            {
+                if( !ppFDesc->getFunctionName().isEmpty() )
+                {
+                    sal_Int32 nArgPos = aHelper.GetArgStart( rSelText, nNextFStart, 0 );
+                    sal_uInt16 nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
+                    OUString aFuncName( ppFDesc->getFunctionName() + "(");
+                    OUString aNew;
+                    ScTypedCaseStrSet::const_iterator it =
+                        findText(*pFormulaDataPara, pFormulaDataPara->end(), aFuncName, aNew, false);
+                    if (it != pFormulaDataPara->end())
+                    {
+                        bool bFlag = false;
+                        sal_uInt16 nActive = 0;
+                        for( sal_uInt16 i=0; i < nArgs; i++ )
+                        {
+                            sal_Int32 nLength = aArgs[i].getLength();
+                            if( nArgPos <= rSelText.getLength()-1 )
+                            {
+                                nActive = i+1;
+                                bFlag = true;
+                            }
+                            nArgPos+=nLength+1;
+                        }
+                        if( bFlag )
+                        {
+                            sal_Int32 nCountSemicolon = comphelper::string::getTokenCount(aNew, cSep) - 1;
+                            sal_Int32 nCountDot = comphelper::string::getTokenCount(aNew, cSheetSep) - 1;
+                            sal_Int32 nStartPosition = 0;
+                            sal_Int32 nEndPosition = 0;
+
+                            if( !nCountSemicolon )
+                            {
+                                for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
+                                {
+                                    sal_Unicode cNext = aNew[i];
+                                    if( cNext == '(' )
+                                    {
+                                        nStartPosition = i+1;
+                                    }
+                                }
+                            }
+                            else if( !nCountDot )
+                            {
+                                sal_uInt16 nCount = 0;
+                                for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
+                                {
+                                    sal_Unicode cNext = aNew[i];
+                                    if( cNext == '(' )
+                                    {
+                                        nStartPosition = i+1;
+                                    }
+                                    else if( cNext == cSep )
+                                    {
+                                        nCount ++;
+                                        nEndPosition = i;
+                                        if( nCount == nActive )
+                                        {
+                                            break;
+                                        }
+                                        nStartPosition = nEndPosition+1;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                sal_uInt16 nCount = 0;
+                                for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
+                                {
+                                    sal_Unicode cNext = aNew[i];
+                                    if( cNext == '(' )
+                                    {
+                                        nStartPosition = i+1;
+                                    }
+                                    else if( cNext == cSep )
+                                    {
+                                        nCount ++;
+                                        nEndPosition = i;
+                                        if( nCount == nActive )
+                                        {
+                                            break;
+                                        }
+                                        nStartPosition = nEndPosition+1;
+                                    }
+                                    else if( cNext == cSheetSep )
+                                    {
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            if (nStartPosition > 0)
+                            {
+                                OUStringBuffer aBuf;
+                                aBuf.append(aNew.copy(0, nStartPosition));
+                                aBuf.append(static_cast<sal_Unicode>(0x25BA));
+                                aBuf.append(aNew.copy(nStartPosition));
+                                aNew = aBuf.makeStringAndClear();
+                                ShowTipBelow( aNew );
+                                bFound = true;
+                            }
+                        }
+                        else
+                        {
+                            ShowTipBelow( aNew );
+                            bFound = true;
+                        }
+                    }
+                }
+            }
+        }
+        else if (bTryFirstSel)
+        {
+            sal_Int32 nPosition = 0;
+            OUString aText = pEngine->GetWord( 0, rSel.nEndPos-1 );
+            /* XXX: dubious, what is this condition supposed to exactly match? */
+            if (rSel.nEndPos <= aText.getLength() && aText[ rSel.nEndPos-1 ] == '=')
+            {
+                break;
+            }
+            OUString aNew;
+            nPosition = aText.getLength()+1;
+            ScTypedCaseStrSet::const_iterator it =
+                findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
+            if (it != pFormulaDataPara->end())
+            {
+                if( nPosition < rParagraph.getLength() && rParagraph[ nPosition ] =='(' )
+                {
+                    ShowTipBelow( aNew );
+                    bFound = true;
+                }
+                else
+                    break;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+}
+
 void ScInputHandler::ShowTipCursor()
 {
     HideTip();
     HideTipBelow();
     EditView* pActiveView = pTopView ? pTopView : pTableView;
-    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
-    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
     {
-        OUString aFormula = pEngine->GetText( 0 );
+        OUString aParagraph = pEngine->GetText( 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
-        if( aSel.nEndPos )
+
+        if ( aParagraph.getLength() < aSel.nEndPos )
+            return;
+
+        if ( aSel.nEndPos > 0 )
         {
-            if ( aFormula.getLength() < aSel.nEndPos )
-                return;
-            sal_Int32 nPos = aSel.nEndPos;
-            OUString  aSelText = aFormula.copy( 0, nPos );
-            sal_Int32   nNextFStart = 0;
-            sal_Int32  nArgPos = 0;
-            const IFunctionDescription* ppFDesc;
-            ::std::vector< OUString> aArgs;
-            sal_uInt16      nArgs;
-            bool bFound = false;
-            FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
+            OUString aSelText( aParagraph.copy( 0, aSel.nEndPos ));
 
-            while( !bFound )
-            {
-                aSelText += ")";
-                sal_Int32 nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.getLength()-1 );
-                if( nLeftParentPos != -1 )
-                {
-                    sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText[ nLeftParentPos-1 ] : 0;
-                    if( !(comphelper::string::isalphaAscii(c)) )
-                        continue;
-                    nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, true);
-                    if( aHelper.GetNextFunc( aSelText, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
-                    {
-                        if( !ppFDesc->getFunctionName().isEmpty() )
-                        {
-                            nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
-                            nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
-
-                            OUString aFuncName = ppFDesc->getFunctionName() + "(";
-                            OUString aNew;
-                            ScTypedCaseStrSet::const_iterator it =
-                                findText(*pFormulaDataPara, pFormulaDataPara->end(), aFuncName, aNew, false);
-                            if (it != pFormulaDataPara->end())
-                            {
-                                bool bFlag = false;
-                                sal_uInt16 nActive = 0;
-                                for( sal_uInt16 i=0; i < nArgs; i++ )
-                                {
-                                    sal_Int32 nLength = aArgs[i].getLength();
-                                    if( nArgPos <= aSelText.getLength()-1 )
-                                    {
-                                        nActive = i+1;
-                                        bFlag = true;
-                                    }
-                                    nArgPos+=nLength+1;
-                                }
-                                if( bFlag )
-                                {
-                                    sal_Int32 nCountSemicolon = comphelper::string::getTokenCount(aNew, cSep) - 1;
-                                    sal_Int32 nCountDot = comphelper::string::getTokenCount(aNew, cSheetSep) - 1;
-                                    sal_Int32 nStartPosition = 0;
-                                    sal_Int32 nEndPosition = 0;
-
-                                    if( !nCountSemicolon )
-                                    {
-                                        for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
-                                        {
-                                            sal_Unicode cNext = aNew[i];
-                                            if( cNext == '(' )
-                                            {
-                                                nStartPosition = i+1;
-                                            }
-                                        }
-                                    }
-                                    else if( !nCountDot )
-                                    {
-                                        sal_uInt16 nCount = 0;
-                                        for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
-                                        {
-                                            sal_Unicode cNext = aNew[i];
-                                            if( cNext == '(' )
-                                            {
-                                                nStartPosition = i+1;
-                                            }
-                                            else if( cNext == cSep )
-                                            {
-                                                nCount ++;
-                                                nEndPosition = i;
-                                                if( nCount == nActive )
-                                                {
-                                                    break;
-                                                }
-                                                nStartPosition = nEndPosition+1;
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        sal_uInt16 nCount = 0;
-                                        for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
-                                        {
-                                            sal_Unicode cNext = aNew[i];
-                                            if( cNext == '(' )
-                                            {
-                                                nStartPosition = i+1;
-                                            }
-                                            else if( cNext == cSep )
-                                            {
-                                                nCount ++;
-                                                nEndPosition = i;
-                                                if( nCount == nActive )
-                                                {
-                                                    break;
-                                                }
-                                                nStartPosition = nEndPosition+1;
-                                            }
-                                            else if( cNext == cSheetSep )
-                                            {
-                                                continue;
-                                            }
-                                        }
-                                    }
-
-                                    if (nStartPosition > 0)
-                                    {
-                                        OUStringBuffer aBuf;
-                                        aBuf.append(aNew.copy(0, nStartPosition));
-                                        aBuf.append(static_cast<sal_Unicode>(0x25BA));
-                                        aBuf.append(aNew.copy(nStartPosition));
-                                        aNew = aBuf.makeStringAndClear();
-                                        ShowTipBelow( aNew );
-                                        bFound = true;
-                                    }
-                                }
-                                else
-                                {
-                                    ShowTipBelow( aNew );
-                                    bFound = true;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    sal_Int32 nPosition = 0;
-                    OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
-                    /* XXX: dubious, what is this condition supposed to exactly match? */
-                    if (aSel.nEndPos <= aText.getLength() && aText[ aSel.nEndPos-1 ] == '=')
-                    {
-                        break;
-                    }
-                    OUString aNew;
-                    nPosition = aText.getLength()+1;
-                    ScTypedCaseStrSet::const_iterator it =
-                        findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
-                    if (it != pFormulaDataPara->end())
-                    {
-                        if( nPosition < aFormula.getLength() && aFormula[ nPosition ] =='(' )
-                        {
-                            ShowTipBelow( aNew );
-                            bFound = true;
-                        }
-                        else
-                            break;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
+            ShowArgumentsTip( aParagraph, aSelText, aSel, true);
         }
     }
 }
@@ -1052,38 +1052,27 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
-    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
-    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     // Formulas may only have 1 paragraph
     if ( pActiveView && pFormulaData && pEngine->GetParagraphCount() == 1 )
     {
-        OUString aTotal = pEngine->GetText( 0 );
+        OUString aParagraph = pEngine->GetText( 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
 
         // Due to differences between table and input cell (e.g clipboard with line breaks),
         // the selection may not be in line with the EditEngine anymore.
         // Just return without any indication as to why.
-        if ( aSel.nEndPos > aTotal.getLength() )
+        if ( aSel.nEndPos > aParagraph.getLength() )
             return;
 
         //  Is the cursor at the end of a word?
         if ( aSel.nEndPos > 0 )
         {
-            sal_Int32 nPos = aSel.nEndPos;
-            OUString  aFormula = aTotal.copy( 0, nPos );;
-            sal_Int32   nLeftParentPos = 0;
-            sal_Int32   nNextFStart = 0;
-            sal_Int32  nArgPos = 0;
-            const IFunctionDescription* ppFDesc;
-            ::std::vector< OUString> aArgs;
-            sal_uInt16      nArgs;
-            bool bFound = false;
+            OUString aSelText( aParagraph.copy( 0, aSel.nEndPos ));
 
             OUString aText;
-            if ( GetFuncName( aFormula, aText ) )
+            if ( GetFuncName( aSelText, aText ) )
             {
                 // function name is incomplete:
                 // show first matching function name as tip above cell
@@ -1099,129 +1088,10 @@ void ScInputHandler::UseFormulaData()
                 }
                 return;
             }
-            FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
 
             // function name is complete:
             // show tip below the cell with function name and arguments of function
-            while( !bFound )
-            {
-                aFormula += ")";
-                nLeftParentPos = lcl_MatchParenthesis( aFormula, aFormula.getLength()-1 );
-                if( nLeftParentPos == -1 )
-                    break;
-
-                nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, true);
-                if( aHelper.GetNextFunc( aFormula, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
-                {
-                    if( !ppFDesc->getFunctionName().isEmpty() )
-                    {
-                        nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
-                        nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
-                        OUString aFuncName = ppFDesc->getFunctionName() + "(";
-                        OUString aNew;
-                        ScTypedCaseStrSet::const_iterator it =
-                            findText(*pFormulaDataPara, pFormulaDataPara->end(), aFuncName, aNew, false);
-                        if (it != pFormulaDataPara->end())
-                        {
-                            bool bFlag = false;
-                            sal_uInt16 nActive = 0;
-                            for( sal_uInt16 i=0; i < nArgs; i++ )
-                            {
-                                sal_Int32 nLength = aArgs[i].getLength();
-                                if( nArgPos <= aFormula.getLength()-1 )
-                                {
-                                    nActive = i+1;
-                                    bFlag = true;
-                                }
-                                nArgPos+=nLength+1;
-                            }
-                            if( bFlag )
-                            {
-                                sal_Int32 nCountSemicolon = comphelper::string::getTokenCount(aNew, cSep) - 1;
-                                sal_Int32 nCountDot = comphelper::string::getTokenCount(aNew, cSheetSep) - 1;
-                                sal_Int32 nStartPosition = 0;
-                                sal_Int32 nEndPosition = 0;
-
-                               if( !nCountSemicolon )
-                               {
-                                    for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
-                                    {
-                                        sal_Unicode cNext = aNew[i];
-                                        if( cNext == '(' )
-                                        {
-                                            nStartPosition = i+1;
-                                        }
-                                    }
-                                }
-                                else if( !nCountDot )
-                                {
-                                    sal_uInt16 nCount = 0;
-                                    for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
-                                    {
-                                        sal_Unicode cNext = aNew[i];
-                                        if( cNext == '(' )
-                                        {
-                                            nStartPosition = i+1;
-                                        }
-                                        else if( cNext == cSep )
-                                        {
-                                            nCount ++;
-                                            nEndPosition = i;
-                                            if( nCount == nActive )
-                                            {
-                                                break;
-                                            }
-                                            nStartPosition = nEndPosition+1;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    sal_uInt16 nCount = 0;
-                                    for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
-                                    {
-                                        sal_Unicode cNext = aNew[i];
-                                        if( cNext == '(' )
-                                        {
-                                            nStartPosition = i+1;
-                                        }
-                                        else if( cNext == cSep )
-                                        {
-                                            nCount ++;
-                                            nEndPosition = i;
-                                            if( nCount == nActive )
-                                            {
-                                                break;
-                                            }
-                                            nStartPosition = nEndPosition+1;
-                                        }
-                                        else if( cNext == cSheetSep )
-                                        {
-                                            continue;
-                                        }
-                                    }
-                                }
-
-                                if (nStartPosition > 0)
-                                {
-                                    OUStringBuffer aBuf;
-                                    aBuf.append(aNew.copy(0, nStartPosition));
-                                    aBuf.append(static_cast<sal_Unicode>(0x25BA));
-                                    aBuf.append(aNew.copy(nStartPosition));
-                                    aNew = aBuf.makeStringAndClear();
-                                    ShowTipBelow( aNew );
-                                    bFound = true;
-                                }
-                            }
-                            else
-                            {
-                                ShowTipBelow( aNew );
-                                bFound = true;
-                            }
-                        }
-                    }
-                }
-            }
+            ShowArgumentsTip( aParagraph, aSelText, aSel, false);
         }
     }
 }
