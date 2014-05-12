@@ -181,7 +181,6 @@ public:
     ScRefCellValue GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;
 
-    const sc::CellTextAttr* GetCellTextAttr( SCROW nRow ) const;
     const sc::CellTextAttr* GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
 
     void        Delete( SCROW nRow );
@@ -595,7 +594,6 @@ public:
     void SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange );
 
     void TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rDest );
-    void TransferCellValuesFrom( SCROW nRow, sc::CellValues& rSrc );
     void CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc );
 
 #if DEBUG_COLUMN_STORAGE

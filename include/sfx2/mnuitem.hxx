@@ -50,9 +50,9 @@ public:
     static SfxMenuControl*  CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
     static void             RegisterControl( sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL );
 
-                            virtual ~SfxMenuControl();
+                    virtual ~SfxMenuControl();
 
-        using SfxControllerItem::Bind;
+    using SfxControllerItem::Bind;
     void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
                                   const OUString& rTitle, SfxBindings& rBindings );
     void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
@@ -68,7 +68,7 @@ public:
 
     static SfxMenuControl*    CreateControl( sal_uInt16 nId, Menu &, SfxBindings & );
     static SfxUnoMenuControl* CreateControl( const OUString&, sal_uInt16, Menu&, const OUString& sItemText, SfxBindings&, SfxVirtualMenu* );
-    static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
+    static void               RegisterMenuControl( SfxModule*, SfxMenuCtrlFactory* );
 
 };
 

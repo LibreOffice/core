@@ -53,41 +53,14 @@
  *
  *
  ************************************************************************/
-/*************************************************************************
- * @file
- * Circle object.
- ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILTER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFILTER_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/factory.hxx>
-
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <tools/stream.hxx>
 
-using namespace ::rtl;
-using namespace ::cppu;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star;
-
 //test code
-int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& XDoc);
+int ReadWordproFile(SvStream &rStream, css::uno::Reference<css::xml::sax::XDocumentHandler>& XDoc);
 
 #endif
 

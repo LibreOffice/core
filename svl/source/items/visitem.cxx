@@ -95,12 +95,6 @@ SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
 }
 
 // virtual
-sal_uInt16 SfxVisibilityItem::GetValueCount() const
-{
-    return 2;
-}
-
-// virtual
 OUString SfxVisibilityItem::GetValueTextByVal(bool bTheValue) const
 {
     return bTheValue ? OUString("TRUE") : OUString("FALSE");

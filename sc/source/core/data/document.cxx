@@ -4064,26 +4064,6 @@ sal_uInt8 ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
     return 0;
 }
 
-const ScBitMaskCompressedArray< SCROW, sal_uInt8> & ScDocument::GetRowFlagsArray(
-        SCTAB nTab ) const
-{
-    const ScBitMaskCompressedArray< SCROW, sal_uInt8> * pFlags;
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        pFlags = maTabs[nTab]->GetRowFlagsArray();
-    else
-    {
-        OSL_FAIL("wrong sheet number");
-        pFlags = 0;
-    }
-    if (!pFlags)
-    {
-        OSL_FAIL("no row flags at sheet");
-        static ScBitMaskCompressedArray< SCROW, sal_uInt8> aDummy( MAXROW, 0);
-        pFlags = &aDummy;
-    }
-    return *pFlags;
-}
-
 void ScDocument::GetAllRowBreaks(set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])

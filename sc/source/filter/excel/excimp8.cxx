@@ -819,20 +819,6 @@ void XclImpAutoFilterData::Apply()
     if( bActive )
     {
         InsertQueryParam();
-
-        // #i38093# rows hidden by filter need extra flag, but CR_FILTERED is not set here yet
-//        SCROW nRow1 = StartRow();
-//        SCROW nRow2 = EndRow();
-//        size_t nRows = nRow2 - nRow1 + 1;
-//        boost::scoped_array<sal_uInt8> pFlags( new sal_uInt8[nRows]);
-//        pExcRoot->pDoc->GetRowFlagsArray( Tab()).FillDataArray( nRow1, nRow2,
-//                pFlags.get());
-//        for (size_t j=0; j<nRows; ++j)
-//        {
-//            if ((pFlags[j] & CR_HIDDEN) && !(pFlags[j] & CR_FILTERED))
-//                pExcRoot->pDoc->SetRowFlags( nRow1 + j, Tab(),
-//                        pFlags[j] | CR_FILTERED );
-//        }
     }
 }
 

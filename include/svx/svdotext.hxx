@@ -290,11 +290,6 @@ protected:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
     bool NbcSetEckenradius(long nRad);
-    bool NbcSetAutoGrowHeight(bool bAuto);
-    bool NbcSetMaxTextFrameHeight(long nHgt);
-    bool NbcSetAutoGrowWidth(bool bAuto);
-    bool NbcSetMaxTextFrameWidth(long nWdt);
-    bool NbcSetFitToSize(SdrFitToSizeType eFit);
 
     // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
     // SdrTextMinFrameWidthItem and SdrTextMinFrameHeightItem based on all settings, necessities

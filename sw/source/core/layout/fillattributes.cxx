@@ -50,15 +50,6 @@ void FillAttributes::createPrimitive2DSequence(
     }
 }
 
-FillAttributes::FillAttributes()
-:   maLastPaintRange(),
-    maLastDefineRange(),
-    maFillAttribute(),
-    maFillGradientAttribute(),
-    maPrimitives()
-{
-}
-
 FillAttributes::FillAttributes(const Color& rColor)
 :   maLastPaintRange(),
     maLastDefineRange(),
@@ -128,16 +119,6 @@ const drawinglayer::attribute::SdrFillAttribute& FillAttributes::getFillAttribut
     }
 
     return *maFillAttribute.get();
-}
-
-const drawinglayer::attribute::FillGradientAttribute& FillAttributes::getFillGradientAttribute() const
-{
-    if(!maFillGradientAttribute.get())
-    {
-        const_cast< FillAttributes* >(this)->maFillGradientAttribute.reset(new drawinglayer::attribute::FillGradientAttribute());
-    }
-
-    return *maFillGradientAttribute.get();
 }
 
 const drawinglayer::primitive2d::Primitive2DSequence& FillAttributes::getPrimitive2DSequence(

@@ -384,8 +384,6 @@ public:
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
     ScRefCellValue GetCellValue( SCCOL nCol, SCROW nRow ) const;
 
-    const sc::CellTextAttr* GetCellTextAttr( SCCOL nCol, SCROW nRow ) const;
-
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
@@ -920,7 +918,6 @@ public:
         SCCOL nColDelta, SCROW nRowDelta );
 
     void TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
-    void TransferCellValuesFrom( SCCOL nCol, SCROW nRow, sc::CellValues& rSrc );
     void CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );
 
 #if DEBUG_COLUMN_STORAGE
