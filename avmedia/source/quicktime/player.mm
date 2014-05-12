@@ -43,11 +43,9 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mbInitialized( false ),
     maSizeCondition( osl_createCondition() )
 {
-    OSErr result;
-
     NSApplicationLoad();
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-      mbInitialized = true;
+    mbInitialized = true;
     [pool release];
 }
 

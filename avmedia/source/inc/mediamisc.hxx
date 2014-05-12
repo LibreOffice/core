@@ -31,6 +31,7 @@ class ResMgr;
 #else
 #ifdef MACOSX
 #define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_QuickTime"
+#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1 "com.sun.star.comp.avmedia.Manager_MacAVF"
 #else
 #define AVMEDIA_MANAGER_SERVICE_NAME_OLD  "com.sun.star.comp.avmedia.Manager_GStreamer_0_10"
 #define AVMEDIA_MANAGER_SERVICE_NAME      "com.sun.star.comp.avmedia.Manager_GStreamer"

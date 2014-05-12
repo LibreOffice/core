@@ -417,6 +417,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	communi \
 	ooxml \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc) \
+	avmediaMacAVF \
 	avmediaQuickTime \
 	filtertracer \
 	rpt \
