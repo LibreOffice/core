@@ -39,6 +39,7 @@ public:
     virtual  ~FrameGrabber();
 
     bool    create( const ::rtl::OUString& rURL );
+    bool    create( AVAsset* pMovie );
 
     // XFrameGrabber
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (::com::sun::star::uno::RuntimeException);

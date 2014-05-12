@@ -43,6 +43,7 @@ public:
     virtual  ~Player();
 
     bool create( const ::rtl::OUString& rURL );
+    bool create( AVAsset* );
 
     // XPlayer
     virtual void SAL_CALL start() throw (::com::sun::star::uno::RuntimeException);
@@ -69,14 +70,11 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    AVAsset* getMovie();
     AVPlayer* getAVPlayer() const { return mpPlayer; }
     virtual bool handleObservation( NSString* pKeyPath );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
-
-    ::rtl::OUString     maURL;
 
     AVPlayer*           mpPlayer;
 

@@ -49,8 +49,6 @@ FrameGrabber::~FrameGrabber()
 
 bool FrameGrabber::create( const ::rtl::OUString& rURL )
 {
-    // TODO: use AVPlayer's movie directly instead of loading it here?
-
     NSString* pNSStr = [NSString stringWithCharacters:rURL.getStr() length:rURL.getLength()];
     NSURL* pNSURL = [NSURL URLWithString: [pNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     AVAsset* pMovie = [AVURLAsset URLAssetWithURL:pNSURL options:nil];
@@ -59,9 +57,17 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
         OSL_TRACE( "AVGrabber::create() cannot load url=\"%s\"", [pNSStr UTF8String] );
         return false;
     }
+
+    return create( pMovie );
+}
+
+// ------------------------------------------------------------------------------
+
+bool FrameGrabber::create( AVAsset* pMovie )
+{
     if( [[pMovie tracksWithMediaType:AVMediaTypeVideo] count] == 0)
     {
-        OSL_TRACE( "AVGrabber::create() found no video in url=\"%s\"", [pNSStr UTF8String] );
+        OSL_TRACE( "AVGrabber::create() found no video content!" );
         return false;
     }
 
