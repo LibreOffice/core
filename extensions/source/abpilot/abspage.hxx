@@ -42,7 +42,6 @@ namespace abp
     class AddressBookSourcePage : public AddressBookSourcePage_Base
     {
     protected:
-        AddressBookSourcePage( OAddessBookSourcePilot* _pParent, const ResId& _rId );
         AddressBookSourcePage(OAddessBookSourcePilot *pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     protected:

@@ -51,6 +51,8 @@ ScDocument::CreateFormatTable() const
 ScDocument::GetRowFlagsArray(short) const
 ScExtIButton::GetSelected() const
 ScFormulaCellGroup::scheduleCompilation()
+ScTabView::DrawMarkRect(Rectangle const&)
+ScTabViewShell::SetChartArea(tools::SvRef<ScRangeList> const&, Rectangle const&)
 ScTable::GetCellTextAttr(short, int) const
 ScTable::TransferCellValuesFrom(short, int, sc::CellValues&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
@@ -81,6 +83,7 @@ StyleSettings::SetTitleHeight(long)
 StyleSettings::SetUseFlatBorders(bool)
 StyleSettings::SetUseFlatMenus(bool)
 SvpSalInstance::PostedEventsInQueue()
+SvtLanguageTable::AddLanguageTag(LanguageTag const&, rtl::OUString const&)
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxDummyShapeContainer::SvxDummyShapeContainer(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>)
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
@@ -216,8 +219,6 @@ canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const
 chart::ChartTypeUnoDlg::Create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 chart::opengl3D::Camera::zoom(unsigned int)
-chart::opengl3D::Line::Line(chart::opengl3D::OpenGL3DRenderer*, unsigned int)
-chart::opengl3D::OpenGL3DRenderer::CreateBMPHeader(unsigned char*, int, int)
 chart::opengl3D::OpenGL3DRenderer::GetTime()
 chart::opengl3D::OpenGL3DRenderer::ProcessPickingBox()
 chart::opengl3D::OpenGL3DRenderer::ProcessUnrenderedShape()
@@ -226,8 +227,6 @@ chart::opengl3D::OpenGL3DRenderer::RenderFPS(float)
 chart::opengl3D::OpenGL3DRenderer::SetClickPos(Point)
 chart::opengl3D::OpenGL3DRenderer::SetFPS(float)
 chart::opengl3D::OpenGL3DRenderer::init()
-chart::opengl3D::Rectangle::Rectangle(chart::opengl3D::OpenGL3DRenderer*, unsigned int)
-chart::opengl3D::Text::Text(chart::opengl3D::OpenGL3DRenderer*, unsigned int)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const

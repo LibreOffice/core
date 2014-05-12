@@ -30,12 +30,6 @@ namespace abp
     using namespace ::com::sun::star::lang;
 
     //= AddressBookSourcePage
-
-    AddressBookSourcePage::AddressBookSourcePage( OAddessBookSourcePilot* _pParent, const ResId& _rId )
-        :AddressBookSourcePage_Base(_pParent, _rId)
-    {
-    }
-
     AddressBookSourcePage::AddressBookSourcePage(OAddessBookSourcePilot* _pParent, const OString& rID, const OUString& rUIXMLDescription)
         :AddressBookSourcePage_Base(_pParent, rID, rUIXMLDescription)
     {
