@@ -150,8 +150,8 @@ public:
     void init();
     void Set3DSenceInfo(sal_Int32 color = 255, bool twoSidesLighting = true);
     void SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction);
-    void AddShapePolygon3DObject(sal_Int32 color, bool lineOnly, sal_Int32 lineColor,
-            long fillStyle, sal_Int32 specular);
+    void AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, sal_uInt32 lineColor,
+            long fillStyle, sal_uInt32 specular);
     void EndAddShapePolygon3DObject();
     void AddPolygon3DObjectNormalPoint(float x, float y, float z);
     void EndAddPolygon3DObjectNormalPoint();

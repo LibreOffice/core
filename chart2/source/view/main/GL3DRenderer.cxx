@@ -834,7 +834,7 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::ve
     }
 }
 
-void OpenGL3DRenderer::AddShapePolygon3DObject(sal_Int32 color,bool lineOnly,sal_Int32 lineColor,long fillStyle,sal_Int32 specular)
+void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, sal_uInt32 lineColor,long fillStyle, sal_uInt32 specular)
 {
     m_Polygon3DInfo.polygonColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
                                              (float)(((color) & 0x0000FF00) >> 8) / 255.0f,

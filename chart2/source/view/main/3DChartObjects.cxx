@@ -112,7 +112,7 @@ void Rectangle::render()
     glm::vec3 dir1 = maBottomRight - maTopLeft;
     glm::vec3 dir2 = maTopRight - maTopLeft;
     glm::vec3 normal = glm::normalize(glm::cross(dir1, dir2));
-    mpRenderer->AddShapePolygon3DObject((sal_Int32)maColor.GetColor(), false, 0, 1, 0xFFFFFF);
+    mpRenderer->AddShapePolygon3DObject(maColor.GetColor(), false, 0, 1, 0xFFFFFF);
     glm::vec3 bottomLeft = maBottomRight - dir2;
     //set polygon points and normals
     mpRenderer->AddPolygon3DObjectPoint(maBottomRight.x, maBottomRight.y, maBottomRight.z);
@@ -128,7 +128,7 @@ void Rectangle::render()
     //we should render the edge if the edge color is different from the fill color
     if ((sal_Int32)maColor.GetColor() != (sal_Int32)maLineColor.GetColor())
     {
-        mpRenderer->AddShapePolygon3DObject(0, true, (sal_Int32)maLineColor.GetColor(), 0, 0xFFFFFF);
+        mpRenderer->AddShapePolygon3DObject(0, true, maLineColor.GetColor(), 0, 0xFFFFFF);
         mpRenderer->AddPolygon3DObjectPoint(maBottomRight.x, maBottomRight.y, maBottomRight.z);
         mpRenderer->AddPolygon3DObjectPoint(maTopRight.x, maTopRight.y, maTopRight.z);
         mpRenderer->AddPolygon3DObjectPoint(maTopLeft.x, maTopLeft.y, maTopLeft.z);
