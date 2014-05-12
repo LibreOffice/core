@@ -941,7 +941,8 @@ const SfxPoolItem* SfxShell::GetSlotState
             return &pStateSet->Get( pItem->Which() );
         pRetItem = pItem->Clone();
     }
-    DeleteItemOnIdle(pRetItem);
+    DeleteItemOnIdle aItem(pRetItem);
+    aItem.LaunchDeleteOnIdle();
 
     return pRetItem;
 }
