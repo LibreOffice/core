@@ -429,6 +429,15 @@ void ScFiltersTest::testFunctionsODS()
 
     createCSVPath("database-functions.", aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
+
+    xDocSh->DoClose();
+
+    xDocSh = loadDoc("date-time-functions.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    xDocSh->DoHardRecalc(true);
+    pDoc = xDocSh->GetDocument();
+    createCSVPath("date-time-functions.", aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0, PureString);
 }
 
 void ScFiltersTest::testFunctionsExcel2010()
