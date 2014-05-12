@@ -244,16 +244,6 @@ void DocxSdrExport::setFrameBtLr(bool bFrameBtLr)
     m_pImpl->m_bFrameBtLr = bFrameBtLr;
 }
 
-bool DocxSdrExport::getFlyFrameGraphic()
-{
-    return m_pImpl->m_bFlyFrameGraphic;
-}
-
-void DocxSdrExport::setFlyFrameGraphic(bool bFlyFrameGraphic)
-{
-    m_pImpl->m_bFlyFrameGraphic = bFlyFrameGraphic;
-}
-
 sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyFillAttrList()
 {
     return m_pImpl->m_pFlyFillAttrList;

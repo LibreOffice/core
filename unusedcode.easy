@@ -4,8 +4,6 @@ CPhysicalCamera::GetAngleY()
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
 ConfigurationAccess::getPath(rtl::OUString const&)
 DocumentHandler::DocumentHandler(com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>&)
-DocxSdrExport::getFlyFrameGraphic()
-DocxSdrExport::setFlyFrameGraphic(bool)
 DocxSdrExport::setFrameBtLr(bool)
 EditEngine::IsIdleFormatterActive() const
 FPSCounter::getGPUTime()
