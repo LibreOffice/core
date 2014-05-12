@@ -54,6 +54,7 @@ class VCoordinateSystem;
 class DrawModelWrapper;
 class SeriesPlotterContainer;
 class VDataSeries;
+class GL3DPlotterBase;
 
 enum TimeBasedMode
 {
@@ -271,6 +272,7 @@ private: //member
 
     ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 
+    boost::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
     TimeBasedInfo maTimeBased;
     osl::Mutex maTimeMutex;
 };

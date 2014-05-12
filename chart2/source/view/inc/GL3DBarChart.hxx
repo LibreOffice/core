@@ -10,6 +10,8 @@
 #ifndef CHART2_GL3DBARCHART_HXX
 #define CHART2_GL3DBARCHART_HXX
 
+#include <GL3DPlotterBase.hxx>
+
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"
@@ -27,7 +29,7 @@ class OpenGL3DRenderer;
 
 }
 
-class GL3DBarChart
+class GL3DBarChart : public GL3DPlotterBase
 {
 public:
     GL3DBarChart(
@@ -35,11 +37,11 @@ public:
         const boost::ptr_vector<VDataSeries>& rDataSeries, OpenGLWindow& rContext,
         ExplicitCategoriesProvider& rCatProvider );
 
-    ~GL3DBarChart();
+    virtual ~GL3DBarChart();
 
-    void create3DShapes();
+    virtual void create3DShapes() SAL_OVERRIDE;
 
-    void render();
+    virtual void render() SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::chart2::XChartType> mxChartType;
