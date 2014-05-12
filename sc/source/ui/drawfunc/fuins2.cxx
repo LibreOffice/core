@@ -746,7 +746,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                         OSL_ASSERT( pPage );
                         OSL_ASSERT( pObj );
                         if( pPage )
-                            pPage->RemoveObject( pObj->GetOrdNum());
+                        {
+                            // Remove the OLE2 object from the sdr page.
+                            SdrObject* pRemoved = pPage->RemoveObject(pObj->GetOrdNum());
+                            OSL_ASSERT(pRemoved == pObj);
+                            SdrObject::Free(pRemoved); // Don't forget to free it.
+                        }
 
                         bAddUndo = false;       // don't create the undo action for inserting
 
