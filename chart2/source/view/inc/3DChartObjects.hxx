@@ -37,7 +37,7 @@ protected:
 class Bar : public Renderable3DObject
 {
 public:
-    Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 nColor, sal_uInt32 nId);
+    Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_Int32 nColor, sal_uInt32 nId);
 
     virtual void render() SAL_OVERRIDE;
 private:

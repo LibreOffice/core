@@ -28,7 +28,7 @@ void Renderable3DObject::render()
     (void) mnUniqueId;
 }
 
-Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 aColor, sal_uInt32 nId)
+Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_Int32 aColor, sal_uInt32 nId)
     : Renderable3DObject(pRenderer, nId)
     , mbRoundedCorners(true)
     , maPos(rPosition)
@@ -39,15 +39,8 @@ Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 aCo
 
 void Bar::render()
 {
-    if(mbRoundedCorners)
-    {
-        mpRenderer->AddShape3DExtrudeObject((sal_Int32)maColor.GetColor(), 0xFFFFFF, maPos);
-        mpRenderer->EndAddShape3DExtrudeObject();
-    }
-    else
-    {
-        mpRenderer->RenderNonRoundedBar(maPos, maColor.GetColor());
-    }
+    mpRenderer->AddShape3DExtrudeObject(mbRoundedCorners, (sal_Int32)maColor.GetColor(), 0xFFFFFF, maPos);
+    mpRenderer->EndAddShape3DExtrudeObject();
 }
 
 Line::Line(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):

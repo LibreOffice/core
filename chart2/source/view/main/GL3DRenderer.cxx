@@ -919,7 +919,7 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
     m_Polygon3DInfo.vertices = NULL;
 }
 
-void OpenGL3DRenderer::AddShape3DExtrudeObject(sal_Int32 color,sal_Int32 specular, glm::mat4 modelMatrix)
+void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 color,sal_Int32 specular, glm::mat4 modelMatrix)
 {
     glm::vec4 tranform = modelMatrix * glm::vec4(0.0, 0.0, 0.0, 1.0);
     glm::vec4 DirX = modelMatrix * glm::vec4(1.0, 0.0, 0.0, 0.0);
@@ -954,7 +954,8 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(sal_Int32 color,sal_Int32 specula
     m_Extrude3DInfo.yTransform = tranform.y;
     m_Extrude3DInfo.zTransform = tranform.z;
 //    m_Extrude3DInfo.zTransform = 0;
-    if (m_RoundBarMesh.iMeshSizes == 0)
+    m_Extrude3DInfo.rounded = roundedCorner;
+    if (m_Extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
     {
         CreateActualRoundedCube(0.1f, 30, 30, 1.0f, 1.2f, m_Extrude3DInfo.zScale / m_Extrude3DInfo.xScale);
         AddVertexData(m_CubeVertexBuf);
@@ -1144,54 +1145,26 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
 }
 
-namespace {
-
-glm::vec4 getColorAsVector(sal_uInt32 nColor)
+void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
 {
-    sal_uInt8 nRed = sal_uInt8((nColor & 0xFF0000) >> 16);
-    sal_uInt8 nGreen = sal_uInt8((nColor & 0xFF00) >> 8);
-    sal_uInt8 nBlue = sal_uInt8((nColor & 0xFF));
-    sal_uInt8 nAlpha = sal_uInt8((nColor & 0xFF000000) >> 24);
-    return glm::vec4(nRed/255.0, nGreen/255.0, nBlue/255.0, nAlpha/255.0);
-}
-
-}
-
-void OpenGL3DRenderer::RenderNonRoundedBar(const glm::mat4& modelMatrix, sal_uInt32 nColor)
-{
-    glm::mat4 aMVP = m_3DProjection * m_3DView * modelMatrix;
-    SAL_INFO("chart2.3dopengl", "render new bar");
-    SAL_INFO("chart2.3dopengl", aMVP);
-
-    for(size_t i = 0; i < SAL_N_ELEMENTS(cubeVertices); i += 3)
+    float xScale = extrude3D.xScale;
+    float yScale = extrude3D.yScale;
+    float zScale = extrude3D.zScale;
+    glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
+    glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3D.xTransform, -extrude3D.yTransform, extrude3D.zTransform));
+    glm::mat4 scaleMatrix = glm::scale(xScale, yScale, zScale);
+    m_Model = transformMatrix * extrude3D.rotation * scaleMatrix;
+    if (extrude3D.reverse)
     {
-        glm::vec4 aPos(cubeVertices[i*3], cubeVertices[i*3+1], cubeVertices[i*3+2], 1.0);
-        glm::vec4 aNewPos = aMVP * aPos;
-        SAL_INFO("chart2.3dopengl", aNewPos);
+        glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
+        m_Model = m_Model * reverseMatrix;
     }
-
-    glm::vec4 aColor = getColorAsVector(nColor);
-    glUseProgram(m_CommonProID);
-    //fill vertex buffer
-    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-    glUniform4fv(m_2DColorID, 1, &aColor[0]);
-    glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
-    // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(m_2DVertexID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-    glVertexAttribPointer(m_2DVertexID,
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
-            );
-
+    glm::mat3 normalMatrix(m_Model);
+    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+    glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+    glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    glDisableVertexAttribArray(m_2DVertexID);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glUseProgram(0);
 }
 
 void OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
@@ -1225,8 +1198,8 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     for (size_t i = 0; i < extrude3DNum; i++)
     {
         Extrude3DInfo extrude3DInfo = m_Extrude3DList[i];
-        GLuint vertexBuf = m_CubeVertexBuf;
-        GLuint normalBuf = m_CubeNormalBuf;
+        GLuint vertexBuf = extrude3DInfo.rounded ? m_CubeVertexBuf : m_BoundBox;
+        GLuint normalBuf = extrude3DInfo.rounded ? m_CubeNormalBuf : m_BoundBoxNormal;
         // 1st attribute buffer : vertices
         glEnableVertexAttribArray(m_3DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
@@ -1254,8 +1227,15 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         CHECK_GL_ERROR();
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
         extrude3DInfo.reverse = 0;
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
-        RenderExtrudeSurface(extrude3DInfo);
+        if (extrude3DInfo.rounded)
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
+            RenderExtrudeSurface(extrude3DInfo);
+        }
+        else
+        {
+            RenderNonRoundedBar(extrude3DInfo);
+        }
         glDisableVertexAttribArray(m_3DVertexID);
         glDisableVertexAttribArray(m_3DNormalID);
     }
