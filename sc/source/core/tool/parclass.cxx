@@ -208,6 +208,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocXor,             {{ Reference                                            }, 1 }},
     { ocZTest,           {{ Reference, Value, Value                              }, 0 }},
     { ocZTest_MS,        {{ Reference, Value, Value                              }, 0 }},
+    { ocNetWorkdays,     {{ Value, Value, Reference, Reference                   }, 0 }},
     { ocNetWorkdays_MS,  {{ Value, Value, Value, Reference                       }, 0 }},
     { ocWorkday_MS,      {{ Value, Value, Value, Reference                       }, 0 }},
     { ocAggregate,       {{ Value, Value, Reference                              }, 1 }},

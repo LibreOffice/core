@@ -336,7 +336,8 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocEffektiv,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getEffect" ) },
     { ocKumKapZ,            255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getCumprinc" ) },
     { ocKumZinsZ,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getCumipmt" ) },
-    { ocNominal,            255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getNominal" ) }
+    { ocNominal,            255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getNominal" ) },
+    { ocNetWorkdays,        255,    2,  4,  R, { VR, VR, RO, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getNetWorkdays" ) }
 };
 
 /** Functions new in BIFF5/BIFF7. Unsupported functions: DATESTRING, NUMBERSTRING. */
@@ -399,7 +400,7 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocAverageIfs,         255,    4,  MX, V, { RO_E, RO, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
     { ocIfError,            NOID,   2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
     { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
-    { ocNetWorkdays_MS,     NOID,   2,  4,  V, { VR, VR, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
+    { ocNetWorkdays_MS,     NOID,   2,  4,  V, { VR, VR, RO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
     { ocNetWorkdays_MS,     255,    3,  5,  V, { RO_E, VR, VR, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
     { ocWorkday_MS,         NOID,   2,  4,  V, { VR, VR, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "WORKDAY.INTL" ) },
     { ocWorkday_MS,         255,    3,  5,  V, { RO_E, VR, VR, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "WORKDAY.INTL" ) },
