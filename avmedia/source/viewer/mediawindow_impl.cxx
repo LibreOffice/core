@@ -162,6 +162,7 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     DragSourceHelper( this ),
     mpMediaWindow( pMediaWindow ),
     mpEvents( NULL ),
+    mbEventTransparent(true),
     mpMediaWindowControl( bInternalMediaControl ? new MediaWindowControl( this ) : NULL ),
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
@@ -505,6 +506,7 @@ void MediaWindowImpl::onURLChanged()
     {
         SystemWindowData aWinData = OpenGLContext::generateWinData(this);
         mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
+        mbEventTransparent = false;
     }
     if( !mpChildWindow )
         return;
@@ -715,7 +717,7 @@ void MediaWindowImpl::GetFocus()
 
 void MediaWindowImpl::MouseMove( const MouseEvent& rMEvt )
 {
-    if( mpMediaWindow )
+    if( mpMediaWindow && mbEventTransparent )
         mpMediaWindow->MouseMove( rMEvt );
 }
 
@@ -723,7 +725,7 @@ void MediaWindowImpl::MouseMove( const MouseEvent& rMEvt )
 
 void MediaWindowImpl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if( mpMediaWindow )
+    if( mpMediaWindow && mbEventTransparent )
         mpMediaWindow->MouseButtonDown( rMEvt );
 }
 
@@ -731,7 +733,7 @@ void MediaWindowImpl::MouseButtonDown( const MouseEvent& rMEvt )
 
 void MediaWindowImpl::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if( mpMediaWindow )
+    if( mpMediaWindow && mbEventTransparent )
         mpMediaWindow->MouseButtonUp( rMEvt );
 }
 
@@ -739,7 +741,7 @@ void MediaWindowImpl::MouseButtonUp( const MouseEvent& rMEvt )
 
 void MediaWindowImpl::KeyInput( const KeyEvent& rKEvt )
 {
-    if( mpMediaWindow )
+    if( mpMediaWindow && mbEventTransparent )
         mpMediaWindow->KeyInput( rKEvt );
 }
 
@@ -747,7 +749,7 @@ void MediaWindowImpl::KeyInput( const KeyEvent& rKEvt )
 
 void MediaWindowImpl::KeyUp( const KeyEvent& rKEvt )
 {
-    if( mpMediaWindow )
+    if( mpMediaWindow && mbEventTransparent )
         mpMediaWindow->KeyUp( rKEvt );
 }
 
@@ -755,7 +757,7 @@ void MediaWindowImpl::KeyUp( const KeyEvent& rKEvt )
 
 void MediaWindowImpl::Command( const CommandEvent& rCEvt )
 {
-    if( mpMediaWindow )
+    if( mpMediaWindow && mbEventTransparent )
         mpMediaWindow->Command( rCEvt );
 }
 
@@ -763,21 +765,21 @@ void MediaWindowImpl::Command( const CommandEvent& rCEvt )
 
 sal_Int8 MediaWindowImpl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return( mpMediaWindow ? mpMediaWindow->AcceptDrop( rEvt ) : 0 );
+    return( mpMediaWindow && mbEventTransparent ? mpMediaWindow->AcceptDrop( rEvt ) : 0 );
 }
 
 
 
 sal_Int8 MediaWindowImpl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    return( mpMediaWindow ? mpMediaWindow->ExecuteDrop( rEvt ) : 0 );
+    return( mpMediaWindow && mbEventTransparent ? mpMediaWindow->ExecuteDrop( rEvt ) : 0 );
 }
 
 
 
 void MediaWindowImpl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
-    if( mpMediaWindow )
+    if( mpMediaWindow && mbEventTransparent )
         mpMediaWindow->StartDrag( nAction, rPosPixel );
 }
 

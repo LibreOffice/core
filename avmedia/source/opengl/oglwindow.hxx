@@ -19,6 +19,7 @@
 
 #include <libgltf.h>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/syschild.hxx>
 
 namespace avmedia { namespace ogl {
 
@@ -26,7 +27,7 @@ class OGLWindow : public ::cppu::WeakImplHelper2 < com::sun::star::media::XPlaye
                                                    com::sun::star::lang::XServiceInfo >
 {
 public:
-    OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext );
+    OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext, SystemChildWindow* pChildWindow );
     virtual ~OGLWindow();
 
     virtual void SAL_CALL update() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -61,8 +62,12 @@ public:
     virtual void SAL_CALL removePaintListener( const com::sun::star::uno::Reference< com::sun::star::awt::XPaintListener >& xListener ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
+    DECL_LINK( FocusGrabber, VclWindowEvent* );
+    DECL_LINK( CameraHandler, VclWindowEvent* );
+
     glTFHandle* m_pHandle;
     OpenGLContext* m_pContext;
+    Window* m_pEventHandler;
     bool m_bVisible;
     com::sun::star::media::ZoomLevel meZoomLevel;
 };

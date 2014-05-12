@@ -14,9 +14,10 @@ using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
 
-OGLWindow::OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext  )
+OGLWindow::OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext, SystemChildWindow* pChildWindow )
     : m_pHandle( pHandle )
     , m_pContext( pContext )
+    , m_pEventHandler( pChildWindow->GetParent() )
     , m_bVisible ( false )
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
 {
@@ -122,7 +123,17 @@ void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
     throw (uno::RuntimeException, std::exception)
 {
     if( bSet && !m_bVisible )
+    {
         update();
+        m_pEventHandler->GetParent()->AddEventListener( LINK(this, OGLWindow, FocusGrabber));
+        m_pEventHandler->AddEventListener( LINK(this, OGLWindow, CameraHandler));
+        m_pEventHandler->GrabFocus();
+    }
+    else if( !bSet )
+    {
+        m_pEventHandler->GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
+        m_pEventHandler->RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
+    }
     m_bVisible = bSet;
 }
 
@@ -194,6 +205,80 @@ void SAL_CALL OGLWindow::addPaintListener( const uno::Reference< awt::XPaintList
 void SAL_CALL OGLWindow::removePaintListener( const uno::Reference< awt::XPaintListener >& )
     throw (uno::RuntimeException, std::exception)
 {
+}
+
+IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
+{
+    assert(m_pEventHandler);
+    if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
+    {
+        MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
+        if(pMouseEvt)
+        {
+            const Point& rMousePos = pMouseEvt->GetPosPixel();
+            const Rectangle aWinRect(m_pEventHandler->GetPosPixel(),m_pEventHandler->GetSizePixel());
+            if( aWinRect.IsInside(rMousePos) )
+            {
+                if ( !m_pEventHandler->HasFocus() )
+                {
+                    m_pEventHandler->GrabFocus();
+                }
+            }
+            else if ( m_pEventHandler->HasFocus() )
+            {
+                m_pEventHandler->GrabFocusToDocument();
+            }
+        }
+    }
+
+    return 0;
+}
+
+IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
+{
+    if( pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT )
+    {
+        KeyEvent* pKeyEvt = (KeyEvent*)pEvent->GetData();
+        if(pKeyEvt)
+        {
+            sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
+            m_pContext->makeCurrent();
+
+            // Calculate movement
+            glm::vec3 vMoveBy;
+            {
+                glm::vec3 vEye;
+                glm::vec3 vView;
+                glm::vec3 vUp;
+                gltf_get_camera_pos(&vEye,&vView,&vUp);
+                float fModelSize =(float)gltf_get_model_size();
+
+                glm::vec3 vMove = vView-vEye;
+                vMove = glm::normalize(vMove);
+                vMove *= 25.0f;
+                glm::vec3 vStrafe = glm::cross(vView-vEye, vUp);
+                vStrafe = glm::normalize(vStrafe);
+                vStrafe *= 25.0f;
+                glm::vec3 vMup = glm::cross(vView-vEye,glm::vec3(1.f,0.f,0.f) );
+                vMup = glm::normalize(vMup);
+                vMup *= 25.0f;
+
+                if(nCode == KEY_Q)vMoveBy += vMove*(0.1f*fModelSize);
+                if(nCode == KEY_E)vMoveBy -= vMove*(0.1f*fModelSize);
+                if(nCode == KEY_A)vMoveBy -= vStrafe*(0.1f*fModelSize);
+                if(nCode == KEY_D)vMoveBy += vStrafe*(0.1f*fModelSize);
+                if(nCode == KEY_W)vMoveBy -= vMup*(0.1f*fModelSize);
+                if(nCode == KEY_S)vMoveBy += vMup*(0.1f*fModelSize);
+            }
+
+            gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,10.0);
+            gltf_prepare_renderer(m_pHandle);
+            gltf_renderer(m_pHandle);
+            gltf_complete_renderer();
+            m_pContext->swapBuffers();
+        }
+    }
+    return 0;
 }
 
 } // namespace ogl
