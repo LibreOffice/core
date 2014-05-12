@@ -53,7 +53,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/bigint.hxx>
 #include <unotools/charclass.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <charfmt.hxx>
@@ -359,37 +358,6 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     bool bOutLongVal = true;
     if( nVal > LONG_MAX / nMul )
     {
-        // needs a BigInt to translate this unit
-#ifdef SAL_INT64_IS_STRUCT
-        BigInt nBigVal( nVal );
-        nBigVal *= nMul;
-        nBigVal /= nDiv;
-        nBigVal += 5;
-        nBigVal /= 10;
-
-        if( nBigVal.IsLong() )
-        {
-            // a long is sufficient
-            nLongVal = (long)nBigVal;
-        }
-        else
-        {
-            BigInt nBigFac( nFac );
-            BigInt nBig10( 10 );
-            rOut += (long)(nBigVal / nBigFac);
-            if( !(nBigVal % nBigFac).IsZero() )
-            {
-                rOut.append('.');
-                while( nFac > 1 && !(nBigVal % nBigFac).IsZero() )
-                {
-                    nFac /= 10;
-                    nBigFac = nFac;
-                    rOut.append(OString::number((nBigVal / nBigFac) % nBig10));
-                }
-            }
-            bOutLongVal = false;
-        }
-#else
         sal_Int64 nBigVal( nVal );
         nBigVal *= nMul;
         nBigVal /= nDiv;
@@ -415,7 +383,6 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
             }
             bOutLongVal = false;
         }
-#endif
     }
     else
     {
