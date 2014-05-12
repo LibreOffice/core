@@ -148,8 +148,8 @@ public:
     ~OpenGL3DRenderer();
 
     void init();
-    void Set3DSenceInfo(sal_Int32 color = 255, bool twoSidesLighting = true);
-    void SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction);
+    void Set3DSenceInfo(sal_uInt32 color = 255, bool twoSidesLighting = true);
+    void SetLightInfo(bool lightOn, sal_uInt32 color, const glm::vec4& direction);
     void AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, sal_uInt32 lineColor,
             long fillStyle, sal_uInt32 specular);
     void EndAddShapePolygon3DObject();
@@ -157,7 +157,7 @@ public:
     void EndAddPolygon3DObjectNormalPoint();
     void AddPolygon3DObjectPoint(float x, float y, float z);
     void EndAddPolygon3DObjectPoint();
-    void AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 color, sal_Int32 specular, glm::mat4 modelMatrix);
+    void AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 color, sal_uInt32 specular, glm::mat4 modelMatrix);
     void EndAddShape3DExtrudeObject();
     double GetTime();
     void SetFPS(float fps);

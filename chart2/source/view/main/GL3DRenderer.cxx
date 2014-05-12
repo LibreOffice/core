@@ -59,6 +59,15 @@ GLfloat texCoords[] = {
     0.0f, 1.0f
 };
 
+glm::vec4 getColorAsVector(sal_uInt32 nColor)
+{
+    return glm::vec4(((nColor & 0x00FF0000) >> 16) / 255.0f,
+            ((nColor & 0x0000FF00) >> 8) / 255.0f,
+            (nColor & 0x000000FF) / 255.0f,
+            (0xFF - (nColor & 0xFF000000)/255.0));
+
+}
+
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
@@ -802,20 +811,17 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
     return;
 }
 
-void OpenGL3DRenderer::Set3DSenceInfo(sal_Int32 color, bool twoSidesLighting)
+void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)
 {
     m_Polygon3DInfo.material.twoSidesLighting = twoSidesLighting;
 
-    m_LightsInfo.ambient = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
-                                                   (float)(((color) & 0x0000FF00) >> 8) / 255.0f,
-                                                   (float)(((color) & 0x000000FF)) / 255.0f,
-                                                   1.0);
+    m_LightsInfo.ambient = getColorAsVector(nColor);
 
     m_LightsInfo.lightNum = 0;
     SetLightInfo(true, 0xFFFFFF, glm::vec4(1.0, 1.0, 1.0, 0.0));
 }
 
-void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::vec4& direction)
+void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::vec4& direction)
 {
     if (m_LightsInfo.lightNum > MAX_LIGHT_NUM)
     {
@@ -824,22 +830,16 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_Int32 color, const glm::ve
 
     if (lightOn)
     {
-        m_LightsInfo.light[m_LightsInfo.lightNum].lightColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
-                                                                                                     (float)(((color) & 0x0000FF00) >> 8) / 255.0f,
-                                                                                                     (float)(((color) & 0x000000FF)) / 255.0f,
-                                                                                                      1.0);
+        m_LightsInfo.light[m_LightsInfo.lightNum].lightColor = getColorAsVector(nColor);
         m_LightsInfo.light[m_LightsInfo.lightNum].positionWorldspace = direction;
         m_LightsInfo.light[m_LightsInfo.lightNum].lightPower = 1.0;
         m_LightsInfo.lightNum++;
     }
 }
 
-void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, sal_uInt32 lineColor,long fillStyle, sal_uInt32 specular)
+void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly, sal_uInt32 nLineColor,long fillStyle, sal_uInt32 specular)
 {
-    m_Polygon3DInfo.polygonColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
-                                             (float)(((color) & 0x0000FF00) >> 8) / 255.0f,
-                                             (float)(((color) & 0x000000FF)) / 255.0f,
-                                             1.0);
+    m_Polygon3DInfo.polygonColor = getColorAsVector(nColor);
     m_Polygon3DInfo.material.materialColor = m_Polygon3DInfo.polygonColor;//material color seems to be the same for all parts, so we use the polygon color
     //line or Polygon
     m_Polygon3DInfo.lineOnly = lineOnly;
@@ -848,10 +848,7 @@ void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, 
     // if line only, use line color
     if (m_Polygon3DInfo.lineOnly)
     {
-        m_Polygon3DInfo.polygonColor = glm::vec4((float)(((lineColor) & 0x00FF0000) >> 16) / 255.0f,
-                                                     (float)(((lineColor) & 0x0000FF00) >> 8) / 255.0f,
-                                                     (float)(((lineColor) & 0x000000FF)) / 255.0f,
-                                                     1.0);
+        m_Polygon3DInfo.polygonColor = getColorAsVector(nLineColor);
     }
 
     //fillStyle
@@ -859,10 +856,7 @@ void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, 
 
 
     //material specular;
-    m_Polygon3DInfo.material.specular = glm::vec4((float)(((specular) & 0x00FF0000) >> 16) / 255.0f,
-                                        (float)(((specular) & 0x0000FF00) >> 8) / 255.0f,
-                                        (float)(((specular) & 0x000000FF)) / 255.0f,
-                                        1.0);
+    m_Polygon3DInfo.material.specular = getColorAsVector(specular);
 
     m_Polygon3DInfo.material.diffuse = glm::vec4(1.0, 1.0, 1.0, 1.0);
 
@@ -919,7 +913,7 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
     m_Polygon3DInfo.vertices = NULL;
 }
 
-void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 color,sal_Int32 specular, glm::mat4 modelMatrix)
+void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nColor, sal_uInt32 specular, glm::mat4 modelMatrix)
 {
     glm::vec4 tranform = modelMatrix * glm::vec4(0.0, 0.0, 0.0, 1.0);
     glm::vec4 DirX = modelMatrix * glm::vec4(1.0, 0.0, 0.0, 0.0);
@@ -933,17 +927,11 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_Int32 col
     m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
 
     //color
-    m_Extrude3DInfo.extrudeColor = glm::vec4((float)(((color) & 0x00FF0000) >> 16) / 255.0f,
-                                             (float)(((color) & 0x0000FF00) >> 8) / 255.0f,
-                                             (float)(((color) & 0x000000FF)) / 255.0f,
-                                                 1.0);
+    m_Extrude3DInfo.extrudeColor = getColorAsVector(nColor);
     m_Extrude3DInfo.material.materialColor = m_Extrude3DInfo.extrudeColor;//material color seems to be the same for all parts, so we use the polygon color
 
     //material specular;
-    m_Extrude3DInfo.material.specular = glm::vec4((float)(((specular) & 0x00FF0000) >> 16) / 255.0f,
-                                        (float)(((specular) & 0x0000FF00) >> 8) / 255.0f,
-                                        (float)(((specular) & 0x000000FF)) / 255.0f,
-                                        1.0);
+    m_Extrude3DInfo.material.specular = getColorAsVector(specular);
 
     m_Extrude3DInfo.material.diffuse = glm::vec4(1.0, 1.0, 1.0, 1.0);
 

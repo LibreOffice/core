@@ -28,7 +28,7 @@ void Renderable3DObject::render()
     (void) mnUniqueId;
 }
 
-Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_Int32 aColor, sal_uInt32 nId)
+Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 aColor, sal_uInt32 nId)
     : Renderable3DObject(pRenderer, nId)
     , mbRoundedCorners(true)
     , maPos(rPosition)
@@ -39,7 +39,7 @@ Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_Int32 aCol
 
 void Bar::render()
 {
-    mpRenderer->AddShape3DExtrudeObject(mbRoundedCorners, (sal_Int32)maColor.GetColor(), 0xFFFFFF, maPos);
+    mpRenderer->AddShape3DExtrudeObject(mbRoundedCorners, maColor.GetColor(), 0xFFFFFF, maPos);
     mpRenderer->EndAddShape3DExtrudeObject();
 }
 
@@ -50,7 +50,7 @@ Line::Line(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
 
 void Line::render()
 {
-    mpRenderer->AddShapePolygon3DObject(0, true, (sal_Int32)maLineColor.GetColor(), 0, 0);
+    mpRenderer->AddShapePolygon3DObject(0, true, maLineColor.GetColor(), 0, 0);
     mpRenderer->AddPolygon3DObjectPoint(maPosBegin.x, maPosBegin.y, maPosBegin.z);
     mpRenderer->AddPolygon3DObjectPoint(maPosEnd.x, maPosEnd.y, maPosEnd.z);
     mpRenderer->EndAddShapePolygon3DObject();
@@ -126,7 +126,7 @@ void Rectangle::render()
     mpRenderer->EndAddPolygon3DObjectPoint();
     mpRenderer->EndAddPolygon3DObjectNormalPoint();
     //we should render the edge if the edge color is different from the fill color
-    if ((sal_Int32)maColor.GetColor() != (sal_Int32)maLineColor.GetColor())
+    if (maColor.GetColor() != maLineColor.GetColor())
     {
         mpRenderer->AddShapePolygon3DObject(0, true, maLineColor.GetColor(), 0, 0xFFFFFF);
         mpRenderer->AddPolygon3DObjectPoint(maBottomRight.x, maBottomRight.y, maBottomRight.z);
