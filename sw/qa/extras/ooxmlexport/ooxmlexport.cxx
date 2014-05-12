@@ -3328,6 +3328,16 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testfdo78599,"fdo78599.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    //docx file after RT is getting corrupted.
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[6]/w:fldChar", "fldCharType", "end" );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
