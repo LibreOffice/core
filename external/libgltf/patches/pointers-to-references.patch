@@ -1,0 +1,72 @@
+diff --git libgltf/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf/src/RenderScene.cpp
++++ libgltf/src/RenderScene.cpp
+@@ -145,17 +145,17 @@ glm::mat4 RenderPrimitive::getCurrentMatrix()
+     return mCurrentMatrix;
+ }
+ 
+-void RenderPrimitive::setParentMatrixes(vector<glm::mat4>* parentMatrixes)
++void RenderPrimitive::setParentMatrixes(const vector<glm::mat4>& parentMatrixes)
+ {
+-    for (unsigned int i = 0; i < parentMatrixes->size(); i++)
++    for (unsigned int i = 0; i < parentMatrixes.size(); i++)
+     {
+-        mParentMatrixes.push_back((*parentMatrixes)[i]);
++        mParentMatrixes.push_back(parentMatrixes[i]);
+     }
+ }
+ 
+-vector<glm::mat4>* RenderPrimitive::getParentMatrixes()
++vector<glm::mat4>& RenderPrimitive::getParentMatrixes()
+ {
+-    return& mParentMatrixes;
++    return mParentMatrixes;
+ }
+ 
+ RenderScene::RenderScene()
+@@ -283,7 +283,7 @@ void RenderScene::constructPrimitive(const Primitives* pPrimitive,
+     bindAttributeBuffer(pPrimitive, pRenderPrimitive);
+     pRenderPrimitive->setMaterial(pMaterial);
+     pRenderPrimitive->setCurrentMatrix(pNode->getCurrentNodeMatrix());
+-    pRenderPrimitive->setParentMatrixes(&(pNode->getParentMatrixes()));
++    pRenderPrimitive->setParentMatrixes(pNode->getParentMatrixes());
+     pRenderPrimitive->setMatrix(pmatrix);
+ 
+     setPrimitiveVec(pRenderPrimitive);
+@@ -520,17 +520,17 @@ void RenderScene::upLoadMatrixInfo(unsigned int progId,
+                                    RenderPrimitive* pPrimitive)
+ {
+     glm::mat4* pMatrix = pPrimitive->getMatrix();
+-    vector<glm::mat4>* parentMatrixes = pPrimitive->getParentMatrixes();
++    vector<glm::mat4>& parentMatrixes = pPrimitive->getParentMatrixes();
+ 
+-    if (mEnableRotation && parentMatrixes->size() > 0 && mRotationNow)
++    if (mEnableRotation && parentMatrixes.size() > 0 && mRotationNow)
+     {
+-        glm::mat4 rootMatrix = (*parentMatrixes)[parentMatrixes->size() - 1];
++        glm::mat4 rootMatrix = parentMatrixes[parentMatrixes.size() - 1];
+         glm::mat4 tmpMat4;
+         tmpMat4 = glm::rotate(rootMatrix, 0.3f, glm::vec3(0.0f, 0.0f, 1.0f));
+-        (*parentMatrixes)[parentMatrixes->size() - 1] = tmpMat4;
+-        for (int i = (int)parentMatrixes->size() - 2; i >= 0; i--)
++        parentMatrixes[parentMatrixes.size() - 1] = tmpMat4;
++        for (int i = (int)parentMatrixes.size() - 2; i >= 0; i--)
+         {
+-            tmpMat4 = tmpMat4 * (*parentMatrixes)[i];
++            tmpMat4 = tmpMat4 * parentMatrixes[i];
+         }
+         tmpMat4 = tmpMat4 * pPrimitive->getCurrentMatrix();
+         *pMatrix = tmpMat4;
+--- libgltf/src/RenderScene.h
++++ libgltf/src/RenderScene.h
+@@ -58,8 +58,8 @@ public:
+     void setCurrentMatrix(glm::mat4 currentMatrix);
+     glm::mat4 getCurrentMatrix();
+ 
+-    void setParentMatrixes(vector<glm::mat4>* parentMatrixes);
+-    vector<glm::mat4>* getParentMatrixes();
++    void setParentMatrixes(const vector<glm::mat4>& parentMatrixes);
++    vector<glm::mat4>& getParentMatrixes();
+ 
+     RenderPrimitive();
+     ~RenderPrimitive();

@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/unneeded_context_handling.patch \
 	external/libgltf/patches/win_only_variables.patch \
 	external/libgltf/patches/constify_for_temporaries.patch \
+	external/libgltf/patches/pointers-to-references.patch \
 	external/libgltf/patches/shader_charbuffer_used_as_cstring.patch \
 	external/libgltf/patches/get_bitmap_new_syntax.patch \
 	external/libgltf/patches/remove_extra_include.patch \
