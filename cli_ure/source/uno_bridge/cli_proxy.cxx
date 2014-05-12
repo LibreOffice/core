@@ -1106,11 +1106,11 @@ void SAL_CALL cli_proxy_dispatch(
     catch (BridgeRuntimeError & err)
     {
         // binary identical struct
-        ::com::sun::star::uno::RuntimeException exc(
+        css::uno::RuntimeException exc(
             "[cli_uno bridge error] " + err.m_message,
-            ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface >() );
-        ::com::sun::star::uno::Type const & exc_type = ::getCppuType( & exc);
+            css::uno::Reference<
+            css::uno::XInterface >() );
+        css::uno::Type const & exc_type = ::getCppuType( & exc);
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0);
 #if OSL_DEBUG_LEVEL >= 1
         OString cstr_msg(OUStringToOString(exc.Message,

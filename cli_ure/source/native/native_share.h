@@ -47,17 +47,17 @@ inline OUString String_to_ustring( ::System::String ^ str )
 
 template< typename T >
 inline ::System::Object ^ to_cli(
-    ::com::sun::star::uno::Reference< T > const & x )
+    css::uno::Reference< T > const & x )
 {
-    ::com::sun::star::uno::Mapping mapping(
+    css::uno::Mapping mapping(
         CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_CLI );
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
     {
-        throw ::com::sun::star::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             "cannot get mapping from C++ to CLI!",
-            ::com::sun::star::uno::Reference<
-              ::com::sun::star::uno::XInterface >() );
+            css::uno::Reference<
+              css::uno::XInterface >() );
     }
 
     intptr_t intptr =
@@ -71,17 +71,17 @@ inline ::System::Object ^ to_cli(
 
 template< typename T >
 inline void to_uno(
-    ::com::sun::star::uno::Reference< T > * pRet, ::System::Object ^ x )
+    css::uno::Reference< T > * pRet, ::System::Object ^ x )
 {
-    ::com::sun::star::uno::Mapping mapping(
+    css::uno::Mapping mapping(
         UNO_LB_CLI, CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
     {
-        throw ::com::sun::star::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             "cannot get mapping from CLI to C++!",
-            ::com::sun::star::uno::Reference<
-              ::com::sun::star::uno::XInterface >() );
+            css::uno::Reference<
+              css::uno::XInterface >() );
     }
 
     ::System::Runtime::InteropServices::GCHandle handle(

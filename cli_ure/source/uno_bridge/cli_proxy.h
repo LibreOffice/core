@@ -176,7 +176,7 @@ struct CliProxy: public uno_Interface
     const Bridge* m_bridge;
     const gcroot<System::Object^> m_cliI;
     gcroot<System::Type^> m_type;
-    const com::sun::star::uno::TypeDescription m_unoType;
+    const css::uno::TypeDescription m_unoType;
     const gcroot<System::String^> m_oid;
     const OUString m_usOid;
 

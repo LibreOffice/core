@@ -130,7 +130,7 @@ ref class TypeEmitter : public ::System::IDisposable
         css::reflection::XCompoundTypeDescription > >& seq_exceptionsTd );
 /* Creates ::System::Type object for UNO exceptions. The UNO exceptions are
        obtained by
-       com::sun::star::reflection::XServiceConstructorDescription::getExceptions
+       css::reflection::XServiceConstructorDescription::getExceptions
        In a first step the respective CLI types are created. Then it is examined
        if a Type represents a super class of another class. If so the Type of the
        derived class is discarded. For example there are a uno RuntimeException and
