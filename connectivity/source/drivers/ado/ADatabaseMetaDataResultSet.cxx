@@ -706,11 +706,16 @@ void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
     Sequence< com::sun::star::beans::Property > aProps(5);
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,          OUString);
-    DECL_PROP0(FETCHDIRECTION,      sal_Int32);
-    DECL_PROP0(FETCHSIZE,           sal_Int32);
-    DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
-    DECL_PROP0(RESULTSETTYPE,       sal_Int32);
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+        PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+        PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+        PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+        PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
+    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+        PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
