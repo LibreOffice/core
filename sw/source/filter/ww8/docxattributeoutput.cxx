@@ -4210,8 +4210,9 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
          it != m_postponedDMLDrawing->end();
          ++it )
     {
-        if ( IsAlternateContentChoiceOpen() )
-            m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
+        // Avoid w:drawing within another w:drawing.
+        if ( IsAlternateContentChoiceOpen() && !( m_rExport.SdrExporter().IsDrawingOpen()) )
+           m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
     }
