@@ -1642,6 +1642,9 @@ void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         for(boost::ptr_vector<Window>::iterator itr = maChildWindows.begin(),
                 itrEnd = maChildWindows.end(); itr != itrEnd; ++itr)
         {
+            if(!itr->IsVisible())
+                continue;
+
             Point aPoint = itr->GetPosPixel();
             Size aSize = itr->GetSizePixel();
 
