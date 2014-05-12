@@ -72,10 +72,6 @@ SvtLanguageTable::AddLanguageTag(LanguageTag const&, rtl::OUString const&)
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxDummyShapeContainer::SvxDummyShapeContainer(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>)
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
-SwAccessibleMap::FireColumnChangeEvent(unsigned short, unsigned short)
-SwAccessibleMap::FirePageChangeEvent(unsigned short, unsigned short)
-SwExtraRedlineTbl::GetPos(SwExtraRedline const*) const
-SwExtraRedlineTbl::Remove(unsigned short)
 TextDoc::IsValidPaM(TextPaM const&)
 Texture::greateEmptyTexture(int, int, unsigned int)
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)

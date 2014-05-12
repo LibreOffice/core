@@ -205,11 +205,9 @@ private:
 
 public:
     ~SwExtraRedlineTbl();
-    sal_uInt16 GetPos(const SwExtraRedline* p) const;
 
     bool Insert( SwExtraRedline* p );
 
-    void Remove( sal_uInt16 nPos );
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 
