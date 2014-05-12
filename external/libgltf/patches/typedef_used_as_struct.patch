@@ -1,14 +1,74 @@
-diff -ur libgltf.org/src/Common.h libgltf/src/Common.h
---- libgltf.org/src/Common.h	2014-05-05 14:31:00.483359159 +0200
-+++ libgltf/src/Common.h	2014-05-05 14:34:02.055366903 +0200
-@@ -536,8 +536,8 @@
-         unsigned int mCount;
-         double mMaxTime;
-         double mMinTime;
--        std::vector<struct QuatKey> mTimeRorateVec;
--        //std::vector<struct QuatKey> mTimeTransfromVec;
-+        std::vector<QuatKey> mTimeRorateVec;
-+        //std::vector<QuatKey> mTimeTransfromVec;
-     };
+diff --git a/libgltf/src/Common.cpp b/libgltf/src/Common.cpp
+--- libgltf/src/Common.cpp
++++ libgltf/src/Common.cpp
+@@ -906,14 +906,14 @@ AnimChannel::AnimChannel()
  
-     class Animation
+ AnimChannel::~AnimChannel()
+ {
+-    std::vector<struct QuatKey4>::iterator it4;
++    std::vector<QuatKey4>::iterator it4;
+     for (it4 = mTimeValue4Vec.begin(); it4 != mTimeValue4Vec.end(); ++it4)
+     {
+         delete it4->mValue;
+     }
+     mTimeValue4Vec.clear();
+ 
+-    std::vector<struct QuatKey3>::iterator it3;
++    std::vector<QuatKey3>::iterator it3;
+     for (it3 = mTimeValue3Vec.begin(); it3 != mTimeValue3Vec.end(); ++it3)
+     {
+         delete it3->mValue;
+@@ -933,7 +933,7 @@ unsigned int AnimChannel::getCount()
+ 
+ void AnimChannel::pushTimeValue4(double time, glm::vec4* value)
+ {
+-    struct QuatKey4 quatKey;
++    QuatKey4 quatKey;
+     quatKey.mTime = time;
+     quatKey.mValue = value;
+     this->mTimeValue4Vec.push_back(quatKey);
+@@ -955,7 +955,7 @@ glm::vec4* AnimChannel::getTimeValue4(double time)
+ 
+ void AnimChannel::pushTimeValue3(double time, glm::vec3* value)
+ {
+-    struct QuatKey3 quatKey;
++    QuatKey3 quatKey;
+     quatKey.mTime = time;
+     quatKey.mValue = value;
+     this->mTimeValue3Vec.push_back(quatKey);
+diff --git a/libgltf/src/Common.h b/libgltf/src/Common.h
+--- libgltf/src/Common.h
++++ libgltf/src/Common.h
+@@ -511,17 +511,17 @@ private:
+ 
+ class AnimChannel
+ {
+-    typedef struct QuatKey4
++    struct QuatKey4
+     {
+         double mTime;
+         glm::vec4* mValue;
+-    } QuatKey4;
++    };
+ 
+-    typedef struct QuatKey3
++    struct QuatKey3
+     {
+         double mTime;
+         glm::vec3* mValue;
+-    } QuatKey3;
++    };
+ 
+ public:
+     void setCount(unsigned int cout);
+@@ -532,8 +532,8 @@ private:
+     unsigned int mCount;
+     double mMaxTime;
+     double mMinTime;
+-    std::vector<struct QuatKey3> mTimeValue3Vec;
+-    std::vector<struct QuatKey4> mTimeValue4Vec;
++    std::vector<QuatKey3> mTimeValue3Vec;
++    std::vector<QuatKey4> mTimeValue4Vec;
+ };
+ 
+ class Animation

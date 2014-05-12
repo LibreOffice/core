@@ -1,12 +1,12 @@
-diff -ur libgltf.org/src/FPSCounter.cpp libgltf/src/FPSCounter.cpp
---- libgltf.org/src/FPSCounter.cpp	2014-05-05 14:44:01.711392481 +0200
-+++ libgltf/src/FPSCounter.cpp	2014-05-05 14:44:34.495393880 +0200
-@@ -119,7 +119,9 @@
-         if (timeCounter>=TIMETHRESHOLD)
+--- libgltf/src/FPSCounter.cpp	2014-05-12 09:37:18.237883541 +0200
++++ libgltf.new/src/FPSCounter.cpp	2014-05-12 10:12:46.458199886 +0200
+@@ -152,8 +152,10 @@ void FPSCounter::printFPS(glTFViewport*
+         if (timeCounter >= TIMETHRESHOLD)
          {
-             FPSFile<<"FPS:"<<mFPS<<"\n";
+             FPSFile << "FPS:" << mFPS << "\n";
 +#ifdef _WIN32
-             FPSFile<<"Render Total Time: "<<mTotalTime*1000<<" ms"<<"Draw Time: "<<mGPUTime*1000<<" ms\n";
+             FPSFile << "Render Total Time: " << mTotalTime * 1000 << " ms" <<
+                     "Draw Time: " << mGPUTime * 1000 << " ms\n";
 +#endif
              timeCounter = 0;
          }
