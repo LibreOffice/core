@@ -439,346 +439,345 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     if( ! rReq.IsAPI() )
         rReq.Done();
 
-    if( SvtModuleOptions().IsChart() )
+    if (!SvtModuleOptions().IsChart())
+        return;
+
+    // BM/IHA --
+
+    // get range
+    OUString aRangeString;
+    ScRange aPositionRange;             // cell range for chart positioning
+    ScMarkData aMark = pViewSh->GetViewData()->GetMarkData();
+    if( pReqArgs )
     {
+        const SfxPoolItem* pItem;
+        if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
+            aRangeString = OUString( ((const SfxStringItem*)pItem)->GetValue());
 
-        // BM/IHA --
-
-        // get range
-        OUString aRangeString;
-        ScRange aPositionRange;             // cell range for chart positioning
-        ScMarkData aMark = pViewSh->GetViewData()->GetMarkData();
-        if( pReqArgs )
+        aPositionRange = pViewSh->GetViewData()->GetCurPos();
+    }
+    else
+    {
+        bool bAutomaticMark = false;
+        if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
         {
-            const SfxPoolItem* pItem;
-            if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
-                aRangeString = OUString( ((const SfxStringItem*)pItem)->GetValue());
+            pViewSh->GetViewData()->GetView()->MarkDataArea( true );
+            bAutomaticMark = true;
+        }
 
-            aPositionRange = pViewSh->GetViewData()->GetCurPos();
+        ScMarkData aMultiMark( aMark );
+        aMultiMark.MarkToMulti();
+
+        ScRangeList aRanges;
+        aMultiMark.FillRangeListWithMarks( &aRanges, false );
+        OUString aStr;
+        ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
+        aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
+        aRangeString = aStr;
+
+        // get "total" range for positioning
+        if ( !aRanges.empty() )
+        {
+            aPositionRange = *aRanges[ 0 ];
+            for ( size_t i = 1, nCount = aRanges.size(); i < nCount; ++i )
+            {
+                aPositionRange.ExtendTo( *aRanges[ i ] );
+            }
+        }
+
+        if(bAutomaticMark)
+            pViewSh->GetViewData()->GetView()->Unmark();
+    }
+
+
+    // adapted old code
+    pView->UnmarkAll();
+
+    OUString aName;
+    const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
+    uno::Reference < embed::XEmbeddedObject > xObj =
+        pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
+
+    uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+    if( xCompSupp.is())
+        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+
+    // lock the model to suppress any internal updates
+    uno::Reference< frame::XModel > xChartModel( xReceiver, uno::UNO_QUERY );
+    if( xChartModel.is() )
+        xChartModel->lockControllers();
+
+    ScRangeListRef aDummy;
+    Rectangle aMarkDest;
+    SCTAB nMarkTab;
+    bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
+
+    //  Objekt-Groesse
+    awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+    Size aSize( aSz.Width, aSz.Height );
+
+    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+
+    bool bSizeCh = false;
+    if (bDrawRect && !aMarkDest.IsEmpty())
+    {
+        aSize = aMarkDest.GetSize();
+        bSizeCh = true;
+    }
+    if (aSize.Height() <= 0 || aSize.Width() <= 0)
+    {
+        aSize.Width() = 5000;
+        aSize.Height() = 5000;
+        bSizeCh = true;
+    }
+    if (bSizeCh)
+    {
+        aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+        aSz.Width = aSize.Width();
+        aSz.Height = aSize.Height();
+        xObj->setVisualAreaSize( nAspect, aSz );
+    }
+
+    ScViewData* pData = pViewSh->GetViewData();
+    ScDocShell* pScDocSh = pData->GetDocShell();
+    ScDocument* pScDoc   = pScDocSh->GetDocument();
+    bool bUndo (pScDoc->IsUndoEnabled());
+
+    Window* pParentWindow = pData->GetActiveWin();
+    OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
+    Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
+    pChildWindow->SetSizePixel(aWindowSize);
+    pChildWindow->Show();
+    uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( xChartModel, uno::UNO_QUERY_THROW );
+    sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pChildWindow);
+    x3DWindowProvider->setWindow(nWindowPtr);
+    ScGridWindow* pGridWindow = dynamic_cast<ScGridWindow*>(pParentWindow);
+    if(pGridWindow)
+    {
+        pGridWindow->AddChildWindow(pChildWindow);
+    }
+    else
+        SAL_WARN("sc", "not a grid window. You are in serious trouble");
+
+    if( pReqArgs )
+    {
+        const SfxPoolItem* pItem;
+        sal_uInt16 nToTable = 0;
+
+        if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
+        {
+            if ( pItem->ISA( SfxUInt16Item ) )
+                nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
+            else if ( pItem->ISA( SfxBoolItem ) )
+            {
+                //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
+                //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
+
+                if ( ((const SfxBoolItem*)pItem)->GetValue() )
+                    nToTable = static_cast<sal_uInt16>(pScDoc->GetTableCount());
+                else
+                    nToTable = static_cast<sal_uInt16>(pData->GetTabNo());
+            }
         }
         else
         {
-            bool bAutomaticMark = false;
-            if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
+            if (bDrawRect)
+                nToTable = static_cast<sal_uInt16>(nMarkTab);
+            rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
+        }
+
+        // auf neue Tabelle ausgeben?
+        if ( nToTable == pScDoc->GetTableCount() )
+        {
+            // dann los...
+            OUString      aTabName;
+            SCTAB       nNewTab = pScDoc->GetTableCount();
+
+            pScDoc->CreateValidTabName( aTabName );
+
+            if ( pScDoc->InsertTab( nNewTab, aTabName ) )
             {
-                pViewSh->GetViewData()->GetView()->MarkDataArea( true );
-                bAutomaticMark = true;
-            }
+                bool bAppend = true;
 
-            ScMarkData aMultiMark( aMark );
-            aMultiMark.MarkToMulti();
-
-            ScRangeList aRanges;
-            aMultiMark.FillRangeListWithMarks( &aRanges, false );
-            OUString aStr;
-            ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
-            aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
-            aRangeString = aStr;
-
-            // get "total" range for positioning
-            if ( !aRanges.empty() )
-            {
-                aPositionRange = *aRanges[ 0 ];
-                for ( size_t i = 1, nCount = aRanges.size(); i < nCount; ++i )
+                if (bUndo)
                 {
-                    aPositionRange.ExtendTo( *aRanges[ i ] );
+                    pScDocSh->GetUndoManager()->AddUndoAction(
+                        new ScUndoInsertTab( pScDocSh, nNewTab,
+                                             bAppend, aTabName ) );
                 }
-            }
 
-            if(bAutomaticMark)
-                pViewSh->GetViewData()->GetView()->Unmark();
-        }
-
-
-        // adapted old code
-        pView->UnmarkAll();
-
-        OUString aName;
-        const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-
-        uno::Reference < embed::XEmbeddedObject > xObj =
-            pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
-
-        uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
-        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-        if( xCompSupp.is())
-            xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-
-        // lock the model to suppress any internal updates
-        uno::Reference< frame::XModel > xChartModel( xReceiver, uno::UNO_QUERY );
-        if( xChartModel.is() )
-            xChartModel->lockControllers();
-
-        ScRangeListRef aDummy;
-        Rectangle aMarkDest;
-        SCTAB nMarkTab;
-        bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
-
-        //  Objekt-Groesse
-        awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-        Size aSize( aSz.Width, aSz.Height );
-
-        MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-
-        bool bSizeCh = false;
-        if (bDrawRect && !aMarkDest.IsEmpty())
-        {
-            aSize = aMarkDest.GetSize();
-            bSizeCh = true;
-        }
-        if (aSize.Height() <= 0 || aSize.Width() <= 0)
-        {
-            aSize.Width() = 5000;
-            aSize.Height() = 5000;
-            bSizeCh = true;
-        }
-        if (bSizeCh)
-        {
-            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize( nAspect, aSz );
-        }
-
-        ScViewData* pData = pViewSh->GetViewData();
-        ScDocShell* pScDocSh = pData->GetDocShell();
-        ScDocument* pScDoc   = pScDocSh->GetDocument();
-        bool bUndo (pScDoc->IsUndoEnabled());
-
-        Window* pParentWindow = pData->GetActiveWin();
-        OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
-        Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
-        pChildWindow->SetSizePixel(aWindowSize);
-        pChildWindow->Show();
-        uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( xChartModel, uno::UNO_QUERY_THROW );
-        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pChildWindow);
-        x3DWindowProvider->setWindow(nWindowPtr);
-        ScGridWindow* pGridWindow = dynamic_cast<ScGridWindow*>(pParentWindow);
-        if(pGridWindow)
-        {
-            pGridWindow->AddChildWindow(pChildWindow);
-        }
-        else
-            SAL_WARN("sc", "not a grid window. You are in serious trouble");
-
-        if( pReqArgs )
-        {
-            const SfxPoolItem* pItem;
-            sal_uInt16 nToTable = 0;
-
-            if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
-            {
-                if ( pItem->ISA( SfxUInt16Item ) )
-                    nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
-                else if ( pItem->ISA( SfxBoolItem ) )
-                {
-                    //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
-                    //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
-
-                    if ( ((const SfxBoolItem*)pItem)->GetValue() )
-                        nToTable = static_cast<sal_uInt16>(pScDoc->GetTableCount());
-                    else
-                        nToTable = static_cast<sal_uInt16>(pData->GetTabNo());
-                }
+                pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
+                pViewSh->SetTabNo( nNewTab, true );
+                pScDocSh->PostPaintExtras();            //! erst hinterher ???
             }
             else
             {
-                if (bDrawRect)
-                    nToTable = static_cast<sal_uInt16>(nMarkTab);
-                rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
-            }
-
-            // auf neue Tabelle ausgeben?
-            if ( nToTable == pScDoc->GetTableCount() )
-            {
-                // dann los...
-                OUString      aTabName;
-                SCTAB       nNewTab = pScDoc->GetTableCount();
-
-                pScDoc->CreateValidTabName( aTabName );
-
-                if ( pScDoc->InsertTab( nNewTab, aTabName ) )
-                {
-                    bool bAppend = true;
-
-                    if (bUndo)
-                    {
-                        pScDocSh->GetUndoManager()->AddUndoAction(
-                            new ScUndoInsertTab( pScDocSh, nNewTab,
-                                                 bAppend, aTabName ) );
-                    }
-
-                    pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
-                    pViewSh->SetTabNo( nNewTab, true );
-                    pScDocSh->PostPaintExtras();            //! erst hinterher ???
-                }
-                else
-                {
-                    OSL_FAIL( "Could not create new table :-/" );
-                }
-            }
-            else if ( nToTable != pData->GetTabNo() )
-            {
-                pViewSh->SetTabNo( nToTable, true );
+                OSL_FAIL( "Could not create new table :-/" );
             }
         }
-
-        lcl_ChartInit( xObj, pData, aRangeString );         // set source range, auto-detect column/row headers
-
-        //  Objekt-Position
-
-        Point aStart;
-        if ( bDrawRect )
-            aStart = aMarkDest.TopLeft();                       // marked by hand
-        else
+        else if ( nToTable != pData->GetTabNo() )
         {
-            // get chart position (from window size and data range)
-            aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
+            pViewSh->SetTabNo( nToTable, true );
         }
-        pChildWindow->SetPosPixel(pChildWindow->LogicToPixel(aStart, MapMode(MAP_100TH_MM)));
+    }
 
-        Rectangle aRect (aStart, aSize);
-        SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
-        SdrPageView* pPV = pView->GetSdrPageView();
+    lcl_ChartInit( xObj, pData, aRangeString );         // set source range, auto-detect column/row headers
 
-        // #i121334# This call will change the chart's default background fill from white to transparent.
-        // Add here again if this is wanted (see task description for details)
-        // ChartHelper::AdaptDefaultsForChart( xObj );
+    //  Objekt-Position
+
+    Point aStart;
+    if ( bDrawRect )
+        aStart = aMarkDest.TopLeft();                       // marked by hand
+    else
+    {
+        // get chart position (from window size and data range)
+        aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
+    }
+    pChildWindow->SetPosPixel(pChildWindow->LogicToPixel(aStart, MapMode(MAP_100TH_MM)));
+
+    Rectangle aRect (aStart, aSize);
+    SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+    SdrPageView* pPV = pView->GetSdrPageView();
+
+    // #i121334# This call will change the chart's default background fill from white to transparent.
+    // Add here again if this is wanted (see task description for details)
+    // ChartHelper::AdaptDefaultsForChart( xObj );
 
 //        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
 
-        // use the page instead of the view to insert, so no undo action is created yet
-        SdrPage* pInsPage = pPV->GetPage();
-        pInsPage->InsertObject( pObj );
-        pView->UnmarkAllObj();
-        pView->MarkObj( pObj, pPV );
-        bool bAddUndo = true;               // add undo action later, unless the dialog is canceled
+    // use the page instead of the view to insert, so no undo action is created yet
+    SdrPage* pInsPage = pPV->GetPage();
+    pInsPage->InsertObject( pObj );
+    pView->UnmarkAllObj();
+    pView->MarkObj( pObj, pPV );
+    bool bAddUndo = true;               // add undo action later, unless the dialog is canceled
 
-        if (rReq.IsAPI())
+    if (rReq.IsAPI())
+    {
+        if( xChartModel.is() )
+            xChartModel->unlockControllers();
+    }
+    else
+    {
+        //the controller will be unlocked by the dialog when the dialog is told to do so
+
+        // only activate object if not called via API (e.g. macro)
+        pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+
+        //open wizard
+        //@todo get context from calc if that has one
+        uno::Reference< uno::XComponentContext > xContext(
+            ::cppu::defaultBootstrap_InitialComponentContext() );
+        if(xContext.is())
         {
-            if( xChartModel.is() )
-                xChartModel->unlockControllers();
-        }
-        else
-        {
-            //the controller will be unlocked by the dialog when the dialog is told to do so
-
-            // only activate object if not called via API (e.g. macro)
-            pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
-
-            //open wizard
-            //@todo get context from calc if that has one
-            uno::Reference< uno::XComponentContext > xContext(
-                ::cppu::defaultBootstrap_InitialComponentContext() );
-            if(xContext.is())
+            uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+            if(xMCF.is())
             {
-                uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
-                if(xMCF.is())
+                uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
+                    xMCF->createInstanceWithContext(
+                        OUString("com.sun.star.comp.chart2.WizardDialog")
+                        , xContext), uno::UNO_QUERY);
+                uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
+                if( xChartModel.is() && xInit.is() )
                 {
-                    uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
-                        xMCF->createInstanceWithContext(
-                            OUString("com.sun.star.comp.chart2.WizardDialog")
-                            , xContext), uno::UNO_QUERY);
-                    uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
-                    if( xChartModel.is() && xInit.is() )
+                    uno::Reference< awt::XWindow > xDialogParentWindow(0);
+                    //  initialize dialog
+                    uno::Sequence<uno::Any> aSeq(2);
+                    uno::Any* pArray = aSeq.getArray();
+                    beans::PropertyValue aParam1;
+                    aParam1.Name = "ParentWindow";
+                    aParam1.Value <<= uno::makeAny(xDialogParentWindow);
+                    beans::PropertyValue aParam2;
+                    aParam2.Name = "ChartModel";
+                    aParam2.Value <<= uno::makeAny(xChartModel);
+                    pArray[0] <<= uno::makeAny(aParam1);
+                    pArray[1] <<= uno::makeAny(aParam2);
+                    xInit->initialize( aSeq );
+
+                    // try to set the dialog's position so it doesn't hide the chart
+                    uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
+                    if ( xDialogProps.is() )
                     {
-                        uno::Reference< awt::XWindow > xDialogParentWindow(0);
-                        //  initialize dialog
-                        uno::Sequence<uno::Any> aSeq(2);
-                        uno::Any* pArray = aSeq.getArray();
-                        beans::PropertyValue aParam1;
-                        aParam1.Name = "ParentWindow";
-                        aParam1.Value <<= uno::makeAny(xDialogParentWindow);
-                        beans::PropertyValue aParam2;
-                        aParam2.Name = "ChartModel";
-                        aParam2.Value <<= uno::makeAny(xChartModel);
-                        pArray[0] <<= uno::makeAny(aParam1);
-                        pArray[1] <<= uno::makeAny(aParam2);
-                        xInit->initialize( aSeq );
-
-                        // try to set the dialog's position so it doesn't hide the chart
-                        uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
-                        if ( xDialogProps.is() )
+                        try
                         {
-                            try
+                            //get dialog size:
+                            awt::Size aDialogAWTSize;
+                            if( xDialogProps->getPropertyValue("Size")
+                                >>= aDialogAWTSize )
                             {
-                                //get dialog size:
-                                awt::Size aDialogAWTSize;
-                                if( xDialogProps->getPropertyValue("Size")
-                                    >>= aDialogAWTSize )
+                                Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
+                                if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
                                 {
-                                    Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
-                                    if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
-                                    {
-                                        //calculate and set new position
-                                        Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
-                                        xDialogProps->setPropertyValue("Position",
-                                            uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
-                                    }
+                                    //calculate and set new position
+                                    Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
+                                    xDialogProps->setPropertyValue("Position",
+                                        uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                 }
-                                //tell the dialog to unlock controller
-                                xDialogProps->setPropertyValue("UnlockControllersOnExecute",
-                                            uno::makeAny( sal_True ) );
-
                             }
-                            catch( uno::Exception& )
-                            {
-                                OSL_FAIL( "Chart wizard couldn't be positioned automatically\n" );
-                            }
+                            //tell the dialog to unlock controller
+                            xDialogProps->setPropertyValue("UnlockControllersOnExecute",
+                                        uno::makeAny( sal_True ) );
+
                         }
-
-                        sal_Int16 nDialogRet = xDialog->execute();
-                        if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
+                        catch( uno::Exception& )
                         {
-                            pGridWindow->DeleteChildWindow(pChildWindow);
-                            // leave OLE inplace mode and unmark
-                            OSL_ASSERT( pViewShell );
-                            OSL_ASSERT( pView );
-                            pViewShell->DeactivateOle();
-                            pView->UnmarkAll();
-
-                            // old page view pointer is invalid after switching sheets
-                            pPV = pView->GetSdrPageView();
-
-                            // remove the chart
-                            OSL_ASSERT( pPV );
-                            SdrPage * pPage( pPV->GetPage());
-                            OSL_ASSERT( pPage );
-                            OSL_ASSERT( pObj );
-                            if( pPage )
-                                pPage->RemoveObject( pObj->GetOrdNum());
-
-                            bAddUndo = false;       // don't create the undo action for inserting
-
-                            // leave the draw shell
-                            pViewShell->SetDrawShell( false );
-
-                            // reset marked cell area
-
-                            pViewSh->GetViewData()->GetViewShell()->SetMarkData(aMark);
-                        }
-                        else
-                        {
-                            OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
-                            //@todo maybe move chart to different table
+                            OSL_FAIL( "Chart wizard couldn't be positioned automatically\n" );
                         }
                     }
-                    uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
-                    if( xComponent.is())
-                        xComponent->dispose();
+
+                    sal_Int16 nDialogRet = xDialog->execute();
+                    if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
+                    {
+                        pGridWindow->DeleteChildWindow(pChildWindow);
+                        // leave OLE inplace mode and unmark
+                        OSL_ASSERT( pViewShell );
+                        OSL_ASSERT( pView );
+                        pViewShell->DeactivateOle();
+                        pView->UnmarkAll();
+
+                        // old page view pointer is invalid after switching sheets
+                        pPV = pView->GetSdrPageView();
+
+                        // remove the chart
+                        OSL_ASSERT( pPV );
+                        SdrPage * pPage( pPV->GetPage());
+                        OSL_ASSERT( pPage );
+                        OSL_ASSERT( pObj );
+                        if( pPage )
+                            pPage->RemoveObject( pObj->GetOrdNum());
+
+                        bAddUndo = false;       // don't create the undo action for inserting
+
+                        // leave the draw shell
+                        pViewShell->SetDrawShell( false );
+
+                        // reset marked cell area
+
+                        pViewSh->GetViewData()->GetViewShell()->SetMarkData(aMark);
+                    }
+                    else
+                    {
+                        OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
+                        //@todo maybe move chart to different table
+                    }
                 }
+                uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
+                if( xComponent.is())
+                    xComponent->dispose();
             }
         }
-
-        if ( bAddUndo )
-        {
-            // add undo action the same way as in SdrEditView::InsertObjectAtView
-            // (using UndoActionHdl etc.)
-            pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
-        }
-
-        // BM/IHA --
     }
+
+    if ( bAddUndo )
+    {
+        // add undo action the same way as in SdrEditView::InsertObjectAtView
+        // (using UndoActionHdl etc.)
+        pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+    }
+
+    // BM/IHA --
 }
 
 void FuInsertChart::Activate()
