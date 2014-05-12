@@ -7,8 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ifneq ($(COM_GCC_IS_CLANG)$(filter -fsanitize=address,$(CC)),TRUE-fsanitize=address)
 gb_LinkTarget_LDFLAGS += \
         -Wl,-z,defs \
+
+endif
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
