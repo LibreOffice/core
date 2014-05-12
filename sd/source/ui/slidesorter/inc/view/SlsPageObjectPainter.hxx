@@ -85,6 +85,7 @@ private:
     Bitmap maFocusedBackground;
     Bitmap maMouseOverBackground;
     Bitmap maMouseOverFocusedBackground;
+    Bitmap maMouseOverSelectedBackground;
     Bitmap maMouseOverSelectedAndFocusedBackground;
     Size maSize;
 

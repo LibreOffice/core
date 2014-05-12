@@ -82,6 +82,7 @@ public:
         Gradient_SelectedPage,
         Gradient_SelectedAndFocusedPage,
         Gradient_MouseOverPage,
+        Gradient_MouseOverSelected,
         Gradient_MouseOverSelectedAndFocusedPage,
         Gradient_FocusedPage,
         _GradientColorType_Size_

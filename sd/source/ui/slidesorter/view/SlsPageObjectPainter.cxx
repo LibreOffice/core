@@ -53,13 +53,7 @@ PageObjectPainter::PageObjectPainter (
       mpTheme(rSlideSorter.GetTheme()),
       mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rSlideSorter.GetContentWindow())),
       mpShadowPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_RawShadow))),
-      mpFocusBorderPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_FocusBorder))),
-      maNormalBackground(),
-      maSelectionBackground(),
-      maFocusedSelectionBackground(),
-      maMouseOverBackground(),
-      maMouseOverFocusedBackground(),
-      maSize()
+      mpFocusBorderPainter(new FramePainter(mpTheme->GetIcon(Theme::Icon_FocusBorder)))
 {
     // Replace the color (not the alpha values) in the focus border with a
     // color derived from the current selection color.
@@ -148,6 +142,7 @@ void PageObjectPainter::InvalidateBitmaps (void)
     maFocusedSelectionBackground.SetEmpty();
     maFocusedBackground.SetEmpty();
     maMouseOverBackground.SetEmpty();
+    maMouseOverSelectedBackground.SetEmpty();
     maMouseOverFocusedBackground.SetEmpty();
     maMouseOverSelectedAndFocusedBackground.SetEmpty();
 }
@@ -399,6 +394,12 @@ Bitmap& PageObjectPainter::GetBackgroundForState (
                 true);
 
         case MouseOver | Selected:
+            return GetBackground(
+                maMouseOverSelectedBackground,
+                Theme::Gradient_MouseOverSelected,
+                rReferenceDevice,
+                false);
+
         case MouseOver:
             return GetBackground(
                 maMouseOverBackground,

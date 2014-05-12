@@ -110,11 +110,12 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
         maColor[Color_PageCountFontColor] = White;
 
     // Set up gradients.
-    SetGradient(Gradient_SelectedPage, aSelectionColor, 50, 50, +100,+100, +50,+25);
-    SetGradient(Gradient_MouseOverPage, aSelectionColor, 75, 75, +100,+100, +50,+25);
-    SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +100,+100, -50,-75);
-    SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 75, 75, +100,+100, -50,-75);
+    SetGradient(Gradient_MouseOverPage, aSelectionColor, 0, 60, +80,+100, +50,+25);
+    SetGradient(Gradient_SelectedPage, aSelectionColor, 50, 50, +80,+100, +50,+25);
     SetGradient(Gradient_FocusedPage, aSelectionColor, -1,-1, 0,0, -50,-75);
+    SetGradient(Gradient_MouseOverSelected, aSelectionColor, 55, 60, +80,+100, +50,+25);
+    SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +80,+100, -50,-75);
+    SetGradient(Gradient_MouseOverSelectedAndFocusedPage, aSelectionColor, 55, 60, +80,+100, -50,-75);
 
     SetGradient(Gradient_NormalPage, maBackgroundColor, -1,-1, 0,0, 0,0);
 
