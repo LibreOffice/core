@@ -58,6 +58,7 @@ certain functionality.
 @section chart2
 
 @li @c chart2
+@li @c chart2.3dopengl
 @li @c chart2.areachart
 @li @c chart2.barchart3D
 @li @c chart2.opengl
