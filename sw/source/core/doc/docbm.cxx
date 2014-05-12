@@ -659,6 +659,10 @@ namespace sw { namespace mark
                 continue;
 
             ::sw::mark::MarkBase* pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
+
+            if (!pMark)
+                continue;
+
             // on position ??
             bool bIsPosInRange = lcl_GreaterThan(pMark->GetMarkPos(), rStt, pSttIdx)
                                  && lcl_Lower(pMark->GetMarkPos(), rEnd, pEndIdx);
