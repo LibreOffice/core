@@ -252,10 +252,10 @@ private: //member
     ::cppu::OMultiTypeInterfaceContainerHelper
                         m_aListenerContainer;
 
-    bool volatile       m_bViewDirty; //states whether the view needs to be rebuild
-    bool volatile       m_bInViewUpdate;
-    bool volatile       m_bViewUpdatePending;
-    bool volatile       m_bRefreshAddIn;
+    bool m_bViewDirty; //states whether the view needs to be rebuild
+    bool m_bInViewUpdate;
+    bool m_bViewUpdatePending;
+    bool m_bRefreshAddIn;
 
     //better performance for big data
     ::com::sun::star::awt::Size m_aPageResolution;
