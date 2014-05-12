@@ -405,7 +405,7 @@ void TestBreakIterator::testWordBoundaries()
     }
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=85411
-    for (int j = 0; j < 2; ++j)
+    for (int j = 0; j < 3; ++j)
     {
         switch (j)
         {
@@ -416,6 +416,10 @@ void TestBreakIterator::testWordBoundaries()
             case 1:
                 aLocale.Language = "ca";
                 aLocale.Country = "ES";
+                break;
+            case 2:
+                aLocale.Language = "fi";
+                aLocale.Country = "FI";
                 break;
             default:
                 CPPUNIT_ASSERT(false);
@@ -484,15 +488,16 @@ void TestBreakIterator::testWordBoundaries()
     }
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=58513
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=55707
     {
         aLocale.Language = "fi";
         aLocale.Country = "FI";
 
-        OUString aTest("Kuorma-auto kaakkois- ja Keski-Suomi");
+        OUString aTest("Kuorma-auto kaakkois- ja Keski-Suomi USA:n 90:n %:n");
 
         {
             sal_Int32 nPos = 0;
-            sal_Int32 aExpected[] = {12, 22, 25, 36};
+            sal_Int32 aExpected[] = {11, 21, 24, 36, 42, 47, 51};
             size_t i = 0;
             do
             {
@@ -507,7 +512,8 @@ void TestBreakIterator::testWordBoundaries()
 
         {
             sal_Int32 nPos = 0;
-            sal_Int32 aExpected[] = {0, 11, 12, 21, 22, 24, 25, 36};
+            sal_Int32 aExpected[] = {0, 11, 12, 20, 22, 24, 25, 36, 37,
+                                    40, 41, 42, 43, 45, 46, 47, 50, 51};
             size_t i = 0;
             do
             {
