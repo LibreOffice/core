@@ -1287,7 +1287,7 @@ void OpenGL3DRenderer::RenderTextShape()
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
-        m_MVP = m_Projection * m_View * m_Model;
+        m_MVP = m_3DProjection * m_3DView * m_Model;
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
@@ -1401,7 +1401,6 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     CreateSceneBoxView();
     glViewport(0, 0, m_iWidth, m_iHeight);
     glClearDepth(1.0f);
-    glViewport(0, 0, m_iWidth, m_iHeight);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Polygon
