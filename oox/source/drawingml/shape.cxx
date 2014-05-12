@@ -940,7 +940,7 @@ Reference< XShape > Shape::createAndInsert(
             // add 3D effects if any
             Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
             Sequence< PropertyValue > aLightRig3DEffects = get3DProperties().getLightRigAttributes();
-            Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes();
+            Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
             if( aCamera3DEffects.getLength() > 0 || aLightRig3DEffects.getLength() > 0 )
             {
                 Sequence< PropertyValue > a3DEffectsGrabBag( 3 );

@@ -64,6 +64,8 @@ struct Shape3DProperties
     OptValue< sal_Int32 > mnContourW;
     OptValue< sal_Int32 > mnShapeZ;
     OptValue< sal_Int32 > mnMaterial;
+    Color maExtrusionColor;
+    Color maContourColor;
 
     OptValue< BevelProperties > maTopBevelProperties;
     OptValue< BevelProperties > maBottomBevelProperties;
@@ -79,8 +81,11 @@ struct Shape3DProperties
 
     css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
-    css::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes();
+    css::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes(
+            const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr = API_RGB_TRANSPARENT );
     css::uno::Sequence< css::beans::PropertyValue > getBevelAttributes( BevelProperties rProps );
+    css::uno::Sequence< css::beans::PropertyValue > getColorAttributes(
+            const Color& rColor, const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr );
 };
 
 

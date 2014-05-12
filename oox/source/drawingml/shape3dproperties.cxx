@@ -325,9 +325,34 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getBevelAttri
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes()
+css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getColorAttributes(
+        const Color& rColor, const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr )
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(2);
+    OUString sColorScheme = rColor.getSchemeName();
+    if( sColorScheme.isEmpty() )
+    {
+        // RGB color and transparency value
+        aSeq[0].Name = "rgbClr";
+        aSeq[0].Value = css::uno::Any( rColor.getColor( rGraphicHelper, rPhClr ) );
+        aSeq[1].Name = "rgbClrTransparency";
+        aSeq[1].Value = css::uno::Any( rColor.getTransparency() );
+    }
+    else
+    {
+        // scheme color with name and transformations
+        aSeq[0].Name = "schemeClr";
+        aSeq[0].Value = css::uno::Any( sColorScheme );
+        aSeq[1].Name = "schemeClrTransformations";
+        aSeq[1].Value = css::uno::Any( rColor.getTransformations() );
+    }
+    return aSeq;
+}
+
+css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes(
+        const GraphicHelper& rGraphicHelper, sal_Int32 rPhClr )
+{
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(8);
     sal_Int32 nSize = 0;
     if( mnExtrusionH.has() )
     {
@@ -363,6 +388,18 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAtt
     {
         aSeq[nSize].Name = "bevelB";
         aSeq[nSize].Value = css::uno::Any( getBevelAttributes( maBottomBevelProperties.use() ) );
+        nSize++;
+    }
+    if( maExtrusionColor.isUsed() )
+    {
+        aSeq[nSize].Name = "extrusionClr";
+        aSeq[nSize].Value = css::uno::Any( getColorAttributes( maExtrusionColor, rGraphicHelper, rPhClr ) );
+        nSize++;
+    }
+    if( maContourColor.isUsed() )
+    {
+        aSeq[nSize].Name = "contourClr";
+        aSeq[nSize].Value = css::uno::Any( getColorAttributes( maContourColor, rGraphicHelper, rPhClr ) );
         nSize++;
     }
     aSeq.realloc( nSize );

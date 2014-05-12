@@ -2409,6 +2409,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         return;
 
     bool bBevelTPresent = false, bBevelBPresent = false;
+    Sequence< PropertyValue > aExtrusionColorProps, aContourColorProps;
     sax_fastparser::FastAttributeList *aBevelTAttrList = mpFS->createAttrList();
     sax_fastparser::FastAttributeList *aBevelBAttrList = mpFS->createAttrList();
     sax_fastparser::FastAttributeList *aShape3DAttrList = mpFS->createAttrList();
@@ -2431,6 +2432,14 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
             OUString sVal;
             aShape3DProps[i].Value >>= sVal;
             aShape3DAttrList->add( XML_prstMaterial, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        else if( aShape3DProps[i].Name == "extrusionClr" )
+        {
+            aShape3DProps[i].Value >>= aExtrusionColorProps;
+        }
+        else if( aShape3DProps[i].Name == "contourClr" )
+        {
+            aShape3DProps[i].Value >>= aContourColorProps;
         }
         else if( aShape3DProps[i].Name == "bevelT" || aShape3DProps[i].Name == "bevelB" )
         {
@@ -2484,6 +2493,56 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     {
         sax_fastparser::XFastAttributeListRef xBevelAttrList( aBevelBAttrList );
         mpFS->singleElementNS( XML_a, XML_bevelB, xBevelAttrList );
+    }
+    if( aExtrusionColorProps.getLength() > 0 )
+    {
+        OUString sSchemeClr;
+        sal_Int32 nColor, nTransparency;
+        Sequence< PropertyValue > aColorTransformations;
+        for( sal_Int32 i=0; i < aExtrusionColorProps.getLength(); ++i )
+        {
+            if( aExtrusionColorProps[i].Name == "schemeClr" )
+                aExtrusionColorProps[i].Value >>= sSchemeClr;
+            else if( aExtrusionColorProps[i].Name == "schemeClrTransformations" )
+                aExtrusionColorProps[i].Value >>= aColorTransformations;
+            else if( aExtrusionColorProps[i].Name == "rgbClr" )
+                aExtrusionColorProps[i].Value >>= nColor;
+            else if( aExtrusionColorProps[i].Name == "rgbClrTransparency" )
+                aExtrusionColorProps[i].Value >>= nTransparency;
+        }
+        mpFS->startElementNS( XML_a, XML_extrusionClr, FSEND );
+
+        if( sSchemeClr.isEmpty() )
+            WriteColor( nColor, MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
+        else
+            WriteColor( sSchemeClr, aColorTransformations );
+
+        mpFS->endElementNS( XML_a, XML_extrusionClr );
+    }
+    if( aContourColorProps.getLength() > 0 )
+    {
+        OUString sSchemeClr;
+        sal_Int32 nColor, nTransparency;
+        Sequence< PropertyValue > aColorTransformations;
+        for( sal_Int32 i=0; i < aContourColorProps.getLength(); ++i )
+        {
+            if( aContourColorProps[i].Name == "schemeClr" )
+                aContourColorProps[i].Value >>= sSchemeClr;
+            else if( aContourColorProps[i].Name == "schemeClrTransformations" )
+                aContourColorProps[i].Value >>= aColorTransformations;
+            else if( aContourColorProps[i].Name == "rgbClr" )
+                aContourColorProps[i].Value >>= nColor;
+            else if( aContourColorProps[i].Name == "rgbClrTransparency" )
+                aContourColorProps[i].Value >>= nTransparency;
+        }
+        mpFS->startElementNS( XML_a, XML_contourClr, FSEND );
+
+        if( sSchemeClr.isEmpty() )
+            WriteColor( nColor, MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
+        else
+            WriteColor( sSchemeClr, aContourColorProps );
+
+        mpFS->endElementNS( XML_a, XML_contourClr );
     }
     mpFS->endElementNS( XML_a, XML_sp3d );
 }

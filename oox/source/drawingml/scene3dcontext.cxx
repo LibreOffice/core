@@ -104,6 +104,11 @@ ContextHandlerRef Shape3DPropertiesContext::onCreateContext( sal_Int32 aElementT
 
         break;
     }
+    case A_TOKEN( extrusionClr ):
+        return new ColorContext( *this, mr3DProperties.maExtrusionColor );
+
+    case A_TOKEN( contourClr ):
+        return new ColorContext( *this, mr3DProperties.maContourColor );
     }
     return 0;
 }
