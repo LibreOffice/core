@@ -70,7 +70,6 @@
 #include <GraphicHelpers.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 namespace writerfilter {
 

@@ -30,8 +30,6 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star::drawing;
-using namespace ::writerfilter;
-
 
 CellColorHandler::CellColorHandler() :
 LoggedProperties(dmapper_logger, "CellColorHandler"),
