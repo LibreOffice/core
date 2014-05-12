@@ -2751,44 +2751,6 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     }
 }
 
-//Notify the page change event to bridge.
-void SwAccessibleMap::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage)
-{
-    uno::Reference<XAccessible> xAcc = GetDocumentView( );
-        if ( xAcc.is() )
-        {
-            SwAccessibleDocumentBase *pAcc =
-            static_cast< SwAccessibleDocumentBase * >( xAcc.get() );
-            if (pAcc)
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::PAGE_CHANGED;
-                aEvent.OldValue <<= nOldPage;
-                aEvent.NewValue <<= nNewPage;
-                pAcc->FireAccessibleEvent( aEvent );
-            }
-        }
-}
-
-void SwAccessibleMap::FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn)
-{
-    uno::Reference<XAccessible> xAcc = GetDocumentView( );
-        if ( xAcc.is() )
-        {
-            SwAccessibleDocumentBase *pAcc =
-            static_cast< SwAccessibleDocumentBase * >( xAcc.get() );
-        if (pAcc)
-        {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::COLUMN_CHANGED;
-                aEvent.OldValue <<= nOldColumn;
-                aEvent.NewValue <<= nNewColumn;
-                pAcc->FireAccessibleEvent( aEvent );
-
-        }
-        }
-}
-
 void SwAccessibleMap::InvalidateFocus()
 {
     if(GetShell()->IsPreview())
