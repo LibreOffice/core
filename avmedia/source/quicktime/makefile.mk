@@ -44,15 +44,15 @@ CDEFS+= -DVERBOSE
 CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
-        $(SLO)$/quicktimeuno.obj  \
-        $(SLO)$/framegrabber.obj        \
-        $(SLO)$/manager.obj       \
-        $(SLO)$/window.obj        \
-        $(SLO)$/player.obj
+        $(SLO)$/qt_uno.obj  \
+        $(SLO)$/qt_framegrabber.obj        \
+        $(SLO)$/qt_manager.obj       \
+        $(SLO)$/qt_window.obj        \
+        $(SLO)$/qt_player.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/framegrabber.obj        \
-        $(SLO)$/quicktimeuno.obj
+        $(SLO)$/qt_framegrabber.obj        \
+        $(SLO)$/qt_uno.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 

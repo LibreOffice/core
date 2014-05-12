@@ -41,15 +41,15 @@ CDEFS+= -DVERBOSE
 CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
-        $(SLO)$/macavfuno.obj  \
-        $(SLO)$/framegrabber.obj        \
-        $(SLO)$/manager.obj       \
-        $(SLO)$/window.obj        \
-        $(SLO)$/player.obj
+        $(SLO)$/macavf_uno.obj           \
+        $(SLO)$/macavf_framegrabber.obj  \
+        $(SLO)$/macavf_manager.obj       \
+        $(SLO)$/macavf_window.obj        \
+        $(SLO)$/macavf_player.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/framegrabber.obj        \
-        $(SLO)$/macavfuno.obj
+        $(SLO)$/macavf_framegrabber.obj \
+        $(SLO)$/macavf_uno.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 
