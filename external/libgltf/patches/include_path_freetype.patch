@@ -10,10 +10,3 @@ diff -ur libgltf.org/src/Font.h libgltf/src/Font.h
  #include FT_FREETYPE_H
  #include "Texture.h"
  
-@@ -49,4 +49,4 @@
- 	FT_Face mFTFace;
- 	unsigned int mShaderId;
- };
--#endif
-\ No newline at end of file
-+#endif

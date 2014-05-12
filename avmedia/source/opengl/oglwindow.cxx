@@ -32,7 +32,7 @@ OGLWindow::~OGLWindow()
 void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::exception)
 {
     m_pContext->makeCurrent();
-    gltf_prepare_renderer(m_pHandle);
+    gltf_prepare_renderer(&m_pHandle->viewport);
     gltf_renderer(m_pHandle);
     gltf_complete_renderer();
     m_pContext->swapBuffers();
