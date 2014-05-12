@@ -73,6 +73,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			--enable-shared \
 		) \
 		CC="$(strip $(CC) \
+			-I$(EXTERNAL_WORKDIR)/Modules/expat \
 			$(if $(SYSTEM_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include \
 				$(if $(DISABLE_OPENSSL),,-I$(call gb_UnpackedTarball_get_dir,openssl)/include)) \
 			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
