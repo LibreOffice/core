@@ -292,7 +292,6 @@ protected:
     uno::Reference< uno::XComponentContext > getComponentContext();
 
     sal_uInt32 mnInstanceNumber;
-    sal_uInt32 mnRefCount;
 
     bool inPositionV;
 
