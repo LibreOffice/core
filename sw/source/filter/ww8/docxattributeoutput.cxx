@@ -871,6 +871,14 @@ void DocxAttributeOutput::EndRun()
                 m_endPageRef = false;
                 m_hyperLinkAnchor = "";
             }
+            for ( int i = 0; i < m_nFieldsInHyperlink; i++ )
+            {
+                // If fields begin after hyperlink start then
+                // it should end before hyperlink close
+                EndField_Impl( m_Fields.back( ) );
+                if (m_Fields.back().pField)
+                    delete m_Fields.back().pField;
+            }
 
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
