@@ -591,9 +591,7 @@ SwDoc::~SwDoc()
     // Destroy these only after destroying the FmtIndices, because the content
     // of headers/footers has to be deleted as well. If in the headers/footers
     // there are still Flys registered at that point, we have a problem.
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
-        delete pPageDesc;
-    maPageDescs.clear();
+    maPageDescs.DeleteAndDestroyAll();
 
     // Delete content selections.
     // Don't wait for the SwNodes dtor to destroy them; so that Formats
@@ -862,9 +860,9 @@ void SwDoc::ClearDoc()
     if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
         maPageDescs.erase(maPageDescs.begin() + nDummyPgDsc);
 
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
-        delete pPageDesc;
-    maPageDescs.clear();
+    // remove the dummy pagedec from the array and delete all the old ones
+    maPageDescs.erase( pDummyPgDsc );
+    maPageDescs.DeleteAndDestroyAll();
 
     // Delete for Collections
     // So that we get rid of the dependencies
@@ -901,12 +899,12 @@ void SwDoc::ClearDoc()
 
     GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFmtColl( GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
-    nDummyPgDsc = maPageDescs.size();
-    maPageDescs.push_back( pDummyPgDsc );
+    std::pair<SwPageDescs::const_iterator, bool> res = maPageDescs.insert( pDummyPgDsc );
+    SAL_WARN_IF(res.second == false, "sw", "ClearDoc: inserted already existing PageDesc" );
     // set the layout back to the new standard pagedesc
     pFirstNd->ResetAllAttr();
     // delete now the dummy pagedesc
-    DelPageDesc( nDummyPgDsc );
+    DelPageDesc( std::distance( maPageDescs.begin(), res.first) );
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )

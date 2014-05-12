@@ -30,6 +30,7 @@
 class SfxPoolItem;
 class SwTxtFmtColl;
 class SwNode;
+class SwPageDescs;
 
 /// Separator line adjustment.
 enum SwFtnAdj
@@ -130,6 +131,9 @@ namespace nsUseOnPage
 class SW_DLLPUBLIC SwPageDesc : public SwModify
 {
     friend class SwDoc;
+    // How to define the friend functions _erase and insert
+    // to update the list member
+    friend class SwPageDescs;
 
     OUString    aDescName;
     SvxNumberType   aNumType;
@@ -149,6 +153,9 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     /// Footnote information.
     SwPageFtnInfo aFtnInfo;
 
+    // The assigned list.
+    SwPageDescs *list;
+
     /** Called for mirroring of Chg (doc).
        No adjustment at any other place. */
     SW_DLLPRIVATE void Mirror();
@@ -162,7 +169,7 @@ protected:
 
 public:
     OUString GetName() const { return aDescName; }
-    void SetName( const OUString& rNewName ) { aDescName = rNewName; }
+    void SetName( const OUString& rNewName );
 
     sal_Bool GetLandscape() const { return bLandscape; }
     void SetLandscape( sal_Bool bNew ) { bLandscape = bNew; }
@@ -336,9 +343,52 @@ public:
     operator SwPageDesc() const; // #i7983#
 };
 
+typedef std::vector<SwPageDesc*> SwPageDescsBase;
+
+// PageDescriptor-interface, Array because of inlines.
+// Mimics o3tl::sorted_vector interface
+class SwPageDescs : private SwPageDescsBase
+{
+public:
+    typedef SwPageDescsBase::const_iterator const_iterator;
+    typedef SwPageDescsBase::size_type size_type;
+    typedef SwPageDescsBase::value_type value_type;
+
+    // the destructor will free all objects still in the vector
+    ~SwPageDescs();
+
+    void DeleteAndDestroyAll();
+
+    using SwPageDescsBase::clear;
+    using SwPageDescsBase::empty;
+    using SwPageDescsBase::size;
+
+    std::pair<const_iterator,bool> insert( const value_type& x );
+    size_type erase( const value_type& x );
+    void erase( size_type index );
+    void erase( const_iterator const& position );
+
+    const value_type& front() const { return SwPageDescsBase::front(); }
+    const value_type& back() const { return SwPageDescsBase::back(); }
+    const value_type& operator[]( size_t index ) const
+        { return SwPageDescsBase::operator[]( index ); }
+
+    const_iterator find( const OUString &name ) const;
+    const_iterator find( const value_type& x ) const;
+
+    const_iterator begin() const { return SwPageDescsBase::begin(); }
+    const_iterator end() const { return SwPageDescsBase::end(); }
+
+    bool Contains( const value_type& x ) const;
+
+private:
+    typedef SwPageDescsBase::iterator iterator;
+    iterator begin_nonconst() { return SwPageDescsBase::begin(); }
+    iterator end_nonconst() { return SwPageDescsBase::end(); }
+};
 
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const OUString& rName);
 
-#endif  //PAGEDESC_HXX
+#endif // INCLUDED_SW_INC_PAGEDESC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

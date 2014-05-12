@@ -615,7 +615,9 @@ SwPageDesc* SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
         pNew->GetFirstMaster().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
         pNew->GetFirstLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
-    maPageDescs.push_back( pNew );
+
+    std::pair<SwPageDescs::const_iterator, bool> res = maPageDescs.insert( pNew );
+    SAL_WARN_IF(res.second == false, "sw", "MakePageDesc called with existing name" );
 
     if (bBroadcast)
         BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PAGE,
@@ -628,22 +630,6 @@ SwPageDesc* SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
 
     SetModified();
     return pNew;
-}
-
-SwPageDesc* SwDoc::FindPageDesc( const String& rName, sal_uInt16* pPos ) const
-{
-    SwPageDesc* pRet = NULL;
-    if( pPos ) *pPos = USHRT_MAX;
-
-    for( sal_uInt16 n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
-        if( maPageDescs[ n ]->GetName() == rName )
-        {
-            pRet = maPageDescs[ n ];
-            if( pPos )
-                *pPos = n;
-            break;
-        }
-    return pRet;
 }
 
 void SwDoc::PrtDataChanged()
@@ -838,9 +824,28 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     return 0;
 }
 
-SwPageDesc * SwDoc::GetPageDesc( const String & rName )
+static SwPageDesc* lcl_FindPageDesc( SwPageDescs *maPageDescs, const OUString & rName, sal_uInt16* pPos )
 {
-    return FindPageDesc(rName);
+    SwPageDescs::const_iterator it = maPageDescs->find( rName );
+    SwPageDesc* res = NULL;
+    if (it != maPageDescs->end() ) {
+        res = const_cast <SwPageDesc *>( *it );
+        if( pPos )
+            *pPos = std::distance( maPageDescs->begin(), it );
+    }
+    else if( pPos )
+        *pPos = USHRT_MAX;
+    return res;
+}
+
+SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos )
+{
+    return lcl_FindPageDesc( &maPageDescs, rName, pPos );
+}
+
+SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos ) const
+{
+    return lcl_FindPageDesc( const_cast <SwPageDescs *>( &maPageDescs ), rName, pPos );
 }
 
 void SwDoc::DelPageDesc( const String & rName, bool bBroadcast )
