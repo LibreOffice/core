@@ -23,9 +23,21 @@ struct find_unique;
 
 /** Represents a sorted vector of values.
 
-    @tpl Value class of item to be stored in container
-    @tpl Compare comparison method
-    @tpl Find   look up index of a Value in the array
+    The vector has a special "first default" mode, enabled by the
+    constructor boolean FirstDefault.
+
+    This keeps the first item always unsorted. Many LO lists store
+    their defaults in the first item and index access expect it at
+    at position 0.
+
+    The alternative of "marking a special item as default" in the
+    vector was dropped, as new iterators would have been needed in
+    case one would keep index and iterator distance interchangeable
+    and still represent the default item at index 0.
+
+    @tpl Value    class of item to be stored in container
+    @tpl Compare  comparison method
+    @tpl Find     look up index of a Value in the array
 */
 template<typename Value, typename Compare = std::less<Value>,
      template<typename, typename> class Find = find_unique >
@@ -36,19 +48,48 @@ private:
     typedef Find<Value, Compare> Find_t;
     typedef typename std::vector<Value> base_t;
     typedef typename std::vector<Value>::iterator  iterator;
+    int mOffset;
+
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
     typedef typename std::vector<Value>::size_type size_type;
+    typedef typename std::vector<Value>::value_type value_type;
+    typedef std::pair<const_iterator, bool> find_insert_type;
 
+private:
+    find_insert_type _find( const Value& x ) const
+    {
+        if (mOffset && empty())
+            return find_insert_type(end(), false);
+        find_insert_type const ret(Find_t()(begin() + mOffset, end(), x));
+
+        // We haven't found the item, but have a default, so check the offset item
+        if (!ret.second && mOffset) {
+            find_insert_type const check(Find_t()(begin(), begin() + mOffset, x));
+            // Just return on success; we otherwise need the insert point from ret
+            if (check.second)
+                return check;
+        }
+        return ret;
+    }
+
+public:
     using base_t::clear;
     using base_t::empty;
     using base_t::size;
 
+    sorted_vector( bool FirstDefault=false )
+    {
+       mOffset = FirstDefault ? 1 : 0;
+    }
+
+    int GetOffset() const { return mOffset; }
+
     // MODIFIERS
 
-    std::pair<const_iterator,bool> insert( const Value& x )
+    find_insert_type insert( const Value& x )
     {
-        std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
+        find_insert_type const ret = _find( x );
         if (!ret.second)
         {
             const_iterator const it = base_t::insert(
@@ -60,7 +101,7 @@ public:
 
     size_type erase( const Value& x )
     {
-        std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
+        find_insert_type const ret = _find( x );
         if (ret.second)
         {
             base_t::erase(begin_nonconst() + (ret.first - begin()));
@@ -69,7 +110,7 @@ public:
         return 0;
     }
 
-    void erase( size_t index )
+    void erase( size_type index )
     {
         base_t::erase( begin_nonconst() + index );
     }
@@ -119,14 +160,15 @@ public:
 
     const_iterator lower_bound( const Value& x ) const
     {
-        return std::lower_bound( base_t::begin(), base_t::end(), x, Compare() );
+        return std::lower_bound( base_t::begin() + mOffset, base_t::end(), x, Compare() );
     }
 
     const_iterator upper_bound( const Value& x ) const
     {
-        return std::upper_bound( base_t::begin(), base_t::end(), x, Compare() );
+        return std::upper_bound( base_t::begin() + mOffset, base_t::end(), x, Compare() );
     }
 
+public:
     /* Searches the container for an element with a value of x
      * and returns an iterator to it if found, otherwise it returns an
      * iterator to sorted_vector::end (the element past the end of the container).
@@ -135,7 +177,7 @@ public:
      */
     const_iterator find( const Value& x ) const
     {
-        std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
+        find_insert_type const ret = _find( x );
         return (ret.second) ? ret.first : end();
     }
 
@@ -167,7 +209,7 @@ public:
     // If you are calling this function, you are Doing It Wrong!
     void Resort()
     {
-        std::stable_sort(begin_nonconst(), end_nonconst(), Compare());
+        std::stable_sort(begin_nonconst() + mOffset, end_nonconst(), Compare());
     }
 
 private:

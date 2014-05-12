@@ -30,6 +30,25 @@ public:
     }
 };
 
+class SwContentComplex
+{
+public:
+    int x;
+    int y;
+    SwContentComplex(int x_, int y_) : x(x_), y(y_) {}
+};
+
+struct CompareSwContentComplexs {
+    bool operator()(SwContentComplex* const& lhs, SwContentComplex* const& rhs) const
+    {
+        if (lhs->x < rhs->x)
+            return true;
+        if (lhs->x > rhs->x)
+            return false;
+        return (lhs->y < rhs->y);
+    }
+};
+
 class sorted_vector_test : public CppUnit::TestFixture
 {
 public:
@@ -244,7 +263,94 @@ public:
         delete p4;
     }
 
+    void testBasicsDefault()
+    {
+        o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent> > aVec( true );
+        SwContent *p1 = new SwContent(1);
+        SwContent *p2 = new SwContent(2);
+        SwContent *p3 = new SwContent(3);
+        SwContent *p4 = new SwContent(4);
+        SwContent *p5 = new SwContent(5);
 
+        CPPUNIT_ASSERT( aVec.insert(p3).second );
+        CPPUNIT_ASSERT( aVec.insert(p1).second );
+        CPPUNIT_ASSERT( !aVec.insert(p3).second );
+        CPPUNIT_ASSERT( aVec.insert(p5).second );
+
+        CPPUNIT_ASSERT( aVec.size() == 3 );
+
+        CPPUNIT_ASSERT( aVec[0] == p3 );
+        CPPUNIT_ASSERT( aVec[1] == p1 );
+        CPPUNIT_ASSERT( aVec[2] == p5 );
+
+        CPPUNIT_ASSERT( aVec.insert(p2).second );
+
+        CPPUNIT_ASSERT( aVec.size() == 4 );
+
+        CPPUNIT_ASSERT( aVec[0] == p3 );
+        CPPUNIT_ASSERT( aVec[1] == p1 );
+        CPPUNIT_ASSERT( aVec[2] == p2 );
+        CPPUNIT_ASSERT( aVec[3] == p5 );
+
+        CPPUNIT_ASSERT( *aVec.begin() == p3 );
+        CPPUNIT_ASSERT( *(aVec.end()-1) == p5 );
+
+        CPPUNIT_ASSERT( aVec.front() == p3 );
+        CPPUNIT_ASSERT( aVec.back() == p5 );
+
+        CPPUNIT_ASSERT( aVec.find(p3) != aVec.end() );
+        CPPUNIT_ASSERT( aVec.find(p3) == aVec.begin() );
+        CPPUNIT_ASSERT( aVec.find(p3) - aVec.begin() == 0 );
+        CPPUNIT_ASSERT( aVec.find(p5) != aVec.end() );
+        CPPUNIT_ASSERT( aVec.find(p5) - aVec.begin() == 3 );
+        CPPUNIT_ASSERT( aVec.find(p4) == aVec.end() );
+
+        CPPUNIT_ASSERT( aVec.erase(p3) == 1 );
+        CPPUNIT_ASSERT( aVec.find(p1) == aVec.begin() );
+        CPPUNIT_ASSERT( aVec.size() == 3 );
+        CPPUNIT_ASSERT( aVec.erase(p3) == 0 );
+
+        aVec.DeleteAndDestroyAll();
+        delete p4;
+    }
+
+    void testComplexDefault()
+    {
+        o3tl::sorted_vector<SwContentComplex*, CompareSwContentComplexs,
+                            o3tl::find_partialorder_ptrequals> aVec( true );
+        SwContentComplex *p1 = new SwContentComplex(10, 1);
+        SwContentComplex *p2 = new SwContentComplex(2, 1);
+        SwContentComplex *p3 = new SwContentComplex(5, 0);
+        SwContentComplex *p4 = new SwContentComplex(5, 2);
+        SwContentComplex *p5 = new SwContentComplex(2, 2);
+        SwContentComplex *p6 = new SwContentComplex(2, 1);
+
+        CPPUNIT_ASSERT( aVec.insert(p1).second );
+        CPPUNIT_ASSERT( aVec.insert(p2).second );
+        CPPUNIT_ASSERT( !aVec.insert(p1).second );
+        CPPUNIT_ASSERT( aVec.insert(p3).second );
+        CPPUNIT_ASSERT( aVec.insert(p4).second );
+        CPPUNIT_ASSERT( !aVec.insert(p3).second );
+        CPPUNIT_ASSERT( aVec.insert(p5).second );
+        CPPUNIT_ASSERT( aVec.insert(p6).second );
+
+        CPPUNIT_ASSERT( aVec.size() == 6 );
+
+        CPPUNIT_ASSERT( aVec[0] == p1 );
+        if (p2 < p6) {
+            CPPUNIT_ASSERT( aVec[1] == p6 );
+            CPPUNIT_ASSERT( aVec[2] == p2 );
+        }
+        else {
+            CPPUNIT_ASSERT( aVec[1] == p2 );
+            CPPUNIT_ASSERT( aVec[2] == p6 );
+        }
+        CPPUNIT_ASSERT( aVec[3] == p5 );
+        CPPUNIT_ASSERT( aVec[4] == p3 );
+        CPPUNIT_ASSERT( aVec[5] == p4 );
+
+        aVec.DeleteAndDestroyAll();
+    }
 
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
@@ -257,6 +363,8 @@ public:
     CPPUNIT_TEST(testLowerBound);
     CPPUNIT_TEST(testBasics_FindPtr);
     CPPUNIT_TEST(testErase_FindPtr);
+    CPPUNIT_TEST(testBasicsDefault);
+    CPPUNIT_TEST(testComplexDefault);
     CPPUNIT_TEST_SUITE_END();
 };
 
