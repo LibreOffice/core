@@ -59,9 +59,9 @@
 #include "stlalgorithm.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <boost/checked_delete.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <o3tl/deleter.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
@@ -458,7 +458,7 @@ ScViewData::~ScViewData()
     KillEditView();
     delete pOptions;
     ::std::for_each(
-        maTabData.begin(), maTabData.end(), o3tl::default_deleter<ScViewDataTable>());
+        maTabData.begin(), maTabData.end(), boost::checked_deleter<ScViewDataTable>());
 }
 
 void ScViewData::UpdateCurrentTab()

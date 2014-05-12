@@ -24,7 +24,7 @@
 #include "document.hxx"
 #include "reftokenhelper.hxx"
 
-#include <o3tl/deleter.hxx>
+#include <boost/checked_delete.hpp>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -576,7 +576,7 @@ void ScChartListenerCollection::FreeUnused()
     std::for_each(aUsed.begin(), aUsed.end(), InsertChartListener(maListeners));
 
     // Now, delete the ones no longer needed.
-    std::for_each(aUnused.begin(), aUnused.end(), o3tl::default_deleter<ScChartListener>());
+    std::for_each(aUnused.begin(), aUnused.end(), boost::checked_deleter<ScChartListener>());
 }
 
 void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
@@ -604,7 +604,7 @@ void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartData
     std::for_each(aUsed.begin(), aUsed.end(), InsertChartListener(maListeners));
 
     // Now, delete the ones no longer needed.
-    std::for_each(aUnused.begin(), aUnused.end(), o3tl::default_deleter<ScChartListener>());
+    std::for_each(aUnused.begin(), aUnused.end(), boost::checked_deleter<ScChartListener>());
 }
 
 void ScChartListenerCollection::StartTimer()

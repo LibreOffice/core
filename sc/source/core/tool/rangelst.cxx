@@ -26,7 +26,7 @@
 #include "refupdat.hxx"
 #include "rechead.hxx"
 #include "compiler.hxx"
-#include <o3tl/deleter.hxx>
+#include <boost/checked_delete.hpp>
 
 using ::std::vector;
 using ::std::advance;
@@ -1073,7 +1073,7 @@ ScRange* ScRangeList::Remove(size_t nPos)
 
 void ScRangeList::RemoveAll()
 {
-    for_each(maRanges.begin(), maRanges.end(), o3tl::default_deleter<ScRange>());
+    for_each(maRanges.begin(), maRanges.end(), boost::checked_deleter<ScRange>());
     maRanges.clear();
 }
 
@@ -1196,7 +1196,7 @@ ScRangeList ScRangeList::GetIntersectedRange(const ScRange& rRange) const
 //  ScRangePairList
 ScRangePairList::~ScRangePairList()
 {
-    for_each( maPairs.begin(), maPairs.end(), o3tl::default_deleter<ScRangePair>() );
+    for_each( maPairs.begin(), maPairs.end(), boost::checked_deleter<ScRangePair>() );
     maPairs.clear();
 }
 

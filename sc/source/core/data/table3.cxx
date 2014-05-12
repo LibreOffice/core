@@ -62,9 +62,9 @@
 #include <refhint.hxx>
 
 #include <svl/sharedstringpool.hxx>
-#include <o3tl/deleter.hxx>
 
 #include <vector>
+#include <boost/checked_delete.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/unordered_set.hpp>
@@ -293,7 +293,7 @@ public:
         delete[] pppInfo;
 
         if (mpRows)
-            std::for_each(mpRows->begin(), mpRows->end(), o3tl::default_deleter<Row>());
+            std::for_each(mpRows->begin(), mpRows->end(), boost::checked_deleter<Row>());
     }
 
     void SetKeepQuery( bool b ) { mbKeepQuery = b; }

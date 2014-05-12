@@ -54,7 +54,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/math.hxx>
-#include <o3tl/deleter.hxx>
+#include <boost/checked_delete.hpp>
 
 SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
         "com.sun.star.chart2.data.DataProvider")
@@ -156,7 +156,7 @@ struct TokenTable : boost::noncopyable
     }
     void clear()
     {
-        std::for_each(maTokens.begin(), maTokens.end(), o3tl::default_deleter<FormulaToken>());
+        std::for_each(maTokens.begin(), maTokens.end(), boost::checked_deleter<FormulaToken>());
     }
 
     void push_back( FormulaToken* pToken )

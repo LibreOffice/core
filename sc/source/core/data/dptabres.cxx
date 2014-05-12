@@ -33,13 +33,13 @@
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
-#include <o3tl/deleter.hxx>
 
 #include <math.h>
 #include <float.h>
 #include <algorithm>
-#include <boost/unordered_map.hpp>
+#include <boost/checked_delete.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -757,7 +757,7 @@ ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
 
 ScDPResultData::~ScDPResultData()
 {
-    std::for_each(maDimMembers.begin(), maDimMembers.end(), o3tl::default_deleter<ResultMembers>());
+    std::for_each(maDimMembers.begin(), maDimMembers.end(), boost::checked_deleter<ResultMembers>());
 }
 
 void ScDPResultData::SetMeasureData(
@@ -3550,7 +3550,7 @@ ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
 
 ScDPDataDimension::~ScDPDataDimension()
 {
-    std::for_each(maMembers.begin(), maMembers.end(), o3tl::default_deleter<ScDPDataMember>());
+    std::for_each(maMembers.begin(), maMembers.end(), boost::checked_deleter<ScDPDataMember>());
 }
 
 void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )

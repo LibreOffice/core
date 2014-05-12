@@ -98,10 +98,10 @@
 #include <tokenstringcontext.hxx>
 
 #include <formula/vectortoken.hxx>
-#include <o3tl/deleter.hxx>
 
 #include <map>
 #include <limits>
+#include <boost/checked_delete.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include "mtvelements.hxx"
@@ -785,7 +785,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
                 TableContainer::iterator it = maTabs.begin() + nTab;
                 TableContainer::iterator itEnd = it + nSheets;
-                std::for_each(it, itEnd, o3tl::default_deleter<ScTable>());
+                std::for_each(it, itEnd, boost::checked_deleter<ScTable>());
                 maTabs.erase(it, itEnd);
                 // UpdateBroadcastAreas must be called between UpdateDeleteTab,
                 // which ends listening, and StartAllListeners, to not modify

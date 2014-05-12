@@ -56,7 +56,6 @@
 #include <filter/msfilter/msoleexp.hxx>
 
 #include <unotools/localedatawrapper.hxx>
-#include <o3tl/deleter.hxx>
 
 #include <stdio.h>
 
@@ -78,6 +77,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 
+#include <boost/checked_delete.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -109,7 +109,7 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
 
 XclExpObjList::~XclExpObjList()
 {
-    std::for_each(maObjs.begin(), maObjs.end(), o3tl::default_deleter<XclObj>());
+    std::for_each(maObjs.begin(), maObjs.end(), boost::checked_deleter<XclObj>());
     delete pMsodrawingPerSheet;
     delete pSolverContainer;
 }

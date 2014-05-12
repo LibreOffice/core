@@ -15,7 +15,7 @@
 #include "markdata.hxx"
 #include "rangelst.hxx"
 #include <fstalgorithm.hxx>
-#include <o3tl/deleter.hxx>
+#include <boost/checked_delete.hpp>
 
 #include <algorithm>
 
@@ -67,7 +67,7 @@ ColumnSpanSet::~ColumnSpanSet()
         if (!pTab)
             continue;
 
-        std::for_each(pTab->begin(), pTab->end(), o3tl::default_deleter<ColumnType>());
+        std::for_each(pTab->begin(), pTab->end(), boost::checked_deleter<ColumnType>());
         delete pTab;
     }
 }
