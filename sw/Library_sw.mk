@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/access/accdoc \
     sw/source/core/access/accembedded \
     sw/source/core/access/accfootnote \
-    sw/source/core/access/accfield \
     sw/source/core/access/accframe \
     sw/source/core/access/accframebase\
     sw/source/core/access/accfrmobj \
