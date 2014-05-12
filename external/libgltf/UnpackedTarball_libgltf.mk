@@ -18,16 +18,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libgltf,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/include_path_glew.patch \
 	external/libgltf/patches/include_path_freetype.patch \
-	external/libgltf/patches/typedef_used_as_struct.patch \
-	external/libgltf/patches/avoid_c++11_copy_filestream.patch \
-	external/libgltf/patches/unneeded_context_handling.patch \
-	external/libgltf/patches/win_only_variables.patch \
-	external/libgltf/patches/constify_for_temporaries.patch \
-	external/libgltf/patches/shader_charbuffer_used_as_cstring.patch \
-	external/libgltf/patches/get_bitmap_new_syntax.patch \
-	external/libgltf/patches/remove_extra_include.patch \
-	external/libgltf/patches/fmod_error_handling.patch \
-	external/libgltf/patches/extern-C.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
