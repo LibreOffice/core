@@ -98,6 +98,11 @@ namespace {
 // and the quotation mark (so string constants can be skipped)
 const sal_Char pMinDelimiters[] = " !\"";
 
+// Formula data replacement character for a pair of parentheses at end of
+// function name, to force sorting parentheses before all other characters.
+// Collation may treat parentheses differently.
+const sal_Unicode cParenthesesReplacement = 0x0001;
+
 sal_Unicode lcl_getSheetSeparator(ScDocument* pDoc)
 {
     ScCompiler aComp(pDoc, ScAddress());
@@ -720,6 +725,7 @@ void ScInputHandler::GetFormulaData()
         else
             pFormulaDataPara = new ScTypedCaseStrSet;
 
+        const OUString aParenthesesReplacement( cParenthesesReplacement);
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
         sal_uLong nListCount = pFuncList->GetCount();
         for(sal_uLong i=0;i<nListCount;i++)
@@ -727,7 +733,6 @@ void ScInputHandler::GetFormulaData()
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
             if ( pDesc->pFuncName )
             {
-                pFormulaData->insert(ScTypedStrData(*pDesc->pFuncName, 0.0, ScTypedStrData::Standard));
                 const sal_Unicode* pName = pDesc->pFuncName->getStr();
                 const sal_Int32 nLen = pDesc->pFuncName->getLength();
                 // fdo#75264 fill maFormulaChar with all characters used in formula names
@@ -736,6 +741,8 @@ void ScInputHandler::GetFormulaData()
                     sal_Unicode c = pName[ j ];
                     maFormulaChar.insert( c );
                 }
+                OUString aFuncName = *pDesc->pFuncName + aParenthesesReplacement;
+                pFormulaData->insert(ScTypedStrData(aFuncName, 0.0, ScTypedStrData::Standard));
                 pDesc->initArgumentInfo();
                 OUString aEntry = pDesc->getSignature();
                 pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
@@ -830,9 +837,10 @@ void ScInputHandler::ShowTipCursor()
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
                             nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
 
+                            OUString aFuncName = ppFDesc->getFunctionName() + "(";
                             OUString aNew;
                             ScTypedCaseStrSet::const_iterator it =
-                                findText(*pFormulaDataPara, pFormulaDataPara->end(), ppFDesc->getFunctionName(), aNew, false);
+                                findText(*pFormulaDataPara, pFormulaDataPara->end(), aFuncName, aNew, false);
                             if (it != pFormulaDataPara->end())
                             {
                                 bool bFlag = false;
@@ -1084,7 +1092,8 @@ void ScInputHandler::UseFormulaData()
                 miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
                 if (miAutoPosFormula != pFormulaData->end())
                 {
-                    aNew += "()";
+                    if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
+                        aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
                     ShowTip( aNew );
                     aAutoSearch = aText;
                 }
@@ -1227,6 +1236,8 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
         if (itNew != pFormulaData->end())
         {
             miAutoPosFormula = itNew;
+            if (aNew[aNew.getLength()-1] == cParenthesesReplacement)
+                aNew = aNew.copy( 0, aNew.getLength()-1) + "()";
             ShowTip(aNew); // Display a quick help
         }
     }
@@ -1288,7 +1299,9 @@ void ScInputHandler::PasteFunctionData()
     if (pFormulaData && miAutoPosFormula != pFormulaData->end())
     {
         const ScTypedStrData& rData = *miAutoPosFormula;
-        const OUString& aInsert = rData.GetString();
+        OUString aInsert = rData.GetString();
+        if (aInsert[aInsert.getLength()-1] == cParenthesesReplacement)
+            aInsert = aInsert.copy( 0, aInsert.getLength()-1) + "()";
         bool bParInserted = false;
 
         DataChanging(); // Cannot be new
