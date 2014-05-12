@@ -233,10 +233,4 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
 }
 
 
-sal_uInt32 SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag, const OUString& rString )
-{
-    return theLanguageTable::get().AddItem( (rString.isEmpty() ? rLanguageTag.getBcp47() : rString),
-            rLanguageTag.getLanguageType());
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
