@@ -476,10 +476,6 @@ private:
             //the ownership between model and controller is not clear at first
             //each controller might consider himself as owner of the model first
             bool volatile       m_bOwnership;
-            //with a XCloseable::close call and during XCloseListener::queryClosing
-            //the ownership can be regulated more explicit,
-            //if so the ownership is considered to be well known
-            bool volatile       m_bOwnershipIsWellKnown;
     };
     class TheModelRef
     {
