@@ -142,6 +142,7 @@ struct DocxSdrExport::Impl
     sax_fastparser::FastAttributeList* m_pTextboxAttrList;
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
+    bool m_bDrawingOpen;
     bool m_bFlyFrameGraphic;
     sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
@@ -162,6 +163,7 @@ struct DocxSdrExport::Impl
           m_pFlyAttrList(0),
           m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
+          m_bDrawingOpen(false),
           m_bFlyFrameGraphic(false),
           m_pFlyFillAttrList(0),
           m_pFlyWrapAttrList(0),
@@ -244,6 +246,11 @@ void DocxSdrExport::setFrameBtLr(bool bFrameBtLr)
     m_pImpl->m_bFrameBtLr = bFrameBtLr;
 }
 
+bool DocxSdrExport::IsDrawingOpen()
+{
+    return m_pImpl->m_bDrawingOpen;
+}
+
 bool DocxSdrExport::getFlyFrameGraphic()
 {
     return m_pImpl->m_bFlyFrameGraphic;
@@ -281,6 +288,7 @@ void DocxSdrExport::setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrL
 
 void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize)
 {
+    m_pImpl->m_bDrawingOpen = true;
     m_pImpl->m_pSerializer->startElementNS(XML_w, XML_drawing, FSEND);
 
     const SvxLRSpaceItem pLRSpaceItem = pFrmFmt->GetLRSpace(false);
@@ -544,6 +552,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrmFmt* pFrmFmt)
     m_pImpl->m_pSerializer->endElementNS(XML_wp, isAnchor ? XML_anchor : XML_inline);
 
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_drawing);
+    m_pImpl->m_bDrawingOpen = false;
 }
 
 void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft)

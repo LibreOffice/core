@@ -3293,6 +3293,14 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
                         "image/png");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo78300,"fdo78300.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r[1]/w:drawing[1]",0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
