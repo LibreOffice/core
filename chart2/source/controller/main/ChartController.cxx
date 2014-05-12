@@ -139,8 +139,7 @@ void ChartController::RefCountable::release()
 ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xModel ) :
     m_xModel( xModel ),
     m_xCloseable( NULL ),
-    m_bOwnership( true ),
-    m_bOwnershipIsWellKnown( false )
+    m_bOwnership( true )
 {
     m_xCloseable =
         uno::Reference< util::XCloseable >( xModel, uno::UNO_QUERY );
@@ -153,7 +152,6 @@ ChartController::TheModel::~TheModel()
 void ChartController::TheModel::SetOwnership( bool bGetsOwnership )
 {
     m_bOwnership                = bGetsOwnership;
-    m_bOwnershipIsWellKnown = true;
 }
 
 void ChartController::TheModel::addListener( ChartController* pController )
@@ -206,7 +204,6 @@ void ChartController::TheModel::tryTermination()
                 m_xCloseable->close(sal_True);
 
                 m_bOwnership                = false;
-                m_bOwnershipIsWellKnown = true;
             }
             catch( const util::CloseVetoException& )
             {
@@ -219,7 +216,6 @@ void ChartController::TheModel::tryTermination()
 #endif
 
                 m_bOwnership                = false;
-                m_bOwnershipIsWellKnown = true;
                 return;
             }
 

@@ -311,14 +311,12 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     impl_doClose();
 }
 
-    void CloseableLifeTimeManager
-::impl_setOwnership( bool bDeliverOwnership, bool bMyVeto )
+void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool bMyVeto )
 {
     m_bOwnership            = bDeliverOwnership && bMyVeto;
-    m_bOwnershipIsWellKnown = true;
 }
-    bool CloseableLifeTimeManager
-::impl_shouldCloseAtNextChance()
+
+bool CloseableLifeTimeManager::impl_shouldCloseAtNextChance()
 {
     return m_bOwnership;
 }

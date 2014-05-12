@@ -83,10 +83,6 @@ protected:
     //each controller might consider him as owner of the model first
     //at start the model is not considered as owner of itself
     bool volatile       m_bOwnership;
-    //with a XCloseable::close call and during XCloseListener::queryClosing
-    //the ownership can be regulated more explicit,
-    //if so the ownership is considered to be well known
-    bool volatile       m_bOwnershipIsWellKnown;
 
 public:
 OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( ::com::sun::star::util::XCloseable* pCloseable
@@ -118,7 +114,6 @@ protected:
         m_bClosed = false;
         m_bInTryClose = false;
         m_bOwnership = false;
-        m_bOwnershipIsWellKnown = false;
         m_aEndTryClosingCondition.set();
     }
 };
