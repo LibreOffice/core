@@ -686,6 +686,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Method used to form differences: Type = 0 denotes US method (NASD), Type = 1 denotes the European method." ;
         };
     };
+     // -=*# Resource for function NETWORKDAYS #*=-
+    Resource SC_OPCODE_NETWORKDAYS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the number of workdays between two dates using arguments to indicate weekenddays and holidays." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_DATETIME;
+            U2S( HID_FUNC_NETWORKDAYS );
+            4;  0;  0;  1;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Start Date" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Start date for calculation." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "End Date" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "End date for calculation." ;
+        };
+        String 8 // Name of Parameter 3
+        {
+            Text [ en-US ] = "array" ;
+        };
+        String 9 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Optional set of one or more dates to be considered as holiday." ;
+        };
+        String 6 // Name of Parameter 4
+        {
+            Text [ en-US ] = "list of numbers" ;
+        };
+        String 7 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Optional list of numbers to indicate working (0) and weekend (non-zero) days. When omitted, weekend is Saturday and Sunday." ;
+        };
+    };
      // -=*# Resource for function NETWORKDAYS.INTL #*=-
     Resource SC_OPCODE_NETWORKDAYS_MS
     {
