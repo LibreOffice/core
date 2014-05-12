@@ -316,6 +316,7 @@ const char* ImplDbgCheckWindow( const void* pObj );
 
 class Dialog;
 class WindowImpl;
+class PaintHelper;
 class VclBuilder;
 class VclSizeGroup;
 
@@ -343,6 +344,7 @@ class VCL_DLLPUBLIC Window : public OutputDevice, public Resource
     friend class SystemChildWindow;
     friend class ImplBorderWindow;
     friend class VclBuilder;
+    friend class PaintHelper;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
@@ -480,6 +482,8 @@ protected:
     SAL_DLLPRIVATE WindowResHeader      ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                 ImplLoadRes( const ResId& rResId );
 
+    SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper *pHelper);
+    SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper *pHelper);
 private:
 
     SAL_DLLPRIVATE void                 ImplInitWindowData( WindowType nType );

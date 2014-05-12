@@ -1914,11 +1914,185 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
     }
 }
 
+class PaintHelper
+{
+private:
+    Window* m_pWindow;
+    Region* m_pChildRegion;
+    Rectangle m_aSelectionRect;
+    Rectangle m_aPaintRect;
+    Region m_aPaintRegion;
+    sal_uInt16 m_nPaintFlags;
+    bool m_bPop;
+    bool m_bRestoreCursor;
+public:
+    PaintHelper(Window *pWindow, sal_uInt16 nPaintFlags);
+    void SetPop()
+    {
+        m_bPop = true;
+    }
+    void SetPaintRect(const Rectangle& rRect)
+    {
+        m_aPaintRect = rRect;
+    }
+    void SetSelectionRect(const Rectangle& rRect)
+    {
+        m_aSelectionRect = rRect;
+    }
+    void SetRestoreCursor(bool bRestoreCursor)
+    {
+        m_bRestoreCursor = bRestoreCursor;
+    }
+    bool GetRestoreCursor() const
+    {
+        return m_bRestoreCursor;
+    }
+    sal_uInt16 GetPaintFlags() const
+    {
+        return m_nPaintFlags;
+    }
+    Region& GetPaintRegion()
+    {
+        return m_aPaintRegion;
+    }
+    void DoPaint(const Region* pRegion);
+    ~PaintHelper();
+};
+
+PaintHelper::PaintHelper(Window *pWindow, sal_uInt16 nPaintFlags)
+    : m_pWindow(pWindow)
+    , m_pChildRegion(NULL)
+    , m_nPaintFlags(nPaintFlags)
+    , m_bPop(false)
+    , m_bRestoreCursor(false)
+{
+}
+
+void PaintHelper::DoPaint(const Region* pRegion)
+{
+    WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
+    Region* pWinChildClipRegion = m_pWindow->ImplGetWinChildClipRegion();
+    if ( pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
+        pWindowImpl->maInvalidateRegion = *pWinChildClipRegion;
+    else
+    {
+        if ( pRegion )
+            pWindowImpl->maInvalidateRegion.Union( *pRegion );
+
+        if( pWindowImpl->mpWinData && pWindowImpl->mbTrackVisible )
+            /* #98602# need to repaint all children within the
+           * tracking rectangle, so the following invert
+           * operation takes places without traces of the previous
+           * one.
+           */
+            pWindowImpl->maInvalidateRegion.Union( *pWindowImpl->mpWinData->mpTrackRect );
+
+        if ( pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
+            m_pChildRegion = new Region( pWindowImpl->maInvalidateRegion );
+        pWindowImpl->maInvalidateRegion.Intersect( *pWinChildClipRegion );
+    }
+    pWindowImpl->mnPaintFlags = 0;
+    if ( !pWindowImpl->maInvalidateRegion.IsEmpty() )
+    {
+        m_pWindow->PushPaintHelper(this);
+        m_pWindow->Paint(m_aPaintRect);
+    }
+}
+
+void Window::PushPaintHelper(PaintHelper *pHelper)
+{
+    pHelper->SetPop();
+
+    if ( mpWindowImpl->mpCursor )
+        pHelper->SetRestoreCursor(mpWindowImpl->mpCursor->ImplSuspend());
+
+    mbInitClipRegion = true;
+    mpWindowImpl->mbInPaint = true;
+
+    // restore Paint-Region
+    Region &rPaintRegion = pHelper->GetPaintRegion();
+    rPaintRegion = mpWindowImpl->maInvalidateRegion;
+    Rectangle   aPaintRect = rPaintRegion.GetBoundRect();
+
+    // - RTL - re-mirror paint rect and region at this window
+    if( ImplIsAntiparallel() )
+    {
+        const OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ReMirror( aPaintRect );
+        pOutDev->ReMirror( rPaintRegion );
+    }
+    aPaintRect = ImplDevicePixelToLogic( aPaintRect);
+    mpWindowImpl->mpPaintRegion = &rPaintRegion;
+    mpWindowImpl->maInvalidateRegion.SetEmpty();
+
+    if ( (pHelper->GetPaintFlags() & IMPL_PAINT_ERASE) && IsBackground() )
+    {
+        if ( IsClipRegion() )
+        {
+            Region aOldRegion = GetClipRegion();
+            SetClipRegion();
+            Erase();
+            SetClipRegion( aOldRegion );
+        }
+        else
+            Erase();
+    }
+
+    // #98943# trigger drawing of toolbox selection after all childern are painted
+    if( mpWindowImpl->mbDrawSelectionBackground )
+        pHelper->SetSelectionRect(aPaintRect);
+    pHelper->SetPaintRect(aPaintRect);
+}
+
+void Window::PopPaintHelper(PaintHelper *pHelper)
+{
+    if ( mpWindowImpl->mpWinData )
+    {
+        if ( mpWindowImpl->mbFocusVisible )
+            ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
+    }
+    mpWindowImpl->mbInPaint = false;
+    mbInitClipRegion = true;
+    mpWindowImpl->mpPaintRegion = NULL;
+    if ( mpWindowImpl->mpCursor )
+        mpWindowImpl->mpCursor->ImplResume(pHelper->GetRestoreCursor());
+}
+
+PaintHelper::~PaintHelper()
+{
+    WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
+    if (m_bPop)
+    {
+        m_pWindow->PopPaintHelper(this);
+    }
+
+    if ( m_nPaintFlags & (IMPL_PAINT_PAINTALLCHILDREN | IMPL_PAINT_PAINTCHILDREN) )
+    {
+        // Paint from the bottom child window and frontward.
+        Window* pTempWindow = pWindowImpl->mpLastChild;
+        while ( pTempWindow )
+        {
+            if ( pTempWindow->mpWindowImpl->mbVisible )
+                pTempWindow->ImplCallPaint( m_pChildRegion, m_nPaintFlags );
+            pTempWindow = pTempWindow->mpWindowImpl->mpPrev;
+        }
+    }
+
+    if ( pWindowImpl->mpWinData && pWindowImpl->mbTrackVisible && (pWindowImpl->mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
+        /* #98602# need to invert the tracking rect AFTER
+        * the children have painted
+        */
+        m_pWindow->InvertTracking( *(pWindowImpl->mpWinData->mpTrackRect), pWindowImpl->mpWinData->mnTrackFlags );
+
+    // #98943# draw toolbox selection
+    if( !m_aSelectionRect.IsEmpty() )
+        m_pWindow->DrawSelectionBackground( m_aSelectionRect, 3, false, true, false );
+
+    delete m_pChildRegion;
+}
+
 void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 {
-    Exception aException;
-    bool bExceptionCaught(false);
-
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
     PrePaint();
@@ -1947,129 +2121,12 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 
     nPaintFlags = mpWindowImpl->mnPaintFlags & ~(IMPL_PAINT_PAINT);
 
-    Region* pChildRegion = NULL;
-    Rectangle aSelectionRect;
+    PaintHelper aHelper(this, nPaintFlags);
+
     if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINT )
-    {
-        Region* pWinChildClipRegion = ImplGetWinChildClipRegion();
-        if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
-            mpWindowImpl->maInvalidateRegion = *pWinChildClipRegion;
-        else
-        {
-            if ( pRegion )
-                mpWindowImpl->maInvalidateRegion.Union( *pRegion );
-
-            if( mpWindowImpl->mpWinData && mpWindowImpl->mbTrackVisible )
-                /* #98602# need to repaint all children within the
-               * tracking rectangle, so the following invert
-               * operation takes places without traces of the previous
-               * one.
-               */
-                mpWindowImpl->maInvalidateRegion.Union( *mpWindowImpl->mpWinData->mpTrackRect );
-
-            if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
-                pChildRegion = new Region( mpWindowImpl->maInvalidateRegion );
-            mpWindowImpl->maInvalidateRegion.Intersect( *pWinChildClipRegion );
-        }
-        mpWindowImpl->mnPaintFlags = 0;
-        if ( !mpWindowImpl->maInvalidateRegion.IsEmpty() )
-        {
-            bool bRestoreCursor = false;
-            if ( mpWindowImpl->mpCursor )
-                bRestoreCursor = mpWindowImpl->mpCursor->ImplSuspend();
-
-            mbInitClipRegion = true;
-            mpWindowImpl->mbInPaint = true;
-
-            // restore Paint-Region
-            Region      aPaintRegion( mpWindowImpl->maInvalidateRegion );
-            Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
-
-            // - RTL - re-mirror paint rect and region at this window
-            if( ImplIsAntiparallel() )
-            {
-                const OutputDevice *pOutDev = GetOutDev();
-                pOutDev->ReMirror( aPaintRect );
-                pOutDev->ReMirror( aPaintRegion );
-            }
-            aPaintRect = ImplDevicePixelToLogic( aPaintRect);
-            mpWindowImpl->mpPaintRegion = &aPaintRegion;
-            mpWindowImpl->maInvalidateRegion.SetEmpty();
-
-            if ( (nPaintFlags & IMPL_PAINT_ERASE) && IsBackground() )
-            {
-                if ( IsClipRegion() )
-                {
-                    Region aOldRegion = GetClipRegion();
-                    SetClipRegion();
-                    Erase();
-                    SetClipRegion( aOldRegion );
-                }
-                else
-                    Erase();
-            }
-
-            // #98943# trigger drawing of toolbox selection after all childern are painted
-            if( mpWindowImpl->mbDrawSelectionBackground )
-                aSelectionRect = aPaintRect;
-
-            // Paint can throw exceptions; to not have a situation where
-            // mpWindowImpl->mbInPaint keeps to be on true (and other
-            // settings, too) better catch here to avoid to go completely out of
-            // this method without executing the after-paint stuff
-            try
-            {
-                Paint( aPaintRect );
-            }
-            catch(Exception& rException)
-            {
-                aException = rException;
-                bExceptionCaught = true;
-            }
-
-            if ( mpWindowImpl->mpWinData )
-            {
-                if ( mpWindowImpl->mbFocusVisible )
-                    ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
-            }
-            mpWindowImpl->mbInPaint = false;
-            mbInitClipRegion = true;
-            mpWindowImpl->mpPaintRegion = NULL;
-            if ( mpWindowImpl->mpCursor )
-                mpWindowImpl->mpCursor->ImplResume( bRestoreCursor );
-        }
-    }
+        aHelper.DoPaint(pRegion);
     else
         mpWindowImpl->mnPaintFlags = 0;
-
-    if ( nPaintFlags & (IMPL_PAINT_PAINTALLCHILDREN | IMPL_PAINT_PAINTCHILDREN) )
-    {
-        // Paint from the bottom child window and frontward.
-        Window* pTempWindow = mpWindowImpl->mpLastChild;
-        while ( pTempWindow )
-        {
-            if ( pTempWindow->mpWindowImpl->mbVisible )
-                pTempWindow->ImplCallPaint( pChildRegion, nPaintFlags );
-            pTempWindow = pTempWindow->mpWindowImpl->mpPrev;
-        }
-    }
-
-    if ( mpWindowImpl->mpWinData && mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
-        /* #98602# need to invert the tracking rect AFTER
-        * the children have painted
-        */
-        InvertTracking( *(mpWindowImpl->mpWinData->mpTrackRect), mpWindowImpl->mpWinData->mnTrackFlags );
-
-    // #98943# draw toolbox selection
-    if( !aSelectionRect.IsEmpty() )
-        DrawSelectionBackground( aSelectionRect, 3, false, true, false );
-
-    delete pChildRegion;
-
-    if(bExceptionCaught)
-    {
-        throw(aException);
-    }
 }
 
 void Window::ImplCallOverlapPaint()
