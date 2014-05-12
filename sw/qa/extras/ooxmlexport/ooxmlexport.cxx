@@ -3310,6 +3310,33 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreakInFirstPara,"fdo77727.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br","type","page");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    sal_Int32 IntMax = 2147483647;
+
+    xmlNodeSetPtr pXmlNodes[6];
+    pXmlNodes[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlNodes[1] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+
+    pXmlNodes[2] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlNodes[3] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+
+    pXmlNodes[4] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlNodes[5] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+
+    for(sal_Int32 index = 0; index<6; ++index)
+    {
+        CPPUNIT_ASSERT(pXmlNodes[index] != 0);
+        xmlNodePtr pXmlNode = pXmlNodes[index]->nodeTab[0];
+        OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+        CPPUNIT_ASSERT( contents.toInt64() <= IntMax );
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");

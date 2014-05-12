@@ -44,6 +44,8 @@
 #include <writerhelper.hxx>
 #include <comphelper/seqstream.hxx>
 
+#include <climits>
+
 using namespace com::sun::star;
 using namespace oox;
 
@@ -422,7 +424,27 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         else
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
-            m_pImpl->m_pSerializer->write(TwipsToEMU(aPos.X));
+            sal_Int64 nTwipstoEMU = TwipsToEMU(aPos.X);
+
+            /* Absolute Position Offset Value is of type Int. Hence it should not be greater than
+             * Maximum value for Int OR Less than the Minimum value for Int.
+             * - Maximum value for Int = 2147483647
+             * - Minimum value for Int = -2147483648
+             *
+             * As per ECMA Specification : ECMA-376, Second Edition,
+             * Part 1 - Fundamentals And Markup Language Reference[20.4.3.3 ST_PositionOffset (Absolute Position Offset Value)]
+             *
+             * Please refer : http://www.schemacentral.com/sc/xsd/t-xsd_int.html
+             */
+            if (nTwipstoEMU > INT_MAX)
+            {
+                nTwipstoEMU = INT_MAX;
+            }
+            else if (nTwipstoEMU < INT_MIN)
+            {
+                nTwipstoEMU = INT_MIN;
+            }
+            m_pImpl->m_pSerializer->write(nTwipstoEMU);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionH);
@@ -436,7 +458,16 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         else
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
-            m_pImpl->m_pSerializer->write(TwipsToEMU(aPos.Y));
+            sal_Int64 nTwipstoEMU = TwipsToEMU(aPos.Y);
+            if (nTwipstoEMU > INT_MAX)
+            {
+                nTwipstoEMU = INT_MAX;
+            }
+            else if (nTwipstoEMU < INT_MIN)
+            {
+                nTwipstoEMU = INT_MIN;
+            }
+            m_pImpl->m_pSerializer->write(nTwipstoEMU);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionV);
