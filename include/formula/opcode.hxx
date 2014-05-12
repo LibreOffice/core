@@ -448,6 +448,7 @@ enum OpCode : sal_uInt16
     // miscellaneous
         ocWeek              = SC_OPCODE_WEEK,
         ocGetDayOfWeek      = SC_OPCODE_GET_DAY_OF_WEEK,
+        ocNetWorkdays       = SC_OPCODE_NETWORKDAYS,
         ocNetWorkdays_MS    = SC_OPCODE_NETWORKDAYS_MS,
         ocWorkday_MS        = SC_OPCODE_WORKDAY_MS,
         ocNoName            = SC_OPCODE_NO_NAME,
