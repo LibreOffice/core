@@ -192,6 +192,31 @@ OUString Shape3DProperties::getBevelPresetTypeString( sal_Int32 nType )
     return OUString();
 }
 
+OUString Shape3DProperties::getPresetMaterialTypeString( sal_Int32 nType )
+{
+    switch (nType)
+    {
+        case XML_legacyMatte:       return OUString("legacyMatte");
+        case XML_legacyPlastic:     return OUString("legacyPlastic");
+        case XML_legacyMetal:       return OUString("legacyMetal");
+        case XML_legacyWireframe:   return OUString("legacyWireframe");
+        case XML_matte:             return OUString("matte");
+        case XML_plastic:           return OUString("plastic");
+        case XML_metal:             return OUString("metal");
+        case XML_warmMatte:         return OUString("warmMatte");
+        case XML_translucentPowder: return OUString("translucentPowder");
+        case XML_powder:            return OUString("powder");
+        case XML_dkEdge:            return OUString("dkEdge");
+        case XML_softEdge:          return OUString("softEdge");
+        case XML_clear:             return OUString("clear");
+        case XML_flat:              return OUString("flat");
+        case XML_softmetal:         return OUString("softmetal");
+        case XML_none:              return OUString("none");
+    }
+    SAL_WARN( "oox.drawingml", "Shape3DProperties::getPresetMaterialTypeString - unexpected token" );
+    return OUString();
+}
+
 css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getCameraAttributes()
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
@@ -302,7 +327,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getBevelAttri
 
 css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAttributes()
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(5);
+    css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
     sal_Int32 nSize = 0;
     if( mnExtrusionH.has() )
     {
@@ -320,6 +345,12 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAtt
     {
         aSeq[nSize].Name = "z";
         aSeq[nSize].Value = css::uno::Any( mnShapeZ.use() );
+        nSize++;
+    }
+    if( mnMaterial.has() )
+    {
+        aSeq[nSize].Name = "prstMaterial";
+        aSeq[nSize].Value = css::uno::Any( getPresetMaterialTypeString( mnMaterial.use() ) );
         nSize++;
     }
     if( maTopBevelProperties.has() )

@@ -78,6 +78,8 @@ Shape3DPropertiesContext::Shape3DPropertiesContext( ContextHandler2Helper& rPare
         mr3DProperties.mnContourW = rAttribs.getInteger( XML_contourW, 0 );
     if( rAttribs.hasAttribute( XML_z ) )
         mr3DProperties.mnShapeZ = rAttribs.getInteger( XML_z, 0 );
+    if( rAttribs.hasAttribute( XML_prstMaterial ) )
+        mr3DProperties.mnMaterial = rAttribs.getToken( XML_prstMaterial, XML_none );
 }
 
 ContextHandlerRef Shape3DPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )

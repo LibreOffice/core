@@ -1191,7 +1191,7 @@ DECLARE_OOXMLEXPORT_TEST(testShape3DEffectPreservation, "shape-3d-effect-preserv
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
             "z", "488950");
 
-    // second shape: extrusion with theme color, no camera or light rotation
+    // second shape: extrusion with theme color, no camera or light rotation, metal material
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera",
             "prst", "isometricLeftDown");
@@ -1211,11 +1211,17 @@ DECLARE_OOXMLEXPORT_TEST(testShape3DEffectPreservation, "shape-3d-effect-preserv
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
             "extrusionH", "25400");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "prstMaterial", "metal");
 
-    // third shape: colored countour and top and bottom bevel
+    // third shape: colored countour and top and bottom bevel, plastic material
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
             "contourW", "50800");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "prstMaterial", "plastic");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelT",
             "w", "139700");
@@ -1231,6 +1237,11 @@ DECLARE_OOXMLEXPORT_TEST(testShape3DEffectPreservation, "shape-3d-effect-preserv
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelB",
             "prst", "relaxedInset");
+
+    // fourth shape: wireframe
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "prstMaterial", "legacyWireframe");
 }
 
 DECLARE_OOXMLEXPORT_TEST(fdo77719, "fdo77719.docx")

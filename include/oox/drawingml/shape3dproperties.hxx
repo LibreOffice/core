@@ -63,6 +63,7 @@ struct Shape3DProperties
     OptValue< sal_Int32 > mnExtrusionH;
     OptValue< sal_Int32 > mnContourW;
     OptValue< sal_Int32 > mnShapeZ;
+    OptValue< sal_Int32 > mnMaterial;
 
     OptValue< BevelProperties > maTopBevelProperties;
     OptValue< BevelProperties > maBottomBevelProperties;
@@ -74,6 +75,7 @@ struct Shape3DProperties
     OUString            getLightRigName( sal_Int32 nElement );
     OUString            getLightRigDirName( sal_Int32 nElement );
     OUString            getBevelPresetTypeString( sal_Int32 nType );
+    OUString            getPresetMaterialTypeString( sal_Int32 nType );
 
     css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
     css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();

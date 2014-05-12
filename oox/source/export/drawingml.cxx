@@ -2426,7 +2426,13 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
                 nToken = XML_z;
             aShape3DAttrList->add( nToken, OString::number( nVal ).getStr() );
         }
-        if( aShape3DProps[i].Name == "bevelT" || aShape3DProps[i].Name == "bevelB" )
+        else if( aShape3DProps[i].Name == "prstMaterial" )
+        {
+            OUString sVal;
+            aShape3DProps[i].Value >>= sVal;
+            aShape3DAttrList->add( XML_prstMaterial, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        else if( aShape3DProps[i].Name == "bevelT" || aShape3DProps[i].Name == "bevelB" )
         {
             Sequence< PropertyValue > aBevelProps;
             aShape3DProps[i].Value >>= aBevelProps;
