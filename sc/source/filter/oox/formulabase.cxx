@@ -633,7 +633,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "ACCRINT",                "ACCRINT",              469,    NOID,   6,  7,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ACCRINTM",               "ACCRINTM",             470,    NOID,   4,  5,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "WORKDAY",                "WORKDAY",              471,    NOID,   2,  3,  V, { RR, RR, RX, C }, FUNCFLAG_EXTERNAL },
-    { "NETWORKDAYS",            "NETWORKDAYS",          472,    NOID,   2,  3,  V, { RR, RR, RX, C }, FUNCFLAG_EXTERNAL },
+    { "NETWORKDAYS",            "NETWORKDAYS",          472,    NOID,   2,  4,  V, { RR, RR, RX, RX }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
     { "GCD",                    "GCD",                  473,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
     { "MULTINOMIAL",            "MULTINOMIAL",          474,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL },
     { "LCM",                    "LCM",                  475,    NOID,   1,  MX, V, { RX }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in

@@ -561,6 +561,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( const uno::Reference< beans::XProp
 sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( const uno::Reference< beans::XPropertySet >& xOpt,
         sal_Int32 nStartDate, sal_Int32 nEndDate, const uno::Any& aHDay ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
+    SAL_WARN( "77985", "AnalysisAddIn::getNetworkdays() called." );
     sal_Int32                   nNullDate = GetNullDate( xOpt );
 
     SortedIndividualInt32List   aSrtLst;

@@ -250,9 +250,49 @@ void ScInterpreter::ScEasterSunday()
 
 sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
     const sal_uInt8 nParamCount, const sal_uInt32 nNullDate, vector< double >& rSortArray,
-    OUString& rWeekendDays, bool bWeekendMask[ 7 ] )
+    bool bWeekendMask[ 7 ] )
+{
+    if ( nParamCount == 4 )
+    {
+        vector< double > nWeekendDays;
+        GetNumberSequenceArray( 1, nWeekendDays);
+        if ( nGlobalError )
+            return nGlobalError;
+        else
+        {
+            if ( nWeekendDays.size() != 7 )
+                return  errIllegalArgument;
+
+            for ( int i = 0; i < 7; i++ )
+                bWeekendMask[ i ] = ( bool ) nWeekendDays[ i ];
+        }
+    }
+    else
+    {
+        for ( int i = 0; i < 7; i++ )
+            bWeekendMask[ i] = false;
+
+        bWeekendMask[ SATURDAY ] = true;
+        bWeekendMask[ SUNDAY ]   = true;
+    }
+
+    if ( nParamCount >= 3 )
+    {
+        GetSortArray( 1, rSortArray );
+        size_t nMax = rSortArray.size();
+        for ( size_t i = 0; i < nMax; i++ )
+            rSortArray.at( i ) = ::rtl::math::approxFloor( rSortArray.at( i ) ) + nNullDate;
+    }
+
+    return 0;
+}
+
+sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks_MS(
+    const sal_uInt8 nParamCount, const sal_uInt32 nNullDate, vector< double >& rSortArray,
+    bool bWeekendMask[ 7 ] )
 {
     sal_uInt16 nErr = 0;
+    OUString aWeekendDays;
     if ( nParamCount == 4 )
     {
         GetSortArray( 1, rSortArray );
@@ -262,23 +302,23 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
     }
 
     if ( nParamCount >= 3 )
-        rWeekendDays = GetString().getString();
+        aWeekendDays = GetString().getString();
 
     for ( int i = 0; i < 7; i++ )
         bWeekendMask[ i] = false;
 
-    if ( rWeekendDays.isEmpty() )
+    if ( aWeekendDays.isEmpty() )
     {
         bWeekendMask[ SATURDAY ] = true;
         bWeekendMask[ SUNDAY ]   = true;
     }
     else
     {
-        switch ( rWeekendDays.getLength() )
+        switch ( aWeekendDays.getLength() )
         {
             case 1 :
                 // Weekend days defined by code
-                switch ( rWeekendDays[ 0 ] )
+                switch ( aWeekendDays[ 0 ] )
                 {
                     case '1' : bWeekendMask[ SATURDAY ]  = true; bWeekendMask[ SUNDAY ]    = true; break;
                     case '2' : bWeekendMask[ SUNDAY ]    = true; bWeekendMask[ MONDAY ]    = true; break;
@@ -292,9 +332,9 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
                 break;
             case 2 :
                 // Weekend day defined by code
-                if ( rWeekendDays[ 0 ] == '1' )
+                if ( aWeekendDays[ 0 ] == '1' )
                 {
-                    switch ( rWeekendDays[ 1 ] )
+                    switch ( aWeekendDays[ 1 ] )
                     {
                         case '1' : bWeekendMask[ SUNDAY ]    = true; break;
                         case '2' : bWeekendMask[ MONDAY ]    = true; break;
@@ -313,7 +353,7 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
                 // Weekend days defined by string
                 for ( int i = 0; i < 7 && !nErr; i++ )
                 {
-                    switch ( rWeekendDays[ i ] )
+                    switch ( aWeekendDays[ i ] )
                     {
                         case '0' : bWeekendMask[ i ] = false; break;
                         case '1' : bWeekendMask[ i ] = true;  break;
@@ -329,18 +369,28 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
     return nErr;
 }
 
-void ScInterpreter::ScNetWorkdays_MS()
+void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
 {
+    SAL_WARN( "77985", "ScInterpreter::ScNetWorkdays() called." );
+
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 4 ) )
     {
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
-        OUString aWeekendDays;
         Date aNullDate = *( pFormatter->GetNullDate() );
         sal_uInt32 nNullDate = Date::DateToDays( aNullDate.GetDay(), aNullDate.GetMonth(), aNullDate.GetYear() );
-        sal_uInt16 nErr = GetWeekendAndHolidayMasks( nParamCount, nNullDate,
-                            nSortArray , aWeekendDays, bWeekendMask );
+        sal_uInt16 nErr;
+        if ( bOOXML_Version )
+        {
+            nErr = GetWeekendAndHolidayMasks_MS( nParamCount, nNullDate,
+                            nSortArray, bWeekendMask );
+        }
+        else
+        {
+            nErr = GetWeekendAndHolidayMasks( nParamCount, nNullDate,
+                            nSortArray, bWeekendMask );
+        }
         if ( nErr )
             PushError( nErr );
         else
@@ -385,8 +435,8 @@ void ScInterpreter::ScWorkday_MS()
         OUString aWeekendDays;
         Date aNullDate = *( pFormatter->GetNullDate() );
         sal_uInt32 nNullDate = Date::DateToDays( aNullDate.GetDay(), aNullDate.GetMonth(), aNullDate.GetYear() );
-        sal_uInt16 nErr = GetWeekendAndHolidayMasks( nParamCount, nNullDate,
-                            nSortArray , aWeekendDays, bWeekendMask );
+        sal_uInt16 nErr = GetWeekendAndHolidayMasks_MS( nParamCount, nNullDate,
+                            nSortArray, bWeekendMask );
         if ( nErr )
             PushError( nErr );
         else

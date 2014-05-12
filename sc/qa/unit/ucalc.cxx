@@ -2409,6 +2409,7 @@ void Test::testFunctionLists()
         "MINUTE",
         "MONTH",
         "MONTHS",
+        "NETWORKDAYS",
         "NETWORKDAYS.INTL",
         "NOW",
         "SECOND",
