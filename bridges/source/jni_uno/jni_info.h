@@ -82,6 +82,9 @@ struct JNI_interface_type_info : public JNI_type_info
     virtual void destroy( JNIEnv * jni_env ) SAL_OVERRIDE;
     explicit JNI_interface_type_info(
         JNI_context const & jni, typelib_TypeDescription * td );
+
+private:
+    virtual ~JNI_interface_type_info() {}
 };
 
 struct JNI_compound_type_info : public JNI_type_info
@@ -95,6 +98,9 @@ struct JNI_compound_type_info : public JNI_type_info
     virtual void destroy( JNIEnv * jni_env ) SAL_OVERRIDE;
     explicit JNI_compound_type_info(
         JNI_context const & jni, typelib_TypeDescription * td );
+
+private:
+    virtual ~JNI_compound_type_info() {}
 };
 
 struct JNI_type_info_holder
