@@ -728,10 +728,12 @@ void ScInputHandler::GetFormulaData()
             if ( pDesc->pFuncName )
             {
                 pFormulaData->insert(ScTypedStrData(*pDesc->pFuncName, 0.0, ScTypedStrData::Standard));
-                // fdo75264 fill maFormulaChar with all characters used in formula names
-                for ( sal_Int32 j = 0; j < pDesc->pFuncName->getLength(); j++ )
+                const sal_Unicode* pName = pDesc->pFuncName->getStr();
+                const sal_Int32 nLen = pDesc->pFuncName->getLength();
+                // fdo#75264 fill maFormulaChar with all characters used in formula names
+                for ( sal_Int32 j = 0; j < nLen; j++ )
                 {
-                    sal_Unicode c = pDesc->pFuncName->getStr()[ j ];
+                    sal_Unicode c = pName[ j ];
                     maFormulaChar.insert( c );
                 }
                 pDesc->initArgumentInfo();
@@ -1018,7 +1020,7 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     aStart = ScGlobal::pCharClass->uppercase( aStart );
     sal_Int32 nPos = aStart.getLength() - 1;
     sal_Unicode c = aStart[ nPos ];
-    // fdo75264 use maFormulaChar to check if characters are used in function names
+    // fdo#75264 use maFormulaChar to check if characters are used in function names
     ::std::set< sal_Unicode >::const_iterator p = maFormulaChar.find( c );
     if ( p == maFormulaChar.end() )
         return false; // last character is not part of any function name, quit
