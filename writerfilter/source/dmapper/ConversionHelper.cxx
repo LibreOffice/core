@@ -31,7 +31,6 @@
 #include <functional>
 
 using namespace com::sun::star;
-using namespace com::sun::star::table::BorderLineStyle;
 
 namespace writerfilter {
 namespace dmapper{
@@ -85,7 +84,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     ::editeng::SvxBorderStyle const nLineStyle(
             ::editeng::ConvertBorderStyleFromWord(nLineType));
     rToFill.LineStyle = nLineStyle;
-    double const fConverted( (NONE == nLineStyle) ? 0.0 :
+    double const fConverted( (table::BorderLineStyle::NONE == nLineStyle) ? 0.0 :
         ::editeng::ConvertBorderWidthFromWord(nLineStyle, nLineThickness,
             nLineType));
     rToFill.LineWidth = convertTwipToMM100(fConverted);
