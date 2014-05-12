@@ -302,25 +302,28 @@ bool SfxObjectShell::IsModified()
         return false;
     }
 
-    uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-    for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+    if (pImp->mpObjectContainer)
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
-        if ( xObj.is() )
+        uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
         {
-            try
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            if ( xObj.is() )
             {
-                sal_Int32 nState = xObj->getCurrentState();
-                if ( nState != embed::EmbedStates::LOADED )
+                try
                 {
-                    uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-                    if ( xModifiable.is() && xModifiable->isModified() )
-                        return true;
+                    sal_Int32 nState = xObj->getCurrentState();
+                    if ( nState != embed::EmbedStates::LOADED )
+                    {
+                        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                        if ( xModifiable.is() && xModifiable->isModified() )
+                            return true;
+                    }
                 }
+                catch( uno::Exception& )
+                {}
             }
-            catch( uno::Exception& )
-            {}
         }
     }
 
