@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_a478a22c",
+        "filename": "cppuhelper/source/findsofficepath.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-12T07:51:54Z",
+      "side": 1,
+      "message": "missing free(str)",
+      "revId": "406a5b1be6dcf216bd67d78187a760cd0b7760e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_4499ae6d",
+        "filename": "shell/source/unix/exec/urltest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-12T07:51:54Z",
+      "side": 1,
+      "message": "this is wrong; each round through the while loop, aBuffer shall be appended to the same line prefix",
+      "revId": "406a5b1be6dcf216bd67d78187a760cd0b7760e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
