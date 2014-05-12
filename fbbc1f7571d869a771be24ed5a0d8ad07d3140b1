@@ -34,6 +34,24 @@
       "revId": "fbbc1f7571d869a771be24ed5a0d8ad07d3140b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_44828e01",
+        "filename": "cli_ure/source/uno_bridge/cli_proxy.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-05-12T08:16:42Z",
+      "side": 1,
+      "message": "Yes, because MSVC complains that __pin is old API style. The build breaks because of this.",
+      "parentUuid": "3a6ff13c_c49e7e63",
+      "revId": "fbbc1f7571d869a771be24ed5a0d8ad07d3140b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
