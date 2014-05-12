@@ -58,7 +58,8 @@ SwPageDesc::SwPageDesc( const OUString& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE ) ),
     bLandscape( sal_False ),
     bHidden( sal_False ),
-    aFtnInfo()
+    aFtnInfo(),
+    list ( 0 )
 {
 }
 
@@ -77,7 +78,8 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
     eUse( rCpy.ReadUseOn() ),
     bLandscape( rCpy.GetLandscape() ),
     bHidden( rCpy.IsHidden() ),
-    aFtnInfo( rCpy.GetFtnInfo() )
+    aFtnInfo( rCpy.GetFtnInfo() ),
+    list ( 0 )
 {
 }
 
@@ -106,6 +108,34 @@ SwPageDesc::~SwPageDesc()
 {
 }
 
+
+
+void SwPageDesc::SetName( const OUString& rNewName )
+{
+    SwPageDescs *_list = list;
+    SwPageDescs::const_iterator it;
+    bool move_entry = false;
+
+    if (list) {
+        if( list->end() != list->find( rNewName ))
+            return;
+        // Optimize by implemeting move in o3tl::sorted_vector
+        it = list->find( this );
+        SAL_WARN_IF( list->end() == it, "sw", "SwPageDesc not found in expected list" );
+        // We don't move the first entry
+        move_entry = (it != list->begin());
+        if (move_entry)
+            // Clears list
+            list->erase( it );
+    }
+
+    aDescName = rNewName;
+
+    if (_list && move_entry)
+        // Sets list
+        _list->insert( this );
+}
+
 /*************************************************************************
 |*
 |*  SwPageDesc::Mirror()
@@ -114,8 +144,6 @@ SwPageDesc::~SwPageDesc()
 |*      Attributes like borders and so on are copied 1:1.
 |*
 |*************************************************************************/
-
-
 
 void SwPageDesc::Mirror()
 {
@@ -392,8 +420,6 @@ void SwPageDesc::ChgFirstShare( sal_Bool bNew )
 |*
 |*************************************************************************/
 
-
-
 SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
     nLineWidth(10),
@@ -508,7 +534,7 @@ SwPageDescExt::operator SwPageDesc() const
 {
     SwPageDesc aResult(aPageDesc);
 
-    SwPageDesc * pPageDesc = pDoc->GetPageDesc(sFollow);
+    SwPageDesc * pPageDesc = pDoc->FindPageDesc(sFollow);
 
     if ( 0 != pPageDesc )
         aResult.SetFollow(pPageDesc);
@@ -518,8 +544,83 @@ SwPageDescExt::operator SwPageDesc() const
 
 SwPageDescs::~SwPageDescs()
 {
-    for(const_iterator it = begin(); it != end(); ++it)
+    DeleteAndDestroyAll();
+}
+
+void SwPageDescs::DeleteAndDestroyAll()
+{
+    for( const_iterator it = begin(); it != end(); ++it )
         delete *it;
+    clear();
+}
+
+std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::insert( const value_type& x )
+{
+    const_iterator const ret = find( x );
+    if (ret == end()) {
+        SwPageDescsBase::push_back( x );
+        SAL_WARN_IF(x->list == 0, "sw", "Inserting already assigned item");
+        x->list = this;
+        return std::make_pair(end() - 1 , true);
+    }
+    return std::make_pair(ret, false);
+}
+
+SwPageDescs::size_type SwPageDescs::erase( const value_type& x )
+{
+    const_iterator const ret = find( x );
+    if (ret != end()) {
+        SwPageDescsBase::erase( begin_nonconst() + (ret - begin()) );
+        x->list = 0;
+        return 1;
+    }
+    return 0;
+}
+
+void SwPageDescs::erase( size_type index )
+{
+    erase( begin_nonconst() + index );
+}
+
+void SwPageDescs::erase( const_iterator const& position )
+{
+    (*position)->list = 0;
+    SwPageDescsBase::erase( begin_nonconst() + (position - begin()) );
+}
+
+struct spd_oustring_compare : public std::unary_function<SwPageDesc*, bool>
+{
+    spd_oustring_compare(const OUString &_baseline) : baseline(_baseline) {}
+    bool operator() (SwPageDesc* const &arg)
+        { return (baseline.compareTo( arg->GetName() ) == 0); }
+    const OUString baseline;
+};
+
+struct spd_item_compare : public std::unary_function<SwPageDesc*, bool>
+{
+    spd_item_compare(const SwPageDesc* _baseline) : baseline(_baseline) {}
+    bool operator() (SwPageDesc* const &arg)
+        { return (baseline->GetName().compareTo( arg->GetName() ) == 0); }
+    const SwPageDesc* baseline;
+};
+
+SwPageDescs::const_iterator SwPageDescs::find( const OUString &name ) const
+{
+    const_iterator const it = std::find_if(
+        begin(), end(), spd_oustring_compare( name ) );
+    return it;
+}
+
+SwPageDescs::const_iterator SwPageDescs::find( const value_type& x ) const
+{
+    const_iterator const it = std::find_if(
+        begin(), end(), spd_item_compare( x ) );
+    return it;
+}
+
+bool SwPageDescs::Contains( const SwPageDescs::value_type& x ) const
+{
+    return (x->list == this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
