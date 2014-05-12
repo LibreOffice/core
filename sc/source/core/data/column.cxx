@@ -51,6 +51,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fieldupdater.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <cstring>
 #include <map>
@@ -2227,7 +2228,7 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
 
         if (!mpUndoDoc->SetFormulaCells(rOldPos, aCells))
             // Insertion failed.  Delete all formula cells.
-            std::for_each(aCells.begin(), aCells.end(), ScDeleteObjectByPtr<ScFormulaCell>());
+            std::for_each(aCells.begin(), aCells.end(), o3tl::default_deleter<ScFormulaCell>());
     }
 
 public:

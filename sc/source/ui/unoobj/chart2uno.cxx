@@ -32,7 +32,6 @@
 #include "compiler.hxx"
 #include "reftokenhelper.hxx"
 #include "chartlis.hxx"
-#include "stlalgorithm.hxx"
 #include "tokenuno.hxx"
 #include "docsh.hxx"
 #include "cellvalue.hxx"
@@ -55,6 +54,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/math.hxx>
+#include <o3tl/deleter.hxx>
 
 SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
         "com.sun.star.chart2.data.DataProvider")
@@ -156,7 +156,7 @@ struct TokenTable : boost::noncopyable
     }
     void clear()
     {
-        ::std::for_each(maTokens.begin(), maTokens.end(), ScDeleteObjectByPtr<FormulaToken>());
+        std::for_each(maTokens.begin(), maTokens.end(), o3tl::default_deleter<FormulaToken>());
     }
 
     void push_back( FormulaToken* pToken )

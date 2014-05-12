@@ -56,13 +56,13 @@
 #include "tokenarray.hxx"
 #include "mtvcellfunc.hxx"
 #include "columnspanset.hxx"
-#include <stlalgorithm.hxx>
 #include <fstalgorithm.hxx>
 #include <listenercontext.hxx>
 #include <sharedformula.hxx>
 #include <refhint.hxx>
 
 #include <svl/sharedstringpool.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
@@ -293,7 +293,7 @@ public:
         delete[] pppInfo;
 
         if (mpRows)
-            std::for_each(mpRows->begin(), mpRows->end(), ScDeleteObjectByPtr<Row>());
+            std::for_each(mpRows->begin(), mpRows->end(), o3tl::default_deleter<Row>());
     }
 
     void SetKeepQuery( bool b ) { mbKeepQuery = b; }

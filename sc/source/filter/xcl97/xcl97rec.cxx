@@ -56,6 +56,7 @@
 #include <filter/msfilter/msoleexp.hxx>
 
 #include <unotools/localedatawrapper.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <stdio.h>
 
@@ -68,7 +69,6 @@
 #include "docoptio.hxx"
 #include "patattr.hxx"
 #include "tabprotection.hxx"
-#include "stlalgorithm.hxx"
 
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
@@ -109,7 +109,7 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
 
 XclExpObjList::~XclExpObjList()
 {
-    ::std::for_each(maObjs.begin(), maObjs.end(), ScDeleteObjectByPtr<XclObj>());
+    std::for_each(maObjs.begin(), maObjs.end(), o3tl::default_deleter<XclObj>());
     delete pMsodrawingPerSheet;
     delete pSolverContainer;
 }

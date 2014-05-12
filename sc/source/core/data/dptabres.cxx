@@ -27,13 +27,13 @@
 #include "dpitemdata.hxx"
 
 #include "document.hxx"
-#include "stlalgorithm.hxx"
 #include "dpresfilter.hxx"
 #include "dputil.hxx"
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <math.h>
 #include <float.h>
@@ -757,7 +757,7 @@ ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
 
 ScDPResultData::~ScDPResultData()
 {
-    std::for_each(maDimMembers.begin(), maDimMembers.end(), ScDeleteObjectByPtr<ResultMembers>());
+    std::for_each(maDimMembers.begin(), maDimMembers.end(), o3tl::default_deleter<ResultMembers>());
 }
 
 void ScDPResultData::SetMeasureData(
@@ -3550,7 +3550,7 @@ ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
 
 ScDPDataDimension::~ScDPDataDimension()
 {
-    std::for_each(maMembers.begin(), maMembers.end(), ScDeleteObjectByPtr<ScDPDataMember>());
+    std::for_each(maMembers.begin(), maMembers.end(), o3tl::default_deleter<ScDPDataMember>());
 }
 
 void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )

@@ -15,19 +15,6 @@
 
 #include <rtl/alloc.h>
 
-/**
- * Function object to allow deleting instances stored in STL containers as
- * pointers.
- */
-template<typename T>
-struct ScDeleteObjectByPtr : public ::std::unary_function<T*, void>
-{
-    void operator() (T* p)
-    {
-        delete p;
-    }
-};
-
 namespace sc {
 
 /**

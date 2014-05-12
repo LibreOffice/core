@@ -8,7 +8,6 @@
  */
 
 #include "columnspanset.hxx"
-#include "stlalgorithm.hxx"
 #include "column.hxx"
 #include "table.hxx"
 #include "document.hxx"
@@ -16,6 +15,7 @@
 #include "markdata.hxx"
 #include "rangelst.hxx"
 #include <fstalgorithm.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <algorithm>
 
@@ -67,7 +67,7 @@ ColumnSpanSet::~ColumnSpanSet()
         if (!pTab)
             continue;
 
-        std::for_each(pTab->begin(), pTab->end(), ScDeleteObjectByPtr<ColumnType>());
+        std::for_each(pTab->begin(), pTab->end(), o3tl::default_deleter<ColumnType>());
         delete pTab;
     }
 }

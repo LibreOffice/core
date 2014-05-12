@@ -84,7 +84,6 @@
 #include "externalrefmgr.hxx"
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
-#include "stlalgorithm.hxx"
 #include "defaultsoptions.hxx"
 #include "editutil.hxx"
 #include "stringutil.hxx"
@@ -99,6 +98,7 @@
 #include <tokenstringcontext.hxx>
 
 #include <formula/vectortoken.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <map>
 #include <limits>
@@ -785,7 +785,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
                 TableContainer::iterator it = maTabs.begin() + nTab;
                 TableContainer::iterator itEnd = it + nSheets;
-                std::for_each(it, itEnd, ScDeleteObjectByPtr<ScTable>());
+                std::for_each(it, itEnd, o3tl::default_deleter<ScTable>());
                 maTabs.erase(it, itEnd);
                 // UpdateBroadcastAreas must be called between UpdateDeleteTab,
                 // which ends listening, and StartAllListeners, to not modify
