@@ -112,17 +112,6 @@ Player::~Player()
 
 // ------------------------------------------------------------------------------
 
-AVAsset* Player::getMovie()
-{
-    if( !mpPlayer )
-        return nil;
-    AVAsset* pMovie = [[mpPlayer currentItem] asset];
-    OSL_ASSERT( pMovie );
-    return pMovie;
-}
-
-// ------------------------------------------------------------------------------
-
 bool Player::handleObservation( NSString* pKeyPath )
 {
     OSL_TRACE( "AVPlayer::handleObservation key=\"%s\"", [pKeyPath UTF8String]);
@@ -139,8 +128,6 @@ bool Player::handleObservation( NSString* pKeyPath )
 
 bool Player::create( const ::rtl::OUString& rURL )
 {
-    maURL = rURL;
-
     // get the media asset
     NSString* aNSStr = [NSString stringWithCharacters:rURL.getStr() length:rURL.getLength()];
     NSURL* aNSURL = [NSURL URLWithString: [aNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
@@ -433,12 +420,10 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     uno::Reference< media::XFrameGrabber > xRet;
     OSL_TRACE ("Player::createFrameGrabber");
 
-    if( !maURL.isEmpty() )
-    {
-        FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
-        if( pGrabber->create( maURL ) )
-            xRet = pGrabber;
-    }
+    FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
+    AVAsset* pMovie = [[mpPlayer currentItem] asset];
+    if( pGrabber->create( pMovie ) )
+        xRet = pGrabber;
 
     return xRet;
 }
