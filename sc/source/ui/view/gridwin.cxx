@@ -1636,6 +1636,33 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    if(!maChildWindows.empty())
+    {
+        const Point& rPos = rMEvt.GetPosPixel();
+        for(boost::ptr_vector<Window>::iterator itr = maChildWindows.begin(),
+                itrEnd = maChildWindows.end(); itr != itrEnd; ++itr)
+        {
+            Point aPoint = itr->GetPosPixel();
+            Size aSize = itr->GetSizePixel();
+
+            if(rPos.X() >= aPoint.X() && rPos.X() <= (aPoint.X() + aSize.Width())
+                    && rPos.Y() >= aPoint.Y() && rPos.Y() <= (aPoint.Y() + aSize.Height()))
+            {
+                // we found a mouse event for the child window
+                // we need to recalculate the position based on the child window
+
+                Point aNewPos = rPos - aPoint;
+                sal_uInt16 nClicks = rMEvt.GetClicks();
+                sal_uInt16 nMode = rMEvt.GetMode();
+                sal_uInt16 nButtons = rMEvt.GetButtons();
+                sal_uInt16 nModifier = rMEvt.GetModifier();
+
+                MouseEvent aEvent(aNewPos, nClicks, nMode, nButtons, nModifier);
+                itr->MouseButtonDown(aEvent);
+                return;
+            }
+        }
+    }
     nNestedButtonState = SC_NESTEDBUTTON_DOWN;
 
     MouseEventState aState;
