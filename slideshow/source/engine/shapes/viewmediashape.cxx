@@ -299,7 +299,7 @@ namespace slideshow
             if( !mxPlayer.is() && mxShape.is() )
             {
                 ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(),
-                                   "ViewMediaShape::update(): Invalid layer canvas" );
+                                   "ViewMediaShape::implInitialize(): Invalid layer canvas" );
 
                 uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas()->getUNOCanvas() );
 
@@ -434,7 +434,7 @@ namespace slideshow
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams,
                                                                  const OUString& rMimeType )
         {
-                    OSL_TRACE( "ViewMediaShape::implInitializeVCLBasedPlayerWindow" );
+            OSL_TRACE( "ViewMediaShape::implInitializePlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
             {
                 try
