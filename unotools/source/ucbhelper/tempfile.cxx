@@ -90,14 +90,7 @@ bool ensuredir( const OUString& rUnqPath )
     // HACK: create directory on a mount point with nobrowse option
     // returns ENOSYS in any case !!
     osl::Directory aDirectory( aPath );
-#ifdef UNX
-    /* RW permission for the user only! */
-    mode_t old_mode = umask(077);
-#endif
     osl::FileBase::RC nError = aDirectory.open();
-#ifdef UNX
-    umask(old_mode);
-#endif
     aDirectory.close();
     if( nError == osl::File::E_None )
         return true;
