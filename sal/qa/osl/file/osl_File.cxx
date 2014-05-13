@@ -26,7 +26,6 @@
 #include "osl/thread.h"
 
 #include <osl/file.hxx>
-#include <osl/detail/file.h>
 #include <osl_File_Const.h>
 
 #include <cppunit/TestFixture.h>

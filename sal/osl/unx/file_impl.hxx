@@ -43,6 +43,11 @@ struct DirectoryItem_Impl
     oslFileType getFileType() const;
 };
 
+oslFileError openFilePath(
+    const char *cpFilePath,
+    oslFileHandle* pHandle,
+    sal_uInt32 uFlags );
+
 #endif /* INCLUDED_FILE_IMPL_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

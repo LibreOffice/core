@@ -12,35 +12,17 @@
 
 #include <sal/config.h>
 
-#include <sys/stat.h>
-
-#include <sal/saldllapi.h>
-#include <sal/types.h>
-
 /** @cond INTERNAL */
 
 /* Some additions to the osl file functions for LibreOffice internal
    use. Needed for details in the Android support.
  */
 
-#if defined __cplusplus
-extern "C" {
-#endif
-
 /* More flags needed for semantics that match the open() call that
    used to be in SvFileStream::Open().
 */
 #define osl_File_OpenFlag_Trunc     0x00000010L
 #define osl_File_OpenFlag_NoExcl    0x00000020L
-
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFilePath(
-    const char *cpFilePath,
-    oslFileHandle* pHandle,
-    sal_uInt32 uFlags );
-
-#if defined __cplusplus
-}
-#endif
 
 /** @endcond */
 

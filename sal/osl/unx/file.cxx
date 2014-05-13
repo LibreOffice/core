@@ -33,6 +33,7 @@
 #include "system.h"
 #include "createfilehandlefromfd.hxx"
 #include "file_error_transl.h"
+#include "file_impl.hxx"
 #include "file_url.h"
 #include "uunxapi.h"
 
@@ -820,7 +821,7 @@ openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const char
 #endif
 
 oslFileError
-SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags )
+openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags )
 {
     oslFileError eRet;
 
@@ -1015,7 +1016,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 #endif /* MACOSX */
 
-    return osl_openFilePath (buffer, pHandle, uFlags);
+    return openFilePath (buffer, pHandle, uFlags);
 }
 
 oslFileError

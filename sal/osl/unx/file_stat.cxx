@@ -18,7 +18,6 @@
  */
 
 #include "osl/file.h"
-#include "osl/detail/file.h"
 
 #include "system.h"
 #include <sys/types.h>
