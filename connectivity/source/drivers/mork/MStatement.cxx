@@ -71,7 +71,6 @@ using namespace com::sun::star::util;
 
 OStatement::OStatement( OConnection* _pConnection) : OCommonStatement( _pConnection)
 {
-    SAL_INFO("connectivity.mork", "=>  OStatement::OStatement()" );
 }
 
 OCommonStatement::OCommonStatement(OConnection* _pConnection )
@@ -84,7 +83,6 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
     ,m_pSQLIterator( new OSQLParseTreeIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ) )
     ,rBHelper(OCommonStatement_IBASE::rBHelper)
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::OCommonStatement()" );
     m_xDBMetaData = _pConnection->getMetaData();
     m_pParseTree = NULL;
     m_pConnection->acquire();
@@ -143,8 +141,6 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException, 
 
 void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::createTable()" );
-
 /*
     if(m_pParseTree)
     {
@@ -193,8 +189,6 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
 OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , sal_Bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::parseSql()" );
-
     OUString aErr;
 
     m_pParseTree = m_aParser.parseTree(aErr,sql);
@@ -269,8 +263,6 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
 
 Reference< XResultSet > OCommonStatement::impl_executeCurrentQuery()
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::impl_executeCurrentQuery()" );
-
     clearCachedResultSet();
 
     ::rtl::Reference< OResultSet > pResult( new OResultSet( this, m_pSQLIterator ) );
@@ -286,8 +278,6 @@ Reference< XResultSet > OCommonStatement::impl_executeCurrentQuery()
 
 void OCommonStatement::initializeResultSet( OResultSet* _pResult )
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::initializeResultSet()" );
-
     ENSURE_OR_THROW( _pResult, "invalid result set" );
 
     _pResult->setColumnMapping(m_aColMapping);
@@ -300,8 +290,6 @@ void OCommonStatement::initializeResultSet( OResultSet* _pResult )
 
 void OCommonStatement::clearCachedResultSet()
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::clearCachedResultSet()" );
-
     Reference< XResultSet > xResultSet( m_xResultSet.get(), UNO_QUERY );
     if ( !xResultSet.is() )
         return;
@@ -321,8 +309,6 @@ void OCommonStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pR
 
 sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::execute()" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
@@ -336,8 +322,6 @@ sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLExce
 
 Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::executeQuery()" );
-
     ::osl::MutexGuard aGuard( m_ThreadMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
@@ -354,8 +338,6 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString&
 
 Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::getConnection()" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
@@ -365,8 +347,6 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLE
 
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::queryInterface()" );
-
     Any aRet = ::cppu::queryInterface(rType,static_cast< XServiceInfo*> (this));
     if(!aRet.hasValue())
         aRet = OCommonStatement::queryInterface(rType);
@@ -512,8 +492,6 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement
 
 void OCommonStatement::createColumnMapping()
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::createColumnMapping()" );
-
     size_t i;
 
     // initialize the column index map (mapping select columns to table columns)
@@ -564,8 +542,6 @@ void OCommonStatement::analyseSQL()
 void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
-    SAL_INFO("connectivity.mork", "=>  OCommonStatement::setOrderbyColumn()" );
-
     OUString aColumnName;
     if (pColumnRef->count() == 1)
         aColumnName = pColumnRef->getChild(0)->getTokenValue();

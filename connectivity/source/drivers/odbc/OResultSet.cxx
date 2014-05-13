@@ -199,7 +199,6 @@ void OResultSet::disposing(void)
 
 SQLRETURN OResultSet::unbind(bool _bUnbindHandle)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::unbind" );
     SQLRETURN nRet = 0;
     if ( _bUnbindHandle )
         nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
@@ -270,7 +269,6 @@ SQLRETURN OResultSet::unbind(bool _bUnbindHandle)
 
 TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::allocBindColumn" );
     TVoidPtr aPair;
     switch (_nType)
     {
@@ -332,7 +330,6 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
 
 void OResultSet::allocBuffer()
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::allocBuffer" );
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
 
@@ -353,7 +350,6 @@ void OResultSet::allocBuffer()
 
 void OResultSet::releaseBuffer()
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::releaseBuffer" );
     unbind(false);
     m_aLengthVector.clear();
 }
@@ -376,7 +372,6 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::findColumn" );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
@@ -587,7 +582,6 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException, 
 
 Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::getMetaData" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -706,7 +700,6 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException, s
 
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::beforeFirst" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -718,7 +711,6 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, 
 
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::afterLast" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -741,32 +733,27 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException, std::e
 
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::first" );
     return moveImpl(IResultSetHelper::FIRST,0,true);
 }
 
 
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::last" );
     return moveImpl(IResultSetHelper::LAST,0,true);
 }
 
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::absolute" );
     return moveImpl(IResultSetHelper::ABSOLUTE,row,true);
 }
 
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::relative" );
     return moveImpl(IResultSetHelper::RELATIVE,row,true);
 }
 
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::previous" );
     return moveImpl(IResultSetHelper::PRIOR,0,true);
 }
 
@@ -780,7 +767,6 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException
 
 sal_Bool SAL_CALL OResultSet::rowDeleted() throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::rowDeleted" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -792,7 +778,6 @@ sal_Bool SAL_CALL OResultSet::rowDeleted() throw(SQLException, RuntimeException,
 
 sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::rowInserted" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -804,7 +789,6 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeExcepti
 
 sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::rowUpdated" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -815,14 +799,12 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeExceptio
 
 sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::next" );
     return moveImpl(IResultSetHelper::NEXT,1,true);
 }
 
 
 sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::wasNull" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -850,7 +832,6 @@ Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException, s
 
 void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::insertRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -927,7 +908,6 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException, st
 
 void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::updateRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -978,7 +958,6 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException, st
 
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::deleteRow" );
     SQLRETURN nRet = SQL_SUCCESS;
     sal_Int32 nPos = getDriverPos();
     nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_DELETE,SQL_LOCK_NO_CHANGE);
@@ -1010,7 +989,6 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
 
 void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::moveToInsertRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1030,7 +1008,6 @@ void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 
 void OResultSet::updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(SQLException, RuntimeException)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::updateValue" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1156,7 +1133,6 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
 
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::refreshRow" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1189,7 +1165,6 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException,
 }
 Sequence<sal_Int8> OResultSet::impl_getBookmark(  ) throw( SQLException,  RuntimeException)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::getBookmark" );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
@@ -1217,7 +1192,6 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  ) throw( SQLException,  Runtim
 
 sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::moveToBookmark" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1246,7 +1220,6 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
 
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::moveRelativeToBookmark" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1264,7 +1237,6 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
 
 sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::compareBookmarks" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -1549,8 +1521,6 @@ void OResultSet::getFastPropertyValue(
 
 void OResultSet::fillColumn(const sal_Int32 _nColumn)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::fillColumn" );
-
     ensureCacheForColumn(_nColumn);
 
     if (m_aRow[_nColumn].isBound())
@@ -1684,7 +1654,6 @@ void SAL_CALL OResultSet::release() throw()
 
 bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool /*_bRetrieveData*/)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::move" );
     SQLSMALLINT nFetchOrientation = SQL_FETCH_NEXT;
     switch(_eCursorPosition)
     {
@@ -1816,7 +1785,6 @@ bool OResultSet::moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 
 void OResultSet::fillNeededData(SQLRETURN _nRet)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSet::fillNeededData" );
     SQLRETURN nRet = _nRet;
     if( nRet == SQL_NEED_DATA)
     {

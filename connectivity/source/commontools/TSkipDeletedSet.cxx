@@ -27,7 +27,6 @@ OSkipDeletedSet::OSkipDeletedSet(IResultSetHelper* _pHelper)
     : m_pHelper(_pHelper)
     ,m_bDeletedVisible(false)
 {
-    SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::OSkipDeletedSet" );
     m_aBookmarksPositions.reserve(256);
 }
 
@@ -39,7 +38,6 @@ OSkipDeletedSet::~OSkipDeletedSet()
 
 bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData)
 {
-    SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::skipDeleted" );
     OSL_ENSURE(_eCursorPosition != IResultSetHelper::BOOKMARK,"OSkipDeletedSet::SkipDeleted can't be called for BOOKMARK");
 
     IResultSetHelper::Movement eDelPosition = _eCursorPosition;
@@ -164,7 +162,6 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
 
 bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,bool _bRetrieveData)
 {
-    SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::moveAbsolute" );
     bool bDataFound = false;
     sal_Int32 nNewPos = _nPos;
     if(nNewPos > 0)
@@ -227,14 +224,12 @@ bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,bool _bRetrieveData)
 
 void OSkipDeletedSet::clear()
 {
-    SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::clear" );
     ::std::vector<sal_Int32>().swap(m_aBookmarksPositions);
     //TInt2IntMap().swap(m_aBookmarks);
 }
 
 sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
 {
-    SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::getMappedPosition" );
     ::std::vector<sal_Int32>::const_iterator aFind = ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nPos);
     if ( aFind !=  m_aBookmarksPositions.end() )
         return (aFind - m_aBookmarksPositions.begin()) + 1;
@@ -247,7 +242,6 @@ sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
 
 void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
 {
-    SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::insertNewPosition" );
     //OSL_ENSURE(m_aBookmarks.find(_nPos) == m_aBookmarks.end(),"OSkipDeletedSet::insertNewPosition: Invalid position");
     //m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(_nPos,m_aBookmarksPositions.size()+1)).first);
     //OSL_ENSURE(::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nPos) == m_aBookmarksPositions.end(),"Invalid driver pos");
@@ -256,7 +250,6 @@ void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
 
 void OSkipDeletedSet::deletePosition(sal_Int32 _nBookmark)
 {
-    SAL_INFO( "connectivity.commontools", "commontools Ocke.Janssen@sun.com OSkipDeletedSet::deletePosition" );
     ::std::vector<sal_Int32>::iterator aFind = ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nBookmark);
     if ( aFind !=  m_aBookmarksPositions.end() )
     {

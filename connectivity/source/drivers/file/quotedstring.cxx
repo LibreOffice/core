@@ -28,7 +28,6 @@ namespace connectivity
 
     sal_Int32 QuotedTokenizedString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) const
     {
-        SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com QuotedTokenizedString::GetTokenCount" );
         const sal_Int32 nLen = m_sString.getLength();
         if ( !nLen )
             return 0;
@@ -87,7 +86,6 @@ namespace connectivity
 
     OUString QuotedTokenizedString::GetTokenSpecial(sal_Int32& nStartPos, sal_Unicode cTok, sal_Unicode cStrDel) const
     {
-        SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com QuotedTokenizedString::GetTokenCount" );
         const sal_Int32 nLen = m_sString.getLength();
         if ( nLen )
         {

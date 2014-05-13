@@ -37,7 +37,6 @@ using namespace ::com::sun::star::container;
 
 sdbcx::ObjectType OCalcTables::createObject(const OUString& _rName)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTables::createObject" );
     OCalcTable* pTable = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,OUString("TABLE"));
     sdbcx::ObjectType xRet = pTable;
