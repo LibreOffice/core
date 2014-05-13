@@ -10,14 +10,20 @@
 #ifndef CHART2_GL3DPLOTTERBASE_HXX
 #define CHART2_GL3DPLOTTERBASE_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+#include "VDataSeries.hxx"
+
 namespace chart {
+
+class ExplicitCategoriesProvider;
 
 class GL3DPlotterBase
 {
 public:
     virtual ~GL3DPlotterBase();
 
-    virtual void create3DShapes() = 0;
+    virtual void create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeries,
+        ExplicitCategoriesProvider& rCatProvider) = 0;
     virtual void render() = 0;
 };
 

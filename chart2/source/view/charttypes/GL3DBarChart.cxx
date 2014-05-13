@@ -25,13 +25,10 @@ namespace chart {
 
 GL3DBarChart::GL3DBarChart(
     const css::uno::Reference<css::chart2::XChartType>& xChartType,
-    const boost::ptr_vector<VDataSeries>& rDataSeries,
-    OpenGLWindow& rWindow, ExplicitCategoriesProvider& rCatProvider ) :
+    OpenGLWindow& rWindow) :
     mxChartType(xChartType),
-    maDataSeries(rDataSeries),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
-    mrWindow(rWindow),
-    mrCatProvider(rCatProvider)
+    mrWindow(rWindow)
 {
     mrWindow.setRenderer(this);
     mpRenderer->init();
@@ -42,7 +39,8 @@ GL3DBarChart::~GL3DBarChart()
     mrWindow.setRenderer(NULL);
 }
 
-void GL3DBarChart::create3DShapes()
+void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
+        ExplicitCategoriesProvider& rCatProvider)
 {
     // Each series of data flows from left to right, and multiple series are
     // stacked vertically along y axis.
@@ -68,8 +66,8 @@ void GL3DBarChart::create3DShapes()
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     sal_Int32 nSeriesIndex = 0;
-    for (boost::ptr_vector<VDataSeries>::const_iterator itr = maDataSeries.begin(),
-            itrEnd = maDataSeries.end(); itr != itrEnd; ++itr)
+    for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
+            itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
     {
         nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY) + nBarSizeY;
 
@@ -147,7 +145,7 @@ void GL3DBarChart::create3DShapes()
     pRect->setLineColor(COL_BLUE);
 
     // Create category texts along X-axis at the bottom.
-    uno::Sequence<OUString> aCats = mrCatProvider.getSimpleCategories();
+    uno::Sequence<OUString> aCats = rCatProvider.getSimpleCategories();
     for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
     {
         float nXPos = i * (nBarSizeX + nBarDistanceX);

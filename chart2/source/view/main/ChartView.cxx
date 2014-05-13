@@ -3115,65 +3115,67 @@ IMPL_LINK_NOARG(ChartView, UpdateTimeBased)
 
 void ChartView::createShapes3D()
 {
+    OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
+    if(!pWindow)
+        return;
+
+    uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
+    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
+    if( !xCooSysContainer.is())
+        return;
+
+    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+
+    if (aCooSysList.getLength() != 1)
+        // Supporting multiple coordinates in a truly 3D chart (which implies
+        // it's a Cartesian coordinate system) is a bit of a challenge, if not
+        // impossible.
+        return;
+
+    uno::Reference<XCoordinateSystem> xCooSys( aCooSysList[0] );
+
+    //iterate through all chart types in the current coordinate system
+    uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
+    OSL_ASSERT( xChartTypeContainer.is());
+    if( !xChartTypeContainer.is() )
+        return;
+
+    uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+    if (aChartTypeList.getLength() != 1)
+        // Likewise, we can't really support multiple chart types here.
+        return;
+
+    uno::Reference< XChartType > xChartType( aChartTypeList[0] );
+
     if (!m_pGL3DPlotter)
     {
-        uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
-        uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-        if( !xCooSysContainer.is())
-            return;
-
-        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-        boost::ptr_vector<VDataSeries> aDataSeries;
-
-        if (aCooSysList.getLength() != 1)
-            // Supporting multiple coordinates in a truly 3D chart (which implies
-            // it's a Cartesian coordinate system) is a bit of a challenge, if not
-            // impossible.
-            return;
-
-        uno::Reference<XCoordinateSystem> xCooSys( aCooSysList[0] );
-
-        //iterate through all chart types in the current coordinate system
-        uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        OSL_ASSERT( xChartTypeContainer.is());
-        if( !xChartTypeContainer.is() )
-            return;
-
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        if (aChartTypeList.getLength() != 1)
-            // Likewise, we can't really support multiple chart types here.
-            return;
-
-        uno::Reference< XChartType > xChartType( aChartTypeList[0] );
-
-        uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-        OSL_ASSERT( xDataSeriesContainer.is());
-        if( !xDataSeriesContainer.is() )
-            return;
-
-        uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
-        for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
-        {
-            uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
-            if(!xDataSeries.is())
-                continue;
-
-            aDataSeries.push_back(new VDataSeries(xDataSeries));
-        }
-
-        OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
-        if(!pWindow)
-            return;
-
-        boost::scoped_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
-
-        pWindow->Show();
-
-        m_pGL3DPlotter.reset(new GL3DBarChart(xChartType, aDataSeries, *pWindow, *pCatProvider));
-        m_pGL3DPlotter->create3DShapes();
+        m_pGL3DPlotter.reset(new GL3DBarChart(xChartType, *pWindow));
     }
 
+
+    uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
+    OSL_ASSERT( xDataSeriesContainer.is());
+    if( !xDataSeriesContainer.is() )
+        return;
+
+    boost::ptr_vector<VDataSeries> aDataSeries;
+    uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+    for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+    {
+        uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
+        if(!xDataSeries.is())
+            continue;
+
+        aDataSeries.push_back(new VDataSeries(xDataSeries));
+    }
+
+    boost::scoped_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
+
+
+    m_pGL3DPlotter->create3DShapes(aDataSeries, *pCatProvider);
+
     m_pGL3DPlotter->render();
+    pWindow->Show();
 }
 
 } //namespace chart

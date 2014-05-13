@@ -34,12 +34,12 @@ class GL3DBarChart : public GL3DPlotterBase, public IRenderer
 public:
     GL3DBarChart(
         const css::uno::Reference<css::chart2::XChartType>& xChartType,
-        const boost::ptr_vector<VDataSeries>& rDataSeries, OpenGLWindow& rContext,
-        ExplicitCategoriesProvider& rCatProvider );
+        OpenGLWindow& rContext);
 
     virtual ~GL3DBarChart();
 
-    virtual void create3DShapes() SAL_OVERRIDE;
+    virtual void create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeries,
+        ExplicitCategoriesProvider& rCatProvider) SAL_OVERRIDE;
 
     virtual void render() SAL_OVERRIDE;
 
@@ -49,12 +49,10 @@ public:
 
 private:
     css::uno::Reference<css::chart2::XChartType> mxChartType;
-    const boost::ptr_vector<VDataSeries>& maDataSeries;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
     boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
     OpenGLWindow& mrWindow;
-    ExplicitCategoriesProvider& mrCatProvider;
 };
 
 }
