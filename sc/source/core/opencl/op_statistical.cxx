@@ -5982,7 +5982,6 @@ void OpLogInv:: GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -6022,7 +6021,6 @@ void OpLogInv:: GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -6283,10 +6281,10 @@ void OpForecast::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    for (int i = 0; i <" << nCurWindowSize << "; i++)\n";
         ss << "    {\n";
         ss << "        double arg1 = ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef(true);
         ss << ";\n";
         ss << "        double arg2 = ";
-        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef(true);
         ss << ";\n";
 #ifdef ISNAN
         ss << "        if(isNan(arg1)||((gid0+i)>=";
@@ -6314,10 +6312,10 @@ void OpForecast::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    for (int i = 0; i <" << nCurWindowSize << "; i++)\n";
         ss << "    {\n";
         ss << "        double arg1 = ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef(true);
         ss << ";\n";
         ss << "        double arg2 = ";
-        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef(true);
         ss << ";\n";
 #ifdef ISNAN
         ss << "        if(isNan(arg1)||((gid0+i)>=";
@@ -6371,7 +6369,6 @@ void OpLogNormDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -6411,7 +6408,6 @@ void OpLogNormDist::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -6516,7 +6512,7 @@ void OpGammaDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -6556,7 +6552,6 @@ void OpGammaDist::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -6633,7 +6628,6 @@ void OpChiDist::GenSlidingWindowFunction(
     ss << "    int gid0=get_global_id(0);\n";
 
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
     ss <<"\n";
     for (i = 0; i < vSubArguments.size(); i++)
     {
@@ -6680,7 +6674,6 @@ void OpChiDist::GenSlidingWindowFunction(
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -6689,7 +6682,6 @@ void OpChiDist::GenSlidingWindowFunction(
                 static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -6697,13 +6689,11 @@ void OpChiDist::GenSlidingWindowFunction(
 #ifdef  ISNAN
             ss << "{\n";
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 #ifdef  ISNAN
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
@@ -6772,7 +6762,7 @@ void OpBinomdist::GenSlidingWindowFunction(
     ss << "    double tmp0,tmp1,tmp2,tmp3;\n";
     ss << "    int gid0=get_global_id(0);\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     ss <<"\n    ";
     //while (i-- > 1)
     for (i = 0; i < vSubArguments.size(); i++)
@@ -6820,7 +6810,6 @@ void OpBinomdist::GenSlidingWindowFunction(
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -6829,7 +6818,6 @@ void OpBinomdist::GenSlidingWindowFunction(
                 static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -6837,13 +6825,11 @@ void OpBinomdist::GenSlidingWindowFunction(
 #ifdef  ISNAN
             ss << "{\n";
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 #ifdef  ISNAN
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
@@ -7148,7 +7134,7 @@ void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -7188,7 +7174,6 @@ void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -7362,7 +7347,7 @@ void OpFInv::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -7402,7 +7387,6 @@ void OpFInv::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -7596,7 +7580,7 @@ void OpFTest::GenSlidingWindowFunction(std::stringstream &ss,
 #ifdef  ISNAN
             ss << "0; i < "<< pDVR->GetRefRowSize() << "; i++){\n";
             ss << "        double arg"<<i<<" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
             ss << ";\n";
 #ifdef ISNAN
             ss << "        if(isNan(arg"<<i<<")||((gid0+i)>=";
@@ -7677,7 +7661,6 @@ void OpB::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -7717,7 +7700,6 @@ void OpB::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -8240,7 +8222,7 @@ void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     ss << "    double arg0,arg1,arg2,arg3,arg4,arg5;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -8280,7 +8262,7 @@ void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
+
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -8393,7 +8375,6 @@ void OpBetainv::GenSlidingWindowFunction(
     ss << "    double tmp0,tmp1,tmp2,tmp3,tmp4;\n";
     ss << "    int gid0=get_global_id(0);\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
     ss <<"\n    ";
     //while (i-- > 1)
     for (i = 0; i < vSubArguments.size(); i++)
@@ -8435,7 +8416,6 @@ void OpBetainv::GenSlidingWindowFunction(
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -8444,7 +8424,6 @@ void OpBetainv::GenSlidingWindowFunction(
                 static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -8452,13 +8431,12 @@ void OpBetainv::GenSlidingWindowFunction(
 #ifdef  ISNAN
             ss << "{\n";
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
+
         }
 #ifdef  ISNAN
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
@@ -8730,7 +8708,7 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0,arg1,arg2,arg3;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     for (i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -8762,7 +8740,6 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "0; i < "<< nCurWindowSize << "; i++){\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -8869,7 +8846,6 @@ void OpMinA::GenSlidingWindowFunction(
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp0 = 1.79769e+308;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
     ss <<"\n";
     for (i = 0; i < vSubArguments.size(); i++)
     {
@@ -8919,7 +8895,6 @@ void OpMinA::GenSlidingWindowFunction(
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -8938,7 +8913,6 @@ void OpMinA::GenSlidingWindowFunction(
                 isMixed = svSingleVectorRefNULL;
             ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -8947,13 +8921,11 @@ void OpMinA::GenSlidingWindowFunction(
             ss << "    {\n";
             isMixed = svDoubleDouble;
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 
 #ifdef  ISNAN
@@ -9055,7 +9027,7 @@ vSubArguments)
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double nCount = 0.0;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     ss <<"\n";
     for (i = 0; i < vSubArguments.size(); i++)
     {
@@ -9105,7 +9077,6 @@ vSubArguments)
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -9124,7 +9095,6 @@ vSubArguments)
                 isMixed = svSingleVectorRefNULL;
             ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -9133,13 +9103,11 @@ vSubArguments)
             ss << "    {\n";
             isMixed = svDoubleDouble;
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 
 #ifdef  ISNAN
@@ -9227,7 +9195,7 @@ vSubArguments)
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp0 = 2.22507e-308;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
+
     ss <<"\n";
     for (i = 0; i < vSubArguments.size(); i++)
     {
@@ -9277,7 +9245,6 @@ vSubArguments)
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -9296,7 +9263,6 @@ vSubArguments)
                 isMixed = svSingleVectorRefNULL;
             ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -9305,13 +9271,11 @@ vSubArguments)
             ss << "    {\n";
             isMixed = svDoubleDouble;
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 
 #ifdef  ISNAN
@@ -9414,7 +9378,6 @@ vSubArguments)
     ss << "    double tmp0 = 0.0;\n";
     ss << "    double nCount = 0.0;\n";
     size_t i = vSubArguments.size();
-    size_t nItems = 0;
     ss <<"\n";
     for (i = 0; i < vSubArguments.size(); i++)
     {
@@ -9464,7 +9427,6 @@ vSubArguments)
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            nItems += nCurWindowSize;
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
@@ -9483,7 +9445,6 @@ vSubArguments)
                 isMixed = svSingleVectorRefNULL;
             ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -9492,13 +9453,11 @@ vSubArguments)
             ss << "    {\n";
             isMixed = svDoubleDouble;
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 
 #ifdef  ISNAN
