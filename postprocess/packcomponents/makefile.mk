@@ -315,6 +315,7 @@ my_components += \
 .IF "$(OS)" == "MACOSX"
 my_components += \
     avmediaQuickTime \
+    avmediaMacAVF \
     fps_aqua \
     macab1 \
     macbe1 \
