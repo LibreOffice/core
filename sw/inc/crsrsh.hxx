@@ -452,7 +452,7 @@ public:
     void EndCrsrMove( const bool bIdleEnd = false );
 #else
     void SttCrsrMove() { ++m_nCrsrMove; StartAction(); }
-    void EndCrsrMove( const bool bIdleEnd = sal_False )
+    void EndCrsrMove( const bool bIdleEnd = false )
             { EndAction( bIdleEnd ); --m_nCrsrMove; }
 #endif
 
