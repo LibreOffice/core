@@ -445,9 +445,10 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             {
                 SolarMutexGuard aGuard;
                 VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
-                PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
-
-                pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
+                PopupMenu* pVCLPopupMenu = pXPopupMenu ? (PopupMenu *)pXPopupMenu->GetMenu() : NULL;
+                assert(pVCLPopupMenu);
+                if (pVCLPopupMenu)
+                    pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
             }
 
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
