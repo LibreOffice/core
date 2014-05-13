@@ -249,7 +249,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/progress \
     sc/source/core/tool/queryentry \
     sc/source/core/tool/queryparam \
-    sc/source/core/tool/random \
     sc/source/core/tool/rangelst \
     sc/source/core/tool/rangenam \
     sc/source/core/tool/rangeseq \

@@ -22,7 +22,6 @@
 #include "uiitems.hxx"
 #include "reffact.hxx"
 #include "strload.hxx"
-#include "random.hxx"
 #include "docfunc.hxx"
 #include "StatisticsDialogs.hrc"
 #include "TableFillingAndNavigationTools.hxx"

@@ -46,7 +46,6 @@
 #include "globstr.hrc"
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
-#include "random.hxx"
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
 #include "rangenam.hxx"
@@ -61,6 +60,7 @@
 #include "compare.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <svl/sharedstringpool.hxx>
 
@@ -1680,7 +1680,7 @@ void ScInterpreter::ScPi()
 
 void ScInterpreter::ScRandom()
 {
-    PushDouble(sc::rng::uniform());
+    PushDouble(::comphelper::rng::uniform());
 }
 
 

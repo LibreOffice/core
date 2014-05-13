@@ -12,12 +12,12 @@
 
 #include <boost/random.hpp>
 
-#include <random.hxx>
+#include <comphelper/random.hxx>
 
 // this is nothing but a simple wrapper around
 // the boost random generators
 
-namespace sc
+namespace comphelper
 {
 namespace rng
 {
