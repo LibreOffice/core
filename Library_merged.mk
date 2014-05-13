@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	boost_headers \
 	boostdatetime \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
+	$(call gb_Helper_optional,COLLADA2GLTF,collada2gltf) \
 	cups \
 	curl \
 	dbus \
@@ -58,6 +59,8 @@ $(eval $(call gb_Library_use_externals,merged,\
 	mesa_headers \
 	mythes \
 	nss3 \
+	$(call gb_Helper_optional,COLLADA2GLTF,opencollada_parser) \
+	$(call gb_Helper_optional,COLLADA2GLTF,png) \
 	telepathy \
 	zlib \
 ))
