@@ -108,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/accessibility \
     vcl/source/window/legacyaccessibility \
     vcl/source/window/clipping \
+    vcl/source/window/stacking \
     vcl/source/window/btndlg \
     vcl/source/window/builder \
     vcl/source/window/cmdevt \
