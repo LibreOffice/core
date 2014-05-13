@@ -129,7 +129,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/clrschemecontext \
     oox/source/drawingml/clrscheme \
     oox/source/drawingml/colorchoicecontext \
-    oox/source/drawingml/color \
     oox/source/drawingml/connectorshapecontext \
     oox/source/drawingml/customshapegeometry \
     oox/source/drawingml/customshapepresetdata \
@@ -291,5 +290,20 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/vml/vmltextboxcontext \
     oox/source/vml/vmltextbox \
 ))
+
+ifeq ($(OS),IOS)
+# Either a compiler bug in Xcode 5.1.1 or some hard-to-spot undefined
+# behaviour in the source code... Compiling this source file with
+# optimization causes some Smart Art images to end up with completely
+# wrong colour, some even totally black.
+$(eval $(call gb_Library_add_cxxobjects,oox,\
+    oox/source/drawingml/color \
+    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+))
+else
+$(eval $(call gb_Library_add_exception_objects,oox,\
+    oox/source/drawingml/color \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
