@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <cstddef>
 #include <ctype.h>

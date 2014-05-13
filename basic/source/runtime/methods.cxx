@@ -45,6 +45,7 @@
 #include "errobject.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -3521,16 +3522,16 @@ RTLFUNC(Randomize)
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     }
-    sal_Int16 nSeed;
+    int nSeed;
     if( rPar.Count() == 2 )
     {
-        nSeed = (sal_Int16)rPar.Get(1)->GetInteger();
+        nSeed = (int)rPar.Get(1)->GetInteger();
     }
     else
     {
-        nSeed = (sal_Int16)rand();
+        nSeed = (int)time(NULL);
     }
-    srand( nSeed );
+    comphelper::rng::seed( nSeed );
 }
 
 RTLFUNC(Rnd)
@@ -3544,9 +3545,7 @@ RTLFUNC(Rnd)
     }
     else
     {
-        double nRand = (double)rand();
-        nRand = ( nRand / ((double)RAND_MAX + 1.0));
-        rPar.Get(0)->PutDouble( nRand );
+        rPar.Get(0)->PutDouble( comphelper::rng::uniform() );
     }
 }
 
