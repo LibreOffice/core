@@ -118,8 +118,6 @@ sal_Int32 Writer::mapRelative( sal_Int32 n100thMM ) const
 
 
 
-/**
-*/
 void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, bool bFilled )
 {
     Point aLastPoint( rPoly[0] );
@@ -175,7 +173,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, bool bFill
 
 
 
-/** exports a style change record with a move to (x,y) and depending on bFilled a line style 1 or fill style 1
+/** Exports a style change record with a move to (x,y) and depending on bFilled a line style 1 or fill style 1
 */
 void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int16 dy, bool bFilled )
 {
@@ -198,7 +196,7 @@ void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int1
 
 
 
-/** exports a straight edge record
+/** Exports a straight edge record
 */
 void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int16 dy )
 {
@@ -232,7 +230,7 @@ void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int
 
 
 
-/** exports a curved edge record
+/** Exports a curved edge record
 */
 void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, sal_Int16 control_dy, sal_Int16 anchor_dx, sal_Int16 anchor_dy )
 {
@@ -255,7 +253,7 @@ void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, s
 
 
 
-/** exports a end shape record
+/** Exports a end shape record
 */
 void Writer::Impl_addEndShapeRecord( BitStream& rBits )
 {
@@ -328,7 +326,7 @@ void Writer::Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, bool bFilled, 
 
 
 
-/** a gradient is a transition from one color to another, rendered inside a given polypolygon */
+/** A gradient is a transition from one color to another, rendered inside a given polypolygon */
 void Writer::Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
     if( rPolyPoly.Count() )
@@ -591,7 +589,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
 
         // write text element
 
-#if 0 // makes the calculated bound rect visible for debuging
+#if 0 // makes the calculated bound rect visible for debugging
 {
         Polygon aTmpPoly( aPoly );
         sal_uInt16 nID = FlashGeometryExporter::writePolygonShape( aMovieStream, aTmpPoly, false, Color(COL_MAGENTA), Color(COL_MAGENTA), mpClipPolyPolygon  );
@@ -600,7 +598,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal
 #endif
 
         // CL: This is still a hack until we figure out how to calculate a correct bound rect
-        //     for rotatet text
+        //     for rotated text
         Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
         double scale = 1.0;
 
@@ -806,7 +804,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     // AS: OK, we have a good image, so now we decide whether or not to JPEG it or
     //  or Lossless compress it.
 
-    //Figure out lossless size
+    // Figure out lossless size
     sal_uInt8 *pImageData, *pAlphaData;
     sal_uInt32 width, height;
 
@@ -843,7 +841,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #endif
     }
 
-    //Figure out JPEG size
+    // Figure out JPEG size
     const sal_uInt8* pJpgData = NULL;;
     sal_uInt32 nJpgDataLength = 0xffffffff;
 
@@ -914,7 +912,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
             Rectangle cropRect(destRect);
 
-            // AS: The bmp origion is always 0,0 so we have to adjust before we crop.
+            // AS: The bmp origin is always 0,0 so we have to adjust before we crop.
             cropRect.Move(-srcPt.X(), -srcPt.Y());
             // AS: Rectangle has no scale function (?!) so I do it manually...
             Rectangle cropPixelRect(static_cast<long>(cropRect.Left()*XScale),
@@ -963,7 +961,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
             Polygon aPoly( destRect );
 
             // AS: Since images are being cropped now, no translation is normally necessary.
-            //  However, some things like graphical bullet points are still get translated.
+            //  However, some things like graphical bullet points still get translated.
             ::basegfx::B2DHomMatrix m; // #i73264#
             m.scale(1.0/XScale, 1.0/YScale );
             if (destRect.Left() || destRect.Top())
@@ -997,7 +995,7 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
 
 void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
 {
-    // AS: Go through the actuall JPEG bits, separating out the
+    // AS: Go through the actual JPEG bits, separating out the
     //  header fields from the actual image fields.  Fields are
     //  identifed by 0xFFXX where XX is the field type.  Both
     //  the header and the image need start and stop (D8 and D9),
@@ -1170,7 +1168,7 @@ void Writer::Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY )
 }
 
 
-/** writes the stroke defined by SvtGraphicStroke and returns true or it returns
+/** Writes the stroke defined by SvtGraphicStroke and returns true or it returns
     false if it can't handle this stroke.
 */
 bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
@@ -1214,7 +1212,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
 
 
 
-/** writes the filling defined by SvtGraphicFill and returns true or it returns
+/** Writes the filling defined by SvtGraphicFill and returns true or it returns
     false if it can't handle this filling.
 */
 bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
