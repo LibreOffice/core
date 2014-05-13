@@ -25,24 +25,38 @@ Function verify_testCDec() as String
     On Error GoTo errorHandler
     
     ret = CDec("")
-    TestLog_ASSERT ret = 0, "Converts the string to uppercase characters:" & ret
+    TestLog_ASSERT ret = 0, "Empty string test:" & ret
 
     ret = CDec("1234")
-    TestLog_ASSERT ret = "1234", "Converts the string to uppercase characters:" & ret
+    TestLog_ASSERT ret = 1234, "Simple number:" & ret
 
     ret = CDec("  1234  ")
-    TestLog_ASSERT ret = 1234, "Converts the string to uppercase characters:" & ret
+    TestLog_ASSERT ret = 1234, "Simple number with whitespaces:" & ret
+
+    ret = CDec("-1234")
+    TestLog_ASSERT ret = -1234, "Simple negative number:" & ret
+
+    ret = CDec(" - 1234 ")
+    TestLog_ASSERT ret = -1234, "Simple negative number with whitespaces:" & ret
 
     '''''''''''''''
     ' Those are erroneous, see i#64348
     ret = CDec("1234-")
-    TestLog_ASSERT ret = -1234, "Converts the string to uppercase characters:" & ret
+    TestLog_ASSERT ret = -1234, "Wrong negative number1:" & ret
 
     ret = CDec("  1234  -")
-    TestLog_ASSERT ret = -1234, "Converts the string to uppercase characters:" & ret
+    TestLog_ASSERT ret = -1234, "Wrong negative number2:" & ret
+
+    'ret = CDec("79228162514264300000000000001")
+    'TestLog_ASSERT ret = 79228162514264300000000000001, "Very long number1:" & ret
+    'ret = ret+1
+    'TestLog_ASSERT ret = 79228162514264300000000000002, "Very long number2:" & ret
 
     ret = CDec("79228162514264400000000000000")
-    TestLog_ASSERT ret = 62406456049664, "Converts the string to uppercase characters:" & ret
+    TestLog_ASSERT ret = 62406456049664, "Very long number3:" & ret
+
+    ret = CDec("79228162514264340000000000000") ' gives zero
+    TestLog_ASSERT ret = 0, "Very long number4:" & ret
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testCDec = result
