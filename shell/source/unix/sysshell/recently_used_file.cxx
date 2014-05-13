@@ -63,13 +63,12 @@ recently_used_file::recently_used_file() :
         OString tmp =
             OUStringToOString(rufn, osl_getThreadTextEncoding());
 
-        file_ = fopen(tmp.getStr(), "r+");
-
-        /* create if not exist */
-        if (NULL == file_) {
-            mode_t umask_ = umask(S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-            file_ = fopen(tmp.getStr(), "w+");
-            umask(umask_);
+        int fd = open(tmp.getStr(), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+        if (fd != -1) {
+            file_ = fdopen(fd, "w+");
+            if (file_ == 0) {
+                close(fd);
+            }
         }
 
         if (NULL == file_)
