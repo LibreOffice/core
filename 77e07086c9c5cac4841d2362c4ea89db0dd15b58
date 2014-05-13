@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_e730dcea",
+        "filename": "wizards/source/access2base/Application.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2014-05-13T08:08:27Z",
+      "side": 0,
+      "message": "By removing error codes, don\u0027t you break backwards compatibility?",
+      "revId": "77e07086c9c5cac4841d2362c4ea89db0dd15b58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
