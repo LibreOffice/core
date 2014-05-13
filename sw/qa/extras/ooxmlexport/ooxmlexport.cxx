@@ -3377,6 +3377,16 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78300,"fdo78300.docx")
                 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo78651, "fdo78651.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+    // ensure that there are only two tables
+    assertXPath(pXmlDoc, "//w:tbl", 2);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
