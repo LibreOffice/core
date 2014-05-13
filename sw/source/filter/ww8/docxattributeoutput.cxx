@@ -2553,6 +2553,7 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
             //Reset the oldReference, after copying it back to the original.
             m_oldTableReference->m_bTableCellOpen = false ;
             m_oldTableReference->m_nTableDepth = 0;
+            m_oldTableReference->m_pOldTablepInner.reset();
        }
 
     }

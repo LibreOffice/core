@@ -434,6 +434,13 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 the RT files with different first page being set.
             */
             bNewPageDesc = false;
+
+            /*
+             * If Table cell is open and page header types are different
+             * set pSet to NULL as we don't want to add any section breaks.
+             */
+            if ( isCellOpen && ( pAktPageDesc->GetName() != pPageDesc->GetName() ) )
+                pSet = NULL;
         }
         else
         {
