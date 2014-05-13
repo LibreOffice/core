@@ -22,6 +22,7 @@
 #include <osl/socket.h>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 
 #include "sockimpl.h"
 
