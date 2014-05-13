@@ -47,20 +47,6 @@ namespace
 namespace utl
 {
 
-struct TempFile_Impl
-{
-    OUString    aName;
-    OUString    aURL;
-    SvStream*   pStream;
-    bool        bIsDirectory;
-
-    TempFile_Impl()
-        : pStream(0)
-        , bIsDirectory(false)
-    {
-    }
-};
-
 OUString getParentName( const OUString& aFileName )
 {
     sal_Int32 lastIndex = aFileName.lastIndexOf( '/' );
@@ -249,11 +235,9 @@ void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
     }
 }
 
-void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _bStartWithZero,
+OUString lcl_createName(const OUString& rLeadingChars, bool _bStartWithZero,
                     const OUString* pExtension, const OUString* pParent, bool bDirectory)
 {
-    _rImpl.bIsDirectory = bDirectory;
-
     // get correct directory
     OUString aName = ConstructTempDir_Impl( pParent );
 
@@ -275,12 +259,11 @@ void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _b
             FileBase::RC err = Directory::create( aTmp );
             if ( err == FileBase::E_None )
             {
-                _rImpl.aName = aTmp;
-                break;
+                return aTmp;
             }
             else if ( err != FileBase::E_EXIST )
                 // if f.e. name contains invalid chars stop trying to create dirs
-                break;
+                return OUString();
         }
         else
         {
@@ -295,9 +278,8 @@ void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _b
 #endif
             if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
-                _rImpl.aName = aTmp;
                 aFile.close();
-                break;
+                return aTmp;
             }
             else if ( err != FileBase::E_EXIST )
             {
@@ -309,7 +291,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _b
                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
                   || aTmpStatus.getFileType() != FileStatus::Directory )
-                    break;
+                    return OUString();
             }
         }
         if ( !_bStartWithZero )
@@ -333,93 +315,92 @@ OUString TempFile::CreateTempName()
 }
 
 TempFile::TempFile( const OUString* pParent, bool bDirectory )
-    : pImp( new TempFile_Impl )
+    : pStream( 0 )
+    , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
-    pImp->bIsDirectory = bDirectory;
-
     // get correct directory
-    pImp->aName = ConstructTempDir_Impl( pParent );
+    aName = ConstructTempDir_Impl( pParent );
 
     // get TempFile with default naming scheme
-    CreateTempName_Impl( pImp->aName, true, bDirectory );
+    CreateTempName_Impl( aName, true, bDirectory );
 }
 
 TempFile::TempFile( const OUString& rLeadingChars, const OUString* pExtension, const OUString* pParent, bool bDirectory)
-    : pImp( new TempFile_Impl )
+    : pStream( 0 )
+    , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
-    lcl_createName(*pImp, rLeadingChars, true, pExtension, pParent, bDirectory);
+    aName = lcl_createName(rLeadingChars, true, pExtension, pParent, bDirectory);
 }
 TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension, const OUString* pParent, bool bDirectory)
-    : pImp( new TempFile_Impl )
+    : pStream( 0 )
+    , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
-    lcl_createName(*pImp, rLeadingChars, _bStartWithZero, pExtension, pParent, bDirectory);
+    aName = lcl_createName(rLeadingChars, _bStartWithZero, pExtension, pParent, bDirectory);
 }
 
 TempFile::~TempFile()
 {
-    delete pImp->pStream;
+    delete pStream;
     if ( bKillingFileEnabled )
     {
-        if ( pImp->bIsDirectory )
+        if ( bIsDirectory )
         {
             // at the moment no recursiv algorithm present
-            Directory::remove( pImp->aName );
+            Directory::remove( aName );
         }
         else
         {
-            File::remove( pImp->aName );
+            File::remove( aName );
         }
     }
-
-    delete pImp;
 }
 
 bool TempFile::IsValid() const
 {
-    return !(pImp->aName.isEmpty());
+    return !aName.isEmpty();
 }
 
 OUString TempFile::GetFileName() const
 {
     OUString aTmp;
-    FileBase::getSystemPathFromFileURL( pImp->aName, aTmp );
+    FileBase::getSystemPathFromFileURL( aName, aTmp );
     return aTmp;
 }
 
-OUString TempFile::GetURL() const
+OUString TempFile::GetURL()
 {
-    if ( pImp->aURL.isEmpty() )
+    if ( aURL.isEmpty() )
     {
         OUString aTmp;
         LocalFileHelper::ConvertPhysicalNameToURL( GetFileName(), aTmp );
-        pImp->aURL = aTmp;
+        aURL = aTmp;
     }
 
-    return pImp->aURL;
+    return aURL;
 }
 
 SvStream* TempFile::GetStream( StreamMode eMode )
 {
-    if ( !pImp->pStream )
+    if ( !pStream )
     {
         if ( !GetURL().isEmpty() )
-            pImp->pStream = UcbStreamHelper::CreateStream( pImp->aURL, eMode, true /* bFileExists */ );
+            pStream = UcbStreamHelper::CreateStream( aURL, eMode, true /* bFileExists */ );
         else
-            pImp->pStream = new SvMemoryStream( eMode );
+            pStream = new SvMemoryStream( eMode );
     }
 
-    return pImp->pStream;
+    return pStream;
 }
 
 void TempFile::CloseStream()
 {
-    if ( pImp->pStream )
+    if ( pStream )
     {
-        delete pImp->pStream;
-        pImp->pStream = NULL;
+        delete pStream;
+        pStream = NULL;
     }
 }
 
@@ -456,7 +437,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
         TempFile aBase( NULL, true );
         if ( aBase.IsValid() )
             // use it in case of success
-            rTempNameBase_Impl = aBase.pImp->aName;
+            rTempNameBase_Impl = aBase.aName;
 
         // return system path of used directory
         FileBase::getSystemPathFromFileURL( rTempNameBase_Impl, aTmp );

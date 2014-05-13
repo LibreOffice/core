@@ -26,8 +26,6 @@
 namespace utl
 {
 
-struct TempFile_Impl;
-
 /**
     The class TempFile gives access to temporary files in the local file system. Sometimes they are needed because a 3rd party
     code has a file name based interface, or some file access has to be done locally without transferring tons of bytes to or
@@ -46,8 +44,11 @@ struct TempFile_Impl;
 
 class UNOTOOLS_DLLPUBLIC TempFile
 {
-    TempFile_Impl*  pImp;
-    bool            bKillingFileEnabled;
+    OUString    aName;
+    OUString    aURL;
+    SvStream*   pStream;
+    bool        bIsDirectory;
+    bool        bKillingFileEnabled;
 
     // prevent copy c'tor
     TempFile( const TempFile& );
@@ -99,7 +100,7 @@ public:
                     If no UCP is available for the local file system, an empty URL is returned. In this case you can't access
                     the file as a UCB content !
                     */
-    OUString        GetURL() const;
+    OUString        GetURL();
 
                     /**
                     Returns the "physical" name of the tempfile in host notation ( should only be used for 3rd party code
