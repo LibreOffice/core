@@ -35,10 +35,6 @@ class Impl_Font;
 class ImplFontAttributes;
 class Size;
 
-
-// - Font -
-
-
 class VCL_DLLPUBLIC Font
 {
 private:
