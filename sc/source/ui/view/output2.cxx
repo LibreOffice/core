@@ -1850,7 +1850,11 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                                     (long) ( aVars.GetLeftTotal() * mnPPTX ) +
                                     (long) ( aVars.GetMargin()->GetRightMargin() * mnPPTX );
                         if ( nNeededWidth <= aAreaParam.maClipRect.GetWidth() )
+                        {
+                            // Cell value is no longer clipped.  Reset relevant parameters.
                             aAreaParam.mbLeftClip = aAreaParam.mbRightClip = false;
+                            aAreaParam.mnLeftClipLength = aAreaParam.mnRightClipLength = 0;
+                        }
 
                         //  If the "###" replacement doesn't fit into the cells, no clip marks
                         //  are shown, as the "###" already denotes too little space.
