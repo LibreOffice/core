@@ -90,7 +90,7 @@ FltError ImportExcel::Read( void )
     sal_Size nProgressBasePos = 0;
     sal_Size nProgressBaseSize = 0;
 
-    while( eAkt != Z_Ende )
+    for (; eAkt != Z_Ende; mnLastRecId = nOpcode)
     {
         if( eAkt == Z_Biff5E )
         {
