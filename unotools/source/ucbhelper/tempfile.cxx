@@ -192,13 +192,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
 
         if ( bDir )
         {
-#ifdef UNX /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-#endif
             FileBase::RC err = Directory::create( aTmp );
-#ifdef UNX
-            umask(old_mode);
-#endif
             if ( err == FileBase::E_None )
             {
                 // !bKeep: only for creating a name, not a file or directory
