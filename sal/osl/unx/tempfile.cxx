@@ -217,7 +217,7 @@ static oslFileError osl_create_temp_file_impl_(
         offset_file_name++;
     }
 
-    while(1) /* try until success */
+    while(true) /* try until success */
     {
         osl_gen_random_name_impl_(&rand_name);
 
