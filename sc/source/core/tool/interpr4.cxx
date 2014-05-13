@@ -1843,6 +1843,8 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
 {
     if (xMat)
     {
+        SCSIZE nCols, nRows;
+        xMat->GetDimensions(nCols, nRows);
         ScMatrixValue nMatVal = xMat->Get(0, 0);
         ScMatValType nMatValType = nMatVal.nType;
         if (ScMatrix::IsNonValueType( nMatValType))
@@ -1850,14 +1852,14 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
             if ( xMat->IsEmptyPath( 0, 0))
             {   // result of empty FALSE jump path
                 FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
-                PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
+                PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_LOGICAL;
             }
             else
             {
                 svl::SharedString aStr( nMatVal.GetString());
                 FormulaTokenRef xRes = new FormulaStringToken( aStr);
-                PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
+                PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_TEXT;
             }
         }
@@ -1869,7 +1871,7 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
                 xRes = new FormulaErrorToken( nErr);
             else
                 xRes = new FormulaDoubleToken( nMatVal.fVal);
-            PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
+            PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
             if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
                 rRetTypeExpr = NUMBERFORMAT_NUMBER;
         }
