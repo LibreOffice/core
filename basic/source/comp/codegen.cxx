@@ -334,9 +334,13 @@ void SbiCodeGen::Save()
                         {
                             nUserData |= PARAM_INFO_WITHBRACKETS;
                         }
+                        SbxParamInfo* pParam = NULL;
                         if( nUserData )
                         {
-                            SbxParamInfo* pParam = (SbxParamInfo*)pInfo->GetParam( i );
+                            pParam = (SbxParamInfo*)pInfo->GetParam( i );
+                        }
+                        if( pParam )
+                        {
                             pParam->nUserData = nUserData;
                         }
                     }
