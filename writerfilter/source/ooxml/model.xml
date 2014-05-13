@@ -78,11 +78,12 @@
     <start name="theme"/>
     <start name="themeOverride"/>
     <start name="themeManager"/>
-    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <start name="hlinkClick"/>
+    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-baseStylesheet.rng"/>
       <include href="dml-styleDefaults.rng"/>
-      <!-- start = theme | themeOverride | themeManager -->
+      <!-- start = theme | themeOverride | themeManager | hlinkClick -->
       <define name="CT_EmptyElement">
         <empty/>
       </define>
@@ -228,6 +229,13 @@
           <ref name="CT_ColorMapping"/>
         </element>
       </define>
+      <define name="CT_Hyperlink">
+        <optional>
+          <attribute name="r:id">
+            <text/>
+          </attribute>
+        </optional>
+      </define>
       <define name="theme">
         <element name="theme">
           <ref name="CT_OfficeStyleSheet"/>
@@ -243,13 +251,24 @@
           <ref name="CT_EmptyElement"/>
         </element>
       </define>
+      <define name="hlinkClick">
+        <element name="hlinkClick">
+          <ref name="CT_Hyperlink"/>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_OfficeStyleSheet" resource="Table" tokenid="ooxml:THEMETABLE"/>
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Properties" tag="shape">
+      <attribute name="r:id" tokenid="ooxml:CT_Hyperlink_r_id"/>
+    </resource>
     <resource name="theme" resource="Stream" tag="theme">
       <element name="theme" tokenid="ooxml:THEMETABLE"/>
     </resource>
     <resource name="themeOverride" resource="Stream" tag="theme"/>
     <resource name="themeManager" resource="Stream" tag="theme"/>
+    <resource name="hlinkClick" resource="Properties" tag="shape">
+      <element name="hlinkClick" tokenid="ooxml:hlinkClick_hlinkClick"/>
+    </resource>
   </namespace>
   <namespace name="dml-styleDefaults" file="dml-styleDefaults">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
@@ -4780,7 +4799,7 @@
     <resource name="ST_DrawingElementId" resource="Integer" generated="yes"/>
   </namespace>
   <namespace name="dml-documentProperties" file="dml-documentProperties.rng" todo="ignore">
-    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-baseTypes.rng"/>
       <include href="dml-shapeGeometry.rng"/>
@@ -5027,8 +5046,8 @@
       <define name="CT_NonVisualDrawingProps">
         <group>
           <optional>
-            <element name="hlinkClick">
-              <ref name="CT_Hyperlink"/>
+            <element name="a:hlinkClick">
+              <ref name="BUILT_IN_ANY_TYPE"/>
             </element>
           </optional>
           <optional>
@@ -5177,8 +5196,8 @@
       <attribute name="noMove" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noMove"/>
       <attribute name="noResize" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noResize"/>
     </resource>
-    <resource name="CT_NonVisualDrawingProps" resource="Properties" tag="shape">
-      <element name="hlinkClick" tokenid="ooxml:CT_NonVisualDrawingProps_hlinkClick"/>
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_NonVisualDrawingProps" resource="Properties" tag="shape">
+      <element name="a:hlinkClick" tokenid="ooxml:CT_NonVisualDrawingProps_a_hlinkClick"/>
       <element name="hlinkHover" tokenid="ooxml:CT_NonVisualDrawingProps_hlinkHover"/>
       <element name="extLst" tokenid="ooxml:CT_NonVisualDrawingProps_extLst"/>
       <attribute name="id" tokenid="ooxml:CT_NonVisualDrawingProps_id"/>

@@ -933,6 +933,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_wpg_wgp:
         case NS_ooxml::LN_sizeRelH_sizeRelH:
         case NS_ooxml::LN_sizeRelV_sizeRelV:
+        case NS_ooxml::LN_hlinkClick_hlinkClick:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
