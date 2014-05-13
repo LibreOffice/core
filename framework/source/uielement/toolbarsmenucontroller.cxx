@@ -556,7 +556,11 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     {
         SolarMutexGuard aGuard;
         VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
-        PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
+        PopupMenu*     pVCLPopupMenu = pXPopupMenu ? (PopupMenu *)pXPopupMenu->GetMenu() : NULL;
+
+        assert(pVCLPopupMenu);
+        if (!pVCLPopupMenu)
+            return;
 
         for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
         {
