@@ -1,0 +1,12 @@
+diff -ur nss.org/nss/coreconf/Linux.mk nss/nss/coreconf/Linux.mk
+--- nss.org/nss/coreconf/Linux.mk	2014-05-06 04:36:01.817838877 +0200
++++ nss/nss/coreconf/Linux.mk	2014-05-06 04:37:25.387835456 +0200
+@@ -145,7 +145,7 @@
+ # The linker on Red Hat Linux 7.2 and RHEL 2.1 (GNU ld version 2.11.90.0.8)
+ # incorrectly reports undefined references in the libraries we link with, so
+ # we don't use -z defs there.
+-ZDEFS_FLAG		= -Wl,-z,defs
++ZDEFS_FLAG		=
+ DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
+ LDFLAGS			+= $(ARCHFLAG)
+ 
