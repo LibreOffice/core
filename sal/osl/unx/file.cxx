@@ -780,10 +780,12 @@ static bool osl_file_queryLocking (sal_uInt32 uFlags)
     return false;
 }
 
-#ifdef UNX
+#if defined ANDROID
+
+namespace {
 
 static oslFileError
-osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const char *path )
+openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const char *path )
 {
     oslFileError eRet;
     FileHandle_Impl * pImpl = new FileHandle_Impl (-1, FileHandle_Impl::KIND_MEM, path);
@@ -805,10 +807,6 @@ osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const 
     return osl_File_E_None;
 }
 
-oslFileError
-SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle )
-{
-    return osl_openMemoryAsFile( address, size, pHandle, "<anon>" );
 }
 
 #endif
@@ -848,7 +846,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
             errno = ENOENT;
             return osl_File_E_NOENT;
         }
-        return osl_openMemoryAsFile(address, size, pHandle, cpFilePath);
+        return openMemoryAsFile(address, size, pHandle, cpFilePath);
     }
 #endif
 

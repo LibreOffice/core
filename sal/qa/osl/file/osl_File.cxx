@@ -2942,38 +2942,9 @@ namespace osl_File
                                      *pEOF &&
                                     ( 0 == strncmp( ( const char * )aSequence.getArray(), &pBuffer_Char[26], 26 ) ) );
         }
-#ifdef UNX
-        void readLine_android()
-        {
-            static const char buffer[] =
-                "Hello\n\r\n\a\n"
-                "Fun=Badness\n"
-                "Some=Somethingelse\n\r";
-            sal_Int32 aHash = rtl_str_hashCode( buffer );
-            for (size_t i = 0; i < sizeof (buffer); i += 7)
-            {
-                oslFileHandle pFile( 0 );
-                CPPUNIT_ASSERT( osl_openMemoryAsFile( (void *)buffer,
-                                                      sizeof( buffer ) - i, &pFile )
-                                == osl_File_E_None );
-                for (;;)
-                {
-                    sal_Sequence *pSequence( 0 );
-                    if (osl_readLine( pFile, &pSequence ) != osl_File_E_None)
-                        break;
-                    rtl_byte_sequence_release (pSequence);
-                }
-                CPPUNIT_ASSERT( osl_closeFile( pFile ) == osl_File_E_None );
-            }
-            CPPUNIT_ASSERT( aHash == rtl_str_hashCode( buffer ) );
-        }
-#endif
         CPPUNIT_TEST_SUITE( readLine );
         CPPUNIT_TEST( readLine_001 );
         CPPUNIT_TEST( readLine_002 );
-#ifdef UNX
-        CPPUNIT_TEST( readLine_android );
-#endif
         CPPUNIT_TEST_SUITE_END();
     };// class readLine
 

@@ -709,7 +709,6 @@ PRIVATE_textenc.1 { # LibreOffice 3.6
 PRIVATE_file.1 { # LibreOffice 3.6
     global:
         osl_getFileOSHandle;
-	osl_openMemoryAsFile;
 };
 
 # Unique libstdc++ symbols:

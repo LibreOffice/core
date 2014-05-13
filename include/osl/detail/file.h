@@ -43,9 +43,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileOSHandle(
     oslFileHandle Handle,
     sal_IntPtr *piFileHandle );
 
-/* for unit testing. */
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle );
-
 #if defined __cplusplus
 }
 #endif
