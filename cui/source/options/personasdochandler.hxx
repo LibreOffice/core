@@ -20,20 +20,15 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <vector>
 
 class PersonasDocHandler : public ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler >
 {
 private:
-    OUString m_sHeaderURL;
-    OUString m_sFooterURL;
-    OUString m_sTextColor;
-    OUString m_sAccentColor;
+    std::vector<OUString> m_vLearnmoreURLs;
+    bool m_bLearnmoreTag;
 public:
-    PersonasDocHandler(){}
-    OUString getHeaderURL() { return m_sHeaderURL; }
-    OUString getFooterURL() { return m_sFooterURL; }
-    OUString getTextColor() { return m_sTextColor; }
-    OUString getAccentColor() { return m_sAccentColor; }
+    PersonasDocHandler(){ m_bLearnmoreTag = false; }
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

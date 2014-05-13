@@ -36,9 +36,11 @@ throw ( xml::sax::SAXException, RuntimeException, std::exception )
 }
 
 void SAL_CALL
-PersonasDocHandler::characters( const OUString & )
+PersonasDocHandler::characters( const OUString & aChars)
     throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
+    if( m_bLearnmoreTag )
+        m_vLearnmoreURLs.push_back( aChars );
 }
 
 void SAL_CALL
@@ -63,21 +65,19 @@ PersonasDocHandler::setDocumentLocator(
 
 void SAL_CALL
 PersonasDocHandler::startElement( const OUString& aName,
-    const Reference< xml::sax::XAttributeList > & xAttribs )
+    const Reference< xml::sax::XAttributeList > & )
         throw ( xml::sax::SAXException,
             RuntimeException, std::exception )
 {
-    SAL_DEBUG("startElement: " << aName << "\n");
-    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
-    {
-        SAL_DEBUG("\t\tAttribute Name: " << xAttribs->getNameByIndex(i) << "\tAttribute Value: " << xAttribs->getValueByIndex(i) << "\n");
-    }
+    if ( aName == "learnmore" )
+        m_bLearnmoreTag = true;
+    else
+        m_bLearnmoreTag = false;
 }
 
-void SAL_CALL PersonasDocHandler::endElement( const OUString & aName )
+void SAL_CALL PersonasDocHandler::endElement( const OUString & )
    throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
-    SAL_DEBUG("endElement: " << aName << "\n");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
