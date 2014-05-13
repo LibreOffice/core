@@ -130,7 +130,7 @@ public:
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
 
     virtual sal_Int32  InsertEntry(const OUString& rStr, sal_Int32  nPos = COMBOBOX_APPEND);
-    void            InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_Int32  nPos = COMBOBOX_APPEND );
+    sal_Int32       InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_Int32  nPos = COMBOBOX_APPEND );
 
     void            RemoveEntry( const OUString& rStr );
     virtual void    RemoveEntryAt(sal_Int32  nPos);

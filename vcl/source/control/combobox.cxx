@@ -872,11 +872,11 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
     return nRealPos;
 }
 
-void ComboBox::InsertEntryWithImage(
+sal_Int32 ComboBox::InsertEntryWithImage(
         const OUString& rStr, const Image& rImage, sal_Int32 const nPos)
 {
     if (nPos < 0 || COMBOBOX_MAX_ENTRIES <= mpImplLB->GetEntryList()->GetEntryCount())
-        return;
+        return COMBOBOX_ERROR;
 
     sal_Int32 nRealPos;
     if (nPos == COMBOBOX_APPEND)
@@ -885,13 +885,14 @@ void ComboBox::InsertEntryWithImage(
     {
         const sal_Int32 nMRUCount = mpImplLB->GetEntryList()->GetMRUCount();
         if (nPos > COMBOBOX_MAX_ENTRIES - nMRUCount)
-            return;
+            return COMBOBOX_ERROR;
         nRealPos = nPos + nMRUCount;
     }
 
     nRealPos = mpImplLB->InsertEntry( nRealPos, rStr, rImage );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
+    return nRealPos;
 }
 
 void ComboBox::RemoveEntry( const OUString& rStr )
