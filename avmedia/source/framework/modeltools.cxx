@@ -29,6 +29,7 @@
 #ifdef ENABLE_COLLADA2GLTF
 #include <COLLADA2GLTFWriter.h>
 #include <GLTFAsset.h>
+#include <KMZ2Collada.h>
 #endif
 
 #include <string>
@@ -139,7 +140,7 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
 {
     OUString sSource = rSourceURL;
 #ifdef ENABLE_COLLADA2GLTF
-    if (rSourceURL.endsWith("dae"))
+    if (rSourceURL.endsWith(".dae") || rSourceURL.endsWith(".kmz"))
     {
         OUString sName = ::utl::TempFile::CreateTempName();
         // remove .tmp extension
@@ -149,6 +150,14 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
 
         std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
         asset->setInputFilePath(sSourcePath);
+
+        if (rSourceURL.endsWith(".kmz"))
+        {
+            std::string strDaeFilePath = GLTF::Kmz2Collada()(asset->getInputFilePath());
+            if (strDaeFilePath == "")
+                return false;
+            asset->setInputFilePath(strDaeFilePath);
+        }
         asset->setBundleOutputPath(OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr());
         GLTF::COLLADA2GLTFWriter writer(asset);
         writer.write();

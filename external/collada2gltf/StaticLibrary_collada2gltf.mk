@@ -50,6 +50,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,collada2gltf,\
 	UnpackedTarball/collada2gltf/COLLADA2GLTFWriter \
 	UnpackedTarball/collada2gltf/GitSHA1 \
 	UnpackedTarball/collada2gltf/GLTFOpenCOLLADAUtils \
+	UnpackedTarball/collada2gltf/KMZ2Collada \
 	UnpackedTarball/collada2gltf/assetModifiers/GLTFFlipUVModifier \
 	UnpackedTarball/collada2gltf/convert/meshConverter \
 	UnpackedTarball/collada2gltf/convert/animationConverter \
@@ -79,6 +80,11 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,collada2gltf,\
 	UnpackedTarball/collada2gltf/JSON/JSONValue \
 	UnpackedTarball/collada2gltf/profiles/webgl-1.0/GLTFWebGL_1_0_Profile \
 	UnpackedTarball/collada2gltf/shaders/commonProfileShaders \
+))
+
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,collada2gltf,\
+	UnpackedTarball/collada2gltf/kmz/ioapi \
+	UnpackedTarball/collada2gltf/kmz/unzip \
 ))
 
 # o3dgc external library compiled from collada2gltf
