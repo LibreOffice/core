@@ -18,9 +18,7 @@ else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2-2.dll,src/.libs/liblcms2-2.dll))
 else ifeq ($(COM),MSC)
-# note: the lcms2d.lib references LCMS2.DLL (without D!) but the dll is
-# actually called LCMS2D.DLL then
-$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/lcms2.dll,bin/lcms2$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/lcms2.dll,bin/lcms2.dll))
 endif # $(COM)
 else  # $(OS) != WNT/MACOSX
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2.0.6))
