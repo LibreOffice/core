@@ -3119,6 +3119,7 @@ void ChartView::createShapes3D()
     if(!pWindow)
         return;
 
+    pWindow->Show();
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( !xCooSysContainer.is())
@@ -3175,7 +3176,6 @@ void ChartView::createShapes3D()
     m_pGL3DPlotter->create3DShapes(aDataSeries, *pCatProvider);
 
     m_pGL3DPlotter->render();
-    pWindow->Show();
 }
 
 } //namespace chart
