@@ -159,92 +159,23 @@ OUString ConstructTempDir_Impl( const OUString* pParent )
     return aName;
 }
 
-void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
+OUString lcl_createName(
+    const OUString& rLeadingChars, unsigned long nSeed, bool bFirst,
+    const OUString* pExtension, const OUString* pParent, bool bDirectory,
+    bool bKeep)
 {
-    // add a suitable tempname
     // 36 ** 6 == 2176782336
     unsigned const nRadix = 36;
     unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
-    OUString aName;
-    OUString aEyeCatcher = "lu";
-#ifdef DBG_UTIL
-#ifdef UNX
-    const char* eye = getenv("LO_TESTNAME");
-    if(eye)
-    {
-        aEyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
-    }
-#endif
-#endif
-    aName = rName + aEyeCatcher;
-    rName = "";
-    static unsigned long u = Time::GetSystemTicks() % nMax;
-    for ( unsigned long nSeed = u; ++u != nSeed; )
-    {
-        u %= nMax;
-        OUString aTmp( aName );
-        aTmp += OUString::number(u, nRadix);
-        aTmp += ".tmp";
+    nSeed %= nMax;
 
-        if ( bDir )
-        {
-            FileBase::RC err = Directory::create( aTmp );
-            if ( err == FileBase::E_None )
-            {
-                // !bKeep: only for creating a name, not a file or directory
-                if ( bKeep || Directory::remove( aTmp ) == FileBase::E_None )
-                    rName = aTmp;
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-            {
-                // if f.e. name contains invalid chars stop trying to create dirs
-                break;
-            }
-        }
-        else
-        {
-            DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
-            File aFile( aTmp );
-#ifdef UNX /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-#endif
-            FileBase::RC err = aFile.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
-#ifdef UNX
-            umask(old_mode);
-#endif
-            if (  err == FileBase::E_None )
-            {
-                rName = aTmp;
-                aFile.close();
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-            {
-                 // if f.e. name contains invalid chars stop trying to create files
-                 // but if there is a folder with such name proceed further
-
-                 DirectoryItem aTmpItem;
-                 FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
-                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
-                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
-                   || aTmpStatus.getFileType() != FileStatus::Directory )
-                     break;
-            }
-        }
-    }
-}
-
-OUString lcl_createName(const OUString& rLeadingChars, bool _bStartWithZero,
-                    const OUString* pExtension, const OUString* pParent, bool bDirectory)
-{
     // get correct directory
     OUString aName = ConstructTempDir_Impl( pParent );
 
-    bool bUseNumber = _bStartWithZero;
+    bool bUseNumber = bFirst;
     // now use special naming scheme ( name takes leading chars and an index counting up from zero
     aName += rLeadingChars;
-    for ( sal_Int32 i=0;; i++ )
+    for ( unsigned long i=nSeed;; )
     {
         OUString aTmp( aName );
         if ( bUseNumber )
@@ -259,7 +190,11 @@ OUString lcl_createName(const OUString& rLeadingChars, bool _bStartWithZero,
             FileBase::RC err = Directory::create( aTmp );
             if ( err == FileBase::E_None )
             {
-                return aTmp;
+                // !bKeep: only for creating a name, not a file or directory
+                if ( bKeep || Directory::remove( aTmp ) == FileBase::E_None )
+                    return aTmp;
+                else
+                    return OUString();
             }
             else if ( err != FileBase::E_EXIST )
                 // if f.e. name contains invalid chars stop trying to create dirs
@@ -267,6 +202,7 @@ OUString lcl_createName(const OUString& rLeadingChars, bool _bStartWithZero,
         }
         else
         {
+            DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
             File aFile( aTmp );
 #ifdef UNX
             /* RW permission for the user only! */
@@ -294,16 +230,32 @@ OUString lcl_createName(const OUString& rLeadingChars, bool _bStartWithZero,
                     return OUString();
             }
         }
+        i = (i + 1) % nMax;
+        if (i == nSeed) {
+            return OUString();
+        }
     }
+}
+
+OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = true )
+{
+    OUString aEyeCatcher = "lu";
+#ifdef DBG_UTIL
+#ifdef UNX
+    const char* eye = getenv("LO_TESTNAME");
+    if(eye)
+    {
+        aEyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
+    }
+#endif
+#endif
+    return lcl_createName(
+        aEyeCatcher, Time::GetSystemTicks(), true, 0, pParent, bDir, bKeep);
 }
 
 OUString TempFile::CreateTempName()
 {
-    // get correct directory
-    OUString aName = ConstructTempDir_Impl( 0 );
-
-    // get TempFile name with default naming scheme
-    CreateTempName_Impl( aName, false );
+    OUString aName(CreateTempName_Impl( 0, false ));
 
     // convert to file URL
     OUString aTmp;
@@ -317,11 +269,7 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
     , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
-    // get correct directory
-    aName = ConstructTempDir_Impl( pParent );
-
-    // get TempFile with default naming scheme
-    CreateTempName_Impl( aName, true, bDirectory );
+    aName = CreateTempName_Impl( pParent, true, bDirectory );
 }
 
 TempFile::TempFile( const OUString& rLeadingChars, const OUString* pExtension, const OUString* pParent, bool bDirectory)
@@ -329,14 +277,14 @@ TempFile::TempFile( const OUString& rLeadingChars, const OUString* pExtension, c
     , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
-    aName = lcl_createName(rLeadingChars, true, pExtension, pParent, bDirectory);
+    aName = lcl_createName(rLeadingChars, 0, true, pExtension, pParent, bDirectory, true);
 }
 TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension, const OUString* pParent, bool bDirectory)
     : pStream( 0 )
     , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
-    aName = lcl_createName(rLeadingChars, _bStartWithZero, pExtension, pParent, bDirectory);
+    aName = lcl_createName(rLeadingChars, 0, _bStartWithZero, pExtension, pParent, bDirectory, true);
 }
 
 TempFile::~TempFile()
