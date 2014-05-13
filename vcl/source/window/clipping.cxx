@@ -141,6 +141,94 @@ void Window::InitClipRegion()
     mbInitClipRegion = false;
 }
 
+void Window::SetParentClipMode( sal_uInt16 nMode )
+{
+
+    if ( mpWindowImpl->mpBorderWindow )
+        mpWindowImpl->mpBorderWindow->SetParentClipMode( nMode );
+    else
+    {
+        if ( !ImplIsOverlapWindow() )
+        {
+            mpWindowImpl->mnParentClipMode = nMode;
+            if ( nMode & PARENTCLIPMODE_CLIP )
+                mpWindowImpl->mpParent->mpWindowImpl->mbClipChildren = true;
+        }
+    }
+}
+
+sal_uInt16 Window::GetParentClipMode() const
+{
+
+    if ( mpWindowImpl->mpBorderWindow )
+        return mpWindowImpl->mpBorderWindow->GetParentClipMode();
+    else
+        return mpWindowImpl->mnParentClipMode;
+}
+
+void Window::ExpandPaintClipRegion( const Region& rRegion )
+{
+    if( mpWindowImpl->mpPaintRegion )
+    {
+        Region aPixRegion = LogicToPixel( rRegion );
+        Region aDevPixRegion = ImplPixelToDevicePixel( aPixRegion );
+
+        Region aWinChildRegion = *ImplGetWinChildClipRegion();
+        // --- RTL -- only this region is in frame coordinates, so re-mirror it
+        if( ImplIsAntiparallel() )
+        {
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ReMirror( aWinChildRegion );
+        }
+
+        aDevPixRegion.Intersect( aWinChildRegion );
+        if( ! aDevPixRegion.IsEmpty() )
+        {
+            mpWindowImpl->mpPaintRegion->Union( aDevPixRegion );
+            mbInitClipRegion = true;
+        }
+    }
+}
+
+
+Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
+{
+
+    Region aWinClipRegion;
+
+    if ( nFlags & WINDOW_GETCLIPREGION_NOCHILDREN )
+    {
+        if ( mpWindowImpl->mbInitWinClipRegion )
+            ((Window*)this)->ImplInitWinClipRegion();
+        aWinClipRegion = mpWindowImpl->maWinClipRegion;
+    }
+    else
+    {
+        Region* pWinChildClipRegion = ((Window*)this)->ImplGetWinChildClipRegion();
+        aWinClipRegion = *pWinChildClipRegion;
+        // --- RTL --- remirror clip region before passing it to somebody
+        if( ImplIsAntiparallel() )
+        {
+            const OutputDevice *pOutDev = GetOutDev();
+            pOutDev->ReMirror( aWinClipRegion );
+        }
+    }
+
+    if ( nFlags & WINDOW_GETCLIPREGION_NULL )
+    {
+        Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+        Region      aWinRegion( aWinRect );
+
+        if ( aWinRegion == aWinClipRegion )
+            aWinClipRegion.SetNull();
+    }
+
+    aWinClipRegion.Move( -mnOutOffX, -mnOutOffY );
+
+    return aWinClipRegion;
+}
+
+
 Region Window::GetActiveClipRegion() const
 {
     Region aRegion(true);
@@ -172,6 +260,145 @@ void Window::EnableClipSiblings( bool bClipSiblings )
         mpWindowImpl->mpBorderWindow->EnableClipSiblings( bClipSiblings );
 
     mpWindowImpl->mbClipSiblings = bClipSiblings;
+}
+
+void Window::ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps )
+{
+    if ( bThis )
+        ImplIntersectWindowClipRegion( rRegion );
+    else if ( ImplIsOverlapWindow() )
+    {
+        // clip to frame if required
+        if ( !mpWindowImpl->mbFrame )
+            rRegion.Intersect( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
+
+        if ( bOverlaps && !rRegion.IsEmpty() )
+        {
+            // Clip Overlap Siblings
+            Window* pStartOverlapWindow = this;
+            while ( !pStartOverlapWindow->mpWindowImpl->mbFrame )
+            {
+                Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
+                while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
+                {
+                    pOverlapWindow->ImplExcludeOverlapWindows2( rRegion );
+                    pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
+                }
+                pStartOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow;
+            }
+
+            // Clip Child Overlap Windows
+            ImplExcludeOverlapWindows( rRegion );
+        }
+    }
+    else
+        ImplGetParent()->ImplIntersectWindowClipRegion( rRegion );
+}
+
+bool Window::ImplClipChildren( Region& rRegion )
+{
+    bool    bOtherClip = false;
+    Window* pWindow = mpWindowImpl->mpFirstChild;
+    while ( pWindow )
+    {
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+        {
+            // read-out ParentClipMode-Flags
+            sal_uInt16 nClipMode = pWindow->GetParentClipMode();
+            if ( !(nClipMode & PARENTCLIPMODE_NOCLIP) &&
+                 ((nClipMode & PARENTCLIPMODE_CLIP) || (GetStyle() & WB_CLIPCHILDREN)) )
+                pWindow->ImplExcludeWindowRegion( rRegion );
+            else
+                bOtherClip = true;
+        }
+
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+
+    return bOtherClip;
+}
+
+void Window::ImplClipAllChildren( Region& rRegion )
+{
+    Window* pWindow = mpWindowImpl->mpFirstChild;
+    while ( pWindow )
+    {
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+            pWindow->ImplExcludeWindowRegion( rRegion );
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+}
+
+void Window::ImplClipSiblings( Region& rRegion )
+{
+    Window* pWindow = ImplGetParent()->mpWindowImpl->mpFirstChild;
+    while ( pWindow )
+    {
+        if ( pWindow == this )
+            break;
+
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+            pWindow->ImplExcludeWindowRegion( rRegion );
+
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+}
+
+void Window::ImplInitWinClipRegion()
+{
+    // Build Window Region
+    mpWindowImpl->maWinClipRegion = Rectangle( Point( mnOutOffX, mnOutOffY ),
+                                 Size( mnOutWidth, mnOutHeight ) );
+    if ( mpWindowImpl->mbWinRegion )
+        mpWindowImpl->maWinClipRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+
+    // ClipSiblings
+    if ( mpWindowImpl->mbClipSiblings && !ImplIsOverlapWindow() )
+        ImplClipSiblings( mpWindowImpl->maWinClipRegion );
+
+    // Clip Parent Boundaries
+    ImplClipBoundaries( mpWindowImpl->maWinClipRegion, false, true );
+
+    // Clip Children
+    if ( (GetStyle() & WB_CLIPCHILDREN) || mpWindowImpl->mbClipChildren )
+        mpWindowImpl->mbInitChildRegion = true;
+
+    mpWindowImpl->mbInitWinClipRegion = false;
+}
+
+void Window::ImplInitWinChildClipRegion()
+{
+    if ( !mpWindowImpl->mpFirstChild )
+    {
+        if ( mpWindowImpl->mpChildClipRegion )
+        {
+            delete mpWindowImpl->mpChildClipRegion;
+            mpWindowImpl->mpChildClipRegion = NULL;
+        }
+    }
+    else
+    {
+        if ( !mpWindowImpl->mpChildClipRegion )
+            mpWindowImpl->mpChildClipRegion = new Region( mpWindowImpl->maWinClipRegion );
+        else
+            *mpWindowImpl->mpChildClipRegion = mpWindowImpl->maWinClipRegion;
+
+        ImplClipChildren( *mpWindowImpl->mpChildClipRegion );
+    }
+
+    mpWindowImpl->mbInitChildRegion = false;
+}
+
+Region* Window::ImplGetWinChildClipRegion()
+{
+    if ( mpWindowImpl->mbInitWinClipRegion )
+        ImplInitWinClipRegion();
+    if ( mpWindowImpl->mbInitChildRegion )
+        ImplInitWinChildClipRegion();
+    if ( mpWindowImpl->mpChildClipRegion )
+        return mpWindowImpl->mpChildClipRegion;
+    else
+        return &mpWindowImpl->maWinClipRegion;
 }
 
 
