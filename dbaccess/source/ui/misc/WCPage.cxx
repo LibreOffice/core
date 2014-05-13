@@ -51,57 +51,53 @@ using namespace ::com::sun::star::sdbcx;
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
 // Klasse OCopyTable
-OCopyTable::OCopyTable( Window * pParent )
-    :OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) )
-    ,m_ftTableName(         this, ModuleRes( FT_TABLENAME       ) )
-    ,m_edTableName(         this, ModuleRes( ET_TABLENAME       ) )
-    ,m_aFL_Options(         this, ModuleRes( FL_OPTIONS         ) )
-    ,m_aRB_DefData(         this, ModuleRes( RB_DEFDATA         ) )
-    ,m_aRB_Def(             this, ModuleRes( RB_DEF             ) )
-    ,m_aRB_View(            this, ModuleRes( RB_VIEW            ) )
-    ,m_aRB_AppendData(      this, ModuleRes( RB_APPENDDATA      ) )
-    ,m_aCB_UseHeaderLine(   this, ModuleRes( CB_USEHEADERLINE   ) )
-    ,m_aCB_PrimaryColumn(   this, ModuleRes( CB_PRIMARY_COLUMN  ) )
-    ,m_aFT_KeyName(         this, ModuleRes( FT_KEYNAME         ) )
-    ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
-    ,m_nOldOperation(0)
-    ,m_pPage2(NULL)
-    ,m_pPage3(NULL)
-    ,m_bPKeyAllowed(false)
-    ,m_bUseHeaderAllowed(true)
+OCopyTable::OCopyTable(Window * pParent)
+    : OWizardPage(pParent, "CopyTablePage", "dbaccess/ui/copytablepage.ui")
+    , m_nOldOperation(0)
+    , m_pPage2(NULL)
+    , m_pPage3(NULL)
+    , m_bPKeyAllowed(false)
+    , m_bUseHeaderAllowed(true)
 {
+    get(m_pEdTableName, "name");
+    get(m_pRB_DefData, "defdata");
+    get(m_pRB_Def, "def");
+    get(m_pRB_View, "view");
+    get(m_pRB_AppendData, "data");
+    get(m_pCB_UseHeaderLine, "firstline");
+    get(m_pCB_PrimaryColumn, "primarykey");
+    get(m_pFT_KeyName, "keynamelabel");
+    get(m_pEdKeyName, "keyname");
 
-    m_edTableName.SetMaxTextLen(EDIT_NOLIMIT);
+    m_pEdTableName->SetMaxTextLen(EDIT_NOLIMIT);
 
     if ( m_pParent->m_xDestConnection.is() )
     {
         if ( !m_pParent->supportsViews() )
-            m_aRB_View.Disable();
+            m_pRB_View->Disable();
 
-        m_aCB_UseHeaderLine.Check(true);
+        m_pCB_UseHeaderLine->Check(true);
         m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
-        m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
+        m_pCB_PrimaryColumn->Enable(m_bPKeyAllowed);
 
-        m_aRB_AppendData.SetClickHdl(   LINK( this, OCopyTable, AppendDataClickHdl  ) );
+        m_pRB_AppendData->SetClickHdl(   LINK( this, OCopyTable, AppendDataClickHdl  ) );
 
-        m_aRB_DefData.SetClickHdl(      LINK( this, OCopyTable, RadioChangeHdl      ) );
-        m_aRB_Def.SetClickHdl(          LINK( this, OCopyTable, RadioChangeHdl      ) );
-        m_aRB_View.SetClickHdl(         LINK( this, OCopyTable, RadioChangeHdl      ) );
+        m_pRB_DefData->SetClickHdl(      LINK( this, OCopyTable, RadioChangeHdl      ) );
+        m_pRB_Def->SetClickHdl(          LINK( this, OCopyTable, RadioChangeHdl      ) );
+        m_pRB_View->SetClickHdl(         LINK( this, OCopyTable, RadioChangeHdl      ) );
 
-        m_aCB_PrimaryColumn.SetClickHdl(LINK( this, OCopyTable, KeyClickHdl         ) );
+        m_pCB_PrimaryColumn->SetClickHdl(LINK( this, OCopyTable, KeyClickHdl         ) );
 
-        m_aFT_KeyName.Enable(false);
-        m_edKeyName.Enable(false);
+        m_pFT_KeyName->Enable(false);
+        m_pEdKeyName->Enable(false);
         OUString sKeyName("ID");
         sKeyName = m_pParent->createUniqueName(sKeyName);
-        m_edKeyName.SetText(sKeyName);
+        m_pEdKeyName->SetText(sKeyName);
 
         sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
-        m_edKeyName.SetMaxTextLen(nMaxLen ? nMaxLen : EDIT_NOLIMIT);
+        m_pEdKeyName->SetMaxTextLen(nMaxLen ? nMaxLen : EDIT_NOLIMIT);
     }
-
-    FreeResource();
 
     SetText(ModuleRes(STR_COPYTABLE_TITLE_COPY));
 }
@@ -120,20 +116,20 @@ IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 void OCopyTable::SetAppendDataRadio()
 {
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,true);
-    m_aFT_KeyName.Enable(false);
-    m_aCB_PrimaryColumn.Enable(false);
-    m_edKeyName.Enable(false);
+    m_pFT_KeyName->Enable(false);
+    m_pCB_PrimaryColumn->Enable(false);
+    m_pEdKeyName->Enable(false);
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,pButton != &m_aRB_View);
-    bool bKey = m_bPKeyAllowed && pButton != &m_aRB_View;
-    m_aFT_KeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
-    m_edKeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
-    m_aCB_PrimaryColumn.Enable(bKey);
-    m_aCB_UseHeaderLine.Enable(m_bUseHeaderAllowed && IsOptionDefData());
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,pButton != m_pRB_View);
+    bool bKey = m_bPKeyAllowed && pButton != m_pRB_View;
+    m_pFT_KeyName->Enable(bKey && m_pCB_PrimaryColumn->IsChecked());
+    m_pEdKeyName->Enable(bKey && m_pCB_PrimaryColumn->IsChecked());
+    m_pCB_PrimaryColumn->Enable(bKey);
+    m_pCB_UseHeaderLine->Enable(m_bUseHeaderAllowed && IsOptionDefData());
 
     // set typ what to do
     if( IsOptionDefData() )
@@ -148,16 +144,16 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 
 IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 {
-    m_edKeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
-    m_aFT_KeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
+    m_pEdKeyName->Enable(m_pCB_PrimaryColumn->IsChecked());
+    m_pFT_KeyName->Enable(m_pCB_PrimaryColumn->IsChecked());
     return 0;
 }
 
 bool OCopyTable::LeavePage()
 {
-    m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
-    m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : OUString();
-    m_pParent->setUseHeaderLine( m_aCB_UseHeaderLine.IsChecked() );
+    m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_pCB_PrimaryColumn->IsEnabled()) ? m_pCB_PrimaryColumn->IsChecked() : sal_False;
+    m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_pEdKeyName->GetText() : OUString();
+    m_pParent->setUseHeaderLine( m_pCB_UseHeaderLine->IsChecked() );
 
     // first check if the table already exists in the database
     if( m_pParent->getOperation() != CopyTableOperation::AppendData )
@@ -165,7 +161,7 @@ bool OCopyTable::LeavePage()
         m_pParent->clearDestColumns();
         DynamicTableOrQueryNameCheck aNameCheck( m_pParent->m_xDestConnection, CommandType::TABLE );
         SQLExceptionInfo aErrorInfo;
-        if ( !aNameCheck.isNameValid( m_edTableName.GetText(), aErrorInfo ) )
+        if ( !aNameCheck.isNameValid( m_pEdTableName->GetText(), aErrorInfo ) )
         {
             aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) );
             m_pParent->showError(aErrorInfo.get());
@@ -179,7 +175,7 @@ bool OCopyTable::LeavePage()
         OUString sSchema;
         OUString sTable;
         ::dbtools::qualifiedNameComponents( xMeta,
-                                            m_edTableName.GetText(),
+                                            m_pEdTableName->GetText(),
                                             sCatalog,
                                             sSchema,
                                             sTable,
@@ -204,7 +200,7 @@ bool OCopyTable::LeavePage()
         }
     }
 
-    if ( m_edTableName.IsValueChangedFromSaved() )
+    if ( m_pEdTableName->IsValueChangedFromSaved() )
     { // table exists and name has changed
         if ( m_pParent->getOperation() == CopyTableOperation::AppendData )
         {
@@ -213,7 +209,7 @@ bool OCopyTable::LeavePage()
         }
         else if ( m_nOldOperation == CopyTableOperation::AppendData )
         {
-            m_edTableName.SaveValue();
+            m_pEdTableName->SaveValue();
             return LeavePage();
         }
     }
@@ -225,8 +221,8 @@ bool OCopyTable::LeavePage()
                 return false;
         }
     }
-    m_pParent->m_sName = m_edTableName.GetText();
-    m_edTableName.SaveValue();
+    m_pParent->m_sName = m_pEdTableName->GetText();
+    m_pEdTableName->SaveValue();
 
     if(m_pParent->m_sName.isEmpty())
     {
@@ -242,8 +238,8 @@ void OCopyTable::ActivatePage()
 {
     m_pParent->GetOKButton().Enable( true );
     m_nOldOperation = m_pParent->getOperation();
-    m_edTableName.GrabFocus();
-    m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());
+    m_pEdTableName->GrabFocus();
+    m_pCB_UseHeaderLine->Check(m_pParent->UseHeaderLine());
 }
 
 OUString OCopyTable::GetTitle() const
@@ -255,8 +251,8 @@ void OCopyTable::Reset()
 {
     m_bFirstTime = false;
 
-    m_edTableName.SetText( m_pParent->m_sName );
-    m_edTableName.SaveValue();
+    m_pEdTableName->SetText( m_pParent->m_sName );
+    m_pEdTableName->SaveValue();
 }
 
 bool OCopyTable::checkAppendData()
@@ -267,7 +263,7 @@ bool OCopyTable::checkAppendData()
     Reference<XNameAccess> xTables;
     if(xSup.is())
         xTables = xSup->getTables();
-    if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
+    if(xTables.is() && xTables->hasByName(m_pEdTableName->GetText()))
     {
         const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
         const sal_uInt32 nSrcSize = pSrcColumns->size();
@@ -275,7 +271,7 @@ bool OCopyTable::checkAppendData()
         m_pParent->m_vColumnTypes.resize( nSrcSize , COLUMN_POSITION_NOT_FOUND );
 
         // set new destination
-        xTables->getByName( m_edTableName.GetText() ) >>= xTable;
+        xTables->getByName( m_pEdTableName->GetText() ) >>= xTable;
         ObjectCopySource aTableCopySource( m_pParent->m_xDestConnection, xTable );
         m_pParent->loadData( aTableCopySource, m_pParent->m_vDestColumns, m_pParent->m_aDestVec );
         const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
@@ -315,11 +311,11 @@ bool OCopyTable::checkAppendData()
 void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
     bool bCreatePK = m_bPKeyAllowed && _bDoCreate;
-    m_aCB_PrimaryColumn.Check( bCreatePK );
-    m_edKeyName.SetText( _rSuggestedName );
+    m_pCB_PrimaryColumn->Check( bCreatePK );
+    m_pEdKeyName->SetText( _rSuggestedName );
 
-    m_aFT_KeyName.Enable( bCreatePK );
-    m_edKeyName.Enable( bCreatePK );
+    m_pFT_KeyName->Enable( bCreatePK );
+    m_pEdKeyName->Enable( bCreatePK );
 }
 
 void OCopyTable::setCreateStyleAction()
@@ -328,27 +324,27 @@ void OCopyTable::setCreateStyleAction()
     switch(m_pParent->getOperation())
     {
         case CopyTableOperation::CopyDefinitionAndData:
-            m_aRB_DefData.Check(true);
-            RadioChangeHdl(&m_aRB_DefData);
+            m_pRB_DefData->Check(true);
+            RadioChangeHdl(m_pRB_DefData);
             break;
         case CopyTableOperation::CopyDefinitionOnly:
-            m_aRB_Def.Check(true);
-            RadioChangeHdl(&m_aRB_Def);
+            m_pRB_Def->Check(true);
+            RadioChangeHdl(m_pRB_Def);
             break;
         case CopyTableOperation::AppendData:
-            m_aRB_AppendData.Check(true);
+            m_pRB_AppendData->Check(true);
             SetAppendDataRadio();
             break;
         case CopyTableOperation::CreateAsView:
-            if ( m_aRB_View.IsEnabled() )
+            if ( m_pRB_View->IsEnabled() )
             {
-                m_aRB_View.Check(true);
-                RadioChangeHdl(&m_aRB_View);
+                m_pRB_View->Check(true);
+                RadioChangeHdl(m_pRB_View);
             }
             else
             {
-                m_aRB_DefData.Check(true);
-                RadioChangeHdl(&m_aRB_DefData);
+                m_pRB_DefData->Check(true);
+                RadioChangeHdl(m_pRB_DefData);
             }
     }
 }

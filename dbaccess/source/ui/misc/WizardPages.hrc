@@ -35,25 +35,13 @@
 #define PB_NONE                 17
 
 #define ET_AUTO                 1
-#define ET_TABLENAME            2
-#define ET_KEYNAME              3
 
 #define FT_AUTO                 1
 #define FT_TABLE_LEFT           2
 #define FT_TABLE_RIGHT          3
-#define FT_TABLENAME            4
-#define FT_KEYNAME              5
 
 #define FL_COLUMN_NAME                  2
 #define FL_AUTO_TYPE                    3
-#define FL_OPTIONS                              5
-
-#define RB_DEFDATA              1
-#define RB_DEF                  2
-#define RB_VIEW                 3
-#define RB_APPENDDATA           4
-#define CB_PRIMARY_COLUMN       5
-#define CB_USEHEADERLINE        6
 
 #define CONTROL_CONTAINER       1
 // controls

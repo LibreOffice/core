@@ -104,7 +104,7 @@
     // FREE
 #define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 10
 #define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 11
-#define TAB_WIZ_COPYTABLE               RID_PAGE_START + 12
+    // FREE
     // FREE
 #define PAGE_LDAP                       RID_PAGE_START + 15
 #define TAB_PAGE_USERADMIN              RID_PAGE_START + 16

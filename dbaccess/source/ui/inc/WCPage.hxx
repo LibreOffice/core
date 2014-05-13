@@ -34,24 +34,22 @@ namespace dbaui
     class OCopyTable : public OWizardPage
     {
     protected:
-        FixedText                               m_ftTableName;
-        Edit                                    m_edTableName;
-        FixedLine                               m_aFL_Options;
-        RadioButton                             m_aRB_DefData;
-        RadioButton                             m_aRB_Def;
-        RadioButton                             m_aRB_View;
-        RadioButton                             m_aRB_AppendData;
-        CheckBox                                m_aCB_UseHeaderLine;
-        CheckBox                                m_aCB_PrimaryColumn;
-        FixedText                               m_aFT_KeyName;
-        Edit                                    m_edKeyName;
-        sal_Int16                               m_nOldOperation;
+        Edit*              m_pEdTableName;
+        RadioButton*       m_pRB_DefData;
+        RadioButton*       m_pRB_Def;
+        RadioButton*       m_pRB_View;
+        RadioButton*       m_pRB_AppendData;
+        CheckBox*          m_pCB_UseHeaderLine;
+        CheckBox*          m_pCB_PrimaryColumn;
+        FixedText*         m_pFT_KeyName;
+        Edit*              m_pEdKeyName;
+        sal_Int16          m_nOldOperation;
 
-        OWizColumnSelect*                       m_pPage2;
-        OWizNormalExtend*                       m_pPage3;
+        OWizColumnSelect*  m_pPage2;
+        OWizNormalExtend*  m_pPage3;
 
-        bool                                    m_bPKeyAllowed;
-        bool                                    m_bUseHeaderAllowed;
+        bool               m_bPKeyAllowed;
+        bool               m_bUseHeaderAllowed;
 
         DECL_LINK( AppendDataClickHdl, Button* );
         DECL_LINK( RadioChangeHdl, Button* );
@@ -69,22 +67,22 @@ namespace dbaui
         OCopyTable( Window * pParent );
         virtual ~OCopyTable();
 
-        inline bool IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
-        inline bool IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
-        inline bool IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
-        inline bool IsOptionView()          const { return m_aRB_View.IsChecked(); }
-        inline bool UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
-        OUString    GetKeyName()            const { return m_edKeyName.GetText(); }
+        bool IsOptionDefData() const { return m_pRB_DefData->IsChecked(); }
+        bool IsOptionDef() const { return m_pRB_Def->IsChecked(); }
+        bool IsOptionAppendData() const { return m_pRB_AppendData->IsChecked(); }
+        bool IsOptionView() const { return m_pRB_View->IsChecked(); }
+        bool UseHeaderLine() const { return m_pCB_UseHeaderLine->IsChecked(); }
+        OUString GetKeyName() const { return m_pEdKeyName->GetText(); }
 
         void setCreateStyleAction();
         inline void disallowViews()
         {
-            m_aRB_View.Disable();
+            m_pRB_View->Disable();
         }
         inline void disallowUseHeaderLine()
         {
             m_bUseHeaderAllowed = false;
-            m_aCB_UseHeaderLine.Disable();
+            m_pCB_UseHeaderLine->Disable();
         }
 
         void setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );
