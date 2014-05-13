@@ -43,6 +43,13 @@ public:
      */
     static OUString     GetLanguageString( const LanguageType eType, bool bUserInterfaceSelection );
 
+    /** Add a language tag to the table.
+
+        @param  rString
+                UI visible description string. If empty, the rLanguageTag Bcp47
+                string is used instead.
+     */
+    static sal_uInt32   AddLanguageTag( const LanguageTag& rLanguageTag, const OUString& rString );
 };
 
 // Add LRE or RLE embedding characters to the string based on the
