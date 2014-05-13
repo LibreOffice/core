@@ -18,6 +18,7 @@
 #include <boost/bind.hpp>
 #include <boost/current_function.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/random.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -62,7 +63,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/document/NoSuchFilterRequest.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -225,4 +225,5 @@
 #include <unicode/uchar.h>
 #include <uno/data.h>
 #include <vector>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

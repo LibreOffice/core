@@ -99,6 +99,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/officeresourcebundle \
     comphelper/source/misc/officerestartmanager \
     comphelper/source/misc/proxyaggregation \
+    comphelper/source/misc/random \
     comphelper/source/misc/scopeguard \
     comphelper/source/misc/SelectionMultiplex \
     comphelper/source/misc/sequenceashashmap \

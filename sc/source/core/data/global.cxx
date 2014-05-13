@@ -49,6 +49,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -77,7 +78,6 @@
 #include "sc.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
-#include "random.hxx"
 #include "editutil.hxx"
 
 
@@ -529,7 +529,7 @@ void ScGlobal::Init()
     // names from the compiler.
     ScParameterClassification::Init();
     srand( (unsigned) time( NULL ) );       // Random Seed Init fuer Interpreter
-    sc::rng::seed( time( NULL ) );          // seed for libc rand() replacement
+    ::comphelper::rng::seed( time( NULL ) ); // seed for libc rand() replacement
 
     InitAddIns();
 

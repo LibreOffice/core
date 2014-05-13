@@ -7,18 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_RANDOM_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_RANDOM_HXX
+#ifndef INCLUDED_COMPHELPER_RANDOM_HXX
+#define INCLUDED_COMPHELPER_RANDOM_HXX
 
-namespace sc
+#include <comphelper/comphelperdllapi.h>
+
+namespace comphelper
 {
 
 namespace rng
 {
 
-void seed(int i);       // set initial seed (equivalent of libc srand())
+/// set initial seed (equivalent of libc srand())
+COMPHELPER_DLLPUBLIC void seed(int i);
 
-double uniform();                   // uniform distribution in [0,1)
+/// uniform distribution in [0,1)
+COMPHELPER_DLLPUBLIC double uniform();
 
 } // namespace
 
