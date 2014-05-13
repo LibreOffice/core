@@ -136,7 +136,7 @@ public:
                     If you want to convert file name into a URL, always use class LocalFileHelper, but never use any
                     conversion functions of osl.
                     */
-    static OUString CreateTempName( const OUString* pParent=NULL );
+    static OUString CreateTempName();
 
                     /**
                     The TempNameBaseDirectory is a subfolder in the folder that is passed as a "physical" file name in the

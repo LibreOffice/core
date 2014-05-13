@@ -1093,7 +1093,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         //then save it
         SfxStringItem aName(SID_FILE_NAME,
                 URIHelper::SmartRel2Abs(
-                    INetURLObject(), utl::TempFile::CreateTempName(0),
+                    INetURLObject(), utl::TempFile::CreateTempName(),
                     URIHelper::GetMaybeFileHdl()) );
 
         {

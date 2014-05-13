@@ -317,10 +317,10 @@ void lcl_createName(TempFile_Impl& _rImpl,const OUString& rLeadingChars, bool _b
     }
 }
 
-OUString TempFile::CreateTempName( const OUString* pParent )
+OUString TempFile::CreateTempName()
 {
     // get correct directory
-    OUString aName = ConstructTempDir_Impl( pParent );
+    OUString aName = ConstructTempDir_Impl( 0 );
 
     // get TempFile name with default naming scheme
     CreateTempName_Impl( aName, false );
