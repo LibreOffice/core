@@ -1046,7 +1046,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
 
     if (osl_openFilePath(pszSourceFileName,
                          &SourceFileFH,
-                         osl_File_OpenFlag_Read|osl_File_OpenFlag_NoLock|osl_File_OpenFlag_NoExcl) != osl_File_E_None)
+                         osl_File_OpenFlag_Read|osl_File_OpenFlag_NoLock|osl_File_OpenFlag_NoExcl, mode_t(-1)) != osl_File_E_None)
     {
         // Let's hope errno is still set relevantly after osl_openFilePath...
         nRet=errno;

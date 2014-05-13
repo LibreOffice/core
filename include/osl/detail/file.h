@@ -33,11 +33,6 @@ extern "C" {
 #define osl_File_OpenFlag_Trunc     0x00000010L
 #define osl_File_OpenFlag_NoExcl    0x00000020L
 
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFilePath(
-    const char *cpFilePath,
-    oslFileHandle* pHandle,
-    sal_uInt32 uFlags );
-
 /*  Get the OS specific "handle" of an open file. */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileOSHandle(
     oslFileHandle Handle,
