@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
 	external/libxmlsec/xmlsec1-android.patch \
 	external/libxmlsec/xmlsec1-1.2.14-ansi.patch \
 	external/libxmlsec/xmlsec1-customkeymanage.patch \
+	external/libxmlsec/xmlsec1-update-config.guess.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,xmlsec,include/xmlsec/mscrypto/akmngr.h,external/libxmlsec/include/akmngr_mscrypto.h))
