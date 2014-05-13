@@ -751,21 +751,6 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 }
 
 oslFileError
-SAL_CALL osl_getFileOSHandle(
-    oslFileHandle  Handle,
-    sal_IntPtr    *piFileHandle )
-{
-    FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
-
-    if (0 == pImpl || !IsValidHandle(pImpl->m_hFile))
-        return osl_File_E_INVAL;
-
-    *piFileHandle = (sal_IntPtr) pImpl->m_hFile;
-
-    return osl_File_E_None;
-}
-
-oslFileError
 SAL_CALL osl_closeFile(oslFileHandle Handle)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);

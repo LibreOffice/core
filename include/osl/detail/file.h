@@ -38,11 +38,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFilePath(
     oslFileHandle* pHandle,
     sal_uInt32 uFlags );
 
-/*  Get the OS specific "handle" of an open file. */
-SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileOSHandle(
-    oslFileHandle Handle,
-    sal_IntPtr *piFileHandle );
-
 #if defined __cplusplus
 }
 #endif

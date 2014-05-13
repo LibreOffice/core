@@ -1081,21 +1081,6 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 }
 
 oslFileError
-SAL_CALL osl_getFileOSHandle(
-    oslFileHandle Handle,
-    sal_IntPtr *piFileHandle )
-{
-    FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
-
-    if (0 == pImpl || pImpl->m_kind != FileHandle_Impl::KIND_FD || -1 == pImpl->m_fd)
-        return osl_File_E_INVAL;
-
-    *piFileHandle = pImpl->m_fd;
-
-    return osl_File_E_None;
-}
-
-oslFileError
 SAL_CALL osl_mapFile (
     oslFileHandle Handle,
     void**        ppAddr,
