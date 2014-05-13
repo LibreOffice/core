@@ -823,7 +823,7 @@ void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)
 
 void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::vec4& direction)
 {
-    if (m_LightsInfo.lightNum > MAX_LIGHT_NUM)
+    if (m_LightsInfo.lightNum >= MAX_LIGHT_NUM)
     {
         return;
     }
