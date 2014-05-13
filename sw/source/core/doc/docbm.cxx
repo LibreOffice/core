@@ -518,6 +518,9 @@ namespace sw { namespace mark
             "<MarkManager::repositionMark(..)>"
             " - Mark is not in my doc.");
         MarkBase* const pMarkBase = dynamic_cast< MarkBase* >(io_pMark);
+        if (!pMarkBase)
+            return;
+
         pMarkBase->SetMarkPos(*(rPaM.GetPoint()));
         if(rPaM.HasMark())
             pMarkBase->SetOtherMarkPos(*(rPaM.GetMark()));
