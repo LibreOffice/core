@@ -3754,10 +3754,11 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         aTmpPos.SetRow(mxGroup->mpTopCell->aPos.Row() + i);
         ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
         assert( pCell != NULL );
+        if (!pCell)
+            continue;
 
         // FIXME: this set of horrors is unclear to me ... certainly
         // the above GetCell is profoundly nasty & slow ...
-
         // Ensure the cell truly has a result:
         pCell->aResult = aResult;
         pCell->ResetDirty();
