@@ -194,6 +194,8 @@ void SbxDecimal::setUInt( unsigned int val )
 
 bool SbxDecimal::setString( OUString* pOUString )
 {
+    assert(pOUString);
+
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
     // Convert delimiter
@@ -471,7 +473,9 @@ start:
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
-            pnDecRes->setString( p->pOUString ); break;
+            if ( p->pOUString )
+                pnDecRes->setString( p->pOUString );
+            break;
         case SbxOBJECT:
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
