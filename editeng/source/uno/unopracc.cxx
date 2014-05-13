@@ -86,11 +86,11 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() thr
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                ::getCppuType( static_cast< const uno::Reference< beans::XPropertySet >* > (0) ),
-                ::getCppuType( static_cast< const uno::Reference< beans::XMultiPropertySet >* > (0) ),
-                ::getCppuType( static_cast< const uno::Reference< beans::XPropertyState >* > (0) ),
-                ::getCppuType( static_cast< const uno::Reference< lang::XServiceInfo >* > (0) ),
-                ::getCppuType( static_cast< const uno::Reference< lang::XTypeProvider >* > (0) ) );
+                ::cppu::UnoType<beans::XPropertySet>::get(),
+                ::cppu::UnoType<beans::XMultiPropertySet>::get(),
+                ::cppu::UnoType<beans::XPropertyState>::get(),
+                ::cppu::UnoType<lang::XServiceInfo>::get(),
+                ::cppu::UnoType<lang::XTypeProvider>::get() );
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;

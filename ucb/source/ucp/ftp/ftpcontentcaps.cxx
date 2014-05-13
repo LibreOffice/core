@@ -148,14 +148,12 @@ uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
         ucb::CommandInfo(
             OUString( "open" ),
             -1,
-            getCppuType(
-                static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+            cppu::UnoType<ucb::OpenCommandArgument2>::get()
         ),
         ucb::CommandInfo(
             OUString( "insert" ),
             -1,
-            getCppuType(
-                static_cast< ucb::InsertCommandArgument * >( 0 ) )
+            cppu::UnoType<ucb::InsertCommandArgument>::get()
         ),
         ucb::CommandInfo(
             OUString( "delete" ),

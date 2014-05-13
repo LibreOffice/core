@@ -162,10 +162,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference< task::XInteractionRequest > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<task::XInteractionRequest>::get() );
             pCollection = &collection;
         }
     }
@@ -304,10 +302,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionAbort::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference< task::XInteractionAbort > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<task::XInteractionAbort>::get() );
             pCollection = &collection;
         }
     }
@@ -396,10 +392,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRetry::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference< task::XInteractionRetry > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<task::XInteractionRetry>::get() );
             pCollection = &collection;
         }
     }
@@ -488,10 +482,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionApprove::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference< task::XInteractionApprove > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<task::XInteractionApprove>::get() );
             pCollection = &collection;
         }
     }
@@ -580,10 +572,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionDisapprove::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference< task::XInteractionDisapprove > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<task::XInteractionDisapprove>::get() );
             pCollection = &collection;
         }
     }
@@ -674,11 +664,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference<
-                        ucb::XInteractionSupplyAuthentication2 > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<ucb::XInteractionSupplyAuthentication2>::get() );
             pCollection = &collection;
         }
     }
@@ -928,10 +915,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference< ucb::XInteractionSupplyName > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<ucb::XInteractionSupplyName>::get() );
             pCollection = &collection;
         }
     }
@@ -1035,11 +1020,8 @@ uno::Sequence< uno::Type > SAL_CALL InteractionReplaceExistingData::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast<
-                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
-                getCppuType( static_cast<
-                    uno::Reference<
-                        ucb::XInteractionReplaceExistingData > * >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<ucb::XInteractionReplaceExistingData>::get() );
             pCollection = &collection;
         }
     }

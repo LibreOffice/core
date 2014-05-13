@@ -563,14 +563,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "insert" ),
                 -1,
-                getCppuType( static_cast<
-                    ucb::InsertCommandArgument * >( 0 ) ) );
+                cppu::UnoType<ucb::InsertCommandArgument>::get() );
     aCmdInfo[ 6 ] =
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
-                getCppuType( static_cast<
-                    ucb::OpenCommandArgument2 * >( 0 ) ) );
+                cppu::UnoType<ucb::OpenCommandArgument2>::get() );
 
 
     // New commands
@@ -580,20 +578,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "post" ),
                 -1,
-                getCppuType( static_cast<
-                    ucb::PostCommandArgument2 * >( 0 ) ) );
+                cppu::UnoType<ucb::PostCommandArgument2>::get() );
     aCmdInfo[ 8 ] =
             ucb::CommandInfo(
                 OUString( "addProperty" ),
                 -1,
-                getCppuType( static_cast<
-                    ucb::PropertyCommandArgument * >( 0 ) ) );
+                cppu::UnoType<ucb::PropertyCommandArgument>::get() );
     aCmdInfo[ 9 ] =
             ucb::CommandInfo(
                 OUString( "removeProperty" ),
                 -1,
-                getCppuType( static_cast<
-                    rtl::OUString * >( 0 ) ) );
+                cppu::UnoType<rtl::OUString>::get() );
 
     bool bFolder = false;
 

@@ -282,25 +282,25 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::UnoType< bool >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< bool * >(0)) ==
-        ::getCppuType(static_cast< bool * >(0)));
+        ::cppu::UnoType<bool>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< sal_Bool * >(0)) ==
         ::cppu::UnoType< bool >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< sal_Bool * >(0)) ==
-        ::getCppuType(static_cast< sal_Bool * >(0)));
+        ::cppu::UnoType<sal_Bool>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_Int8 * >(0)) ==
         ::cppu::UnoType< ::sal_Int8 >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_Int8 * >(0)) ==
-        ::getCppuType(static_cast< ::sal_Int8 * >(0)));
+        ::cppu::UnoType<sal_Int8>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_Int16 * >(0)) ==
         ::cppu::UnoType< ::sal_Int16 >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_Int16 * >(0)) ==
-        ::getCppuType(static_cast< ::sal_Int16 * >(0)));
+        ::cppu::UnoType<sal_Int16>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(
             static_cast< ::cppu::UnoUnsignedShortType * >(0)) ==
@@ -316,19 +316,19 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::UnoType< ::sal_Int32 >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_Int32 * >(0)) ==
-        ::getCppuType(static_cast< ::sal_Int32 * >(0)));
+        ::cppu::UnoType<sal_Int32>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_uInt32 * >(0)) ==
         ::cppu::UnoType< ::sal_uInt32 >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_uInt32 * >(0)) ==
-        ::getCppuType(static_cast< ::sal_uInt32 * >(0)));
+        ::cppu::UnoType<sal_uInt32>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_Int64 * >(0)) ==
         ::cppu::UnoType< ::sal_Int64 >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_Int64 * >(0)) ==
-        ::getCppuType(static_cast< ::sal_Int64 * >(0)));
+        ::cppu::UnoType<sal_Int64>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::sal_uInt64 * >(0)) ==
         ::cppu::UnoType< ::sal_uInt64 >::get());
@@ -340,13 +340,13 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::UnoType< float >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< float * >(0)) ==
-        ::getCppuType(static_cast< float * >(0)));
+        ::cppu::UnoType<float>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< double * >(0)) ==
         ::cppu::UnoType< double >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< double * >(0)) ==
-        ::getCppuType(static_cast< double * >(0)));
+        ::cppu::UnoType<double>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(
             static_cast< ::cppu::UnoCharType * >(0)) ==
@@ -362,7 +362,7 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::UnoType< ::rtl::OUString >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< ::rtl::OUString * >(0)) ==
-        ::getCppuType(static_cast< ::rtl::OUString * >(0)));
+        ::cppu::UnoType<rtl::OUString>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< css::uno::Type * >(0)) ==
         ::cppu::UnoType< css::uno::Type >::get());
@@ -446,7 +446,7 @@ void Test::testGetTypeFavourUnsigned() {
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::lang::EventObject * >(0)) ==
-        ::getCppuType(static_cast< css::lang::EventObject * >(0)));
+        ::cppu::UnoType<css::lang::EventObject>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedStruct1 * >(0)) ==
         ::cppu::UnoType< css::lang::EventObject >::get());
@@ -460,7 +460,7 @@ void Test::testGetTypeFavourUnsigned() {
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::beans::PropertyChangeEvent * >(0)) ==
-        ::getCppuType(static_cast< css::beans::PropertyChangeEvent * >(0)));
+        ::cppu::UnoType<css::beans::PropertyChangeEvent>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedStruct2 * >(0)) ==
         ::cppu::UnoType< css::beans::PropertyChangeEvent >::get());
@@ -482,7 +482,7 @@ void Test::testGetTypeFavourUnsigned() {
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::uno::Exception * >(0)) ==
-        ::getCppuType(static_cast< css::uno::Exception * >(0)));
+        ::cppu::UnoType<css::uno::Exception>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedException1 * >(0)) ==
         ::cppu::UnoType< css::uno::Exception >::get());
@@ -536,9 +536,7 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::getTypeFavourUnsigned(
             static_cast<
             css::uno::Reference< css::uno::XComponentContext > * >(0)) ==
-        ::getCppuType(
-            static_cast<
-            css::uno::Reference< css::uno::XComponentContext > * >(0)));
+        cppu::UnoType<css::uno::XComponentContext>::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedInterface2 * >(0)) ==
         ::cppu::UnoType< css::uno::XComponentContext >::get());

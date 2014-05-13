@@ -462,23 +462,23 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
         nType = DataType::BIT;      // XRow::getBoolean
     else if ( rType == cppu::UnoType<sal_Int32>::get() )
         nType = DataType::INTEGER;  // XRow::getInt
-    else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int64>::get() )
         nType = DataType::BIGINT;   // XRow::getLong
-    else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int16>::get() )
         nType = DataType::SMALLINT; // XRow::getShort
-    else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<sal_Int8>::get() )
         nType = DataType::TINYINT;  // XRow::getByte
-    else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<float>::get() )
         nType = DataType::REAL;     // XRow::getFloat
-    else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<double>::get() )
         nType = DataType::DOUBLE;   // XRow::getDouble
     else if ( rType == getCppuType( static_cast< const Sequence< sal_Int8 > * >( 0 ) ) )
         nType = DataType::VARBINARY;// XRow::getBytes
-    else if ( rType == getCppuType( static_cast< const Date * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<Date>::get() )
         nType = DataType::DATE;     // XRow::getDate
-    else if ( rType == getCppuType( static_cast< const Time * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<Time>::get() )
         nType = DataType::TIME;     // XRow::getTime
-    else if ( rType == getCppuType( static_cast< const DateTime * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<DateTime>::get() )
         nType = DataType::TIMESTAMP;// XRow::getTimestamp
     else if ( rType == getCppuType( static_cast< Reference< XInputStream > * >( 0 ) ) )
         nType = DataType::LONGVARBINARY;    // XRow::getBinaryStream

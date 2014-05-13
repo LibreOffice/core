@@ -363,14 +363,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                    cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "transfer" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::TransferInfo * >( 0 ) )
+                    cppu::UnoType<ucb::TransferInfo>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "createNewContent" ),
@@ -442,14 +440,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                    cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "transfer" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::TransferInfo * >( 0 ) )
+                    cppu::UnoType<ucb::TransferInfo>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "createNewContent" ),
@@ -521,8 +517,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
-                getCppuType(
-                    static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                cppu::UnoType<ucb::OpenCommandArgument2>::get()
             )
 
             // New commands

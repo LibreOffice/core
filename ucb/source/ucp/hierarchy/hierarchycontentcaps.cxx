@@ -535,8 +535,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                    cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 )
 
                 // New commands
@@ -590,8 +589,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                    cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "transfer" ),
@@ -654,8 +652,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                    cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 )
 
                 // New commands
@@ -699,8 +696,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                    cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 ),
                 ucb::CommandInfo(
                     OUString( "transfer" ),

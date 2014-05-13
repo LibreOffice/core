@@ -99,8 +99,8 @@ FileContentIdentifier::getTypes(
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( static_cast< uno::Reference< lang::XTypeProvider >* >( 0 ) ),
-                getCppuType( static_cast< uno::Reference< XContentIdentifier >* >( 0 ) ) );
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<XContentIdentifier>::get() );
             pCollection = &collection;
         }
     }

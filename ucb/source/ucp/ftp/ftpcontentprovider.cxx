@@ -98,9 +98,9 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContentProvider::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                    getCppuType( static_cast< css::uno::Reference< XTypeProvider >*>(0) ),
-                    getCppuType( static_cast< css::uno::Reference< XServiceInfo>*> (0) ),
-                    getCppuType( static_cast< css::uno::Reference< XContentProvider>*> (0) )
+                    cppu::UnoType<XTypeProvider>::get(),
+                    cppu::UnoType<XServiceInfo>::get(),
+                    cppu::UnoType<XContentProvider>::get()
                 );
             pCollection = &collection;
         }

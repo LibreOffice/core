@@ -65,7 +65,7 @@ void SAL_CALL ConfigFlush::refresh()
     // Further its not a good idea to hold the own lock
     // if an outside object is called :-)
     css::lang::EventObject             aSource    (static_cast< css::util::XRefreshable* >(this));
-    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(::getCppuType(static_cast< css::uno::Reference< css::util::XRefreshListener >* >(NULL)));
+    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XRefreshListener>::get());
     if (pContainer)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -94,7 +94,7 @@ void SAL_CALL ConfigFlush::addRefreshListener(const css::uno::Reference< css::ut
 {
     // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.addInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XRefreshListener >* >(NULL)),
+    m_lListener.addInterface(cppu::UnoType<css::util::XRefreshListener>::get(),
                              xListener);
 }
 
@@ -104,7 +104,7 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 {
     // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.removeInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XRefreshListener >* >(NULL)),
+    m_lListener.removeInterface(cppu::UnoType<css::util::XRefreshListener>::get(),
                                 xListener);
 }
 

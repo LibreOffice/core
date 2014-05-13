@@ -212,8 +212,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 OUString( "Storage" ),
                 -1,
-                getCppuType( static_cast<
-                    const uno::Reference< embed::XStorage > * >( 0 ) ),
+                cppu::UnoType<embed::XStorage>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             )
@@ -279,8 +278,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 OUString( "DocumentModel" ),
                 -1,
-                getCppuType( static_cast<
-                    const uno::Reference< frame::XModel > * >( 0 ) ),
+                cppu::UnoType<frame::XModel>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             )
@@ -410,8 +408,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     OUString( "open" ),
                     -1,
-                    getCppuType(
-                        static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                    cppu::UnoType<ucb::OpenCommandArgument2>::get()
                 )
 
                 // New commands
@@ -470,8 +467,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
-                getCppuType(
-                    static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                cppu::UnoType<ucb::OpenCommandArgument2>::get()
             )
 
             // New commands
@@ -531,8 +527,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
-                getCppuType(
-                    static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                cppu::UnoType<ucb::OpenCommandArgument2>::get()
             ),
             ucb::CommandInfo(
                 OUString( "transfer" ),
@@ -592,8 +587,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
-                getCppuType(
-                    static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                cppu::UnoType<ucb::OpenCommandArgument2>::get()
             ),
             ucb::CommandInfo(
                 OUString( "transfer" ),
@@ -655,8 +649,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 OUString( "open" ),
                 -1,
-                getCppuType(
-                    static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
+                cppu::UnoType<ucb::OpenCommandArgument2>::get()
             )
 
             // New commands

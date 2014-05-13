@@ -188,7 +188,7 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
         star::ucb::CommandInfo(
             "open",
             -1,
-            getCppuType( static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+            cppu::UnoType<star::ucb::OpenCommandArgument2>::get()
         )
     };
 

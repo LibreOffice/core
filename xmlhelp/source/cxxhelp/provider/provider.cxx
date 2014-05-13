@@ -105,11 +105,11 @@ css::uno::Sequence< css::uno::Type > SAL_CALL ContentProvider::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                    getCppuType( static_cast< css::uno::Reference< lang::XTypeProvider > *>(0)),
-                    getCppuType( static_cast< css::uno::Reference< lang::XServiceInfo > *>(0)),
-                    getCppuType( static_cast< css::uno::Reference< ucb::XContentProvider > *>(0)),
-                    getCppuType( static_cast< css::uno::Reference< lang::XComponent > *>(0)),
-                    getCppuType( static_cast< css::uno::Reference< container::XContainerListener > *>(0))
+                    cppu::UnoType<lang::XTypeProvider>::get(),
+                    cppu::UnoType<lang::XServiceInfo>::get(),
+                    cppu::UnoType<ucb::XContentProvider>::get(),
+                    cppu::UnoType<lang::XComponent>::get(),
+                    cppu::UnoType<container::XContainerListener>::get()
                 );
             pCollection = &collection;
         }

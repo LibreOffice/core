@@ -37,13 +37,13 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
 
     aInterceptedRequest.Handle = HANDLE_INTERACTIVEIOEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::InteractiveIOException();
-    aInterceptedRequest.Continuation = ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0));
+    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
     aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     aInterceptedRequest.Handle = HANDLE_UNSUPPORTEDDATASINKEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::UnsupportedDataSinkException();
-    aInterceptedRequest.Continuation = ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0));
+    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
     aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
@@ -108,7 +108,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
         m_bHandledByMySelf = true;
         css::uno::Reference< css::task::XInteractionContinuation > xAbort = ::ucbhelper::InterceptedInteraction::extractContinuation(
             xRequest->getContinuations(),
-            ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0)));
+            cppu::UnoType<css::task::XInteractionAbort>::get() );
         if (!xAbort.is())
             return ::ucbhelper::InterceptedInteraction::E_NO_CONTINUATION_FOUND;
         xAbort->select();
