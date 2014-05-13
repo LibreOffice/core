@@ -53,6 +53,8 @@ public:
      */
     static void setExpandRefs(bool bExpand);
 
+    static void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
+
     template<size_t _Size>
     static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
     {
@@ -131,6 +133,7 @@ public:
     void testFormulaRefUpdateNamedExpression();
     void testFormulaRefUpdateNamedExpressionMove();
     void testFormulaRefUpdateNamedExpressionExpandRef();
+    void testFormulaRefUpdateValidity();
     void testMultipleOperations();
     void testFuncCOLUMN();
     void testFuncCOUNT();
@@ -389,6 +392,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateNamedExpression);
     CPPUNIT_TEST(testFormulaRefUpdateNamedExpressionMove);
     CPPUNIT_TEST(testFormulaRefUpdateNamedExpressionExpandRef);
+    CPPUNIT_TEST(testFormulaRefUpdateValidity);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
     CPPUNIT_TEST(testFuncCOUNT);

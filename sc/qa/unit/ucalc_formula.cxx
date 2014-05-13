@@ -23,6 +23,10 @@
 #include "paramisc.hxx"
 #include "tokenstringcontext.hxx"
 #include "dbdata.hxx"
+#include <validat.hxx>
+#include <scitems.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
 
 #include <formula/vectortoken.hxx>
 
@@ -2107,6 +2111,129 @@ void Test::testFormulaRefUpdateNamedExpressionExpandRef()
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,0,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,1,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaRefUpdateValidity()
+{
+    struct {
+
+        bool checkList( std::vector<ScTypedStrData>& rList )
+        {
+            double aExpected[] = { 1.0, 2.0, 3.0 }; // must be sorted.
+            size_t nCheckSize = SAL_N_ELEMENTS(aExpected);
+
+            if (rList.size() != nCheckSize)
+            {
+                cerr << "List size is not what is expected." << endl;
+                return false;
+            }
+
+            std::sort(rList.begin(), rList.end(), ScTypedStrData::LessCaseSensitive());
+
+            for (size_t i = 0; i < nCheckSize; ++i)
+            {
+                if (aExpected[i] != rList[i].GetValue())
+                {
+                    cerr << "Incorrect value at position " << i
+                        << ": expected=" << aExpected[i] << ", actual=" << rList[i].GetValue() << endl;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    } aCheck;
+
+    setExpandRefs(false);
+    setCalcAsShown(m_pDoc, true);
+
+    m_pDoc->InsertTab(0, "Formula");
+
+    // Set values in C2:C4.
+    m_pDoc->SetValue(ScAddress(2,1,0), 1.0);
+    m_pDoc->SetValue(ScAddress(2,2,0), 2.0);
+    m_pDoc->SetValue(ScAddress(2,3,0), 3.0);
+
+    // Set validity in A2.
+    ScValidationData aData(
+        SC_VALID_LIST, SC_COND_EQUAL, "C2:C4", "", m_pDoc, ScAddress(0,1,0), "", "",
+        m_pDoc->GetGrammar(), m_pDoc->GetGrammar());
+
+    sal_uLong nIndex = m_pDoc->AddValidationEntry(aData);
+    SfxUInt32Item aItem(ATTR_VALIDDATA, nIndex);
+
+    ScPatternAttr aNewAttrs(
+        new SfxItemSet(*m_pDoc->GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END));
+    aNewAttrs.GetItemSet().Put(aItem);
+
+    m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);
+
+    const ScValidationData* pData = m_pDoc->GetValidationEntry(nIndex);
+    CPPUNIT_ASSERT(pData);
+
+    // Make sure the list is correct.
+    std::vector<ScTypedStrData> aList;
+    pData->FillSelectionList(aList, ScAddress(0,1,0));
+    bool bGood = aCheck.checkList(aList);
+    CPPUNIT_ASSERT_MESSAGE("Initial list is incorrect.", bGood);
+
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Insert a new column at Column B, to move the list from C2:C4 to D2:D4.
+    bool bInserted = rFunc.InsertCells(ScRange(1,0,0,1,MAXROW,0), &aMark, INS_INSCOLS, true, true, false);
+    CPPUNIT_ASSERT_MESSAGE("Column insertion failed.", bInserted);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(3,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,3,0)));
+
+    // Check the list values again.
+    aList.clear();
+    pData->FillSelectionList(aList, ScAddress(0,1,0));
+    bGood = aCheck.checkList(aList);
+    CPPUNIT_ASSERT_MESSAGE("List content is incorrect after column insertion.", bGood);
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and check the list content again.  The list moves back to C2:C4 after the undo.
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+
+    aList.clear();
+    pData->FillSelectionList(aList, ScAddress(0,1,0));
+    bGood = aCheck.checkList(aList);
+    CPPUNIT_ASSERT_MESSAGE("List content is incorrect after undo of column insertion.", bGood);
+
+    // Move C2:C4 to E5:E7.
+    bool bMoved = rFunc.MoveBlock(ScRange(2,1,0,2,3,0), ScAddress(4,4,0), false, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(4,4,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,5,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(4,6,0)));
+
+    // Check the list again after the move.
+    aList.clear();
+    pData->FillSelectionList(aList, ScAddress(0,1,0));
+    bGood = aCheck.checkList(aList);
+    CPPUNIT_ASSERT_MESSAGE("List content is incorrect after moving C2:C4 to E5:E7.", bGood);
+
+    // Undo the move and check.  The list should be back to C2:C4.
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
+
+    aList.clear();
+    pData->FillSelectionList(aList, ScAddress(0,1,0));
+    bGood = aCheck.checkList(aList);
+    CPPUNIT_ASSERT_MESSAGE("List content is incorrect after undo of the move.", bGood);
 
     m_pDoc->DeleteTab(0);
 }

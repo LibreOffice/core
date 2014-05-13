@@ -1408,8 +1408,8 @@ public:
 
     SC_DLLPUBLIC ScConditionalFormatList* GetCondFormList( SCTAB nTab ) const;
 
-    ScValidationDataList* GetValidationList() const
-                    { return pValidationList; }
+    const ScValidationDataList* GetValidationList() const;
+    ScValidationDataList* GetValidationList();
 
     SC_DLLPUBLIC void           ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const SfxPoolItem& rAttr );

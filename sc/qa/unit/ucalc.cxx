@@ -6245,6 +6245,13 @@ void Test::setExpandRefs(bool bExpand)
     pMod->SetInputOptions(aOpt);
 }
 
+void Test::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
+{
+    ScDocOptions aOpt = pDoc->GetDocOptions();
+    aOpt.SetCalcAsShown(bCalcAsShown);
+    pDoc->SetDocOptions(aOpt);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
