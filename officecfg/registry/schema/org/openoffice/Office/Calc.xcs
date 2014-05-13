@@ -720,7 +720,7 @@
           <desc>Use legacy behaviour when selecting cells</desc>
           <label>Use legacy behaviour when selecting cells</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
         <!-- OldPath: Calc/Input -->
