@@ -35,7 +35,6 @@ class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem
 public:
                             TYPEINFO_OVERRIDE();
                             XFillStyleItem(XFillStyle = XFILL_SOLID);
-                            XFillStyleItem(XFillStyle, sal_uInt16 nWhich);
                             XFillStyleItem(SvStream& rIn);
 
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;

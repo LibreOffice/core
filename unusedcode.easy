@@ -80,7 +80,6 @@ VCLXGraphics::getLineColor()
 VCLXGraphics::getRasterOp()
 VCLXGraphics::getTextColor()
 VCLXGraphics::getTextFillColor()
-XFillStyleItem::XFillStyleItem(XFillStyle, unsigned short)
 XGradient::VclGradient() const
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()

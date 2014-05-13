@@ -2247,11 +2247,6 @@ XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle) :
 {
 }
 
-XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle, sal_uInt16 nWhich_) :
-    SfxEnumItem(nWhich_, sal::static_int_cast< sal_uInt16 >(eFillStyle))
-{
-}
-
 XFillStyleItem::XFillStyleItem(SvStream& rIn) :
     SfxEnumItem(XATTR_FILLSTYLE, rIn)
 {
