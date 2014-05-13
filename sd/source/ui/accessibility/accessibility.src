@@ -210,7 +210,7 @@ String  SID_SD_A11Y_P_OUTLINER_N_STYLE
 
 String  SID_SD_A11Y_P_SUBTITLE_N_STYLE
 {
-    Text [ en-US ] = "Sub Title";
+    Text [ en-US ] = "Subtitle";
 };
 
 String  SID_SD_A11Y_P_PAGE_N_STYLE
