@@ -931,6 +931,14 @@ sal_Int32 ComboBox::GetEntryPos( const OUString& rStr ) const
     return nPos;
 }
 
+sal_Int32 ComboBox::GetEntryPos( const void* pData ) const
+{
+    sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( pData );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        nPos = nPos - mpImplLB->GetEntryList()->GetMRUCount();
+    return nPos;
+}
+
 OUString ComboBox::GetEntry( sal_Int32 nPos ) const
 {
     const sal_Int32 nMRUCount = mpImplLB->GetEntryList()->GetMRUCount();

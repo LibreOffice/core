@@ -138,6 +138,7 @@ public:
     void            Clear();
 
     sal_Int32       GetEntryPos( const OUString& rStr ) const;
+    sal_Int32       GetEntryPos( const void* pData ) const;
     Image           GetEntryImage( sal_Int32  nPos ) const;
     OUString        GetEntry( sal_Int32  nPos ) const;
     sal_Int32       GetEntryCount() const;
