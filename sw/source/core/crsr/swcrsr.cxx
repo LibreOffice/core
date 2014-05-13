@@ -2218,7 +2218,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             if( !( pNd = &pPos->nNode.GetNode())->IsCntntNode() )
                 pNd = rNds.GoPrevSection( &pPos->nNode, true, false );
 
-            pPos->nContent.Assign( (SwCntntNode*)pNd, ((SwCntntNode*)pNd)->Len() );
+            pPos->nContent.Assign((SwCntntNode*)pNd, pNd ? ((SwCntntNode*)pNd)->Len() : 0);
         }
     }
     return pAktCrsr;
