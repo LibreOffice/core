@@ -1712,7 +1712,8 @@ static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         {
             pTmpTab = pTmpTab->GetFollow();
             rpStart = pTmpTab->FirstCell();
-            while ( (rpStart->Frm().*fnRect->fnGetLeft)() < nSX &&
+            while ( rpStart &&
+                    (rpStart->Frm().*fnRect->fnGetLeft)() < nSX &&
                     (rpStart->Frm().*fnRect->fnGetRight)()< nSX2 )
                 rpStart = rpStart->GetNextLayoutLeaf();
         }
@@ -1801,7 +1802,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     else if( nsSwTblSearchType::TBLSEARCH_COL == ((~nsSwTblSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
         ::lcl_FindStartEndCol( pStart, pEnd, nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType );
 
-    if ( !pEnd ) return; // Made code robust.
+    if ( !pEnd || !pStart ) return; // Made code robust.
 
     // retrieve again, as they have been moved
     pTable = pStart->FindTabFrm();
