@@ -23,4 +23,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.mingw.patch.3) \
 ))
 
+ifeq ($(COM_GCC_IS_CLANG)$(filter -fsanitize=address,$(CC)),TRUE-fsanitize=address)
+$(eval $(call gb_UnpackedTarball_add_patches,nss,\
+	external/nss/asan.patch.1 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
