@@ -906,8 +906,10 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
 
     Point aPixPos(aRect.X, aRect.Y);
 
-    /* getBoundsImpl already checked that GetWindow returns valid pointer. */
-    aPixPos = GetWindow()->OutputToAbsoluteScreenPixel(aPixPos);
+    Window *pWin = GetWindow();
+    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+
+    aPixPos = pWin->OutputToAbsoluteScreenPixel(aPixPos);
     awt::Point aPoint(aPixPos.getX(), aPixPos.getY());
 
     return aPoint;
