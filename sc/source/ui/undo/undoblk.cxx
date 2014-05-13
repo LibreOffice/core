@@ -49,6 +49,8 @@
 #include "sc.hrc"
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
+#include <refupdatecontext.hxx>
+#include <validat.hxx>
 
 #include <set>
 #include <boost/scoped_ptr.hpp>
@@ -1264,6 +1266,19 @@ void ScUndoDragDrop::Undo()
         SCTAB nTabDelta = aSrcRange.aStart.Tab() - aDestRange.aStart.Tab();
         sc::RefMovedHint aHint(aDestRange, ScAddress(nColDelta, nRowDelta, nTabDelta));
         pDoc->BroadcastRefMoved(aHint);
+
+        ScValidationDataList* pValidList = pDoc->GetValidationList();
+        if (pValidList)
+        {
+            // Update the references of validation entries.
+            sc::RefUpdateContext aCxt(*pDoc);
+            aCxt.meMode = URM_MOVE;
+            aCxt.maRange = aSrcRange;
+            aCxt.mnColDelta = nColDelta;
+            aCxt.mnRowDelta = nRowDelta;
+            aCxt.mnTabDelta = nTabDelta;
+            pValidList->UpdateReference(aCxt);
+        }
     }
 
     DoUndo(aDestRange);

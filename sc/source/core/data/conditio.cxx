@@ -513,13 +513,38 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
 
     if (pFormula1)
     {
-        sc::RefUpdateResult aRes = pFormula1->AdjustReferenceInName(rCxt, aOldSrcPos);
+        sc::RefUpdateResult aRes;
+        switch (rCxt.meMode)
+        {
+            case URM_INSDEL:
+                aRes = pFormula1->AdjustReferenceOnShift(rCxt, aOldSrcPos);
+            break;
+            case URM_MOVE:
+                aRes = pFormula1->AdjustReferenceOnMove(rCxt, aOldSrcPos, aSrcPos);
+            break;
+            default:
+                ;
+        }
+
         if (aRes.mbReferenceModified || bChangedPos)
             DELETEZ(pFCell1);       // is created again in IsValid
     }
+
     if (pFormula2)
     {
-        sc::RefUpdateResult aRes = pFormula2->AdjustReferenceInName(rCxt, aOldSrcPos);
+        sc::RefUpdateResult aRes;
+        switch (rCxt.meMode)
+        {
+            case URM_INSDEL:
+                aRes = pFormula2->AdjustReferenceOnShift(rCxt, aOldSrcPos);
+            break;
+            case URM_MOVE:
+                aRes = pFormula2->AdjustReferenceOnMove(rCxt, aOldSrcPos, aSrcPos);
+            break;
+            default:
+                ;
+        }
+
         if (aRes.mbReferenceModified || bChangedPos)
             DELETEZ(pFCell2);       // is created again in IsValid
     }
