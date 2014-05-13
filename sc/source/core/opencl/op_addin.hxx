@@ -21,6 +21,13 @@ public:
         const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Besselj"; }
 };
+class OpGestep: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Gestep"; }
+};
 
 }}
 
