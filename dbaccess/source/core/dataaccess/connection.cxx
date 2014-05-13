@@ -78,7 +78,6 @@ namespace dbaccess
 // XServiceInfo
 OUString OConnection::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getImplementationName" );
     return OUString("com.sun.star.comp.dbaccess.Connection");
 }
 
@@ -89,7 +88,6 @@ sal_Bool OConnection::supportsService( const OUString& _rServiceName ) throw (Ru
 
 Sequence< OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getSupportedServiceNames" );
     Sequence< OUString > aSupported = OConnectionWrapper::getSupportedServiceNames();
 
     if ( 0 == findValue( aSupported, SERVICE_SDB_CONNECTION, true ).getLength() )
@@ -105,14 +103,12 @@ Sequence< OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeExc
 // XCloseable
 void OConnection::close(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::close" );
     // being closed is the same as being disposed
     dispose();
 }
 
 sal_Bool OConnection::isClosed(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::isClosed" );
     MutexGuard aGuard(m_aMutex);
     return !m_xMasterConnection.is();
 }
@@ -120,7 +116,6 @@ sal_Bool OConnection::isClosed(void) throw( SQLException, RuntimeException, std:
 // XConnection
 Reference< XStatement >  OConnection::createStatement(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::createStatement" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -136,7 +131,6 @@ Reference< XStatement >  OConnection::createStatement(void) throw( SQLException,
 
 Reference< XPreparedStatement >  OConnection::prepareStatement(const OUString& sql) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::prepareStatement" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -153,7 +147,6 @@ Reference< XPreparedStatement >  OConnection::prepareStatement(const OUString& s
 
 Reference< XPreparedStatement >  OConnection::prepareCall(const OUString& sql) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::prepareCall" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -169,7 +162,6 @@ Reference< XPreparedStatement >  OConnection::prepareCall(const OUString& sql) t
 
 OUString OConnection::nativeSQL(const OUString& sql) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::nativeSQL" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xMasterConnection->nativeSQL(sql);
@@ -177,7 +169,6 @@ OUString OConnection::nativeSQL(const OUString& sql) throw( SQLException, Runtim
 
 void OConnection::setAutoCommit(sal_Bool autoCommit) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::setAutoCommit" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->setAutoCommit(autoCommit);
@@ -185,7 +176,6 @@ void OConnection::setAutoCommit(sal_Bool autoCommit) throw( SQLException, Runtim
 
 sal_Bool OConnection::getAutoCommit(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getAutoCommit" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xMasterConnection->getAutoCommit();
@@ -193,7 +183,6 @@ sal_Bool OConnection::getAutoCommit(void) throw( SQLException, RuntimeException,
 
 void OConnection::commit(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::commit" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->commit();
@@ -201,7 +190,6 @@ void OConnection::commit(void) throw( SQLException, RuntimeException, std::excep
 
 void OConnection::rollback(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::rollback" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->rollback();
@@ -209,7 +197,6 @@ void OConnection::rollback(void) throw( SQLException, RuntimeException, std::exc
 
 Reference< XDatabaseMetaData >  OConnection::getMetaData(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getMetaData" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xMasterConnection->getMetaData();
@@ -217,7 +204,6 @@ Reference< XDatabaseMetaData >  OConnection::getMetaData(void) throw( SQLExcepti
 
 void OConnection::setReadOnly(sal_Bool readOnly) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::setReadOnly" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->setReadOnly(readOnly);
@@ -225,7 +211,6 @@ void OConnection::setReadOnly(sal_Bool readOnly) throw( SQLException, RuntimeExc
 
 sal_Bool OConnection::isReadOnly(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::isReadOnly" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xMasterConnection->isReadOnly();
@@ -233,7 +218,6 @@ sal_Bool OConnection::isReadOnly(void) throw( SQLException, RuntimeException, st
 
 void OConnection::setCatalog(const OUString& catalog) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::setCatalog" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->setCatalog(catalog);
@@ -241,7 +225,6 @@ void OConnection::setCatalog(const OUString& catalog) throw( SQLException, Runti
 
 OUString OConnection::getCatalog(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getCatalog" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xMasterConnection->getCatalog();
@@ -249,7 +232,6 @@ OUString OConnection::getCatalog(void) throw( SQLException, RuntimeException, st
 
 void OConnection::setTransactionIsolation(sal_Int32 level) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::setTransactionIsolation" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->setTransactionIsolation(level);
@@ -257,7 +239,6 @@ void OConnection::setTransactionIsolation(sal_Int32 level) throw( SQLException, 
 
 sal_Int32 OConnection::getTransactionIsolation(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getTransactionIsolation" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xMasterConnection->getTransactionIsolation();
@@ -265,7 +246,6 @@ sal_Int32 OConnection::getTransactionIsolation(void) throw( SQLException, Runtim
 
 Reference< XNameAccess >  OConnection::getTypeMap(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getTypeMap" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xMasterConnection->getTypeMap();
@@ -273,7 +253,6 @@ Reference< XNameAccess >  OConnection::getTypeMap(void) throw( SQLException, Run
 
 void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::setTypeMap" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_xMasterConnection->setTypeMap(typeMap);
@@ -300,7 +279,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_bSupportsUsers(false)
             ,m_bSupportsGroups(false)
 {
-    SAL_INFO("dbaccess", "OConnection::OConnection" );
     osl_atomic_increment(&m_refCount);
 
     try
@@ -388,7 +366,6 @@ OConnection::~OConnection()
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings() throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getWarnings" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_aWarnings.getWarnings();
@@ -396,7 +373,6 @@ Any SAL_CALL OConnection::getWarnings() throw(SQLException, RuntimeException, st
 
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::clearWarnings" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     m_aWarnings.clearWarnings();
@@ -423,7 +399,6 @@ namespace
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > OConnection::getTypes() throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getTypes" );
     TypeBag aNormalizedTypes;
 
     lcl_copyTypes( aNormalizedTypes, OSubComponent::getTypes() );
@@ -481,7 +456,6 @@ void OConnection::release() throw ()
 // OSubComponent
 void OConnection::disposing()
 {
-    SAL_INFO("dbaccess", "OConnection::disposing" );
     MutexGuard aGuard(m_aMutex);
 
     OSubComponent::disposing();
@@ -526,7 +500,6 @@ void OConnection::disposing()
 // XChild
 Reference< XInterface >  OConnection::getParent(void) throw( RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getParent" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xParent;
@@ -534,14 +507,12 @@ Reference< XInterface >  OConnection::getParent(void) throw( RuntimeException, s
 
 void OConnection::setParent(const Reference< XInterface > & /*Parent*/) throw( NoSupportException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::setParent" );
     throw NoSupportException();
 }
 
 // XSQLQueryComposerFactory
 Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::createQueryComposer" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -563,7 +534,6 @@ void OConnection::impl_fillTableFilter()
 
 void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
 {
-    SAL_INFO("dbaccess", "OConnection::refresh" );
     if ( _rToBeRefreshed == Reference< XNameAccess >(m_pTables) )
     {
         if (m_pTables && !m_pTables->isInitialized())
@@ -601,7 +571,6 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
 // XTablesSupplier
 Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getTables" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -612,7 +581,6 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException, std:
 
 Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getViews" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -624,7 +592,6 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
 // XQueriesSupplier
 Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OConnection::getQueries" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -634,7 +601,6 @@ Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException,
 // ::com::sun::star::sdb::XCommandPreparation
 Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::prepareCommand" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -666,7 +632,6 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUS
 
 Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _sServiceSpecifier ) throw (Exception, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::createInstance" );
     Reference< XServiceInfo > xRet;
     if ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier || _sServiceSpecifier == "com.sun.star.sdb.SingleSelectQueryAnalyzer" )
     {
@@ -697,13 +662,11 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
 
 Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const OUString& _sServiceSpecifier, const Sequence< Any >& /*Arguments*/ ) throw (Exception, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::createInstanceWithArguments" );
     return createInstance(_sServiceSpecifier);
 }
 
 Sequence< OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getAvailableServiceNames" );
     Sequence< OUString > aRet(1);
     aRet[0] = SERVICE_NAME_SINGLESELECTQUERYCOMPOSER;
     return aRet;
@@ -711,7 +674,6 @@ Sequence< OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) throw (R
 
 Reference< XTablesSupplier > OConnection::getMasterTables()
 {
-    SAL_INFO("dbaccess", "OConnection::getMasterTables" );
 // check if out "master connection" can supply tables
     if(!m_xMasterTables.is())
     {
@@ -731,7 +693,6 @@ Reference< XTablesSupplier > OConnection::getMasterTables()
 // XUsersSupplier
 Reference< XNameAccess > SAL_CALL OConnection::getUsers(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getUsers" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
@@ -742,7 +703,6 @@ Reference< XNameAccess > SAL_CALL OConnection::getUsers(  ) throw(RuntimeExcepti
 // XGroupsSupplier
 Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getGroups" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     Reference<XGroupsSupplier> xGrp(getMasterTables(),UNO_QUERY);
@@ -751,14 +711,11 @@ Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeExcept
 
 void OConnection::impl_loadConnectionTools_throw()
 {
-    SAL_INFO("dbaccess", "OConnection::impl_loadConnectionTools_throw" );
-
     m_xConnectionTools = css::sdb::tools::ConnectionTools::createWithConnection( m_aContext, this );
 }
 
 Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::createTableName" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     impl_loadConnectionTools_throw();
@@ -768,7 +725,6 @@ Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (Runtime
 
 Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getObjectNames" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     impl_loadConnectionTools_throw();
@@ -778,7 +734,6 @@ Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (Runtim
 
 Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getDataSourceMetaData" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     impl_loadConnectionTools_throw();
@@ -788,7 +743,6 @@ Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  )
 
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& keepFieldsAlive ) throw (::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getFieldsByCommandDescriptor" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     impl_loadConnectionTools_throw();
@@ -798,7 +752,6 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getF
 
 Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getComposer" );
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     impl_loadConnectionTools_throw();
@@ -808,7 +761,6 @@ Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal
 
 void OConnection::impl_checkTableQueryNames_nothrow()
 {
-    SAL_INFO("dbaccess", "OConnection::impl_checkTableQueryNames_nothrow" );
     DatabaseMetaData aMeta( static_cast< XConnection* >( this ) );
     if ( !aMeta.supportsSubqueriesInFrom() )
         // nothing to do
@@ -843,7 +795,6 @@ void OConnection::impl_checkTableQueryNames_nothrow()
 
 Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& _TableName, ::sal_Int32 _ColorMode ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getTableIcon" );
     Reference< XGraphic > xReturn;
 
     // ask our aggregate
@@ -860,7 +811,6 @@ Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& _Table
 
 Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getTableEditor" );
     Reference< XInterface > xReturn;
 
     // ask our aggregate

@@ -66,7 +66,6 @@ ORTFReader::ORTFReader( SvStream& rIn,
     :SvRTFParser(rIn)
     ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, pList, _pInfoMap, rIn )
 {
-    SAL_INFO("dbaccess.ui", "ORTFReader::ORTFReader" );
     m_bAppendFirstLine = false;
 }
 
@@ -81,7 +80,6 @@ ORTFReader::ORTFReader(SvStream& rIn,
    :SvRTFParser(rIn)
    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
-    SAL_INFO("dbaccess.ui", "ORTFReader::ORTFReader" );
     m_bAppendFirstLine = false;
 }
 
@@ -91,7 +89,6 @@ ORTFReader::~ORTFReader()
 
 SvParserState ORTFReader::CallParser()
 {
-    SAL_INFO("dbaccess.ui", "ORTFReader::CallParser" );
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
     SvParserState  eParseState = SvRTFParser::CallParser();
@@ -101,7 +98,6 @@ SvParserState ORTFReader::CallParser()
 
 void ORTFReader::NextToken( int nToken )
 {
-    SAL_INFO("dbaccess.ui", "ORTFReader::NextToken" );
     if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
         return;
 
@@ -253,7 +249,6 @@ void ORTFReader::NextToken( int nToken )
 
 bool ORTFReader::CreateTable(int nToken)
 {
-    SAL_INFO("dbaccess.ui", "ORTFReader::CreateTable" );
     OUString aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.getToken(0,' ');
     aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
@@ -336,13 +331,11 @@ bool ORTFReader::CreateTable(int nToken)
 
 void ORTFReader::release()
 {
-    SAL_INFO("dbaccess.ui", "ORTFReader::release" );
     ReleaseRef();
 }
 
 TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 {
-    SAL_INFO("dbaccess.ui", "ORTFReader::getTypeSelectionPageFactory" );
     return &OWizRTFExtend::Create;
 }
 

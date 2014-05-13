@@ -1801,8 +1801,6 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
 
 void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotification)
 {
-    SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn" );
-
     // now we can dispose our old connection
     ::comphelper::disposeComponent(m_xOldConnection);
     m_xOldConnection = NULL;

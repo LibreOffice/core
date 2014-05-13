@@ -112,12 +112,10 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
 
 OTableContainer::~OTableContainer()
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::OTableContainer" );
 }
 
 void OTableContainer::removeMasterContainerListener()
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::removeMasterContainerListener" );
     try
     {
         Reference<XContainer> xCont( m_xMasterContainer, UNO_QUERY_THROW );
@@ -165,7 +163,6 @@ void lcl_createDefintionObject(const OUString& _rName
 
 connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _rName)
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::createObject" );
     Reference<XColumnsSupplier > xSup;
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
         xSup.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
@@ -237,7 +234,6 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
 
 Reference< XPropertySet > OTableContainer::createDescriptor()
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::createDescriptor" );
     Reference< XPropertySet > xRet;
 
     // first we have to look if the master tables support this
@@ -263,7 +259,6 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
 // XAppend
 ObjectType OTableContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::appendObject" );
     // append the new table with a create stmt
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(aName))
@@ -350,7 +345,6 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 // XDrop
 void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::dropObject" );
     m_bInDrop = true;
     try
     {
@@ -414,7 +408,6 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 
 void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception)
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementInserted" );
     ::osl::MutexGuard aGuard(m_rMutex);
     OUString sName;
     Event.Accessor >>= sName;
@@ -433,12 +426,10 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 
 void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementRemoved" );
 }
 
 void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception)
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementReplaced" );
     // create a new config entry
     {
         OUString sOldComposedName,sNewComposedName;
@@ -451,7 +442,6 @@ void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) th
 
 void SAL_CALL OTableContainer::disposing()
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::disposing" );
     OFilteredContainer::disposing();
     // say goodbye to our listeners
     m_xTableDefinitions = NULL;
@@ -460,7 +450,6 @@ void SAL_CALL OTableContainer::disposing()
 
 void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::disposing" );
 }
 
 void OTableContainer::addMasterContainerListener()

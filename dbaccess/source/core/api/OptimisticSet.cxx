@@ -94,7 +94,6 @@ OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
 {
-    SAL_INFO("dbaccess", "OptimisticSet::OptimisticSet" );
 }
 
 OptimisticSet::~OptimisticSet()
@@ -103,8 +102,6 @@ OptimisticSet::~OptimisticSet()
 
 void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)
 {
-    SAL_INFO("dbaccess", "OptimisticSet::construct" );
-
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
 
     initColumns();
@@ -183,7 +180,6 @@ Sequence< sal_Int32 > SAL_CALL OptimisticSet::deleteRows( const Sequence< Any >&
 
 void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "OptimisticSet::updateRow" );
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
     // list all cloumns that should be set
@@ -258,7 +254,6 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
 
 void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "OptimisticSet::insertRow" );
     TSQLStatements aSql;
     TSQLStatements aParameter;
     TSQLStatements aKeyConditions;
@@ -392,8 +387,6 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
 
 void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,const OUString& i_sTableName)
 {
-    SAL_INFO("dbaccess", "OptimisticSet::executeDelete" );
-
     // now create and execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);

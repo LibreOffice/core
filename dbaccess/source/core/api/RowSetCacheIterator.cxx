@@ -27,7 +27,6 @@ ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
 , m_pCache(_rRH.m_pCache)
 ,m_pRowSet(_rRH.m_pRowSet)
 {
-    SAL_INFO("dbaccess", "ORowSetCacheIterator::ORowSetCacheIterator" );
 }
 
 ORowSetCacheIterator::operator ORowSetMatrix::iterator()
@@ -107,13 +106,11 @@ bool ORowSetCacheIterator::operator ==(const ORowSetMatrix::iterator& _rRH) cons
 
 void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBookmark)
 {
-    SAL_INFO("dbaccess", "ORowSetCacheIterator::setBookmark" );
     m_aIter->second.aBookmark = _rBookmark;
 }
 
 bool ORowSetCacheIterator::isNull() const
 {
-    SAL_INFO("dbaccess", "ORowSetCacheIterator::isNull" );
     bool bRet = !m_pCache || !m_pRowSet || m_aIter == m_pCache->m_aCacheIterators.end();
     if ( !bRet )
     {
@@ -129,7 +126,6 @@ bool ORowSetCacheIterator::isNull() const
 
 ::osl::Mutex* ORowSetCacheIterator::getMutex() const
 {
-    SAL_INFO("dbaccess", "ORowSetCacheIterator::getMutex" );
     return m_pRowSet ? m_pRowSet->getMutex() : NULL;
 }
 

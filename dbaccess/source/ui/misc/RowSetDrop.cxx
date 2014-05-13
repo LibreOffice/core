@@ -50,13 +50,11 @@ ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             ,m_pParent(_pParent)
                                             ,m_bAlreadyAsked(false)
 {
-    SAL_INFO("dbaccess.ui", "ORowSetImportExport::ORowSetImportExport" );
     OSL_ENSURE(_pParent,"Window can't be null!");
 }
 
 void ORowSetImportExport::initialize()
 {
-    SAL_INFO("dbaccess.ui", "ORowSetImportExport::initialize" );
     ODatabaseImportExport::initialize();
     // do namemapping
     Reference<XColumnLocate> xColumnLocate(m_xResultSet,UNO_QUERY);
@@ -96,13 +94,11 @@ void ORowSetImportExport::initialize()
 
 bool ORowSetImportExport::Write()
 {
-    SAL_INFO("dbaccess.ui", "ORowSetImportExport::Write" );
     return true;
 }
 
 bool ORowSetImportExport::Read()
 {
-    SAL_INFO("dbaccess.ui", "ORowSetImportExport::Read" );
     // check if there is any column to copy
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
@@ -157,7 +153,6 @@ bool ORowSetImportExport::Read()
 
 bool ORowSetImportExport::insertNewRow()
 {
-    SAL_INFO("dbaccess.ui", "ORowSetImportExport::insertNewRow" );
     try
     {
         m_xTargetResultSetUpdate->moveToInsertRow();

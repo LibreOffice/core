@@ -38,7 +38,6 @@ using namespace ::osl;
 
 void WrappedResultSet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::construct" );
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
     m_xUpd.set(_xDriverSet,UNO_QUERY_THROW);
     m_xRowLocate.set(_xDriverSet,UNO_QUERY_THROW);
@@ -52,7 +51,6 @@ void WrappedResultSet::reset(const Reference< XResultSet>& _xDriverSet)
 
 Any SAL_CALL WrappedResultSet::getBookmark() throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::getBookmark" );
     if ( m_xRowLocate.is() )
     {
         return m_xRowLocate->getBookmark( );
@@ -62,38 +60,32 @@ Any SAL_CALL WrappedResultSet::getBookmark() throw(SQLException, RuntimeExceptio
 
 bool SAL_CALL WrappedResultSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::moveToBookmark" );
     return m_xRowLocate->moveToBookmark( bookmark );
 }
 
 bool SAL_CALL WrappedResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::moveRelativeToBookmark" );
     return m_xRowLocate->moveRelativeToBookmark( bookmark,rows );
 }
 
 sal_Int32 SAL_CALL WrappedResultSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::compareBookmarks" );
     return m_xRowLocate->compareBookmarks( _first,_second );
 }
 
 bool SAL_CALL WrappedResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::hasOrderedBookmarks" );
     return m_xRowLocate->hasOrderedBookmarks();
 }
 
 sal_Int32 SAL_CALL WrappedResultSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::hashBookmark" );
     return m_xRowLocate->hashBookmark(bookmark);
 }
 
 // ::com::sun::star::sdbcx::XDeleteRows
 Sequence< sal_Int32 > SAL_CALL WrappedResultSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::deleteRows" );
     Reference< ::com::sun::star::sdbcx::XDeleteRows> xDeleteRow(m_xRowLocate,UNO_QUERY);
     if(xDeleteRow.is())
     {
@@ -104,8 +96,6 @@ Sequence< sal_Int32 > SAL_CALL WrappedResultSet::deleteRows( const Sequence< Any
 
 void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::insertRow" );
-
     m_xUpd->moveToInsertRow();
     sal_Int32 i = 1;
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
@@ -120,7 +110,6 @@ void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const c
 
 void SAL_CALL WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::updateRow" );
     sal_Int32 i = 1;
     connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOriginalRow->get().begin()+1;
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
@@ -134,37 +123,31 @@ void SAL_CALL WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const O
 
 void SAL_CALL WrappedResultSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::deleteRow" );
     m_xUpd->deleteRow();
 }
 
 void SAL_CALL WrappedResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::cancelRowUpdates" );
     m_xUpd->cancelRowUpdates();
 }
 
 void SAL_CALL WrappedResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::moveToInsertRow" );
     m_xUpd->moveToInsertRow();
 }
 
 void SAL_CALL WrappedResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::moveToCurrentRow" );
     m_xUpd->moveToCurrentRow();
 }
 
 void WrappedResultSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::fillValueRow" );
     OCacheSet::fillValueRow(_rRow,_nPosition);
 }
 
 void WrappedResultSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParameter,const ORowSetValue& _rValue)
 {
-    SAL_INFO("dbaccess", "WrappedResultSet::updateColumn" );
     if(_rValue.isBound() && _rValue.isModified())
     {
         if(_rValue.isNull())

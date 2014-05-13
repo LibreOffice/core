@@ -47,7 +47,6 @@ namespace dbaccess
 */
 sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
 {
-    SAL_INFO("dbaccess", "api OFilteredContainer::createWildCardVector" );
     // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
     // for them
     OUString* pTableFilters = _rTableFilter.getArray();
@@ -411,7 +410,6 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
     void OFilteredContainer::impl_refresh() throw(RuntimeException)
     {
-        SAL_INFO("dbaccess", "api OFilteredContainer::impl_refresh" );
         if ( m_pRefreshListener )
         {
             m_bConstructed = false;

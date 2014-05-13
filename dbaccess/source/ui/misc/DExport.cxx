@@ -111,8 +111,6 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_bCheckOnly(false)
     ,m_bAppendFirstLine(false)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
-
     m_nRows += nRows;
     sal_Int32 nCount = 0;
     for(sal_Int32 j=0;j < (sal_Int32)m_vColumns.size();++j)
@@ -167,7 +165,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_bCheckOnly(false)
     ,m_bAppendFirstLine(false)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
     try
     {
         SvtSysLocale aSysLocale;
@@ -300,7 +297,6 @@ ODatabaseExport::~ODatabaseExport()
 
 void ODatabaseExport::insertValueIntoColumn()
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::insertValueIntoColumn" );
     if(m_nColumnPos < sal_Int32(m_vDestVector.size()))
     {
         OFieldDescription* pField = m_vDestVector[m_nColumnPos]->second;
@@ -414,7 +410,6 @@ void ODatabaseExport::insertValueIntoColumn()
 
 sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::CheckString" );
     double fOutNumber = 0.0;
     sal_Int16 nNumberFormat = 0;
 
@@ -561,7 +556,6 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
 
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::SetColumnTypes" );
     if(_pList && _pInfoMap)
     {
         OSL_ENSURE(m_vNumberFormat.size() == m_vColumnSize.size() && m_vColumnSize.size() == _pList->size(),"Illegal columns in list");
@@ -633,7 +627,6 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
 
 void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::CreateDefaultColumn" );
     Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
     OUString aAlias = _rColumnName;
@@ -685,7 +678,6 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 
 bool ODatabaseExport::createRowSet()
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::createRowSet" );
     m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
 
     return m_pUpdateHelper.get() != NULL;
@@ -693,8 +685,6 @@ bool ODatabaseExport::createRowSet()
 
 bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::executeWizard" );
-
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
     OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
     OCopyTableWizard aWizard(
@@ -759,7 +749,6 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
 
 void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException& e)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::showErrorDialog" );
     if(!m_bDontAskAgain)
     {
         OUString aMsg(e.Message);
@@ -776,7 +765,6 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
 
 void ODatabaseExport::adjustFormat()
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::adjustFormat" );
     if ( !m_sTextToken.isEmpty() )
     {
         sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
@@ -799,7 +787,6 @@ void ODatabaseExport::adjustFormat()
 
 void ODatabaseExport::eraseTokens()
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::eraseTokens" );
     m_sTextToken = "";
     m_sNumToken = "";
     m_sValToken = "";
@@ -807,7 +794,6 @@ void ODatabaseExport::eraseTokens()
 
 void ODatabaseExport::ensureFormatter()
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::ensureFormatter" );
     if ( !m_pFormatter )
     {
         Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
@@ -823,7 +809,6 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const Reference<XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns)
 {
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::createPreparedStatment" );
     OUString aSql("INSERT INTO ");
     OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 

@@ -230,8 +230,6 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rxContext.is(), "factory missing");
 
-   SAL_INFO("dbaccess", "dbaxml ReadThroughComponent" );
-
     // prepare ParserInputSrouce
     InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;

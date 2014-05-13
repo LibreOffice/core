@@ -101,7 +101,6 @@ namespace
     */
     const OSQLParseNode* parseStatement_throwError( OSQLParser& _rParser, const OUString& _rStatement, const Reference< XInterface >& _rxContext )
     {
-        SAL_INFO("dbaccess", "SingleSelectQueryComposer.cxx::parseStatement_throwError" );
         OUString aErrorMsg;
         const OSQLParseNode* pNewSqlParseNode = _rParser.parseTree( aErrorMsg, _rStatement );
         if ( !pNewSqlParseNode )
@@ -146,7 +145,6 @@ namespace
     void parseAndCheck_throwError( OSQLParser& _rParser, const OUString& _rStatement,
         OSQLParseTreeIterator& _rIterator, const Reference< XInterface >& _rxContext )
     {
-        SAL_INFO("dbaccess", "SingleSelectQueryComposer.cxx::parseAndCheck_throwError" );
         const OSQLParseNode* pNode = parseStatement_throwError( _rParser, _rStatement, _rxContext );
         checkForSingleSelect_throwError( pNode, _rIterator, _rxContext, _rStatement );
     }
@@ -233,8 +231,6 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     ,m_nBoolCompareMode( BooleanComparisonMode::EQUAL_INTEGER )
     ,m_nCommandType(CommandType::COMMAND)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::OSingleSelectQueryComposer" );
-
     if ( !m_aContext.is() || !m_xConnection.is() || !m_xConnectionTables.is() )
         throw IllegalArgumentException();
 
@@ -281,7 +277,6 @@ OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
 // OComponentHelper
 void SAL_CALL OSingleSelectQueryComposer::disposing(void)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::disposing" );
     OSubComponent::disposing();
 
     MutexGuard aGuard(m_aMutex);
@@ -310,7 +305,6 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
 // XSingleSelectQueryAnalyzer
 OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getQuery" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -320,7 +314,6 @@ OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  ) throw(RuntimeExceptio
 
 void SAL_CALL OSingleSelectQueryComposer::setQuery( const OUString& command ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setQuery" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -409,7 +402,6 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
 
 void OSingleSelectQueryComposer::setQuery_Impl( const OUString& command )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setQuery_Impl" );
     // parse this
     parseAndCheck_throwError( m_aSqlParser, command, m_aSqlIterator, *this );
 
@@ -422,28 +414,24 @@ void OSingleSelectQueryComposer::setQuery_Impl( const OUString& command )
 
 Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredHavingClause(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getStructuredHavingClause" );
     TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleHavingTree);
     return getStructuredCondition(F_tmp);
 }
 
 Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredFilter(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getStructuredFilter" );
     TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);
     return getStructuredCondition(F_tmp);
 }
 
 void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendHavingClauseByColumn" );
     ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetHavingClause);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
 void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendFilterByColumn" );
     ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetFilter);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
@@ -560,7 +548,6 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
 
 void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendOrderByColumn" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OUString sColumnName( impl_getColumnName_throw(column, true) );
     OUString sOrder = getOrder();
@@ -575,7 +562,6 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
 
 void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< XPropertySet >& column) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendGroupByColumn" );
     ::osl::MutexGuard aGuard( m_aMutex );
     OUString sColumnName( impl_getColumnRealName_throw(column, true) );
     OrderCreator aComposer;
@@ -586,7 +572,6 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 
 OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vector< OUString >& _rParts )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::composeStatementFromParts" );
     OSL_ENSURE( _rParts.size() == (size_t)SQLPartCount, "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
 
     OUStringBuffer aSql( m_aPureSelectSQL );
@@ -602,13 +587,11 @@ OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vec
 
 OUString SAL_CALL OSingleSelectQueryComposer::getElementaryQuery() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getElementaryQuery" );
     return composeStatementFromParts( m_aElementaryParts );
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setElementaryQuery" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -658,7 +641,6 @@ namespace
 
 void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const OUString& _rClause )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setSingleAdditiveClause" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -721,32 +703,27 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
 
 void SAL_CALL OSingleSelectQueryComposer::setFilter( const OUString& filter ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setFilter" );
     setSingleAdditiveClause( Where, filter );
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setOrder( const OUString& order ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setOrder" );
     setSingleAdditiveClause( Order, order );
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setGroup( const OUString& group ) throw (SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setGroup" );
     setSingleAdditiveClause( Group, group );
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setHavingClause( const OUString& filter ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setHavingClause" );
     setSingleAdditiveClause( Having, filter );
 }
 
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getTables" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -767,7 +744,6 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  ) thro
 // XColumnsSupplier
 Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getColumns" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !!m_aCurrentColumns[SelectColumns] )
@@ -986,7 +962,6 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLParseTreeIterator& _rIterator,
                                     ::std::vector< ::std::vector < PropertyValue > >& rFilters, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setORCriteria" );
     // Round brackets around the expression
     if (pCondition->count() == 3 &&
         SQL_ISPUNCTUATION(pCondition->getChild(0),"(") &&
@@ -1023,7 +998,6 @@ bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLPa
 bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     OSQLParseTreeIterator& _rIterator, ::std::vector < PropertyValue >& rFilter, const Reference< XNumberFormatter > & xFormatter) const
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setANDCriteria" );
     // Round brackets
     if (SQL_ISRULE(pCondition,boolean_primary))
     {
@@ -1110,7 +1084,6 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
 
 sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredicate) const
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getPredicateType" );
     sal_Int32 nPredicate = SQLFilterOperator::EQUAL;
     switch (_pPredicate->getNodeType())
     {
@@ -1141,7 +1114,6 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
 bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition, OSQLParseTreeIterator& _rIterator,
                                             ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setComparsionPredicate" );
     OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
     if (SQL_ISRULE(pCondition->getChild(0), column_ref) ||
         SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
@@ -1264,7 +1236,6 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
 // Functions for analysing SQL
 OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNode* pColumnRef, OSQLParseTreeIterator& _rIterator ) const
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getColumnName" );
     OUString aTableRange, aColumnName;
     _rIterator.getColumnRange(pColumnRef,aColumnName,aTableRange);
     return aColumnName;
@@ -1272,7 +1243,6 @@ OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNod
 
 OUString SAL_CALL OSingleSelectQueryComposer::getFilter(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getFilter" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     return getSQLPart(Where,m_aAdditiveIterator,false);
@@ -1280,7 +1250,6 @@ OUString SAL_CALL OSingleSelectQueryComposer::getFilter(  ) throw(RuntimeExcepti
 
 OUString SAL_CALL OSingleSelectQueryComposer::getOrder(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getOrder" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     return getSQLPart(Order,m_aAdditiveIterator,false);
@@ -1288,7 +1257,6 @@ OUString SAL_CALL OSingleSelectQueryComposer::getOrder(  ) throw(RuntimeExceptio
 
 OUString SAL_CALL OSingleSelectQueryComposer::getGroup(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getGroup" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     return getSQLPart(Group,m_aAdditiveIterator,false);
@@ -1296,7 +1264,6 @@ OUString SAL_CALL OSingleSelectQueryComposer::getGroup(  ) throw (RuntimeExcepti
 
 OUString OSingleSelectQueryComposer::getHavingClause() throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getHavingClause" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     return getSQLPart(Having,m_aAdditiveIterator,false);
@@ -1304,7 +1271,6 @@ OUString OSingleSelectQueryComposer::getHavingClause() throw (RuntimeException, 
 
 OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet >& column) const
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getTableAlias" );
     OUString sReturn;
     if(m_pTables && m_pTables->getCount() > 1)
     {
@@ -1378,7 +1344,6 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
 
 Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getParameters" );
     // now set the Parameters
     if ( !m_aCurrentColumns[ParameterColumns] )
     {
@@ -1395,7 +1360,6 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
 
 void OSingleSelectQueryComposer::clearColumns( const EColumnType _eType )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::clearColumns" );
     OPrivateColumns* pColumns = m_aCurrentColumns[ _eType ];
     if ( pColumns != NULL )
     {
@@ -1407,7 +1371,6 @@ void OSingleSelectQueryComposer::clearColumns( const EColumnType _eType )
 
 void OSingleSelectQueryComposer::clearCurrentCollections()
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::clearCurrentCollections" );
     ::std::vector<OPrivateColumns*>::iterator aIter = m_aCurrentColumns.begin();
     ::std::vector<OPrivateColumns*>::iterator aEnd = m_aCurrentColumns.end();
     for (;aIter != aEnd;++aIter)
@@ -1431,7 +1394,6 @@ void OSingleSelectQueryComposer::clearCurrentCollections()
 Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumnType _eType,
     const ::rtl::Reference< OSQLColumns >& _rCols )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setCurrentColumns" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1450,19 +1412,16 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
 
 Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getGroupColumns(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getGroupColumns" );
     return setCurrentColumns( GroupByColumns, m_aAdditiveIterator.getGroupColumns() );
 }
 
 Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getOrderColumns(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getOrderColumns" );
     return setCurrentColumns( OrderColumns, m_aAdditiveIterator.getOrderColumns() );
 }
 
 OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getQueryWithSubstitution" );
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -1481,7 +1440,6 @@ OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  ) throw
 
 OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode& _aGetFunctor, OSQLParseTreeIterator& _rIterator )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getStatementPart" );
     OUString sResult;
 
     const OSQLParseNode* pNode = _aGetFunctor( &_rIterator );
@@ -1536,21 +1494,18 @@ namespace
 
 void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, ::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setStructuredFilter" );
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection, &m_aParseContext);
     setFilter(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setStructuredHavingClause" );
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection);
     setHavingClause(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
 void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor,sal_Int32 filterOperator)
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setConditionByColumn" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     if ( !column.is()
@@ -1716,7 +1671,6 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
 
 Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredCondition( TGetParseNode& _aGetFunctor )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getStructuredCondition" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     MutexGuard aGuard(m_aMutex);
@@ -1801,7 +1755,6 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
 
 OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart ) const
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getKeyword" );
     OUString sKeyword;
     switch(_ePart)
     {
@@ -1826,7 +1779,6 @@ OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart ) const
 
 OUString OSingleSelectQueryComposer::getSQLPart( SQLPart _ePart, OSQLParseTreeIterator& _rIterator, bool _bWithKeyword )
 {
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getSQLPart" );
     TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);
     OUString sKeyword( getKeyword( _ePart ) );
     switch(_ePart)

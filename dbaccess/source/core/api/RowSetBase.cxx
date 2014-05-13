@@ -94,8 +94,6 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
     ,m_bAfterLast(false)
     ,m_bIsInsertRow(false)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::ORowSetBase" );
-
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
     sal_Int32 nInitialRowCountValue = 0;
@@ -137,7 +135,6 @@ Any ORowSetBase::queryInterface( const Type & rType ) throw (RuntimeException, s
 
 void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
-    //SAL_INFO("dbaccess", "ORowSetBase::getFastPropertyValue" );
     if(m_pCache)
     {
         switch(nHandle)
@@ -159,7 +156,6 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
 // OComponentHelper
 void SAL_CALL ORowSetBase::disposing(void)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::disposing" );
     MutexGuard aGuard(*m_pMutex);
 
     if ( m_pColumns )
@@ -178,7 +174,6 @@ void SAL_CALL ORowSetBase::disposing(void)
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSetBase::createArrayHelper( ) const
 {
-    SAL_INFO("dbaccess", "ORowSetBase::createArrayHelper" );
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
@@ -187,14 +182,12 @@ void SAL_CALL ORowSetBase::disposing(void)
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSetBase::getInfoHelper()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getInfoHelper" );
     return *const_cast<ORowSetBase*>(this)->getArrayHelper();
 }
 
 // XRow
 sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::wasNull" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return impl_wasNull();
@@ -202,20 +195,17 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException,
 
 bool ORowSetBase::impl_wasNull()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::impl_wasNull" );
     return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is()) ? ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull() : sal_True;
 }
 
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getValue" );
     checkCache();
     return impl_getValue(columnIndex);
 }
 
 const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::impl_getValue" );
     if ( m_bBeforeFirst || m_bAfterLast )
     {
         SAL_WARN("dbaccess", "ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
@@ -269,91 +259,78 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
 
 OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getString" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 sal_Bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getBoolean" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 sal_Int8 SAL_CALL ORowSetBase::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getByte" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 sal_Int16 SAL_CALL ORowSetBase::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getShort" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 sal_Int32 SAL_CALL ORowSetBase::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getInt" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 sal_Int64 SAL_CALL ORowSetBase::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getLong" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 float SAL_CALL ORowSetBase::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getFloat" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 double SAL_CALL ORowSetBase::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getDouble" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getBytes" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 ::com::sun::star::util::Date SAL_CALL ORowSetBase::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getDate" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 ::com::sun::star::util::Time SAL_CALL ORowSetBase::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getTime" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 ::com::sun::star::util::DateTime SAL_CALL ORowSetBase::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getTimestamp" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getBinaryStream" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
@@ -388,13 +365,11 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
 
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getCharacterStream" );
     return getBinaryStream(columnIndex);
 }
 
 Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getObject" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
@@ -403,26 +378,22 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
 
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getRef" );
     ::dbtools::throwFeatureNotImplementedException( "XRow::getRef", *m_pMySelf );
     return NULL;
 }
 
 Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getBlob" );
     return Reference< XBlob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
 
 Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getClob" );
     return Reference< XClob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
 
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getArray" );
     ::dbtools::throwFeatureNotImplementedException( "XRow::getArray", *m_pMySelf );
     return NULL;
 }
@@ -430,8 +401,7 @@ Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) 
 // ::com::sun::star::sdbcx::XRowLocate
 Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getBookmark" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::getBookmark() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::getBookmark() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -448,8 +418,7 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException, 
 
 sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::moveToBookmark" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::moveToBookmark(Any) Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::moveToBookmark(Any) Clone = " << m_bClone);
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
@@ -493,14 +462,13 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         // - IsNew
         aNotifier.fire( );
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::moveToBookmark(Any) = " << bRet << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::moveToBookmark(Any) = " << bRet << " Clone = " << m_bClone);
     return bRet;
 }
 
 sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::moveRelativeToBookmark" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::moveRelativeToBookmark(Any," << rows << ") Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::moveRelativeToBookmark(Any," << rows << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -537,13 +505,12 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         // RowCount/IsRowCountFinal
         fireRowcount();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::moveRelativeToBookmark(Any," << rows << ") = " << bRet << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::moveRelativeToBookmark(Any," << rows << ") = " << bRet << " Clone = " << m_bClone);
     return bRet;
 }
 
 sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::compareBookmarks" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->compareBookmarks(_first,_second);
@@ -551,7 +518,6 @@ sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& _first, const Any& 
 
 sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::hasOrderedBookmarks" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->hasOrderedBookmarks();
@@ -559,7 +525,6 @@ sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  ) throw(SQLException, Runti
 
 sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::hashBookmark" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->hashBookmark(bookmark);
@@ -568,7 +533,6 @@ sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark ) throw(SQLExc
 // XResultSetMetaDataSupplier
 Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getMetaData" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     Reference< XResultSetMetaData > xMeta;
@@ -581,7 +545,6 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
 // XColumnLocate
 sal_Int32 SAL_CALL ORowSetBase::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::findColumn" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -592,7 +555,6 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const OUString& columnName ) throw(S
 // ::com::sun::star::sdbcx::XColumnsSupplier
 Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getColumns" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -609,8 +571,7 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeExcep
 // XResultSet
 sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::next" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::next() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::next() Clone = " << m_bClone);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkCache();
 
@@ -652,43 +613,39 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException, st
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::next() = " << bRet << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::next() = " << bRet << " Clone = " << m_bClone);
     return bRet;
 }
 
 sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::isBeforeFirst" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::isBeforeFirst() = " << m_bBeforeFirst << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::isBeforeFirst() = " << m_bBeforeFirst << " Clone = " << m_bClone);
 
     return m_bBeforeFirst;
 }
 
 sal_Bool SAL_CALL ORowSetBase::isAfterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::isAfterLast" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::isAfterLast() = " << m_bAfterLast << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::isAfterLast() = " << m_bAfterLast << " Clone = " << m_bClone);
 
     return m_bAfterLast;
 }
 
 bool ORowSetBase::isOnFirst()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::isOnFirst" );
     return isFirst();
 }
 
 sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::isFirst" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::isFirst() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::isFirst() Clone = " << m_bClone);
 
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -702,20 +659,18 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException,
 
     bool bIsFirst = m_pCache->isFirst();
 
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::isFirst() = " << bIsFirst << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::isFirst() = " << bIsFirst << " Clone = " << m_bClone);
     return bIsFirst;
 }
 
 bool ORowSetBase::isOnLast()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::isOnLast" );
     return isLast();
 }
 
 sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::isLast" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::isLast() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::isLast() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -733,14 +688,13 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException, 
 
     bool bIsLast = m_pCache->isLast();
 
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::isLast() = " << bIsLast << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::isLast() = " << bIsLast << " Clone = " << m_bClone);
     return bIsLast;
 }
 
 void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::beforeFirst" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::beforeFirst() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::beforeFirst() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
@@ -776,13 +730,12 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException,
         // to be done _after_ the notifications!
         m_aOldRow->clearRow();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::beforeFirst() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::beforeFirst() Clone = " << m_bClone);
 }
 
 void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::afterLast" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::afterLast() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -816,14 +769,13 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException, s
             fireRowcount();
         }
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::afterLast() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
 }
 
 bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<bool,ORowSetBase>& _aCheckFunctor,
                                     ::std::mem_fun_t<bool,ORowSetCache>& _aMovementFunctor)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::move" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::move() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::move() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
@@ -863,14 +815,13 @@ bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<bool,ORowSetBase>& _aCheckF
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::move() = " << bRet << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::move() = " << bRet << " Clone = " << m_bClone);
     return bRet;
 }
 
 sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::first" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::first() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::first() Clone = " << m_bClone);
     ::std::mem_fun_t<bool,ORowSetBase> ioF_tmp(&ORowSetBase::isOnFirst);
     ::std::mem_fun_t<bool,ORowSetCache> F_tmp(&ORowSetCache::first);
     return move(ioF_tmp,F_tmp);
@@ -878,8 +829,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException, s
 
 sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::last" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::last() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::last() Clone = " << m_bClone);
     ::std::mem_fun_t<bool,ORowSetBase> ioL_tmp(&ORowSetBase::isOnLast);
     ::std::mem_fun_t<bool,ORowSetCache> L_tmp(&ORowSetCache::last);
     return move(ioL_tmp,L_tmp);
@@ -887,8 +837,7 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException, st
 
 sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getRow" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::getRow() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::getRow() Clone = " << m_bClone);
     ::osl::MutexGuard aGuard( *m_pMutex );
 
     checkCache();
@@ -897,7 +846,6 @@ sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException,
 
 sal_Int32 ORowSetBase::impl_getRow()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::impl_getRow" );
     sal_Int32  nPos = 0;
     if ( m_bBeforeFirst )
         nPos = 0;
@@ -918,14 +866,13 @@ sal_Int32 ORowSetBase::impl_getRow()
         }
         nPos = m_pCache->getRow();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::impl_getRow() = " << nPos << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::impl_getRow() = " << nPos << " Clone = " << m_bClone);
     return nPos;
 }
 
 sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::absolute" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::absolute(" << row << ") Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::absolute(" << row << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
@@ -964,14 +911,13 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::absolute(" << row << ") = " << bRet << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::absolute(" << row << ") = " << bRet << " Clone = " << m_bClone);
     return bRet;
 }
 
 sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::relative" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::relative(" << rows << ") Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::relative(" << rows << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -1020,14 +966,13 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::relative(" << rows << ") = " << bRet << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::relative(" << rows << ") = " << bRet << " Clone = " << m_bClone);
     return bRet;
 }
 
 sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::previous" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::previous() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::previous() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
@@ -1073,14 +1018,13 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::previous() = " << bRet << " Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::previous() = " << bRet << " Clone = " << m_bClone);
     return bRet;
 }
 
 void ORowSetBase::setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard )
 {
-    SAL_INFO("dbaccess", "ORowSetBase::setCurrentRow" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::setCurrentRow() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::setCurrentRow() Clone = " << m_bClone);
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
     m_bAfterLast    = m_pCache->isAfterLast();
 
@@ -1133,25 +1077,22 @@ void ORowSetBase::setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow
         // - cursorMoved
         notifyAllListenersCursorMoved( _rGuard );
 
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::setCurrentRow() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::setCurrentRow() Clone = " << m_bClone);
 }
 
 void ORowSetBase::checkPositioningAllowed() throw( SQLException, RuntimeException )
 {
-    SAL_INFO("dbaccess", "ORowSetBase::checkPositioningAllowed" );
     if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throwFunctionSequenceException(*m_pMySelf);
 }
 
 Reference< XInterface >  ORowSetBase::getStatement(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getStatement" );
     return NULL;
 }
 
 void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::refreshRow" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -1170,7 +1111,6 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException, 
 
 sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::rowUpdated" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
@@ -1182,7 +1122,6 @@ sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeExcepti
 
 sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::rowInserted" );
     ::osl::MutexGuard aGuard( *m_pMutex );
 
     checkCache();
@@ -1195,7 +1134,6 @@ sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeExcept
 
 sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::rowDeleted" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return impl_rowDeleted();
@@ -1209,7 +1147,6 @@ bool ORowSetBase::impl_rowDeleted(  )
 // XWarningsSupplier
 Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getWarnings" );
     ::osl::MutexGuard aGuard( *m_pMutex );
 
     if ( m_pCache )
@@ -1224,7 +1161,6 @@ Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException, 
 
 void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::clearWarnings" );
     ::osl::MutexGuard aGuard( *m_pMutex );
 
     if ( m_pCache )
@@ -1241,7 +1177,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
         return;
 
     SAL_INFO("dbaccess", "ORowSetBase::firePropertyChange" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::firePropertyChange() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::firePropertyChange() Clone = " << m_bClone);
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
     sal_Int32 i=0;
     try
@@ -1254,7 +1190,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     {
         SAL_WARN("dbaccess", "firePropertyChange: Exception");
     }
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::firePropertyChange() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::firePropertyChange() Clone = " << m_bClone);
 }
 
 void ORowSetBase::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
@@ -1265,23 +1201,19 @@ void ORowSetBase::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowS
 
 void ORowSetBase::fireRowcount()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::fireRowcount" );
 }
 
 bool ORowSetBase::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::notifyAllListenersCursorBeforeMove" );
     return true;
 }
 
 void ORowSetBase::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::notifyAllListenersCursorMoved" );
 }
 
 void ORowSetBase::notifyAllListeners(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::notifyAllListeners" );
 }
 
 bool ORowSetBase::isPropertyChangeNotificationEnabled() const
@@ -1291,7 +1223,6 @@ bool ORowSetBase::isPropertyChangeNotificationEnabled() const
 
 void ORowSetBase::fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld )
 {
-    SAL_INFO("dbaccess", "ORowSetBase::fireProperty" );
     Any aNew = css::uno::makeAny( _bNew );
     Any aOld = css::uno::makeAny( _bOld );
     fire( &_nProperty, &aNew, &aOld, 1, sal_False );
@@ -1299,8 +1230,7 @@ void ORowSetBase::fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld )
 
 void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
 {
-    SAL_INFO("dbaccess", "ORowSetBase::positionCache" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::positionCache() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::positionCache() Clone = " << m_bClone);
 
     bool bSuccess = false;
     if ( m_aBookmark.hasValue() )
@@ -1355,12 +1285,11 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
     OSL_ENSURE( bSuccess, "ORowSetBase::positionCache: failed!" );
     (void)bSuccess;
 
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::positionCache() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::positionCache() Clone = " << m_bClone);
 }
 
 void ORowSetBase::checkCache()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::checkCache" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     if(!m_pCache)
         throwFunctionSequenceException(*m_pMySelf);
@@ -1368,8 +1297,7 @@ void ORowSetBase::checkCache()
 
 void ORowSetBase::movementFailed()
 {
-    SAL_INFO("dbaccess", "ORowSetBase::movementFailed" );
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::movementFailed() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::movementFailed() Clone = " << m_bClone);
     m_aOldRow->clearRow();
     m_aCurrentRow   = m_pCache->getEnd();
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
@@ -1377,12 +1305,11 @@ void ORowSetBase::movementFailed()
     m_aBookmark     = Any();
     m_aCurrentRow.setBookmark(m_aBookmark);
     OSL_ENSURE(m_bBeforeFirst || m_bAfterLast,"BeforeFirst or AfterLast is wrong!");
-    SAL_INFO("dbaccess", "DBACCESS ORowSetBase::movementFailed() Clone = " << m_bClone);
+    SAL_INFO("dbaccess", "ORowSetBase::movementFailed() Clone = " << m_bClone);
 }
 
 ORowSetRow ORowSetBase::getOldRow(bool _bWasNew)
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getOldRow" );
     OSL_ENSURE(m_aOldRow.is(),"RowSetRowHElper isn't valid!");
     ORowSetRow aOldValues;
     if ( !_bWasNew && m_aOldRow->getRow().is() )
@@ -1392,13 +1319,11 @@ ORowSetRow ORowSetBase::getOldRow(bool _bWasNew)
 
 void ORowSetBase::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any& _rDefault ) const
 {
-    SAL_INFO("dbaccess", "ORowSetBase::getPropertyDefaultByHandle" );
     _rDefault.clear();
 }
 
 void ORowSetBase::onDeleteRow( const Any& _rBookmark )
 {
-    SAL_INFO("dbaccess", "ORowSetBase::onDeleteRow" );
     if ( rowDeleted() )
         // not interested in
         return;
@@ -1414,7 +1339,6 @@ void ORowSetBase::onDeleteRow( const Any& _rBookmark )
 
 void ORowSetBase::onDeletedRow( const Any& _rBookmark, sal_Int32 _nPos )
 {
-    SAL_INFO("dbaccess", "ORowSetBase::onDeletedRow" );
     if ( rowDeleted() )
     {
         // if we're a clone, and on a deleted row, and the main RowSet deleted another
@@ -1437,7 +1361,6 @@ void ORowSetBase::onDeletedRow( const Any& _rBookmark, sal_Int32 _nPos )
 
 sal_Int32 ORowSetBase::impl_getRowCount() const
 {
-    SAL_INFO("dbaccess", "ORowSetBase::impl_getRowCount" );
     sal_Int32 nRowCount( m_pCache->m_nRowCount );
     if ( const_cast< ORowSetBase* >( this )->rowDeleted() && !m_pCache->m_bNew )
         ++nRowCount;
@@ -1489,7 +1412,6 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
 
 ORowSetNotifier::~ORowSetNotifier( )
 {
-    SAL_INFO("dbaccess", "ORowSetNotifier::~ORowSetNotifier" );
 }
 
 void ORowSetNotifier::fire()

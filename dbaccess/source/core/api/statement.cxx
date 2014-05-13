@@ -50,7 +50,6 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
     ,m_bEscapeProcessing( true )
 
 {
-    SAL_INFO("dbaccess", "OStatementBase::OStatementBase" );
     OSL_ENSURE(_xStatement.is() ,"Statement is NULL!");
     m_xAggregateAsSet.set(_xStatement,UNO_QUERY);
     m_xAggregateAsCancellable = Reference< ::com::sun::star::util::XCancellable > (m_xAggregateAsSet, UNO_QUERY);
@@ -63,7 +62,6 @@ OStatementBase::~OStatementBase()
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > OStatementBase::getTypes() throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::getTypes" );
     OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
                            ::getCppuType( (const Reference< XWarningsSupplier > *)0 ),
                            ::getCppuType( (const Reference< XCloseable > *)0 ),
@@ -121,7 +119,6 @@ void OStatementBase::release() throw ()
 
 void OStatementBase::disposeResultSet()
 {
-    SAL_INFO("dbaccess", "OStatementBase::disposeResultSet" );
     // free the cursor if alive
     Reference< XComponent > xComp(m_aResultSet.get(), UNO_QUERY);
     if (xComp.is())
@@ -132,7 +129,6 @@ void OStatementBase::disposeResultSet()
 // OComponentHelper
 void OStatementBase::disposing()
 {
-    SAL_INFO("dbaccess", "OStatementBase::disposing" );
     OPropertySetHelper::disposing();
 
     MutexGuard aGuard(m_aMutex);
@@ -165,7 +161,6 @@ void OStatementBase::disposing()
 // XCloseable
 void OStatementBase::close(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatementBase::close" );
     {
         MutexGuard aGuard( m_aMutex );
         ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -176,14 +171,12 @@ void OStatementBase::close(void) throw( SQLException, RuntimeException, std::exc
 // OPropertySetHelper
 Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* OStatementBase::createArrayHelper( ) const
 {
-    //SAL_INFO("dbaccess", "OStatementBase::createArrayHelper" );
     BEGIN_PROPERTY_HELPER(10)
         DECL_PROP0(CURSORNAME,              OUString);
         DECL_PROP0_BOOL(ESCAPE_PROCESSING);
@@ -201,13 +194,11 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& OStatementBase::getInfoHelper()
 {
-    //SAL_INFO("dbaccess", "OStatementBase::getInfoHelper" );
     return *getArrayHelper();
 }
 
 sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException  )
 {
-    //SAL_INFO("dbaccess", "OStatementBase::convertFastPropertyValue" );
     bool bModified(false);
     switch (nHandle)
     {
@@ -242,7 +233,6 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
 
 void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
 {
-    //SAL_INFO("dbaccess", "OStatementBase::setFastPropertyValue_NoBroadcast" );
     switch ( nHandle )
     {
         case PROPERTY_ID_USEBOOKMARKS:
@@ -272,7 +262,6 @@ void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
 
 void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    //SAL_INFO("dbaccess", "OStatementBase::getFastPropertyValue" );
     switch (nHandle)
     {
         case PROPERTY_ID_USEBOOKMARKS:
@@ -299,7 +288,6 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 // XWarningsSupplier
 Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatementBase::getWarnings" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -308,7 +296,6 @@ Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException, std
 
 void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatementBase::clearWarnings" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -318,7 +305,6 @@ void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException, 
 // ::com::sun::star::util::XCancellable
 void OStatementBase::cancel(void) throw( RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatementBase::cancel" );
     // no blocking as cancel is typically called from a different thread
     ClearableMutexGuard aCancelGuard(m_aCancelMutex);
     if (m_xAggregateAsCancellable.is())
@@ -329,7 +315,6 @@ void OStatementBase::cancel(void) throw( RuntimeException, std::exception )
 // XMultipleResults
 Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::getResultSet" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -343,7 +328,6 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLExcep
 
 sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::getUpdateCount" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -357,7 +341,6 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, Runtim
 
 sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::getMoreResults" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -375,7 +358,6 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
 // XPreparedBatchExecution
 void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::addBatch" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -389,7 +371,6 @@ void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException,
 
 void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::clearBatch" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -403,7 +384,6 @@ void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeExceptio
 
 Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::executeBatch" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -420,7 +400,6 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLExcepti
 
 Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatementBase::getGeneratedValues" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
@@ -437,7 +416,6 @@ OStatement::OStatement( const Reference< XConnection >& _xConn, const Reference<
     :OStatementBase( _xConn, _xStatement )
     ,m_bAttemptedComposerCreation( false )
 {
-    SAL_INFO("dbaccess", "OStatement::OStatement" );
     m_xAggregateStatement.set( _xStatement, UNO_QUERY_THROW );
 }
 
@@ -447,7 +425,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE )
 // XServiceInfo
 OUString OStatement::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatement::getImplementationName" );
     return OUString("com.sun.star.sdb.OStatement");
 }
 
@@ -458,7 +435,6 @@ sal_Bool OStatement::supportsService( const OUString& _rServiceName ) throw (Run
 
 Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OStatement::getSupportedServiceNames" );
     Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = SERVICE_SDBC_STATEMENT;
     return aSNS;
@@ -467,7 +443,6 @@ Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeExce
 // XStatement
 Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatement::executeQuery" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -494,7 +469,6 @@ Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw(
 
 sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatement::executeUpdate" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -506,7 +480,6 @@ sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException
 
 sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -518,7 +491,6 @@ sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, Runti
 
 void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
@@ -533,7 +505,6 @@ void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeE
 
 void OStatement::clearBatch( ) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     // first check the meta data
@@ -546,7 +517,6 @@ void OStatement::clearBatch( ) throw( SQLException, RuntimeException, std::excep
 
 Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     // first check the meta data
@@ -559,13 +529,11 @@ Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeEx
 
 Reference< XConnection > OStatement::getConnection(void) throw( SQLException, RuntimeException, std::exception )
 {
-    SAL_INFO("dbaccess", "OStatement::getConnection" );
     return Reference< XConnection >( m_xParent, UNO_QUERY );
 }
 
 void SAL_CALL OStatement::disposing()
 {
-    SAL_INFO("dbaccess", "OStatement::disposing" );
     OStatementBase::disposing();
     m_xComposer.clear();
     m_xAggregateStatement.clear();
@@ -573,7 +541,6 @@ void SAL_CALL OStatement::disposing()
 
 OUString OStatement::impl_doEscapeProcessing_nothrow( const OUString& _rSQL ) const
 {
-    SAL_INFO("dbaccess", "OStatement::impl_doEscapeProcessing_nothrow" );
     if ( !m_bEscapeProcessing )
         return _rSQL;
     try
@@ -602,7 +569,6 @@ OUString OStatement::impl_doEscapeProcessing_nothrow( const OUString& _rSQL ) co
 
 bool OStatement::impl_ensureComposer_nothrow() const
 {
-    SAL_INFO("dbaccess", "OStatement::impl_ensureComposer_nothrow" );
     if ( m_bAttemptedComposerCreation )
         return m_xComposer.is();
 
