@@ -772,7 +772,6 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
                 return;
         }
         remove(localPathNew);
-        umask(0);
         if  (0 > (fdDst = open(localPathNew, O_WRONLY|O_CREAT,
                         S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH))){
             close( fdSrc);
