@@ -31,7 +31,7 @@
 /// CONFIGURATIONS
 // Comment out this to turn off FMIN and FMAX intrinsics
 #define USE_FMIN_FMAX 1
-#define REDUCE_THRESHOLD 4  // set to 4 for correctness testing. priority 1
+#define REDUCE_THRESHOLD 201  // set to 4 for correctness testing. priority 1
 #define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 #include "formulagroupcl_public.hxx"
 #ifdef WIN32
@@ -1218,30 +1218,25 @@ public:
             ss << "int nCount = 0;\n\t";
         ss << "double tmpBottom;\n\t";
         unsigned i = vSubArguments.size();
-        size_t nItems = 0;
         while (i--)
         {
             if (NumericRange *NR =
                     dynamic_cast<NumericRange *> (vSubArguments[i].get()))
             {
-                bool needBody;
-                nItems += NR->GenReductionLoopHeader(ss, needBody);
-                if (needBody == false) continue;
+                bool needBody;NR->GenReductionLoopHeader(ss, needBody);if (needBody == false) continue;
             }
             else if (ParallelNumericRange *PNR =
                     dynamic_cast<ParallelNumericRange *> (vSubArguments[i].get()))
             {
                 //did not handle yet
-                bool needBody;
-                nItems += PNR->GenReductionLoopHeader(ss, needBody);
-                if (needBody == false) continue;
+           bool needBody;PNR->GenReductionLoopHeader(ss, needBody);if (needBody == false) continue;
             }
             else if (StringRange *SR =
                     dynamic_cast<StringRange *> (vSubArguments[i].get()))
             {
                 //did not handle yet
                 bool needBody;
-                nItems += SR->GenReductionLoopHeader(ss, needBody);
+                SR->GenReductionLoopHeader(ss, needBody);
                 if (needBody == false) continue;
             }
             else
@@ -1257,7 +1252,6 @@ public:
                         static_cast< const formula::SingleVectorRefToken* >(pCur);
                     ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n\t\t";
 #else
-                    nItems += 1;
 #endif
                 }
                 else if (pCur->GetType() == formula::svDouble)
@@ -1265,11 +1259,9 @@ public:
 #ifdef  ISNAN
                     ss << "{\n\t\t";
 #endif
-                    nItems += 1;
                 }
                 else
                 {
-                    nItems += 1;
                 }
             }
 #ifdef  ISNAN
@@ -1304,7 +1296,7 @@ public:
         ss << "return tmp";
 #ifdef  ISNAN
         if (isAverage())
-            ss << "/(double)nCount";
+            ss << "*pow((double)nCount,-1.0)";
 #else
         if (isAverage())
             ss << "/(double)"<<nItems;
@@ -2827,10 +2819,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpSumIf));
                  break;
-            /*case ocNegSub:
+            case ocNegSub:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpNegSub));
-                 break;*/
+                 break;
             case ocAveDev:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpAveDev));
@@ -3071,6 +3063,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpBesselj));
                 }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getGestep"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpGestep));
+                }
                 else
                     throw UnhandledToken(pChild, "unhandled opcode");
                 break;
@@ -3175,6 +3173,9 @@ public:
             global_work_size, NULL, 0, NULL, NULL);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
+        err = clFinish(kEnv.mpkCmdQueue);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err, __FILE__, __LINE__);
     }
     virtual ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }

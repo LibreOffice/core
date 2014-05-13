@@ -196,6 +196,71 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return DBL_MAX;\n";
     ss << "}";
 }
+void OpGestep::GenSlidingWindowFunction(
+    std::stringstream &ss,const std::string &sSymName,
+    SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    double tmp=0,tmp0 =0,tmp1 = 0;\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    size_t i = vSubArguments.size();
+    ss <<"\n";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+            ss << "    {\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    {\n";
+#endif
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            tmp"<<i<<" = 0;\n";
+            ss << "        else\n";
+            ss << "            tmp"<<i<<" = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n    }\n";
+        }
+        else
+        {
+            ss << "tmp"<<i<<" ="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
+#endif
+    }
+    ss << "    tmp =tmp0 >= tmp1 ? 1 : 0;\n";
+    ss << "    return tmp;\n";
+    ss << "}\n";
+}
 
 }}
 
