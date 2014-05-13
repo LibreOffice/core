@@ -312,8 +312,6 @@ OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const ::com::sun::star:
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedObject( const OUString& rName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetEmbeddedObject" );
-
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Empty object name!");
 
     uno::Reference < embed::XEmbeddedObject > xObj;
@@ -390,8 +388,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject( const uno::Sequence < sal_Int8 >& rClassId,
             const uno::Sequence < beans::PropertyValue >& rArgs, OUString& rNewName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CreateEmbeddedObject" );
-
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
@@ -431,8 +427,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 
 void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, const OUString& rName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::AddEmbeddedObject" );
-
 #if OSL_DEBUG_LEVEL > 1
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Added object doesn't have a name!");
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
@@ -495,8 +489,6 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
 
 bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName, bool bCopy )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::StoreEmbeddedObject" );
-
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();
@@ -536,7 +528,6 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed:
 
 bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( Object )" );
     // store it into the container storage
     if ( StoreEmbeddedObject( xObj, rName, false ) )
     {
@@ -550,8 +541,6 @@ bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < io::XInputStream >& xStm, OUString& rNewName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( InputStream )" );
-
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
@@ -612,8 +601,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aMedium, OUString& rNewName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( MediaDescriptor )" );
-
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
@@ -646,8 +633,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedLink( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aMedium, OUString& rNewName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedLink" );
-
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
@@ -685,8 +670,6 @@ bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectContainer
                                                             const OUString& aOrigName,
                                                             const OUString& aTargetName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::TryToCopyGraphReplacement" );
-
     bool bResult = false;
 
     if ( ( &rSrc != this || !aOrigName.equals( aTargetName ) ) && !aOrigName.isEmpty() && !aTargetName.isEmpty() )
@@ -702,8 +685,6 @@ bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectContainer
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyAndGetEmbeddedObject" );
-
     uno::Reference< embed::XEmbeddedObject > xResult;
 
     // TODO/LATER: For now only objects that implement XEmbedPersist have a replacement image, it might change in future
@@ -855,8 +836,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
 
 bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::MoveEmbeddedObject( Object )" );
-
     // get the object name before(!) it is assigned to a new storage
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     OUString aName;
@@ -920,8 +899,6 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc,
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
 bool EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool bClose, bool bKeepToTempStorage )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveEmbeddedObject( Name )" );
-
     uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( rName );
     if ( xObj.is() )
         //return RemoveEmbeddedObject( xObj, bClose );
@@ -932,8 +909,6 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool 
 
 bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& rCnt )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::MoveEmbeddedObject( Name )" );
-
     // find object entry
     EmbeddedObjectContainerNameMap::iterator aIt2 = rCnt.pImpl->maObjectContainer.find( rName );
     OSL_ENSURE( aIt2 == rCnt.pImpl->maObjectContainer.end(), "Object does already exist in target container!" );
@@ -987,8 +962,6 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, Embedde
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
 bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, bool bClose, bool bKeepToTempStorage )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveEmbeddedObject( Object )" );
-
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     OUString aName;
     if ( xPersist.is() )
@@ -1131,8 +1104,6 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
 
 bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CloseEmbeddedObject" );
-
     // disconnect the object from the container and close it if possible
 
     bool bFound = false;
@@ -1168,8 +1139,6 @@ bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
 
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const OUString& aName, OUString* pMediaType )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetGraphicStream( Name )" );
-
     uno::Reference < io::XInputStream > xStream;
 
     SAL_WARN_IF( aName.isEmpty(), "comphelper.container", "Retrieving graphic for unknown object!" );
@@ -1200,16 +1169,12 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
 
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, OUString* pMediaType )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetGraphicStream( Object )" );
-
     // try to load it from the container storage
     return GetGraphicStream( GetEmbeddedObjectName( xObj ), pMediaType );
 }
 
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( const OUString& aName, OUString* pMediaType )
 {
-    SAL_INFO( "comphelper.container", "comphelper::EmbeddedObjectContainer::GetObjectStream( Name )" );
-
     uno::Reference < io::XInputStream > xInputStream;
 
     SAL_WARN_IF( aName.isEmpty(), "comphelper.container", "Retrieving stream for unknown object!" );
@@ -1239,17 +1204,12 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( co
 
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString* pMediaType )
 {
-
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetGraphicStream( Object )" );
-
     // try to load it from the container storage
     return GetObjectStream( GetEmbeddedObjectName( xObj ), pMediaType );
 }
 
 bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertGraphicStream" );
-
     try
     {
         uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
@@ -1285,8 +1245,6 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno::Re
 
 bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertGraphicStreamDirectly" );
-
     try
     {
         uno::Reference < embed::XStorage > xReplacement = pImpl->GetReplacements();
@@ -1317,8 +1275,6 @@ bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::star:
 
 bool EmbeddedObjectContainer::RemoveGraphicStream( const OUString& rObjectName )
 {
-    SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveGraphicStream" );
-
     try
     {
         uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
