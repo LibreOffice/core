@@ -2921,7 +2921,7 @@ void OpConvert::GenSlidingWindowFunction(
 void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-    ss << "\ndouble " << sSymName;
+       ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"( ";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
@@ -2932,13 +2932,9 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    int i = 0;\n";
-    ss << "    double product=0.0;\n\n";
+    ss << "    double product=1.0;\n\n";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
-        std::stringstream ssArgNoI;
-        ssArgNoI << i;
-        std::string sArgNoI = ssArgNoI.str();
-        ss << std::string("    double arg")+sArgNoI+";\n";
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
         if (pCur->GetType() == formula::svDoubleVectorRef)
@@ -2946,52 +2942,49 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
             const formula::DoubleVectorRefToken* pDVR =
             static_cast<const formula::DoubleVectorRefToken *>(pCur);
             size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << std::string("    arg")+sArgNoI+" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss <<";\n";
-#ifdef ISNAN
-            ss << std::string("    if(isNan(arg")+sArgNoI+")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "    {\n";
-            ss << std::string("        arg")+sArgNoI+" = 0;\n";
-            ss << "    }\n";
-#endif
-            ss << std::string("    product = arg")+sArgNoI+";\n";
-            ss << "    for (i = ";
-            ss << "1; i < "<< nCurWindowSize << "; i++)\n";
-            ss << "    {\n";
-            ss << std::string("        arg")+sArgNoI+" = ";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-#ifdef ISNAN
-            ss <<std::string("        if(isNan(arg")+sArgNoI+")||((gid0+i)>=";
-            ss << pDVR->GetArrayLength();
-            ss << "))\n";
-            ss << "        {\n";
-            ss << std::string("            arg")+sArgNoI+" = 0;\n";
-            ss << "        }\n";
-#endif
-            ss << std::string("        product*=arg")+sArgNoI+";\n";
-            ss << "    }\n";
+
+             ss << "    for (int i = ";
+             if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+             {
+                 ss << "gid0; i < " << pDVR->GetArrayLength();
+                 ss << " && i < " << nCurWindowSize  << "; i++)\n";
+                 ss << "    {\n";
+             }
+             else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+             {
+                 ss << "0; i < " << pDVR->GetArrayLength();
+                 ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
+                 ss << "    {\n";
+             }
+             else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+             {
+                 ss << "0; i + gid0 < " <<  pDVR->GetArrayLength();
+                 ss << " &&  i < " << nCurWindowSize << "; i++)\n";
+                 ss << "    {\n";
+              }
+              else if (pDVR->IsStartFixed() && pDVR->IsEndFixed())
+              {
+
+                 ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
+                 ss << "    {\n";
+              }
+              ss << "if(!isNan("<<vSubArguments[i]->GenSlidingWindowDeclRef()<<"))\n";
+              ss << "product = product*";
+              ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
+              ss << "    }\n";
             }
             else if (pCur->GetType() == formula::svSingleVectorRef)
             {
-#ifdef  ISNAN
-                ss << std::string("    arg")+sArgNoI+" = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << ";\n";
-                ss << std::string("    product*=arg")+sArgNoI+";\n";
-#endif
+                ss << "if(!isNan("<<vSubArguments[i]->GenSlidingWindowDeclRef()<<"))\n";
+                ss << "product = product*";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
+
             }
-            else if (pCur->GetType() == formula::svDouble)
+            else
             {
-#ifdef  ISNAN
-                ss << std::string("    arg")+sArgNoI+" = ";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << ";\n";
-                ss << std::string("    product*=arg")+sArgNoI+";\n";
-#endif
+                ss << "if(!isNan("<<vSubArguments[i]->GenSlidingWindowDeclRef()<<"))\n";
+                ss << "product = product*";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
             }
         }
         ss << "    return product;\n";
@@ -3072,12 +3065,11 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
         if(vSubArguments[paraThreeIndex]->GetFormulaToken()->GetType() ==
         formula::svDoubleVectorRef)
         {
-            unsigned paraThreeWidth = 1;
             FormulaToken *tmpCur2 =
             vSubArguments[paraThreeIndex]->GetFormulaToken();
             const formula::DoubleVectorRefToken*pCurDVR2= static_cast<const
                 formula::DoubleVectorRefToken *>(tmpCur2);
-            paraThreeWidth = pCurDVR2->GetArrays().size();
+            unsigned paraThreeWidth = pCurDVR2->GetArrays().size();
              if(paraThreeWidth > 1)
             {
                 throw Unhandled();
