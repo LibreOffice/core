@@ -211,6 +211,7 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     m_pHandle->viewport.y = 0;
     m_pHandle->viewport.width = aSize.Width();
     m_pHandle->viewport.height = aSize.Height();
+    gltf_renderer_set_content(m_pHandle);
     OGLWindow* pWindow = new OGLWindow(m_pHandle, &m_aContext, pChildWindow);
     return uno::Reference< media::XPlayerWindow >( pWindow );
 }
