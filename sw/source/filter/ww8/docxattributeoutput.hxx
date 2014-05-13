@@ -358,7 +358,7 @@ public:
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
-    void ClearGraphicCache();
+    void ClearRelIdCache();
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.

@@ -3567,7 +3567,7 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
     }
 }
 
-void DocxAttributeOutput::ClearGraphicCache()
+void DocxAttributeOutput::ClearRelIdCache()
 {
     m_aRelIdCache.clear();
 }
