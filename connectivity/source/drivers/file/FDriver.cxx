@@ -40,12 +40,10 @@ OFileDriver::OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::sta
     : ODriver_BASE(m_aMutex)
     ,m_xContext(_rxContext)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::OFileDriver" );
 }
 
 void OFileDriver::disposing()
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::disposing" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
 
@@ -95,7 +93,6 @@ Sequence< OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  ) throw(Ru
 
 Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::connect" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
@@ -110,13 +107,11 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, con
 sal_Bool SAL_CALL OFileDriver::acceptsURL( const OUString& url )
                 throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::acceptsURL" );
     return url.startsWith("sdbc:file:");
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getPropertyInfo" );
     if ( acceptsURL(url) )
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
@@ -179,13 +174,11 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
 
 sal_Int32 SAL_CALL OFileDriver::getMajorVersion(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getMajorVersion" );
     return 1;
 }
 
 sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getMinorVersion" );
     return 0;
 }
 
@@ -193,7 +186,6 @@ sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  ) throw(RuntimeException, std:
 // XDataDefinitionSupplier
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection( const Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getDataDefinitionByConnection" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
@@ -221,7 +213,6 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
 
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileDriver::getDataDefinitionByURL" );
     if ( ! acceptsURL(url) )
     {
         ::connectivity::SharedResources aResources;

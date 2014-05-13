@@ -47,7 +47,6 @@ using namespace com::sun::star::container;
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
                         ,m_pConnection(_pCon)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::ODatabaseMetaData" );
 }
 
 ODatabaseMetaData::~ODatabaseMetaData()
@@ -56,13 +55,11 @@ ODatabaseMetaData::~ODatabaseMetaData()
 
 Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_getTypeInfo_throw" );
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTypeInfo );
 }
 
 OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_getCatalogSeparator_throw" );
     return OUString();
 }
 
@@ -70,7 +67,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/,
         const OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getColumns" );
     SAL_WARN( "connectivity.drivers","Should be overloaded!");
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
 }
@@ -163,7 +159,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/,
         const OUString& tableNamePattern, const Sequence< OUString >& types ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getTables" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
@@ -316,80 +311,67 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxBinaryLiteralLength" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxRowSize" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxCatalogNameLength" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxCharLiteralLength" );
     return SAL_MAX_INT32;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxColumnNameLength" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxColumnsInIndex" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxCursorNameLength" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxConnections" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxColumnsInTable" );
     return 0;
 }
 
 sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_getMaxStatements_throw" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxTableNameLength" );
     return 0;
 }
 
 sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_getMaxTablesInSelect_throw" );
     return 1;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getTablePrivileges" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
@@ -458,230 +440,192 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::doesMaxRowSizeIncludeBlobs" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::storesLowerCaseQuotedIdentifiers" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::storesLowerCaseIdentifiers" );
     return sal_False;
 }
 
 bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::storesMixedCaseIdentifiers" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::storesUpperCaseQuotedIdentifiers" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::storesUpperCaseIdentifiers" );
     return sal_False;
 }
 
 bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw" );
     return false;
 }
 
 bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw" );
     return false;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxIndexLength" );
     return 0;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsNonNullableColumns" );
     return sal_False;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getCatalogTerm" );
     return OUString();
 }
 
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_getIdentifierQuoteString_throw" );
     static const OUString sQuote("\"");
     return sQuote;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getExtraNameCharacters" );
     return OUString();
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsDifferentTableCorrelationNames" );
     return sal_True;
 }
 
 bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_isCatalogAtStart_throw" );
     return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::dataDefinitionIgnoredInTransactions" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::dataDefinitionCausesTransactionCommit" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsDataManipulationTransactionsOnly" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsPositionedDelete" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsPositionedUpdate" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsOpenStatementsAcrossRollback" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsOpenStatementsAcrossCommit" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsOpenCursorsAcrossCommit" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsOpenCursorsAcrossRollback" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsTransactionIsolationLevel" );
     return sal_False;
 }
 
 bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw" );
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsANSI92FullSQL" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsANSI92EntryLevelSQL" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsIntegrityEnhancementFacility" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSchemasInIndexDefinitions" );
     return sal_False;
 }
 
 bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw" );
     return false;
 }
 
 bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw" );
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsCatalogsInIndexDefinitions" );
     return sal_False;
 }
 
 bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw" );
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsOuterJoins" );
     return sal_False;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getTableTypes" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTableTypes );
@@ -700,416 +644,347 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxStatementLength" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxProcedureNameLength" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxSchemaNameLength" );
     return 0;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsTransactions" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::allProceduresAreCallable" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsStoredProcedures" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSelectForUpdate" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::allTablesAreSelectable" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::isReadOnly" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::usesLocalFiles" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::usesLocalFilePerTable" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsTypeConversion" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::nullPlusNonNullIsNull" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsColumnAliasing" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsTableCorrelationNames" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 /*fromType*/, sal_Int32 /*toType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsConvert" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsExpressionsInOrderBy" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsGroupBy" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsGroupByBeyondSelect" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsGroupByUnrelated" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsMultipleTransactions" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsMultipleResultSets" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsLikeEscapeClause" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsOrderByUnrelated" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsUnion" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsUnionAll" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsMixedCaseIdentifiers" );
     return sal_True;
 }
 
 bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw" );
     return false;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::nullsAreSortedAtEnd" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::nullsAreSortedAtStart" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::nullsAreSortedHigh" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::nullsAreSortedLow" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSchemasInProcedureCalls" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsCatalogsInProcedureCalls" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsCorrelatedSubqueries" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInComparisons(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSubqueriesInComparisons" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInExists(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSubqueriesInExists" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInIns(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSubqueriesInIns" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsSubqueriesInQuantifieds" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsANSI92IntermediateSQL" );
     return sal_False;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getURL" );
     static const OUString aValue(  "sdbc:file:" );
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getUserName" );
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDriverName" );
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDriverVersion" );
     return OUString::number(1);
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDatabaseProductVersion" );
     return OUString::number(0);
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDatabaseProductName" );
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getProcedureTerm" );
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getSchemaTerm" );
     return OUString();
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDriverMajorVersion" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDefaultTransactionIsolation" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDriverMinorVersion" );
     return 0;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getSQLKeywords" );
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getSearchStringEscape" );
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getStringFunctions" );
     return OUString("UCASE,LCASE,ASCII,LENGTH,OCTET_LENGTH,CHAR_LENGTH,CHARACTER_LENGTH,CHAR,CONCAT,LOCATE,SUBSTRING,LTRIM,RTRIM,SPACE,REPLACE,REPEAT,INSERT,LEFT,RIGHT");
 }
 
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getTimeDateFunctions" );
     return OUString("DAYOFWEEK,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,CURDATE,CURTIME,NOW");
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getSystemFunctions" );
     return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getNumericFunctions" );
     return OUString("ABS,SIGN,MOD,FLOOR,CEILING,ROUND,EXP,LN,LOG,LOG10,POWER,SQRT,PI,COS,SIN,TAN,ACOS,ASIN,ATAN,ATAN2,DEGREES,RADIANS");
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsExtendedSQLGrammar" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsCoreSQLGrammar" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsMinimumSQLGrammar" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsFullOuterJoins" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsLimitedOuterJoins" );
     return sal_False;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxColumnsInGroupBy" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxColumnsInOrderBy" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxColumnsInSelect" );
     return 0;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getMaxUserNameLength" );
     return 0;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsResultSetType" );
     switch(setType)
     {
         case ResultSetType::FORWARD_ONLY:
@@ -1123,7 +998,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) 
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 /*concurrency*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsResultSetConcurrency" );
     switch(setType)
     {
         case ResultSetType::FORWARD_ONLY:
@@ -1137,67 +1011,56 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
 
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::ownUpdatesAreVisible" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::ownDeletesAreVisible" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::ownInsertsAreVisible" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::othersUpdatesAreVisible" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::othersDeletesAreVisible" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::othersInsertsAreVisible" );
     return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::updatesAreDetected" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::deletesAreDetected" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::insertsAreDetected" );
     return sal_False;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::supportsBatchUpdates" );
     return sal_False;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getUDTs" );
     return NULL;
 }
 

@@ -68,9 +68,6 @@ OUString MQueryHelperResultEntry::getValue( const OString &key ) const
 
 void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rValue)
 {
-//    SAL_INFO("connectivity.mork", "MQueryHelper::setValue()" );
-//    SAL_INFO("connectivity.mork", "key: " << &key << " value: " << &rValue);
-
     m_Fields[ key ] = rValue;
 }
 
@@ -86,8 +83,6 @@ MQueryHelper::MQueryHelper(const OColumnAlias& _ca)
 
 MQueryHelper::~MQueryHelper()
 {
-    SAL_INFO("connectivity.mork", "MQueryHelper::~MQueryHelper()");
-
     clear_results();
     OSL_TRACE("OUT MQueryHelper::~MQueryHelper()");
 }
@@ -95,8 +90,6 @@ MQueryHelper::~MQueryHelper()
 
 void MQueryHelper::setAddressbook(OUString &ab)
 {
-    SAL_INFO("connectivity.mork", "MQueryHelper::setAddressbook()");
-
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_aAddressbook = ab;
@@ -106,7 +99,6 @@ void MQueryHelper::setAddressbook(OUString &ab)
 
 void MQueryHelper::setExpression( MQueryExpression &_expr )
 {
-    SAL_INFO("connectivity.mork", "MQueryHelper::setExpression()");
     OSL_TRACE("IN MQueryHelper::setExpression()");
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -117,8 +109,6 @@ void MQueryHelper::setExpression( MQueryExpression &_expr )
 
 void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 {
-//    SAL_INFO("connectivity.mork", "MQueryHelper::append()");
-
     if ( resEnt != NULL ) {
         m_aResults.push_back( resEnt );
         m_bAtEnd   = false;
@@ -157,9 +147,7 @@ MQueryHelper::getByIndex(sal_uInt32 nRow)
 
 sal_Int32 MQueryHelper::getResultCount() const
 {
-//    SAL_INFO("connectivity.mork", "MQueryHelper::getResultCount()" );
     sal_Int32 result = static_cast<sal_Int32>(m_aResults.size());
-//    SAL_INFO("connectivity.mork", "result: " << result);
 
     return result;
 }
@@ -188,7 +176,6 @@ bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
 
 bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType )
 {
-    SAL_INFO("connectivity.mork", "MQueryHelper::getRowValue()" );
     MQueryHelperResultEntry* xResEntry = getByIndex( nDBRow );
 
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
@@ -213,7 +200,6 @@ bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUS
 
 sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
 {
-    SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()");
     reset();
 
     OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );

@@ -69,7 +69,6 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::scanParameter" );
     DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
     // found parameter Name-Rule?
@@ -90,7 +89,6 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
 
 OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::GetOrderbyKeyValue" );
     sal_uInt32 nBookmarkValue = std::abs((sal_Int32)(_rRow->get())[0]->getValue());
 
     OKeyValue* pKeyValue = OKeyValue::createKeyValue((sal_uInt32)nBookmarkValue);

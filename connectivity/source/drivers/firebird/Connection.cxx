@@ -113,8 +113,6 @@ void SAL_CALL Connection::release() throw()
 void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "construct().");
-
     osl_atomic_increment( &m_refCount );
 
     m_sConnectionURL = url;
@@ -315,7 +313,6 @@ IMPLEMENT_SERVICE_INFO(Connection, "com.sun.star.sdbc.drivers.firebird.Connectio
 Reference< XBlob> Connection::createBlob(ISC_QUAD* pBlobId)
     throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "createBlob()");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
@@ -332,17 +329,12 @@ Reference< XBlob> Connection::createBlob(ISC_QUAD* pBlobId)
 Reference< XStatement > SAL_CALL Connection::createStatement( )
                                         throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.firebird", "createStatement().");
-
     MutexGuard aGuard( m_aMutex );
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     // the pre
     if(m_aTypeInfo.empty())
         buildTypeInfo();
-
-    SAL_INFO("connectivity.firebird", "createStatement(). "
-             "Creating statement.");
 
     // create a statement
     // the statement can only be executed once
@@ -630,8 +622,6 @@ void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >& typeMap)
 //----- XCloseable -----------------------------------------------------------
 void SAL_CALL Connection::close(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.firebird", "close().");
-
     // we just dispose us
     {
         MutexGuard aGuard( m_aMutex );
@@ -693,8 +683,6 @@ void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
 
 void Connection::buildTypeInfo() throw( SQLException)
 {
-    SAL_INFO("connectivity.firebird", "buildTypeInfo().");
-
     MutexGuard aGuard( m_aMutex );
 
     Reference< XResultSet> xRs = getMetaData ()->getTypeInfo ();
@@ -746,8 +734,6 @@ void Connection::buildTypeInfo() throw( SQLException)
 
 void Connection::disposing()
 {
-    SAL_INFO("connectivity.firebird", "disposing().");
-
     MutexGuard aGuard(m_aMutex);
 
     disposeStatements();
@@ -804,7 +790,6 @@ uno::Reference< XTablesSupplier > Connection::createCatalog()
 
 void Connection::rebuildIndexes() throw(SQLException)
 {
-    SAL_INFO("connectivity.firebird", "rebuildIndexes()");
     MutexGuard aGuard(m_aMutex);
 
     // We only need to do this for character based columns on user-created tables.

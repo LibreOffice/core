@@ -120,7 +120,6 @@ void OTools::getValue(  OConnection* _pConnection,
                         void* _pValue,
                         SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getValue" );
     const size_t properSize = sqlTypeLen(_nType);
     if ( properSize == static_cast<size_t>(-1) )
         SAL_WARN( "connectivity.drivers", "connectivity::odbc::OTools::getValue: unknown SQL type - cannot check buffer size");
@@ -162,7 +161,6 @@ void OTools::bindValue( OConnection* _pConnection,
                         rtl_TextEncoding _nTextEncoding,
                         bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::bindValue" );
     SQLRETURN nRetcode;
     SQLSMALLINT   fSqlType;
     SQLSMALLINT   fCType;
@@ -318,7 +316,6 @@ void OTools::ThrowException(const OConnection* _pConnection,
 
     // Additional Information on the latest ODBC-functioncall available
     // SQLError provides this Information.
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::ThrowException" );
 
     SDB_ODBC_CHAR szSqlState[5];
     SQLINTEGER pfNativeError;
@@ -357,7 +354,6 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                          bool &_bWasNull,
                                          const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getBytesValue" );
     sal_Int8 aCharArray[2048];
     // First try to fetch the data with the little Buffer:
     const SQLLEN nMaxLen = sizeof aCharArray;
@@ -411,7 +407,6 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                                        const Reference< XInterface >& _xInterface,
                                        rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getStringValue" );
     OUStringBuffer aData;
     switch(_fSqlType)
     {
@@ -664,7 +659,6 @@ sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
 
 SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::jdbcTypeToOdbc" );
     // For the most part, JDBC types match ODBC types.  We'll
     // just convert the ones that we know are different
 
@@ -700,7 +694,6 @@ void OTools::getBindTypes(bool _bUseWChar,
                           SQLSMALLINT& fSqlType
                           )
 {
-    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getBindTypes" );
     switch(_nOdbcType)
     {
         case SQL_CHAR:              if(_bUseWChar)

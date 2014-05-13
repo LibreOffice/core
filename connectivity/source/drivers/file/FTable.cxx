@@ -46,7 +46,6 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
                 ,m_nBufferSize(0)
                 ,m_bWriteable(false)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
     construct();
     m_aColumns = new OSQLColumns();
 }
@@ -70,7 +69,6 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
     , m_nBufferSize(0)
     , m_bWriteable(false)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
     m_aColumns = new OSQLColumns();
     construct();
     //  refreshColumns();
@@ -82,7 +80,6 @@ OFileTable::~OFileTable( )
 
 void OFileTable::refreshColumns()
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshColumns" );
     TStringVector aVector;
     Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
                                                                                m_SchemaName,m_Name, OUString("%"));
@@ -102,17 +99,14 @@ void OFileTable::refreshColumns()
 
 void OFileTable::refreshKeys()
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshKeys" );
 }
 
 void OFileTable::refreshIndexes()
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshIndexes" );
 }
 
 Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::queryInterface" );
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
         rType == ::getCppuType((const Reference<XRename>*)0) ||
         rType == ::getCppuType((const Reference<XAlterTable>*)0) ||
@@ -125,7 +119,6 @@ Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 void SAL_CALL OFileTable::disposing(void)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::disposing" );
     OTable::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -135,7 +128,6 @@ void SAL_CALL OFileTable::disposing(void)
 
 Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getUnoTunnelImplementationId" );
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
     {
@@ -153,7 +145,6 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
@@ -161,7 +152,6 @@ sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 
 void OFileTable::FileClose()
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::FileClose" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if (m_pFileStream && m_pFileStream->IsWritable())
@@ -189,38 +179,32 @@ void SAL_CALL OFileTable::release() throw()
 
 bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, bool /*bFlush*/, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::InsertRow" );
     return false;
 }
 
 bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::DeleteRow" );
     return false;
 }
 
 bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::UpdateRow" );
     return false;
 }
 
 void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::addColumn" );
     OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 
 void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::dropColumn" );
     OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 
 
 SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::createStream_simpleError" );
     utl::UcbLockBytesHandler* p_null_dummy = NULL;
     SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, (_eOpenMode & STREAM_NOCREATE) == STREAM_NOCREATE, p_null_dummy);
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
@@ -234,7 +218,6 @@ SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, Stre
 
 void OFileTable::refreshHeader()
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshHeader" );
 }
 
 

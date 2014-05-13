@@ -26,7 +26,6 @@ using namespace connectivity::file;
 
 ORowSetValue OOp_Upper::operate(const ORowSetValue& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Upper::operate" );
     if ( lhs.isNull() )
         return lhs;
 
@@ -35,7 +34,6 @@ ORowSetValue OOp_Upper::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_Lower::operate(const ORowSetValue& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Lower::operate" );
     if ( lhs.isNull() )
         return lhs;
 
@@ -44,7 +42,6 @@ ORowSetValue OOp_Lower::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_Ascii::operate(const ORowSetValue& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Ascii::operate" );
     if ( lhs.isNull() )
         return lhs;
     OString sStr(OUStringToOString(lhs,RTL_TEXTENCODING_ASCII_US));
@@ -54,7 +51,6 @@ ORowSetValue OOp_Ascii::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_CharLength::operate(const ORowSetValue& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_CharLength::operate" );
     if ( lhs.isNull() )
         return lhs;
 
@@ -63,7 +59,6 @@ ORowSetValue OOp_CharLength::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_Char::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Char::operate" );
     if ( lhs.empty() )
         return ORowSetValue();
 
@@ -85,7 +80,6 @@ ORowSetValue OOp_Char::operate(const ::std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_Concat::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Concat::operate" );
     if ( lhs.empty() )
         return ORowSetValue();
 
@@ -105,7 +99,6 @@ ORowSetValue OOp_Concat::operate(const ::std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_Locate::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Locate::operate" );
     ::std::vector<ORowSetValue>::const_iterator aIter = lhs.begin();
     ::std::vector<ORowSetValue>::const_iterator aEnd = lhs.end();
     for (; aIter != aEnd; ++aIter)
@@ -124,7 +117,6 @@ ORowSetValue OOp_Locate::operate(const ::std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_SubString::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_SubString::operate" );
     ::std::vector<ORowSetValue>::const_iterator aIter = lhs.begin();
     ::std::vector<ORowSetValue>::const_iterator aEnd = lhs.end();
     for (; aIter != aEnd; ++aIter)
@@ -143,7 +135,6 @@ ORowSetValue OOp_SubString::operate(const ::std::vector<ORowSetValue>& lhs) cons
 
 ORowSetValue OOp_LTrim::operate(const ORowSetValue& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_LTrim::operate" );
     if ( lhs.isNull() )
         return lhs;
 
@@ -154,7 +145,6 @@ ORowSetValue OOp_LTrim::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_RTrim::operate(const ORowSetValue& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_RTrim::operate" );
     if ( lhs.isNull() )
         return lhs;
 
@@ -165,7 +155,6 @@ ORowSetValue OOp_RTrim::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Space::operate" );
     if ( lhs.isNull() )
         return lhs;
 
@@ -181,7 +170,6 @@ ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_Replace::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Replace::operate" );
     if ( lhs.size() != 3 )
         return ORowSetValue();
 
@@ -200,7 +188,6 @@ ORowSetValue OOp_Replace::operate(const ::std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_Repeat::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Repeat::operate" );
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
@@ -215,7 +202,6 @@ ORowSetValue OOp_Repeat::operate(const ORowSetValue& lhs,const ORowSetValue& rhs
 
 ORowSetValue OOp_Insert::operate(const ::std::vector<ORowSetValue>& lhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Insert::operate" );
     if ( lhs.size() != 4 )
         return ORowSetValue();
 
@@ -229,7 +215,6 @@ ORowSetValue OOp_Insert::operate(const ::std::vector<ORowSetValue>& lhs) const
 
 ORowSetValue OOp_Left::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Left::operate" );
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
@@ -242,7 +227,6 @@ ORowSetValue OOp_Left::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) 
 
 ORowSetValue OOp_Right::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_Right::operate" );
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 

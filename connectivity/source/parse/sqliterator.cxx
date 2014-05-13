@@ -142,7 +142,6 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XConnection >& _rx
     :m_rParser( _rParser )
     ,m_pImpl( new OSQLParseTreeIteratorImpl( _rxConnection, _rxTables ) )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::OSQLParseTreeIterator" );
     setParseTree(pRoot);
 }
 
@@ -151,7 +150,6 @@ OSQLParseTreeIterator::OSQLParseTreeIterator( const OSQLParseTreeIterator& _rPar
     :m_rParser( _rParser )
     ,m_pImpl( new OSQLParseTreeIteratorImpl( _rParentIterator.m_pImpl->m_xConnection, _rParentIterator.m_pImpl->m_xTableContainer ) )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::OSQLParseTreeIterator" );
     m_pImpl->m_pForbiddenQueryNames = _rParentIterator.m_pImpl->m_pForbiddenQueryNames;
     setParseTree( pRoot );
 }
@@ -165,21 +163,18 @@ OSQLParseTreeIterator::~OSQLParseTreeIterator()
 
 const OSQLTables& OSQLParseTreeIterator::getTables() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getTables" );
     return *m_pImpl->m_pTables;
 }
 
 
 bool OSQLParseTreeIterator::isCaseSensitive() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::isCaseSensitive" );
     return m_pImpl->m_bIsCaseSensitive;
 }
 
 
 void OSQLParseTreeIterator::dispose()
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::dispose" );
     m_aSelectColumns    = NULL;
     m_aGroupColumns     = NULL;
     m_aOrderColumns     = NULL;
@@ -193,7 +188,6 @@ void OSQLParseTreeIterator::dispose()
 
 void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::setParseTree" );
     m_pImpl->m_pTables->clear();
     m_pImpl->m_pSubTables->clear();
 
@@ -312,7 +306,6 @@ namespace
 
 void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQuery  )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::impl_getQueryParameterColumns" );
     if ( ( m_pImpl->m_nIncludeMask & Parameters ) != Parameters )
         // parameters not to be included in the traversal
         return;
@@ -361,7 +354,6 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
 
 OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComposedName )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::impl_locateRecordSource" );
     if ( _rComposedName.isEmpty() )
     {
         SAL_WARN( "connectivity.parse", "OSQLParseTreeIterator::impl_locateRecordSource: no object name at all?" );
@@ -439,7 +431,6 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComp
 
 void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const OUString & rTableRange )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseOneTableName" );
     if ( ( m_pImpl->m_nIncludeMask & TableNames ) != TableNames )
         // tables should not be included in the traversal
         return;
@@ -509,7 +500,6 @@ void OSQLParseTreeIterator::impl_fillJoinConditions(const OSQLParseNode* i_pJoin
 
 void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, OUString& aTableRange )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getQualified_join" );
     OSL_PRECOND( SQL_ISRULE( pTableRef, cross_union ) || SQL_ISRULE( pTableRef, qualified_join ) ,
         "OSQLParseTreeIterator::getQualified_join: illegal node!" );
 
@@ -552,7 +542,6 @@ void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLP
 
 const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, const OSQLParseNode *pTableRef,OUString& rTableRange )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getTableNode" );
     OSL_PRECOND( SQL_ISRULE( pTableRef, table_ref ) || SQL_ISRULE( pTableRef, joined_table )
               || SQL_ISRULE( pTableRef, qualified_join ) || SQL_ISRULE( pTableRef, cross_union ),
         "OSQLParseTreeIterator::getTableNode: only to be called for table_ref nodes!" );
@@ -617,7 +606,6 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
 
 void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLParseNode* pSelect)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getSelect_statement" );
     if(SQL_ISRULE(pSelect,union_statement))
     {
         getSelect_statement(_rTables,pSelect->getChild(0));
@@ -673,7 +661,6 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
 
 bool OSQLParseTreeIterator::traverseTableNames(OSQLTables& _rTables)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseTableNames" );
     if ( m_pParseTree == NULL )
         return false;
 
@@ -709,7 +696,6 @@ bool OSQLParseTreeIterator::traverseTableNames(OSQLTables& _rTables)
 
 OUString OSQLParseTreeIterator::getColumnAlias(const OSQLParseNode* _pDerivedColumn)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getColumnAlias" );
     OSL_ENSURE(SQL_ISRULE(_pDerivedColumn,derived_column),"No derived column!");
     OUString sColumnAlias;
     if(_pDerivedColumn->getChild(1)->count() == 2)
@@ -779,7 +765,6 @@ void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
                         OUString& _rColumnName,
                         OUString& _rTableRange) const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getColumnRange" );
     OUString sDummy;
     lcl_getColumnRange( _pColumnRef, m_pImpl->m_xConnection, _rColumnName, _rTableRange, NULL, sDummy );
 }
@@ -790,7 +775,6 @@ void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
                         OUString& _rTableRange,
                         OUString& _out_rColumnAliasIfPresent ) const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getColumnRange" );
     lcl_getColumnRange( _pColumnRef, m_pImpl->m_xConnection, _rColumnName, _rTableRange, &*m_aSelectColumns, _out_rColumnAliasIfPresent );
 }
 
@@ -798,7 +782,6 @@ void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
 void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
     const Reference< XConnection >& _rxConnection, OUString& _out_rColumnName, OUString& _out_rTableRange )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getColumnRange" );
     OUString sDummy;
     lcl_getColumnRange( _pColumnRef, _rxConnection, _out_rColumnName, _out_rTableRange, NULL, sDummy );
 }
@@ -815,9 +798,9 @@ bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, OUSt
     else
         return false;
 }
+
 bool OSQLParseTreeIterator::impl_getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getColumnTableRange" );
     // See if all columns belong to one table
     if (SQL_ISRULE(pNode,column_ref))
     {
@@ -873,7 +856,6 @@ bool OSQLParseTreeIterator::impl_getColumnTableRange(const OSQLParseNode* pNode,
 
 void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNode)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseCreateColumns" );
     //  aIteratorStatus.Clear();
 
     if (!pSelectNode || m_eStatementType != SQL_STATEMENT_CREATE_TABLE || m_pImpl->m_pTables->empty())
@@ -934,7 +916,6 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
 
 bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSelectNode)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseSelectColumnNames" );
     if ( ( m_pImpl->m_nIncludeMask & SelectColumns ) != SelectColumns )
         return true;
 
@@ -1039,14 +1020,12 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 
 bool OSQLParseTreeIterator::traverseOrderByColumnNames(const OSQLParseNode* pSelectNode)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseOrderByColumnNames" );
     traverseByColumnNames( pSelectNode, true );
     return !hasErrors();
 }
 
 void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNode, bool _bOrder)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseByColumnNames" );
     //  aIteratorStatus.Clear();
 
     if (pSelectNode == NULL)
@@ -1131,7 +1110,6 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
 
 bool OSQLParseTreeIterator::traverseGroupByColumnNames(const OSQLParseNode* pSelectNode)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseGroupByColumnNames" );
     traverseByColumnNames( pSelectNode, false );
     return !hasErrors();
 }
@@ -1158,7 +1136,6 @@ namespace
 
 void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseParameters" );
     if ( _pNode == NULL )
         return;
 
@@ -1212,7 +1189,6 @@ void OSQLParseTreeIterator::traverseParameters(const OSQLParseNode* _pNode)
 
 bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSelectNode)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseSelectionCriteria" );
     if ( pSelectNode == NULL )
         return false;
 
@@ -1275,9 +1251,6 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
 
 void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondition)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseSearchCondition" );
-
-
     if (
             SQL_ISRULE(pSearchCondition,boolean_primary) &&
             pSearchCondition->count() == 3 &&
@@ -1408,7 +1381,6 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                               ,OUString& _aTableRange
                                               ,const OUString& _rColumnAlias)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseParameter" );
     if ( !SQL_ISRULE( _pParseNode, parameter ) )
         return;
 
@@ -1548,7 +1520,6 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                                 OUString& rValue,
                                 OSQLParseNode * pParseNode)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseOnePredicate" );
     if ( !pParseNode )
         return;
 
@@ -1572,21 +1543,18 @@ void OSQLParseTreeIterator::traverseOnePredicate(
 
 void OSQLParseTreeIterator::traverseSome( sal_uInt32 _nIncludeMask )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseSome" );
     impl_traverse( _nIncludeMask );
 }
 
 
 void OSQLParseTreeIterator::traverseAll()
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseAll" );
     impl_traverse( All );
 }
 
 
 void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::impl_traverse" );
     impl_resetErrors();
     m_pImpl->m_nIncludeMask = _nIncludeMask;
 
@@ -1628,7 +1596,6 @@ void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
 OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableName,
     const OUString& rCatalogName, const OUString& rSchemaName )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::impl_createTableObject" );
     OSL_PRECOND( m_eStatementType == SQL_STATEMENT_CREATE_TABLE,
         "OSQLParseTreeIterator::impl_createTableObject: only to be called for CREATE TABLE statements!" );
         // (in all other cases, m_pTables is to contain the table objects as obtained from the tables
@@ -1648,8 +1615,6 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableN
 
 void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::appendColumns" );
-
     if (!_rTable.is())
         return;
 
@@ -1695,7 +1660,6 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColum
 
 void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt, sal_Int32 _nType, bool bAggFkt)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::setSelectColumnName" );
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
@@ -1851,7 +1815,6 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
 
 OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString & rColumnName) const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getUniqueColumnName" );
     OUString aAlias(rColumnName);
 
     OSQLColumns::Vector::const_iterator aIter = find(
@@ -1876,7 +1839,6 @@ OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString & rColumnName
 
 void OSQLParseTreeIterator::setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, bool bAscending)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::setOrderByColumnName" );
     Reference<XPropertySet> xColumn = findSelectColumn( rColumnName );
     if ( !xColumn.is() )
         xColumn = findColumn ( rColumnName, rTableRange, false );
@@ -1900,7 +1862,6 @@ void OSQLParseTreeIterator::setOrderByColumnName(const OUString & rColumnName, O
 
 void OSQLParseTreeIterator::setGroupByColumnName(const OUString & rColumnName, OUString & rTableRange)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::setGroupByColumnName" );
     Reference<XPropertySet> xColumn = findColumn( rColumnName, rTableRange, false );
     if ( xColumn.is() )
         m_aGroupColumns->get().push_back(new OParseColumn(xColumn,isCaseSensitive()));
@@ -1923,9 +1884,6 @@ void OSQLParseTreeIterator::setGroupByColumnName(const OUString & rColumnName, O
 
 const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getWhereTree" );
-
-
     if (!m_pParseTree)
         return NULL;
 
@@ -1955,9 +1913,6 @@ const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
 
 const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getOrderTree" );
-
-
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
         return NULL;
 
@@ -1979,7 +1934,6 @@ const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
 
 const OSQLParseNode* OSQLParseTreeIterator::getGroupByTree() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getGroupByTree" );
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
         return NULL;
 
@@ -2022,7 +1976,6 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
 
 bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode) const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::isTableNode" );
     return _pTableNode && (SQL_ISRULE(_pTableNode,catalog_name) ||
                            SQL_ISRULE(_pTableNode,schema_name)  ||
                            SQL_ISRULE(_pTableNode,table_name));
@@ -2030,28 +1983,24 @@ bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode) const
 
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleWhereTree() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getSimpleWhereTree" );
     const OSQLParseNode* pNode = getWhereTree();
     return pNode ? pNode->getChild(1) : NULL;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleOrderTree() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getSimpleOrderTree" );
     const OSQLParseNode* pNode = getOrderTree();
     return pNode ? pNode->getChild(2) : NULL;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleGroupByTree() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getSimpleGroupByTree" );
     const OSQLParseNode* pNode = getGroupByTree();
     return pNode ? pNode->getChild(2) : NULL;
 }
 
 const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getSimpleHavingTree" );
     const OSQLParseNode* pNode = getHavingTree();
     return pNode ? pNode->getChild(1) : NULL;
 }
@@ -2059,7 +2008,6 @@ const OSQLParseNode* OSQLParseTreeIterator::getSimpleHavingTree() const
 
 Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUString & rColumnName )
 {
-    SAL_INFO( "connectivity.parse", "parse lionel@mamane.lu OSQLParseTreeIterator::findSelectColumn" );
     for ( OSQLColumns::Vector::const_iterator lookupColumn = m_aSelectColumns->get().begin();
           lookupColumn != m_aSelectColumns->get().end();
           ++lookupColumn )
@@ -2083,7 +2031,6 @@ Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUStrin
 
 Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const OUString & rColumnName, OUString & rTableRange, bool _bLookInSubTables )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::findColumn" );
     Reference< XPropertySet > xColumn = findColumn( *m_pImpl->m_pTables, rColumnName, rTableRange );
     if ( !xColumn.is() && _bLookInSubTables )
         xColumn = findColumn( *m_pImpl->m_pSubTables, rColumnName, rTableRange );
@@ -2093,7 +2040,6 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const OUString & rC
 
 Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _rTables, const OUString & rColumnName, OUString & rTableRange)
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::findColumn" );
     Reference< XPropertySet > xColumn;
     if ( !rTableRange.isEmpty() )
     {
@@ -2130,7 +2076,6 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _r
 
 void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, const OUString* _pReplaceToken1, const OUString* _pReplaceToken2 )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::impl_appendError" );
     OUString sErrorMessage = m_rParser.getContext().getErrorMessage( _eError );
     if ( _pReplaceToken1 )
     {
@@ -2150,7 +2095,6 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
 
 void OSQLParseTreeIterator::impl_appendError( const SQLException& _rError )
 {
-    SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::impl_appendError" );
     if ( !m_aErrors.Message.isEmpty() )
     {
         SQLException* pErrorChain = &m_aErrors;
