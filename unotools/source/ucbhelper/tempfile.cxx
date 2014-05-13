@@ -294,8 +294,6 @@ OUString lcl_createName(const OUString& rLeadingChars, bool _bStartWithZero,
                     return OUString();
             }
         }
-        if ( !_bStartWithZero )
-            aTmp += OUString::number( i );
     }
 }
 
