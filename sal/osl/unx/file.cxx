@@ -821,7 +821,8 @@ openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const char
 #endif
 
 oslFileError
-openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags )
+openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
+              mode_t mode)
 {
     oslFileError eRet;
 
@@ -852,17 +853,21 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags 
 #endif
 
     /* set mode and flags */
-    int mode  = S_IRUSR | S_IRGRP | S_IROTH;
+    int defmode  = S_IRUSR | S_IRGRP | S_IROTH;
     int flags = O_RDONLY;
     if (uFlags & osl_File_OpenFlag_Write)
     {
-        mode |= S_IWUSR | S_IWGRP | S_IWOTH;
+        defmode |= S_IWUSR | S_IWGRP | S_IWOTH;
         flags = OPEN_WRITE_FLAGS;
     }
     if (uFlags & osl_File_OpenFlag_Create)
     {
-        mode |= S_IWUSR | S_IWGRP | S_IWOTH;
+        defmode |= S_IWUSR | S_IWGRP | S_IWOTH;
         flags = OPEN_CREATE_FLAGS;
+    }
+    if (mode == mode_t(-1))
+    {
+        mode = defmode;
     }
 
     /* Check for flags passed in from SvFileStream::Open() */
@@ -1000,6 +1005,12 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags 
 oslFileError
 SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags )
 {
+    return openFile(ustrFileURL, pHandle, uFlags, mode_t(-1));
+}
+
+oslFileError
+SAL_CALL openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags, mode_t mode )
+{
     oslFileError eRet;
 
     if ((ustrFileURL == 0) || (ustrFileURL->length == 0) || (pHandle == 0))
@@ -1016,7 +1027,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 #endif /* MACOSX */
 
-    return openFilePath (buffer, pHandle, uFlags);
+    return openFilePath (buffer, pHandle, uFlags, mode);
 }
 
 oslFileError

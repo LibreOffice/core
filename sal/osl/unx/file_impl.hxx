@@ -22,6 +22,7 @@
 
 #include "osl/file.h"
 #include <stddef.h>
+#include <sys/types.h>
 
 struct DirectoryItem_Impl
 {
@@ -43,10 +44,14 @@ struct DirectoryItem_Impl
     oslFileType getFileType() const;
 };
 
+oslFileError openFile(
+    rtl_uString * pustrFileURL, oslFileHandle * pHandle, sal_uInt32 uFlags,
+    mode_t mode);
+
 oslFileError openFilePath(
     const char *cpFilePath,
     oslFileHandle* pHandle,
-    sal_uInt32 uFlags );
+    sal_uInt32 uFlags, mode_t mode );
 
 #endif /* INCLUDED_FILE_IMPL_HXX */
 

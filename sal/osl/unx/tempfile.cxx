@@ -30,6 +30,7 @@
 #include <sal/macros.h>
 
 #include "file_url.h"
+#include "file_impl.hxx"
 
 oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
 {
@@ -233,17 +234,13 @@ static oslFileError osl_create_temp_file_impl_(
 
         if (osl_File_E_None == osl_error)
         {
-            /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-
-            osl_error = osl_openFile(
+            osl_error = openFile(
                 tmp_file_url,
                 file_handle,
                 osl_File_OpenFlag_Read |
                 osl_File_OpenFlag_Write |
-                osl_File_OpenFlag_Create);
-
-            umask(old_mode);
+                osl_File_OpenFlag_Create,
+                S_IRUSR | S_IWUSR);
         }
 
         /* in case of error osl_File_E_EXIST we simply try again else we give up */
