@@ -18,6 +18,14 @@
 class OpenGLContext;
 class OpenGLWindowImpl;
 
+class VCLOPENGL_DLLPUBLIC IRenderer
+{
+public:
+    virtual ~IRenderer() {}
+    virtual void update() = 0;
+    virtual void clickedAt(const Point& rPos) = 0;
+};
+
 // pImpl Pattern to avoid linking against OpenGL libs when using the class without the context
 class VCLOPENGL_DLLPUBLIC OpenGLWindow : public SystemChildWindow
 {
@@ -26,11 +34,14 @@ public:
     virtual ~OpenGLWindow();
     OpenGLContext* getContext();
 
-    virtual void Paint(const Rectangle&) SAL_OVERRIDE {}
+    void setRenderer(IRenderer* pRenderer);
+
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 private:
     boost::scoped_ptr<OpenGLWindowImpl> mpImpl;
+    IRenderer* mpRenderer;
 };
 
 #endif

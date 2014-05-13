@@ -33,10 +33,13 @@ GL3DBarChart::GL3DBarChart(
     mrWindow(rWindow),
     mrCatProvider(rCatProvider)
 {
+    mrWindow.setRenderer(this);
+    mpRenderer->init();
 }
 
 GL3DBarChart::~GL3DBarChart()
 {
+    mrWindow.setRenderer(NULL);
 }
 
 void GL3DBarChart::create3DShapes()
@@ -166,7 +169,6 @@ void GL3DBarChart::render()
 {
     mrWindow.getContext()->makeCurrent();
     Size aSize = mrWindow.GetSizePixel();
-    mpRenderer->init();
     mpRenderer->SetSize(aSize);
     mrWindow.getContext()->setWinSize(aSize);
     for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
@@ -176,6 +178,16 @@ void GL3DBarChart::render()
     }
     mpRenderer->ProcessUnrenderedShape();
     mrWindow.getContext()->swapBuffers();
+}
+
+void GL3DBarChart::update()
+{
+    render();
+}
+
+void GL3DBarChart::clickedAt(const Point& )
+{
+
 }
 
 }

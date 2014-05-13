@@ -32,7 +32,8 @@ OpenGLContext* OpenGLWindowImpl::getContext()
 
 OpenGLWindow::OpenGLWindow(Window* pParent):
     SystemChildWindow(pParent, 0),
-    mpImpl(new OpenGLWindowImpl(this))
+    mpImpl(new OpenGLWindowImpl(this)),
+    mpRenderer(NULL)
 {
 }
 
@@ -45,12 +46,23 @@ OpenGLContext* OpenGLWindow::getContext()
     return mpImpl->getContext();
 }
 
+void OpenGLWindow::Paint(const Rectangle&)
+{
+    if(mpRenderer)
+        mpRenderer->update();
+}
+
 void OpenGLWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPoint = rMEvt.GetPosPixel();
 
     Color aColor = GetPixel(aPoint);
     SAL_WARN("vcl.opengl", aColor.GetColor());
+}
+
+void OpenGLWindow::setRenderer(IRenderer* pRenderer)
+{
+    mpRenderer = pRenderer;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

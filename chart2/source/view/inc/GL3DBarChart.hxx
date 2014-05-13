@@ -29,7 +29,7 @@ class OpenGL3DRenderer;
 
 }
 
-class GL3DBarChart : public GL3DPlotterBase
+class GL3DBarChart : public GL3DPlotterBase, public IRenderer
 {
 public:
     GL3DBarChart(
@@ -42,6 +42,10 @@ public:
     virtual void create3DShapes() SAL_OVERRIDE;
 
     virtual void render() SAL_OVERRIDE;
+
+    virtual void update() SAL_OVERRIDE;
+
+    virtual void clickedAt(const Point& rPos) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::chart2::XChartType> mxChartType;
