@@ -33,14 +33,6 @@ using namespace ::com::sun::star::datatransfer;
 
 
 
-
-
-
-
-extern const char* BrowseBoxCheckInvariants( const void * pVoid );
-
-
-
 void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel */ )
 {
     // not interested in this event

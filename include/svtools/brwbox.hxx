@@ -213,10 +213,6 @@ class SVT_DLLPUBLIC BrowseBox
     friend class BrowserDataWin;
     friend class ::svt::BrowseBoxImpl;
 
-#ifdef DBG_UTIL
-    friend const char* BrowseBoxCheckInvariants( const void * pVoid );
-#endif
-
 public:
     static const sal_uInt16 HandleColumnId = 0;
 

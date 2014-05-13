@@ -33,8 +33,6 @@
 #include "brwimpl.hxx"
 
 
-extern const char* BrowseBoxCheckInvariants( const void* pVoid );
-
 #define SCROLL_FLAGS (SCROLL_CLIP | SCROLL_NOCHILDREN)
 #define getDataWindow() ((BrowserDataWin*)pDataWin)
 
@@ -2390,27 +2388,6 @@ void BrowseBox::SetHeaderBar( BrowserHeader* pHeaderBar )
     ( (BrowserDataWin*)pDataWin )->pHeaderBar = pHeaderBar;
     ( (BrowserDataWin*)pDataWin )->pHeaderBar->SetStartDragHdl( LINK( this, BrowseBox, StartDragHdl ) );
 }
-
-
-#ifdef DBG_UTIL
-const char* BrowseBoxCheckInvariants( const void * pVoid )
-{
-    const BrowseBox * p = (const BrowseBox *)pVoid;
-
-    if (p->nRowCount < 0) return "BrowseBox: nRowCount < 0";
-    if (p->nTopRow < 0) return "BrowseBox: nTopRow < 0";
-    if (p->nTopRow >= p->nRowCount && p->nRowCount != 0) return "BrowseBox: nTopRow >= nRowCount && nRowCount != 0";
-    if (p->nCurRow < -1) return "BrowseBox: nCurRow < -1";
-    if (p->nCurRow > p->nRowCount) return "BrowseBox: nCurRow > nRowCount";
-
-    // Sadly not always the case when editing:
-    //if (p->nCurRow < 0 && p->nRowCount != 0) return "nCurRow < 0 && nRowCount != 0";
-    //if (p->nCurRow >= p->nRowCount && p->nRowCount != 0) return "nCurRow >= nRowCount && nRowCount != 0";
-
-    return NULL;
-}
-#endif
-
 
 long BrowseBox::GetTitleHeight() const
 {
