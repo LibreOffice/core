@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_e4029a0a",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-05-13T07:12:09Z",
+      "side": 1,
+      "message": "You have to remove the field from m_Fields too. Otherwise this will very likely end up in a segfault, when the already destroyed field is accessed again somewhere.",
+      "revId": "69213b7a6db3fd133d2ff54d542304747ecc4792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
