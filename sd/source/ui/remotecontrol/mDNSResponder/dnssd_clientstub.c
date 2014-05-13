@@ -621,6 +621,7 @@ static DNSServiceErrorType deliver_request(ipc_msg_hdr *hdr, DNSServiceOp *sdr)
             caddr.sun_len = sizeof(struct sockaddr_un);
             #endif
             strcpy(caddr.sun_path, data);
+#error "the below umask(3) calls are bad in a MT program (cf. fdo#60338):"
             mask = umask(0);
             bindresult = bind(listenfd, (struct sockaddr *)&caddr, sizeof(caddr));
             umask(mask);
