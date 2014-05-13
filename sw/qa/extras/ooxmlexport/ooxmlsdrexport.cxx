@@ -465,7 +465,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
 DECLARE_OOXMLEXPORT_TEST(testVMLData, "TestVMLData.docx")
 {
     // The problem was exporter was exporting vml data for shape in w:rPr element.
-    // vml data shoud not come under w:rPr element.
+    // vml data should not come under w:rPr element.
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
     if (!pXmlDoc)
         return;

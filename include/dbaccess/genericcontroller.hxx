@@ -239,7 +239,7 @@ namespace dbaui
         StateCache              m_aStateCache;          // save the current status of feature state
         Dispatch                m_arrStatusListener;    // all our listeners where we dispatch status changes
         OAsyncronousLink        m_aAsyncInvalidateAll;
-        OAsyncronousLink        m_aAsyncCloseTask;      // called when a task shoud be closed
+        OAsyncronousLink        m_aAsyncCloseTask;      // called when a task should be closed
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;

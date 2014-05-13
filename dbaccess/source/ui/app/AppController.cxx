@@ -2480,7 +2480,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     if ( !pView || pView->getElementType() == E_NONE )
     {
         OSL_FAIL("OApplicationController::executeDrop: what the hell did queryDrop do?");
-            // queryDrop shoud not have allowed us to reach this situation ....
+            // queryDrop should not have allowed us to reach this situation ....
         return DND_ACTION_NONE;
     }
 

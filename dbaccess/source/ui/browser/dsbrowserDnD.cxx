@@ -121,7 +121,7 @@ namespace dbaui
         if (!isContainer(eEntryType))
         {
             OSL_FAIL("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
-                // queryDrop shoud not have allowed us to reach this situation ....
+                // queryDrop should not have allowed us to reach this situation ....
             return DND_ACTION_NONE;
         }
         // a TransferableDataHelper for accessing the dropped data

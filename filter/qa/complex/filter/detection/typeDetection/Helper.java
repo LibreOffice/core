@@ -212,7 +212,7 @@ public class Helper  {
     }
 
     /** returns a XInputStream of given file
-     * @param filePath the path to the file which shoud be loaded
+     * @param filePath the path to the file which should be loaded
      * @return the XInputStream, <null/> if the
      * file cannot be read
      * @throws NotConnectedException was thrown if it was not possible to open <CODE>filePath</CODE>

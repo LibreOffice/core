@@ -364,7 +364,7 @@ bool XMLSetVarFieldImportContext::FindFieldMaster(
     Reference<XPropertySet> & xMaster)
 {
     // currently: delegate to XMLVariableDeclImportContext;
-    // shoud eventually go here
+    // should eventually go here
     return XMLVariableDeclImportContext::FindFieldMaster(xMaster,
                                                          GetImport(),
                                                          GetImportHelper(),

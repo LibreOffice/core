@@ -528,7 +528,7 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
    *
    * This signal is emitted when the hashing operation of the handler
    * is started. Note that this might happen or not, depending on the CM
-   * and remote contact capabilities. Clients shoud use
+   * and remote contact capabilities. Clients should use
    * empathy_ft_handler_get_use_hash() before calling
    * empathy_ft_handler_start_transfer() to know whether they should connect
    * to this signal.

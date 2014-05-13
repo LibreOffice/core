@@ -307,7 +307,7 @@ public class FinalizedMandatoryTest
     /**
      * returns the value of the specified (<CODE>pName</CODE>) property from a sequenze of <CODE>PropertyValue</CODE>
      * @param props a sequenze of <CODE>PropertyVlaue</CODE>
-     * @param pName the name of the property the value shoud be returned
+     * @param pName the name of the property the value should be returned
      * @return the value of the property
      */
     protected Object getPropertyValueValue(PropertyValue[] props, String pName)

@@ -2679,7 +2679,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     const char* widthType = "dxa";
     bool bRelBoxSize = false;
 
-    // If actual width of table is relative it shoud export is as "pct".`
+    // If actual width of table is relative it should export is as "pct".`
     const SwTable *pTable = pTableTextNodeInfoInner->getTable();
     SwFrmFmt *pTblFmt = pTable->GetFrmFmt( );
     const SwFmtFrmSize &rSize = pTblFmt->GetFrmSize();
