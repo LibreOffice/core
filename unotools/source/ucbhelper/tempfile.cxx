@@ -202,13 +202,7 @@ void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
 
         if ( bDir )
         {
-#ifdef UNX /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-#endif
             FileBase::RC err = Directory::create( aTmp );
-#ifdef UNX
-            umask(old_mode);
-#endif
             if ( err == FileBase::E_None )
             {
                 // !bKeep: only for creating a name, not a file or directory
