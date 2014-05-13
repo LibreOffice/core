@@ -297,7 +297,6 @@ void OFrames::impl_resetObject()
     m_pFrameContainer = NULL;
 }
 
-//  private method
 
 void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFrame > >&  seqDestination  ,
                                      const  Sequence< css::uno::Reference< XFrame > >&  seqSource       )

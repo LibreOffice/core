@@ -104,7 +104,6 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::
     return bReturn;
 }
 
-//  private method
 
 void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Reference< XFramesSupplier >&         xNode           ,
                                                                  Sequence< css::uno::Reference< XComponent > >& seqComponents   )
@@ -137,7 +136,6 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
     // ... otherwise break a recursive path and go back at current stack!
 }
 
-//  private method
 
 css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
 {

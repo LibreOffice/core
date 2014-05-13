@@ -96,7 +96,6 @@ private:
 
 //TODO_AS            void impl_initStorages();
 
-    // private methods
     ModuleToModuleCfgMgr                                                                m_aModuleToModuleUICfgMgrMap;
     css::uno::Reference< css::frame::XModuleManager2 >          m_xModuleMgr;
     css::uno::Reference< css::uno::XComponentContext >            m_xContext;

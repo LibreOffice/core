@@ -93,8 +93,6 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper3<
 
     protected:
 
-    //  private methods
-
     private:
 
     //  variables

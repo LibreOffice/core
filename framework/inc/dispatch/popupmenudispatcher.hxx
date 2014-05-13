@@ -121,7 +121,6 @@ class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper5<
         void impl_RetrievePopupControllerQuery();
         void impl_CreateUriRefFactory();
 
-    //  private methods
 
     //  variables
     private:

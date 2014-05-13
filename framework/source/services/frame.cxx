@@ -320,7 +320,6 @@ private:
     virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
                                                                sal_Int32        nHandle  ) SAL_OVERRIDE;
 
-//  private methods
 
 private:
 

@@ -256,7 +256,6 @@ class AddonsOptions_Impl : public ConfigItem
         const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const;
         void                                            ReadConfigurationData();
 
-    //  private methods
 
     private:
         enum ImageSize
@@ -625,7 +624,6 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool
     return aImage;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
 {
@@ -663,7 +661,6 @@ bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >
     return ( rAddonMenuSeq.getLength() > 0 );
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
 {
@@ -701,7 +698,6 @@ bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > 
     return ( rAddonOfficeHelpMenuSeq.getLength() > 0 );
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
 {
@@ -756,7 +752,6 @@ bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue
     return ( rAddonOfficeMenuBarSeq.getLength() > 0 );
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
 {
@@ -778,7 +773,6 @@ bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBa
     return ( !rAddonOfficeToolBars.empty() );
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
 {
@@ -814,7 +808,7 @@ bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNode
     return ( (sal_uInt32)rAddonOfficeToolBarSeq.getLength() > nToolBarItemCount );
 }
 
-//  private method
+
 void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 {
     // Read the user-defined Images set and fill image manager
@@ -864,7 +858,6 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
     }
 }
 
-//  private method
 
 OUString AddonsOptions_Impl::GeneratePrefixURL()
 {
@@ -878,7 +871,6 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
     return aPopupMenuURL;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
@@ -946,7 +938,6 @@ bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
     return true;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
 {
@@ -962,7 +953,6 @@ bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructi
     return ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
@@ -1036,7 +1026,6 @@ bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
     return true;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
 {
@@ -1182,7 +1171,6 @@ bool AddonsOptions_Impl::ReadStatusBarItem(
     return bResult;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu )
 {
@@ -1255,7 +1243,6 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
     return bResult;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
 {
@@ -1295,7 +1282,6 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
     return bResult;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
 {
@@ -1315,7 +1301,6 @@ bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
     return true;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
 {
@@ -1371,7 +1356,6 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     return bResult;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
 {
@@ -1400,7 +1384,6 @@ bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMen
     return true;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 {
@@ -1409,7 +1392,6 @@ bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
     return ( pIter != m_aImageManager.end() );
 }
 
-//  private method
 
 void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 {
@@ -1425,7 +1407,6 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
     }
 }
 
-//  private method
 
 Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
@@ -1458,7 +1439,6 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
     return aImage;
 }
 
-//  private method
 
 void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )
 {
@@ -1485,7 +1465,6 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     m_aImageManager.insert( ImageManager::value_type( aURL, aImageEntry ));
 }
 
-//  private method
 
 AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUString& aImagesNodeName )
 {
@@ -1533,7 +1512,6 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
     return pEntry;
 }
 
-//  private method
 
 bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
 {
@@ -1574,7 +1552,6 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     return lResult;
 }
 
-//  private method
 
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const
 {
@@ -1589,7 +1566,6 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
     return lResult;
 }
 
-//  private method
 
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const
 {
@@ -1623,7 +1599,6 @@ Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesStatusbarItem(
     return lResult;
 }
 
-//  private method
 
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString& aPropertyRootNode ) const
 {
@@ -1777,7 +1752,6 @@ Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig ) const
     return GetImageFromURL( aURL, bBig, false );
 }
 
-//  private method
 
 Mutex& AddonsOptions::GetOwnStaticMutex()
 {
@@ -1801,7 +1775,6 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-//  private method
 
 IMPL_STATIC_LINK_NOINSTANCE( AddonsOptions, Notify, void*, EMPTYARG )
 {

@@ -141,7 +141,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
         virtual void impl_resetObject();
 
-    //  private methods
 
     private:
 

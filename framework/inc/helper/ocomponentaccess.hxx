@@ -129,7 +129,6 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
         virtual ~OComponentAccess();
 
-    //  private methods
 
     private:
 

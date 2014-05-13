@@ -155,7 +155,6 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
         virtual ~MenuDispatcher();
 
-    //  private methods
 
     private:
 

@@ -462,7 +462,6 @@ void SubstitutePathVariables_Impl::Commit()
 {
 }
 
-//      private methods
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
 {

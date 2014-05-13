@@ -82,7 +82,6 @@ struct FileType
         inline FileType&    operator=   (   const   FileType&   rCopy   ) { return impl_copy( rCopy );  }
         inline void         free        (                               ) { impl_clear();               }
 
-    // private methods
 
     private:
 
@@ -143,7 +142,6 @@ struct Filter
         inline Filter&  operator=   (   const   Filter& rCopy   ) { return impl_copy( rCopy );  }
         inline void     free        (                           ) { impl_clear();               }
 
-    // private methods
 
     private:
 
@@ -212,7 +210,6 @@ struct Detector
         inline Detector&    operator=   (   const   Detector&   rCopy   ) { return impl_copy( rCopy );  }
         inline void         free        (                               ) { impl_clear();               }
 
-    // private methods
 
     private:
 
@@ -254,7 +251,6 @@ struct Loader
         inline Loader&  operator=   (   const   Loader& rCopy   ) { return impl_copy( rCopy );  }
         inline void     free        (                           ) { impl_clear();               }
 
-    // private methods
 
     private:
 
@@ -298,7 +294,6 @@ struct ContentHandler
         inline ContentHandler&   operator=     ( const ContentHandler& rCopy  ) { return impl_copy( rCopy );  }
         inline void              free          (                              ) { impl_clear();               }
 
-    // private methods
 
     private:
 

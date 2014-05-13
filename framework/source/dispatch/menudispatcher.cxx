@@ -199,7 +199,6 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
     }
 }
 
-//  private method
 
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
 {
@@ -218,7 +217,6 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
     }
 }
 
-//  private method
 
 bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource )
 {

@@ -318,7 +318,6 @@ class Desktop : private cppu::BaseMutex,
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       ) SAL_OVERRIDE;
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //  private methods
 
     private:
 

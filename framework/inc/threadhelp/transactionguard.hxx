@@ -99,7 +99,6 @@ class TransactionGuard : private boost::noncopyable
             }
         }
 
-    //  private methods
 
     private:
 
