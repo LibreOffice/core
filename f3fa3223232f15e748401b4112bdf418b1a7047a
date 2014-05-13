@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_04189683",
+        "filename": "basic/source/sbx/sbxdec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-05-13T06:55:51Z",
+      "side": 1,
+      "message": "This is a memory leak, as SbxDecimal::setString does not take over the string.",
+      "revId": "f3fa3223232f15e748401b4112bdf418b1a7047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
