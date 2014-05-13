@@ -170,6 +170,7 @@ public:
 
     void testSharedFormulaHorizontalXLS();
     void testSharedFormulaWrappedRefsXLS();
+    void testSharedFormulaBIFF5();
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
@@ -247,6 +248,7 @@ public:
     CPPUNIT_TEST(testColumnStyleXLSX);
     CPPUNIT_TEST(testSharedFormulaHorizontalXLS);
     CPPUNIT_TEST(testSharedFormulaWrappedRefsXLS);
+    CPPUNIT_TEST(testSharedFormulaBIFF5);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
@@ -2518,6 +2520,22 @@ void ScFiltersTest::testSharedFormulaWrappedRefsXLS()
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaBIFF5()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/biff5.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    pDoc->CalcAll();
+
+    // E6:E376 should be all formulas, and they should belong to the same group.
+    const ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(4,5,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(371), pFC->GetSharedLength());
 
     xDocSh->DoClose();
 }
