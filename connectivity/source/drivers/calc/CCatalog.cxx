@@ -34,12 +34,10 @@ using namespace connectivity::calc;
 
 OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::OCalcCatalog" );
 }
 
 void OCalcCatalog::refreshTables()
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::refreshTables" );
     TStringVector aVector;
     Sequence< OUString > aTypes;
     OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));

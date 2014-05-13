@@ -78,7 +78,6 @@ OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
 
 void OOperandRow::bindValue(const OValueRefRow& _pRow)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandRow::OOperandRow" );
     OSL_ENSURE(_pRow.is(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
     OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
@@ -87,14 +86,12 @@ void OOperandRow::bindValue(const OValueRefRow& _pRow)
 
 void OOperandRow::setValue(const ORowSetValue& _rVal)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandRow::setValue" );
     OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     (*(m_pRow->get())[m_nRowPos]) = _rVal;
 }
 
 const ORowSetValue& OOperandRow::getValue() const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandRow::getValue" );
     OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     return (m_pRow->get())[m_nRowPos]->getValue();
 }
@@ -102,7 +99,6 @@ const ORowSetValue& OOperandRow::getValue() const
 
 void OOperandValue::setValue(const ORowSetValue& _rVal)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandValue::setValue" );
     m_aValue = _rVal;
 }
 
@@ -143,14 +139,12 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
 
 const ORowSetValue& OOperandValue::getValue() const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandValue::getValue" );
     return m_aValue;
 }
 
 
 OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aStrValue)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandConst::OOperandConst" );
     switch (rColumnRef.getNodeType())
     {
     case SQL_NODE_STRING:
@@ -194,7 +188,6 @@ sal_uInt16 OOperator::getRequestedOperands() const {return 2;}
 
 bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OBoolOperator::operate" );
     return false;
 }
 
@@ -202,7 +195,6 @@ bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 
 void OBoolOperator::Exec(OCodeStack& rCodeStack)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OBoolOperator::Exec" );
     OOperand  *pRight   = rCodeStack.top();
     rCodeStack.pop();
     OOperand  *pLeft    = rCodeStack.top();
@@ -217,13 +209,11 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
 
 bool OOp_NOT::operate(const OOperand* pLeft, const OOperand* ) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_AND::operate" );
     return !pLeft->isValid();
 }
 
 void OOp_NOT::Exec(OCodeStack& rCodeStack)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::Exec" );
     OOperand* pOperand = rCodeStack.top();
     rCodeStack.pop();
 
@@ -234,35 +224,30 @@ void OOp_NOT::Exec(OCodeStack& rCodeStack)
 
 sal_uInt16 OOp_NOT::getRequestedOperands() const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_NOT::getRequestedOperands" );
     return 1;
 }
 
 
 bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_AND::operate" );
     return pLeft->isValid() && pRight->isValid();
 }
 
 
 bool OOp_OR::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_OR::operate" );
     return pLeft->isValid() || pRight->isValid();
 }
 
 
 sal_uInt16 OOp_ISNULL::getRequestedOperands() const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::getRequestedOperands" );
     return 1;
 }
 
 
 void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::Exec" );
     OOperand* pOperand = rCodeStack.top();
     rCodeStack.pop();
 
@@ -274,7 +259,6 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 
 bool OOp_ISNULL::operate(const OOperand* pOperand, const OOperand*) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::operate" );
     return pOperand->getValue().isNull();
 }
 
@@ -287,7 +271,6 @@ bool OOp_ISNOTNULL::operate(const OOperand* pOperand, const OOperand*) const
 
 bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::operate" );
     bool bMatch;
     ORowSetValue aLH(pLeft->getValue());
     ORowSetValue aRH(pRight->getValue());
@@ -304,14 +287,12 @@ bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 
 bool OOp_NOTLIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_NOTLIKE::operate" );
     return !OOp_LIKE::operate(pLeft, pRight);
 }
 
 
 bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_COMPARE::operate" );
     ORowSetValue aLH(pLeft->getValue());
     ORowSetValue aRH(pRight->getValue());
 
@@ -382,8 +363,6 @@ bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
 
 void ONumOperator::Exec(OCodeStack& rCodeStack)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ONumOperator::Exec" );
-
     OOperand  *pRight   = rCodeStack.top();
     rCodeStack.pop();
     OOperand  *pLeft    = rCodeStack.top();
@@ -398,40 +377,34 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
 
 double OOp_ADD::operate(const double& fLeft,const double& fRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ADD::operate" );
     return fLeft + fRight;
 }
 
 
 double OOp_SUB::operate(const double& fLeft,const double& fRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_SUB::operate" );
     return fLeft - fRight;
 }
 
 
 double OOp_MUL::operate(const double& fLeft,const double& fRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_MUL::operate" );
     return fLeft * fRight;
 }
 
 
 double OOp_DIV::operate(const double& fLeft,const double& fRight) const
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_DIV::operate" );
     return fLeft / fRight;
 }
 
 OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* /*pOp*/, OOperand* /*pRight*/)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandAttr::preProcess" );
     return NULL;
 }
 
 void ONthOperator::Exec(OCodeStack& rCodeStack)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ONthOperator::Exec" );
     ::std::vector<ORowSetValue> aValues;
     ::std::vector<OOperand*> aOperands;
     OOperand* pOperand;
@@ -459,7 +432,6 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
 
 void OBinaryOperator::Exec(OCodeStack& rCodeStack)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OBinaryOperator::Exec" );
     OOperand  *pRight   = rCodeStack.top();
     rCodeStack.pop();
     OOperand  *pLeft    = rCodeStack.top();
@@ -477,7 +449,6 @@ void OBinaryOperator::Exec(OCodeStack& rCodeStack)
 
 void OUnaryOperator::Exec(OCodeStack& rCodeStack)
 {
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OUnaryOperator::Exec" );
     OSL_ENSURE(!rCodeStack.empty(),"Stack is empty!");
     OOperand* pOperand = rCodeStack.top();
     rCodeStack.pop();

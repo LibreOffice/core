@@ -42,7 +42,6 @@ namespace connectivity
 namespace {
     static bool isStorageCompatible(sal_Int32 _eType1, sal_Int32 _eType2)
     {
-        SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::isStorageCompatible" );
         bool bIsCompatible = true;
 
         if (_eType1 != _eType2)
@@ -193,7 +192,6 @@ namespace tracing
 
 void ORowSetValue::setTypeKind(sal_Int32 _eType)
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::setTypeKind" );
     if ( !m_bNull && !isStorageCompatible(_eType, m_eTypeKind) )
     {
         switch(_eType)
@@ -275,7 +273,6 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
 
 void ORowSetValue::free()
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::free" );
     if(!m_bNull)
     {
         switch(m_eTypeKind)
@@ -884,7 +881,6 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 
 Any ORowSetValue::makeAny() const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::makeAny" );
     Any rValue;
     if(isBound() && !isNull())
     {
@@ -978,7 +974,6 @@ Any ORowSetValue::makeAny() const
 
 OUString ORowSetValue::getString( ) const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getString" );
     OUString aRet;
     if(!m_bNull)
     {
@@ -1066,7 +1061,6 @@ OUString ORowSetValue::getString( ) const
 
 bool ORowSetValue::getBool()    const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getBool" );
     bool bRet = false;
     if(!m_bNull)
     {
@@ -1139,9 +1133,6 @@ bool ORowSetValue::getBool()    const
 
 sal_Int8 ORowSetValue::getInt8()    const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getInt8" );
-
-
     sal_Int8 nRet = 0;
     if(!m_bNull)
     {
@@ -1285,9 +1276,6 @@ sal_uInt8 ORowSetValue::getUInt8()    const
 
 sal_Int16 ORowSetValue::getInt16()  const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getInt16" );
-
-
     sal_Int16 nRet = 0;
     if(!m_bNull)
     {
@@ -1430,7 +1418,6 @@ sal_uInt16 ORowSetValue::getUInt16()  const
 
 sal_Int32 ORowSetValue::getInt32()  const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getInt32" );
     sal_Int32 nRet = 0;
     if(!m_bNull)
     {
@@ -1577,7 +1564,6 @@ sal_uInt32 ORowSetValue::getUInt32()  const
 
 sal_Int64 ORowSetValue::getLong()   const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getLong" );
     sal_Int64 nRet = 0;
     if(!m_bNull)
     {
@@ -1724,7 +1710,6 @@ sal_uInt64 ORowSetValue::getULong()   const
 
 float ORowSetValue::getFloat()  const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getFloat" );
     float nRet = 0;
     if(!m_bNull)
     {
@@ -1801,9 +1786,6 @@ float ORowSetValue::getFloat()  const
 
 double ORowSetValue::getDouble()    const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getDouble" );
-
-
     double nRet = 0;
     if(!m_bNull)
     {
@@ -1880,7 +1862,6 @@ double ORowSetValue::getDouble()    const
 
 Sequence<sal_Int8>  ORowSetValue::getSequence() const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getSequence" );
     Sequence<sal_Int8> aSeq;
     if (!m_bNull)
     {
@@ -1953,7 +1934,6 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
 ::com::sun::star::util::Date ORowSetValue::getDate() const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getDate" );
     ::com::sun::star::util::Date aValue;
     if(!m_bNull)
     {
@@ -2012,7 +1992,6 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
 ::com::sun::star::util::Time ORowSetValue::getTime()        const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getTime" );
     ::com::sun::star::util::Time aValue;
     if(!m_bNull)
     {
@@ -2057,7 +2036,6 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
 ::com::sun::star::util::DateTime ORowSetValue::getDateTime()    const
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getDateTime" );
     ::com::sun::star::util::DateTime aValue;
     if(!m_bNull)
     {
@@ -2110,7 +2088,6 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
 void ORowSetValue::setSigned(bool _bMod)
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::setSigned" );
     if ( m_bSigned != _bMod )
     {
         m_bSigned = _bMod;
@@ -2269,15 +2246,12 @@ void ORowSetValue::fill(sal_Int32 _nPos,
                      sal_Int32 _nType,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::fill (1)" );
     fill(_nPos,_nType,true,_xRow);
 }
 
 
 void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const detail::IValueSource& _rValueSource )
-
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::fill (2)" );
     bool bReadData = true;
     switch(_nType)
     {
@@ -2365,7 +2339,6 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
 
 void ORowSetValue::fill(const Any& _rValue)
 {
-    SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::fill (3)" );
     switch (_rValue.getValueType().getTypeClass())
     {
         case TypeClass_VOID:

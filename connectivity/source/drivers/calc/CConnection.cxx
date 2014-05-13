@@ -54,7 +54,6 @@ using namespace ::com::sun::star::sheet;
 
 OCalcConnection::OCalcConnection(ODriver* _pDriver) : OConnection(_pDriver),m_nDocCount(0)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::OCalcConnection" );
     // m_aFilenameExtension is not used
 }
 
@@ -65,7 +64,6 @@ OCalcConnection::~OCalcConnection()
 void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
     throw(SQLException, RuntimeException, DeploymentException)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::construct" );
     //  open file
 
     sal_Int32 nLen = url.indexOf(':');
@@ -106,7 +104,6 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
 
 Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::acquireDoc" );
     if ( m_xDoc.is() )
     {
         osl_atomic_increment(&m_nDocCount);
@@ -173,14 +170,12 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
 
 void OCalcConnection::releaseDoc()
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::releaseDoc" );
     if ( osl_atomic_decrement(&m_nDocCount) == 0 )
         ::comphelper::disposeComponent( m_xDoc );
 }
 
 void OCalcConnection::disposing()
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::disposing" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_nDocCount = 0;
@@ -198,7 +193,6 @@ IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connecti
 
 Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::getMetaData" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
@@ -217,7 +211,6 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 
 ::com::sun::star::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::createCatalog" );
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!xTab.is())
@@ -233,7 +226,6 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 
 Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::createStatement" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
@@ -248,7 +240,6 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLE
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
     throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::prepareStatement" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
@@ -265,7 +256,6 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )
     throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::prepareCall" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 

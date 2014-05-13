@@ -65,7 +65,6 @@ using std::lower_bound;
 
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fillColumns" );
     m_bNeedToReadLine = true; // we overwrite m_aCurrentLine, seek the stream, ...
     m_pFileStream->Seek(0);
     m_aCurrentLine = QuotedTokenizedString();
@@ -424,13 +423,11 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
     ,m_cFieldDelimiter(_pConnection->getFieldDelimiter())
     ,m_bNeedToReadLine(false)
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::OFlatTable" );
 
 }
 
 void OFlatTable::construct()
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::construct" );
     SvtSysLocale aLocale;
     ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLanguageTag().getLocale());
 
@@ -470,7 +467,6 @@ void OFlatTable::construct()
 
 OUString OFlatTable::getEntry()
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getEntry" );
     OUString sURL;
     try
     {
@@ -516,7 +512,6 @@ OUString OFlatTable::getEntry()
 
 void OFlatTable::refreshColumns()
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::refreshColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
@@ -534,7 +529,6 @@ void OFlatTable::refreshColumns()
 
 void SAL_CALL OFlatTable::disposing(void)
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::disposing" );
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = NULL;
@@ -596,7 +590,6 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OFlatTable_BASE::getSomething(rId);
@@ -604,7 +597,6 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 
 bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bIsTable, bool bRetrieveData)
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fetchRow" );
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
@@ -766,7 +758,6 @@ namespace
 
 bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::seekRow" );
     OSL_ENSURE(m_pFileStream,"OFlatTable::seekRow: FileStream is NULL!");
 
 
@@ -919,7 +910,6 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
 
 bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos, const bool nonEmpty)
 {
-    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::readLine" );
     const rtl_TextEncoding nEncoding = m_pConnection->getTextEncoding();
     m_aCurrentLine = QuotedTokenizedString();
     do
