@@ -1600,10 +1600,24 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
     return bRet;
 }
 
+WMFReader::WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
+                     FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER* pExtHeader)
+    : WinMtf(new WinMtfOutput(rGDIMetaFile) , rStreamWMF, pConfigItem)
+    , nUnitsPerInch(96)
+    , nRecSize(0)
+    , pEMFStream(NULL)
+    , nEMFRecCount(0)
+    , nEMFRec(0)
+    , nEMFSize(0)
+    , nSkipActions(0)
+    , nCurrentAction(0)
+    , nUnicodeEscapeAction(0)
+    , pExternalHeader(pExtHeader)
+{}
+
 WMFReader::~WMFReader()
 {
-    if( pEMFStream )
-        delete pEMFStream;
+    delete pEMFStream;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

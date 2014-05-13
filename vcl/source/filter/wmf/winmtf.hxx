@@ -842,22 +842,8 @@ private:
 public:
 
     WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-        FilterConfigItem* pConfigItem = NULL,
-        WMF_EXTERNALHEADER* pExtHeader = NULL)
-        : WinMtf(new WinMtfOutput(rGDIMetaFile) , rStreamWMF, pConfigItem)
-        , nUnitsPerInch(96)
-        , nRecSize(0)
-        , pEMFStream(NULL)
-        , nEMFRecCount(0)
-        , nEMFRec(0)
-        , nEMFSize(0)
-        , nSkipActions(0)
-        , nCurrentAction(0)
-        , nUnicodeEscapeAction(0)
-        , pExternalHeader(pExtHeader)
-        {
-        }
-
+              FilterConfigItem* pConfigItem = NULL,
+              WMF_EXTERNALHEADER* pExtHeader = NULL);
     ~WMFReader();
 
     // read WMF file from stream and fill the GDIMetaFile
