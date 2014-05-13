@@ -26,16 +26,6 @@ using namespace http_dav_ucp;
 using namespace ::com::sun::star;
 
 
-
-struct UCBDeadPropertyValueParseContext
-{
-    OUString * pType;
-    OUString * pValue;
-
-    UCBDeadPropertyValueParseContext() : pType( 0 ), pValue( 0 ) {}
-    ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
-};
-
 // static
 const OUString UCBDeadPropertyValue::aTypeString
     = OUString( "string" );

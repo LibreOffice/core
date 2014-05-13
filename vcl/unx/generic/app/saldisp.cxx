@@ -84,6 +84,7 @@ using namespace vcl_sal;
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
 
+#ifdef DBG_UTIL
 inline const char *Null( const char *p ) { return p ? p : ""; }
 inline const char *GetEnv( const char *p ) { return Null( getenv( p ) ); }
 inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
@@ -93,6 +94,7 @@ inline const char *GetAtomName( Display *d, Atom a )
 
 inline double Hypothenuse( long w, long h )
 { return sqrt( (double)((w*w)+(h*h)) ); }
+#endif
 
 inline int ColorDiff( int r, int g, int b )
 { return (r*r)+(g*g)+(b*b); }
