@@ -29,15 +29,11 @@ using com::sun::star::uno::XInterface;
 
 bool CDRImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
 {
-    SAL_INFO("writerperfect", "CDRImportFilter::doImportDocument");
-
     return libcdr::CDRDocument::parse(&rInput, &rGenerator);
 }
 
 bool CDRImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
 {
-    SAL_INFO("writerperfect", "CDRImportFilter::doDetectFormat");
-
     if (libcdr::CDRDocument::isSupported(&rInput))
     {
         rTypeName = "draw_CorelDraw_Document";
@@ -50,14 +46,12 @@ bool CDRImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeNam
 OUString CDRImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "CDRImportFilter_getImplementationName");
     return OUString ( "com.sun.star.comp.Draw.CDRImportFilter" );
 }
 
 Sequence< OUString > SAL_CALL CDRImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "CDRImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.document.ImportFilter";
@@ -68,7 +62,6 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL CDRImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-    SAL_INFO("writerperfect", "CDRImportFilter_createInstance");
     return (cppu::OWeakObject *) new CDRImportFilter( rContext );
 }
 
@@ -76,19 +69,16 @@ throw( Exception )
 OUString SAL_CALL CDRImportFilter::getImplementationName(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "CDRImportFilter::getImplementationName");
     return CDRImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL CDRImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "CDRImportFilter::supportsService");
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL CDRImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "CDRImportFilter::getSupportedServiceNames");
     return CDRImportFilter_getSupportedServiceNames();
 }
 

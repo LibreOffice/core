@@ -27,15 +27,11 @@ using com::sun::star::uno::XInterface;
 
 bool MSPUBImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter::doImportDocument");
-
     return libmspub::MSPUBDocument::parse(&rInput, &rGenerator);
 }
 
 bool MSPUBImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter::doDetectFormat");
-
     if (libmspub::MSPUBDocument::isSupported(&rInput))
     {
         rTypeName = "draw_Publisher_Document";
@@ -48,14 +44,12 @@ bool MSPUBImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeN
 OUString MSPUBImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter_getImplementationName");
     return OUString ( "com.sun.star.comp.Draw.MSPUBImportFilter" );
 }
 
 Sequence< OUString > SAL_CALL MSPUBImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.document.ImportFilter";
@@ -66,7 +60,6 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL MSPUBImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter_createInstance");
     return (cppu::OWeakObject *) new MSPUBImportFilter( rContext );
 }
 
@@ -74,19 +67,16 @@ throw( Exception )
 OUString SAL_CALL MSPUBImportFilter::getImplementationName(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter::getImplementationName");
     return MSPUBImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL MSPUBImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter::supportsService");
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "MSPUBImportFilter::getSupportedServiceNames");
     return MSPUBImportFilter_getSupportedServiceNames();
 }
 

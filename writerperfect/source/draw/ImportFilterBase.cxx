@@ -62,7 +62,6 @@ ImportFilterImpl::~ImportFilterImpl()
 sal_Bool SAL_CALL ImportFilterImpl::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "ImportFilterImpl::filter");
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
@@ -101,14 +100,12 @@ throw (RuntimeException, std::exception)
 void SAL_CALL ImportFilterImpl::cancel(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "ImportFilterImpl::cancel");
 }
 
 // XImporter
 void SAL_CALL ImportFilterImpl::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "ImportFilterImpl::setTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -116,7 +113,6 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::
 OUString SAL_CALL ImportFilterImpl::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException, std::exception )
 {
-    SAL_INFO("writerperfect", "ImportFilterImpl::detect");
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
@@ -156,7 +152,6 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
 void SAL_CALL ImportFilterImpl::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "ImportFilterImpl::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )

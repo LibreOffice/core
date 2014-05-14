@@ -25,15 +25,11 @@ using com::sun::star::uno::XInterface;
 
 bool VisioImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
 {
-    SAL_INFO("writerperfect", "VisioImportFilter::doImportDocument");
-
     return libvisio::VisioDocument::parse(&rInput, &rGenerator);
 }
 
 bool VisioImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
 {
-    SAL_INFO("writerperfect", "VisioImportFilter::doDetectFormat");
-
     if (libvisio::VisioDocument::isSupported(&rInput))
     {
         rTypeName = "draw_Visio_Document";
@@ -46,14 +42,12 @@ bool VisioImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeN
 OUString VisioImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "VisioImportFilter_getImplementationName");
     return OUString ( "com.sun.star.comp.Draw.VisioImportFilter" );
 }
 
 Sequence< OUString > SAL_CALL VisioImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "VisioImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.document.ImportFilter";
@@ -64,7 +58,6 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL VisioImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-    SAL_INFO("writerperfect", "VisioImportFilter_createInstance");
     return (cppu::OWeakObject *) new VisioImportFilter( rContext );
 }
 
@@ -72,19 +65,16 @@ throw( Exception )
 OUString SAL_CALL VisioImportFilter::getImplementationName(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "VisioImportFilter::getImplementationName");
     return VisioImportFilter_getImplementationName();
 }
 sal_Bool SAL_CALL VisioImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "VisioImportFilter::supportsService");
     return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL VisioImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "VisioImportFilter::getSupportedServiceNames");
     return VisioImportFilter_getSupportedServiceNames();
 }
 

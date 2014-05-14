@@ -104,7 +104,6 @@ bool lcl_isPackage( const Any &rComponentData )
 sal_Bool SAL_CALL KeynoteImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::filter");
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     Reference < XInputStream > xInputStream;
@@ -159,14 +158,12 @@ throw (RuntimeException, std::exception)
 void SAL_CALL KeynoteImportFilter::cancel(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL KeynoteImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::setTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -174,8 +171,6 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::
 OUString SAL_CALL KeynoteImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException, std::exception )
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::detect");
-
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 nNewLength = nLength + 2;
     sal_Int32 nComponentDataLocation = -1;
@@ -338,7 +333,6 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
 void SAL_CALL KeynoteImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
@@ -359,7 +353,6 @@ throw (Exception, RuntimeException, std::exception)
 OUString KeynoteImportFilter_getImplementationName ()
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter_getImplementationName");
     return OUString ( "org.libreoffice.comp.Impress.KeynoteImportFilter" );
 }
 
@@ -369,7 +362,6 @@ throw (RuntimeException)
 Sequence< OUString > SAL_CALL KeynoteImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
     pArray[0] =  OUString ( SERVICE_NAME1 );
@@ -383,7 +375,6 @@ throw (RuntimeException)
 Reference< XInterface > SAL_CALL KeynoteImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter_createInstance");
     return (cppu::OWeakObject *) new KeynoteImportFilter( rContext );
 }
 
@@ -391,21 +382,18 @@ throw( Exception )
 OUString SAL_CALL KeynoteImportFilter::getImplementationName(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::getImplementationName");
     return KeynoteImportFilter_getImplementationName();
 }
 
 sal_Bool SAL_CALL KeynoteImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::supportsService");
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL KeynoteImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException, std::exception)
 {
-    SAL_INFO("writerperfect", "KeynoteImportFilter::getSupportedServiceNames");
     return KeynoteImportFilter_getSupportedServiceNames();
 }
 
