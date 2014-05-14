@@ -941,7 +941,7 @@ Reference< XShape > Shape::createAndInsert(
             Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
             Sequence< PropertyValue > aLightRig3DEffects = get3DProperties().getLightRigAttributes();
             Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
-            if( aCamera3DEffects.getLength() > 0 || aLightRig3DEffects.getLength() > 0 )
+            if( aCamera3DEffects.getLength() > 0 || aLightRig3DEffects.getLength() > 0 || aShape3DEffects.getLength() > 0 )
             {
                 Sequence< PropertyValue > a3DEffectsGrabBag( 3 );
                 PUT_PROP( a3DEffectsGrabBag, 0, "Camera", Any( aCamera3DEffects ) );
