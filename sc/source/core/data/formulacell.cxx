@@ -3678,6 +3678,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
+    // The converted code does not have RPN tokens yet.  The interpreter will
+    // generate them.
     mxGroup->meCalcState = sc::GroupCalcRunning;
     if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aCode))
     {

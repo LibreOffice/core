@@ -226,10 +226,6 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
         }
     }
 
-    ScCompiler aComp(&mrDoc, mrPos, mrGroupTokens);
-    aComp.SetGrammar(mrDoc.GetGrammar());
-    aComp.CompileTokenArray(); // Regenerate RPN tokens.
-
     return true;
 }
 

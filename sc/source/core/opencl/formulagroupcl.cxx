@@ -3433,20 +3433,20 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
                                                                       ScFormulaCellGroup& rGroup,
                                                                       ScTokenArray& rCode)
 {
-    ScTokenArray aConvertedCode;
-    ScGroupTokenConverter aConverter(aConvertedCode, rDoc, *rGroup.mpTopCell, rTopPos);
-    if (!aConverter.convert(rCode) || aConvertedCode.GetLen() == 0)
-        return NULL;
-
     SymbolTable::nR = rGroup.mnLength;
-
-    return DynamicKernel::create(rDoc, rTopPos, aConvertedCode);
+    return DynamicKernel::create(rDoc, rTopPos, rCode);
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
+    ScCompiler aComp(&rDoc, rTopPos, rCode);
+    aComp.SetGrammar(rDoc.GetGrammar());
+    // Disable special ordering for jump commands for the OpenCL interpreter.
+    aComp.EnableJumpCommandReorder(false);
+    aComp.CompileTokenArray(); // Regenerate RPN tokens.
+
     DynamicKernel *pKernel = NULL;
     boost::scoped_ptr<DynamicKernel> pLocalKernel;
 
