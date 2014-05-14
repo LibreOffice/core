@@ -31,6 +31,6 @@ namespace svgi
         createSerializer(const ::com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& );
 }
 
-#endif // _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HDL_
+#endif // INCLUDED_FILTER_SOURCE_SVG_TEST_ODFSERIALIZER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

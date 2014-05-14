@@ -19,7 +19,7 @@
 
 #include <com/sun/star/lang/SystemDependent.hpp>
 
-#if defined UNX && ! defined MACOSX && ! defined _COM_SUN_STAR_AWT_SYSTEMDEPENDENTXWINDOW_HPP_
+#if defined UNX && ! defined MACOSX
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #endif
 

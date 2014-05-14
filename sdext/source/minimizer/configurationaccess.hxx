@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX
+
 #include <vector>
 #include "pppoptimizertoken.hxx"
 #include <com/sun/star/awt/Size.hpp>
@@ -29,9 +29,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <map>

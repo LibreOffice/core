@@ -29,10 +29,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "MAccessible.h"
 
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLEEXTENT_HPP_
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
-#endif
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;

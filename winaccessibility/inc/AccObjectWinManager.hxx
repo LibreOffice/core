@@ -20,9 +20,7 @@
 #ifndef INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTWINMANAGER_HXX
 #define INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTWINMANAGER_HXX
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
 #include <map>
 #include <windows.h>
 #include <osl/mutex.hxx>
