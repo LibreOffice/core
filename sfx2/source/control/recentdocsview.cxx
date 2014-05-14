@@ -44,10 +44,10 @@ RecentDocsView::RecentDocsView( Window* pParent )
     , mnTextHeight(30)
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
+    , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
     , maWelcomeImage(SfxResId(IMG_WELCOME))
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
-    , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
 {
     Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
