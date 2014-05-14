@@ -58,6 +58,8 @@ void OpenGLWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
     Color aColor = GetPixel(aPoint);
     SAL_WARN("vcl.opengl", aColor.GetColor());
+    if(mpRenderer)
+        mpRenderer->clickedAt(aPoint);
 }
 
 void OpenGLWindow::setRenderer(IRenderer* pRenderer)
