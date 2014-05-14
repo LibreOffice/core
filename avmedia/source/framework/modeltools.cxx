@@ -71,7 +71,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
 
     // Parse json, read externals' URI and modify this relative URI's so they remain valid in the new context.
     std::vector<std::string> vExternals;
-    ptree aTree;
+    ptree aTree, aEmptyTree;
     try
     {
         json_parser::read_json( sUrl, aTree );
@@ -85,7 +85,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
             aTree.put("buffers." + rVal.first + ".path.",sBufferUri.substr(sBufferUri.find_last_of('/')+1));
         }
         // Images for textures
-        BOOST_FOREACH(ptree::value_type &rVal,aTree.get_child("images"))
+        BOOST_FOREACH(ptree::value_type &rVal,aTree.get_child("images", aEmptyTree))
         {
             const std::string sImageUri(rVal.second.get<std::string>("path"));
             vExternals.push_back(sImageUri);
