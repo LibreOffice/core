@@ -66,7 +66,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <filter/msfilter/sprmids.hxx>
+#include <sprmids.hxx>
 #include <fmtpdsc.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>

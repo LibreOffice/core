@@ -25,7 +25,7 @@
 
 #include <string.h>
 #include <i18nlangtag/mslangid.hxx>
-#include <filter/msfilter/sprmids.hxx>
+#include <sprmids.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 

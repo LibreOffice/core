@@ -61,7 +61,7 @@
 #include <fmtrowsplt.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <numrule.hxx>
-#include <filter/msfilter/sprmids.hxx>
+#include <sprmids.hxx>
 #include "../inc/wwstyles.hxx"
 #include "writerhelper.hxx"
 #include "ww8struc.hxx"

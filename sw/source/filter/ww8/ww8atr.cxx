@@ -120,7 +120,7 @@
 #include <fmthdft.hxx>
 #include <authfld.hxx>
 
-#include <filter/msfilter/sprmids.hxx>
+#include <sprmids.hxx>
 
 #include <fmtcntnt.hxx>
 #include "writerhelper.hxx"

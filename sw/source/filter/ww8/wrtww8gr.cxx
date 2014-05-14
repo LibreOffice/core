@@ -50,7 +50,7 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 
-#include <filter/msfilter/sprmids.hxx>
+#include <sprmids.hxx>
 
 #include <doc.hxx>
 #include "writerhelper.hxx"
