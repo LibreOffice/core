@@ -376,7 +376,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
     }
 }
 
-void DomainMapper_Impl::SetSymbolData( bool nSymbolData )
+void DomainMapper_Impl::SetSymbolData( sal_Int32 nSymbolData )
 {
     m_nSymboldata = nSymbolData;
 }

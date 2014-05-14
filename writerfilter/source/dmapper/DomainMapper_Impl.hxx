@@ -468,7 +468,7 @@ public:
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr();
 
-    void SetSymbolData( bool nSymbolData );
+    void SetSymbolData( sal_Int32 nSymbolData );
     sal_Int32 GetSymbolData();
     /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
