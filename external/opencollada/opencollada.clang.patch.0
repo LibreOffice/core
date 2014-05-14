@@ -1,6 +1,16 @@
+-*- Mode: Diff -*-
 diff -ur opencollada.org/COLLADABaseUtils/include/COLLADABUhash_map.h opencollada/COLLADABaseUtils/include/COLLADABUhash_map.h
 --- COLLADABaseUtils/include/COLLADABUhash_map.h	2014-05-09 11:12:05.740858077 +0200
 +++ COLLADABaseUtils/include/COLLADABUhash_map.h	2014-05-09 11:17:38.616861995 +0200
+@@ -60,7 +60,7 @@
+         #define COLLADABU_HASH_NAMESPACE_CLOSE }
+         #define COLLADABU_HASH_FUN hash
+     #endif
+-#elif defined(__FreeBSD__) && defined(_LIBCPP_VERSION)
++#elif (defined(__APPLE__) || defined(__FreeBSD__)) && defined(_LIBCPP_VERSION)
+     #include <unordered_map>
+     #include <unordered_set>
+     #define COLLADABU_HASH_MAP std::unordered_map
 @@ -70,7 +70,7 @@
      #define COLLADABU_HASH_NAMESPACE_CLOSE
      #define COLLADABU_HASH_FUN hash
