@@ -2002,12 +2002,49 @@ void ScConditionalFormat::InsertCol(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, 
 
 void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
+    for (size_t i = 0, n = maRanges.size(); i < n; ++i)
+    {
+        // We assume that the start and end sheet indices are equal.
+        ScRange* pRange = maRanges[i];
+        SCTAB nTab = pRange->aStart.Tab();
+
+        if (nTab < rCxt.mnInsertPos)
+            // Unaffected.
+            continue;
+
+        pRange->aStart.IncTab(rCxt.mnSheets);
+        pRange->aEnd.IncTab(rCxt.mnSheets);
+    }
+
     for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
         it->UpdateInsertTab(rCxt);
 }
 
 void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
+    for (size_t i = 0, n = maRanges.size(); i < n; ++i)
+    {
+        // We assume that the start and end sheet indices are equal.
+        ScRange* pRange = maRanges[i];
+        SCTAB nTab = pRange->aStart.Tab();
+
+        if (nTab < rCxt.mnDeletePos)
+            // Left of the deleted sheet(s).  Unaffected.
+            continue;
+
+        if (nTab <= rCxt.mnDeletePos+rCxt.mnSheets-1)
+        {
+            // On the deleted sheet(s).
+            pRange->aStart.SetTab(-1);
+            pRange->aEnd.SetTab(-1);
+            continue;
+        }
+
+        // Right of the deleted sheet(s).  Adjust the sheet indices.
+        pRange->aStart.IncTab(-1*rCxt.mnSheets);
+        pRange->aEnd.IncTab(-1*rCxt.mnSheets);
+    }
+
     for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
         it->UpdateDeleteTab(rCxt);
 }
