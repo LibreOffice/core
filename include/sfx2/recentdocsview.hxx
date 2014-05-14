@@ -40,9 +40,6 @@ enum ApplicationType
 
 class SFX2_DLLPUBLIC RecentDocsView : public ThumbnailView
 {
-private:
-    size_t mnLastMouseDownItem = THUMBNAILVIEW_ITEM_NOTFOUND;
-
 public:
     RecentDocsView( Window* pParent );
     virtual ~RecentDocsView();
@@ -80,6 +77,7 @@ protected:
     long    mnTextHeight;
     long    mnItemPadding;
     long    mnItemMaxTextLength;
+    size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.
     Image maWelcomeImage;
