@@ -83,7 +83,7 @@ public:
     /// Writes a diagram (smartart).
     void writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt, int nAnchorId);
     void writeDiagramRels(com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument> xDom,
-                          com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > xRelSeq,
+                          const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > >& xRelSeq,
                           com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName,
                           int nAnchorId);
     /// Writes text frame in DML format.

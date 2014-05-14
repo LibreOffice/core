@@ -169,7 +169,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
                         GetCmisProperties() const;
 
-    void        SetCmisProperties(::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty > cmisProps );
+    void        SetCmisProperties(const ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >& cmisProps );
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;

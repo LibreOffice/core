@@ -176,7 +176,7 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
 
 namespace {
 
-OUString getSourceRangeStrFromLabeledSequences( uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences, bool bPositive )
+OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aSequences, bool bPositive )
 {
     const OUString aRolePrefix( "error-bars" );
     OUString aDirection;

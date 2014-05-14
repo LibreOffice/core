@@ -104,7 +104,7 @@ public:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>
                         GetSelection()const;
-    void                SetSelection(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > rSelection);
+    void                SetSelection(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection);
 
     void                SetCurrentDBData( const SwDBData& rDBData);
     const SwDBData&     GetCurrentDBData() const;

@@ -646,7 +646,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
 }
 
 
-void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
+void LocalizationMgr::handleAddLocales( const Sequence< Locale >& aLocaleSeq )
 {
     const Locale* pLocales = aLocaleSeq.getConstArray();
     sal_Int32 nLocaleCount = aLocaleSeq.getLength();
@@ -678,7 +678,7 @@ void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
 }
 
 
-void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
+void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq )
 {
     const Locale* pLocales = aLocaleSeq.getConstArray();
     sal_Int32 nLocaleCount = aLocaleSeq.getLength();

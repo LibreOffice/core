@@ -106,7 +106,7 @@ class FWE_DLLPUBLIC AddonMenuManager
                                      MenuType    nSubMenuType,
                                      sal_uInt16      nInsPos,
                                      sal_uInt16&     nUniqueMenuId,
-                                     com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > aAddonMenuDefinition,
+                                     const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& aAddonMenuDefinition,
                                      const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                      const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel );
 

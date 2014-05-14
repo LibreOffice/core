@@ -544,7 +544,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const util::DateTime& rTi
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, Sequence< OUString > aItems )
+writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const Sequence< OUString >& aItems )
 {
     if( aItems.getLength() == 0 )
         return;

@@ -174,7 +174,7 @@ public:
     bool
         ReplaceSetProperties(
             const OUString &rNode,
-            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues );
+            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValues );
 
     com::sun::star::uno::Any
             GetProperty( const OUString &rPropertyName ) const;

@@ -263,9 +263,9 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
 // Insert the menu and sub menu entries into pCurrentMenu with the aAddonMenuDefinition provided
 void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrentMenu,
                                   MenuType                              nSubMenuType,
-                                  sal_uInt16                                nInsPos,
-                                  sal_uInt16&                               nUniqueMenuId,
-                                  Sequence< Sequence< PropertyValue > > aAddonMenuDefinition,
+                                  sal_uInt16                            nInsPos,
+                                  sal_uInt16&                           nUniqueMenuId,
+                                  const Sequence< Sequence< PropertyValue > >& aAddonMenuDefinition,
                                   const Reference< XFrame >&            rFrame,
                                   const Reference< XModel >&            rModel )
 {

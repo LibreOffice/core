@@ -1675,7 +1675,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL
 
 
 RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > rModel,
-                              uno::Sequence< beans::PropertyValue > rProperties )
+                              const uno::Sequence< beans::PropertyValue >& rProperties )
 {
     OUString temp;
     uno::Reference< uno::XInterface > temp2;

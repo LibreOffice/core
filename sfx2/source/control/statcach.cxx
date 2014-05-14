@@ -166,15 +166,16 @@ const ::com::sun::star::frame::FeatureStateEvent& BindDispatch_Impl::GetStatus()
     return aStatus;
 }
 
-void BindDispatch_Impl::Dispatch( uno::Sequence < beans::PropertyValue > aProps, bool bForceSynchron )
+void BindDispatch_Impl::Dispatch( const uno::Sequence < beans::PropertyValue >& aProps, bool bForceSynchron )
 {
     if ( xDisp.is() && aStatus.IsEnabled )
     {
         sal_Int32 nLength = aProps.getLength();
-        aProps.realloc(nLength+1);
-        aProps[nLength].Name = "SynchronMode";
-        aProps[nLength].Value <<= bForceSynchron ;
-        xDisp->dispatch( aURL, aProps );
+        uno::Sequence < beans::PropertyValue > aProps2 = aProps;
+        aProps2.realloc(nLength+1);
+        aProps2[nLength].Name = "SynchronMode";
+        aProps2[nLength].Value <<= bForceSynchron ;
+        xDisp->dispatch( aURL, aProps2 );
     }
 }
 

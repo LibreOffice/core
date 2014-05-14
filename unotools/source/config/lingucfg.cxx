@@ -846,7 +846,7 @@ uno::Sequence< uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OU
 }
 
 bool SvtLinguConfig::ReplaceSetProperties(
-        const OUString &rNode, uno::Sequence< beans::PropertyValue > rValues )
+        const OUString &rNode, const uno::Sequence< beans::PropertyValue >& rValues )
 {
     return GetConfigItem().ReplaceSetProperties( rNode, rValues );
 }

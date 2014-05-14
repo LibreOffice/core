@@ -3096,7 +3096,7 @@ const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
 }
 
 Reference< chart2::data::XDataSequence>  getLabeledSequence(
-        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences,
+        const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aSequences,
         bool bPositive )
 {
     const OUString aRolePrefix( "error-bars" );

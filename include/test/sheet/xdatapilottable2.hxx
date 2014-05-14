@@ -35,7 +35,7 @@ public:
 protected:
 
 private:
-    bool checkDrillDownSheetContent(css::uno::Reference< css::sheet::XSpreadsheet >, css::uno::Sequence< css::uno::Sequence < css::uno::Any > > aData);
+    bool checkDrillDownSheetContent(css::uno::Reference< css::sheet::XSpreadsheet >, const css::uno::Sequence< css::uno::Sequence < css::uno::Any > >& aData);
 
     void getOutputRanges(css::uno::Reference< css::sheet::XDataPilotTable2 >);
     void buildDataFields(css::uno::Reference< css::sheet::XDataPilotTable2 >);

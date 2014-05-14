@@ -76,7 +76,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
     return Sequence< sal_Int8 >();
 }
 
-OUString bigIntegerToNumericString ( Sequence< sal_Int8 > integer )
+OUString bigIntegerToNumericString ( const Sequence< sal_Int8 >& integer )
 {
     OUString aRet ;
 

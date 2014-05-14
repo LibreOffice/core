@@ -1289,7 +1289,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
 
 void DomainMapper_Impl::appendTextContent(
     const uno::Reference< text::XTextContent > xContent,
-    const uno::Sequence< beans::PropertyValue > xPropertyValues
+    const uno::Sequence< beans::PropertyValue >& xPropertyValues
     )
 {
     SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
@@ -2865,7 +2865,7 @@ void DomainMapper_Impl::handleAuthor
 }
 
 uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
-                                   uno::Sequence< beans::PropertyValues >aLevel,
+                                   const uno::Sequence< beans::PropertyValues >& aLevel,
                                    PropertyNameSupplier& rPropNameSupplier )
 {
     //create a copy of the level and add two new entries - hyperlink start and end
@@ -4400,9 +4400,9 @@ _PageMar::_PageMar()
 
 
 void DomainMapper_Impl::RegisterFrameConversion(
-        uno::Reference< text::XTextRange >      xFrameStartRange,
-        uno::Reference< text::XTextRange >      xFrameEndRange,
-        uno::Sequence< beans::PropertyValue >   aFrameProperties
+        uno::Reference< text::XTextRange >           xFrameStartRange,
+        uno::Reference< text::XTextRange >           xFrameEndRange,
+        const uno::Sequence< beans::PropertyValue >& aFrameProperties
         )
 {
     OSL_ENSURE(
@@ -4524,7 +4524,7 @@ void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
         pCurrent->m_nToken = nToken;
 }
 
-void DomainMapper_Impl::SetCurrentRedlineRevertProperties( uno::Sequence<beans::PropertyValue> aProperties )
+void DomainMapper_Impl::SetCurrentRedlineRevertProperties( const uno::Sequence<beans::PropertyValue>& aProperties )
 {
     RedlineParamsPtr pCurrent( GetTopRedline(  ) );
     if ( pCurrent.get(  ) )

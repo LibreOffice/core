@@ -221,7 +221,7 @@ void DrawingML::WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha )
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
-void DrawingML::WriteSolidFill( const OUString& sSchemeName, Sequence< PropertyValue > aTransformations )
+void DrawingML::WriteSolidFill( const OUString& sSchemeName, const Sequence< PropertyValue >& aTransformations )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
     WriteColor( sSchemeName, aTransformations );
@@ -360,7 +360,7 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
     }
 }
 
-void DrawingML::WriteGrabBagGradientFill( Sequence< PropertyValue > aGradientStops, awt::Gradient rGradient )
+void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGradientStops, awt::Gradient rGradient )
 {
     // write back the original gradient
     mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
@@ -2027,7 +2027,7 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
     return;
 }
 
-void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, Sequence< PropertyValue > aProperties )
+void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< PropertyValue >& aProperties )
 {
     if( aProperties.getLength() > 0 )
     {

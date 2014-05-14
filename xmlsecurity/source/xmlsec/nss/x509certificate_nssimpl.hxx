@@ -87,7 +87,7 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
         //Helper methods
         void setCert( CERTCertificate* cert ) ;
         const CERTCertificate* getNssCert() const ;
-        void setRawCert( ::com::sun::star::uno::Sequence< sal_Int8 > rawCert ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        void setRawCert( const ::com::sun::star::uno::Sequence< sal_Int8 >& rawCert ) throw ( ::com::sun::star::uno::RuntimeException) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_X509CERTIFICATE_NSSIMPL_HXX

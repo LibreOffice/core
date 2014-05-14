@@ -49,7 +49,7 @@ public:
     static bool IsCorrectContext( const ::rtl::OUString& aContext,
                                   const ::rtl::OUString& aModuleIdentifier );
 
-    static bool ConvertSeqSeqToVector( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > &rSequence,
+    static bool ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                        AddonStatusbarItemContainer& rContainer );
 
     static sal_uInt16 FindReferencePos( StatusBar* pStatusbar,

@@ -149,9 +149,9 @@ namespace utl
             bool                ClearNodeElements(const OUString& rNode,
                                         com::sun::star::uno::Sequence< OUString >& rElements);
             // change or add members to a set
-            bool                SetSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            bool                SetSetProperties(const OUString& rNode, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValues);
             // remove, change or add members of a set
-            bool                ReplaceSetProperties(const OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            bool                ReplaceSetProperties(const OUString& rNode, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValues);
             // add a new node without setting any properties
             bool                AddNode(const OUString& rNode, const OUString& rNewNode);
 

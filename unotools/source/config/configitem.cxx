@@ -801,7 +801,7 @@ Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue 
 
 // Add or change properties
 bool ConfigItem::SetSetProperties(
-    const OUString& rNode, Sequence< PropertyValue > rValues)
+    const OUString& rNode, const Sequence< PropertyValue >& rValues)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
     bool bRet = true;
@@ -900,7 +900,7 @@ bool ConfigItem::SetSetProperties(
 }
 
 bool ConfigItem::ReplaceSetProperties(
-    const OUString& rNode, Sequence< PropertyValue > rValues)
+    const OUString& rNode, const Sequence< PropertyValue >& rValues)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
     bool bRet = true;

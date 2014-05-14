@@ -495,7 +495,7 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
     return pContext;
 }
 
-void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddress> xCellRanges )
+void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRangeAddress>& xCellRanges )
 {
     if(!mpCondFormat || GetScImport().HasNewCondFormatData())
         return;

@@ -615,7 +615,7 @@ namespace vcl
         }
 
         Color VCL_DLLPUBLIC doubleSequenceToColor(
-            const uno::Sequence< double >                   rColor,
+            const uno::Sequence< double >&                  rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {
             const rendering::ARGBColor aARGBColor(

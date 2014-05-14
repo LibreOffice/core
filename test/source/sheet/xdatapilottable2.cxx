@@ -250,7 +250,7 @@ table::CellAddress getLastUsedCellAddress( uno::Reference< sheet::XSpreadsheet >
 
 }
 
-bool XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet > xSheet, uno::Sequence< uno::Sequence< Any > > aData)
+bool XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet > xSheet, const uno::Sequence< uno::Sequence< Any > >& aData)
 {
     table::CellAddress aLastCell = getLastUsedCellAddress(xSheet, 0, 0);
     CPPUNIT_ASSERT(aData.getLength() > 0);
@@ -269,7 +269,7 @@ bool XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpread
         for(sal_Int32 y = 0; y < aSheetData[x].getLength(); ++y)
         {
             Any& aCell1 = aSheetData[x][y];
-            Any& aCell2 = aData[x][y];
+            const Any& aCell2 = aData[x][y];
             CPPUNIT_ASSERT(aCell1 == aCell2);
         }
     }

@@ -49,7 +49,7 @@ class RequestFilterOptions : public ::cppu::WeakImplHelper1< ::com::sun::star::t
 
 public:
     RequestFilterOptions( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > rModel,
-                              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties );
+                              const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties );
 
     bool    isAbort() { return m_pAbort->wasSelected(); }
 

@@ -141,7 +141,7 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
     createControlShape(aSize, xControlModel, uno::Sequence<beans::PropertyValue>());
 }
 
-void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel, uno::Sequence<beans::PropertyValue> rGrabBag)
+void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel, const uno::Sequence<beans::PropertyValue>& rGrabBag)
 {
     uno::Reference<drawing::XControlShape> xControlShape(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.drawing.ControlShape"), uno::UNO_QUERY);
     xControlShape->setSize(aSize);

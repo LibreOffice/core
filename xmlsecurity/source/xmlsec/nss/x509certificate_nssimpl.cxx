@@ -284,7 +284,7 @@ const CERTCertificate* X509Certificate_NssImpl :: getNssCert() const {
     }
 }
 
-void X509Certificate_NssImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) throw ( ::com::sun::star::uno::RuntimeException) {
+void X509Certificate_NssImpl :: setRawCert( const Sequence< sal_Int8 >& rawCert ) throw ( ::com::sun::star::uno::RuntimeException) {
     CERTCertificate* cert ;
     SECItem certItem ;
 
