@@ -7820,7 +7820,11 @@ if test "$with_system_libxml" = "auto"; then
         with_system_libxml="$with_system_libs"
         ;;
     *)
-        with_system_libxml=yes
+        if test "$_os" = "Darwin" -a $MAC_OS_X_VERSION_MAX_ALLOWED -lt 1060; then
+            with_system_libxml=no
+        else
+            with_system_libxml=yes
+        fi
         ;;
     esac
 fi
