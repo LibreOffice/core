@@ -250,8 +250,6 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                 nCode == KEY_A || nCode == KEY_D ||
                 nCode == KEY_W || nCode == KEY_S )
             {
-                m_pContext->makeCurrent();
-
                 // Calculate movement
                 glm::vec3 vMoveBy;
                 {
@@ -280,10 +278,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                 }
 
                 gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,10.0);
-                gltf_prepare_renderer(m_pHandle);
-                gltf_renderer(m_pHandle);
-                gltf_complete_renderer();
-                m_pContext->swapBuffers();
+                update();
             }
         }
     }
