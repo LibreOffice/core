@@ -1497,7 +1497,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
                 if(!m_pTblCrsr)
                 {
                     SAL_WARN("sw", "fdo#74854: "
-                        "this should not happen, but better loose the selection "
+                        "this should not happen, but better lose the selection "
                         "rather than crashing");
                     return;
                 }

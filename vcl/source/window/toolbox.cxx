@@ -4897,7 +4897,7 @@ bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
         if( pToolItem && pToolItem->mpWindow && HasFocus() )
         {
             ImplHideFocus();
-            mbChangingHighlight = true;  // avoid focus change due to loose focus
+            mbChangingHighlight = true;  // avoid focus change due to loss of focus
             pToolItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
             mbChangingHighlight = false;
         }
@@ -5153,7 +5153,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             {
                 Window *pFocusWindow = Application::GetFocusWindow();
                 ImplHideFocus();
-                mbChangingHighlight = true;  // avoid focus change due to loose focus
+                mbChangingHighlight = true;  // avoid focus change due to loss of focus
                 pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
                 mbChangingHighlight = false;
                 if( pFocusWindow != Application::GetFocusWindow() )

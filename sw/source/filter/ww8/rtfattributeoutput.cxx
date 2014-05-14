@@ -1646,7 +1646,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
 
             m_nTableDepth = 0;
             /*
-             * Save m_aRun as we should not loose the opening brace.
+             * Save m_aRun as we should not lose the opening brace.
              * OTOH, just drop the contents of m_aRunText in case something
              * would be there, causing a problem later.
              */

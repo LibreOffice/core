@@ -4017,7 +4017,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
             break;
 
             case ButtonPress:
-                // if we loose the focus in presentation mode
+                // if we lose the focus in presentation mode
                 // there are good chances that we never get it back
                 // since the WM ignores us
                  if( IsOverrideRedirect() )
@@ -4072,7 +4072,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName().equalsAscii( "Sawfish" ) )
                     {
                         // don't set the focus into the IME status window
-                        // since this will lead to a parent loose-focus, close status,
+                        // since this will lead to a parent loss of focus, close status,
                         // reget focus, open status, .... flicker loop
                         if ( (I18NStatus::get().getStatusFrame() != this) )
                             bSetFocus = true;

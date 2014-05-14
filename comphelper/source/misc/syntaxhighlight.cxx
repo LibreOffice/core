@@ -536,7 +536,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*out*
         // Read all characters
         while( *pos != cEndString )
         {
-            // Detect EOF before reading next char, so we do not loose EOF
+            // Detect EOF before reading next char, so we do not lose EOF
             if( *pos == 0 )
             {
                 // ERROR: unterminated string literal
