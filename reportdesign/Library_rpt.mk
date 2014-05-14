@@ -22,6 +22,8 @@ $(eval $(call gb_Library_add_defs,rpt,\
 
 $(eval $(call gb_Library_use_external,rpt,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,rpt,$(SRCDIR)/reportdesign/inc/pch/precompiled_rpt))
+
 $(eval $(call gb_Library_use_sdk_api,rpt))
 
 $(eval $(call gb_Library_use_libraries,rpt,\

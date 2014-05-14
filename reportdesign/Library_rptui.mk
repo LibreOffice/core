@@ -18,6 +18,8 @@ $(eval $(call gb_Library_set_include,rptui,\
 
 $(eval $(call gb_Library_use_external,rptui,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,rptui,$(SRCDIR)/reportdesign/inc/pch/precompiled_rptui))
+
 $(eval $(call gb_Library_use_sdk_api,rptui))
 
 $(eval $(call gb_Library_use_libraries,rptui,\

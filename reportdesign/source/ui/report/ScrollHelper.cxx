@@ -62,7 +62,7 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     m_aReportWindow.Show();
 
     // normally we should be SCROLL_PANE
-    SetAccessibleRole(accessibility::AccessibleRole::SCROLL_PANE);
+    SetAccessibleRole(css::accessibility::AccessibleRole::SCROLL_PANE);
     ImplInitSettings();
 }
 
