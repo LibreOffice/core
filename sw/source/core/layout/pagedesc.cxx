@@ -294,6 +294,19 @@ void SwPageDesc::RegisterChange()
     }
 }
 
+void SwPageDesc::SetPoolFmtId( sal_uInt16 nId )
+{
+    sal_uInt16 nIdOld = aMaster.GetPoolFmtId();
+    if ( nId == nIdOld )
+        return;
+    aMaster.SetPoolFmtId( nId );
+    if (list != 0) {
+        bool ok = list->SetPoolPageDesc( this, nIdOld );
+        SAL_WARN_IF(!ok, "sw",
+                "Unable to set register the PoolFmtId from SetPoolFmtId");
+    }
+}
+
 /*************************************************************************
 |*
 |*                SwPageDesc::Modify()
@@ -301,7 +314,6 @@ void SwPageDesc::RegisterChange()
 |*    special handling if the style of the grid alignment changes
 |*
 *************************************************************************/
-
 
 void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
@@ -542,6 +554,11 @@ SwPageDescExt::operator SwPageDesc() const
     return aResult;
 }
 
+SwPageDescs::SwPageDescs()
+{
+    memset(poolpages, 0, sizeof(value_type) * RES_POOLPAGE_SIZE);
+}
+
 SwPageDescs::~SwPageDescs()
 {
     DeleteAndDestroyAll();
@@ -551,19 +568,41 @@ void SwPageDescs::DeleteAndDestroyAll()
 {
     for( const_iterator it = begin(); it != end(); ++it )
         delete *it;
+    memset(poolpages, 0, sizeof(value_type) * RES_POOLPAGE_SIZE);
     clear();
 }
 
 std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::insert( const value_type& x )
 {
+    sal_uInt16 nId = x->GetPoolFmtId();
+    SAL_WARN_IF(nId != USHRT_MAX && NULL != GetPoolPageDesc( nId ),
+                "sw", "Inserting already assigned pool ID item!");
+
     const_iterator const ret = find( x );
     if (ret == end()) {
         SwPageDescsBase::push_back( x );
-        SAL_WARN_IF(x->list == 0, "sw", "Inserting already assigned item");
+        if (x->list != 0) {
+            SAL_WARN("sw", "Inserting already assigned item!");
+            SAL_WARN_IF(x->list != this, "sw",
+                        "Inserting assigned item from other list!");
+        }
         x->list = this;
+        if (nId != USHRT_MAX)
+            poolpages[ nId - RES_POOLPAGE_BEGIN ] = x;
         return std::make_pair(end() - 1 , true);
     }
     return std::make_pair(ret, false);
+}
+
+void SwPageDescs::_erase( const value_type& x )
+{
+    sal_uInt16 nId = x->GetPoolFmtId();
+    if (nId != USHRT_MAX) {
+        SAL_WARN_IF(poolpages[ nId - RES_POOLPAGE_BEGIN ] != x,
+            "sw", "SwPageDesc with PoolId not correctly registered!");
+        poolpages[ nId - RES_POOLPAGE_BEGIN ] = NULL;
+    }
+    x->list = 0;
 }
 
 SwPageDescs::size_type SwPageDescs::erase( const value_type& x )
@@ -571,7 +610,7 @@ SwPageDescs::size_type SwPageDescs::erase( const value_type& x )
     const_iterator const ret = find( x );
     if (ret != end()) {
         SwPageDescsBase::erase( begin_nonconst() + (ret - begin()) );
-        x->list = 0;
+        _erase( x );
         return 1;
     }
     return 0;
@@ -584,7 +623,7 @@ void SwPageDescs::erase( size_type index )
 
 void SwPageDescs::erase( const_iterator const& position )
 {
-    (*position)->list = 0;
+    _erase( *position );
     SwPageDescsBase::erase( begin_nonconst() + (position - begin()) );
 }
 
@@ -621,6 +660,40 @@ SwPageDescs::const_iterator SwPageDescs::find( const value_type& x ) const
 bool SwPageDescs::Contains( const SwPageDescs::value_type& x ) const
 {
     return (x->list == this);
+}
+
+bool SwPageDescs::IsIdInPoolRange( sal_uInt16 nId, bool allowDefault ) const
+{
+    bool res = (nId >= RES_POOLPAGE_BEGIN && nId < RES_POOLPAGE_END);
+    if (!res && allowDefault)
+        res = (nId == USHRT_MAX);
+    SAL_WARN_IF(!res, "sw", "PageDesc pool id out of range");
+    return res;
+}
+
+bool SwPageDescs::SetPoolPageDesc( const value_type& x, sal_uInt16 nIdOld )
+{
+    sal_uInt16 nId = x->GetPoolFmtId();
+    if (!IsIdInPoolRange(nIdOld, true)) return false;
+    if (!IsIdInPoolRange(nId, true)) return false;
+
+    if (nIdOld != USHRT_MAX) {
+        SAL_WARN_IF(x != poolpages[ nIdOld - RES_POOLPAGE_BEGIN ],
+            "sw", "Old PageDesc pool id pointer != object");
+        poolpages[ nIdOld - RES_POOLPAGE_BEGIN ] = NULL;
+    }
+    if (nId != USHRT_MAX) {
+        SAL_WARN_IF(NULL != poolpages[ nId - RES_POOLPAGE_BEGIN ],
+            "sw", "SwPageDesc pool ID already assigned!");
+        poolpages[ nId - RES_POOLPAGE_BEGIN ] = x;
+    }
+    return true;
+}
+
+SwPageDescs::value_type SwPageDescs::GetPoolPageDesc( sal_uInt16 nId ) const
+{
+    if (!IsIdInPoolRange(nId, false)) return NULL;
+    return poolpages[ nId - RES_POOLPAGE_BEGIN ];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
