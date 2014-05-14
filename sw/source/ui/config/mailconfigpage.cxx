@@ -364,7 +364,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     , rConfigItem( rItem )
 {
     get(m_pAuthenticationCB,"authentication");
-    get(m_pSeparateAuthenticationRB,"seperateauthentication");
+    get(m_pSeparateAuthenticationRB,"separateauthentication");
     get(m_pSMTPAfterPOPRB,"smtpafterpop");
     get(m_pOutgoingServerFT,"label1");
     get(m_pUserNameFT,"username_label");
