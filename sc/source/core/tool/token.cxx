@@ -1328,10 +1328,15 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
 
     if (SC_OPCODE_START_FUNCTION <= eOp && eOp < SC_OPCODE_STOP_FUNCTION)
     {
-        // This is a function opcode. For now, we only support vectorization
-        // for min, max, sum and average.
+        // We support vectorization for the following opcodes.
         switch (eOp)
         {
+            case ocIf:
+            case ocIfError:
+            case ocIfNA:
+            case ocChose:
+                // Jump commands are now supported.
+            break;
             case ocAverage:
             case ocMin:
             case ocMinA:
