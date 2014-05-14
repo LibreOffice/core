@@ -24,6 +24,7 @@
 #include "global.hxx"
 #include "viewdata.hxx"
 #include <editeng/svxenum.hxx>
+#include <svl/brdcst.hxx>
 
 #include <memory>
 

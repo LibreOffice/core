@@ -57,7 +57,6 @@ namespace com
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustring.hxx>
-#include <svl/brdcst.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/ref.hxx>
 #include <vector>

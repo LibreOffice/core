@@ -25,8 +25,8 @@
 #include <vector>
 #include <vcl/window.hxx>
 #include <SidebarWindowsTypes.hxx>
-#include <svl/brdcst.hxx>
 
+class SfxBroadcaster;
 class SwTxtFld;
 class SwRootFrm;
 class SwPostItMgr;
