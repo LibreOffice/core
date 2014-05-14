@@ -119,6 +119,9 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                     if (nTrimLen)
                         aArray = mrDoc.FetchVectorRefArray(aRefPos, nTrimLen);
 
+                    if (!aArray.isValid())
+                        return false;
+
                     formula::SingleVectorRefToken aTok(aArray, nLen, nTrimLen);
                     mrGroupTokens.AddToken(aTok);
                 }
@@ -187,6 +190,9 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                     formula::VectorRefArray aArray;
                     if (nArrayLength)
                         aArray = mrDoc.FetchVectorRefArray(aRefPos, nArrayLength);
+
+                    if (!aArray.isValid())
+                        return false;
 
                     aArrays.push_back(aArray);
                 }

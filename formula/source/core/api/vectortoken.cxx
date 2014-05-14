@@ -11,15 +11,34 @@
 
 namespace formula {
 
-VectorRefArray::VectorRefArray() : mpNumericArray(NULL), mpStringArray(NULL) {}
-VectorRefArray::VectorRefArray( const double* pArray ) : mpNumericArray(pArray), mpStringArray(NULL) {}
-VectorRefArray::VectorRefArray( rtl_uString** pArray ) : mpNumericArray(NULL), mpStringArray(pArray) {}
+VectorRefArray::VectorRefArray() :
+    mpNumericArray(NULL),
+    mpStringArray(NULL),
+    mbValid(true) {}
+
+VectorRefArray::VectorRefArray( InitInvalid ) :
+    mpNumericArray(NULL),
+    mpStringArray(NULL),
+    mbValid(false) {}
+
+VectorRefArray::VectorRefArray( const double* pArray ) :
+    mpNumericArray(pArray),
+    mpStringArray(NULL),
+    mbValid(true) {}
+
+VectorRefArray::VectorRefArray( rtl_uString** pArray ) :
+    mpNumericArray(NULL),
+    mpStringArray(pArray),
+    mbValid(true) {}
+
 VectorRefArray::VectorRefArray( const double* pNumArray, rtl_uString** pStrArray ) :
-    mpNumericArray(pNumArray), mpStringArray(pStrArray) {}
+    mpNumericArray(pNumArray),
+    mpStringArray(pStrArray),
+    mbValid(true) {}
 
 bool VectorRefArray::isValid() const
 {
-    return mpNumericArray || mpStringArray;
+    return mbValid;
 }
 
 SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength ) :
