@@ -213,19 +213,27 @@ void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (rMEvt.IsLeft())
     {
-        if (rMEvt.GetClicks() > 1)
-            return;
+        // ignore to avoid stuff done in ThumbnailView; we don't do selections etc.
+        return;
+    }
 
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+void RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
+{
+    if (rMEvt.IsLeft())
+    {
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
 
         if (pItem)
         {
-            pItem->MouseButtonDown(rMEvt);
+            pItem->MouseButtonUp(rMEvt);
             return;
         }
     }
-    ThumbnailView::MouseButtonDown(rMEvt);
+    ThumbnailView::MouseButtonUp(rMEvt);
 }
 
 void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *)

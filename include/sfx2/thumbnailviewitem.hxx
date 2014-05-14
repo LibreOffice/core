@@ -129,7 +129,7 @@ public:
     static drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
         createBorderLine (const basegfx::B2DPolygon &rPolygon);
 
-    virtual void MouseButtonDown(const MouseEvent&) {}
+    virtual void MouseButtonUp(const MouseEvent&) {}
 
 protected:
 

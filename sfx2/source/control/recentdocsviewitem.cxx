@@ -182,7 +182,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
     }
 }
 
-void RecentDocsViewItem::MouseButtonDown(const MouseEvent& rMEvt)
+void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft())
     {
