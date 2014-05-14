@@ -548,7 +548,7 @@ void SwDoc::InitDrawModel()
 //      pSdrPool->FreezeIdRanges();
 
     // set FontHeight pool defaults without changing static SdrEngineDefaults
-     GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
+    GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     SAL_INFO( "sw.doc", "before create DrawDocument" );
     // The document owns the SdrModel. We always have two layers and one page.

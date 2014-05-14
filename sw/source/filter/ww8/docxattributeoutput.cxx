@@ -4073,8 +4073,6 @@ void DocxAttributeOutput::WritePostponedOLE()
     if( m_postponedOLE == NULL )
         return;
 
-    SAL_INFO( "sw.ww8", OSL_THIS_FUNC );
-
     for( std::list< PostponedOLE >::iterator it = m_postponedOLE->begin();
          it != m_postponedOLE->end();
          ++it )

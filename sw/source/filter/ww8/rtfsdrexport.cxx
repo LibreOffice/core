@@ -56,8 +56,6 @@ RtfSdrExport::~RtfSdrExport()
 
 void RtfSdrExport::OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     EscherEx::OpenContainer(nEscherContainer, nRecInstance);
 
     if (nEscherContainer == ESCHER_SpContainer)
@@ -72,8 +70,6 @@ void RtfSdrExport::OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance)
 
 void RtfSdrExport::CloseContainer()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     if (mRecTypes.back() == ESCHER_SpContainer)
     {
         // write the shape now when we have all the info
@@ -89,22 +85,16 @@ void RtfSdrExport::CloseContainer()
 
 sal_uInt32 RtfSdrExport::EnterGroup(const OUString& /*rShapeName*/, const Rectangle* /*pRect*/)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     return GenerateShapeId();
 }
 
 void RtfSdrExport::LeaveGroup()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     /* noop */
 }
 
 void RtfSdrExport::AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 /*nShapeId*/)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
 }
@@ -143,8 +133,6 @@ inline sal_Int32 impl_GetPointComponent(const sal_uInt8*& pVal, sal_Size& rVerti
 
 void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRect)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     if (m_nShapeType == ESCHER_ShpInst_Nil)
         return;
 
@@ -401,8 +389,6 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
 
 void RtfSdrExport::AddLineDimensions(const Rectangle& rRectangle)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));
 
@@ -429,8 +415,6 @@ void RtfSdrExport::AddLineDimensions(const Rectangle& rRectangle)
 
 void RtfSdrExport::AddRectangleDimensions(OStringBuffer& rBuffer, const Rectangle& rRectangle)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));
 
@@ -491,8 +475,6 @@ void RtfSdrExport::impl_writeGraphic()
 
 sal_Int32 RtfSdrExport::StartShape()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     if (m_nShapeType == ESCHER_ShpInst_Nil)
         return -1;
 
@@ -602,8 +584,6 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
 
 void RtfSdrExport::EndShape(sal_Int32 nShapeElement)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     if (nShapeElement >= 0)
     {
         // end of the shape

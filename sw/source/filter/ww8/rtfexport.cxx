@@ -124,8 +124,6 @@ bool RtfExport::CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich)
 
 void RtfExport::AppendBookmarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
 
@@ -152,8 +150,6 @@ void RtfExport::AppendBookmarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_I
 
 void RtfExport::AppendBookmark(const OUString& rName, bool /*bSkip*/)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     std::vector<OUString> aStarts;
     std::vector<OUString> aEnds;
 
@@ -165,8 +161,6 @@ void RtfExport::AppendBookmark(const OUString& rName, bool /*bSkip*/)
 
 void RtfExport::AppendAnnotationMarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
 
@@ -199,8 +193,6 @@ void RtfExport::ExportGrfBullet(const SwTxtNode&)
 
 void RtfExport::WriteChar(sal_Unicode)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     /* WriteChar() has nothing to do for rtf. */
 }
 
@@ -275,8 +267,6 @@ void RtfExport::WriteNumbering()
 
 void RtfExport::WriteRevTab()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     int nRevAuthors = pDoc->GetRedlineTbl().size();
 
     if (nRevAuthors < 1)
@@ -308,8 +298,6 @@ void RtfExport::WriteRevTab()
 void RtfExport::WriteHeadersFooters(sal_uInt8 nHeadFootFlags,
                                     const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 /*nBreakCode*/)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     // headers
     if (nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN)
         WriteHeaderFooter(rLeftFmt, true, OOO_STRING_SVTOOLS_RTF_HEADERL);
@@ -333,8 +321,6 @@ void RtfExport::WriteHeadersFooters(sal_uInt8 nHeadFootFlags,
 
 void RtfExport::OutputField(const SwField* pFld, ww::eField eFldType, const OUString& rFldCmd, sal_uInt8 nMode)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     m_pAttrOutput->WriteField_Impl(pFld, eFldType, rFldCmd, nMode);
 }
 
@@ -354,15 +340,11 @@ void RtfExport::DoComboBox(const OUString& /*rName*/,
                            const OUString& /*rSelected*/,
                            uno::Sequence<OUString>& /*rListItems*/)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     // this is handled in RtfAttributeOutput::OutputFlyFrame_Impl
 }
 
 void RtfExport::DoFormText(const SwInputField* pFld)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     OUString sResult = pFld->ExpandField(true);
     OUString sHelp(pFld->GetHelp());
     OUString sName = pFld->GetPar2();
@@ -388,8 +370,6 @@ void RtfExport::DoFormText(const SwInputField* pFld)
 
 sal_uLong RtfExport::ReplaceCr(sal_uInt8)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     // Completely unused for Rtf export... only here for code sharing
     // purpose with binary export
 
@@ -445,7 +425,6 @@ void RtfExport::WriteMainText()
 
 void RtfExport::WriteInfo()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_INFO);
 
     SwDocShell* pDocShell(pDoc->GetDocShell());
@@ -491,8 +470,6 @@ void RtfExport::WriteInfo()
 
 void RtfExport::WritePageDescTable()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     // Write page descriptions (page styles)
     sal_uInt16 nSize = pDoc->GetPageDescCnt();
     if (!nSize)
@@ -775,7 +752,6 @@ void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet,
                                    const SwNode& rNd, const SwFmtPageDesc* pNewPgDescFmt,
                                    const SwPageDesc* pNewPgDesc)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     const SwSectionFmt* pFmt = GetSectionFormat(rNd);
     const sal_uLong nLnNm = GetSectionLineNo(pSet, rNd);
 
@@ -794,8 +770,6 @@ void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet,
 bool RtfExport::DisallowInheritingOutlineNumbering(const SwFmt& rFmt)
 {
     bool bRet(false);
-
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     if (SFX_ITEM_SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
     {
@@ -816,21 +790,16 @@ bool RtfExport::DisallowInheritingOutlineNumbering(const SwFmt& rFmt)
 
 void RtfExport::OutputGrfNode(const SwGrfNode&)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     /* noop, see RtfAttributeOutput::FlyFrameGraphic */
 }
 
 void RtfExport::OutputOLENode(const SwOLENode&)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     /* noop, see RtfAttributeOutput::FlyFrameOLE */
 }
 
 void RtfExport::OutputLinkedOLE(const OUString&)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 }
 
 void RtfExport::OutputTextNode(const SwTxtNode& rNode)
@@ -843,8 +812,6 @@ void RtfExport::OutputTextNode(const SwTxtNode& rNode)
 
 void RtfExport::AppendSection(const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     m_pSections->AppendSection(pPageDesc, pFmt, nLnNum);
     AttrOutput().SectionBreak(msword::PageBreak, m_pSections->CurrentSectionInfo());
 }
@@ -1234,7 +1201,6 @@ public:
 
 SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     SetBaseURL(rBaseURL);
     // export outline nodes, only (send outline to clipboard/presentation)
     m_bOutOutlineOnly = rFltName.startsWith("O");
@@ -1245,7 +1211,6 @@ SwRTFWriter::~SwRTFWriter()
 
 sal_uLong SwRTFWriter::WriteStream()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     SwPaM aPam(*pCurPam->End(), *pCurPam->Start());
     RtfExport aExport(NULL, pDoc, &aPam, pCurPam, this, m_bOutOutlineOnly);
     aExport.ExportDocument(true);
@@ -1254,7 +1219,6 @@ sal_uLong SwRTFWriter::WriteStream()
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF(const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     xRet = new SwRTFWriter(rFltName, rBaseURL);
 }
 

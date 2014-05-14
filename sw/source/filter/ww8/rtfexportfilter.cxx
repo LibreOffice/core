@@ -40,8 +40,6 @@ RtfExportFilter::~RtfExportFilter()
 
 sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw(uno::RuntimeException, std::exception)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-
     utl::MediaDescriptor aMediaDesc = aDescriptor;
     uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference< io::XStream >());
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(xStream, true);
