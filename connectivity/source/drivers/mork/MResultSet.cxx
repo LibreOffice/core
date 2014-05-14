@@ -333,7 +333,6 @@ bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 
 bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.mork", "=> OResultSet::pushCard()" );
     return true;
 /*
     if (cardNumber == 0)
@@ -363,8 +362,6 @@ bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, Runtime
 
 bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.mork", "=> OResultSet::fetchRow()" );
-
     OSL_TRACE("fetchRow, cardNumber = %u", cardNumber );
     if (!bForceReload)
     {
@@ -1501,8 +1498,6 @@ sal_Int32 OResultSet::deletedCount()
 
 bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 {
-    SAL_INFO("connectivity.mork", "=> OResultSet::seekRow()" );
-
     ResultSetEntryGuard aGuard( *this );
     if ( !m_pKeySet.is() )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ILLEGAL_MOVEMENT, *this );

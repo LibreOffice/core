@@ -81,8 +81,6 @@ void SAL_CALL OPreparedStatement::disposing()
 OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sql , sal_Bool bAdjusted )
     throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
 {
-    SAL_INFO("connectivity.mork", "=> OPreparedStatement::parseSql()" );
-
     StatementType eStatementType = OCommonStatement::parseSql( sql, bAdjusted );
     if ( eStatementType != eSelect )
         return eStatementType;
@@ -148,8 +146,6 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=> OPreparedStatement::getMetaData()" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
@@ -168,7 +164,6 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 
 sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=> OPreparedStatement::execute()" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
@@ -179,8 +174,6 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=> OPreparedStatement::executeUpdate()" );
-
     ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
 }
@@ -207,8 +200,6 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_INFO("connectivity.mork", "=> OPreparedStatement::executeQuery()" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_TRACE("In: OPreparedStatement::executeQuery" );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
