@@ -5882,6 +5882,112 @@ void Test::testCondFormatInsertRow()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatInsertDeleteSheets()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Add a conditional format to B2:B4.
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    pFormat->AddRange(ScRange(1,1,0,1,3,0));
+
+    sal_uLong nKey = m_pDoc->AddCondFormat(pFormat, 0);
+
+    // Add condition in which if the value equals 2, set the "Result" style.
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(
+        SC_COND_EQUAL, "=2", "" , m_pDoc, ScAddress(0,0,0), ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    // Apply the format to the range.
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, nKey);
+
+    // Make sure this conditional format entry is really there.
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+    const ScConditionalFormat* pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT_MESSAGE("Wrong condntional format instance.", pCheck == pFormat);
+
+    // ... and its range is B2:B4.
+    ScRangeList aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    const ScRange* pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4.", *pRange == ScRange(1,1,0,1,3,0));
+
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+
+    // Insert a new sheet at the left.
+    bool bInserted = rFunc.InsertTable(0, "Inserted", true, true);
+    CPPUNIT_ASSERT(bInserted);
+
+    pList = m_pDoc->GetCondFormList(1);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    // Make sure the range also got shifted.
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the sheet insertion.", *pRange == ScRange(1,1,1,1,3,1));
+
+    // Delete the sheet to the left.
+    bool bDeleted = rFunc.DeleteTable(0, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    // Make sure the range got shifted back.
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the sheet removal.", *pRange == ScRange(1,1,0,1,3,0));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and re-check.
+    pUndoMgr->Undo();
+
+    pList = m_pDoc->GetCondFormList(1);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the undo of the sheet removal.", *pRange == ScRange(1,1,1,1,3,1));
+
+#if 0 // TODO : Undo of sheet insertion currently depends on the presence of
+      // view shell, and crashes when executed during cppunit run.
+
+    // Undo again and re-check.
+    pUndoMgr->Undo();
+
+    pList = m_pDoc->GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+    pCheck = pList->GetFormat(nKey);
+    CPPUNIT_ASSERT(pCheck);
+
+    // Make sure the range got shifted back.
+    aCheckRange = pCheck->GetRange();
+    CPPUNIT_ASSERT_MESSAGE("This should be a single range.", aCheckRange.size() == 1);
+    pRange = aCheckRange[0];
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the undo of sheet insertion.", *pRange == ScRange(1,1,0,1,3,0));
+#else
+    m_pDoc->DeleteTab(1);
+#endif
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCondCopyPaste()
 {
     m_pDoc->InsertTab(0, "Test");

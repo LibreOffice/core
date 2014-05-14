@@ -353,6 +353,7 @@ public:
     void testCondFormatINSDEL();
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
+    void testCondFormatInsertDeleteSheets();
     void testCondCopyPaste();
     void testIconSet();
 
@@ -512,6 +513,7 @@ public:
     CPPUNIT_TEST(testCondFormatINSDEL);
     CPPUNIT_TEST(testCondFormatInsertRow);
     CPPUNIT_TEST(testCondFormatInsertCol);
+    CPPUNIT_TEST(testCondFormatInsertDeleteSheets);
     CPPUNIT_TEST(testCondCopyPaste);
     CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testImportStream);
