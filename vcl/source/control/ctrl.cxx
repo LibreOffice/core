@@ -370,7 +370,7 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
 
 void Control::DataChanged( const DataChangedEvent& rDCEvt)
 {
-    // we don't want to loose some style settings for controls created with the
+    // we don't want to lose some style settings for controls created with the
     // toolkit
     if ( IsCreatedWithToolkit() &&
          (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&

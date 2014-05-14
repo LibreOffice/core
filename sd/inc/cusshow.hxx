@@ -28,11 +28,6 @@
 class SdDrawDocument;
 class SdPage;
 
-/*************************************************************************
-|*
-|* CustomShow
-|*
-\************************************************************************/
 class SD_DLLPUBLIC SdCustomShow
 {
 public:
@@ -62,11 +57,11 @@ public:
     /** Provides a direct access to the collection of the SdPage objects. */
     PageVec& PagesVector();
     /**
-     * Replaces all occurences of pOldPage with pNewPage.
-     * If pNewPage is 0 then removes all occurences of pOldPage.
+     * Replaces all occurrences of pOldPage with pNewPage.
+     * If pNewPage is 0 then removes all occurrences of pOldPage.
      */
     void ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage );
-    /** Removes all occurences of pPage. */
+    /** Removes all occurrences of pPage. */
     void RemovePage( const SdPage* pPage );
 
     void   SetName(const OUString& rName);

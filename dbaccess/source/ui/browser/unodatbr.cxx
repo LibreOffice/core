@@ -2245,7 +2245,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
                 if(e.TargetException >>= aSql)
                     aInfo = aSql;
                 else
-                    SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
+                    SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::OnExpandEntry: something strange happened!");
             }
             catch( const Exception& )
             {
@@ -2713,7 +2713,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
             if(e.TargetException >>= aSql)
                 showError(SQLExceptionInfo(aSql));
             else
-                SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::implSelect: something strange happended!");
+                SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::implSelect: something strange happened!");
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
@@ -3046,7 +3046,7 @@ void SbaTableQueryBrowser::unloadAndCleanup( bool _bDisposeConnection )
         if(e.TargetException >>= aSql)
             showError(SQLExceptionInfo(aSql));
         else
-            SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
+            SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::unloadAndCleanup: something strange happened!");
     }
     catch(const Exception&)
     {

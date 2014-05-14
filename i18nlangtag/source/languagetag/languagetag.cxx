@@ -1907,7 +1907,7 @@ OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
         /* FIXME: use the aImplIsoLangGLIBCModifiersEntries table from
          * i18nlangtag/source/isolang/isolang.cxx or let liblangtag handle it.
          * So far no code was prepared for anything else than a simple
-         * language_country locale so we don't loose anything here right now.
+         * language_country locale so we don't lose anything here right now.
          * */
     }
     return aRet;

@@ -1365,7 +1365,7 @@ namespace accessibility
 
                             case HINT_ENDEDIT:
                             {
-                                // focused child now looses focus
+                                // focused child now loses focus
                                 ESelection aSelection;
                                 if( GetEditViewForwarder().GetSelection( aSelection ) )
                                     SetChildFocus( aSelection.nEndPara, false );

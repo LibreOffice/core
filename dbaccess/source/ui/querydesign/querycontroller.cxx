@@ -277,7 +277,7 @@ namespace
     }
 
     /**
-     * The value of m_nLimit is updated when LimitBox loose its focus
+     * The value of m_nLimit is updated when LimitBox loses its focus
      * So in those case when execution needs recent data, grab the focus
      * (e.g. execute SQL statement, change views)
      */

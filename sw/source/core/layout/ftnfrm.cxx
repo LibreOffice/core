@@ -381,7 +381,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, bool bTst, bool )
                 Frm().Pos().X() += nDist;
         }
 
-        // growing happends upwards, so successors to not need to be invalidated
+        // growing happens upwards, so successors to not need to be invalidated
         if( nReal )
         {
             _InvalidateSize();

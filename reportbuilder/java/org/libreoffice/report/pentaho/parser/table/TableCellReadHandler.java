@@ -21,7 +21,7 @@ import org.libreoffice.report.pentaho.model.TableCellElement;
 import org.libreoffice.report.pentaho.parser.text.NoCDATATextContentReadHandler;
 
 /**
- * A read handler for table-cell contents. This is basicly a text-content
+ * A read handler for table-cell contents. This is basically a text-content
  * read handler; we may extend this implementation later.
  *
  * @since 05.03.2007

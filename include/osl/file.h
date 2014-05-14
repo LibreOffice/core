@@ -323,7 +323,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
 
     @return
     sal_True: if the items point to an identical resource<br>
-    sal_False: if the items point to a different resource, or a fatal error occured<br>
+    sal_False: if the items point to a different resource, or a fatal error occurred<br>
 
     @see osl_getDirectoryItem()
 

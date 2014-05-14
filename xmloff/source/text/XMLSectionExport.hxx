@@ -200,7 +200,7 @@ public:
     static void ExportBibliographyConfiguration(SvXMLExport& rExport);
 
     /** export a heading for every level. This is used by master documents
-     *  to not loose the heading information if master documents are exported
+     *  to not lose the heading information if master documents are exported
      *  without section contents
      */
     void ExportMasterDocHeadingDummies();

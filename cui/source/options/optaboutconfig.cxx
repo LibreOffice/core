@@ -575,7 +575,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     }
                     else if( sPropertyType == "[]short" )
                     {
-                        //create string sequence from comma seperated string
+                        //create string sequence from comma separated string
                         //uno::Sequence< OUString > seqStr;
                         std::vector< OUString > seqStr;
                         seqStr = commaStringToSequence( sNewValue );

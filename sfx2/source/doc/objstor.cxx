@@ -2069,7 +2069,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 {}
             }
 
-            // before the title regenerated the document must loose the signatures
+            // before the title regenerated the document must lose the signatures
             pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
             pImp->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
             OSL_ENSURE( pImp->nScriptingSignatureState != SIGNATURESTATE_SIGNATURES_BROKEN, "The signature must not be broken at this place" );

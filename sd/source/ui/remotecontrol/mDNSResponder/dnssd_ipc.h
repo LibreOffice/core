@@ -162,7 +162,7 @@ typedef enum
 #endif
 
 // Define context object big enough to hold a 64-bit pointer,
-// to accomodate 64-bit clients communicating with 32-bit daemon.
+// to accommodate 64-bit clients communicating with 32-bit daemon.
 // There's no reason for the daemon to ever be a 64-bit process, but its clients might be
 typedef packedunion
 {

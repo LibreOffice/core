@@ -207,7 +207,7 @@ public class RecoveryTools {
             xMSF = null;
 
             desk.terminate();
-            log.println("Waiting until ProcessHandler loose the office...");
+            log.println("Waiting until ProcessHandler loses the office...");
 
         }
         catch (java.lang.Exception e) {

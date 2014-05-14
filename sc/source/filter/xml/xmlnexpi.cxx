@@ -89,7 +89,7 @@ SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( sal_uInt16
 
 void ScXMLNamedExpressionsContext::EndElement()
 {
-    // happends in ScXMLImport::EndDocument()
+    // happens in ScXMLImport::EndDocument()
     // because it has to be set after the Database Ranges
 }
 

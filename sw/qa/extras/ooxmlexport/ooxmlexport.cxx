@@ -2475,8 +2475,8 @@ DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCaption1, "EquationAsScientificNumbering.docx")
 {
-    // fdo#74431 : This test case is to verify the Captions are comming properly
-    //earlier it was comming as "SEQ "scientific"\*ROMAN now it is SEQ scientific\* ROMAN"
+    // fdo#74431 : This test case is to verify the Captions are coming properly
+    // earlier it was coming as "SEQ "scientific"\*ROMAN now it is SEQ scientific\* ROMAN"
 
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)

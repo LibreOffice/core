@@ -470,8 +470,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             // but we'll do this in the endElement, after we close this OfficeToken.TABLE_CELL
         }
 
-        // All styles have to be processed or you will loose the paragraph-styles and inline text-styles.
-
+        // All styles have to be processed or you will lose the paragraph-styles and inline text-styles.
         performStyleProcessing(attrs);
 
         final AttributeList attrList = buildAttributeList(attrs);
