@@ -2042,7 +2042,7 @@ void SAL_CALL SvxUnoTextBase::moveTextRange( const uno::Reference< text::XTextRa
 
 void SvxPropertyValuesToItemSet(
         SfxItemSet &rItemSet,
-        const uno::Sequence< beans::PropertyValue > rPropertyVaules,
+        const uno::Sequence< beans::PropertyValue >& rPropertyVaules,
         const SfxItemPropertySet *pPropSet,
         SvxTextForwarder *pForwarder /*needed for WID_NUMLEVEL*/,
         sal_Int32 nPara /*needed for WID_NUMLEVEL*/)

@@ -89,12 +89,12 @@ static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 
 static void ExtractStatusbarItemParameters(
-    const Sequence< PropertyValue > rProp,
-    OUString&                       rCommandURL,
-    OUString&                       rHelpURL,
-    sal_Int16&                      rOffset,
-    sal_Int16&                      rStyle,
-    sal_Int16&                      rWidth )
+    const Sequence< PropertyValue >& rProp,
+    OUString&                        rCommandURL,
+    OUString&                        rHelpURL,
+    sal_Int16&                       rOffset,
+    sal_Int16&                       rStyle,
+    sal_Int16&                       rWidth )
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {

@@ -184,7 +184,7 @@ SotElement_Impl::~SotElement_Impl()
 // most of properties are holt by the storage but are not used
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
                                 sal_Int32 nMode,
-                                uno::Sequence< beans::PropertyValue > xProperties,
+                                const uno::Sequence< beans::PropertyValue >& xProperties,
                                 uno::Reference< uno::XComponentContext > xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
@@ -224,7 +224,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 // most of properties are holt by the storage but are not used
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
                                 sal_Int32 nMode,
-                                uno::Sequence< beans::PropertyValue > xProperties,
+                                const uno::Sequence< beans::PropertyValue >& xProperties,
                                 uno::Reference< uno::XComponentContext > xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
@@ -1880,7 +1880,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
 
 OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
                     sal_Int32 nMode,
-                    uno::Sequence< beans::PropertyValue > xProperties,
+                    const uno::Sequence< beans::PropertyValue >& xProperties,
                     uno::Reference< uno::XComponentContext > xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
@@ -1891,7 +1891,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
 
 OStorage::OStorage( uno::Reference< io::XStream > xStream,
                     sal_Int32 nMode,
-                    uno::Sequence< beans::PropertyValue > xProperties,
+                    const uno::Sequence< beans::PropertyValue >& xProperties,
                     uno::Reference< uno::XComponentContext > xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )

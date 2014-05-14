@@ -1835,7 +1835,7 @@ class DialogInfo_Impl : public DialogInfoHelper
     uno::Sequence< sal_Int8 > mData;
 
 public:
-    DialogInfo_Impl( const OUString& aName, uno::Sequence< sal_Int8 > Data )
+    DialogInfo_Impl( const OUString& aName, const uno::Sequence< sal_Int8 >& Data )
         : maName( aName ), mData( Data ) {}
 
     // Methods XStarBasicDialogInfo
@@ -2030,9 +2030,9 @@ uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
     return aData;
 }
 
-SbxObject* implCreateDialog( uno::Sequence< sal_Int8 > aData )
+SbxObject* implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
 {
-    sal_Int8* pData = aData.getArray();
+    sal_Int8* pData = const_cast< uno::Sequence< sal_Int8 >& >(aData).getArray();
     SvMemoryStream aMemStream( pData, aData.getLength(), STREAM_READ );
     SbxBase* pBase = SbxBase::Load( aMemStream );
     return dynamic_cast<SbxObject*>(pBase);

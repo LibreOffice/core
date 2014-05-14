@@ -280,7 +280,7 @@ private:
             ::com::sun::star::embed::XStorage >& xZipStorage,
         const OUString& aDocumentVersion,
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::security::DocumentSignatureInformation >
+            ::com::sun::star::security::DocumentSignatureInformation >&
                 aSignInfo,
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<

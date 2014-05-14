@@ -167,7 +167,7 @@ Reference< XButton > UnoDialog::insertButton( const OUString& rName, Reference< 
 
 
 
-Reference< XFixedText > UnoDialog::insertFixedText( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
+Reference< XFixedText > UnoDialog::insertFixedText( const OUString& rName, const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XFixedText > xFixedText;
     try
@@ -185,7 +185,7 @@ Reference< XFixedText > UnoDialog::insertFixedText( const OUString& rName, const
 
 
 
-Reference< XCheckBox > UnoDialog::insertCheckBox( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
+Reference< XCheckBox > UnoDialog::insertCheckBox( const OUString& rName, const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XCheckBox > xCheckBox;
     try
@@ -203,7 +203,7 @@ Reference< XCheckBox > UnoDialog::insertCheckBox( const OUString& rName, const S
 
 
 
-Reference< XControl > UnoDialog::insertFormattedField( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
+Reference< XControl > UnoDialog::insertFormattedField( const OUString& rName, const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XControl > xControl;
     try
@@ -221,7 +221,7 @@ Reference< XControl > UnoDialog::insertFormattedField( const OUString& rName, co
 
 
 
-Reference< XComboBox > UnoDialog::insertComboBox( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
+Reference< XComboBox > UnoDialog::insertComboBox( const OUString& rName, const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XComboBox > xControl;
     try
@@ -239,7 +239,7 @@ Reference< XComboBox > UnoDialog::insertComboBox( const OUString& rName, const S
 
 
 
-Reference< XRadioButton > UnoDialog::insertRadioButton( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
+Reference< XRadioButton > UnoDialog::insertRadioButton( const OUString& rName, const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XRadioButton > xControl;
     try
@@ -257,7 +257,7 @@ Reference< XRadioButton > UnoDialog::insertRadioButton( const OUString& rName, c
 
 
 
-Reference< XListBox > UnoDialog::insertListBox( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
+Reference< XListBox > UnoDialog::insertListBox( const OUString& rName, const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XListBox > xControl;
     try
@@ -275,7 +275,7 @@ Reference< XListBox > UnoDialog::insertListBox( const OUString& rName, const Seq
 
 
 
-Reference< XControl > UnoDialog::insertImage( const OUString& rName, const Sequence< OUString > rPropertyNames, const Sequence< Any > rPropertyValues )
+Reference< XControl > UnoDialog::insertImage( const OUString& rName, const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {
     Reference< XControl > xControl;
     try

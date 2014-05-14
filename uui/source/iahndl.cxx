@@ -1247,7 +1247,7 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     const OUString& aDocumentURL,
     const uno::Reference< embed::XStorage >& xZipStorage,
     const OUString& aDocumentVersion,
-    const uno::Sequence< security::DocumentSignatureInformation > aSignInfo,
+    const uno::Sequence< security::DocumentSignatureInformation >& aSignInfo,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations )
     SAL_THROW((uno::RuntimeException))

@@ -181,13 +181,13 @@ struct OStorage_Impl
     // Constructors
     OStorage_Impl(  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                     sal_Int32 nMode,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xProperties,
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                     sal_Int32 nStorageType );
 
     OStorage_Impl(  ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                     sal_Int32 nMode,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xProperties,
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                     sal_Int32 nStorageType );
 
@@ -314,13 +314,13 @@ public:
 
     OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                 sal_Int32 nMode,
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                 sal_Int32 nStorageType );
 
     OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream,
                 sal_Int32 nMode,
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > xProperties,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xProperties,
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
                 sal_Int32 nStorageType );
 

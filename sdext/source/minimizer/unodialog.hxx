@@ -81,25 +81,25 @@ public :
             const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XFixedText > insertFixedText( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XCheckBox > insertCheckBox( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertFormattedField( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XComboBox > insertComboBox( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XRadioButton > insertRadioButton( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XListBox > insertListBox( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertImage( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
     void setControlProperty( const OUString& rControlName, const OUString& rPropertyName, const com::sun::star::uno::Any& rPropertyValue );
     com::sun::star::uno::Any getControlProperty( const OUString& rControlName, const OUString& rPropertyName );

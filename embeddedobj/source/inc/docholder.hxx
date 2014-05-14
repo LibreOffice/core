@@ -136,7 +136,7 @@ public:
 
     OUString GetContainerName() const { return m_aContainerName; }
 
-    void SetOutplaceFrameProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aProps )
+    void SetOutplaceFrameProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aProps )
         { m_aOutplaceFrameProps = aProps; }
 
     void PlaceFrame( const ::com::sun::star::awt::Rectangle& aNewRect );

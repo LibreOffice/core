@@ -80,12 +80,12 @@ public:
     void dumpMirroredXAsAttribute(bool bMirroredX); // also used in EnhancedCustomShapeHandle
     void dumpMirroredYAsAttribute(bool bMirroredY); // also used in EnhancedCustomShapeHandle
     void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
-    void dumpAdjustmentValuesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues);
-    void dumpExtrusionAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aExtrusion);
-    void dumpPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPath);
-    void dumpTextPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aTextPath);
-    void dumpEquationsAsElement(com::sun::star::uno::Sequence< OUString > aEquations);
-    void dumpHandlesAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues > aHandles);
+    void dumpAdjustmentValuesAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues);
+    void dumpExtrusionAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aExtrusion);
+    void dumpPathAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aPath);
+    void dumpTextPathAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aTextPath);
+    void dumpEquationsAsElement(const com::sun::star::uno::Sequence< OUString >& aEquations);
+    void dumpHandlesAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >& aHandles);
 
     // EnhancedCustomShapeHandle.idl
     void dumpEnhancedCustomShapeHandleService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
@@ -105,18 +105,18 @@ public:
 
     // EnhancedCustomShapePath.idl
     void dumpEnhancedCustomShapePathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
-    void dumpCoordinatesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates);
-    void dumpSegmentsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments);
+    void dumpCoordinatesAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& aCoordinates);
+    void dumpSegmentsAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >& aSegments);
     void dumpStretchXAsAttribute(sal_Int32 aStretchX);
     void dumpStretchYAsAttribute(sal_Int32 aStretchY);
-    void dumpTextFramesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames);
-    void dumpGluePointsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints);
-    void dumpGluePointLeavingDirectionsAsElement(com::sun::star::uno::Sequence< double > aGluePointLeavingDirections);
+    void dumpTextFramesAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >& aTextFrames);
+    void dumpGluePointsAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& aGluePoints);
+    void dumpGluePointLeavingDirectionsAsElement(const com::sun::star::uno::Sequence< double >& aGluePointLeavingDirections);
     void dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType);
     void dumpExtrusionAllowedAsAttribute(bool bExtrusionAllowed);
     void dumpConcentricGradientFillAllowedAsAttribute(bool bConcentricGradientFillAllowed);
     void dumpTextPathAllowedAsAttribute(bool bTextPathAllowed);
-    void dumpSubViewSizeAsElement(com::sun::star::uno::Sequence< com::sun::star::awt::Size > aSubViewSize);
+    void dumpSubViewSizeAsElement(const com::sun::star::uno::Sequence< com::sun::star::awt::Size >& aSubViewSize);
 
     // EnhancedCustomShapePath.idl
     void dumpEnhancedCustomShapeTextPathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);

@@ -56,15 +56,15 @@ static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 static const char ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
 static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
 
-static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
-                                      OUString&                       rCommandURL,
-                                      OUString&                       rLabel,
-                                      OUString&                       rHelpURL,
-                                      OUString&                       rTooltip,
-                                      sal_Int16&                      rStyle,
-                                      sal_Int16&                      rWidth,
-                                      bool&                       rVisible,
-                                      sal_Int16&                      rType )
+static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
+                                      OUString&                        rCommandURL,
+                                      OUString&                        rLabel,
+                                      OUString&                        rHelpURL,
+                                      OUString&                        rTooltip,
+                                      sal_Int16&                       rStyle,
+                                      sal_Int16&                       rWidth,
+                                      bool&                            rVisible,
+                                      sal_Int16&                       rType )
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {

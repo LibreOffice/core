@@ -218,9 +218,10 @@ PropertyChangeNotifier::~PropertyChangeNotifier()
 
 
 void PropertyChangeNotifier::notifyPropertyChanged(
-    uno::Sequence< beans::PropertyChangeEvent > Changes )
+    const uno::Sequence< beans::PropertyChangeEvent >& _Changes )
 {
     sal_Int32 j;
+    uno::Sequence< beans::PropertyChangeEvent > Changes  = _Changes;
 
     for( j = 0; j < Changes.getLength(); ++j )
         Changes[j].Source = m_xCreatorContent;

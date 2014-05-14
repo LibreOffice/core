@@ -100,7 +100,7 @@ namespace fileaccess {
         ~PropertyChangeNotifier();
 
         void notifyPropertyChanged(
-            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent > seqChanged );
+            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent >& seqChanged );
     };
 
 

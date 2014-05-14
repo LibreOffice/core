@@ -643,7 +643,7 @@ void ConverterTest::testNumber()
     doTestNumberToString("0", -0);
 }
 
-void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8> aPass)
+void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8>& aPass)
 {
     OUString const is(OUString::createFromAscii(pis));
     OUStringBuffer buf;
@@ -652,7 +652,7 @@ void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8> aPas
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
 }
 
-void doTestDecodeBase64(const uno::Sequence<sal_Int8> aPass, char const*const pis)
+void doTestDecodeBase64(const uno::Sequence<sal_Int8>& aPass, char const*const pis)
 {
     OUString const is(OUString::createFromAscii(pis));
     uno::Sequence< sal_Int8 > tempSequence;

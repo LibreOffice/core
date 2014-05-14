@@ -1473,7 +1473,7 @@ class BinaryInput
     sal_Int32                               m_nSize;
 
 public:
-    BinaryInput( Sequence< ::sal_Int8 > aData, Reference< XMultiComponentFactory > xMCF,
+    BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XMultiComponentFactory > xMCF,
         Reference< XComponentContext > xContext );
 
     Reference< io::XInputStream > getInputStreamForSection( sal_Int32 nSize );
@@ -1488,7 +1488,7 @@ public:
     OUString readString( void );
 };
 
-BinaryInput::BinaryInput( Sequence< ::sal_Int8 > aData, Reference< XMultiComponentFactory > xMCF,
+BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData, Reference< XMultiComponentFactory > xMCF,
     Reference< XComponentContext > xContext )
         : m_aData( aData )
         , m_xMCF( xMCF )
