@@ -112,8 +112,6 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     aToolBoxCat(this, SmResId(TOOLBOX_CATALOG)),
     aToolBoxCat_Delim(this, SmResId( FL_TOOLBOX_CAT_DELIM ))
 {
-    SAL_INFO( "starmath", "starmath: SmToolBoxWindow::SmToolBoxWindow" );
-
     // allow for cursor travelling between toolbox and sub-categories
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
