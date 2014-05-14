@@ -95,12 +95,12 @@
 #define TYPE_LRSPACE    5
 #define TYPE_BOX        6
 
-const unsigned short aStyleByIndex[] =
+const sal_uInt16 aStyleByIndex[] =
 {
     SFX_STYLE_FAMILY_CHAR,
     SFX_STYLE_FAMILY_PARA,
-    SFX_STYLE_FAMILY_PAGE     ,
-    SFX_STYLE_FAMILY_FRAME    ,
+    SFX_STYLE_FAMILY_PAGE,
+    SFX_STYLE_FAMILY_FRAME,
     SFX_STYLE_FAMILY_PSEUDO
 };
 
@@ -296,7 +296,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
     if(IsValid())
     {
         uno::Reference< container::XNameContainer >  aRef;
-        sal_uInt16 nType = aStyleByIndex[nIndex];
+        const sal_uInt16 nType = aStyleByIndex[nIndex];
         switch( nType )
         {
             case SFX_STYLE_FAMILY_CHAR:
@@ -481,8 +481,8 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
             sal_uInt16 nBaseCount =  RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
                                      RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
             nIndex = nIndex - nBaseCount;
-            const sal_uInt16 nArrLen = rDoc.GetCharFmts()->size();
-            for( sal_uInt16 i = 0; i < nArrLen; i++ )
+            const size_t nArrLen = rDoc.GetCharFmts()->size();
+            for( size_t i = 0; i < nArrLen; ++i )
             {
                 SwCharFmt* pFmt = (*rDoc.GetCharFmts())[ i ];
                 if( pFmt->IsDefault() && pFmt != rDoc.GetDfltCharFmt() )
@@ -514,8 +514,8 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
                                     RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
                                     RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN;
             nIndex = nIndex - nBaseCount;
-            const sal_uInt16 nArrLen = rDoc.GetTxtFmtColls()->size();
-            for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+            const size_t nArrLen = rDoc.GetTxtFmtColls()->size();
+            for ( size_t i = 0; i < nArrLen; ++i )
             {
                 SwTxtFmtColl * pColl = (*rDoc.GetTxtFmtColls())[i];
                 if ( pColl->IsDefault() )
@@ -537,8 +537,8 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
         {
             sal_uInt16 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
             nIndex = nIndex - nBaseCount;
-            const sal_uInt16 nArrLen = rDoc.GetFrmFmts()->size();
-            for( sal_uInt16 i = 0; i < nArrLen; i++ )
+            const size_t nArrLen = rDoc.GetFrmFmts()->size();
+            for( size_t i = 0; i < nArrLen; ++i )
             {
                 SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
                 if(pFmt->IsDefault() || pFmt->IsAuto())
@@ -583,7 +583,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
             sal_uInt16 nBaseCount = RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN;
             nIndex = nIndex - nBaseCount;
             const SwNumRuleTbl& rNumTbl = rDoc.GetNumRuleTbl();
-            for(sal_uInt16 i = 0; i < rNumTbl.size(); ++i)
+            for(size_t i = 0; i < rNumTbl.size(); ++i)
             {
                 const SwNumRule& rRule = *rNumTbl[ i ];
                 if( rRule.IsAutoRule() )
@@ -791,7 +791,7 @@ uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::Runt
     if(pBasePool)
     {
         SfxStyleSheetIteratorPtr pIterator = pBasePool->CreateIterator(eFamily, SFXSTYLEBIT_ALL);
-        sal_uInt16 nCount = pIterator->Count();
+        const sal_uInt16 nCount = pIterator->Count();
         aRet.realloc(nCount);
         OUString* pArray = aRet.getArray();
         OUString aString;
@@ -1080,7 +1080,7 @@ SwStyleProperties_Impl::SwStyleProperties_Impl(const SfxItemPropertyMap& rMap) :
 
 SwStyleProperties_Impl::~SwStyleProperties_Impl()
 {
-    for ( sal_uInt16 i =0 ; i < nArrLen; i++ )
+    for ( sal_uInt32 i =0 ; i < nArrLen; i++ )
         delete pAnyArr[i];
     delete[] pAnyArr;
 }
@@ -1108,7 +1108,7 @@ bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVal)
 bool SwStyleProperties_Impl::ClearProperty( const OUString& rName )
 {
     bool bRet = false;
-    sal_uInt16 nPos = 0;
+    sal_uInt32 nPos = 0;
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     while( aIt != aPropertyEntries.end() )
     {
@@ -1127,7 +1127,7 @@ bool SwStyleProperties_Impl::ClearProperty( const OUString& rName )
 
 void SwStyleProperties_Impl::ClearAllProperties( )
 {
-    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+    for ( sal_uInt32 i = 0; i < nArrLen; i++ )
     {
         delete pAnyArr[i];
         pAnyArr[ i ] = 0;
@@ -1137,7 +1137,7 @@ void SwStyleProperties_Impl::ClearAllProperties( )
 bool SwStyleProperties_Impl::GetProperty(const OUString& rName, uno::Any*& rpAny )
 {
     bool bRet = false;
-    sal_uInt16 nPos = 0;
+    sal_uInt32 nPos = 0;
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     while( aIt != aPropertyEntries.end() )
     {
@@ -1613,9 +1613,8 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
 {
     if(!pOldPageDesc)
     {
-        sal_uInt16 i;
-        sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
-        for(i = 0; i < nPDescCount; i++)
+        const sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
+        for(sal_uInt16 i = 0; i < nPDescCount; ++i)
         {
             const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
             if(rDesc.GetName() == rStyleName)
@@ -1626,7 +1625,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
         }
         if(!pOldPageDesc)
         {
-            for(i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
+            for(sal_uInt16 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
             {
                 const OUString aFmtName(SW_RES(i));
                 if(aFmtName == rStyleName)
@@ -1841,7 +1840,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
                     SwNumRule aSetRule(*pSwXRules->GetNumRule());
                     const SwCharFmts* pFmts = pDoc->GetCharFmts();
-                    sal_uInt16 nChCount = pFmts->size();
+                    const size_t nChCount = pFmts->size();
                     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                     {
 
@@ -1855,7 +1854,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                             {
 
                                 SwCharFmt* pCharFmt = 0;
-                                for(sal_uInt16 j = 0; j< nChCount; j++)
+                                for(size_t j = 0; j< nChCount; ++j)
                                 {
                                     SwCharFmt* pTmp = (*pFmts)[j];
                                     if(pTmp->GetName() == pCharStyleNames[i])
@@ -1994,11 +1993,11 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             OSL_ENSURE(COND_COMMAND_COUNT == 28,
                     "invalid size of comman count?");
             const beans::NamedValue *pSeq = aSeq.getConstArray();
-            sal_Int32 nLen = aSeq.getLength();
+            const sal_Int32 nLen = aSeq.getLength();
 
             bool bFailed = false;
             SwCondCollItem aCondItem;
-            for(sal_uInt16 i = 0; i < nLen; i++)
+            for(sal_Int32 i = 0; i < nLen; ++i)
             {
                 OUString aTmp;
                 if ((pSeq[i].Value >>= aTmp))
@@ -2218,7 +2217,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
     SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName);
     if(pBasePool)
     {
-        sal_uInt16 nSaveMask = pBasePool->GetSearchMask();
+        const sal_uInt16 nSaveMask = pBasePool->GetSearchMask();
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(m_sStyleName);
         pBasePool->SetSearchMask(eFamily, nSaveMask );
@@ -2456,7 +2455,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case FN_UNO_CATEGORY:
             {
-                sal_uInt16 nPoolId = rBase.mxNewBase->GetCollection()->GetPoolFmtId();
+                const sal_uInt16 nPoolId = rBase.mxNewBase->GetCollection()->GetPoolFmtId();
                 short nRet = -1;
 
                 switch ( COLL_GET_RANGE_BITS & nPoolId )
@@ -2636,7 +2635,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
         {
             if(!pBase)
             {
-                sal_uInt16 nSaveMask = pBasePool->GetSearchMask();
+                const sal_uInt16 nSaveMask = pBasePool->GetSearchMask();
                 pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
                 pBase = pBasePool->Find(m_sStyleName);
                 pBasePool->SetSearchMask(eFamily, nSaveMask );
@@ -2847,7 +2846,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                 else if(SFX_STYLE_FAMILY_PAGE == eFamily &&
                         (sPropName.startsWith("Header") || sPropName.startsWith("Footer")))
                 {
-                    sal_uInt16 nResId = lcl_ConvertFNToRES(pEntry->nWID);
+                    const sal_uInt16 nResId = lcl_ConvertFNToRES(pEntry->nWID);
                     bool bFooter = sPropName.startsWith("Footer");
                     const SvxSetItem* pSetItem;
                     if(SFX_ITEM_SET == aSet.GetItemState(
@@ -3261,7 +3260,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName());
     if(GetBasePool())
     {
-        sal_uInt16 nSaveMask = GetBasePool()->GetSearchMask();
+        const sal_uInt16 nSaveMask = GetBasePool()->GetSearchMask();
         GetBasePool()->SetSearchMask(GetFamily());
         SfxStyleSheetBase* pBase = GetBasePool()->Find(GetStyleName());
         GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
@@ -3518,7 +3517,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
         {
             if(!pBase)
             {
-                sal_uInt16 nSaveMask = GetBasePool()->GetSearchMask();
+                const sal_uInt16 nSaveMask = GetBasePool()->GetSearchMask();
                 GetBasePool()->SetSearchMask(GetFamily(), SFXSTYLEBIT_ALL );
                 pBase = GetBasePool()->Find(GetStyleName());
                 GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
@@ -4110,7 +4109,7 @@ uno::Reference< beans::XPropertySetInfo > SwXAutoStyle::getPropertySetInfo(  )
             static uno::Reference< beans::XPropertySetInfo >  xRubyRef;
             if(!xRubyRef.is())
             {
-                sal_uInt16 nMapId = PROPERTY_MAP_RUBY_AUTO_STYLE;
+                const sal_uInt16 nMapId = PROPERTY_MAP_RUBY_AUTO_STYLE;
                 xRubyRef = aSwMapProvider.GetPropertySet(nMapId)->getPropertySetInfo();
             }
             xRet = xRubyRef;
@@ -4121,7 +4120,7 @@ uno::Reference< beans::XPropertySetInfo > SwXAutoStyle::getPropertySetInfo(  )
             static uno::Reference< beans::XPropertySetInfo >  xParaRef;
             if(!xParaRef.is())
             {
-                sal_uInt16 nMapId = PROPERTY_MAP_PARA_AUTO_STYLE;
+                const sal_uInt16 nMapId = PROPERTY_MAP_PARA_AUTO_STYLE;
                 xParaRef = aSwMapProvider.GetPropertySet(nMapId)->getPropertySetInfo();
             }
             xRet = xParaRef;
