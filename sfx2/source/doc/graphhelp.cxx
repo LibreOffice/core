@@ -184,7 +184,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 bool GraphicHelper::supportsMetaFileHandle_Impl()
 {
 #ifdef WNT
-    return sal_True;
+    return true;
 #else
     return false;
 #endif
