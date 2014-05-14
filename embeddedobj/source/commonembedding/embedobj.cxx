@@ -424,8 +424,6 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::changeState" );
-
     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY);
     {
         ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -528,8 +526,6 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::doVerb" );
-
     SolarMutexGuard aSolarGuard;
         //TODO: a gross hack to avoid deadlocks when this is called from the
         // outside and OCommonEmbeddedObject::changeState, with m_aMutex locked,

@@ -567,7 +567,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
             SetVisReplInStream( true );
         else
         {
-            SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::HasVisualReplInStream, analizing" );
+            SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::HasVisualReplInStream, analyzing" );
 
             uno::Reference< io::XInputStream > xStream;
 
@@ -1290,8 +1290,6 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::setPersistentEntry" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
     if ( xWrappedObject.is() )
@@ -1498,8 +1496,6 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeToEntry" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
     if ( xWrappedObject.is() )
@@ -1532,8 +1528,6 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeAsEntry" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
     if ( xWrappedObject.is() )
@@ -1561,8 +1555,6 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::saveCompleted" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
     if ( xWrappedObject.is() )
@@ -1726,8 +1718,6 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeOwn" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
     if ( xWrappedObject.is() )

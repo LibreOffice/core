@@ -65,8 +65,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitFromEntry" );
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -155,8 +153,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor" );
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -219,8 +215,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceInitNew" );
-
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
@@ -271,8 +265,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceUserInit" );
-
     // the initialization is completelly controlled by user
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
@@ -329,8 +321,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceLink" );
-
     uno::Reference< uno::XInterface > xResult;
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
@@ -384,8 +374,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OOoEmbeddedObjectFactory::createInstanceLinkUserInit" );
-
     uno::Reference< uno::XInterface > xResult;
 
     // the initialization is completelly controlled by user

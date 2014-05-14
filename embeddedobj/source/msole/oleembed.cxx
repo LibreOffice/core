@@ -442,8 +442,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::changeState" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
@@ -600,8 +598,6 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getReachableStates" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
@@ -759,8 +755,6 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::doVerb" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
@@ -895,8 +889,6 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         throw ( embed::WrongStateException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getSupportedVerb" );
-
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )

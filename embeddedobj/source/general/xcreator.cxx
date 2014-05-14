@@ -73,8 +73,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitNew" );
-
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
@@ -118,8 +116,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromEntry" );
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -237,8 +233,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor" );
-
     // TODO: use lObjArgs
 
     if ( !xStorage.is() )
@@ -302,8 +296,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceUserInit" );
-
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
@@ -343,8 +335,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLink" );
-
     uno::Reference< uno::XInterface > xResult;
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
@@ -418,8 +408,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
-    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLinkUserInit" );
-
     uno::Reference< uno::XInterface > xResult;
 
     OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );

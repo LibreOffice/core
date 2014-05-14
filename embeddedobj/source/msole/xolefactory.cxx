@@ -67,8 +67,6 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitFromEntry" );
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -139,8 +137,6 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor" );
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -181,8 +177,6 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitNew" );
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -222,8 +216,6 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceLink" );
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >(
@@ -268,8 +260,6 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceUserInit" );
-
     // the initialization is completelly controlled by user
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),

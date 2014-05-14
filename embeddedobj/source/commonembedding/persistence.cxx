@@ -902,8 +902,6 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::setPersistentEntry" );
-
     // the type of the object must be already set
     // a kind of typedetection should be done in the factory
 
@@ -1130,8 +1128,6 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::storeToEntry" );
-
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1256,8 +1252,6 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::storeAsEntry" );
-
     // TODO: use lObjArgs
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -1393,8 +1387,6 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::saveCompleted" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1521,8 +1513,6 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::storeOwn" );
-
     // during switching from Activated to Running and from Running to Loaded states the object will
     // ask container to store the object, the container has to make decision
     // to do so or not
