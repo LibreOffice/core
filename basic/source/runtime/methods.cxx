@@ -84,24 +84,13 @@ using namespace com::sun::star::uno;
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
-#if defined (WNT)
-#include <direct.h>
-#endif
-
 #include "sbobjmod.hxx"
 
 #ifdef WNT
-#if defined _MSC_VER
-#pragma warning (push, 1)
-#pragma warning (disable: 4005)
-#endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning (pop)
-#endif
+#include <prewin.h>
+#include <direct.h>
 #include <io.h>
-#undef GetObject
-#undef GradientSyle_RECT
+#include <postwin.h>
 #endif
 
 #ifndef DISABLE_SCRIPTING
