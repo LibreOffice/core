@@ -917,7 +917,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         }
 
         Font aFont;
-        ScEditEngineDefaulter* pEditEng = NULL;
+        boost::scoped_ptr<ScEditEngineDefaulter> pEditEng;
         const ScPatternAttr& rDefPattern = ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
         if ( nPageScript == SCRIPTTYPE_LATIN )
         {
@@ -929,7 +929,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         else
         {
             //  use EditEngine to draw mixed-script string
-            pEditEng = new ScEditEngineDefaulter( EditEngine::CreatePool(), true );
+            pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
             pEditEng->SetRefMapMode( pContentDev->GetMapMode() );
             SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
             rDefPattern.FillEditItemSet( pEditDefaults );
@@ -1093,8 +1093,6 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 }
             }
         }
-
-        delete pEditEng;
     }
 }
 
@@ -1111,7 +1109,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
     SCSIZE nQuery;
     SCTAB           nTab = pViewData->GetTabNo();
     ScDBData*       pDBData = NULL;
-    ScQueryParam*   pQueryParam = NULL;
+    boost::scoped_ptr<ScQueryParam> pQueryParam;
 
     RowInfo*        pRowInfo = rTabInfo.mpRowInfo;
     sal_uInt16          nArrCount = rTabInfo.mnArrCount;
@@ -1138,7 +1136,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                 if ( pInfo->bAutoFilter && !pInfo->bHOverlapped )
                 {
                     if (!pQueryParam)
-                        pQueryParam = new ScQueryParam;
+                        pQueryParam.reset(new ScQueryParam);
 
                     bool bNewData = true;
                     if (pDBData)
@@ -1249,7 +1247,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
         }
     }
 
-    delete pQueryParam;
+    pQueryParam.reset();
     aComboButton.SetOutputDevice( this );
 }
 

@@ -4476,7 +4476,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
 void ScOutputData::DrawEdit(bool bPixelToLogic)
 {
-    ScFieldEditEngine* pEngine = NULL;
+    boost::scoped_ptr<ScFieldEditEngine> pEngine;
     bool bHyphenatorSet = false;
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet*    pOldCondSet = NULL;
@@ -4592,7 +4592,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         }
                         SfxItemSet* pPreviewFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab );
                         if (!pEngine)
-                            pEngine = CreateOutputEditEngine();
+                            pEngine.reset(CreateOutputEditEngine());
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
@@ -4606,7 +4606,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                                 SVX_HOR_JUSTIFY_BLOCK : aParam.meHorJustContext;
                         aParam.mbPixelToLogic = bPixelToLogic;
                         aParam.mbHyphenatorSet = bHyphenatorSet;
-                        aParam.mpEngine = pEngine;
+                        aParam.mpEngine = pEngine.get();
                         aParam.maCell = aCell;
                         aParam.mnArrY = nArrY;
                         aParam.mnX = nX;
@@ -4660,7 +4660,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
         nRowPosY += pRowInfo[nArrY].nHeight;
     }
 
-    delete pEngine;
+    pEngine.reset();
 
     if (bAnyRotated)
         DrawRotated(bPixelToLogic);     //! von aussen rufen ?
@@ -4680,7 +4680,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
     bool bCellContrast = mbUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    ScFieldEditEngine* pEngine = NULL;
+    boost::scoped_ptr<ScFieldEditEngine> pEngine;
     bool bHyphenatorSet = false;
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;
@@ -4722,7 +4722,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                     if (!bHidden)
                     {
                         if (!pEngine)
-                            pEngine = CreateOutputEditEngine();
+                            pEngine.reset(CreateOutputEditEngine());
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
@@ -5334,8 +5334,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
         }
         nRowPosY += pRowInfo[nArrY].nHeight;
     }
-
-    delete pEngine;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

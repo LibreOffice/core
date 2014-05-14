@@ -1262,15 +1262,15 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
             const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
             if (pData)
             {
-                ScTypedStrData* pNew = NULL;
+                boost::scoped_ptr<ScTypedStrData> pNew;
                 OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
                 if ( pDoc->HasValueData( nCol, nRow, nTab ) )
                 {
                     double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nTab));
-                    pNew = new ScTypedStrData(aDocStr, fVal, ScTypedStrData::Value);
+                    pNew.reset(new ScTypedStrData(aDocStr, fVal, ScTypedStrData::Value));
                 }
                 else
-                    pNew = new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard);
+                    pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
 
                 bool bSortList = ( pData->GetListType() == ValidListType::SORTEDASCENDING);
                 if ( bSortList )
@@ -1293,7 +1293,6 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                             nSelPos = std::distance(itBeg, it);
                     }
                 }
-                delete pNew;
             }
         }
     }

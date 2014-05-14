@@ -47,6 +47,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
 using namespace com::sun::star;
@@ -210,8 +211,8 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-            AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg(
-                pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab);
+            boost::scoped_ptr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
+                pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab));
             OSL_ENSURE(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {
@@ -228,7 +229,6 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
                 aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                 pViewData->GetView()->CursorPosChanged();       // shells may be switched
             }
-            delete pDlg;
         }
     }
     else

@@ -69,6 +69,7 @@
 #include <map>
 #include <utility>
 #include <iostream>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -1368,7 +1369,7 @@ void ScOutputData::DrawFrame()
 
     // draw only rows with set RowInfo::bChanged flag
     size_t nRow1 = nFirstRow;
-    drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
+    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D());
     if (!pProcessor)
         return;
 
@@ -1379,12 +1380,11 @@ void ScOutputData::DrawFrame()
         {
             size_t nRow2 = nRow1;
             while( (nRow2 + 1 <= nLastRow) && pRowInfo[ nRow2 + 1 ].bChanged ) ++nRow2;
-            rArray.DrawRange( pProcessor, nFirstCol, nRow1, nLastCol, nRow2, pForceColor );
+            rArray.DrawRange( pProcessor.get(), nFirstCol, nRow1, nLastCol, nRow2, pForceColor );
             nRow1 = nRow2 + 1;
         }
     }
-    if ( pProcessor )
-        delete pProcessor;
+    pProcessor.reset();
 
     mpDev->SetDrawMode(nOldDrawMode);
 }
@@ -1493,7 +1493,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
         mpDev->SetClipRegion( Region( aClipRect ) );
 
     svx::frame::Array& rArray = mrTabInfo.maArray;
-    drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D( );
+    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
 
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)
@@ -1798,7 +1798,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
         nPosY += nRowHeight;
     }
 
-    if ( pProcessor ) delete pProcessor;
+    pProcessor.reset();
 
     if (bMetaFile)
         mpDev->Pop();
