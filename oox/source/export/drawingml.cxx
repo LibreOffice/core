@@ -2497,7 +2497,8 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     if( aExtrusionColorProps.getLength() > 0 )
     {
         OUString sSchemeClr;
-        sal_Int32 nColor, nTransparency;
+        sal_Int32 nColor(0);
+        sal_Int32 nTransparency(0);
         Sequence< PropertyValue > aColorTransformations;
         for( sal_Int32 i=0; i < aExtrusionColorProps.getLength(); ++i )
         {
@@ -2522,7 +2523,8 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     if( aContourColorProps.getLength() > 0 )
     {
         OUString sSchemeClr;
-        sal_Int32 nColor, nTransparency;
+        sal_Int32 nColor(0);
+        sal_Int32 nTransparency(0);
         Sequence< PropertyValue > aColorTransformations;
         for( sal_Int32 i=0; i < aContourColorProps.getLength(); ++i )
         {
