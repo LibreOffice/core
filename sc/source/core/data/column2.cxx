@@ -2426,7 +2426,7 @@ bool hasNonEmpty( const sc::FormulaGroupContext::StrArrayType& rArray, SCROW nRo
 formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 )
 {
     if (nRow1 > nRow2)
-        return formula::VectorRefArray();
+        return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
     // See if the requested range is already cached.
     sc::FormulaGroupContext& rCxt = pDocument->GetFormulaGroupContext();
@@ -2470,13 +2470,13 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, NULL);
             if (!pColArray)
                 // Failed to insert a new cached column array.
-                return formula::VectorRefArray();
+                return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
             // Fill the remaining array with values from the following blocks.
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
-                return formula::VectorRefArray();
+                return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
             if (pColArray->mpStrArray)
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], &(*pColArray->mpStrArray)[nRow1]);
@@ -2507,7 +2507,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
-                return formula::VectorRefArray();
+                return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
             if (pColArray->mpNumArray)
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], &(*pColArray->mpStrArray)[nRow1]);
@@ -2524,7 +2524,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
                 pColArray = copyFirstFormulaBlock(rCxt, itBlk, nRow2+1, nTab, nCol);
                 if (!pColArray)
                     // Failed to insert a new cached column array.
-                    return formula::VectorRefArray();
+                    return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
                 const double* pNum = NULL;
                 rtl_uString** pStr = NULL;
@@ -2539,12 +2539,12 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             pColArray = copyFirstFormulaBlock(rCxt, itBlk, nRow2+1, nTab, nCol);
             if (!pColArray)
                 // Failed to insert a new cached column array.
-                return formula::VectorRefArray();
+                return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
-                return formula::VectorRefArray();
+                return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
             const double* pNum = NULL;
             rtl_uString** pStr = NULL;
@@ -2564,7 +2564,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, NULL);
             if (!pColArray)
                 // Failed to insert a new cached column array.
-                return formula::VectorRefArray();
+                return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
             if (static_cast<size_t>(nRow2) < itBlk->size)
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1]);
@@ -2573,7 +2573,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             size_t nPos = itBlk->size;
             ++itBlk;
             if (!appendToBlock(pDocument, rCxt, *pColArray, nPos, nRow2+1, itBlk, maCells.end()))
-                return formula::VectorRefArray();
+                return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
             if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1], &(*pColArray->mpStrArray)[nRow1]);
@@ -2585,7 +2585,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             ;
     }
 
-    return formula::VectorRefArray();
+    return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 }
 
 void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen )

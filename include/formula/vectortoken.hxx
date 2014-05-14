@@ -34,10 +34,15 @@ namespace formula {
  */
 struct FORMULA_DLLPUBLIC VectorRefArray
 {
+    enum InitInvalid { Invalid };
+
     const double* mpNumericArray;
     rtl_uString** mpStringArray;
 
+    bool mbValid;
+
     VectorRefArray();
+    VectorRefArray( InitInvalid );
     VectorRefArray( const double* pArray );
     VectorRefArray( rtl_uString** pArray );
     VectorRefArray( const double* pNumArray, rtl_uString** pStrArray );
