@@ -2633,7 +2633,7 @@ dnl ===================================================================
 dnl Export file validation
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable export file validation])
-if test "with_export_validation" != "no"; then
+if test "$with_export_validation" = yes; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_EXPORT_VALIDATION)
 else
