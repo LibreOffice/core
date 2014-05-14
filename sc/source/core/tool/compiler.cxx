@@ -3201,6 +3201,7 @@ bool ScCompiler::IsErrorConstant( const OUString& rName ) const
 
 void ScCompiler::SetAutoCorrection( bool bVal )
 {
+    assert(mbJumpCommandReorder);
     bAutoCorrect = bVal;
     mbStopOnError = !bVal;
 }

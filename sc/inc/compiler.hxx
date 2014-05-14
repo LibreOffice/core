@@ -392,8 +392,9 @@ public:
     bool IsEnglishSymbol( const OUString& rName );
     bool IsErrorConstant( const OUString& ) const;
 
-    //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
-    // #i101512# SetCompileForFAP is in formula::FormulaCompiler
+    /**
+     * When auto correction is set, the jump command reorder must be enabled.
+     */
     void SetAutoCorrection( bool bVal );
     void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
     void            SetRefConvention( const Convention *pConvP );
