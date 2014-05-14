@@ -627,7 +627,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
 
     /*
     Just in case our original size is too big to fit inside a ushort we can
-    substitute the final size and loose on retaining the scaling factor but
+    substitute the final size and lose on retaining the scaling factor but
     still keep the correct display size anyway.
     */
     const bool bIsSubstitutedSize = (aGrTwipSz.Width() > SHRT_MAX) || (aGrTwipSz.Height() > SHRT_MAX) ||

@@ -357,7 +357,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     if( bWrite64Header )
     {
         // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently loose people's data - which they are
+        // We're about to silently lose people's data - which they are
         // unlikely to appreciate so fail instead:
         throw IOException( "File contains streams that are too large.",
                            uno::Reference< XInterface >() );
@@ -379,7 +379,7 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
     if( bWrite64Header )
     {
         // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently loose people's data - which they are
+        // We're about to silently lose people's data - which they are
         // unlikely to appreciate so fail instead:
         throw IOException( "File contains streams that are too large.",
                            uno::Reference< XInterface >() );
@@ -433,7 +433,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     if( bWrite64Header )
     {
         // FIXME64: need to append a ZIP64 header instead of throwing
-        // We're about to silently loose people's data - which they are
+        // We're about to silently lose people's data - which they are
         // unlikely to appreciate so fail instead:
         throw IOException( "File contains streams that are too large.",
                            uno::Reference< XInterface >() );

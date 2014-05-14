@@ -1295,7 +1295,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
                     pNewObject->SetPage(pDestPage);
 
                     uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
-                    if(!xOldChart.is())//#i110034# do not move charts as they loose all their data references otherwise
+                    if(!xOldChart.is())//#i110034# do not move charts as they lose all their data references otherwise
                         pNewObject->NbcMove(Size(0,0));
                     pDestPage->InsertObject( pNewObject );
 

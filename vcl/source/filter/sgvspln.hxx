@@ -20,40 +20,25 @@
 #ifndef INCLUDED_VCL_SOURCE_FILTER_SGVSPLN_HXX
 #define INCLUDED_VCL_SOURCE_FILTER_SGVSPLN_HXX
 
-/*************************************************************************
-|*
-|*    CalcSpline()
-|*
-|*    Description       Calculates the coefficients of parametrised
-|*                      natural or periodic cubic polynom-splines.
-|*                      The corner points of the polygon passed are used
-|*                      as support points. n returns the number of partial polynoms.
-|*                      This function returns TRUE if no error occured.
-|*                      Only in this case memory for the coefficient array
-|*                      has been allocated, which can be freed by the caller
-|*                      using a delete.
-|*
-*************************************************************************/
-
+/*
+ * Calculates the coefficients of parametrised natural or periodic cubic
+ * polynom-splines. The corner points of the polygon passed are used as
+ * support points. n returns the number of partial polynoms. This function
+ * returns TRUE if no error occurred. Only in this case memory for the
+ * coefficient array has been allocated, which can be freed by the caller
+ * using a delete.
+ */
 bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T);
 
-/*************************************************************************
-|*
-|*    Spline2Poly()
-|*
-|*    Description       converts a parametrised cubic spline (natural
-|*                      or periodic) to an approximate polygon.
-|*                      The function returns false, if an error occured
-|*                      during the calculation of the coefficients or
-|*                      the polygon became too large (>PolyMax=16380).
-|*                      In the first case the polygon has 0, in the
-|*                      second case PolyMax points.
-|*                      To prevent coordinate overflows we limit
-|*                      them to +/-32000.
-|*
-*************************************************************************/
+/*
+ * Converts a parametrised cubic spline (natural or periodic) to an approximate
+ * polygon. The function returns false, if an error occurred during the
+ * calculation of the coefficients or the polygon became too large (>PolyMax=16380).
+ * In the first case the polygon has 0, in the second case PolyMax points.
+ * To prevent coordinate overflows we limit them to +/-32000.
+ */
 bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly);
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_SGVSPLN_HXX

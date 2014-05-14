@@ -67,7 +67,7 @@ Different groups of DataAware objects are grouped into vectors.
 Each group (all elements of a vector) uses the same DataObject,
 so when I change the underlying dataObject, I change the whole vector's
 DataObject, thus actualizing UI.<br/>
-This is what happends when a session loads: I Load the session into
+This is what happens when a session loads: I Load the session into
 a tree of DataObjects, and change the DataAware's DataObject. <br/>
 One could also look at this as a kind of "View-Model" relationship.
 The controls are the View, The DataObjects are the Model, containing the
@@ -195,9 +195,9 @@ class WWD_Startup(WWD_General):
     '''
 
     def insertRoadmap(self):
-        
+
         self.insertRoadMapItems(
-            self.resources.RoadmapLabels, 
+            self.resources.RoadmapLabels,
             [True, True, False, False, False, False, False])
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)

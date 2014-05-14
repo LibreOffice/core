@@ -272,7 +272,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     if ( e.TargetException >>= aSql )
                         showError( SQLExceptionInfo( e.TargetException ) );
                     else
-                        OSL_FAIL( "OApplicationController::deleteObjects: something strange happended!" );
+                        OSL_FAIL( "OApplicationController::deleteObjects: something strange happened!" );
                 }
                 catch( const Exception& )
                 {

@@ -73,7 +73,7 @@ endif
 ifeq ($(COM_GCC_IS_CLANG),)
 gb_GccLess460 := $(shell expr $(GCC_VERSION) \< 406)
 
-#At least SLED 10.2 gcc 4.3 overly agressively optimizes uno::Sequence into
+#At least SLED 10.2 gcc 4.3 overly aggressively optimizes uno::Sequence into
 #junk, so only strict-alias on >= 4.6.0
 gb_StrictAliasingUnsafe := $(gb_GccLess460)
 

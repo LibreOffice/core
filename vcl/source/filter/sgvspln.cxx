@@ -385,15 +385,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 
 } // extern "C"
 
-/*************************************************************************
-|*
-|*    NaturalSpline()
-|*
-|*    Description       calculates the coefficients of natural
-|*                      cubic splines with n intervals.
-|*
-*************************************************************************/
-
+// Calculates the coefficients of natural cubic splines with n intervals.
 sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
                      double Marg0, double MargN,
                      sal_uInt8 MargCond,
@@ -488,15 +480,7 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    PeriodicSpline()
-|*
-|*    Description       calculates the coefficients of periodical
-|*                      cubic splines with n intervals.
-|*
-*************************************************************************/
-
+// calculates the coefficients of periodical cubic splines with n intervals.
 sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
                       double* b, double* c, double* d)
 {                     // array dimensions should range from [0..n]!
@@ -555,15 +539,8 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    ParaSpline()
-|*
-|*    Description       calculate the coefficients of parametric
-|*                      natural of periodical cubic splines with n intervals
-|*
-*************************************************************************/
-
+// calculate the coefficients of parametric natural of periodical cubic splines
+// with n intervals
 sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
                   double Marg01, double Marg02,
                   double MargN1, double MargN2,
@@ -628,20 +605,6 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
     }
     return 0;
 }
-
-/*************************************************************************
-|*
-|*    CalcSpline()
-|*
-|*    Description       Calculates the coefficients of parametrised
-|*                      natural or periodic cubic polynom-splines.
-|*                      The corner points of the polygon passed are used
-|*                      as support points. n returns the number of partial polynoms.
-|*                      This function returns TRUE if no error occured.
-|*                      Only in this case memory for the coefficient array
-|*                      has been allocated, which can be freed by the caller
-|*                      using a delete.
-*************************************************************************/
 
 bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
@@ -712,21 +675,6 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*    Spline2Poly()
-|*
-|*    Description       converts a parametrised cubic spline (natural
-|*                      or periodic) to an approximate polygon.
-|*                      The function returns false, if an error occured
-|*                      during the calculation of the coefficients or
-|*                      the polygon became too large (>PolyMax=16380).
-|*                      In the first case the polygon has 0, in the
-|*                      second case PolyMax points.
-|*                      To prevent coordinate overflows we limit
-|*                      them to +/-32000.
-|*
-*************************************************************************/
 bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
 {
     short  MinKoord=-32000;    // to prevent

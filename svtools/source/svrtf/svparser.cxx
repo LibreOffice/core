@@ -425,7 +425,7 @@ int SvParser::GetNextToken()
         pTokenStackPos->nTokenId = nRet;
     }
     else if( SVPAR_ACCEPTED != eState && SVPAR_PENDING != eState )
-        eState = SVPAR_ERROR;       // an error occured
+        eState = SVPAR_ERROR;       // an error occurred
 
     return nRet;
 }

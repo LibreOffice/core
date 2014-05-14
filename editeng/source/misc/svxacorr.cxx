@@ -2786,7 +2786,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             bool not_suffix;
             while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
                 ;
-            // search the first occurance with a left word delimitation
+            // search the first occurrence with a left word delimitation
             sal_Int32 nFndPos = -1;
             do {
                 nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);

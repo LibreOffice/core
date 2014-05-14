@@ -1190,10 +1190,10 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 
     // #105899# First, guarantee that all objects are converted to polyobjects,
     // especially for SdrGrafObj with bitmap filling this is necessary to not
-    // loose the bitmap filling.
+    // lose the bitmap filling.
 
     // #i12392#
-    // ConvertMarkedToPolyObj was too strong here, it will loose quality and
+    // ConvertMarkedToPolyObj was too strong here, it will lose quality and
     // information when curve objects are combined. This can be replaced by
     // using ConvertMarkedToPathObj without changing the previous fix.
 

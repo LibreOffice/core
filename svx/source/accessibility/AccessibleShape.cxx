@@ -1319,7 +1319,7 @@ void AccessibleShape::disposing (void)
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
-    // Make sure to send an event that this object looses the focus in the
+    // Make sure to send an event that this object loses the focus in the
     // case that it has the focus.
     ::utl::AccessibleStateSetHelper* pStateSet =
           static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());

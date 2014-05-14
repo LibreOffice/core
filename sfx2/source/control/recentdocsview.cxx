@@ -194,7 +194,7 @@ void RecentDocsView::Reload()
     CalculateItemPositions();
     Invalidate();
 
-    // Set prefered width
+    // Set preferred width
     if( mFilteredItemList.empty() )
     {
         Font aOldFont(GetFont());

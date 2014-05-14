@@ -511,7 +511,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             // temporary SfxItemSet
             SfxItemSet* pTemplateItemSet = lcl_CreateEmptyItemSet(
                     nSelectionType, *m_pItemSet_ParAttr->GetPool(), false);
-            // no need to verify the existance of pTemplateItemSet as we
+            // no need to verify the existence of pTemplateItemSet as we
             // know that here the selection type is SEL_TXT
 
             pTemplateItemSet->Put( *m_pItemSet_ParAttr );

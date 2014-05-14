@@ -924,7 +924,7 @@ public:
     static css::uno::Reference< css::awt::XDisplayConnection > GetDisplayConnection();
 
     /** @deprecated AppEvent is used only in the Desktop class now. However, it is
-     intended to notify the application that an event has occured. It was in oldsv.cxx,
+     intended to notify the application that an event has occurred. It was in oldsv.cxx,
      but is still needed by a number of functions.
 
      @param     rAppEvent       const reference to ApplicationEvent event
@@ -1093,7 +1093,7 @@ public:
     */
     static Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
 
-    /** Determines if the screens that make up a display are seperate or
+    /** Determines if the screens that make up a display are separate or
      form one large display area.
 
      @returns true when screens form up one large display area windows can be

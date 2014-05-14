@@ -20,7 +20,7 @@ string getexe(string exename) {
     size_t cmdlen;
     _dupenv_s(&cmdbuf,&cmdlen,exename.c_str());
     if(!cmdbuf) {
-        cout << "Error " << exename << " not defined. Did you forget to source the enviroment?" << endl;
+        cout << "Error " << exename << " not defined. Did you forget to source the environment?" << endl;
         exit(1);
     }
     string command(cmdbuf);

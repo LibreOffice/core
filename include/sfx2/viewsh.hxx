@@ -232,6 +232,7 @@ public:
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 
     virtual SfxObjectShell*     GetObjectShell() SAL_OVERRIDE;
+
     /** retrieves the document which shall be considered the "current document" when the frame is active
 
         The default implementation simply returns the XModel of the associated SfxObjectShell. You will rarely
@@ -239,6 +240,7 @@ public:
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetCurrentDocument() const;
+
     /** forwards the current document, as returned by ->GetCurrentDocument, to SfxObjectShell::SetWorkingDocument
     */
     void                        SetCurrentDocument() const;
@@ -316,7 +318,7 @@ inline void SfxViewShell::LostFocus() const
 
     [Note]
 
-    <StarView> unfortunatly does not provide the possibility to define
+    <StarView> unfortunately does not provide the possibility to define
     such events 'from the side'.
 */
 

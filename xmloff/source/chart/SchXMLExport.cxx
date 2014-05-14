@@ -1537,7 +1537,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     // (is included as subelement of chart)
     if( bExportContent )
     {
-        // #85929# always export table, otherwise clipboard may loose data
+        // #85929# always export table, otherwise clipboard may lose data
         exportTable();
     }
 

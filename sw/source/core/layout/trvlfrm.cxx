@@ -1150,7 +1150,7 @@ static sal_uInt64 CalcDiff(const Point &rPt1, const Point &rPt2)
     return (dX * dX) + (dY * dY);
 }
 
-/** Check if the point lies inside the page part in wich also the CntntFrame lies.
+/** Check if the point lies inside the page part in which also the CntntFrame lies.
  *
  * In this context header, page body, footer and footnote-container count as page part.
  * This will suit the purpose that the CntntFrm which lies in the "right" page part will be
