@@ -1097,7 +1097,7 @@ void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_I
     sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nCompressedSize, static_cast< sal_Int64 >( 32000 ) ) );
 
     aGrabber.seek( nOffset );
-    for ( int ind = 0;
+    for ( sal_Int64 ind = 0;
           !aInflaterLocal.finished() && aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nCompressedSize;
           ind++ )
     {
