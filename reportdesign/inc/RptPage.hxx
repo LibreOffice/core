@@ -20,7 +20,7 @@
 #define INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX
 
 #include "dllapi.h"
-#include "svx/svdpage.hxx"
+#include <svx/svdpage.hxx>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XSection.hpp>
 

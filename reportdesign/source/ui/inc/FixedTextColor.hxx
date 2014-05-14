@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
 
-#include <IReportControllerObserver.hxx>
+#include "IReportControllerObserver.hxx"
 #include <vector>
 
 namespace rptui

@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/compbase1.hxx>
-#include "cppuhelper/basemutex.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include "RptDef.hxx"
 
 

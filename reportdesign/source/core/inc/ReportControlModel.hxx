@@ -21,10 +21,10 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_REPORTCONTROLMODEL_HXX
 
 #include "ReportComponent.hxx"
-#include "com/sun/star/style/VerticalAlignment.hpp"
-#include "com/sun/star/awt/FontDescriptor.hpp"
-#include "com/sun/star/report/XFormatCondition.hpp"
-#include "com/sun/star/container/XContainer.hpp"
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/report/XFormatCondition.hpp>
+#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/uno3.hxx>

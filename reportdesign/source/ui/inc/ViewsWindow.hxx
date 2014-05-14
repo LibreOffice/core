@@ -25,17 +25,17 @@
 #include "ReportDefines.hxx"
 #include "ReportSection.hxx"
 #include <comphelper/propmultiplex.hxx>
-#include "cppuhelper/basemutex.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <svx/svdedtv.hxx>
-#include <SectionView.hxx>
+#include "SectionView.hxx"
 #include <unotools/options.hxx>
 #include <list>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-#include <MarkedSection.hxx>
-#include <SectionWindow.hxx>
+#include "MarkedSection.hxx"
+#include "SectionWindow.hxx"
 
 class SdrHdl;
 namespace rptui

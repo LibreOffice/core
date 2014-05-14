@@ -20,18 +20,18 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DATAPROVIDERHANDLER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DATAPROVIDERHANDLER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "cppuhelper/compbase2.hxx"
-#include "cppuhelper/basemutex.hxx"
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/inspection/XPropertyHandler.hpp"
-#include "com/sun/star/chart2/XChartDocument.hpp"
-#include "com/sun/star/chart2/data/XDatabaseDataProvider.hpp"
-#include "com/sun/star/report/XReportComponent.hpp"
-#include "com/sun/star/script/XTypeConverter.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
+#include <com/sun/star/report/XReportComponent.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <memory>
 

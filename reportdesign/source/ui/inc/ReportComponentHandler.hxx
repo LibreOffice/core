@@ -20,12 +20,12 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCOMPONENTHANDLER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCOMPONENTHANDLER_HXX
 
-#include "sal/config.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/compbase2.hxx"
-#include "cppuhelper/basemutex.hxx"
-#include "com/sun/star/inspection/XPropertyHandler.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
+#include <sal/config.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <memory>
 

@@ -31,8 +31,8 @@
 #include <vcl/svapp.hxx>
 #include <tools/link.hxx>
 
-#include <FormattedFieldBeautifier.hxx>
-#include <FixedTextColor.hxx>
+#include "FormattedFieldBeautifier.hxx"
+#include "FixedTextColor.hxx"
 
 namespace rptui
 {

@@ -30,7 +30,7 @@
 #include <boost/shared_ptr.hpp>
 #include <comphelper/propmultiplex.hxx>
 
-#include <MarkedSection.hxx>
+#include "MarkedSection.hxx"
 #include "ViewsWindow.hxx"
 
 namespace rptui

@@ -23,7 +23,7 @@
 #include "RptPage.hxx"
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <comphelper/propmultiplex.hxx>
-#include "cppuhelper/basemutex.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include "ReportDefines.hxx"
 #include "dlgedfunc.hxx"
 #include <svtools/transfer.hxx>

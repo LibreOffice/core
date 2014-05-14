@@ -19,15 +19,15 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLIMPORTDOCUMENTHANDLER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLIMPORTDOCUMENTHANDLER_HXX
 
-#include "sal/config.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <sal/config.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include "com/sun/star/xml/sax/XDocumentHandler.hpp"
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include "com/sun/star/chart2/data/XDatabaseDataProvider.hpp"
+#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <comphelper/uno3.hxx>
 #include <memory>
 

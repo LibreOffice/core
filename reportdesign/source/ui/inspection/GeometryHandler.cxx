@@ -39,8 +39,8 @@
 #include <tools/diagnose_ex.h>
 #include <tools/StringListResource.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include "com/sun/star/form/inspection/FormComponentPropertyHandler.hpp"
-#include "com/sun/star/inspection/StringRepresentation.hpp"
+#include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
+#include <com/sun/star/inspection/StringRepresentation.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XStringListControl.hpp>

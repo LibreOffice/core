@@ -26,7 +26,7 @@
 #include <com/sun/star/report/XReportComponent.hpp>
 
 #include <vector>
-#include <IReportControllerObserver.hxx>
+#include "IReportControllerObserver.hxx"
 
 namespace rptui
 {

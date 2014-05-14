@@ -31,7 +31,7 @@
 #include <vcl/button.hxx>
 
 #include <svx/dataaccessdescriptor.hxx>
-#include "cppuhelper/basemutex.hxx"
+#include <cppuhelper/basemutex.hxx>
 #include <dbaccess/ToolBoxHelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>

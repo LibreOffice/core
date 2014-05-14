@@ -20,16 +20,16 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_GEOMETRYHANDLER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_GEOMETRYHANDLER_HXX
 
-#include "sal/config.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/compbase3.hxx"
-#include "cppuhelper/basemutex.hxx"
-#include "com/sun/star/inspection/XPropertyHandler.hpp"
-#include "com/sun/star/script/XTypeConverter.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/report/XReportComponent.hpp"
-#include "com/sun/star/report/XFunction.hpp"
+#include <sal/config.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/report/XReportComponent.hpp>
+#include <com/sun/star/report/XFunction.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <memory>
