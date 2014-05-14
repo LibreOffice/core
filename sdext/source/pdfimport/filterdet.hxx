@@ -34,23 +34,23 @@ namespace pdfi
 {
 
 typedef ::cppu::WeakComponentImplHelper1<
-    com::sun::star::document::XExtendedFilterDetection > PDFDetectorBase;
+    css::document::XExtendedFilterDetection > PDFDetectorBase;
 
 class PDFDetector : private cppu::BaseMutex,
                     public PDFDetectorBase
 {
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference<
+        css::uno::XComponentContext > m_xContext;
 
 public:
-    explicit PDFDetector( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::uno::XComponentContext >& xContext );
+    explicit PDFDetector( const css::uno::Reference<
+                                css::uno::XComponentContext >& xContext );
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<
-                                               com::sun::star::beans::PropertyValue >& io_rDescriptor )
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL detect( css::uno::Sequence<
+                                               css::beans::PropertyValue >& io_rDescriptor )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -81,12 +81,12 @@ public:
     When false, no dialog is opened to query user for alternate
     password
  */
-com::sun::star::uno::Reference< com::sun::star::io::XStream >
+css::uno::Reference< css::io::XStream >
    getAdditionalStream( const OUString&                                                            rPDFFile,
                         OUString&                                                                  o_rOutMimetype,
                         OUString&                                                                  io_rOutPwd,
-                        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
-                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >&    rFilterData,
+                        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                        const css::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                         bool                                                                            bMayUseUI );
 
 
@@ -94,7 +94,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
                        sal_uInt32           nBytes,
                        const OUString& rChkSum );
 
-bool getPassword( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler,
+bool getPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
                   OUString&                                                                     o_rPwd,
                   bool                                                                               bFirstTry,
                   const OUString&                                                               i_rDocName

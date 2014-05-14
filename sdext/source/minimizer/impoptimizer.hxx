@@ -38,9 +38,9 @@ class ImpOptimizer : public OptimizationStats
 {
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    mxContext;
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel >             mxModel;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >          mxStatusDispatcher;
+    css::uno::Reference< css::uno::XComponentContext >    mxContext;
+    css::uno::Reference< css::frame::XModel >             mxModel;
+    css::uno::Reference< css::frame::XDispatch >          mxStatusDispatcher;
 
     bool        mbJPEGCompression;
     sal_Int32   mnJPEGQuality;
@@ -57,17 +57,17 @@ private:
     OUString    maFilterName;
     bool        mbOpenNewDocument;
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxInformationDialog;
+    css::uno::Reference< css::frame::XFrame > mxInformationDialog;
 
     bool Optimize();
 
 public:
 
-        ImpOptimizer( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rXFactory,
-            const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel );
+        ImpOptimizer( const css::uno::Reference< css::uno::XComponentContext >& rXFactory,
+            const css::uno::Reference< css::frame::XModel >& rxModel );
         ~ImpOptimizer();
 
-        bool     Optimize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rArguments );
+        bool     Optimize( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
         void     DispatchStatus();
 };
 

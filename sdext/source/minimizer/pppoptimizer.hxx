@@ -32,11 +32,11 @@
 
 
 class PPPOptimizer : public cppu::WeakImplHelper2<
-                                    com::sun::star::frame::XDispatchProvider,
-                                    com::sun::star::frame::XDispatch >
+                                    css::frame::XDispatchProvider,
+                                    css::frame::XDispatch >
 {
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
-    com::sun::star::uno::Reference< com::sun::star::frame::XController > mxController;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::frame::XController > mxController;
 
 public:
 
@@ -46,24 +46,24 @@ public:
     virtual     ~PPPOptimizer();
 
     // XDispatchProvider
-    virtual com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
-        const com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-            throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
+        const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches(
-        const com::sun::star::uno::Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
+        const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const com::sun::star::util::URL& aURL,
-                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lArguments )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL,
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL addStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
-                                                const com::sun::star::util::URL& aURL )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
-                                                const com::sun::star::util::URL& aURL )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                const css::util::URL& aURL )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                const css::util::URL& aURL )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static sal_Int64 GetFileSize( const OUString& rURL );
 };

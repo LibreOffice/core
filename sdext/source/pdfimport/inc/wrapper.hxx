@@ -36,19 +36,19 @@ namespace pdfi
 {
     bool xpdf_ImportFromFile( const OUString&                               rURL,
                               const ContentSinkSharedPtr&                        rSink,
-                              const com::sun::star::uno::Reference<
-                                    com::sun::star::task::XInteractionHandler >& xIHdl,
+                              const css::uno::Reference<
+                                    css::task::XInteractionHandler >& xIHdl,
                               const OUString&                               rPwd,
-                              const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XComponentContext >&    xContext );
-    bool xpdf_ImportFromStream( const com::sun::star::uno::Reference<
-                                      com::sun::star::io::XInputStream >&          xInput,
+                              const css::uno::Reference<
+                                    css::uno::XComponentContext >&    xContext );
+    bool xpdf_ImportFromStream( const css::uno::Reference<
+                                      css::io::XInputStream >&          xInput,
                                 const ContentSinkSharedPtr&                        rSink,
-                                const com::sun::star::uno::Reference<
-                                      com::sun::star::task::XInteractionHandler >& xIHdl,
+                                const css::uno::Reference<
+                                      css::task::XInteractionHandler >& xIHdl,
                                 const OUString&                               rPwd,
-                                const com::sun::star::uno::Reference<
-                                      com::sun::star::uno::XComponentContext >&    xContext );
+                                const css::uno::Reference<
+                                      css::uno::XComponentContext >&    xContext );
 }
 
 #endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_WRAPPER_HXX

@@ -163,7 +163,7 @@ private:
         const OUString& rsConfgurationName);
 
     void ThrowIfDisposed (void) const
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 };
 
 } }

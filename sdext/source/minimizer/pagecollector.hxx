@@ -30,12 +30,12 @@ class PageCollector
 
     struct MasterPageEntity
     {
-        com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage;
+        css::uno::Reference< css::drawing::XDrawPage > xMasterPage;
         bool bUsed;
     };
-    static void CollectCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );
-    static void CollectNonCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );
-    static void CollectMasterPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, std::vector< MasterPageEntity >& );
+    static void CollectCustomShowPages( const css::uno::Reference< css::frame::XModel >&, const OUString& rCustomShow, std::vector< css::uno::Reference< css::drawing::XDrawPage > >& );
+    static void CollectNonCustomShowPages( const css::uno::Reference< css::frame::XModel >&, const OUString& rCustomShow, std::vector< css::uno::Reference< css::drawing::XDrawPage > >& );
+    static void CollectMasterPages( const css::uno::Reference< css::frame::XModel >&, std::vector< MasterPageEntity >& );
 };
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PAGECOLLECTOR_HXX

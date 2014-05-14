@@ -242,7 +242,7 @@ public:
             respectively.
         @param nTextType
             Valid values are the
-            com::sun::star::accessibility::AccessibleTextType constants.
+            css::accessibility::AccessibleTextType constants.
     */
     void MoveCaret (
         const sal_Int32 nDistance,

@@ -139,7 +139,7 @@ private:
     bool ProvideTheme (void);
 
     void ThrowIfDisposed (void) const
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sd::presenter

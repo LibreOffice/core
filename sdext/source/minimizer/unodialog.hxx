@@ -62,67 +62,67 @@ class UnoDialog
 {
 public :
 
-    UnoDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame );
+    UnoDialog( const css::uno::Reference< css::uno::XComponentContext >& rxMSF, css::uno::Reference< css::frame::XFrame >& rxFrame );
     ~UnoDialog();
 
     void execute();
     void endExecute( bool bStatus );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > createWindowPeer( com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > xParentPeer )
-        throw ( com::sun::star::uno::Exception );
+    css::uno::Reference< css::awt::XWindowPeer > createWindowPeer( css::uno::Reference< css::awt::XWindowPeer > xParentPeer )
+        throw ( css::uno::Exception );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > insertControlModel( const OUString& rServiceName, const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::uno::XInterface > insertControlModel( const OUString& rServiceName, const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
     void setVisible( const OUString& rName, bool bVisible );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XButton > insertButton( const OUString& rName,
-        com::sun::star::uno::Reference< com::sun::star::awt::XActionListener > xActionListener, const com::sun::star::uno::Sequence< OUString >& rPropertyNames,
-            const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XButton > insertButton( const OUString& rName,
+        css::uno::Reference< css::awt::XActionListener > xActionListener, const css::uno::Sequence< OUString >& rPropertyNames,
+            const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XFixedText > insertFixedText( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XFixedText > insertFixedText( const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XCheckBox > insertCheckBox( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XCheckBox > insertCheckBox( const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertFormattedField( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XControl > insertFormattedField( const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XComboBox > insertComboBox( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XComboBox > insertComboBox( const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XRadioButton > insertRadioButton( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XRadioButton > insertRadioButton( const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XListBox > insertListBox( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XListBox > insertListBox( const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertImage( const OUString& rName,
-        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    css::uno::Reference< css::awt::XControl > insertImage( const OUString& rName,
+        const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& rPropertyValues );
 
-    void setControlProperty( const OUString& rControlName, const OUString& rPropertyName, const com::sun::star::uno::Any& rPropertyValue );
-    com::sun::star::uno::Any getControlProperty( const OUString& rControlName, const OUString& rPropertyName );
+    void setControlProperty( const OUString& rControlName, const OUString& rPropertyName, const css::uno::Any& rPropertyValue );
+    css::uno::Any getControlProperty( const OUString& rControlName, const OUString& rPropertyName );
 
     void enableControl( const OUString& rControlName );
     void disableControl( const OUString& rControlName );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        mxContext;
-    com::sun::star::uno::Reference< com::sun::star::frame::XController >            mxController;
-    com::sun::star::uno::Reference< com::sun::star::awt::XReschedule >              mxReschedule;
+    css::uno::Reference< css::uno::XComponentContext >        mxContext;
+    css::uno::Reference< css::frame::XController >            mxController;
+    css::uno::Reference< css::awt::XReschedule >              mxReschedule;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               mxDialogModel;
-    com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet >      mxDialogModelMultiPropertySet;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >           mxDialogModelPropertySet;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    mxDialogModelMSF;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >     mxDialogModelNameContainer;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >        mxDialogModelNameAccess;
+    css::uno::Reference< css::uno::XInterface >               mxDialogModel;
+    css::uno::Reference< css::beans::XMultiPropertySet >      mxDialogModelMultiPropertySet;
+    css::uno::Reference< css::beans::XPropertySet >           mxDialogModelPropertySet;
+    css::uno::Reference< css::lang::XMultiServiceFactory >    mxDialogModelMSF;
+    css::uno::Reference< css::container::XNameContainer >     mxDialogModelNameContainer;
+    css::uno::Reference< css::container::XNameAccess >        mxDialogModelNameAccess;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >            mxControlModel;
+    css::uno::Reference< css::awt::XControlModel >            mxControlModel;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XUnoControlDialog >        mxDialog;
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl >                 mxControl;
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >              mxWindowPeer;
+    css::uno::Reference< css::awt::XUnoControlDialog >        mxDialog;
+    css::uno::Reference< css::awt::XControl >                 mxControl;
+    css::uno::Reference< css::awt::XWindowPeer >              mxWindowPeer;
 
     bool                                                                        mbStatus;
 };

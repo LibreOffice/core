@@ -90,7 +90,7 @@ public:
     virtual css::geometry::AffineMatrix2D SAL_CALL getTransformation (void)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::geometry::IntegerSize2D SAL_CALL getTranslationOffset(void)
+    virtual css::geometry::IntegerSize2D SAL_CALL getTranslationOffset(void)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addTransformationChangedListener(
@@ -136,8 +136,8 @@ public:
     virtual void SAL_CALL setMouseCursor(::sal_Int16 nPointerShape)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getCanvasArea(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::awt::Rectangle SAL_CALL getCanvasArea(  )
+    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
@@ -189,7 +189,7 @@ public:
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDrawView
 

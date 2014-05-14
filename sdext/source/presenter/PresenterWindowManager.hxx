@@ -158,8 +158,8 @@ public:
     // XEventListener
 
     virtual void SAL_CALL disposing (
-        const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
@@ -222,7 +222,7 @@ private:
 
     void NotifyDisposing (void);
 
-    void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
+    void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
 };
 
 } }

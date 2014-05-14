@@ -35,20 +35,20 @@ class OptimizationStats
             return s1 < s2;
         }
     };
-    std::map < PPPOptimizerTokenEnum, com::sun::star::uno::Any, Compare > maStats;
+    std::map < PPPOptimizerTokenEnum, css::uno::Any, Compare > maStats;
 
     public :
 
         OptimizationStats();
         ~OptimizationStats(){};
 
-        void SetStatusValue( const PPPOptimizerTokenEnum eStat, const com::sun::star::uno::Any& rStatValue );
-        const com::sun::star::uno::Any* GetStatusValue( const PPPOptimizerTokenEnum eStat ) const;
+        void SetStatusValue( const PPPOptimizerTokenEnum eStat, const css::uno::Any& rStatValue );
+        const css::uno::Any* GetStatusValue( const PPPOptimizerTokenEnum eStat ) const;
 
-        void InitializeStatusValuesFromDocument( com::sun::star::uno::Reference< com::sun::star::frame::XModel > rxModel );
-        void InitializeStatusValues( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptimizationStats );
+        void InitializeStatusValuesFromDocument( css::uno::Reference< css::frame::XModel > rxModel );
+        void InitializeStatusValues( const css::uno::Sequence< css::beans::PropertyValue >& rOptimizationStats );
 
-        com::sun::star::beans::PropertyValues GetStatusSequence();
+        css::beans::PropertyValues GetStatusSequence();
 };
 
 

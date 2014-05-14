@@ -31,8 +31,8 @@ namespace sax
 
 namespace pdfi
 {
-    XmlEmitterSharedPtr createSaxEmitter( const com::sun::star::uno::Reference<
-                                                com::sun::star::xml::sax::XDocumentHandler >& xDocHdl );
+    XmlEmitterSharedPtr createSaxEmitter( const css::uno::Reference<
+                                                css::xml::sax::XDocumentHandler >& xDocHdl );
 }
 
 #endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_SAXEMITTER_HXX

@@ -32,12 +32,12 @@ namespace pdfi
     class SaxEmitter : public XmlEmitter
     {
     private:
-        com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler > m_xDocHdl;
+        css::uno::Reference<
+            css::xml::sax::XDocumentHandler > m_xDocHdl;
 
     public:
-        explicit SaxEmitter( const com::sun::star::uno::Reference<
-                                    com::sun::star::xml::sax::XDocumentHandler >& xDocHdl );
+        explicit SaxEmitter( const css::uno::Reference<
+                                    css::xml::sax::XDocumentHandler >& xDocHdl );
         virtual ~SaxEmitter();
 
         virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) SAL_OVERRIDE;

@@ -37,17 +37,17 @@ class FileOpenDialog
         OUString maUIName;
         OUString maFilter;
         sal_Int32 maFlags;
-        com::sun::star::uno::Sequence< OUString > maExtensions;
+        css::uno::Sequence< OUString > maExtensions;
 
         FilterEntry() :
             maFlags( 0 ) {}
     };
-    com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker3 > mxFilePicker;
+    css::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFilePicker;
 
     std::vector< FilterEntry > aFilterEntryList;
 
 public :
-        FileOpenDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+        FileOpenDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         ~FileOpenDialog();
 
         sal_Int16 execute();

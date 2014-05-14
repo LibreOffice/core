@@ -72,8 +72,8 @@ struct OptimizerSettings
         mnEstimatedFileSize( 0 ){};
         ~OptimizerSettings(){};
 
-        void LoadSettingsFromConfiguration( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rSettings );
-        void SaveSettingsToConfiguration( const com::sun::star::uno::Reference< com::sun::star::container::XNameReplace >& rSettings );
+        void LoadSettingsFromConfiguration( const css::uno::Reference< css::container::XNameAccess >& rSettings );
+        void SaveSettingsToConfiguration( const css::uno::Reference< css::container::XNameReplace >& rSettings );
 
         bool operator==( const OptimizerSettings& rOptimizerSettings ) const;
 
@@ -82,7 +82,7 @@ class ConfigurationAccess
 {
     public :
 
-        ConfigurationAccess( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rXFactory,
+        ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory,
                                 OptimizerSettings* pDefaultSettings = NULL );
         ~ConfigurationAccess();
         void SaveConfiguration();
@@ -90,14 +90,14 @@ class ConfigurationAccess
         OUString getString( const PPPOptimizerTokenEnum ) const;
 
         // access to current OptimizerSettings (stored in the first entry of maSettings)
-        com::sun::star::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
-        void SetConfigProperty( const PPPOptimizerTokenEnum, const com::sun::star::uno::Any& aValue );
+        css::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
+        void SetConfigProperty( const PPPOptimizerTokenEnum, const css::uno::Any& aValue );
 
         bool GetConfigProperty( const PPPOptimizerTokenEnum, const bool bDefault ) const;
         sal_Int16 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int16 nDefault ) const;
         sal_Int32 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int32 nDefault ) const;
 
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetConfigurationSequence();
+        css::uno::Sequence< css::beans::PropertyValue > GetConfigurationSequence();
 
         // getting access to the OptimizerSettings list
         std::vector< OptimizerSettings >& GetOptimizerSettings() { return maSettings; };
@@ -117,13 +117,13 @@ class ConfigurationAccess
         std::vector< OptimizerSettings > maSettings;
         std::vector< OptimizerSettings > maInitialSettings;
 
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+        css::uno::Reference< css::uno::XComponentContext > mxContext;
 
         void LoadStrings();
         void LoadConfiguration();
-        com::sun::star::uno::Reference< com::sun::star::uno::XInterface > OpenConfiguration( bool bReadOnly );
-        com::sun::star::uno::Reference< com::sun::star::uno::XInterface > GetConfigurationNode(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xRoot, const OUString& sPathToNode );
+        css::uno::Reference< css::uno::XInterface > OpenConfiguration( bool bReadOnly );
+        css::uno::Reference< css::uno::XInterface > GetConfigurationNode(
+            const css::uno::Reference< css::uno::XInterface >& xRoot, const OUString& sPathToNode );
 };
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX

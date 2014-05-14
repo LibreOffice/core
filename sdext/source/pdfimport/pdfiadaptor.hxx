@@ -40,35 +40,35 @@
 namespace pdfi
 {
     typedef ::cppu::WeakComponentImplHelper2<
-        com::sun::star::document::XFilter,
-        com::sun::star::document::XImporter > PDFIHybridAdaptorBase;
+        css::document::XFilter,
+        css::document::XImporter > PDFIHybridAdaptorBase;
 
     class PDFIHybridAdaptor : private cppu::BaseMutex,
                               public PDFIHybridAdaptorBase
     {
     private:
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext >  m_xContext;
-        com::sun::star::uno::Reference<
-            com::sun::star::frame::XModel >           m_xModel;
+        css::uno::Reference<
+            css::uno::XComponentContext >  m_xContext;
+        css::uno::Reference<
+            css::frame::XModel >           m_xModel;
 
     public:
-        explicit PDFIHybridAdaptor( const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::uno::XComponentContext >& xContext );
+        explicit PDFIHybridAdaptor( const css::uno::Reference<
+                                          css::uno::XComponentContext >& xContext );
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rFilterData ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL cancel() throw(std::exception) SAL_OVERRIDE;
 
         // XImporter
-        virtual void SAL_CALL setTargetDocument( const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xDocument )
-            throw( com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument )
+            throw( css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
     };
 
     typedef ::cppu::WeakComponentImplHelper2<
-        com::sun::star::xml::XImportFilter,
-        com::sun::star::document::XImporter > PDFIAdaptorBase;
+        css::xml::XImportFilter,
+        css::document::XImporter > PDFIAdaptorBase;
 
     /** Adapts raw pdf import to XImportFilter interface
      */
@@ -76,23 +76,23 @@ namespace pdfi
                            public PDFIAdaptorBase
     {
     private:
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext >  m_xContext;
-        com::sun::star::uno::Reference<
-            com::sun::star::frame::XModel >           m_xModel;
+        css::uno::Reference<
+            css::uno::XComponentContext >  m_xContext;
+        css::uno::Reference<
+            css::frame::XModel >           m_xModel;
         TreeVisitorFactorySharedPtr                   m_pVisitorFactory;
         bool                                          m_bEnableToplevelText;
 
-        bool parse( const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>&       xInput,
-                    const com::sun::star::uno::Reference<com::sun::star::task::XInteractionHandler>& xIHdl,
+        bool parse( const css::uno::Reference<css::io::XInputStream>&       xInput,
+                    const css::uno::Reference<css::task::XInteractionHandler>& xIHdl,
                     const OUString&                                                          rPwd,
-                    const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator>& xStatus,
+                    const css::uno::Reference<css::task::XStatusIndicator>& xStatus,
                     const XmlEmitterSharedPtr&                                                    rEmitter,
                     const OUString&                                                          rURL );
 
     public:
-        explicit PDFIRawAdaptor( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::uno::XComponentContext >& xContext );
+        explicit PDFIRawAdaptor( const css::uno::Reference<
+                                       css::uno::XComponentContext >& xContext );
 
         /** Set factory object used to create the tree visitors
 
@@ -113,17 +113,17 @@ namespace pdfi
             Optional status indicator
          */
         bool odfConvert( const OUString&                                                          rURL,
-                         const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&      xOutput,
-                         const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator>& xStatus );
+                         const css::uno::Reference<css::io::XOutputStream>&      xOutput,
+                         const css::uno::Reference<css::task::XStatusIndicator>& xStatus );
 
         // XImportFilter
-        virtual sal_Bool SAL_CALL importer( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rSourceData,
-                                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& rHdl,
-                                            const com::sun::star::uno::Sequence< OUString >& rUserData ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL importer( const css::uno::Sequence< css::beans::PropertyValue >& rSourceData,
+                                            const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHdl,
+                                            const css::uno::Sequence< OUString >& rUserData ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XImporter
-        virtual void SAL_CALL setTargetDocument( const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xDocument )
-            throw( com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument )
+            throw( css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
     };
 }
 

@@ -54,13 +54,13 @@ class GraphicCollector
 
     struct GraphicUser
     {
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >       mxShape;            // if mbFillBitmap is false the xShape has
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >   mxPagePropertySet;
+        css::uno::Reference< css::drawing::XShape >       mxShape;            // if mbFillBitmap is false the xShape has
+        css::uno::Reference< css::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
+        css::uno::Reference< css::beans::XPropertySet >   mxPagePropertySet;
         OUString                       maGraphicURL;
         OUString                       maGraphicStreamURL;
-        com::sun::star::text::GraphicCrop   maGraphicCropLogic;
-        com::sun::star::awt::Size           maLogicalSize;
+        css::text::GraphicCrop         maGraphicCropLogic;
+        css::awt::Size                 maLogicalSize;
         bool                            mbFillBitmap;
 
         GraphicUser() : mxShape(), maGraphicCropLogic( 0, 0, 0, 0 ), mbFillBitmap( false ) {};
@@ -68,24 +68,24 @@ class GraphicCollector
 
     struct GraphicEntity
     {
-        com::sun::star::awt::Size                       maLogicalSize;                          // the biggest logical size the graphic will be displayed
+        css::awt::Size                              maLogicalSize;                          // the biggest logical size the graphic will be displayed
         bool                                        mbRemoveCropArea;
-        com::sun::star::text::GraphicCrop               maGraphicCropLogic;
+        css::text::GraphicCrop                      maGraphicCropLogic;
         std::vector< GraphicUser >                      maUser;
 
         GraphicEntity( const GraphicUser& rUser )
             : maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( false ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
     };
 
-    static const com::sun::star::awt::DeviceInfo& GetDeviceInfo( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxFact );
-    static com::sun::star::awt::Size GetOriginalSize( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF,
-                const com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic >& rxGraphic );
+    static const css::awt::DeviceInfo& GetDeviceInfo( const css::uno::Reference< css::uno::XComponentContext >& rxFact );
+    static css::awt::Size GetOriginalSize( const css::uno::Reference< css::uno::XComponentContext >& rxMSF,
+                const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
 
     // collecting graphic instances, the downside of this method is that every graphic is swapped in
-    static void CollectGraphics( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel,
+    static void CollectGraphics( const css::uno::Reference< css::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, std::vector< GraphicEntity >& io_rGraphicList );
     // counting graphics without swapping in graphics
-    static void CountGraphics( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel,
+    static void CountGraphics( const css::uno::Reference< css::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, sal_Int32& rGraphics );
 };
 

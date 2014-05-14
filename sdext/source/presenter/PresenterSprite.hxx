@@ -26,7 +26,7 @@
 
 namespace sdext { namespace presenter {
 
-/** A wrapper around a com::sun::star::rendering::XCustomSprite that allows
+/** A wrapper around a css::rendering::XCustomSprite that allows
     not only setting values like size, location, and transformation but also
     provides read access to them.
     It also handles the showing and hiding of a sprite.  This includes not

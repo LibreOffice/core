@@ -71,7 +71,7 @@ namespace pdfi
     }
 
     /// Convert color to "#FEFEFE" color notation
-    OUString getColorString( const ::com::sun::star::rendering::ARGBColor& );
+    OUString getColorString( const css::rendering::ARGBColor& );
     OUString getPercentString(double value);
 
     double GetAverageTransformationScale(const basegfx::B2DHomMatrix& matrix);
@@ -93,8 +93,8 @@ namespace pdfi
 
     struct GraphicsContext
     {
-        ::com::sun::star::rendering::ARGBColor     LineColor;
-        ::com::sun::star::rendering::ARGBColor     FillColor;
+        css::rendering::ARGBColor     LineColor;
+        css::rendering::ARGBColor     FillColor;
         sal_Int8                                   LineJoin;
         sal_Int8                                   LineCap;
         sal_Int8                                   BlendMode;
@@ -151,11 +151,11 @@ namespace pdfi
             switch (LineJoin)
             {
             default:
-            case ::com::sun::star::rendering::PathJoinType::MITER:
+            case css::rendering::PathJoinType::MITER:
                 return OUString("miter");
-            case ::com::sun::star::rendering::PathJoinType::ROUND:
+            case css::rendering::PathJoinType::ROUND:
                 return OUString("round");
-            case ::com::sun::star::rendering::PathJoinType::BEVEL:
+            case css::rendering::PathJoinType::BEVEL:
                 return OUString("bevel");
             }
         }
@@ -165,11 +165,11 @@ namespace pdfi
             switch (LineCap)
             {
             default:
-            case ::com::sun::star::rendering::PathCapType::BUTT:
+            case css::rendering::PathCapType::BUTT:
                 return OUString("butt");
-            case ::com::sun::star::rendering::PathCapType::ROUND:
+            case css::rendering::PathCapType::ROUND:
                 return OUString("round");
-            case ::com::sun::star::rendering::PathCapType::SQUARE:
+            case css::rendering::PathCapType::SQUARE:
                 return OUString("square");
             }
         }
@@ -213,16 +213,16 @@ namespace pdfi
 
     /** retrieve password from user
      */
-    bool getPassword( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::task::XInteractionHandler >& xHandler,
+    bool getPassword( const css::uno::Reference<
+                            css::task::XInteractionHandler >& xHandler,
                       OUString&                                       rOutPwd,
                       bool                                                 bFirstTry,
                       const OUString&                                 rDocName
                       );
 
     void reportUnsupportedEncryptionFormat(
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionHandler > const & handler);
+        css::uno::Reference<
+            css::task::XInteractionHandler > const & handler);
 }
 
 #endif

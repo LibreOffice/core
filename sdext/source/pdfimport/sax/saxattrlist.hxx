@@ -31,8 +31,8 @@
 namespace pdfi
 {
     class SaxAttrList : public ::cppu::WeakImplHelper2<
-            com::sun::star::xml::sax::XAttributeList,
-            com::sun::star::util::XCloneable
+            css::xml::sax::XAttributeList,
+            css::util::XCloneable
             >
     {
         struct AttrEntry
@@ -52,7 +52,7 @@ namespace pdfi
         SaxAttrList( const SaxAttrList& );
         virtual ~SaxAttrList();
 
-        // ::com::sun::star::xml::sax::XAttributeList
+        // css::xml::sax::XAttributeList
         virtual sal_Int16 SAL_CALL getLength() throw(std::exception) SAL_OVERRIDE;
         virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw(std::exception) SAL_OVERRIDE;
         virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw(std::exception) SAL_OVERRIDE;
@@ -60,8 +60,8 @@ namespace pdfi
         virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw(std::exception) SAL_OVERRIDE;
         virtual OUString SAL_CALL getValueByName(const OUString& aName) throw(std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::util::XCloneable
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw(std::exception) SAL_OVERRIDE;
+        // css::util::XCloneable
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() throw(std::exception) SAL_OVERRIDE;
     };
 }
 

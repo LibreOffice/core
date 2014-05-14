@@ -36,14 +36,14 @@ namespace pdfi
     class ImageContainer
     {
     private:
-        std::vector< ::com::sun::star::uno::Sequence<
-                     ::com::sun::star::beans::PropertyValue> > m_aImages;
+        std::vector< css::uno::Sequence<
+                     css::beans::PropertyValue> > m_aImages;
 
     public:
         ImageContainer();
 
-        ImageId addImage( const ::com::sun::star::uno::Sequence<
-                                ::com::sun::star::beans::PropertyValue>& xBitmap );
+        ImageId addImage( const css::uno::Sequence<
+                                css::beans::PropertyValue>& xBitmap );
         void writeBase64EncodedStream( ImageId nImageId, EmitContext& rContext );
     };
 }

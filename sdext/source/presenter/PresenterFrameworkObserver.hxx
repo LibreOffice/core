@@ -30,7 +30,7 @@
 namespace sdext { namespace presenter {
 
 typedef ::cppu::WeakComponentImplHelper1 <
-    ::com::sun::star::drawing::framework::XConfigurationChangeListener
+    css::drawing::framework::XConfigurationChangeListener
     > PresenterFrameworkObserverInterfaceBase;
 
 /** Watch the drawing framework for changes and run callbacks when a certain

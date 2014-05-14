@@ -38,8 +38,8 @@ namespace pdfi
         void optimizeTextElements(Element& rParent);
 
     public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIter;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
+    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
+    const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
         explicit DrawXmlOptimizer(PDFIProcessor& rProcessor) :
             m_rProcessor(rProcessor)
         {}
@@ -80,10 +80,10 @@ namespace pdfi
     class DrawXmlEmitter : public ElementTreeVisitor
     {
     private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > mxCharClass;
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xCtx;
+    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
+    css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
         PDFIProcessor&  m_rProcessor;
 
@@ -98,7 +98,7 @@ namespace pdfi
                              );
 
     public:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >& GetCharacterClassification();
+    const css::uno::Reference< css::i18n::XCharacterClassification >& GetCharacterClassification();
         enum DocType{ DRAW_DOC, IMPRESS_DOC };
         explicit DrawXmlEmitter(EmitContext& rEmitContext, DocType eDocType, PDFIProcessor& rProc ) :
             m_rProcessor( rProc ),

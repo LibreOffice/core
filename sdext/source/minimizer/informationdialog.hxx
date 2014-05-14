@@ -46,8 +46,8 @@ class InformationDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
 
-    InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, const OUString& rSaveAsURL,
+    InformationDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            css::uno::Reference< css::frame::XFrame >& rxFrame, const OUString& rSaveAsURL,
                 bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
@@ -55,11 +55,11 @@ public :
 
 private :
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
-    com::sun::star::uno::Reference< com::sun::star::io::XStream >           mxTempFile;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::frame::XFrame >         mxFrame;
+    css::uno::Reference< css::io::XStream >           mxTempFile;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
+    css::uno::Reference< css::awt::XActionListener >  mxActionListener;
 
     void InitDialog();
 
@@ -71,17 +71,17 @@ private :
 
 public :
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxContext; };
+    css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
+    const css::uno::Reference< css::uno::XComponentContext >& GetComponentContext() { return mxContext; };
 };
 
-class OKActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+class OKActionListener : public ::cppu::WeakImplHelper1< css::awt::XActionListener >
 {
 public:
     OKActionListener( InformationDialog& rInformationDialog ) : mrInformationDialog( rInformationDialog ){};
 
-    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     InformationDialog& mrInformationDialog;

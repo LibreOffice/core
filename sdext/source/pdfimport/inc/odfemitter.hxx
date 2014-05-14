@@ -30,8 +30,8 @@ namespace com { namespace sun { namespace star { namespace io
 
 namespace pdfi
 {
-    XmlEmitterSharedPtr createOdfEmitter( const com::sun::star::uno::Reference<
-                                                com::sun::star::io::XOutputStream>& xOut );
+    XmlEmitterSharedPtr createOdfEmitter( const css::uno::Reference<
+                                                css::io::XOutputStream>& xOut );
 }
 
 #endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_ODFEMITTER_HXX

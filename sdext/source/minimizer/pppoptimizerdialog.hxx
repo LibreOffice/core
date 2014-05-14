@@ -40,61 +40,61 @@
 
 class OptimizerDialog;
 class PPPOptimizerDialog : public   ::cppu::WeakImplHelper4<
-                                    com::sun::star::lang::XInitialization,
-                                    com::sun::star::lang::XServiceInfo,
-                                    com::sun::star::frame::XDispatchProvider,
-                                    com::sun::star::frame::XDispatch >
+                                    css::lang::XInitialization,
+                                    css::lang::XServiceInfo,
+                                    css::frame::XDispatchProvider,
+                                    css::frame::XDispatch >
 {
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxFrame;
-    com::sun::star::uno::Reference< com::sun::star::frame::XController > mxController;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::frame::XFrame > mxFrame;
+    css::uno::Reference< css::frame::XController > mxController;
 
     OptimizerDialog*    mpOptimizerDialog;
 
 public:
 
-    PPPOptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+    PPPOptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~PPPOptimizerDialog();
 
     // XInitialization
-    void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw( css::uno::Exception, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XDispatchProvider
-    virtual com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
-        const com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-            throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
+        const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches(
-        const com::sun::star::uno::Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
+        const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const com::sun::star::util::URL& aURL,
-                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lArguments )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL,
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL addStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
-                                                const com::sun::star::util::URL& aURL )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
-                                                const com::sun::star::util::URL& aURL )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                const css::util::URL& aURL )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                const css::util::URL& aURL )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 OUString PPPOptimizerDialog_getImplementationName();
-com::sun::star::uno::Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames();
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > PPPOptimizerDialog_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rSMgr )
-    throw( com::sun::star::uno::Exception );
+css::uno::Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames();
+css::uno::Reference< css::uno::XInterface > PPPOptimizerDialog_createInstance( const css::uno::Reference< css::uno::XComponentContext > & rSMgr )
+    throw( css::uno::Exception );
 
 
 

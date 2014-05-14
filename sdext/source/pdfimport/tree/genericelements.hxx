@@ -48,9 +48,9 @@ namespace pdfi
             StyleContainer&                          _rStyles,
             ImageContainer&                          _rImages,
             PDFIProcessor&                           _rProcessor,
-            const com::sun::star::uno::Reference<
-            com::sun::star::task::XStatusIndicator>& _xStatusIndicator,
-            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext)
+            const css::uno::Reference<
+            css::task::XStatusIndicator>& _xStatusIndicator,
+            css::uno::Reference< css::uno::XComponentContext >  xContext)
         :
             rEmitter(_rEmitter),
             rStyles(_rStyles),
@@ -64,10 +64,10 @@ namespace pdfi
         StyleContainer& rStyles;
         ImageContainer& rImages;
         PDFIProcessor&  rProcessor;
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XStatusIndicator> xStatusIndicator;
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext >  m_xContext;
+        css::uno::Reference<
+            css::task::XStatusIndicator> xStatusIndicator;
+        css::uno::Reference<
+            css::uno::XComponentContext >  m_xContext;
     };
 
     struct Element : public ElementTreeVisitable

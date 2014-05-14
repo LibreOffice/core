@@ -60,8 +60,8 @@ class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
 
-    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher );
+    OptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame >& rxFrame,
+        css::uno::Reference< css::frame::XDispatch > rxStatusDispatcher );
     ~OptimizerDialog();
 
     bool                execute();
@@ -71,19 +71,19 @@ public :
     bool                mbIsReadonly;
 
 private :
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::frame::XFrame >         mxFrame;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControl;
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControlModel;
+    css::uno::Reference< css::uno::XInterface >       mxRoadmapControl;
+    css::uno::Reference< css::uno::XInterface >       mxRoadmapControlModel;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener >    mxItemListener;
-    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
-    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListenerListBox0Pg0;
-    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerFormattedField0Pg1;
-    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerComboBox0Pg1;
-    com::sun::star::uno::Reference< com::sun::star::awt::XSpinListener >    mxSpinListenerFormattedField0Pg1;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >      mxStatusDispatcher;
+    css::uno::Reference< css::awt::XItemListener >    mxItemListener;
+    css::uno::Reference< css::awt::XActionListener >  mxActionListener;
+    css::uno::Reference< css::awt::XActionListener >  mxActionListenerListBox0Pg0;
+    css::uno::Reference< css::awt::XTextListener >    mxTextListenerFormattedField0Pg1;
+    css::uno::Reference< css::awt::XTextListener >    mxTextListenerComboBox0Pg1;
+    css::uno::Reference< css::awt::XSpinListener >    mxSpinListenerFormattedField0Pg1;
+    css::uno::Reference< css::frame::XDispatch >      mxStatusDispatcher;
 
     std::vector< std::vector< OUString > > maControlPages;
 
@@ -109,7 +109,7 @@ public :
 
     OptimizationStats maStats;
 
-    void UpdateStatus( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rStatus );
+    void UpdateStatus( const css::uno::Sequence< css::beans::PropertyValue >& rStatus );
 
     // the ConfigurationAccess is updated to actual control settings
     void UpdateConfiguration();
@@ -121,20 +121,20 @@ public :
     void UpdateControlStates( sal_Int16 nStep = -1 );
 
     OUString GetSelectedString( OUString const & token );
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxContext; };
+    css::uno::Reference< css::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
+    css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
+    const css::uno::Reference< css::uno::XComponentContext >& GetComponentContext() { return mxContext; };
 };
 
 
 
-class ItemListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XItemListener >
+class ItemListener : public ::cppu::WeakImplHelper1< css::awt::XItemListener >
 {
 public:
     ItemListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
 
-    virtual void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL itemStateChanged( const css::awt::ItemEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     OptimizerDialog& mrOptimizerDialog;
@@ -142,13 +142,13 @@ private:
 
 
 
-class ActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+class ActionListener : public ::cppu::WeakImplHelper1< css::awt::XActionListener >
 {
 public:
     ActionListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
 
-    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     OptimizerDialog& mrOptimizerDialog;
@@ -156,13 +156,13 @@ private:
 
 
 
-class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper1< css::awt::XActionListener >
 {
 public:
     ActionListenerListBox0Pg0( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
 
-    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL actionPerformed( const css::awt::ActionEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     OptimizerDialog& mrOptimizerDialog;
@@ -170,13 +170,13 @@ private:
 
 
 
-class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
+class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< css::awt::XTextListener >
 {
 public:
     TextListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
 
-    virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL textChanged( const css::awt::TextEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     OptimizerDialog& mrOptimizerDialog;
@@ -184,13 +184,13 @@ private:
 
 
 
-class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
+class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper1< css::awt::XTextListener >
 {
 public:
     TextListenerComboBox0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
 
-    virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL textChanged( const css::awt::TextEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     OptimizerDialog& mrOptimizerDialog;
@@ -198,16 +198,16 @@ private:
 
 
 
-class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XSpinListener >
+class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< css::awt::XSpinListener >
 {
 public:
     SpinListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
 
-    virtual void SAL_CALL up( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL down( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL first( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL last( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL up( const css::awt::SpinEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL down( const css::awt::SpinEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL first( const css::awt::SpinEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL last( const css::awt::SpinEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     OptimizerDialog& mrOptimizerDialog;
