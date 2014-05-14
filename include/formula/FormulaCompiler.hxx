@@ -337,11 +337,10 @@ protected:
 
     bool                bAutoCorrect;           // whether to apply AutoCorrection
     bool                bCorrected;             // AutoCorrection was applied
-    bool                bIgnoreErrors;          // on AutoCorrect and CompileForFAP
-                                                // ignore errors and create RPN nevertheless
     bool                glSubTotal;             // if code contains one or more subtotal functions
 
     bool mbJumpCommandReorder; /// Whether or not to reorder RPN for jump commands.
+    bool mbStopOnError;        /// Whether to stop compilation on first encountered error.
 
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation

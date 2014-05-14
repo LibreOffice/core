@@ -537,9 +537,9 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
         bCorrected( false ),
-        bIgnoreErrors( false ),
         glSubTotal( false ),
-        mbJumpCommandReorder(true)
+        mbJumpCommandReorder(true),
+        mbStopOnError(true)
 {
 }
 
@@ -555,9 +555,9 @@ FormulaCompiler::FormulaCompiler()
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
         bCorrected( false ),
-        bIgnoreErrors( false ),
         glSubTotal( false ),
-        mbJumpCommandReorder(true)
+        mbJumpCommandReorder(true),
+        mbStopOnError(true)
 {
 }
 
@@ -983,7 +983,7 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const OUString& rName ) const
 void FormulaCompiler::SetCompileForFAP( bool bVal )
 {
     mbJumpCommandReorder = !bVal;
-    bIgnoreErrors = bVal;
+    mbStopOnError = !bVal;
 }
 
 
@@ -1041,7 +1041,7 @@ bool FormulaCompiler::GetToken()
         aCorrectedSymbol = "";
     }
     bool bStop = false;
-    if( pArr->GetCodeError() && !bIgnoreErrors )
+    if (pArr->GetCodeError() && mbStopOnError)
         bStop = true;
     else
     {
@@ -1119,7 +1119,7 @@ bool FormulaCompiler::GetToken()
 // RPN creation by recursion
 void FormulaCompiler::Factor()
 {
-    if ( pArr->GetCodeError() && !bIgnoreErrors )
+    if (pArr->GetCodeError() && mbStopOnError)
         return;
 
     CurrentFactor pFacToken( this );
@@ -1157,7 +1157,7 @@ void FormulaCompiler::Factor()
     {
         NextToken();
         eOp = Expression();
-        while ((eOp == ocSep) && (!pArr->GetCodeError() || bIgnoreErrors))
+        while ((eOp == ocSep) && (!pArr->GetCodeError() || !mbStopOnError))
         {   // range list  (A1;A2)  converted to  (A1~A2)
             pFacToken = mpToken;
             NextToken();
@@ -1292,7 +1292,7 @@ void FormulaCompiler::Factor()
             if( !bNoParam )
             {
                 nSepCount++;
-                while ( (eOp == ocSep) && (!pArr->GetCodeError() || bIgnoreErrors) )
+                while ((eOp == ocSep) && (!pArr->GetCodeError() || !mbStopOnError))
                 {
                     nSepCount++;
                     NextToken();
@@ -1364,7 +1364,7 @@ void FormulaCompiler::Factor()
             }
             short nJumpCount = 0;
             while ( (nJumpCount < (FORMULA_MAXJUMPCOUNT - 1)) && (eOp == ocSep)
-                    && (!pArr->GetCodeError() || bIgnoreErrors) )
+                    && (!pArr->GetCodeError() || !mbStopOnError))
             {
                 if ( ++nJumpCount <= nJumpMax )
                     pFacToken->GetJump()[nJumpCount] = pc-1;
@@ -1641,7 +1641,7 @@ bool FormulaCompiler::CompileTokenArray()
 {
     glSubTotal = false;
     bCorrected = false;
-    if( !pArr->GetCodeError() || bIgnoreErrors )
+    if (!pArr->GetCodeError() || !mbStopOnError)
     {
         if ( bAutoCorrect )
         {
@@ -1684,7 +1684,7 @@ bool FormulaCompiler::CompileTokenArray()
         if( !pArr->GetCodeError() && nErrorBeforePop )
             pArr->SetCodeError( nErrorBeforePop);
 
-        if( pArr->GetCodeError() && !bIgnoreErrors )
+        if (pArr->GetCodeError() && mbStopOnError)
         {
             pArr->DelRPN();
             pArr->SetHyperLink( false);

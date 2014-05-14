@@ -3199,6 +3199,12 @@ bool ScCompiler::IsErrorConstant( const OUString& rName ) const
         return false;
 }
 
+void ScCompiler::SetAutoCorrection( bool bVal )
+{
+    bAutoCorrect = bVal;
+    mbStopOnError = !bVal;
+}
+
 void ScCompiler::AutoCorrectParsedSymbol()
 {
     sal_Int32 nPos = aCorrectedSymbol.getLength();
