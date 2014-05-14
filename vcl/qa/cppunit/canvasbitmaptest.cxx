@@ -123,7 +123,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_MESSAGE( "Color space not there",
                             aLayout.ColorSpace.is());
 
-    CPPUNIT_ASSERT_MESSAGE( "Palette existance does not conform to bitmap",
+    CPPUNIT_ASSERT_MESSAGE( "Palette existence does not conform to bitmap",
                             aLayout.Palette.is() == (nDepth <= 8));
 
     uno::Sequence<sal_Int8> aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );

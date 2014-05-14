@@ -1337,7 +1337,7 @@ static const BuiltinFormat spBuiltinFormats_pl_PL[] =
     NUMFMT_ENDTABLE()
 };
 
-/** Portugese, Brazil. */
+/** Portuguese, Brazil. */
 static const BuiltinFormat spBuiltinFormats_pt_BR[] =
 {
     NUMFMT_ALLDATETIMES( "D/M/YYYY", "D", "/", "MMM", "/", "YY", "h", "hh" ),
@@ -1345,7 +1345,7 @@ static const BuiltinFormat spBuiltinFormats_pt_BR[] =
     NUMFMT_ENDTABLE()
 };
 
-/** Portugese, Portugal. */
+/** Portuguese, Portugal. */
 static const BuiltinFormat spBuiltinFormats_pt_PT[] =
 {
     NUMFMT_ALLDATETIMES( "DD-MM-YYYY", "DD", "-", "MMM", "-", "YY", "h", "h" ),
@@ -1743,8 +1743,8 @@ static const BuiltinFormatTable spBuiltinFormatTables[] =
     { "nso-ZA", "*",        spBuiltinFormats_en_ZA  },  // Northern Sotho, South Africa
     { "pa-IN",  "*",        spBuiltinFormats_pa_IN  },  // Punjabi, India
     { "pl-PL",  "*",        spBuiltinFormats_pl_PL  },  // Polish, Poland
-    { "pt-BR",  "*",        spBuiltinFormats_pt_BR  },  // Portugese, Brazil
-    { "pt-PT",  "*",        spBuiltinFormats_pt_PT  },  // Portugese, Portugal
+    { "pt-BR",  "*",        spBuiltinFormats_pt_BR  },  // Portuguese, Brazil
+    { "pt-PT",  "*",        spBuiltinFormats_pt_PT  },  // Portuguese, Portugal
     { "qu-BO",  "*",        spBuiltinFormats_es_BO  },  // Quechua, Bolivia
     { "qu-EC",  "*",        spBuiltinFormats_es_EC  },  // Quechua, Ecuador
     { "qu-PE",  "*",        spBuiltinFormats_es_PE  },  // Quechua, Peru

@@ -753,7 +753,7 @@ inline void SfxMultiFixRecordWriter::NewContent()
 }
 
 /**
- * Creates a SfxMultiMixRecord in the given stream with a seperate tags and
+ * Creates a SfxMultiMixRecord in the given stream with a separate tags and
  * versions of its content parts. The sizes of each part are calculated
  * automatically.
  *

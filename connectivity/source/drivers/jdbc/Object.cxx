@@ -233,7 +233,7 @@ bool java_lang_Object::callBooleanMethod( const char* _pMethodName, jmethodID& _
     jboolean out( sal_False );
 
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callBooleanMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callBooleanMethod: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"()Z", _inout_MethodID);
     // call method
     out = t.pEnv->CallBooleanMethod( object, _inout_MethodID );
@@ -246,7 +246,7 @@ bool java_lang_Object::callBooleanMethodWithIntArg( const char* _pMethodName, jm
 {
     jboolean out( sal_False );
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callBooleanMethodWithIntArg: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callBooleanMethodWithIntArg: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(I)Z", _inout_MethodID);
     // call method
     out = t.pEnv->CallBooleanMethod( object, _inout_MethodID, _nArgument );
@@ -265,7 +265,7 @@ jobject java_lang_Object::callResultSetMethod( JNIEnv& _rEnv,const char* _pMetho
 sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID,bool _bIgnoreException ) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"()I", _inout_MethodID);
 
     // call method
@@ -281,7 +281,7 @@ sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& 
 sal_Int32 java_lang_Object::callIntMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID,sal_Int32 _nArgument ) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(I)I", _inout_MethodID);
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID , _nArgument) );
@@ -293,7 +293,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg( const char* _pMethodName, j
 void java_lang_Object::callVoidMethod( const char* _pMethodName, jmethodID& _inout_MethodID) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"()V", _inout_MethodID);
 
     // call method
@@ -304,7 +304,7 @@ void java_lang_Object::callVoidMethod( const char* _pMethodName, jmethodID& _ino
 void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument,bool _bIgnoreException ) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(I)V", _inout_MethodID);
 
     // call method
@@ -318,7 +318,7 @@ void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmeth
 void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument,bool _bIgnoreException ) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(Z)V", _inout_MethodID);
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,int(_nArgument) );
@@ -331,7 +331,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
 OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java environment anymore!" );
 
     // call method
     jstring out = (jstring)callObjectMethod(t.pEnv,_pMethodName,"()Ljava/lang/String;", _inout_MethodID);
@@ -361,7 +361,7 @@ jobject java_lang_Object::callObjectMethodWithIntArg( JNIEnv * _pEnv,const char*
 OUString java_lang_Object::callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java environment anymore!" );
     jstring out = (jstring)callObjectMethodWithIntArg(t.pEnv,_pMethodName,"(I)Ljava/lang/String;",_inout_MethodID,_nArgument);
     return JavaString2String( t.pEnv, out );
 }
@@ -369,7 +369,7 @@ OUString java_lang_Object::callStringMethodWithIntArg( const char* _pMethodName,
 void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(Ljava/lang/String;)V", _inout_MethodID);
 
     jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,_nArgument));
@@ -381,7 +381,7 @@ void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jm
 sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const
 {
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethodWithStringArg: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethodWithStringArg: no Java environment anymore!" );
     obtainMethodId(t.pEnv, _pMethodName,"(Ljava/lang/String;)I", _inout_MethodID);
 
     //TODO: Check if the code below is needed

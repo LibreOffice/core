@@ -820,7 +820,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     OSL_ENSURE(bOk, "WW8: Bad Field!\n");
     if (aF.nId == 33) aF.bCodeNest=false; // do not recurse into nested page fields
     bool bCodeNest = aF.bCodeNest;
-    if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and loose the inner data
+    if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and lose the inner data
 
     maFieldStack.push_back(WW8FieldEntry(*pPaM->GetPoint(), aF.nId));
 

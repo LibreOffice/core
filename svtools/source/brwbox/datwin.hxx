@@ -126,7 +126,7 @@ public:
     bool            bResizeOnPaint;   // outstanding resize-event
     bool            bUpdateOnUnlock;  // Update() while locked
     bool            bInUpdateScrollbars;  // prevents recursions
-    bool            bHadRecursion;        // a recursion occured
+    bool            bHadRecursion;        // a recursion occurred
     bool            bOwnDataChangedHdl;   // dont change colors in DataChanged
     bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop curently
     sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!

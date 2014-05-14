@@ -128,7 +128,7 @@ published service DatabaseListBox
                 <dd>The first element of the string sequence in ListBox::ListSource
                 contains the SQL statement which the list result set should be based on.<br/>
                 The statement is not analyzed by the parser. This means that you can use database specific
-                SQL features here, but, on the other hand, loose features like parameter value substitution.</dd>
+                SQL features here, but, on the other hand, lose features like parameter value substitution.</dd>
 
                 <dt>com::sun::star::form::ListSourceType::TABLEFIELDS</dt>
                 <dd>The first element of the string sequence in ListBox::ListSource

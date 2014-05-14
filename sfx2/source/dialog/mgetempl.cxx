@@ -335,7 +335,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
 /*  [Description]
 
-    StarView Handler; loose-focus-handler of the edits of the template name.
+    StarView Handler; lose-focus-handler of the edits of the template name.
     This will update the listbox with the subsequent templates. The current
     template itself is not returned in the listbox of the base templates.
 */

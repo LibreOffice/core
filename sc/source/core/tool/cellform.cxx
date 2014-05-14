@@ -91,7 +91,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                 // access to Formular Cells, becomes a CellText, even if
                 // that triggers further interpretation, except if those
                 // cells are already being interpreted.
-                // IdleCalc generally doesn't trigger futher interpretation,
+                // IdleCalc generally doesn't trigger further interpretation,
                 // as not to get Err522 (circular).
                 if ( pFCell->GetDocument()->IsInInterpreter() &&
                         (!pFCell->GetDocument()->GetMacroInterpretLevel()
@@ -192,7 +192,7 @@ OUString ScCellFormat::GetString(
                 // access to Formular Cells, becomes a CellText, even if
                 // that triggers further interpretation, except if those
                 // cells are already being interpreted.
-                // IdleCalc generally doesn't trigger futher interpretation,
+                // IdleCalc generally doesn't trigger further interpretation,
                 // as not to get Err522 (circular).
                 if (pFCell->GetDocument()->IsInInterpreter() &&
                     (!pFCell->GetDocument()->GetMacroInterpretLevel()

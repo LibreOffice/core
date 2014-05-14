@@ -305,7 +305,7 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
     // This goes wrong in the BrowseView, because the entire document may
     // not be visible. Since the content in frames is fitting exactly,
     // align is not possible (better idea?!?!)
-    // (fix: Bild.de, 200%) It does not work completly without alignment
+    // (fix: Bild.de, 200%) It does not work completely without alignment
     // Let's see how far we get with half BrushSize.
     Point aPt( rPt );
     aPt = GetEditWin().LogicToPixel( aPt );

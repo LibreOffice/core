@@ -325,7 +325,7 @@ namespace basprov
 
         sal_Int32 nIndex = 0;
         // In some strange circumstances the Library name can have an
-        // apparantly illegal '.' in it ( in imported VBA )
+        // apparently illegal '.' in it ( in imported VBA )
 
         BasicManager* pBasicMgr =  NULL;
         if ( aLocation == "document" )

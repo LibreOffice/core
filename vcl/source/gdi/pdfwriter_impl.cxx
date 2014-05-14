@@ -5987,7 +5987,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (!cert)
     {
-        SAL_WARN("vcl.gdi", "PDF Signing: Error occured, certificate cannot be reconstructed.");
+        SAL_WARN("vcl.gdi", "PDF Signing: Error occurred, certificate cannot be reconstructed.");
         return false;
     }
 

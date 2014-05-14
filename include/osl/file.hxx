@@ -1587,7 +1587,7 @@ public:
 
     @return
     true: if the items point to an identical resource<br>
-    false: if the items point to a different resource, or a fatal error occured<br>
+    false: if the items point to a different resource, or a fatal error occurred<br>
 
     @see osl_getDirectoryItem()
 

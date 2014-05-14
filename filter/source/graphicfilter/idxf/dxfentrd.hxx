@@ -27,10 +27,6 @@
 
 typedef std::deque< Point > DXFPointArray;
 
-
-//----------------------------- entity kind ------------------------------------
-
-
 enum DXFEntityType {
     DXF_LINE,
     DXF_POINT,
@@ -52,9 +48,7 @@ enum DXFEntityType {
     DXF_HATCH
 };
 
-
-//------------------------ base class of an entity -----------------------------
-
+// base class of an entity
 
 class DXFBasicEntity {
 
@@ -98,10 +92,7 @@ protected:
 };
 
 
-//------------------- the different kinds of entities --------------------------
-
-
-//--------------------------Line------------------------------------------------
+// the different kinds of entities
 
 class DXFLineEntity : public DXFBasicEntity {
 
@@ -117,8 +108,6 @@ protected:
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
-//--------------------------Point-----------------------------------------------
-
 class DXFPointEntity : public DXFBasicEntity {
 
 public:
@@ -131,8 +120,6 @@ protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
-
-//--------------------------Circle----------------------------------------------
 
 class DXFCircleEntity : public DXFBasicEntity {
 
@@ -147,8 +134,6 @@ protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
-
-//--------------------------Arc-------------------------------------------------
 
 class DXFArcEntity : public DXFBasicEntity {
 
@@ -166,8 +151,6 @@ protected:
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
-//--------------------------Trace-----------------------------------------------
-
 class DXFTraceEntity : public DXFBasicEntity {
 
 public:
@@ -184,8 +167,6 @@ protected:
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
-//--------------------------Solid-----------------------------------------------
-
 class DXFSolidEntity : public DXFBasicEntity {
 
 public:
@@ -201,8 +182,6 @@ protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
-
-//--------------------------Text------------------------------------------------
 
 class DXFTextEntity : public DXFBasicEntity {
 
@@ -227,8 +206,6 @@ protected:
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
-//--------------------------Shape-----------------------------------------------
-
 class DXFShapeEntity : public DXFBasicEntity {
 
 public:
@@ -246,8 +223,6 @@ protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
-
-//--------------------------Insert----------------------------------------------
 
 class DXFInsertEntity : public DXFBasicEntity {
 
@@ -271,8 +246,6 @@ protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
-
-//--------------------------AttDef----------------------------------------------
 
 class DXFAttDefEntity : public DXFBasicEntity {
 
@@ -301,8 +274,6 @@ protected:
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
-//--------------------------Attrib----------------------------------------------
-
 class DXFAttribEntity : public DXFBasicEntity {
 
 public:
@@ -328,8 +299,6 @@ protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
-
-//--------------------------PolyLine--------------------------------------------
 
 class DXFPolyLineEntity : public DXFBasicEntity {
 
@@ -374,8 +343,6 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
         virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 
 };
-
-//-------------------------- Hatch ---------------------------------------------
 
 struct DXFEdgeType
 {
@@ -487,9 +454,6 @@ class DXFHatchEntity : public DXFBasicEntity
         virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 
-
-//--------------------------Vertex----------------------------------------------
-
 class DXFVertexEntity : public DXFBasicEntity {
 
 public:
@@ -508,16 +472,12 @@ protected:
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
-//--------------------------SeqEnd----------------------------------------------
-
 class DXFSeqEndEntity : public DXFBasicEntity {
 
 public:
 
     DXFSeqEndEntity();
 };
-
-//--------------------------3DFace----------------------------------------------
 
 class DXF3DFaceEntity : public DXFBasicEntity {
 
@@ -536,8 +496,6 @@ protected:
     virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
-//--------------------------Dimension-------------------------------------------
-
 class DXFDimensionEntity : public DXFBasicEntity {
 
 public:
@@ -552,9 +510,7 @@ protected:
 };
 
 
-//----------------- read and represent the set of entities ---------------------
-
-
+// read and represent the set of entities
 class DXFEntities {
 
 public:
@@ -565,17 +521,13 @@ public:
     DXFBasicEntity * pFirst; // list of entities, READ ONLY!
 
     void Read(DXFGroupReader & rDGR);
-        // read entities per rGDR of a DXF file untill a
+        // read entities per rGDR of a DXF file until a
         // ENDBLK, ENDSEC oder EOF (of group 0).
         // (all unknown thing will be skipped)
 
     void Clear();
         // deletes all entities
 };
-
-
-//--------------------------------- inlines ------------------------------------
-
 
 inline DXFEntities::DXFEntities()
 {

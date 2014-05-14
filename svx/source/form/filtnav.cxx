@@ -532,9 +532,6 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     m_pModel->Insert( insertPos, pFilterItems );
 }
 
-
-// class FmFilterModel
-
 TYPEINIT1(FmFilterModel, FmParentData);
 
 FmFilterModel::FmFilterModel()
@@ -558,7 +555,7 @@ void FmFilterModel::Clear()
     FilterClearingHint aClearedHint;
     Broadcast( aClearedHint );
 
-    // loose endings
+    // lose endings
     if (m_pAdapter)
     {
         m_pAdapter->dispose();

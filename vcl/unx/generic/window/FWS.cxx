@@ -52,15 +52,8 @@ static Bool fwsHandlesFocus;
 
 static Window fwsCommWindow;
 
-/*************************************<->***********************************
- *
- * WMSupportsFWS() -
- *
- * Initialize our atoms and determine if the current window manager is
- * providing FWS extension support.
- *
- *************************************<->***********************************/
-
+// Initialize our atoms and determine if the current window manager is
+// providing FWS extension support.
 Bool
 WMSupportsFWS (Display *display, int screen)
 {
@@ -174,16 +167,9 @@ WMSupportsFWS (Display *display, int screen)
     return True;
 }
 
-/*************************************<->***********************************
- *
- * newHandler() -
- *
- * Handle X errors (temporarily) to record the occurrence of BadWindow
- * errors without crashing.  Used to detect the FWS_COMM_WINDOW root window
- * property containing an old or obsolete window id.
- *
- *************************************<->***********************************/
-
+// Handle X errors (temporarily) to record the occurrence of BadWindow
+// errors without crashing.  Used to detect the FWS_COMM_WINDOW root window
+// property containing an old or obsolete window id.
 extern "C" {
 
 static Bool badWindowFound;
@@ -202,17 +188,10 @@ newHandler (Display *display, XErrorEvent *xerror)
 
 }
 
-/*************************************<->***********************************
- *
- * RegisterFwsWindow() -
- *
- * Send a client message to the FWS_COMM_WINDOW indicating the existance
- * of a new FWS client window.  Be careful to avoid BadWindow errors on
- * the XSendEvent in case the FWS_COMM_WINDOW root window property had
- * old/obsolete junk in it.
- *
- *************************************<->***********************************/
-
+// Send a client message to the FWS_COMM_WINDOW indicating the existence
+// of a new FWS client window.  Be careful to avoid BadWindow errors on
+// the XSendEvent in case the FWS_COMM_WINDOW root window property had
+// old/obsolete junk in it.
 Bool
 RegisterFwsWindow (Display *display, Window window)
 {
@@ -241,14 +220,7 @@ RegisterFwsWindow (Display *display, Window window)
     return !badWindowFound;
 }
 
-/*************************************<->***********************************
- *
- * AddFwsProtocols -
- *
- * Add the FWS protocol atoms to the WMProtocols property for the window.
- *
- *************************************<->***********************************/
-
+// Add the FWS protocol atoms to the WMProtocols property for the window.
 void
 AddFwsProtocols (Display *display, Window window)
 {

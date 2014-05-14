@@ -4460,7 +4460,7 @@ void Test::testCopyPasteFormulas()
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     bool bMoveDone = rDocFunc.MoveBlock(ScRange(0,0,0,0,4,0), ScAddress( 10, 10, 0), false, false, false, true);
 
-    // check that moving was succesful, mainly for editable tester
+    // check that moving was successful, mainly for editable tester
     CPPUNIT_ASSERT(bMoveDone);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,10,0), 1.0);
     ASSERT_DOUBLES_EQUAL(m_pDoc->GetValue(10,11,0), 1.0);

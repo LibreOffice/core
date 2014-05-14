@@ -1113,7 +1113,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
         // since the diclist may get changed meanwhile (e.g. through the API).
         // We want the dialog to operate on the same set of dictionaries it
         // was started with.
-        // Also we have to take care to not loose the last reference when
+        // Also we have to take care to not lose the last reference when
         // someone else removes a dictionary from the list.
         // removed dics will be replaced by NULL new entries be added to the end
         // Thus we may use indices as consistent references.

@@ -39,7 +39,7 @@
 #include "xltools.hxx"
 
 
-// GUID import/export =========================================================
+// GUID import/export
 
 XclGuid::XclGuid()
 {
@@ -89,10 +89,9 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid )
     return rStrm;
 }
 
-// Excel Tools ================================================================
+// Excel Tools
 
-// GUID's ---------------------------------------------------------------------
-
+// GUID's
 const XclGuid XclTools::maGuidStdLink(
     0x79EAC9D0, 0xBAF9, 0x11CE, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B );
 
@@ -102,7 +101,7 @@ const XclGuid XclTools::maGuidUrlMoniker(
 const XclGuid XclTools::maGuidFileMoniker(
     0x00000303, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
 
-// numeric conversion ---------------------------------------------------------
+// numeric conversion
 
 double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
 {
@@ -335,7 +334,7 @@ double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
     return 40960.0 / ::std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
 }
 
-// formatting -----------------------------------------------------------------
+// formatting
 
 Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt16 nXclPattern )
 {
@@ -351,7 +350,7 @@ Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColo
         ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
-// text encoding --------------------------------------------------------------
+// text encoding
 
 namespace {
 
@@ -371,7 +370,7 @@ pCodePageTable[] =
     {     855,  RTL_TEXTENCODING_IBM_855        },  // OEM Cyrillic
     {     857,  RTL_TEXTENCODING_IBM_857        },  // OEM Turkish
 //  {     858,  RTL_TEXTENCODING_IBM_858        },  // OEM Multilingual Latin I with Euro
-    {     860,  RTL_TEXTENCODING_IBM_860        },  // OEM Portugese
+    {     860,  RTL_TEXTENCODING_IBM_860        },  // OEM Portuguese
     {     861,  RTL_TEXTENCODING_IBM_861        },  // OEM Icelandic
     {     862,  RTL_TEXTENCODING_IBM_862        },  // OEM Hebrew
     {     863,  RTL_TEXTENCODING_IBM_863        },  // OEM Canadian (French)
@@ -442,8 +441,6 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
     return pEntry->mnCodePage;
 }
 
-// font names -----------------------------------------------------------------
-
 OUString XclTools::GetXclFontName( const OUString& rFontName )
 {
     // substitute with MS fonts
@@ -451,8 +448,7 @@ OUString XclTools::GetXclFontName( const OUString& rFontName )
     return aNewName.isEmpty() ? rFontName : aNewName;
 }
 
-// built-in defined names -----------------------------------------------------
-
+// built-in defined names
 const OUString XclTools::maDefNamePrefix( "Excel_BuiltIn_" );
 
 const OUString XclTools::maDefNamePrefixXml ( "_xlnm." );
@@ -522,7 +518,7 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
     return EXC_BUILTIN_UNKNOWN;
 }
 
-// built-in style names -------------------------------------------------------
+// built-in style names
 
 const OUString XclTools::maStyleNamePrefix1( "Excel_BuiltIn_" );
 const OUString XclTools::maStyleNamePrefix2( "Excel Built-in " );
@@ -645,7 +641,7 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
     return false;
 }
 
-// conditional formatting style names -----------------------------------------
+// conditional formatting style names
 
 const OUString XclTools::maCFStyleNamePrefix1( "Excel_CondFormat_" );
 const OUString XclTools::maCFStyleNamePrefix2( "ConditionalStyle_" );
@@ -672,7 +668,7 @@ bool XclTools::IsCondFormatStyleName( const OUString& rStyleName )
     return false;
 }
 
-// stream handling ------------------------------------------------------------
+// stream handling
 
 void XclTools::SkipSubStream( XclImpStream& rStrm )
 {
@@ -686,7 +682,7 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
     }
 }
 
-// Basic macro names ----------------------------------------------------------
+// Basic macro names
 
 const OUString XclTools::maSbMacroPrefix( "vnd.sun.star.script:" );
 const OUString XclTools::maSbMacroSuffix( "?language=Basic&location=document" );
@@ -713,7 +709,7 @@ OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
     return OUString();
 }
 
-// read/write colors ----------------------------------------------------------
+// read/write colors
 
 XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor )
 {

@@ -253,7 +253,7 @@ static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
 #endif
 }
 
-/* Generates a bitmask for the existance of sal_Unicode values in dictionary;
+/* Generates a bitmask for the existence of sal_Unicode values in dictionary;
    it packs 8 sal_Bool values in 1 sal_uInt8 */
 static inline void printExistsMask(FILE *source_fp)
 {

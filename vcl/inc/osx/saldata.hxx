@@ -70,7 +70,7 @@ public:
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
     std::list<AquaSalFrame*>                      maFrames;         // list of all frames
-    boost::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
+    boost::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existence
     std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
