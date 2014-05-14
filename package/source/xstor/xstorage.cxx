@@ -1954,8 +1954,6 @@ OStorage::~OStorage()
 
 void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::InternalDispose" );
-
     if ( !m_pImpl )
     {
         SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
@@ -2343,8 +2341,6 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyToStorage" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2410,8 +2406,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openStreamElement" );
-
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2512,8 +2506,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openEncryptedStreamElement" );
-
     return openEncryptedStream( aStreamName, nOpenMode, ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 }
 
@@ -2525,8 +2517,6 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openStorageElement" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2678,8 +2668,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUStr
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::cloneStreamElement" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2761,8 +2749,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::cloneEncryptedStreamElement" );
-
     return cloneEncryptedStream( aStreamName, ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 }
 
@@ -2774,8 +2760,6 @@ void SAL_CALL OStorage::copyLastCommitTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyLastCommitTo" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -2840,8 +2824,6 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyStorageElementLastCommitTo" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3070,8 +3052,6 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::removeElement" );
-
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3162,8 +3142,6 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::renameElement" );
-
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3266,8 +3244,6 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyElementTo" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3367,8 +3343,6 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::moveElementTo" );
-
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3479,8 +3453,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openEncryptedStream" );
-
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3588,8 +3560,6 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::cloneEncryptedStream" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3676,8 +3646,6 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getPlainRawStreamElement" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3783,8 +3751,6 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getRawEncrStreamElement" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3900,8 +3866,6 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::insertRawEncrStreamElement" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -3990,8 +3954,6 @@ void SAL_CALL OStorage::commit()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::commit" );
-
     uno::Reference< util::XModifiable > xParentModif;
 
     try {
@@ -4055,8 +4017,6 @@ void SAL_CALL OStorage::revert()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::revert" );
-
     // the method removes all the changes done after last commit
 
     BroadcastTransaction( STOR_MESS_PREREVERT );
@@ -4239,8 +4199,6 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
                 lang::WrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getByName" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4303,8 +4261,6 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
 uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
         throw ( uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getElementNames" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4339,8 +4295,6 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
 sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
         throw ( uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::hasByName" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4399,8 +4353,6 @@ uno::Type SAL_CALL OStorage::getElementType()
 sal_Bool SAL_CALL OStorage::hasElements()
         throw ( uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::hasElements" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4505,7 +4457,6 @@ void SAL_CALL OStorage::setEncryptionPassword( const OUString& aPass )
     throw ( uno::RuntimeException,
             io::IOException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setEncryptionPassword" );
     setEncryptionData( ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 }
 
@@ -4513,8 +4464,6 @@ void SAL_CALL OStorage::removeEncryption()
     throw ( uno::RuntimeException,
             io::IOException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::removeEncryption" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4587,8 +4536,6 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
     throw ( io::IOException,
             uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setEncryptionData" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4659,8 +4606,6 @@ sal_Bool SAL_CALL OStorage::hasEncryptionData()
 void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::NamedValue >& aAlgorithms )
     throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setEncryptionAlgorithms" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4724,8 +4669,6 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
 uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
     throw (uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getEncryptionAlgorithms" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4809,8 +4752,6 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
                 lang::WrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setPropertyValue" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -4916,8 +4857,6 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
                 lang::WrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getPropertyValue" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -5488,8 +5427,6 @@ void SAL_CALL OStorage::insertStreamElementDirect(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::insertStreamElementDirect" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -5579,8 +5516,6 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyElementDirectlyTo" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -5677,8 +5612,6 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::writeAndAttachToStream" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -5748,8 +5681,6 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception )
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::attachToURL" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
@@ -5832,8 +5763,6 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getElementPropertyValue" );
-
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
