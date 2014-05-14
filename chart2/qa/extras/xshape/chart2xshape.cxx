@@ -41,7 +41,7 @@ private:
 
 namespace {
 
-bool checkDumpAgainstFile( const OUString& rDump, const OUString aFilePath)
+bool checkDumpAgainstFile( const OUString& rDump, const OUString& aFilePath)
 {
     OString aOFile = OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
 
