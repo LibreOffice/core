@@ -157,7 +157,6 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/rtfutil.hxx>
-#include <filter/msfilter/sprmids.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <fstream>
 #include <functional>
