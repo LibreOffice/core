@@ -92,7 +92,7 @@ class FWE_DLLPUBLIC InteractionRequest
 public:
     static com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >
         CreateRequest( const ::com::sun::star::uno::Any& aRequest,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations );
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& lContinuations );
 };
 
 

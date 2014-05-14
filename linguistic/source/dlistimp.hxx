@@ -83,9 +83,7 @@ class DicList :
                             return aDicList;
                         }
 
-    void            LaunchEvent(sal_Int16 nEvent, com::sun::star::uno::Sequence<
-                            ::com::sun::star::linguistic2::XDictionary > xDic);
-    void            SearchForDictionaries( DictionaryVec_t &rDicList,
+    void                SearchForDictionaries( DictionaryVec_t &rDicList,
                                             const OUString &rDicDir, bool bIsWritePath );
     sal_Int32           GetDicPos(const com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary > &xDic);

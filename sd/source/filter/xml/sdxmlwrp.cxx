@@ -183,7 +183,7 @@ sal_Int32 ReadThroughComponent(
     const OUString& rStreamName,
     Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
-    Sequence<Any> rFilterArguments,
+    const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     bool bMustBeSuccessfull,
     bool bEncrypted )
@@ -325,7 +325,7 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pCompatibilityStreamName,
     Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
-    Sequence<Any> rFilterArguments,
+    const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     bool bMustBeSuccessfull )
 {

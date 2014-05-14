@@ -128,7 +128,7 @@ public:
           mergeTopMarks( true ), mergeTopMarks(), /r, /p
         and you are done.
      */
-    void mark( Int32Sequence aOrder = Int32Sequence() );
+    void mark( const Int32Sequence& aOrder = Int32Sequence() );
 
     /** Merge 2 topmost marks.
 
@@ -183,7 +183,7 @@ private:
         Int32Sequence maOrder;
 
     public:
-        ForSort( Int32Sequence aOrder ) :
+        ForSort( const Int32Sequence& aOrder ) :
             ForMerge(),
             maData(),
             mnCurrentElement( 0 ),

@@ -115,7 +115,7 @@ static inline bool lcl_checkScriptType( sal_Int16 nScriptType, LanguageType nLan
 void SwSpellPopup::fillLangPopupMenu(
     PopupMenu *pPopupMenu,
     sal_uInt16 nLangItemIdStart,
-    uno::Sequence< OUString > aSeq,
+    const uno::Sequence< OUString >& aSeq,
     SwWrtShell* pWrtSh,
     std::map< sal_Int16, OUString > &rLangTable )
 {

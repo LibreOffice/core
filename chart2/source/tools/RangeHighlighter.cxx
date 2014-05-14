@@ -42,7 +42,7 @@ namespace
 
 void lcl_fillRanges(
     Sequence< chart2::data::HighlightedRange > & rOutRanges,
-    Sequence< OUString > aRangeStrings,
+    const Sequence< OUString >& aRangeStrings,
     sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR,
     sal_Int32 nIndex = -1 )
 {

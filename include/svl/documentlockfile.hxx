@@ -39,7 +39,7 @@ class SVL_DLLPUBLIC DocumentLockFile : public LockFileCommon
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > OpenStream();
 
-    void WriteEntryToStream( ::com::sun::star::uno::Sequence< OUString > aEntry, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
+    void WriteEntryToStream( const ::com::sun::star::uno::Sequence< OUString >& aEntry, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
 
 public:
     DocumentLockFile( const OUString& aOrigURL );

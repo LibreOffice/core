@@ -272,7 +272,7 @@ namespace sax_fastparser {
         }
     }
 
-    void FastSaxSerializer::mark( Int32Sequence aOrder )
+    void FastSaxSerializer::mark( const Int32Sequence& aOrder )
     {
         if ( aOrder.hasElements() )
         {

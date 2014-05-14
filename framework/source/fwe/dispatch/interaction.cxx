@@ -194,7 +194,7 @@ class InteractionRequest_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star
 
 public:
     InteractionRequest_Impl( const ::com::sun::star::uno::Any& aRequest,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations )
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& lContinuations )
     {
         m_aRequest = aRequest;
         m_lContinuations = lContinuations;
@@ -217,7 +217,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL Inter
 }
 
 uno::Reference < task::XInteractionRequest > InteractionRequest::CreateRequest(
-    const uno::Any& aRequest, const uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations )
+    const uno::Any& aRequest, const uno::Sequence< uno::Reference< task::XInteractionContinuation > >& lContinuations )
 {
     return new InteractionRequest_Impl( aRequest, lContinuations );
 }

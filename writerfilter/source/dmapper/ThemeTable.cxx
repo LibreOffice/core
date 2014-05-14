@@ -251,7 +251,7 @@ const OUString ThemeTable::getFontNameForTheme(const Id id) const
     }
 }
 
-void ThemeTable::setThemeFontLangProperties(uno::Sequence<beans::PropertyValue> aPropSeq)
+void ThemeTable::setThemeFontLangProperties(const uno::Sequence<beans::PropertyValue>& aPropSeq)
 {
     for (sal_Int32 i = 0 ; i < aPropSeq.getLength() ; i ++)
     {

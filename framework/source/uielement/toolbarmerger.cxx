@@ -108,7 +108,7 @@ bool ToolBarMerger::IsCorrectContext(
 
 */
 bool ToolBarMerger::ConvertSeqSeqToVector(
-    const uno::Sequence< uno::Sequence< beans::PropertyValue > > rSequence,
+    const uno::Sequence< uno::Sequence< beans::PropertyValue > >& rSequence,
     AddonToolbarItemContainer& rContainer )
 {
     sal_Int32 nLen( rSequence.getLength() );
@@ -180,7 +180,7 @@ bool ToolBarMerger::ConvertSeqSeqToVector(
 
 */
 void ToolBarMerger::ConvertSequenceToValues(
-    const uno::Sequence< beans::PropertyValue > rSequence,
+    const uno::Sequence< beans::PropertyValue >& rSequence,
     OUString& rCommandURL,
     OUString& rLabel,
     OUString& rImageIdentifier,

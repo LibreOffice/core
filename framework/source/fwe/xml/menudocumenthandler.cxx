@@ -107,7 +107,7 @@ MenuStyleItem MenuItemStyles[ ] = {
 
 sal_Int32 nMenuStyleItemEntries = (sizeof (MenuItemStyles) / sizeof (MenuItemStyles[0]));
 
-static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
+static void ExtractMenuParameters( const Sequence< PropertyValue >& rProp,
                                    OUString&                       rCommandURL,
                                    OUString&                       rLabel,
                                    OUString&                       rHelpURL,

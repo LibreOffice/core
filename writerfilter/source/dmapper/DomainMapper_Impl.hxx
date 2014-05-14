@@ -279,7 +279,7 @@ struct FloatingTableInfo
     uno::Sequence<beans::PropertyValue> m_aFrameProperties;
     sal_Int32 m_nTableWidth;
 
-    FloatingTableInfo(uno::Reference<text::XTextRange> xStart, uno::Reference<text::XTextRange> xEnd, uno::Sequence<beans::PropertyValue> aFrameProperties, sal_Int32 nTableWidth)
+    FloatingTableInfo(uno::Reference<text::XTextRange> xStart, uno::Reference<text::XTextRange> xEnd, const uno::Sequence<beans::PropertyValue>& aFrameProperties, sal_Int32 nTableWidth)
         : m_xStart(xStart),
         m_xEnd(xEnd),
         m_aFrameProperties(aFrameProperties),
@@ -483,7 +483,7 @@ public:
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
-                                const uno::Sequence< beans::PropertyValue >  );
+                            const uno::Sequence< beans::PropertyValue >& );
     void appendOLE( const OUString& rStreamName, OLEHandlerPtr pOleHandler );
     void appendStarMath( const Value& v );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
@@ -690,7 +690,7 @@ public:
     void RegisterFrameConversion(
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameStartRange,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameEndRange,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFrameProperties
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aFrameProperties
         );
     bool ExecuteFrameConversion();
 
@@ -703,7 +703,7 @@ public:
     void SetCurrentRedlineDate( const OUString& sDate );
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
-    void SetCurrentRedlineRevertProperties( uno::Sequence<beans::PropertyValue> aProperties );
+    void SetCurrentRedlineRevertProperties( const uno::Sequence<beans::PropertyValue>& aProperties );
     void RemoveCurrentRedline( );
     void ResetParaMarkerRedline( );
     void SetCurrentRedlineInitials( const OUString& sInitials );

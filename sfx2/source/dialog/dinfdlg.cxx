@@ -492,7 +492,7 @@ uno::Sequence< document::CmisProperty > SfxDocumentInfoItem::GetCmisProperties()
     return m_aCmisProperties;
 }
 
-void SfxDocumentInfoItem::SetCmisProperties( Sequence< document::CmisProperty > cmisProps)
+void SfxDocumentInfoItem::SetCmisProperties( const Sequence< document::CmisProperty >& cmisProps)
 {
     m_aCmisProperties = cmisProps;
 }

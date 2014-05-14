@@ -151,7 +151,7 @@ FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
     return mpSerializer->getOutputStream();
 }
 
-void FastSerializerHelper::mark( Sequence< sal_Int32 > aOrder )
+void FastSerializerHelper::mark( const Sequence< sal_Int32 >& aOrder )
 {
     mpSerializer->mark( aOrder );
 }

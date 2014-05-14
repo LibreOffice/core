@@ -104,7 +104,7 @@ protected:
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OUString WriteImage( const OUString& rURL, bool bRelPathToMedia = false);
-    void WriteStyleProperties( sal_Int32 nTokenId, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties );
+    void WriteStyleProperties( sal_Int32 nTokenId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
 
     const char* GetComponentDir();
     const char* GetRelationCompPrefix();
@@ -130,11 +130,11 @@ public:
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
     void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteSolidFill( const OUString& sSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
+    void WriteSolidFill( const OUString& sSchemeName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aTransformations );
     void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );
-    void WriteGrabBagGradientFill( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aGradientStops, ::com::sun::star::awt::Gradient rGradient);
+    void WriteGrabBagGradientFill( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aGradientStops, ::com::sun::star::awt::Gradient rGradient);
 
     void WriteBlipOrNormalFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
             const OUString& rURLPropName );

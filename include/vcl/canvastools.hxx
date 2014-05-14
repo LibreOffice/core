@@ -127,7 +127,7 @@ namespace vcl
             @param xColorSpace
             Color space to convert from
          */
-        Color VCL_DLLPUBLIC doubleSequenceToColor( const ::com::sun::star::uno::Sequence< double >   rColor,
+        Color VCL_DLLPUBLIC doubleSequenceToColor( const ::com::sun::star::uno::Sequence< double >& rColor,
                                                    const ::com::sun::star::uno::Reference<
                                                          ::com::sun::star::rendering::XColorSpace >& xColorSpace );
 

@@ -66,7 +66,7 @@ void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
 }
 #endif
 
-sal_Int32 lcl_findProperty( uno::Sequence< beans::PropertyValue > aProps, const OUString& sName )
+sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
 {
     sal_Int32 i = 0;
     sal_Int32 nLen = aProps.getLength( );

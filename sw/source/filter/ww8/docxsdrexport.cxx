@@ -791,7 +791,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
 }
 
 void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
-                                     uno::Sequence< uno::Sequence< uno::Any > > xRelSeq,
+                                     const uno::Sequence< uno::Sequence< uno::Any > >& xRelSeq,
                                      uno::Reference< io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName,
                                      int nAnchorId)
 {

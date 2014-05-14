@@ -82,11 +82,11 @@ public:
 
     void handleTranslationbar( void );
 
-    void handleAddLocales( ::com::sun::star::uno::Sequence
-        < ::com::sun::star::lang::Locale > aLocaleSeq );
+    void handleAddLocales( const ::com::sun::star::uno::Sequence
+        < ::com::sun::star::lang::Locale >& aLocaleSeq );
 
-    void handleRemoveLocales( ::com::sun::star::uno::Sequence
-        < ::com::sun::star::lang::Locale > aLocaleSeq );
+    void handleRemoveLocales( const ::com::sun::star::uno::Sequence
+        < ::com::sun::star::lang::Locale >& aLocaleSeq );
 
     void handleSetDefaultLocale( ::com::sun::star::lang::Locale aLocale );
 

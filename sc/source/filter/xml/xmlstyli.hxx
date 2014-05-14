@@ -115,7 +115,7 @@ public:
     SCTAB GetLastSheet() const       { return nLastSheet; }
     void SetLastSheet(SCTAB nNew)    { nLastSheet = nNew; }
 
-    void ApplyCondFormat( com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress> xCellRanges );
+    void ApplyCondFormat( const com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>& xCellRanges );
 
 private:
     using XMLPropStyleContext::SetStyle;

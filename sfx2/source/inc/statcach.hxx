@@ -56,7 +56,7 @@ public:
 
     void                    Release();
     const ::com::sun::star::frame::FeatureStateEvent& GetStatus() const;
-    void                    Dispatch( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aProps, bool bForceSynchron = false );
+    void                    Dispatch( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aProps, bool bForceSynchron = false );
 };
 
 class SfxStateCache

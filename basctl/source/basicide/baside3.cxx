@@ -867,7 +867,7 @@ extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
                              const ::com::sun::star::lang::Locale& rLocaleRight );
 
 std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
-    ( Sequence< lang::Locale > aFirstSeq, Sequence< lang::Locale > aSecondSeq )
+    ( const Sequence< lang::Locale >& aFirstSeq, const Sequence< lang::Locale >& aSecondSeq )
 {
     std::vector< lang::Locale > avRet;
 
