@@ -42,7 +42,6 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
         FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
         if(tmpCur0->GetType() == formula::svSingleVectorRef)
         {
-#ifdef ISNAN
         const formula::SingleVectorRefToken*pCurDVR= static_cast<const
             formula::SingleVectorRefToken *>(tmpCur0);
         ss<< "    int buffer_len"<<j<<" = "<<pCurDVR->GetArrayLength();
@@ -51,7 +50,6 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
         ss <<vSubArguments[j]->GenSlidingWindowDeclRef();
         ss <<"))\n";
         ss <<"        tmp = 1;\n    else\n";
-#endif
         ss <<"        tmp = ";
         ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
         ss <<"    tmp"<<j<<" = tmp"<<j<<" && tmp;\n";
@@ -99,6 +97,11 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp"<<j<<" = tmp"<<j<<" && tmp;\n";
             ss <<"    }\n";
+        }
+        else
+        {
+            ss <<"        tmp"<<j<<" = ";
+            ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
         }
         ss <<"    t = t && tmp"<<j<<";\n";
     }
