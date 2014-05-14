@@ -163,7 +163,7 @@ uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOut
 // XElementAccess
 uno::Type SAL_CALL OGroups::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference<report::XGroup>*>(NULL));
+    return cppu::UnoType<report::XGroup>::get();
 }
 
 sal_Bool SAL_CALL OGroups::hasElements(  ) throw (uno::RuntimeException, std::exception)

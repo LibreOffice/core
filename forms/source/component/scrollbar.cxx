@@ -297,7 +297,7 @@ namespace frm
 
     Sequence< Type > OScrollBarModel::getSupportedBindingTypes()
     {
-        return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );
+        return Sequence< Type >( & cppu::UnoType<double>::get(), 1 );
     }
 
 

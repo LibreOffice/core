@@ -150,7 +150,7 @@ uno::Any SAL_CALL OFunctions::getByIndex( ::sal_Int32 Index ) throw (lang::Index
 // XElementAccess
 uno::Type SAL_CALL OFunctions::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference<report::XFunction>*>(NULL));
+    return cppu::UnoType<report::XFunction>::get();
 }
 
 sal_Bool SAL_CALL OFunctions::hasElements(  ) throw (uno::RuntimeException, std::exception)

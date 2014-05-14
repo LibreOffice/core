@@ -579,7 +579,7 @@ namespace ucb { namespace ucp { namespace ext
             , CommandInfo(
                 OUString(  "open"  ),
                 -1,
-                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+                cppu::UnoType<OpenCommandArgument2>::get()
             )
         };
 

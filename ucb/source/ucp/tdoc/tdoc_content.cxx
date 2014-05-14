@@ -1072,8 +1072,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 OUString("CreatableContentsInfo"),
                 -1,
-                getCppuType( static_cast<
-                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
             uno::makeAny( rData.getCreatableContentsInfo() ) );
@@ -1083,9 +1082,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             xRow->appendObject(
                 beans::Property( OUString("Storage"),
                           -1,
-                          getCppuType(
-                            static_cast<
-                                const uno::Reference< embed::XStorage > * >( 0 ) ),
+                          cppu::UnoType<embed::XStorage>::get(),
                           beans::PropertyAttribute::BOUND
                             | beans::PropertyAttribute::READONLY ),
                 uno::makeAny( pProvider->queryStorageClone( rContentId ) ) );
@@ -1095,9 +1092,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             xRow->appendObject(
                 beans::Property( OUString("DocumentModel"),
                           -1,
-                          getCppuType(
-                            static_cast<
-                                const uno::Reference< frame::XModel > * >( 0 ) ),
+                          cppu::UnoType<frame::XModel>::get(),
                           beans::PropertyAttribute::BOUND
                             | beans::PropertyAttribute::READONLY ),
                 uno::makeAny(

@@ -40,7 +40,7 @@ namespace extensions { namespace resource
             virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XElementAccess
             virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-                { return ::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*>(0)); };
+                { return cppu::UnoType<com::sun::star::uno::XInterface>::get(); };
             virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return static_cast<bool>(m_pResMgr.get()); };
 

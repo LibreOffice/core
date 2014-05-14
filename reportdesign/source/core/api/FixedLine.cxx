@@ -458,7 +458,7 @@ void SAL_CALL OFixedLine::removeContainerListener( const uno::Reference< contain
 // XElementAccess
 uno::Type SAL_CALL OFixedLine::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
+    return cppu::UnoType<report::XFormatCondition>::get();
 }
 
 sal_Bool SAL_CALL OFixedLine::hasElements(  ) throw (uno::RuntimeException, std::exception)

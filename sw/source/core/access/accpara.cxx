@@ -1264,11 +1264,11 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno:
     aTypes.realloc( nIndex + 6 );
 
     uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleEditableText > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTextAttributes > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTextMarkup > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleMultiLineText > * >( 0 ) );
+    pTypes[nIndex++] = cppu::UnoType<XAccessibleEditableText>::get();
+    pTypes[nIndex++] = cppu::UnoType<XAccessibleTextAttributes>::get();
+    pTypes[nIndex++] = ::cppu::UnoType<XAccessibleSelection>::get();
+    pTypes[nIndex++] = cppu::UnoType<XAccessibleTextMarkup>::get();
+    pTypes[nIndex++] = cppu::UnoType<XAccessibleMultiLineText>::get();
     pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleHypertext > * >( 0 ) );
 
     return aTypes;

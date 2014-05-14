@@ -359,7 +359,7 @@ void SAL_CALL OShape::removeContainerListener( const uno::Reference< container::
 // XElementAccess
 uno::Type SAL_CALL OShape::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
+    return cppu::UnoType<report::XFormatCondition>::get();
 }
 
 sal_Bool SAL_CALL OShape::hasElements(  ) throw (uno::RuntimeException, std::exception)

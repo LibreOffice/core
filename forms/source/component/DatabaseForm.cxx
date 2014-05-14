@@ -1621,7 +1621,7 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
         {
             Any aAggregateProperty;
             getFastPropertyValue(aAggregateProperty, PROPERTY_ID_DATASOURCE);
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const OUString*>(NULL)));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, cppu::UnoType<OUString>::get());
         }
         break;
         case PROPERTY_ID_TARGET_URL:
@@ -1646,7 +1646,7 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDetailFields);
             break;
         case PROPERTY_ID_CYCLE:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aCycle, ::getCppuType(static_cast<const TabulatorCycle*>(NULL)));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aCycle, cppu::UnoType<TabulatorCycle>::get());
             break;
         case PROPERTY_ID_NAVIGATION:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_eNavigation);
@@ -1664,13 +1664,13 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aDynamicControlBorder, ::getBooleanCppuType() );
             break;
         case PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS:
-            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorFocus, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorFocus, cppu::UnoType<sal_Int32>::get() );
             break;
         case PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE:
-            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorMouse, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorMouse, cppu::UnoType<sal_Int32>::get() );
             break;
         case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
-            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorInvalid, getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aControlBorderColorInvalid, cppu::UnoType<sal_Int32>::get() );
             break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle ( nHandle ) )
@@ -4033,7 +4033,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     if (nVersion > 1)
     {
         sal_Int32 nCycle = _rxInStream->readShort();
-        m_aCycle = ::cppu::int2enum(nCycle, ::getCppuType(static_cast<const TabulatorCycle*>(NULL)));
+        m_aCycle = ::cppu::int2enum(nCycle, cppu::UnoType<TabulatorCycle>::get());
         m_eNavigation = (NavigationBarMode)_rxInStream->readShort();
 
         _rxInStream >> sAggregateProp;
@@ -4051,7 +4051,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
         if (nAnyMask & CYCLE)
         {
             sal_Int32 nCycle = _rxInStream->readShort();
-            m_aCycle = ::cppu::int2enum(nCycle, ::getCppuType(static_cast<const TabulatorCycle*>(NULL)));
+            m_aCycle = ::cppu::int2enum(nCycle, cppu::UnoType<TabulatorCycle>::get());
         }
         else
             m_aCycle.clear();

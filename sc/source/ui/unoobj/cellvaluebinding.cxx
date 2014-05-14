@@ -179,7 +179,7 @@ namespace calc
 
             // add sal_Int32 only if constructed as ListPositionCellBinding
             if ( m_bListPos )
-                aTypes[nCount-1] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+                aTypes[nCount-1] = cppu::UnoType<sal_Int32>::get();
         }
 
         return aTypes;

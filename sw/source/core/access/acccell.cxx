@@ -302,7 +302,7 @@ uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
         aR <<= uno::Reference<XAccessibleSelection>(this);
         return aR;
     }
-    if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleValue > * >( 0 ) ) )
+    if ( rType == ::cppu::UnoType<XAccessibleValue>::get() )
     {
         uno::Reference<XAccessibleValue> xValue = this;
         uno::Any aRet;
@@ -325,7 +325,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
     aTypes.realloc( nIndex + 1 );
 
     uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleValue > * >( 0 ) );
+    pTypes[nIndex] = ::cppu::UnoType<XAccessibleValue>::get();
 
     return aTypes;
 }

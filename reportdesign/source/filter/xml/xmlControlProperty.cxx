@@ -85,13 +85,13 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                     if (s_aTypeNameMap.empty())
                     {
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
-                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::cppu::UnoType<double>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::cppu::UnoType<double>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::cppu::UnoType<OUString>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::cppu::UnoType<sal_Int32>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_DATE)]      = ::getCppuType( static_cast< com::sun::star::util::Date* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_TIME)]      = ::getCppuType( static_cast< com::sun::star::util::Time* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = cppu::UnoType<double>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = cppu::UnoType<double>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = cppu::UnoType<OUString>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = cppu::UnoType<sal_Int32>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = cppu::UnoType<sal_Int16>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_DATE)]      = cppu::UnoType<com::sun::star::util::Date>::get();
+                        s_aTypeNameMap[GetXMLToken( XML_TIME)]      = cppu::UnoType<com::sun::star::util::Time>::get();
                         s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
                     }
 

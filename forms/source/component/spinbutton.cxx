@@ -253,7 +253,7 @@ namespace frm
 
     Sequence< Type > OSpinButtonModel::getSupportedBindingTypes()
     {
-        return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );
+        return Sequence< Type >( &cppu::UnoType<double>::get(), 1 );
     }
 
 

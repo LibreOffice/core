@@ -106,7 +106,7 @@ namespace pcr
 
     Type SAL_CALL OTimeControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< util::Time* >( NULL ) );
+        return ::cppu::UnoType<util::Time>::get();
     }
 
 
@@ -160,7 +160,7 @@ namespace pcr
 
     Type SAL_CALL ODateControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< util::Date* >( NULL ) );
+        return ::cppu::UnoType<util::Date>::get();
     }
 
 
@@ -319,7 +319,7 @@ namespace pcr
 
     Type SAL_CALL ODateTimeControl::getValueType() throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< util::DateTime* >( NULL ) );
+        return ::cppu::UnoType<util::DateTime>::get();
     }
 
 

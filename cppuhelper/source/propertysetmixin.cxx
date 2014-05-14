@@ -537,17 +537,14 @@ void PropertySetMixinImpl::Impl::setProperty(
         // the expected semantics); it might also be passed through from lower
         // layers.
         if (e.TargetException.isExtractableTo(
-                getCppuType(
-                    static_cast< css::beans::UnknownPropertyException * >(0)))
+                cppu::UnoType<css::beans::UnknownPropertyException>::get())
             && ((i->second.property.Attributes
                  & css::beans::PropertyAttribute::OPTIONAL)
                 != 0))
         {
             throw css::beans::UnknownPropertyException(name, object);
         } else if (e.TargetException.isExtractableTo(
-                       getCppuType(
-                           static_cast< css::beans::PropertyVetoException * >(
-                               0)))
+                       cppu::UnoType<css::beans::PropertyVetoException>::get())
                    && ((i->second.property.Attributes
                         & css::beans::PropertyAttribute::CONSTRAINED)
                        != 0))
@@ -589,8 +586,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
         // the expected semantics); it might also be passed through from lower
         // layers.
         if (e.TargetException.isExtractableTo(
-                getCppuType(
-                    static_cast< css::beans::UnknownPropertyException * >(0)))
+                cppu::UnoType<css::beans::UnknownPropertyException>::get())
             && ((i->second.property.Attributes
                  & css::beans::PropertyAttribute::OPTIONAL)
                 != 0))

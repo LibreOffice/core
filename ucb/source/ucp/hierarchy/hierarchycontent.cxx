@@ -1035,8 +1035,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
             xRow->appendString(
                 beans::Property( OUString("TargetURL"),
                           -1,
-                          getCppuType(
-                            static_cast< const OUString * >( 0 ) ),
+                          cppu::UnoType<OUString>::get(),
                           // @@@ Might actually be read-only!
                           beans::PropertyAttribute::BOUND ),
                 rData.getTargetURL() );
@@ -1044,8 +1043,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
             beans::Property(
                 OUString("CreatableContentsInfo"),
                 -1,
-                getCppuType( static_cast<
-                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
             uno::makeAny( rData.getCreatableContentsInfo() ) );

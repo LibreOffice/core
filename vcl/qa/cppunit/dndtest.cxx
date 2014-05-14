@@ -109,7 +109,7 @@ public:
         DataFlavor df;
 
         df.MimeType = "text/plain;charset=utf-16";
-        df.DataType = getCppuType( static_cast < OUString * > ( 0 ) );
+        df.DataType = cppu::UnoType<OUString>::get();
 
          m_aFlavorList[0] = df;
     };

@@ -307,7 +307,7 @@ void IdlAttributeFieldImpl::checkException(
             getReflection()->getUno2Cpp().get());
         uno_any_destruct(exception, 0);
         if (e.isExtractableTo(
-                getCppuType(static_cast< RuntimeException const * >(0))))
+                cppu::UnoType<RuntimeException>::get()))
         {
             cppu::throwException(e);
         } else {

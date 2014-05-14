@@ -1520,7 +1520,7 @@ namespace cmis
               -1, getCppuBooleanType() ),
             ucb::CommandInfo
             ( OUString( "insert" ),
-              -1, getCppuType( static_cast<ucb::InsertCommandArgument2 * >( 0 ) ) ),
+              -1, cppu::UnoType<ucb::InsertCommandArgument2>::get() ),
             ucb::CommandInfo
             ( OUString( "open" ),
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),

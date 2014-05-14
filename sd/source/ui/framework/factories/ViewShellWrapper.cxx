@@ -99,7 +99,7 @@ void SAL_CALL ViewShellWrapper::disposing (void)
 uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     if( mpSlideSorterViewShell &&
-        rType == ::getCppuType( static_cast< uno::Reference< view::XSelectionSupplier > * >( 0 ) ) )
+        rType == cppu::UnoType<view::XSelectionSupplier>::get() )
     {
         uno::Any aAny;
         uno::Reference<view::XSelectionSupplier> xSupplier( this );

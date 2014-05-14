@@ -167,7 +167,7 @@ namespace frm
         aTypes.push_back( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
 
         if ( !m_sReferenceValue.isEmpty() )
-            aTypes.push_front( ::getCppuType( static_cast< OUString* >( NULL ) ) );
+            aTypes.push_front( cppu::UnoType<OUString>::get() );
             // push_front, because this is the preferred type
 
         Sequence< Type > aTypesRet( aTypes.size() );

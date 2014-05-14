@@ -509,7 +509,7 @@ void SAL_CALL OSection::removeContainerListener( const uno::Reference< container
 // XElementAccess
 uno::Type SAL_CALL OSection::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference<report::XReportComponent>*>(NULL));
+    return cppu::UnoType<report::XReportComponent>::get();
 }
 
 sal_Bool SAL_CALL OSection::hasElements(  ) throw (uno::RuntimeException, std::exception)

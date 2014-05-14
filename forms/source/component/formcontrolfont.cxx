@@ -259,11 +259,11 @@ namespace frm
         switch( _nHandle )
         {
         case PROPERTY_ID_TEXTCOLOR:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aTextColor, ::getCppuType( static_cast< const sal_Int32* >( NULL ) ) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aTextColor, cppu::UnoType<sal_Int32>::get() );
             break;
 
         case PROPERTY_ID_TEXTLINECOLOR:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aTextLineColor, ::getCppuType( static_cast< sal_Int32* >( NULL ) ) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aTextLineColor, cppu::UnoType<sal_Int32>::get() );
             break;
 
         case PROPERTY_ID_FONTEMPHASISMARK:

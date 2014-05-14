@@ -392,7 +392,7 @@ void SAL_CALL OImageControl::removeContainerListener( const uno::Reference< cont
 // XElementAccess
 uno::Type SAL_CALL OImageControl::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
+    return cppu::UnoType<report::XFormatCondition>::get();
 }
 
 sal_Bool SAL_CALL OImageControl::hasElements(  ) throw (uno::RuntimeException, std::exception)

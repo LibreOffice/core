@@ -202,7 +202,7 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
     throw (uno::RuntimeException, std::exception)
 {
     if( aType ==
-        ::getCppuType( static_cast<uno::Reference<XAccessibleImage>*>( NULL ) ) )
+        ::cppu::UnoType<XAccessibleImage>::get() )
     {
         uno::Reference<XAccessibleImage> xImage = this;
         uno::Any aAny;
@@ -230,7 +230,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(un
     aTypes.realloc( nIndex + 1 );
 
     uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleImage > * >( 0 ) );
+    pTypes[nIndex] = ::cppu::UnoType<XAccessibleImage>::get();
 
     return aTypes;
 }

@@ -246,16 +246,12 @@ CommandProcessorInfo::CommandProcessorInfo()
         = ucb::CommandInfo(
             OUString( GLOBALTRANSFER_NAME ), // Name
             GLOBALTRANSFER_HANDLE, // Handle
-            getCppuType(
-                static_cast<
-                    ucb::GlobalTransferCommandArgument * >( 0 ) ) ); // ArgType
+            cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ); // ArgType
     (*m_pInfo)[ 2 ]
         = ucb::CommandInfo(
             OUString( CHECKIN_NAME ), // Name
             CHECKIN_HANDLE, // Handle
-            getCppuType(
-                static_cast<
-                    ucb::GlobalTransferCommandArgument * >( 0 ) ) ); // ArgType
+            cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ); // ArgType
 }
 
 

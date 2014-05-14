@@ -159,12 +159,12 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                    getCppuType( static_cast< css::uno::Reference< XTypeProvider >*>(0) ),
-                    getCppuType( static_cast< css::uno::Reference< XServiceInfo>*> (0) ),
-                    getCppuType( static_cast< css::uno::Reference< XContent > *> (0)),
-                    getCppuType( static_cast< css::uno::Reference< XCommandProcessor >*> (0) ),
-                    getCppuType( static_cast< css::uno::Reference< XContentCreator >*> (0)),
-                    getCppuType( static_cast< css::uno::Reference< XChild >*> (0) )
+                    cppu::UnoType<XTypeProvider>::get(),
+                    cppu::UnoType<XServiceInfo>::get(),
+                    cppu::UnoType<XContent>::get(),
+                    cppu::UnoType<XCommandProcessor>::get(),
+                    cppu::UnoType<XContentCreator>::get(),
+                    cppu::UnoType<XChild>::get()
                 );
             pCollection = &collection;
         }

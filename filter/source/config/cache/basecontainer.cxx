@@ -532,7 +532,7 @@ void SAL_CALL BaseContainer::flush()
     // Further its not a good idea to hold the own lock
     // if an outside object is called :-)
     css::lang::EventObject             aSource    (static_cast< css::util::XFlushable* >(this));
-    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(::getCppuType(static_cast< css::uno::Reference< css::util::XFlushListener >* >(NULL)));
+    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XFlushListener>::get());
     if (pContainer)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -562,8 +562,7 @@ void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::ut
 {
     // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.addInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XFlushListener >* >(NULL)),
-                             xListener                                                                           );
+    m_lListener.addInterface(cppu::UnoType<css::util::XFlushListener>::get(), xListener);
 }
 
 
@@ -573,8 +572,7 @@ void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css:
 {
     // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
-    m_lListener.removeInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XFlushListener >* >(NULL)),
-                                xListener                                                                           );
+    m_lListener.removeInterface(cppu::UnoType<css::util::XFlushListener>::get(), xListener);
 }
 
     } // namespace config

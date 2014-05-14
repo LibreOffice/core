@@ -316,7 +316,7 @@ void OTimeModel::resetNoBroadcast()
 
 Sequence< Type > OTimeModel::getSupportedBindingTypes()
 {
-    return Sequence< Type >( &::getCppuType( static_cast< util::Time* >( NULL ) ), 1 );
+    return Sequence< Type >( & cppu::UnoType<util::Time>::get(), 1 );
 }
 
 

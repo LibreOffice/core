@@ -81,7 +81,7 @@ void OPropertyContainerHelper::registerProperty(const OUString& _rName, sal_Int3
 {
     OSL_ENSURE((_nAttributes & PropertyAttribute::MAYBEVOID) == 0,
         "OPropertyContainerHelper::registerProperty: don't use this for properties which may be void ! There is a method called \"registerMayBeVoidProperty\" for this !");
-    OSL_ENSURE(!_rMemberType.equals(::getCppuType(static_cast< Any* >(NULL))),
+    OSL_ENSURE(!_rMemberType.equals(cppu::UnoType<Any>::get()),
         "OPropertyContainerHelper::registerProperty: don't give my the type of an uno::Any ! Really can't handle this !");
     OSL_ENSURE(_pPointerToMember,
         "OPropertyContainerHelper::registerProperty: you gave me nonsense : the pointer must be non-NULL");
@@ -109,7 +109,7 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName,
 {
     OSL_ENSURE((_nAttributes & PropertyAttribute::MAYBEVOID) != 0,
         "OPropertyContainerHelper::registerMayBeVoidProperty: why calling this when the attributes say nothing about may-be-void ?");
-    OSL_ENSURE(!_rExpectedType.equals(::getCppuType(static_cast< Any* >(NULL))),
+    OSL_ENSURE(!_rExpectedType.equals(cppu::UnoType<Any>::get()),
         "OPropertyContainerHelper::registerMayBeVoidProperty: don't give my the type of an uno::Any ! Really can't handle this !");
     OSL_ENSURE(_pPointerToMember,
         "OPropertyContainerHelper::registerMayBeVoidProperty: you gave me nonsense : the pointer must be non-NULL");
@@ -129,7 +129,7 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName,
 void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         const Type& _rType, const void* _pInitialValue)
 {
-    OSL_ENSURE(!_rType.equals(::getCppuType(static_cast< Any* >(NULL))),
+    OSL_ENSURE(!_rType.equals(cppu::UnoType<Any>::get()),
         "OPropertyContainerHelper::registerPropertyNoMember : don't give my the type of an uno::Any ! Really can't handle this !");
     OSL_ENSURE(_pInitialValue || ((_nAttributes & PropertyAttribute::MAYBEVOID) != 0),
         "OPropertyContainerHelper::registerPropertyNoMember : you should not omit the initial value if the property can't be void ! This will definitivly crash later !");

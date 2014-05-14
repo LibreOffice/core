@@ -318,7 +318,7 @@ void ODateModel::resetNoBroadcast()
 
 Sequence< Type > ODateModel::getSupportedBindingTypes()
 {
-    return Sequence< Type >( &::getCppuType( static_cast< util::Date* >( NULL ) ), 1 );
+    return Sequence< Type >( & cppu::UnoType<util::Date>::get(), 1 );
 }
 
 

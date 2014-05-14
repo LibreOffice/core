@@ -461,7 +461,7 @@ uno::Any SwAccessibleDocument::queryInterface(
     throw ( uno::RuntimeException, std::exception )
 {
     uno::Any aRet;
-    if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) ) )
+    if ( rType == cppu::UnoType<XAccessibleSelection>::get() )
     {
         uno::Reference<XAccessibleSelection> aSelect = this;
         aRet <<= aSelect;
@@ -499,7 +499,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     aTypes.realloc( nIndex + 2 );
 
     uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
+    pTypes[nIndex] = cppu::UnoType<XAccessibleSelection>::get();
     //Add XEventListener interface support.
     pTypes[nIndex + 1 ] = ::getCppuType( static_cast< uno::Reference< com::sun::star::document::XEventListener > * >( 0 ) );
     return aTypes;

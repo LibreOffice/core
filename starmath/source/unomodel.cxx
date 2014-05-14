@@ -292,7 +292,7 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { OUString("RelativeSymbolPrimaryHeight")      , HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ORNAMENTSIZE      },
         { OUString("RelativeUpperLimitDistance")       , HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_UPPERLIMIT        },
         { OUString("RightMargin")                      , HANDLE_RIGHT_MARGIN                       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_RIGHTSPACE        },
-        { OUString("RuntimeUID")                       , HANDLE_RUNTIME_UID                        ,  ::getCppuType(static_cast< const OUString * >(0)),                      PropertyAttribute::READONLY,  0       },
+        { OUString("RuntimeUID")                       , HANDLE_RUNTIME_UID                        ,  cppu::UnoType<OUString>::get(),                      PropertyAttribute::READONLY,  0       },
         { OUString("Symbols")                          , HANDLE_SYMBOLS                            ,  ::getCppuType((const Sequence < SymbolDescriptor > *)0),                PROPERTY_NONE,  0                     },
         { OUString("UserDefinedSymbolsInUse")          , HANDLE_USED_SYMBOLS                       ,  ::getCppuType((const Sequence < SymbolDescriptor > *)0),                PropertyAttribute::READONLY,  0       },
         { OUString("TopMargin")                        , HANDLE_TOP_MARGIN                         ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_TOPSPACE          },

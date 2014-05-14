@@ -128,7 +128,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::uno:
 
 SQLExceptionInfo::SQLExceptionInfo(const staruno::Any& _rError)
 {
-    const staruno::Type& aSQLExceptionType = ::getCppuType(static_cast< ::com::sun::star::sdbc::SQLException*>(0));
+    const staruno::Type& aSQLExceptionType = cppu::UnoType<com::sun::star::sdbc::SQLException>::get();
     bool bValid = isAssignableFrom(aSQLExceptionType, _rError.getValueType());
     if (bValid)
         m_aContent = _rError;

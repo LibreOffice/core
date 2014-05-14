@@ -368,11 +368,11 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
 
     m_sCommandInfo[4].Name = "open";
     m_sCommandInfo[4].Handle = -1;
-    m_sCommandInfo[4].ArgType = getCppuType( static_cast< OpenCommandArgument* >( 0 ) );
+    m_sCommandInfo[4].ArgType = cppu::UnoType<OpenCommandArgument>::get();
 
     m_sCommandInfo[5].Name = "transfer";
     m_sCommandInfo[5].Handle = -1;
-    m_sCommandInfo[5].ArgType = getCppuType( static_cast< TransferInfo* >( 0 ) );
+    m_sCommandInfo[5].ArgType = cppu::UnoType<TransferInfo>::get();
 
     m_sCommandInfo[6].Name = "delete";
     m_sCommandInfo[6].Handle = -1;
@@ -380,7 +380,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
 
     m_sCommandInfo[7].Name = "insert";
     m_sCommandInfo[7].Handle = -1;
-    m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
+    m_sCommandInfo[7].ArgType = cppu::UnoType<InsertCommandArgument>::get();
 
     m_sCommandInfo[7].Name = "createNewContent";
     m_sCommandInfo[7].Handle = -1;

@@ -2807,7 +2807,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
 
 uno::Type  SwXTextFieldMasters::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType(static_cast<const uno::Reference<beans::XPropertySet>*>(0));
+    return cppu::UnoType<beans::XPropertySet>::get();
 
 }
 
@@ -2876,7 +2876,7 @@ uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(
 
 uno::Type  SwXTextFieldTypes::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType(static_cast<const uno::Reference<text::XDependentTextField>*>(0));
+    return cppu::UnoType<text::XDependentTextField>::get();
 }
 
 sal_Bool SwXTextFieldTypes::hasElements(void) throw( uno::RuntimeException, std::exception )

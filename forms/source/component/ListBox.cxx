@@ -1656,11 +1656,11 @@ namespace frm
     {
         Sequence< Type > aTypes(6);
         aTypes[0] = ::getCppuType( static_cast< Sequence< Any >* >( NULL ) );
-        aTypes[1] = ::getCppuType( static_cast< Any* >( NULL ) );
+        aTypes[1] = cppu::UnoType<Any>::get();
         aTypes[2] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
-        aTypes[3] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        aTypes[3] = cppu::UnoType<sal_Int32>::get();
         aTypes[4] = ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
-        aTypes[5] = ::getCppuType( static_cast< OUString* >( NULL ) );
+        aTypes[5] = cppu::UnoType<OUString>::get();
         return aTypes;
     }
 

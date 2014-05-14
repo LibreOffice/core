@@ -3316,7 +3316,7 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
 
 uno::Type  SwXTextFrame::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType(static_cast<uno::Reference<text::XTextRange>*>(0));
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SwXTextFrame::hasElements(void) throw( uno::RuntimeException, std::exception )

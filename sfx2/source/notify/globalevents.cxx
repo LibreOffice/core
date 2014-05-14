@@ -445,7 +445,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
 uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
     throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference< frame::XModel >* >(NULL));
+    return cppu::UnoType<frame::XModel>::get();
 }
 
 

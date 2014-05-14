@@ -299,7 +299,7 @@ void SAL_CALL OFormattedField::removeContainerListener( const uno::Reference< co
 // XElementAccess
 uno::Type SAL_CALL OFormattedField::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
+    return cppu::UnoType<report::XFormatCondition>::get();
 }
 
 sal_Bool SAL_CALL OFormattedField::hasElements(  ) throw (uno::RuntimeException, std::exception)

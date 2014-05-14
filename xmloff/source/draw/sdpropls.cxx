@@ -1051,12 +1051,12 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                                         <= SvtSaveOptions::ODFVER_012))
                     {
                         pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum_Odf12,
-                            ::getCppuType(static_cast<const com::sun::star::drawing::TextFitToSizeType*>(0)));
+                            cppu::UnoType<com::sun::star::drawing::TextFitToSizeType>::get());
                     }
                     else
                     {
                         pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum,
-                            ::getCppuType(static_cast<const com::sun::star::drawing::TextFitToSizeType*>(0)));
+                            cppu::UnoType<com::sun::star::drawing::TextFitToSizeType>::get());
                     }
                 }
                 break;
