@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_TEXTDATA_HXX
 
 #include <rtl/ustring.hxx>
-#include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
 #include <vcl/dllapi.h>
 

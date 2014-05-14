@@ -21,8 +21,6 @@
 
 #include <svl/svldllapi.h>
 #include <sal/types.h>
-#include <svl/brdcst.hxx>
-#include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 
 class SvtCTLOptions_Impl;

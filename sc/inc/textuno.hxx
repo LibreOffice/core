@@ -23,7 +23,6 @@
 #include "global.hxx"
 #include "address.hxx"
 #include <editeng/unotext.hxx>
-#include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>

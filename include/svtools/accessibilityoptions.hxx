@@ -21,7 +21,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <unotools/configitem.hxx>
-#include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 
