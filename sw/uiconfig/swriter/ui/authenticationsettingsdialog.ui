@@ -99,7 +99,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="seperateauthentication:wrap">
+              <object class="GtkRadioButton" id="separateauthentication:wrap">
                 <property name="label" translatable="yes">The outgoing mail server (SMTP) requires _separate authentication</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -209,7 +209,7 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <property name="group">seperateauthentication:wrap</property>
+                <property name="group">separateauthentication:wrap</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
