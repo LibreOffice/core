@@ -980,12 +980,15 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const OUString& rName ) const
     return nError;
 }
 
-void FormulaCompiler::SetCompileForFAP( bool bVal )
+void FormulaCompiler::EnableJumpCommandReorder( bool bEnable )
 {
-    mbJumpCommandReorder = !bVal;
-    mbStopOnError = !bVal;
+    mbJumpCommandReorder = bEnable;
 }
 
+void FormulaCompiler::EnableStopOnError( bool bEnable )
+{
+    mbStopOnError = bEnable;
+}
 
 void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const
 {

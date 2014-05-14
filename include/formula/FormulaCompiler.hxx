@@ -227,7 +227,8 @@ public:
 
     sal_uInt16 GetErrorConstant( const OUString& rName ) const;
 
-    void SetCompileForFAP( bool bVal );
+    void EnableJumpCommandReorder( bool bEnable );
+    void EnableStopOnError( bool bEnable );
 
     static bool IsOpCodeVolatile( OpCode eOp );
     static bool IsOpCodeJumpCommand( OpCode eOp );

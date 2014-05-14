@@ -114,8 +114,8 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
         eConv = aConvMap[mnConv];
 
     rCompiler.SetRefConvention( eConv );
-
-    rCompiler.SetCompileForFAP(mbCompileFAP);
+    rCompiler.EnableJumpCommandReorder(!mbCompileFAP);
+    rCompiler.EnableStopOnError(!mbCompileFAP);
 
     rCompiler.SetExternalLinks( maExternalLinks);
 }

@@ -323,7 +323,8 @@ void ScFormulaReferenceHelper::Init()
 
         pRefComp.reset( new ScCompiler( pDoc, aCursorPos) );
         pRefComp->SetGrammar( pDoc->GetGrammar() );
-        pRefComp->SetCompileForFAP(true);
+        pRefComp->EnableJumpCommandReorder(false);
+        pRefComp->EnableStopOnError(false);
 
         nRefTab = nTab;
     }

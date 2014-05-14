@@ -740,7 +740,9 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 
     FormulaCompiler aCompiler(*m_pTokenArray.get());
-    aCompiler.SetCompileForFAP(true);   // #i101512# special handling is needed
+    // #i101512# Disable special handling of jump commands.
+    aCompiler.EnableJumpCommandReorder(false);
+    aCompiler.EnableStopOnError(false);
     aCompiler.CompileTokenArray();
 }
 
