@@ -202,14 +202,7 @@ void SwHTMLParser::NewDivision( int nToken )
             pDoc->DelFullPara( aDelPam );
 
             // Die Seitenvorlage aktualisieren
-            for( sal_uInt16 i=0; i < pDoc->GetPageDescCnt(); i++ )
-            {
-                if( RES_POOLPAGE_HTML == pDoc->GetPageDesc(i).GetPoolFmtId() )
-                {
-                    pDoc->ChgPageDesc( i, *pPageDesc );
-                    break;
-                }
-            }
+            pDoc->ChgPageDescP( *pDoc->FindPageDescByPoolId( RES_POOLPAGE_HTML ) );
         }
 
         SwPosition aNewPos( SwNodeIndex( rCntntStIdx, 1 ), SwIndex( pCNd, 0 ) );

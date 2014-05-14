@@ -26,6 +26,7 @@
 #include <frmfmt.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
+#include "poolfmt.hxx"
 
 class SfxPoolItem;
 class SwTxtFmtColl;
@@ -233,7 +234,7 @@ public:
 
     /// Query and set PoolFormat-Id.
     sal_uInt16 GetPoolFmtId() const         { return aMaster.GetPoolFmtId(); }
-    void SetPoolFmtId( sal_uInt16 nId )     { aMaster.SetPoolFmtId( nId ); }
+    void SetPoolFmtId( sal_uInt16 nId );
     sal_uInt16 GetPoolHelpId() const        { return aMaster.GetPoolHelpId(); }
     void SetPoolHelpId( sal_uInt16 nId )    { aMaster.SetPoolHelpId( nId ); }
     sal_uInt8 GetPoolHlpFileId() const      { return aMaster.GetPoolHlpFileId(); }
@@ -345,15 +346,30 @@ public:
 
 typedef std::vector<SwPageDesc*> SwPageDescsBase;
 
-// PageDescriptor-interface, Array because of inlines.
+#define RES_POOLPAGE_SIZE (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN)
+
 // Mimics o3tl::sorted_vector interface
 class SwPageDescs : private SwPageDescsBase
 {
+    // to update the poolpages array on PoolFmtId change
+    friend void SwPageDesc::SetPoolFmtId( sal_uInt16 nId );
+
 public:
     typedef SwPageDescsBase::const_iterator const_iterator;
     typedef SwPageDescsBase::size_type size_type;
     typedef SwPageDescsBase::value_type value_type;
 
+private:
+    // fast index for pool page resources
+    value_type poolpages[RES_POOLPAGE_SIZE];
+
+    void _erase( const value_type& x );
+    bool IsIdInPoolRange( sal_uInt16 nId, bool allowDefault ) const;
+
+    bool SetPoolPageDesc( const value_type& x, sal_uInt16 nId = USHRT_MAX );
+
+public:
+    SwPageDescs();
     // the destructor will free all objects still in the vector
     ~SwPageDescs();
 
@@ -380,6 +396,7 @@ public:
     const_iterator end() const { return SwPageDescsBase::end(); }
 
     bool Contains( const value_type& x ) const;
+    value_type GetPoolPageDesc( sal_uInt16 nId ) const;
 
 private:
     typedef SwPageDescsBase::iterator iterator;
