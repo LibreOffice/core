@@ -3918,7 +3918,7 @@ bool ScCompiler::HandleRange()
         sal_uInt16 nErr = pRangeData->GetErrCode();
         if( nErr )
             SetError( errNoName );
-        else if ( !bCompileForFAP )
+        else if (mbJumpCommandReorder)
         {
             ScTokenArray* pNew;
             // put named formula into parentheses.
@@ -4469,7 +4469,7 @@ bool ScCompiler::HandleSingleRef()
         }
         if ( !bFound )
             SetError(errNoRef);
-        else if ( !bCompileForFAP )
+        else if (mbJumpCommandReorder)
         {
             ScTokenArray* pNew = new ScTokenArray();
             if ( bSingle )
@@ -4520,7 +4520,7 @@ bool ScCompiler::HandleDbData()
     ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(mpToken->GetIndex());
     if ( !pDBData )
         SetError(errNoName);
-    else if ( !bCompileForFAP )
+    else if (mbJumpCommandReorder)
     {
         ScComplexRefData aRefData;
         aRefData.InitFlags();

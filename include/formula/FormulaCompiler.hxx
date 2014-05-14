@@ -227,8 +227,7 @@ public:
 
     sal_uInt16 GetErrorConstant( const OUString& rName ) const;
 
-    void            SetCompileForFAP( bool bVal )
-                        { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
+    void SetCompileForFAP( bool bVal );
 
     static bool IsOpCodeVolatile( OpCode eOp );
     static bool IsOpCodeJumpCommand( OpCode eOp );
@@ -338,11 +337,11 @@ protected:
 
     bool                bAutoCorrect;           // whether to apply AutoCorrection
     bool                bCorrected;             // AutoCorrection was applied
-    bool                bCompileForFAP;         //! not real RPN but names, for FunctionAutoPilot
-                                                // will not be resolved
     bool                bIgnoreErrors;          // on AutoCorrect and CompileForFAP
                                                 // ignore errors and create RPN nevertheless
     bool                glSubTotal;             // if code contains one or more subtotal functions
+
+    bool mbJumpCommandReorder; /// Whether or not to reorder RPN for jump commands.
 
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation

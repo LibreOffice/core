@@ -537,9 +537,9 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
         bCorrected( false ),
-        bCompileForFAP( false ),
         bIgnoreErrors( false ),
-        glSubTotal( false )
+        glSubTotal( false ),
+        mbJumpCommandReorder(true)
 {
 }
 
@@ -555,9 +555,9 @@ FormulaCompiler::FormulaCompiler()
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
         bCorrected( false ),
-        bCompileForFAP( false ),
         bIgnoreErrors( false ),
-        glSubTotal( false )
+        glSubTotal( false ),
+        mbJumpCommandReorder(true)
 {
 }
 
@@ -980,6 +980,12 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const OUString& rName ) const
     return nError;
 }
 
+void FormulaCompiler::SetCompileForFAP( bool bVal )
+{
+    mbJumpCommandReorder = !bVal;
+    bIgnoreErrors = bVal;
+}
+
 
 void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const
 {
@@ -1121,7 +1127,7 @@ void FormulaCompiler::Factor()
     OpCode eOp = mpToken->GetOpCode();
     if( eOp == ocPush || eOp == ocColRowNameAuto || eOp == ocMatRef ||
             eOp == ocDBArea
-            || (bCompileForFAP && ((eOp == ocName) || (eOp == ocDBArea)
+            || (!mbJumpCommandReorder && ((eOp == ocName) || (eOp == ocDBArea)
             || (eOp == ocColRowName) || (eOp == ocBad)))
         )
     {
@@ -1258,7 +1264,7 @@ void FormulaCompiler::Factor()
                 || eOp == ocOr
                 || eOp == ocBad
                 || ( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
-                || (bCompileForFAP && IsOpCodeJumpCommand(eOp)))
+                || (!mbJumpCommandReorder && IsOpCodeJumpCommand(eOp)))
         {
             pFacToken = mpToken;
             OpCode eMyLastOp = eOp;
@@ -1300,7 +1306,7 @@ void FormulaCompiler::Factor()
             else
                 eOp = NextToken();
             // Jumps are just normal functions for the FunctionAutoPilot tree view
-            if ( bCompileForFAP && pFacToken->GetType() == svJump )
+            if (!mbJumpCommandReorder && pFacToken->GetType() == svJump)
                 pFacToken = new FormulaFAPToken( pFacToken->GetOpCode(), nSepCount, pFacToken );
             else
                 pFacToken->SetByte( nSepCount );
@@ -2061,7 +2067,7 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
         SetError( errCodeOverflow);
         return;
     }
-    if( pArr->GetCodeError() && !bCompileForFAP )
+    if (pArr->GetCodeError() && mbJumpCommandReorder)
         return;
     ForceArrayOperator( p, pCurrentFactorToken);
     p->IncRef();
