@@ -59,14 +59,12 @@ FilterCache::FilterCache()
     : BaseLock    (                                        )
     , m_eFillState(E_CONTAINS_NOTHING                      )
 {
-   SAL_INFO( "filter.config", "{ (as96863) FilterCache lifetime");
 }
 
 
 
 FilterCache::~FilterCache()
 {
-   SAL_INFO( "filter.config", "} (as96863) FilterCache lifetime");
     if (m_xTypesChglisteners.is())
         m_xTypesChglisteners->stopListening();
     if (m_xFiltersChgListener.is())
@@ -976,8 +974,6 @@ void FilterCache::impl_validateAndOptimize()
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-
-    SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::impl_validateAndOptimize");
 
     // First check if any filter or type could be readed
     // from the underlying configuration!
