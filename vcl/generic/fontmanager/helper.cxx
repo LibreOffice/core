@@ -202,7 +202,7 @@ OUString psp::getFontPath()
             // replace net and user paths if the path exists
             aPathBuffer.append(aConfigPath);
             aPathBuffer.appendAscii("/" LIBO_SHARE_FOLDER "/fonts");
-            // check existance of config path
+            // check existence of config path
             struct stat aStat;
             if( 0 != stat( OUStringToOString( aPathBuffer.makeStringAndClear(), osl_getThreadTextEncoding() ).getStr(), &aStat )
                 || ! S_ISDIR( aStat.st_mode ) )

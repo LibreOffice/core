@@ -1099,7 +1099,7 @@ DNSServiceErrorType DNSSD_API DNSServiceRegister
  *
  * sdRef:           A DNSServiceRef initialized by DNSServiceRegister().
  *
- * RecordRef:       A pointer to an uninitialized DNSRecordRef. Upon succesfull completion of this
+ * RecordRef:       A pointer to an uninitialized DNSRecordRef. Upon successful completion of this
  *                  call, this ref may be passed to DNSServiceUpdateRecord() or DNSServiceRemoveRecord().
  *                  If the above DNSServiceRef is passed to DNSServiceRefDeallocate(), RecordRef is also
  *                  invalidated and may not be used further.
@@ -1722,7 +1722,7 @@ typedef void (DNSSD_API *DNSServiceRegisterRecordReply)
  *
  * sdRef:           A DNSServiceRef initialized by DNSServiceCreateConnection().
  *
- * RecordRef:       A pointer to an uninitialized DNSRecordRef. Upon succesfull completion of this
+ * RecordRef:       A pointer to an uninitialized DNSRecordRef. Upon successful completion of this
  *                  call, this ref may be passed to DNSServiceUpdateRecord() or DNSServiceRemoveRecord().
  *                  (To deregister ALL records registered on a single connected DNSServiceRef
  *                  and deallocate each of their corresponding DNSServiceRecordRefs, call

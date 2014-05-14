@@ -91,7 +91,7 @@ namespace oox { namespace ppt {
     {
         bool bRet = false;
 
-        /* here we want to substitute all occurance of
+        /* here we want to substitute all occurrences of
          * [#]ppt_[xyhw] with
          * x,y,height and width respectively
          */

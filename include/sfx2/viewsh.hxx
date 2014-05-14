@@ -239,12 +239,10 @@ public:
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetCurrentDocument() const;
-    /** forwards the current document, as returned by ->GetCurrentDocument, to SfxObjectShell::SetWorkingDocument
-    */
+    // forwards the current document, as returned by ->GetCurrentDocument, to SfxObjectShell::SetWorkingDocument
     void                        SetCurrentDocument() const;
 
-    /** get an XRenderable instance that can render this document
-    */
+    // get an XRenderable instance that can render this document
     virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
 
 
@@ -316,7 +314,7 @@ inline void SfxViewShell::LostFocus() const
 
     [Note]
 
-    <StarView> unfortunatly does not provide the possibility to define
+    <StarView> unfortunately does not provide the possibility to define
     such events 'from the side'.
 */
 

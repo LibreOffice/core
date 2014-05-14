@@ -1067,7 +1067,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
                     if ( !pCntntFrm )
                     {
                         // Oops! An empty page.
-                        // In order not to loose the whole frame (RTF) we
+                        // In order not to lose the whole frame (RTF) we
                         // look for the last Cntnt before the page.
                         SwPageFrm *pPrv = (SwPageFrm*)pPage->GetPrev();
                         while ( !pCntntFrm && pPrv )

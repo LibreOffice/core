@@ -218,8 +218,7 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
             return;
         }
 
-        // All styles have to be processed or you will loose the paragraph-styles and inline text-styles.
-
+        // All styles have to be processed or you will lose the paragraph-styles and inline text-styles.
         performStyleProcessing(attrs);
 
         final AttributeList attrList = buildAttributeList(attrs);

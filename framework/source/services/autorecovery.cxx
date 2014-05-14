@@ -2309,7 +2309,7 @@ void AutoRecovery::implts_updateTimer()
         #endif
     }
     else if (m_eTimerType == AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED)
-        nMilliSeconds = 300; // there is a minimum time frame, where the user can loose some key input data!
+        nMilliSeconds = 300; // there is a minimum time frame, where the user can lose some key input data!
 
     m_aTimer.SetTimeout(nMilliSeconds);
     m_aTimer.Start();

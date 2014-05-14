@@ -240,7 +240,7 @@ Western (Apple Macintosh/Icelandic)             RTL_TEXTENCODING_APPLE_ICELAND
 Western (ASCII/US)                              RTL_TEXTENCODING_ASCII_US
 Western (DOS/OS2-437/US)                        RTL_TEXTENCODING_IBM_437
 Western (DOS/OS2-850/International)             RTL_TEXTENCODING_IBM_850
-Western (DOS/OS2-860/Portugese)                 RTL_TEXTENCODING_IBM_860
+Western (DOS/OS2-860/Portuguese)                RTL_TEXTENCODING_IBM_860
 Western (DOS/OS2-861/Icelandic)                 RTL_TEXTENCODING_IBM_861
 Western (DOS/OS2-863/Canadian-French)           RTL_TEXTENCODING_IBM_863
 Western (DOS/OS2-865/Nordic)                    RTL_TEXTENCODING_IBM_865

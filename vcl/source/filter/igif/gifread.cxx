@@ -738,7 +738,7 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-        // an error occured
+        // an error occurred
         case( ABORT_READING ):
         {
             bEnd = true;

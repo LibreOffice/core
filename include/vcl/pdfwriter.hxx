@@ -1109,7 +1109,7 @@ The following structure describes the permissions used in PDF security
     EndStructureElement for it. Best think of the structure
     tree as a stack.
 
-    Note: there is always one structural element in existance without having
+    Note: there is always one structural element in existence without having
     called BeginStructureElement; this is the root of the structure
     tree (called StructTreeRoot). The StructTreeRoot has always the id 0.
 

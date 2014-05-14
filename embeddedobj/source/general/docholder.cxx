@@ -251,7 +251,7 @@ void DocumentHolder::FreeOffice()
 
     // the following code is commented out since for now there is still no completely correct way to detect
     // whether the office can be terminated, so it is better to have unnecessary process running than
-    // to loose any data
+    // to lose any data
 
 //      uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
 //      if ( xFramesSupplier.is() )

@@ -97,7 +97,7 @@ namespace drawinglayer
                 // geraphics, independent from the color filtering stuff. This will enhance e.g.
                 // SVG and print quality while reducing data size at the same time.
                 // The other way around the old modifications when only used on already bitmap objects
-                // will not loose any quality.
+                // will not lose any quality.
                 aTransformedGraphic = rGraphicObject.GetTransformedGraphic(&aSuppressGraphicAttr);
 
                 // reset GraphicAttr after use to not apply double

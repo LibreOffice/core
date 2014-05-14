@@ -715,7 +715,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                             {
                             // HACK: This is for bnc#780851, where a table has one cell that has w:framePr,
                             // which causes that paragraph to be converted to a text frame, and the original
-                            // paragraph object no longer exists, which makes table creation fail and futhermore
+                            // paragraph object no longer exists, which makes table creation fail and furthermore
                             // it would be missing in the table layout anyway. So actually no letting that paragraph
                             // be a text frame "fixes" it. I'm not sure what "inline" is supposed to mean in practice
                             // anyway, so as long as this doesn't cause trouble elsewhere ...
@@ -1571,7 +1571,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         if(pSectionContext)
         {
             // Ignore continuous section break at the end of the document, if the previous section had the same type as well
-            // It makes the importer loose margin settings with no benefit
+            // It makes the importer lose margin settings with no benefit
             SectionPropertyMap* pLastContext = m_pImpl->GetLastSectionContext();
             int nPrevBreakType = 0;
             bool bHasPrevSection = false;

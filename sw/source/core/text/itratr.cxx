@@ -696,7 +696,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                                 // This is a hack for the wollowing situation: In the paragraph there's a
                                 // text frame with relative size. Then let's take 0.5 cm as minimum width
                                 // and KSHRT_MAX as maximum width
-                                // It were cleaner and maybe neccessary later on to iterate over the content
+                                // It were cleaner and maybe necessary later on to iterate over the content
                                 // of the text frame and call GetMinMaxSize recursively
                                 nAktWidth = FLYINCNT_MIN_WIDTH; // 0.5 cm
                                 if( (long)rMax < KSHRT_MAX )

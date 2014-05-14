@@ -1684,7 +1684,7 @@ void SwInsertDBColAutoPilot::Load()
 
                 OUString sColumn;
                 pSubProps[0] >>= sColumn;
-                //check for existance of the loaded column name
+                // check for existence of the loaded column name
                 bool bFound = false;
                 for(size_t nRealColumn = 0; nRealColumn < aDBColumns.size(); ++nRealColumn)
                 {

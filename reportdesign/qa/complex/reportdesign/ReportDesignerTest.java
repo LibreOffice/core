@@ -538,7 +538,7 @@ public class ReportDesignerTest
             catch (com.sun.star.util.CloseVetoException e)
             {
                 System.out.println("ERROR: CloseVetoException caught");
-                System.out.println("CloseVetoException occured Can't close document.");
+                System.out.println("CloseVetoException occurred. Can't close document.");
                 System.out.println("Message: " + e.getMessage());
             }
         }

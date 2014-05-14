@@ -922,7 +922,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     if (!m_aStates.top().pCurrentBuffer)
     {
         Mapper().props(pProperties);
-        // Make sure we don't loose these properties with a too early reset.
+        // Make sure we don't lose these properties with a too early reset.
         m_bHadPicture = true;
     }
     else

@@ -39,10 +39,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-
-//************ Class: java.sql.DatabaseMetaData
-
-
 jclass java_sql_DatabaseMetaData::theClass              = 0;
 
 java_sql_DatabaseMetaData::~java_sql_DatabaseMetaData()
@@ -622,7 +618,7 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
     jobject out(0);
 
     SDBThreadAttach t;
-    OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callResultSetMethodWithStrings: no Java enviroment anymore!" );
+    OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callResultSetMethodWithStrings: no Java environment anymore!" );
 
     {
         const  char* pSignature = _pOptionalAdditionalString

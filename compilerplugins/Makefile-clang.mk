@@ -10,7 +10,7 @@
 
 CLANG_COMMA :=,
 
-# You may occassionally want to override some of these
+# You may occasionally want to override some of these
 CLANGCXX=$(filter-out -m32 -m64 -fsanitize=address,$(CXX))
 
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
