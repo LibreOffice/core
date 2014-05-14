@@ -40,6 +40,9 @@ enum ApplicationType
 
 class SFX2_DLLPUBLIC RecentDocsView : public ThumbnailView
 {
+private:
+    size_t mnLastMouseDownItem = THUMBNAILVIEW_ITEM_NOTFOUND;
+
 public:
     RecentDocsView( Window* pParent );
     virtual ~RecentDocsView();
