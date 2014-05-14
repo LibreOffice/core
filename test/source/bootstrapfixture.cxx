@@ -122,6 +122,7 @@ test::BootstrapFixture::~BootstrapFixture()
 {
 }
 
+#if HAVE_EXPORT_VALIDATION
 namespace {
 
 OString loadFile(const OUString& rURL)
@@ -141,6 +142,7 @@ OString loadFile(const OUString& rURL)
 }
 
 }
+#endif
 
 void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFormat eFormat )
 {
