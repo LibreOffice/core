@@ -195,17 +195,37 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
 
 static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
 {
-    utl::TempFile aTemp;
-    aTemp.EnableKillingFile();
-    OUString fileName("pstoedit" EXESUFFIX);
-    OUString arg1("-f");
-    OUString arg2("emf:-OO");
-    OUString arg3("-");
+    utl::TempFile aTempOutput;
+    utl::TempFile aTempInput;
+    aTempOutput.EnableKillingFile();
+    aTempInput.EnableKillingFile();
     OUString output;
-    osl::FileBase::getSystemPathFromFileURL(aTemp.GetURL(), output);
+    osl::FileBase::getSystemPathFromFileURL(aTempOutput.GetURL(), output);
+    OUString input;
+    osl::FileBase::getSystemPathFromFileURL(aTempInput.GetURL(), input);
+
+    SvStream* pInputStream = aTempInput.GetStream(STREAM_WRITE);
+    sal_uInt64 nCount = pInputStream->Write(pBuf, nBytesRead);
+    aTempInput.CloseStream();
+
+    OUString fileName("pstoedit" EXESUFFIX);
+    //fdo#64161 pstoedit under non-windows uses libEMF to output the EMF, but
+    //libEMF cannot calculate the bounding box of text, so the overall bounding
+    //box is not increased to include that of any text in the eps
+    //
+    //-drawbb will force pstoedit to draw a pair of pixels with the bg color to
+    //the topleft and bottom right of the bounding box as pstoedit sees it,
+    //which libEMF will then extend its bounding box to fit
+    //
+    //-usebbfrominput forces pstoedit to take the original ps bounding box
+    //as the bounding box as it sees it, instead of calculating its own
+    //which also doesn't work for this example
+    OUString arg1("-usebbfrominput");   //-usebbfrominput use the original ps bounding box
+    OUString arg2("-f");
+    OUString arg3("emf:-OO -drawbb");   //-drawbb mark out the bounding box extent with bg pixels
     rtl_uString *args[] =
     {
-        arg1.pData, arg2.pData, arg3.pData, output.pData
+        arg1.pData, arg2.pData, arg3.pData, input.pData, output.pData
     };
     oslProcess aProcess;
     oslFileHandle pIn = NULL;
@@ -219,9 +239,9 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         return false;
 
     bool bRet = false;
-    sal_uInt64 nCount;
-    osl_writeFile(pIn, pBuf, nBytesRead, &nCount);
     if (pIn) osl_closeFile(pIn);
+    osl_joinProcess(aProcess);
+    osl_freeProcessHandle(aProcess);
     bool bEMFSupported=true;
     if (pOut)
     {
@@ -235,14 +255,13 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         osl_closeFile(pOut);
     }
     if (pErr) osl_closeFile(pErr);
-    osl_joinProcess(aProcess);
-    osl_freeProcessHandle(aProcess);
     if (nCount == nBytesRead && bEMFSupported)
     {
         SvFileStream aFile(output, STREAM_READ);
         if (GraphicConverter::Import(aFile, rGraphic, CVT_EMF) == ERRCODE_NONE)
             bRet = true;
     }
+
     return bRet;
 }
 
