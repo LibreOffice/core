@@ -446,12 +446,12 @@ class ControllerProperties
     }
 };
 
-static void filterAccelerator( rtl::OUString& io_rText )
+static OUString filterAccelerator( rtl::OUString const & rText )
 {
-    rtl::OUStringBuffer aBuf( io_rText.getLength() );
+    rtl::OUStringBuffer aBuf( rText.getLength() );
     for( sal_Int32 nIndex = 0; nIndex != -1; )
-        aBuf.append( io_rText.getToken( 0, '~', nIndex ) );
-    io_rText = aBuf.makeStringAndClear();
+        aBuf.append( rText.getToken( 0, '~', nIndex ) );
+    return aBuf.makeStringAndClear();
 }
 
 @implementation ControlTarget
@@ -823,7 +823,7 @@ static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
 
 static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
                      const rtl::OUString& rText,
-                     const rtl::OUString& rProperty, Sequence< rtl::OUString > rChoices, sal_Int32 nSelectValue,
+                     const rtl::OUString& rProperty, Sequence<rtl::OUString> const & rChoices, sal_Int32 nSelectValue,
                      std::vector<ColumnItem >& rLeftColumn,
                      std::vector<ColumnItem >& rRightColumn,
                      ControllerProperties* pControllerProperties,
@@ -868,8 +868,7 @@ static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttach
     for( sal_Int32 m = 0; m < rChoices.getLength(); m++ )
     {
         NSCell* pCell = [pCells objectAtIndex: m];
-        filterAccelerator( rChoices[m] );
-        linebreakCell( pCell, rChoices[m] );
+        linebreakCell( pCell, filterAccelerator( rChoices[m] ) );
         // connect target and action
         [pCell setTarget: pCtrlTarget];
         [pCell setAction: @selector(triggered:)];
@@ -898,7 +897,7 @@ static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttach
 
 static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttachOffset*/,
                     const rtl::OUString& rText,
-                    const rtl::OUString& rProperty, const Sequence< rtl::OUString > rChoices, sal_Int32 nSelectValue,
+                    const rtl::OUString& rProperty, Sequence<rtl::OUString> const & rChoices, sal_Int32 nSelectValue,
                     std::vector<ColumnItem >& rLeftColumn,
                     std::vector<ColumnItem >& rRightColumn,
                     ControllerProperties* pControllerProperties,
@@ -1184,7 +1183,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text")) )
             {
                 rEntry.Value >>= aText;
-                filterAccelerator( aText );
+                aText = filterAccelerator( aText );
             }
             else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ControlType")) )
             {
