@@ -400,7 +400,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             OUString sTmpName;
             {
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
-                utl::TempFile aTempFile(sFind , &sExt, &sHomePath);
+                utl::TempFile aTempFile(sFind, true, &sExt, &sHomePath);
                 aTempFile.EnableKillingFile(true);
                 sTmpName = aTempFile.GetURL();
             }

@@ -231,7 +231,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     OUString sLeading(aEntry.GetBase());
     aEntry.removeSegment();
     OUString sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
-    utl::TempFile aTemp(sLeading,&sExt,&sPath );
+    utl::TempFile aTemp(sLeading, true, &sExt, &sPath);
     aTemp.EnableKillingFile();
 
     DateTime aTmplDate( DateTime::SYSTEM );
@@ -316,7 +316,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     // And what's with all the Bookmarks?
                     // ?????
 
-                    utl::TempFile aTempFile2(sLeading,&sExt,&sPath );
+                    utl::TempFile aTempFile2(sLeading, true, &sExt, &sPath);
                     sFileName = aTempFile2.GetURL();
                     SfxMedium* pTmpMed = new SfxMedium( sFileName,
                                                 STREAM_STD_READWRITE );

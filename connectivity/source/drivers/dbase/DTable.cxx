@@ -2453,7 +2453,7 @@ OUString ODbaseTable::createTempFile()
     OUString sTempName(aIdent);
     OUString sExt(OUString(".") + m_pConnection->getExtension());
     OUString sName(m_Name);
-    TempFile aTempFile(sName, &sExt, &sTempName);
+    TempFile aTempFile(sName, true, &sExt, &sTempName);
     if(!aTempFile.IsValid())
         getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE, *this);
 

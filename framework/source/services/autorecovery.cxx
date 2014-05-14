@@ -3541,7 +3541,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     OUString sName(sUniqueName.makeStringAndClear());
     OUString sExtension(rInfo.Extension);
     OUString sPath(sBackupPath);
-    ::utl::TempFile aTempFile(sName, &sExtension, &sPath);
+    ::utl::TempFile aTempFile(sName, true, &sExtension, &sPath);
 
     rInfo.NewTempURL = aTempFile.GetURL();
 }

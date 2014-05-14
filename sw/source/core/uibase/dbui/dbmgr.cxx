@@ -991,7 +991,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
                         OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
                         aTempFile.reset(
-                                new utl::TempFile(sLeading,&sExt,&sPath ));
+                            new utl::TempFile(sLeading, true, &sExt, &sPath));
                         if( bAsSingleFile )
                             aTempFile->EnableKillingFile();
                     }
@@ -2354,7 +2354,7 @@ OUString SwDBManager::LoadAndRegisterDataSource()
                 OUString sOutputExt = ".odb";
                 OUString sTmpName;
                 {
-                    utl::TempFile aTempFile(sNewName , &sOutputExt, &sHomePath);
+                    utl::TempFile aTempFile(sNewName, true, &sOutputExt, &sHomePath);
                     aTempFile.EnableKillingFile(true);
                     sTmpName = aTempFile.GetURL();
                 }

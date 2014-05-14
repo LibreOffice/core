@@ -174,7 +174,7 @@ protected:
     {
         FileFormat* pFormat = getFormat(nExportType);
         OUString aExt = OUString( "." ) + OUString::createFromAscii(pFormat->pName);
-        utl::TempFile aTempFile(OUString(), &aExt);
+        utl::TempFile aTempFile(OUString(), true, &aExt);
         aTempFile.EnableKillingFile();
         save(pShell, pFormat, aTempFile);
         return loadURL(aTempFile.GetURL());

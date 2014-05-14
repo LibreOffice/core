@@ -105,7 +105,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
         //creating with extension is not supported by a static method :-(
         OUString const sExt(
             comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(),'*'));
-        utl::TempFile aTempFile( OUString(), &sExt );
+        utl::TempFile aTempFile( OUString(), true, &sExt );
         m_sExampleURL = aTempFile.GetURL();
         aTempFile.EnableKillingFile();
     }

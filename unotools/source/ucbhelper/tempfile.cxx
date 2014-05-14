@@ -272,13 +272,6 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
     aName = CreateTempName_Impl( pParent, true, bDirectory );
 }
 
-TempFile::TempFile( const OUString& rLeadingChars, const OUString* pExtension, const OUString* pParent, bool bDirectory)
-    : pStream( 0 )
-    , bIsDirectory( bDirectory )
-    , bKillingFileEnabled( false )
-{
-    aName = lcl_createName(rLeadingChars, 0, true, pExtension, pParent, bDirectory, true);
-}
 TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const OUString* pExtension, const OUString* pParent, bool bDirectory)
     : pStream( 0 )
     , bIsDirectory( bDirectory )
