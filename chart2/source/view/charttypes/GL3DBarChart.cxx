@@ -28,7 +28,8 @@ GL3DBarChart::GL3DBarChart(
     OpenGLWindow& rWindow) :
     mxChartType(xChartType),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
-    mrWindow(rWindow)
+    mrWindow(rWindow),
+    mpCamera(NULL)
 {
     mrWindow.setRenderer(this);
     mpRenderer->init();
@@ -65,6 +66,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
+    mpCamera = static_cast<opengl3D::Camera*>(&maShapes.back());
+
     sal_Int32 nSeriesIndex = 0;
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
             itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
@@ -185,7 +188,8 @@ void GL3DBarChart::update()
 
 void GL3DBarChart::clickedAt(const Point& )
 {
-
+    if (mpCamera)
+        mpCamera->zoom(1);
 }
 
 }

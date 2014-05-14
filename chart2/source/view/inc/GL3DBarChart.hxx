@@ -26,6 +26,7 @@ namespace opengl3D {
 
 class Renderable3DObject;
 class OpenGL3DRenderer;
+class Camera;
 
 }
 
@@ -53,6 +54,8 @@ private:
 
     boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
     OpenGLWindow& mrWindow;
+
+    opengl3D::Camera* mpCamera;
 };
 
 }
