@@ -132,7 +132,7 @@ public:
         mpFilter(pFilter),
         m_nStartTime(0),
         m_bExported(false)
-    {}
+    { m_aTempFile.EnableKillingFile(); }
 
     virtual ~SwModelTestBase()
     {}
@@ -495,7 +495,6 @@ protected:
         aMediaDescriptor["FilterName"] <<= aFilterName;
         if (!maFilterOptions.isEmpty())
             aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-        m_aTempFile.EnableKillingFile();
         xStorable->storeToURL(m_aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
