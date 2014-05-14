@@ -2032,8 +2032,6 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
                                        const OUString& aExtension,
                                        const OUString& aDestDir )
 {
-    SAL_INFO( "sfx.doc", "SfxMedium::DoInternalBackup_Impl( with destdir )" );
-
     if ( !pImp->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
@@ -2108,9 +2106,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 
 void SfxMedium::DoBackup_Impl()
 {
-    SAL_INFO( "sfx.doc", "SfxMedium::DoBackup_Impl" );
-
-       // source file name is the logical name of this medium
+    // source file name is the logical name of this medium
     INetURLObject aSource( GetURLObject() );
 
     // there is nothing to backup in case source file does not exist

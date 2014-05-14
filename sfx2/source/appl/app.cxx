@@ -180,8 +180,6 @@ SfxApplication* SfxApplication::GetOrCreate()
 SfxApplication::SfxApplication()
     : pAppData_Impl( 0 )
 {
-    SAL_INFO( "sfx.appl", "SfxApplication::SfxApplication" );
-
     SetName( OUString("StarOffice") );
     SvtViewOptions::AcquireOptions();
 

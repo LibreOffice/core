@@ -204,8 +204,6 @@ OUString GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 bool SfxApplication::Initialize_Impl()
 {
-    SAL_INFO( "sfx.appl", "SfxApplication::Initialize_Impl" );
-
 #ifdef TLX_VALIDATE
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
 #endif

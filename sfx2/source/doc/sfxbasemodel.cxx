@@ -1525,7 +1525,6 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
                 io::IOException,
                 RuntimeException, std::exception )
 {
-    SAL_INFO( "sfx.doc", "PERFORMANCE - SfxBaseModel::storeSelf" );
     SfxModelGuard aGuard( *this );
 
     if ( m_pData->m_pObjectShell.Is() )
@@ -1655,7 +1654,6 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
                                         const   Sequence< beans::PropertyValue >&  rArgs   )
         throw (io::IOException, RuntimeException, std::exception)
 {
-    SAL_INFO( "sfx.doc", "PERFORMANCE - SfxBaseModel::storeAsURL" );
     SfxModelGuard aGuard( *this );
 
     if ( m_pData->m_pObjectShell.Is() )
