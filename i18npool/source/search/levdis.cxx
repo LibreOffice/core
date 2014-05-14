@@ -70,35 +70,6 @@
 #define LEVDISBIG   (nLimit + 1)    // Return value if distance > nLimit
 #define LEVDISDOUBLEBUF 2048        // dadrueber wird nicht mehr gedoppelt
 
-// Balance, aus Geschwindigkeitsgruenden ist dieses keine Funktion
-// c == cpPattern[jj] == cString[ii]
-// erst wird bis Fundstelle gesucht, wenn dort die Balance gleich ist, wird
-// auch nach der Fundstelle verglichen
-#define LEVDISBALANCE(jj,ii)                        \
-{                                                   \
-    if ( jj != ii )                                 \
-    {                                               \
-        sal_Int32 k;                                \
-        if ( jj > 0 )                               \
-            for ( k=0; k < jj; k++ )                \
-                if ( cpPattern[k] == c )            \
-                    nBalance++;                     \
-        if ( ii > 0 )                               \
-            for ( k=0; k < ii; k++ )                \
-                if ( cString[k] == c )              \
-                    nBalance--;                     \
-        if ( !nBalance )                            \
-        {                                           \
-            for ( k=jj+1; k < nPatternLen; k++ )    \
-                if ( cpPattern[k] == c )            \
-                    nBalance++;                     \
-            for ( k=ii+1; k < nStringLen; k++ )     \
-                if ( cString[k] == c )              \
-                    nBalance--;                     \
-        }                                           \
-    }                                               \
-}
-
 static sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
 {
     const sal_Unicode* pTempStr = pStr;
@@ -178,8 +149,8 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                 }
                 else if ( nReplacePos > 0 && !nP )
                 {
-                    int nBalance = 0;   // gleiche Anzahl c
-                    LEVDISBALANCE( 0, i-1 );
+                   // gleiche Anzahl c
+                    int nBalance = levdisbalance( 0, i-1, c, cString, nStringLen );
                     if ( !nBalance )
                     {   // einer wurde ersetzt, der ein Insert war
                         nRepS--;
@@ -230,8 +201,8 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                 nPij = 0;           // p(i,j)
                 if ( nReplacePos < 0 )
                 {
-                    int nBalance = 0;   // same quantity c
-                    LEVDISBALANCE( j, i-1 );
+                    // same quantity c
+                    int nBalance = levdisbalance( j, i-1, c, cString, nStringLen );
                     if ( !nBalance )
                         nReplacePos = 0;    // keine Ersetzung mehr
                 }
@@ -259,8 +230,8 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                     // Replace keins. Buchstabendreher werden hier erfasst
                     // und der ReplaceS zurueckgenommen, wodurch das doppelte
                     // Limit zum Tragen kommt.
-                    int nBalance = 0;   // same quantity c
-                    LEVDISBALANCE( j, i-1 );
+                    // same quantity c
+                    int nBalance = levdisbalance( j, i-1, c, cString, nStringLen );
                     if ( !nBalance )
                     {   // einer wurde ersetzt, der ein Insert war
                         nRepS--;

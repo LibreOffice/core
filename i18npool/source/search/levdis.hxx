@@ -165,6 +165,39 @@ public:
         // SetSplit( TRUE ) macht nur mit Werten nach CalcLPQR() Sinn!
 
     inline bool IsNormal( sal_Int32 nPos ) const { return( !bpPatIsWild[nPos] ); }
+
+    // Balance, aus Geschwindigkeitsgruenden ist dieses keine Funktion
+    // c == cpPattern[jj] == cString[ii]
+    // erst wird bis Fundstelle gesucht, wenn dort die Balance gleich ist, wird
+    // auch nach der Fundstelle verglichen
+    int levdisbalance(sal_Int32 jj, sal_Int32 ii, sal_Unicode c, const sal_Unicode* cString, sal_Int32 nStringLen)
+    {
+        int nBalance = 0;
+
+        if ( jj != ii )
+        {
+            sal_Int32 k;
+            if ( jj > 0 )
+                for ( k=0; k < jj; k++ )
+                    if ( cpPattern[k] == c )
+                        nBalance++;
+            if ( ii > 0 )
+                for ( k=0; k < ii; k++ )
+                    if ( cString[k] == c )
+                        nBalance--;
+            if ( !nBalance )
+            {
+                for ( k=jj+1; k < nPatternLen; k++ )
+                    if ( cpPattern[k] == c )
+                        nBalance++;
+                for ( k=ii+1; k < nStringLen; k++ )
+                    if ( cString[k] == c )
+                        nBalance--;
+            }
+        }
+
+        return nBalance;
+    }
 };
 
 inline int WLevDistance::SetLimit( int nNewLimit )
