@@ -125,6 +125,10 @@ SCQAHELPER_DLLPUBLIC bool checkFormulaPosition(ScDocument& rDoc, const ScAddress
 SCQAHELPER_DLLPUBLIC bool checkFormulaPositions(
     ScDocument& rDoc, SCTAB nTab, SCCOL nCol, const SCROW* pRows, size_t nRowCount);
 
+SCQAHELPER_DLLPUBLIC ScTokenArray* compileFormula(
+    ScDocument* pDoc, const OUString& rFormula, const ScAddress* pPos = NULL,
+    formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE );
+
 template<size_t _Size>
 bool checkOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][_Size], const char* pCaption)
 {

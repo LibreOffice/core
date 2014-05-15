@@ -123,6 +123,7 @@ public:
     void testFormulaTokenEquality();
     void testFormulaRefData();
     void testFormulaCompiler();
+    void testFormulaCompilerJumpReordering();
     void testFormulaRefUpdate();
     void testFormulaRefUpdateRange();
     void testFormulaRefUpdateSheets();
@@ -383,6 +384,7 @@ public:
     CPPUNIT_TEST(testFormulaTokenEquality);
     CPPUNIT_TEST(testFormulaRefData);
     CPPUNIT_TEST(testFormulaCompiler);
+    CPPUNIT_TEST(testFormulaCompilerJumpReordering);
     CPPUNIT_TEST(testFormulaRefUpdate);
     CPPUNIT_TEST(testFormulaRefUpdateRange);
     CPPUNIT_TEST(testFormulaRefUpdateSheets);

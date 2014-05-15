@@ -781,14 +781,90 @@ void Test::testFormulaCompiler()
     {
         boost::scoped_ptr<ScTokenArray> pArray;
         {
-            ScCompiler aComp(m_pDoc, ScAddress());
-            aComp.SetGrammar(aTests[i].eInputGram);
-            pArray.reset(aComp.CompileString(OUString::createFromAscii(aTests[i].pInput)));
+            pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), NULL, aTests[i].eInputGram));
             CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray.get());
         }
 
         OUString aFormula = toString(*m_pDoc, ScAddress(), *pArray, aTests[i].eOutputGram);
         CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aTests[i].pOutput), aFormula);
+    }
+}
+
+void Test::testFormulaCompilerJumpReordering()
+{
+    struct TokenCheck
+    {
+        OpCode meOp;
+        StackVar meType;
+    };
+
+    // Set separators first.
+    ScFormulaOptions aOptions;
+    aOptions.SetFormulaSepArg(";");
+    aOptions.SetFormulaSepArrayCol(";");
+    aOptions.SetFormulaSepArrayRow("|");
+    getDocShell().SetFormulaOptions(aOptions);
+
+    {
+        OUString aInput("=IF(B1;12;\"text\")");
+
+        // Compile formula string first.
+        boost::scoped_ptr<ScTokenArray> pCode(compileFormula(m_pDoc, aInput));
+        CPPUNIT_ASSERT(pCode.get());
+
+        // Then generate RPN tokens.
+        ScCompiler aCompRPN(m_pDoc, ScAddress(), *pCode);
+        aCompRPN.SetGrammar(FormulaGrammar::GRAM_NATIVE);
+        aCompRPN.CompileTokenArray();
+
+        // RPN tokens should be ordered: B1, ocIf, C1, ocSep, D1, ocClose.
+        TokenCheck aCheckRPN[] =
+        {
+            { ocPush,  svSingleRef },
+            { ocIf,    0           },
+            { ocPush,  svDouble    },
+            { ocSep,   0           },
+            { ocPush,  svString    },
+            { ocClose, 0           },
+        };
+
+        sal_uInt16 nLen = pCode->GetCodeLen();
+        CPPUNIT_ASSERT_MESSAGE("Wrong RPN token count.", nLen == SAL_N_ELEMENTS(aCheckRPN));
+
+        FormulaToken** ppTokens = pCode->GetCode();
+        for (sal_uInt16 i = 0; i < nLen; ++i)
+        {
+            const FormulaToken* p = ppTokens[i];
+            CPPUNIT_ASSERT_EQUAL(aCheckRPN[i].meOp, p->GetOpCode());
+            if (aCheckRPN[i].meOp == ocPush)
+                CPPUNIT_ASSERT_EQUAL(static_cast<int>(aCheckRPN[i].meType), static_cast<int>(p->GetType()));
+        }
+
+        // Generate RPN tokens again, but this time no jump command reordering.
+        pCode->DelRPN();
+        ScCompiler aCompRPN2(m_pDoc, ScAddress(), *pCode);
+        aCompRPN2.SetGrammar(FormulaGrammar::GRAM_NATIVE);
+        aCompRPN2.EnableJumpCommandReorder(false);
+        aCompRPN2.CompileTokenArray();
+
+        TokenCheck aCheckRPN2[] =
+        {
+            { ocPush,  svSingleRef },
+            { ocPush,  svDouble    },
+            { ocPush,  svString    },
+            { ocIf,    0           },
+        };
+
+        nLen = pCode->GetCodeLen();
+        CPPUNIT_ASSERT_MESSAGE("Wrong RPN token count.", nLen == SAL_N_ELEMENTS(aCheckRPN2));
+        ppTokens = pCode->GetCode();
+        for (sal_uInt16 i = 0; i < nLen; ++i)
+        {
+            const FormulaToken* p = ppTokens[i];
+            CPPUNIT_ASSERT_EQUAL(aCheckRPN2[i].meOp, p->GetOpCode());
+            if (aCheckRPN[i].meOp == ocPush)
+                CPPUNIT_ASSERT_EQUAL(static_cast<int>(aCheckRPN2[i].meType), static_cast<int>(p->GetType()));
+        }
     }
 }
 
