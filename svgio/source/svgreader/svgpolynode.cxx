@@ -22,8 +22,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-
-
 namespace svgio
 {
     namespace svgreader
@@ -120,8 +118,5 @@ namespace svgio
         }
     } // end of namespace svgreader
 } // end of namespace svgio
-
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

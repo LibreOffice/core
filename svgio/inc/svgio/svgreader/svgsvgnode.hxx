@@ -22,8 +22,6 @@
 
 #include <svgio/svgreader/svgstyleattributes.hxx>
 
-
-
 namespace svgio
 {
     namespace svgreader
@@ -95,10 +93,6 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-
-
 #endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGSVGNODE_HXX
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

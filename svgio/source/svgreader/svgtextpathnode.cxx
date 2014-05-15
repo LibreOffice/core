@@ -29,8 +29,6 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 
-
-
 namespace svgio
 {
     namespace svgreader
@@ -478,8 +476,5 @@ namespace svgio
 
     } // end of namespace svgreader
 } // end of namespace svgio
-
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

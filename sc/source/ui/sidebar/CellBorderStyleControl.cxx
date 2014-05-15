@@ -341,6 +341,4 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
 
 } } // end of namespace svx::sidebar
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

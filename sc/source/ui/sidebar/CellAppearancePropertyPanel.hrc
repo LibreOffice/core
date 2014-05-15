@@ -79,6 +79,4 @@
 #define VS_NOFILLCOLOR          2
 #define VS_LINECOLOR            1
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

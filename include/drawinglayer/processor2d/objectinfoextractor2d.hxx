@@ -22,11 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
-
-
 namespace drawinglayer { namespace primitive2d { class ObjectInfoPrimitive2D; }}
-
-
 
 namespace drawinglayer
 {
@@ -55,10 +51,6 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-
-
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_OBJECTINFOEXTRACTOR2D_HXX
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

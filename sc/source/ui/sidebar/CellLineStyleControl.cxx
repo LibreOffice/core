@@ -246,6 +246,4 @@ void CellLineStyleControl::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal
 
 } } // end of namespace svx::sidebar
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

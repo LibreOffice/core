@@ -22,11 +22,7 @@
 #include <svtools/valueset.hxx>
 #include <svx/svxdllapi.h>
 
-
-
 class XColorList;
-
-
 
 class SVX_DLLPUBLIC SvxColorValueSet : public ValueSet
 {
@@ -47,10 +43,6 @@ public:
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };
 
-
-
 #endif // INCLUDED_SVX_SVXCOLORVALUESET_HXX
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

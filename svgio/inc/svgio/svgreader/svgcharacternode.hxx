@@ -22,12 +22,7 @@
 
 #include <svgio/svgreader/svgnode.hxx>
 
-
-// predefines
-
 namespace drawinglayer { namespace primitive2d { class TextSimplePortionPrimitive2D; }}
-
-
 
 namespace svgio
 {
@@ -174,10 +169,6 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-
-
 #endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGCHARACTERNODE_HXX
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

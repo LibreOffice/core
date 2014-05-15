@@ -23,8 +23,6 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <rtl/ustring.hxx>
 
-
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -66,11 +64,6 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
-
-
 #endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_OBJECTINFOPRIMITIVE2D_HXX
-
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

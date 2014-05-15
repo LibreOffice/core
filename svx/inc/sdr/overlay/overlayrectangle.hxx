@@ -22,8 +22,6 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <tools/gen.hxx>
 
-
-
 class PolyPolygon;
 
 namespace sdr
@@ -77,10 +75,6 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
-
-
 #endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

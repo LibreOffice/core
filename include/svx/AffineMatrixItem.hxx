@@ -23,10 +23,6 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 
-
-// class AffineMatrixItem
-
-
 class SVX_DLLPUBLIC AffineMatrixItem : public SfxPoolItem
 {
 private:
@@ -49,7 +45,5 @@ public:
 };
 
 #endif // INCLUDED_SVX_AFFINEMATRIXITEM_HXX
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

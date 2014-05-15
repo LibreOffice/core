@@ -33,8 +33,6 @@
 #include <rtl/uri.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-
-
 namespace svgio
 {
     namespace svgreader
@@ -352,8 +350,5 @@ namespace svgio
 
     } // end of namespace svgreader
 } // end of namespace svgio
-
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

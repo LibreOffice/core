@@ -24,8 +24,6 @@
 #include <editeng/editund2.hxx>
 #include <tools/link.hxx>
 
-
-
 class SVX_DLLPUBLIC SdrUndoManager : public EditUndoManager
 {
 private:
@@ -63,9 +61,6 @@ public:
     bool isEndTextEditTriggeredFromUndo() { return mbEndTextEditTriggeredFromUndo; }
 };
 
-
-
 #endif // INCLUDED_SVX_SDRUNDOMANAGER_HXX
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

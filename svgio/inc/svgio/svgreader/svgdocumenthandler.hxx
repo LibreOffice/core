@@ -23,12 +23,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <svgio/svgreader/svgdocument.hxx>
 
-
-// predefines
-
 namespace svgio { namespace svgreader { class SvgCharacterNode; }}
-
-
 
 namespace svgio
 {
@@ -65,10 +60,6 @@ namespace svgio
     } // end of namespace svgreader
 } // end of namespace svgio
 
-
-
 #endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
