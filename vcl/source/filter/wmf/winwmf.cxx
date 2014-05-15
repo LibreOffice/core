@@ -1157,11 +1157,12 @@ bool WMFReader::ReadHeader()
             if (aPlaceableBound.GetWidth() > aMaxWidth)
             {
                 double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
+
                 aPlaceableBound = Rectangle(
-                                    aPlaceableBound.Top() / fRatio,
-                                    aPlaceableBound.Left() / fRatio,
-                                    aPlaceableBound.Bottom() / fRatio,
-                                    aPlaceableBound.Right() / fRatio);
+                                    aPlaceableBound.Left()   / fRatio,
+                                    aPlaceableBound.Top()    / fRatio,
+                                    aPlaceableBound.Right()  / fRatio,
+                                    aPlaceableBound.Bottom() / fRatio);
             }
         }
 
