@@ -107,7 +107,8 @@ sal_Bool PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic )
     {
         case 0 :
             maBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == sal_False )
+            mpAcc = maBmp.AcquireWriteAccess();
+            if ( !mpAcc )
                 return sal_False;
             mpAcc->SetPaletteEntryCount( 2 );
             mpAcc->SetPaletteColor( 0, BitmapColor( 0xff, 0xff, 0xff ) );
@@ -122,7 +123,8 @@ sal_Bool PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic )
             else
                 maBmp = Bitmap( Size( mnWidth, mnHeight ), 8);
 
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == sal_False )
+            mpAcc = maBmp.AcquireWriteAccess();
+            if ( !mpAcc )
                 return sal_False;
             mnCol = (sal_uInt16)mnMaxVal + 1;
             if ( mnCol > 256 )
@@ -137,7 +139,8 @@ sal_Bool PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic )
             break;
         case 2 :
             maBmp = Bitmap( Size( mnWidth, mnHeight ), 24 );
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == sal_False )
+            mpAcc = maBmp.AcquireWriteAccess();
+            if ( !mpAcc )
                 return sal_False;
             break;
     }

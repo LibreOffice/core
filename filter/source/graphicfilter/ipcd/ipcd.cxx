@@ -155,7 +155,8 @@ sal_Bool PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigIt
             nBMPHeight = nWidth;
         }
         aBmp = Bitmap( Size( nBMPWidth, nBMPHeight ), 24 );
-        if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == sal_False )
+        mpAcc = aBmp.AcquireWriteAccess();
+        if ( !mpAcc )
             return sal_False;
 
         ReadImage( 5 ,65 );
