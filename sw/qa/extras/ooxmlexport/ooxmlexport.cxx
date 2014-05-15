@@ -3194,6 +3194,18 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tif']", "PartName", "/word/media/image1.tif");
 }
 
+DECLARE_OOXMLEXPORT_TEST(fdo78474, "fdo78474.docx")
+{
+    xmlDocPtr pXmlDoc1 = parseExport("word/document.xml");
+    if (!pXmlDoc1) return;
+    //docx file after RT is getting corrupted.
+    assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "rId2");
+
+    xmlDocPtr pXmlDoc2 = parseExport("word/_rels/document.xml.rels");
+    if (!pXmlDoc2) return;
+    assertXPath(pXmlDoc2,"/rels:Relationships/rels:Relationship[2]","Id","rId2");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
 {
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
