@@ -1165,6 +1165,12 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     {
         SAL_WARN( "embeddedobj.common", "Can not retrieve target storage media type!" );
     }
+    if (nTargetStorageFormat == SOFFICE_FILEFORMAT_60)
+    {
+        SAL_INFO("embeddedobj.common", "fdo#78159: Storing OOoXML as ODF");
+        nTargetStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
+        // setting MediaType is done later anyway, no need to do it here
+    }
 
     try
     {
@@ -1293,6 +1299,12 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     catch ( const uno::Exception& )
     {
         SAL_WARN( "embeddedobj.common", "Can not retrieve target storage media type!" );
+    }
+    if (nTargetStorageFormat == SOFFICE_FILEFORMAT_60)
+    {
+        SAL_INFO("embeddedobj.common", "fdo#78159: Storing OOoXML as ODF");
+        nTargetStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
+        // setting MediaType is done later anyway, no need to do it here
     }
 
     try
@@ -1578,6 +1590,12 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         catch ( const uno::Exception& )
         {
             SAL_WARN( "embeddedobj.common", "Can not retrieve storage media type!" );
+        }
+        if (nStorageFormat == SOFFICE_FILEFORMAT_60)
+        {
+            SAL_INFO("embeddedobj.common", "fdo#78159: Storing OOoXML as ODF");
+            nStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
+            // setting MediaType is done later anyway, no need to do it here
         }
 
         aGuard.clear();
