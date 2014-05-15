@@ -22,13 +22,13 @@
 
 using namespace rtl;
 
-class Test : public SwModelTestBase, public HtmlTestTools
+class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
 private:
     FieldUnit m_eUnit;
 
 public:
-    Test() :
+    HtmlExportTest() :
         SwModelTestBase("/sw/qa/extras/htmlexport/data/", "HTML (StarWriter)"),
         m_eUnit(FUNIT_NONE)
     {}
@@ -70,7 +70,7 @@ private:
     }
 };
 
-#define DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+#define DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, HtmlExportTest)
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo62336, "fdo62336.docx")
 {
@@ -105,22 +105,20 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml(m_aTempFile);
-    if (pDoc)
-    {
-        assertXPath(pDoc, "/html/body", 1);
-        assertXPath(pDoc, "/html/body/p/img", 1);
-    }
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/html/body", 1);
+    assertXPath(pDoc, "/html/body/p/img", 1);
 }
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml(m_aTempFile);
-    if (pDoc)
-    {
-        assertXPath(pDoc, "/html/body", 1);
-        assertXPath(pDoc, "/html/body/p/img", 0);
-    }
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/html/body", 1);
+    assertXPath(pDoc, "/html/body/p/img", 0);
 }
 
 #endif
