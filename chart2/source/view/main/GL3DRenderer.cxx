@@ -770,6 +770,10 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
             glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
             glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
         }
+        else
+        {
+            // TODO: moggi: model matrix
+        }
 
         GLint maVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
 
@@ -1051,10 +1055,18 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 flatScale = glm::scale(xzScale, xzScale, xzScale);
     m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
-    glm::mat3 normalMatrix(m_Model);
-    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    if(!mbPickingMode)
+    {
+        glm::mat3 normalMatrix(m_Model);
+        glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+        glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+        glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    }
+    else
+    {
+        // TODO: moggi: model matrix
+    }
+
     glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[surIndex]));
 }
 
@@ -1084,10 +1096,18 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale;
     }
-    glm::mat3 normalMatrix(m_Model);
-    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+
+    if(!mbPickingMode)
+    {
+        glm::mat3 normalMatrix(m_Model);
+        glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+        glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+        glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    }
+    else
+    {
+        // TODO: moggi: model matrix
+    }
     glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[BOTTOM_SURFACE]));
 }
 
@@ -1119,10 +1139,18 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
         glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
         m_Model = m_Model * reverseMatrix;
     }
-    glm::mat3 normalMatrix(m_Model);
-    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+
+    if(!mbPickingMode)
+    {
+        glm::mat3 normalMatrix(m_Model);
+        glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+        glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+        glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    }
+    else
+    {
+        // TODO: moggi: model matrix
+    }
     glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[MIDDLE_SURFACE]));
 }
 
@@ -1155,10 +1183,18 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
-    glm::mat3 normalMatrix(m_Model);
-    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+
+    if(!mbPickingMode)
+    {
+        glm::mat3 normalMatrix(m_Model);
+        glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+        glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+        glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    }
+    else
+    {
+        // TODO: moggi: model matrix
+    }
     glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[TOP_SURFACE]));
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
 }
@@ -1178,10 +1214,18 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
         glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
         m_Model = m_Model * reverseMatrix;
     }
-    glm::mat3 normalMatrix(m_Model);
-    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+
+    if(!mbPickingMode)
+    {
+        glm::mat3 normalMatrix(m_Model);
+        glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+        glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+        glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    }
+    else
+    {
+        // TODO: moggi: model matrix
+    }
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
@@ -1209,8 +1253,13 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    Update3DUniformBlock();
-    glUseProgram(maResources.m_3DProID);
+    if(mbPickingMode)
+        glUseProgram(maPickingResources.m_CommonProID);
+    else
+    {
+        Update3DUniformBlock();
+        glUseProgram(maResources.m_3DProID);
+    }
     size_t extrude3DNum = m_Extrude3DList.size();
     for (size_t i = 0; i < extrude3DNum; i++)
     {
@@ -1218,31 +1267,40 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         GLuint vertexBuf = extrude3DInfo.rounded ? m_CubeVertexBuf : m_BoundBox;
         GLuint normalBuf = extrude3DInfo.rounded ? m_CubeNormalBuf : m_BoundBoxNormal;
         // 1st attribute buffer : vertices
-        glEnableVertexAttribArray(maResources.m_3DVertexID);
+
+        GLint aVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
+        glEnableVertexAttribArray(aVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
-        glVertexAttribPointer(maResources.m_3DVertexID, // attribute
+        glVertexAttribPointer(aVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
                                 0,                  // stride
                                 (void*)0            // array buffer offset
                                 );
-        // 2nd attribute buffer : normals
-        glEnableVertexAttribArray(maResources.m_3DNormalID);
-        glBindBuffer(GL_ARRAY_BUFFER, normalBuf);
-        glVertexAttribPointer(maResources.m_3DNormalID, // attribute
-                                3,                  // size
-                                GL_FLOAT,           // type
-                                GL_FALSE,           // normalized?
-                                0,                  // stride
-                                (void*)0            // array buffer offset
-                                );
+
+        if(!mbPickingMode)
+        {
+            // 2nd attribute buffer : normals
+            glEnableVertexAttribArray(maResources.m_3DNormalID);
+            glBindBuffer(GL_ARRAY_BUFFER, normalBuf);
+            glVertexAttribPointer(maResources.m_3DNormalID, // attribute
+                    3,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+                    );
+        }
         extrude3DInfo.yTransform *= m_fHeightWeight;
         extrude3DInfo.yScale *= m_fHeightWeight;
-        glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
-        glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &extrude3DInfo.material);
-        CHECK_GL_ERROR();
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        if(!mbPickingMode)
+        {
+            glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
+            glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &extrude3DInfo.material);
+            CHECK_GL_ERROR();
+            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        }
         extrude3DInfo.reverse = 0;
         if (extrude3DInfo.rounded)
         {
@@ -1253,8 +1311,9 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         {
             RenderNonRoundedBar(extrude3DInfo);
         }
-        glDisableVertexAttribArray(maResources.m_3DVertexID);
-        glDisableVertexAttribArray(maResources.m_3DNormalID);
+        glDisableVertexAttribArray(aVertexID);
+        if(!mbPickingMode)
+            glDisableVertexAttribArray(maResources.m_3DNormalID);
     }
     m_Extrude3DList.clear();
     glUseProgram(0);
