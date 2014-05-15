@@ -32,7 +32,6 @@ public:
         BootstrapFixture(true, false)
     {}
 
-    void runTest();
     void testNonPlaceableWmf();
 
     CPPUNIT_TEST_SUITE(WmfTest);
