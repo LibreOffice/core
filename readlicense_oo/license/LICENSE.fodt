@@ -4490,10 +4490,8 @@
    <text:h text:style-name="Heading_20_2" text:outline-level="2">Czech</text:h>
    <text:h text:style-name="Heading_20_3" text:outline-level="3">Thesaurus</text:h>
    <text:p text:style-name="Standard">The following software may be included in this product: Czech thesaurus. Use of any of this software is governed by the terms of the license below:</text:p>
-   <text:p text:style-name="Standard">Copyright (c) 2002 Pavel Rychly, Pavel Smrz, {pary,smrz}@fi.muni.cz, <text:s text:c="10"/>NLPlab, Faculty of Informatics, Masaryk University</text:p>
-   <text:p text:style-name="Standard">Permission is hereby granted, free of charge, to any person obtaining a copy of this data (the &quot;Data&quot;), to deal in the Data without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Data, and to permit persons to whom the Data is furnished to do so, subject to the following conditions:</text:p>
-   <text:p text:style-name="Standard">The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Data.</text:p>
-   <text:p text:style-name="Standard">THE DATA ARE PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATA OR THE USE OR OTHER DEALINGS IN THE DATA.</text:p>
+   <text:p text:style-name="Standard">Copyright (c) 1994,2008 Karel Pala, Jan Všianský<text:line-break/>pala@fi.muni.cz</text:p>
+   <text:p text:style-name="Standard">You can freely use the thesaurus in OpenOffice.org (or its derivatives). You can not modify it or use for commercial purposes without the author's approval.</text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:soft-page-break/>Croatian</text:h>
    <text:h text:style-name="Heading_20_3" text:outline-level="3">Spelling dictionary</text:h>
    <text:p text:style-name="Standard">The following software may be included in this product: Croatian spelling dictionary. Use of any of this software is governed by the terms of the license below:</text:p>
