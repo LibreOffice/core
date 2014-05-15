@@ -920,28 +920,37 @@ void ScInputHandler::ShowArgumentsTip( const OUString& rParagraph, OUString& rSe
                 }
             }
         }
-        else if (bTryFirstSel)
+        else
         {
-            sal_Int32 nPosition = 0;
-            OUString aText = pEngine->GetWord( 0, rSel.nEndPos-1 );
-            /* XXX: dubious, what is this condition supposed to exactly match? */
-            if (rSel.nEndPos <= aText.getLength() && aText[ rSel.nEndPos-1 ] == '=')
+            if ( bTryFirstSel )
             {
-                break;
-            }
-            OUString aNew;
-            nPosition = aText.getLength()+1;
-            ScTypedCaseStrSet::const_iterator it =
-                findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
-            if (it != pFormulaDataPara->end())
-            {
-                if( nPosition < rParagraph.getLength() && rParagraph[ nPosition ] =='(' )
+                sal_Int32 nPosition = 0;
+                OUString aText = pEngine->GetWord( 0, rSel.nEndPos-1 );
+                /* XXX: dubious, what is this condition supposed to exactly match? */
+                if (rSel.nEndPos <= aText.getLength() && aText[ rSel.nEndPos-1 ] == '=')
                 {
-                    ShowTipBelow( aNew );
-                    bFound = true;
+                    break;
+                }
+                OUString aNew;
+                nPosition = aText.getLength()+1;
+                ScTypedCaseStrSet::const_iterator it =
+                    findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
+                if (it != pFormulaDataPara->end())
+                {
+                    if( nPosition < rParagraph.getLength() && rParagraph[ nPosition ] =='(' )
+                    {
+                        ShowTipBelow( aNew );
+                        bFound = true;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
                 else
+                {
                     break;
+                }
             }
             else
             {
