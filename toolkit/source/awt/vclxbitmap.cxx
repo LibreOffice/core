@@ -44,8 +44,8 @@ IMPL_XUNOTUNNEL( VCLXBitmap )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXBitmap )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayBitmap>* ) NULL )
+    cppu::UnoType<com::sun::star::awt::XBitmap>::get(),
+    cppu::UnoType<com::sun::star::awt::XDisplayBitmap>::get()
 IMPL_XTYPEPROVIDER_END
 
 

@@ -382,7 +382,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
 
 com::sun::star::uno::Type SAL_CALL DispatchRecorder::getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL);
+    return cppu::UnoType<com::sun::star::frame::DispatchStatement>::get();
 }
 
 sal_Bool SAL_CALL DispatchRecorder::hasElements()  throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -405,7 +405,7 @@ com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  t
     }
 
     Any element(&m_aStatements[idx],
-        ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL));
+        cppu::UnoType<com::sun::star::frame::DispatchStatement>::get());
 
     return element;
 }
@@ -413,7 +413,7 @@ com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  t
 void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::star::uno::Any& element) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (element.getValueType() !=
-        ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL)) {
+        cppu::UnoType<com::sun::star::frame::DispatchStatement>::get()) {
                         throw com::sun::star::lang::IllegalArgumentException(
                         OUString( "Illegal argument in dispatch recorder" ),
                         Reference< XInterface >(), 2 );

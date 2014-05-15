@@ -1931,7 +1931,7 @@ public:
 uno::Type ModuleContainer_Impl::getElementType()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Type aModuleType = ::getCppuType( (const uno::Reference< script::XStarBasicModuleInfo > *)0 );
+    uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
     return aModuleType;
 }
 
@@ -1993,7 +1993,7 @@ void ModuleContainer_Impl::replaceByName( const OUString& aName, const uno::Any&
 void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    uno::Type aModuleType = ::getCppuType( (const uno::Reference< script::XStarBasicModuleInfo > *)0 );
+    uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
     uno::Type aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
@@ -2080,7 +2080,7 @@ public:
 uno::Type DialogContainer_Impl::getElementType()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Type aModuleType = ::getCppuType( (const uno::Reference< script::XStarBasicDialogInfo > *)0 );
+    uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
     return aModuleType;
 }
 
@@ -2173,7 +2173,7 @@ void DialogContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     (void)aName;
-    uno::Type aModuleType = ::getCppuType( (const uno::Reference< script::XStarBasicDialogInfo > *)0 );
+    uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
     uno::Type aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
@@ -2240,7 +2240,7 @@ public:
 uno::Type LibraryContainer_Impl::getElementType()
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Type aType = ::getCppuType( (const uno::Reference< script::XStarBasicLibraryInfo > *)0 );
+    uno::Type aType = cppu::UnoType<script::XStarBasicLibraryInfo>::get();
     return aType;
 }
 

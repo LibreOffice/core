@@ -462,7 +462,7 @@ throw (css::uno::RuntimeException, std::exception)
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL TabWindow::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
@@ -475,7 +475,7 @@ throw (css::uno::RuntimeException, std::exception)
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 // XEventListener
@@ -911,11 +911,11 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
     {
         com::sun::star::beans::Property( TABWINDOW_PROPNAME_PARENTWINDOW,
                                          TABWINDOW_PROPHANDLE_PARENTWINDOW,
-                                         ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
+                                         cppu::UnoType<css::awt::XWindow>::get(),
                                          com::sun::star::beans::PropertyAttribute::READONLY  ),
         com::sun::star::beans::Property( TABWINDOW_PROPNAME_TOPWINDOW,
                                          TABWINDOW_PROPHANDLE_TOPWINDOW,
-                                         ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
+                                         cppu::UnoType<css::awt::XWindow>::get(),
                                          com::sun::star::beans::PropertyAttribute::READONLY  )
     };  // Use it to initialize sequence!
     const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );

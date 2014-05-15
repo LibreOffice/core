@@ -763,8 +763,8 @@ void SAL_CALL UnoMultiPageControl::removeTabListener( const Reference< XTabListe
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoMultiPageControl )
-    getCppuType( ( uno::Reference< awt::XSimpleTabController>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XTabListener>* ) NULL ),
+    cppu::UnoType<awt::XSimpleTabController>::get(),
+    cppu::UnoType<awt::XTabListener>::get(),
     ControlContainerBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 

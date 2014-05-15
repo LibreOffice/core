@@ -848,26 +848,26 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
     switch( eType )
     {
         case SbxNULL:       aRetType = ::getCppuType( (const Reference< XInterface > *)0 ); break;
-        case SbxINTEGER:    aRetType = ::cppu::UnoType<sal_Int16>::get(); break;
-        case SbxLONG:       aRetType = ::cppu::UnoType<sal_Int32>::get(); break;
-        case SbxSINGLE:     aRetType = ::cppu::UnoType<float>::get(); break;
-        case SbxDOUBLE:     aRetType = ::cppu::UnoType<double>::get(); break;
-        case SbxCURRENCY:   aRetType = ::getCppuType( (oleautomation::Currency*)0 ); break;
-        case SbxDECIMAL:    aRetType = ::getCppuType( (oleautomation::Decimal*)0 ); break;
+        case SbxINTEGER:    aRetType = cppu::UnoType<sal_Int16>::get(); break;
+        case SbxLONG:       aRetType = cppu::UnoType<sal_Int32>::get(); break;
+        case SbxSINGLE:     aRetType = cppu::UnoType<float>::get(); break;
+        case SbxDOUBLE:     aRetType = cppu::UnoType<double>::get(); break;
+        case SbxCURRENCY:   aRetType = cppu::UnoType<oleautomation::Currency>::get(); break;
+        case SbxDECIMAL:    aRetType = cppu::UnoType<oleautomation::Decimal>::get(); break;
         case SbxDATE:       {
                             SbiInstance* pInst = GetSbData()->pInst;
                             if( pInst && pInst->IsCompatibility() )
-                                aRetType = ::cppu::UnoType<double>::get();
+                                aRetType = cppu::UnoType<double>::get();
                             else
-                                aRetType = ::getCppuType( (oleautomation::Date*)0 );
+                                aRetType = cppu::UnoType<oleautomation::Date>::get();
                             }
                             break;
-        case SbxSTRING:     aRetType = ::cppu::UnoType<OUString>::get(); break;
-        case SbxBOOL:       aRetType = ::getCppuType( (sal_Bool*)0 ); break;
-        case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
-        case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
-        case SbxBYTE:       aRetType = ::cppu::UnoType<sal_Int8>::get(); break;
-        case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
+        case SbxSTRING:     aRetType = cppu::UnoType<OUString>::get(); break;
+        case SbxBOOL:       aRetType = cppu::UnoType<sal_Bool>::get(); break;
+        case SbxVARIANT:    aRetType = cppu::UnoType<Any>::get(); break;
+        case SbxCHAR:       aRetType = cppu::UnoType<cppu::UnoCharType>::get(); break;
+        case SbxBYTE:       aRetType = cppu::UnoType<sal_Int8>::get(); break;
+        case SbxUSHORT:     aRetType = cppu::UnoType<cppu::UnoUnsignedShortType>::get(); break;
         case SbxULONG:      aRetType = ::cppu::UnoType<sal_uInt32>::get(); break;
         // map machine-dependent ones to long for consistency
         case SbxINT:        aRetType = ::cppu::UnoType<sal_Int32>::get(); break;
@@ -926,7 +926,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                             {
                                 // if only first element is void: different types  -> []any
                                 // if all elements are void: []void is not allowed -> []any
-                                aElementType = getCppuType( (Any*)0 );
+                                aElementType = cppu::UnoType<Any>::get();
                                 break;
                             }
                             aElementType = aType;
@@ -935,7 +935,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                         else if( aElementType != aType )
                         {
                             // different types -> AnySequence
-                            aElementType = getCppuType( (Any*)0 );
+                            aElementType = cppu::UnoType<Any>::get();
                             break;
                         }
                     }
@@ -963,7 +963,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                             {
                                 // if only first element is void: different types  -> []any
                                 // if all elements are void: []void is not allowed -> []any
-                                aElementType = getCppuType( (Any*)0 );
+                                aElementType = cppu::UnoType<Any>::get();
                                 break;
                             }
                             aElementType = aType;
@@ -972,7 +972,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                         else if( aElementType != aType )
                         {
                             // different types -> AnySequence
-                            aElementType = getCppuType( (Any*)0 );
+                            aElementType = cppu::UnoType<Any>::get();
                             break;
                         }
                     }
@@ -1087,16 +1087,16 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
             {
                 sal_uInt16 n = pVar->GetUShort();
                 if( n <= 255 )
-                    aType = ::getCppuType( (sal_uInt8*)0 );
+                    aType = cppu::UnoType<sal_uInt8>::get();
                 break;
             }
             case TypeClass_UNSIGNED_LONG:
             {
                 sal_uInt32 n = pVar->GetLong();
                 if( n <= 255 )
-                    aType = ::getCppuType( (sal_uInt8*)0 );
+                    aType = cppu::UnoType<sal_uInt8>::get();
                 else if( n <= SbxMAXUINT )
-                    aType = ::getCppuType( (sal_uInt16*)0 );
+                    aType = cppu::UnoType<cppu::UnoUnsignedShortType>::get();
                 break;
             }
             // TODO: need to add hyper types ?
@@ -1247,20 +1247,20 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                     SbiInstance* pInst = GetSbData()->pInst;
                     if( pInst && pInst->IsCompatibility() )
                     {
-                        if( rType == ::getCppuType( (oleautomation::Decimal*)0 ) )
+                        if( rType == cppu::UnoType<oleautomation::Decimal>::get())
                         {
                             oleautomation::Decimal aDecimal;
                             pVar->fillAutomationDecimal( aDecimal );
                             aRetVal <<= aDecimal;
                             break;
                         }
-                        else if( rType == ::getCppuType( (oleautomation::Currency*)0 ) )
+                        else if( rType == cppu::UnoType<oleautomation::Currency>::get())
                         {
                             // assumes per previous code that ole Currency is Int64
                             aRetVal <<= (sal_Int64)( pVar->GetInt64() );
                             break;
                         }
-                        else if( rType == ::getCppuType( (oleautomation::Date*)0 ) )
+                        else if( rType == cppu::UnoType<oleautomation::Date>::get())
                         {
                             oleautomation::Date aDate;
                             aDate.Value = pVar->GetDate();

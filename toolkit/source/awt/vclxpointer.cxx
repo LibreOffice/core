@@ -48,7 +48,7 @@ IMPL_XUNOTUNNEL( VCLXPointer )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXPointer )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer>* ) NULL )
+    cppu::UnoType<com::sun::star::awt::XPointer>::get()
 IMPL_XTYPEPROVIDER_END
 
 void VCLXPointer::setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException, std::exception)

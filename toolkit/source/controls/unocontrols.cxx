@@ -1533,8 +1533,8 @@ uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType ) t
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoFixedHyperlinkControl )
-    getCppuType( ( uno::Reference< awt::XFixedHyperlink>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
+    cppu::UnoType<awt::XFixedHyperlink>::get(),
+    cppu::UnoType<awt::XLayoutConstrains>::get(),
     UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -1729,8 +1729,8 @@ uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType ) throw(
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoFixedTextControl )
-    getCppuType( ( uno::Reference< awt::XFixedText>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
+    cppu::UnoType<awt::XFixedText>::get(),
+    cppu::UnoType<awt::XLayoutConstrains>::get(),
     UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -2994,9 +2994,9 @@ uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType ) throw(u
 }
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoComboBoxControl )
-    getCppuType( ( uno::Reference< awt::XComboBox>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XItemListener>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XItemListListener>* ) NULL ),
+    cppu::UnoType<awt::XComboBox>::get(),
+    cppu::UnoType<awt::XItemListener>::get(),
+    cppu::UnoType<awt::XItemListListener>::get(),
     UnoEditControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -3291,7 +3291,7 @@ uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType ) throw(
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoSpinFieldControl )
-    getCppuType( ( uno::Reference< awt::XSpinField>* ) NULL ),
+    cppu::UnoType<awt::XSpinField>::get(),
     UnoEditControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -3441,7 +3441,7 @@ uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType ) throw(
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoDateFieldControl )
-    getCppuType( ( uno::Reference< awt::XDateField>* ) NULL ),
+    cppu::UnoType<awt::XDateField>::get(),
     UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -3696,7 +3696,7 @@ uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType ) throw(
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoTimeFieldControl )
-    getCppuType( ( uno::Reference< awt::XTimeField>* ) NULL ),
+    cppu::UnoType<awt::XTimeField>::get(),
     UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -3911,7 +3911,7 @@ uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType ) thr
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoNumericFieldControl )
-    getCppuType( ( uno::Reference< awt::XNumericField>* ) NULL ),
+    cppu::UnoType<awt::XNumericField>::get(),
     UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -4129,7 +4129,7 @@ uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType ) th
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoCurrencyFieldControl )
-    getCppuType( ( uno::Reference< awt::XCurrencyField>* ) NULL ),
+    cppu::UnoType<awt::XCurrencyField>::get(),
     UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -4362,7 +4362,7 @@ uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType ) thr
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoPatternFieldControl )
-    getCppuType( ( uno::Reference< awt::XPatternField>* ) NULL ),
+    cppu::UnoType<awt::XPatternField>::get(),
     UnoSpinFieldControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -4498,7 +4498,7 @@ uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType ) thro
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoProgressBarControl )
-    getCppuType( ( uno::Reference< awt::XProgressBar>* ) NULL ),
+    cppu::UnoType<awt::XProgressBar>::get(),
     UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 

@@ -1887,7 +1887,7 @@ RTLFUNC(CDateFromUnoDate)
         return;
     }
 
-    Any aAny (sbxToUnoValue(rPar.Get(1), ::getCppuType( (com::sun::star::util::Date*)0 )));
+    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<com::sun::star::util::Date>::get()));
     com::sun::star::util::Date aUnoDate;
     if(aAny >>= aUnoDate)
         SbxDateFromUNODate(rPar.Get(0), aUnoDate);
@@ -1940,7 +1940,7 @@ RTLFUNC(CDateFromUnoTime)
         return;
     }
 
-    Any aAny (sbxToUnoValue(rPar.Get(1), ::getCppuType( (com::sun::star::util::Time*)0 )));
+    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<com::sun::star::util::Time>::get()));
     com::sun::star::util::Time aUnoTime;
     if(aAny >>= aUnoTime)
         SbxDateFromUNOTime(rPar.Get(0), aUnoTime);
@@ -2002,7 +2002,7 @@ RTLFUNC(CDateFromUnoDateTime)
         return;
     }
 
-    Any aAny (sbxToUnoValue(rPar.Get(1), ::getCppuType( (com::sun::star::util::DateTime*)0 )));
+    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<com::sun::star::util::DateTime>::get()));
     com::sun::star::util::DateTime aUnoDT;
     if(aAny >>= aUnoDT)
         SbxDateFromUNODateTime(rPar.Get(0), aUnoDT);

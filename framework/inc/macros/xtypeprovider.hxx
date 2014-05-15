@@ -243,7 +243,7 @@ ________________________________________________________________________________
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER_PURE( CLASS )                                                                                                          \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, ::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >*)NULL ) )
+    PRIVATE_DEFINE_XTYPEPROVIDER_GETTYPES( CLASS, cppu::UnoType<com::sun::star::lang::XTypeProvider>::get())
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER( CLASS, TYPES )                                                                                                        \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                               \

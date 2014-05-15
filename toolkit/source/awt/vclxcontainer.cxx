@@ -57,8 +57,8 @@ VCLXContainer::~VCLXContainer()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXContainer )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainer>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerPeer>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XVclContainer>::get(),
+    cppu::UnoType<com::sun::star::awt::XVclContainerPeer>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 

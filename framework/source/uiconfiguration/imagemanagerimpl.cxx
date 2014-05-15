@@ -721,13 +721,13 @@ void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >&
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const uno::Reference< XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 void ImageManagerImpl::removeEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const uno::Reference< XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 // XInitialization
@@ -1372,20 +1372,20 @@ throw (::com::sun::star::uno::RuntimeException)
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const uno::Reference< XUIConfigurationListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<XUIConfigurationListener>::get(), xListener );
 }
 
 void ImageManagerImpl::removeConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
 throw (::com::sun::star::uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const uno::Reference< XUIConfigurationListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<XUIConfigurationListener>::get(), xListener );
 }
 
 void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
-                                        ::getCppuType( ( const css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >*) NULL ) );
+                                        cppu::UnoType<com::sun::star::ui::XUIConfigurationListener>::get());
     if ( pContainer != NULL )
     {
         ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );

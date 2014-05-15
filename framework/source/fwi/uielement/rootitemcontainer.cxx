@@ -367,7 +367,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > RootItemC
     const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
-                                         ::getCppuType((const OUString*)NULL),
+                                         cppu::UnoType<OUString>::get(),
                                          com::sun::star::beans::PropertyAttribute::TRANSIENT )
     };
     // Use it to initialize sequence!

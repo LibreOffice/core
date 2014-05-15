@@ -84,7 +84,7 @@ IMPL_XUNOTUNNEL( VCLXFont )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXFont )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont2>* ) NULL )
+    cppu::UnoType<com::sun::star::awt::XFont2>::get()
 IMPL_XTYPEPROVIDER_END
 
 

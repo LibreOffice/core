@@ -1090,7 +1090,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((OUString*)0);
+        pProp->Type       = cppu::UnoType<OUString>::get();
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
         if (rPath.bIsReadonly)
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
@@ -1116,7 +1116,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_WRITE_PATH;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((OUString*)0);
+        pProp->Type       = cppu::UnoType<OUString>::get();
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
         if (rPath.bIsReadonly)
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;

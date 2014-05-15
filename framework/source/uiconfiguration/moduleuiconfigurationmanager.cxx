@@ -1677,7 +1677,7 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly() throw (::com::sun::
 
 void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::ConfigurationEvent& aEvent, NotifyOp eOp )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<com::sun::star::ui::XUIConfigurationListener>::get());
     if ( pContainer != NULL )
     {
         ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );

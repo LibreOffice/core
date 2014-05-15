@@ -49,7 +49,7 @@
         {
             static ::com::sun::star::beans::Property aPropTable[] =
             {
-                ::com::sun::star::beans::Property( OUString("Orientation"), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
+                ::com::sun::star::beans::Property( OUString("Orientation"), PROPERTY_Orientation, cppu::UnoType<sal_Int16>::get(), 0 ),
                 ::com::sun::star::beans::Property( OUString("Horizontal"), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
             };
             pProperties = aPropTable;

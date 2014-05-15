@@ -2616,19 +2616,19 @@ IMPL_LINK_NOARG(LayoutManager, SettingsChanged)
 void SAL_CALL LayoutManager::addLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
 throw (uno::RuntimeException, std::exception)
 {
-    m_aListenerContainer.addInterface( ::getCppuType( (const uno::Reference< frame::XLayoutManagerListener >*)NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<frame::XLayoutManagerListener>::get(), xListener );
 }
 
 void SAL_CALL LayoutManager::removeLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
 throw (uno::RuntimeException, std::exception)
 {
-    m_aListenerContainer.removeInterface( ::getCppuType( (const uno::Reference< frame::XLayoutManagerListener >*)NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<frame::XLayoutManagerListener>::get(), xListener );
 }
 
 void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
 {
     lang::EventObject                  aSource( static_cast< ::cppu::OWeakObject*>(this) );
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const uno::Reference< frame::XLayoutManagerListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<frame::XLayoutManagerListener>::get());
     if (pContainer!=NULL)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);

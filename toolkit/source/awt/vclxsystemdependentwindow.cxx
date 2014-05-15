@@ -58,7 +58,7 @@ VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXSystemDependentWindow )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSystemDependentWindowPeer>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XSystemDependentWindowPeer>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 

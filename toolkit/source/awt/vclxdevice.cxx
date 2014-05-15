@@ -82,8 +82,8 @@ IMPL_XUNOTUNNEL( VCLXDevice )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDevice )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion>* ) NULL )
+    cppu::UnoType<com::sun::star::awt::XDevice>::get(),
+    cppu::UnoType<com::sun::star::awt::XUnitConversion>::get()
 IMPL_XTYPEPROVIDER_END
 
 

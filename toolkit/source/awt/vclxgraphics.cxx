@@ -53,7 +53,7 @@ IMPL_XUNOTUNNEL( VCLXGraphics )
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXGraphics )
-    getCppuType( ( uno::Reference< awt::XGraphics>* ) NULL )
+    cppu::UnoType<awt::XGraphics>::get()
 IMPL_XTYPEPROVIDER_END
 
 VCLXGraphics::VCLXGraphics()

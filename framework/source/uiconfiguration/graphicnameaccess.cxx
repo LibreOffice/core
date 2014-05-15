@@ -88,7 +88,7 @@ throw( uno::RuntimeException, std::exception )
 uno::Type SAL_CALL GraphicNameAccess::getElementType()
 throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType( (const uno::Reference< graphic::XGraphic > *)NULL );
+    return cppu::UnoType<graphic::XGraphic>::get();
 }
 
 } // namespace framework

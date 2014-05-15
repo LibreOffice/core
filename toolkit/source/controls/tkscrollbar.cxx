@@ -107,8 +107,8 @@ namespace toolkit
 
     // ::com::sun::star::lang::XTypeProvider
     IMPL_XTYPEPROVIDER_START( UnoScrollBarControl )
-        getCppuType( ( uno::Reference< awt::XAdjustmentListener>* ) NULL ),
-        getCppuType( ( uno::Reference< awt::XScrollBar>* ) NULL ),
+        cppu::UnoType<awt::XAdjustmentListener>::get(),
+        cppu::UnoType<awt::XScrollBar>::get(),
         UnoControlBase::getTypes()
     IMPL_XTYPEPROVIDER_END
 

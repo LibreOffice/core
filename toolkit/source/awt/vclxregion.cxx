@@ -51,7 +51,7 @@ IMPL_XUNOTUNNEL( VCLXRegion )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXRegion )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion>* ) NULL )
+    cppu::UnoType<com::sun::star::awt::XRegion>::get()
 IMPL_XTYPEPROVIDER_END
 
 

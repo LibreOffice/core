@@ -181,7 +181,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
 throw ( RuntimeException, std::exception )
 {
-    return( ::getCppuType( (const OUString*)NULL ) );
+    return( cppu::UnoType<OUString>::get());
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()

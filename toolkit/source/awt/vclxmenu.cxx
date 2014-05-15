@@ -250,10 +250,10 @@ throw(css::uno::RuntimeException, std::exception)
             if( !pCollectionPopupMenu )
             {
                 static ::cppu::OTypeCollection collectionPopupMenu(
-                getCppuType( ( css::uno::Reference< css::lang::XTypeProvider>* ) NULL ),
-                getCppuType( ( css::uno::Reference< css::awt::XMenu>* ) NULL ),
-                getCppuType( ( css::uno::Reference< css::awt::XPopupMenu>* ) NULL ),
-                getCppuType( ( css::uno::Reference< css::lang::XServiceInfo>* ) NULL ) );
+                cppu::UnoType<css::lang::XTypeProvider>::get(),
+                cppu::UnoType<css::awt::XMenu>::get(),
+                cppu::UnoType<css::awt::XPopupMenu>::get(),
+                cppu::UnoType<css::lang::XServiceInfo>::get());
                 pCollectionPopupMenu = &collectionPopupMenu;
             }
         }
@@ -268,10 +268,10 @@ throw(css::uno::RuntimeException, std::exception)
             if( !pCollectionMenuBar )
             {
                 static ::cppu::OTypeCollection collectionMenuBar(
-                getCppuType( ( css::uno::Reference< css::lang::XTypeProvider>* ) NULL ),
-                getCppuType( ( css::uno::Reference< css::awt::XMenu>* ) NULL ),
-                getCppuType( ( css::uno::Reference< css::awt::XMenuBar>* ) NULL ),
-                getCppuType( ( css::uno::Reference< css::lang::XServiceInfo>* ) NULL ) );
+                cppu::UnoType<css::lang::XTypeProvider>::get(),
+                cppu::UnoType<css::awt::XMenu>::get(),
+                cppu::UnoType<css::awt::XMenuBar>::get(),
+                cppu::UnoType<css::lang::XServiceInfo>::get());
                 pCollectionMenuBar = &collectionMenuBar;
             }
         }

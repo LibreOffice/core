@@ -368,7 +368,7 @@ void SAL_CALL TabWindowService::dispose()
 void SAL_CALL TabWindowService::addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
-    m_lListener.addInterface(::getCppuType((const css::uno::Reference< css::lang::XEventListener >*)NULL), xListener);
+    m_lListener.addInterface(cppu::UnoType<css::lang::XEventListener>::get(), xListener);
 }
 
 //  XComponent
@@ -376,7 +376,7 @@ void SAL_CALL TabWindowService::addEventListener(const css::uno::Reference< css:
 void SAL_CALL TabWindowService::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
-    m_lListener.removeInterface(::getCppuType((const css::uno::Reference< css::lang::XEventListener >*)NULL), xListener);
+    m_lListener.removeInterface(cppu::UnoType<css::lang::XEventListener>::get(), xListener);
 }
 
 void TabWindowService::impl_initializePropInfo()
@@ -387,7 +387,7 @@ void TabWindowService::impl_initializePropInfo()
         css::beans::Property(
             OUString("Window"),
             TABWINDOWSERVICE_PROPHANDLE_WINDOW,
-            ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
+            cppu::UnoType<css::awt::XWindow>::get(),
             css::beans::PropertyAttribute::TRANSIENT));
 }
 

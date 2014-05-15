@@ -2128,7 +2128,7 @@ void SAL_CALL Frame::addEventListener( const css::uno::Reference< css::lang::XEv
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
@@ -2142,7 +2142,7 @@ void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 /*-****************************************************************************************************
@@ -2684,7 +2684,7 @@ void Frame::impl_initializePropInfo()
         css::beans::Property(
             FRAME_PROPNAME_TITLE,
             FRAME_PROPHANDLE_TITLE,
-            ::getCppuType((const OUString*)NULL),
+            cppu::UnoType<OUString>::get(),
             css::beans::PropertyAttribute::TRANSIENT));
 }
 

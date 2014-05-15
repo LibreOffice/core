@@ -224,9 +224,9 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( StdTabControllerModel )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>* ) NULL )
+    cppu::UnoType<com::sun::star::awt::XTabControllerModel>::get(),
+    cppu::UnoType<com::sun::star::lang::XServiceInfo>::get(),
+    cppu::UnoType<com::sun::star::io::XPersistObject>::get()
 IMPL_XTYPEPROVIDER_END
 
 sal_Bool StdTabControllerModel::getGroupControl(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)

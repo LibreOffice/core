@@ -611,7 +611,7 @@ void UnoControlContainer::addingControl( const uno::Reference< awt::XControl >& 
     if ( _rxControl.is() )
     {
         uno::Reference< uno::XInterface > xThis;
-        OWeakAggObject::queryInterface( ::getCppuType( static_cast< uno::Reference< uno::XInterface >* >( NULL ) ) ) >>= xThis;
+        OWeakAggObject::queryInterface( cppu::UnoType<uno::XInterface>::get() ) >>= xThis;
 
         _rxControl->setContext( xThis );
         _rxControl->addEventListener( this );

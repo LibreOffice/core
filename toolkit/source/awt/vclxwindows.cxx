@@ -795,8 +795,8 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XButton>::get(),
+    cppu::UnoType<com::sun::star::awt::XCheckBox>::get(),
     VCLXGraphicControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -1096,8 +1096,8 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRadioButton>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XRadioButton>::get(),
+    cppu::UnoType<com::sun::star::awt::XButton>::get(),
     VCLXGraphicControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -1356,7 +1356,7 @@ VCLXSpinField::VCLXSpinField() : maSpinListeners( *this )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXSpinField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XSpinField>::get(),
     VCLXEdit::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -2201,7 +2201,7 @@ VCLXMessageBox::~VCLXMessageBox()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXMessageBox )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XMessageBox>::get(),
     VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -2288,8 +2288,8 @@ VCLXDialog::~VCLXDialog()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XDialog2>::get(),
+    cppu::UnoType<com::sun::star::awt::XDialog>::get(),
     VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -2899,7 +2899,7 @@ void VCLXFixedHyperlink::dispose() throw(::com::sun::star::uno::RuntimeException
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXFixedHyperlink )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedHyperlink>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XFixedHyperlink>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -3203,7 +3203,7 @@ VCLXFixedText::~VCLXFixedText()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXFixedText )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XFixedText>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -3345,7 +3345,7 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXScrollBar )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XScrollBar>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XScrollBar>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -3831,9 +3831,9 @@ VCLXEdit::VCLXEdit() : maTextListeners( *this )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXEdit )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextEditField>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextLayoutConstrains>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XTextComponent>::get(),
+    cppu::UnoType<com::sun::star::awt::XTextEditField>::get(),
+    cppu::UnoType<com::sun::star::awt::XTextLayoutConstrains>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -4819,7 +4819,7 @@ VCLXDateField::~VCLXDateField()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDateField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDateField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XDateField>::get(),
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -5167,7 +5167,7 @@ VCLXTimeField::~VCLXTimeField()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXTimeField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTimeField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XTimeField>::get(),
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -5466,7 +5466,7 @@ VCLXNumericField::~VCLXNumericField()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXNumericField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XNumericField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XNumericField>::get(),
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -5823,7 +5823,7 @@ MetricField *VCLXMetricField::GetMetricField() throw(::com::sun::star::uno::Runt
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXMetricField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMetricField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XMetricField>::get(),
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -6062,7 +6062,7 @@ VCLXCurrencyField::~VCLXCurrencyField()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXCurrencyField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCurrencyField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XCurrencyField>::get(),
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -6411,7 +6411,7 @@ VCLXPatternField::~VCLXPatternField()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXPatternField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPatternField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XPatternField>::get(),
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 

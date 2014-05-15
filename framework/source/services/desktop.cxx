@@ -396,7 +396,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     }
 
     // No lock required ... container is threadsafe by itself.
-    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<css::frame::XTerminateListener>::get(), xListener );
 }
 
 void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
@@ -437,7 +437,7 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
     }
 
     // No lock required ... container is threadsafe by itself.
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<css::frame::XTerminateListener>::get(), xListener );
 }
 
 /*-************************************************************************************************************
@@ -1100,7 +1100,7 @@ void SAL_CALL Desktop::addEventListener( const css::uno::Reference< css::lang::X
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >*) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
@@ -1112,7 +1112,7 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >*) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 /*-************************************************************************************************************
@@ -1585,7 +1585,7 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
         css::beans::Property( DESKTOP_PROPNAME_DISPATCHRECORDERSUPPLIER , DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL), css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( DESKTOP_PROPNAME_ISPLUGGED                , DESKTOP_PROPHANDLE_ISPLUGGED               , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( DESKTOP_PROPNAME_SUSPENDQUICKSTARTVETO    , DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO   , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( DESKTOP_PROPNAME_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , ::getCppuType((const OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( DESKTOP_PROPNAME_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
     const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, DESKTOP_PROPCOUNT );
@@ -1600,7 +1600,7 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
 
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
     if ( ! pContainer )
         return;
 
@@ -1661,7 +1661,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
     if ( ! pContainer )
         return;
 

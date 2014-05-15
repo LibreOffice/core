@@ -307,10 +307,10 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 {
     const Property pActionTriggerPropertys[] =
     {
-        Property( OUString( "CommandURL"    ), HANDLE_COMMANDURL   , ::getCppuType((OUString*)0)                , PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "HelpURL"       ), HANDLE_HELPURL      , ::getCppuType((OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "CommandURL"    ), HANDLE_COMMANDURL   , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "HelpURL"       ), HANDLE_HELPURL      , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
         Property( OUString( "Image"         ), HANDLE_IMAGE     , ::getCppuType((Reference<XBitmap>*)0)     , PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "SubContainer"  ), HANDLE_SUBCONTAINER , ::getCppuType((OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "SubContainer"  ), HANDLE_SUBCONTAINER , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
         Property( OUString( "Text"          ), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
     };
 
