@@ -44,8 +44,6 @@
 #include <unistd.h>
 #endif
 
-#include "rtl/allocator.hxx"
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -88,7 +86,7 @@ inline ::rtl::OUString getExecutablePath( void )
 
 //rtl::OUString CWD = getExecutablePath();
 
-typedef std::vector<std::string, rtl::Allocator<std::string> >  string_container_t;
+typedef std::vector<std::string>  string_container_t;
 typedef string_container_t::const_iterator string_container_const_iter_t;
 typedef string_container_t::iterator       string_container_iter_t;
 

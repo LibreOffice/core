@@ -25,7 +25,6 @@
 #include "osl/thread.hxx"
 #include "osl/time.h"
 #include "rtl/alloc.h"
-#include "rtl/allocator.hxx"
 #include "rtl/bootstrap.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/character.hxx"

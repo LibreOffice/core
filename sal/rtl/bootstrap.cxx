@@ -37,7 +37,6 @@
 #include <rtl/instance.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/uri.hxx>
-#include "rtl/allocator.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
@@ -132,10 +131,7 @@ struct rtl_bootstrap_NameValue
         {}
 };
 
-typedef std::list<
-    rtl_bootstrap_NameValue,
-    rtl::Allocator< rtl_bootstrap_NameValue >
-> NameValueList;
+typedef std::list<rtl_bootstrap_NameValue> NameValueList;
 
 bool find(
     NameValueList const & list, rtl::OUString const & key,
@@ -607,8 +603,7 @@ namespace {
 struct bootstrap_map: private boost::noncopyable {
     typedef boost::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
-        rtl::OUStringHash, std::equal_to< rtl::OUString >,
-        rtl::Allocator< OUString > > t;
+        rtl::OUStringHash, std::equal_to< rtl::OUString > > t;
 
     // get and release must only be called properly synchronized via some mutex
     // (e.g., osl::Mutex::getGlobalMutex()):

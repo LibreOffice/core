@@ -36,7 +36,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "secimpl.h"
-#include "rtl/allocator.hxx"
 #include <osl/file.hxx>
 
 #include <list>
@@ -54,7 +53,6 @@ const rtl::OUString QUOTE("\"");
 
 namespace /* private */
 {
-
     typedef std::list<rtl::OUString> string_container_t;
     typedef string_container_t::iterator string_container_iterator_t;
     typedef string_container_t::const_iterator string_container_const_iterator_t;
