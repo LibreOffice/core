@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 #include <unordered_map>
 typedef std::unordered_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
 #else
-#include <hash_map>
+#include <ext/hash_map>
 typedef std::hash_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
 #endif
 
