@@ -65,6 +65,14 @@ public:
         mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
     }
 
+    virtual void tearDown() SAL_OVERRIDE
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+
+        test::BootstrapFixture::tearDown();
+    }
+
     void testHtmlSkipImage()
     {
         htmlDocPtr pDoc;
