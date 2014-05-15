@@ -4341,6 +4341,10 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     if( xTextContent.is())
         appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
 
+    // Clear the reference, so in case the embedded object is inside a
+    // TextFrame, we won't try to resize it (to match the size of the
+    // TextFrame) here.
+    m_xEmbedded.clear();
     m_pGraphicImport.reset();
 }
 

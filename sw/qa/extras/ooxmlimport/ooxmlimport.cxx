@@ -37,6 +37,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -2106,6 +2107,15 @@ DECLARE_OOXMLIMPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e2]));
     CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e3]));
     CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e4]));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testChartSize, "chart-size.docx")
+{
+    // When chart was in a TextFrame, its size was too large.
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
+    // This was 10954.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6008), getProperty<sal_Int32>(xEmbeddedObjects->getByIndex(0), "Width"));
 }
 
 #endif
