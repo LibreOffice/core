@@ -2219,15 +2219,24 @@ void Document::handleParagraphNotifications()
 
 void Document::sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId)
 {
-     Paragraphs::iterator aEnd = ::std::min(m_xParagraphs->begin() + end + 1, m_aVisibleEnd);
-    for (Paragraphs::iterator aIt = ::std::max(m_xParagraphs->begin() + start, m_aVisibleBegin);
-         aIt < aEnd; ++aIt)
+    size_t nAvailDistance = std::distance(m_xParagraphs->begin(), m_aVisibleEnd);
+
+    Paragraphs::iterator aEnd(m_xParagraphs->begin());
+    size_t nEndDistance = std::min<size_t>(end + 1, nAvailDistance);
+    std::advance(aEnd, nEndDistance);
+
+    Paragraphs::iterator aIt(m_xParagraphs->begin());
+    size_t nStartDistance = std::min<size_t>(start, nAvailDistance);
+    std::advance(aIt, nStartDistance);
+
+    while (aIt < aEnd)
     {
         ::rtl::Reference< Paragraph > xParagraph(getParagraph(aIt));
         if (xParagraph.is())
             xParagraph->notifyEvent(
             nEventId,
                 ::css::uno::Any(), ::css::uno::Any());
+        ++aIt;
     }
 }
 
