@@ -47,6 +47,8 @@ $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/diff/diff \
     test/source/xmltesttools \
     test/source/htmltesttools \
+    test/source/mtfxmldump \
+    test/source/xmlwriter \
 ))
 
 # vim: set noet sw=4 ts=4:
