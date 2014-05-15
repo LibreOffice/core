@@ -677,16 +677,18 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 {
     size_t listNum = polygon.verticesList.size();
     glUseProgram(maResources.m_CommonProID);
+
+    PosVecf3 trans = {0.0f, 0, 0.0};
+    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 scale = {1.0f, m_fHeightWeight, 1.0f};
+    MoveModelf(trans, angle, scale);
+
+    m_3DMVP = m_3DProjection * m_3DView * m_Model;
+
     for (size_t i = 0; i < listNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         Vertices3D *pointList = polygon.verticesList.front();
-        PosVecf3 trans = {0.0f, 0, 0.0};
-        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {1.0f, m_fHeightWeight, 1.0f};
-        MoveModelf(trans, angle, scale);
-
-        m_3DMVP = m_3DProjection * m_3DView * m_Model;
         //if line only, using the common shader to render
 
         //render to fbo
