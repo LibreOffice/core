@@ -69,7 +69,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
     if (h == NULL && Module->length > 260)
     {
-        std::vector<WCHAR, rtl::Allocator<WCHAR> > vec(Module->length + 1);
+        std::vector<WCHAR> vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
                                       reinterpret_cast<LPWSTR>(&vec[0]), Module->length + 1);
         if (len )
