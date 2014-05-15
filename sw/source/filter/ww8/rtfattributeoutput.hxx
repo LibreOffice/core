@@ -215,7 +215,7 @@ public:
 
 protected:
     /// Output frames - the implementation.
-    virtual void OutputFlyFrame_Impl(const sw::Frame& rFmt, const Point& rNdTopLeft) SAL_OVERRIDE;
+    virtual bool OutputFlyFrame_Impl(const sw::Frame& rFmt, const Point& rNdTopLeft) SAL_OVERRIDE;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap(const SvxCaseMapItem& rCaseMap) SAL_OVERRIDE;

@@ -309,6 +309,9 @@ public:
     /// Has different headers/footers for the title page.
     virtual void SectionTitlePage() = 0;
 
+    /// If the node has an anchor linked.
+    virtual void SetAnchorIsLinkedToNode( bool /*bAnchorLinkedToNode = false*/){};
+
     /// Description of the page borders.
     virtual void SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmFmt* pFirstPageFmt ) = 0;
 
@@ -354,7 +357,7 @@ protected:
     void GetNumberPara( OUString& rStr, const SwField& rFld );
 
     /// Output frames - the implementation.
-    virtual void OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft ) = 0;
+    virtual bool OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft ) = 0;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap( const SvxCaseMapItem& ) = 0;
@@ -631,7 +634,7 @@ public:
     void OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep, bool bTestForDefault );
 
     /// Output frames.
-    void OutputFlyFrame( const sw::Frame& rFmt );
+    bool OutputFlyFrame( const sw::Frame& rFmt );
 
     void GetTablePageSize
     ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner,

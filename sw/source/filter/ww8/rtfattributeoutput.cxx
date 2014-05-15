@@ -1589,8 +1589,12 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
     }
 }
 
-void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Point& /*rNdTopLeft*/)
+bool RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Point& /*rNdTopLeft*/ )
 {
+    /* this flag is sensible only in DocxAttributeOutput::OutputFlyFrame_Impl
+       and is not applicable here. Could not risk adding a flag in Frame and take out const &*/
+    bool bPostponedFlyFrame = false ;
+
     const SwNode* pNode = rFrame.GetContent();
     const SwGrfNode* pGrfNode = pNode ? pNode->GetGrfNode() : 0;
 
@@ -1952,6 +1956,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unknown type (" << (int)rFrame.GetWriterType() << ")");
         break;
     }
+    return bPostponedFlyFrame ;
 }
 
 void RtfAttributeOutput::CharCaseMap(const SvxCaseMapItem& rCaseMap)
