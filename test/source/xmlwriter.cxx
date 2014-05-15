@@ -27,10 +27,9 @@ XmlWriter::XmlWriter(xmlTextWriterPtr pWriter) :
 XmlWriter::~XmlWriter()
 {}
 
-void XmlWriter::startDocument(const OString& name)
+void XmlWriter::startDocument()
 {
     xmlTextWriterStartDocument(mpWriter, NULL, NULL, NULL);
-    startElement(name);
 }
 
 void XmlWriter::endDocument()

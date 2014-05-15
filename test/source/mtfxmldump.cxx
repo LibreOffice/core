@@ -168,7 +168,8 @@ void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
     XmlWriter aWriter(xmlWriter);
-    aWriter.startDocument("metafile");
+    aWriter.startDocument();
+    aWriter.startElement("metafile");
 
     for(MetaAction* pAction = rMetaFile.FirstAction(); pAction != NULL; pAction = rMetaFile.NextAction())
     {
@@ -391,12 +392,9 @@ void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
 
         }
     }
-    aWriter.endDocument();
 
-    for(size_t i=0; i<usedIds.size(); ++i)
-        if(usedIds[i])
-            printf("%ld ", i);
-    printf("\n");
+    aWriter.endElement();
+    aWriter.endDocument();
 
     mrStream.WriteOString(aString.makeStringAndClear());
 }

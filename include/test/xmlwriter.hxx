@@ -25,7 +25,7 @@ public:
     XmlWriter(xmlTextWriterPtr pWriter);
     virtual ~XmlWriter();
 
-    void startDocument(const OString& sTagName);
+    void startDocument();
     void endDocument();
 
     void element(const OString& sTagName);
