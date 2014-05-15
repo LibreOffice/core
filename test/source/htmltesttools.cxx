@@ -9,17 +9,20 @@
 
 #include <test/htmltesttools.hxx>
 
+#include <boost/scoped_array.hpp>
+
 htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile& aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), STREAM_READ);
-    sal_Size nSize = aFileStream.remainingSize();
+    return parseHtmlStream(&aFileStream);
+}
 
+htmlDocPtr HtmlTestTools::parseHtmlStream(SvStream* pStream)
+{
+    sal_Size nSize = pStream->remainingSize();
     boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nSize + 1]);
-
-    aFileStream.Read(pBuffer.get(), nSize);
-
+    pStream->Read(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
-
     return htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), NULL);
 }
 

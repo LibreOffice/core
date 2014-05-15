@@ -14,12 +14,15 @@
 #include <test/testdllapi.hxx>
 
 #include <libxml/xmlwriter.h>
+#include <libxml/tree.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/tempfile.hxx>
+
 #include <cppunit/TestAssert.h>
 
 class OOO_DLLPUBLIC_TEST XmlTestTools
@@ -27,6 +30,9 @@ class OOO_DLLPUBLIC_TEST XmlTestTools
 protected:
     XmlTestTools();
     virtual ~XmlTestTools();
+
+    htmlDocPtr parseXml(utl::TempFile& aTempFile);
+    htmlDocPtr parseXmlStream(SvStream* pStream);
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx);
 

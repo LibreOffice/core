@@ -17,12 +17,12 @@
 #include <libxml/HTMLtree.h>
 
 #include <unotools/tempfile.hxx>
-#include <boost/scoped_array.hpp>
 
 class OOO_DLLPUBLIC_TEST HtmlTestTools
 {
 protected:
     htmlDocPtr parseHtml(utl::TempFile& aTempFile);
+    htmlDocPtr parseHtmlStream(SvStream* pStream);
 };
 
 #endif

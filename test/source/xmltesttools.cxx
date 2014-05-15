@@ -9,11 +9,28 @@
 
 #include <test/xmltesttools.hxx>
 
+#include <boost/scoped_array.hpp>
+
 XmlTestTools::XmlTestTools()
 {}
 
 XmlTestTools::~XmlTestTools()
 {}
+
+htmlDocPtr XmlTestTools::parseXml(utl::TempFile& aTempFile)
+{
+    SvFileStream aFileStream(aTempFile.GetURL(), STREAM_READ);
+    return parseXmlStream(&aFileStream);
+}
+
+xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
+{
+    sal_Size nSize = pStream->remainingSize();
+    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nSize + 1]);
+    pStream->Read(pBuffer.get(), nSize);
+    pBuffer[nSize] = 0;
+    return xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
+}
 
 xmlNodeSetPtr XmlTestTools::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
 {
