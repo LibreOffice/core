@@ -370,8 +370,21 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
+    if( !m_bAnchorLinkedToNode )
+        WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs );
+    else
+    {
+        //These should be written out to the actual Node and not to the anchor.
+        //Clear them as they will be repopulated when the node is processed.
+        m_nParagraphSdtPrToken = 0;
+        delete m_pParagraphSdtPrTokenChildren; m_pParagraphSdtPrTokenChildren = NULL;
+        if( m_pParagraphSdtPrDataBindingAttrs )
+        {
+            delete m_pParagraphSdtPrDataBindingAttrs;
+            m_pParagraphSdtPrDataBindingAttrs = NULL;
+        }
+    }
 
-    WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs );
     m_pSerializer->mergeTopMarks();
 
     // Check for end of cell, rows, tables here
@@ -686,6 +699,11 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
 }
 
+void DocxAttributeOutput::SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode )
+{
+    m_bAnchorLinkedToNode = bAnchorLinkedToNode ;
+}
+
 void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSingleEmptyRun*/ )
 {
     // Don't start redline data here, possibly there is a hyperlink later, and
@@ -841,7 +859,20 @@ void DocxAttributeOutput::EndRun()
     EndRedline( m_pRedlineData );
 
     // enclose in a sdt block, if necessary
-    WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs );
+    if ( !m_bAnchorLinkedToNode )
+        WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs );
+    else
+    {
+        //These should be written out to the actual Node and not to the anchor.
+        //Clear them as they will be repopulated when the node is processed.
+        m_nRunSdtPrToken = 0;
+        delete m_pRunSdtPrTokenChildren; m_pRunSdtPrTokenChildren = NULL;
+        if ( m_pRunSdtPrDataBindingAttrs )
+        {
+            delete m_pRunSdtPrDataBindingAttrs ;
+            m_pRunSdtPrDataBindingAttrs = NULL ;
+        }
+    }
     m_pSerializer->mergeTopMarks();
 
     WritePostponedMath();
@@ -4220,8 +4251,10 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     m_postponedDMLDrawing = NULL;
 }
 
-void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
+bool DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
 {
+    bool bPostponedFlyFrame = false ;
+
     m_pSerializer->mark();
 
     switch ( rFrame.GetWriterType() )
@@ -4237,6 +4270,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj);
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
+                        bPostponedFlyFrame = true ;
                         m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj));
                     }
                 }
@@ -4253,6 +4287,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                             m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetFrmFmt(), m_anchorId++);
                         else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                         {    // so write it out later
+                            bPostponedFlyFrame = true ;
                             m_postponedDiagram->push_back( PostponedDiagram( pSdrObj, &(rFrame.GetFrmFmt()) ));
                         }
                     }
@@ -4266,8 +4301,11 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                                 m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
                         }
                         else
+                        {
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
+                            bPostponedFlyFrame = true ;
                             m_postponedDMLDrawing->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
+                        }
                     }
                 }
             }
@@ -4290,7 +4328,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 }
 
                 if( !bDuplicate )
+                {
+                    bPostponedFlyFrame = true ;
                     m_aFramesOfParagraph.push_back(sw::Frame(rFrame));
+                }
             }
             break;
         case sw::Frame::eOle:
@@ -4309,6 +4350,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             {
                 const SdrObject* pObject = rFrame.GetFrmFmt().FindRealSdrObject();
                 m_aPostponedFormControls.push_back(pObject);
+                bPostponedFlyFrame = true ;
             }
             break;
         default:
@@ -4319,6 +4361,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
     }
 
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_POSTPONE );
+    return bPostponedFlyFrame ;
 }
 
 bool DocxAttributeOutput::IsDiagram( const SdrObject* sdrObject )
@@ -7386,6 +7429,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
       m_bWritingHeaderFooter( false ),
+      m_bAnchorLinkedToNode(false),
       m_sFieldBkm( ),
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),

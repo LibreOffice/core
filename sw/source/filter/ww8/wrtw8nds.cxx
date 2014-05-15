@@ -540,8 +540,29 @@ bool SwWW8AttrIter::IsWatermarkFrame()
     return false;
 }
 
-void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
+bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
 {
+    sw::FrameIter aTmpFlyIter = maFlyIter ;
+
+    while ( aTmpFlyIter != maFlyFrms.end() )
+    {
+        const SwPosition &rAnchor  = maFlyIter->GetPosition();
+        sal_uLong nAnchorPos = rAnchor.nNode.GetIndex();
+        /* if current node position and the anchor position are the same
+           then the frame anchor is linked to this node
+        */
+        if ( nAnchorPos == nNodePos )
+            return true ;
+
+        ++aTmpFlyIter;
+    }
+    return false ;
+}
+
+sal_Int16 SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
+{
+    bool bPostponedFlyFrame = false ;
+
     /*
      #i2916#
      May have an anchored graphic to be placed, loop through sorted array
@@ -553,7 +574,7 @@ void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         const sal_Int32 nPos = rAnchor.nContent.GetIndex();
 
         if ( nPos != nSwPos )
-            break;
+            return FLY_NOT_PROCESSED ; //We havent processed the fly
 
         const SdrObject* pSdrObj = maFlyIter->GetFrmFmt().FindRealSdrObject();
 
@@ -565,7 +586,7 @@ void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
                  if(m_rExport.nTxtTyp == TXT_HDFT)
                  {
                        // Should write a watermark in the header
-                       m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
+                       bPostponedFlyFrame = m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
                  }
                  else
                  {
@@ -575,16 +596,17 @@ void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
             else
             {
                  // This is not a watermark object - write normally
-                 m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
+                 bPostponedFlyFrame = m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
             }
         }
         else
         {
             // This is not a watermark object - write normally
-            m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
+            bPostponedFlyFrame = m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
         }
         ++maFlyIter;
     }
+    return ( bPostponedFlyFrame ? FLY_POSTPONED : FLY_PROCESSED ) ;
 }
 
 bool SwWW8AttrIter::IsTxtAttr( sal_Int32 nSwPos )
@@ -2024,18 +2046,33 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     do {
         const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
+        sal_Int16 nStateOfFlyFrame   = 0;
+        bool bPostponeWritingText    = false ;
+        OUString aSavedSnippet ;
 
         sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
         // Is this the only run in this paragraph and it's empty?
         bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
         AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+
         if( nTxtTyp == TXT_FTN || nTxtTyp == TXT_EDN )
             AttrOutput().FootnoteEndnoteRefTag();
 
         if( nNextAttr > nEnd )
             nNextAttr = nEnd;
 
-        aAttrIter.OutFlys( nAktPos );
+        /*
+            1) If there is a text node and an overlapping anchor, then write them in two different
+            runs and not as part of the same run.
+            2) Ensure that it is a text node and not in a fly.
+            3) If the anchor is associated with a text node with empty text then we ignore.
+        */
+        if ( rNode.IsTxtNode() && aStr != "\001" && aStr != ""  &&
+            !rNode.GetFlyFmt() && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()))
+            bPostponeWritingText = true ;
+
+        nStateOfFlyFrame = aAttrIter.OutFlys( nAktPos );
+        AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
         // Append bookmarks in this range after flys, exclusive of final
         // position of this range
         AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
@@ -2152,7 +2189,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( aSnippet[0] != 0x09 )
                     aSnippet = OUString( 0x09 ) + aSnippet;
             }
-            AttrOutput().RunText( aSnippet, eChrSet );
+
+            if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
+                aSavedSnippet = aSnippet ;
+            else
+                AttrOutput().RunText( aSnippet, eChrSet );
         }
 
         if ( aAttrIter.IsDropCap( nNextAttr ) )
@@ -2257,6 +2298,18 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         AttrOutput().WritePostitFieldReference();
 
         AttrOutput().EndRun();
+        if ( bPostponeWritingText && ( FLY_PROCESSED == nStateOfFlyFrame ) )
+        {
+            //write the postponed text run
+            bPostponeWritingText = false ;
+            AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+            AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText );
+            AttrOutput().StartRunProperties();
+            aAttrIter.OutAttr( nAktPos );
+            AttrOutput().EndRunProperties( pRedlineData );
+            AttrOutput().RunText( aSavedSnippet, eChrSet );
+            AttrOutput().EndRun();
+        }
 
         nAktPos = nNextAttr;
         UpdatePosition( &aAttrIter, nAktPos, nEnd );
@@ -2793,8 +2846,11 @@ void WW8Export::OutWW6FlyFrmsInCntnt( const SwTxtNode& rNd )
     }
 }
 
-void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft )
+bool WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft )
 {
+    /* this flag is sensible only in DocxAttributeOutput::OutputFlyFrame_Impl
+       and is not applicable here could not risk adding a flag in Frame and take out const &*/
+    bool bPostponedFlyFrame = false ;
     const SwFrmFmt &rFrmFmt = rFmt.GetFrmFmt();
     const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();
 
@@ -2815,7 +2871,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
         if ((bUseEscher == true) && (eType == sw::Frame::eFormControl))
         {
             if ( m_rWW8Export.MiserableFormFieldExportHack( rFrmFmt ) )
-                return ;
+                return bPostponedFlyFrame;
         }
     }
 
@@ -2836,7 +2892,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
         sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
 
         if( nStt >= nEnd )      // no range, hence no valid node
-            return;
+            return bPostponedFlyFrame;
 
         if ( !m_rWW8Export.IsInTable() && rFmt.IsInline() )
         {
@@ -2886,12 +2942,13 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
             m_rWW8Export.RestoreData();
         }
     }
+    return bPostponedFlyFrame;
 }
 
-void AttributeOutputBase::OutputFlyFrame( const sw::Frame& rFmt )
+bool AttributeOutputBase::OutputFlyFrame( const sw::Frame& rFmt )
 {
     if ( !rFmt.GetCntntNode() )
-        return;
+        return false;
 
     const SwCntntNode &rNode = *rFmt.GetCntntNode();
     Point aLayPos;
@@ -2902,7 +2959,7 @@ void AttributeOutputBase::OutputFlyFrame( const sw::Frame& rFmt )
     else
         aLayPos = rNode.FindLayoutRect().Pos();
 
-    OutputFlyFrame_Impl( rFmt, aLayPos );
+    return OutputFlyFrame_Impl( rFmt, aLayPos );
 }
 
 // write data of any redline

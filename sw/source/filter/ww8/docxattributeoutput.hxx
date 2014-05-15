@@ -204,6 +204,7 @@ public:
     /// Start of the tag that encloses the run, fills the info according to
     /// the value of pRedlineData.
     void StartRedline( const SwRedlineData * pRedlineData );
+    void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode = false );
 
     /// Output redlining.
     ///
@@ -433,7 +434,7 @@ private:
 protected:
 
     /// Output frames - the implementation.
-    virtual void OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft ) SAL_OVERRIDE;
+    virtual bool OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft ) SAL_OVERRIDE;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap( const SvxCaseMapItem& rCaseMap ) SAL_OVERRIDE;
@@ -722,6 +723,7 @@ private:
 
     /// Flag indicating that the header \ footer are being written
     bool m_bWritingHeaderFooter;
+    bool m_bAnchorLinkedToNode;
 
     /// Field data to remember in the text run
     std::vector< FieldInfos > m_Fields;
