@@ -18,7 +18,7 @@ using namespace rtl;
 class SdHTMLFilterTest : public SdModelTestBase, public XmlTestTools, public HtmlTestTools
 {
 private:
-    htmlDocPtr exportAndparseHtml(sd::DrawDocShellRef& xDocShRef)
+    htmlDocPtr exportAndParseHtml(sd::DrawDocShellRef& xDocShRef)
     {
         FileFormat* pFormat = getFormat(HTML);
         OUString aExt = OUString( "." ) + OUString::createFromAscii(pFormat->pName);
@@ -33,7 +33,7 @@ public:
     void testHTMLExport()
     {
         sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/HtmlExportTestDocument.odp"));
-        htmlDocPtr htmlDoc = exportAndparseHtml(xDocShRef);
+        htmlDocPtr htmlDoc = exportAndParseHtml(xDocShRef);
 
         assertXPath(htmlDoc, "/html", 1);
         assertXPath(htmlDoc, "/html/body", 1);

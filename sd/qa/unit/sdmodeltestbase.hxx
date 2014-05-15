@@ -63,10 +63,12 @@ FileFormat aFileFormats[] = {
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
 {
+private:
+    uno::Reference<uno::XInterface> mxDrawComponent;
+
 public:
     SdModelTestBase()
-    {
-    }
+    {}
 
     virtual void setUp() SAL_OVERRIDE
     {
@@ -74,13 +76,13 @@ public:
 
         // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
         // which is a private symbol to us, gets called
-        m_xDrawComponent = getMultiServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
-        CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
+        mxDrawComponent = getMultiServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
+        CPPUNIT_ASSERT_MESSAGE("no impress component!", mxDrawComponent.is());
     }
 
     virtual void tearDown() SAL_OVERRIDE
     {
-        uno::Reference< lang::XComponent >( m_xDrawComponent, uno::UNO_QUERY_THROW )->dispose();
+        uno::Reference<lang::XComponent>(mxDrawComponent, uno::UNO_QUERY_THROW)->dispose();
         test::BootstrapFixture::tearDown();
     }
 
@@ -230,10 +232,6 @@ protected:
         }
         xDocShRef->DoClose();
     }
-
-
-private:
-    uno::Reference<uno::XInterface> m_xDrawComponent;
 };
 
 #endif
