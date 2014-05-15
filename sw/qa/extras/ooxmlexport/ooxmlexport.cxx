@@ -3370,6 +3370,17 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78654 , "fdo78654.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // In case of two "Hyperlink" tags in one paragraph and one of them
+    // contains "PAGEREF" field then field end tag was missing from hyperlink.
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink[3]/w:r[5]/w:fldChar", "fldCharType", "end" );
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testfdo78599,"fdo78599.docx")
 {
      xmlDocPtr pXmlDoc = parseExport("word/document.xml");
