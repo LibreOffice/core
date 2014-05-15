@@ -569,13 +569,8 @@ protected:
         uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
 
         boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-        sal_Size nSize = pStream->remainingSize();
 
-        rtl::ByteSequence aBuffer(nSize);
-        pStream->Read(aBuffer.getArray(), nSize);
-
-        // Parse the XML.
-        return xmlParseMemory(reinterpret_cast<const char*>(aBuffer.getArray()), aBuffer.getLength());
+        return parseXmlStream(pStream.get());
     }
 
     /**
