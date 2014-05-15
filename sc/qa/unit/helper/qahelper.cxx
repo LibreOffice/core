@@ -473,6 +473,18 @@ bool checkFormulaPositions(
     return true;
 }
 
+ScTokenArray* compileFormula(
+    ScDocument* pDoc, const OUString& rFormula, const ScAddress* pPos,
+    formula::FormulaGrammar::Grammar eGram )
+{
+    ScAddress aPos(0,0,0);
+    if (pPos)
+        aPos = *pPos;
+    ScCompiler aComp(pDoc, aPos);
+    aComp.SetGrammar(eGram);
+    return aComp.CompileString(rFormula);
+}
+
 void clearFormulaCellChangedFlag( ScDocument& rDoc, const ScRange& rRange )
 {
     const ScAddress& s = rRange.aStart;
