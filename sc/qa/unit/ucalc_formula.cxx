@@ -2793,6 +2793,22 @@ void Test::testFuncCOUNTIF()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncIF()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Formula");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "=IF(B1=2;\"two\";\"not two\")");
+    CPPUNIT_ASSERT_EQUAL(OUString("not two"), m_pDoc->GetString(ScAddress(0,0,0)));
+    m_pDoc->SetValue(ScAddress(1,0,0), 2.0);
+    CPPUNIT_ASSERT_EQUAL(OUString("two"), m_pDoc->GetString(ScAddress(0,0,0)));
+    m_pDoc->SetValue(ScAddress(1,0,0), 3.0);
+    CPPUNIT_ASSERT_EQUAL(OUString("not two"), m_pDoc->GetString(ScAddress(0,0,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncIFERROR()
 {
     // IFERROR/IFNA (fdo#56124)
