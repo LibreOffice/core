@@ -61,7 +61,7 @@ struct ColDesc
 
 class ResultSet;
 
-typedef std::vector< ColDesc, Allocator< ColDesc > > ColDescVector;
+typedef std::vector< ColDesc > ColDescVector;
 
 
 class ResultSetMetaData :

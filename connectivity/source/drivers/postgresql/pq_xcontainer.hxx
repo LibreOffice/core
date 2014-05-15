@@ -91,8 +91,7 @@ typedef ::boost::unordered_map
    OUString,
    sal_Int32,
    OUStringHash,
-   ::std::equal_to< OUString >,
-   Allocator< ::std::pair< const OUString , sal_Int32 > >
+   ::std::equal_to< OUString >
 > String2IntMap;
 
 typedef ::cppu::WeakComponentImplHelper8

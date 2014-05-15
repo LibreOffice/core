@@ -59,7 +59,6 @@
 #include <cppuhelper/compbase6.hxx>
 
 #include <libpq-fe.h>
-#include "pq_allocator.hxx"
 
 namespace pq_sdbc_driver
 {
@@ -150,10 +149,9 @@ typedef ::boost::unordered_map<
     ::rtl::ByteSequence,
     ::com::sun::star::uno::WeakReference< com::sun::star::sdbc::XCloseable >,
     HashByteSequence,
-    ::std::equal_to< ::rtl::ByteSequence >,
-    Allocator< std::pair< const ::rtl::ByteSequence,::com::sun::star::uno::WeakReference< com::sun::star::sdbc::XCloseable > > >
+    ::std::equal_to< ::rtl::ByteSequence >
 > WeakHashMap;
-typedef ::std::vector< OString, Allocator< OString > > OStringVector;
+typedef ::std::vector< OString > OStringVector;
 
 
 
@@ -162,8 +160,7 @@ typedef ::boost::unordered_map
     const sal_Int32,
     OUString,
     ::boost::hash< sal_Int32 >,
-    ::std::equal_to< sal_Int32 >,
-    Allocator< ::std::pair< sal_Int32, OUString > >
+    ::std::equal_to< sal_Int32 >
 > Int2StringMap;
 
 class Connection : public ConnectionBase

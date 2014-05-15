@@ -210,11 +210,9 @@ Connection::~Connection()
         m_settings.logFile = 0;
     }
 }
-typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XCloseable > ,
-    ::pq_sdbc_driver::Allocator < ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XCloseable > > > CloseableList;
+typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XCloseable > > CloseableList;
 
-typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > ,
-    ::pq_sdbc_driver::Allocator < ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > > DisposeableList;
+typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > DisposeableList;
 
 void Connection::close() throw ( SQLException, RuntimeException, std::exception )
 {

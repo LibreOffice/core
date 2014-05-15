@@ -46,8 +46,6 @@
 
 #include <cppuhelper/propshlp.hxx>
 
-#include "pq_allocator.hxx"
-
 namespace pq_sdbc_driver
 {
 
@@ -94,7 +92,7 @@ struct ColumnMetaData
     bool isSigned;
 };
 
-typedef std::vector< ColumnMetaData, Allocator< ColumnMetaData > > ColumnMetaDataVector;
+typedef std::vector< ColumnMetaData > ColumnMetaDataVector;
 
 struct TypeDetails
 {
@@ -110,8 +108,7 @@ typedef ::boost::unordered_map
    OUString,
    sal_Int32,
    OUStringHash,
-   ::std::equal_to< OUString >,
-   Allocator< ::std::pair< const OUString , sal_Int32 > >
+   ::std::equal_to< OUString >
 > BaseTypeMap;
 
 

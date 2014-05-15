@@ -128,8 +128,7 @@ typedef ::boost::unordered_map
     OString,
     OString,
     OStringHash,
-    ::std::equal_to< OString >,
-    Allocator< ::std::pair< OString, OString > >
+    ::std::equal_to< OString >
 > String2StringMap;
 
 OUString querySingleValue(
@@ -165,7 +164,7 @@ public:
     void executeUpdate( const OUString & sql );
 };
 
-template < typename T, typename Allocator > com::sun::star::uno::Sequence<T> sequence_of_vector ( const std::vector<T, Allocator> &vec )
+template < typename T > com::sun::star::uno::Sequence<T> sequence_of_vector ( const std::vector<T> &vec )
 {
     if ( vec.empty() )
         return com::sun::star::uno::Sequence<T>();

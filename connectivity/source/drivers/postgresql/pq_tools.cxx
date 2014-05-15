@@ -566,7 +566,7 @@ void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUSt
     }
 }
 
-typedef std::vector< sal_Int32 , Allocator< sal_Int32 > > IntVector;
+typedef std::vector< sal_Int32 > IntVector;
 
 
 OUString array2String( const com::sun::star::uno::Sequence< Any > &seq )
@@ -601,8 +601,7 @@ OUString array2String( const com::sun::star::uno::Sequence< Any > &seq )
 typedef
 std::vector
 <
-    com::sun::star::uno::Any,
-    Allocator< com::sun::star::uno::Any >
+    com::sun::star::uno::Any
 > AnyVector;
 
 com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( SQLException )
@@ -873,7 +872,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str
         if ( str.iterateCodePoints(&start, 0) == L'}' )
             return ret;
 
-        std::vector< sal_Int32, Allocator< sal_Int32 > > vec;
+        std::vector< sal_Int32 > vec;
         do
         {
             OUString digits;

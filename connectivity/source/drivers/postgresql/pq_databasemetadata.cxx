@@ -102,8 +102,7 @@ namespace pq_sdbc_driver
 typedef
 std::vector
 <
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any >,
-    Allocator< com::sun::star::uno::Sequence< com::sun::star::uno::Any > >
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any >
 > SequenceAnyVector;
 
 
@@ -1419,8 +1418,7 @@ typedef ::boost::unordered_map
     sal_Int32,
     DatabaseTypeDescription,
     ::boost::hash< sal_Int32 >,
-    ::std::equal_to< sal_Int32 >,
-    Allocator< ::std::pair< sal_Int32, DatabaseTypeDescription > >
+    ::std::equal_to< sal_Int32 >
 > Oid2DatabaseTypeDescriptionMap;
 
 static void columnMetaData2DatabaseTypeDescription(
