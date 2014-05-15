@@ -25,8 +25,13 @@
 
 using namespace ::com::sun::star;
 
+#ifdef _LIBCPP_VERSION
 #include <unordered_map>
 typedef std::unordered_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
+#else
+#include <hash_map>
+typedef std::hash_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
+#endif
 
 @implementation MacAVObserverObject
 {
