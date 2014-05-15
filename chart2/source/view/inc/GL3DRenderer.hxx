@@ -255,9 +255,7 @@ private:
         void LoadShaders();
     };
 
-    ShaderResources maNormalResources;
-    ShaderResources maPickingResources;
-    ShaderResources* pResources;
+    ShaderResources maResources;
 
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
