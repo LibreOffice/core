@@ -246,40 +246,45 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
         if(pKeyEvt)
         {
             const sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
-            m_pContext->makeCurrent();
-
-            // Calculate movement
-            glm::vec3 vMoveBy;
+            if (nCode == KEY_Q || nCode == KEY_E ||
+                nCode == KEY_A || nCode == KEY_D ||
+                nCode == KEY_W || nCode == KEY_S )
             {
-                glm::vec3 vEye;
-                glm::vec3 vView;
-                glm::vec3 vUp;
-                gltf_get_camera_pos(&vEye,&vView,&vUp);
-                float fModelSize =(float)gltf_get_model_size();
+                m_pContext->makeCurrent();
 
-                glm::vec3 vMove = vView-vEye;
-                vMove = glm::normalize(vMove);
-                vMove *= 25.0f;
-                glm::vec3 vStrafe = glm::cross(vView-vEye, vUp);
-                vStrafe = glm::normalize(vStrafe);
-                vStrafe *= 25.0f;
-                glm::vec3 vMup = glm::cross(vView-vEye,glm::vec3(1.f,0.f,0.f) );
-                vMup = glm::normalize(vMup);
-                vMup *= 25.0f;
+                // Calculate movement
+                glm::vec3 vMoveBy;
+                {
+                    glm::vec3 vEye;
+                    glm::vec3 vView;
+                    glm::vec3 vUp;
+                    gltf_get_camera_pos(&vEye,&vView,&vUp);
+                    float fModelSize =(float)gltf_get_model_size();
 
-                if(nCode == KEY_Q)vMoveBy += vMove*(0.1f*fModelSize);
-                if(nCode == KEY_E)vMoveBy -= vMove*(0.1f*fModelSize);
-                if(nCode == KEY_A)vMoveBy -= vStrafe*(0.1f*fModelSize);
-                if(nCode == KEY_D)vMoveBy += vStrafe*(0.1f*fModelSize);
-                if(nCode == KEY_W)vMoveBy -= vMup*(0.1f*fModelSize);
-                if(nCode == KEY_S)vMoveBy += vMup*(0.1f*fModelSize);
+                    glm::vec3 vMove = vView-vEye;
+                    vMove = glm::normalize(vMove);
+                    vMove *= 25.0f;
+                    glm::vec3 vStrafe = glm::cross(vView-vEye, vUp);
+                    vStrafe = glm::normalize(vStrafe);
+                    vStrafe *= 25.0f;
+                    glm::vec3 vMup = glm::cross(vView-vEye,glm::vec3(1.f,0.f,0.f) );
+                    vMup = glm::normalize(vMup);
+                    vMup *= 25.0f;
+
+                    if(nCode == KEY_Q)vMoveBy += vMove*(0.1f*fModelSize);
+                    if(nCode == KEY_E)vMoveBy -= vMove*(0.1f*fModelSize);
+                    if(nCode == KEY_A)vMoveBy -= vStrafe*(0.1f*fModelSize);
+                    if(nCode == KEY_D)vMoveBy += vStrafe*(0.1f*fModelSize);
+                    if(nCode == KEY_W)vMoveBy -= vMup*(0.1f*fModelSize);
+                    if(nCode == KEY_S)vMoveBy += vMup*(0.1f*fModelSize);
+                }
+
+                gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,10.0);
+                gltf_prepare_renderer(m_pHandle);
+                gltf_renderer(m_pHandle);
+                gltf_complete_renderer();
+                m_pContext->swapBuffers();
             }
-
-            gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,10.0);
-            gltf_prepare_renderer(m_pHandle);
-            gltf_renderer(m_pHandle);
-            gltf_complete_renderer();
-            m_pContext->swapBuffers();
         }
     }
     return 0;
