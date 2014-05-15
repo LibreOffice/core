@@ -821,11 +821,11 @@ void Test::testFormulaCompilerJumpReordering()
         TokenCheck aCheckRPN[] =
         {
             { ocPush,  svSingleRef },
-            { ocIf,    0           },
+            { ocIf,    static_cast<formula::StackVar>(0) },
             { ocPush,  svDouble    },
-            { ocSep,   0           },
+            { ocSep,   static_cast<formula::StackVar>(0) },
             { ocPush,  svString    },
-            { ocClose, 0           },
+            { ocClose, static_cast<formula::StackVar>(0) },
         };
 
         sal_uInt16 nLen = pCode->GetCodeLen();
@@ -852,7 +852,7 @@ void Test::testFormulaCompilerJumpReordering()
             { ocPush,  svSingleRef },
             { ocPush,  svDouble    },
             { ocPush,  svString    },
-            { ocIf,    0           },
+            { ocIf,    static_cast<formula::StackVar>(0) },
         };
 
         nLen = pCode->GetCodeLen();
