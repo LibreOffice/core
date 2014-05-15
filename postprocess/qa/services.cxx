@@ -9,7 +9,10 @@
 
 #include <sal/config.h>
 
+#include <vector>
+
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <test/bootstrapfixture.hxx>
@@ -37,6 +40,7 @@ void ServicesTest::test()
                 "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
             UNO_QUERY_THROW );
     Sequence<OUString> s = m_xContext->getServiceManager()->getAvailableServiceNames();
+    std::vector< css::uno::Reference<css::lang::XComponent> > comps;
     for (sal_Int32 i = 0; i < s.getLength(); i++)
     {
         if (!xTypeManager->hasByHierarchicalName(s[i]))
@@ -54,12 +58,13 @@ void ServicesTest::test()
         Sequence< Reference< XServiceConstructorDescription > > xseq = xDesc->getConstructors();
         for (sal_Int32 c = 0; c < xseq.getLength(); c++)
             if (!xseq[c]->getParameters().hasElements())
+            {
+                Reference< XInterface > instance;
                 try
                 {
                     OString message = OUStringToOString(s[i], RTL_TEXTENCODING_UTF8);
                     bool bDefConstructor = xseq[c]->isDefaultConstructor();
                     Reference< css::lang::XMultiComponentFactory > serviceManager = m_xContext->getServiceManager();
-                    Reference< XInterface > instance;
 
                     if( bDefConstructor )
                         instance = serviceManager->createInstanceWithContext(s[i], m_xContext);
@@ -75,6 +80,18 @@ void ServicesTest::test()
                         OUStringToOString(s[i] + ": " + e.Message, RTL_TEXTENCODING_UTF8);
                     CPPUNIT_FAIL(exc.getStr());
                 }
+                css::uno::Reference<css::lang::XComponent> comp(
+                    instance, css::uno::UNO_QUERY);
+                if (comp.is()) {
+                    comps.push_back(comp);
+                }
+            }
+    }
+    for (std::vector< css::uno::Reference<css::lang::XComponent> >::iterator i(
+             comps.begin());
+         i != comps.end(); ++i)
+    {
+        (*i)->dispose();
     }
 }
 
