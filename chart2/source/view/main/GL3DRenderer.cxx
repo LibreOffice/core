@@ -691,12 +691,12 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         Vertices3D *pointList = polygon.verticesList.front();
         //if line only, using the common shader to render
 
-        //render to fbo
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList->size() * sizeof(glm::vec3), &pointList[0][0], GL_STATIC_DRAW);
         glUniform4fv(maResources.m_2DColorID, 1, &polygon.polygonColor[0]);
         glUniformMatrix4fv(maResources.m_MatrixID, 1, GL_FALSE, &m_3DMVP[0][0]);
+
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(maResources.m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
@@ -733,9 +733,18 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &polygon.material);
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glUseProgram(maResources.m_3DProID);
-    glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
-    glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+
+    if(mbPickingMode)
+    {
+        glUseProgram(maPickingResources.m_CommonProID);
+    }
+    else
+    {
+        glUseProgram(maResources.m_3DProID);
+        glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
+        glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    }
+
     for (size_t i = 0; i < verticesNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
@@ -752,26 +761,22 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList->size() * sizeof(glm::vec3), &pointList[0][0], GL_STATIC_DRAW);
-        //fill normal buffer
-        glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
-        glBufferData(GL_ARRAY_BUFFER, normalList->size() * sizeof(glm::vec3), &normalList[0][0], GL_STATIC_DRAW);
-        glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-        glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+
+        if(!mbPickingMode)
+        {
+            //fill normal buffer
+            glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
+            glBufferData(GL_ARRAY_BUFFER, normalList->size() * sizeof(glm::vec3), &normalList[0][0], GL_STATIC_DRAW);
+            glUniformMatrix4fv(maResources.m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+            glUniformMatrix3fv(maResources.m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+        }
+
+        GLint maVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
 
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(maResources.m_3DVertexID);
+        glEnableVertexAttribArray(maVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glVertexAttribPointer(maResources.m_3DVertexID, // attribute
-                                3,                  // size
-                                GL_FLOAT,           // type
-                                GL_FALSE,           // normalized?
-                                0,                  // stride
-                                (void*)0            // array buffer offset
-                                );
-        // 2nd attribute buffer : normals
-        glEnableVertexAttribArray(maResources.m_3DNormalID);
-        glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
-        glVertexAttribPointer(maResources.m_3DNormalID, // attribute
+        glVertexAttribPointer(maVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -779,9 +784,26 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
                                 (void*)0            // array buffer offset
                                 );
 
+        if(!mbPickingMode)
+        {
+            // 2nd attribute buffer : normals
+            glEnableVertexAttribArray(maResources.m_3DNormalID);
+            glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
+            glVertexAttribPointer(maResources.m_3DNormalID, // attribute
+                    3,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+                    );
+        }
+
         glDrawArrays(GL_POLYGON, 0, pointList->size());
-        glDisableVertexAttribArray(maResources.m_3DVertexID);
-        glDisableVertexAttribArray(maResources.m_3DNormalID);
+
+        glDisableVertexAttribArray(maVertexID);
+        if(!mbPickingMode)
+            glDisableVertexAttribArray(maResources.m_3DNormalID);
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         delete pointList;
         delete normalList;
@@ -969,6 +991,9 @@ void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
 
 void OpenGL3DRenderer::Init3DUniformBlock()
 {
+    if(mbPickingMode)
+        return;
+
     GLuint a3DLightBlockIndex = glGetUniformBlockIndex(maResources.m_3DProID, "GlobalLights");
     GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(maResources.m_3DProID, "GlobalMaterialParameters");
 
@@ -1002,6 +1027,9 @@ void OpenGL3DRenderer::Init3DUniformBlock()
 
 void OpenGL3DRenderer::Update3DUniformBlock()
 {
+    if(mbPickingMode)
+        return;
+
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLint), &m_LightsInfo.lightNum);
     CHECK_GL_ERROR();
