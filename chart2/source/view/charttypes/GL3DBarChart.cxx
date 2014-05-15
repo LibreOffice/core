@@ -72,7 +72,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
             itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
     {
-        nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY) + nBarSizeY;
+        nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY);
 
         const VDataSeries& rDataSeries = *itr;
         sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
@@ -97,10 +97,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
             float nVal = rDataSeries.getYValue(nIndex);
-            float nXPos = nIndex * (nBarSizeX + nBarDistanceX) + nBarSizeX;
+            float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
 
 
-            glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, nVal);
+            glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, 0);
             glm::mat4 aTranslationMatrix = glm::translate(nXPos, nYPos, nVal);
             glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
 
