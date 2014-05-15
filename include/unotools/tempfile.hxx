@@ -74,7 +74,7 @@ public:
                     TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=NULL, const OUString* pParent=NULL, bool bDirectory=false);
 
                     /**
-                    TempFile will be removed from disk in dtor if EnableKillingTempFile was called before.
+                    TempFile will be removed from disk in dtor if EnableKillingFile(true) was called before.
                     Temporary directories will be removed recursively in that case.
                     */
                     ~TempFile();
@@ -105,7 +105,7 @@ public:
                     /**
                     Returns a stream to the tempfiles data; the stream is owned by the tempfile object, so you have to keep this
                     alive as long as you want to use the stream. If the TempFile object is destroyed, it also destroys the
-                    stream object, the underlying file is only deleted if EnableKillingFile( sal_True ) has been called before!
+                    stream object, the underlying file is only deleted if EnableKillingFile(true) has been called before!
                     */
     SvStream*       GetStream( StreamMode eMode );
 
@@ -119,9 +119,6 @@ public:
                     */
     void            EnableKillingFile( bool bEnable=true )
                     { bKillingFileEnabled = bEnable; }
-
-    bool            IsKillingFileEnabled() const
-                    { return bKillingFileEnabled; }
 
                     /**
                     Only create a "physical" file name for a temporary file that would be valid at that moment.

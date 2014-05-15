@@ -2036,7 +2036,6 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
         return; // the backup was done already
 
     ::utl::TempFile aTransactTemp( aPrefix, true, &aExtension, &aDestDir );
-    aTransactTemp.EnableKillingFile( false );
 
     INetURLObject aBackObj( aTransactTemp.GetURL() );
     OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -2063,7 +2062,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     }
 
     if ( pImp->m_aBackupURL.isEmpty() )
-        aTransactTemp.EnableKillingFile( true );
+        aTransactTemp.EnableKillingFile();
 }
 
 
