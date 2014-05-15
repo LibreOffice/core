@@ -823,6 +823,8 @@ void DocxAttributeOutput::EndRun()
                     FSNS( XML_w, XML_fldCharType ), "separate",
                     FSEND );
             m_pSerializer->endElementNS( XML_w, XML_r );
+            // At start of every "PAGEREF" field m_endPageRef value should be true.
+            m_endPageRef = true;
         }
 
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
