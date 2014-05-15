@@ -20,7 +20,9 @@
 #include <StaticGeometry.h>
 #include "glm/gtc/matrix_inverse.hpp"
 
-#define DEBUG_FBO 0
+#define DEBUG_FBO 1
+
+#define GL_PI 3.14159f
 
 using namespace com::sun::star;
 
@@ -87,6 +89,12 @@ OpenGL3DRenderer::OpenGL3DRenderer():
 
     GetFreq();
     m_RoundBarMesh.iMeshSizes = 0;
+    m_SenceBox.maxXCoord = -1.0 * FLT_MAX;
+    m_SenceBox.minXCoord = FLT_MAX;
+    m_SenceBox.maxYCoord =  -1.0 * FLT_MAX;
+    m_SenceBox.minYCoord = FLT_MAX;
+    m_SenceBox.maxZCoord =  -1.0 * FLT_MAX;
+    m_SenceBox.minZCoord = FLT_MAX;
 }
 
 OpenGL3DRenderer::~OpenGL3DRenderer()
@@ -332,7 +340,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     glm::vec3 actualNormals[3];
     std::vector<unsigned short> indeices[5];
     glm::vec3 externSurNormal;
-    glm::mat4 corrctCoord = glm::translate(glm::vec3(width / 2.0f, height / 2.0f  - fRadius, depth / 2.0f));
+    glm::mat4 corrctCoord = glm::translate(glm::vec3(width / 2.0f, height / 2.0f, depth / 2.0f - fRadius));
     m_RoundBarMesh.topThreshold = topThreshold;
     m_RoundBarMesh.bottomThreshold = bottomThreshold;
     m_RoundBarMesh.iMeshStartIndices = m_Vertices.size();
@@ -347,9 +355,9 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
             actualVerteices[k] = glm::vec3(corrctCoord * glm::vec4(vertices[i + k], 1.0));
             actualNormals[k] = normals[i + k];
         }
-        float maxY = std::max(std::max(actualVerteices[0].y, actualVerteices[1].y), actualVerteices[2].y);
-        float minY = std::min(std::min(actualVerteices[0].y, actualVerteices[1].y), actualVerteices[2].y);
-        int surfaceIndex = (minY >= topThreshold - 0.001) ? TOP_SURFACE : ((maxY <= bottomThreshold + 0.001) ? BOTTOM_SURFACE : MIDDLE_SURFACE);
+        float maxZ = std::max(std::max(actualVerteices[0].z, actualVerteices[1].z), actualVerteices[2].z);
+        float minZ = std::min(std::min(actualVerteices[0].z, actualVerteices[1].z), actualVerteices[2].z);
+        int surfaceIndex = (minZ >= topThreshold - 0.001) ? TOP_SURFACE : ((maxZ <= bottomThreshold + 0.001) ? BOTTOM_SURFACE : MIDDLE_SURFACE);
         for (int k = 0; k < 3; k++)
         {
             {
@@ -360,8 +368,8 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
             //add extern
             if ((surfaceIndex == TOP_SURFACE) || (surfaceIndex == BOTTOM_SURFACE))
             {
-                actualVerteices[k].y = 0.0f;
-                externSurNormal = (surfaceIndex == TOP_SURFACE) ? glm::vec3(0.0, 1.0, 0.0) : glm::vec3(0.0, -1.0, 0.0);
+                actualVerteices[k].z = 0.0f;
+                externSurNormal = (surfaceIndex == TOP_SURFACE) ? glm::vec3(0.0, 0.0, 1.0) : glm::vec3(0.0, 0.0, -1.0);
                 int tmpSurfaceIndex = (surfaceIndex == TOP_SURFACE) ? FLAT_TOP_SURFACE : FLAT_BOTTOM_SURFACE;
                 PackedVertex packed = {actualVerteices[k], externSurNormal};
                 SetVertex(packed, VertexToOutIndex, m_Vertices, m_Normals, indeices[tmpSurfaceIndex]);
@@ -381,6 +389,8 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
         }
         indeices[k].clear();
     }
+    vertices.clear();
+    normals.clear();
     VertexToOutIndex.clear();
 }
 
@@ -680,7 +690,7 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 
     PosVecf3 trans = {0.0f, 0, 0.0};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {1.0f, m_fHeightWeight, 1.0f};
+    PosVecf3 scale = {1.0f, 1.0f, m_fHeightWeight};
     MoveModelf(trans, angle, scale);
 
     m_3DMVP = m_3DProjection * m_3DView * m_Model;
@@ -752,7 +762,7 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         Normals3D *normalList = polygon.normalsList.front();
         PosVecf3 trans = {0.0f, 0.0f, 0.0};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {1.0f, m_fHeightWeight, 1.0f};
+        PosVecf3 scale = {1.0f, 1.0f, m_fHeightWeight};
         MoveModelf(trans, angle, scale);
         glm::mat3 normalMatrix(m_Model);
         glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
@@ -933,6 +943,12 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
     float actualY = y;
     float actualZ = z;
     m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, actualY, actualZ));
+    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, actualX);
+    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, actualX);
+    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, actualY);
+    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, actualY);
+    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, actualZ);
+    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, actualZ);
 }
 
 void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
@@ -948,10 +964,10 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     glm::vec4 DirY = modelMatrix * glm::vec4(0.0, 1.0, 0.0, 0.0);
     glm::vec4 DirZ = modelMatrix * glm::vec4(0.0, 0.0, 1.0, 0.0);
     m_Extrude3DInfo.xScale = glm::length(DirX);
-    m_Extrude3DInfo.yScale = glm::length(DirZ);
-    m_Extrude3DInfo.zScale = glm::length(DirY);
+    m_Extrude3DInfo.yScale = glm::length(DirY);
+    m_Extrude3DInfo.zScale = glm::length(DirZ);
     glm::mat4 transformMatrixInverse = glm::inverse(glm::translate(glm::vec3(tranform)));
-    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.zScale, m_Extrude3DInfo.yScale));
+    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.yScale, m_Extrude3DInfo.zScale));
     m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
 
     //color
@@ -969,11 +985,10 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     m_Extrude3DInfo.xTransform = tranform.x;
     m_Extrude3DInfo.yTransform = tranform.y;
     m_Extrude3DInfo.zTransform = tranform.z;
-//    m_Extrude3DInfo.zTransform = 0;
     m_Extrude3DInfo.rounded = roundedCorner;
     if (m_Extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
     {
-        CreateActualRoundedCube(0.1f, 30, 30, 1.0f, 1.2f, m_Extrude3DInfo.zScale / m_Extrude3DInfo.xScale);
+        CreateActualRoundedCube(0.1f, 30, 30, 1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1.2f);
         AddVertexData(m_CubeVertexBuf);
         AddNormalData(m_CubeNormalBuf);
         AddIndexData(m_CubeElementBuf);
@@ -982,10 +997,16 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
             m_Extrude3DInfo.startIndex[j] = m_RoundBarMesh.iElementStartIndices[j];
             m_Extrude3DInfo.size[j] = m_RoundBarMesh.iElementSizes[j];
         }
+        m_Vertices.clear();
+        m_Normals.clear();
+        m_Indeices.clear();
     }
-    m_Vertices.clear();
-    m_Normals.clear();
-    m_Indeices.clear();
+    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, m_Extrude3DInfo.xTransform + m_Extrude3DInfo.xScale);
+    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, m_Extrude3DInfo.xTransform);
+    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, m_Extrude3DInfo.yTransform + m_Extrude3DInfo.yScale);
+    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, m_Extrude3DInfo.yTransform );
+    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, m_Extrude3DInfo.zTransform + m_Extrude3DInfo.zScale);
+    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, m_Extrude3DInfo.zTransform);
 }
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
@@ -1048,12 +1069,12 @@ void OpenGL3DRenderer::Update3DUniformBlock()
 
 void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, int surIndex)
 {
-    float xzScale = extrude3D.xScale;
-    PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
-                      -extrude3D.yTransform,
+    float xyScale = extrude3D.xScale;
+    PosVecf3 trans = {extrude3D.xTransform,
+                      extrude3D.yTransform,
                       extrude3D.zTransform};
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-    glm::mat4 flatScale = glm::scale(xzScale, xzScale, xzScale);
+    glm::mat4 flatScale = glm::scale(xyScale, xyScale, xyScale);
     m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
     if(!mbPickingMode)
     {
@@ -1072,27 +1093,27 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
 
 void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D)
 {
-    float xzScale = extrude3D.xScale;
-    float yScale = extrude3D.yScale;
-    float actualYTrans = yScale - m_RoundBarMesh.bottomThreshold * xzScale;
-    PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
-                      -extrude3D.yTransform,
+    float xyScale = extrude3D.xScale;
+    float zScale = extrude3D.zScale;
+    float actualZTrans = zScale - m_RoundBarMesh.bottomThreshold * xyScale;
+    PosVecf3 trans = {extrude3D.xTransform,
+                      extrude3D.yTransform,
                       extrude3D.zTransform};
     //PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    if (actualYTrans < 0.0f)
+    if (actualZTrans < 0.0f)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
    //     yScale /= (float)(1 + BOTTOM_THRESHOLD);
-        yScale /= (float)(m_RoundBarMesh.bottomThreshold);
-        PosVecf3 scale = {xzScale, yScale, xzScale};
+        zScale /= (float)(m_RoundBarMesh.bottomThreshold);
+        PosVecf3 scale = {xyScale, xyScale, zScale};
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * aScaleMatrix;
     }
     else
     {
-        glm::mat4 topTrans = glm::translate(glm::vec3(0.0, -actualYTrans, 0.0));
-        glm::mat4 topScale = glm::scale(xzScale, xzScale, xzScale);
+        glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, actualZTrans));
+        glm::mat4 topScale = glm::scale(xyScale, xyScale, xyScale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale;
     }
@@ -1113,13 +1134,13 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
 
 void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D)
 {
-    float xzScale = extrude3D.xScale;
-    float yScale = extrude3D.yScale;
-    float actualYScale = yScale - m_RoundBarMesh.bottomThreshold * xzScale;
-    PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
-                      -extrude3D.yTransform,
+    float xyScale = extrude3D.xScale;
+    float zScale = extrude3D.zScale;
+    float actualZScale = zScale - m_RoundBarMesh.bottomThreshold * xyScale;
+    PosVecf3 trans = {extrude3D.xTransform,
+                      extrude3D.yTransform,
                       extrude3D.zTransform};
-    if (actualYScale < 0.0f)
+    if (actualZScale < 0.0f)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
  //       yScale /= (float)(1 + BOTTOM_THRESHOLD);
@@ -1129,14 +1150,14 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     }
     else
     {
-        glm::mat4 scale = glm::scale(xzScale, actualYScale, xzScale);
+        glm::mat4 scale = glm::scale(xyScale, xyScale,actualZScale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * scale;
     }
 
     if (extrude3D.reverse)
     {
-        glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
+        glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         m_Model = m_Model * reverseMatrix;
     }
 
@@ -1156,20 +1177,20 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
 
 void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
 {
-    float xzScale = extrude3D.xScale;
-    float yScale = extrude3D.yScale;
-    float actualYTrans = yScale - m_RoundBarMesh.bottomThreshold * xzScale;
-    PosVecf3 trans = {extrude3D.xTransform,//m_Extrude3DInfo.xTransform + 140,
-                      -extrude3D.yTransform,
+    float xyScale = extrude3D.xScale;
+    float zScale = extrude3D.zScale;
+    float actualZTrans = zScale - m_RoundBarMesh.bottomThreshold * xyScale;
+    PosVecf3 trans = {extrude3D.xTransform,
+                      extrude3D.yTransform,
                       extrude3D.zTransform};
 
-    if (actualYTrans < 0.0f)
+    if (actualZTrans < 0.0f)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
         //yScale /= (float)(1 + BOTTOM_THRESHOLD);
-        yScale /= (float)(m_RoundBarMesh.bottomThreshold);
-        glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, -1.0, 0.0));
-        glm::mat4 scale = glm::scale(xzScale, yScale, xzScale);
+        zScale /= (float)(m_RoundBarMesh.bottomThreshold);
+        glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, 0.0, -1.0));
+        glm::mat4 scale = glm::scale(xyScale, xyScale, zScale);
         //MoveModelf(trans, angle, scale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * scale * orgTrans;
@@ -1177,9 +1198,9 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     else
     {
         // use different matrices for different parts
-        glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, -1.0, 0.0));
-        glm::mat4 topTrans = glm::translate(glm::vec3(0.0, actualYTrans, 0.0));
-        glm::mat4 topScale = glm::scale(xzScale, xzScale, xzScale);
+        glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, 0.0, -1.0));
+        glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, actualZTrans));
+        glm::mat4 topScale = glm::scale(xyScale, xyScale, xyScale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
@@ -1204,14 +1225,12 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
     float xScale = extrude3D.xScale;
     float yScale = extrude3D.yScale;
     float zScale = extrude3D.zScale;
-    glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
-    glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
-    glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3D.xTransform, -extrude3D.yTransform, extrude3D.zTransform));
+    glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3D.xTransform, extrude3D.yTransform, extrude3D.zTransform));
     glm::mat4 scaleMatrix = glm::scale(xScale, yScale, zScale);
     m_Model = transformMatrix * extrude3D.rotation * scaleMatrix;
     if (extrude3D.reverse)
     {
-        glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, -1.0, 0.0));
+        glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         m_Model = m_Model * reverseMatrix;
     }
 
@@ -1231,9 +1250,6 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
 
 void OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
 {
-    glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
-    glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
-    CHECK_GL_ERROR();
     RenderExtrudeMiddleSurface(extrude3D);
     // check reverse flag to decide whether to render the top middle
     if (extrude3D.reverse)
@@ -1259,7 +1275,10 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     {
         Update3DUniformBlock();
         glUseProgram(maResources.m_3DProID);
+        glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
+        glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
     }
+    CHECK_GL_ERROR();
     size_t extrude3DNum = m_Extrude3DList.size();
     for (size_t i = 0; i < extrude3DNum; i++)
     {
@@ -1292,8 +1311,8 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
                     (void*)0            // array buffer offset
                     );
         }
-        extrude3DInfo.yTransform *= m_fHeightWeight;
-        extrude3DInfo.yScale *= m_fHeightWeight;
+        extrude3DInfo.zTransform *= m_fHeightWeight;
+        extrude3DInfo.zScale *= m_fHeightWeight;
         if(!mbPickingMode)
         {
             glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
@@ -1330,19 +1349,19 @@ void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vT
     TextInfo aTextInfo;
     aTextInfo.vertex[0] = vBottomRight.x;
     aTextInfo.vertex[1] = vBottomRight.y;
-    aTextInfo.vertex[2] = vBottomRight.z;
+    aTextInfo.vertex[2] = vBottomRight.z * m_fHeightWeight;
 
     aTextInfo.vertex[3] = vTopRight.x;
     aTextInfo.vertex[4] = vTopRight.y;
-    aTextInfo.vertex[5] = vTopRight.z;
-
-    aTextInfo.vertex[6] = vTopLeft.x;
-    aTextInfo.vertex[7] = vTopLeft.y;
-    aTextInfo.vertex[8] = vTopLeft.z;
+    aTextInfo.vertex[5] = aTextInfo.vertex[2] + (vTopRight.z - vBottomRight.z);
 
     aTextInfo.vertex[9] = vBottomLeft.x;
     aTextInfo.vertex[10] = vBottomLeft.y;
-    aTextInfo.vertex[11] = vBottomLeft.z;
+    aTextInfo.vertex[11] = vBottomLeft.z * m_fHeightWeight;
+
+    aTextInfo.vertex[6] = vTopLeft.x;
+    aTextInfo.vertex[7] = vTopLeft.y;
+    aTextInfo.vertex[8] = aTextInfo.vertex[11] + (vTopLeft.z - vBottomLeft.z);
 
     CHECK_GL_ERROR();
     glGenTextures(1, &aTextInfo.texture);
@@ -1479,30 +1498,50 @@ void OpenGL3DRenderer::RenderClickPos(Point aMPos)
 
 void OpenGL3DRenderer::CreateSceneBoxView()
 {
+//original code start
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos,
                m_CameraInfo.cameraOrg,
                m_CameraInfo.cameraUp);
+//original code end
+    float senceBoxWidth = m_SenceBox.maxXCoord - m_SenceBox.minXCoord;
+    float senceBoxHeight = m_SenceBox.maxZCoord - m_SenceBox.minZCoord;
+    float senceBoxDepth = m_SenceBox.maxYCoord - m_SenceBox.minYCoord;
+    float distanceY = m_SenceBox.maxYCoord + senceBoxWidth / 2 / tan(m_fViewAngle / 2 * GL_PI / 180.0f);
+    float veriticalAngle = atan((float)m_iHeight / (float)m_iWidth);
+    float distance = distanceY / cos(veriticalAngle);
+    float horizontalAngle = 0;
+    m_fHeightWeight = senceBoxWidth * (float)m_iHeight / (float)m_iWidth / senceBoxHeight;
+    m_SenceBox.maxZCoord *= m_fHeightWeight;
+    m_SenceBox.minZCoord *= m_fHeightWeight;
+    m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
+                                       m_SenceBox.minYCoord + senceBoxDepth * 2,
+                                       m_SenceBox.minZCoord + senceBoxHeight * m_fHeightWeight/ 2);    //update the camera position and org
+    m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
+    m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * cos(veriticalAngle) * cos(horizontalAngle);
+    m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * sin(veriticalAngle);
+    m_3DView = glm::lookAt(m_CameraInfo.cameraPos,
+                            m_CameraInfo.cameraOrg,
+                            m_CameraInfo.cameraUp
+                            );
 }
 
 void OpenGL3DRenderer::ProcessUnrenderedShape()
 {
-    CreateSceneBoxView();
     glViewport(0, 0, m_iWidth, m_iHeight);
     glClearDepth(1.0f);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    CreateSceneBoxView();
     //Polygon
     RenderPolygon3DObject();
     //Shape3DExtrudeObject
     RenderExtrude3DObject();
     //render text
     RenderTextShape();
-    glViewport(0, 0, m_iWidth, m_iHeight);
 #if DEBUG_FBO
     OUString aFileName = OUString("D://shaderout_") + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
     OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
 #endif
-//    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void OpenGL3DRenderer::MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale)

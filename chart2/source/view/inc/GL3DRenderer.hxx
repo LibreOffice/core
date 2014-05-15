@@ -141,6 +141,16 @@ struct TextInfo
     float vertex[12];
 };
 
+typedef struct SceneBox{
+    float maxXCoord;
+    float minXCoord;
+    float maxYCoord;
+    float minYCoord;
+    float maxZCoord;
+    float minZCoord;
+}SceneBox;
+
+
 class OpenGL3DRenderer
 {
 public:
@@ -204,7 +214,6 @@ private:
     int GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY,
                                int iSubDivZ, float width, float height, float depth);
     void CreateSceneBoxView();
-    void CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
     void RenderTexture(GLuint TexID);
 private:
 
@@ -351,6 +360,7 @@ private:
     float m_fHeightWeight;
 
     bool mbPickingMode;
+    SceneBox m_SenceBox;
 };
 
 }
