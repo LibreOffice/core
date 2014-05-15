@@ -462,7 +462,6 @@ void SubstitutePathVariables_Impl::Commit()
 {
 }
 
-
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
 {
 #ifdef SOLARIS

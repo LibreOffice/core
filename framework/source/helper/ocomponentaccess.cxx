@@ -136,7 +136,6 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
     // ... otherwise break a recursive path and go back at current stack!
 }
 
-
 css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
 {
     // Set default return value, if method failed.

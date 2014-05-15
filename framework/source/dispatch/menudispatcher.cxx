@@ -199,7 +199,6 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
     }
 }
 
-
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
 {
     for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
@@ -216,7 +215,6 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
         }
     }
 }
-
 
 bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource )
 {
