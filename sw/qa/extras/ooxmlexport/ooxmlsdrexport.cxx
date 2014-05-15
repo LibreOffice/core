@@ -80,10 +80,10 @@ DECLARE_OOXMLEXPORT_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.docx")
 {
-    if (!m_bExported)
+    if (!mbExported)
         return;
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.gif")));
     // This was also true, image was written twice.
     CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.gif")));
@@ -232,10 +232,10 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
     // 1st shape has some cropping
     text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? 454 : 455 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? 367 : 368 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? -454 : -455 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(m_bExported ? -367 : -368 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? 454 : 455 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? 367 : 368 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? -454 : -455 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(mbExported ? -367 : -368 ), aGraphicCropStruct.Bottom );
 
     // 2nd shape has no cropping
     aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
@@ -331,17 +331,17 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
 
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 11338 : 11335), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2121), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11338 : 11335), xChildGroup->getPosition().Y);
 
     xGroup.set(xChildGroup, uno::UNO_QUERY);
     xChildGroup.set(xGroup->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -1856 : -1858), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 11338 : 11335), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -1856 : -1858), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11338 : 11335), xChildGroup->getPosition().Y);
 
     xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 14028 : 14025), xChildGroup->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2121), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 14028 : 14025), xChildGroup->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGradientFillTheme, "dml-gradientfill-theme.docx")

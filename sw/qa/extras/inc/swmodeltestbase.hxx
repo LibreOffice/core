@@ -112,7 +112,26 @@ using namespace css;
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
+private:
     OUString maFilterOptions;
+
+protected:
+    uno::Reference<lang::XComponent> mxComponent;
+    xmlBufferPtr mpXmlBuffer;
+    const char* mpTestDocumentPath;
+    const char* mpFilter;
+
+    template<typename T>
+    struct MethodEntry
+    {
+        const char* pName;
+        void (T::*pMethod)();
+    };
+
+    sal_uInt32 mnStartTime;
+    utl::TempFile maTempFile;
+    bool mbExported; ///< Does maTempFile already contain something useful?
+
 protected:
     virtual OUString getTestName() { return OUString(); }
 
@@ -127,12 +146,14 @@ public:
     }
 
     SwModelTestBase(const char* pTestDocumentPath = "", const char* pFilter = "")
-        : mpXmlBuffer(0),
-        mpTestDocumentPath(pTestDocumentPath),
-        mpFilter(pFilter),
-        m_nStartTime(0),
-        m_bExported(false)
-    { m_aTempFile.EnableKillingFile(); }
+        : mpXmlBuffer(0)
+        , mpTestDocumentPath(pTestDocumentPath)
+        , mpFilter(pFilter)
+        , mnStartTime(0)
+        , mbExported(false)
+    {
+        maTempFile.EnableKillingFile();
+    }
 
     virtual ~SwModelTestBase()
     {}
@@ -141,7 +162,7 @@ public:
     {
         test::BootstrapFixture::setUp();
 
-        mxDesktop.set( com::sun::star::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())) );
+        mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
     }
 
     virtual void tearDown() SAL_OVERRIDE
@@ -198,7 +219,7 @@ protected:
         header();
         preTest(filename);
         load(mpTestDocumentPath, filename);
-        save(OUString::createFromAscii(mpFilter), m_aTempFile);
+        save(OUString::createFromAscii(mpFilter), maTempFile);
         postTest(filename);
         verify();
         finish();
@@ -481,7 +502,7 @@ protected:
             mxComponent->dispose();
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cout << pName << ",";
-        m_nStartTime = osl_getGlobalTimer();
+        mnStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
         if (mustCalcLayoutOf(pName))
             calcLayout();
@@ -495,20 +516,20 @@ protected:
         aMediaDescriptor["FilterName"] <<= aFilterName;
         if (!maFilterOptions.isEmpty())
             aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-        xStorable->storeToURL(m_aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
-        m_bExported = true;
-        mxComponent = loadFromDesktop(m_aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        mbExported = true;
+        mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
         if(aFilterName == "Office Open XML Text")
         {
             // too many validation errors right now
-            // validate(m_aTempFile.GetFileName(), test::OOXML);
+            // validate(maTempFile.GetFileName(), test::OOXML);
         }
         else if(aFilterName == "writer8")
         {
             // still a few validation errors
-            // validate(m_aTempFile.GetFileName(), test::ODF);
+            // validate(maTempFile.GetFileName(), test::ODF);
         }
 
         if (mpXmlBuffer)
@@ -535,7 +556,7 @@ protected:
     void finish()
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();
-        std::cout << (nEndTime - m_nStartTime) << std::endl;
+        std::cout << (nEndTime - mnStartTime) << std::endl;
         if (mpXmlBuffer)
         {
             xmlBufferFree(mpXmlBuffer);
@@ -561,13 +582,12 @@ protected:
      */
     xmlDocPtr parseExport(const OUString& rStreamName = OUString("word/document.xml"))
     {
-        if (!m_bExported)
+        if (!mbExported)
             return 0;
 
         // Read the XML stream we're interested in.
-        uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+        uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
         uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
-
         boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
         return parseXmlStream(pStream.get());
@@ -594,21 +614,6 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("lc"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("extended-properties"), BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"));
     }
-
-    uno::Reference<lang::XComponent> mxComponent;
-    xmlBufferPtr mpXmlBuffer;
-    const char* mpTestDocumentPath;
-    const char* mpFilter;
-
-    template< typename T >
-    struct MethodEntry
-    {
-        const char* pName;
-        void (T::*pMethod)();
-    };
-    sal_uInt32 m_nStartTime;
-    utl::TempFile m_aTempFile;
-    bool m_bExported; ///< Does m_aTempFile already contain something useful?
 };
 
 /**

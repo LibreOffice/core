@@ -2062,7 +2062,7 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 
     // Right after import we get a rounding error: 8662 vs 8664.
-    if (m_bExported)
+    if (mbExported)
     {
         uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
         // This was 2, due to incorrect handling of parent transformations inside DML groupshapes.
@@ -2271,7 +2271,7 @@ DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesP
 
 DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
 {
-    if (!m_bExported)
+    if (!mbExported)
         return;
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
@@ -2601,7 +2601,7 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:object", 2);
 
     // finally check the embedded files are present in the zipped document
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSheetFiles = 0;
     int nImageFiles = 0;
@@ -2758,7 +2758,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
         return;
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship", 4);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
-                         comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+                         comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
     //check that images are also saved
     OUString sImageFile( "word/media/OOXDiagramDataRels1_0.jpeg" ); //added anchor id to form a uniqe name
@@ -2785,7 +2785,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo77718, "fdo77718.docx")
     assertXPath(pXmlDataRels2,"/rels:Relationships/rels:Relationship", 4);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
-                         comphelper::getComponentContext(m_xSFactory), m_aTempFile.GetURL());
+                         comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
     //check that images are also saved
     OUString sImageFile1( "word/media/OOXDiagramDataRels1_0.jpeg" ); //added anchor id to form a uniqe name
