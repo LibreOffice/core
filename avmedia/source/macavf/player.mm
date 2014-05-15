@@ -182,7 +182,9 @@ void SAL_CALL Player::start()
     OSL_TRACE ("Player::start status=%d", (int)eStatus);
     if( eStatus == AVPlayerStatusReadyToPlay)
 #endif
+    {
         [mpPlayer play];
+    }
     // else // TODO: delay until it becomes ready
 }
 
