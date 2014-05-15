@@ -25,10 +25,12 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "viewlayer.hxx"
 
 class SystemChildWindow;
+class Window;
 
 namespace com { namespace sun { namespace star { namespace drawing {
     class XShape;
@@ -145,7 +147,8 @@ namespace slideshow
                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rVCLDeviceParams,
                                                      const OUString& rMimeType );
             ViewLayerSharedPtr                    mpViewLayer;
-            ::std::auto_ptr< SystemChildWindow >    mpMediaWindow;
+            ::std::auto_ptr< SystemChildWindow >  mpMediaWindow;
+            boost::scoped_ptr< Window >           mpEventHandlerParent;
             mutable ::com::sun::star::awt::Point  maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
 

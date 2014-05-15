@@ -75,7 +75,8 @@ namespace slideshow
                                         const uno::Reference< drawing::XShape >&        rxShape,
                                         const uno::Reference< uno::XComponentContext >& rxContext ) :
             mpViewLayer( rViewLayer ),
-            mpMediaWindow(),
+            mpMediaWindow(0),
+            mpEventHandlerParent(0),
             maWindowOffset( 0, 0 ),
             maBounds(),
             mxShape( rxShape ),
@@ -149,6 +150,7 @@ namespace slideshow
             }
 
             mpMediaWindow.reset();
+            mpEventHandlerParent.reset();
 
             // shutdown player
             if( mxPlayer.is() )
@@ -277,7 +279,15 @@ namespace slideshow
 
             if( mpMediaWindow.get() )
             {
-                mpMediaWindow->SetPosSizePixel( aPosPixel, aSizePixel );
+                if( mpEventHandlerParent )
+                {
+                    mpEventHandlerParent->SetPosSizePixel( aPosPixel, aSizePixel );
+                    mpMediaWindow->SetPosSizePixel( Point(0,0), aSizePixel );
+                }
+                else
+                {
+                    mpMediaWindow->SetPosSizePixel( aPosPixel, aSizePixel );
+                }
                 mxPlayerWindow->setPosSize( 0, 0,
                                             aSizePixel.Width(), aSizePixel.Height(),
                                             0 );
@@ -463,16 +473,22 @@ namespace slideshow
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
                             if( avmedia::IsModel(rMimeType) )
                             {
-                                SystemWindowData aWinData = OpenGLContext::generateWinData(pWindow);
-                                mpMediaWindow.reset(new SystemChildWindow(pWindow, 0, &aWinData));
+                                mpEventHandlerParent.reset(new Window(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
+                                mpEventHandlerParent->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
+                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
+                                mpEventHandlerParent->Show();
+                                SystemWindowData aWinData = OpenGLContext::generateWinData(mpEventHandlerParent.get());
+                                mpMediaWindow.reset(new SystemChildWindow(mpEventHandlerParent.get(), 0, &aWinData));
+                                mpMediaWindow->SetPosSizePixel( Point( 0, 0 ),
+                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
                             else
                             {
                                 mpMediaWindow.reset( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
+                                mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
+                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
-                            mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
-                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
                             mpMediaWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
                             mpMediaWindow->EnableEraseBackground( false );
                             mpMediaWindow->EnablePaint( false );
@@ -504,6 +520,7 @@ namespace slideshow
                                 //if there was no playerwindow, then clear the mpMediaWindow too
                                 //so that we can draw a placeholder instead in that space
                                 mpMediaWindow.reset();
+                                mpEventHandlerParent.reset();
                             }
                         }
                     }
