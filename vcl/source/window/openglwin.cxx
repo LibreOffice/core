@@ -23,6 +23,7 @@ private:
 OpenGLWindowImpl::OpenGLWindowImpl(SystemChildWindow* pWindow)
 {
     maContext.init(pWindow);
+    pWindow->SetMouseTransparent(false);
 }
 
 OpenGLContext* OpenGLWindowImpl::getContext()

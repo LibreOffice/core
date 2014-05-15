@@ -71,15 +71,11 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
-    m_TextProID(0)
-    , m_TextMatrixID(0)
-    , m_TextVertexID(0)
-    , m_TextTexCoordID(0)
-    , m_TextTexCoordBuf(0)
-    , m_TextTexID(0)
+    pResources(&maPickingResources)
     , m_uiSelectFrameCounter(0)
     , m_fViewAngle(30.0f)
     , m_fHeightWeight(1.0f)
+    , mbPickingMode(false)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -96,12 +92,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
 
 OpenGL3DRenderer::~OpenGL3DRenderer()
 {
-    // delete programs
-    glDeleteProgram(m_CommonProID);
-    glDeleteProgram(m_RenderProID);
-    glDeleteProgram(m_TextProID);
-    glDeleteProgram(m_3DProID);
-
     // delete buffers
     glDeleteBuffers(1, &m_CubeVertexBuf);
     glDeleteBuffers(1, &m_CubeNormalBuf);
@@ -114,7 +104,7 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_3DUBOBuffer);
 }
 
-void OpenGL3DRenderer::LoadShaders()
+void OpenGL3DRenderer::ShaderResources::LoadShaders()
 {
     m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShader", "shape3DFragmentShader");
     m_3DProjectionID = glGetUniformLocation(m_3DProID, "P");
@@ -153,22 +143,22 @@ void OpenGL3DRenderer::RenderTexture(GLuint TexID)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glUseProgram(m_RenderProID);
+    glUseProgram(pResources->m_RenderProID);
 
-    glEnableVertexAttribArray(m_RenderVertexID);
+    glEnableVertexAttribArray(pResources->m_RenderVertexID);
     glBindBuffer(GL_ARRAY_BUFFER, m_RenderVertexBuf);
     glVertexAttribPointer(
-        m_RenderVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        pResources->m_RenderVertexID, // attribute
         3,                  // size
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
         0,                  // stride
         (void*)0            // array buffer offset
         );
-    glEnableVertexAttribArray(m_RenderTexCoordID);
+    glEnableVertexAttribArray(pResources->m_RenderTexCoordID);
     glBindBuffer(GL_ARRAY_BUFFER, m_RenderTexCoordBuf);
     glVertexAttribPointer(
-        m_RenderTexCoordID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        pResources->m_RenderTexCoordID, // attribute.
         2,                  // size
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
@@ -176,10 +166,10 @@ void OpenGL3DRenderer::RenderTexture(GLuint TexID)
         (void*)0            // array buffer offset
         );
     glBindTexture(GL_TEXTURE_2D, TexID);
-    glUniform1i(m_RenderTexID, 0);
+    glUniform1i(pResources->m_RenderTexID, 0);
     glDrawArrays(GL_QUADS, 0, 4);
-    glDisableVertexAttribArray(m_RenderTexCoordID);
-    glDisableVertexAttribArray(m_RenderVertexID);
+    glDisableVertexAttribArray(pResources->m_RenderTexCoordID);
+    glDisableVertexAttribArray(pResources->m_RenderVertexID);
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
 }
@@ -223,7 +213,8 @@ void OpenGL3DRenderer::init()
 
     m_fViewAngle = 60.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
-    LoadShaders();
+    maNormalResources.LoadShaders();
+    maPickingResources.LoadShaders();
     glGenBuffers(1, &m_TextTexCoordBuf);
     glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
     glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
@@ -676,7 +667,7 @@ double OpenGL3DRenderer::GetTime()
 void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 {
     size_t listNum = polygon.verticesList.size();
-    glUseProgram(m_CommonProID);
+    glUseProgram(pResources->m_CommonProID);
     for (size_t i = 0; i < listNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
@@ -693,12 +684,12 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList->size() * sizeof(glm::vec3), &pointList[0][0], GL_STATIC_DRAW);
-        glUniform4fv(m_2DColorID, 1, &polygon.polygonColor[0]);
-        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_3DMVP[0][0]);
+        glUniform4fv(pResources->m_2DColorID, 1, &polygon.polygonColor[0]);
+        glUniformMatrix4fv(pResources->m_MatrixID, 1, GL_FALSE, &m_3DMVP[0][0]);
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_2DVertexID);
+        glEnableVertexAttribArray(pResources->m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glVertexAttribPointer(m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -708,7 +699,7 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 
         glLineWidth(polygon.lineWidth);
         glDrawArrays(GL_LINE_STRIP, 0, pointList->size());
-        glDisableVertexAttribArray(m_2DVertexID);
+        glDisableVertexAttribArray(pResources->m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         delete pointList;
         polygon.verticesList.pop_front();
@@ -731,9 +722,9 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &polygon.material);
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-    glUseProgram(m_3DProID);
-    glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
-    glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    glUseProgram(pResources->m_3DProID);
+    glUniformMatrix4fv(pResources->m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
+    glUniformMatrix4fv(pResources->m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
     for (size_t i = 0; i < verticesNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
@@ -753,13 +744,13 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         //fill normal buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
         glBufferData(GL_ARRAY_BUFFER, normalList->size() * sizeof(glm::vec3), &normalList[0][0], GL_STATIC_DRAW);
-        glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-        glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+        glUniformMatrix4fv(pResources->m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+        glUniformMatrix3fv(pResources->m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
 
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_3DVertexID);
+        glEnableVertexAttribArray(pResources->m_3DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glVertexAttribPointer(m_3DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_3DVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -767,9 +758,9 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
                                 (void*)0            // array buffer offset
                                 );
         // 2nd attribute buffer : normals
-        glEnableVertexAttribArray(m_3DNormalID);
+        glEnableVertexAttribArray(pResources->m_3DNormalID);
         glBindBuffer(GL_ARRAY_BUFFER, m_NormalBuffer);
-        glVertexAttribPointer(m_3DNormalID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_3DNormalID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -778,8 +769,8 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
                                 );
 
         glDrawArrays(GL_POLYGON, 0, pointList->size());
-        glDisableVertexAttribArray(m_3DVertexID);
-        glDisableVertexAttribArray(m_3DNormalID);
+        glDisableVertexAttribArray(pResources->m_3DVertexID);
+        glDisableVertexAttribArray(pResources->m_3DNormalID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         delete pointList;
         delete normalList;
@@ -967,8 +958,8 @@ void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
 
 void OpenGL3DRenderer::Init3DUniformBlock()
 {
-    GLuint a3DLightBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalLights");
-    GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(m_3DProID, "GlobalMaterialParameters");
+    GLuint a3DLightBlockIndex = glGetUniformBlockIndex(pResources->m_3DProID, "GlobalLights");
+    GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(pResources->m_3DProID, "GlobalMaterialParameters");
 
     if ((GL_INVALID_INDEX == a3DLightBlockIndex) || (GL_INVALID_INDEX == a3DMaterialBlockIndex))
     {
@@ -977,8 +968,8 @@ void OpenGL3DRenderer::Init3DUniformBlock()
     int nUniformBufferAlignSize = 0;
     glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &nUniformBufferAlignSize);
     GLint nBlockDataSizeLight = 0, nBlockDataSizeMertrial = 0;
-    glGetActiveUniformBlockiv(m_3DProID, a3DLightBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeLight);
-    glGetActiveUniformBlockiv(m_3DProID, a3DMaterialBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeMertrial);
+    glGetActiveUniformBlockiv(pResources->m_3DProID, a3DLightBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeLight);
+    glGetActiveUniformBlockiv(pResources->m_3DProID, a3DMaterialBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeMertrial);
     CHECK_GL_ERROR();
     glGenBuffers(1, &m_3DUBOBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
@@ -989,10 +980,10 @@ void OpenGL3DRenderer::Init3DUniformBlock()
     glBufferData(GL_UNIFORM_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_3DUBOBuffer, 0, nBlockDataSizeLight);
     CHECK_GL_ERROR();
-    glUniformBlockBinding(m_3DProID, a3DLightBlockIndex, 0);
+    glUniformBlockBinding(pResources->m_3DProID, a3DLightBlockIndex, 0);
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_3DUBOBuffer, ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize, nBlockDataSizeMertrial);
-    glUniformBlockBinding(m_3DProID, a3DMaterialBlockIndex, 1);
+    glUniformBlockBinding(pResources->m_3DProID, a3DMaterialBlockIndex, 1);
     //for the light source uniform, we must calc the offset of each element
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -1023,8 +1014,8 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    glUniformMatrix4fv(pResources->m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+    glUniformMatrix3fv(pResources->m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[surIndex]));
 }
 
@@ -1056,8 +1047,8 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     }
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    glUniformMatrix4fv(pResources->m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+    glUniformMatrix3fv(pResources->m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[BOTTOM_SURFACE]));
 }
 
@@ -1091,8 +1082,8 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     }
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    glUniformMatrix4fv(pResources->m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+    glUniformMatrix3fv(pResources->m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[MIDDLE_SURFACE]));
 }
 
@@ -1127,8 +1118,8 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     }
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    glUniformMatrix4fv(pResources->m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+    glUniformMatrix3fv(pResources->m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[TOP_SURFACE]));
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
 }
@@ -1138,8 +1129,8 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
     float xScale = extrude3D.xScale;
     float yScale = extrude3D.yScale;
     float zScale = extrude3D.zScale;
-    glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
-    glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    glUniformMatrix4fv(pResources->m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
+    glUniformMatrix4fv(pResources->m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
     glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3D.xTransform, -extrude3D.yTransform, extrude3D.zTransform));
     glm::mat4 scaleMatrix = glm::scale(xScale, yScale, zScale);
     m_Model = transformMatrix * extrude3D.rotation * scaleMatrix;
@@ -1150,15 +1141,15 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
     }
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
-    glUniformMatrix4fv(m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
-    glUniformMatrix3fv(m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
+    glUniformMatrix4fv(pResources->m_3DModelID, 1, GL_FALSE, &m_Model[0][0]);
+    glUniformMatrix3fv(pResources->m_3DNormalMatrixID, 1, GL_FALSE, &normalInverseTranspos[0][0]);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
 {
-    glUniformMatrix4fv(m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
-    glUniformMatrix4fv(m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    glUniformMatrix4fv(pResources->m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
+    glUniformMatrix4fv(pResources->m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
     CHECK_GL_ERROR();
     RenderExtrudeMiddleSurface(extrude3D);
     // check reverse flag to decide whether to render the top middle
@@ -1181,7 +1172,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     glCullFace(GL_BACK);
     Update3DUniformBlock();
     //render to fbo
-    glUseProgram(m_3DProID);
+    glUseProgram(pResources->m_3DProID);
     size_t extrude3DNum = m_Extrude3DList.size();
     for (size_t i = 0; i < extrude3DNum; i++)
     {
@@ -1189,9 +1180,9 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         GLuint vertexBuf = extrude3DInfo.rounded ? m_CubeVertexBuf : m_BoundBox;
         GLuint normalBuf = extrude3DInfo.rounded ? m_CubeNormalBuf : m_BoundBoxNormal;
         // 1st attribute buffer : vertices
-        glEnableVertexAttribArray(m_3DVertexID);
+        glEnableVertexAttribArray(pResources->m_3DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
-        glVertexAttribPointer(m_3DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_3DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -1199,9 +1190,9 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
                                 (void*)0            // array buffer offset
                                 );
         // 2nd attribute buffer : normals
-        glEnableVertexAttribArray(m_3DNormalID);
+        glEnableVertexAttribArray(pResources->m_3DNormalID);
         glBindBuffer(GL_ARRAY_BUFFER, normalBuf);
-        glVertexAttribPointer(m_3DNormalID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_3DNormalID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -1224,8 +1215,8 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         {
             RenderNonRoundedBar(extrude3DInfo);
         }
-        glDisableVertexAttribArray(m_3DVertexID);
-        glDisableVertexAttribArray(m_3DNormalID);
+        glDisableVertexAttribArray(pResources->m_3DVertexID);
+        glDisableVertexAttribArray(pResources->m_3DNormalID);
     }
     m_Extrude3DList.clear();
     glUseProgram(0);
@@ -1292,15 +1283,15 @@ void OpenGL3DRenderer::RenderTextShape()
         CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
         CHECK_GL_ERROR();
-        glUseProgram(m_TextProID);
+        glUseProgram(pResources->m_TextProID);
 
         CHECK_GL_ERROR();
-        glUniformMatrix4fv(m_TextMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        glUniformMatrix4fv(pResources->m_TextMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_TextVertexID);
+        glEnableVertexAttribArray(pResources->m_TextVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
-            m_TextVertexID,
+            pResources->m_TextVertexID,
             3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
@@ -1309,10 +1300,10 @@ void OpenGL3DRenderer::RenderTextShape()
             );
         //tex coord
         CHECK_GL_ERROR();
-        glEnableVertexAttribArray(m_TextTexCoordID);
+        glEnableVertexAttribArray(pResources->m_TextTexCoordID);
         glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
         glVertexAttribPointer(
-            m_TextTexCoordID,
+            pResources->m_TextTexCoordID,
             2,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
@@ -1323,14 +1314,14 @@ void OpenGL3DRenderer::RenderTextShape()
         CHECK_GL_ERROR();
         glBindTexture(GL_TEXTURE_2D, textInfo.texture);
         CHECK_GL_ERROR();
-        glUniform1i(m_TextTexID, 0);
+        glUniform1i(pResources->m_TextTexID, 0);
         CHECK_GL_ERROR();
         //TODO: moggi: get rid fo GL_QUADS
         glDrawArrays(GL_QUADS, 0, 4);
         CHECK_GL_ERROR();
-        glDisableVertexAttribArray(m_TextTexCoordID);
+        glDisableVertexAttribArray(pResources->m_TextTexCoordID);
         CHECK_GL_ERROR();
-        glDisableVertexAttribArray(m_TextVertexID);
+        glDisableVertexAttribArray(pResources->m_TextVertexID);
         CHECK_GL_ERROR();
         glBindTexture(GL_TEXTURE_2D, 0);
         glUseProgram(0);
@@ -1423,6 +1414,11 @@ void OpenGL3DRenderer::MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scal
     glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
     glm::mat4 aRotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
     m_Model = aTranslationMatrix * aRotationMatrix * aScaleMatrix;
+}
+
+void OpenGL3DRenderer::SetPickingMode(bool bPickingMode)
+{
+    mbPickingMode = bPickingMode;
 }
 
 }

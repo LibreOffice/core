@@ -166,10 +166,11 @@ public:
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
     void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
     void ProcessUnrenderedShape();
+
+    void SetPickingMode(bool bPickingMode);
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
-    void LoadShaders();
     void GetFreq();
     void RenderPolygon3DObject();
     void RenderLine3D(Polygon3DInfo &polygon);
@@ -206,6 +207,58 @@ private:
     void CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
     void RenderTexture(GLuint TexID);
 private:
+
+    struct ShaderResources
+    {
+        // 3DProID
+        GLint m_3DProID;
+        GLuint m_3DProjectionID;
+        GLuint m_3DViewID;
+        GLuint m_3DModelID;
+        GLuint m_3DNormalMatrixID;
+        GLuint m_3DVertexID;
+        GLuint m_3DNormalID;
+
+        // TextProID
+        GLint m_TextProID;
+        GLint m_TextMatrixID;
+        GLint m_TextVertexID;
+        GLint m_TextTexCoordID;
+        GLint m_TextTexID;
+
+        // CommonProID
+        GLint m_CommonProID;
+        GLint m_2DVertexID;
+        GLint m_2DColorID;
+        GLint m_MatrixID;
+
+        // RenderProID
+        GLint m_RenderProID;
+        GLint m_RenderTexID;
+        GLint m_RenderVertexID;
+        GLint m_RenderTexCoordID;
+
+        ShaderResources():
+            m_3DProID(0),
+            m_TextProID(0),
+            m_CommonProID(0),
+            m_RenderProID(0) {}
+
+        ~ShaderResources()
+        {
+            glDeleteProgram(m_CommonProID);
+            glDeleteProgram(m_RenderProID);
+            glDeleteProgram(m_TextProID);
+            glDeleteProgram(m_3DProID);
+        }
+
+        void LoadShaders();
+    };
+
+    ShaderResources maNormalResources;
+    ShaderResources maPickingResources;
+    ShaderResources* pResources;
+
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
     // Camera matrix
@@ -235,20 +288,6 @@ private:
 
     glm::mat4 m_3DMVP;
 
-    GLint m_3DProID;
-
-    GLuint m_3DProjectionID;
-
-    GLuint m_3DViewID;
-
-    GLuint m_3DModelID;
-
-    GLuint m_3DVertexID;
-
-    GLuint m_3DNormalID;
-
-    GLuint m_3DNormalMatrixID;
-
     GLuint m_3DUBOBuffer;
 #if 0
     GLint m_3DLightBlockIndex;
@@ -260,8 +299,6 @@ private:
     GLuint m_NormalBuffer;
 
     GLuint m_VertexBuffer;
-
-    GLint m_MatrixID;
 
     Extrude3DInfo m_Extrude3DInfo;
 
@@ -277,12 +314,7 @@ private:
     GLuint m_BoundBoxNormal;
      // add for text
     std::list <TextInfo> m_TextInfoList;
-    GLint m_TextProID;
-    GLint m_TextMatrixID;
-    GLint m_TextVertexID;
-    GLint m_TextTexCoordID;
     GLuint m_TextTexCoordBuf;
-    GLint m_TextTexID;
 
     int m_uiSelectFrameCounter;
 
@@ -294,25 +326,15 @@ private:
 
     RoundBarMesh m_RoundBarMesh;
 
-    GLint m_CommonProID;
-    GLint m_2DVertexID;
-    GLint m_2DColorID;
-
-    GLint m_RenderProID;
-
     GLuint m_RenderVertexBuf;
 
     GLuint m_RenderTexCoordBuf;
 
-    GLint m_RenderTexID;
-
-    GLint m_RenderVertexID;
-
-    GLint m_RenderTexCoordID;
-
     float m_fViewAngle;
 
     float m_fHeightWeight;
+
+    bool mbPickingMode;
 };
 
 }

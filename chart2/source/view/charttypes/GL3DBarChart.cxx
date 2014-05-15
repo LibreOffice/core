@@ -26,6 +26,7 @@ namespace chart {
 GL3DBarChart::GL3DBarChart(
     const css::uno::Reference<css::chart2::XChartType>& xChartType,
     OpenGLWindow& rWindow) :
+    mbPickingMode(false),
     mxChartType(xChartType),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
     mrWindow(rWindow),
@@ -186,8 +187,34 @@ void GL3DBarChart::update()
     render();
 }
 
+namespace {
+
+class PickingModeSetter
+{
+private:
+    opengl3D::OpenGL3DRenderer* mpRenderer;
+
+public:
+    PickingModeSetter(opengl3D::OpenGL3DRenderer* pRenderer):
+        mpRenderer(pRenderer)
+    {
+        mpRenderer->SetPickingMode(true);
+    }
+
+    ~PickingModeSetter()
+    {
+        mpRenderer->SetPickingMode(false);
+    }
+};
+
+}
+
 void GL3DBarChart::clickedAt(const Point& )
 {
+    {
+        PickingModeSetter(mpRenderer.get());
+        render();
+    }
     if (mpCamera)
         mpCamera->zoom(1);
 }
