@@ -36,6 +36,8 @@ namespace vcl
 class OutputDevice;
 class SwFrm;
 class SwLinePortion;
+class SwPageFrm;
+class SwPrintData;
 class SwTxtPainter;
 class SwEditShell;
 class StringRangeEnumerator;
@@ -207,6 +209,8 @@ class SwEnhancedPDFExportHelper
     bool mbSkipEmptyPages;
     bool mbEditEngineOnly;
 
+    const SwPrintData& mrPrintData;
+
     static TableColumnsMap aTableColumnsMap;
     static LinkIdMap aLinkIdMap;
     static NumListIdMap aNumListIdMap;
@@ -229,7 +233,8 @@ class SwEnhancedPDFExportHelper
                                OutputDevice& rOut,
                                const OUString& rPageRange,
                                bool bSkipEmptyPages,
-                               bool bEditEngineOnly );
+                               bool bEditEngineOnly,
+                               const SwPrintData& rPrintData );
 
     ~SwEnhancedPDFExportHelper();
 
@@ -240,6 +245,10 @@ class SwEnhancedPDFExportHelper
     static FrmTagIdMap& GetFrmTagIdMap() { return aFrmTagIdMap; }
 
     static LanguageType GetDefaultLanguage() {return eLanguageDefault; }
+
+    //scale and position rRectangle if we're scaling due to notes in margins.
+    Rectangle SwRectToPDFRect(const SwPageFrm* pCurrPage,
+        const Rectangle& rRectangle) const;
 };
 
 #endif

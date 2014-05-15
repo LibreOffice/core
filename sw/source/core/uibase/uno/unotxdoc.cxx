@@ -3012,13 +3012,14 @@ void SAL_CALL SwXTextDocument::render(
                                             ((SwView*)pView)->GetWrtShellPtr() :
                                             0;
 
-                    if (bIsPDFExport && bFirstPage && pWrtShell)
-                    {
-                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, false );
-                    }
-
                     SwPrintData const& rSwPrtOptions =
                         *m_pRenderData->GetSwPrtOptions();
+
+                    if (bIsPDFExport && bFirstPage && pWrtShell)
+                    {
+                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, false, rSwPrtOptions );
+                    }
+
                     if (bPrintProspect)
                         pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
                     else    // normal printing and PDF export
@@ -3032,7 +3033,7 @@ void SAL_CALL SwXTextDocument::render(
 
                     if (bIsPDFExport && bLastPage && pWrtShell)
                     {
-                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  true );
+                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, true, rSwPrtOptions );
                     }
 
                     pVwSh->SetPDFExportOption( false );

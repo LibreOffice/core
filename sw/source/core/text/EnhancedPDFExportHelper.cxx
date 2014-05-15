@@ -69,6 +69,7 @@
 #include <itrpaint.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <IMark.hxx>
+#include <printdata.hxx>
 #include <SwNodeNum.hxx>
 #include <switerator.hxx>
 #include <stack>
@@ -677,7 +678,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                  ( pFrm->IsTabFrm() &&
                    !static_cast<const SwTabFrm*>(pFrm)->IsFollow() &&
                    !static_cast<const SwTabFrm*>(pFrm)->HasFollow() ) )
-                mpPDFExtOutDevData->SetStructureBoundingBox( pFrm->Frm().SVRect() );
+            {
+                mpPDFExtOutDevData->SetStructureBoundingBox(pFrm->Frm().SVRect());
+            }
         }
 
         if ( bRowSpan )
@@ -1447,12 +1450,14 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       OutputDevice& rOut,
                                                       const OUString& rPageRange,
                                                       bool bSkipEmptyPages,
-                                                      bool bEditEngineOnly )
+                                                      bool bEditEngineOnly,
+                                                      const SwPrintData& rPrintData )
     : mrSh( rSh ),
       mrOut( rOut ),
       mpRangeEnum( 0 ),
       mbSkipEmptyPages( bSkipEmptyPages ),
-      mbEditEngineOnly( bEditEngineOnly )
+      mbEditEngineOnly( bEditEngineOnly ),
+      mrPrintData( rPrintData )
 {
     if ( !rPageRange.isEmpty() )
         mpRangeEnum = new StringRangeEnumerator( rPageRange, 0, mrSh.GetPageCount()-1 );
@@ -1500,6 +1505,29 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
 SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
 {
     delete mpRangeEnum;
+}
+
+Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrm* pCurrPage,
+    const Rectangle& rRectangle) const
+{
+    sal_Int16 nPostItMode = mrPrintData.GetPrintPostIts();
+    if (nPostItMode != POSTITS_INMARGINS)
+        return rRectangle;
+    //the page has been scaled by 75% and vertically centered, so adjust these
+    //rectangles equivalently
+    Rectangle aRect(rRectangle);
+    Size aRectSize(aRect.GetSize());
+    double fScale = 0.75;
+    aRectSize.Width() = (aRectSize.Width() * fScale);
+    aRectSize.Height() = (aRectSize.Height() * fScale);
+    long nOrigHeight = pCurrPage->Frm().Height();
+    long nNewHeight = nOrigHeight*fScale;
+    long nShiftY = (nOrigHeight-nNewHeight)/2;
+    aRect.Left() = (aRect.Left() * fScale);
+    aRect.Top() = (aRect.Top() * fScale);
+    aRect.Move(0, nShiftY);
+    aRect.SetSize(aRectSize);
+    return aRect;
 }
 
 void SwEnhancedPDFExportHelper::EnhancedPDFExport()
@@ -1555,6 +1583,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     {
                         // Link Rectangle
                         const SwRect& rNoteRect = mrSh.GetCharRect();
+                        const SwPageFrm* pCurrPage =
+                            static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
 
                         // Link PageNums
                         std::vector<sal_Int32> aNotePageNums = CalcOutputPageNums( rNoteRect );
@@ -1580,7 +1610,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             aNote.Contents = pField->GetTxt();
 
                             // Link Export
-                            pPDFExtOutDevData->CreateNote( rNoteRect.SVRect(), aNote, aNotePageNums[nNumIdx] );
+                            Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));
+                            pPDFExtOutDevData->CreateNote(aRect, aNote, aNotePageNums[nNumIdx]);
                         }
                     }
                 }
@@ -1632,6 +1663,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     aTmp.insert( aTmp.begin(), mrSh.SwCrsrShell::_GetCrsr()->begin(), mrSh.SwCrsrShell::_GetCrsr()->end() );
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
+                    const SwPageFrm* pSelectionPage =
+                        static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                     // Create the destination for internal links:
                     sal_Int32 nDestId = -1;
                     if ( bIntern )
@@ -1643,12 +1677,18 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         // Destination Rectangle
                         const SwRect& rDestRect = mrSh.GetCharRect();
 
+                        const SwPageFrm* pCurrPage =
+                            static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                         // Destination PageNum
                         const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                         // Destination Export
                         if ( -1 != nDestPageNum )
-                            nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                        {
+                            Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                            nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                        }
                     }
 
                     if ( !bIntern || -1 != nDestId )
@@ -1670,8 +1710,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
                             {
                                 // Link Export
+                                Rectangle aRect(SwRectToPDFRect(pSelectionPage, rLinkRect.SVRect()));
                                 const sal_Int32 nLinkId =
-                                    pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), aLinkPageNums[nNumIdx] );
+                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
 
                                 // Store link info for tagged pdf output:
                                 const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -1705,6 +1746,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             if ( RES_DRAWFRMFMT != pFrmFmt->Which() &&
                  SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_URL, true, &pItem ) )
             {
+                const SwPageFrm* pCurrPage =
+                    static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                 OUString aURL( static_cast<const SwFmtURL*>(pItem)->GetURL() );
                 const bool bIntern = '#' == aURL[0];
 
@@ -1719,12 +1763,17 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // Destination Rectangle
                     const SwRect& rDestRect = mrSh.GetCharRect();
 
+                    pCurrPage = static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                     // Destination PageNum
                     const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                     // Destination Export
                     if ( -1 != nDestPageNum )
-                        nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                    {
+                        Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                        nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                    }
                 }
 
                 if ( !bIntern || -1 != nDestId )
@@ -1738,8 +1787,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // Link Export
                     for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
                     {
+                        Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink( aLinkRect.SVRect(), aLinkPageNums[nNumIdx] );
+                            pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
 
                         // Connect Link and Destination:
                         if ( bIntern )
@@ -1801,13 +1851,16 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
                     const SwRect& rDestRect = mrSh.GetCharRect();
 
+                    const SwPageFrm* pCurrPage = static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                     // Destination PageNum
                     const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                     if ( -1 != nDestPageNum )
                     {
                         // Destination Export
-                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                        Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                         // #i44368# Links in Header/Footer
                         const SwPosition aPos( *pTNd );
@@ -1826,8 +1879,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
                             {
                                 // Link Export
+                                aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
                                 const sal_Int32 nLinkId =
-                                    pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), aLinkPageNums[nNumIdx] );
+                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
 
                                 // Store link info for tagged pdf output:
                                 const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -1893,14 +1947,18 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
+                const SwPageFrm* pCurrPage =
+                    static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                 // Destination PageNum
                 const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                 for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
                 {
                     // Link Export
+                    Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                     const sal_Int32 nLinkId =
-                        pPDFExtOutDevData->CreateLink( aLinkRect.SVRect(), aLinkPageNums[nNumIdx] );
+                        pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
 
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
@@ -1908,8 +1966,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     if ( -1 != nDestPageNum )
                     {
+                        aRect = SwRectToPDFRect(pCurrPage, rDestRect.SVRect());
                         // Destination Export
-                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(rDestRect.SVRect(), nDestPageNum);
 
                         // Connect Link and Destination:
                         pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
@@ -1954,14 +2013,18 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 mrSh.GotoOutline(i);
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
+                const SwPageFrm* pCurrPage =
+                    static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                 // Destination PageNum
                 const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                 if ( -1 != nDestPageNum )
                 {
                     // Destination Export
+                    Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                     const sal_Int32 nDestId =
-                        pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                        pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                     // Outline entry text
                     const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i, true, false, false );
@@ -1999,12 +2062,18 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
+                const SwPageFrm* pCurrPage =
+                    static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                 // Destination PageNum
                 const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                 // Destination Export
                 if ( -1 != nDestPageNum )
-                    pPDFExtOutDevData->CreateNamedDest( sBkName, rDestRect.SVRect(), nDestPageNum );
+                {
+                    Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                    pPDFExtOutDevData->CreateNamedDest(sBkName, aRect, nDestPageNum);
+                }
             }
             mrSh.SwCrsrShell::ClearMark();
             //<--- i56629
@@ -2030,22 +2099,26 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
+                const SwPageFrm* pCurrPage =
+                    static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
+
                 // Destination PageNum
                 const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                 if ( -1 != nDestPageNum )
                 {
+                    Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
                     if ( aIBeg->nLinkId != -1 )
                     {
                         // Destination Export
-                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                         // Connect Link and Destination:
                         pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, nDestId );
                     }
                     else
                     {
-                        pPDFExtOutDevData->DescribeRegisteredDest( aIBeg->nDestId, rDestRect.SVRect(), nDestPageNum );
+                        pPDFExtOutDevData->DescribeRegisteredDest(aIBeg->nDestId, aRect, nDestPageNum);
                     }
                 }
             }
@@ -2161,8 +2234,9 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                 for ( size_t nNumIdx = 0; nNumIdx < aHFLinkPageNums.size(); ++nNumIdx )
                 {
                     // Link Export
+                    Rectangle aRect(SwRectToPDFRect(pPageFrm, aHFLinkRect.SVRect()));
                     const sal_Int32 nHFLinkId =
-                        rPDFExtOutDevData.CreateLink( aHFLinkRect.SVRect(), aHFLinkPageNums[nNumIdx] );
+                        rPDFExtOutDevData.CreateLink(aRect, aHFLinkPageNums[nNumIdx]);
 
                     // Connect Link and Destination:
                     if ( bIntern )
