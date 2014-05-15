@@ -131,6 +131,14 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
     CHECK_GL_ERROR();
 }
 
+void OpenGL3DRenderer::PickingShaderResources::LoadShaders()
+{
+    m_CommonProID = OpenGLHelper::LoadShaders("pickingVertexShader", "pickingFragmentShader");
+    m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
+    m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
+    m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+}
+
 void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up)
 {
     m_CameraInfo.cameraPos = pos;
@@ -212,7 +220,10 @@ void OpenGL3DRenderer::init()
 
     m_fViewAngle = 60.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
+
     maResources.LoadShaders();
+    maPickingResources.LoadShaders();
+
     glGenBuffers(1, &m_TextTexCoordBuf);
     glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
     glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);

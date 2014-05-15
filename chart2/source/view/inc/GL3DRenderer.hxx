@@ -255,7 +255,27 @@ private:
         void LoadShaders();
     };
 
+    struct PickingShaderResources
+    {
+        // CommonProID
+        GLint m_CommonProID;
+        GLint m_2DVertexID;
+        GLint m_2DColorID;
+        GLint m_MatrixID;
+
+        PickingShaderResources():
+            m_CommonProID(0) {}
+
+        ~PickingShaderResources()
+        {
+            glDeleteProgram(m_CommonProID);
+        }
+
+        void LoadShaders();
+    };
+
     ShaderResources maResources;
+    PickingShaderResources maPickingResources;
 
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
