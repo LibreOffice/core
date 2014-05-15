@@ -463,7 +463,10 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
                 mxLockedCanvasContext.clear();
             }
         }
-        else if (mxChartShapeContext.is())
+        //NMSP_dmlChart == getNamespace( mnStartToken ) check is introduced to make sure that
+        //mnStartToken is set as NMSP_dmlChart in setStartToken.
+        //Only in case it is set then only the below block of code for ChartShapeContext should be executed.
+        else if (mxChartShapeContext.is() && (NMSP_dmlChart == getNamespace( mnStartToken )))
         {
             ChartGraphicDataContext* pChartGraphicDataContext = dynamic_cast<ChartGraphicDataContext*>(mxChartShapeContext.get());
             if (pChartGraphicDataContext)
