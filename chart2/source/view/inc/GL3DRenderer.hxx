@@ -212,12 +212,12 @@ private:
     {
         // 3DProID
         GLint m_3DProID;
-        GLuint m_3DProjectionID;
-        GLuint m_3DViewID;
-        GLuint m_3DModelID;
-        GLuint m_3DNormalMatrixID;
-        GLuint m_3DVertexID;
-        GLuint m_3DNormalID;
+        GLint m_3DProjectionID;
+        GLint m_3DViewID;
+        GLint m_3DModelID;
+        GLint m_3DNormalMatrixID;
+        GLint m_3DVertexID;
+        GLint m_3DNormalID;
 
         // TextProID
         GLint m_TextProID;
