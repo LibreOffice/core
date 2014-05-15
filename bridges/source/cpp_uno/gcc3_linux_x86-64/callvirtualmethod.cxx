@@ -57,10 +57,27 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     if ( nGPR > x86_64::MAX_GPR_REGS )
         nGPR = x86_64::MAX_GPR_REGS;
 
+    // Work around Clang -fsanitize=address "inline assembly requires more
+    // registers than available" error:
+    struct Data {
+        sal_uInt64 pMethod;
+        sal_uInt64 * pGPR;
+        double * pFPR;
+        sal_uInt64 nFPR;
+        // Return values:
+        sal_uInt64 rax;
+        sal_uInt64 rdx;
+        double xmm0;
+        double xmm1;
+    } data;
+    data.pGPR = pGPR;
+    data.pFPR = pFPR;
+    data.nFPR = nFPR;
+
     // Get pointer to method
     sal_uInt64 pMethod = *((sal_uInt64 *)pThis);
     pMethod += 8 * nVtableIndex;
-    pMethod = *((sal_uInt64 *)pMethod);
+    data.pMethod = *((sal_uInt64 *)pMethod);
 
     // Load parameters to stack, if necessary
     sal_uInt64* pCallStack = NULL;
@@ -72,16 +89,10 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         std::memcpy( pCallStack, pStack, nStackBytes );
     }
 
-    // Return values
-    sal_uInt64 rax;
-    sal_uInt64 rdx;
-    double xmm0;
-    double xmm1;
-
     asm volatile (
 
         // Fill the xmm registers
-        "movq %6, %%rax\n\t"
+        "movq 16%0, %%rax\n\t"
 
         "movsd   (%%rax), %%xmm0\n\t"
         "movsd  8(%%rax), %%xmm1\n\t"
@@ -93,7 +104,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "movsd 56(%%rax), %%xmm7\n\t"
 
         // Fill the general purpose registers
-        "movq %5, %%rax\n\t"
+        "movq 8%0, %%rax\n\t"
 
         "movq    (%%rax), %%rdi\n\t"
         "movq   8(%%rax), %%rsi\n\t"
@@ -103,46 +114,46 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "movq  40(%%rax), %%r9\n\t"
 
         // Perform the call
-        "movq %4, %%r11\n\t"
-        "movq %7, %%rax\n\t"
+        "movq 0%0, %%r11\n\t"
+        "movq 24%0, %%rax\n\t"
         "call *%%r11\n\t"
 
         // Fill the return values
-        "movq   %%rax, %0\n\t"
-        "movq   %%rdx, %1\n\t"
-        "movsd %%xmm0, %2\n\t"
-        "movsd %%xmm1, %3\n\t"
-        : "=m" ( rax ), "=m" ( rdx ), "=m" ( xmm0 ), "=m" ( xmm1 )
-        : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR ),
+        "movq   %%rax, 32%0\n\t"
+        "movq   %%rdx, 40%0\n\t"
+        "movsd %%xmm0, 48%0\n\t"
+        "movsd %%xmm1, 56%0\n\t"
+        :: "o" (data),
           "m" ( pCallStack ) // dummy input to prevent the compiler from optimizing the alloca out
         : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r10", "r11",
           "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6", "xmm7",
-          "xmm8", "xmm9", "xmm10", "xmm11", "xmm12", "xmm13", "xmm14", "xmm15"
+          "xmm8", "xmm9", "xmm10", "xmm11", "xmm12", "xmm13", "xmm14", "xmm15",
+          "memory"
     );
 
     switch (pReturnTypeRef->eTypeClass)
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        *reinterpret_cast<sal_uInt64 *>( pRegisterReturn ) = rax;
+        *reinterpret_cast<sal_uInt64 *>( pRegisterReturn ) = data.rax;
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
     case typelib_TypeClass_ENUM:
-        *reinterpret_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &rax );
+        *reinterpret_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &data.rax );
         break;
     case typelib_TypeClass_CHAR:
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        *reinterpret_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &rax );
+        *reinterpret_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &data.rax );
         break;
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
-        *reinterpret_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &rax );
+        *reinterpret_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &data.rax );
         break;
     case typelib_TypeClass_FLOAT:
     case typelib_TypeClass_DOUBLE:
-        *reinterpret_cast<double *>( pRegisterReturn ) = xmm0;
+        *reinterpret_cast<double *>( pRegisterReturn ) = data.xmm0;
         break;
     default:
         {
@@ -150,12 +161,12 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
             if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0)
             {
                 sal_uInt64 longs[2];
-                longs[0] = rax;
-                longs[1] = rdx;
+                longs[0] = data.rax;
+                longs[1] = data.rdx;
 
                 double doubles[2];
-                doubles[0] = xmm0;
-                doubles[1] = xmm1;
+                doubles[0] = data.xmm0;
+                doubles[1] = data.xmm1;
                 x86_64::fill_struct( pReturnTypeRef, &longs[0], &doubles[0], pRegisterReturn);
             }
             break;
