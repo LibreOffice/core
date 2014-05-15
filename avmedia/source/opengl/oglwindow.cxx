@@ -25,6 +25,7 @@ OGLWindow::OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext, SystemChildW
 
 OGLWindow::~OGLWindow()
 {
+    dispose();
 }
 
 void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::exception)
@@ -81,6 +82,8 @@ uno::Sequence< OUString > SAL_CALL OGLWindow::getSupportedServiceNames() throw (
 
 void SAL_CALL OGLWindow::dispose() throw (uno::RuntimeException, std::exception)
 {
+    m_pEventHandler->GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
+    m_pEventHandler->RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
 }
 
 void SAL_CALL OGLWindow::addEventListener( const uno::Reference< lang::XEventListener >& )
@@ -216,6 +219,7 @@ IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
         {
             const Point& rMousePos = pMouseEvt->GetPosPixel();
             const Rectangle aWinRect(m_pEventHandler->GetPosPixel(),m_pEventHandler->GetSizePixel());
+            // Grab focus to the OpenGL window when mouse pointer is over it
             if( aWinRect.IsInside(rMousePos) )
             {
                 if ( !m_pEventHandler->HasFocus() )
@@ -223,6 +227,7 @@ IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
                     m_pEventHandler->GrabFocus();
                 }
             }
+            // Move focus to the document when mouse is not over the OpenGL window
             else if ( m_pEventHandler->HasFocus() )
             {
                 m_pEventHandler->GrabFocusToDocument();
@@ -240,7 +245,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
         KeyEvent* pKeyEvt = (KeyEvent*)pEvent->GetData();
         if(pKeyEvt)
         {
-            sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
+            const sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
             m_pContext->makeCurrent();
 
             // Calculate movement
