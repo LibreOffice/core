@@ -97,6 +97,7 @@ using namespace ::com::sun::star;
 #include "conditio.hxx"
 #include "sheetevents.hxx"
 #include <documentlinkmgr.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define IS_SHARE_HEADER(set) \
     ((SfxBoolItem&) \
@@ -328,7 +329,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        AbstractScColRowLabelDlg* pDlg = pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders);
+                        boost::scoped_ptr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -340,7 +341,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         }
                         else
                             bOk = false;
-                        delete pDlg;
                     }
 
                     if (bOk)            // ausfuehren
@@ -865,7 +865,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected);
+                                boost::scoped_ptr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(GetActiveDialogParent(), aName, true, bSheetProtected));
                                 OSL_ENSURE(pNewDlg, "Dialog create fail!");
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
@@ -874,7 +874,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     ModifyScenario( nTab, aName, aComment, aColor, nFlags );
                                     rReq.Done();
                                 }
-                                delete pNewDlg;
                             }
                         }
                     }
@@ -1137,8 +1136,8 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQuer
         OUString aText( ScResId( SCSTR_PASSWORD ) );
         OUString aPassword;
 
-        SfxPasswordDialog* pDlg = new SfxPasswordDialog(
-            _pParent ? _pParent : GetActiveDialogParent(), &aText );
+        boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(
+            _pParent ? _pParent : GetActiveDialogParent(), &aText ));
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );
         pDlg->SetHelpId( GetStaticInterface()->GetSlot(SID_CHG_PROTECT)->GetCommand() );
@@ -1147,7 +1146,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, bool bJustQuer
             pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
         if ( pDlg->Execute() == RET_OK )
             aPassword = pDlg->GetPassword();
-        delete pDlg;
+        pDlg.reset();
 
         if (!aPassword.isEmpty())
         {
@@ -1546,7 +1545,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        SfxAbstractTabDialog* pDlg = pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE );
+                        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE ));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
@@ -1586,7 +1585,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             PageStyleModified( aNewName, false );
                             rReq.Done();
                         }
-                        delete pDlg;
+                        pDlg.reset();
 
                         rStyleSet.ClearItem( ATTR_PAGE_PAPERTRAY );
                     }
@@ -1701,11 +1700,11 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg( SfxViewFrame::Current(),
+                        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg( SfxViewFrame::Current(),
                                                                                 GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
-                                                                                nResId);
+                                                                                nResId));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1717,7 +1716,6 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             SetDocumentModified();
                             rReq.Done();
                         }
-                        delete pDlg;
                     }
                 }
             }

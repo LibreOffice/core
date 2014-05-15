@@ -58,6 +58,7 @@
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <boost/scoped_ptr.hpp>
 
 TYPEINIT1( ScDrawShell, SfxShell );
 
@@ -256,7 +257,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if ( pFact )
                                 {
-                                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( pWin, pView );
+                                    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateCaptionDialog( pWin, pView ));
 
                                     const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -270,8 +271,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                         pView->SetAttributes(*pDlg->GetOutputItemSet());
                                         pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
                                     }
-
-                                    delete pDlg;
                                 }
                             }
                             else
@@ -280,14 +279,13 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if(pFact)
                                 {
-                                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView );
+                                    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView ));
                                     OSL_ENSURE(pDlg, "Dialog creation failed!");
                                     if (pDlg->Execute() == RET_OK)
                                     {
                                         rReq.Done(*(pDlg->GetOutputItemSet()));
                                         pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
                                     }
-                                    delete pDlg;
                                 }
                             }
                         }
@@ -331,7 +329,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     }
 
     // create empty itemset for macro-dlg
-    SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
+    boost::scoped_ptr<SfxItemSet> pItemSet(new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 ));
     pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
@@ -343,7 +341,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
         xFrame = GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pWin, *pItemSet, xFrame, SID_EVENTCONFIG );
+    boost::scoped_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( pWin, *pItemSet, xFrame, SID_EVENTCONFIG ));
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
@@ -370,9 +368,6 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
             lcl_setModified( GetObjectShell() );
         }
     }
-
-    delete pMacroDlg;
-    delete pItemSet;
 }
 
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
@@ -391,11 +386,11 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
-    SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                 &aNewAttr,
             pViewData->GetDocument()->GetDrawLayer(),
             pObj,
-            bHasMarked);
+            bHasMarked));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
@@ -410,8 +405,6 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
         pView->InvalidateAttribs();
         rReq.Done();
     }
-
-    delete pDlg;
 }
 
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
@@ -425,9 +418,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog(
+    boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
         pViewData->GetDialogParent(), &aNewAttr,
-        pViewData->GetDocument()->GetDrawLayer(), true);
+        pViewData->GetDocument()->GetDrawLayer(), true));
 
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
@@ -442,8 +435,6 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
         pView->InvalidateAttribs();
         rReq.Done();
     }
-
-    delete pDlg;
 }
 
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage */ )
@@ -456,7 +447,7 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage *
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, pView );
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, pView ));
 
     sal_uInt16 nResult = pDlg->Execute();
 
@@ -470,7 +461,6 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage *
         pView->InvalidateAttribs();
         rReq.Done();
     }
-    delete( pDlg );
 }
 
 void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk )

@@ -39,6 +39,7 @@
 #include "dputil.hxx"
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::sheet;
 
@@ -499,10 +500,9 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
 {
     if (pBtn == mpBtnOptions)
     {
-        ScDPSubtotalOptDlg* pDlg = new ScDPSubtotalOptDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout );
+        boost::scoped_ptr<ScDPSubtotalOptDlg> pDlg(new ScDPSubtotalOptDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout ));
         if( pDlg->Execute() == RET_OK )
             pDlg->FillLabelData( maLabelData );
-        delete pDlg;
     }
     return 0;
 }

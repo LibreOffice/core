@@ -55,6 +55,7 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "postit.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #include "sc.hrc"
 
@@ -490,7 +491,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");
-                        AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
+                        boost::scoped_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         pDlg->SetCheckNameHdl(LINK(this, ScDrawShell, NameObjectHdl));
@@ -539,8 +540,6 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( true );
                             pDocSh->SetDrawModified();
                         }
-
-                        delete pDlg;
                     }
                 }
                 break;
@@ -561,7 +560,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");
-                        AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription);
+                        boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         if(RET_OK == pDlg->Execute())
@@ -578,8 +577,6 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( true );
                             pDocSh->SetDrawModified();
                         }
-
-                        delete pDlg;
                     }
                 }
                 break;
