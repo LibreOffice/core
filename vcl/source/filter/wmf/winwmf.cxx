@@ -1361,10 +1361,10 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 
     pStm->Seek( nPos );
 
-    boost::optional<Point> aWinOrg;
+    Point aWinOrg(0,0);
     boost::optional<Size>  aWinExt;
 
-    boost::optional<Point> aViewportOrg;
+    Point aViewportOrg(0,0);
     boost::optional<Size>  aViewportExt;
 
     if( nEnd - nPos )
@@ -1604,16 +1604,16 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 
     if (bRet)
     {
-        if (aWinOrg && aWinExt)
+        if (aWinExt)
         {
-            rPlaceableBound = Rectangle(*aWinOrg, *aWinExt);
+            rPlaceableBound = Rectangle(aWinOrg, *aWinExt);
             SAL_INFO("vcl.wmf", "Window dimension "
                     << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
-        else if (aViewportOrg && aViewportExt)
+        else if (aViewportExt)
         {
-            rPlaceableBound = Rectangle(*aViewportOrg, *aViewportExt);
+            rPlaceableBound = Rectangle(aViewportOrg, *aViewportExt);
             SAL_INFO("vcl.wmf", "Viewport dimension "
                     << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
