@@ -1866,7 +1866,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 bool DocxAttributeOutput::EndURL()
 {
     m_closeHyperlinkInThisRun = true;
-    if(m_hyperLinkAnchor != "" && m_hyperLinkAnchor.startsWith("_Toc"))
+    if(m_startedHyperlink && m_hyperLinkAnchor != "" && m_hyperLinkAnchor.startsWith("_Toc"))
     {
         m_endPageRef = true;
     }

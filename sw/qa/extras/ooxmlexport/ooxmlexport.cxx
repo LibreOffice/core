@@ -3362,6 +3362,15 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
                         "image/png");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78659, "fdo78659.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[8]/w:tr[6]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:r[3]/w:fldChar[1]", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
