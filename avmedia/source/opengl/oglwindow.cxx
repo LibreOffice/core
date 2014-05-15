@@ -270,14 +270,14 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     vMup = glm::normalize(vMup);
                     vMup *= 25.0f;
 
-                    if(nCode == KEY_Q)vMoveBy += vMove*(0.1f*fModelSize);
-                    if(nCode == KEY_E)vMoveBy -= vMove*(0.1f*fModelSize);
-                    if(nCode == KEY_A)vMoveBy -= vStrafe*(0.1f*fModelSize);
-                    if(nCode == KEY_D)vMoveBy += vStrafe*(0.1f*fModelSize);
-                    if(nCode == KEY_W)vMoveBy -= vMup*(0.1f*fModelSize);
-                    if(nCode == KEY_S)vMoveBy += vMup*(0.1f*fModelSize);
+                    if(nCode == KEY_Q)vMoveBy += vMove*(0.001f*fModelSize);
+                    if(nCode == KEY_E)vMoveBy -= vMove*(0.001f*fModelSize);
+                    if(nCode == KEY_A)vMoveBy -= vStrafe*(0.001f*fModelSize);
+                    if(nCode == KEY_D)vMoveBy += vStrafe*(0.001f*fModelSize);
+                    if(nCode == KEY_W)vMoveBy -= vMup*(0.001f*fModelSize);
+                    if(nCode == KEY_S)vMoveBy += vMup*(0.001f*fModelSize);
                 }
-                gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,10.0);
+                gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,0.0);
                 update();
             }
         }
@@ -290,7 +290,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             m_aLastMousePos = pMouseEvt->GetPosPixel();
         }
     }
-    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONUP )
+    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
         MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
         if(pMouseEvt && pMouseEvt->IsLeft())
@@ -299,9 +299,9 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
 
             long nDeltaX = m_aLastMousePos.X()-aCurPos.X();
             long nDeltaY = aCurPos.Y()-m_aLastMousePos.Y();
-            static const float fSensitivity = 4.0;
+            static const float fSensitivity = 1.0;
             // TODO: It seems this method just moves the camera but not rotate it.
-            gltf_renderer_rotate_camera((float)nDeltaX*fSensitivity,(float)nDeltaY*fSensitivity,0.0,10.0);
+            gltf_renderer_rotate_camera((float)nDeltaX*fSensitivity,(float)nDeltaY*fSensitivity,0.0,0.0);
             update();
         }
     }
