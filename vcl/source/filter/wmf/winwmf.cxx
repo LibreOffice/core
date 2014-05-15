@@ -1346,10 +1346,10 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
     pStm->Seek( nPos );
 
-    boost::optional<Point> aWinOrg;
+    Point aWinOrg(0,0);
     boost::optional<Size>  aWinExt;
 
-    boost::optional<Point> aViewportOrg;
+    Point aViewportOrg(0,0);
     boost::optional<Size>  aViewportExt;
 
     if( nEnd - nPos )
@@ -1588,13 +1588,13 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
     if (bRet)
     {
-        if (aWinOrg && aWinExt)
+        if (aWinExt)
         {
-            rPlaceableBound = Rectangle(*aWinOrg, *aWinExt);
+            rPlaceableBound = Rectangle(aWinOrg, *aWinExt);
         }
-        else if (aViewportOrg && aViewportExt)
+        else if (aViewportExt)
         {
-            rPlaceableBound = Rectangle(*aViewportOrg, *aViewportExt);
+            rPlaceableBound = Rectangle(aViewportOrg, *aViewportExt);
         }
         else
         {
