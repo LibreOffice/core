@@ -1541,8 +1541,7 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
     for (; it != itEnd; ++it)
     {
         SvTreeListEntry& r = *it;
-        if (!r.maChildren.empty())
-            ResortChildren(&r);
+        ResortChildren(&r);
     }
 
     SetListPositions(pParent->maChildren); // correct list position in target list
