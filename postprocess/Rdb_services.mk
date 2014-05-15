@@ -121,8 +121,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/impress/wpftimpress \
 	writerperfect/source/writer/wpftwriter \
 	$(if $(filter MACOSX,$(OS)), \
+		$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
 		$(if $(filter TRUE,$(ENABLE_MACOSX_SANDBOX)),, \
-			$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
 			$(call gb_Helper_optional,AVMEDIA,avmedia/source/quicktime/avmediaQuickTime) \
 		) \
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
