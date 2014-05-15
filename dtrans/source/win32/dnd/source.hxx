@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOURCE_HXX_
-#define _SOURCE_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_SOURCE_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DND_SOURCE_HXX
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>

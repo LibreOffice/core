@@ -2,8 +2,8 @@
 
 /* From mingw-w64 excpt.h */
 
-#ifndef _SEHANDLER_HXX
-#define _SEHANDLER_HXX
+#ifndef INCLUDED_WNTGCCX_SEHANDLER_HXX
+#define INCLUDED_WNTGCCX_SEHANDLER_HXX
 
 #if !defined( __MINGW32__ ) || !defined ( _WIN64 )
 #error This file should be included only in a 64-bit MinGW compilation
@@ -42,5 +42,5 @@
 #endif
 
 
-#endif // _SEHANDLER_HXX
+#endif // INCLUDED_WNTGCCX_SEHANDLER_HXX
 

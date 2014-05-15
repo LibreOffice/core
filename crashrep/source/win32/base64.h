@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __BASE64_H
-#define __BASE64_H
+#ifndef INCLUDED_CRASHREP_SOURCE_WIN32_BASE64_H
+#define INCLUDED_CRASHREP_SOURCE_WIN32_BASE64_H
 
 #ifndef _INC_STDIO
 #include <stdio.h>
@@ -33,6 +33,6 @@ size_t base64_encode( FILE *fin, FILE *fout );
 }
 #endif
 
-#endif /* __BASE64_H */
+#endif // INCLUDED_CRASHREP_SOURCE_WIN32_BASE64_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

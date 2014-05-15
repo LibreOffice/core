@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#ifndef COLLECTDIRCONTENT_H
-#define COLLECTDIRCONTENT_H
+#ifndef INCLUDED_SOLTOOLS_MKDEPEND_COLLECTDIRCONTENT_HXX
+#define INCLUDED_SOLTOOLS_MKDEPEND_COLLECTDIRCONTENT_HXX
 
 #if defined __cplusplus
 

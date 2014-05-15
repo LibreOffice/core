@@ -27,8 +27,8 @@
  *
  ************************************************************************/
 
-#ifndef _VCL_TDEDATA_HXX
-#define _VCL_TDEDATA_HXX
+#ifndef INCLUDED_VCL_INC_UNX_TDE_TDEDATA_HXX
+#define INCLUDED_VCL_INC_UNX_TDE_TDEDATA_HXX
 
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
@@ -109,6 +109,6 @@ public:
     void doStartup();
 };
 
-#endif // _VCL_TDEDATA_HXX
+#endif // INCLUDED_VCL_INC_UNX_TDE_TDEDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

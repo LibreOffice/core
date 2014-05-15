@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_JVMFWK_LOCAL_FRAMEWORK_HXX
-#define INCLUDED_JVMFWK_LOCAL_FRAMEWORK_HXX
+#ifndef INCLUDED_JVMFWK_SOURCE_FRAMEWORK_HXX
+#define INCLUDED_JVMFWK_SOURCE_FRAMEWORK_HXX
 
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"

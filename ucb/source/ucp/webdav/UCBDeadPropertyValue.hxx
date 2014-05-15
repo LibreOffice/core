@@ -19,8 +19,8 @@
 
 
 
-#ifndef _UCBDEADPROPERTYVALUE_HXX_
-#define _UCBDEADPROPERTYVALUE_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_UCBDEADPROPERTYVALUE_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_UCBDEADPROPERTYVALUE_HXX
 
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -56,6 +56,6 @@ public:
 
 }
 
-#endif /* _UCBDEADPROPERTYVALUE_HXX_ */
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_UCBDEADPROPERTYVALUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

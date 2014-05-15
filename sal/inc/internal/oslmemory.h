@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_INTERNAL_OSLMEMORY_H
-#define INCLUDED_SAL_INTERNAL_OSLMEMORY_H
+#ifndef INCLUDED_SAL_INC_INTERNAL_OSLMEMORY_H
+#define INCLUDED_SAL_INC_INTERNAL_OSLMEMORY_H
 
 #include <sal/saldllapi.h>
 #include <sal/types.h>

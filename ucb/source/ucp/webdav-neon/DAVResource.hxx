@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _DAVRESOURCE_HXX_
-#define _DAVRESOURCE_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVRESOURCE_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVRESOURCE_HXX
 
 #include <config_lgpl.h>
 #include <vector>
@@ -66,6 +66,6 @@ struct DAVResourceInfo
 
 } // namespace webdav_ucp
 
-#endif // _DAVRESOURCE_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVRESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

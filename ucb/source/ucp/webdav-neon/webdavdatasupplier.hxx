@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef WEBDAV_UCP_DATASUPPLIER_HXX
-#define WEBDAV_UCP_DATASUPPLIER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVDATASUPPLIER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVDATASUPPLIER_HXX
 
 #include <config_lgpl.h>
 #include <vector>

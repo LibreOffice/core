@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PROPERTIES_MEASUREPROPERTIES_HXX
-#define INCLUDED_SVX_SDR_PROPERTIES_MEASUREPROPERTIES_HXX
+#ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_MEASUREPROPERTIES_HXX
+#define INCLUDED_SVX_INC_SDR_PROPERTIES_MEASUREPROPERTIES_HXX
 
 #include <svx/sdr/properties/textproperties.hxx>
 
@@ -62,6 +62,6 @@ namespace sdr
 
 
 
-#endif // INCLUDED_SVX_SDR_PROPERTIES_MEASUREPROPERTIES_HXX
+#endif // INCLUDED_SVX_INC_SDR_PROPERTIES_MEASUREPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

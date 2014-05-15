@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_testtools_source_bridgetest_multi_hxx
-#define INCLUDED_testtools_source_bridgetest_multi_hxx
+#ifndef INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_MULTI_HXX
+#define INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_MULTI_HXX
 
 #include "sal/config.h"
 

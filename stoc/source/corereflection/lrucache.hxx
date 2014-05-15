@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _LRU_CACHE_HXX_
-#define _LRU_CACHE_HXX_
+#ifndef INCLUDED_STOC_SOURCE_COREREFLECTION_LRUCACHE_HXX
+#define INCLUDED_STOC_SOURCE_COREREFLECTION_LRUCACHE_HXX
 
 // __CACHE_DIAGNOSE forces cache size to 4 and works only for OUString keys
 //  #define __CACHE_DIAGNOSE 1

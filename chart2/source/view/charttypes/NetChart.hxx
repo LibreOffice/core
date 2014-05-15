@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_NETCHART_HXX
-#define _CHART2_NETCHART_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_NETCHART_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_NETCHART_HXX
 
 #include "VSeriesPlotter.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WINDOW_HXX
-#define _WINDOW_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_WIN_WINDOW_HXX
+#define INCLUDED_AVMEDIA_SOURCE_WIN_WINDOW_HXX
 
 #include "wincommon.hxx"
 #include <cppuhelper/interfacecontainer.h>
@@ -110,6 +110,6 @@ private:
 } // namespace win
 } // namespace avmedia
 
-#endif // _WINDOW_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_WIN_WINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

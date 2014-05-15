@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_SOURCE_CORE_SERVICES_HXX
-#define INCLUDED_OOX_SOURCE_CORE_SERVICES_HXX
+#ifndef INCLUDED_OOX_INC_SERVICES_HXX
+#define INCLUDED_OOX_INC_SERVICES_HXX
 
 #include <sal/config.h>
 

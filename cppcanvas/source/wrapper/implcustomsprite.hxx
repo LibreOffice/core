@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_IMPLCUSTOMSPRITE_HXX
-#define _CPPCANVAS_IMPLCUSTOMSPRITE_HXX
+#ifndef INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCUSTOMSPRITE_HXX
+#define INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCUSTOMSPRITE_HXX
 
 #include <sal/types.h>
 
@@ -58,6 +58,6 @@ namespace cppcanvas
     }
 }
 
-#endif /* _CPPCANVAS_IMPLCUSTOMSPRITE_HXX */
+#endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCUSTOMSPRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

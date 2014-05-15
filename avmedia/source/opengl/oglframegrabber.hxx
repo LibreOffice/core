@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_FRAMEGRABBER_HXX
-#define OGL_FRAMEGRABBER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLFRAMEGRABBER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLFRAMEGRABBER_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -43,6 +43,6 @@ private:
 } // namespace ogl
 } // namespace avmedia
 
-#endif // OGL_FRAMEGRABBER_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLFRAMEGRABBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

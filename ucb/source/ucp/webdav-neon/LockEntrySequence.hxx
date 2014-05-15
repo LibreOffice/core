@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _LOCKENTRYSEQUENCE_HXX_
-#define _LOCKENTRYSEQUENCE_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKENTRYSEQUENCE_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKENTRYSEQUENCE_HXX
 
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -46,6 +46,6 @@ public:
 
 }
 
-#endif /* _LOCKENTRYSEQUENCE_HXX_ */
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKENTRYSEQUENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

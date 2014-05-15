@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JNI_BASE_H
-#define INCLUDED_JNI_BASE_H
+#ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BASE_H
+#define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BASE_H
 
 #include <sal/config.h>
 

@@ -114,6 +114,6 @@ class WindowCommandDispatch
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_DISPATCH_MACDISPATCH_HXX_
+#endif // INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_WINDOWCOMMANDDISPATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

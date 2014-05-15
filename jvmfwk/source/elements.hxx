@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_JVMFWK_ELEMENTS_HXX
-#define INCLUDED_JVMFWK_ELEMENTS_HXX
+#ifndef INCLUDED_JVMFWK_SOURCE_ELEMENTS_HXX
+#define INCLUDED_JVMFWK_SOURCE_ELEMENTS_HXX
 
 #include <vector>
 #include "jvmfwk/framework.h"

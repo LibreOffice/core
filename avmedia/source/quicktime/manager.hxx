@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MANAGER_HXX
-#define _MANAGER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_QUICKTIME_MANAGER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_QUICKTIME_MANAGER_HXX
 
 #include "quicktimecommon.hxx"
 
@@ -53,6 +53,6 @@ private:
 } // namespace quicktime
 } // namespace avmedia
 
-#endif // _MANAGER_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_QUICKTIME_MANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

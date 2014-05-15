@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IODLGIMP_HXX
-#define _IODLGIMP_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_IODLGIMP_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_IODLGIMP_HXX
 
 #include <PlacesListBox.hxx>
 
@@ -271,7 +271,7 @@ inline  void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter
     SetCurFilter( pFilter, pFilter->GetName() );
 }
 
-#endif // #ifndef _IODLGIMP_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_IODLGIMP_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

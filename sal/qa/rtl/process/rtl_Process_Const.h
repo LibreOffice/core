@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_PROCESS_CONST_H_
-#define _RTL_PROCESS_CONST_H_
+#ifndef INCLUDED_SAL_QA_RTL_PROCESS_RTL_PROCESS_CONST_H
+#define INCLUDED_SAL_QA_RTL_PROCESS_RTL_PROCESS_CONST_H
 
 #include <rtl/ustring.hxx>
 

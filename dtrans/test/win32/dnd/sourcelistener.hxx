@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOURCELISTENER_HXX_
-#define _SOURCELISTENER_HXX_
+#ifndef INCLUDED_DTRANS_TEST_WIN32_DND_SOURCELISTENER_HXX
+#define INCLUDED_DTRANS_TEST_WIN32_DND_SOURCELISTENER_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>

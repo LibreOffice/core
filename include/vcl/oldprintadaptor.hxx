@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_OLDPRINTADAPTOR
-#define _VCL_OLDPRINTADAPTOR
+#ifndef INCLUDED_VCL_OLDPRINTADAPTOR_HXX
+#define INCLUDED_VCL_OLDPRINTADAPTOR_HXX
 
 #include <vcl/print.hxx>
 

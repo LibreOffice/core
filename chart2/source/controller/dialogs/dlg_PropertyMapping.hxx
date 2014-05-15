@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CHART2_PROPERTY_MAPPING_HXX
-#define CHART2_PROPERTY_MAPPING_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DLG_PROPERTYMAPPING_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DLG_PROPERTYMAPPING_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

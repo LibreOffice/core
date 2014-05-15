@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TXTCNVTHLP_HXX_
-#define _TXTCNVTHLP_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_TXTCNVTHLP_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_TXTCNVTHLP_HXX
 
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WINDOW_HXX_
-#define _WINDOW_HXX_
+#ifndef INCLUDED_DTRANS_TEST_WIN32_DND_ATLWINDOW_HXX
+#define INCLUDED_DTRANS_TEST_WIN32_DND_ATLWINDOW_HXX
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>

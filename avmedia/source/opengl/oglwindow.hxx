@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_WINDOW_HXX
-#define OGL_WINDOW_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLWINDOW_HXX
+#define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLWINDOW_HXX
 
 #include "oglplayer.hxx"
 
@@ -76,6 +76,6 @@ private:
 } // namespace ogl
 } // namespace avmedia
 
-#endif // OGL_WINDOW_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

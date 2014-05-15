@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MTAFOP_HXX_
-#define _MTAFOP_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_MTAFOP_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_MTAFOP_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

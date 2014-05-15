@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SYMBOL_LOADER_HXX
-#define _SYMBOL_LOADER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_SYMBOLLOADER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_SYMBOLLOADER_HXX
 #if defined( WNT )
 # include <windows.h>
 # include <winreg.h>

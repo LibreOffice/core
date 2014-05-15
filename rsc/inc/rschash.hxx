@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCHASH_HXX
-#define _RSCHASH_HXX
+#ifndef INCLUDED_RSC_INC_RSCHASH_HXX
+#define INCLUDED_RSC_INC_RSCHASH_HXX
 
 #include <sal/types.h>
 #include <rtl/string.hxx>
@@ -42,6 +42,6 @@ class AtomContainer
 
 };
 
-#endif // _RSCHASH_HXX
+#endif // INCLUDED_RSC_INC_RSCHASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

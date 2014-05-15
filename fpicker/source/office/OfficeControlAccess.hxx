@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_CONTROLACCESS_HXX
-#define SVTOOLS_CONTROLACCESS_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICECONTROLACCESS_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICECONTROLACCESS_HXX
 
 #include <svtools/fileview.hxx>
 #include <vcl/lstbox.hxx>
@@ -113,6 +113,6 @@ namespace svt
 }   // namespace svt
 
 
-#endif // SVTOOLS_CONTROLACCESS_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_OFFICECONTROLACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

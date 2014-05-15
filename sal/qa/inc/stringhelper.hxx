@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef STRINGHELPER_HXX
-#define STRINGHELPER_HXX
+#ifndef INCLUDED_SAL_QA_INC_STRINGHELPER_HXX
+#define INCLUDED_SAL_QA_INC_STRINGHELPER_HXX
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>

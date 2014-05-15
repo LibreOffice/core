@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_XMLSIGNATUREHELPER_HXX
-#define _XMLSECURITY_XMLSIGNATUREHELPER_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX
 
 #include <vector>
 
@@ -179,6 +179,6 @@ public:
     void ExportSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler, const SignatureInformation& signatureInfo );
 };
 
-#endif // _XMLSECURITY_XMLSIGNATUREHELPER_HXX
+#endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSIGNATUREHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

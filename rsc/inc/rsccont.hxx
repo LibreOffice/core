@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCCONT_HXX
-#define _RSCCONT_HXX
+#ifndef INCLUDED_RSC_INC_RSCCONT_HXX
+#define INCLUDED_RSC_INC_RSCCONT_HXX
 
 #include <rscall.h>
 #include <rscerror.h>
@@ -134,6 +134,6 @@ public:
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
 };
 
-#endif //_RSCCONT_HXX
+#endif // INCLUDED_RSC_INC_RSCCONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FTRANSL_HXX_
-#define _FTRANSL_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_FTRANSL_FTRANSL_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_FTRANSL_FTRANSL_HXX
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

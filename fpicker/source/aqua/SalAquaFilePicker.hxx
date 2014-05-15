@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALAQUAFILEPICKER_HXX_
-#define _SALAQUAFILEPICKER_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
+#define INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
 
 #include <cppuhelper/compbase4.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -220,6 +220,6 @@ public:
 
 };
 
-#endif // _SALAQUAFILEPICKER_HXX_
+#endif // INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

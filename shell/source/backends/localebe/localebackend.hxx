@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FIXEDVALUEBACKEND_HXX_
-#define _FIXEDVALUEBACKEND_HXX_
+#ifndef INCLUDED_SHELL_SOURCE_BACKENDS_LOCALEBE_LOCALEBACKEND_HXX
+#define INCLUDED_SHELL_SOURCE_BACKENDS_LOCALEBE_LOCALEBACKEND_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -137,6 +137,6 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
 } ;
 
 
-#endif // _FIXEDVALUEBACKEND_HXX_
+#endif // INCLUDED_SHELL_SOURCE_BACKENDS_LOCALEBE_LOCALEBACKEND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

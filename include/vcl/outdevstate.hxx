@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OUTDEVSTATE_HXX
-#define INCLUDED_VCL_INC_OUTDEVSTATE_HXX
+#ifndef INCLUDED_VCL_OUTDEVSTATE_HXX
+#define INCLUDED_VCL_OUTDEVSTATE_HXX
 
 #include <sal/types.h>
 
@@ -73,6 +73,6 @@ public:
     sal_uInt16      mnFlags;
 };
 
-#endif // INCLUDED_VCL_INC_OUTDEVSTATE_HXX
+#endif // INCLUDED_VCL_OUTDEVSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

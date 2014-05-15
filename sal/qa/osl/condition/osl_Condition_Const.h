@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_CONDITION_CONST_H_
-#define _OSL_CONDITION_CONST_H_
+#ifndef INCLUDED_SAL_QA_OSL_CONDITION_OSL_CONDITION_CONST_H
+#define INCLUDED_SAL_QA_OSL_CONDITION_OSL_CONDITION_CONST_H
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -45,6 +45,6 @@ OSLTEST_DECLARE_USTRING( TestCon,  "testcondition" );
 
 const char pTestString[17] = "Sun Microsystems";
 
-#endif /* _OSL_CONDITION_CONST_H_ */
+#endif // INCLUDED_SAL_QA_OSL_CONDITION_OSL_CONDITION_CONST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

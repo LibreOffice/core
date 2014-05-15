@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EMBSERVCONST_H_
-#define _EMBSERVCONST_H_
+#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_EMBSERVCONST_H
+#define INCLUDED_EMBEDSERV_SOURCE_INC_EMBSERVCONST_H
 
 #include <guiddef.h>
 

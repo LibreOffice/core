@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_POLYPOLYACTION_HXX
-#define _CPPCANVAS_POLYPOLYACTION_HXX
+#ifndef INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_POLYPOLYACTION_HXX
+#define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_POLYPOLYACTION_HXX
 
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -90,6 +90,6 @@ namespace cppcanvas
     }
 }
 
-#endif /* _CPPCANVAS_POLYPOLYACTION_HXX */
+#endif // INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_POLYPOLYACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

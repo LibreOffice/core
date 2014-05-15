@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCCLOBJ_HXX
-#define _RSCCLOBJ_HXX
+#ifndef INCLUDED_RSC_INC_RSCCLOBJ_HXX
+#define INCLUDED_RSC_INC_RSCCLOBJ_HXX
 
 #include <rsctree.hxx>
 #include <rscdef.hxx>
@@ -90,6 +90,6 @@ public:
                     }
 };
 
-#endif // _RSCCLOBJ_HXX
+#endif // INCLUDED_RSC_INC_RSCCLOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

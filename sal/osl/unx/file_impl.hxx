@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILE_IMPL_HXX
-#define INCLUDED_FILE_IMPL_HXX
+#ifndef INCLUDED_SAL_OSL_UNX_FILE_IMPL_HXX
+#define INCLUDED_SAL_OSL_UNX_FILE_IMPL_HXX
 
 #include "osl/file.h"
 #include <stddef.h>
@@ -53,6 +53,6 @@ oslFileError openFilePath(
     oslFileHandle* pHandle,
     sal_uInt32 uFlags, mode_t mode );
 
-#endif /* INCLUDED_FILE_IMPL_HXX */
+#endif // INCLUDED_SAL_OSL_UNX_FILE_IMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

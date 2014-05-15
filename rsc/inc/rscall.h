@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCALL_H
-#define _RSCALL_H
+#ifndef INCLUDED_RSC_INC_RSCALL_H
+#define INCLUDED_RSC_INC_RSCALL_H
 
 #include <rsctools.hxx>
 #include <rscerror.h>
@@ -101,6 +101,6 @@ struct SUBINFO_STRUCT
 /******************* F u n c t i o n *************************************/
 void InitRscCompiler();
 
-#endif // _RSCALL_H
+#endif // INCLUDED_RSC_INC_RSCALL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

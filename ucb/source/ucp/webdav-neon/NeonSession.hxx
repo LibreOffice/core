@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _NEONSESSION_HXX_
-#define _NEONSESSION_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONSESSION_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONSESSION_HXX
 
 #include <config_lgpl.h>
 #include <vector>
@@ -292,6 +292,6 @@ private:
 
 } // namespace webdav_ucp
 
-#endif // _NEONSESSION_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONSESSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

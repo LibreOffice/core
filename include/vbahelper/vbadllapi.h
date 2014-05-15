@@ -29,6 +29,6 @@
 #endif
 #define VBAHELPER_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_SVLDLLAPI_H */
+#endif // INCLUDED_VBAHELPER_VBADLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

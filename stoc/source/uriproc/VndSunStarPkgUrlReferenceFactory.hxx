@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_stoc_source_uriproc_VndSunStarPkgUrlReferenceFactory_hxx
-#define INCLUDED_stoc_source_uriproc_VndSunStarPkgUrlReferenceFactory_hxx
+#ifndef INCLUDED_STOC_SOURCE_URIPROC_VNDSUNSTARPKGURLREFERENCEFACTORY_HXX
+#define INCLUDED_STOC_SOURCE_URIPROC_VNDSUNSTARPKGURLREFERENCEFACTORY_HXX
 
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"

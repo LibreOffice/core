@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SVGREADER_SVGMARKERNODE_HXX
-#define INCLUDED_SVGIO_SVGREADER_SVGMARKERNODE_HXX
+#ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGMARKERNODE_HXX
+#define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGMARKERNODE_HXX
 
 #include <svgio/svgreader/svgnode.hxx>
 #include <svgio/svgreader/svgstyleattributes.hxx>
@@ -115,7 +115,7 @@ namespace svgio
 
 
 
-#endif //INCLUDED_SVGIO_SVGREADER_SVGMARKERNODE_HXX
+#endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGMARKERNODE_HXX
 
 // eof
 

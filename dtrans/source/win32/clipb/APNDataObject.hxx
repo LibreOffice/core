@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _APNDATAOBJECT_HXX_
-#define _APNDATAOBJECT_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_APNDATAOBJECT_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_APNDATAOBJECT_HXX
 
 /*
     an APartment Neutral dataobject wrapper; this wrapper of a IDataObject

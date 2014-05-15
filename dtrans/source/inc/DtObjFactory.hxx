@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DTOBJFACTORY_HXX_
-#define _DTOBJFACTORY_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_INC_DTOBJFACTORY_HXX
+#define INCLUDED_DTRANS_SOURCE_INC_DTOBJFACTORY_HXX
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

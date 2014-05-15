@@ -113,6 +113,6 @@ class QuietInteraction : public  ::cppu::WeakImplHelper1<
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_INTERACTION_STILLINTERACTION_HXX_
+#endif // INCLUDED_FRAMEWORK_INC_INTERACTION_QUIETINTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

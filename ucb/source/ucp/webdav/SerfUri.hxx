@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_SERFURI_HXX
-#define INCLUDED_SERFURI_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFURI_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFURI_HXX
 
 #include <apr_uri.h>
 #include <rtl/ustring.hxx>
@@ -97,6 +97,6 @@ class SerfUri
 
 } // namespace http_dav_ucp
 
-#endif // INCLUDED_SERFURI_HXX
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFURI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

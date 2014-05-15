@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
-#define INCLUDED_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
+#ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
+#define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <svgio/svgreader/svgdocument.hxx>
@@ -67,7 +67,7 @@ namespace svgio
 
 
 
-#endif //INCLUDED_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
+#endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENTHANDLER_HXX
 
 // eof
 

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _WEBDAV_UCP_CONTENT_HXX
-#define _WEBDAV_UCP_CONTENT_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVCONTENT_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVCONTENT_HXX
 
 #include <config_lgpl.h>
 #include <memory>

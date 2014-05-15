@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASEGFX_BEZIERCLIP_HXX
-#define BASEGFX_BEZIERCLIP_HXX
+#ifndef INCLUDED_BASEGFX_SOURCE_WORKBENCH_BEZIERCLIP_HXX
+#define INCLUDED_BASEGFX_SOURCE_WORKBENCH_BEZIERCLIP_HXX
 
 #include <vector>
 
@@ -82,6 +82,6 @@ template <typename NumType> bool tolEqual( NumType n1, NumType n2 ) { return tol
 template <typename NumType> bool tolLessEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1<n2; }
 template <typename NumType> bool tolGreaterEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1>n2; }
 
-#endif /* BASEGFX_BEZIERCLIP_HXX */
+#endif // INCLUDED_BASEGFX_SOURCE_WORKBENCH_BEZIERCLIP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

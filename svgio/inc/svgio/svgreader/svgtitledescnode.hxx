@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVGIO_SVGREADER_SVGTITLEDESCNODE_HXX
-#define INCLUDED_SVGIO_SVGREADER_SVGTITLEDESCNODE_HXX
+#ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTITLEDESCNODE_HXX
+#define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTITLEDESCNODE_HXX
 
 #include <svgio/svgreader/svgnode.hxx>
 
@@ -51,6 +51,6 @@ namespace svgio
 
 
 
-#endif //INCLUDED_SVGIO_SVGREADER_SVGTITLEDESCNODE_HXX
+#endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTITLEDESCNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

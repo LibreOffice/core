@@ -19,8 +19,8 @@
 
 /* Fake jni_md.h for use when cross-compiling to Windows */
 
-#ifndef JNI_MD_H_INCLUDED
-#define JNI_MD_H_INCLUDED
+#ifndef INCLUDED_WNTGCCI_JNI_MD_H
+#define INCLUDED_WNTGCCI_JNI_MD_H
 
 #define JNIEXPORT __declspec (dllexport)
 #define JNIIMPORT __declspec (dllimport)
@@ -30,6 +30,6 @@ typedef long jint;
 typedef __int64 jlong;
 typedef char jbyte;
 
-#endif /* JNI_MD_H_INCLUDED */
+#endif // INCLUDED_WNTGCCI_JNI_MD_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _I18N_INDEXENTRYSUPPLIER_COMMON_HXX_
-#define _I18N_INDEXENTRYSUPPLIER_COMMON_HXX_
+#ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_COMMON_HXX
+#define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_COMMON_HXX
 
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <cppuhelper/implbase2.hxx>

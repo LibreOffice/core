@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SERFHEADREQPROCIMPL_HXX
-#define INCLUDED_SERFHEADREQPROCIMPL_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFHEADREQPROCIMPL_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFHEADREQPROCIMPL_HXX
 
 #include "SerfRequestProcessorImpl.hxx"
 
@@ -62,6 +62,6 @@ private:
 
 } // namespace http_dav_ucp
 
-#endif // INCLUDED_SERFHEADREQPROCIMPL_HXX
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFHEADREQPROCIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

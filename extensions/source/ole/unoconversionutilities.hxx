@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNO_CONVERSION_UTILITIES
-#define _UNO_CONVERSION_UTILITIES
+#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
 
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/script/XInvocationAdapterFactory.hpp"

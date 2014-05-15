@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _WEBDAV_DATETIME_HELPER_HXX
-#define _WEBDAV_DATETIME_HELPER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DATETIMEHELPER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DATETIMEHELPER_HXX
 
 #include <config_lgpl.h>
 #include <sal/types.h>

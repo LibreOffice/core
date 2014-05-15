@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OSL_FILE_URL_H
-#define INCLUDED_OSL_FILE_URL_H
+#ifndef INCLUDED_SAL_OSL_W32_FILE_URL_H
+#define INCLUDED_SAL_OSL_W32_FILE_URL_H
 
 #include "sal/types.h"
 #include "rtl/ustring.h"
@@ -86,6 +86,6 @@ oslFileError _osl_getFileURLFromSystemPath (
 }
 #endif
 
-#endif /* INCLUDED_OSL_FILE_URL_H */
+#endif // INCLUDED_SAL_OSL_W32_FILE_URL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

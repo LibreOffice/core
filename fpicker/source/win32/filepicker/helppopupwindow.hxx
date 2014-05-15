@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HELPPOPUPWINDOW_HXX_
-#define _HELPPOPUPWINDOW_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_HELPPOPUPWINDOW_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_HELPPOPUPWINDOW_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

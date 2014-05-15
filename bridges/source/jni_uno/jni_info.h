@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JNI_INFO_H
-#define INCLUDED_JNI_INFO_H
+#ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_INFO_H
+#define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_INFO_H
 
 #include <boost/unordered_map.hpp>
 

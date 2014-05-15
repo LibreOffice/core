@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCKEY_HXX
-#define _RSCKEY_HXX
+#ifndef INCLUDED_RSC_INC_RSCKEY_HXX
+#define INCLUDED_RSC_INC_RSCKEY_HXX
 
 // class forwards
 class RscTop;
@@ -49,6 +49,6 @@ public:
     bool    Get( Atom nName, KEY_STRUCT * pEle );
 };
 
-#endif// _RSCKEY_HXX
+#endif // INCLUDED_RSC_INC_RSCKEY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

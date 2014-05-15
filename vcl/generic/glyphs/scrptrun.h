@@ -34,8 +34,8 @@
  *   created by: Eric R. Mader
  */
 
-#ifndef __SCRPTRUN_H
-#define __SCRPTRUN_H
+#ifndef INCLUDED_VCL_GENERIC_GLYPHS_SCRPTRUN_H
+#define INCLUDED_VCL_GENERIC_GLYPHS_SCRPTRUN_H
 
 #include <sal/config.h>
 

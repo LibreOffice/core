@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILEPICKER_HXX_
-#define _FILEPICKER_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FILEPICKER_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FILEPICKER_HXX
 
 #include <cppuhelper/compbase6.hxx>
 #include <osl/mutex.hxx>

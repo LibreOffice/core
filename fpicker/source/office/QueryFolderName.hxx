@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_QUERYFOLDERNAME_HXX
-#define INCLUDED_QUERYFOLDERNAME_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_QUERYFOLDERNAME_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_QUERYFOLDERNAME_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -41,6 +41,6 @@ public:
     OUString GetName() const { return m_pNameEdit->GetText(); }
 };
 
-#endif // INCLUDED_QUERYFOLDERNAME_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_QUERYFOLDERNAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

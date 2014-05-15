@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_RTL_SOURCE_SURROGATES_HXX
-#define INCLUDED_SAL_RTL_SOURCE_SURROGATES_HXX
+#ifndef INCLUDED_SAL_RTL_SURROGATES_HXX
+#define INCLUDED_SAL_RTL_SURROGATES_HXX
 
 #include "sal/config.h"
 

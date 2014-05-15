@@ -19,8 +19,8 @@
 
 
 
-#ifndef _DAVRESOURCE_HXX_
-#define _DAVRESOURCE_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVRESOURCE_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVRESOURCE_HXX
 
 #include <vector>
 
@@ -58,6 +58,6 @@ struct DAVResourceInfo
 
 } // namespace http_dav_ucp
 
-#endif // _DAVRESOURCE_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVRESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TARGETLISTENER_HXX_
-#define _TARGETLISTENER_HXX_
+#ifndef INCLUDED_DTRANS_TEST_WIN32_DND_TARGETLISTENER_HXX
+#define INCLUDED_DTRANS_TEST_WIN32_DND_TARGETLISTENER_HXX
 
 #if defined _MSC_VER
 #pragma warning(push,1)

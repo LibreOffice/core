@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XDICTIONARY_H_
-#define _XDICTIONARY_H_
+#ifndef INCLUDED_I18NPOOL_INC_XDICTIONARY_HXX
+#define INCLUDED_I18NPOOL_INC_XDICTIONARY_HXX
 
 #include <sal/types.h>
 #include <osl/module.h>

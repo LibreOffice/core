@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _JPEG_HXX
-#define _JPEG_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
 
 #include <vcl/graph.hxx>
 #include <vcl/fltcall.hxx>
@@ -33,6 +33,6 @@ bool ExportJPEG(SvStream& rOutputStream,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
                     bool* pExportWasGrey = NULL);
 
-#endif // _JPEG_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

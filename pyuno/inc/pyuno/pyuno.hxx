@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PYUNO_PYUNO_HXX_
-#define _PYUNO_PYUNO_HXX_
+#ifndef INCLUDED_PYUNO_INC_PYUNO_PYUNO_HXX
+#define INCLUDED_PYUNO_INC_PYUNO_PYUNO_HXX
 
 #ifndef Py_PYTHON_H
 #if defined _MSC_VER

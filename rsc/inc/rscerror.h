@@ -19,8 +19,8 @@
 
 #include <sal/types.h>
 
-#ifndef _RSCERROR_H
-#define _RSCERROR_H
+#ifndef INCLUDED_RSC_INC_RSCERROR_H
+#define INCLUDED_RSC_INC_RSCERROR_H
 
 // Return errors
 #define ERR_OK              0xFFFFFFFF
@@ -147,6 +147,6 @@ public:
                                 const char * pMessage = NULL );
 };
 
-#endif // _RSCERROR_H
+#endif // INCLUDED_RSC_INC_RSCERROR_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,6 +18,7 @@
  */
 
 #ifndef INCLUDED_SVX_SOURCE_ACCESSIBILITY_CHILDRENMANAGERIMPL_HXX
+#define INCLUDED_SVX_SOURCE_ACCESSIBILITY_CHILDRENMANAGERIMPL_HXX
 
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/IAccessibleParent.hxx>

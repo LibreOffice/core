@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _WINFILEOPENIMPL_HXX_
-#define _WINFILEOPENIMPL_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_WINFILEOPENIMPL_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_WINFILEOPENIMPL_HXX
 
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLSCRIPT_XMLBAS_EXPORT_HXX
-#define XMLSCRIPT_XMLBAS_EXPORT_HXX
+#ifndef INCLUDED_XMLSCRIPT_SOURCE_XMLFLAT_IMEXP_XMLBAS_EXPORT_HXX
+#define INCLUDED_XMLSCRIPT_SOURCE_XMLFLAT_IMEXP_XMLBAS_EXPORT_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/document/XXMLBasicExporter.hpp>
@@ -106,6 +106,6 @@ namespace xmlscript
 
 }   // namespace xmlscript
 
-#endif // XMLSCRIPT_XMLBAS_EXPORT_HXX
+#endif // INCLUDED_XMLSCRIPT_SOURCE_XMLFLAT_IMEXP_XMLBAS_EXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

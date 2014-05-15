@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FPSERVICEINFO_HXX_
-#define _FPSERVICEINFO_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_AQUA_FPSERVICEINFO_HXX
+#define INCLUDED_FPICKER_SOURCE_AQUA_FPSERVICEINFO_HXX
 
 // the service names
 #define FILE_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.AquaFilePicker"

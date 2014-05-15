@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILE_URL_H
-#define INCLUDED_FILE_URL_H
+#ifndef INCLUDED_SAL_OSL_UNX_FILE_URL_H
+#define INCLUDED_SAL_OSL_UNX_FILE_URL_H
 
 #include "osl/file.h"
 
@@ -39,6 +39,6 @@ int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_t
 }
 #endif
 
-#endif /* #define INCLUDED_FILE_URL_H */
+#endif /* #define INCLUDED_SAL_OSL_UNX_FILE_URL_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PLATFORM_VISTA_H_
-#define _PLATFORM_VISTA_H_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PLATFORM_VISTA_H
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PLATFORM_VISTA_H
 
 #pragma once
 

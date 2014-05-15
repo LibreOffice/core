@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_FILEPICKER_INTERACTION_HXX
-#define SVTOOLS_FILEPICKER_INTERACTION_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_FPINTERACTION_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_FPINTERACTION_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -80,6 +80,6 @@ namespace svt
 }   // namespace svt
 
 
-#endif // SVTOOLS_FILEPICKER_INTERACTION_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_FPINTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

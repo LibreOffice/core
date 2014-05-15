@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_FILE_CONST_H_
-#define _OSL_FILE_CONST_H_
+#ifndef INCLUDED_SAL_QA_OSL_FILE_OSL_FILE_CONST_H
+#define INCLUDED_SAL_QA_OSL_FILE_OSL_FILE_CONST_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -197,6 +197,6 @@ OSLTEST_DECLARE( VolURL6,  FILE_PREFIX  "e:/" );
 }
 #endif
 
-#endif /* _OSL_FILE_CONST_H_ */
+#endif // INCLUDED_SAL_QA_OSL_FILE_OSL_FILE_CONST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SVGREADER_SVGPAINT_HXX
-#define INCLUDED_SVGIO_SVGREADER_SVGPAINT_HXX
+#ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGPAINT_HXX
+#define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGPAINT_HXX
 
 #include <basegfx/color/bcolor.hxx>
 
@@ -57,7 +57,7 @@ namespace svgio
 
 
 
-#endif //INCLUDED_SVGIO_SVGREADER_SVGPAINT_HXX
+#endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGPAINT_HXX
 
 // eof
 

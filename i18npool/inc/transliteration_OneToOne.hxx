@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_TRANSLITERATION_TRANSLITERATION_ONETOONE_H_
-#define _I18N_TRANSLITERATION_TRANSLITERATION_ONETOONE_H_
+#ifndef INCLUDED_I18NPOOL_INC_TRANSLITERATION_ONETOONE_HXX
+#define INCLUDED_I18NPOOL_INC_TRANSLITERATION_ONETOONE_HXX
 
 #include <transliteration_commonclass.hxx>
 #include <i18nutil/oneToOneMapping.hxx>
@@ -98,6 +98,6 @@ TRANSLITERATION_ONETOONE(smallToLarge_ja_JP)
 
 } } } }
 
-#endif // _I18N_TRANSLITERATION_TRANSLITERATION_ONETOONE_H_
+#endif // INCLUDED_I18NPOOL_INC_TRANSLITERATION_ONETOONE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

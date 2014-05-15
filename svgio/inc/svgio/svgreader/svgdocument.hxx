@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SVGREADER_SVGDOCUMENT_HXX
-#define INCLUDED_SVGIO_SVGREADER_SVGDOCUMENT_HXX
+#ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENT_HXX
+#define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 
 #include <boost/utility.hpp>
 #include <svgio/svgreader/svgnode.hxx>
@@ -81,7 +81,7 @@ namespace svgio
 
 
 
-#endif //INCLUDED_SVGIO_SVGREADER_SVGDOCUMENT_HXX
+#endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 
 // eof
 

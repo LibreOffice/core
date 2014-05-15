@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SCOPED_DISPOSING_PTR
-#define _SCOPED_DISPOSING_PTR
+#ifndef INCLUDED_COMPHELPER_SCOPED_DISPOSING_PTR_HXX
+#define INCLUDED_COMPHELPER_SCOPED_DISPOSING_PTR_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <boost/utility.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _I18N_NUMBERFORMATCODE_HXX_
-#define _I18N_NUMBERFORMATCODE_HXX_
+#ifndef INCLUDED_I18NPOOL_INC_NUMBERFORMATCODE_HXX
+#define INCLUDED_I18NPOOL_INC_NUMBERFORMATCODE_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
@@ -70,6 +70,6 @@ private:
 };
 
 
-#endif // _I18N_NUMBERFORMATCODE_HXX_
+#endif // INCLUDED_I18NPOOL_INC_NUMBERFORMATCODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

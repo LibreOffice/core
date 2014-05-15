@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XIM_h
-#define _XIM_h
+#ifndef INCLUDED_VCL_INC_UNX_XIM_H
+#define INCLUDED_VCL_INC_UNX_XIM_H
 
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
