@@ -412,7 +412,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         CFDictionaryRef rProxyDict = SCDynamicStoreCopyProxies(NULL);
 
         if (!rProxyDict)
-            rExceptionsList = false;
+            rExceptionsList = nil;
         else
             rExceptionsList = (CFArrayRef) CFDictionaryGetValue(rProxyDict, kSCPropNetProxiesExceptionsList);
 

@@ -115,7 +115,7 @@ namespace {
 
         bool IsHandoutHorizontal (void) const
         {
-            return GetBoolValue("SlidesPerPageOrder", sal_Int32(0), true);
+            return GetBoolValue("SlidesPerPageOrder", NULL, true);
         }
 
         sal_Int32 GetHandoutPageCount (void) const
