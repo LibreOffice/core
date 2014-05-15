@@ -20,6 +20,7 @@ OGLWindow::OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext, SystemChildW
     , m_pEventHandler( pChildWindow->GetParent() )
     , m_bVisible ( false )
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
+    , m_aLastMousePos(Point())
 {
 }
 
@@ -276,10 +277,32 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     if(nCode == KEY_W)vMoveBy -= vMup*(0.1f*fModelSize);
                     if(nCode == KEY_S)vMoveBy += vMup*(0.1f*fModelSize);
                 }
-
                 gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,10.0);
                 update();
             }
+        }
+    }
+    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONDOWN )
+    {
+        MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
+        if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
+        {
+            m_aLastMousePos = pMouseEvt->GetPosPixel();
+        }
+    }
+    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONUP )
+    {
+        MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
+        if(pMouseEvt && pMouseEvt->IsLeft())
+        {
+            const Point& aCurPos = pMouseEvt->GetPosPixel();
+
+            long nDeltaX = m_aLastMousePos.X()-aCurPos.X();
+            long nDeltaY = aCurPos.Y()-m_aLastMousePos.Y();
+            static const float fSensitivity = 4.0;
+            // TODO: It seems this method just moves the camera but not rotate it.
+            gltf_renderer_rotate_camera((float)nDeltaX*fSensitivity,(float)nDeltaY*fSensitivity,0.0,10.0);
+            update();
         }
     }
     return 0;

@@ -70,6 +70,7 @@ private:
     Window* m_pEventHandler;
     bool m_bVisible;
     com::sun::star::media::ZoomLevel meZoomLevel;
+    Point m_aLastMousePos;
 };
 
 } // namespace ogl
