@@ -30,7 +30,6 @@
 
 #include "path_helper.h"
 #include <rtl/ustring.hxx>
-#include <rtl/allocator.hxx>
 
 namespace osl
 {

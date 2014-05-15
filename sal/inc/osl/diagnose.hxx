@@ -23,21 +23,10 @@
 #if ! defined(OSL_DIAGNOSE_HXX_INCLUDED)
 #define OSL_DIAGNOSE_HXX_INCLUDED
 
-#if ! defined(_OSL_DIAGNOSE_H_)
 #include "osl/diagnose.h"
-#endif
-#if ! defined(_OSL_INTERLOCK_H_)
 #include "osl/interlck.h"
-#endif
-#if ! defined(_OSL_MUTEX_HXX_)
 #include "osl/mutex.hxx"
-#endif
-#if ! defined(INCLUDED_RTL_ALLOCATOR_HXX)
-#include "rtl/allocator.hxx"
-#endif
-#if ! defined(_RTL_INSTANCE_HXX_)
 #include "rtl/instance.hxx"
-#endif
 #include <hash_set>
 #include <functional>
 #include <typeinfo>
@@ -91,8 +80,7 @@ struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
     }
 };
 
-typedef ::std::hash_set<void const*, VoidPtrHash, ::std::equal_to<void const*>,
-                        ::rtl::Allocator<void const*> > VoidPointerSet;
+typedef ::std::hash_set<void const*, VoidPtrHash, ::std::equal_to<void const*> > VoidPointerSet;
 
 struct ObjectRegistryData {
     ObjectRegistryData( ::std::type_info const& rTypeInfo )

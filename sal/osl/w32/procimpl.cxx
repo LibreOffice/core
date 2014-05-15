@@ -43,7 +43,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "secimpl.h"
-#include "rtl/allocator.hxx"
 #include <osl/file.hxx>
 
 #include <list>
@@ -63,11 +62,11 @@ const rtl::OUString QUOTE = rtl::OUString::createFromAscii("\"");
 namespace /* private */
 {
     //#################################################
-    typedef std::list<rtl::OUString, rtl::Allocator<rtl::OUString> > string_container_t;
+    typedef std::list<rtl::OUString> string_container_t;
     typedef string_container_t::iterator string_container_iterator_t;
     typedef string_container_t::const_iterator string_container_const_iterator_t;
     typedef std::pair<string_container_iterator_t, string_container_iterator_t> iterator_pair_t;
-    typedef std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > environment_container_t;
+    typedef std::vector<sal_Unicode > environment_container_t;
 
     //#################################################
     /* Function object that compares two strings that are
@@ -307,7 +306,7 @@ namespace /* private */
         rtl::OUString ret(path);
         if (path.getLength() > 260)
         {
-            std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(path.getLength() + 1);
+            std::vector<sal_Unicode> vec(path.getLength() + 1);
             //GetShortPathNameW only works if the file can be found!
             const DWORD len = GetShortPathNameW(
                 reinterpret_cast<LPCWSTR>(path.getStr()), reinterpret_cast<LPWSTR>(&vec[0]), path.getLength() + 1);
@@ -316,8 +315,7 @@ namespace /* private */
                 && extension.getLength())
             {
                 const rtl::OUString extPath(path + extension);
-                std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec2(
-                    extPath.getLength() + 1);
+                std::vector<sal_Unicode > vec2( extPath.getLength() + 1);
                 const DWORD len2 = GetShortPathNameW(
                     reinterpret_cast<LPCWSTR>(extPath.getStr()), reinterpret_cast<LPWSTR>(&vec2[0]), extPath.getLength() + 1);
                 ret = rtl::OUString(&vec2[0], len2);

@@ -44,7 +44,7 @@
 
 namespace {
 
-typedef std::vector<rtl::OString, rtl::Allocator<rtl::OString> > OStringVec;
+typedef std::vector<rtl::OString> OStringVec;
 
 struct StaticDebugBaseAddressFilter
     : rtl::StaticWithInit<OStringVec const, StaticDebugBaseAddressFilter> {
