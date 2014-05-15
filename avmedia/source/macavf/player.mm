@@ -216,7 +216,10 @@ double SAL_CALL Player::getDuration()
     if( mpPlayer )
     {
         AVPlayerItem* pItem = [mpPlayer currentItem];
-        duration = CMTimeGetSeconds( [pItem duration] );
+        if( [pItem status] == AVPlayerItemStatusReadyToPlay )
+            duration = CMTimeGetSeconds( [pItem duration] );
+        else // fall back to AVAsset's best guess
+            duration = CMTimeGetSeconds( [[pItem asset] duration] );
     }
 
     return duration;
