@@ -142,6 +142,8 @@ typedef void (SwFrm:: *SwFrmMakePos)( const SwFrm*, const SwFrm*, sal_Bool );
 typedef long (*SwOperator)( long, long );
 typedef void (SwFrm:: *SwFrmSet)( long, long );
 
+SwFrm* SaveCntnt( SwLayoutFrm*, SwFrm* pStart = NULL );
+
 struct SwRectFnCollection
 {
     SwRectGet     fnGetTop;
@@ -279,8 +281,8 @@ class SwFrm: public SwClient, public SfxBroadcaster
     friend class SwLooping;         // LoopControlling  (layouter.cxx)
 
     //Hebt die Lower waehrend eines Spaltenumbaus auf.
-    friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart = NULL );
-    friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
+    friend SwFrm *SaveCntnt( SwLayoutFrm*, SwFrm* pStart );
+        friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
 #if OSL_DEBUG_LEVEL > 1
     //entfernt leere SwSectionFrms aus einer Kette

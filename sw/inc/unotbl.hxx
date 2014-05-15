@@ -58,11 +58,12 @@ class SwTableCursor;
 class SwTableBoxFmt;
 class SwChartDataProvider;
 class SwFrmFmt;
+class SwXCell;
 
+void lcl_setString( SwXCell&, const rtl::OUString &rTxt, sal_Bool bKeepNumberFmt = sal_True );
 
-/* -----------------------------22.09.00 11:10--------------------------------
+// ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwChartEventListenerContainer : public SwEventListenerContainer
 {
     public:
@@ -87,7 +88,7 @@ class SwXCell : public SwXCellBaseClass,
     public SwClient
 {
     friend void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
-                                 sal_Bool bKeepNumberFmt = sal_False );
+                                 sal_Bool bKeepNumberFmt );
     friend double lcl_getValue( SwXCell &rCell );
     friend void   lcl_setValue( SwXCell &rCell, double nVal );
 

@@ -190,14 +190,9 @@ void SwPaintQueue::Remove( ViewShell *pSh )
     }
 }
 
-/******************************************************************************
- *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
- *  Beschreibung:
- *  Erstellt    :   OK 04.11.94 16:27
- *  Aenderung   :
- ******************************************************************************/
+// ******************************************************************************
 
-void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, sal_Bool /*bPDFExport*/ )
+void SetSwVisArea( ViewShell *pSh, const SwRect &rRect /*, sal_Bool bPDFExport*/ )
 {
     ASSERT( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->aVisArea = rRect;
