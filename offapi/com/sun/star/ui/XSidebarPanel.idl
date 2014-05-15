@@ -19,24 +19,11 @@
 #ifndef __com_sun_star_ui_XSidebarPanel_idl__
 #define __com_sun_star_ui_XSidebarPanel_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_ui_LayoutSize_idl__
 #include <com/sun/star/ui/LayoutSize.idl>
-#endif
 
 module com { module sun { module star { module ui {
 
