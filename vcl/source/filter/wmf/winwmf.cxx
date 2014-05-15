@@ -1152,6 +1152,21 @@ sal_Bool WMFReader::ReadHeader()
         {
             pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the metaactions
             GetPlaceableBound( aPlaceableBound, pWMF );
+
+            // The image size is not known so normalize the calculated bounds so that the
+            // resulting image is not too big
+            const long   aMaxWidth = 1024;
+            const double fMaxWidth = static_cast<double>(aMaxWidth);
+            if (aPlaceableBound.GetWidth() > aMaxWidth)
+            {
+                double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
+
+                aPlaceableBound = Rectangle(
+                                    aPlaceableBound.Left()   / fRatio,
+                                    aPlaceableBound.Top()    / fRatio,
+                                    aPlaceableBound.Right()  / fRatio,
+                                    aPlaceableBound.Bottom() / fRatio);
+            }
         }
 
         pWMF->Seek( nStrmPos );
