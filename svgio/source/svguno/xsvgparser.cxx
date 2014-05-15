@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XSvgParser.hpp>
