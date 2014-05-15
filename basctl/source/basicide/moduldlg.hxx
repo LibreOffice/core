@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_MODULDLG_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_MODULDLG_HXX
 
-#include <svheader.hxx>
-
 #include <bastype2.hxx>
 #include <svtools/svtabbx.hxx>
 #include <vcl/button.hxx>

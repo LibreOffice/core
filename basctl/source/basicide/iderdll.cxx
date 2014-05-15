@@ -20,7 +20,6 @@
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <svheader.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/genlink.hxx>

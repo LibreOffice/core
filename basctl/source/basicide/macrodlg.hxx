@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_MACRODLG_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_MACRODLG_HXX
 
-#include <svheader.hxx>
-
 #include <bastype2.hxx>
 #include <bastype3.hxx>
 #include <sfx2/basedlgs.hxx>

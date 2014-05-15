@@ -22,7 +22,6 @@
 
 #include "doceventnotifier.hxx"
 #include <svl/stritem.hxx>
-#include <svheader.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/lstbox.hxx>
 

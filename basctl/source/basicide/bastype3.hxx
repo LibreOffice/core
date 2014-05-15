@@ -19,7 +19,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE3_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE3_HXX
 
-#include <svheader.hxx>
 #include <svtools/svmedit.hxx>
 #include <iderid.hxx>
 #include <vcl/accel.hxx>

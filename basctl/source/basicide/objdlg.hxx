@@ -23,7 +23,6 @@
 #include "bastype2.hxx"
 #include "bastypes.hxx"
 
-#include <svheader.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>

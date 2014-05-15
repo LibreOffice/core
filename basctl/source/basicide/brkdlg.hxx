@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 
-#include <svheader.hxx>
 #include <bastypes.hxx>
 #include <vcl/dialog.hxx>
 

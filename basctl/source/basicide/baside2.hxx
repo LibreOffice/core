@@ -27,8 +27,6 @@
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 
-#include <svheader.hxx>
-
 class ExtTextEngine;
 class ExtTextView;
 class SvxSearchItem;
