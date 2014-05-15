@@ -655,14 +655,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLExceptio
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
-    return nValue == SQL_SC_SQL92_FULL;
+    return static_cast<bool>(nValue & SQL_SC_SQL92_FULL);
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
-    return nValue == SQL_SC_SQL92_ENTRY;
+    return static_cast<bool>(nValue &SQL_SC_SQL92_ENTRY);
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1173,7 +1173,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
-    return nValue == SQL_SC_SQL92_INTERMEDIATE;
+    return static_cast<bool>(nValue & SQL_SC_SQL92_INTERMEDIATE);
 }
 
 OUString ODatabaseMetaData::getURLImpl()
@@ -1476,46 +1476,34 @@ OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException,
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SQLUINTEGER nValue;
-    if(m_bOdbc3)
-    {
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OIC_LEVEL2;
-    }
-    else
-    {
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OAC_LEVEL2;
-    }
+    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
+    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
+    SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
+                "connectivity.odbc",
+                "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
+    return nValue == SQL_OSC_EXTENDED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SQLUINTEGER nValue;
-    if(m_bOdbc3)
-    {
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OIC_CORE || nValue == SQL_OIC_LEVEL2 || nValue == SQL_OIC_LEVEL1;
-    }
-    else
-    {
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OSC_CORE || nValue == SQL_OAC_LEVEL1 || nValue == SQL_OAC_LEVEL2;
-    }
+    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
+    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
+    SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
+                "connectivity.odbc",
+                "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
+    return nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
     SQLUINTEGER nValue;
-    if(m_bOdbc3)
-    {
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OIC_LEVEL1 || nValue == SQL_OIC_LEVEL2;
-    }
-    else
-    {
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OAC_LEVEL1 || nValue == SQL_OAC_LEVEL2;
-    }
+    // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
+    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
+    SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
+                "connectivity.odbc",
+                "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
+    return nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
