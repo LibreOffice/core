@@ -1518,9 +1518,9 @@ public:
 
     SortComparator( SvTreeList& rList ) : mrList(rList) {}
 
-    bool operator() ( const SvTreeListEntry& pLeft, const SvTreeListEntry& pRight ) const
+    bool operator() ( const SvTreeListEntry& rLeft, const SvTreeListEntry& rRight ) const
     {
-        return mrList.Compare(&pLeft, &pRight) < 0;
+        return mrList.Compare(&rLeft, &rRight) < 0;
     }
 };
 
