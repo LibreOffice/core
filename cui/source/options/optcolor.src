@@ -49,7 +49,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
     ListBox LB_COLORSCHEME
     {
         HelpID = "cui:ListBox:RID_SVXPAGE_COLORCONFIG:LB_COLORSCHEME";
-        Pos = MAP_APPFONT ( 65 , 14 ) ;
+        Pos = MAP_APPFONT ( 65 , 13 ) ;
         Size = MAP_APPFONT ( 77 , 58 ) ;
         Border = TRUE;
         Sort = TRUE;
@@ -79,14 +79,14 @@ TabPage RID_SVXPAGE_COLORCONFIG
     Control CT_COLORCONFIG
     {
         Pos = MAP_APPFONT ( 12 , 45 ) ;
-        Size = MAP_APPFONT ( 236 , 134 ) ;
+        Size = MAP_APPFONT ( 236 , 138 ) ;
         Border = TRUE;
         DialogControl = TRUE;
         OutputSize = TRUE ;
         ScrollBar VB_VSCROLL
         {
             Pos = MAP_APPFONT ( 228 , 10 ) ;
-            Size = MAP_APPFONT ( 8 , 124 ) ;
+            Size = MAP_APPFONT ( 8 , 128 ) ;
             VScroll = TRUE;
         };
         String ST_ON
@@ -131,7 +131,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             OutputSize = TRUE ;
             Pos = MAP_APPFONT ( 0 , 10 ) ;
-            Size = MAP_APPFONT ( 228 , 124 ) ;
+            Size = MAP_APPFONT ( 228 , 128 ) ;
             DialogControl = TRUE;
 
             FixedText FT_GENERAL
