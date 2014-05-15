@@ -63,4 +63,16 @@
 
 #endif
 
+#define LIKELY(x) __builtin_expect((x),1)
+
+#define UNLIKELY(x) __builtin_expect((x),0)
+
+#ifndef SAL_HOT
+#   define SAL_HOT __attribute__((hot))
+#endif
+
+#ifndef SAL_COLD
+#   define SAL_COLD __attribute__((cold))
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
