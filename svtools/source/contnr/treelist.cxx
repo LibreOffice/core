@@ -1509,6 +1509,23 @@ void SvTreeList::Resort()
     Broadcast( LISTACTION_RESORTED );
 }
 
+namespace {
+
+class SortComparator : public std::binary_function<SvTreeListEntry,SvTreeListEntry,bool>
+{
+    SvTreeList& mrList;
+public:
+
+    SortComparator( SvTreeList& rList ) : mrList(rList) {}
+
+    bool operator() ( const SvTreeListEntry& pLeft, const SvTreeListEntry& pRight ) const
+    {
+        return mrList.Compare(&pLeft, &pRight) < 0;
+    }
+};
+
+}
+
 void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
 {
     DBG_ASSERT(pParent,"Parent not set");
@@ -1516,38 +1533,18 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
     if (pParent->maChildren.empty())
         return;
 
-    // TODO: Re-implement this using ptr_vector's sort method.
+    SortComparator aComp(*this);
+    pParent->maChildren.sort(aComp);
 
-    std::vector<SvTreeListEntry*> aStore; // Temporarily store entries.
-    aStore.reserve(pParent->maChildren.size());
-    {
-        SvTreeListEntries::iterator it = pParent->maChildren.begin(), itEnd = pParent->maChildren.end();
-        for (; it != itEnd; ++it)
-        {
-            SvTreeListEntry* p = &(*it);
-            aStore.push_back(p);
-        }
-    }
-    pParent->maChildren.release().release(); // Release all stored entries and empty the container.
-
-    std::vector<SvTreeListEntry*>::iterator it = aStore.begin(), itEnd = aStore.end();
+    // Recursively sort child entries.
+    SvTreeListEntries::iterator it = pParent->maChildren.begin(), itEnd = pParent->maChildren.end();
     for (; it != itEnd; ++it)
     {
-        SvTreeListEntry* p = *it;
-        sal_uLong nListPos = TREELIST_APPEND;
-        GetInsertionPos(p, pParent, nListPos);
-        if (nListPos < pParent->maChildren.size())
-        {
-            SvTreeListEntries::iterator itPos = pParent->maChildren.begin();
-            std::advance(itPos, nListPos);
-            pParent->maChildren.insert(itPos, p);
-        }
-        else
-            pParent->maChildren.push_back(p);
-        if (!p->maChildren.empty())
-            // Recursively sort child entries.
-            ResortChildren(p);
+        SvTreeListEntry& r = *it;
+        if (!r.maChildren.empty())
+            ResortChildren(&r);
     }
+
     SetListPositions(pParent->maChildren); // correct list position in target list
 }
 
