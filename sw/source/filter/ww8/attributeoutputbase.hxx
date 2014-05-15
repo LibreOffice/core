@@ -309,6 +309,15 @@ public:
     /// Has different headers/footers for the title page.
     virtual void SectionTitlePage() = 0;
 
+    /// If the node has an anchor linked.
+    virtual void SetAnchorIsLinkedToNode( bool /*bAnchorLinkedToNode*/){};
+
+    /// Is processing of fly postponed ?
+    virtual bool IsFlyProcessingPostponed(){ return false; };
+
+    /// Reset the flag for FlyProcessing
+    virtual void ResetFlyProcessingFlag(){};
+
     /// Description of the page borders.
     virtual void SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmFmt* pFirstPageFmt ) = 0;
 

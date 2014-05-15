@@ -210,6 +210,10 @@ public:
     /// End of the tag that encloses the run.
     void EndRedline( const SwRedlineData * pRedlineData );
 
+    virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode = false ) SAL_OVERRIDE;
+    virtual bool IsFlyProcessingPostponed() SAL_OVERRIDE;
+    virtual void ResetFlyProcessingFlag() SAL_OVERRIDE;
+
     virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) SAL_OVERRIDE;
 
     /// Output style.
@@ -726,6 +730,7 @@ private:
 
     /// Flag indicating that the header \ footer are being written
     bool m_bWritingHeaderFooter;
+    bool m_bAnchorLinkedToNode;
 
     /// Field data to remember in the text run
     std::vector< FieldInfos > m_Fields;
@@ -767,6 +772,7 @@ private:
     bool m_bParagraphFrameOpen;
     bool m_bIsFirstParagraph;
     bool m_bAlternateContentChoiceOpen;
+    bool m_bPostponedProcessingFly;
 
     // Remember that a column break has to be opened at the
     // beginning of the next paragraph
