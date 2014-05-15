@@ -391,6 +391,7 @@ certain functionality.
 @li @c vcl.unx.print
 @li @c vcl.virdev
 @li @c vcl.window
+@li @c vcl.wmf
 
 @section winaccessiblity
 
