@@ -78,4 +78,17 @@ grep ::.*\( unusedcode.all \
 		  | grep -v WPX \
 		  | grep -v ^WSObject \
 		  | grep -v ^OAuth2Handler \
+		  | grep -v ^COLLADABU:: \
+		  | grep -v ^COLLADAFW:: \
+		  | grep -v ^COLLADASaxFWL14:: \
+		  | grep -v ^COLLADASaxFWL15:: \
+		  | grep -v ^COLLADASaxFWL:: \
+		  | grep -v ^o3dgc:: \
+		  | grep -v ^MathML:: \
+		  | grep -v ^GeneratedSaxParser:: \
+		  | grep -v ^FPSCounter:: \
+		  | grep -v ^CPhysicalCamera:: \
+		  | grep -v ^RenderScene:: \
+		  | grep -v ^ShaderProgram:: \
+		  | grep -v ^Texture:::: \
 		  > ../unusedcode.easy
