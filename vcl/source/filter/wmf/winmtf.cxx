@@ -246,7 +246,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     // Convert height to positive
     aFontSize.Height() = std::abs(aFontSize.Height());
 
-    aFont.SetSize( aFontSize );
+    aFont.SetSize(aFontSize);
 };
 
 WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigItem* pConfigItem )
@@ -631,10 +631,7 @@ void WinMtfOutput::SetTextAlign( sal_uInt32 nAlign )
 
 void WinMtfOutput::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
 {
-    sal_uInt32 i = vGDIObj.size();
-    vGDIObj.resize( nNewEntrys );
-    for ( ; i < nNewEntrys ; i++ )
-        vGDIObj[ i ] = NULL;
+    vGDIObj.resize(nNewEntrys, NULL);
 }
 
 void WinMtfOutput::ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly )

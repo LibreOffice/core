@@ -1102,8 +1102,13 @@ bool WMFReader::ReadHeader()
 
     Rectangle aPlaceableBound;
 
-    if (nPlaceableMetaKey == 0x9ac6cdd7L)
-    { //TODO do some real error handling here
+    bool bPlaceable = nPlaceableMetaKey == 0x9ac6cdd7L;
+
+    SAL_INFO("vcl.wmf", "Placeable: \"" << (bPlaceable ? "yes" : "no") << "\"");
+
+    if (bPlaceable)
+    {
+        //TODO do some real error handling here
         sal_Int16 nVal;
 
         // Skip reserved bytes
@@ -1143,6 +1148,11 @@ bool WMFReader::ReadHeader()
                           (double) pExternalHeader->xExt * 567 * nUnitsPerInch / 1440000,
                           (double) pExternalHeader->yExt * 567 * nUnitsPerInch / 1440000);
             aPlaceableBound = aExtRect;
+
+            SAL_INFO("vcl.wmf", "External header size "
+                    << " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
+                    << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
+
             pOut->SetMapMode( pExternalHeader->mapMode );
         }
         else
@@ -1163,6 +1173,10 @@ bool WMFReader::ReadHeader()
                                     aPlaceableBound.Top()    / fRatio,
                                     aPlaceableBound.Right()  / fRatio,
                                     aPlaceableBound.Bottom() / fRatio);
+
+                SAL_INFO("vcl.wmf", "Placeable bounds "
+                    << " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
+                    << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
             }
         }
 
@@ -1173,6 +1187,9 @@ bool WMFReader::ReadHeader()
     Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
     pOut->SetWinExt( aWMFSize );
 
+    SAL_INFO("vcl.wmf", "WMF size "
+                    << " w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
+
     Size aDevExt( 10000, 10000 );
     if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
     {
@@ -1182,6 +1199,9 @@ bool WMFReader::ReadHeader()
         aDevExt = Size( labs( aSize100.Width() ), labs( aSize100.Height() ) );
     }
     pOut->SetDevExt( aDevExt );
+
+    SAL_INFO("vcl.wmf", "Dev size "
+                    << " w: " << aDevExt.Width()    << " h: " << aDevExt.Height());
 
     // read the METAHEADER
     sal_uInt32 nMetaKey(0);
@@ -1453,7 +1473,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                         nPoints += nP;
                     }
 
-                    SAL_WARN_IF(!bRecordOk, "vcl.filter", "polypolygon record has more polygons than we can handle");
+                    SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record has more polygons than we can handle");
 
                     bRecordOk = bRecordOk && pStm->good();
 
@@ -1587,14 +1607,23 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
         if (aWinOrg && aWinExt)
         {
             rPlaceableBound = Rectangle(*aWinOrg, *aWinExt);
+            SAL_INFO("vcl.wmf", "Window dimension "
+                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
         else if (aViewportOrg && aViewportExt)
         {
             rPlaceableBound = Rectangle(*aViewportOrg, *aViewportExt);
+            SAL_INFO("vcl.wmf", "Viewport dimension "
+                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
         else
         {
             rPlaceableBound = aBound;
+            SAL_INFO("vcl.wmf", "Detemined dimension "
+                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
     }
 
