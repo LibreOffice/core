@@ -948,6 +948,10 @@ void ScInputHandler::ShowArgumentsTip( const OUString& rParagraph, OUString& rSe
                 break;
             }
         }
+        else
+        {
+            break;
+        }
     }
 }
 
