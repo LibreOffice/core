@@ -54,6 +54,7 @@ void WmfTest::testNonPlaceableWmf()
     dumper.filterActionType(META_POLYLINE_ACTION, false);
     dumper.dump(aGDIMetaFile);
 
+    aStream->WriteChar(0);
     aStream->Seek(STREAM_SEEK_TO_BEGIN);
 
     xmlDocPtr pDoc = parseXmlStream(aStream.get());
