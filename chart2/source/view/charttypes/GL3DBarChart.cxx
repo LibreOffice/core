@@ -26,7 +26,6 @@ namespace chart {
 GL3DBarChart::GL3DBarChart(
     const css::uno::Reference<css::chart2::XChartType>& xChartType,
     OpenGLWindow& rWindow) :
-    mbPickingMode(false),
     mxChartType(xChartType),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
     mrWindow(rWindow),

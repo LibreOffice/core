@@ -49,7 +49,6 @@ public:
     virtual void clickedAt(const Point& rPos) SAL_OVERRIDE;
 
 private:
-    bool mbPickingMode;
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
