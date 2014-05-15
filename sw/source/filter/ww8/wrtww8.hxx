@@ -145,6 +145,16 @@ enum TxtTypes  //enums for TextTypes
     TXT_EDN = 4, TXT_ATN = 5, TXT_TXTBOX = 6, TXT_HFTXTBOX= 7
 };
 
+/**
+enum to state the present state of the fly
+*/
+enum FlyProcessingState
+{
+    FLY_PROCESSED,
+    FLY_POSTPONED,
+    FLY_NOT_PROCESSED
+};
+
 struct WW8_SepInfo
 {
     const SwPageDesc* pPageDesc;
@@ -1533,7 +1543,7 @@ public:
     int OutAttrWithRange(sal_Int32 nPos);
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
-    void OutFlys(sal_Int32 nSwPos);
+    sal_Int16 OutFlys(sal_Int32 nSwPos);
 
     sal_Int32 WhereNext() const { return nAktSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }
@@ -1545,6 +1555,7 @@ public:
     const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
 
     bool IsWatermarkFrame();
+    bool IsAnchorLinkedToThisNode( sal_uLong nNodePos );
 };
 
 /// Class to collect and output the styles table.

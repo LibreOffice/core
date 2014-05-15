@@ -540,7 +540,26 @@ bool SwWW8AttrIter::IsWatermarkFrame()
     return false;
 }
 
-void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
+bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
+{
+    sw::FrameIter aTmpFlyIter = maFlyIter ;
+
+    while ( aTmpFlyIter != maFlyFrms.end() )
+    {
+        const SwPosition &rAnchor  = maFlyIter->GetPosition();
+        sal_uLong nAnchorPos = rAnchor.nNode.GetIndex();
+        /* if current node position and the anchor position are the same
+           then the frame anchor is linked to this node
+        */
+        if ( nAnchorPos == nNodePos )
+            return true ;
+
+        ++aTmpFlyIter;
+    }
+    return false ;
+}
+
+sal_Int16 SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 {
     /*
      #i2916#
@@ -553,7 +572,7 @@ void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         const sal_Int32 nPos = rAnchor.nContent.GetIndex();
 
         if ( nPos != nSwPos )
-            break;
+            return FLY_NOT_PROCESSED ; //We havent processed the fly
 
         const SdrObject* pSdrObj = maFlyIter->GetFrmFmt().FindRealSdrObject();
 
@@ -585,6 +604,7 @@ void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         }
         ++maFlyIter;
     }
+    return ( m_rExport.AttrOutput().IsFlyProcessingPostponed() ? FLY_POSTPONED : FLY_PROCESSED ) ;
 }
 
 bool SwWW8AttrIter::IsTxtAttr( sal_Int32 nSwPos )
@@ -2017,6 +2037,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     sal_Int32 const nEnd = aStr.getLength();
     bool bRedlineAtEnd = false;
     sal_Int32 nOpenAttrWithRange = 0;
+    OUString aStringForImage("\001");
 
     ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
     if ( pTextNodeInfo.get() != NULL )
@@ -2024,18 +2045,33 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     do {
         const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
+        sal_Int16 nStateOfFlyFrame   = 0;
+        bool bPostponeWritingText    = false ;
+        OUString aSavedSnippet ;
 
         sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
         // Is this the only run in this paragraph and it's empty?
         bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
         AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+
         if( nTxtTyp == TXT_FTN || nTxtTyp == TXT_EDN )
             AttrOutput().FootnoteEndnoteRefTag();
 
         if( nNextAttr > nEnd )
             nNextAttr = nEnd;
 
-        aAttrIter.OutFlys( nAktPos );
+        /*
+            1) If there is a text node and an overlapping anchor, then write them in two different
+            runs and not as part of the same run.
+            2) Ensure that it is a text node and not in a fly.
+            3) If the anchor is associated with a text node with empty text then we ignore.
+        */
+        if ( rNode.IsTxtNode() && aStr != aStringForImage && aStr != ""  &&
+            !rNode.GetFlyFmt() && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()))
+            bPostponeWritingText = true ;
+
+        nStateOfFlyFrame = aAttrIter.OutFlys( nAktPos );
+        AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
         // Append bookmarks in this range after flys, exclusive of final
         // position of this range
         AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
@@ -2152,7 +2188,17 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( aSnippet[0] != 0x09 )
                     aSnippet = OUString( 0x09 ) + aSnippet;
             }
-            AttrOutput().RunText( aSnippet, eChrSet );
+
+            if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
+            {
+                bPostponeWritingText = true ;
+                aSavedSnippet = aSnippet ;
+            }
+            else
+            {
+                bPostponeWritingText = false ;
+                AttrOutput().RunText( aSnippet, eChrSet );
+            }
         }
 
         if ( aAttrIter.IsDropCap( nNextAttr ) )
@@ -2179,7 +2225,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 else
                 {
                     // insert final graphic anchors if any before CR
-                    aAttrIter.OutFlys( nEnd );
+                    nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
                     // insert final bookmarks if any before CR and after flys
                     AppendBookmarks( rNode, nEnd, 1 );
                     AppendAnnotationMarks( rNode, nEnd, 1 );
@@ -2228,7 +2274,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             if ( bTxtAtr || bAttrWithRange || bRedlineAtEnd )
             {
                 // insert final graphic anchors if any before CR
-                aAttrIter.OutFlys( nEnd );
+                nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
                 // insert final bookmarks if any before CR and after flys
                 AppendBookmarks( rNode, nEnd, 1 );
                 AppendAnnotationMarks( rNode, nEnd, 1 );
@@ -2256,7 +2302,25 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
         AttrOutput().WritePostitFieldReference();
 
-        AttrOutput().EndRun();
+        if( bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame )
+        {
+            AttrOutput().EndRun();
+            //write the postponed text run
+            bPostponeWritingText = false ;
+            AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+            AttrOutput().SetAnchorIsLinkedToNode( false );
+            AttrOutput().ResetFlyProcessingFlag();
+            if (0 != nEnd)
+            {
+                AttrOutput().StartRunProperties();
+                aAttrIter.OutAttr( nAktPos );
+                AttrOutput().EndRunProperties( pRedlineData );
+            }
+            AttrOutput().RunText( aSavedSnippet, eChrSet );
+            AttrOutput().EndRun();
+        }
+        else
+            AttrOutput().EndRun();
 
         nAktPos = nNextAttr;
         UpdatePosition( &aAttrIter, nAktPos, nEnd );
