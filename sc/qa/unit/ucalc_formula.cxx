@@ -2809,6 +2809,28 @@ void Test::testFuncIF()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncCHOOSE()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Formula");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "=CHOOSE(B1;\"one\";\"two\";\"three\")");
+    sal_uInt16 nError = m_pDoc->GetErrCode(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Formula result should be an error since B1 is still empty.", nError);
+    m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
+    CPPUNIT_ASSERT_EQUAL(OUString("one"), m_pDoc->GetString(ScAddress(0,0,0)));
+    m_pDoc->SetValue(ScAddress(1,0,0), 2.0);
+    CPPUNIT_ASSERT_EQUAL(OUString("two"), m_pDoc->GetString(ScAddress(0,0,0)));
+    m_pDoc->SetValue(ScAddress(1,0,0), 3.0);
+    CPPUNIT_ASSERT_EQUAL(OUString("three"), m_pDoc->GetString(ScAddress(0,0,0)));
+    m_pDoc->SetValue(ScAddress(1,0,0), 4.0);
+    nError = m_pDoc->GetErrCode(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Formula result should be an error due to out-of-bound input..", nError);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncIFERROR()
 {
     // IFERROR/IFNA (fdo#56124)
