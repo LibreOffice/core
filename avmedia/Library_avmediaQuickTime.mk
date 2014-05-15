@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,avmediaQuickTime,\
 $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaQuickTime,\
 	Cocoa \
 	QTKit \
-	QuickTime \
 ))
 
 $(eval $(call gb_Library_add_objcxxobjects,avmediaQuickTime,\
