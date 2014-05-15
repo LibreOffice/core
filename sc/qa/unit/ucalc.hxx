@@ -154,6 +154,7 @@ public:
     void testFuncDATEDIF();
     void testFuncINDIRECT();
     void testFuncIF();
+    void testFuncCHOOSE();
     void testFuncIFERROR();
     void testFuncSHEET();
     void testFuncNOW();
@@ -416,6 +417,7 @@ public:
     CPPUNIT_TEST(testFuncDATEDIF);
     CPPUNIT_TEST(testFuncINDIRECT);
     CPPUNIT_TEST(testFuncIF);
+    CPPUNIT_TEST(testFuncCHOOSE);
     CPPUNIT_TEST(testFuncIFERROR);
     CPPUNIT_TEST(testFuncGETPIVOTDATA);
     CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
