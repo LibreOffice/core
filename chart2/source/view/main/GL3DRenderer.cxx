@@ -689,7 +689,7 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(pResources->m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glVertexAttribPointer(pResources->m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_2DVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -1171,7 +1171,6 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     Update3DUniformBlock();
-    //render to fbo
     glUseProgram(pResources->m_3DProID);
     size_t extrude3DNum = m_Extrude3DList.size();
     for (size_t i = 0; i < extrude3DNum; i++)
@@ -1182,7 +1181,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         // 1st attribute buffer : vertices
         glEnableVertexAttribArray(pResources->m_3DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
-        glVertexAttribPointer(pResources->m_3DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_3DVertexID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
@@ -1192,7 +1191,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         // 2nd attribute buffer : normals
         glEnableVertexAttribArray(pResources->m_3DNormalID);
         glBindBuffer(GL_ARRAY_BUFFER, normalBuf);
-        glVertexAttribPointer(pResources->m_3DNormalID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+        glVertexAttribPointer(pResources->m_3DNormalID, // attribute
                                 3,                  // size
                                 GL_FLOAT,           // type
                                 GL_FALSE,           // normalized?
