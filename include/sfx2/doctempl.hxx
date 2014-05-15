@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXDOCTEMPL_HXX
-#define _SFXDOCTEMPL_HXX
+#ifndef INCLUDED_SFX2_DOCTEMPL_HXX
+#define INCLUDED_SFX2_DOCTEMPL_HXX
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -133,7 +133,7 @@ public:
     void            Update( bool _bSmart = true );
 };
 
-#endif // #ifndef _SFXDOCTEMPL_HXX
+#endif // INCLUDED_SFX2_DOCTEMPL_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

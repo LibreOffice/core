@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONFIG_HXX
-#define _CONFIG_HXX
+#ifndef INCLUDED_TOOLS_CONFIG_HXX
+#define INCLUDED_TOOLS_CONFIG_HXX
 
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>

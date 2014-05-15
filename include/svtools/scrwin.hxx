@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SCRWIN_HXX
-#define _SCRWIN_HXX
+#ifndef INCLUDED_SVTOOLS_SCRWIN_HXX
+#define INCLUDED_SVTOOLS_SCRWIN_HXX
 
 #include <svtools/svtdllapi.h>
 

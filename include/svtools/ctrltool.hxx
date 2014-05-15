@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CTRLTOOL_HXX
-#define _CTRLTOOL_HXX
+#ifndef INCLUDED_SVTOOLS_CTRLTOOL_HXX
+#define INCLUDED_SVTOOLS_CTRLTOOL_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -225,6 +225,6 @@ public:
     long                    GetIndexSize( sal_uLong nIndex ) const;
 };
 
-#endif  // _CTRLTOOL_HXX
+#endif // INCLUDED_SVTOOLS_CTRLTOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

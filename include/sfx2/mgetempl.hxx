@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_MGETEMPL_HXX
-#define _SFX_MGETEMPL_HXX
+#ifndef INCLUDED_SFX2_MGETEMPL_HXX
+#define INCLUDED_SFX2_MGETEMPL_HXX
 
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>

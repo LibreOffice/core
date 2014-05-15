@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NEWSTYLE_HXX
-#define _NEWSTYLE_HXX
+#ifndef INCLUDED_SFX2_NEWSTYLE_HXX
+#define INCLUDED_SFX2_NEWSTYLE_HXX
 
 #include <comphelper/string.hxx>
 #include <sal/config.h>

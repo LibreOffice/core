@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CTRLBOX_HXX
-#define _CTRLBOX_HXX
+#ifndef INCLUDED_SVTOOLS_CTRLBOX_HXX
+#define INCLUDED_SVTOOLS_CTRLBOX_HXX
 
 #include <svtools/svtdllapi.h>
 
@@ -530,6 +530,6 @@ private:
     FontSizeBox&    operator =( const FontSizeBox& );
 };
 
-#endif  // _CTRLBOX_HXX
+#endif // INCLUDED_SVTOOLS_CTRLBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

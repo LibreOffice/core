@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RULER_HXX
-#define _RULER_HXX
+#ifndef INCLUDED_SVTOOLS_RULER_HXX
+#define INCLUDED_SVTOOLS_RULER_HXX
 
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
@@ -826,6 +826,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
-#endif  // _RULER_HXX
+#endif // INCLUDED_SVTOOLS_RULER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
