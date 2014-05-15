@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALAQUACONSTANTS_H_
-#define _SALAQUACONSTANTS_H_
+#ifndef INCLUDED_FPICKER_SOURCE_AQUA_SALAQUACONSTANTS_H
+#define INCLUDED_FPICKER_SOURCE_AQUA_SALAQUACONSTANTS_H
 
 #define kAppFourCharCode 'LibO'
 #define kControlPropertyTracking 'Trck'
@@ -51,6 +51,6 @@
 
 #define kAquaPopupButtonDefaultHeight (26)
 
-#endif //_SALAQUACONSTANTS_H_
+#endif // INCLUDED_FPICKER_SOURCE_AQUA_SALAQUACONSTANTS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

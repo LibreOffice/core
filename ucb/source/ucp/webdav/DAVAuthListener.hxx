@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _DAVAUTHLISTENER_HXX_
-#define _DAVAUTHLISTENER_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVAUTHLISTENER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVAUTHLISTENER_HXX
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
@@ -44,6 +44,6 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
 
 } // namespace http_dav_ucp
 
-#endif // _DAVAUTHLISTENER_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVAUTHLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

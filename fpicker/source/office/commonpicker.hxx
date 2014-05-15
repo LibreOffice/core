@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_COMMONPICKER_HXX
-#define SVTOOLS_COMMONPICKER_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_COMMONPICKER_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_COMMONPICKER_HXX
 
 #include <cppuhelper/compbase5.hxx>
 #include <com/sun/star/ui/dialogs/XControlInformation.hpp>
@@ -192,6 +192,6 @@ namespace svt
 }   // namespace svt
 
 
-#endif // SVTOOLS_COMMONPICKER_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_COMMONPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

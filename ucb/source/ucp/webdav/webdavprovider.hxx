@@ -19,8 +19,8 @@
 
 
 
-#ifndef _WEBDAV_UCP_PROVIDER_HXX
-#define _WEBDAV_UCP_PROVIDER_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVPROVIDER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVPROVIDER_HXX
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/Property.hpp>

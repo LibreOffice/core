@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
-#define _WEBDAV_UCP_CONTENTPROPERTIES_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_CONTENTPROPERTIES_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_CONTENTPROPERTIES_HXX
 
 #include <config_lgpl.h>
 #include <memory>
@@ -220,6 +220,6 @@ public:
 
 } // namespace webdav_ucp
 
-#endif /* !_WEBDAV_UCP_CONTENTPROPERTIES_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_CONTENTPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

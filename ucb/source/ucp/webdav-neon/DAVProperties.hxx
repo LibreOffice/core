@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DAVPROPERTIES_HXX_
-#define _DAVPROPERTIES_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVPROPERTIES_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVPROPERTIES_HXX
 
 #include <config_lgpl.h>
 #include <rtl/ustring.hxx>
@@ -63,6 +63,6 @@ struct DAVProperties
 
 } // namespace webdav_ucp
 
-#endif // _DAVPROPERTIES_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

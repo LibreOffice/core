@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_COLLATORIMPL_HXX_
-#define _I18N_COLLATORIMPL_HXX_
+#ifndef INCLUDED_I18NPOOL_INC_COLLATORIMPL_HXX
+#define INCLUDED_I18NPOOL_INC_COLLATORIMPL_HXX
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>

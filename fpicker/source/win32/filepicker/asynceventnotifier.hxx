@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ASYNCEVENTNOTIFIER_HXX_
-#define _ASYNCEVENTNOTIFIER_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_ASYNCEVENTNOTIFIER_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_ASYNCEVENTNOTIFIER_HXX
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

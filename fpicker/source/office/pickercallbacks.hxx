@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_PICKER_CALLBACKS_HXX
-#define SVTOOLS_PICKER_CALLBACKS_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_PICKERCALLBACKS_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_PICKERCALLBACKS_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -56,6 +56,6 @@ namespace svt
 }   // namespace svt
 
 
-#endif // SVTOOLS_PICKER_CALLBACKS_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_PICKERCALLBACKS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

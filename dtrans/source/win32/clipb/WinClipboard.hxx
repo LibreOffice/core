@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WINCLIPBOARD_HXX_
-#define _WINCLIPBOARD_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_WINCLIPBOARD_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_WINCLIPBOARD_HXX
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

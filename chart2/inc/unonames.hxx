@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CHART2_UNONAMES_HXX
-#define CHART2_UNONAMES_HXX
+#ifndef INCLUDED_CHART2_INC_UNONAMES_HXX
+#define INCLUDED_CHART2_INC_UNONAMES_HXX
 
 #define CHART_UNONAME_SORT_BY_XVALUES       "SortByXValues"
 #define CHART_UNONAME_ROUNDED_EDGE          "RoundedEdge"

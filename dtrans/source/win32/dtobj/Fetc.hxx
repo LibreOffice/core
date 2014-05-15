@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FETC_HXX_
-#define _FETC_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FETC_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FETC_HXX
 
 #include <sal/types.h>
 

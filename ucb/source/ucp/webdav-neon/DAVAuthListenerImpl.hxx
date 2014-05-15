@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _DAVAUTHLISTENERIMPL_HXX_
-#define _DAVAUTHLISTENERIMPL_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVAUTHLISTENERIMPL_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVAUTHLISTENERIMPL_HXX
 
 #include <config_lgpl.h>
 #include "DAVAuthListener.hxx"

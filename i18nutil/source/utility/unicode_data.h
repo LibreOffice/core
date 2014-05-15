@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CCLASS_CHARTYPE_H
-#define CCLASS_CHARTYPE_H
+#ifndef INCLUDED_I18NUTIL_SOURCE_UTILITY_UNICODE_DATA_H
+#define INCLUDED_I18NUTIL_SOURCE_UTILITY_UNICODE_DATA_H
 
 #include <sal/types.h>
 

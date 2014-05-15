@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _NEONTYPES_HXX_
-#define _NEONTYPES_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONTYPES_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONTYPES_HXX
 
 #include <config_lgpl.h>
 #include <ne_session.h>
@@ -53,6 +53,6 @@ typedef ne_prop_result_set          NeonPropFindResultSet;
 
 typedef struct ne_lock              NeonLock;
 
-#endif // _NEONTYPES_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

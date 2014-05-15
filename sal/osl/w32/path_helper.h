@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PATH_HELPER_H_
-#define _PATH_HELPER_H_
+#ifndef INCLUDED_SAL_OSL_W32_PATH_HELPER_H
+#define INCLUDED_SAL_OSL_W32_PATH_HELPER_H
 
 #include <sal/types.h>
 #include <rtl/ustring.h>

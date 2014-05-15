@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_WTT_H_
-#define _I18N_WTT_H_
+#ifndef INCLUDED_I18NPOOL_INC_WTT_H
+#define INCLUDED_I18NPOOL_INC_WTT_H
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -63,6 +63,6 @@ static const sal_uInt16 thaiCT[128] = {     // Thai character type
 
 } } } }
 
-#endif // _I18N_WTT_H_
+#endif // INCLUDED_I18NPOOL_INC_WTT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UACCCOM_UACCCOMDLLAPI_H
-#define INCLUDED_UACCCOM_UACCCOMDLLAPI_H
+#ifndef INCLUDED_WINACCESSIBILITY_INC_UACCCOMDLLAPI_H
+#define INCLUDED_WINACCESSIBILITY_INC_UACCCOMDLLAPI_H
 
 #include <sal/types.h>
 

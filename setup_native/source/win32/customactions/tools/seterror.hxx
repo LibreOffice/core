@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SETERROR_HXX_
-#define _SETERROR_HXX_
+#ifndef INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_TOOLS_SETERROR_HXX
+#define INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_TOOLS_SETERROR_HXX
 
 
 // list of own error codes

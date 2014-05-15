@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EMBEDDOCACCESS_HXX_
-#define _EMBEDDOCACCESS_HXX_
+#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOCACCESS_HXX
+#define INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOCACCESS_HXX
 
 #define OLESERV_SAVEOBJECT      1
 #define OLESERV_CLOSE           2

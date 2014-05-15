@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EMBEDDOC_HXX_
-#define _EMBEDDOC_HXX_
+#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOC_HXX
+#define INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOC_HXX
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
 #endif
@@ -194,6 +194,6 @@ public:
     }
 };
 
-#endif //_EMBEDDOC_HXX_
+#endif // INCLUDED_EMBEDSERV_SOURCE_INC_EMBEDDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

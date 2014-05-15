@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_DOCSETTING_HXX
-#define INCLUDED_SW_INC_DOCSETTING_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSETTINGMANAGER_HXX
+#define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSETTINGMANAGER_HXX
 
 #include <IDocumentSettingAccess.hxx>
 class SwDoc;

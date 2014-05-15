@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WINCLIPBIMPL_HXX_
-#define _WINCLIPBIMPL_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_WINCLIPBIMPL_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_WINCLIPBIMPL_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

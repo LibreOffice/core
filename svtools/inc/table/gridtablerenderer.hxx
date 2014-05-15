@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TABLE_GRIDTABLERENDERER_HXX
-#define INCLUDED_SVTOOLS_TABLE_GRIDTABLERENDERER_HXX
+#ifndef INCLUDED_SVTOOLS_INC_TABLE_GRIDTABLERENDERER_HXX
+#define INCLUDED_SVTOOLS_INC_TABLE_GRIDTABLERENDERER_HXX
 
 #include <svtools/table/tablemodel.hxx>
 
@@ -116,6 +116,6 @@ namespace svt { namespace table
 } } // namespace svt::table
 
 
-#endif // INCLUDED_SVTOOLS_TABLE_GRIDTABLERENDERER_HXX
+#endif // INCLUDED_SVTOOLS_INC_TABLE_GRIDTABLERENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

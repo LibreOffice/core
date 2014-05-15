@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_JFW_PLUGIN_UTIL_HXX
-#define INCLUDED_JFW_PLUGIN_UTIL_HXX
+#ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_UTIL_HXX
+#define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_UTIL_HXX
 
 #include "rtl/ustring.hxx"
 #include "rtl/bootstrap.hxx"

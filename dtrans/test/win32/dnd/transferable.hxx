@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TRANSFERABLE_HXX_
-#define _TRANSFERABLE_HXX_
+#ifndef INCLUDED_DTRANS_TEST_WIN32_DND_TRANSFERABLE_HXX
+#define INCLUDED_DTRANS_TEST_WIN32_DND_TRANSFERABLE_HXX
 
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

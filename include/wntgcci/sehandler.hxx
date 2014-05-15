@@ -4,8 +4,8 @@
 // but from where it got there, I don't know.
 
 
-#ifndef _SEHANDLER_HXX
-#define _SEHANDLER_HXX
+#ifndef INCLUDED_WNTGCCI_SEHANDLER_HXX
+#define INCLUDED_WNTGCCI_SEHANDLER_HXX
 
 #if !defined( __MINGW32__ ) || defined ( _WIN64 )
 #error This file should be included only in a 32-bit MinGW compilation
@@ -125,4 +125,4 @@ private:
 
 } // namespace {
 
-#endif // _SEHANDLER_HXX
+#endif // INCLUDED_WNTGCCI_SEHANDLER_HXX

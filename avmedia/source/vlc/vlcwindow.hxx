@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _VLCWINDOW_HXX
-#define _VLCWINDOW_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCWINDOW_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_VLCWINDOW_HXX
 
 #include "vlccommon.hxx"
 
@@ -71,4 +71,4 @@ public:
 }
 }
 
-#endif // _VLCWINDOW_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_VLC_VLCWINDOW_HXX

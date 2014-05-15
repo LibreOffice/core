@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_IMPLFONT_HXX
-#define _CPPCANVAS_IMPLFONT_HXX
+#ifndef INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLFONT_HXX
+#define INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLFONT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -64,6 +64,6 @@ namespace cppcanvas
     }
 }
 
-#endif /* _CPPCANVAS_IMPLFONT_HXX */
+#endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

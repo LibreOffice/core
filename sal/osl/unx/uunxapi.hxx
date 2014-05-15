@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_UUNXAPI_HXX_
-#define _OSL_UUNXAPI_HXX_
+#ifndef INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
+#define INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
 
 #include "uunxapi.h"
 
@@ -62,6 +62,6 @@ namespace osl
     }
 } // end namespace osl
 
-#endif /* _OSL_UUNXAPI_HXX_ */
+#endif // INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

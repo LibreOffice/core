@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_SERFLOCKSTORE_HXX
-#define INCLUDED_SERFLOCKSTORE_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFLOCKSTORE_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFLOCKSTORE_HXX
 
 #include <map>
 #include <osl/mutex.hxx>
@@ -86,6 +86,6 @@ private:
 
 } // namespace http_dav_ucp
 
-#endif // INCLUDED_SERFLOCKSTORE_HXX
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFLOCKSTORE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILE_ERROR_TRANSL_H_
-#define _FILE_ERROR_TRANSL_H_
+#ifndef INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_H
+#define INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_H
 
 #include <osl/file.h>
 #include <sal/types.h>

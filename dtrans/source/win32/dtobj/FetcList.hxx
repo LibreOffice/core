@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FETCLIST_HXX_
-#define _FETCLIST_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FETCLIST_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FETCLIST_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_FILE_PATH_HELPER_HXX_
-#define _OSL_FILE_PATH_HELPER_HXX_
+#ifndef INCLUDED_SAL_OSL_UNX_FILE_PATH_HELPER_HXX
+#define INCLUDED_SAL_OSL_UNX_FILE_PATH_HELPER_HXX
 
 #include "file_path_helper.h"
 

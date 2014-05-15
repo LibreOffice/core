@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
-#define SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_ASYNCFILEPICKER_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_ASYNCFILEPICKER_HXX
 
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
@@ -102,6 +102,6 @@ namespace svt
 } // namespace svt
 
 
-#endif // SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_ASYNCFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

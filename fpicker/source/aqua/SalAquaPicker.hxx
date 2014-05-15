@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALAQUAFPICKER_HXX_
-#define _SALAQUAFPICKER_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAPICKER_HXX
+#define INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAPICKER_HXX
 
 #include <osl/mutex.hxx>
 

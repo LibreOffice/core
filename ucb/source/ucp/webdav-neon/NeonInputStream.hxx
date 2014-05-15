@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NEONINPUTSTREAM_HXX_
-#define _NEONINPUTSTREAM_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONINPUTSTREAM_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONINPUTSTREAM_HXX
 
 #include <config_lgpl.h>
 #include <sal/types.h>
@@ -120,6 +120,6 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
 };
 
 } // namespace webdav_ucp
-#endif // _NEONINPUTSTREAM_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONINPUTSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

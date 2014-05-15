@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMMON_HXX
-#define INCLUDED_COMMON_HXX
+#ifndef INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_COMMON_HXX
+#define INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_COMMON_HXX
 
 #include <sal/types.h>
 

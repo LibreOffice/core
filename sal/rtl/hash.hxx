@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_SOURCE_HASH_HXX
-#define INCLUDED_RTL_SOURCE_HASH_HXX
+#ifndef INCLUDED_SAL_RTL_HASH_HXX
+#define INCLUDED_SAL_RTL_HASH_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.h>
@@ -29,6 +29,6 @@ rtl_uString     *rtl_str_hash_intern (rtl_uString       *pString,
                                       int                can_return);
 void             rtl_str_hash_remove (rtl_uString       *pString);
 
-#endif /* INCLUDED_RTL_SOURCE_HASH_HXX */
+#endif // INCLUDED_SAL_RTL_HASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

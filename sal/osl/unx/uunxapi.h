@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_UUNXAPI_H_
-#define _OSL_UUNXAPI_H_
+#ifndef INCLUDED_SAL_OSL_UNX_UUNXAPI_H
+#define INCLUDED_SAL_OSL_UNX_UUNXAPI_H
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -65,6 +65,6 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path);
 }
 #endif
 
-#endif /* _OSL_UUNXAPI_H_ */
+#endif // INCLUDED_SAL_OSL_UNX_UUNXAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JFW_PLUGIN_SUNJRE_HXX
-#define INCLUDED_JFW_PLUGIN_SUNJRE_HXX
+#ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNJRE_HXX
+#define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNJRE_HXX
 
 #include "vendorbase.hxx"
 #include "vendorlist.hxx"

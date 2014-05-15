@@ -118,6 +118,6 @@ public:
     void    FillHashList( SvStringHashList * rList ) const;
 };
 
-#endif // _RSCHASH_HXX
+#endif // INCLUDED_IDL_INC_HASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

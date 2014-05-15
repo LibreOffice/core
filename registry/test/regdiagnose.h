@@ -18,8 +18,8 @@
  */
 
 
-#ifndef REG_DIAGNOSE_H
-#define REG_DIAGNOSE_H
+#ifndef INCLUDED_REGISTRY_TEST_REGDIAGNOSE_H
+#define INCLUDED_REGISTRY_TEST_REGDIAGNOSE_H
 
 #include <osl/diagnose.h>
 
@@ -33,6 +33,6 @@
     } while (0)
 
 
-#endif // REG_DIAGNOSE_H
+#endif // INCLUDED_REGISTRY_TEST_REGDIAGNOSE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FMTFILTER_HXX_
-#define _FMTFILTER_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FMTFILTER_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_FMTFILTER_HXX
 
 #include <sal/types.h>
 

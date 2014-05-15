@@ -37,6 +37,6 @@ public:
     bool perform();
 };
 
-#endif // _JPEG_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

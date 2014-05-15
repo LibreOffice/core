@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CHART2_DUMMY_XSHAPE_HXX
-#define CHART2_DUMMY_XSHAPE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_DUMMYXSHAPE_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_MAIN_DUMMYXSHAPE_HXX
 
 #include <cppuhelper/implbase6.hxx>
 

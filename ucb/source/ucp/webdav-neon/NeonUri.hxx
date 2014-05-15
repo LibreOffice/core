@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NEONURI_HXX_
-#define _NEONURI_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONURI_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONURI_HXX
 
 #include <config_lgpl.h>
 #include <ne_uri.h>
@@ -98,6 +98,6 @@ class NeonUri
 
 } // namespace webdav_ucp
 
-#endif // _NEONURI_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONURI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

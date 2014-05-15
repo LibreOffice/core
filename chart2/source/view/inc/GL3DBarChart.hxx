@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CHART2_GL3DBARCHART_HXX
-#define CHART2_GL3DBARCHART_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DBARCHART_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DBARCHART_HXX
 
 #include <GL3DPlotterBase.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEGRABBER_HXX
-#define _FRAMEGRABBER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTFRAMEGRABBER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTFRAMEGRABBER_HXX
 
 #include "gstplayer.hxx"
 #include <com/sun/star/media/XFrameGrabber.hpp>
@@ -59,6 +59,6 @@ private:
 } // namespace gst
 } // namespace avmedia
 
-#endif // _FRAMEGRABBER_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTFRAMEGRABBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

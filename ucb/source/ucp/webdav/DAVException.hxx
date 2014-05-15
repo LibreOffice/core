@@ -19,8 +19,8 @@
 
 
 
-#ifndef _DAVEXCEPTION_HXX_
-#define _DAVEXCEPTION_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -166,6 +166,6 @@ class DAVException
 
 } // namespace http_dav_ucp
 
-#endif // _DAVEXCEPTION_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVEXCEPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

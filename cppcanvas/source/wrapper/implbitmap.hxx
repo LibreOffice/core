@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_IMPLBITMAP_HXX
-#define _CPPCANVAS_IMPLBITMAP_HXX
+#ifndef INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLBITMAP_HXX
+#define INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLBITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XBitmap.hpp>
@@ -67,6 +67,6 @@ namespace cppcanvas
     }
 }
 
-#endif /* _CPPCANVAS_IMPLBITMAP_HXX */
+#endif // INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLBITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

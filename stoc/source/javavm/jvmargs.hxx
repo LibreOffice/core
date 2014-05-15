@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __JVM_HXX
-#define __JVM_HXX
+#ifndef INCLUDED_STOC_SOURCE_JAVAVM_JVMARGS_HXX
+#define INCLUDED_STOC_SOURCE_JAVAVM_JVMARGS_HXX
 
 
 #include <vector>

@@ -2,8 +2,8 @@
 
 /* Typedefs and structures that represent the libvlc API / ABI */
 
-#ifndef _WRAPPER_TYPES_HXX
-#define _WRAPPER_TYPES_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
 
 #if defined WNT
         typedef __int64 libvlc_time_t;
@@ -46,6 +46,6 @@ struct libvlc_track_description_t
 
 }
 
-#endif // _WRAPPER_TYPES_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

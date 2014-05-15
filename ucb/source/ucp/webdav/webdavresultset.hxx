@@ -19,8 +19,8 @@
 
 
 
-#ifndef _WEBDAV_UCP_RESULTSET_HXX
-#define _WEBDAV_UCP_RESULTSET_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVRESULTSET_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVRESULTSET_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>

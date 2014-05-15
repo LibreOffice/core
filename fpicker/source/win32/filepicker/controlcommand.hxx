@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONTROLCOMMAND_HXX_
-#define _CONTROLCOMMAND_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_CONTROLCOMMAND_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_CONTROLCOMMAND_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Any.hxx>

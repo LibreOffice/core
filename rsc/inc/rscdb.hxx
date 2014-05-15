@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RSCDB_HXX
-#define _RSCDB_HXX
+#ifndef INCLUDED_RSC_INC_RSCDB_HXX
+#define INCLUDED_RSC_INC_RSCDB_HXX
 
 #include <rscall.h>
 #include <rsckey.hxx>

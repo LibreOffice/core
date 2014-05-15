@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_HATCHWINDOW_HXX
-#define INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_HATCHWINDOW_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_INC_HATCHWINDOW_HXX
+#define INCLUDED_SVTOOLS_SOURCE_INC_HATCHWINDOW_HXX
 
 #include <com/sun/star/embed/XHatchWindow.hpp>
 
@@ -67,6 +67,6 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_HATCHWINDOW_HXX
+#endif // INCLUDED_SVTOOLS_SOURCE_INC_HATCHWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

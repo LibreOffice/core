@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_IMPLRENDERER_HXX
-#define _CPPCANVAS_IMPLRENDERER_HXX
+#ifndef INCLUDED_CPPCANVAS_SOURCE_INC_IMPLRENDERER_HXX
+#define INCLUDED_CPPCANVAS_SOURCE_INC_IMPLRENDERER_HXX
 
 #include <sal/types.h>
 
@@ -348,6 +348,6 @@ static float GetSwapFloat( SvStream& rSt )
     }
 }
 
-#endif /* _CPPCANVAS_IMPLRENDERER_HXX */
+#endif // INCLUDED_CPPCANVAS_SOURCE_INC_IMPLRENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_GL3DBARCHARTTYPE_HXX
-#define INCLUDED_CHART2_GL3DBARCHARTTYPE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_GL3DBARCHARTTYPE_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_GL3DBARCHARTTYPE_HXX
 
 #include "ChartType.hxx"
 #include "ServiceMacros.hxx"

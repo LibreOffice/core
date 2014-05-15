@@ -19,8 +19,8 @@
 
 
 
-#ifndef _DAVSESSION_HXX_
-#define _DAVSESSION_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSION_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSION_HXX
 
 #include <memory>
 #include <rtl/ustring.hxx>
@@ -208,6 +208,6 @@ private:
 
 } // namespace http_dav_ucp
 
-#endif // _DAVSESSION_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

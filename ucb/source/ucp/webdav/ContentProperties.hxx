@@ -19,8 +19,8 @@
 
 
 
-#ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
-#define _WEBDAV_UCP_CONTENTPROPERTIES_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_CONTENTPROPERTIES_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_CONTENTPROPERTIES_HXX
 
 #include <memory>
 #include <vector>
@@ -219,6 +219,6 @@ public:
 
 } // namespace http_dav_ucp
 
-#endif /* !_WEBDAV_UCP_CONTENTPROPERTIES_HXX */
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_CONTENTPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

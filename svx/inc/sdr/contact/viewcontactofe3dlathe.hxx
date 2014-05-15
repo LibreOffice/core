@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
+#ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
+#define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
 
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
 
@@ -56,6 +56,6 @@ namespace sdr
 
 
 
-#endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
+#endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INCLUDED_ANIMCORE_FACTREG_HXX_
-#define _INCLUDED_ANIMCORE_FACTREG_HXX_
+#ifndef INCLUDED_ANIMATIONS_SOURCE_ANIMCORE_FACTREG_HXX
+#define INCLUDED_ANIMATIONS_SOURCE_ANIMCORE_FACTREG_HXX
 
 namespace animcore {
 

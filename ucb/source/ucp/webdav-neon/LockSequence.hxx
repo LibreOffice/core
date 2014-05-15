@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _LOCKSEQUENCE_HXX_
-#define _LOCKSEQUENCE_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKSEQUENCE_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKSEQUENCE_HXX
 
 #include <config_lgpl.h>
 #include <rtl/string.hxx>
@@ -47,6 +47,6 @@ public:
 
 }
 
-#endif /* _LOCKSEQUENCE_HXX_ */
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKSEQUENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

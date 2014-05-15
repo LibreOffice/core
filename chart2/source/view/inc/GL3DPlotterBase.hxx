@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CHART2_GL3DPLOTTERBASE_HXX
-#define CHART2_GL3DPLOTTERBASE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DPLOTTERBASE_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DPLOTTERBASE_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"

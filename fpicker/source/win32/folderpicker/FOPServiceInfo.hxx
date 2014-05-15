@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FOPSERVICEINFO_HXX_
-#define _FOPSERVICEINFO_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_FOPSERVICEINFO_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_FOPSERVICEINFO_HXX
 
 // the service name is a description of a set of
 // interfaces (is the same as component categories in COM)

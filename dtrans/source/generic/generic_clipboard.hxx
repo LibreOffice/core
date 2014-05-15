@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DTRANS_GENERIC_CLIPBOARD_HXX_
-#define _DTRANS_GENERIC_CLIPBOARD_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_GENERIC_GENERIC_CLIPBOARD_HXX
+#define INCLUDED_DTRANS_SOURCE_GENERIC_GENERIC_CLIPBOARD_HXX
 
 #include <cppuhelper/compbase4.hxx>
 

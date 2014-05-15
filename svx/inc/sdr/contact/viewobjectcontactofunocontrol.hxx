@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
+#ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
+#define INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
@@ -126,6 +126,6 @@ namespace sdr { namespace contact {
 } } // namespace sdr::contact
 
 
-#endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
+#endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

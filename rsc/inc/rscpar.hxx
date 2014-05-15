@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCPAR_HXX
-#define _RSCPAR_HXX
+#ifndef INCLUDED_RSC_INC_RSCPAR_HXX
+#define INCLUDED_RSC_INC_RSCPAR_HXX
 
 #include <rsctools.hxx>
 #include <rscerror.h>
@@ -77,6 +77,6 @@ public:
 void IncludeParser( RscFileInst * pFileInst );
 ERRTYPE parser( RscFileInst * pFileInst );
 
-#endif // _RSCPAR_HXX
+#endif // INCLUDED_RSC_INC_RSCPAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

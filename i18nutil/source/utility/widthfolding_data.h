@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_I18NUTIL_CASEFOLDING_DATA_H
-#define INCLUDED_I18NUTIL_CASEFOLDING_DATA_H
+#ifndef INCLUDED_I18NUTIL_SOURCE_UTILITY_WIDTHFOLDING_DATA_H
+#define INCLUDED_I18NUTIL_SOURCE_UTILITY_WIDTHFOLDING_DATA_H
 
 #include <i18nutil/oneToOneMapping.hxx>
 

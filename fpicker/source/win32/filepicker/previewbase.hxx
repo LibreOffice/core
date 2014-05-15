@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PREVIEWBASE_HXX_
-#define _PREVIEWBASE_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PREVIEWBASE_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PREVIEWBASE_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.hxx>

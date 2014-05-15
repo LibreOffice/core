@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FPICKER_WIN32_VISTA_ASYNCREQUESTS_HXX
-#define FPICKER_WIN32_VISTA_ASYNCREQUESTS_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_ASYNCREQUESTS_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_ASYNCREQUESTS_HXX
 
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -204,6 +204,6 @@ class AsyncRequests : private ::cppu::BaseMutex
 } // namespace win32
 } // namespace fpicker
 
-#endif // FPICKER_WIN32_VISTA_ASYNCREQUESTS_HXX
+#endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_ASYNCREQUESTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCCONST_HXX
-#define _RSCCONST_HXX
+#ifndef INCLUDED_RSC_INC_RSCCONST_HXX
+#define INCLUDED_RSC_INC_RSCCONST_HXX
 
 #include <rscall.h>
 #include <rscerror.h>
@@ -97,6 +97,6 @@ public:
     Atom AddLanguage( const char* pLang, RscNameTable& rNames );
 };
 
-#endif // _RSCCONST_HXX
+#endif // INCLUDED_RSC_INC_RSCCONST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

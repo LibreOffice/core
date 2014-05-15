@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_CPP_UNO_SHARED_VTABLES_HXX
-#define INCLUDED_BRIDGES_CPP_UNO_SHARED_VTABLES_HXX
+#ifndef INCLUDED_BRIDGES_INC_BRIDGES_CPP_UNO_SHARED_VTABLES_HXX
+#define INCLUDED_BRIDGES_INC_BRIDGES_CPP_UNO_SHARED_VTABLES_HXX
 
 #include "sal/types.h"
 #include "typelib/typedescription.h"

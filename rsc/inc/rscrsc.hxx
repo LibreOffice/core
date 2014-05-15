@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCRSC_HXX
-#define _RSCRSC_HXX
+#ifndef INCLUDED_RSC_INC_RSCRSC_HXX
+#define INCLUDED_RSC_INC_RSCRSC_HXX
 
 #include <rscall.h>
 #include <rscerror.h>
@@ -102,6 +102,6 @@ public:
     void            EndCompile();
 };
 
-#endif //_RSCRSC_HXX
+#endif // INCLUDED_RSC_INC_RSCRSC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

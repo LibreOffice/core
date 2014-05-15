@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JVMACCESS_SUNVERSION_HXX
-#define INCLUDED_JVMACCESS_SUNVERSION_HXX
+#ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX
+#define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX
 
 #include "rtl/ustring.hxx"
 
@@ -117,6 +117,6 @@ protected:
 
 }
 
-#endif // INCLUDED_JVMACCESS_SUNVERSION_HXX
+#endif // INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

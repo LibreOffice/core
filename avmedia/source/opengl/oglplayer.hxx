@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_PLAYER_HXX
-#define OGL_PLAYER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLPLAYER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLPLAYER_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -63,6 +63,6 @@ private:
 } // namespace ogl
 } // namespace avmedia
 
-#endif // OGL_PLAYER_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLPLAYER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

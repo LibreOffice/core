@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _DAVTYPES_HXX_
-#define _DAVTYPES_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVTYPES_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVTYPES_HXX
 
 #include <config_lgpl.h>
 #include <rtl/ustring.hxx>
@@ -84,6 +84,6 @@ struct ProppatchValue
 
 } // namespace webdav_ucp
 
-#endif // _DAVTYPES_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

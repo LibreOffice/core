@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _WEBDAV_UCP_PROPERTYMAP_HXX
-#define _WEBDAV_UCP_PROPERTYMAP_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_PROPERTYMAP_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_PROPERTYMAP_HXX
 
 #include <config_lgpl.h>
 #include <boost/unordered_set.hpp>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _WRAPPER_EVENT_MANAGER_HXX
-#define _WRAPPER_EVENT_MANAGER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTMANAGER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTMANAGER_HXX
 
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>

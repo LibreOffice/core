@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CLI_ENVIRONMENT_H
-#define INCLUDED_CLI_ENVIRONMENT_H
+#ifndef INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_ENVIRONMENT_H
+#define INCLUDED_CLI_URE_SOURCE_UNO_BRIDGE_CLI_ENVIRONMENT_H
 
 #include "cli_base.h"
 

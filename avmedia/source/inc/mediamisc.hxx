@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AVMEDIA_MEDIAMISC_HXX
-#define _AVMEDIA_MEDIAMISC_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
+#define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 
 class ResMgr;
 

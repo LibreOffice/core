@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DIBPREVIEW_HXX_
-#define _DIBPREVIEW_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_DIBPREVIEW_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_DIBPREVIEW_HXX
 
 #include "previewbase.hxx"
 #include <osl/mutex.hxx>

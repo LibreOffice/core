@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __OSL_SYSTEM_H__
-#define __OSL_SYSTEM_H__
+#ifndef INCLUDED_SAL_OSL_UNX_SYSTEM_H
+#define INCLUDED_SAL_OSL_UNX_SYSTEM_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -411,6 +411,6 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 #endif /* !defined(FREEBSD) || (__FreeBSD_version < 601103) */
 #endif
 
-#endif /* __OSL_SYSTEM_H__ */
+#endif // INCLUDED_SAL_OSL_UNX_SYSTEM_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

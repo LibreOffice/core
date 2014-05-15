@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_JVMFWK_FWKUTIL_HXX
-#define INCLUDED_JVMFWK_FWKUTIL_HXX
+#ifndef INCLUDED_JVMFWK_SOURCE_FWKUTIL_HXX
+#define INCLUDED_JVMFWK_SOURCE_FWKUTIL_HXX
 
 #include <config_features.h>
 #include <config_folders.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFXMACROLOADER_HXX
-#define INCLUDED_SFXMACROLOADER_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_MACROLOADER_HXX
+#define INCLUDED_SFX2_SOURCE_INC_MACROLOADER_HXX
 
 #include <sal/config.h>
 

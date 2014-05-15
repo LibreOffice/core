@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XTDATAOBJECT_HXX_
-#define _XTDATAOBJECT_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_WORKBENCH_XTDO_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_WORKBENCH_XTDO_HXX
 
 #if defined _MSC_VER
 #pragma warning(push,1)
