@@ -21,7 +21,7 @@
 #include <tools/stream.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
-#include <whassert.hxx>
+#include "whassert.hxx"
 
 #include <comphelper/extract.hxx>
 

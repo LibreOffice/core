@@ -37,7 +37,7 @@
 #include <com/sun/star/i18n/AmPmValue.hpp>
 
 #include <svl/zformat.hxx>
-#include <zforscan.hxx>
+#include "zforscan.hxx"
 
 #include "zforfind.hxx"
 #include <svl/zforlist.hxx>

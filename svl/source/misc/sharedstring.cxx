@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "svl/sharedstring.hxx"
+#include <svl/sharedstring.hxx>
 
 namespace svl {
 

@@ -13,7 +13,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
-#include "svl/lngmisc.hxx"
+#include <svl/lngmisc.hxx>
 
 #include <rtl/ustrbuf.hxx>
 

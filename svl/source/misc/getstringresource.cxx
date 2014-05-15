@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 
-#include "boost/noncopyable.hpp"
-#include "boost/scoped_ptr.hpp"
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <i18nlangtag/languagetag.hxx>
-#include "rtl/instance.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "tools/resmgr.hxx"
-#include "tools/simplerm.hxx"
+#include <rtl/instance.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 
 #include "getstringresource.hxx"
 

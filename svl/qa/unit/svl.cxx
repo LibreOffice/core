@@ -31,10 +31,10 @@
 
 #include <i18nlangtag/lang.h>
 
-#include "svl/zforlist.hxx"
-#include "svl/zformat.hxx"
-#include "svl/sharedstringpool.hxx"
-#include "unotools/syslocale.hxx"
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/sharedstringpool.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

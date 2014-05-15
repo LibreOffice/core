@@ -18,7 +18,7 @@
  */
 
 
-#include "svl/lngmisc.hxx"
+#include <svl/lngmisc.hxx>
 
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>

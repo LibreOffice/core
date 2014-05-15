@@ -23,8 +23,8 @@
 #include <string.h>
 
 #include <boost/noncopyable.hpp>
-#include "rtl/instance.hxx"
-#include "rtl/crc.h"
+#include <rtl/instance.hxx>
+#include <rtl/crc.h>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

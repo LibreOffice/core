@@ -17,31 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/container/ElementExistException.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/container/XNameContainer.hpp"
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "comphelper/configuration.hxx"
-#include "comphelper/processfactory.hxx"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/configuration.hxx>
+#include <comphelper/processfactory.hxx>
 #include "officecfg/Office/Common.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "i18nlangtag/languagetag.hxx"
-#include "svl/asiancfg.hxx"
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <svl/asiancfg.hxx>
 
 namespace {
 

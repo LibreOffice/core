@@ -22,10 +22,10 @@
 
 #include <set>
 #include <memory>
-#include "osl/mutex.hxx"
-#include "rtl/ustring.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "unotools/configitem.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <unotools/configitem.hxx>
 
 class SysCredentialsConfig;
 

@@ -28,7 +28,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include "com/sun/star/io/XAsyncOutputMonitor.hpp"
+#include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.h>

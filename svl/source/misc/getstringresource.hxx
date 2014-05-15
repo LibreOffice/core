@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVL_SOURCE_MISC_GETSTRINGRESOURCE_HXX
 #define INCLUDED_SVL_SOURCE_MISC_GETSTRINGRESOURCE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;

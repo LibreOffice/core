@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "svl/sharedstringpool.hxx"
-#include "unotools/charclass.hxx"
+#include <svl/sharedstringpool.hxx>
+#include <unotools/charclass.hxx>
 
 namespace svl {
 

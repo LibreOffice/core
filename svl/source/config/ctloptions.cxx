@@ -30,7 +30,7 @@
 #include <svl/smplhint.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/syslocale.hxx>
-#include <itemholder2.hxx>
+#include "itemholder2.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

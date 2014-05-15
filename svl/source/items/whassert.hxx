@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SVL_SOURCE_ITEMS_WHASSERT_HXX
 #define INCLUDED_SVL_SOURCE_ITEMS_WHASSERT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #define SFX_ASSERT( bCondition, nId, sMessage ) SAL_WARN_IF( \
     !(bCondition), "svl", (sMessage) << ", with ID/pos " << (nId));
