@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _WRAPPER_INSTANCE_HXX
-#define _WRAPPER_INSTANCE_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_INSTANCE_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_INSTANCE_HXX
 
 struct libvlc_instance_t;
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVDGLOB_HXX
-#define INCLUDED_SVX_SVDGLOB_HXX
+#ifndef INCLUDED_SVX_INC_SVDGLOB_HXX
+#define INCLUDED_SVX_INC_SVDGLOB_HXX
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -42,6 +42,6 @@ SVX_DLLPUBLIC OUString ImpGetResStr(sal_uInt16 nResID);
 
 
 
-#endif // INCLUDED_SVX_SVDGLOB_HXX
+#endif // INCLUDED_SVX_INC_SVDGLOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

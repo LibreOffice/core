@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_COLLATOR_UNICODE_HXX_
-#define _I18N_COLLATOR_UNICODE_HXX_
+#ifndef INCLUDED_I18NPOOL_INC_COLLATOR_UNICODE_HXX
+#define INCLUDED_I18NPOOL_INC_COLLATOR_UNICODE_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCollator.hpp>

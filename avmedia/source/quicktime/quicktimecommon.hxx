@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _QUICKTIMECOMMON_HXX
-#define _QUICKTIMECOMMON_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_QUICKTIME_QUICKTIMECOMMON_HXX
+#define INCLUDED_AVMEDIA_SOURCE_QUICKTIME_QUICKTIMECOMMON_HXX
 
 #ifdef MACOSX
 #include <premac.h>
@@ -28,9 +28,7 @@
 #include <postmac.h>
 #endif
 #include <osl/mutex.hxx>
-#ifndef __RTL_USTRING_
 #include <rtl/ustring.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>

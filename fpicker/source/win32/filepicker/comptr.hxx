@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPTR_HXX
-#define COMPTR_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_COMPTR_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_COMPTR_HXX
 
 #include <sal/types.h>
 #include <osl/diagnose.h>

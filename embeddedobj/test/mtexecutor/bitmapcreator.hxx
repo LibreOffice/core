@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __INITIALIZABLEBITMAP_HXX_
-#define __INITIALIZABLEBITMAP_HXX_
+#ifndef INCLUDED_EMBEDDEDOBJ_TEST_MTEXECUTOR_BITMAPCREATOR_HXX
+#define INCLUDED_EMBEDDEDOBJ_TEST_MTEXECUTOR_BITMAPCREATOR_HXX
 
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

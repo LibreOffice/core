@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef TRANSLITERATION_CASE_IGNORE_H
-#define TRANSLITERATION_CASE_IGNORE_H
+#ifndef INCLUDED_I18NPOOL_INC_TRANSLITERATION_CASEIGNORE_HXX
+#define INCLUDED_I18NPOOL_INC_TRANSLITERATION_CASEIGNORE_HXX
 
 #define TRANSLITERATION_UPPER_LOWER
 #include "transliteration_body.hxx"

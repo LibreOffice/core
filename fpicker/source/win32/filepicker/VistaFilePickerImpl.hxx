@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FPICKER_WIN32_VISTA_FILEPICKERIMPL_HXX
-#define FPICKER_WIN32_VISTA_FILEPICKERIMPL_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKERIMPL_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKERIMPL_HXX
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4917 )
@@ -341,6 +341,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
 #endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 
-#endif // FPICKER_WIN32_VISTA_FILEPICKERIMPL_HXX
+#endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKERIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

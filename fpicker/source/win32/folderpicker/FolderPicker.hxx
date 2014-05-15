@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FOLDERPICKER_HXX_
-#define _FOLDERPICKER_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_FOLDERPICKER_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_FOLDERPICKER_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>

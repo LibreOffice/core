@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_HELPER_IMAGEALIGN_HXX
-#define INCLUDED_TOOLKIT_HELPER_IMAGEALIGN_HXX
+#ifndef INCLUDED_TOOLKIT_INC_HELPER_IMAGEALIGN_HXX
+#define INCLUDED_TOOLKIT_INC_HELPER_IMAGEALIGN_HXX
 
 #include <sal/types.h>
 #include <vcl/button.hxx>
@@ -48,6 +48,6 @@ namespace toolkit
 } // namespace toolkit
 
 
-#endif // INCLUDED_TOOLKIT_HELPER_IMAGEALIGN_HXX
+#endif // INCLUDED_TOOLKIT_INC_HELPER_IMAGEALIGN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

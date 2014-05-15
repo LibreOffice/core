@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IMPLHELPER_HXX_
-#define _IMPLHELPER_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_MISC_IMPLHELPER_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_MISC_IMPLHELPER_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

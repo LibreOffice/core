@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SECURITY_CONST_H_
-#define _OSL_SECURITY_CONST_H_
+#ifndef INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
+#define INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
 
 #if ( defined WNT )                     // Windows
 #include <io.h>
@@ -53,6 +53,6 @@ const char pTestString[17] = "Sun Microsystems";
 
 bool isAdmin = sal_False;
 
-#endif /* _OSL_SECURITY_CONST_H_ */
+#endif // INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __OWNVIEW_HXX_
-#define __OWNVIEW_HXX_
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OWNVIEW_HXX
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OWNVIEW_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAX_ATTRLISTIMPL_HXX
-#define _SAX_ATTRLISTIMPL_HXX
+#ifndef INCLUDED_SAX_SOURCE_EXPATWRAP_ATTRLISTIMPL_HXX
+#define INCLUDED_SAX_SOURCE_EXPATWRAP_ATTRLISTIMPL_HXX
 
 #include "sal/config.h"
 #include <cppuhelper/implbase2.hxx>

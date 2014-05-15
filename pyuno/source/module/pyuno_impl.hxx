@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PYUNO_IMPL_
-#define _PYUNO_IMPL_
+#ifndef INCLUDED_PYUNO_SOURCE_MODULE_PYUNO_IMPL_HXX
+#define INCLUDED_PYUNO_SOURCE_MODULE_PYUNO_IMPL_HXX
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1600)
 // Workaround for some horrible hypot() mess

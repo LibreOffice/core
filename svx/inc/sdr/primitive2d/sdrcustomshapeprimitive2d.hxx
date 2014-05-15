@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PRIMITIVE2D_SDRCUSTOMSHAPEPRIMITIVE2D_HXX
-#define INCLUDED_SVX_SDR_PRIMITIVE2D_SDRCUSTOMSHAPEPRIMITIVE2D_HXX
+#ifndef INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRCUSTOMSHAPEPRIMITIVE2D_HXX
+#define INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRCUSTOMSHAPEPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -84,6 +84,6 @@ namespace drawinglayer
 
 
 
-#endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDRCUSTOMSHAPEPRIMITIVE2D_HXX
+#endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRCUSTOMSHAPEPRIMITIVE2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

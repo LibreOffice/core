@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MCNTTYPE_HXX_
-#define _MCNTTYPE_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_CNTTYPE_MCNTTYPE_HXX
+#define INCLUDED_DTRANS_SOURCE_CNTTYPE_MCNTTYPE_HXX
 
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/ustring.hxx>

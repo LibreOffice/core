@@ -29,10 +29,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
-
-#ifndef __com_sun_star_lang_DisposedException_idl__
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

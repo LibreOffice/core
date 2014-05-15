@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_ACTION_HXX
-#define _CPPCANVAS_ACTION_HXX
+#ifndef INCLUDED_CPPCANVAS_SOURCE_INC_ACTION_HXX
+#define INCLUDED_CPPCANVAS_SOURCE_INC_ACTION_HXX
 
 #include <sal/types.h>
 
@@ -151,6 +151,6 @@ namespace cppcanvas
     }
 }
 
-#endif /* _CPPCANVAS_ACTION_HXX */
+#endif // INCLUDED_CPPCANVAS_SOURCE_INC_ACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

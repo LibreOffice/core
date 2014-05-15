@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_BREAKITERATOR_CJK_HXX_
-#define _I18N_BREAKITERATOR_CJK_HXX_
+#ifndef INCLUDED_I18NPOOL_INC_BREAKITERATOR_CJK_HXX
+#define INCLUDED_I18NPOOL_INC_BREAKITERATOR_CJK_HXX
 
 #include <breakiterator_unicode.hxx>
 #include <xdictionary.hxx>
@@ -66,6 +66,6 @@ BREAKITERATOR_CJK( ko )
 
 } } } }
 
-#endif // _I18N_BREAKITERATOR_CJK_HXX_
+#endif // INCLUDED_I18NPOOL_INC_BREAKITERATOR_CJK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PLAYER_HXX
-#define _PLAYER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_WIN_PLAYER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_WIN_PLAYER_HXX
 
 #include "wincommon.hxx"
 
@@ -118,6 +118,6 @@ private:
 } // namespace win
 } // namespace avmedia
 
-#endif // _PLAYER_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_WIN_PLAYER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

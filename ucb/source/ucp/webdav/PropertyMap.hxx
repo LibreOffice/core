@@ -19,8 +19,8 @@
 
 
 
-#ifndef _WEBDAV_UCP_PROPERTYMAP_HXX
-#define _WEBDAV_UCP_PROPERTYMAP_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_PROPERTYMAP_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_PROPERTYMAP_HXX
 
 #include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/Property.hpp>

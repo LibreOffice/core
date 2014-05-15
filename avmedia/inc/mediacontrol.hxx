@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AVMEDIA_MEDIACONTROL_HXX
-#define _AVMEDIA_MEDIACONTROL_HXX
+#ifndef INCLUDED_AVMEDIA_INC_MEDIACONTROL_HXX
+#define INCLUDED_AVMEDIA_INC_MEDIACONTROL_HXX
 
 #include <avmedia/mediaitem.hxx>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GLOBALS_HXX_
-#define _GLOBALS_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_GLOBALS_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DND_GLOBALS_HXX
 
 #include <osl/mutex.hxx>
 

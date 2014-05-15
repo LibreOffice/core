@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_LEVDIS_HXX
-#define INCLUDED_I18NPOOL_LEVDIS_HXX
+#ifndef INCLUDED_I18NPOOL_SOURCE_SEARCH_LEVDIS_HXX
+#define INCLUDED_I18NPOOL_SOURCE_SEARCH_LEVDIS_HXX
 
 #include <rtl/ustring.hxx>
 

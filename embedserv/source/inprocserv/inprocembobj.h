@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INPROCEMBOBJ_HXX_
-#define _INPROCEMBOBJ_HXX_
+#ifndef INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_INPROCEMBOBJ_H
+#define INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_INPROCEMBOBJ_H
 
 #if defined _MSC_VER
 #pragma warning(disable : 4668)

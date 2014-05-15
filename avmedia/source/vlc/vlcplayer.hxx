@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VLCPLAYER_HXX
-#define _VLCPLAYER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCPLAYER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_VLCPLAYER_HXX
 
 #include "vlccommon.hxx"
 #include <boost/shared_ptr.hpp>

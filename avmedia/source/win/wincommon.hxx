@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WINCOMMON_HXX
-#define _WINCOMMON_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_WIN_WINCOMMON_HXX
+#define INCLUDED_AVMEDIA_SOURCE_WIN_WINCOMMON_HXX
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>

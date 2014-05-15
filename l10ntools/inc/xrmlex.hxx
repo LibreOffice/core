@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_L10NTOOLS_SOURCE_XRMLEX_HXX
-#define INCLUDED_L10NTOOLS_SOURCE_XRMLEX_HXX
+#ifndef INCLUDED_L10NTOOLS_INC_XRMLEX_HXX
+#define INCLUDED_L10NTOOLS_INC_XRMLEX_HXX
 
 #include <sal/config.h>
 

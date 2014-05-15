@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XTDATAOBJECT_HXX_
-#define _XTDATAOBJECT_HXX_
+#ifndef INCLUDED_SAL_WORKBEN_CLIPBOARDWBEN_TESTCOPY_XTDATAOBJECT_HXX
+#define INCLUDED_SAL_WORKBEN_CLIPBOARDWBEN_TESTCOPY_XTDATAOBJECT_HXX
 
 /*
 #include <com/sun/star/datatransfer/XTransferable.hpp>

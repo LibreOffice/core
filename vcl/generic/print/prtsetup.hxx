@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PAD_PRTSETUP_HXX_
-#define _PAD_PRTSETUP_HXX_
+#ifndef INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
+#define INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 
 #include "tools/link.hxx"
 

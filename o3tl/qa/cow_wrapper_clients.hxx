@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COW_WRAPPER_CLIENTS_HXX
-#define INCLUDED_COW_WRAPPER_CLIENTS_HXX
+#ifndef INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
+#define INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 
 #include "o3tl/cow_wrapper.hxx"
 
@@ -141,6 +141,6 @@ private:
 
 } // namespace o3tltests
 
-#endif /* INCLUDED_COW_WRAPPER_CLIENTS_HXX */
+#endif // INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

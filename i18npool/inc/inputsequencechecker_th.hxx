@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_INPUTSEQUENCECHECKER_TH_HXX_
-#define _I18N_INPUTSEQUENCECHECKER_TH_HXX_
+#ifndef INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_TH_HXX
+#define INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_TH_HXX
 
 #include <inputsequencechecker.hxx>
 
@@ -41,6 +41,6 @@ public:
 
 } } } }
 
-#endif // _I18N_BREAKITERATOR_HXX_
+#endif // INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_TH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

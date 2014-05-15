@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JFW_PLUGIN_VENDORBASE_HXX
-#define INCLUDED_JFW_PLUGIN_VENDORBASE_HXX
+#ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORBASE_HXX
+#define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORBASE_HXX
 
 #include "rtl/ustring.hxx"
 #include "rtl/ref.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VLCMANAGER_HXX
-#define _VLCMANAGER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCMANAGER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_VLCMANAGER_HXX
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include "vlccommon.hxx"

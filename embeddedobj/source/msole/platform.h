@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PLATFORM_H_
-#define _PLATFORM_H_
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_PLATFORM_H
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_PLATFORM_H
 
 #define STRICT
 #define _ATL_APARTMENT_THREADED

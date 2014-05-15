@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _WINFOPIMPL_HXX_
-#define _WINFOPIMPL_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_WINFOPIMPL_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FOLDERPICKER_WINFOPIMPL_HXX
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "MtaFop.hxx"

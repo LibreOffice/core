@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVT_FILEPICKER_HXX
-#define INCLUDED_SVT_FILEPICKER_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
 
 #include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -227,6 +227,6 @@ private:
     DECL_LINK(          DialogClosedHdl, Dialog* );
 };
 
-#endif // INCLUDED_SVT_FILEPICKER_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

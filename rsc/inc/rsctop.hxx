@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCTOP_HXX
-#define _RSCTOP_HXX
+#ifndef INCLUDED_RSC_INC_RSCTOP_HXX
+#define INCLUDED_RSC_INC_RSCTOP_HXX
 
 #include <rscerror.h>
 #include <rsctools.hxx>
@@ -215,6 +215,6 @@ public:
                              RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra );
 };
 
-#endif //_RSCTOP_HXX
+#endif // INCLUDED_RSC_INC_RSCTOP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

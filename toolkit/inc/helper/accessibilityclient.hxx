@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_HELPER_ACCESSIBILITYCLIENT_HXX
-#define INCLUDED_TOOLKIT_HELPER_ACCESSIBILITYCLIENT_HXX
+#ifndef INCLUDED_TOOLKIT_INC_HELPER_ACCESSIBILITYCLIENT_HXX
+#define INCLUDED_TOOLKIT_INC_HELPER_ACCESSIBILITYCLIENT_HXX
 
 #include <toolkit/helper/accessiblefactory.hxx>
 
@@ -52,6 +52,6 @@ namespace toolkit
 
 }   // namespace toolkit
 
-#endif // INCLUDED_TOOLKIT_HELPER_ACCESSIBILITYCLIENT_HXX
+#endif // INCLUDED_TOOLKIT_INC_HELPER_ACCESSIBILITYCLIENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

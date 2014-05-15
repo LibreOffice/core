@@ -23,9 +23,7 @@
 #include <ctype.h>
 #include <limits.h>
 
-#ifdef _RSCERROR_H
 #include <rscerror.h>
-#endif
 #include <rschash.hxx>
 #include <rscdb.hxx>
 #include <rsctop.hxx>

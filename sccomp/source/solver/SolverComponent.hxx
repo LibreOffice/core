@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SOLVER_HXX
-#define SOLVER_HXX
+#ifndef INCLUDED_SCCOMP_SOURCE_SOLVER_SOLVERCOMPONENT_HXX
+#define INCLUDED_SCCOMP_SOURCE_SOLVER_SOLVERCOMPONENT_HXX
 
 #include <com/sun/star/sheet/XSolver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOCKETHELPER_HXX_
-#define _SOCKETHELPER_HXX_
+#ifndef INCLUDED_SAL_QA_OSL_SOCKET_SOCKETHELPER_HXX
+#define INCLUDED_SAL_QA_OSL_SOCKET_SOCKETHELPER_HXX
 
 #include <sal/types.h>
 #include <rtl/textenc.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CFSTRINGUTILITIES_HXX_
-#define _CFSTRINGUTILITIES_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_AQUA_CFSTRINGUTILITIES_HXX
+#define INCLUDED_FPICKER_SOURCE_AQUA_CFSTRINGUTILITIES_HXX
 
 #include <premac.h>
 #include <Carbon/Carbon.h>
@@ -178,6 +178,6 @@ inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, cons
     SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = " << OUStringToOString(retVal, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-#endif //_CFSTRINGUTILITIES_HXX_
+#endif // INCLUDED_FPICKER_SOURCE_AQUA_CFSTRINGUTILITIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

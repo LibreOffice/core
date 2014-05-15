@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IODLGIMPL_HXX
-#define _IODLGIMPL_HXX
+#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
+#define INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -453,6 +453,6 @@ inline SvtFileView* SvtFileDialog::GetView() const
 #define DIALOG_SIZE_CHANGED     5
 
 
-#endif // #ifndef _IODLG_HXX
+#endif // INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

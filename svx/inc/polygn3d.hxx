@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_POLYGN3D_HXX
-#define INCLUDED_SVX_POLYGN3D_HXX
+#ifndef INCLUDED_SVX_INC_POLYGN3D_HXX
+#define INCLUDED_SVX_INC_POLYGN3D_HXX
 
 #include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
@@ -67,6 +67,6 @@ public:
     void SetLineOnly(bool bNew);
 };
 
-#endif // INCLUDED_SVX_POLYGN3D_HXX
+#endif // INCLUDED_SVX_INC_POLYGN3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

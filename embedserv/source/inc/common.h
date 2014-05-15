@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMMON_H_
-#define _COMMON_H_
+#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_COMMON_H
+#define INCLUDED_EMBEDSERV_SOURCE_INC_COMMON_H
 
 #include "stdafx.h"
 #include <initguid.h>

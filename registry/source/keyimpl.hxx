@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _KEYIMPL_HXX_
-#define _KEYIMPL_HXX_
+#ifndef INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
+#define INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
 
 #include <registry/registry.h>
 #include "regimpl.hxx"

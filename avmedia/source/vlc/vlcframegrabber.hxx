@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VLCFRAMEGRABBER_HXX
-#define _VLCFRAMEGRABBER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
@@ -55,4 +55,4 @@ public:
 }
 }
 
-#endif // _VLCFRAMEGRABBER_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX

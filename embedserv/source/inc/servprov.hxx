@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SERVPROV_HXX
-#define _SERVPROV_HXX
+#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_SERVPROV_HXX
+#define INCLUDED_EMBEDSERV_SOURCE_INC_SERVPROV_HXX
 
 #include "common.h"
 #include <oleidl.h>

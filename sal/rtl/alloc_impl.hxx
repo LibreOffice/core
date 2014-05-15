@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_ALLOC_IMPL_HXX
-#define INCLUDED_RTL_ALLOC_IMPL_HXX
+#ifndef INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
+#define INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
 
 #include "sal/types.h"
 
@@ -202,6 +202,6 @@ typedef enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET } AllocMode;
 
 extern AllocMode alloc_mode;
 
-#endif /* INCLUDED_RTL_ALLOC_IMPL_HXX */
+#endif // INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

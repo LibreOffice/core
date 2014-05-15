@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _NEONPROPFINDREQUEST_HXX_
-#define _NEONPROPFINDREQUEST_HXX_
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONPROPFINDREQUEST_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONPROPFINDREQUEST_HXX
 
 #include <config_lgpl.h>
 #include <vector>
@@ -61,6 +61,6 @@ public:
 
 } // namespace webdav_ucp
 
-#endif // _NEONPROPFINDREQUEST_HXX_
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONPROPFINDREQUEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FPSERVICEINFO_HXX_
-#define _FPSERVICEINFO_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE_FPSERVICEINFO_HXX
+#define INCLUDED_VCL_UNX_KDE_FPSERVICEINFO_HXX
 
 #include <config_vclplug.h>
 

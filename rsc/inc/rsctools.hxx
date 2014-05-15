@@ -19,8 +19,8 @@
 struct RSHEADER_TYPE;
 class  RscPtrPtr;
 
-#ifndef _RSCTOOLS_HXX
-#define _RSCTOOLS_HXX
+#ifndef INCLUDED_RSC_INC_RSCTOOLS_HXX
+#define INCLUDED_RSC_INC_RSCTOOLS_HXX
 
 #ifdef UNX
 #include <stdlib.h>
@@ -210,6 +210,6 @@ public:
                 }
 };
 
-#endif // _RSCTOOLS_HXX
+#endif // INCLUDED_RSC_INC_RSCTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

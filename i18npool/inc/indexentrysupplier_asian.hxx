@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _I18N_INDEXENTRYSUPPLIER_ASIAN_HXX_
-#define _I18N_INDEXENTRYSUPPLIER_ASIAN_HXX_
+#ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_ASIAN_HXX
+#define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_ASIAN_HXX
 
 #include <indexentrysupplier_common.hxx>
 #include <osl/module.h>

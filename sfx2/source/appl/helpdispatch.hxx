@@ -42,6 +42,6 @@ public:
     virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-#endif // #ifndef SFX_HELPDISPATCHER_HXX
+#endif // INCLUDED_SFX2_SOURCE_APPL_HELPDISPATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

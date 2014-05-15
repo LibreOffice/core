@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INC_SPECIALOBJECT_HXX_
-#define _INC_SPECIALOBJECT_HXX_
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_SPECIALOBJECT_HXX
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_SPECIALOBJECT_HXX
 
 #include <com/sun/star/awt/Size.hpp>
 

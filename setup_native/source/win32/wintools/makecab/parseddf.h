@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __PARSEDDF_H__
-#define __PARSEDDF_H__
+#ifndef INCLUDED_SETUP_NATIVE_SOURCE_WIN32_WINTOOLS_MAKECAB_PARSEDDF_H
+#define INCLUDED_SETUP_NATIVE_SOURCE_WIN32_WINTOOLS_MAKECAB_PARSEDDF_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,6 +41,6 @@ unsigned int ParseDdf(char * ddfFile, PCCAB vars, DDFSRCFILE ** srcListH, unsign
 }
 #endif
 
-#endif /* __PARSEDDF_H__ */
+#endif // INCLUDED_SETUP_NATIVE_SOURCE_WIN32_WINTOOLS_MAKECAB_PARSEDDF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

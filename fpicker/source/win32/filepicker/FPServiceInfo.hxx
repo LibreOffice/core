@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FPSERVICEINFO_HXX_
-#define _FPSERVICEINFO_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FPSERVICEINFO_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FPSERVICEINFO_HXX
 
 // the service name is a description of a set of
 // interfaces (is the same as component categories in COM)

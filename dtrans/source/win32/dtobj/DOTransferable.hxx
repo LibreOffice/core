@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOTRANSFERABLE_HXX_
-#define _DOTRANSFERABLE_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_DOTRANSFERABLE_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_DOTRANSFERABLE_HXX
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 

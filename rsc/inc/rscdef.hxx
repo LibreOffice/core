@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCDEF_HXX
-#define _RSCDEF_HXX
+#ifndef INCLUDED_RSC_INC_RSCDEF_HXX
+#define INCLUDED_RSC_INC_RSCDEF_HXX
 
 #include <tools/unqidx.hxx>
 #include <rsctree.hxx>
@@ -267,6 +267,6 @@ public:
     RscFile *   GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
 };
 
-#endif // _RSCDEF_HXX
+#endif // INCLUDED_RSC_INC_RSCDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

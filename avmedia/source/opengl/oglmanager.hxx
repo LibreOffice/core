@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_MANAGER_HXX
-#define OGL_MANAGER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLMANAGER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLMANAGER_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -39,6 +39,6 @@ private:
 } // namespace ogl
 } // namespace avmedia
 
-#endif // OGL_MANAGER_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

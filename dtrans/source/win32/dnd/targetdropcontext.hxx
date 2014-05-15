@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TARGETDROPCONTEXT_HXX_
-#define _TARGETDROPCONTEXT_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDROPCONTEXT_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DND_TARGETDROPCONTEXT_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>

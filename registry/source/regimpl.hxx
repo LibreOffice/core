@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REGIMPL_HXX_
-#define _REGIMPL_HXX_
+#ifndef INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
+#define INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
 
 #include <set>
 #include <boost/unordered_map.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_BITMAPACTION_HXX
-#define _CPPCANVAS_BITMAPACTION_HXX
+#ifndef INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_BITMAPACTION_HXX
+#define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_BITMAPACTION_HXX
 
 #include <cppcanvas/canvas.hxx>
 #include <action.hxx>
@@ -70,6 +70,6 @@ namespace cppcanvas
     }
 }
 
-#endif /*_CPPCANVAS_BITMAPACTION_HXX */
+#endif // INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_BITMAPACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

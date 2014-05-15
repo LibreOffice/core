@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _WINIMPLHELPER_HXX_
-#define _WINIMPLHELPER_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_MISC_WINIMPLHELPER_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_MISC_WINIMPLHELPER_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

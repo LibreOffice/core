@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SVGREADER_SVGNODE_HXX
-#define INCLUDED_SVGIO_SVGREADER_SVGNODE_HXX
+#ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGNODE_HXX
+#define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGNODE_HXX
 
 #include <svgio/svgreader/svgtools.hxx>
 #include <svgio/svgreader/svgtoken.hxx>
@@ -165,7 +165,7 @@ namespace svgio
 
 
 
-#endif //INCLUDED_SVGIO_SVGREADER_SVGNODE_HXX
+#endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGNODE_HXX
 
 // eof
 

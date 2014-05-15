@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
-#define INCLUDED_SVX_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
+#ifndef INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
+#define INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
 
 #include <sal/types.h>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
@@ -60,6 +60,6 @@ namespace drawinglayer
 
 
 
-#endif // INCLUDED_SVX_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
+#endif // INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SVGREADER_SVGTOOLS_HXX
-#define INCLUDED_SVGIO_SVGREADER_SVGTOOLS_HXX
+#ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTOOLS_HXX
+#define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTOOLS_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -231,7 +231,7 @@ namespace svgio
 
 
 
-#endif //INCLUDED_SVGIO_SVGREADER_SVGTOOLS_HXX
+#endif // INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTOOLS_HXX
 
 // eof
 

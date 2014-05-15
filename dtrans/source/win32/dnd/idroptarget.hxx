@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IDROPTARGET_HXX_
-#define _IDROPTARGET_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_IDROPTARGET_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DND_IDROPTARGET_HXX
 
 #include "target.hxx"
 

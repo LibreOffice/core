@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XWIN_HXX_
-#define _XWIN_HXX_
+#ifndef INCLUDED_EMBEDSERV_SOURCE_INC_XWIN_HXX
+#define INCLUDED_EMBEDSERV_SOURCE_INC_XWIN_HXX
 
 
 #include "common.h"

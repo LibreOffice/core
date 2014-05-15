@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef XML_TEST_TOOLS_H
-#define XML_TEST_TOOLS_H
+#ifndef INCLUDED_TEST_XMLTESTTOOLS_HXX
+#define INCLUDED_TEST_XMLTESTTOOLS_HXX
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>

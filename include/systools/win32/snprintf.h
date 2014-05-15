@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SNPRINTF_H
-#define _SNPRINTF_H
+#ifndef INCLUDED_SYSTOOLS_WIN32_SNPRINTF_H
+#define INCLUDED_SYSTOOLS_WIN32_SNPRINTF_H
 
 #if     !defined(_WIN32)
 #error ERROR: Only Win32 target supported!
@@ -83,6 +83,6 @@ _SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char
 }
 #endif
 
-#endif /* _SNPRINTF_H */
+#endif // INCLUDED_SYSTOOLS_WIN32_SNPRINTF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

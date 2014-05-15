@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NSURL_OOOADDITIONS_HXX_
-#define _NSURL_OOOADDITIONS_HXX_
+#ifndef INCLUDED_FPICKER_SOURCE_AQUA_NSURL_OOOADDITIONS_HXX
+#define INCLUDED_FPICKER_SOURCE_AQUA_NSURL_OOOADDITIONS_HXX
 
 #include <premac.h>
 #include <CoreFoundation/CoreFoundation.h>

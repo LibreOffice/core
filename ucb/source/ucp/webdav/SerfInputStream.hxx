@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_NEONINPUTSTREAM_HXX
-#define INCLUDED_NEONINPUTSTREAM_HXX
+#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
+#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -116,6 +116,6 @@ class SerfInputStream : public ::com::sun::star::io::XInputStream,
 
 } // namespace http_dav_ucp
 
-#endif // INCLUDED_NEONINPUTSTREAM_HXX
+#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

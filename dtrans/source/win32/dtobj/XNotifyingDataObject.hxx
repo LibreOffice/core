@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XNOTIFYINGDATAOBJECT_HXX_
-#define _XNOTIFYINGDATAOBJECT_HXX_
+#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_XNOTIFYINGDATAOBJECT_HXX
+#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_XNOTIFYINGDATAOBJECT_HXX
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>

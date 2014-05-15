@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
-#define INCLUDED_SVX_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
+#ifndef INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
+#define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <tools/gen.hxx>
@@ -79,7 +79,7 @@ namespace sdr
 
 
 
-#endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
+#endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYRECTANGLE_HXX
 
 // eof
 

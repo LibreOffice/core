@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX
-#define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX
+#ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX
+#define INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -49,6 +49,6 @@ namespace sdr
 
 
 
-#endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX
+#endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFE3DSCENE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

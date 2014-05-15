@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VLCCOMMON_HXX
-#define _VLCCOMMON_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCCOMMON_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_VLCCOMMON_HXX
 
 #include <osl/mutex.hxx>
 #include <tools/stream.hxx>

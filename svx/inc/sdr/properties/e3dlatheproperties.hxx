@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
-#define INCLUDED_SVX_SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
+#ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
+#define INCLUDED_SVX_INC_SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
 
 #include <svx/sdr/properties/e3dcompoundproperties.hxx>
 #include <svx/svxdllapi.h>
@@ -53,6 +53,6 @@ namespace sdr
 
 
 
-#endif // INCLUDED_SVX_SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
+#endif // INCLUDED_SVX_INC_SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
