@@ -283,8 +283,6 @@ private:
     glm::mat4 m_View;
     // Model matrix : an identity matrix (model will be at the origin
     glm::mat4 m_Model;
-    // Our ModelViewProjection : multiplication of our 3 matrices
-    glm::mat4 m_MVP;
 
     sal_Int32 m_iWidth;
 

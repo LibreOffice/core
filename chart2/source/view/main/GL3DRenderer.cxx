@@ -1316,7 +1316,7 @@ void OpenGL3DRenderer::RenderTextShape()
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
-        m_MVP = m_3DProjection * m_3DView * m_Model;
+        glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
@@ -1324,7 +1324,7 @@ void OpenGL3DRenderer::RenderTextShape()
         glUseProgram(maResources.m_TextProID);
 
         CHECK_GL_ERROR();
-        glUniformMatrix4fv(maResources.m_TextMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        glUniformMatrix4fv(maResources.m_TextMatrixID, 1, GL_FALSE, &aMVP[0][0]);
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(maResources.m_TextVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
