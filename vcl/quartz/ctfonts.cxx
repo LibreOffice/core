@@ -121,10 +121,13 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
 
-    rMetric.mnAscent       = CTFontGetAscent( aCTFontRef );
+    const CGFloat fAscent = CTFontGetAscent( aCTFontRef );
+    const CGFloat fCapHeight = CTFontGetCapHeight( aCTFontRef );
+    rMetric.mnAscent       = fAscent;
     rMetric.mnDescent      = CTFontGetDescent( aCTFontRef );
     rMetric.mnExtLeading   = CTFontGetLeading( aCTFontRef );
-    rMetric.mnIntLeading   = 0;
+    rMetric.mnIntLeading   = fAscent - fCapHeight;
+
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
