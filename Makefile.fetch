@@ -51,15 +51,19 @@ define fetch_Download__is_checksum
 $(filter 32,$(words $(shell echo $(1) | sed -e 's/./& /g')))
 endef
 
+define fetch_Download__subst_var
+$(subst _DLL,_MD5SUM,$(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(1))))
+endef
+
 # fetch_Download_item url variable-name
 define fetch_Download_item
 $(if $(strip $($(2))),,$(error fetch__Download_item: $(2) is empty))
-$(if $(filter undefined,$(origin $(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(2))))),\
+$(if $(filter undefined,$(origin $(call fetch_Download__subst_var,$(2)))),\
 	$(if $(call fetch_Download__is_checksum,$(firstword $(subst -, ,$($(2))))),\
 		$(call fetch__Download_item,$1,$($2),$(firstword $(subst -, ,$($(2))))),\
-		$(error "fetch_Download_item: no checksum found for $($(2)). Please define $(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(2))) in download.lst.") \
+		$(error "fetch_Download_item: no checksum found for $($(2)). Please define $(call fetch_Download__subst_var,$(2)) in download.lst.") \
 	),\
-	$(call fetch__Download_item,$(1),$($2),$($(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(2))))) \
+	$(call fetch__Download_item,$(1),$($2),$($(call fetch_Download__subst_var,$(2)))) \
 )
 
 endef
