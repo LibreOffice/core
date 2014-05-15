@@ -51,37 +51,35 @@ namespace std
 template<
 	typename __K,
 	typename __H = hash<__K>,
-	typename __E = equal_to<__K>,
-	typename __A = allocator<__K> >
+	typename __E = equal_to<__K> >
 class hash_set
-:	public unordered_set<__K,__H,__E,__A>
+:	public unordered_set<__K,__H,__E>
 {
-	typedef unordered_set<__K,__H,__E,__A> _super;
+	typedef unordered_set<__K,__H,__E> _super;
 public:
 	hash_set( void) {}
 	hash_set( size_t n) : _super(n) {}
 
 private:
 	// setting the hasher dynamically is not supported in the emulation!
-	hash_set( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented
+	hash_set( size_t, const __H&, const __E& rE=__E()); // not implemented
 };
 
 template<
 	typename __K,
 	typename __H = hash<__K>,
-	typename __E = equal_to<__K>,
-	typename __A = allocator<__K> >
+	typename __E = equal_to<__K> >
 class hash_multiset
-:	public unordered_multiset<__K,__H,__E,__A>
+:	public unordered_multiset<__K,__H,__E>
 {
-	typedef unordered_multiset<__K,__H,__E,__A> _super;
+	typedef unordered_multiset<__K,__H,__E> _super;
 public:
 	hash_multiset( void) {}
 	hash_multiset( size_t n) : _super( n) {}
 
 private:
 	// setting the hasher dynamically is not supported in the emulation!
-	hash_multiset( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented
+	hash_multiset( size_t, const __H&, const __E& rE=__E()); // not implemented
 };
 
 } // namespace std
