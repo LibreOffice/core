@@ -678,16 +678,7 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
     U8* pOut = mpWritePtr;
 
     int nInt = static_cast<int>(aVal);
-    static const int nOutCharstrType = 1;
-    if( (nInt != aVal) && (nOutCharstrType == 2)) {
-        // numtype==255 means int32 for Type1, but 16.16 for Type2 charstrings!!!
-        *(pOut++) = 255;                            // Fixed 16.16
-        *(pOut++) = static_cast<U8>(nInt >> 8);
-        *(pOut++) = static_cast<U8>(nInt);
-        nInt = static_cast<int>(aVal * 0x10000) & 0xFFFF;
-        *(pOut++) = static_cast<U8>(nInt >> 8);
-        *(pOut++) = static_cast<U8>(nInt);
-    } else if( (nInt >= -107) && (nInt <= +107)) {
+    if( (nInt >= -107) && (nInt <= +107)) {
         *(pOut++) = static_cast<U8>(nInt + 139);    // -107..+107
     } else if( (nInt >= -1131) && (nInt <= +1131)) {
         if( nInt >= 0)
@@ -696,7 +687,7 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
             nInt = 64148 - nInt;                    // -108..-1131
         *(pOut++) = static_cast<U8>(nInt >> 8);
         *(pOut++) = static_cast<U8>(nInt);
-    } else if( nOutCharstrType == 1) {
+    } else {
         // numtype==255 means int32 for Type1, but 16.16 for Type2 charstrings!!!
         *(pOut++) = 255;
         *(pOut++) = static_cast<U8>(nInt >> 24);
