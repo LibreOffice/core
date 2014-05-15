@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
 	external/mdds/mdds_0.6.0.patch \
+	external/mdds/mdds-c++98.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
