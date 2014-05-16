@@ -55,15 +55,25 @@ GtkSalSystem::GetDisplayXScreenCount()
 namespace
 {
 
-struct GdkRectangleEqual
+struct GdkRectangleCoincidentLess
 {
+    // fdo#78799 - detect and elide overlaying monitors of different sizes
+    bool operator()(GdkRectangle const& rLeft, GdkRectangle const& rRight)
+    {
+        return
+            rLeft.x < rRight.x
+            || rLeft.y < rRight.y
+            ;
+    }
+};
+struct GdkRectangleCoincident
+{
+    // fdo#78799 - detect and elide overlaying monitors of different sizes
     bool operator()(GdkRectangle const& rLeft, GdkRectangle const& rRight)
     {
         return
             rLeft.x == rRight.x
             && rLeft.y == rRight.y
-            && rLeft.width == rRight.width
-            && rLeft.height == rRight.height
             ;
     }
 };
@@ -95,10 +105,11 @@ GtkSalSystem::countScreenMonitors()
                 gdk_screen_get_monitor_geometry(pScreen, j, &aGeometry);
                 aGeometries.push_back(aGeometry);
             }
-            GdkRectangleEqual aCmp;
-            std::sort(aGeometries.begin(), aGeometries.end(), aCmp);
+            std::sort(aGeometries.begin(), aGeometries.end(),
+                    GdkRectangleCoincidentLess());
             const std::vector<GdkRectangle>::iterator aUniqueEnd(
-                    std::unique(aGeometries.begin(), aGeometries.end(), aCmp));
+                    std::unique(aGeometries.begin(), aGeometries.end(),
+                    GdkRectangleCoincident()));
             nMonitors = std::distance(aGeometries.begin(), aUniqueEnd);
         }
         maScreenMonitors.push_back(std::make_pair(pScreen, nMonitors));
