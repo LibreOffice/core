@@ -777,8 +777,10 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
     sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     aDlg.SetTitle( "Insert 3D Model" );
+    aDlg.AddFilter( "All supported formats", "*.json; *.dae; *.kmz"  );
     aDlg.AddFilter( "GL Transmission Format", "*.json" );
-    aDlg.AddFilter( "All files", "*.*"  );
+    aDlg.AddFilter( "COLLADA", "*.dae" );
+    aDlg.AddFilter( "Keyhole Markup language Zipped", "*.kmz"  );
 
     OUString sURL;
     if( aDlg.Execute() == ERRCODE_NONE )
@@ -809,7 +811,6 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
             aPos.X() -= aSize.Width() >> 1;
             aPos.Y() -= aSize.Height() >> 1;
         }
-
 
         mpView->Insert3DModelURL( sURL, nAction, aPos, aSize, false ) ;
 
