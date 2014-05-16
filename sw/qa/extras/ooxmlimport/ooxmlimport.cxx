@@ -2120,6 +2120,12 @@ DECLARE_OOXMLIMPORT_TEST(testChartSize, "chart-size.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6008), getProperty<sal_Int32>(xEmbeddedObjects->getByIndex(0), "Width"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testInlineGroupshape, "inline-groupshape.docx")
+{
+    // Inline groupshape was in the background, so it was hidden sometimes by other shapes.
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Opaque"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

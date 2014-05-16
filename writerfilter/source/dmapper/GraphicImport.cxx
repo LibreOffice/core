@@ -723,6 +723,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                              uno::makeAny
                              (text::TextContentAnchorType_AS_CHARACTER));
 
+                        // In Word, if a shape is anchored inline, that
+                        // excludes being in the background.
+                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(true));
+
                         uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
 
                         // TextFrames can't be rotated. But for anything else,
