@@ -31,30 +31,24 @@ static int help()
     return 1;
 }
 
+static GtkWidget* ourCanvas;
 
-bool drawCallback(GtkWidget* pCanvas, void* /* cairo_t* cr */, gpointer pData)
+bool drawCallback(GtkWidget* /* The eventbox */, void* /* cairo_t* cr */, gpointer pData)
 {
     fprintf(stderr, "attempting to draw tile");
 
     Document* pDocument = static_cast< Document* >( pData );
 
-    // This is UNX only for now, we need to get the appropriate equivalents
-    // for windows/mac (see SystemGraphicsData for what we need)
-    SystemGraphicsData aSystemGraphicsData;
-    aSystemGraphicsData.pDisplay = GDK_WINDOW_XDISPLAY( pCanvas->window );
-    aSystemGraphicsData.hDrawable = GDK_WINDOW_XWINDOW( pCanvas->window );
-    aSystemGraphicsData.pVisual = GDK_VISUAL_XVISUAL( gtk_widget_get_visual( pCanvas ) );
-    aSystemGraphicsData.nScreen = GDK_SCREEN_XNUMBER( gtk_widget_get_screen( pCanvas ) );
-    aSystemGraphicsData.nDepth = gdk_visual_get_depth( gtk_widget_get_visual( pCanvas ) );
-    aSystemGraphicsData.aColormap = GDK_COLORMAP_XCOLORMAP(
-                                        gdk_screen_get_default_colormap(
-                                            gtk_widget_get_screen( pCanvas ) ) );
-    aSystemGraphicsData.pXRenderFormat = XRenderFindVisualFormat(
-                                        GDK_WINDOW_XDISPLAY( pCanvas->window ),
-                                        GDK_VISUAL_XVISUAL( gtk_widget_get_visual( pCanvas ) ) );
-
     // Hardcoded tile just to see whether or not we get any sort of output.
-    pDocument->paintTile( 256, 256, 0, 0, 5000, 5000 );
+    unsigned char* pBuffer = pDocument->paintTile( 1000, 1000, 0, 0, 10000, 10000 );
+
+    GdkPixbuf* pBixBuf = gdk_pixbuf_new_from_data( pBuffer, GDK_COLORSPACE_RGB,
+                                                   false, 8, 1000, 1000, 3*1000,
+                                                   0, 0 );
+    pBixBuf = gdk_pixbuf_flip( pBixBuf, false );
+    gtk_image_set_from_pixbuf( GTK_IMAGE(ourCanvas), pBixBuf );
+
+    // TODO: we need to keep track of and cleanup these buffers etc.
     return true;
 
 }
@@ -91,16 +85,22 @@ int main( int argc, char* argv[] )
     GtkWidget* pScroller = gtk_scrolled_window_new( 0, 0 );
     gtk_container_add( GTK_CONTAINER(pWindow), pScroller );
 
-    GtkWidget* pCanvas = gtk_drawing_area_new();
-    gtk_widget_set_size_request( pCanvas, 1000, 1000 );
-    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pScroller), pCanvas );
+    GtkWidget* pEventBox = gtk_event_box_new();
+    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pScroller), pEventBox );
 
-    g_signal_connect( G_OBJECT(pCanvas), "expose_event", G_CALLBACK(drawCallback), pDocument);
+    GtkWidget* pCanvas = gtk_image_new();
+    ourCanvas = pCanvas;
+    gtk_container_add( GTK_CONTAINER( pEventBox ), pCanvas );
+
+
+    g_signal_connect( G_OBJECT(pEventBox), "button-press-event", G_CALLBACK(drawCallback), pDocument);
 
     gtk_widget_show( pCanvas );
+    gtk_widget_show( pEventBox );
     gtk_widget_show( pScroller );
     gtk_widget_show( pWindow );
 
+    drawCallback( pCanvas, 0, pDocument );
 
     gtk_main();
 
