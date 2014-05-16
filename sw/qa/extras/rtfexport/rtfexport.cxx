@@ -30,9 +30,11 @@ class Test : public SwModelTestBase
 public:
     Test() : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format") {}
 
-    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
+    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE
+    {
         // Don't test the first import of these, for some reason those tests fail
-        const char* aBlacklist[] = {
+        const char* aBlacklist[] =
+        {
             "math-eqarray.rtf",
             "math-escaping.rtf",
             "math-lim.rtf",
@@ -230,7 +232,7 @@ DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
 
     aActual = getFormula(getRun(getParagraph(4), 1));
     aExpected = OUString("f left (x right ) = {a} rsub {0} + sum from {n = 1} to {\xe2\x88\x9e} {left ({a} rsub {n} cos {n\xcf\x80x} over {L} + {b} rsub {n} sin {n\xcf\x80x} over {L} right )}", 144,
-            RTL_TEXTENCODING_UTF8);
+                         RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(5), 1));
@@ -355,7 +357,7 @@ DECLARE_RTFEXPORT_TEST(testFdo55939, "fdo55939.odt")
     getRun(xParagraph, 1, "Main text before footnote.");
     // Why the tab has to be removed here?
     CPPUNIT_ASSERT_EQUAL(OUString("Footnote text."),
-            getProperty< uno::Reference<text::XTextRange> >(getRun(xParagraph, 2), "Footnote")->getText()->getString().replaceAll("\t", ""));
+                         getProperty< uno::Reference<text::XTextRange> >(getRun(xParagraph, 2), "Footnote")->getText()->getString().replaceAll("\t", ""));
     getRun(xParagraph, 3, " Text after the footnote."); // However, this leading space is intentional and OK.
 }
 

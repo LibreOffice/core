@@ -127,9 +127,9 @@ DECLARE_RTFIMPORT_TEST(testFdo45553, "fdo45553.rtf")
         {
             uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
             OUString aStr = xRange->getString();
-            if ( aStr == "space-before" )
+            if (aStr == "space-before")
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(120)), getProperty<sal_Int32>(xRange, "ParaTopMargin"));
-            else if ( aStr == "space-after" )
+            else if (aStr == "space-after")
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(240)), getProperty<sal_Int32>(xRange, "ParaBottomMargin"));
         }
     }
@@ -140,7 +140,7 @@ DECLARE_RTFIMPORT_TEST(testN192129, "n192129.rtf")
     // We expect that the result will be 16x16px.
     Size aExpectedSize(16, 16);
     MapMode aMap(MAP_100TH_MM);
-    aExpectedSize = Application::GetDefaultDevice()->PixelToLogic( aExpectedSize, aMap );
+    aExpectedSize = Application::GetDefaultDevice()->PixelToLogic(aExpectedSize, aMap);
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
@@ -230,9 +230,9 @@ DECLARE_RTFIMPORT_TEST(testFdo46662, "fdo46662.rtf")
     {
         const beans::PropertyValue& rProp = aProps[i];
 
-        if ( rProp.Name == "ParentNumbering" )
+        if (rProp.Name == "ParentNumbering")
             CPPUNIT_ASSERT_EQUAL(sal_Int16(2), rProp.Value.get<sal_Int16>());
-        else if ( rProp.Name == "Suffix" )
+        else if (rProp.Name == "Suffix")
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rProp.Value.get<OUString>().getLength());
     }
 }
@@ -922,12 +922,12 @@ DECLARE_RTFIMPORT_TEST(testFdo58933, "fdo58933.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo44053, "fdo44053.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
     // The with of the table's A1 and A2 cell should equal.
     CPPUNIT_ASSERT_EQUAL(getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position,
-            getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
+                         getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo48440, "fdo48440.rtf")
@@ -1409,33 +1409,31 @@ DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
     xTable.set(xTables->getByIndex(2), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 fullPtSolid(
-            1, 0, 35, 0, table::BorderLineStyle::SOLID, 35);
+    table::BorderLine2 fullPtSolid(1, 0, 35, 0, table::BorderLineStyle::SOLID, 35);
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
-        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+                                getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
-        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+                                getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
-        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+                                getProperty<table::BorderLine2>(xCell, "TopBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
-        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+                                getProperty<table::BorderLine2>(xCell, "BottomBorder"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xCC0000), getProperty<sal_Int32>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 halfPtSolid(
-            /*0*/1, 0, 18, 0, table::BorderLineStyle::SOLID, 18);
+    table::BorderLine2 halfPtSolid(/*0*/1, 0, 18, 0, table::BorderLineStyle::SOLID, 18);
     CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid,
-        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+                                getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
-            getProperty<sal_Int32>(xCell, "BackColor"));
+                         getProperty<sal_Int32>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("B2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
     CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid,
-        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+                                getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid,
-        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+                                getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
-            getProperty<sal_Int32>(xCell, "BackColor"));
+                         getProperty<sal_Int32>(xCell, "BackColor"));
 
     // \sect at the end resulted in spurious page break
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1446,21 +1444,21 @@ DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
     uno::Reference<text::XTextRange> xParaSecond = getParagraph(2);
     CPPUNIT_ASSERT_EQUAL(OUString("SECOND"), xParaSecond->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
-            getProperty<style::BreakType>(xParaSecond, "BreakType"));
+                         getProperty<style::BreakType>(xParaSecond, "BreakType"));
     CPPUNIT_ASSERT_EQUAL(OUString(""),
-            getProperty<OUString>(xParaSecond, "PageDescName"));
+                         getProperty<OUString>(xParaSecond, "PageDescName"));
     // actually not sure how many paragraph there should be between
     // SECOND and THIRD - important is that the page break is on there
     uno::Reference<text::XTextRange> xParaNext = getParagraph(3);
     CPPUNIT_ASSERT_EQUAL(OUString(""), xParaNext->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("Converted1"),
-            getProperty<OUString>(xParaNext, "PageDescName"));
+                         getProperty<OUString>(xParaNext, "PageDescName"));
     uno::Reference<text::XTextRange> xParaThird = getParagraph(4);
     CPPUNIT_ASSERT_EQUAL(OUString("THIRD"), xParaThird->getString());
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
-            getProperty<style::BreakType>(xParaThird, "BreakType"));
+                         getProperty<style::BreakType>(xParaThird, "BreakType"));
     CPPUNIT_ASSERT_EQUAL(OUString(""),
-            getProperty<OUString>(xParaThird, "PageDescName"));
+                         getProperty<OUString>(xParaThird, "PageDescName"));
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -1469,14 +1467,13 @@ DECLARE_RTFIMPORT_TEST(testFooterPara, "footer-para.rtf")
 {
     // check that paragraph properties in footer are imported
     uno::Reference<text::XText> xFooterText =
-        getProperty< uno::Reference<text::XText> >(
-            getStyles("PageStyles")->getByName("First Page"), "FooterText");
+        getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("First Page"), "FooterText");
     uno::Reference<text::XTextContent> xParagraph =
         getParagraphOrTable(1, xFooterText);
     CPPUNIT_ASSERT_EQUAL(OUString("All Rights Reserved."),
-        uno::Reference<text::XTextRange>(xParagraph, uno::UNO_QUERY)->getString());
+                         uno::Reference<text::XTextRange>(xParagraph, uno::UNO_QUERY)->getString());
     CPPUNIT_ASSERT_EQUAL((sal_Int16)style::ParagraphAdjust_CENTER,
-        getProperty</*style::ParagraphAdjust*/sal_Int16>(xParagraph, "ParaAdjust"));
+                         getProperty</*style::ParagraphAdjust*/sal_Int16>(xParagraph, "ParaAdjust"));
 }
 
 DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")
@@ -1497,7 +1494,7 @@ DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")
 DECLARE_RTFIMPORT_TEST(testFdo65090, "fdo65090.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
     // The first row had 3 cells, instead of a horizontally merged one and a normal one (2 -> 1 separator).
@@ -1512,58 +1509,54 @@ DECLARE_RTFIMPORT_TEST(testTableBorderDefaults, "fdo68779.rtf")
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 solid(
-            1, 0, 26, 0, table::BorderLineStyle::SOLID, 26);
+    table::BorderLine2 solid(1, 0, 26, 0, table::BorderLineStyle::SOLID, 26);
     CPPUNIT_ASSERT_BORDER_EQUAL(solid,
-        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+                                getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(solid,
-        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+                                getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(solid,
-        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+                                getProperty<table::BorderLine2>(xCell, "TopBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(solid,
-        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+                                getProperty<table::BorderLine2>(xCell, "BottomBorder"));
 
     xTable.set(xTables->getByIndex(1), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 dotted(
-            1, 0, 26, 0, table::BorderLineStyle::DOTTED, 26);
+    table::BorderLine2 dotted(1, 0, 26, 0, table::BorderLineStyle::DOTTED, 26);
     CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
-        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+                                getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
-        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+                                getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
-        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+                                getProperty<table::BorderLine2>(xCell, "TopBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
-        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+                                getProperty<table::BorderLine2>(xCell, "BottomBorder"));
 
     xTable.set(xTables->getByIndex(2), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 doubled(
-            1, 26, 26, 26, table::BorderLineStyle::DOUBLE, 79);
+    table::BorderLine2 doubled(1, 26, 26, 26, table::BorderLineStyle::DOUBLE, 79);
     CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
-        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+                                getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
-        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+                                getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
-        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+                                getProperty<table::BorderLine2>(xCell, "TopBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
-        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+                                getProperty<table::BorderLine2>(xCell, "BottomBorder"));
 
     xTable.set(xTables->getByIndex(3), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 thinThickMG(
-            1, 14, 26, 14, table::BorderLineStyle::THINTHICK_MEDIUMGAP, 53);
+    table::BorderLine2 thinThickMG(1, 14, 26, 14, table::BorderLineStyle::THINTHICK_MEDIUMGAP, 53);
     CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
-        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+                                getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
-        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+                                getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
-        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+                                getProperty<table::BorderLine2>(xCell, "TopBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
-        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+                                getProperty<table::BorderLine2>(xCell, "BottomBorder"));
 }
 
 DECLARE_RTFIMPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
