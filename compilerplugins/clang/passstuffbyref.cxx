@@ -11,25 +11,25 @@
 
 #include "plugin.hxx"
 
-// Find places where OUString and OString are passed by value.
+// Find places where various things are passed by value.
 // It's not very efficient, because we generally end up copying it twice - once into the parameter and
-// again into the destination OUString.
+// again into the destination.
 // They should rather be passed by reference.
 
 namespace {
 
-class PassStringByRef:
-    public RecursiveASTVisitor<PassStringByRef>, public loplugin::Plugin
+class PassStuffByRef:
+    public RecursiveASTVisitor<PassStuffByRef>, public loplugin::Plugin
 {
 public:
-    explicit PassStringByRef(InstantiationData const & data): Plugin(data) {}
+    explicit PassStuffByRef(InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitFunctionDecl(const FunctionDecl * decl);
 };
 
-bool PassStringByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
+bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (ignoreLocation(functionDecl)) {
         return true;
     }
@@ -60,11 +60,18 @@ bool PassStringByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
                 pvDecl->getSourceRange().getBegin())
               << pvDecl->getSourceRange();
         }
+        else if (typeName.find("class com::sun::star::uno::Sequence") == 0) {
+            report(
+                DiagnosticsEngine::Warning,
+                "passing css::uno::Sequence by value, rather pass by reference .e.g. 'const css::uno::Sequence&' " + typeName,
+                pvDecl->getSourceRange().getBegin())
+              << pvDecl->getSourceRange();
+        }
     }
     return true;
 }
 
-loplugin::Plugin::Registration< PassStringByRef > X("passstringbyref");
+loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref");
 
 }
 
