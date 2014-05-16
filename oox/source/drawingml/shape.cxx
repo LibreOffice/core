@@ -962,6 +962,12 @@ Reference< XShape > Shape::createAndInsert(
             }
         }
 
+        else if( mbLockedCanvas )
+        {
+            //If we have aServiceName as "com.sun.star.drawing.GroupShape" and lockedCanvas
+            putPropertyToGrabBag( "LockedCanvas", Any( true ) );
+        }
+
         // These can have a custom geometry, so position should be set here,
         // after creation but before custom shape handling, using the position
         // we got from the caller.
