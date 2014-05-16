@@ -720,6 +720,9 @@ private:
     /// Flag indicating that the section properties are being written
     bool m_bOpenedSectPr;
 
+    /// Flag indicating that the Run Text is being written
+    bool m_bRunTextIsOn;
+
     /// Flag indicating that the header \ footer are being written
     bool m_bWritingHeaderFooter;
 

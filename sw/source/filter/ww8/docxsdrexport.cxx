@@ -145,6 +145,7 @@ struct DocxSdrExport::Impl
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
     bool m_bDrawingOpen;
+    bool m_bParagraphHasDrawing; ///Flag for checking drawing in a paragraph.
     bool m_bFlyFrameGraphic;
     sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
@@ -166,6 +167,7 @@ struct DocxSdrExport::Impl
           m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
           m_bDrawingOpen(false),
+          m_bParagraphHasDrawing(false),
           m_bFlyFrameGraphic(false),
           m_pFlyFillAttrList(0),
           m_pFlyWrapAttrList(0),
@@ -248,6 +250,21 @@ bool DocxSdrExport::IsDrawingOpen()
     return m_pImpl->m_bDrawingOpen;
 }
 
+void DocxSdrExport::setDrawingOpen(bool bDrawingOpen)
+{
+    m_pImpl->m_bDrawingOpen = bDrawingOpen;
+}
+
+bool DocxSdrExport::IsParagraphHasDrawing()
+{
+    return m_pImpl->m_bParagraphHasDrawing;
+}
+
+void DocxSdrExport::setParagraphHasDrawing(bool bParagraphHasDrawing)
+{
+    m_pImpl->m_bParagraphHasDrawing = bParagraphHasDrawing;
+}
+
 sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyFillAttrList()
 {
     return m_pImpl->m_pFlyFillAttrList;
@@ -276,6 +293,7 @@ void DocxSdrExport::setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrL
 void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize)
 {
     m_pImpl->m_bDrawingOpen = true;
+    m_pImpl->m_bParagraphHasDrawing = true;
     m_pImpl->m_pSerializer->startElementNS(XML_w, XML_drawing, FSEND);
 
     const SvxLRSpaceItem pLRSpaceItem = pFrmFmt->GetLRSpace(false);
