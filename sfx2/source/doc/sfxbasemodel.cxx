@@ -523,18 +523,15 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
     }
 }
 
-
 //  destructor
-
-
 SfxBaseModel::~SfxBaseModel()
 {
+    //In SvxDrawingLayerImport when !xTargetDocument the fallback SvxUnoDrawingModel created there
+    //never gets disposed called on it, so m_pData leaks.
+    delete m_pData, m_pData = 0;
 }
 
-
 //  XInterface
-
-
 Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType ) throw( RuntimeException, std::exception )
 {
     if  (   ( !m_bSupportEmbeddedScripts && rType.equals( cppu::UnoType<document::XEmbeddedScripts>::get() ) )
@@ -545,10 +542,7 @@ Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType ) throw( Runti
     return SfxBaseModel_Base::queryInterface( rType );
 }
 
-
 //  XInterface
-
-
 void SAL_CALL SfxBaseModel::acquire() throw( )
 {
     // Attention:
