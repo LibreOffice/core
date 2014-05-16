@@ -4074,6 +4074,12 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                      pComboBox->EnableAutocomplete( n != 0 );
+                 else
+                 {
+                    sal_Bool b = sal_Bool();
+                    if ( Value >>= b )
+                        pComboBox->EnableAutocomplete( b );
+                }
             }
             break;
             case BASEPROPERTY_STRINGITEMLIST:
