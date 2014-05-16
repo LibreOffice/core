@@ -1116,10 +1116,18 @@ const SvxFieldData* toXMLPropertyStates(
             case EE_CHAR_FONTINFO_CJK:
             case EE_CHAR_FONTINFO_CTL:
             {
-                if (!static_cast<const SvxFontItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
-                    continue;
+                // Apparently font info needs special handling.
+                const SvxFontItem* pItem = static_cast<const SvxFontItem*>(p);
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                sal_Int32 nIndexFontName = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "font-name", 0);
+
+                if (nIndexFontName == -1 || nIndexFontName >= nEntryCount)
+                    break;
+
+                if (!pItem->QueryValue(aAny, MID_FONT_FAMILY_NAME))
+                    break;
+
+                rPropStates.push_back(XMLPropertyState(nIndexFontName, aAny));
             }
             break;
             case EE_CHAR_WEIGHT:
