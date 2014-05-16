@@ -24,7 +24,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		StaticLibrary_vclmain \
-		Executable_ui-previewer) \
+		Executable_ui-previewer \
+		Executable_svdemo) \
 	Library_vclopengl \
 ))
 
