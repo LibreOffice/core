@@ -3408,6 +3408,16 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78599,"fdo78599.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[6]/w:fldChar", "fldCharType", "end" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo78469, "fdo78469.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+       return;
+    // make sure dataBinding & text tags not presernt in sdtcontent
+    assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:dataBinding[1]",0);
+    assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:text[1]",0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo78300,"fdo78300.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
