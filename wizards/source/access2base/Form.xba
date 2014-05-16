@@ -564,7 +564,7 @@ REM ----------------------------------------------------------------------------
 Public Sub _Initialize(psName As String)
 &apos;	Set pointers to UNO objects
 
-Dim oDoc As Object, oFormsCollection As Object
+Dim oDoc As Object, oFormsCollection As Object, oDatabase As Object
 	If _ErrorHandler() Then On Local Error Goto Trace_Error
 	_Name = psName
 	_Shortcut = &quot;Forms!&quot; &amp; Utils._Surround(psName)
@@ -587,7 +587,17 @@ Dim oDoc As Object, oFormsCollection As Object
 				End If
 			Case DBCONNECTFORM
 				Set ContainerWindow = oDoc.Document.CurrentController.Frame.ContainerWindow
-				Set DatabaseForm = Application._CurrentDb(_DocEntry, _DbEntry).Form
+				Set oDatabase = Application._CurrentDb(_DocEntry, _DbEntry)
+				With oDatabase
+					Set DatabaseForm = .Form
+					If IsNull(.Connection) Then
+						Set .Connection = DatabaseForm.ActiveConnection
+						If Not IsNull(.Connection) Then
+							Set .MetaData = .Connection.MetaData
+							oDatabase._ReadOnly = .Connection.isReadOnly()
+						End If
+					End If
+				End With
 		End Select
 	Else
 		Set Component = Nothing

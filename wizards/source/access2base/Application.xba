@@ -750,7 +750,7 @@ Dim vCurrentDoc() As Variant
 Dim oBaseContext As Object, sDbNames() As String, oBaseSource As Object
 Dim sDatabaseURL As String, oHandler As Object
 Dim vDbContainer As Variant, vDbContainers() As Variant, vDocContainer As Variant
-Dim sFormName As String, oConnection As Object
+Dim sFormName As String
 
 	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current AOO/LibO session
 	Set OpenConnection = Nothing
@@ -844,29 +844,26 @@ Const cstThisSub = &quot;OpenConnection&quot;
 			For i = 0 To oForms.Count - 1
 				vDbContainer = New DbContainer					&apos;	To make distinct entries !!
 				sFormName = oForms.ElementNames(i)
-				Set oConnection = oForms.getByName(sFormName).ActiveConnection
-				If IsNull(oConnection) Then
-					Set vDbContainer.Database = Nothing			&apos;	Form is not data-aware
-				Else
-					Set vDbContainer.Database = New Database
-					Set vDbContainer.Database._This = vDbContainer.Database
-					With vDbContainer.Database
-						.FormName = sFormName
-						vDbContainer.FormName = sFormName
-						Set .Form = oForms.getByName(sFormName)
-						Set .Connection = oConnection
-						Set .MetaData = oConnection.MetaData
-						._ReadOnly = oConnection.isReadOnly()
-						Set .Document = oComponent
-						.Title = oComponent.Title
-						.URL = .Form.DataSourceName
-						._DbConnect = DBCONNECTFORM
-						Set vDbContainers(i) = vDbContainer
-						vDbContainers(i).FormName = sFormName
+				Set vDbContainer.Database = New Database
+				Set vDbContainer.Database._This = vDbContainer.Database
+				With vDbContainer.Database
+					.FormName = sFormName
+					vDbContainer.FormName = sFormName
+					Set .Form = oForms.getByName(sFormName)
+					Set .Connection = .Form.ActiveConnection	&apos;	Might be Nothing in Windows at AOO/LO startup (not met in Linux)
+					If Not IsNull(.Connection) Then
+						Set .MetaData = .Connection.MetaData
+						._ReadOnly = .Connection.isReadOnly()
 						TraceLog(TRACEANY, .MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; .MetaData.getDatabaseProductVersion, False)
-						TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; .URL &amp; &quot; Form=&quot; &amp; vDbContainer.FormName, False)
-					End With
-				End If
+					End If
+					Set .Document = oComponent
+					.Title = oComponent.Title
+					.URL = .Form.DataSourceName
+					._DbConnect = DBCONNECTFORM
+					Set vDbContainers(i) = vDbContainer
+					vDbContainers(i).FormName = sFormName
+					TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; .URL &amp; &quot; Form=&quot; &amp; vDbContainer.FormName, False)
+				End With
 			Next i
 			vDocContainer.DbConnect = DBCONNECTFORM
 		End Select
