@@ -1586,8 +1586,6 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                     pDestNd->SplitCntntNode( rPos );
                 }
 
-                pDestNd = rPos.nNode.GetNode().GetTxtNode();
-
                 if ( bCorrEnd )
                 {
                     aEndIdx--;
