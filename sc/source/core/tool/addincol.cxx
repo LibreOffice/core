@@ -684,7 +684,7 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
 
                 OUString sName = xClass->getName();
                 return (
-                    IsTypeName( sName, cppu::UnoType<util::DateTime>::get()) ||
+                    IsTypeName( sName, cppu::UnoType<sheet::XVolatileResult>::get()) ||
                     IsTypeName( sName, cppu::UnoType<uno::XInterface>::get()) );
             }
 
@@ -734,7 +734,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<uno::Any> >*)0) ))
         return SC_ADDINARG_MIXED_ARRAY;
 
-    if (IsTypeName( sName, cppu::UnoType<util::DateTime>::get()))
+    if (IsTypeName( sName, cppu::UnoType<uno::Any>::get()))
         return SC_ADDINARG_VALUE_OR_ARRAY;
 
     if (IsTypeName( sName, cppu::UnoType<table::XCellRange>::get()))
@@ -821,11 +821,11 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                 IsTypeName( sName,
                                     cppu::UnoType<uno::XInterface>::get()) ||
                                 IsTypeName( sName,
-                                    cppu::UnoType<util::DateTime>::get()) ||
+                                    cppu::UnoType<lang::XServiceName>::get()) ||
                                 IsTypeName( sName,
                                     cppu::UnoType<lang::XServiceInfo>::get()) ||
                                 IsTypeName( sName,
-                                    cppu::UnoType<util::DateTime>::get()) );
+                                    cppu::UnoType<sheet::XAddIn>::get()) );
                         }
                         if (!bSkip)
                         {
@@ -1491,10 +1491,10 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         catch(const reflection::InvocationTargetException& rWrapped)
         {
             if ( rWrapped.TargetException.getValueType().equals(
-                    cppu::UnoType<util::DateTime>::get()) )
+                    cppu::UnoType<lang::IllegalArgumentException>::get()) )
                 nErrCode = errIllegalArgument;
             else if ( rWrapped.TargetException.getValueType().equals(
-                    cppu::UnoType<util::DateTime>::get()) )
+                    cppu::UnoType<sheet::NoConvergenceException>::get()) )
                 nErrCode = errNoConvergence;
             else
                 nErrCode = errNoValue;
