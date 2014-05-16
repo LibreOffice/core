@@ -226,11 +226,6 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         /* Evaluating an OpenCL device */
         LOG_PRINTF("[DS] Device: \"" << device->oclDeviceName << "\" (OpenCL) evaluation...");
         cl_int clStatus;
-        cl_context clContext;
-        cl_command_queue clQueue;
-        cl_program clProgram;
-        cl_kernel clKernel;
-
         /* Check for 64-bit float extensions */
         size_t aDevExtInfoSize = 0;
         clStatus = clGetDeviceInfo(device->oclDeviceID, CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize);
@@ -239,7 +234,6 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         char* aExtInfo = new char[aDevExtInfoSize];
         clStatus = clGetDeviceInfo(device->oclDeviceID, CL_DEVICE_EXTENSIONS, sizeof(char) * aDevExtInfoSize, aExtInfo, NULL);
         DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clGetDeviceInfo");
-
         bool bKhrFp64Flag = false;
         bool bAmdFp64Flag = false;
         const char* buildOption = NULL;
@@ -276,13 +270,13 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             /* 64-bit float support present */
 
             /* Create context and command queue */
-            clContext = clCreateContext(NULL, 1, &device->oclDeviceID, NULL, NULL, &clStatus);
+            cl_context  clContext = clCreateContext(NULL, 1, &device->oclDeviceID, NULL, NULL, &clStatus);
             DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateContext");
-            clQueue = clCreateCommandQueue(clContext, device->oclDeviceID, 0, &clStatus);
+            cl_command_queue clQueue = clCreateCommandQueue(clContext, device->oclDeviceID, 0, &clStatus);
             DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateCommandQueue");
 
             /* Build program */
-            clProgram = clCreateProgramWithSource(clContext, 1, &source, sourceSize, &clStatus);
+            cl_program clProgram = clCreateProgramWithSource(clContext, 1, &source, sourceSize, &clStatus);
             DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateProgramWithSource");
             clStatus = clBuildProgram(clProgram, 1, &device->oclDeviceID, buildOption, NULL, NULL);
             DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clBuildProgram");
@@ -293,7 +287,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
                 char* buildLog;
                 clStatus = clGetProgramBuildInfo(clProgram, device->oclDeviceID, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
                 buildLog = (char*)malloc(length);
-                clStatus = clGetProgramBuildInfo(clProgram, device->oclDeviceID, CL_PROGRAM_BUILD_LOG, length, buildLog, &length);
+                clGetProgramBuildInfo(clProgram, device->oclDeviceID, CL_PROGRAM_BUILD_LOG, length, buildLog, &length);
                 LOG_PRINTF("[OCL] Build Errors" << std::endl << buildLog);
                 free(buildLog);
 
@@ -309,7 +303,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
 
                 /* Run kernel */
                 LibreOfficeDeviceEvaluationIO* testData = (LibreOfficeDeviceEvaluationIO*)evalData;
-                clKernel = clCreateKernel(clProgram, "DynamicKernel", &clStatus);
+                cl_kernel clKernel = clCreateKernel(clProgram, "DynamicKernel", &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateKernel");
                 cl_mem clResult = clCreateBuffer(clContext, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR, sizeof(cl_double) * testData->outputSize, &testData->output[0], &clStatus);
                 DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clCreateBuffer::clResult");
@@ -560,7 +554,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
         bIsDeviceSelected = true;
 
         /* Release profile */
-        status = releaseDSProfile(profile, releaseScore);
+        releaseDSProfile(profile, releaseScore);
     }
     return selectedDevice;
 }
