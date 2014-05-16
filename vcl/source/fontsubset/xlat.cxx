@@ -18,6 +18,7 @@
  */
 
 #include "rtl/textcvt.h"
+#include "xlat.hxx"
 #include <tools/debug.hxx>
 
 namespace {
@@ -137,8 +138,6 @@ void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt1
 }
 
 } // anonymous namespace
-
-#include "xlat.hxx"
 
 namespace vcl
 {
