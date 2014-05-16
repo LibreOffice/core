@@ -15,6 +15,7 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     -I$(SRCDIR)/desktop/source/inc \
     -I$(SRCDIR)/desktop/source/deployment/inc \
     -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/vcl/inc \
 ))
 
 $(eval $(call gb_Library_use_external,sofficeapp,boost_headers))
@@ -35,6 +36,7 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
 $(eval $(call gb_Library_set_precompiled_header,sofficeapp,$(SRCDIR)/desktop/inc/pch/precompiled_sofficeapp))
 
 $(eval $(call gb_Library_use_libraries,sofficeapp,\
+    basebmp \
     comphelper \
     cppu \
     cppuhelper \

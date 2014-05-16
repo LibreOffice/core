@@ -47,6 +47,8 @@ public:
     virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
     virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer ) SAL_OVERRIDE;
     virtual void            GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
+
+    basebmp::BitmapDeviceSharedPtr getBitmapDevice() { return m_aDevice; }
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
