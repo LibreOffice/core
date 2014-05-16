@@ -31,7 +31,7 @@ $(eval $(call gb_StaticLibrary_add_defs,collada2gltf,\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_libs,collada2gltf,\
+$(eval $(call gb_StaticLibrary_add_libs,collada2gltf,\
 	-lrt \
 ))
 endif
