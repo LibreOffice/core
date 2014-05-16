@@ -537,6 +537,11 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 SfxBaseModel::~SfxBaseModel()
 {
     DBG_DTOR(sfx2_SfxBaseModel,NULL);
+    //In SvxDrawingLayerImport when !xTargetDocument the fallback SvxUnoDrawingModel created there
+    //never gets disposed called on it, so m_pData leaks.
+    IMPL_SfxBaseModel_DataContainer* pData = m_pData;
+    m_pData = 0;
+    delete pData;
 }
 
 //________________________________________________________________________________________________________
