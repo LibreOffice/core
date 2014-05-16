@@ -782,7 +782,8 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         }
         else
         {
-            // TODO: moggi: model matrix
+            glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+            glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
         }
 
         GLint maVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
@@ -1085,7 +1086,8 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     }
     else
     {
-        // TODO: moggi: model matrix
+        glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
     }
 
     glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[surIndex]));
@@ -1127,7 +1129,8 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     }
     else
     {
-        // TODO: moggi: model matrix
+        glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
     }
     glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[BOTTOM_SURFACE]));
 }
@@ -1170,7 +1173,8 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     }
     else
     {
-        // TODO: moggi: model matrix
+        glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
     }
     glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[MIDDLE_SURFACE]));
 }
@@ -1214,7 +1218,8 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     }
     else
     {
-        // TODO: moggi: model matrix
+        glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
     }
     glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[TOP_SURFACE]));
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
@@ -1243,7 +1248,8 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
     }
     else
     {
-        // TODO: moggi: model matrix
+        glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
+        glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
     }
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
