@@ -1814,7 +1814,6 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     if( nParasInLayout )
     {
         // create an OutlinerParaObject
-        pPara = pOutliner->GetParagraph( nTitlePara + 1 );
         pOPO  = pOutliner->CreateParaObject( nTitlePara + 1, nParasInLayout );
     }
 
