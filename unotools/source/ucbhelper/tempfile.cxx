@@ -237,6 +237,84 @@ OUString lcl_createName(
     }
 }
 
+OUString lcl_createName_BROKEN(
+    const OUString& rLeadingChars, sal_Int16 nRadix,
+    bool bFirst, const OUString* pExtension, const OUString* pParent,
+    bool bDirectory, bool bKeep, bool bLock)
+{
+    // 36 ** 6 == 2176782336
+    unsigned long const nMaxRadix = 36;
+    unsigned long const nMax = (nMaxRadix*nMaxRadix*nMaxRadix*nMaxRadix*nMaxRadix*nMaxRadix);
+    static unsigned long nSeed = Time::GetSystemTicks() % nMax;
+
+    // get correct directory
+    OUString aName = ConstructTempDir_Impl( pParent );
+
+    bool bUseNumber = bFirst;
+    // now use special naming scheme ( name takes leading chars and an index counting up from zero
+    aName += rLeadingChars;
+    for ( unsigned long i=nSeed;; )
+    {
+        OUString aTmp( aName );
+        if ( bUseNumber )
+            aTmp += OUString::number(nSeed, nRadix);
+        bUseNumber = true;
+        if ( pExtension )
+            aTmp += *pExtension;
+        else
+            aTmp += ".tmp";
+        if ( bDirectory )
+        {
+            FileBase::RC err = Directory::create( aTmp );
+            if ( err == FileBase::E_None )
+            {
+                // !bKeep: only for creating a name, not a file or directory
+                if ( bKeep || Directory::remove( aTmp ) == FileBase::E_None )
+                    return aTmp;
+                else
+                    return OUString();
+            }
+            else if ( err != FileBase::E_EXIST )
+                // if f.e. name contains invalid chars stop trying to create dirs
+                return OUString();
+        }
+        else
+        {
+            DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
+            File aFile( aTmp );
+#ifdef UNX
+            /* RW permission for the user only! */
+            mode_t old_mode = umask(077);
+#endif
+            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create | (bLock ? 0 : osl_File_OpenFlag_NoLock));
+#ifdef UNX
+            umask(old_mode);
+#endif
+            if ( err == FileBase::E_None || (bLock && err == FileBase::E_NOLCK) )
+            {
+                aFile.close();
+                return aTmp;
+            }
+            else if ( err != FileBase::E_EXIST )
+            {
+                // if f.e. name contains invalid chars stop trying to create dirs
+                // but if there is a folder with such name proceed further
+
+                DirectoryItem aTmpItem;
+                FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
+                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
+                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
+                  || aTmpStatus.getFileType() != FileStatus::Directory )
+                    return OUString();
+            }
+        }
+        nSeed = (nSeed + 1) % nMax;
+        if (i == nSeed) {
+            return OUString();
+        }
+    }
+}
+
 OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = true )
 {
     OUString aEyeCatcher = "lu";
@@ -249,8 +327,8 @@ OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = t
     }
 #endif
 #endif
-    return lcl_createName(
-        aEyeCatcher, Time::GetSystemTicks(), 36, true, 0, pParent, bDir, bKeep,
+    return lcl_createName_BROKEN(
+        aEyeCatcher, 36, true, 0, pParent, bDir, bKeep,
         false);
 }
 
