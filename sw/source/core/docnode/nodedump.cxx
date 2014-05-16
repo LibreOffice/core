@@ -146,6 +146,7 @@ void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
                     writer.writeFormatAttribute("name", "%s", BAD_CAST(OUStringToOString(pObject->GetName(), RTL_TEXTENCODING_UTF8).getStr()));
                     writer.writeFormatAttribute("title", "%s", BAD_CAST(OUStringToOString(pObject->GetTitle(), RTL_TEXTENCODING_UTF8).getStr()));
                     writer.writeFormatAttribute("description", "%s", BAD_CAST(OUStringToOString(pObject->GetDescription(), RTL_TEXTENCODING_UTF8).getStr()));
+                    writer.writeFormatAttribute("nOrdNum", TMP_FORMAT, pObject->GetOrdNumDirect());
 
                     const OutlinerParaObject* pOutliner = pObject->GetOutlinerParaObject();
                     writer.startElement("outliner");
