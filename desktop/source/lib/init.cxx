@@ -53,6 +53,11 @@
 #include <unotxdoc.hxx>
 #include <viewsh.hxx>
 
+// And let's also grab the SvpSalVirtualDevice
+#include <headless/svpvd.hxx>
+
+#include <basebmp/bitmapdevice.hxx>
+
 using namespace css;
 using namespace utl;
 
@@ -167,7 +172,7 @@ static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const ch
 static LibreOfficeKitDocumentType doc_getDocumentType(LibreOfficeKitDocument* pThis);
 static int doc_getNumberOfParts(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
-static void doc_paintTile(LibreOfficeKitDocument* pThis, void* pCanvas,
+static unsigned char* doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
@@ -378,27 +383,39 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
     (void) nPart;
 }
 
-static void doc_paintTile (LibreOfficeKitDocument* pThis, void* pCanvas,
+// TODO: Temporary hack -- we need to keep the buffer alive while we paint it
+// in the gtk tiled viewer -- we can't pass out the shared_array through
+// the C interface, so maybe we want some sort of wrapper where we can return
+// a handle which we then associate with a given shared_array within LibLO
+// (where the client then has to tell us when they are finished with using
+// the buffer).
+boost::shared_array< sal_uInt8 > ourBuffer;
+
+// TODO: Not 100% sure about the bitmap buffer format yet -- it appears
+// to just be RGB, 8 bits per sample, and vertically mirrored compared
+// to what gtk expects.
+// The BitmapDevice actually supports various formats, as detailed in
+// basebmp/scanlineformat.hxx -- for svp SVP_DEFAULT_BITMAP_FORMAT is seemingly used
+// (see creation in svpvd.cxx) -- which is simply FORMAT_TWENTYFOUR_BIT_TC_MASK
+// for now -- we could probably adjust this as necessary to get whatever
+// format is presumably most useful, or maybe even allow that as a parameter.
+//
+// It's actually possible to set the depth in the creation of a VirtualDevice,
+// however that only allows 0, 1 or 8 -- and we can't select the full range of formats
+// as above, so we'd need to add a way of setting the format entirely from scratch
+// should that be deemed necessary.
+//
+// We probably also want to use getScanlineStride() -- I'm guessing that
+// this is where we are actually just returning a sub-portion of a larger buffer
+// which /shouldn't/ apply in our case, but better to be safe here.
+static unsigned char* doc_paintTile (LibreOfficeKitDocument* pThis,
                            const int nCanvasWidth, const int nCanvasHeight,
                            const int nTilePosX, const int nTilePosY,
                            const int nTileWidth, const int nTileHeight)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    // We can't use this on anything but Linux for now, so the following is
-    // likely unusable for now.
-    SystemGraphicsData aSystemGraphicsData;
-#if defined( WNT )
-    aSystemGraphicsData.hDC = *static_cast< HDC* >(pCanvas);
-#elif defined( MACOSX )
-    aSystemGraphicsData.rCGContext = *static_cast< CGContextRef* >(pCanvas);
-#elif defined( ANDROID )
-    assert(false); // We can't use tiled rendering on Android in any case yet...
-#elif defined( IOS )
-    aSystemGraphicsData.rCGContext = *static_cast< CGContextRef* >(pCanvas);
-#elif defined( UNX )
-    aSystemGraphicsData = *static_cast< SystemGraphicsData*> (pCanvas);
-#endif
+    unsigned char* pRet = 0;
 
     Application::AcquireSolarMutex(1);
     {
@@ -407,11 +424,21 @@ static void doc_paintTile (LibreOfficeKitDocument* pThis, void* pCanvas,
         SwDoc* pDoc = pDocShell->GetDoc();
         SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
 
-        VirtualDevice aDevice(&aSystemGraphicsData, (sal_uInt16)0);
+        VirtualDevice aDevice(0, (sal_uInt16)0);
+
         pViewShell->PaintTile(aDevice, nCanvasWidth, nCanvasHeight,
                                 nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+        SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
+        basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
+
+        ourBuffer = pBmpDev->getBuffer();
+
+        pRet = ourBuffer.get();
     }
     Application::ReleaseSolarMutex();
+
+    return pRet;
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

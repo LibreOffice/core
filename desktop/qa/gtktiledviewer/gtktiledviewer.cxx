@@ -54,7 +54,7 @@ bool drawCallback(GtkWidget* pCanvas, void* /* cairo_t* cr */, gpointer pData)
                                         GDK_VISUAL_XVISUAL( gtk_widget_get_visual( pCanvas ) ) );
 
     // Hardcoded tile just to see whether or not we get any sort of output.
-    pDocument->paintTile( &aSystemGraphicsData, 256, 256, 0, 0, 5000, 5000 );
+    pDocument->paintTile( 256, 256, 0, 0, 5000, 5000 );
     return true;
 
 }

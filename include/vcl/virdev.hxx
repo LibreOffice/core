@@ -66,6 +66,8 @@ protected:
     virtual void ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
 public:
+    SalVirtualDevice* getSalVirtualDevice() { return mpVirDev; }
+
     /** Create a virtual device of size 1x1
 
         @param nBitCount

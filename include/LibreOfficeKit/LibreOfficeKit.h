@@ -85,16 +85,8 @@ struct _LibreOfficeKitDocumentClass
   void (*setPart)         (LibreOfficeKitDocument* pThis,
                            int nPart);
 
-  // pCanvas is a pointer to the appropriate type of graphics object:
-  // Windows: HDC
-  // iOS/OSX: CGContextRef
-  // Unx: A full SystemGraphicsData
-  // (This is as we need multiple pieces of data on Unx -- in the future
-  // it would potentially be best to define our own simple equivalent
-  // structure here which can then be copied into a SystemGraphicsData
-  // within the paintTile implementation.)
-  void (*paintTile)       (LibreOfficeKitDocument* pThis,
-                           void* Canvas,
+  // Get a pointer to a raw array, of size 3*nCanvasWidth*nCanvasHeight
+  unsigned char* (*paintTile) (LibreOfficeKitDocument* pThis,
                            const int nCanvasWidth,
                            const int nCanvasHeight,
                            const int nTilePosX,
