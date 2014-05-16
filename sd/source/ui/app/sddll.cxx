@@ -217,7 +217,7 @@ void SdDLL::RegisterControllers()
 
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
     SvxFontNameToolBoxControl::RegisterControl(0, pMod);
-    SvxColorToolBoxControl::RegisterControl(0, pMod);
+    SvxColorToolBoxControl::RegisterControl( SID_ATTR_CHAR_COLOR, pMod );
 
     SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
     SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
