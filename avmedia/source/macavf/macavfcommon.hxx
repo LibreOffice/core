@@ -92,6 +92,6 @@ public:
 
 }}
 
-#endif // MACAVF_COMMON_HXX
+#endif // INCLUDED_AVMEDIA_SOURCE_MACAVF_MACAVFCOMMON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
