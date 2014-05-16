@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_47129063",
+        "filename": "connectivity/source/drivers/odbc/ODatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2014-05-16T16:52:54Z",
+      "side": 1,
+      "message": "I\u0027d make that a sal_Int32; except for that, this patch is perfect.",
+      "revId": "f5067c26e0a2461790c7666b855d09c8db51fd1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
