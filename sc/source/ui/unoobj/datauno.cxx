@@ -669,7 +669,7 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return cppu::UnoType<util::DateTime>::get();
+    return cppu::UnoType<sheet::XSubTotalField>::get();
 }
 
 sal_Bool SAL_CALL ScSubTotalDescriptorBase::hasElements() throw(uno::RuntimeException, std::exception)
@@ -2332,7 +2332,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return cppu::UnoType<util::DateTime>::get();
+    return cppu::UnoType<sheet::XDatabaseRange>::get();
 }
 
 sal_Bool SAL_CALL ScDatabaseRangesObj::hasElements() throw(uno::RuntimeException, std::exception)

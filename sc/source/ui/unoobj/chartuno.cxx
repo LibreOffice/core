@@ -365,7 +365,7 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return cppu::UnoType<util::DateTime>::get();
+    return cppu::UnoType<table::XTableChart>::get();
 }
 
 sal_Bool SAL_CALL ScChartsObj::hasElements() throw(uno::RuntimeException, std::exception)
