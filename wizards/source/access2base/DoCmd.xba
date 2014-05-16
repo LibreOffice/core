@@ -989,7 +989,7 @@ Dim sFilter As String, oForm As Object, oFormsCollection As Object
 	With ofForm
 		Select Case pvDataMode
 			Case acFormAdd
-				.setAllowAdditions = True
+				.AllowAdditions = True
 				.AllowDeletions = False
 				.AllowEdits = False
 			Case acFormEdit
