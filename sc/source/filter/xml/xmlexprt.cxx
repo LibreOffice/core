@@ -1171,6 +1171,10 @@ const SvxFieldData* toXMLPropertyStates(
                 if (nIndexWidth == -1 || nIndexWidth > nEntryCount)
                     break;
 
+                sal_Int32 nIndexType = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-underline-type", 0);
+                if (nIndexType == -1 || nIndexType > nEntryCount)
+                    break;
+
                 sal_Int32 nIndexColor = xMapper->FindEntryIndex("CharUnderlineColor", XML_NAMESPACE_STYLE, "text-underline-color");
                 if (nIndexColor == -1 || nIndexColor > nEntryCount)
                     break;
@@ -1182,6 +1186,7 @@ const SvxFieldData* toXMLPropertyStates(
                 const SvxUnderlineItem* pUL = static_cast<const SvxUnderlineItem*>(p);
                 pUL->QueryValue(aAny, MID_TL_STYLE);
                 rPropStates.push_back(XMLPropertyState(nIndexStyle, aAny));
+                rPropStates.push_back(XMLPropertyState(nIndexType,  aAny));
                 rPropStates.push_back(XMLPropertyState(nIndexWidth, aAny));
 
                 pUL->QueryValue(aAny, MID_TL_COLOR);
@@ -1193,10 +1198,38 @@ const SvxFieldData* toXMLPropertyStates(
             break;
             case EE_CHAR_OVERLINE:
             {
-                if (!static_cast<const SvxOverlineItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
-                    continue;
+                // Same with overline.  Do just as we do with underline attributes.
+                sal_Int32 nIndexStyle = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-overline-style", 0);
+                if (nIndexStyle == -1 || nIndexStyle > nEntryCount)
+                    break;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                sal_Int32 nIndexWidth = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-overline-width", 0);
+                if (nIndexWidth == -1 || nIndexWidth > nEntryCount)
+                    break;
+
+                sal_Int32 nIndexType = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-overline-type", 0);
+                if (nIndexType == -1 || nIndexType > nEntryCount)
+                    break;
+
+                sal_Int32 nIndexColor = xMapper->FindEntryIndex("CharOverlineColor", XML_NAMESPACE_STYLE, "text-overline-color");
+                if (nIndexColor == -1 || nIndexColor > nEntryCount)
+                    break;
+
+                sal_Int32 nIndexHasColor = xMapper->FindEntryIndex("CharOverlineHasColor", XML_NAMESPACE_STYLE, "text-overline-color");
+                if (nIndexHasColor == -1 || nIndexHasColor > nEntryCount)
+                    break;
+
+                const SvxOverlineItem* pOL = static_cast<const SvxOverlineItem*>(p);
+                pOL->QueryValue(aAny, MID_TL_STYLE);
+                rPropStates.push_back(XMLPropertyState(nIndexStyle, aAny));
+                rPropStates.push_back(XMLPropertyState(nIndexType,  aAny));
+                rPropStates.push_back(XMLPropertyState(nIndexWidth, aAny));
+
+                pOL->QueryValue(aAny, MID_TL_COLOR);
+                rPropStates.push_back(XMLPropertyState(nIndexColor, aAny));
+
+                pOL->QueryValue(aAny, MID_TL_HASCOLOR);
+                rPropStates.push_back(XMLPropertyState(nIndexHasColor, aAny));
             }
             break;
             case EE_CHAR_COLOR:
