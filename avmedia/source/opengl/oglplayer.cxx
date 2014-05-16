@@ -138,8 +138,9 @@ double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exc
 
 void SAL_CALL OGLPlayer::setMediaTime( double fTime ) throw ( uno::RuntimeException, std::exception )
 {
+    // TODO: doesn't work, but cause problem in playing
     osl::MutexGuard aGuard(m_aMutex);
-    gltf_animation_set_time(m_pHandle, fTime);
+    //gltf_animation_set_time(m_pHandle, fTime);
 }
 
 double SAL_CALL OGLPlayer::getMediaTime() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
