@@ -91,50 +91,6 @@
     </prop>
   </node>
   <node oor:name="SearchEngines">
-    <node oor:name="Euroseek" oor:op="replace">
-      <node oor:name="And">
-        <prop oor:name="ooInetPrefix" oor:type="xs:string">
-          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix" oor:type="xs:string">
-          <value>&amp;language=en</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
-          <value>0</value>
-        </prop>
-        <prop oor:name="ooInetSeparator" oor:type="xs:string">
-          <value>+</value>
-        </prop>
-      </node>
-      <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix" oor:type="xs:string">
-          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix" oor:type="xs:string">
-          <value>&amp;language=en</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
-          <value>0</value>
-        </prop>
-        <prop oor:name="ooInetSeparator" oor:type="xs:string">
-          <value>%20</value>
-        </prop>
-      </node>
-      <node oor:name="Or">
-        <prop oor:name="ooInetPrefix" oor:type="xs:string">
-          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix" oor:type="xs:string">
-          <value>&amp;language=en</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
-          <value>0</value>
-        </prop>
-        <prop oor:name="ooInetSeparator" oor:type="xs:string">
-          <value>+</value>
-        </prop>
-      </node>
-    </node>
     <node oor:name="Lycos" oor:op="replace">
       <node oor:name="And">
         <prop oor:name="ooInetPrefix" oor:type="xs:string">
