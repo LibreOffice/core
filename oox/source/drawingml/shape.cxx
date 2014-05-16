@@ -1088,7 +1088,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
 
         // Rendering format
-        OUString sFormat( "PNG" );
+        OUString sFormat( "SVM" );
 
         // Size of the rendering
         awt::Size aActualSize = mxShape->getSize();
@@ -1097,21 +1097,15 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         awt::Size aSize = awt::Size( static_cast < sal_Int32 > ( ( fPixelsPer100thmm * aActualSize.Width ) + 0.5 ),
                                      static_cast < sal_Int32 > ( ( fPixelsPer100thmm * aActualSize.Height ) + 0.5 ) );
 
-        Sequence< PropertyValue > aFilterData( 7 );
-        aFilterData[ 0 ].Name = "Compression";
-        aFilterData[ 0 ].Value <<= static_cast < sal_Int32 > ( 9 );
-        aFilterData[ 1 ].Name = "Interlaced";
-        aFilterData[ 1 ].Value <<= static_cast < sal_Int32 > ( 1 );
-        aFilterData[ 2 ].Name = "Translucent";
-        aFilterData[ 2 ].Value <<= static_cast < sal_Int32 > ( 1 );
-        aFilterData[ 3 ].Name = "PixelWidth";
-        aFilterData[ 3 ].Value <<= aSize.Width;
-        aFilterData[ 4 ].Name = "PixelHeight";
-        aFilterData[ 4 ].Value <<= aSize.Height;
-        aFilterData[ 5 ].Name = "LogicalWidth";
-        aFilterData[ 5 ].Value <<= aActualSize.Width;
-        aFilterData[ 6 ].Name = "LogicalHeight";
-        aFilterData[ 6 ].Value <<= aActualSize.Height;
+        Sequence< PropertyValue > aFilterData( 4 );
+        aFilterData[ 0 ].Name = "PixelWidth";
+        aFilterData[ 0 ].Value <<= aSize.Width;
+        aFilterData[ 1 ].Name = "PixelHeight";
+        aFilterData[ 1 ].Value <<= aSize.Height;
+        aFilterData[ 2 ].Name = "LogicalWidth";
+        aFilterData[ 2 ].Value <<= aActualSize.Width;
+        aFilterData[ 3 ].Name = "LogicalHeight";
+        aFilterData[ 3 ].Value <<= aActualSize.Height;
 
         Sequence < PropertyValue > aDescriptor( 3 );
         aDescriptor[ 0 ].Name = "OutputStream";
