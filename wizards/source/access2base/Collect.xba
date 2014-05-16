@@ -31,6 +31,7 @@ Private Sub Class_Initialize()
 	_CollType = &quot;&quot;
 	_ParentType = &quot;&quot;
 	_ParentName = &quot;&quot;
+	Set _ParentDatabase = Nothing
 	_Count = 0
 End Sub		&apos;	Constructor
 
@@ -161,15 +162,15 @@ REM ----------------------------------------------------------------------------
 REM --- CLASS METHODS	 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
-Public Function Append(Optional pvObject As Variant) As Boolean
+Public Function Add(Optional pvObject As Variant) As Boolean
 &apos;	Append a new TableDef or Field object to the TableDefs/Fields collections
 
-Const cstThisSub = &quot;Collection.Append&quot;
+Const cstThisSub = &quot;Collection.Add&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	
 Dim odbDatabase As Object, oConnection As Object, oTables As Object, sName As String, oTable As Object
-	Append = False
+	Add = False
 	If IsMissing(pvObject) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvObject, 1, vbObject) Then Goto Exit_Function
 
@@ -192,7 +193,7 @@ Dim odbDatabase As Object, oConnection As Object, oTables As Object, sName As St
 		End Select
 	End With
 
-	Append = True
+	Add = True
 
 Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
@@ -206,7 +207,7 @@ Error_NotApplicable:
 Error_Sequence:
 	TraceError(TRACEFATAL, ERRTABLECREATION, Utils._CalledSub(), 0, 1, pvObject._Name)
 	Goto Exit_Function
-End Function		&apos;	Append	V1.1.0
+End Function		&apos;	Add	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Delete(ByVal Optional pvName As Variant) As Boolean
