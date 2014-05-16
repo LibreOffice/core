@@ -249,9 +249,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
             FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), NULL, meFieldUnit );
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
 
-            ResMgr*     pResMgr;
-
-            pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
+            ResMgr* pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
             aFltCallDlgPara.pResMgr = pResMgr;
 
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
