@@ -118,6 +118,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		unopkg \
 		unopkg_com \
 	) \
+    svdemo \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\

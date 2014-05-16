@@ -23,9 +23,10 @@ $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_afm_hash \
     Library_vcl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
-		StaticLibrary_vclmain \
-		Executable_ui-previewer) \
-	Library_vclopengl \
+        StaticLibrary_vclmain \
+        Executable_ui-previewer) \
+    Executable_svdemo \
+    Library_vclopengl \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
