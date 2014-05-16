@@ -25,6 +25,9 @@ public:
     GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
     virtual ~GL3DBarChartType();
 
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedPropertyRoles()
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
         getImplementationName()
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

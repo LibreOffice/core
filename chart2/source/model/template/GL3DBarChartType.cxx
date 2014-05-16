@@ -118,6 +118,15 @@ OUString SAL_CALL GL3DBarChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR;
 }
 
+uno::Sequence<OUString> GL3DBarChartType::getSupportedPropertyRoles()
+        throw (::com::sun::star::uno::RuntimeException, std::exception)
+{
+    uno::Sequence< OUString > aPropRoles(1);
+    aPropRoles[0] = "FillColor";
+
+    return aPropRoles;
+}
+
 com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
 GL3DBarChartType::createClone()
     throw (com::sun::star::uno::RuntimeException, std::exception)
