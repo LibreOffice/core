@@ -60,7 +60,8 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
     [pAVPlayer pause];
     mpPlayerLayer = [AVPlayerLayer playerLayerWithPlayer:pAVPlayer];
     [mpPlayerLayer retain];
-    [mpPlayerLayer setFrame:[mpView frame]];
+    NSRect viewFrame = [mpView frame];
+    [mpPlayerLayer setFrame:CGRectMake(viewFrame.origin.x, viewFrame.origin.y, viewFrame.size.width, viewFrame.size.height)];
     [mpPlayerLayer setHidden:YES];
     [mpPlayerLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
     [mpPlayerLayer addObserver:getObserver() forKeyPath:@"readyForDisplay" options:0 context:this];
@@ -142,7 +143,8 @@ void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal
     aRect.size.height = Height;
 
     [mpView setFrameSize: aRect.size];
-    [mpPlayerLayer setFrame: [mpView frame]];
+    NSRect viewFrame = [mpView frame];
+    [mpPlayerLayer setFrame:CGRectMake(viewFrame.origin.x, viewFrame.origin.y, viewFrame.size.width, viewFrame.size.height)];
 }
 
 // ------------------------------------------------------------------------------

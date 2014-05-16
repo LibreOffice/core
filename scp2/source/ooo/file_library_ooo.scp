@@ -108,12 +108,10 @@ File gid_File_Lib_avmediaQuickTime
 End
 
 #if MAXOSX_SDK_VERSION >= 1070
-#ifdef X86_64
 File gid_File_Lib_avmediaMacAVF
 	PACKED_LIB_FILE_BODY;
 	Name = LIBNAME(avmediaMacAVF);
 End
-#endif
 #endif
 
 #endif

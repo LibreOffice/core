@@ -44,13 +44,10 @@ endif
 endif
 
 ifeq ($(OS),MACOSX)
-ifeq ($(CPUNAME),X86_64)
-# The macavf code is a bit x86_64 dependent...
 ifneq (1060,$(MACOSX_SDK_VERSION))
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaMacAVF \
 ))
-endif
 endif
 endif
 

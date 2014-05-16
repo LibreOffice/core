@@ -25,18 +25,8 @@
 
 using namespace ::com::sun::star;
 
-#ifdef _LIBCPP_VERSION
-#include <unordered_map>
-typedef std::unordered_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
-#else
-#include <ext/hash_map>
-typedef std::hash_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
-#endif
-
 @implementation MacAVObserverObject
-{
-    HandlersForObject maHandlersForObject;
-}
+
 - (void)observeValueForKeyPath:(NSString*)pKeyPath ofObject:(id)pObject change:(NSDictionary*)pChangeDict context:(void*)pContext
 {
     (void) pObject;
@@ -387,7 +377,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     NSArray* pVideoTracks = [pMovie tracksWithMediaType:AVMediaTypeVideo];
     if ([pVideoTracks count] > 0)
     {
-        AVAssetTrack* pFirstVideoTrack =(AVAssetTrack*)pVideoTracks[0];
+        AVAssetTrack* pFirstVideoTrack = (AVAssetTrack*) [pVideoTracks objectAtIndex:0];
         const CGSize aPrefSize = [pFirstVideoTrack naturalSize];
         aSize = awt::Size( aPrefSize.width, aPrefSize.height );
     }
@@ -405,7 +395,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     OSL_TRACE( "Player::createPlayerWindow %dx%d argsLength: %d", aSize.Width, aSize.Height, aArguments.getLength() );
 
     // get the parent view
-    sal_IntPtr nNSViewPtr = NULL;
+    sal_IntPtr nNSViewPtr = 0;
     aArguments[0] >>= nNSViewPtr;
     NSView* pParentView = reinterpret_cast<NSView*>(nNSViewPtr);
 

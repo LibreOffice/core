@@ -20,12 +20,13 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_MACAVF_MACAVFCOMMON_HXX
 #define INCLUDED_AVMEDIA_SOURCE_MACAVF_MACAVFCOMMON_HXX
 
-#ifdef MACOSX
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
 #import <AVFoundation/AVFoundation.h>
 #include <postmac.h>
-#endif
+
+#include <boost/unordered_map.hpp>
+
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
@@ -64,7 +65,16 @@
 
 // MacAVObserver handles the notifications used in the AVFoundation framework
 
+namespace avmedia { namespace macavf {
+class MacAVObserverHandler;
+} }
+
+typedef boost::unordered_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
+
 @interface MacAVObserverObject : NSObject
+{
+    HandlersForObject maHandlersForObject;
+}
 - (void)observeValueForKeyPath:(NSString*)pKeyPath ofObject:(id)pObject change:(NSDictionary*)pChangeDict context:(void*)pContext;
 - (void)onNotification:(NSNotification*)pNotification;
 @end
