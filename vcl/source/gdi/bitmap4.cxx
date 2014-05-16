@@ -946,7 +946,7 @@ bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*p
         {
             const long      nWidth = pWriteAcc->Width();
             const long      nHeight = pWriteAcc->Height();
-            const sal_uLong nEntryCount = 1L << pWriteAcc->GetBitCount();
+            const sal_uLong nEntryCount = 1UL << pWriteAcc->GetBitCount();
             sal_uLong       n;
             PopArtEntry*    pPopArtTable = new PopArtEntry[ nEntryCount ];
 
