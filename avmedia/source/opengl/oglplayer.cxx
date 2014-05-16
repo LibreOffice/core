@@ -103,6 +103,10 @@ bool OGLPlayer::create( const OUString& rURL )
             }
         }
     }
+
+    // Set timer
+    m_aTimer.SetTimeout(10);
+    m_aTimer.SetTimeoutHdl(LINK(this,OGLPlayer,TimerHandler));
     return true;
 }
 
@@ -110,12 +114,14 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     gltf_animation_start(m_pHandle);
+    m_aTimer.Start();
 }
 
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     gltf_animation_stop(m_pHandle);
+    m_aTimer.Stop();
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
@@ -212,8 +218,8 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     m_pHandle->viewport.width = aSize.Width();
     m_pHandle->viewport.height = aSize.Height();
     gltf_renderer_set_content(m_pHandle);
-    OGLWindow* pWindow = new OGLWindow(m_pHandle, &m_aContext, pChildWindow);
-    return uno::Reference< media::XPlayerWindow >( pWindow );
+    m_pOGLWindow = new OGLWindow(m_pHandle, &m_aContext, pChildWindow);
+    return uno::Reference< media::XPlayerWindow >( m_pOGLWindow );
 }
 
 uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
@@ -254,6 +260,17 @@ uno::Sequence< OUString > SAL_CALL OGLPlayer::getSupportedServiceNames()
     uno::Sequence< OUString > aRet(1);
     aRet[0] = OUString("com.sun.star.media.Player_OpenGL");
     return aRet;
+}
+
+IMPL_LINK(OGLPlayer,TimerHandler,Timer*,pTimer)
+{
+    if (pTimer == &m_aTimer)
+    {
+        m_pOGLWindow->update();
+        m_aTimer.Start();
+    }
+
+    return 0;
 }
 
 } // namespace ogl

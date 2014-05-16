@@ -16,8 +16,11 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <libgltf.h>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/timer.hxx>
 
 namespace avmedia { namespace ogl {
+
+class OGLWindow;
 
 typedef ::cppu::WeakComponentImplHelper2< com::sun::star::media::XPlayer,
                                           com::sun::star::lang::XServiceInfo > Player_BASE;
@@ -55,9 +58,13 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
+    DECL_LINK( TimerHandler, Timer* );
+
     OUString m_sURL;
     glTFHandle* m_pHandle;
     OpenGLContext m_aContext;
+    Timer m_aTimer;
+    OGLWindow* m_pOGLWindow;
 };
 
 } // namespace ogl
