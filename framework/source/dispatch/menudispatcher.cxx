@@ -344,10 +344,10 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                         xModel = uno::Reference< XModel >( xController->getModel(), UNO_QUERY );
 
                     // retrieve addon popup menus and add them to our menu bar
-                    AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
+                    AddonMenuManager::MergeAddonPopupMenus( xFrame, nPos, pMenuBar, m_xFactory );
 
                     // retrieve addon help menu items and add them to our help menu
-                    AddonMenuManager::MergeAddonHelpMenu( xFrame, pMenuBar );
+                    AddonMenuManager::MergeAddonHelpMenu( xFrame, pMenuBar, m_xFactory );
                 }
 
                 // set new menu on our system window and create new menu manager

@@ -341,20 +341,17 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
     if ( pSVMenu->IsMenuBar() )
     {
+        Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
         sal_uInt16 nPos = pSVMenu->GetItemPos( SID_MDIWINDOWLIST );
         if ( nPos != MENU_ITEM_NOTFOUND && xFrame.is() )
         {
             // Retrieve addon popup menus and add them to our menu bar
-            Reference< com::sun::star::frame::XModel >      xModel;
-            Reference< com::sun::star::frame::XController > xController( xFrame->getController(), UNO_QUERY );
-            if ( xController.is() )
-                xModel = Reference< com::sun::star::frame::XModel >( xController->getModel(), UNO_QUERY );
-            framework::AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, (MenuBar *)pSVMenu );
+            framework::AddonMenuManager::MergeAddonPopupMenus( xFrame, nPos, (MenuBar *)pSVMenu, aXMultiServiceFactory );
         }
 
         // Merge the Add-Ons help menu items into the Office help menu
         if ( xFrame.is() )
-            framework::AddonMenuManager::MergeAddonHelpMenu( xFrame, (MenuBar *)pSVMenu );
+            framework::AddonMenuManager::MergeAddonHelpMenu( xFrame, (MenuBar *)pSVMenu, aXMultiServiceFactory );
 
         // Set addon menu pointer here to avoid problems. When accessibility is enabled, the whole menu
         // is created immediately!
@@ -870,7 +867,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     PopupMenu* pAddonMenu = NULL;
     try
     {
-        pAddonMenu = framework::AddonMenuManager::CreateAddonMenu( xFrame );
+        pAddonMenu = framework::AddonMenuManager::CreateAddonMenu( xFrame, aXMultiServiceFactory );
     }
     catch ( ::com::sun::star::lang::WrappedTargetException )
     {

@@ -192,7 +192,7 @@ MenuManager::MenuManager(
                     AddonMenuManager::HasAddonMenuElements() )
                 {
                     sal_uInt16      nCount   = 0;
-                    AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
+                    AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame, xServiceFactory );
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         if ( pPopupMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
