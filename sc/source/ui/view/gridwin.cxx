@@ -64,6 +64,7 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 
 #include "gridwin.hxx"
 #include "tabvwsh.hxx"
@@ -5205,11 +5206,43 @@ boost::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const
     return pEngine;
 }
 
+bool extractURLInfo( const SvxFieldItem* pFieldItem, OUString* pName, OUString* pUrl, OUString* pTarget )
+{
+    if (!pFieldItem)
+        return false;
+
+    const SvxFieldData* pField = pFieldItem->GetField();
+    if (pField->GetClassId() != text::textfield::Type::URL)
+        return false;
+
+    const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
+
+    if (pName)
+        *pName = pURLField->GetRepresentation();
+    if (pUrl)
+        *pUrl = pURLField->GetURL();
+    if (pTarget)
+        *pTarget = pURLField->GetTargetFrame();
+
+    return true;
+}
+
 }
 
 bool ScGridWindow::GetEditUrl( const Point& rPos,
                                OUString* pName, OUString* pUrl, OUString* pTarget )
 {
+    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    ScInputHandler* pInputHdl = NULL;
+    if (pViewSh)
+        pInputHdl = pViewSh->GetInputHandler();
+
+    if (pInputHdl->IsInputMode())
+    {
+        EditView* pView = pInputHdl->GetTableView();
+        return extractURLInfo(pView->GetFieldUnderMousePointer(), pName, pUrl, pTarget);
+    }
+
     //! nPosX/Y mit uebergeben?
     SCsCOL nPosX;
     SCsROW nPosY;
@@ -5318,27 +5351,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         bool bRet = false;
         MapMode aOld = GetMapMode();
         SetMapMode(aEditMode);                  // kein return mehr
-
-        const SvxFieldItem* pFieldItem = aTempView.GetFieldUnderMousePointer();
-        if (pFieldItem)
-        {
-            const SvxFieldData* pField = pFieldItem->GetField();
-            if ( pField && pField->ISA(SvxURLField) )
-            {
-                if ( pName || pUrl || pTarget )
-                {
-                    const SvxURLField* pURLField = (const SvxURLField*)pField;
-                    if (pName)
-                        *pName = pURLField->GetRepresentation();
-                    if (pUrl)
-                        *pUrl = pURLField->GetURL();
-                    if (pTarget)
-                        *pTarget = pURLField->GetTargetFrame();
-                }
-                bRet = true;
-            }
-        }
-
+        bRet = extractURLInfo(aTempView.GetFieldUnderMousePointer(), pName, pUrl, pTarget);
         SetMapMode(aOld);
 
         return bRet;
