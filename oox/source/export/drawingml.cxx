@@ -2076,57 +2076,45 @@ void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
     mpFS->singleElementNS( XML_a, XML_fontRef, XML_idx, "minor", FSEND );
 }
 
-void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
+void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< PropertyValue >& aEffectProps )
 {
-    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
-        return;
-
-    Sequence< PropertyValue > aGrabBag, aEffectProps;
-    mAny >>= aGrabBag;
-    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
-    {
-        if( aGrabBag[i].Name == "EffectProperties" )
-            aGrabBag[i].Value >>= aEffectProps;
-    }
     if( aEffectProps.getLength() == 0 )
         return;
 
-    OUString sSchemeClr;
-    bool bContainsColor = false;
-    sal_uInt32 nRgbClr = 0;
+    // assign the proper tag and enable bContainsColor if necessary
     sal_Int32 nEffectToken = 0;
+    bool bContainsColor = false;
+    if( sName == "outerShdw" )
+    {
+        nEffectToken = FSNS( XML_a, XML_outerShdw );
+        bContainsColor = true;
+    }
+    else if( sName == "innerShdw" )
+    {
+        nEffectToken = FSNS( XML_a, XML_innerShdw );
+        bContainsColor = true;
+    }
+    else if( sName == "glow" )
+    {
+        nEffectToken = FSNS( XML_a, XML_glow );
+        bContainsColor = true;
+    }
+    else if( sName == "softEdge" )
+        nEffectToken = FSNS( XML_a, XML_softEdge );
+    else if( sName == "reflection" )
+        nEffectToken = FSNS( XML_a, XML_reflection );
+    else if( sName == "blur" )
+        nEffectToken = FSNS( XML_a, XML_blur );
+
+    OUString sSchemeClr;
+    sal_uInt32 nRgbClr = 0;
     sal_Int32 nAlpha = MAX_PERCENT;
     Sequence< PropertyValue > aTransformations;
     sax_fastparser::FastAttributeList *aOuterShdwAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
-        if( aEffectProps[i].Name == "outerShdw" || aEffectProps[i].Name == "innerShdw"
-                || aEffectProps[i].Name == "glow" || aEffectProps[i].Name == "softEdge"
-                || aEffectProps[i].Name == "reflection" || aEffectProps[i].Name == "blur" )
+        if( aEffectProps[i].Name == "Attribs" )
         {
-            // assign the proper tag and enable bContainsColor if necessary
-            if( aEffectProps[i].Name == "outerShdw" )
-            {
-                nEffectToken = FSNS( XML_a, XML_outerShdw );
-                bContainsColor = true;
-            }
-            else if( aEffectProps[i].Name == "innerShdw" )
-            {
-                nEffectToken = FSNS( XML_a, XML_innerShdw );
-                bContainsColor = true;
-            }
-            else if( aEffectProps[i].Name == "glow" )
-            {
-                nEffectToken = FSNS( XML_a, XML_glow );
-                bContainsColor = true;
-            }
-            else if( aEffectProps[i].Name == "softEdge" )
-                nEffectToken = FSNS( XML_a, XML_softEdge );
-            else if( aEffectProps[i].Name == "reflection" )
-                nEffectToken = FSNS( XML_a, XML_reflection );
-            else if( aEffectProps[i].Name == "blur" )
-                nEffectToken = FSNS( XML_a, XML_blur );
-
             // read tag attributes
             uno::Sequence< beans::PropertyValue > aOuterShdwProps;
             aEffectProps[i].Value >>= aOuterShdwProps;
@@ -2230,22 +2218,22 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
                 }
             }
         }
-        else if(aEffectProps[i].Name == "ShadowRgbClr")
+        else if(aEffectProps[i].Name == "RgbClr")
         {
             aEffectProps[i].Value >>= nRgbClr;
         }
-        else if(aEffectProps[i].Name == "ShadowRgbClrTransparency")
+        else if(aEffectProps[i].Name == "RgbClrTransparency")
         {
             sal_Int32 nTransparency;
             aEffectProps[i].Value >>= nTransparency;
             // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
             nAlpha = MAX_PERCENT - ( PER_PERCENT * nTransparency );
         }
-        else if(aEffectProps[i].Name == "ShadowColorSchemeClr")
+        else if(aEffectProps[i].Name == "SchemeClr")
         {
             aEffectProps[i].Value >>= sSchemeClr;
         }
-        else if(aEffectProps[i].Name == "ShadowColorTransformations")
+        else if(aEffectProps[i].Name == "SchemeClrTransformations")
         {
             aEffectProps[i].Value >>= aTransformations;
         }
@@ -2253,7 +2241,6 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
 
     if( nEffectToken > 0 )
     {
-        mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
         sax_fastparser::XFastAttributeListRef xAttrList( aOuterShdwAttrList );
         mpFS->startElement( nEffectToken, xAttrList );
 
@@ -2266,8 +2253,37 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
         }
 
         mpFS->endElement( nEffectToken );
-        mpFS->endElementNS(XML_a, XML_effectLst);
     }
+}
+
+void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
+{
+    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
+        return;
+
+    Sequence< PropertyValue > aGrabBag, aEffects;
+    mAny >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+    {
+        if( aGrabBag[i].Name == "EffectProperties" )
+        {
+            aGrabBag[i].Value >>= aEffects;
+            break;
+        }
+    }
+    if( aEffects.getLength() == 0 )
+        return;
+
+    mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
+
+    for( sal_Int32 i=0; i < aEffects.getLength(); ++i )
+    {
+        Sequence< PropertyValue > aEffectProps;
+        aEffects[i].Value >>= aEffectProps;
+        WriteShapeEffect( aEffects[i].Name, aEffectProps );
+    }
+
+    mpFS->endElementNS(XML_a, XML_effectLst);
 }
 
 void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )

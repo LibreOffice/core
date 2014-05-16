@@ -33,80 +33,66 @@ EffectPropertiesContext::~EffectPropertiesContext()
 {
 }
 
-void EffectPropertiesContext::saveUnsupportedAttribs( const AttributeList& rAttribs )
+void EffectPropertiesContext::saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs )
 {
     if( rAttribs.hasAttribute( XML_algn ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "algn",
-                                                          makeAny( rAttribs.getString( XML_algn, "" ) ) );
+        rEffect.maAttribs["algn"] = makeAny( rAttribs.getString( XML_algn, "" ) );
     if( rAttribs.hasAttribute( XML_blurRad ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "blurRad",
-                                                          makeAny( rAttribs.getInteger( XML_blurRad, 0 ) ) );
+        rEffect.maAttribs["blurRad"] = makeAny( rAttribs.getInteger( XML_blurRad, 0 ) );
     if( rAttribs.hasAttribute( XML_dir ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "dir",
-                                                          makeAny( rAttribs.getInteger( XML_dir, 0 ) ) );
+        rEffect.maAttribs["dir"] = makeAny( rAttribs.getInteger( XML_dir, 0 ) );
     if( rAttribs.hasAttribute( XML_dist ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "dist",
-                                                          makeAny( rAttribs.getInteger( XML_dist, 0 ) ) );
+        rEffect.maAttribs["dist"] = makeAny( rAttribs.getInteger( XML_dist, 0 ) );
     if( rAttribs.hasAttribute( XML_kx ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "kx",
-                                                          makeAny( rAttribs.getInteger( XML_kx, 0 ) ) );
+        rEffect.maAttribs["kx"] =  makeAny( rAttribs.getInteger( XML_kx, 0 ) );
     if( rAttribs.hasAttribute( XML_ky ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "ky",
-                                                          makeAny( rAttribs.getInteger( XML_ky, 0 ) ) );
+        rEffect.maAttribs["ky"] = makeAny( rAttribs.getInteger( XML_ky, 0 ) );
     if( rAttribs.hasAttribute( XML_rotWithShape ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "rotWithShape",
-                                                          makeAny( rAttribs.getInteger( XML_rotWithShape, 0 ) ) );
+        rEffect.maAttribs["rotWithShape"] = makeAny( rAttribs.getInteger( XML_rotWithShape, 0 ) );
     if( rAttribs.hasAttribute( XML_sx ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "sx",
-                                                          makeAny( rAttribs.getInteger( XML_sx, 0 ) ) );
+        rEffect.maAttribs["sx"] = makeAny( rAttribs.getInteger( XML_sx, 0 ) );
     if( rAttribs.hasAttribute( XML_sy ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "sy",
-                                                          makeAny( rAttribs.getInteger( XML_sy, 0 ) ) );
+        rEffect.maAttribs["sy"] = makeAny( rAttribs.getInteger( XML_sy, 0 ) );
     if( rAttribs.hasAttribute( XML_rad ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "rad",
-                                                          makeAny( rAttribs.getInteger( XML_rad, 0 ) ) );
+        rEffect.maAttribs["rad"] = makeAny( rAttribs.getInteger( XML_rad, 0 ) );
     if( rAttribs.hasAttribute( XML_endA ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "endA",
-                                                          makeAny( rAttribs.getInteger( XML_endA, 0 ) ) );
+        rEffect.maAttribs["endA"] = makeAny( rAttribs.getInteger( XML_endA, 0 ) );
     if( rAttribs.hasAttribute( XML_endPos ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "endPos",
-                                                          makeAny( rAttribs.getInteger( XML_endPos, 0 ) ) );
+        rEffect.maAttribs["endPos"] = makeAny( rAttribs.getInteger( XML_endPos, 0 ) );
     if( rAttribs.hasAttribute( XML_fadeDir ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "fadeDir",
-                                                          makeAny( rAttribs.getInteger( XML_fadeDir, 0 ) ) );
+        rEffect.maAttribs["fadeDir"] = makeAny( rAttribs.getInteger( XML_fadeDir, 0 ) );
     if( rAttribs.hasAttribute( XML_stA ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "stA",
-                                                          makeAny( rAttribs.getInteger( XML_stA, 0 ) ) );
+        rEffect.maAttribs["stA"] = makeAny( rAttribs.getInteger( XML_stA, 0 ) );
     if( rAttribs.hasAttribute( XML_stPos ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "stPos",
-                                                          makeAny( rAttribs.getInteger( XML_stPos, 0 ) ) );
+        rEffect.maAttribs["stPos"] = makeAny( rAttribs.getInteger( XML_stPos, 0 ) );
     if( rAttribs.hasAttribute( XML_grow ) )
-        mrEffectProperties.appendUnsupportedEffectAttrib( "grow",
-                                                          makeAny( rAttribs.getInteger( XML_grow, 0 ) ) );
+        rEffect.maAttribs["grow"] = makeAny( rAttribs.getInteger( XML_grow, 0 ) );
 }
 
 ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    sal_Int32 nPos = mrEffectProperties.maEffects.size();
+    mrEffectProperties.maEffects.push_back( new Effect() );
     switch( nElement )
     {
         case A_TOKEN( outerShdw ):
         {
-            mrEffectProperties.msUnsupportedEffectName = "outerShdw";
-            saveUnsupportedAttribs( rAttribs );
+            mrEffectProperties.maEffects[nPos]->msName = "outerShdw";
+            saveUnsupportedAttribs( *mrEffectProperties.maEffects[nPos], rAttribs );
 
             mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
             mrEffectProperties.maShadow.moShadowDir = rAttribs.getInteger( XML_dir, 0 );
-            return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
+            return new ColorContext( *this, mrEffectProperties.maEffects[nPos]->moColor );
         }
         break;
         case A_TOKEN( innerShdw ):
         {
-            mrEffectProperties.msUnsupportedEffectName = "innerShdw";
-            saveUnsupportedAttribs( rAttribs );
+            mrEffectProperties.maEffects[nPos]->msName = "innerShdw";
+            saveUnsupportedAttribs( *mrEffectProperties.maEffects[nPos], rAttribs );
 
             mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
             mrEffectProperties.maShadow.moShadowDir = rAttribs.getInteger( XML_dir, 0 );
-            return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
+            return new ColorContext( *this, mrEffectProperties.maEffects[nPos]->moColor );
         }
         break;
         case A_TOKEN( glow ):
@@ -115,19 +101,20 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
         case A_TOKEN( blur ):
         {
             if( nElement == A_TOKEN( glow ) )
-                mrEffectProperties.msUnsupportedEffectName = "glow";
+                mrEffectProperties.maEffects[nPos]->msName = "glow";
             else if( nElement == A_TOKEN( softEdge ) )
-                mrEffectProperties.msUnsupportedEffectName = "softEdge";
+                mrEffectProperties.maEffects[nPos]->msName = "softEdge";
             else if( nElement == A_TOKEN( reflection ) )
-                mrEffectProperties.msUnsupportedEffectName = "reflection";
+                mrEffectProperties.maEffects[nPos]->msName = "reflection";
             else if( nElement == A_TOKEN( blur ) )
-                mrEffectProperties.msUnsupportedEffectName = "blur";
-            saveUnsupportedAttribs( rAttribs );
-            return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
+                mrEffectProperties.maEffects[nPos]->msName = "blur";
+            saveUnsupportedAttribs( *mrEffectProperties.maEffects[nPos], rAttribs );
+            return new ColorContext( *this, mrEffectProperties.maEffects[nPos]->moColor );
         }
         break;
     }
 
+    mrEffectProperties.maEffects.pop_back();
     return 0;
 }
 

@@ -911,30 +911,41 @@ Reference< XShape > Shape::createAndInsert(
             }
 
             // store unsupported effect attributes in the grab bag
-            PropertyValue aEffect = aEffectProperties.getUnsupportedEffect();
-            if( aEffect.Name != "" )
+            if( aEffectProperties.maEffects.size() > 0 )
             {
-                Sequence< PropertyValue > aEffectsGrabBag( 3 );
-                PUT_PROP( aEffectsGrabBag, 0, aEffect.Name, aEffect.Value );
-
-                OUString sColorScheme = aEffectProperties.maShadow.moShadowColor.getSchemeName();
-                if( sColorScheme.isEmpty() )
+                Sequence< PropertyValue > aEffects( aEffectProperties.maEffects.size() );
+                sal_uInt32 i = 0;
+                for( std::vector< Effect* >::iterator it = aEffectProperties.maEffects.begin();
+                        it != aEffectProperties.maEffects.end(); ++it )
                 {
-                    // RGB color and transparency value
-                    PUT_PROP( aEffectsGrabBag, 1, "ShadowRgbClr",
-                              aEffectProperties.maShadow.moShadowColor.getColor( rGraphicHelper, nFillPhClr ) );
-                    PUT_PROP( aEffectsGrabBag, 2, "ShadowRgbClrTransparency",
-                              aEffectProperties.maShadow.moShadowColor.getTransparency() );
-                }
-                else
-                {
-                    // scheme color with name and transformations
-                    PUT_PROP( aEffectsGrabBag, 1, "ShadowColorSchemeClr", sColorScheme );
-                    PUT_PROP( aEffectsGrabBag, 2, "ShadowColorTransformations",
-                              aEffectProperties.maShadow.moShadowColor.getTransformations() );
-                }
+                    PropertyValue aEffect = (*it)->getEffect();
+                    if( !aEffect.Name.isEmpty() )
+                    {
+                        Sequence< PropertyValue > aEffectsGrabBag( 3 );
+                        PUT_PROP( aEffectsGrabBag, 0, "Attribs", aEffect.Value );
 
-                putPropertyToGrabBag( "EffectProperties", Any( aEffectsGrabBag ) );
+                        Color& aColor( (*it)->moColor );
+                        OUString sColorScheme = aColor.getSchemeName();
+                        if( sColorScheme.isEmpty() )
+                        {
+                            // RGB color and transparency value
+                            PUT_PROP( aEffectsGrabBag, 1, "RgbClr",
+                                      aColor.getColor( rGraphicHelper, nFillPhClr ) );
+                            PUT_PROP( aEffectsGrabBag, 2, "RgbClrTransparency",
+                                      aColor.getTransparency() );
+                        }
+                        else
+                        {
+                            // scheme color with name and transformations
+                            PUT_PROP( aEffectsGrabBag, 1, "SchemeClr", sColorScheme );
+                            PUT_PROP( aEffectsGrabBag, 2, "SchemeClrTransformations",
+                                      aColor.getTransformations() );
+                        }
+                        PUT_PROP( aEffects, i, aEffect.Name, aEffectsGrabBag );
+                        ++i;
+                    }
+                }
+                putPropertyToGrabBag( "EffectProperties", Any( aEffects ) );
             }
 
             // add 3D effects if any

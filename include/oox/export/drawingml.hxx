@@ -174,6 +174,7 @@ public:
     void WriteFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
     void WriteShapeStyle( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteShapeEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
+    void WriteShapeEffect( const OUString& sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
     void WriteShape3DEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
 
     static void ResetCounters();

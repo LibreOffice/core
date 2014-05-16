@@ -12,6 +12,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 #include <oox/dllapi.h>
+#include <oox/drawingml/effectproperties.hxx>
 
 namespace oox { namespace drawingml {
 
@@ -33,7 +34,7 @@ protected:
     EffectProperties& mrEffectProperties;
 
 private:
-    void saveUnsupportedAttribs( const AttributeList& rAttribs );
+    void saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs );
 };
 
 } }

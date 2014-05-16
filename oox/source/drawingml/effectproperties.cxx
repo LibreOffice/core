@@ -30,53 +30,56 @@ void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourcePro
 void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
 {
     maShadow.assignUsed(rSourceProps.maShadow);
-    msUnsupportedEffectName.assignIfUsed( rSourceProps.msUnsupportedEffectName );
-    maUnsupportedEffectAttribs = rSourceProps.maUnsupportedEffectAttribs;
+    if( rSourceProps.maEffects.size() > 0 )
+        maEffects = rSourceProps.maEffects;
 }
 
 void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper ) const
 {
-    if (maShadow.moShadowDist.has())
-    {
-        // Negative X or Y dist indicates left or up, respectively
-        double nAngle = (maShadow.moShadowDir.get(0) / PER_DEGREE) * F_PI180;
-        sal_Int32 nDist = convertEmuToHmm(maShadow.moShadowDist.get(0));
-        sal_Int32 nXDist = cos(nAngle) * nDist;
-        sal_Int32 nYDist = sin(nAngle) * nDist;
+    for( std::vector< Effect* >::const_iterator it = maEffects.begin(); it != maEffects.end(); ++it )
+        if( (*it)->msName == "outerShdw" )
+        {
+            sal_Int32 nAttrDir = 0, nAttrDist = 0;
+            std::map< OUString, css::uno::Any >::iterator attribIt = (*it)->maAttribs.find( "dir" );
+            if( attribIt != (*it)->maAttribs.end() )
+                attribIt->second >>= nAttrDir;
 
-        rPropMap.setProperty( PROP_Shadow, true );
-        rPropMap.setProperty( PROP_ShadowXDistance, nXDist);
-        rPropMap.setProperty( PROP_ShadowYDistance, nYDist);
-        rPropMap.setProperty( PROP_ShadowColor, maShadow.moShadowColor.getColor(rGraphicHelper, -1 ) );
-        rPropMap.setProperty( PROP_ShadowTransparence, maShadow.moShadowColor.getTransparency());
-    }
+            attribIt = (*it)->maAttribs.find( "dist" );
+            if( attribIt != (*it)->maAttribs.end() )
+                attribIt->second >>= nAttrDist;
+
+            // Negative X or Y dist indicates left or up, respectively
+            double nAngle = ( nAttrDir / PER_DEGREE ) * F_PI180;
+            sal_Int32 nDist = convertEmuToHmm( nAttrDist );
+            sal_Int32 nXDist = cos(nAngle) * nDist;
+            sal_Int32 nYDist = sin(nAngle) * nDist;
+
+            rPropMap.setProperty( PROP_Shadow, true );
+            rPropMap.setProperty( PROP_ShadowXDistance, nXDist);
+            rPropMap.setProperty( PROP_ShadowYDistance, nYDist);
+            rPropMap.setProperty( PROP_ShadowColor, (*it)->moColor.getColor(rGraphicHelper, -1 ) );
+            rPropMap.setProperty( PROP_ShadowTransparence, (*it)->moColor.getTransparency());
+        }
 }
 
-void EffectProperties::appendUnsupportedEffectAttrib( const OUString& aKey, const css::uno::Any& aValue )
-{
-    css::beans::PropertyValue aProperty;
-    aProperty.Name = aKey;
-    aProperty.Value = aValue;
-    maUnsupportedEffectAttribs.push_back(aProperty);
-}
-
-css::beans::PropertyValue EffectProperties::getUnsupportedEffect()
+css::beans::PropertyValue Effect::getEffect()
 {
     css::beans::PropertyValue pRet;
-    if(!msUnsupportedEffectName.has())
+    if( msName.isEmpty() )
         return pRet;
 
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(maUnsupportedEffectAttribs.size());
-    css::beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<css::beans::PropertyValue>::iterator i = maUnsupportedEffectAttribs.begin(); i != maUnsupportedEffectAttribs.end(); ++i)
-        *pSeq++ = *i;
+    css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
+    sal_uInt32 i = 0;
+    for( std::map< OUString, css::uno::Any >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it )
+    {
+        aSeq[i].Name = it->first;
+        aSeq[i].Value = it->second;
+        i++;
+    }
 
-    pRet.Name = msUnsupportedEffectName.use();
+    pRet.Name = msName;
     pRet.Value = css::uno::Any( aSeq );
-
-    msUnsupportedEffectName.reset();
-    maUnsupportedEffectAttribs.clear();
 
     return pRet;
 }
