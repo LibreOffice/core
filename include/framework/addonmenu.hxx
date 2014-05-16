@@ -22,6 +22,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vcl/menu.hxx>
 #include <framework/fwedllapi.h>
@@ -80,23 +82,25 @@ class FWE_DLLPUBLIC AddonMenuManager
         static bool       IsAddonMenuId( sal_uInt16 nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
 
         // Check if the context string matches the provided xModel context
-        static bool       IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const OUString& aContext );
+        static bool IsCorrectContext(const OUString& rModuleIdentifier, const OUString& rContext);
 
         // Factory method to create different Add-On menu types
         static PopupMenu* CreatePopupMenuType( MenuType eMenuType, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
         // Create the Add-Ons menu
-        static AddonMenu* CreateAddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+        static AddonMenu* CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
+                                           const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
         // Merge the Add-Ons help menu items into the given menu bar at a defined pos
-        static void       MergeAddonHelpMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                              MenuBar* pMergeMenuBar );
+        static void       MergeAddonHelpMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
+                                              MenuBar* pMergeMenuBar,
+                                              const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
         // Merge the addon popup menus into the given menu bar at the provided pos.
-        static void       MergeAddonPopupMenus( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                                const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel,
+        static void       MergeAddonPopupMenus( const css::uno::Reference< css::frame::XFrame >& rFrame,
                                                 sal_uInt16   nMergeAtPos,
-                                                MenuBar* pMergeMenuBar );
+                                                MenuBar* pMergeMenuBar,
+                                                const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
         // Returns the next position to insert a menu item/sub menu
         static sal_uInt16     GetNextPos( sal_uInt16 nPos );
@@ -108,7 +112,7 @@ class FWE_DLLPUBLIC AddonMenuManager
                                      sal_uInt16&     nUniqueMenuId,
                                      const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& aAddonMenuDefinition,
                                      const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                     const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel );
+                                     const ::rtl::OUString& rModuleIdentifier );
 
         // Retrieve the menu entry property values from a sequence
         static void       GetMenuEntry( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonMenuEntry,

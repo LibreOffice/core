@@ -22,11 +22,13 @@
 #include <general.h>
 #include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
+#include <services.h>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <tools/config.hxx>
 #include <vcl/svapp.hxx>
@@ -82,18 +84,21 @@ AddonPopupMenu::~AddonPopupMenu()
 {
 }
 
-static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame )
+static OUString GetModuleIdentifier(const Reference<XComponentContext>& rContext,
+    const Reference< XFrame >& rFrame)
 {
-    // Query for the model to get check the context information
-    Reference< XModel > xModel;
-    if ( rFrame.is() )
+    Reference< XModuleManager > xModuleManager(ModuleManager::create(rContext));
+    if ( xModuleManager.is() )
     {
-        Reference< XController > xController( rFrame->getController(), UNO_QUERY );
-        if ( xController.is() )
-            xModel = xController->getModel();
+        try
+        {
+            return xModuleManager->identify( rFrame );
+        }
+        catch ( Exception& )
+        {
+        }
     }
-
-    return xModel;
+    return OUString();
 }
 
 bool AddonMenuManager::HasAddonMenuElements()
@@ -113,7 +118,8 @@ PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, const Refe
 }
 
 // Create the Add-Ons menu
-AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame )
+AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame,
+                                              const Reference< XComponentContext >& rContext )
 {
     AddonsOptions aOptions;
     AddonMenu*  pAddonMenu      = NULL;
@@ -123,8 +129,8 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame 
     if ( rAddonMenuEntries.getLength() > 0 )
     {
         pAddonMenu = (AddonMenu *)AddonMenuManager::CreatePopupMenuType( ADDON_MENU, rFrame );
-        Reference< XModel > xModel = GetModelFromFrame( rFrame );
-        AddonMenuManager::BuildMenu( pAddonMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, xModel );
+        ::rtl::OUString aModuleIdentifier = GetModuleIdentifier( rContext, rFrame );
+        AddonMenuManager::BuildMenu( pAddonMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );
 
         // Don't return an empty Add-On menu
         if ( pAddonMenu->GetItemCount() == 0 )
@@ -159,7 +165,9 @@ static sal_uInt16 FindMenuId( Menu* pMenu, const OUString& aCommand )
 }
 
 // Merge the Add-Ons help menu items into the given menu bar at a defined pos
-void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, MenuBar* pMergeMenuBar )
+void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
+                                           MenuBar* pMergeMenuBar,
+                                           const Reference<XComponentContext>& rContext )
 {
     if ( pMergeMenuBar )
     {
@@ -188,8 +196,8 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
             if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MENUITEM_SEPARATOR )
                 nInsSepAfterPos = nInsPos;
 
-            Reference< XModel > xModel = GetModelFromFrame( rFrame );
-            AddonMenuManager::BuildMenu( pHelpMenu, ADDON_MENU, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, xModel );
+            ::rtl::OUString aModuleIdentifier = GetModuleIdentifier(rContext, rFrame);
+            AddonMenuManager::BuildMenu( pHelpMenu, ADDON_MENU, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, aModuleIdentifier );
 
             if ( pHelpMenu->GetItemCount() > nItemCount )
             {
@@ -207,9 +215,9 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
 
 // Merge the addon popup menus into the given menu bar at the provided pos.
 void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
-                                             const Reference< XModel >& rModel,
                                              sal_uInt16               nMergeAtPos,
-                                             MenuBar*             pMergeMenuBar )
+                                             MenuBar*             pMergeMenuBar,
+                                             const Reference< XComponentContext >& rContext )
 {
     if ( pMergeMenuBar )
     {
@@ -222,7 +230,8 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
         OUString                              aImageId;
         OUString                              aContext;
         Sequence< Sequence< PropertyValue > > aAddonSubMenu;
-        sal_uInt16                                nUniqueMenuId = ADDONMENU_ITEMID_START;
+        sal_uInt16                            nUniqueMenuId = ADDONMENU_ITEMID_START;
+        OUString                              aModuleIdentifier = GetModuleIdentifier(rContext, rFrame);
 
         const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
         for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
@@ -237,12 +246,12 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
             if ( !aTitle.isEmpty() &&
                  !aURL.isEmpty()   &&
                  aAddonSubMenu.getLength() > 0 &&
-                 AddonMenuManager::IsCorrectContext( rModel, aContext ))
+                 AddonMenuManager::IsCorrectContext( aModuleIdentifier, aContext ))
             {
                 sal_uInt16          nId             = nUniqueMenuId++;
                 AddonPopupMenu* pAddonPopupMenu = (AddonPopupMenu *)AddonMenuManager::CreatePopupMenuType( ADDON_POPUPMENU, rFrame );
 
-                AddonMenuManager::BuildMenu( pAddonPopupMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModel );
+                AddonMenuManager::BuildMenu( pAddonPopupMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, aModuleIdentifier );
 
                 if ( pAddonPopupMenu->GetItemCount() > 0 )
                 {
@@ -267,7 +276,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                                   sal_uInt16&                           nUniqueMenuId,
                                   const Sequence< Sequence< PropertyValue > >& aAddonMenuDefinition,
                                   const Reference< XFrame >&            rFrame,
-                                  const Reference< XModel >&            rModel )
+                                  const ::rtl::OUString&               rModuleIdentifier )
 {
     Sequence< Sequence< PropertyValue > >   aAddonSubMenu;
     bool                                    bInsertSeparator    = false;
@@ -286,7 +295,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
     {
         GetMenuEntry( aAddonMenuDefinition[i], aTitle, aURL, aTarget, aImageId, aContext, aAddonSubMenu );
 
-        if ( !IsCorrectContext( rModel, aContext ) || ( aTitle.isEmpty() && aURL.isEmpty() ))
+        if ( !IsCorrectContext( rModuleIdentifier, aContext ) || ( aTitle.isEmpty() && aURL.isEmpty() ))
             continue;
 
         if ( aURL == "private:separator" )
@@ -297,7 +306,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
             if ( aAddonSubMenu.getLength() > 0 )
             {
                 pSubMenu = AddonMenuManager::CreatePopupMenuType( nSubMenuType, rFrame );
-                AddonMenuManager::BuildMenu( pSubMenu, nSubMenuType, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModel );
+                AddonMenuManager::BuildMenu( pSubMenu, nSubMenuType, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModuleIdentifier );
 
                 // Don't create a menu item for an empty sub menu
                 if ( pSubMenu->GetItemCount() == 0 )
@@ -366,26 +375,18 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 }
 
 // Check if the context string matches the provided xModel context
-bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const OUString& aContext )
+bool AddonMenuManager::IsCorrectContext( const OUString& rModuleIdentifier, const OUString& rContext )
 {
-    if ( rModel.is() )
-    {
-        Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( rModel, UNO_QUERY );
-        if ( xServiceInfo.is() )
-        {
-            sal_Int32 nIndex = 0;
-            do
-            {
-                OUString aToken = aContext.getToken( 0, ',', nIndex );
+    if ( rContext.isEmpty() )
+        return true;
 
-                if ( xServiceInfo->supportsService( aToken ))
-                    return true;
-            }
-            while ( nIndex >= 0 );
-        }
+    if ( !rModuleIdentifier.isEmpty() )
+    {
+        sal_Int32 nIndex = rContext.indexOf( rModuleIdentifier );
+        return ( nIndex >= 0 );
     }
 
-    return ( aContext.isEmpty() );
+    return false;
 }
 
 }
