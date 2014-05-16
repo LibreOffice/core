@@ -1678,6 +1678,8 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 pPara->SetPrepAdjust();
                 CalcLineSpace();
+                // possible that pPara was deleted above; retrieve it again
+                pPara = aAccess.GetPara();
                 InvalidateSize();
                 _InvalidatePrt();
                 SwFrm* pNxt;
