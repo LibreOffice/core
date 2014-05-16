@@ -879,9 +879,9 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                     bRet = rWriteContext.write( pOutBytes, nOutBytes );
                 if( bRet )
                     bRet = rWriteContext.write( "\nendstream\nendobj\n", 18 );
-                rtl_freeMemory( pStream );
                 if( pOutBytes != (sal_uInt8*)pStream )
                     rtl_freeMemory( pOutBytes );
+                rtl_freeMemory( pStream );
                 if( pEData )
                     pEData->setDecryptObject( 0, 0 );
                 return bRet;
