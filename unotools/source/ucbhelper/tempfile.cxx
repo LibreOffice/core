@@ -160,13 +160,13 @@ OUString ConstructTempDir_Impl( const OUString* pParent )
 }
 
 OUString lcl_createName(
-    const OUString& rLeadingChars, unsigned long nSeed, bool bFirst,
-    const OUString* pExtension, const OUString* pParent, bool bDirectory,
-    bool bKeep)
+    const OUString& rLeadingChars, unsigned long nSeed, sal_Int16 nRadix,
+    bool bFirst, const OUString* pExtension, const OUString* pParent,
+    bool bDirectory, bool bKeep, bool bLock)
 {
     // 36 ** 6 == 2176782336
-    unsigned const nRadix = 36;
-    unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
+    unsigned long const nMaxRadix = 36;
+    unsigned long const nMax = (nMaxRadix*nMaxRadix*nMaxRadix*nMaxRadix*nMaxRadix*nMaxRadix);
     nSeed %= nMax;
 
     // get correct directory
@@ -179,7 +179,7 @@ OUString lcl_createName(
     {
         OUString aTmp( aName );
         if ( bUseNumber )
-            aTmp += OUString::number( i );
+            aTmp += OUString::number(i, nRadix);
         bUseNumber = true;
         if ( pExtension )
             aTmp += *pExtension;
@@ -208,11 +208,11 @@ OUString lcl_createName(
             /* RW permission for the user only! */
             mode_t old_mode = umask(077);
 #endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create | (bLock ? 0 : osl_File_OpenFlag_NoLock));
 #ifdef UNX
             umask(old_mode);
 #endif
-            if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
+            if ( err == FileBase::E_None || (bLock && err == FileBase::E_NOLCK) )
             {
                 aFile.close();
                 return aTmp;
@@ -250,7 +250,8 @@ OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = t
 #endif
 #endif
     return lcl_createName(
-        aEyeCatcher, Time::GetSystemTicks(), true, 0, pParent, bDir, bKeep);
+        aEyeCatcher, Time::GetSystemTicks(), 36, true, 0, pParent, bDir, bKeep,
+        false);
 }
 
 OUString TempFile::CreateTempName()
@@ -277,7 +278,7 @@ TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero, const O
     , bIsDirectory( bDirectory )
     , bKillingFileEnabled( false )
 {
-    aName = lcl_createName(rLeadingChars, 0, _bStartWithZero, pExtension, pParent, bDirectory, true);
+    aName = lcl_createName(rLeadingChars, 0, 10, _bStartWithZero, pExtension, pParent, bDirectory, true, true);
 }
 
 TempFile::~TempFile()
