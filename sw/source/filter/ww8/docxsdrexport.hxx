@@ -65,6 +65,7 @@ public:
     bool getFrameBtLr();
 
     bool IsDrawingOpen();
+    void setDrawingOpen(bool bDrawingOpen);
     sax_fastparser::FastAttributeList*& getFlyFillAttrList();
     sax_fastparser::FastAttributeList* getFlyWrapAttrList();
     void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);
