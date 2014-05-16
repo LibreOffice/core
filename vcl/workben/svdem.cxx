@@ -43,8 +43,13 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
-
     Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
+
+    if( !xServiceManager.is() )
+    {
+        fprintf( stderr, "Failed to bootstrap\n" );
+        exit( 1 );
+    }
 
     comphelper::setProcessServiceFactory( xServiceManager );
 
