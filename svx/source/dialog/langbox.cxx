@@ -40,6 +40,9 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
 
+// If these ever dispersed we'd need a solution.
+BOOST_STATIC_ASSERT((LISTBOX_APPEND == COMBOBOX_APPEND) && (LISTBOX_ENTRY_NOTFOUND == COMBOBOX_ENTRY_NOTFOUND));
+
 
 OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg )
 {
@@ -104,29 +107,6 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
 }
 
 
-//  class SvxLanguageBox
-
-
-sal_Int32 TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
-{
-    sal_Int32 nPos   = LISTBOX_ENTRY_NOTFOUND;
-    sal_Int32 nCount = rLb.GetEntryCount();
-
-    for ( sal_Int32 i=0; nPos == LISTBOX_ENTRY_NOTFOUND && i<nCount; i++ )
-        if ( eType == LanguageType((sal_uIntPtr)rLb.GetEntryData(i)) )
-            nPos = i;
-
-    return nPos;
-}
-
-SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, bool bCheck )
-    : ListBox( pParent, nBits )
-    , m_pSpellUsedLang( NULL )
-    , m_bWithCheckmark( bCheck )
-{
-    Init();
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -135,13 +115,32 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pPar
         nBits |= WB_DROPDOWN;
     else
         nBits |= WB_BORDER;
-    SvxLanguageBox *pListBox = new SvxLanguageBox(pParent, nBits);
-    pListBox->EnableAutoSize(true);
-    return pListBox;
+    SvxLanguageBox *pLanguageBox = new SvxLanguageBox(pParent, nBits);
+    pLanguageBox->EnableAutoSize(true);
+    return pLanguageBox;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageComboBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    if (bDropdown)
+        nBits |= WB_DROPDOWN;
+    else
+        nBits |= WB_BORDER;
+    SvxLanguageComboBox *pLanguageBox = new SvxLanguageComboBox(pParent, nBits);
+    pLanguageBox->EnableAutoSize(true);
+    return pLanguageBox;
 }
 
 
-void SvxLanguageBox::Init()
+SvxLanguageBoxBase::SvxLanguageBoxBase( bool bCheck )
+    : m_pSpellUsedLang( NULL )
+    , m_bWithCheckmark( bCheck )
+{
+}
+
+void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
 {
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
@@ -149,9 +148,6 @@ void SvxLanguageBox::Init()
     m_nLangList             = LANG_LIST_EMPTY;
     m_bHasLangNone          = false;
     m_bLangNoneIsLangAll    = false;
-
-    // display entries sorted
-    SetStyle( GetStyle() | WB_SORT );
 
     if ( m_bWithCheckmark )
     {
@@ -175,29 +171,16 @@ void SvxLanguageBox::Init()
 }
 
 
-SvxLanguageBox::~SvxLanguageBox()
+SvxLanguageBoxBase::~SvxLanguageBoxBase()
 {
     delete m_pSpellUsedLang;
 }
 
 
-
-sal_Int32 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 nPos, bool bChecked )
-{
-    sal_Int32 nRet = 0;
-    if( !bChecked )
-        nRet = InsertEntry( rEntry, m_aNotCheckedImage, nPos );
-    else
-        nRet = InsertEntry( rEntry, m_aCheckedImage, nPos );
-    return nRet;
-}
-
-
-
-void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
+void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
         bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
 {
-    Clear();
+    ImplClear();
 
     m_nLangList             = nLangList;
     m_bHasLangNone          = bHasLangNone;
@@ -315,15 +298,13 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
 }
 
 
-
-sal_Int32 SvxLanguageBox::InsertLanguage( const LanguageType nLangType, sal_Int32 nPos )
+sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType, sal_Int32 nPos )
 {
     return ImplInsertLanguage( nLangType, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
 
-
-sal_Int32 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_Int32 nPos, sal_Int16 nType )
+sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, sal_Int32 nPos, sal_Int16 nType )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
@@ -331,7 +312,7 @@ sal_Int32 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_
     // string as would be returned by SvtLanguageTable::GetString().
     if (nLang != nLangType)
     {
-        sal_Int32 nAt = TypeToPos_Impl( nLang, *this );
+        sal_Int32 nAt = ImplTypeToPos( nLang );
         if ( nAt != LISTBOX_ENTRY_NOTFOUND )
             return nAt;
     }
@@ -371,29 +352,26 @@ sal_Int32 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }
     else
-        nAt = InsertEntry( aStrEntry, nPos );
+        nAt = ImplInsertEntry( aStrEntry, nPos );
 
-    SetEntryData( nAt, (void*)(sal_uIntPtr)nLangType );
+    ImplSetEntryData( nAt, (void*)(sal_uIntPtr)nLangType );
     return nAt;
 }
 
 
-
-sal_Int32 SvxLanguageBox::InsertDefaultLanguage( sal_Int16 nType, sal_Int32 nPos )
+sal_Int32 SvxLanguageBoxBase::InsertDefaultLanguage( sal_Int16 nType, sal_Int32 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
 }
 
 
-
-sal_Int32 SvxLanguageBox::InsertSystemLanguage( sal_Int32 nPos )
+sal_Int32 SvxLanguageBoxBase::InsertSystemLanguage( sal_Int32 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
 
-
-sal_Int32 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
+sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType,
         bool bCheckEntry, sal_Int32 nPos )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
@@ -402,7 +380,7 @@ sal_Int32 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
     // string as would be returned by SvtLanguageTable::GetString().
     if (nLang != nLangType)
     {
-        sal_Int32 nAt = TypeToPos_Impl( nLang, *this );
+        sal_Int32 nAt = ImplTypeToPos( nLang );
         if ( nAt != LISTBOX_ENTRY_NOTFOUND )
             return nAt;
     }
@@ -412,63 +390,215 @@ sal_Int32 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
         aStrEntry = m_aAllString;
 
     sal_Int32 nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
-    SetEntryData( nAt, (void*)(sal_uIntPtr)nLang );
+    ImplSetEntryData( nAt, (void*)(sal_uIntPtr)nLang );
 
     return nAt;
 }
 
 
-
-void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
+void SvxLanguageBoxBase::RemoveLanguage( const LanguageType eLangType )
 {
-    sal_Int32 nAt = TypeToPos_Impl( eLangType, *this );
+    sal_Int32 nAt = ImplTypeToPos( eLangType );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        RemoveEntry( nAt );
+        ImplRemoveEntryAt( nAt );
 }
 
 
-
-LanguageType SvxLanguageBox::GetSelectLanguage() const
+LanguageType SvxLanguageBoxBase::GetSelectLanguage() const
 {
-    sal_Int32     nPos   = GetSelectEntryPos();
+    sal_Int32     nPos   = ImplGetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return LanguageType( (sal_uIntPtr)GetEntryData(nPos) );
+        return LanguageType( (sal_uIntPtr)ImplGetEntryData(nPos) );
     else
         return LanguageType( LANGUAGE_DONTKNOW );
 }
 
 
-
-void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, bool bSelect )
+void SvxLanguageBoxBase::SelectLanguage( const LanguageType eLangType, bool bSelect )
 {
     // If the core uses a LangID of an imported MS document and wants to select
     // a language that is replaced, we need to select the replacement instead.
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 
-    sal_Int32 nAt = TypeToPos_Impl( nLang, *this );
+    sal_Int32 nAt = ImplTypeToPos( nLang );
 
     if ( nAt == LISTBOX_ENTRY_NOTFOUND )
         nAt = InsertLanguage( nLang );      // on-the-fly-ID
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        SelectEntryPos( nAt, bSelect );
+        ImplSelectEntryPos( nAt, bSelect );
 }
 
 
-
-bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
+bool SvxLanguageBoxBase::IsLanguageSelected( const LanguageType eLangType ) const
 {
     // Same here, work on the replacement if applicable.
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 
-    sal_Int32 nAt = TypeToPos_Impl( nLang, *this );
+    sal_Int32 nAt = ImplTypeToPos( nLang );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        return IsEntryPosSelected( nAt );
+        return ImplIsEntryPosSelected( nAt );
     else
         return false;
 }
+
+
+sal_Int32 SvxLanguageBoxBase::ImplTypeToPos( LanguageType eType ) const
+{
+    sal_Int32 nPos   = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nCount = ImplGetEntryCount();
+
+    for ( sal_Int32 i=0; nPos == LISTBOX_ENTRY_NOTFOUND && i<nCount; i++ )
+        if ( eType == LanguageType((sal_uIntPtr)ImplGetEntryData(i)) )
+            nPos = i;
+
+    return nPos;
+}
+
+
+SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, bool bCheck )
+    : ListBox( pParent, nBits )
+    , SvxLanguageBoxBase( bCheck )
+{
+    // display entries sorted
+    SetStyle( GetStyle() | WB_SORT );
+
+    ImplLanguageBoxBaseInit();
+}
+
+SvxLanguageBox::~SvxLanguageBox()
+{
+}
+
+
+SvxLanguageComboBox::SvxLanguageComboBox( Window* pParent, WinBits nBits, bool bCheck )
+    : ComboBox( pParent, nBits )
+    , SvxLanguageBoxBase( bCheck )
+{
+    // display entries sorted
+    SetStyle( GetStyle() | WB_SORT );
+
+    EnableMultiSelection( false );
+
+    ImplLanguageBoxBaseInit();
+}
+
+SvxLanguageComboBox::~SvxLanguageComboBox()
+{
+}
+
+
+sal_Int32 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 nPos, bool bChecked )
+{
+    return InsertEntry( rEntry, (bChecked ? m_aCheckedImage : m_aNotCheckedImage), nPos );
+}
+
+sal_Int32 SvxLanguageComboBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 nPos, bool bChecked )
+{
+    return InsertEntryWithImage( rEntry, (bChecked ? m_aCheckedImage : m_aNotCheckedImage), nPos );
+}
+
+
+void SvxLanguageBox::ImplRemoveEntryAt( sal_Int32 nPos )
+{
+    RemoveEntry( nPos);
+}
+
+void SvxLanguageComboBox::ImplRemoveEntryAt( sal_Int32 nPos )
+{
+    RemoveEntryAt( nPos);
+}
+
+
+void SvxLanguageBox::ImplClear()
+{
+    Clear();
+}
+
+void SvxLanguageComboBox::ImplClear()
+{
+    Clear();
+}
+
+
+sal_Int32 SvxLanguageBox::ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos )
+{
+    return InsertEntry( rEntry, nPos);
+}
+
+sal_Int32 SvxLanguageComboBox::ImplInsertEntry( const OUString& rEntry, sal_Int32 nPos )
+{
+    return InsertEntry( rEntry, nPos);
+}
+
+
+void SvxLanguageBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
+{
+    SetEntryData( nPos, pData);
+}
+
+void SvxLanguageComboBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
+{
+    SetEntryData( nPos, pData);
+}
+
+
+sal_Int32 SvxLanguageBox::ImplGetSelectEntryPos() const
+{
+    return GetSelectEntryPos();
+}
+
+sal_Int32 SvxLanguageComboBox::ImplGetSelectEntryPos() const
+{
+    return GetSelectEntryPos();
+}
+
+
+void* SvxLanguageBox::ImplGetEntryData( sal_Int32 nPos ) const
+{
+    return GetEntryData( nPos);
+}
+
+void* SvxLanguageComboBox::ImplGetEntryData( sal_Int32 nPos ) const
+{
+    return GetEntryData( nPos);
+}
+
+
+void SvxLanguageBox::ImplSelectEntryPos( sal_Int32 nPos, bool bSelect )
+{
+    SelectEntryPos( nPos, bSelect);
+}
+
+void SvxLanguageComboBox::ImplSelectEntryPos( sal_Int32 nPos, bool bSelect )
+{
+    SelectEntryPos( nPos, bSelect);
+}
+
+
+bool SvxLanguageBox::ImplIsEntryPosSelected( sal_Int32 nPos ) const
+{
+    return IsEntryPosSelected( nPos);
+}
+
+bool SvxLanguageComboBox::ImplIsEntryPosSelected( sal_Int32 nPos ) const
+{
+    return IsEntryPosSelected( nPos);
+}
+
+
+sal_Int32 SvxLanguageBox::ImplGetEntryCount() const
+{
+    return GetEntryCount();
+}
+
+sal_Int32 SvxLanguageComboBox::ImplGetEntryCount() const
+{
+    return GetEntryCount();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
