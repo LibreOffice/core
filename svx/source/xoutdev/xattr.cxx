@@ -2511,22 +2511,6 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nStepCount     == rGradient.nStepCount );
 }
 
-Gradient XGradient::VclGradient() const
-{
-    Gradient aGradient;
-    aGradient.SetStyle((GradientStyle)eStyle);
-    aGradient.SetStartColor(aStartColor);
-    aGradient.SetEndColor(aEndColor);
-    aGradient.SetAngle(nAngle);
-    aGradient.SetBorder(nBorder);
-    aGradient.SetOfsX(nOfsX);
-    aGradient.SetOfsY(nOfsY);
-    aGradient.SetStartIntensity(nIntensStart);
-    aGradient.SetEndIntensity(nIntensEnd);
-    aGradient.SetSteps(nStepCount);
-    return aGradient;
-}
-
 // class XFillGradientItem
 
 TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);

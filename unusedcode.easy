@@ -59,7 +59,6 @@ VCLXGraphics::getLineColor()
 VCLXGraphics::getRasterOp()
 VCLXGraphics::getTextColor()
 VCLXGraphics::getTextFillColor()
-XGradient::VclGradient() const
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()
