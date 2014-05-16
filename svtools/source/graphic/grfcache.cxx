@@ -367,7 +367,7 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
     if( mbSwappedAll )
     {
         delete mpBmpEx, mpBmpEx = NULL;
-        mpMtf = NULL; // No need to delete it as it has already been dereferenced
+        delete mpMtf, mpMtf = NULL;
         delete mpAnimation, mpAnimation = NULL;
 
         // #119176# also reset SvgData
