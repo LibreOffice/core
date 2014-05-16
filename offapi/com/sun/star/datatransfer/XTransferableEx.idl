@@ -18,7 +18,7 @@
  */
 
 #ifndef __com_sun_star_datatransfer_XTransferableEx_idl__
-#define __com_sun_star_datatransfer_XTransferable_idl__
+#define __com_sun_star_datatransfer_XTransferableEx_idl__
 
 #include <com/sun/star/datatransfer/DataFlavor.idl>
 #include <com/sun/star/uno/XInterface.idl>
