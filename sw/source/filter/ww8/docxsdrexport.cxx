@@ -246,6 +246,11 @@ bool DocxSdrExport::IsDrawingOpen()
     return m_pImpl->m_bDrawingOpen;
 }
 
+void DocxSdrExport::setDrawingOpen(bool bDrawingOpen)
+{
+    m_pImpl->m_bDrawingOpen = bDrawingOpen;
+}
+
 sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyFillAttrList()
 {
     return m_pImpl->m_pFlyFillAttrList;
@@ -537,7 +542,6 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrmFmt* pFrmFmt)
     m_pImpl->m_pSerializer->endElementNS(XML_wp, isAnchor ? XML_anchor : XML_inline);
 
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_drawing);
-    m_pImpl->m_bDrawingOpen = false;
 }
 
 void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft)

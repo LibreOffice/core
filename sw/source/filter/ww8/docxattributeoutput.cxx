@@ -372,6 +372,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->endElementNS( XML_w, XML_p );
 
     WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs );
+    //sdtcontent is written so Set m_bDrawingOpen to false
+    m_rExport.SdrExporter().setDrawingOpen( false );
     m_pSerializer->mergeTopMarks();
 
     // Check for end of cell, rows, tables here
@@ -411,10 +413,10 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparse
             m_pSerializer->singleElement( nSdtPrToken,
                                           FSNS(XML_w, XML_val), OString::number( rand() ),
                                           FSEND );
-        else if( nSdtPrToken > 0 )
+        else if( (nSdtPrToken > 0) && (!m_rExport.SdrExporter().IsDrawingOpen() || (nSdtPrToken == FSNS( XML_w, XML_picture ))))
             m_pSerializer->singleElement( nSdtPrToken, FSEND );
 
-        if( pSdtPrDataBindingAttrs )
+        if(( pSdtPrDataBindingAttrs ) && !m_rExport.SdrExporter().IsDrawingOpen())
         {
             XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs );
             m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
