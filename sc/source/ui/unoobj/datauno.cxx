@@ -96,7 +96,7 @@ static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
         {OUString(SC_UNONAME_ISCASE),   0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_MAXFLD),   0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNONAME_ORIENT),   0,  getCppuType((table::TableOrientation*)0),  0, 0},
-        {OUString(SC_UNONAME_OUTPOS),   0,  getCppuType((table::CellAddress*)0),       0, 0},
+        {OUString(SC_UNONAME_OUTPOS),   0,  cppu::UnoType<table::CellAddress>::get(),       0, 0},
         {OUString(SC_UNONAME_SAVEOUT),  0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_SKIPDUP),  0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_USEREGEX), 0,  getBooleanCppuType(),                      0, 0},
@@ -110,11 +110,11 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
     static const SfxItemPropertyMapEntry aDBRangePropertyMap_Impl[] =
     {
         {OUString(SC_UNONAME_AUTOFLT),  0,  getBooleanCppuType(),                      0, 0},
-        {OUString(SC_UNONAME_FLTCRT),   0,  getCppuType((table::CellRangeAddress*)0),  0, 0},
+        {OUString(SC_UNONAME_FLTCRT),   0,  cppu::UnoType<table::CellRangeAddress>::get(),  0, 0},
         {OUString(SC_UNONAME_FROMSELECT),0, getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_ISUSER),   0,  getBooleanCppuType(),           beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_KEEPFORM), 0,  getBooleanCppuType(),                      0, 0},
-        {OUString(SC_UNO_LINKDISPBIT),  0,  getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNO_LINKDISPBIT),  0,  cppu::UnoType<awt::XBitmap>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNO_LINKDISPNAME), 0,  cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_MOVCELLS), 0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_REFPERIOD), 0, cppu::UnoType<sal_Int32>::get(),                0, 0},
@@ -669,7 +669,7 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XSubTotalField>*)0);
+    return cppu::UnoType<util::DateTime>::get();
 }
 
 sal_Bool SAL_CALL ScSubTotalDescriptorBase::hasElements() throw(uno::RuntimeException, std::exception)
@@ -2332,7 +2332,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XDatabaseRange>*)0);
+    return cppu::UnoType<util::DateTime>::get();
 }
 
 sal_Bool SAL_CALL ScDatabaseRangesObj::hasElements() throw(uno::RuntimeException, std::exception)

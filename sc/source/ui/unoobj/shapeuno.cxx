@@ -50,9 +50,9 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
 {
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
-        {OUString(SC_UNONAME_ANCHOR), 0, getCppuType((uno::Reference<uno::XInterface>*)0), 0, 0 },
+        {OUString(SC_UNONAME_ANCHOR), 0, cppu::UnoType<uno::XInterface>::get(), 0, 0 },
         {OUString(SC_UNONAME_HORIPOS), 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
-        {OUString(SC_UNONAME_IMAGEMAP), 0, getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
+        {OUString(SC_UNONAME_IMAGEMAP), 0, cppu::UnoType<container::XIndexContainer>::get(), 0, 0 },
         {OUString(SC_UNONAME_VERTPOS), 0, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_MOVEPROTECT), 0, cppu::UnoType<sal_Bool>::get(), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
@@ -171,7 +171,7 @@ void ScShapeObj::GetShapePropertySet()
     {
         uno::Reference<beans::XPropertySet> xProp;
         if ( mxShapeAgg.is() )
-            mxShapeAgg->queryAggregation( getCppuType((uno::Reference<beans::XPropertySet>*) 0) ) >>= xProp;
+            mxShapeAgg->queryAggregation( cppu::UnoType<beans::XPropertySet>::get()) >>= xProp;
         pShapePropertySet = xProp.get();
     }
 }
@@ -185,7 +185,7 @@ void ScShapeObj::GetShapePropertyState()
     {
         uno::Reference<beans::XPropertyState> xState;
         if ( mxShapeAgg.is() )
-            mxShapeAgg->queryAggregation( getCppuType((uno::Reference<beans::XPropertyState>*) 0) ) >>= xState;
+            mxShapeAgg->queryAggregation( cppu::UnoType<beans::XPropertyState>::get()) >>= xState;
         pShapePropertyState = xState.get();
     }
 }
@@ -194,7 +194,7 @@ static uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<u
 {
     uno::Reference<lang::XComponent> xRet;
     if ( xAgg.is() )
-        xAgg->queryAggregation( getCppuType((uno::Reference<lang::XComponent>*) 0) ) >>= xRet;
+        xAgg->queryAggregation( cppu::UnoType<lang::XComponent>::get()) >>= xRet;
     return xRet;
 }
 
@@ -202,7 +202,7 @@ static uno::Reference<text::XText> lcl_GetText( const uno::Reference<uno::XAggre
 {
     uno::Reference<text::XText> xRet;
     if ( xAgg.is() )
-        xAgg->queryAggregation( getCppuType((uno::Reference<text::XText>*) 0) ) >>= xRet;
+        xAgg->queryAggregation( cppu::UnoType<text::XText>::get()) >>= xRet;
     return xRet;
 }
 
@@ -210,7 +210,7 @@ static uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference
 {
     uno::Reference<text::XSimpleText> xRet;
     if ( xAgg.is() )
-        xAgg->queryAggregation( getCppuType((uno::Reference<text::XSimpleText>*) 0) ) >>= xRet;
+        xAgg->queryAggregation( cppu::UnoType<text::XSimpleText>::get()) >>= xRet;
     return xRet;
 }
 
@@ -218,7 +218,7 @@ static uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<u
 {
     uno::Reference<text::XTextRange> xRet;
     if ( xAgg.is() )
-        xAgg->queryAggregation( getCppuType((uno::Reference<text::XTextRange>*) 0) ) >>= xRet;
+        xAgg->queryAggregation( cppu::UnoType<text::XTextRange>::get()) >>= xRet;
     return xRet;
 }
 
@@ -1329,7 +1329,7 @@ uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes() throw(uno::RuntimeExcep
 
     uno::Reference<lang::XTypeProvider> xBaseProvider;
     if ( mxShapeAgg.is() )
-        mxShapeAgg->queryAggregation( getCppuType((uno::Reference<lang::XTypeProvider>*) 0) ) >>= xBaseProvider;
+        mxShapeAgg->queryAggregation( cppu::UnoType<lang::XTypeProvider>::get()) >>= xBaseProvider;
     OSL_ENSURE( xBaseProvider.is(), "ScShapeObj: No XTypeProvider from aggregated shape!" );
 
     uno::Sequence< uno::Type > aAggTypes;

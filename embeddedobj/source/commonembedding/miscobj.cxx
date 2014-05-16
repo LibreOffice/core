@@ -323,7 +323,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pIC = m_pInterfaceContainer->getContainer(
-                                            ::getCppuType((const uno::Reference< document::XEventListener >*)0) );
+                                            cppu::UnoType<document::XEventListener>::get());
         if( pIC )
         {
             document::EventObject aEvent;
@@ -358,7 +358,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
 {
     uno::Any aReturn;
 
-    if ( rType == ::getCppuType( (uno::Reference< embed::XEmbeddedObject > const *)0 ))
+    if ( rType == cppu::UnoType<embed::XEmbeddedObject>::get() )
     {
         void * p = static_cast< embed::XEmbeddedObject * >( this );
         return uno::Any( &p, rType );
@@ -414,24 +414,24 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
             if ( m_bIsLink )
             {
                 static ::cppu::OTypeCollection aTypeCollection(
-                                            ::getCppuType( (const uno::Reference< lang::XTypeProvider >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XInplaceObject >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XCommonEmbedPersist >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< container::XChild >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XLinkageSupport >*)NULL ) );
+                                            cppu::UnoType<lang::XTypeProvider>::get(),
+                                            cppu::UnoType<embed::XEmbeddedObject>::get(),
+                                            cppu::UnoType<embed::XInplaceObject>::get(),
+                                            cppu::UnoType<embed::XCommonEmbedPersist>::get(),
+                                            cppu::UnoType<container::XChild>::get(),
+                                            cppu::UnoType<embed::XLinkageSupport>::get());
 
                 pTypeCollection = &aTypeCollection ;
             }
             else
             {
                    static ::cppu::OTypeCollection aTypeCollection(
-                                            ::getCppuType( (const uno::Reference< lang::XTypeProvider >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XInplaceObject >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XCommonEmbedPersist >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< container::XChild >*)NULL ),
-                                            ::getCppuType( (const uno::Reference< embed::XEmbedPersist >*)NULL ) );
+                                            cppu::UnoType<lang::XTypeProvider>::get(),
+                                            cppu::UnoType<embed::XEmbeddedObject>::get(),
+                                            cppu::UnoType<embed::XInplaceObject>::get(),
+                                            cppu::UnoType<embed::XCommonEmbedPersist>::get(),
+                                            cppu::UnoType<container::XChild>::get(),
+                                            cppu::UnoType<embed::XEmbedPersist>::get());
 
                 pTypeCollection = &aTypeCollection ;
             }
@@ -509,7 +509,7 @@ void SAL_CALL OCommonEmbeddedObject::addStateChangeListener( const uno::Referenc
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+    m_pInterfaceContainer->addInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                         xListener );
 }
 
@@ -520,7 +520,7 @@ void SAL_CALL OCommonEmbeddedObject::removeStateChangeListener(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                 xListener );
 }
 
@@ -539,7 +539,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
-            m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+            m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -557,7 +557,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         }
 
         pContainer = m_pInterfaceContainer->getContainer(
-                                    ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+                                    cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
@@ -640,7 +640,7 @@ void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< uti
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
 
 
@@ -649,7 +649,7 @@ void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<util::XCloseListener>::get(),
                                                 xListener );
 }
 
@@ -664,7 +664,7 @@ void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< doc
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }
 
 
@@ -673,7 +673,7 @@ void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<document::XEventListener>::get(),
                                                 xListener );
 }
 

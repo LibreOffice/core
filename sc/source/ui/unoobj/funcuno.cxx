@@ -578,7 +578,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         {
             ArrayOfArrayProc<uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( getCppuType( (uno::Reference<table::XCellRange>*)0 ) ) )
+        else if ( aType.equals( cppu::UnoType<table::XCellRange>::get()) )
         {
             // currently, only our own cell ranges are supported
 

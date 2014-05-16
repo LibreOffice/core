@@ -118,7 +118,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sa
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
-                            ::getCppuType( ( const uno::Reference< embed::XStateChangeListener >*) NULL ) );
+                            cppu::UnoType<embed::XStateChangeListener>::get());
         if ( pContainer != NULL )
         {
             lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );

@@ -46,7 +46,7 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
     static const SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
-        {OUString(SC_UNONAME_ERRALSTY), 0,  getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
+        {OUString(SC_UNONAME_ERRALSTY), 0,  cppu::UnoType<sheet::ValidationAlertStyle>::get(),  0, 0},
         {OUString(SC_UNONAME_ERRMESS),  0,  cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNONAME_ERRTITLE), 0,  cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNONAME_IGNOREBL), 0,  getBooleanCppuType(),                          0, 0},
@@ -55,7 +55,7 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
         {OUString(SC_UNONAME_SHOWERR),  0,  getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNONAME_SHOWINP),  0,  getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNONAME_SHOWLIST), 0,  cppu::UnoType<sal_Int16>::get(),                    0, 0},
-        {OUString(SC_UNONAME_TYPE),     0,  getCppuType((sheet::ValidationType*)0),        0, 0},
+        {OUString(SC_UNONAME_TYPE),     0,  cppu::UnoType<sheet::ValidationType>::get(),        0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aValidatePropertyMap_Impl;
@@ -400,7 +400,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XSheetConditionalEntry>*)0);
+    return cppu::UnoType<sheet::XSheetConditionalEntry>::get();
 }
 
 sal_Bool SAL_CALL ScTableConditionalFormat::hasElements() throw(uno::RuntimeException, std::exception)

@@ -50,7 +50,7 @@ static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
 {
     static const SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {
-        {OUString(SC_UNO_LINKDISPBIT),  0,  getCppuType((const uno::Reference<awt::XBitmap>*)0),   beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNO_LINKDISPBIT),  0,  cppu::UnoType<awt::XBitmap>::get(),   beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNO_LINKDISPNAME), 0,  cppu::UnoType<OUString>::get(),                beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -123,7 +123,7 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( 
 
 uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL ScLinkTargetTypesObj::hasElements(void) throw( uno::RuntimeException, std::exception )
@@ -278,7 +278,7 @@ sal_Bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName) throw( uno:
 
 uno::Type SAL_CALL ScLinkTargetsObj::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL ScLinkTargetsObj::hasElements(void) throw( uno::RuntimeException, std::exception )

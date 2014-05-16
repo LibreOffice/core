@@ -106,10 +106,10 @@ static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
         {OUString(SC_UNO_SHOWZERO),     0,  getBooleanCppuType(),          0, 0},
         {OUString(OLD_UNO_VALUEHIGH),   0,  getBooleanCppuType(),          0, 0},
         {OUString(OLD_UNO_VERTSCROLL),  0,  getBooleanCppuType(),          0, 0},
-        {OUString(SC_UNO_VISAREA),      0,  getCppuType((awt::Rectangle*)0), 0, 0},
+        {OUString(SC_UNO_VISAREA),      0,  cppu::UnoType<awt::Rectangle>::get(), 0, 0},
         {OUString(SC_UNO_ZOOMTYPE),     0,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         {OUString(SC_UNO_ZOOMVALUE),    0,  cppu::UnoType<sal_Int16>::get(),    0, 0},
-        {OUString(SC_UNO_VISAREASCREEN),0,  getCppuType((awt::Rectangle*)0), 0, 0},
+        {OUString(SC_UNO_VISAREASCREEN),0,  cppu::UnoType<awt::Rectangle>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aViewOptPropertyMap_Impl;
@@ -161,11 +161,11 @@ uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes() throw(uno::RuntimeE
     {
         aTypes.realloc(5);
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[0] = getCppuType((const uno::Reference<sheet::XViewPane>*)0);
-        pPtr[1] = getCppuType((const uno::Reference<sheet::XCellRangeReferrer>*)0);
-        pPtr[2] = getCppuType((const uno::Reference<view::XFormLayerAccess>*)0);
-        pPtr[3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
-        pPtr[4] = getCppuType((const uno::Reference<lang::XTypeProvider>*)0);
+        pPtr[0] = cppu::UnoType<sheet::XViewPane>::get();
+        pPtr[1] = cppu::UnoType<sheet::XCellRangeReferrer>::get();
+        pPtr[2] = cppu::UnoType<view::XFormLayerAccess>::get();
+        pPtr[3] = cppu::UnoType<lang::XServiceInfo>::get();
+        pPtr[4] = cppu::UnoType<lang::XTypeProvider>::get();
     }
     return aTypes;
 }
@@ -602,18 +602,18 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
 
         aTypes.realloc( nParentLen + 12 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetView>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<container::XIndexAccess>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<view::XSelectionSupplier>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XViewSplitable>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XViewFreezable>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XRangeSelection>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<sheet::XEnhancedMouseClickBroadcaster>*)0);
-        pPtr[nParentLen + 10] = getCppuType((const uno::Reference<sheet::XActivationBroadcaster>*)0);
-        pPtr[nParentLen + 11] = getCppuType((const uno::Reference<datatransfer::XTransferableSupplier>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheetView>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<container::XEnumerationAccess>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<container::XIndexAccess>::get();
+        pPtr[nParentLen + 3] = cppu::UnoType<view::XSelectionSupplier>::get();
+        pPtr[nParentLen + 4] = cppu::UnoType<beans::XPropertySet>::get();
+        pPtr[nParentLen + 5] = cppu::UnoType<sheet::XViewSplitable>::get();
+        pPtr[nParentLen + 6] = cppu::UnoType<sheet::XViewFreezable>::get();
+        pPtr[nParentLen + 7] = cppu::UnoType<sheet::XRangeSelection>::get();
+        pPtr[nParentLen + 8] = cppu::UnoType<lang::XUnoTunnel>::get();
+        pPtr[nParentLen + 9] = cppu::UnoType<sheet::XEnhancedMouseClickBroadcaster>::get();
+        pPtr[nParentLen + 10] = cppu::UnoType<sheet::XActivationBroadcaster>::get();
+        pPtr[nParentLen + 11] = cppu::UnoType<datatransfer::XTransferableSupplier>::get();
 
         long i;
         for (i=0; i<nViewPaneLen; i++)
@@ -1013,7 +1013,7 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScTabViewObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XViewPane>*)0);
+    return cppu::UnoType<sheet::XViewPane>::get();
 }
 
 sal_Bool SAL_CALL ScTabViewObj::hasElements() throw(uno::RuntimeException, std::exception)

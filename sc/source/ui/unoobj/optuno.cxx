@@ -41,7 +41,7 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
         {OUString(SC_UNO_ITEREPSILON),  PROP_UNO_ITEREPSILON ,  cppu::UnoType<double>::get(),       0, 0},
         {OUString(SC_UNO_LOOKUPLABELS), PROP_UNO_LOOKUPLABELS,  getBooleanCppuType(),          0, 0},
         {OUString(SC_UNO_MATCHWHOLE),   PROP_UNO_MATCHWHOLE  ,  getBooleanCppuType(),          0, 0},
-        {OUString(SC_UNO_NULLDATE),     PROP_UNO_NULLDATE    ,  getCppuType((util::Date*)0),   0, 0},
+        {OUString(SC_UNO_NULLDATE),     PROP_UNO_NULLDATE    ,  cppu::UnoType<util::Date>::get(),   0, 0},
         {OUString(SC_UNO_SPELLONLINE),  PROP_UNO_SPELLONLINE ,  getBooleanCppuType(),          0, 0},
         {OUString(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         {OUString(SC_UNO_REGEXENABLED), PROP_UNO_REGEXENABLED,  getBooleanCppuType(),          0, 0},

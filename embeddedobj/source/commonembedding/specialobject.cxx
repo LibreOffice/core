@@ -83,9 +83,9 @@ uno::Sequence< uno::Type > SAL_CALL OSpecialEmbeddedObject::getTypes()
         if ( !pTypeCollection )
         {
             static ::cppu::OTypeCollection aTypeCollection(
-                                        ::getCppuType( (const uno::Reference< lang::XTypeProvider >*)NULL ),
-                                        ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
-                                        ::getCppuType( (const uno::Reference< embed::XInplaceObject >*)NULL ) );
+                                        cppu::UnoType<lang::XTypeProvider>::get(),
+                                        cppu::UnoType<embed::XEmbeddedObject>::get(),
+                                        cppu::UnoType<embed::XInplaceObject>::get());
 
             pTypeCollection = &aTypeCollection ;
         }

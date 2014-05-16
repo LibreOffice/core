@@ -135,7 +135,7 @@ void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboar
     OSL_ENSURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     if (!rBHelper.bInDispose && !rBHelper.bDisposed)
-        rBHelper.aLC.addInterface( getCppuType( (const ::com::sun::star::uno::Reference< XClipboardListener > *) 0), listener );
+        rBHelper.aLC.addInterface( cppu::UnoType<XClipboardListener>::get(), listener );
 }
 
 void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )

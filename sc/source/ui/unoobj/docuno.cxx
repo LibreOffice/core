@@ -111,20 +111,20 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
     static const SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
     {
         {OUString(SC_UNO_APPLYFMDES),              0, getBooleanCppuType(),                                             0, 0},
-        {OUString(SC_UNO_AREALINKS),               0, getCppuType((uno::Reference<sheet::XAreaLinks>*)0),               0, 0},
+        {OUString(SC_UNO_AREALINKS),               0, cppu::UnoType<util::DateTime>::get(),               0, 0},
         {OUString(SC_UNO_AUTOCONTFOC),             0, getBooleanCppuType(),                                             0, 0},
-        {OUString(SC_UNO_BASICLIBRARIES),          0, getCppuType((uno::Reference< script::XLibraryContainer >*)0),     beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNO_DIALOGLIBRARIES),         0, getCppuType((uno::Reference< script::XLibraryContainer >*)0),     beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNO_BASICLIBRARIES),          0, cppu::UnoType<util::DateTime>::get(),     beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNO_DIALOGLIBRARIES),         0, cppu::UnoType<util::DateTime>::get(),     beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_VBAGLOBNAME),             0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_CALCASSHOWN),             PROP_UNO_CALCASSHOWN, getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNONAME_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
         {OUString(SC_UNO_CJK_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
         {OUString(SC_UNO_CTL_CLOCAL),              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
-        {OUString(SC_UNO_COLLABELRNG),             0, getCppuType((uno::Reference<sheet::XLabelRanges>*)0),             0, 0},
-        {OUString(SC_UNO_DDELINKS),                0, getCppuType((uno::Reference<container::XNameAccess>*)0),          0, 0},
+        {OUString(SC_UNO_COLLABELRNG),             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
+        {OUString(SC_UNO_DDELINKS),                0, cppu::UnoType<container::XNameAccess>::get(),          0, 0},
         {OUString(SC_UNO_DEFTABSTOP),              PROP_UNO_DEFTABSTOP, cppu::UnoType<sal_Int16>::get(),                     0, 0},
-        {OUString(SC_UNO_EXTERNALDOCLINKS),        0, getCppuType((uno::Reference<sheet::XExternalDocLinks>*)0),        0, 0},
-        {OUString(SC_UNO_FORBIDDEN),               0, getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0),      beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNO_EXTERNALDOCLINKS),        0, cppu::UnoType<util::DateTime>::get(),        0, 0},
+        {OUString(SC_UNO_FORBIDDEN),               0, cppu::UnoType<util::DateTime>::get(),      beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_HASDRAWPAGES),            0, getBooleanCppuType(),                                             beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_IGNORECASE),              PROP_UNO_IGNORECASE, getBooleanCppuType(),                           0, 0},
         {OUString(SC_UNO_ITERENABLED),             PROP_UNO_ITERENABLED, getBooleanCppuType(),                          0, 0},
@@ -132,11 +132,11 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_ITEREPSILON),             PROP_UNO_ITEREPSILON, cppu::UnoType<double>::get(),                       0, 0},
         {OUString(SC_UNO_LOOKUPLABELS),            PROP_UNO_LOOKUPLABELS, getBooleanCppuType(),                         0, 0},
         {OUString(SC_UNO_MATCHWHOLE),              PROP_UNO_MATCHWHOLE, getBooleanCppuType(),                           0, 0},
-        {OUString(SC_UNO_NAMEDRANGES),             0, getCppuType((uno::Reference<sheet::XNamedRanges>*)0),             0, 0},
-        {OUString(SC_UNO_DATABASERNG),             0, getCppuType((uno::Reference<sheet::XDatabaseRanges>*)0),          0, 0},
-        {OUString(SC_UNO_NULLDATE),                PROP_UNO_NULLDATE, getCppuType((util::Date*)0),                      0, 0},
-        {OUString(SC_UNO_ROWLABELRNG),             0, getCppuType((uno::Reference<sheet::XLabelRanges>*)0),             0, 0},
-        {OUString(SC_UNO_SHEETLINKS),              0, getCppuType((uno::Reference<container::XNameAccess>*)0),          0, 0},
+        {OUString(SC_UNO_NAMEDRANGES),             0, cppu::UnoType<sheet::XNamedRanges>::get(),             0, 0},
+        {OUString(SC_UNO_DATABASERNG),             0, cppu::UnoType<util::DateTime>::get(),          0, 0},
+        {OUString(SC_UNO_NULLDATE),                PROP_UNO_NULLDATE, cppu::UnoType<util::Date>::get(),                      0, 0},
+        {OUString(SC_UNO_ROWLABELRNG),             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
+        {OUString(SC_UNO_SHEETLINKS),              0, cppu::UnoType<container::XNameAccess>::get(),          0, 0},
         {OUString(SC_UNO_SPELLONLINE),             PROP_UNO_SPELLONLINE, getBooleanCppuType(),                          0, 0},
         {OUString(SC_UNO_STANDARDDEC),             PROP_UNO_STANDARDDEC, cppu::UnoType<sal_Int16>::get(),                    0, 0},
         {OUString(SC_UNO_REGEXENABLED),            PROP_UNO_REGEXENABLED, getBooleanCppuType(),                         0, 0},
@@ -147,7 +147,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_ISADJUSTHEIGHTENABLED),   0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_ISEXECUTELINKENABLED),    0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_ISCHANGEREADONLYENABLED), 0, getBooleanCppuType(),                                             0, 0},
-        {OUString(SC_UNO_REFERENCEDEVICE),         0, getCppuType((uno::Reference<awt::XDevice>*)0),                    beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNO_REFERENCEDEVICE),         0, cppu::UnoType<awt::XDevice>::get(),                    beans::PropertyAttribute::READONLY, 0},
         {OUString("BuildId"),                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
         {OUString(SC_UNO_CODENAME),                0, cppu::UnoType<OUString>::get(),                  0, 0},
         {OUString(SC_UNO_INTEROPGRABBAG),          0, ::getCppuType((uno::Sequence< beans::PropertyValue >*)0), 0, 0},
@@ -468,12 +468,12 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue()
-        && rType != ::getCppuType((uno::Reference< com::sun::star::document::XDocumentEventBroadcaster>*)0)
-        && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XController>*)0)
-        && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XFrame>*)0)
-        && rType != ::getCppuType((uno::Reference< com::sun::star::script::XInvocation>*)0)
-        && rType != ::getCppuType((uno::Reference< com::sun::star::beans::XFastPropertySet>*)0)
-        && rType != ::getCppuType((uno::Reference< com::sun::star::awt::XWindow>*)0))
+        && rType != cppu::UnoType<com::sun::star::document::XDocumentEventBroadcaster>::get()
+        && rType != cppu::UnoType<com::sun::star::frame::XController>::get()
+        && rType != cppu::UnoType<com::sun::star::frame::XFrame>::get()
+        && rType != cppu::UnoType<com::sun::star::script::XInvocation>::get()
+        && rType != cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get()
+        && rType != cppu::UnoType<com::sun::star::awt::XWindow>::get())
     {
         GetFormatter();
         if ( xNumberAgg.is() )
@@ -505,7 +505,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         uno::Sequence<uno::Type> aAggTypes;
         if ( GetFormatter().is() )
         {
-            const uno::Type& rProvType = ::getCppuType((uno::Reference<lang::XTypeProvider>*) 0);
+            const uno::Type& rProvType = cppu::UnoType<lang::XTypeProvider>::get();
             uno::Any aNumProv(xNumberAgg->queryAggregation(rProvType));
             if(aNumProv.getValueType() == rProvType)
             {
@@ -520,22 +520,22 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         const long nThisLen = 16;
         aTypes.realloc( nParentLen + nAggLen + nThisLen );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetDocument>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<document::XActionLockable>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<sheet::XCalculatable>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<util::XProtectable>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<drawing::XDrawPagesSupplier>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XGoalSeek>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XConsolidatable>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XDocumentAuditing>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<style::XStyleFamiliesSupplier>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<view::XRenderable>*)0);
-        pPtr[nParentLen +10] = getCppuType((const uno::Reference<document::XLinkTargetSupplier>*)0);
-        pPtr[nParentLen +11] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
-        pPtr[nParentLen +12] = getCppuType((const uno::Reference<lang::XMultiServiceFactory>*)0);
-        pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
-        pPtr[nParentLen +14] = getCppuType((const uno::Reference<util::XChangesNotifier>*)0);
-        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::opencl::XOpenCLSelection>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheetDocument>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<document::XActionLockable>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<sheet::XCalculatable>::get();
+        pPtr[nParentLen + 3] = cppu::UnoType<util::XProtectable>::get();
+        pPtr[nParentLen + 4] = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
+        pPtr[nParentLen + 5] = cppu::UnoType<sheet::XGoalSeek>::get();
+        pPtr[nParentLen + 6] = cppu::UnoType<sheet::XConsolidatable>::get();
+        pPtr[nParentLen + 7] = cppu::UnoType<sheet::XDocumentAuditing>::get();
+        pPtr[nParentLen + 8] = cppu::UnoType<style::XStyleFamiliesSupplier>::get();
+        pPtr[nParentLen + 9] = cppu::UnoType<view::XRenderable>::get();
+        pPtr[nParentLen +10] = cppu::UnoType<document::XLinkTargetSupplier>::get();
+        pPtr[nParentLen +11] = cppu::UnoType<beans::XPropertySet>::get();
+        pPtr[nParentLen +12] = cppu::UnoType<lang::XMultiServiceFactory>::get();
+        pPtr[nParentLen +13] = cppu::UnoType<lang::XServiceInfo>::get();
+        pPtr[nParentLen +14] = cppu::UnoType<util::XChangesNotifier>::get();
+        pPtr[nParentLen +15] = cppu::UnoType<sheet::opencl::XOpenCLSelection>::get();
 
         long i;
         for (i=0; i<nParentLen; i++)
@@ -2076,7 +2076,7 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
 
     if ( GetFormatter().is() )
     {
-        const uno::Type& rTunnelType = ::getCppuType((uno::Reference<lang::XUnoTunnel>*) 0);
+        const uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
         uno::Any aNumTunnel(xNumberAgg->queryAggregation(rTunnelType));
         if(aNumTunnel.getValueType() == rTunnelType)
         {
@@ -2478,7 +2478,7 @@ uno::Any SAL_CALL ScDrawPagesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDrawPagesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<drawing::XDrawPage>*)0);
+    return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
 sal_Bool SAL_CALL ScDrawPagesObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -2835,7 +2835,7 @@ uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScTableSheetsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XSpreadsheet>*)0);
+    return cppu::UnoType<sheet::XSpreadsheet>::get();
 }
 
 sal_Bool SAL_CALL ScTableSheetsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -3006,7 +3006,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScTableColumnsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<table::XCellRange>*)0);
+    return cppu::UnoType<table::XCellRange>::get();
 }
 
 sal_Bool SAL_CALL ScTableColumnsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -3261,7 +3261,7 @@ uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScTableRowsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<table::XCellRange>*)0);
+    return cppu::UnoType<table::XCellRange>::get();
 }
 
 sal_Bool SAL_CALL ScTableRowsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -3608,7 +3608,7 @@ uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScAnnotationsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XSheetAnnotation>*)0);
+    return cppu::UnoType<sheet::XSheetAnnotation>::get();
 }
 
 sal_Bool SAL_CALL ScAnnotationsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -3775,7 +3775,7 @@ uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScScenariosObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XScenario>*)0);
+    return cppu::UnoType<sheet::XScenario>::get();
 }
 
 sal_Bool SAL_CALL ScScenariosObj::hasElements() throw(uno::RuntimeException, std::exception)

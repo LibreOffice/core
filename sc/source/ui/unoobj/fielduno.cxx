@@ -56,7 +56,7 @@ const SfxItemPropertySet* getDateTimePropertySet()
 {
     static const SfxItemPropertyMapEntry aMapContent[] =
     {
-        { OUString(SC_UNONAME_DATETIME), 0, getCppuType((const util::DateTime*)0), 0, 0 },
+        { OUString(SC_UNONAME_DATETIME), 0, cppu::UnoType<util::DateTime>::get(), 0, 0 },
         { OUString(SC_UNONAME_ISFIXED),  0, getBooleanCppuType(),                  0, 0 },
         { OUString(SC_UNONAME_ISDATE),   0, getBooleanCppuType(),                  0, 0 },
         { OUString(SC_UNONAME_NUMFMT),   0, cppu::UnoType<sal_Int32>::get(),      0, 0 },
@@ -373,7 +373,7 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScCellFieldsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<text::XTextField>*)0);
+    return cppu::UnoType<text::XTextField>::get();
 }
 
 sal_Bool SAL_CALL ScCellFieldsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -553,7 +553,7 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScHeaderFieldsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<text::XTextField>*)0);
+    return cppu::UnoType<text::XTextField>::get();
 }
 
 sal_Bool SAL_CALL ScHeaderFieldsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -1457,10 +1457,10 @@ uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes() throw(uno::RuntimeE
 
         aTypes.realloc( nParentLen + 4 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<text::XTextField>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<text::XTextField>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<beans::XPropertySet>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<lang::XUnoTunnel>::get();
+        pPtr[nParentLen + 3] = cppu::UnoType<lang::XServiceInfo>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first

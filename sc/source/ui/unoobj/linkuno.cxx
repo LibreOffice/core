@@ -498,7 +498,7 @@ uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScSheetLinksObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<beans::XPropertySet>*)0);
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL ScSheetLinksObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -1026,7 +1026,7 @@ uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScAreaLinksObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XAreaLink>*)0);
+    return cppu::UnoType<util::DateTime>::get();
 }
 
 sal_Bool SAL_CALL ScAreaLinksObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -1333,7 +1333,7 @@ uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDDELinksObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XDDELink>*)0);
+    return cppu::UnoType<util::DateTime>::get();
 }
 
 sal_Bool SAL_CALL ScDDELinksObj::hasElements() throw(uno::RuntimeException, std::exception)

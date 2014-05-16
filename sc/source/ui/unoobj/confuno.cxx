@@ -65,7 +65,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {OUString(SC_UNO_PRINTERNAME),  0,  cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNO_PRINTERSETUP), 0,  getCppuType((uno::Sequence<sal_Int8>*)0), 0, 0},
         {OUString(SC_UNO_APPLYDOCINF),  0,  getBooleanCppuType(),              0, 0},
-        {OUString(SC_UNO_FORBIDDEN),    0,  getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY, 0},
+        {OUString(SC_UNO_FORBIDDEN),    0,  cppu::UnoType<util::DateTime>::get(), beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_CHARCOMP),     0,  cppu::UnoType<sal_Int16>::get(),        0, 0},
         {OUString(SC_UNO_ASIANKERN),    0,  getBooleanCppuType(),              0, 0},
         {OUString(SCSAVEVERSION),       0,  getBooleanCppuType(),              0, 0},

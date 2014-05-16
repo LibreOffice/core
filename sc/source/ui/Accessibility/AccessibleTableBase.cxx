@@ -65,7 +65,7 @@ void SAL_CALL ScAccessibleTableBase::disposing()
 uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException, std::exception)
 {
-    if ( rType == ::getCppuType((uno::Reference<XAccessibleTableSelection> *)0) )
+    if ( rType == cppu::UnoType<XAccessibleTableSelection>::get())
     {
         return uno::Any(uno::Reference<XAccessibleTableSelection>(this));
     }

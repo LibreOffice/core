@@ -50,7 +50,7 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
     static const SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
-        {OUString(SC_UNO_LINKDISPBIT),      0,  getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNO_LINKDISPBIT),      0,  cppu::UnoType<awt::XBitmap>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNO_LINKDISPNAME),     0,  cppu::UnoType<OUString>::get(),                beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_TOKENINDEX),   0,  cppu::UnoType<sal_Int32>::get(),                    beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_ISSHAREDFMLA), 0,  getBooleanCppuType(),                          0, 0 },
@@ -642,7 +642,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScNamedRangesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< sheet::XNamedRange >*)0);   // must be suitable for getByIndex
+    return cppu::UnoType<sheet::XNamedRange>::get();   // must be suitable for getByIndex
 }
 
 sal_Bool SAL_CALL ScNamedRangesObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -1204,7 +1204,7 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScLabelRangesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< sheet::XLabelRange >*)0);   // must be suitable for getByIndex
+    return cppu::UnoType<sheet::XLabelRange>::get();   // must be suitable for getByIndex
 
 }
 

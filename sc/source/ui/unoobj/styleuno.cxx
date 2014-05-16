@@ -131,7 +131,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {OUString(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(),        0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(),        0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  ::cppu::UnoType<sal_Int32>::get(),            0, 0 },
-//      {SC_UNONAME_NUMRULES, SC_WID_UNO_NUMRULES,getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+//      {SC_UNONAME_NUMRULES, SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,       ::cppu::UnoType<table::CellOrientation>::get(),   0, 0 },
         {OUString(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   ::cppu::UnoType<sal_Int16>::get(),    0, MID_HORJUST_ADJUST },
         {OUString(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        ::cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
@@ -154,7 +154,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {OUString(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD2, ::cppu::UnoType<table::TableBorder2>::get(),       0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(),        0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine2>::get(),        0, TOP_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
@@ -247,8 +247,8 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {OUString(SC_UNO_PAGE_LEFTBORDER),  ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(),        0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNO_PAGE_LEFTBRDDIST), ATTR_BORDER,        ::cppu::UnoType<sal_Int32>::get(),    0, LEFT_BORDER_DISTANCE | CONVERT_TWIPS },
         {OUString(SC_UNO_PAGE_LEFTMARGIN),  ATTR_LRSPACE,       ::cppu::UnoType<sal_Int32>::get(),            0, MID_L_MARGIN | CONVERT_TWIPS },
-        {OUString(SC_UNO_PAGE_LEFTFTRCONT), ATTR_PAGE_FOOTERLEFT,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0), 0, 0 },
-        {OUString(SC_UNO_PAGE_LEFTHDRCONT), ATTR_PAGE_HEADERLEFT,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0), 0, 0 },
+        {OUString(SC_UNO_PAGE_LEFTFTRCONT), ATTR_PAGE_FOOTERLEFT,cppu::UnoType<sheet::XHeaderFooterContent>::get(), 0, 0 },
+        {OUString(SC_UNO_PAGE_LEFTHDRCONT), ATTR_PAGE_HEADERLEFT,cppu::UnoType<sheet::XHeaderFooterContent>::get(), 0, 0 },
         {OUString(SC_UNO_PAGE_NUMBERTYPE),  ATTR_PAGE,          ::cppu::UnoType<sal_Int16>::get(),            0, MID_PAGE_NUMTYPE },
         {OUString(SC_UNO_PAGE_SCALEVAL),    ATTR_PAGE_SCALE,    ::cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {OUString(SC_UNO_PAGE_SYTLELAYOUT), ATTR_PAGE,          ::cppu::UnoType<style::PageStyleLayout>::get(),   0, MID_PAGE_LAYOUT },
@@ -265,8 +265,8 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {OUString(SC_UNO_PAGE_RIGHTBORDER), ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNO_PAGE_RIGHTBRDDIST),ATTR_BORDER,        ::cppu::UnoType<sal_Int32>::get(),    0, RIGHT_BORDER_DISTANCE | CONVERT_TWIPS },
         {OUString(SC_UNO_PAGE_RIGHTMARGIN), ATTR_LRSPACE,       ::cppu::UnoType<sal_Int32>::get(),            0, MID_R_MARGIN | CONVERT_TWIPS },
-        {OUString(SC_UNO_PAGE_RIGHTFTRCON), ATTR_PAGE_FOOTERRIGHT,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0), 0, 0 },
-        {OUString(SC_UNO_PAGE_RIGHTHDRCON), ATTR_PAGE_HEADERRIGHT,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0), 0, 0 },
+        {OUString(SC_UNO_PAGE_RIGHTFTRCON), ATTR_PAGE_FOOTERRIGHT,cppu::UnoType<sheet::XHeaderFooterContent>::get(), 0, 0 },
+        {OUString(SC_UNO_PAGE_RIGHTHDRCON), ATTR_PAGE_HEADERRIGHT,cppu::UnoType<sheet::XHeaderFooterContent>::get(), 0, 0 },
         {OUString(SC_UNO_PAGE_SCALETOPAG),  ATTR_PAGE_SCALETOPAGES,::cppu::UnoType<sal_Int16>::get(),     0, 0 },
         {OUString(SC_UNO_PAGE_SCALETOX),    ATTR_PAGE_SCALETO,  ::cppu::UnoType<sal_Int16>::get(),        0, 0 },
         {OUString(SC_UNO_PAGE_SCALETOY),    ATTR_PAGE_SCALETO,  ::cppu::UnoType<sal_Int16>::get(),        0, 0 },
@@ -277,7 +277,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {OUString(SC_UNO_PAGE_TOPMARGIN),   ATTR_ULSPACE,       ::cppu::UnoType<sal_Int32>::get(),            0, MID_UP_MARGIN | CONVERT_TWIPS },
         {OUString(OLD_UNO_PAGE_FTRBACKTRAN),SC_WID_UNO_FOOTERSET,::getBooleanCppuType(),                       0, 0 },
         {OUString(OLD_UNO_PAGE_HDRBACKTRAN),SC_WID_UNO_HEADERSET,::getBooleanCppuType(),                       0, 0 },
-        {OUString(SC_UNONAME_USERDEF),      ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),      ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
         {OUString(SC_UNO_PAGE_WIDTH),       ATTR_PAGE_SIZE,     ::cppu::UnoType<sal_Int32>::get(),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
         {OUString(SC_UNONAME_WRITING),      ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {OUString(SC_UNONAME_HIDDEN),       ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get(),             0, 0 },
@@ -479,7 +479,7 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< container::XNameContainer >*)0);    // muss zu getByIndex passen
+    return cppu::UnoType<container::XNameContainer>::get();    // muss zu getByIndex passen
 }
 
 sal_Bool SAL_CALL ScStyleFamiliesObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -789,7 +789,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< style::XStyle >*)0);    // muss zu getByIndex passen
+    return cppu::UnoType<style::XStyle>::get();    // muss zu getByIndex passen
 }
 
 sal_Bool SAL_CALL ScStyleFamilyObj::hasElements() throw(uno::RuntimeException, std::exception)

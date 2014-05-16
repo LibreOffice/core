@@ -167,7 +167,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
     {
            ::cppu::OInterfaceContainerHelper* pContainer =
             m_pInterfaceContainer->getContainer(
-                                    ::getCppuType( ( const uno::Reference< document::XEventListener >*) NULL ) );
+                                    cppu::UnoType<document::XEventListener>::get());
         if ( pContainer != NULL )
         {
             document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
@@ -192,7 +192,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
-                            ::getCppuType( ( const uno::Reference< embed::XStateChangeListener >*) NULL ) );
+                            cppu::UnoType<embed::XStateChangeListener>::get());
         if ( pContainer != NULL )
         {
             lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -421,7 +421,7 @@ void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< e
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+    m_pInterfaceContainer->addInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                         xListener );
 }
 
@@ -442,7 +442,7 @@ void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                 xListener );
 }
 
@@ -472,7 +472,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
-            m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+            m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -490,7 +490,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
         }
 
         pContainer = m_pInterfaceContainer->getContainer(
-                                    ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+                                    cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
@@ -532,7 +532,7 @@ void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::X
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
 
 
@@ -554,7 +554,7 @@ void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util
         throw lang::DisposedException(); // TODO
 
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<util::XCloseListener>::get(),
                                                 xListener );
 }
 
@@ -579,7 +579,7 @@ void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< documen
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }
 
 
@@ -602,7 +602,7 @@ void SAL_CALL OleEmbeddedObject::removeEventListener(
         throw lang::DisposedException(); // TODO
 
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<document::XEventListener>::get(),
                                                 xListener );
 }
 

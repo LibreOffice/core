@@ -92,7 +92,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
         {OUString(SC_UNONAME_HIDDENVALUES), 0, getCppuType((uno::Sequence<sal_Int32>*)0 ),                 0, 0 },
-        {OUString(SC_UNONAME_ROLE), 0, getCppuType((::com::sun::star::chart2::data::DataSequenceRole*)0),                  0, 0 },
+        {OUString(SC_UNONAME_ROLE), 0, cppu::UnoType<com::sun::star::chart2::data::DataSequenceRole>::get(),                  0, 0 },
         {OUString(SC_UNONAME_INCLUDEHIDDENCELLS), 0,        getBooleanCppuType(),                  0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

@@ -1707,7 +1707,7 @@ uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType 
     throw (uno::RuntimeException, std::exception)
 {
     uno::Any aAnyTmp;
-    if(rType == ::getCppuType((com::sun::star::uno::Reference<XAccessibleGetAccFlowTo> *)NULL) )
+    if(rType == cppu::UnoType<XAccessibleGetAccFlowTo>::get())
        {
          com::sun::star::uno::Reference<XAccessibleGetAccFlowTo> AccFromXShape = this;
             aAnyTmp <<= AccFromXShape;

@@ -62,7 +62,7 @@ void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pIC = m_pInterfaceContainer->getContainer(
-                                            ::getCppuType((const uno::Reference< document::XEventListener >*)0) );
+                                            cppu::UnoType<document::XEventListener>::get());
         if( pIC )
         {
             document::EventObject aEvent;
@@ -596,7 +596,7 @@ void SAL_CALL ODummyEmbeddedObject::addStateChangeListener( const uno::Reference
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+    m_pInterfaceContainer->addInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                         xListener );
 }
 
@@ -607,7 +607,7 @@ void SAL_CALL ODummyEmbeddedObject::removeStateChangeListener(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                 xListener );
 }
 
@@ -626,7 +626,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
-            m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+            m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -644,7 +644,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
         }
 
         pContainer = m_pInterfaceContainer->getContainer(
-                                    ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
+                                    cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
@@ -678,7 +678,7 @@ void SAL_CALL ODummyEmbeddedObject::addCloseListener( const uno::Reference< util
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
 
 
@@ -687,7 +687,7 @@ void SAL_CALL ODummyEmbeddedObject::removeCloseListener( const uno::Reference< u
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<util::XCloseListener>::get(),
                                                 xListener );
 }
 
@@ -702,7 +702,7 @@ void SAL_CALL ODummyEmbeddedObject::addEventListener( const uno::Reference< docu
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }
 
 
@@ -711,7 +711,7 @@ void SAL_CALL ODummyEmbeddedObject::removeEventListener( const uno::Reference< d
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<document::XEventListener>::get(),
                                                 xListener );
 }
 

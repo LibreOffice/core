@@ -206,9 +206,9 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         {OUString(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,getBooleanCppuType(),                  0, 0 },
-        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
         {OUString(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine2>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
@@ -220,7 +220,7 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         {OUString(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,       cppu::UnoType<table::CellOrientation>::get(), 0, 0 },
         {OUString(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   ::cppu::UnoType<sal_Int16>::get(),    0, MID_HORJUST_ADJUST },
         {OUString(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
@@ -243,10 +243,10 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         {OUString(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2, cppu::UnoType<table::TableBorder2>::get(),   0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
@@ -315,9 +315,9 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         {OUString(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,getBooleanCppuType(),                  0, 0 },
-        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
         {OUString(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine2>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
@@ -329,7 +329,7 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         {OUString(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,       cppu::UnoType<table::CellOrientation>::get(), 0, 0 },
         {OUString(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   ::cppu::UnoType<sal_Int16>::get(),    0, MID_HORJUST_ADJUST },
         {OUString(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
@@ -342,7 +342,7 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         {OUString(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     cppu::UnoType<awt::Point>::get(),           0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_RIGHTBORDER2),ATTR_BORDER,     ::cppu::UnoType<table::BorderLine2>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
@@ -354,10 +354,10 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         {OUString(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2, cppu::UnoType<table::TableBorder2>::get(),   0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
@@ -425,15 +425,15 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {OUString(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,getBooleanCppuType(),                  0, 0 },
-        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
         {OUString(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine2>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_TLBR2), ATTR_BORDER_TLBR, ::cppu::UnoType<table::BorderLine2>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_FORMLOC),  SC_WID_UNO_FORMLOC, cppu::UnoType<OUString>::get(),        0, 0 },
-        {OUString(SC_UNONAME_FORMRT),   SC_WID_UNO_FORMRT,  getCppuType((table::CellContentType*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_FORMRT),   SC_WID_UNO_FORMRT,  cppu::UnoType<table::CellContentType>::get(), 0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   cppu::UnoType<table::CellHoriJustify>::get(), 0, MID_HORJUST_HORJUST },
         {OUString(SC_UNONAME_CELLHJUS_METHOD), ATTR_HOR_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
@@ -441,7 +441,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {OUString(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,       cppu::UnoType<table::CellOrientation>::get(), 0, 0 },
         {OUString(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   ::cppu::UnoType<sal_Int16>::get(),    0, MID_HORJUST_ADJUST },
         {OUString(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
@@ -454,7 +454,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {OUString(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     cppu::UnoType<awt::Point>::get(),           0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_RIGHTBORDER2),ATTR_BORDER,     ::cppu::UnoType<table::BorderLine2>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
@@ -466,10 +466,10 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {OUString(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2, cppu::UnoType<table::TableBorder2>::get(),   0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
@@ -539,9 +539,9 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
         {OUString(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,getBooleanCppuType(),                  0, 0 },
-        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
         {OUString(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine2>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
@@ -556,7 +556,7 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
         {OUString(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {OUString(SC_UNONAME_OWIDTH),   SC_WID_UNO_OWIDTH,  getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,       cppu::UnoType<table::CellOrientation>::get(), 0, 0 },
         {OUString(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   ::cppu::UnoType<sal_Int16>::get(),    0, MID_HORJUST_ADJUST },
@@ -570,7 +570,7 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
         {OUString(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     cppu::UnoType<awt::Point>::get(),           0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_RIGHTBORDER2),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
@@ -582,10 +582,10 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
         {OUString(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2, cppu::UnoType<table::TableBorder2>::get(),   0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_CELLWID),  SC_WID_UNO_CELLWID, cppu::UnoType<sal_Int32>::get(),            0, 0 },
@@ -651,9 +651,9 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
         {OUString(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,getBooleanCppuType(),                  0, 0 },
-        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
         {OUString(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, ::cppu::UnoType<table::BorderLine2>::get(), 0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
@@ -670,7 +670,7 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
         {OUString(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {OUString(SC_UNONAME_OHEIGHT),  SC_WID_UNO_OHEIGHT, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,       cppu::UnoType<table::CellOrientation>::get(), 0, 0 },
         {OUString(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   ::cppu::UnoType<sal_Int16>::get(),    0, MID_HORJUST_ADJUST },
@@ -684,7 +684,7 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
         {OUString(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     cppu::UnoType<awt::Point>::get(),           0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_RIGHTBORDER2),ATTR_BORDER,     ::cppu::UnoType<table::BorderLine2>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
@@ -696,10 +696,10 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
         {OUString(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2, cppu::UnoType<table::TableBorder2>::get(),   0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
@@ -766,9 +766,9 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {OUString(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,getBooleanCppuType(),                  0, 0 },
-        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {OUString(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
+        {OUString(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, cppu::UnoType<sheet::XSheetConditionalEntries>::get(), 0, 0 },
         {OUString(SC_UNONAME_COPYBACK), SC_WID_UNO_COPYBACK,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_COPYFORM), SC_WID_UNO_COPYFORM,getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_COPYSTYL), SC_WID_UNO_COPYSTYL,getBooleanCppuType(),                  0, 0 },
@@ -784,10 +784,10 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {OUString(SC_UNONAME_CELLVIS),  SC_WID_UNO_CELLVIS, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine2>::get(), 0, LEFT_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNO_LINKDISPBIT),  SC_WID_UNO_LINKDISPBIT,getCppuType((uno::Reference<awt::XBitmap>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNO_LINKDISPBIT),  SC_WID_UNO_LINKDISPBIT,cppu::UnoType<awt::XBitmap>::get(), 0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNO_LINKDISPNAME), SC_WID_UNO_LINKDISPNAME,cppu::UnoType<OUString>::get(),    0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  cppu::UnoType<sal_Int32>::get(),            0, 0 },
-        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {OUString(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,cppu::UnoType<container::XIndexReplace>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLORI),  ATTR_STACKED,       cppu::UnoType<table::CellOrientation>::get(), 0, 0 },
         {OUString(SC_UNONAME_PAGESTL),  SC_WID_UNO_PAGESTL, cppu::UnoType<OUString>::get(),        0, 0 },
         {OUString(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   ::cppu::UnoType<sal_Int16>::get(),    0, MID_HORJUST_ADJUST },
@@ -801,7 +801,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {OUString(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {OUString(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        cppu::UnoType<sal_Int32>::get(),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {OUString(SC_UNONAME_POS),      SC_WID_UNO_POS,     cppu::UnoType<awt::Point>::get(),           0 | beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_PRINTBORD),SC_WID_UNO_PRINTBORD,getBooleanCppuType(),                 0, 0 },
         {OUString(SC_UNONAME_PROTECT),  SC_WID_UNO_PROTECT, getBooleanCppuType(),                  0, 0 },
         {OUString(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      ::cppu::UnoType<table::BorderLine>::get(), 0, RIGHT_BORDER | CONVERT_TWIPS },
@@ -817,16 +817,16 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {OUString(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,cppu::UnoType<sal_Int16>::get(),           0, 0 },
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
-        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
+        {OUString(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, cppu::UnoType<beans::XPropertySet>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {OUString(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, cppu::UnoType<OUString>::get(),    0, 0},
-        {OUString(SC_UNO_NAMEDRANGES), SC_WID_UNO_NAMES, getCppuType((uno::Reference<sheet::XNamedRanges>*)0), 0, 0 },
+        {OUString(SC_UNO_NAMEDRANGES), SC_WID_UNO_NAMES, cppu::UnoType<sheet::XNamedRanges>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
@@ -841,8 +841,8 @@ static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
-        {OUString(SC_UNONAME_TEXTUSER), EE_CHAR_XMLATTRIBS, getCppuType((const uno::Reference< container::XNameContainer >*)0), 0, 0},
-        {OUString(SC_UNONAME_USERDEF),  EE_PARA_XMLATTRIBS, getCppuType((const uno::Reference< container::XNameContainer >*)0), 0, 0},
+        {OUString(SC_UNONAME_TEXTUSER), EE_CHAR_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
+        {OUString(SC_UNONAME_USERDEF),  EE_PARA_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aEditPropertyMap_Impl;
@@ -1762,19 +1762,19 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes() throw(uno::Runtim
     {
         aTypes.realloc(13);
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[0] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
-        pPtr[1] = getCppuType((const uno::Reference<beans::XMultiPropertySet>*)0);
-        pPtr[2] = getCppuType((const uno::Reference<beans::XPropertyState>*)0);
-        pPtr[3] = getCppuType((const uno::Reference<sheet::XSheetOperation>*)0);
-        pPtr[4] = getCppuType((const uno::Reference<chart::XChartDataArray>*)0);
-        pPtr[5] = getCppuType((const uno::Reference<util::XIndent>*)0);
-        pPtr[6] = getCppuType((const uno::Reference<sheet::XCellRangesQuery>*)0);
-        pPtr[7] = getCppuType((const uno::Reference<sheet::XFormulaQuery>*)0);
-        pPtr[8] = getCppuType((const uno::Reference<util::XReplaceable>*)0);
-        pPtr[9] = getCppuType((const uno::Reference<util::XModifyBroadcaster>*)0);
-        pPtr[10]= getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
-        pPtr[11]= getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-        pPtr[12]= getCppuType((const uno::Reference<lang::XTypeProvider>*)0);
+        pPtr[0] = cppu::UnoType<beans::XPropertySet>::get();
+        pPtr[1] = cppu::UnoType<beans::XMultiPropertySet>::get();
+        pPtr[2] = cppu::UnoType<beans::XPropertyState>::get();
+        pPtr[3] = cppu::UnoType<sheet::XSheetOperation>::get();
+        pPtr[4] = cppu::UnoType<chart::XChartDataArray>::get();
+        pPtr[5] = cppu::UnoType<util::XIndent>::get();
+        pPtr[6] = cppu::UnoType<sheet::XCellRangesQuery>::get();
+        pPtr[7] = cppu::UnoType<sheet::XFormulaQuery>::get();
+        pPtr[8] = cppu::UnoType<util::XReplaceable>::get();
+        pPtr[9] = cppu::UnoType<util::XModifyBroadcaster>::get();
+        pPtr[10]= cppu::UnoType<lang::XServiceInfo>::get();
+        pPtr[11]= cppu::UnoType<lang::XUnoTunnel>::get();
+        pPtr[12]= cppu::UnoType<lang::XTypeProvider>::get();
     }
     return aTypes;
 }
@@ -4171,9 +4171,9 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes() throw(uno::Runtime
 
         aTypes.realloc( nParentLen + 3 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSheetCellRangeContainer>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XNameContainer>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSheetCellRangeContainer>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<container::XNameContainer>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<container::XEnumerationAccess>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -4699,7 +4699,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScCellRangesObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<table::XCellRange>*)0);
+    return cppu::UnoType<table::XCellRange>::get();
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -4814,23 +4814,23 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
 
         aTypes.realloc( nParentLen + 17 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XCellRangeAddressable>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XSheetCellRange>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<sheet::XArrayFormulaRange>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<sheet::XArrayFormulaTokens>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XCellRangeData>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XCellRangeFormula>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XMultipleOperation>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<util::XMergeable>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<sheet::XCellSeries>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<table::XAutoFormattable>*)0);
-        pPtr[nParentLen +10] = getCppuType((const uno::Reference<util::XSortable>*)0);
-        pPtr[nParentLen +11] = getCppuType((const uno::Reference<sheet::XSheetFilterableEx>*)0);
-        pPtr[nParentLen +12] = getCppuType((const uno::Reference<sheet::XSubTotalCalculatable>*)0);
-        pPtr[nParentLen +13] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
-        pPtr[nParentLen +14] = getCppuType((const uno::Reference<util::XImportable>*)0);
-        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
-        pPtr[nParentLen +16] = getCppuType((const uno::Reference<sheet::XUniqueCellFormatRangesSupplier>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XCellRangeAddressable>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<sheet::XSheetCellRange>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<sheet::XArrayFormulaRange>::get();
+        pPtr[nParentLen + 3] = cppu::UnoType<sheet::XArrayFormulaTokens>::get();
+        pPtr[nParentLen + 4] = cppu::UnoType<sheet::XCellRangeData>::get();
+        pPtr[nParentLen + 5] = cppu::UnoType<sheet::XCellRangeFormula>::get();
+        pPtr[nParentLen + 6] = cppu::UnoType<sheet::XMultipleOperation>::get();
+        pPtr[nParentLen + 7] = cppu::UnoType<util::XMergeable>::get();
+        pPtr[nParentLen + 8] = cppu::UnoType<sheet::XCellSeries>::get();
+        pPtr[nParentLen + 9] = cppu::UnoType<table::XAutoFormattable>::get();
+        pPtr[nParentLen +10] = cppu::UnoType<util::XSortable>::get();
+        pPtr[nParentLen +11] = cppu::UnoType<sheet::XSheetFilterableEx>::get();
+        pPtr[nParentLen +12] = cppu::UnoType<sheet::XSubTotalCalculatable>::get();
+        pPtr[nParentLen +13] = cppu::UnoType<table::XColumnRowRange>::get();
+        pPtr[nParentLen +14] = cppu::UnoType<util::XImportable>::get();
+        pPtr[nParentLen +15] = cppu::UnoType<sheet::XCellFormatRangesSupplier>::get();
+        pPtr[nParentLen +16] = cppu::UnoType<sheet::XUniqueCellFormatRangesSupplier>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -6107,15 +6107,15 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
 
         aTypes.realloc( nParentLen + 9 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<table::XCell>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XCellAddressable>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<text::XText>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XSheetAnnotationAnchor>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<text::XTextFieldsSupplier>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<document::XActionLockable>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XFormulaTokens>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<table::XCell2>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<table::XCell>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<sheet::XCellAddressable>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<text::XText>::get();
+        pPtr[nParentLen + 3] = cppu::UnoType<container::XEnumerationAccess>::get();
+        pPtr[nParentLen + 4] = cppu::UnoType<sheet::XSheetAnnotationAnchor>::get();
+        pPtr[nParentLen + 5] = cppu::UnoType<text::XTextFieldsSupplier>::get();
+        pPtr[nParentLen + 6] = cppu::UnoType<document::XActionLockable>::get();
+        pPtr[nParentLen + 7] = cppu::UnoType<sheet::XFormulaTokens>::get();
+        pPtr[nParentLen + 8] = cppu::UnoType<table::XCell2>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -6852,24 +6852,24 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
 
         aTypes.realloc( nParentLen + 18 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheet>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XNamed>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<sheet::XSheetPageBreak>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<sheet::XCellRangeMovement>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<table::XTableChartsSupplier>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XDataPilotTablesSupplier>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XScenariosSupplier>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XSheetAnnotationsSupplier>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<drawing::XDrawPageSupplier>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<sheet::XPrintAreas>*)0);
-        pPtr[nParentLen +10] = getCppuType((const uno::Reference<sheet::XSheetAuditing>*)0);
-        pPtr[nParentLen +11] = getCppuType((const uno::Reference<sheet::XSheetOutline>*)0);
-        pPtr[nParentLen +12] = getCppuType((const uno::Reference<util::XProtectable>*)0);
-        pPtr[nParentLen +13] = getCppuType((const uno::Reference<sheet::XScenario>*)0);
-        pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XScenarioEnhanced>*)0);
-        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XSheetLinkable>*)0);
-        pPtr[nParentLen +16] = getCppuType((const uno::Reference<sheet::XExternalSheetName>*)0);
-        pPtr[nParentLen +17] = getCppuType((const uno::Reference<document::XEventsSupplier>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheet>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<container::XNamed>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<sheet::XSheetPageBreak>::get();
+        pPtr[nParentLen + 3] = cppu::UnoType<sheet::XCellRangeMovement>::get();
+        pPtr[nParentLen + 4] = cppu::UnoType<table::XTableChartsSupplier>::get();
+        pPtr[nParentLen + 5] = cppu::UnoType<sheet::XDataPilotTablesSupplier>::get();
+        pPtr[nParentLen + 6] = cppu::UnoType<sheet::XScenariosSupplier>::get();
+        pPtr[nParentLen + 7] = cppu::UnoType<sheet::XSheetAnnotationsSupplier>::get();
+        pPtr[nParentLen + 8] = cppu::UnoType<drawing::XDrawPageSupplier>::get();
+        pPtr[nParentLen + 9] = cppu::UnoType<sheet::XPrintAreas>::get();
+        pPtr[nParentLen +10] = cppu::UnoType<sheet::XSheetAuditing>::get();
+        pPtr[nParentLen +11] = cppu::UnoType<sheet::XSheetOutline>::get();
+        pPtr[nParentLen +12] = cppu::UnoType<util::XProtectable>::get();
+        pPtr[nParentLen +13] = cppu::UnoType<sheet::XScenario>::get();
+        pPtr[nParentLen +14] = cppu::UnoType<sheet::XScenarioEnhanced>::get();
+        pPtr[nParentLen +15] = cppu::UnoType<sheet::XSheetLinkable>::get();
+        pPtr[nParentLen +16] = cppu::UnoType<sheet::XExternalSheetName>::get();
+        pPtr[nParentLen +17] = cppu::UnoType<document::XEventsSupplier>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -8679,7 +8679,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes() throw(uno::Runtim
 
         aTypes.realloc( nParentLen + 1 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<container::XNamed>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<container::XNamed>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -9037,7 +9037,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellsObj::createEnumeration()
 uno::Type SAL_CALL ScCellsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<table::XCell>*)0);
+    return cppu::UnoType<table::XCell>::get();
 }
 
 sal_Bool SAL_CALL ScCellsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -9284,7 +9284,7 @@ uno::Any SAL_CALL ScCellFormatsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScCellFormatsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<table::XCellRange>*)0);
+    return cppu::UnoType<table::XCellRange>::get();
 }
 
 sal_Bool SAL_CALL ScCellFormatsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -9652,7 +9652,7 @@ uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XSheetCellRangeContainer>*)0);
+    return cppu::UnoType<sheet::XSheetCellRangeContainer>::get();
 }
 
 sal_Bool SAL_CALL ScUniqueCellFormatsObj::hasElements() throw(uno::RuntimeException, std::exception)

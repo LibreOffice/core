@@ -76,9 +76,9 @@ uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes() throw(uno::Runtime
 
         aTypes.realloc( nParentLen + 3 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSheetCellCursor>*)0);
-        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XUsedAreaCursor>*)0);
-        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<table::XCellCursor>*)0);
+        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSheetCellCursor>::get();
+        pPtr[nParentLen + 1] = cppu::UnoType<sheet::XUsedAreaCursor>::get();
+        pPtr[nParentLen + 2] = cppu::UnoType<table::XCellCursor>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first

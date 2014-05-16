@@ -684,8 +684,8 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
 
                 OUString sName = xClass->getName();
                 return (
-                    IsTypeName( sName, getCppuType((uno::Reference<sheet::XVolatileResult>*)0) ) ||
-                    IsTypeName( sName, getCppuType((uno::Reference<uno::XInterface>*)0) ) );
+                    IsTypeName( sName, cppu::UnoType<util::DateTime>::get()) ||
+                    IsTypeName( sName, cppu::UnoType<uno::XInterface>::get()) );
             }
 
         default:
@@ -734,13 +734,13 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<uno::Any> >*)0) ))
         return SC_ADDINARG_MIXED_ARRAY;
 
-    if (IsTypeName( sName, getCppuType((uno::Any*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<util::DateTime>::get()))
         return SC_ADDINARG_VALUE_OR_ARRAY;
 
-    if (IsTypeName( sName, getCppuType((uno::Reference<table::XCellRange>*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<table::XCellRange>::get()))
         return SC_ADDINARG_CELLRANGE;
 
-    if (IsTypeName( sName, getCppuType((uno::Reference<beans::XPropertySet>*)0) ))
+    if (IsTypeName( sName, cppu::UnoType<beans::XPropertySet>::get()))
         return SC_ADDINARG_CALLER;
 
     if (IsTypeName( sName, getCppuType((uno::Sequence<uno::Any>*)0) ))
@@ -819,13 +819,13 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                             OUString sName = xClass->getName();
                             bSkip = (
                                 IsTypeName( sName,
-                                    getCppuType((uno::Reference<uno::XInterface>*)0) ) ||
+                                    cppu::UnoType<uno::XInterface>::get()) ||
                                 IsTypeName( sName,
-                                    getCppuType((uno::Reference<lang::XServiceName>*)0) ) ||
+                                    cppu::UnoType<util::DateTime>::get()) ||
                                 IsTypeName( sName,
-                                    getCppuType((uno::Reference<lang::XServiceInfo>*)0) ) ||
+                                    cppu::UnoType<lang::XServiceInfo>::get()) ||
                                 IsTypeName( sName,
-                                    getCppuType((uno::Reference<sheet::XAddIn>*)0) ) );
+                                    cppu::UnoType<util::DateTime>::get()) );
                         }
                         if (!bSkip)
                         {
@@ -1491,10 +1491,10 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         catch(const reflection::InvocationTargetException& rWrapped)
         {
             if ( rWrapped.TargetException.getValueType().equals(
-                    getCppuType( (lang::IllegalArgumentException*)0 ) ) )
+                    cppu::UnoType<util::DateTime>::get()) )
                 nErrCode = errIllegalArgument;
             else if ( rWrapped.TargetException.getValueType().equals(
-                    getCppuType( (sheet::NoConvergenceException*)0 ) ) )
+                    cppu::UnoType<util::DateTime>::get()) )
                 nErrCode = errNoConvergence;
             else
                 nErrCode = errNoValue;

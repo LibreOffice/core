@@ -1301,7 +1301,7 @@ sal_Bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName ) throw(uno::
 
 uno::Type SAL_CALL ScDPDimensions::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return getCppuType((uno::Reference<container::XNamed>*)0);
+    return cppu::UnoType<container::XNamed>::get();
 }
 
 sal_Bool SAL_CALL ScDPDimensions::hasElements() throw(uno::RuntimeException, std::exception)
@@ -1523,7 +1523,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         { OUString(SC_UNO_DP_ISDATALAYOUT), 0,  getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_NUMBERFO), 0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_ORIENTATION), 0,  cppu::UnoType<sheet::DataPilotFieldOrientation>::get(), 0, 0 },
-        { OUString(SC_UNO_DP_ORIGINAL), 0,  getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
+        { OUString(SC_UNO_DP_ORIGINAL), 0,  cppu::UnoType<container::XNamed>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString(SC_UNO_DP_ORIGINAL_POS), 0, cppu::UnoType<sal_Int32>::get(),             0, 0 },
         { OUString(SC_UNO_DP_POSITION), 0,  cppu::UnoType<sal_Int32>::get(),                0, 0 },
         { OUString(SC_UNO_DP_REFVALUE), 0,  cppu::UnoType<sheet::DataPilotFieldReference>::get(), 0, 0 },
@@ -1779,7 +1779,7 @@ sal_Bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName ) throw(uno:
 
 uno::Type SAL_CALL ScDPHierarchies::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return getCppuType((uno::Reference<container::XNamed>*)0);
+    return cppu::UnoType<container::XNamed>::get();
 }
 
 sal_Bool SAL_CALL ScDPHierarchies::hasElements() throw(uno::RuntimeException, std::exception)
@@ -1958,7 +1958,7 @@ sal_Bool SAL_CALL ScDPLevels::hasByName( const OUString& aName ) throw(uno::Runt
 
 uno::Type SAL_CALL ScDPLevels::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return getCppuType((uno::Reference<container::XNamed>*)0);
+    return cppu::UnoType<container::XNamed>::get();
 }
 
 sal_Bool SAL_CALL ScDPLevels::hasElements() throw(uno::RuntimeException, std::exception)
@@ -2437,7 +2437,7 @@ sal_Bool SAL_CALL ScDPMembers::hasByName( const OUString& aName ) throw(uno::Run
 
 uno::Type SAL_CALL ScDPMembers::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return getCppuType((uno::Reference<container::XNamed>*)0);
+    return cppu::UnoType<container::XNamed>::get();
 }
 
 sal_Bool SAL_CALL ScDPMembers::hasElements() throw(uno::RuntimeException, std::exception)

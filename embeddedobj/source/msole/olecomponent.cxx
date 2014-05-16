@@ -1440,7 +1440,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
     if ( m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
-            m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >* ) NULL ) );
+            m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
@@ -1458,7 +1458,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
         }
 
         pContainer = m_pInterfaceContainer->getContainer(
-                                    ::getCppuType( ( const uno::Reference< util::XCloseListener >* ) NULL ) );
+                                    cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pCloseIterator( *pContainer );
@@ -1490,7 +1490,7 @@ void SAL_CALL OleComponent::addCloseListener( const uno::Reference< util::XClose
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( ( const uno::Reference< util::XCloseListener >* )0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
 
 
@@ -1502,7 +1502,7 @@ void SAL_CALL OleComponent::removeCloseListener( const uno::Reference< util::XCl
         throw lang::DisposedException(); // TODO
 
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( ( const uno::Reference< util::XCloseListener >* )0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<util::XCloseListener>::get(),
                                                 xListener );
 }
 
@@ -1576,7 +1576,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
     }
     // TODO: Investigate if there is already the format name
     //       and whether this format is really required
-    else if ( aFlavor.DataType == getCppuType( ( const uno::Reference< io::XInputStream >* ) 0 )
+    else if ( aFlavor.DataType == cppu::UnoType<io::XInputStream>::get()
             && aFlavor.MimeType == "application/x-openoffice-contentstream" )
     {
         // allow to retrieve stream-representation of the object persistence
@@ -1670,7 +1670,7 @@ void SAL_CALL OleComponent::addEventListener( const uno::Reference< lang::XEvent
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
 
@@ -1682,7 +1682,7 @@ void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEv
         throw lang::DisposedException(); // TODO
 
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<lang::XEventListener>::get(),
                                                 xListener );
 }
 
@@ -1732,7 +1732,7 @@ void SAL_CALL OleComponent::setModified( sal_Bool bModified )
     if ( bModified && m_pInterfaceContainer )
     {
         ::cppu::OInterfaceContainerHelper* pContainer =
-            m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XModifyListener >* ) NULL ) );
+            m_pInterfaceContainer->getContainer( cppu::UnoType<util::XModifyListener>::get());
         if ( pContainer != NULL )
         {
             ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
@@ -1761,7 +1761,7 @@ void SAL_CALL OleComponent::addModifyListener( const com::sun::star::uno::Refere
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
 
-    m_pInterfaceContainer->addInterface( ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ), xListener );
+    m_pInterfaceContainer->addInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
 }
 
 void SAL_CALL OleComponent::removeModifyListener( const com::sun::star::uno::Reference < com::sun::star::util::XModifyListener >& xListener) throw(::com::sun::star::uno::RuntimeException)
@@ -1771,7 +1771,7 @@ void SAL_CALL OleComponent::removeModifyListener( const com::sun::star::uno::Ref
         throw lang::DisposedException(); // TODO
 
     if ( m_pInterfaceContainer )
-        m_pInterfaceContainer->removeInterface( ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ),
+        m_pInterfaceContainer->removeInterface( cppu::UnoType<util::XModifyListener>::get(),
                                                 xListener );
 }
 

@@ -335,7 +335,7 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScAutoFormatsObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< container::XNamed >*)0);    // muss zu getByIndex passen
+    return cppu::UnoType<container::XNamed>::get();    // muss zu getByIndex passen
 }
 
 sal_Bool SAL_CALL ScAutoFormatsObj::hasElements() throw(uno::RuntimeException, std::exception)
@@ -497,7 +497,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScAutoFormatObj::getElementType() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);  // muss zu getByIndex passen
+    return cppu::UnoType<beans::XPropertySet>::get();  // muss zu getByIndex passen
 }
 
 sal_Bool SAL_CALL ScAutoFormatObj::hasElements() throw(uno::RuntimeException, std::exception)

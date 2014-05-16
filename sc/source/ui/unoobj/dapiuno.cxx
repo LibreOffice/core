@@ -113,20 +113,20 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
     using namespace ::com::sun::star::beans::PropertyAttribute;
     static const SfxItemPropertyMapEntry aDataPilotFieldMap_Impl[] =
     {
-        {OUString(SC_UNONAME_AUTOSHOW),     0,  getCppuType((DataPilotFieldAutoShowInfo*)0),   MAYBEVOID, 0 },
-        {OUString(SC_UNONAME_FUNCTION),     0,  getCppuType((GeneralFunction*)0),              0, 0 },
-        {OUString(SC_UNONAME_GROUPINFO),    0,  getCppuType((DataPilotFieldGroupInfo*)0),      MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_AUTOSHOW),     0,  cppu::UnoType<DataPilotFieldAutoShowInfo>::get(),   MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_FUNCTION),     0,  cppu::UnoType<GeneralFunction>::get(),              0, 0 },
+        {OUString(SC_UNONAME_GROUPINFO),    0,  cppu::UnoType<DataPilotFieldGroupInfo>::get(),      MAYBEVOID, 0 },
         {OUString(SC_UNONAME_HASAUTOSHOW),  0,  getBooleanCppuType(),                          0, 0 },
         {OUString(SC_UNONAME_HASLAYOUTINFO),0,  getBooleanCppuType(),                          0, 0 },
         {OUString(SC_UNONAME_HASREFERENCE), 0,  getBooleanCppuType(),                          0, 0 },
         {OUString(SC_UNONAME_HASSORTINFO),  0,  getBooleanCppuType(),                          0, 0 },
         {OUString(SC_UNONAME_ISGROUP),      0,  getBooleanCppuType(),                          0, 0 },
-        {OUString(SC_UNONAME_LAYOUTINFO),   0,  getCppuType((DataPilotFieldLayoutInfo*)0),     MAYBEVOID, 0 },
-        {OUString(SC_UNONAME_ORIENT),       0,  getCppuType((DataPilotFieldOrientation*)0),    MAYBEVOID, 0 },
-        {OUString(SC_UNONAME_REFERENCE),    0,  getCppuType((DataPilotFieldReference*)0),      MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_LAYOUTINFO),   0,  cppu::UnoType<DataPilotFieldLayoutInfo>::get(),     MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_ORIENT),       0,  cppu::UnoType<DataPilotFieldOrientation>::get(),    MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_REFERENCE),    0,  cppu::UnoType<DataPilotFieldReference>::get(),      MAYBEVOID, 0 },
         {OUString(SC_UNONAME_SELPAGE),      0,  cppu::UnoType<OUString>::get(),                     0, 0 },
         {OUString(SC_UNONAME_SHOWEMPTY),    0,  getBooleanCppuType(),                          0, 0 },
-        {OUString(SC_UNONAME_SORTINFO),     0,  getCppuType((DataPilotFieldSortInfo*)0),       MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_SORTINFO),     0,  cppu::UnoType<DataPilotFieldSortInfo>::get(),       MAYBEVOID, 0 },
         {OUString(SC_UNONAME_SUBTOTALS),    0,  getCppuType((Sequence<GeneralFunction>*)0),    0, 0 },
         {OUString(SC_UNONAME_USESELPAGE),   0,  getBooleanCppuType(),                          0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
