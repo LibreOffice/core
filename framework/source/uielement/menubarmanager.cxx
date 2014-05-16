@@ -1182,17 +1182,13 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             if ( nItemId == SID_MDIWINDOWLIST || aCommand == aSpecialWindowCommand)
             {
                 // Retrieve addon popup menus and add them to our menu bar
-                Reference< com::sun::star::frame::XModel >      xModel;
-                Reference< com::sun::star::frame::XController > xController( rFrame->getController(), UNO_QUERY );
-                if ( xController.is() )
-                    xModel = Reference< com::sun::star::frame::XModel >( xController->getModel(), UNO_QUERY );
-                framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, xModel, nPos, (MenuBar *)pMenu );
+                framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, nPos, (MenuBar *)pMenu, m_xContext );
                 break;
             }
         }
 
         // Merge the Add-Ons help menu items into the Office help menu
-        framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, (MenuBar *)pMenu );
+        framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, (MenuBar *)pMenu, m_xContext );
     }
 
     OUString    aEmpty;
@@ -1288,7 +1284,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
-                    AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
+                    AddonMenu* pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame, m_xContext);
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         sal_uInt16 nCount = 0;

@@ -148,7 +148,7 @@ MenuManager::MenuManager(
                 if ( ( nItemId == SID_ADDONLIST || aItemCommand == aSlotSpecialToolsMenu )
                     && AddonMenuManager::HasAddonMenuElements() )
                 {
-                    AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
+                    AddonMenu* pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame, rxContext);
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         sal_uInt16 nCount = 0;
