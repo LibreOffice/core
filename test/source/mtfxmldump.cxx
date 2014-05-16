@@ -17,15 +17,17 @@
 namespace
 {
 
-int writeCallback(void* pContext, const char* sBuffer, int nLen)
+int lclWriteCallback(void* pContext, const char* sBuffer, int nLen)
 {
-    OStringBuffer* pBuffer = static_cast<OStringBuffer*>(pContext);
-    pBuffer->append(sBuffer);
+    SvStream* pStream = static_cast<SvStream*>(pContext);
+    pStream->Write(sBuffer, nLen);
     return nLen;
 }
 
-int closeCallback(void* )
+int lclCloseCallback(void* pContext)
 {
+    SvStream* pStream = static_cast<SvStream*>(pContext);
+    pStream->WriteChar(0);
     return 0;
 }
 
@@ -162,8 +164,7 @@ void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
 {
     std::vector<bool> usedIds(512, false);
 
-    OStringBuffer aString;
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, &mrStream, NULL);
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
@@ -395,8 +396,6 @@ void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
 
     aWriter.endElement();
     aWriter.endDocument();
-
-    mrStream.WriteOString(aString.makeStringAndClear());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
