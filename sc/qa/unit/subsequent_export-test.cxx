@@ -45,6 +45,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <formula/grammar.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
@@ -437,6 +438,20 @@ void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sa
             rEE.QuickSetAttribs(aItemSet, aSel);
         }
         break;
+        case EE_CHAR_OVERLINE:
+        {
+            SvxOverlineItem aItem(UNDERLINE_DOUBLE, nType);
+            aItemSet.Put(aItem);
+            rEE.QuickSetAttribs(aItemSet, aSel);
+        }
+        break;
+        case EE_CHAR_UNDERLINE:
+        {
+            SvxUnderlineItem aItem(UNDERLINE_DOUBLE, nType);
+            aItemSet.Put(aItem);
+            rEE.QuickSetAttribs(aItemSet, aSel);
+        }
+        break;
         default:
             ;
     }
@@ -535,6 +550,40 @@ void ScExportTest::testRichTextExportODS()
                     continue;
 
                 return static_cast<const SvxCrossedOutItem*>(p)->GetStrikeout() == STRIKEOUT_SINGLE;
+            }
+            return false;
+        }
+
+        static bool isOverline(const editeng::Section& rAttr, FontUnderline eStyle)
+        {
+            if (rAttr.maAttributes.empty())
+                return false;
+
+            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                if (p->Which() != EE_CHAR_OVERLINE)
+                    continue;
+
+                return static_cast<const SvxOverlineItem*>(p)->GetLineStyle() == eStyle;
+            }
+            return false;
+        }
+
+        static bool isUnderline(const editeng::Section& rAttr, FontUnderline eStyle)
+        {
+            if (rAttr.maAttributes.empty())
+                return false;
+
+            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                if (p->Which() != EE_CHAR_UNDERLINE)
+                    continue;
+
+                return static_cast<const SvxUnderlineItem*>(p)->GetLineStyle() == eStyle;
             }
             return false;
         }
@@ -715,6 +764,41 @@ void ScExportTest::testRichTextExportODS()
             return true;
         }
 
+        bool checkB8(const EditTextObject* pText) const
+        {
+            if (!pText)
+                return false;
+
+            if (pText->GetParagraphCount() != 1)
+                return false;
+
+            if (pText->GetText(0) != "Over and Under")
+                return false;
+
+            std::vector<editeng::Section> aSecAttrs;
+            pText->GetAllSections(aSecAttrs);
+            if (aSecAttrs.size() != 3)
+                return false;
+
+            // First section shoul have overline applied.
+            const editeng::Section* pAttr = &aSecAttrs[0];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 4)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isOverline(*pAttr, UNDERLINE_DOUBLE))
+                return false;
+
+            // Last section should have underline applied.
+            pAttr = &aSecAttrs[2];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 9 || pAttr->mnEnd != 14)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isUnderline(*pAttr, UNDERLINE_DOUBLE))
+                return false;
+
+            return true;
+        }
+
     } aCheckFunc;
 
     // Start with an empty document, put one edit text cell, and make sure it
@@ -754,8 +838,8 @@ void ScExportTest::testRichTextExportODS()
     // Insert a multi-line content to B4.
     pEE->Clear();
     pEE->SetText("One\nTwo\nThree");
-    pDoc->SetEditText(ScAddress(3,1,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(3,1,0));
+    pDoc->SetEditText(ScAddress(1,3,0), pEE->CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(1,3,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
 
     // Reload the doc again, and check the content of B2 and B4.
@@ -766,14 +850,14 @@ void ScExportTest::testRichTextExportODS()
 
     pEditText = pDoc->GetEditText(ScAddress(1,1,0));
     CPPUNIT_ASSERT_MESSAGE("B2 should be an edit text.", pEditText);
-    pEditText = pDoc->GetEditText(ScAddress(3,1,0));
+    pEditText = pDoc->GetEditText(ScAddress(1,3,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
 
     // Insert a multi-line content to B5, but this time, set some empty paragraphs.
     pEE->Clear();
     pEE->SetText("\nTwo\nThree\n\nFive\n");
-    pDoc->SetEditText(ScAddress(4,1,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(4,1,0));
+    pDoc->SetEditText(ScAddress(1,4,0), pEE->CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(1,4,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
 
     // Insert a text with strikethrough in B6.
@@ -781,8 +865,8 @@ void ScExportTest::testRichTextExportODS()
     pEE->SetText("Strike Me");
     // Set the 'Strike' part strikethrough.
     setAttribute(*pEE, 0, 0, 6, EE_CHAR_STRIKEOUT);
-    pDoc->SetEditText(ScAddress(5,1,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(5,1,0));
+    pDoc->SetEditText(ScAddress(1,5,0), pEE->CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(1,5,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B6 value.", aCheckFunc.checkB6(pEditText));
 
     // Insert a text with different font segments in B7.
@@ -790,9 +874,18 @@ void ScExportTest::testRichTextExportODS()
     pEE->SetText("Font1 and Font2");
     setFont(*pEE, 0, 0, 5, "Courier");
     setFont(*pEE, 0, 10, 15, "Luxi Mono");
-    pDoc->SetEditText(ScAddress(6,1,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(6,1,0));
+    pDoc->SetEditText(ScAddress(1,6,0), pEE->CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(1,6,0));
     CPPUNIT_ASSERT_MESSAGE("Incorret B7 value.", aCheckFunc.checkB7(pEditText));
+
+    // Insert a text with overline and underline in B8.
+    pEE->Clear();
+    pEE->SetText("Over and Under");
+    setAttribute(*pEE, 0, 0, 4, EE_CHAR_OVERLINE);
+    setAttribute(*pEE, 0, 9, 14, EE_CHAR_UNDERLINE);
+    pDoc->SetEditText(ScAddress(1,7,0), pEE->CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(1,7,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B8 value.", aCheckFunc.checkB8(pEditText));
 
     // Reload the doc again, and check the content of B2, B4, B6 and B7.
     ScDocShellRef xNewDocSh3 = saveAndReload(xNewDocSh2, ODS);
@@ -800,15 +893,17 @@ void ScExportTest::testRichTextExportODS()
     xNewDocSh2->DoClose();
 
     pEditText = pDoc->GetEditText(ScAddress(1,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(3,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(4,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(5,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B6 value.", aCheckFunc.checkB6(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(6,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B7 value.", aCheckFunc.checkB7(pEditText));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value after save and reload.", aCheckFunc.checkB2(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(1,3,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value after save and reload.", aCheckFunc.checkB4(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(1,4,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B5 value after save and reload.", aCheckFunc.checkB5(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(1,5,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B6 value after save and reload.", aCheckFunc.checkB6(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(1,6,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B7 value after save and reload.", aCheckFunc.checkB7(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(1,7,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B8 value after save and reload.", aCheckFunc.checkB8(pEditText));
 
     xNewDocSh3->DoClose();
 }
