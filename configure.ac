@@ -3979,7 +3979,9 @@ else
 fi
 AC_SUBST(ENABLE_SYMBOLS)
 
-# Running dsymutil takes too long
+# Debug information format for iOS. Running dsymutil takes a long time... you really need a separate
+# .dSYM only if running Instruments, I think. (Not for normal debugging in Xcode.) To enable a
+# separate .dSYM, either use --enable-release-build or change manually to "DWARF with DSYM" in Xcode.
 XCODE_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
 if test "$enable_release_build" != yes -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \); then
     XCODE_DEBUG_INFORMATION_FORMAT=dwarf
