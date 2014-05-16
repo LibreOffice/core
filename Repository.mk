@@ -62,6 +62,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	unoidl-read \
 	unoidl-write \
 	xrmex \
+    svdemo \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
