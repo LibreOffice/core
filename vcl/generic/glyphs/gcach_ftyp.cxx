@@ -1292,8 +1292,8 @@ const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )
     if( bOK )
         mpFontCharMap = new ImplFontCharMap( aCmapResult );
     else
-               mpFontCharMap = ImplFontCharMap::GetDefaultMap();
-    mpFontCharMap->AddReference();
+        mpFontCharMap = ImplFontCharMap::GetDefaultMap();
+    // mpFontCharMap on either branch now has a refcount of 1
     return mpFontCharMap;
 }
 
