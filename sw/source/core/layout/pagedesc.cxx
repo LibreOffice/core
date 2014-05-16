@@ -554,7 +554,7 @@ SwPageDescExt::operator SwPageDesc() const
     return aResult;
 }
 
-SwPageDescs::SwPageDescs()
+SwPageDescs::SwPageDescs() : SwPageDescsBase( true )
 {
     memset(poolpages, 0, sizeof(value_type) * RES_POOLPAGE_SIZE);
 }
@@ -566,10 +566,8 @@ SwPageDescs::~SwPageDescs()
 
 void SwPageDescs::DeleteAndDestroyAll()
 {
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
     memset(poolpages, 0, sizeof(value_type) * RES_POOLPAGE_SIZE);
-    clear();
+    SwPageDescsBase::DeleteAndDestroyAll();
 }
 
 std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::insert( const value_type& x )
@@ -578,9 +576,8 @@ std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::insert( const value_typ
     SAL_WARN_IF(nId != USHRT_MAX && NULL != GetPoolPageDesc( nId ),
                 "sw", "Inserting already assigned pool ID item!");
 
-    const_iterator const ret = find( x );
-    if (ret == end()) {
-        SwPageDescsBase::push_back( x );
+    std::pair<SwPageDescs::const_iterator,bool> ret = SwPageDescsBase::insert( x );
+    if (ret.second) {
         if (x->list != 0) {
             SAL_WARN("sw", "Inserting already assigned item!");
             SAL_WARN_IF(x->list != this, "sw",
@@ -589,9 +586,8 @@ std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::insert( const value_typ
         x->list = this;
         if (nId != USHRT_MAX)
             poolpages[ nId - RES_POOLPAGE_BEGIN ] = x;
-        return std::make_pair(end() - 1 , true);
     }
-    return std::make_pair(ret, false);
+    return ret;
 }
 
 void SwPageDescs::_erase( const value_type& x )
@@ -607,57 +603,60 @@ void SwPageDescs::_erase( const value_type& x )
 
 SwPageDescs::size_type SwPageDescs::erase( const value_type& x )
 {
-    const_iterator const ret = find( x );
-    if (ret != end()) {
-        SwPageDescsBase::erase( begin_nonconst() + (ret - begin()) );
+    size_type ret = SwPageDescsBase::erase( x );
+    if (ret)
         _erase( x );
-        return 1;
-    }
-    return 0;
+    return ret;
 }
 
 void SwPageDescs::erase( size_type index )
 {
-    erase( begin_nonconst() + index );
+    erase( begin() + index );
 }
 
 void SwPageDescs::erase( const_iterator const& position )
 {
     _erase( *position );
-    SwPageDescsBase::erase( begin_nonconst() + (position - begin()) );
+    SwPageDescsBase::erase( position );
 }
 
-struct spd_oustring_compare : public std::unary_function<SwPageDesc*, bool>
+bool CompareSwPageDescs::operator()(OUString const& lhs, SwPageDesc* const& rhs) const
 {
-    spd_oustring_compare(const OUString &_baseline) : baseline(_baseline) {}
-    bool operator() (SwPageDesc* const &arg)
-        { return (baseline.compareTo( arg->GetName() ) == 0); }
-    const OUString baseline;
-};
+    return (lhs.compareTo( rhs->GetName() ) < 0);
+}
 
-struct spd_item_compare : public std::unary_function<SwPageDesc*, bool>
+bool CompareSwPageDescs::operator()(SwPageDesc* const& lhs, OUString const& rhs) const
 {
-    spd_item_compare(const SwPageDesc* _baseline) : baseline(_baseline) {}
-    bool operator() (SwPageDesc* const &arg)
-        { return (baseline->GetName().compareTo( arg->GetName() ) == 0); }
-    const SwPageDesc* baseline;
-};
+    return (lhs->GetName().compareTo( rhs ) < 0);
+}
+
+bool CompareSwPageDescs::operator()(SwPageDesc* const& lhs, SwPageDesc* const& rhs) const
+{
+    return (lhs->GetName().compareTo( rhs->GetName() ) < 0);
+}
 
 SwPageDescs::const_iterator SwPageDescs::find( const OUString &name ) const
 {
-    const_iterator const it = std::find_if(
-        begin(), end(), spd_oustring_compare( name ) );
+    if (empty())
+        return end();
+
+    const_iterator it = end();
+    if (size() > 1) {
+        it = std::lower_bound( begin() + 1, end(), name, CompareSwPageDescs() );
+        if (it != end() && CompareSwPageDescs()(name, *it))
+            it = end();
+    }
+    if (it == end() && !name.compareTo( (*this)[0]->GetName() ))
+        it = begin();
     return it;
 }
 
 SwPageDescs::const_iterator SwPageDescs::find( const value_type& x ) const
 {
-    const_iterator const it = std::find_if(
-        begin(), end(), spd_item_compare( x ) );
-    return it;
+    return find( x->GetName() );
 }
 
-bool SwPageDescs::Contains( const SwPageDescs::value_type& x ) const
+bool SwPageDescs::Contains( const value_type& x ) const
 {
     return (x->list == this);
 }
