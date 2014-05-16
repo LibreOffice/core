@@ -1079,8 +1079,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67737, "fdo67737.docx")
 DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);
-    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xPicture, "ShadowFormat");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x7f808080), aShadow.Color);
+    sal_Int32 nShadowColor = getProperty<sal_Int32>(xPicture, "ShadowColor");
+    sal_Int16 nShadowTransparence = getProperty<sal_Int16>(xPicture, "ShadowTransparence");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x808080), nShadowColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(50), nShadowTransparence);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc834035, "bnc834035.odt")

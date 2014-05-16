@@ -828,9 +828,11 @@ DECLARE_OOXMLIMPORT_TEST(testShadow, "imgshadow.docx")
      */
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(2), uno::UNO_QUERY);
 
-    table::ShadowFormat aShadow;
-    xPropertySet->getPropertyValue("ShadowFormat") >>= aShadow;
-    CPPUNIT_ASSERT(sal_Int32(aShadow.ShadowWidth) > 0);
+    bool bShadow = getProperty<bool>(xPropertySet, "Shadow");
+    CPPUNIT_ASSERT(bShadow);
+
+    sal_Int32 nShadowXDistance = getProperty<sal_Int32>(xPropertySet, "ShadowXDistance");
+    CPPUNIT_ASSERT(nShadowXDistance != 0);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN782061, "n782061.docx")

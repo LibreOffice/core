@@ -530,6 +530,10 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
     WritePresetShape( "rect" );
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
+
+    WriteShapeEffects( xShapeProps );
+    WriteShape3DEffects( xShapeProps );
+
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     pFS->endElementNS( mnXmlNamespace, XML_pic );

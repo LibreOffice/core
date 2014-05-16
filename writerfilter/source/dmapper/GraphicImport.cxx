@@ -643,6 +643,17 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         sal_Int32 nRotation = 0;
                         xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
 
+                        ::css::beans::PropertyValues aGrabBag;
+                        bool bContainsEffects = false;
+                        xShapeProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                        for( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
+                        {
+                            // if the shape contains effects in the grab bag, we should not transform it
+                            // in a XTextContent so those effects can be preserved
+                            if( aGrabBag[i].Name == "EffectProperties" || aGrabBag[i].Name == "3DEffectProperties" )
+                                bContainsEffects = true;
+                        }
+
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
                         aMediaProperties[0].Name = "URL";
                         aMediaProperties[0].Value <<= sUrl;
@@ -661,7 +672,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xShapeProps->getPropertyValue("AdjustContrast") >>= m_pImpl->nContrast;
 
                         // fdo#70457: transform XShape into a SwXTextGraphicObject only if there's no rotation
-                        if ( nRotation == 0 )
+                        if ( nRotation == 0 && !bContainsEffects )
                             m_xGraphicObject = createGraphicObject( aMediaProperties );
 
                         bUseShape = !m_xGraphicObject.is( );
