@@ -476,6 +476,7 @@ namespace slideshow
                                 mpEventHandlerParent.reset(new Window(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
                                 mpEventHandlerParent->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
+                                mpEventHandlerParent->EnablePaint(false);
                                 mpEventHandlerParent->Show();
                                 SystemWindowData aWinData = OpenGLContext::generateWinData(mpEventHandlerParent.get());
                                 mpMediaWindow.reset(new SystemChildWindow(mpEventHandlerParent.get(), 0, &aWinData));
