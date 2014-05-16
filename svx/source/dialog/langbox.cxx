@@ -459,6 +459,42 @@ sal_Int32 SvxLanguageBoxBase::ImplTypeToPos( LanguageType eType ) const
 }
 
 
+void SvxLanguageBoxBase::SetNoSelectionLBB()
+{
+    ImplSetNoSelection();
+}
+
+void SvxLanguageBoxBase::HideLBB()
+{
+    ImplHide();
+}
+
+void SvxLanguageBoxBase::DisableLBB()
+{
+    ImplDisable();
+}
+
+void SvxLanguageBoxBase::SaveValueLBB()
+{
+    ImplSaveValue();
+}
+
+sal_Int32 SvxLanguageBoxBase::GetSelectEntryPosLBB( sal_Int32 nSelIndex ) const
+{
+    return ImplGetSelectEntryPos( nSelIndex);
+}
+
+void* SvxLanguageBoxBase::GetEntryDataLBB( sal_Int32  nPos ) const
+{
+    return ImplGetEntryData( nPos);
+}
+
+sal_Int32 SvxLanguageBoxBase::GetSavedValueLBB() const
+{
+    return ImplGetSavedValue();
+}
+
+
 SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, bool bCheck )
     : ListBox( pParent, nBits )
     , SvxLanguageBoxBase( bCheck )
@@ -477,6 +513,7 @@ SvxLanguageBox::~SvxLanguageBox()
 SvxLanguageComboBox::SvxLanguageComboBox( Window* pParent, WinBits nBits, bool bCheck )
     : ComboBox( pParent, nBits )
     , SvxLanguageBoxBase( bCheck )
+    , mnSavedValuePos( COMBOBOX_ENTRY_NOTFOUND )
 {
     // display entries sorted
     SetStyle( GetStyle() | WB_SORT );
@@ -546,14 +583,14 @@ void SvxLanguageComboBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
 }
 
 
-sal_Int32 SvxLanguageBox::ImplGetSelectEntryPos() const
+sal_Int32 SvxLanguageBox::ImplGetSelectEntryPos( sal_Int32 nSelIndex ) const
 {
-    return GetSelectEntryPos();
+    return GetSelectEntryPos( nSelIndex);
 }
 
-sal_Int32 SvxLanguageComboBox::ImplGetSelectEntryPos() const
+sal_Int32 SvxLanguageComboBox::ImplGetSelectEntryPos( sal_Int32 nSelIndex ) const
 {
-    return GetSelectEntryPos();
+    return GetSelectEntryPos( nSelIndex);
 }
 
 
@@ -598,6 +635,62 @@ sal_Int32 SvxLanguageBox::ImplGetEntryCount() const
 sal_Int32 SvxLanguageComboBox::ImplGetEntryCount() const
 {
     return GetEntryCount();
+}
+
+
+void SvxLanguageBox::ImplSetNoSelection()
+{
+    SetNoSelection();
+}
+
+void SvxLanguageComboBox::ImplSetNoSelection()
+{
+    SetNoSelection();
+}
+
+
+void SvxLanguageBox::ImplHide()
+{
+    Hide();
+}
+
+void SvxLanguageComboBox::ImplHide()
+{
+    Hide();
+}
+
+
+void SvxLanguageBox::ImplDisable()
+{
+    Disable();
+}
+
+void SvxLanguageComboBox::ImplDisable()
+{
+    Disable();
+}
+
+
+void SvxLanguageBox::ImplSaveValue()
+{
+    SaveValue();
+}
+
+void SvxLanguageComboBox::ImplSaveValue()
+{
+    // Emulate the ListBox behavior.
+    mnSavedValuePos = GetSelectEntryPos();
+}
+
+
+sal_Int32 SvxLanguageBox::ImplGetSavedValue() const
+{
+    return GetSavedValue();
+}
+
+sal_Int32 SvxLanguageComboBox::ImplGetSavedValue() const
+{
+    return mnSavedValuePos;
 }
 
 
