@@ -19,19 +19,23 @@
 
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
+
+#include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
+#include <cstdio>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace cppu;
 
 // Forward declaration
 void Main();
@@ -40,10 +44,16 @@ SAL_IMPLEMENT_MAIN()
 {
     tools::extendApplicationEnvironment();
 
-    Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( "types.rdb", "applicat.rdb", true );
+    Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
+    Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
 
-    comphelper::setProcessServiceFactory( xMS );
+    if( !xServiceManager.is() )
+    {
+        fprintf( stderr, "Failed to bootstrap\n" );
+        exit( 1 );
+    }
+
+    comphelper::setProcessServiceFactory( xServiceManager );
 
     InitVCL();
     ::Main();
