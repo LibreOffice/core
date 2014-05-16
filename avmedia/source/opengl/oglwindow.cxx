@@ -292,6 +292,10 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
     }
     else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
+        if ( !m_pEventHandler->HasFocus() )
+        {
+            m_pEventHandler->GrabFocus();
+        }
         MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
         if(pMouseEvt && pMouseEvt->IsLeft())
         {
