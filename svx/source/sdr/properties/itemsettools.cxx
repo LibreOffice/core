@@ -120,6 +120,7 @@ namespace sdr
                         SfxPoolItem* pNewItem = pItem->Clone();
                         pNewItem->ScaleMetrics(nMul, nDiv);
                         rSet.Put(*pNewItem);
+                        delete pNewItem;
                     }
                 }
                 nWhich = aIter.NextWhich();
