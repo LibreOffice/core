@@ -911,7 +911,8 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
             (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
         || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
         || (pProperty->nWID == OWN_ATTR_MEDIA_TEMPFILEURL)
-        || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE))
+        || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE)
+        || (pProperty->nWID == OWN_ATTR_FALLBACK_GRAPHIC))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( mpObj.get() );
         const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
@@ -948,6 +949,10 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
 
             case OWN_ATTR_MEDIA_MIMETYPE:
                 rValue <<= aItem.getMimeType();
+                break;
+
+            case OWN_ATTR_FALLBACK_GRAPHIC:
+                rValue <<= pMedia->getSnapshot();
                 break;
 
             default:

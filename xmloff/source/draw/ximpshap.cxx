@@ -3056,6 +3056,7 @@ SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
 
 void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList)
 {
+
     // watch for MimeType attribute to see if we have a media object
     for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
     {
@@ -3582,6 +3583,18 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
                 pContext = new XMLImageMapContext(GetImport(), nPrefix, rLocalName, xPropSet);
             }
         }
+    }
+    // For glTF models the fallback image is placed before the real shape.
+    // So we need to remove the fallback image after real shape is detected.
+    else if ( mxImplContext.Is() && IsXMLToken(mxImplContext->GetLocalName(), XML_IMAGE) &&
+              IsXMLToken( rLocalName, XML_PLUGIN ) )
+    {
+        SvXMLShapeContext* pShapeContext= GetImport().GetShapeImport()->CreateFrameChildContext(
+                        GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
+
+        pContext = pShapeContext;
+        if( pContext )
+            removeGraphicFromImportContext(*mxImplContext);
     }
 
     // call parent for content
