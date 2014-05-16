@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_e7f8dc4b",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-16T08:18:59Z",
+      "side": 1,
+      "message": "Space after \"if\". This file had a consistent style so far, please don\u0027t break that. There are 3 more similar errors in the added lines.",
+      "revId": "d1dd2e2eb6d88e2acd902e2b053986e1c873f996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
