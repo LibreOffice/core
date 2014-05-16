@@ -131,6 +131,20 @@ EOM
     exit( 1 );
 }
 
+# Block large files.
+open( FILES, "git diff --cached --name-only --diff-filter=A -z $against |" ) ||  die "Cannot run git diff-index.";
+while (<FILES>)
+{
+    my $size = `git cat-file -s :$_`;
+    # For now let's say large is 500KB
+    my $limit = 500;
+    if ($size > $limit * 1024)
+    {
+        print "Error: Attempt to add a large file: $_, pleasy try to fit into $limit KB.\n";
+        exit( 1 );
+    }
+}
+
 # fix whitespace in code
 check_whitespaces( $against);
 
