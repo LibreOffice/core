@@ -440,7 +440,7 @@ namespace
                     const FontNameBox* _pFontNameLB,
                     const FontStyleBox* _pFontStyleLB,
                     const FontSizeBox* _pFontSizeLB,
-                    const SvxLanguageBox* _pLanguageLB,
+                    const SvxLanguageBoxBase* _pLanguageLB,
                     const FontList* _pFontList,
                     sal_uInt16 _nFontWhich,
                     sal_uInt16 _nFontHeightWhich)
@@ -623,7 +623,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     FixedText* pSizeLabel = NULL;
     FontSizeBox* pSizeBox = NULL;
     FixedText* pLangFT = NULL;
-    SvxLanguageBox* pLangBox = NULL;
+    SvxLanguageBoxBase* pLangBox = NULL;
     sal_uInt16 nWhich = 0;
 
     switch ( eLangGrp )
@@ -786,20 +786,20 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         case Asian : nWhich = GetWhich( SID_ATTR_CHAR_CJK_LANGUAGE ); break;
         case Ctl : nWhich = GetWhich( SID_ATTR_CHAR_CTL_LANGUAGE ); break;
     }
-    pLangBox->SetNoSelection();
+    pLangBox->SetNoSelectionLBB();
     eState = rSet.GetItemState( nWhich );
 
     switch ( eState )
     {
         case SFX_ITEM_UNKNOWN:
             pLangFT->Hide();
-            pLangBox->Hide();
+            pLangBox->HideLBB();
             break;
 
         case SFX_ITEM_DISABLED:
         case SFX_ITEM_READONLY:
             pLangFT->Disable();
-            pLangBox->Disable();
+            pLangBox->DisableLBB();
             break;
 
         case SFX_ITEM_DEFAULT:
@@ -834,7 +834,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     pNameBox->SaveValue();
     pStyleBox->SaveValue();
     pSizeBox->SaveValue();
-    pLangBox->SaveValue();
+    pLangBox->SaveValueLBB();
 }
 
 
@@ -846,7 +846,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     FontNameBox* pNameBox = NULL;
     FontStyleBox* pStyleBox = NULL;
     FontSizeBox* pSizeBox = NULL;
-    SvxLanguageBox* pLangBox = NULL;
+    SvxLanguageBoxBase* pLangBox = NULL;
     sal_uInt16 nWhich = 0;
     sal_uInt16 nSlot = 0;
 
@@ -1086,8 +1086,8 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     nWhich = GetWhich( nSlot );
     pOld = GetOldItem( rSet, nSlot );
-    sal_Int32 nLangPos = pLangBox->GetSelectEntryPos();
-    LanguageType eLangType = (LanguageType)(sal_uLong)pLangBox->GetEntryData( nLangPos );
+    sal_Int32 nLangPos = pLangBox->GetSelectEntryPosLBB();
+    LanguageType eLangType = (LanguageType)(sal_uLong)pLangBox->GetEntryDataLBB( nLangPos );
 
     if ( pOld )
     {
@@ -1098,7 +1098,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     if ( !bChanged )
-        bChanged = ( pLangBox->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
+        bChanged = ( pLangBox->GetSavedValueLBB() == LISTBOX_ENTRY_NOTFOUND );
 
     if ( bChanged && nLangPos != LISTBOX_ENTRY_NOTFOUND )
     {
