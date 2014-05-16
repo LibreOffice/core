@@ -198,7 +198,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
 
     SwNodeIndex aStt( *pNds, nStartIdx );
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
-    if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
+    if( !pCNode && 0 == pNds->GoNext( &aStt ) )
     {
         OSL_FAIL( "No more ContentNode at StartPos" );
     }
