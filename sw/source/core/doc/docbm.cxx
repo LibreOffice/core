@@ -486,7 +486,8 @@ namespace sw { namespace mark
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
                 IDocumentMarkAccess::CHECKBOX_FIELDMARK );
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
-        pFieldMark->SetFieldname( rType );
+        if (pFieldMark)
+            pFieldMark->SetFieldname( rType );
 
         return pFieldMark;
     }
