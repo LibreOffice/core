@@ -158,7 +158,28 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
                 OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
                 if ( !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
+                {
+                    if ( xListener.is() )
+                    {
+                        ::com::sun::star::frame::DispatchResultEvent aEvent(
+                                static_cast< ::cppu::OWeakObject* >( this ),
+                                ::com::sun::star::frame::DispatchResultState::FAILURE,
+                                invokeResult );
+                        try
+                        {
+                            xListener->dispatchFinished( aEvent ) ;
+                        }
+                        catch(RuntimeException & e)
+                        {
+                            OSL_TRACE(
+                                "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
+                                "while dispatchFinished with failture of the execution %s",
+                                ::rtl::OUStringToOString( e.Message,
+                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        }
+                    }
                     return;
+                }
             }
 
             // Creates a ScriptProvider ( if one is not created already )
@@ -332,6 +353,25 @@ ScriptProtocolHandler::getScriptInvocation()
             // mode, then from the controller
             if ( !m_xScriptInvocation.set( xController->getModel(), UNO_QUERY ) )
                 m_xScriptInvocation.set( xController, UNO_QUERY );
+        }
+        else
+        {
+            Reference< XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
+            if ( xFrame.is() )
+            {
+                SfxFrame* pFrame = NULL;
+                for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+                {
+                    if ( pFrame->GetFrameInterface() == xFrame )
+                        break;
+                }
+                SfxObjectShell* pDocShell = pFrame ? pFrame->GetCurrentDocument() : SfxObjectShell::Current();
+                if ( pDocShell )
+                {
+                    Reference< XModel > xModel( pDocShell->GetModel() );
+                    m_xScriptInvocation.set( xModel, UNO_QUERY );
+                }
+            }
         }
     }
     return m_xScriptInvocation.is();
