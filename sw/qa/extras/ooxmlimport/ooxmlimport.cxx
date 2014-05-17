@@ -1979,9 +1979,8 @@ DECLARE_OOXMLIMPORT_TEST(testSmartartStrict, "strict-smartart.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testLibreOfficeHang, "frame-wrap-auto.docx")
 {
-    // fdo#72775
-    // This was text::WrapTextMode_NONE.
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_DYNAMIC, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+    // fdo#72775 Files hangs LO on opening
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testI124106, "i124106.docx")

@@ -811,7 +811,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             StyleSheetEntryPtr pParaStyle =
                 GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(rAppendContext.pLastParagraphProperties->GetParaStyleName());
 
-            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 16: 9);
+            uno::Sequence< beans::PropertyValue > aFrameProperties(pParaStyle ? 17: 9);
 
             if ( pParaStyle.get( ) )
             {
@@ -832,6 +832,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pFrameProperties[13].Name = rPropNameSupplier.GetName(PROP_TOP_MARGIN);
                 pFrameProperties[14].Name = rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN);
                 pFrameProperties[15].Name = rPropNameSupplier.GetName(PROP_BACK_COLOR_TRANSPARENCY);
+                pFrameProperties[16].Name = rPropNameSupplier.GetName(PROP_PARA_FRAME_PROPERTIES);
+
+
 
                 const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
                 if (!pStyleProperties)
@@ -915,6 +918,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 // Otherwise CellColorHandler has priority, and this setting
                 // will be ignored.
                 pFrameProperties[15].Value <<= sal_Int32(100);
+
+                // If paragraph has a Frame properties then IsFrameMode return true else false
+                pFrameProperties[16].Value <<= rAppendContext.pLastParagraphProperties->IsFrameMode();
 
                 lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
