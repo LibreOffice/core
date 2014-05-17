@@ -458,18 +458,23 @@ bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
          * how many languages do not separate the day and month names in some
          * form? */
 
+        // Check simple ASCII first before invoking i18n or anything else.
+        if (rtl::isAsciiAlphanumeric( rString[nPos] ))
+            return false;   // Alpha or numeric is not word gap.
+
         sal_Int32 nIndex = nPos;
-        sal_uInt32 c = rString.iterateCodePoints( &nIndex);
+        const sal_uInt32 c = rString.iterateCodePoints( &nIndex);
         if (nPos+1 < nIndex)
             return true;    // Surrogate, assume these to be new words.
         (void)c;
 
         const sal_Int32 nType = pFormatter->GetCharClass()->getCharacterType( rString, nPos);
+        using namespace ::com::sun::star::i18n;
 
-        if (CharClass::isAlphaNumericType( nType))
+        if ((nType & (KCharacterType::UPPER | KCharacterType::LOWER | KCharacterType::DIGIT)) != 0)
             return false;   // Alpha or numeric is not word gap.
 
-        if (CharClass::isLetterType( nType))
+        if ((nType & (KCharacterType::LETTER)) != 0)
             return true;    // Letter other than alpha is new word. (Is it?)
 
         return true;        // Catch all remaining as gap until we know better.
