@@ -2,15 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkAdjustment" id="adjustmentIndent">
-    <property name="upper">990</property>
-    <property name="step_increment">10</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentSpinDegrees">
-    <property name="upper">359</property>
-    <property name="step_increment">5</property>
-  </object>
   <object class="GtkGrid" id="CellAlignPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -348,8 +339,7 @@
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="left_padding">6</property>
             <child>
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
@@ -529,6 +519,15 @@
         <property name="height">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentIndent">
+    <property name="upper">990</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentSpinDegrees">
+    <property name="upper">359</property>
+    <property name="step_increment">5</property>
   </object>
   <object class="GtkListStore" id="liststoreHorzAlign">
     <columns>
