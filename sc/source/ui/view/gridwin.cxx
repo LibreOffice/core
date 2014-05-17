@@ -5237,7 +5237,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     if (pViewSh)
         pInputHdl = pViewSh->GetInputHandler();
 
-    if (pInputHdl->IsInputMode())
+    if (pInputHdl && pInputHdl->IsInputMode())
     {
         EditView* pView = pInputHdl->GetTableView();
         return extractURLInfo(pView->GetFieldUnderMousePointer(), pName, pUrl, pTarget);
