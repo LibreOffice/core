@@ -1708,8 +1708,9 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
     pLine->SetEnd( nBreakPos );
     sal_uInt16 nEndPortion = SplitTextPortion( nPara, nBreakPos );
 
-    bool bBlankSeparator = ( ( nBreakPos >= pLine->GetStart() ) &&
-                             ( pNode->GetText()[ nBreakPos ] == ' ' ) );
+    bool bBlankSeparator = ( nBreakPos >= pLine->GetStart() &&
+                             nBreakPos < pNode->GetText().getLength() &&
+                             pNode->GetText()[ nBreakPos ] == ' ' );
     if ( bBlankSeparator )
     {
         // generally suppress blanks at the end of line
