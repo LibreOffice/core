@@ -1017,7 +1017,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76249, "fdo76249.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
        return;
-    assertXPath(pXmlDoc, "//mc:Choice/w:drawing//w:txbxContent//w:drawing//lc:lockedCanvas", 1);
+    assertXPath(pXmlDoc, "//mc:Choice[2]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/lc:lockedCanvas[1]",1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo76979, "fdo76979.docx")
