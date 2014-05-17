@@ -3706,6 +3706,31 @@ void Test::testCopyPasteSkipEmpty()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCopyPasteSkipEmpty2()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "A");
+    m_pDoc->SetString(ScAddress(2,0,0), "C");
+
+    // Copy A1:C1 to clipboard.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    aClipDoc.ResetClip(m_pDoc, static_cast<SCTAB>(0));
+    copyToClip(m_pDoc, ScRange(0,0,0,2,0,0), &aClipDoc);
+
+    // Paste to A3 with the skip empty option set.  This used to freeze. (fdo#77735)
+    ScRange aDestRange(0,2,0,2,2,0);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_ALL, NULL, &aClipDoc, false, false, true, true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), m_pDoc->GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_MESSAGE("B3 should be empty.", m_pDoc->GetCellType(ScAddress(1,2,0)) == CELLTYPE_NONE);
+    CPPUNIT_ASSERT_EQUAL(OUString("C"), m_pDoc->GetString(ScAddress(2,2,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyPasteSkipEmptyConditionalFormatting()
 {
     m_pDoc->InsertTab(0, "Test");
