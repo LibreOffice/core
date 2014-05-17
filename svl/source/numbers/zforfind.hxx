@@ -210,6 +210,13 @@ private:
     void NumberStringDivision( const OUString& rString );
 
 
+    /** Whether rString contains word (!) rWhat at nPos.
+        rWhat will not be matched if it is a substring of a word.
+     */
+    bool StringContainsWord( const OUString& rWhat,
+                             const OUString& rString,
+                             sal_Int32 nPos );
+
     // optimized substring versions
 
     // Whether rString contains rWhat at nPos
