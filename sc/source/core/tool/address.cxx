@@ -1015,6 +1015,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
 }
 
 /**
+    @param p        pointer to null-terminated sal_Unicode string
     @param pRange   pointer to range where rAddr effectively is *pRange->aEnd,
                     used in conjunction with pExtInfo to determine the tab span
                     of a 3D reference.
@@ -1023,7 +1024,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
                                            ScAddress::ExternalInfo* pExtInfo = NULL, ScRange* pRange = NULL )
 {
     sal_uInt16  nRes = 0;
-    OUString aDocName;       // der pure Dokumentenname
+    OUString aDocName;       // the pure Document Name
     OUString aTab;
     bool    bExtDoc = false;
     bool    bExtDocInherited = false;
@@ -1072,6 +1073,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
         }
         else
         {
+            OUStringBuffer aTabAcc;
             while (*p)
             {
                 if( *p == '.')
@@ -1081,9 +1083,10 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
                 {
                     p++; break;
                 }
-                aTab += OUString(*p);
+                aTabAcc.append(*p);
                 p++;
             }
+            aTab = aTabAcc.makeStringAndClear();
         }
         if( *p++ != '.' )
             nBits = 0;
@@ -1148,8 +1151,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
         }
         else
         {
-            OUString aTmp( p );
-            long n = aTmp.toInt32() - 1;
+            long n = rtl_ustr_toInt32( p, 10 ) - 1;
             while (rtl::isAsciiDigit( *p ))
                 p++;
             if( n < 0 || n > MAXROW )
