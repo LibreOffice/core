@@ -1373,6 +1373,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 {
     InitHeadFoot_Impl( rSet );
+    UpdateExample_Impl();
     ResetBackground_Impl( rSet );
     RangeHdl_Impl( 0 );
 }
