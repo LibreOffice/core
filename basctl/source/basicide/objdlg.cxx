@@ -66,24 +66,39 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) )
     {
-        BasicEntryDescriptor aDesc( GetEntryDescriptor( GetCurEntry() ) );
-
-        if ( aDesc.GetType() == OBJ_TYPE_METHOD )
-        {
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if( pDispatcher )
-            {
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
-                                  aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
-                pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
-                                        SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-            }
-        }
+        OpenCurrent();
     }
 }
 
+void ObjectTreeListBox::KeyInput( const KeyEvent& rEvt )
+{
+    if ( rEvt.GetKeyCode() == KEY_RETURN && OpenCurrent() )
+    {
+        return;
+    }
+    BasicTreeListBox::KeyInput( rEvt );
+}
+
+bool ObjectTreeListBox::OpenCurrent()
+{
+    BasicEntryDescriptor aDesc( GetEntryDescriptor( GetCurEntry() ) );
+
+    if ( aDesc.GetType() == OBJ_TYPE_METHOD )
+    {
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        if( pDispatcher )
+        {
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
+                              aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
+            pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
+                                    SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+            return true;
+        }
+    }
+    return false;
+}
 
 
 ObjectCatalog::ObjectCatalog( Window * pParent )

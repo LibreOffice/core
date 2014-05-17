@@ -40,7 +40,9 @@ private:
 
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    KeyInput( const KeyEvent& rEvt );
 
+    bool            OpenCurrent();
 public:
             ObjectTreeListBox( Window* pParent, const ResId& rRes );
             ~ObjectTreeListBox();
