@@ -609,7 +609,6 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
     static const OUString aSepShortened("SEP");
 
     short res = 0; // no month found
-    int nMatchLen = 0;
 
     if (rString.getLength() > nPos) // only if needed
     {
@@ -618,78 +617,52 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
             InitText();
         }
         sal_Int16 nMonths = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
-        // Find the longest match. This is needed for, e.g., Czech, as &Ccaron;erven (June)
-        // is fully contained in &Ccaron;ervenec (July), so the latter could never be found
-        // if we stopped at the first match.
         for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
             if ( bScanGenitiveMonths && StringContainsWord( pUpperGenitiveMonthText[i], rString, nPos ) )
             {   // genitive full names first
-                const int nMonthLen = pUpperGenitiveMonthText[i].getLength();
-                if (nMonthLen > nMatchLen)
-                {
-                    nMatchLen = nMonthLen;
-                    res = i + 1;
-                }
+                nPos = nPos + pUpperGenitiveMonthText[i].getLength();
+                res = i + 1;
+                break;  // for
             }
             else if ( bScanGenitiveMonths && StringContainsWord( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
             {   // genitive abbreviated
-                const int nMonthLen = pUpperGenitiveAbbrevMonthText[i].getLength();
-                if (nMonthLen > nMatchLen)
-                {
-                    nMatchLen = nMonthLen;
-                    res = sal::static_int_cast< short >(-(i+1)); // negative
-                }
+                nPos = nPos + pUpperGenitiveAbbrevMonthText[i].getLength();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
+                break;  // for
             }
             else if ( bScanPartitiveMonths && StringContainsWord( pUpperPartitiveMonthText[i], rString, nPos ) )
             {   // partitive full names
-                const int nMonthLen = pUpperPartitiveMonthText[i].getLength();
-                if (nMonthLen > nMatchLen)
-                {
-                    nMatchLen = nMonthLen;
-                    res = i+1;
-                }
+                nPos = nPos + pUpperPartitiveMonthText[i].getLength();
+                res = i+1;
+                break;  // for
             }
             else if ( bScanPartitiveMonths && StringContainsWord( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
             {   // partitive abbreviated
-                const int nMonthLen = pUpperPartitiveAbbrevMonthText[i].getLength();
-                if (nMonthLen > nMatchLen)
-                {
-                    nMatchLen = nMonthLen;
-                    res = sal::static_int_cast< short >(-(i+1)); // negative
-                }
+                nPos = nPos + pUpperPartitiveAbbrevMonthText[i].getLength();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
+                break;  // for
             }
             else if ( StringContainsWord( pUpperMonthText[i], rString, nPos ) )
             {   // noun full names
-                const int nMonthLen = pUpperMonthText[i].getLength();
-                if (nMonthLen > nMatchLen)
-                {
-                    nMatchLen = nMonthLen;
-                    res = i+1;
-                }
+                nPos = nPos + pUpperMonthText[i].getLength();
+                res = i+1;
+                break;  // for
             }
             else if ( StringContainsWord( pUpperAbbrevMonthText[i], rString, nPos ) )
             {   // noun abbreviated
-                const int nMonthLen = pUpperAbbrevMonthText[i].getLength();
-                if (nMonthLen > nMatchLen)
-                {
-                    nMatchLen = nMonthLen;
-                    res = sal::static_int_cast< short >(-(i+1)); // negative
-                }
+                nPos = nPos + pUpperAbbrevMonthText[i].getLength();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
+                break;  // for
             }
             else if ( i == 8 && pUpperAbbrevMonthText[i] == aSeptCorrect &&
                     StringContainsWord( aSepShortened, rString, nPos ) )
             {   // #102136# SEPT/SEP
-                const int nMonthLen = aSepShortened.getLength();
-                if (nMonthLen > nMatchLen)
-                {
-                    nMatchLen = nMonthLen;
-                    res = sal::static_int_cast< short >(-(i+1)); // negative
-                }
+                nPos = nPos + aSepShortened.getLength();
+                res = sal::static_int_cast< short >(-(i+1)); // negative
+                break;  // for
             }
         }
-
-        nPos += nMatchLen;
     }
 
     return res;
