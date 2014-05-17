@@ -1412,7 +1412,6 @@ void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
 {
     void* pPtr = (void*)nWindowPtr;
     OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(pPtr);
-    assert(pWindow);
     mpOpenGLWindow = pWindow;
 }
 
