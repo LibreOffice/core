@@ -307,6 +307,8 @@ const char* getTypeString(GLenum type)
             return "pop group";
         case GL_DEBUG_TYPE_OTHER:
             return "other";
+        case GL_DEBUG_TYPE_ERROR:
+            return "error";
         default:
             ;
     }
