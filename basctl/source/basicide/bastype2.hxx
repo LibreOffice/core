@@ -185,7 +185,9 @@ protected:
     virtual void            ExpandedHdl() SAL_OVERRIDE;
     virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) SAL_OVERRIDE;
     virtual bool            ExpandingHdl() SAL_OVERRIDE;
+    virtual void            KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
 
+    bool                    OpenCurrent();
     void                    ImpCreateLibEntries( SvTreeListEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                    ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
     void                    ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
