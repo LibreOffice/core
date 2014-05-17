@@ -86,6 +86,7 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^o3dgc:: \
 		  | grep -v ^MathML:: \
 		  | grep -v ^GeneratedSaxParser:: \
+		  | grep -v ^GLTF:: \
 		  | grep -v ^FPSCounter:: \
 		  | grep -v ^CPhysicalCamera:: \
 		  | grep -v ^RenderScene:: \
