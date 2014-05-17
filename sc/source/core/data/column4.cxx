@@ -59,6 +59,10 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
     sc::SingleColumnSpanSet::SpansType aSpans;
     aSpanSet.getSpans(aSpans);
 
+    if (aSpans.empty())
+        // All cells in the range in the clip are empty.  Nothing to delete.
+        return;
+
     // Translate the clip column spans into the destination column, and repeat as needed.
     std::vector<sc::RowSpan> aDestSpans;
     SCROW nDestOffset = aRange.mnRow1 - nClipRow1;
