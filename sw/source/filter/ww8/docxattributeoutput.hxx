@@ -684,6 +684,7 @@ private:
     void WritePostponedOLE();
     void WritePostponedVMLDrawing();
     void WritePostponedDMLDrawing();
+    void WritePostponedCustomShape();
 
     void WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs );
 
@@ -760,6 +761,7 @@ private:
     SwWriteTable *m_pTableWrt;
 
     bool m_bParagraphOpened;
+    bool m_bParagraphFrameOpen;
     bool m_bIsFirstParagraph;
     bool m_bAlternateContentChoiceOpen;
 
@@ -807,6 +809,7 @@ private:
     };
     std::list< PostponedDrawing >* m_postponedVMLDrawing;
     std::list< PostponedDrawing >* m_postponedDMLDrawing;
+    std::list< PostponedDrawing >* m_postponedCustomShape;
 
     struct PostponedOLE
     {
