@@ -784,20 +784,20 @@ bool SwColumn::operator==( const SwColumn &rCmp ) const
 
 SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     : SfxPoolItem( RES_COL ),
-    eLineStyle( rCpy.eLineStyle ),
-    nLineWidth( rCpy.nLineWidth),
-    aLineColor( rCpy.aLineColor),
-    nLineHeight( rCpy.GetLineHeight() ),
-    eAdj( rCpy.GetLineAdj() ),
-    aColumns( (sal_Int8)rCpy.GetNumCols() ),
-    nWidth( rCpy.GetWishWidth() ),
-    aWidthAdjustValue( rCpy.aWidthAdjustValue ),
-    bOrtho( rCpy.IsOrtho() )
+    m_eLineStyle( rCpy.m_eLineStyle ),
+    m_nLineWidth( rCpy.m_nLineWidth),
+    m_aLineColor( rCpy.m_aLineColor),
+    m_nLineHeight( rCpy.GetLineHeight() ),
+    m_eAdj( rCpy.GetLineAdj() ),
+    m_aColumns( (sal_Int8)rCpy.GetNumCols() ),
+    m_nWidth( rCpy.GetWishWidth() ),
+    m_aWidthAdjustValue( rCpy.m_aWidthAdjustValue ),
+    m_bOrtho( rCpy.IsOrtho() )
 {
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
         SwColumn *pCol = new SwColumn( rCpy.GetColumns()[i] );
-        aColumns.push_back( pCol );
+        m_aColumns.push_back( pCol );
     }
 }
 
@@ -805,35 +805,35 @@ SwFmtCol::~SwFmtCol() {}
 
 SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 {
-    eLineStyle  = rCpy.eLineStyle;
-    nLineWidth  = rCpy.nLineWidth;
-    aLineColor  = rCpy.aLineColor;
-    nLineHeight = rCpy.GetLineHeight();
-    eAdj        = rCpy.GetLineAdj();
-    nWidth      = rCpy.GetWishWidth();
-    aWidthAdjustValue = rCpy.aWidthAdjustValue;
-    bOrtho      = rCpy.IsOrtho();
+    m_eLineStyle  = rCpy.m_eLineStyle;
+    m_nLineWidth  = rCpy.m_nLineWidth;
+    m_aLineColor  = rCpy.m_aLineColor;
+    m_nLineHeight = rCpy.GetLineHeight();
+    m_eAdj        = rCpy.GetLineAdj();
+    m_nWidth      = rCpy.GetWishWidth();
+    m_aWidthAdjustValue = rCpy.m_aWidthAdjustValue;
+    m_bOrtho      = rCpy.IsOrtho();
 
-    if ( !aColumns.empty() )
-        aColumns.clear();
+    if ( !m_aColumns.empty() )
+        m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
         SwColumn *pCol = new SwColumn( rCpy.GetColumns()[i] );
-        aColumns.push_back( pCol );
+        m_aColumns.push_back( pCol );
     }
     return *this;
 }
 
 SwFmtCol::SwFmtCol()
     : SfxPoolItem( RES_COL )
-    , eLineStyle( table::BorderLineStyle::NONE)
+    , m_eLineStyle( table::BorderLineStyle::NONE)
     ,
-    nLineWidth(0),
-    nLineHeight( 100 ),
-    eAdj( COLADJ_NONE ),
-    nWidth( USHRT_MAX ),
-    aWidthAdjustValue( 0 ),
-    bOrtho( true )
+    m_nLineWidth(0),
+    m_nLineHeight( 100 ),
+    m_eAdj( COLADJ_NONE ),
+    m_nWidth( USHRT_MAX ),
+    m_aWidthAdjustValue( 0 ),
+    m_bOrtho( true )
 {
 }
 
@@ -841,20 +841,20 @@ bool SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "no equal attributes" );
     const SwFmtCol &rCmp = (const SwFmtCol&)rAttr;
-    if( !(eLineStyle        == rCmp.eLineStyle  &&
-          nLineWidth        == rCmp.nLineWidth  &&
-          aLineColor        == rCmp.aLineColor  &&
-          nLineHeight        == rCmp.GetLineHeight() &&
-          eAdj               == rCmp.GetLineAdj() &&
-          nWidth             == rCmp.GetWishWidth() &&
-          bOrtho             == rCmp.IsOrtho() &&
-          aColumns.size() == rCmp.GetNumCols() &&
-          aWidthAdjustValue == rCmp.GetAdjustValue()
+    if( !(m_eLineStyle        == rCmp.m_eLineStyle  &&
+          m_nLineWidth        == rCmp.m_nLineWidth  &&
+          m_aLineColor        == rCmp.m_aLineColor  &&
+          m_nLineHeight        == rCmp.GetLineHeight() &&
+          m_eAdj               == rCmp.GetLineAdj() &&
+          m_nWidth             == rCmp.GetWishWidth() &&
+          m_bOrtho             == rCmp.IsOrtho() &&
+          m_aColumns.size() == rCmp.GetNumCols() &&
+          m_aWidthAdjustValue == rCmp.GetAdjustValue()
          ) )
         return false;
 
-    for ( sal_uInt16 i = 0; i < aColumns.size(); ++i )
-        if ( !(aColumns[i] == rCmp.GetColumns()[i]) )
+    for ( sal_uInt16 i = 0; i < m_aColumns.size(); ++i )
+        if ( !(m_aColumns[i] == rCmp.GetColumns()[i]) )
             return false;
 
     return true;
@@ -868,14 +868,14 @@ SfxPoolItem*  SwFmtCol::Clone( SfxItemPool* ) const
 sal_uInt16 SwFmtCol::GetGutterWidth( bool bMin ) const
 {
     sal_uInt16 nRet = 0;
-    if ( aColumns.size() == 2 )
-        nRet = aColumns[0].GetRight() + aColumns[1].GetLeft();
-    else if ( aColumns.size() > 2 )
+    if ( m_aColumns.size() == 2 )
+        nRet = m_aColumns[0].GetRight() + m_aColumns[1].GetLeft();
+    else if ( m_aColumns.size() > 2 )
     {
         bool bSet = false;
-        for ( sal_uInt16 i = 1; i < aColumns.size()-1; ++i )
+        for ( sal_uInt16 i = 1; i < m_aColumns.size()-1; ++i )
         {
-            const sal_uInt16 nTmp = aColumns[i].GetRight() + aColumns[i+1].GetLeft();
+            const sal_uInt16 nTmp = m_aColumns[i].GetRight() + m_aColumns[i+1].GetLeft();
             if ( bSet )
             {
                 if ( nTmp != nRet )
@@ -897,18 +897,18 @@ sal_uInt16 SwFmtCol::GetGutterWidth( bool bMin ) const
 
 void SwFmtCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
 {
-    if ( bOrtho )
+    if ( m_bOrtho )
         Calc( nNew, nAct );
     else
     {
         sal_uInt16 nHalf = nNew / 2;
-        for ( sal_uInt16 i = 0; i < aColumns.size(); ++i )
-        {   SwColumn *pCol = &aColumns[i];
+        for ( sal_uInt16 i = 0; i < m_aColumns.size(); ++i )
+        {   SwColumn *pCol = &m_aColumns[i];
             pCol->SetLeft ( nHalf );
             pCol->SetRight( nHalf );
             if ( i == 0 )
                 pCol->SetLeft( 0 );
-            else if ( i == (aColumns.size() - 1) )
+            else if ( i == (m_aColumns.size() - 1) )
                 pCol->SetRight( 0 );
         }
     }
@@ -918,44 +918,44 @@ void SwFmtCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nA
 {
     // Deleting seems to be a bit radical on the first sight; but otherwise we
     // have to initialize all values of the remaining SwCloumns.
-    if ( !aColumns.empty() )
-        aColumns.clear();
+    if ( !m_aColumns.empty() )
+        m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
     {   SwColumn *pCol = new SwColumn;
-        aColumns.push_back( pCol );
+        m_aColumns.push_back( pCol );
     }
-    bOrtho = true;
-    nWidth = USHRT_MAX;
+    m_bOrtho = true;
+    m_nWidth = USHRT_MAX;
     if( nNumCols )
         Calc( nGutterWidth, nAct );
 }
 
 void SwFmtCol::SetOrtho( bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 {
-    bOrtho = bNew;
-    if ( bNew && !aColumns.empty() )
+    m_bOrtho = bNew;
+    if ( bNew && !m_aColumns.empty() )
         Calc( nGutterWidth, nAct );
 }
 
 sal_uInt16 SwFmtCol::CalcColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const
 {
-    assert(nCol < aColumns.size());
-    if ( nWidth != nAct )
+    assert(nCol < m_aColumns.size());
+    if ( m_nWidth != nAct )
     {
-        long nW = aColumns[nCol].GetWishWidth();
+        long nW = m_aColumns[nCol].GetWishWidth();
         nW *= nAct;
-        nW /= nWidth;
+        nW /= m_nWidth;
         return sal_uInt16(nW);
     }
     else
-        return aColumns[nCol].GetWishWidth();
+        return m_aColumns[nCol].GetWishWidth();
 }
 
 sal_uInt16 SwFmtCol::CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const
 {
-    assert(nCol < aColumns.size());
+    assert(nCol < m_aColumns.size());
     sal_uInt16 nRet = CalcColWidth( nCol, nAct );
-    const SwColumn *pCol = &aColumns[nCol];
+    const SwColumn *pCol = &m_aColumns[nCol];
     nRet = nRet - pCol->GetLeft();
     nRet = nRet - pCol->GetRight();
     return nRet;
@@ -977,7 +977,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 
     //The fist column is PrtWidth + (gap width / 2)
     const sal_uInt16 nLeftWidth = nPrtWidth + nGutterHalf;
-    SwColumn *pCol = &aColumns.front();
+    SwColumn *pCol = &m_aColumns.front();
     pCol->SetWishWidth( nLeftWidth );
     pCol->SetRight( nGutterHalf );
     pCol->SetLeft ( 0 );
@@ -989,7 +989,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 
     for ( i = 1; i < GetNumCols()-1; ++i )
     {
-        pCol = &aColumns[i];
+        pCol = &m_aColumns[i];
         pCol->SetWishWidth( nMidWidth );
         pCol->SetLeft ( nGutterHalf );
         pCol->SetRight( nGutterHalf );
@@ -998,15 +998,15 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 
     //The last column is equivalent to the first one - to compensate rounding
     //errors we add the remaining space of the other columns to the last one.
-    pCol = &aColumns.back();
+    pCol = &m_aColumns.back();
     pCol->SetWishWidth( nAvail );
     pCol->SetLeft ( nGutterHalf );
     pCol->SetRight( 0 );
 
     //Convert the current width to the requested width.
-    for ( i = 0; i < aColumns.size(); ++i )
+    for ( i = 0; i < m_aColumns.size(); ++i )
     {
-        pCol = &aColumns[i];
+        pCol = &m_aColumns[i];
         long nTmp = pCol->GetWishWidth();
         nTmp *= GetWishWidth();
         nTmp /= nAct;
@@ -1047,7 +1047,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             uno::Sequence<text::TextColumn> aSetColumns = xCols->getColumns();
             const text::TextColumn* pArray = aSetColumns.getConstArray();
-            aColumns.clear();
+            m_aColumns.clear();
             //max count is 64k here - this is something the array can't do
             sal_uInt16 nCount = std::min( (sal_uInt16)aSetColumns.getLength(),
                                      (sal_uInt16) 0x3fff );
@@ -1062,11 +1062,11 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     nWidthSum = static_cast<sal_uInt16>(nWidthSum + pArray[i].Width);
                     pCol->SetLeft ( static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].LeftMargin)) );
                     pCol->SetRight( static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].RightMargin)) );
-                    aColumns.insert(aColumns.begin() + i, pCol);
+                    m_aColumns.insert(m_aColumns.begin() + i, pCol);
                 }
             bRet = true;
-            nWidth = nWidthSum;
-            bOrtho = false;
+            m_nWidth = nWidthSum;
+            m_bOrtho = false;
 
             uno::Reference<lang::XUnoTunnel> xNumTunnel(xCols, uno::UNO_QUERY);
             SwXTextColumns* pSwColums = 0;
@@ -1078,25 +1078,25 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
             if(pSwColums)
             {
-                bOrtho = pSwColums->IsAutomaticWidth();
-                nLineWidth = pSwColums->GetSepLineWidth();
-                aLineColor.SetColor(pSwColums->GetSepLineColor());
-                nLineHeight = pSwColums->GetSepLineHeightRelative();
+                m_bOrtho = pSwColums->IsAutomaticWidth();
+                m_nLineWidth = pSwColums->GetSepLineWidth();
+                m_aLineColor.SetColor(pSwColums->GetSepLineColor());
+                m_nLineHeight = pSwColums->GetSepLineHeightRelative();
                 switch ( pSwColums->GetSepLineStyle() )
                 {
                     default:
-                    case 0: eLineStyle = table::BorderLineStyle::NONE; break;
-                    case 1: eLineStyle = table::BorderLineStyle::SOLID; break;
-                    case 2: eLineStyle = table::BorderLineStyle::DOTTED; break;
-                    case 3: eLineStyle = table::BorderLineStyle::DASHED; break;
+                    case 0: m_eLineStyle = table::BorderLineStyle::NONE; break;
+                    case 1: m_eLineStyle = table::BorderLineStyle::SOLID; break;
+                    case 2: m_eLineStyle = table::BorderLineStyle::DOTTED; break;
+                    case 3: m_eLineStyle = table::BorderLineStyle::DASHED; break;
                 }
                 if(!pSwColums->GetSepLineIsOn())
-                    eAdj = COLADJ_NONE;
+                    m_eAdj = COLADJ_NONE;
                 else switch(pSwColums->GetSepLineVertAlign())
                 {
-                    case 0: eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
-                    case 1: eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
-                    case 2: eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
+                    case 0: m_eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
+                    case 1: m_eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
+                    case 2: m_eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
                     default: OSL_ENSURE( !this, "unknown alignment" ); break;
                 }
             }

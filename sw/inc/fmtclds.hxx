@@ -68,20 +68,20 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
-    editeng::SvxBorderStyle eLineStyle;     ///< style of the separator line
-    sal_uLong   nLineWidth;                 ///< Width of the separator line.
-    Color   aLineColor;                     ///< Color of the separator line.
+    editeng::SvxBorderStyle m_eLineStyle;     ///< style of the separator line
+    sal_uLong   m_nLineWidth;                 ///< Width of the separator line.
+    Color   m_aLineColor;                     ///< Color of the separator line.
 
-    sal_uInt16   nLineHeight;               /**< Percentile height of lines.
+    sal_uInt16   m_nLineHeight;               /**< Percentile height of lines.
                                           (Based on height of columns including UL). */
 
-    SwColLineAdj eAdj;                      ///< Line will be adjusted top, centered or bottom.
+    SwColLineAdj m_eAdj;                      ///< Line will be adjusted top, centered or bottom.
 
-    SwColumns   aColumns;                   ///< Information concerning the columns.
-    sal_uInt16  nWidth;                     ///< Total desired width of all columns.
-    sal_Int16   aWidthAdjustValue;
+    SwColumns   m_aColumns;                   ///< Information concerning the columns.
+    sal_uInt16  m_nWidth;                     ///< Total desired width of all columns.
+    sal_Int16   m_aWidthAdjustValue;
 
-    bool bOrtho;            /**< Only if this flag is set, the setting of GutterWidth will
+    bool m_bOrtho;            /**< Only if this flag is set, the setting of GutterWidth will
                              be accompanied by a "visual rearrangement".
                              The flag must be reset if widths of columns or borders are changed.
                              When it is set (again) the visual arrangement is recalculated.
@@ -94,8 +94,8 @@ public:
     SwFmtCol( const SwFmtCol& );
     virtual ~SwFmtCol();
     //#i120133#
-    sal_Int16 GetAdjustValue() const { return aWidthAdjustValue; }
-    void SetAdjustValue( const sal_Int16& n ) { aWidthAdjustValue = n; }
+    sal_Int16 GetAdjustValue() const { return m_aWidthAdjustValue; }
+    void SetAdjustValue( const sal_Int16& n ) { m_aWidthAdjustValue = n; }
 
     SwFmtCol& operator=( const SwFmtCol& );
 
@@ -111,36 +111,36 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    const SwColumns &GetColumns() const { return aColumns; }
-          SwColumns &GetColumns()       { return aColumns; }
-    sal_uInt16           GetNumCols() const { return aColumns.size(); }
+    const SwColumns &GetColumns() const { return m_aColumns; }
+          SwColumns &GetColumns()       { return m_aColumns; }
+    sal_uInt16           GetNumCols() const { return m_aColumns.size(); }
 
-    editeng::SvxBorderStyle     GetLineStyle() const  { return eLineStyle;}
-    sal_uLong           GetLineWidth() const  { return nLineWidth;}
-    const Color&    GetLineColor() const { return aLineColor;}
+    editeng::SvxBorderStyle     GetLineStyle() const  { return m_eLineStyle;}
+    sal_uLong           GetLineWidth() const  { return m_nLineWidth;}
+    const Color&    GetLineColor() const { return m_aLineColor;}
 
-    SwColLineAdj     GetLineAdj() const { return eAdj; }
-    bool             IsOrtho()    const { return bOrtho; }
-    sal_uInt16           GetWishWidth() const { return nWidth; }
-    sal_uInt8            GetLineHeight()const { return nLineHeight; }
+    SwColLineAdj     GetLineAdj() const { return m_eAdj; }
+    bool             IsOrtho()    const { return m_bOrtho; }
+    sal_uInt16           GetWishWidth() const { return m_nWidth; }
+    sal_uInt8            GetLineHeight()const { return m_nLineHeight; }
 
     /** @return USHRT_MAX if ambiguous.
      @return smallest width if bMin is true. */
     sal_uInt16 GetGutterWidth( bool bMin = false ) const;
 
-    void SetLineStyle(editeng::SvxBorderStyle eStyle)        { eLineStyle = eStyle;}
-    void SetLineWidth(sal_uLong nLWidth)        { nLineWidth = nLWidth;}
-    void SetLineColor(const Color& rCol )   { aLineColor = rCol;}
-    void SetLineHeight( sal_uInt8 nNew )     { nLineHeight = nNew; }
-    void SetLineAdj( SwColLineAdj eNew ){ eAdj = eNew; }
-    void SetWishWidth( sal_uInt16 nNew )    { nWidth = nNew; }
+    void SetLineStyle(editeng::SvxBorderStyle eStyle)        { m_eLineStyle = eStyle;}
+    void SetLineWidth(sal_uLong nLWidth)        { m_nLineWidth = nLWidth;}
+    void SetLineColor(const Color& rCol )   { m_aLineColor = rCol;}
+    void SetLineHeight( sal_uInt8 nNew )     { m_nLineHeight = nNew; }
+    void SetLineAdj( SwColLineAdj eNew ){ m_eAdj = eNew; }
+    void SetWishWidth( sal_uInt16 nNew )    { m_nWidth = nNew; }
 
     /** This function allows to (repeatedly) initialize the columns.
      The Ortho flag is set automatically. */
     void Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
     /** Adjusts borders for columns in aColumns.
-     If flag bOrtho is set, columns are visually re-arranged.
+     If flag m_bOrtho is set, columns are visually re-arranged.
      If the flag is not set, columns widths are not changed and
      borders are adjusted. */
     void SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct );
@@ -150,7 +150,7 @@ public:
     void SetOrtho( bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
     /// For the reader
-    void _SetOrtho( bool bNew ) { bOrtho = bNew; }
+    void _SetOrtho( bool bNew ) { m_bOrtho = bNew; }
 
     /** Calculates current width of column nCol.
      The ratio of desired width of this column to return value is
