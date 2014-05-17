@@ -350,7 +350,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             }
             break;
         }
-        aRet.setValue(&aRef, ::getCppuType((const uno::Reference<container::XNameContainer>*)0));
+        aRet.setValue(&aRef, cppu::UnoType<container::XNameContainer>::get());
     }
     else
         throw uno::RuntimeException();
@@ -360,7 +360,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
 uno::Type SwXStyleFamilies::getElementType(void)
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const uno::Reference<container::XNameContainer>*)0);
+    return cppu::UnoType<container::XNameContainer>::get();
 
 }
 
@@ -734,7 +734,7 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nTempIndex)
                                 new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
                                     new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
                     }
-                    aRet.setValue(&xStyle, ::getCppuType((uno::Reference<style::XStyle>*)0));
+                    aRet.setValue(&xStyle, cppu::UnoType<style::XStyle>::get());
                 }
                 else
                     throw container::NoSuchElementException();
@@ -773,7 +773,7 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
                         new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
                             new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
             }
-            aRet.setValue(&xStyle, ::getCppuType((uno::Reference<style::XStyle>*)0));
+            aRet.setValue(&xStyle, cppu::UnoType<style::XStyle>::get());
         }
         else
             throw container::NoSuchElementException();
@@ -826,7 +826,7 @@ sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExc
 
 uno::Type SwXStyleFamily::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const uno::Reference<style::XStyle>*)0);
+    return cppu::UnoType<style::XStyle>::get();
 
 }
 
@@ -1822,7 +1822,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
         {
-            if(aValue.getValueType() == ::getCppuType((uno::Reference< container::XIndexReplace>*)0) )
+            if(aValue.getValueType() == cppu::UnoType<container::XIndexReplace>::get())
             {
                 uno::Reference< container::XIndexReplace > * pxRulesRef =
                         (uno::Reference< container::XIndexReplace > *)aValue.getValue();
@@ -2362,7 +2362,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 OSL_ENSURE(pRule, "Wo ist die NumRule?");
                 uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule, pDoc);
 
-                aRet.setValue(&xRules, ::getCppuType((uno::Reference<container::XIndexReplace>*)0));
+                aRet.setValue(&xRules, cppu::UnoType<container::XIndexReplace>::get());
                 bDone = true;
                 break;
             }
@@ -3769,14 +3769,14 @@ uno::Sequence< uno::Type > SwXFrameStyle::getTypes(  ) throw(uno::RuntimeExcepti
     uno::Sequence< uno::Type > aTypes = SwXStyle::getTypes();
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 1);
-    aTypes.getArray()[nLen] = ::getCppuType((uno::Reference<XEventsSupplier>*)0);
+    aTypes.getArray()[nLen] = cppu::UnoType<XEventsSupplier>::get();
     return aTypes;
 }
 
 uno::Any SwXFrameStyle::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if(rType == ::getCppuType((uno::Reference<XEventsSupplier>*)0))
+    if(rType == cppu::UnoType<XEventsSupplier>::get())
         aRet <<= uno::Reference<XEventsSupplier>(this);
     else
         aRet = SwXStyle::queryInterface(rType);
@@ -3841,7 +3841,7 @@ uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
             default:
                 ;
         }
-        aRet.setValue(&aRef, ::getCppuType((const uno::Reference<style::XAutoStyleFamily>*)0));
+        aRet.setValue(&aRef, cppu::UnoType<style::XAutoStyleFamily>::get());
     }
     else
         throw uno::RuntimeException();
@@ -3850,7 +3850,7 @@ uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
 
 uno::Type SwXAutoStyles::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((const uno::Reference<style::XAutoStyleFamily>*)0);
+    return cppu::UnoType<style::XAutoStyleFamily>::get();
 }
 
 sal_Bool SwXAutoStyles::hasElements(  ) throw(uno::RuntimeException, std::exception)
@@ -3984,7 +3984,7 @@ uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(
 
 uno::Type SwXAutoStyleFamily::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((const uno::Reference<style::XAutoStyle>*)0);
+    return cppu::UnoType<style::XAutoStyle>::get();
 }
 
 sal_Bool SwXAutoStyleFamily::hasElements(  ) throw(uno::RuntimeException, std::exception)
@@ -4067,7 +4067,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
         SfxItemSet_Pointer_t pNextSet = pImpl->nextElement();
         uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(pImpl->getDoc(),
                                                         pNextSet, pImpl->getFamily());
-        aRet.setValue(&xAutoStyle, ::getCppuType((uno::Reference<style::XAutoStyle>*)0));
+        aRet.setValue(&xAutoStyle, cppu::UnoType<style::XAutoStyle>::get());
     }
     return aRet;
 }

@@ -532,7 +532,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 
     aAny = rArguments[0];
 
-    if ( ( aAny.getValueType() != ::getCppuType( (sal_Int16*)0 ) ) && ( aAny.getValueType() != ::getCppuType( (sal_Int8*)0 ) ) )
+    if ( ( aAny.getValueType() != cppu::UnoType<sal_Int16>::get()) && ( aAny.getValueType() != cppu::UnoType<sal_Int8>::get()) )
         throw lang::IllegalArgumentException(
                 OUString( "invalid argument type" ),
                 static_cast< XFilePicker2* >( this ), 1 );

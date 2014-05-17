@@ -60,7 +60,7 @@ uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet;
 
-    if (::getCppuType((uno::Reference<container::XEnumerationAccess> *)0) == rType)
+    if (cppu::UnoType<container::XEnumerationAccess>::get()== rType)
     {
         uno::Reference<container::XEnumerationAccess> aAccess = this;
         aRet <<= aAccess;
@@ -87,7 +87,7 @@ uno::Sequence<uno::Type> SwXRedlineText::getTypes()
     // add container::XEnumerationAccess
     sal_Int32 nLength = aTypes.getLength();
     aTypes.realloc(nLength + 1);
-    aTypes[nLength] = ::getCppuType((uno::Reference<container::XEnumerationAccess> *)0);
+    aTypes[nLength] = cppu::UnoType<container::XEnumerationAccess>::get();
 
     return aTypes;
 }
@@ -166,7 +166,7 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration(void)
 
 uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<text::XTextRange>*)0);
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException, std::exception)
@@ -568,7 +568,7 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration(void) t
 
 uno::Type SwXRedline::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<text::XTextRange>*)0);
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SwXRedline::hasElements(  ) throw(uno::RuntimeException, std::exception)

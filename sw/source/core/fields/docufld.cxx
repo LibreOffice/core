@@ -257,7 +257,7 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 eType = text::PageNumberType_PREV;
             else if(nSubType == PG_NEXT)
                 eType = text::PageNumberType_NEXT;
-            rAny.setValue(&eType, ::getCppuType((const text::PageNumberType*)0));
+            rAny.setValue(&eType, cppu::UnoType<text::PageNumberType>::get());
         }
         break;
     case FIELD_PROP_PAR1:

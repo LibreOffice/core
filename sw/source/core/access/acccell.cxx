@@ -289,14 +289,14 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
     throw( uno::RuntimeException, std::exception )
 {
-    if (rType == ::getCppuType((const uno::Reference<XAccessibleExtendedAttributes>*)0))
+    if (rType == cppu::UnoType<XAccessibleExtendedAttributes>::get())
     {
         uno::Any aR;
         aR <<= uno::Reference<XAccessibleExtendedAttributes>(this);
         return aR;
     }
 
-    if (rType == ::getCppuType((const uno::Reference<XAccessibleSelection>*)0))
+    if (rType == cppu::UnoType<XAccessibleSelection>::get())
     {
         uno::Any aR;
         aR <<= uno::Reference<XAccessibleSelection>(this);

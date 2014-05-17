@@ -139,14 +139,14 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeExcep
         aBaseTypes.getLength() + 8 );
 
     uno::Type* pBaseTypes = aBaseTypes.getArray();
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XSelectionSupplier >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XServiceInfo           >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XFormLayerAccess   >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XTextViewCursorSupplier>*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XViewSettingsSupplier  >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XRubySelection >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<XPropertySet  >*)0);
-    pBaseTypes[nIndex++] = ::getCppuType((uno::Reference<datatransfer::XTransferableSupplier >*)0);
+    pBaseTypes[nIndex++] = cppu::UnoType<XSelectionSupplier>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<XServiceInfo>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<XFormLayerAccess>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<XTextViewCursorSupplier>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<XViewSettingsSupplier>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<XRubySelection>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<XPropertySet>::get();
+    pBaseTypes[nIndex++] = cppu::UnoType<datatransfer::XTransferableSupplier>::get();
     return aBaseTypes;
 }
 
@@ -169,47 +169,47 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     throw (RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if(aType == ::getCppuType((uno::Reference<view::XSelectionSupplier  >*)0))
+    if(aType == cppu::UnoType<view::XSelectionSupplier>::get())
     {
         uno::Reference<view::XSelectionSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<lang::XServiceInfo           >*)0))
+    else if(aType == cppu::UnoType<lang::XServiceInfo>::get())
     {
         uno::Reference<lang::XServiceInfo> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<view::XControlAccess     >*)0))
+    else if(aType == cppu::UnoType<view::XControlAccess>::get())
     {
         uno::Reference<view::XControlAccess> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<view::XFormLayerAccess   >*)0))
+    else if(aType == cppu::UnoType<view::XFormLayerAccess>::get())
     {
         uno::Reference<view::XFormLayerAccess> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<text::XTextViewCursorSupplier>*)0))
+    else if(aType == cppu::UnoType<text::XTextViewCursorSupplier>::get())
     {
         uno::Reference<text::XTextViewCursorSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<view::XViewSettingsSupplier  >*)0))
+    else if(aType == cppu::UnoType<view::XViewSettingsSupplier>::get())
     {
         uno::Reference<view::XViewSettingsSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<XRubySelection>*)0))
+    else if(aType == cppu::UnoType<XRubySelection>::get())
     {
         uno::Reference<XRubySelection> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<XPropertySet>*)0))
+    else if(aType == cppu::UnoType<XPropertySet>::get())
     {
         uno::Reference<XPropertySet> xRet = this;
         aRet.setValue(&xRet, aType);
     }
-    else if(aType == ::getCppuType((uno::Reference<datatransfer::XTransferableSupplier   >*)0))
+    else if(aType == cppu::UnoType<datatransfer::XTransferableSupplier>::get())
     {
         uno::Reference<datatransfer::XTransferableSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
@@ -419,7 +419,7 @@ uno::Any SwXTextView::getSelection()
             default:;//prevent warning
         }
     }
-    uno::Any aRet(&aRef, ::getCppuType((uno::Reference<uno::XInterface>*)0));
+    uno::Any aRet(&aRef, cppu::UnoType<uno::XInterface>::get());
     return aRet;
 }
 

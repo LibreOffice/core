@@ -101,12 +101,12 @@ static void lcl_html_outEvents( SvStream& rStrm,
     {
         uno::Any aTmp = xIndexAcc->getByIndex(nPos);
         OSL_ENSURE( aTmp.getValueType() ==
-                        ::getCppuType( (uno::Reference<form::XFormComponent>*)0 ) ||
+                        cppu::UnoType<form::XFormComponent>::get()||
                 aTmp.getValueType() ==
-                        ::getCppuType( (uno::Reference<form::XForm>*)0 ),
+                        cppu::UnoType<form::XForm>::get(),
                 "lcl_html_outEvents: falsche Reflection" );
         if( aTmp.getValueType() ==
-                    ::getCppuType( (uno::Reference< form::XFormComponent >*)0) )
+                    cppu::UnoType<form::XFormComponent>::get())
 
         {
             if( rFormComp ==
@@ -114,7 +114,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
                 break;
         }
         else if( aTmp.getValueType() ==
-                            ::getCppuType( (uno::Reference< form::XForm>*)0) )
+                            cppu::UnoType<form::XForm>::get())
         {
             uno::Reference< form::XFormComponent > xFC(
                 *(uno::Reference< form::XForm > *)aTmp.getValue(), uno::UNO_QUERY );
@@ -379,10 +379,10 @@ void SwHTMLWriter::OutHiddenForms()
     {
         uno::Any aTmp = xForms->getByIndex( i );
         OSL_ENSURE( aTmp.getValueType() ==
-                        ::getCppuType((uno::Reference< form::XForm >*)0),
+                        cppu::UnoType<form::XForm>::get(),
                 "OutHiddenForms: falsche Reflection" );
         if( aTmp.getValueType() ==
-                    ::getCppuType((uno::Reference< form::XForm >*)0) )
+                    cppu::UnoType<form::XForm>::get())
             OutHiddenForm( *(uno::Reference< form::XForm > *)aTmp.getValue() );
     }
 }
@@ -399,10 +399,10 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
     {
         uno::Any aTmp = xFormComps->getByIndex( i );
         OSL_ENSURE( aTmp.getValueType() ==
-                        ::getCppuType((uno::Reference<form::XFormComponent>*)0),
+                        cppu::UnoType<form::XFormComponent>::get(),
                 "OutHiddenForm: falsche Reflection" );
         if( aTmp.getValueType() !=
-                    ::getCppuType((uno::Reference<form::XFormComponent>*)0) )
+                    cppu::UnoType<form::XFormComponent>::get())
             continue;
 
         uno::Reference< form::XFormComponent > xFormComp =
@@ -490,7 +490,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     aTmp = xFormPropSet->getPropertyValue(
                     OUString("SubmitMethod") );
-    if( aTmp.getValueType() == ::getCppuType((const form::FormSubmitMethod*)0) )
+    if( aTmp.getValueType() == cppu::UnoType<form::FormSubmitMethod>::get())
     {
         form::FormSubmitMethod eMethod =
                 *( form::FormSubmitMethod*)aTmp.getValue();
@@ -502,7 +502,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     }
     aTmp = xFormPropSet->getPropertyValue(
                     OUString("SubmitEncoding") );
-    if( aTmp.getValueType()==::getCppuType((const form::FormSubmitEncoding*)0) )
+    if( aTmp.getValueType()==cppu::UnoType<form::FormSubmitEncoding>::get())
     {
         form::FormSubmitEncoding eEncType =
                     *( form::FormSubmitEncoding*)aTmp.getValue();
@@ -561,10 +561,10 @@ void SwHTMLWriter::OutHiddenControls(
         {
             uno::Any aTmp = rFormComps->getByIndex( nPos );
             OSL_ENSURE( aTmp.getValueType() ==
-                        ::getCppuType((uno::Reference< form::XFormComponent>*)0),
+                        cppu::UnoType<form::XFormComponent>::get(),
                     "OutHiddenControls: falsche Reflection" );
             bDone = aTmp.getValueType() ==
-                        ::getCppuType((uno::Reference< form::XFormComponent>*)0) &&
+                        cppu::UnoType<form::XFormComponent>::get()&&
                     *(uno::Reference< form::XFormComponent > *)aTmp.getValue() ==
                         xFC;
         }
@@ -574,10 +574,10 @@ void SwHTMLWriter::OutHiddenControls(
     {
         uno::Any aTmp = rFormComps->getByIndex( nPos );
         OSL_ENSURE( aTmp.getValueType() ==
-                        ::getCppuType((uno::Reference< form::XFormComponent>*)0),
+                        cppu::UnoType<form::XFormComponent>::get(),
                 "OutHiddenControls: falsche Reflection" );
         if( aTmp.getValueType() !=
-                    ::getCppuType((uno::Reference< form::XFormComponent>*)0) )
+                    cppu::UnoType<form::XFormComponent>::get())
             continue;
         uno::Reference< form::XFormComponent > xFC =
                 *(uno::Reference< form::XFormComponent > *)aTmp.getValue();
@@ -1094,7 +1094,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const float*)0) )
+            if( aTmp.getValueType() == cppu::UnoType<float>::get())
 
             {
                 float nHeight = *(float*)aTmp.getValue();
@@ -1132,7 +1132,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );
-            if( aTmp.getValueType() == ::getCppuType((const float*)0) )
+            if( aTmp.getValueType() == cppu::UnoType<float>::get())
             {
                 FontWeight eWeight =
                     VCLUnoHelper::ConvertFontWeight( *(float*)aTmp.getValue() );

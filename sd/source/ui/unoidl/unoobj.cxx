@@ -161,7 +161,7 @@ static SdTypesCache gImplTypesCache;
 
         static const SfxItemPropertyMapEntry aImpress_SdXShapePropertyGraphicMap_Impl[] =
         {
-            { OUString("ImageMap"),             WID_IMAGEMAP,        ::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
+            { OUString("ImageMap"),             WID_IMAGEMAP,        cppu::UnoType<container::XIndexContainer>::get(),    0, 0 },
             IMPRESS_MAP_ENTRIES
         };
         return aImpress_SdXShapePropertyGraphicMap_Impl;
@@ -196,7 +196,7 @@ static SdTypesCache gImplTypesCache;
     {
         static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyGraphicMap_Impl[] =
         {
-            { OUString("ImageMap"),             WID_IMAGEMAP,        ::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
+            { OUString("ImageMap"),             WID_IMAGEMAP,        cppu::UnoType<container::XIndexContainer>::get(),    0, 0 },
             DRAW_MAP_ENTRIES
         };
         return aDraw_SdXShapePropertyGraphicMap_Impl;
@@ -343,7 +343,7 @@ bool SdXShape::queryAggregation( const com::sun::star::uno::Type & rType, com::s
 {
     if( mpModel && mpModel ->IsImpressDocument() )
     {
-        if( rType == ::getCppuType(( const uno::Reference< document::XEventsSupplier >*)0) )
+        if( rType == cppu::UnoType<document::XEventsSupplier>::get())
         {
             aAny <<= uno::Reference< document::XEventsSupplier >(this);
             return true;
@@ -370,7 +370,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
             pTypes = new uno::Sequence< uno::Type >( mpShape->_getTypes() );
             sal_uInt32 nCount = pTypes->getLength();
             pTypes->realloc( nCount+1 );
-            (*pTypes)[nCount] = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
+            (*pTypes)[nCount] = cppu::UnoType<lang::XTypeProvider>::get();
 
             gImplTypesCache[ nObjId ] = pTypes;
         }

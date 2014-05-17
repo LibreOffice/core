@@ -1227,7 +1227,7 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
 
 uno::Type SAL_CALL SwXCell::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const uno::Reference<text::XTextRange>*)0);
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SwXCell::hasElements(void) throw( uno::RuntimeException, std::exception )
@@ -4768,7 +4768,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
                 pXRow = new SwXTextTableRow(pFrmFmt, pLine);
             uno::Reference< beans::XPropertySet >  xRet =
                                     (beans::XPropertySet*)pXRow;
-            aRet.setValue(&xRet, ::getCppuType((const uno::Reference<beans::XPropertySet>*)0));
+            aRet.setValue(&xRet, cppu::UnoType<beans::XPropertySet>::get());
         }
         else
             throw lang::IndexOutOfBoundsException();
@@ -4778,7 +4778,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
 
 uno::Type SAL_CALL SwXTableRows::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const uno::Reference<beans::XPropertySet>*)0);
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SwXTableRows::hasElements(void) throw( uno::RuntimeException, std::exception )
@@ -4985,12 +4985,12 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
             throw lang::IndexOutOfBoundsException();
         xRet = uno::Reference<uno::XInterface>();   //!! writer tables do not have columns !!
     }
-    return uno::Any(&xRet, ::getCppuType((const uno::Reference<uno::XInterface>*)0));
+    return uno::Any(&xRet, cppu::UnoType<uno::XInterface>::get());
 }
 
 uno::Type SAL_CALL SwXTableColumns::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((uno::Reference<uno::XInterface>*)0);
+    return cppu::UnoType<uno::XInterface>::get();
 }
 
 sal_Bool SwXTableColumns::hasElements(void) throw( uno::RuntimeException, std::exception )

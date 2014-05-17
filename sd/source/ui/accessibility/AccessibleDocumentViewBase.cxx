@@ -502,15 +502,15 @@ OUString SAL_CALL
 
     // ...and add the additional type for the component, ...
     const uno::Type aLangEventListenerType =
-         ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
+         cppu::UnoType<lang::XEventListener>::get();
     const uno::Type aPropertyChangeListenerType =
-         ::getCppuType((const uno::Reference<beans::XPropertyChangeListener>*)0);
+         cppu::UnoType<beans::XPropertyChangeListener>::get();
     const uno::Type aWindowListenerType =
-         ::getCppuType((const uno::Reference<awt::XWindowListener>*)0);
+         cppu::UnoType<awt::XWindowListener>::get();
     const uno::Type aFocusListenerType =
-         ::getCppuType((const uno::Reference<awt::XFocusListener>*)0);
+         cppu::UnoType<awt::XFocusListener>::get();
     const uno::Type aEventBroadcaster =
-         ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0);
+         cppu::UnoType<XAccessibleEventBroadcaster>::get();
 
     // ... and merge them all into one list.
     sal_Int32 nTypeCount (aTypeList.getLength()),

@@ -209,7 +209,7 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
         aAny <<= xImage;
         return aAny;
     }
-    else if ( aType == ::getCppuType((uno::Reference<XAccessibleHypertext> *)0) )
+    else if ( aType == cppu::UnoType<XAccessibleHypertext>::get())
     {
         uno::Reference<XAccessibleHypertext> aAccHypertext = this;
         uno::Any aAny;

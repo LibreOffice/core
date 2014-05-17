@@ -853,7 +853,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             aGraphicURL = ( *(OUString*)pValue );
                         else if ( aPropName == "GraphicSize" )
                         {
-                            if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (::com::sun::star::awt::Size*)0) )
+                            if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<com::sun::star::awt::Size>::get())
                             {
                                 // don't cast awt::Size to Size as on 64-bits they are not the same.
                                 ::com::sun::star::awt::Size aSize;

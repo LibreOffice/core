@@ -1025,7 +1025,7 @@ bool SwFmtCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     else
     {
         uno::Reference< text::XTextColumns >  xCols = new SwXTextColumns(*this);
-        rVal.setValue(&xCols, ::getCppuType((uno::Reference< text::XTextColumns>*)0));
+        rVal.setValue(&xCols, cppu::UnoType<text::XTextColumns>::get());
     }
     return true;
 }

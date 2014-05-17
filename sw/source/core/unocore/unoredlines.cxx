@@ -82,7 +82,7 @@ uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration(void)
 
 uno::Type SwXRedlines::getElementType(  ) throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<beans::XPropertySet>*)0);
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException, std::exception)

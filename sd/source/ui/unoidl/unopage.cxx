@@ -160,7 +160,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                \
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},                                                                \
         { OUString(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                \
-        { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},\
+        { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, cppu::UnoType<com::sun::star::container::XNameContainer>::get(),      0,     0},\
         { OUString("IsHeaderVisible"),              WID_PAGE_HEADERVISIBLE, ::getBooleanCppuType(),                    0, 0},                                                                 \
         { OUString("HeaderText"),                   WID_PAGE_HEADERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},                                                            \
         { OUString("IsBackgroundDark"),             WID_PAGE_ISDARK,     ::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},                                \

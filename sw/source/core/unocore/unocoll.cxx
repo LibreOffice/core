@@ -871,7 +871,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(nIndex, true);
             uno::Reference< XTextTable >  xTbl = SwXTextTables::GetObject(rFmt);
             aRet.setValue( &xTbl,
-                ::getCppuType((uno::Reference< XTextTable>*)0));
+                cppu::UnoType<XTextTable>::get());
         }
         else
             throw IndexOutOfBoundsException();
@@ -897,7 +897,7 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
             {
                 xTbl = SwXTextTables::GetObject(rFmt);
                 aRet.setValue(&xTbl,
-                    ::getCppuType(( uno::Reference< XTextTable >*)0));
+                    cppu::UnoType<XTextTable>::get());
                 break;
             }
         }
@@ -957,7 +957,7 @@ uno::Type SAL_CALL
     SwXTextTables::getElementType(  )
         throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<XTextTable>*)0);
+    return cppu::UnoType<XTextTable>::get();
 }
 
 sal_Bool SwXTextTables::hasElements(void) throw( uno::RuntimeException, std::exception )
@@ -1268,11 +1268,11 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException, std:
     switch(eType)
     {
         case FLYCNTTYPE_FRM:
-            return ::getCppuType((uno::Reference<XTextFrame>*)0);
+            return cppu::UnoType<XTextFrame>::get();
         case FLYCNTTYPE_GRF:
-            return ::getCppuType((uno::Reference<XTextContent>*)0);
+            return cppu::UnoType<XTextContent>::get();
         case FLYCNTTYPE_OLE:
-            return ::getCppuType((uno::Reference<XEmbeddedObjectSupplier>*)0);
+            return cppu::UnoType<XEmbeddedObjectSupplier>::get();
         default:
             return uno::Type();
     }
@@ -1476,7 +1476,7 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
                 && (aName == pFmt->GetSection()->GetSectionName()))
             {
                 xSect = GetObject(*pFmt);
-                aRet.setValue(&xSect, ::getCppuType((uno::Reference<XTextSection>*)0));
+                aRet.setValue(&xSect, cppu::UnoType<XTextSection>::get());
                 break;
             }
         }
@@ -1550,7 +1550,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& rName)
 
 uno::Type SAL_CALL SwXTextSections::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<XTextSection>*)0);
+    return cppu::UnoType<XTextSection>::get();
 }
 
 sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException, std::exception )
@@ -1705,7 +1705,7 @@ sal_Bool SwXBookmarks::hasByName(const OUString& rName)
 uno::Type SAL_CALL SwXBookmarks::getElementType()
     throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<XTextContent>*)0);
+    return cppu::UnoType<XTextContent>::get();
 }
 
 sal_Bool SwXBookmarks::hasElements(void)
@@ -1757,7 +1757,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
         if ( nIndex < (sal_Int32)GetDoc()->GetNumRuleTbl().size() )
         {
             xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ], GetDoc());
-            aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
+            aRet.setValue(&xRef, cppu::UnoType<XIndexReplace>::get());
         }
 
         if(!xRef.is())
@@ -1770,7 +1770,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
 
 uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<XIndexReplace>*)0);
+    return cppu::UnoType<XIndexReplace>::get();
 }
 
 sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeException, std::exception )
@@ -1864,7 +1864,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 
 uno::Type SAL_CALL SwXFootnotes::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<XFootnote>*)0);
+    return cppu::UnoType<XFootnote>::get();
 }
 
 sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException, std::exception )
@@ -1929,7 +1929,7 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
         if(pMark)
         {
             xRef = SwXReferenceMarks::GetObject( GetDoc(), pMark );
-            aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+            aRet.setValue(&xRef, cppu::UnoType<XTextContent>::get());
         }
     }
     if(!xRef.is())
@@ -1948,7 +1948,7 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
         if(pMark)
         {
             uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( GetDoc(), pMark );
-            aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+            aRet.setValue(&xRef, cppu::UnoType<XTextContent>::get());
         }
         else
             throw NoSuchElementException();
@@ -1986,7 +1986,7 @@ sal_Bool SwXReferenceMarks::hasByName(const OUString& rName) throw( uno::Runtime
 
 uno::Type SAL_CALL SwXReferenceMarks::getElementType() throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((uno::Reference<XTextContent>*)0);
+    return cppu::UnoType<XTextContent>::get();
 }
 
 sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException, std::exception )

@@ -877,7 +877,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
     const uno::Reference< container::XIndexContainer > & rFormComps =
         pFormImpl->GetFormComps();
-    Any aAny( &rFComp, ::getCppuType( (uno::Reference< XFormComponent>*)0 ) );
+    Any aAny( &rFComp, cppu::UnoType<XFormComponent>::get());
     rFormComps->insertByIndex( rFormComps->getCount(), aAny );
 
     if( !bHidden )
@@ -1185,7 +1185,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             }
 
             aTmp.setValue( &xTxtRg,
-                           ::getCppuType((uno::Reference< text::XTextRange>*)0));
+                           cppu::UnoType<text::XTextRange>::get());
             xShapePropSet->setPropertyValue(
                 OUString("TextRange"), aTmp );
         }
@@ -1369,12 +1369,12 @@ void SwHTMLParser::NewForm( bool bAppend )
                                     aTmp );
 
     FormSubmitMethod eMethod = (FormSubmitMethod)nMethod;
-    aTmp.setValue( &eMethod, ::getCppuType((const FormSubmitMethod*)0) );
+    aTmp.setValue( &eMethod, cppu::UnoType<FormSubmitMethod>::get());
     xFormPropSet->setPropertyValue("SubmitMethod",
                                     aTmp );
 
      FormSubmitEncoding eEncType = (FormSubmitEncoding)nEncType;
-    aTmp.setValue( &eEncType, ::getCppuType((const FormSubmitEncoding*)0) );
+    aTmp.setValue( &eEncType, cppu::UnoType<FormSubmitEncoding>::get());
     xFormPropSet->setPropertyValue(
         OUString("SubmitEncoding"), aTmp );
 
@@ -1386,7 +1386,7 @@ void SwHTMLParser::NewForm( bool bAppend )
 
     const uno::Reference< container::XIndexContainer > & rForms =
         pFormImpl->GetForms();
-    Any aAny( &xForm, ::getCppuType((uno::Reference< XForm>*)0) );
+    Any aAny( &xForm, cppu::UnoType<XForm>::get());
     rForms->insertByIndex( rForms->getCount(), aAny );
     if( !aMacroTbl.empty() )
         lcl_html_setEvents( pFormImpl->GetFormEventManager(),
@@ -1719,7 +1719,7 @@ void SwHTMLParser::InsertInput()
             }
              FormButtonType eButtonType = FormButtonType_SUBMIT;
             aTmp.setValue( &eButtonType,
-                           ::getCppuType((const FormButtonType*)0));
+                           cppu::UnoType<FormButtonType>::get());
             xPropSet->setPropertyValue(
                 OUString("ButtonType"), aTmp );
 
@@ -1757,7 +1757,7 @@ void SwHTMLParser::InsertInput()
                                         aTmp );
 
             aTmp.setValue( &eButtonType,
-                           ::getCppuType((const FormButtonType*)0));
+                           cppu::UnoType<FormButtonType>::get());
             xPropSet->setPropertyValue(
                 OUString("ButtonType"), aTmp );
 

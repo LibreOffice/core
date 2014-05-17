@@ -641,8 +641,8 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
     arg = args[0];
 
-    if (( arg.getValueType() != ::getCppuType((sal_Int16*)0)) &&
-        ( arg.getValueType() != ::getCppuType((sal_Int8*)0)))
+    if (( arg.getValueType() != cppu::UnoType<sal_Int16>::get()) &&
+        ( arg.getValueType() != cppu::UnoType<sal_Int8>::get()))
     {
         throw lang::IllegalArgumentException(
                 OUString( "invalid argument type" ),

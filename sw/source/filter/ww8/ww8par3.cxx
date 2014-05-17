@@ -2535,8 +2535,7 @@ bool SwMSConvertControls::InsertControl(
     bool bFloatingCtrl)
 {
     const uno::Reference< container::XIndexContainer > &rComps = GetFormComps();
-    uno::Any aTmp( &rFComp, ::getCppuType((const uno::Reference<
-        form::XFormComponent >*)0) );
+    uno::Any aTmp( &rFComp, cppu::UnoType<form::XFormComponent>::get());
     rComps->insertByIndex( rComps->getCount(), aTmp );
 
     const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory =

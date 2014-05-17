@@ -1194,52 +1194,52 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
     throw (uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if ( rType == ::getCppuType((uno::Reference<XAccessibleText> *)0) )
+    if ( rType == cppu::UnoType<XAccessibleText>::get())
     {
         uno::Reference<XAccessibleText> aAccText = (XAccessibleText *) *this; // resolve ambiguity
         aRet <<= aAccText;
     }
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleEditableText> *)0) )
+    else if ( rType == cppu::UnoType<XAccessibleEditableText>::get())
     {
         uno::Reference<XAccessibleEditableText> aAccEditText = this;
         aRet <<= aAccEditText;
     }
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleSelection> *)0) )
+    else if ( rType == cppu::UnoType<XAccessibleSelection>::get())
     {
         uno::Reference<XAccessibleSelection> aAccSel = this;
         aRet <<= aAccSel;
     }
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleHypertext> *)0) )
+    else if ( rType == cppu::UnoType<XAccessibleHypertext>::get())
     {
         uno::Reference<XAccessibleHypertext> aAccHyp = this;
         aRet <<= aAccHyp;
     }
     // #i63870#
     // add interface com::sun:star:accessibility::XAccessibleTextAttributes
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextAttributes> *)0) )
+    else if ( rType == cppu::UnoType<XAccessibleTextAttributes>::get())
     {
         uno::Reference<XAccessibleTextAttributes> aAccTextAttr = this;
         aRet <<= aAccTextAttr;
     }
     // #i89175#
     // add interface com::sun:star:accessibility::XAccessibleTextMarkup
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextMarkup> *)0) )
+    else if ( rType == cppu::UnoType<XAccessibleTextMarkup>::get())
     {
         uno::Reference<XAccessibleTextMarkup> aAccTextMarkup = this;
         aRet <<= aAccTextMarkup;
     }
     // add interface com::sun:star:accessibility::XAccessibleMultiLineText
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleMultiLineText> *)0) )
+    else if ( rType == cppu::UnoType<XAccessibleMultiLineText>::get())
     {
         uno::Reference<XAccessibleMultiLineText> aAccMultiLineText = this;
         aRet <<= aAccMultiLineText;
     }
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextSelection> *)NULL) )
+    else if ( rType == cppu::UnoType<XAccessibleTextSelection>::get())
     {
         uno::Reference< com::sun::star::accessibility::XAccessibleTextSelection > aTextExtension = this;
         aRet <<= aTextExtension;
     }
-    else if ( rType == ::getCppuType((uno::Reference<XAccessibleExtendedAttributes> *)NULL) )
+    else if ( rType == cppu::UnoType<XAccessibleExtendedAttributes>::get())
     {
         uno::Reference<XAccessibleExtendedAttributes> xAttr = this;
         aRet <<= xAttr;
@@ -1269,7 +1269,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno:
     pTypes[nIndex++] = ::cppu::UnoType<XAccessibleSelection>::get();
     pTypes[nIndex++] = cppu::UnoType<XAccessibleTextMarkup>::get();
     pTypes[nIndex++] = cppu::UnoType<XAccessibleMultiLineText>::get();
-    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleHypertext > * >( 0 ) );
+    pTypes[nIndex] = cppu::UnoType<XAccessibleHypertext>::get();
 
     return aTypes;
 }
@@ -2384,7 +2384,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 if (pNumRule)
                 {
                     uno::Reference< container::XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);
-                    aVal.setValue(&xNum, ::getCppuType((const uno::Reference< container::XIndexReplace >*)0));
+                    aVal.setValue(&xNum, cppu::UnoType<container::XIndexReplace>::get());
                 }
                 rValue.Value <<= aVal;
             }

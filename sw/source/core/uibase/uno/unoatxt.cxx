@@ -106,7 +106,7 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
 
 uno::Type SwXAutoTextContainer::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const uno::Reference<text::XAutoTextGroup>*)0);
+    return cppu::UnoType<text::XAutoTextGroup>::get();
 
 }
 
@@ -536,7 +536,7 @@ uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
 
 uno::Type SwXAutoTextGroup::getElementType(void) throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((uno::Reference<text::XAutoTextEntry>*)0);
+    return cppu::UnoType<text::XAutoTextEntry>::get();
 
 }
 

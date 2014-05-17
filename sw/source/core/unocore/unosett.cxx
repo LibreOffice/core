@@ -1506,7 +1506,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             {
                 uno::Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( pGraphic->GetBitmapEx() );
                 pData = new PropValData((void*)&xBmp, UNO_NAME_GRAPHIC_BITMAP,
-                                ::getCppuType((const uno::Reference<awt::XBitmap>*)0));
+                                cppu::UnoType<awt::XBitmap>::get());
                 aPropertyValues.push_back(pData);
             }
              Size aSize = rFmt.GetGraphicSize();

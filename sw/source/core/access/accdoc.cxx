@@ -467,17 +467,17 @@ uno::Any SwAccessibleDocument::queryInterface(
         aRet <<= aSelect;
     }
     //Add XEventListener interface support.
-    else if ( (rType == ::getCppuType((uno::Reference<com::sun::star::document::XEventListener> *)NULL)) )
+    else if ( (rType == cppu::UnoType<com::sun::star::document::XEventListener>::get()) )
     {
         uno::Reference<com::sun::star::document::XEventListener> aSelect = this;
         aRet <<= aSelect;
     }
-    else  if ( rType == ::getCppuType((uno::Reference<XAccessibleExtendedAttributes> *)NULL) )
+    else  if ( rType == cppu::UnoType<XAccessibleExtendedAttributes>::get())
     {
         uno::Reference<XAccessibleExtendedAttributes> aAttribute = this;
         aRet <<= aAttribute;
     }
-    else if(rType == ::getCppuType((uno::Reference<XAccessibleGetAccFlowTo> *)NULL) )
+    else if(rType == cppu::UnoType<XAccessibleGetAccFlowTo>::get())
     {
         uno::Reference<XAccessibleGetAccFlowTo> AccFlowTo = this;
         aRet <<= AccFlowTo;
@@ -501,7 +501,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     uno::Type* pTypes = aTypes.getArray();
     pTypes[nIndex] = cppu::UnoType<XAccessibleSelection>::get();
     //Add XEventListener interface support.
-    pTypes[nIndex + 1 ] = ::getCppuType( static_cast< uno::Reference< com::sun::star::document::XEventListener > * >( 0 ) );
+    pTypes[nIndex + 1 ] = cppu::UnoType<com::sun::star::document::XEventListener>::get();
     return aTypes;
 }
 

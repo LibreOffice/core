@@ -152,8 +152,8 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         break;
                         case XATTR_FILLBITMAP :
                         {
-                            if ( ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0) ) ||
-                                    ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >*)0) ) ) &&
+                            if ( ( ( pAny->getValueType() == cppu::UnoType<com::sun::star::awt::XBitmap>::get()) ||
+                                    ( pAny->getValueType() == cppu::UnoType<com::sun::star::graphic::XGraphic>::get()) ) &&
                                     ( aIt->nMemberId == MID_BITMAP ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );

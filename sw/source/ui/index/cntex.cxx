@@ -375,7 +375,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     aSequPropVals.realloc(nTokenIndex);
 
                     uno::Any aFormatAccess = xIdxProps->getPropertyValue(UNO_NAME_LEVEL_FORMAT);
-                    OSL_ENSURE(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
+                    OSL_ENSURE(aFormatAccess.getValueType() == cppu::UnoType<container::XIndexReplace>::get(),
                         "wrong property type");
 
                     uno::Reference< container::XIndexReplace >  xFormatAccess;

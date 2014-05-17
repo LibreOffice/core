@@ -549,13 +549,13 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
                         uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
-                        pAny->setValue(&xTable, ::getCppuType((uno::Reference<XTextTable>*)0));
+                        pAny->setValue(&xTable, cppu::UnoType<XTextTable>::get());
                     }
                     else
                     {
                         SwTableBox* pBox = pSttNode->GetTblBox();
                         uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
-                        pAny->setValue(&xCell, ::getCppuType((uno::Reference<XCell>*)0));
+                        pAny->setValue(&xCell, cppu::UnoType<XCell>::get());
                     }
                 }
             }
@@ -574,7 +574,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     uno::Reference< XTextFrame >  xFrm = (SwXTextFrame*) SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM);
-                    pAny->setValue(&xFrm, ::getCppuType((uno::Reference<XTextFrame>*)0));
+                    pAny->setValue(&xFrm, cppu::UnoType<XTextFrame>::get());
                 }
             }
             else
@@ -589,7 +589,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
-                    pAny->setValue(&xSect, ::getCppuType((uno::Reference<XTextSection>*)0) );
+                    pAny->setValue(&xSect, cppu::UnoType<XTextSection>::get());
                 }
             }
             else
@@ -636,7 +636,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {   // hmm... can only return 1 here
                     const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
                     uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
-                    pAny->setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+                    pAny->setValue(&xRef, cppu::UnoType<XTextContent>::get());
                 }
             }
             else
@@ -890,7 +890,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
     {
         uno::Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);
         if ( pAny )
-            pAny->setValue(&xNum, ::getCppuType((const uno::Reference<XIndexReplace>*)0));
+            pAny->setValue(&xNum, cppu::UnoType<XIndexReplace>::get());
         eState = PropertyState_DIRECT_VALUE;
     }
     else
