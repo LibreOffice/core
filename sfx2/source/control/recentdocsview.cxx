@@ -227,6 +227,9 @@ void RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft())
     {
+        if( rMEvt.GetClicks() > 1 )
+            return;
+
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
 
@@ -241,8 +244,11 @@ void RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
     ThumbnailView::MouseButtonUp(rMEvt);
 }
 
-void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *)
+void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
 {
+    RecentDocsViewItem* pRecentItem = dynamic_cast< RecentDocsViewItem* >(pItem);
+    if (pRecentItem)
+        pRecentItem->OpenDocument();
 }
 
 void RecentDocsView::Paint( const Rectangle &aRect )
