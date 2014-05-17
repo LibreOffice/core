@@ -49,7 +49,7 @@ class GL3DBarChart : public GL3DPlotterBase, public IRenderer
 public:
     GL3DBarChart(
         const css::uno::Reference<css::chart2::XChartType>& xChartType,
-        OpenGLWindow& rContext);
+        OpenGLWindow* pContext);
 
     virtual ~GL3DBarChart();
 
@@ -65,6 +65,8 @@ public:
     virtual void scroll(long nDelta) SAL_OVERRIDE;
     virtual void contextDestroyed() SAL_OVERRIDE;
 
+    void setOpenGLWindow(OpenGLWindow* pWindow);
+
 private:
 
     void moveToCorner();
@@ -75,7 +77,7 @@ private:
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
     boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
-    OpenGLWindow& mrWindow;
+    OpenGLWindow* mpWindow;
 
     opengl3D::Camera* mpCamera;
     bool mbValidContext;

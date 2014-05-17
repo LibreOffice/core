@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
     ucbhelper \
     utl \
     vcl \
+    vclopengl \
 	$(gb_UWINAPI) \
 ))
 
