@@ -439,6 +439,47 @@ bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
 
 
 /**
+ * Whether rString contains word rWhat at nPos
+ */
+bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
+                                               const OUString& rString, sal_Int32 nPos )
+{
+    if (rWhat.isEmpty() || rString.getLength() < nPos + rWhat.getLength())
+        return false;
+
+    if (StringPtrContainsImpl( rWhat, rString.getStr(), nPos))
+    {
+        nPos += rWhat.getLength();
+        if (nPos == rString.getLength())
+            return true;    // word at end of string
+
+        /* TODO: we COULD invoke bells and whistles word break iterator to find
+         * the next boundary, but really ... this is called for date input, so
+         * how many languages do not separate the day and month names in some
+         * form? */
+
+        sal_Int32 nIndex = nPos;
+        sal_uInt32 c = rString.iterateCodePoints( &nIndex);
+        if (nPos+1 < nIndex)
+            return true;    // Surrogate, assume these to be new words.
+        (void)c;
+
+        const sal_Int32 nType = pFormatter->GetCharClass()->getCharacterType( rString, nPos);
+
+        if (CharClass::isAlphaNumericType( nType))
+            return false;   // Alpha or numeric is not word gap.
+
+        if (CharClass::isLetterType( nType))
+            return true;    // Letter other than alpha is new word. (Is it?)
+
+        return true;        // Catch all remaining as gap until we know better.
+    }
+
+    return false;
+}
+
+
+/**
  * Skips the supplied char
  */
 inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const OUString& rString,
@@ -577,7 +618,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
         // if we stopped at the first match.
         for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
-            if ( bScanGenitiveMonths && StringContains( pUpperGenitiveMonthText[i], rString, nPos ) )
+            if ( bScanGenitiveMonths && StringContainsWord( pUpperGenitiveMonthText[i], rString, nPos ) )
             {   // genitive full names first
                 const int nMonthLen = pUpperGenitiveMonthText[i].getLength();
                 if (nMonthLen > nMatchLen)
@@ -586,7 +627,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                     res = i + 1;
                 }
             }
-            else if ( bScanGenitiveMonths && StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
+            else if ( bScanGenitiveMonths && StringContainsWord( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
             {   // genitive abbreviated
                 const int nMonthLen = pUpperGenitiveAbbrevMonthText[i].getLength();
                 if (nMonthLen > nMatchLen)
@@ -595,7 +636,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                     res = sal::static_int_cast< short >(-(i+1)); // negative
                 }
             }
-            else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveMonthText[i], rString, nPos ) )
+            else if ( bScanPartitiveMonths && StringContainsWord( pUpperPartitiveMonthText[i], rString, nPos ) )
             {   // partitive full names
                 const int nMonthLen = pUpperPartitiveMonthText[i].getLength();
                 if (nMonthLen > nMatchLen)
@@ -604,7 +645,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                     res = i+1;
                 }
             }
-            else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
+            else if ( bScanPartitiveMonths && StringContainsWord( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
             {   // partitive abbreviated
                 const int nMonthLen = pUpperPartitiveAbbrevMonthText[i].getLength();
                 if (nMonthLen > nMatchLen)
@@ -613,7 +654,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                     res = sal::static_int_cast< short >(-(i+1)); // negative
                 }
             }
-            else if ( StringContains( pUpperMonthText[i], rString, nPos ) )
+            else if ( StringContainsWord( pUpperMonthText[i], rString, nPos ) )
             {   // noun full names
                 const int nMonthLen = pUpperMonthText[i].getLength();
                 if (nMonthLen > nMatchLen)
@@ -622,7 +663,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                     res = i+1;
                 }
             }
-            else if ( StringContains( pUpperAbbrevMonthText[i], rString, nPos ) )
+            else if ( StringContainsWord( pUpperAbbrevMonthText[i], rString, nPos ) )
             {   // noun abbreviated
                 const int nMonthLen = pUpperAbbrevMonthText[i].getLength();
                 if (nMonthLen > nMatchLen)
@@ -632,7 +673,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                 }
             }
             else if ( i == 8 && pUpperAbbrevMonthText[i] == aSeptCorrect &&
-                    StringContains( aSepShortened, rString, nPos ) )
+                    StringContainsWord( aSepShortened, rString, nPos ) )
             {   // #102136# SEPT/SEP
                 const int nMonthLen = aSepShortened.getLength();
                 if (nMonthLen > nMatchLen)
@@ -667,13 +708,13 @@ int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos
         sal_Int16 nDays = pFormatter->GetCalendar()->getNumberOfDaysInWeek();
         for ( sal_Int16 i = 0; i < nDays; i++ )
         {
-            if ( StringContains( pUpperDayText[i], rString, nPos ) )
+            if ( StringContainsWord( pUpperDayText[i], rString, nPos ) )
             {   // full names first
                 nPos = nPos + pUpperDayText[i].getLength();
                 res = i + 1;
                 break;  // for
             }
-            if ( StringContains( pUpperAbbrevDayText[i], rString, nPos ) )
+            if ( StringContainsWord( pUpperAbbrevDayText[i], rString, nPos ) )
             {   // abbreviated
                 nPos = nPos + pUpperAbbrevDayText[i].getLength();
                 res = -(i + 1); // negative
