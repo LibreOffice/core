@@ -31,6 +31,8 @@ GL3DBarChart::GL3DBarChart(
     mrWindow(rWindow),
     mpCamera(NULL)
 {
+    Size aSize = mrWindow.GetSizePixel();
+    mpRenderer->SetSize(aSize);
     mrWindow.setRenderer(this);
     mpRenderer->init();
 }
