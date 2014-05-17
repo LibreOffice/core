@@ -198,15 +198,15 @@ uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
 {
     uno::Any aAny;
 
-    if( rType == ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0) )
+    if( rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference< lang::XServiceInfo >(this);
-    else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
+    else if( rType == cppu::UnoType<lang::XTypeProvider>::get())
         aAny <<= uno::Reference< lang::XTypeProvider >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
+    else if( rType == cppu::UnoType<beans::XPropertySet>::get())
         aAny <<= uno::Reference< beans::XPropertySet >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertyState >*)0) )
+    else if( rType == cppu::UnoType<beans::XPropertyState>::get())
         aAny <<= uno::Reference< beans::XPropertyState >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
+    else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
     else
         aAny <<= OWeakAggObject::queryAggregation( rType );
@@ -268,12 +268,12 @@ uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
     uno::Sequence< uno::Type >  aTypes( 6 );
     uno::Type*                  pTypes = aTypes.getArray();
 
-    *pTypes++ = ::getCppuType((const uno::Reference< uno::XAggregation>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet>*)0);
+    *pTypes++ = cppu::UnoType<uno::XAggregation>::get();
+    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
+    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
 
     return aTypes;
 }
@@ -293,14 +293,14 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString("GraphicType"), UNOGRAPHIC_GRAPHICTYPE, ::getCppuType( (const sal_Int8*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("MimeType"), UNOGRAPHIC_MIMETYPE, ::getCppuType( (const OUString*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("SizePixel"), UNOGRAPHIC_SIZEPIXEL, ::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Size100thMM"), UNOGRAPHIC_SIZE100THMM, ::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("BitsPerPixel"), UNOGRAPHIC_BITSPERPIXEL, ::getCppuType( (const sal_uInt8*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Transparent"), UNOGRAPHIC_TRANSPARENT, ::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Alpha"), UNOGRAPHIC_ALPHA, ::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { OUString("Animated"), UNOGRAPHIC_ANIMATED, ::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("GraphicType"), UNOGRAPHIC_GRAPHICTYPE, cppu::UnoType<sal_Int8>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("MimeType"), UNOGRAPHIC_MIMETYPE, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("SizePixel"), UNOGRAPHIC_SIZEPIXEL, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("Size100thMM"), UNOGRAPHIC_SIZE100THMM, cppu::UnoType<awt::Size>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("BitsPerPixel"), UNOGRAPHIC_BITSPERPIXEL, cppu::UnoType<sal_uInt8>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("Transparent"), UNOGRAPHIC_TRANSPARENT, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("Alpha"), UNOGRAPHIC_ALPHA, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("Animated"), UNOGRAPHIC_ANIMATED, cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

@@ -61,11 +61,11 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
     throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
-    if( rType == ::getCppuType((const uno::Reference< graphic::XGraphic >*)0) )
+    if( rType == cppu::UnoType<graphic::XGraphic>::get())
         aAny <<= uno::Reference< graphic::XGraphic >( this );
-    else if( rType == ::getCppuType((const uno::Reference< awt::XBitmap >*)0) )
+    else if( rType == cppu::UnoType<awt::XBitmap>::get())
         aAny <<= uno::Reference< awt::XBitmap >( this );
-    else if( rType == ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0) )
+    else if( rType == cppu::UnoType<lang::XUnoTunnel>::get())
         aAny <<= uno::Reference< lang::XUnoTunnel >(this);
     else
         aAny <<= ::unographic::GraphicDescriptor::queryAggregation( rType );
@@ -151,8 +151,8 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
     sal_Int32                   nOldCount = aRet.getLength();
 
     aRet.realloc( nOldCount + 2 );
-    aRet[ nOldCount ] = ::getCppuType((const uno::Reference< graphic::XGraphic>*)0);
-    aRet[ nOldCount+1 ] = ::getCppuType((const uno::Reference< awt::XBitmap>*)0);
+    aRet[ nOldCount ] = cppu::UnoType<graphic::XGraphic>::get();
+    aRet[ nOldCount+1 ] = cppu::UnoType<awt::XBitmap>::get();
 
     return aRet;
 }

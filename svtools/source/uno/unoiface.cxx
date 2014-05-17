@@ -194,9 +194,9 @@ VCLXMultiLineEdit::~VCLXMultiLineEdit()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXMultiLineEdit )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextArea>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextLayoutConstrains>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XTextComponent>::get(),
+    cppu::UnoType<com::sun::star::awt::XTextArea>::get(),
+    cppu::UnoType<com::sun::star::awt::XTextLayoutConstrains>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -557,8 +557,8 @@ VCLXFileControl::~VCLXFileControl()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXFileControl )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextLayoutConstrains>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XTextComponent>::get(),
+    cppu::UnoType<com::sun::star::awt::XTextLayoutConstrains>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -1677,7 +1677,7 @@ SVTXNumericField::~SVTXNumericField()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( SVTXNumericField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XNumericField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XNumericField>::get(),
     SVTXFormattedField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -1844,7 +1844,7 @@ SVTXCurrencyField::~SVTXCurrencyField()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( SVTXCurrencyField )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCurrencyField>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XCurrencyField>::get(),
     SVTXFormattedField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -2133,7 +2133,7 @@ void VCLXProgressBar::ImplUpdateValue()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXProgressBar )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar>* ) NULL ),
+    cppu::UnoType<com::sun::star::awt::XProgressBar>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 

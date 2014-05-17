@@ -84,9 +84,9 @@ uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
     uno::Sequence< uno::Type >  aTypes( 3 );
     uno::Type*                  pTypes = aTypes.getArray();
 
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< graphic::XGraphicProvider>*)0);
+    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+    *pTypes++ = cppu::UnoType<graphic::XGraphicProvider>::get();
 
     return aTypes;
 }

@@ -131,11 +131,11 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry const aPolygonObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
                 { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),                0, 0 },
                 { OUString("Polygon"),     HANDLE_POLYGON,     ::getCppuType((const PointSequence*)0),    0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -147,14 +147,14 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry const aCircleObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
                 { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),                0, 0 },
-                { OUString("Center"),      HANDLE_CENTER,      ::getCppuType((const awt::Point*)0),   0, 0 },
-                { OUString("Radius"),      HANDLE_RADIUS,      ::getCppuType((const sal_Int32*)0),    0, 0 },
+                { OUString("Center"),      HANDLE_CENTER,      cppu::UnoType<awt::Point>::get(),   0, 0 },
+                { OUString("Radius"),      HANDLE_RADIUS,      cppu::UnoType<sal_Int32>::get(),    0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
@@ -165,13 +165,13 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry const aRectangleObj_Impl[] =
             {
-                { OUString("URL"),         HANDLE_URL,         ::getCppuType((const OUString*)0), 0, 0 },
-                { OUString("Title"),       HANDLE_TITLE,       ::getCppuType((const OUString*)0),     0, 0 },
-                { OUString("Description"), HANDLE_DESCRIPTION, ::getCppuType((const OUString*)0), 0, 0 },
-                { OUString("Target"),      HANDLE_TARGET,      ::getCppuType((const OUString*)0), 0, 0 },
-                { OUString("Name"),        HANDLE_NAME,        ::getCppuType((const OUString*)0), 0, 0 },
+                { OUString("URL"),         HANDLE_URL,         cppu::UnoType<OUString>::get(), 0, 0 },
+                { OUString("Title"),       HANDLE_TITLE,       cppu::UnoType<OUString>::get(),     0, 0 },
+                { OUString("Description"), HANDLE_DESCRIPTION, cppu::UnoType<OUString>::get(), 0, 0 },
+                { OUString("Target"),      HANDLE_TARGET,      cppu::UnoType<OUString>::get(), 0, 0 },
+                { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(), 0, 0 },
                 { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),            0, 0 },
-                { OUString("Boundary"),    HANDLE_BOUNDARY,    ::getCppuType((const awt::Rectangle*)0),   0, 0 },
+                { OUString("Boundary"),    HANDLE_BOUNDARY,    cppu::UnoType<awt::Rectangle>::get(),   0, 0 },
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
@@ -350,13 +350,13 @@ uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
     uno::Sequence< uno::Type > aTypes( 7 );
     uno::Type* pTypes = aTypes.getArray();
 
-    *pTypes++ = ::getCppuType((const uno::Reference< XAggregation>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XEventsSupplier>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XServiceInfo>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XPropertySet>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XMultiPropertySet>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XTypeProvider>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XUnoTunnel>*)0);
+    *pTypes++ = cppu::UnoType<XAggregation>::get();
+    *pTypes++ = cppu::UnoType<XEventsSupplier>::get();
+    *pTypes++ = cppu::UnoType<XServiceInfo>::get();
+    *pTypes++ = cppu::UnoType<XPropertySet>::get();
+    *pTypes++ = cppu::UnoType<XMultiPropertySet>::get();
+    *pTypes++ = cppu::UnoType<XTypeProvider>::get();
+    *pTypes++ = cppu::UnoType<XUnoTunnel>::get();
 
     return aTypes;
 }

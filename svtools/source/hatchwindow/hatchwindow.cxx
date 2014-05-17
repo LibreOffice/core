@@ -148,7 +148,7 @@ uno::Sequence< uno::Type > SAL_CALL VCLXHatchWindow::getTypes()
         if ( pTypeCollection == NULL )
         {
             static ::cppu::OTypeCollection aTypeCollection(
-                    ::getCppuType(( const uno::Reference< embed::XHatchWindow >* )NULL ),
+                    cppu::UnoType<embed::XHatchWindow>::get(),
                     VCLXHatchWindow::getTypes() );
 
             pTypeCollection = &aTypeCollection ;

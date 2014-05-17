@@ -61,17 +61,17 @@ uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType 
 {
     uno::Any aAny;
 
-    if( rType == ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0) )
+    if( rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference< lang::XServiceInfo >(this);
-    else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
+    else if( rType == cppu::UnoType<lang::XTypeProvider>::get())
         aAny <<= uno::Reference< lang::XTypeProvider >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
+    else if( rType == cppu::UnoType<beans::XPropertySet>::get())
         aAny <<= uno::Reference< beans::XPropertySet >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertyState >*)0) )
+    else if( rType == cppu::UnoType<beans::XPropertyState>::get())
         aAny <<= uno::Reference< beans::XPropertyState >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
+    else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
-    else if( rType == ::getCppuType((const uno::Reference< graphic::XGraphicRenderer >*)0) )
+    else if( rType == cppu::UnoType<graphic::XGraphicRenderer>::get())
         aAny <<= uno::Reference< graphic::XGraphicRenderer >(this);
     else
         aAny <<= OWeakAggObject::queryAggregation( rType );
@@ -135,13 +135,13 @@ uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
     uno::Sequence< uno::Type >  aTypes( 7 );
     uno::Type*                  pTypes = aTypes.getArray();
 
-    *pTypes++ = ::getCppuType((const uno::Reference< uno::XAggregation>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< graphic::XGraphicRenderer>*)0);
+    *pTypes++ = cppu::UnoType<uno::XAggregation>::get();
+    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
+    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+    *pTypes++ = cppu::UnoType<graphic::XGraphicRenderer>::get();
 
     return aTypes;
 }
@@ -161,9 +161,9 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
 
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { OUString("Device"), UNOGRAPHIC_DEVICE, ::getCppuType( (const uno::Any*)(0)), 0, 0 },
-        { OUString("DestinationRect"), UNOGRAPHIC_DESTINATIONRECT, ::getCppuType( (const awt::Rectangle*)(0)), 0, 0 },
-        { OUString("RenderData"), UNOGRAPHIC_RENDERDATA, ::getCppuType( (const uno::Any*)(0)), 0, 0 },
+        { OUString("Device"), UNOGRAPHIC_DEVICE, cppu::UnoType<uno::Any>::get(), 0, 0 },
+        { OUString("DestinationRect"), UNOGRAPHIC_DESTINATIONRECT, cppu::UnoType<awt::Rectangle>::get(), 0, 0 },
+        { OUString("RenderData"), UNOGRAPHIC_RENDERDATA, cppu::UnoType<uno::Any>::get(), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
