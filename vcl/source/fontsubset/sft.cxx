@@ -2028,7 +2028,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 #endif
     }
 
-    TrueTypeCreatorDispose(ttcr);
+    delete ttcr;
     free(gID);
 
     return res;
@@ -2209,7 +2209,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     AddTable(ttcr, prep); AddTable(ttcr, glyf); AddTable(ttcr, fpgm);
 
     if ((res = StreamToMemory(ttcr, &sfntP, &sfntLen)) != SF_OK) {
-        TrueTypeCreatorDispose(ttcr);
+        delete ttcr;
         free(gID);
         return res;
     }
@@ -2245,7 +2245,8 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     fprintf(outf, "end readonly def\n");
 
     fprintf(outf, "FontName currentdict end definefont pop\n");
-    TrueTypeCreatorDispose(ttcr);
+    delete ttcr;
+
     free(gID);
     free(sfntP);
     return SF_OK;

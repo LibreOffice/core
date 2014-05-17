@@ -220,11 +220,6 @@ extern "C"
  * Destructor for the TrueTypeTable object.
  */
  void TrueTypeTableDispose(vcl::TrueTypeTable *);
-
-/**
- * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
- */
- void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this);
 }
 
 #endif // INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX

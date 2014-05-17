@@ -32,8 +32,10 @@
 #include <assert.h>
 
 #include "ttcr.hxx"
-#include "list.h"
 #include "string.h"
+
+#include <list>
+#include <boost/shared_ptr.hpp>
 
 namespace vcl
 {
@@ -41,11 +43,14 @@ namespace vcl
 /*
  * Private Data Types
  */
+typedef std::list<boost::shared_ptr<TrueTypeTable> > TableList;
+typedef std::list<boost::shared_ptr<GlyphData> > GlyphList;
+typedef std::list<boost::shared_ptr<NameRecord> > NameRecordList;
 
-    struct _TrueTypeCreator {
-        sal_uInt32 tag;                         /**< TrueType file tag */
-        list   tables;                      /**< List of table tags and pointers */
-    };
+struct _TrueTypeCreator {
+    sal_uInt32 tag;                         // TrueType file tag
+    TableList *tables;      // List of table tags and pointers
+};
 
 /* These must be #defined so that they can be used in initializers */
 #define T_maxp  0x6D617870
@@ -192,49 +197,34 @@ _inline void *scalloc(sal_uInt32 n, sal_uInt32 size)
     return res;
 }
 
+;
+
 /*
  * Public functions
  */
-
 void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
 {
-    TrueTypeCreator* ptr = (TrueTypeCreator*)smalloc(sizeof(TrueTypeCreator));
-
-    ptr->tables = listNewEmpty();
-    listSetElementDtor(ptr->tables, (list_destructor)TrueTypeTableDispose);
-
+    TrueTypeCreator* ptr = new TrueTypeCreator();
+    ptr->tables = new TableList();
     ptr->tag = tag;
-
     *_this = ptr;
 }
 
 int AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
 {
     if (table != 0) {
-        listAppend(_this->tables, table);
+        _this->tables->push_back(boost::shared_ptr<TrueTypeTable>(table, TrueTypeTableDispose));
     }
     return SF_OK;
 }
 
 void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
 {
-    if (listCount(_this->tables))
-    {
-        listToFirst(_this->tables);
-        int done = 0;
-        do {
-            if (((TrueTypeTable *) listCurrent(_this->tables))->tag == tag)
-            {
-                listRemove(_this->tables);
-            }
-            else
-            {
-                if (listNext(_this->tables))
-                {
-                    done = 1;
-                }
-            }
-        } while (!done);
+    for (TableList::iterator it = _this->tables->begin(); it != _this->tables->end(); ++it){
+        if ((*it)->tag == tag){
+            _this->tables->erase(it);
+            break;
+        }
     }
 }
 
@@ -248,21 +238,22 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     int i=0, n;
     sal_uInt8 *head = NULL;     /* saved pointer to the head table data for checkSumAdjustment calculation */
 
-    if ((n = listCount(_this->tables)) == 0) return SF_TTFORMAT;
+    n = _this->tables->size();
+    if (n == 0){
+        return SF_TTFORMAT;
+    }
 
     ProcessTables(_this);
 
     /* ProcessTables() adds 'loca' and 'hmtx' */
 
-    n = listCount(_this->tables);
+    n = _this->tables->size();
     numTables = (sal_uInt16) n;
 
     TableEntry* te = (TableEntry*)scalloc(n, sizeof(TableEntry));
 
-    listToFirst(_this->tables);
-    for (i = 0; i < n; i++) {
-        GetRawData((TrueTypeTable *) listCurrent(_this->tables), &te[i].data, &te[i].length, &te[i].tag);
-        listNext(_this->tables);
+    for (TableList::iterator it = _this->tables->begin(); it != _this->tables->end(); ++it){
+        GetRawData(it->get(), &te[i].data, &te[i].length, &te[i].tag);
     }
 
     qsort(te, n, sizeof(TableEntry), TableEntryCompareF);
@@ -476,7 +467,9 @@ static void TrueTypeTableDispose_maxp(TrueTypeTable *_this)
 static void TrueTypeTableDispose_glyf(TrueTypeTable *_this)
 {
     if (_this) {
-        if (_this->data) listDispose((list) _this->data);
+        if (_this->data) {
+            delete static_cast<TableList*>(_this->data);
+        }
         free(_this);
     }
 }
@@ -507,7 +500,9 @@ static void TrueTypeTableDispose_cmap(TrueTypeTable *_this)
 static void TrueTypeTableDispose_name(TrueTypeTable *_this)
 {
     if (_this) {
-        if (_this->data) listDispose((list) _this->data);
+        if (_this->data) {
+            delete static_cast<TableList*>(_this->data);
+        }
         free(_this);
     }
 }
@@ -606,7 +601,8 @@ static int GetRawData_maxp(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 static int GetRawData_glyf(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
     sal_uInt32 n, nbytes = 0;
-    list l = (list) _this->data;
+
+    GlyphList *l = static_cast<GlyphList*>(_this->data);
     /* sal_uInt16 curID = 0;    */               /* to check if glyph IDs are sequential and start from zero */
     sal_uInt8 *p;
 
@@ -614,24 +610,22 @@ static int GetRawData_glyf(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     *len = 0;
     *tag = 0;
 
-    if (listCount(l) == 0) return TTCR_ZEROGLYPHS;
+    if (l->empty()) return TTCR_ZEROGLYPHS;
 
-    listToFirst(l);
-    do {
+    for (GlyphList::iterator it = l->begin(); it != l->end(); ++it){
         /* if (((GlyphData *) listCurrent(l))->glyphID != curID++) return TTCR_GLYPHSEQ; */
-        nbytes += ((GlyphData *) listCurrent(l))->nbytes;
-    } while (listNext(l));
+        nbytes += (*it)->nbytes;
+    }
 
     p = _this->rawdata = ttmalloc(nbytes);
 
-    listToFirst(l);
-    do {
-        n = ((GlyphData *) listCurrent(l))->nbytes;
+    for (GlyphList::iterator it = l->begin(); it != l->end(); ++it){
+        n = (*it)->nbytes;
         if (n != 0) {
-            memcpy(p, ((GlyphData *) listCurrent(l))->ptr, n);
+            memcpy(p, (*it)->ptr, n);
             p += n;
         }
-    } while (listNext(l));
+    }
 
     *len = nbytes;
     *ptr = _this->rawdata;
@@ -752,7 +746,7 @@ static int GetRawData_cmap(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
 static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
-    list l;
+    NameRecordList *l;
     sal_Int16 i=0, n;                          /* number of Name Records */
     int stringLen = 0;
     sal_uInt8 *p1, *p2;
@@ -762,20 +756,21 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     *tag = 0;
 
     assert(_this != 0);
-    l = (list) _this->data;
+    l = static_cast<NameRecordList*>(_this->data);
     assert(l != 0);
 
-    if ((n = (sal_Int16)listCount(l)) == 0) return TTCR_NONAMES;
+    n = l->size();
+    if (n == 0){
+        return TTCR_NONAMES;
+    }
 
     NameRecord* nr = (NameRecord*)scalloc(n, sizeof(NameRecord));
 
-    listToFirst(l);
-
-    do {
-        memcpy(nr+i, listCurrent(l), sizeof(NameRecord));
+    for (NameRecordList::iterator it = l->begin(); it != l->end(); ++it){
+        memcpy(nr+i, it->get(), sizeof(NameRecord));
         stringLen += nr[i].slen;
         i++;
-    } while (listNext(l));
+    }
 
     if (stringLen > 65535) {
         free(nr);
@@ -996,13 +991,8 @@ TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size)
 TrueTypeTable *TrueTypeTableNew_glyf(void)
 {
     TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
-    list l = listNewEmpty();
 
-    assert(l != 0);
-
-    listSetElementDtor(l, (list_destructor)FreeGlyphData);
-
-    table->data = l;
+    table->data = new GlyphList();
     table->rawdata = 0;
     table->tag = T_glyf;
 
@@ -1053,16 +1043,12 @@ static NameRecord* NameRecordNewCopy(NameRecord *nr)
 TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord *nr)
 {
     TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
-    list l = listNewEmpty();
-
-    assert(l != 0);
-
-    listSetElementDtor(l, (list_destructor)DisposeNameRecord);
+    NameRecordList *l = new NameRecordList();
 
     if (n != 0) {
         int i;
         for (i = 0; i < n; i++) {
-            listAppend(l, NameRecordNewCopy(nr+i));
+            l->push_back(boost::shared_ptr<NameRecord>(NameRecordNewCopy(nr + i), DisposeNameRecord));
         }
     }
 
@@ -1193,7 +1179,7 @@ void cmapAdd(TrueTypeTable *table, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
 
 sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt)
 {
-    list l;
+    GlyphList *l;
     sal_uInt32 currentID;
     int ret, n, ncomponents;
     GlyphData *gd;
@@ -1207,15 +1193,14 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
 
     ncomponents = GetTTGlyphComponents(fnt, glyphdata->glyphID, glyphlist);
 
-    l = (list) table->data;
-    if (listCount(l) > 0) {
-        listToLast(l);
-        ret = n = ((GlyphData *) listCurrent(l))->newID + 1;
+    l = static_cast<GlyphList*> (table->data);
+    if (!l->empty()) {
+        ret = n = l->back()->newID + 1;
     } else {
         ret = n = 0;
     }
     glyphdata->newID = n++;
-    listAppend(l, glyphdata);
+    l->push_back(boost::shared_ptr<GlyphData>(glyphdata, FreeGlyphData));
 
     if (ncomponents > 1 && glyphlist.size() > 1 )
     {
@@ -1224,21 +1209,20 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
         /* glyphData->glyphID is always the first glyph on the list */
         do
         {
-            int found = 0;
+            bool found = false;
             currentID = *it;
-            /* XXX expensive! should be rewritten with sorted arrays! */
-            listToFirst(l);
-            do {
-                if (((GlyphData *) listCurrent(l))->glyphID == currentID) {
-                    found = 1;
+
+            for (GlyphList::iterator it2 = l->begin(); it2 != l->end(); ++it2){
+                if ((*it2)->glyphID == currentID) {
+                    found = true;
                     break;
                 }
-            } while (listNext(l));
+            }
 
             if (!found) {
                 gd = GetTTRawGlyphData(fnt, currentID);
                 gd->newID = n++;
-                listAppend(l, gd);
+                l->push_back(boost::shared_ptr<GlyphData>(gd, FreeGlyphData));
             }
         } while( ++it !=  glyphlist.end() );
     }
@@ -1250,32 +1234,28 @@ sal_uInt32 glyfCount(const TrueTypeTable *table)
 {
     assert(table != 0);
     assert(table->tag == T_glyf);
-    return listCount((list) table->data);
+    return static_cast<GlyphList*>(table->data)->size();
 }
 
 void nameAdd(TrueTypeTable *table, NameRecord *nr)
 {
-    list l;
-
     assert(table != 0);
     assert(table->tag == T_name);
 
-    l = (list) table->data;
-
-    listAppend(l, NameRecordNewCopy(nr));
+    static_cast<NameRecordList*>(table->data)->push_back(boost::shared_ptr<NameRecord>(NameRecordNewCopy(nr), DisposeNameRecord));
 }
 
 static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
 {
-    if (listIsEmpty(tt->tables)) return 0;
+    if (tt->tables->empty()){
+        return 0;
+    }
 
-    listToFirst(tt->tables);
-
-    do {
-        if (((TrueTypeTable *) listCurrent(tt->tables))->tag == tag) {
-            return (TrueTypeTable*)listCurrent(tt->tables);
+    for (TableList::iterator it = tt->tables->begin(); it != tt->tables->end(); ++it){
+        if ((*it)->tag == tag) {
+            return it->get();
         }
-    } while (listNext(tt->tables));
+    }
 
     return 0;
 }
@@ -1298,7 +1278,7 @@ static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
 static void ProcessTables(TrueTypeCreator *tt)
 {
     TrueTypeTable *glyf, *loca, *head, *maxp, *hhea;
-    list glyphlist;
+    GlyphList* glyphlist;
     sal_uInt32 nGlyphs, locaLen = 0, glyfLen = 0;
     sal_Int16 xMin = 0, yMin = 0, xMax = 0, yMax = 0;
     sal_uInt32 i = 0;
@@ -1311,8 +1291,8 @@ static void ProcessTables(TrueTypeCreator *tt)
     sal_uInt32 *gid;                        /* array of old glyphIDs */
 
     glyf = FindTable(tt, T_glyf);
-    glyphlist = (list) glyf->data;
-    nGlyphs = listCount(glyphlist);
+    glyphlist = static_cast<GlyphList*>(glyf->data);
+    nGlyphs = glyphlist->size();
     assert(nGlyphs != 0);
     gid = (sal_uInt32*)scalloc(nGlyphs, sizeof(sal_uInt32));
 
@@ -1321,9 +1301,8 @@ static void ProcessTables(TrueTypeCreator *tt)
 
     /* XXX Need to make sure that composite glyphs do not break during glyph renumbering */
 
-    listToFirst(glyphlist);
-    do {
-        GlyphData *gd = (GlyphData *) listCurrent(glyphlist);
+    for (GlyphList::iterator it = glyphlist->begin(); it != glyphlist->end(); it++){
+        GlyphData *gd = it->get();
         sal_Int16 z;
         glyfLen += gd->nbytes;
         /* XXX if (gd->nbytes & 1) glyfLen++; */
@@ -1355,8 +1334,7 @@ static void ProcessTables(TrueTypeCreator *tt)
             if (gd->npoints > maxCompositePoints) maxCompositePoints = gd->npoints;
             if (gd->ncontours > maxCompositeContours) maxCompositeContours = gd->ncontours;
         }
-
-    } while (listNext(glyphlist));
+    }
 
     indexToLocFormat = (glyfLen / 2 > 0xFFFF) ? 1 : 0;
     locaLen = indexToLocFormat ?  (nGlyphs + 1) << 2 : (nGlyphs + 1) << 1;
@@ -1366,11 +1344,11 @@ static void ProcessTables(TrueTypeCreator *tt)
     TTSimpleGlyphMetrics* met = (TTSimpleGlyphMetrics*)scalloc(nGlyphs, sizeof(TTSimpleGlyphMetrics));
     i = 0;
 
-    listToFirst(glyphlist);
     p1 = glyfPtr;
     p2 = locaPtr;
-    do {
-        GlyphData *gd = (GlyphData *) listCurrent(glyphlist);
+
+    for (GlyphList::iterator it = glyphlist->begin(); it != glyphlist->end(); ++it){
+         GlyphData *gd = it->get();
 
         if (gd->compflag) {                       /* re-number all components */
             sal_uInt16 flags, index;
@@ -1423,7 +1401,7 @@ static void ProcessTables(TrueTypeCreator *tt)
         met[i].adv = gd->aw;
         met[i].sb  = gd->lsb;
         i++;
-    } while (listNext(glyphlist));
+    }
 
     free(gid);
 
@@ -1495,15 +1473,6 @@ static void ProcessTables(TrueTypeCreator *tt)
 extern "C"
 {
     /**
-     * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
-     */
-     void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this)
-    {
-        listDispose(_this->tables);
-        free(_this);
-    }
-
-    /**
      * Destructor for the TrueTypeTable object.
      */
      void TrueTypeTableDispose(vcl::TrueTypeTable *_this)
@@ -1563,7 +1532,7 @@ int main(void)
 
     StreamToFile(ttcr, "ttcrout.ttf");
 
-    TrueTypeCreatorDispose(ttcr);
+    delete ttcr;
     return 0;
 }
 #endif
