@@ -74,6 +74,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                     if (s_aTypeNameMap.empty())
                     {
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
+                        // Not a copy paste error, see comment xmloff/source/forms/propertyimport.cxx lines 244-248
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::cppu::UnoType<double>::get();
                         s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::cppu::UnoType<double>::get();
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::cppu::UnoType<OUString>::get();
