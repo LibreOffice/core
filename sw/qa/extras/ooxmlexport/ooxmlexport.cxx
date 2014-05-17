@@ -3437,6 +3437,25 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78651, "fdo78651.docx")
     // ensure that there are only two tables
     assertXPath(pXmlDoc, "//w:tbl", 2);
 }
+DECLARE_OOXMLEXPORT_TEST(testWordArtWithinDraingtool, "testWordArtWithinDraingtool.docx")
+{
+/*   * Within a file, there is a 2007 wordArt enclosed in a drawing tool
+     * LO was exporting it as below:
+     * Sample XML as in Original file:
+     * <p> <r> <ac> <drawing> <txbx> <txbxContent> ..  <pict> </pict> </txbxContent></txbx> </drawing> </ac> </r> </p>
+     *  After RT :
+     * <p> <r> <ac> <drawing> <txbx> <txbxContent> ..  <drawing> <txbx> <txbxContent> ..  </txbxContent></txbx> </drawing> .. </txbxContent></txbx> </drawing> </ac> </r> </p>
+     *  Expected : As there is nesting of a 2007 Word Art within a draing tool, then can be separated in two different runs.
+     * */
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]",1);
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]/v:textbox[1]/w:txbxContent[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]",1);
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]",1);
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[4]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]",1);
+}
 
 #endif
 

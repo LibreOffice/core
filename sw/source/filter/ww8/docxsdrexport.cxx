@@ -151,7 +151,6 @@ struct DocxSdrExport::Impl
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
     sax_fastparser::FastAttributeList* m_pDashLineStyleAttr;
-    bool m_bIsInDMLTextFrame;
     sal_Int32 m_nId ;
     sal_Int32 m_nSeq ;
 
@@ -173,7 +172,6 @@ struct DocxSdrExport::Impl
           m_pFlyWrapAttrList(0),
           m_pBodyPrAttrList(0),
           m_pDashLineStyleAttr(0),
-          m_bIsInDMLTextFrame(false),
           m_nId(0),
           m_nSeq(0)
     {
@@ -657,10 +655,10 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
         if (propName == "LockedCanvas")
         {
             /*
-             * Export as Locked Canvas only if the drawing
-             * was originally a Locked Canvas and is now inside a Text Frame.
+             * Export as Locked Canvas only if the property
+             * is in the PropertySet
              */
-            bLockedCanvas = m_pImpl->m_bIsInDMLTextFrame;
+            bLockedCanvas = true;
             break;
         }
     }
@@ -1104,7 +1102,6 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
 void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
 {
-    m_pImpl->m_bIsInDMLTextFrame = true;
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
     const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
@@ -1320,7 +1317,6 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     }
 
     endDMLAnchorInline(&rFrmFmt);
-    m_pImpl->m_bIsInDMLTextFrame = false;
 }
 
 void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)

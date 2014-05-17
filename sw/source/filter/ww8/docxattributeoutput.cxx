@@ -297,8 +297,11 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     ++m_nTextFrameLevel;
     if( m_nTextFrameLevel == 1 )
     {
+        assert(!m_postponedCustomShape);
+        m_postponedCustomShape = new std::list< PostponedDrawing >;
         for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
         {
+            m_bParagraphFrameOpen = true;
             sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 
@@ -352,7 +355,16 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
 
             m_pSerializer->endElementNS( XML_w, XML_r );
+            m_bParagraphFrameOpen = false;
         }
+        if (m_postponedCustomShape)
+        {
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            WritePostponedCustomShape();
+            m_pSerializer->endElementNS( XML_w, XML_r );
+        }
+        delete m_postponedCustomShape;
+        m_postponedCustomShape = NULL;
 
         m_aFramesOfParagraph.clear();
     }
@@ -4207,6 +4219,24 @@ void DocxAttributeOutput::WritePostponedVMLDrawing()
     m_postponedVMLDrawing = NULL;
 }
 
+void DocxAttributeOutput::WritePostponedCustomShape()
+{
+    if(m_postponedCustomShape == NULL)
+        return;
+
+    for( std::list< PostponedDrawing >::iterator it = m_postponedCustomShape->begin();
+         it != m_postponedCustomShape->end();
+         ++it )
+    {
+        if ( IsAlternateContentChoiceOpen() )
+            m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
+        else
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
+    }
+    delete m_postponedCustomShape;
+    m_postponedCustomShape = NULL;
+}
+
 void DocxAttributeOutput::WritePostponedDMLDrawing()
 {
     if(m_postponedDMLDrawing == NULL)
@@ -4264,12 +4294,21 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     }
                     else
                     {
+                        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
+                        OUString sShapeType = xShape->getShapeType();
                         if ( m_postponedDMLDrawing == NULL )
                         {
                             if ( IsAlternateContentChoiceOpen() )
                                 m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrmFmt(), m_anchorId++);
                             else
                                 m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
+                        }
+                        // IsAlternateContentChoiceOpen() : check is to ensure that only one object is getting added. Without this check, plus one obejct gets added
+                        // m_bParagraphFrameOpen : Check if the frame is open.
+                        // sShapeType : This check is to ensure that if the custom shape is within a text frame then only we should postpone it.
+                        else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen && sShapeType == "com.sun.star.drawing.CustomShape")
+                        {
+                            m_postponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
                         }
                         else
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
@@ -7398,6 +7437,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nNextAnnotationMarkId( 0 ),
       m_pTableWrt( NULL ),
       m_bParagraphOpened( false ),
+      m_bParagraphFrameOpen( false ),
       m_bIsFirstParagraph( true ),
       m_bAlternateContentChoiceOpen( false ),
       m_nColBreakStatus( COLBRK_NONE ),
@@ -7411,6 +7451,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),
       m_postponedDMLDrawing(NULL),
+      m_postponedCustomShape(NULL),
       m_postponedOLE( NULL ),
       m_postponedMath( NULL ),
       m_postponedChart( NULL ),
