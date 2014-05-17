@@ -922,32 +922,47 @@ void TreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
     SvTreeListBox::MouseButtonDown( rMEvt );
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) )
     {
-        EntryDescriptor aDesc = GetEntryDescriptor(GetCurEntry());
-        switch (aDesc.GetType())
-        {
-            case OBJ_TYPE_METHOD:
-            case OBJ_TYPE_MODULE:
-            case OBJ_TYPE_DIALOG:
-                if (SfxDispatcher* pDispatcher = GetDispatcher())
-                {
-                    SbxItem aSbxItem(
-                        SID_BASICIDE_ARG_SBX, aDesc.GetDocument(),
-                        aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
-                        ConvertType(aDesc.GetType())
-                    );
-                    pDispatcher->Execute(
-                        SID_BASICIDE_SHOWSBX,
-                        SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L
-                    );
-                }
-                break;
-
-            default:
-                break;
-        }
+        OpenCurrent();
     }
 }
 
+void TreeListBox::KeyInput( const KeyEvent& rEvt )
+{
+    if ( rEvt.GetKeyCode() == KEY_RETURN && OpenCurrent() )
+    {
+        return;
+    }
+    SvTreeListBox::KeyInput( rEvt );
+}
+
+bool TreeListBox::OpenCurrent()
+{
+    EntryDescriptor aDesc = GetEntryDescriptor(GetCurEntry());
+    switch (aDesc.GetType())
+    {
+        case OBJ_TYPE_METHOD:
+        case OBJ_TYPE_MODULE:
+        case OBJ_TYPE_DIALOG:
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
+            {
+                SbxItem aSbxItem(
+                    SID_BASICIDE_ARG_SBX, aDesc.GetDocument(),
+                    aDesc.GetLibName(), aDesc.GetName(), aDesc.GetMethodName(),
+                    ConvertType(aDesc.GetType())
+                );
+                pDispatcher->Execute(
+                    SID_BASICIDE_SHOWSBX,
+                    SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L
+                );
+                return true;
+            }
+            break;
+
+        default:
+            break;
+    }
+    return false;
+}
 
 } // namespace basctl
 
