@@ -65,14 +65,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AnchorPosition",
                   PROP_LEGEND_ANCHOR_POSITION,
-                  ::getCppuType( reinterpret_cast< const chart2::LegendPosition * >(0)),
+                  cppu::UnoType<chart2::LegendPosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "Expansion",
                   PROP_LEGEND_EXPANSION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartLegendExpansion>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -85,21 +85,21 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ReferencePageSize",
                   PROP_LEGEND_REF_PAGE_SIZE,
-                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "RelativePosition",
                   PROP_LEGEND_REL_POS,
-                  ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
+                  cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "RelativeSize",
                   PROP_LEGEND_REL_SIZE,
-                  ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
+                  cppu::UnoType<chart2::RelativeSize>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 

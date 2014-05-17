@@ -95,13 +95,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CrossoverPosition",
                   PROP_AXIS_CROSSOVER_POSITION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisPosition * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "CrossoverValue",
                   PROP_AXIS_CROSSOVER_VALUE,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
@@ -114,20 +114,20 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "NumberFormat",
                   PROP_AXIS_NUMBER_FORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "LabelPosition",
                   PROP_AXIS_LABEL_POSITION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisLabelPosition * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisLabelPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_AXIS_TEXT_ROTATION,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -155,33 +155,33 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ArrangeOrder",
                   PROP_AXIS_TEXT_ARRANGE_ORDER,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisArrangeOrderType * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisArrangeOrderType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ReferencePageSize",
                   PROP_AXIS_REFERENCE_DIAGRAM_SIZE,
-                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "MajorTickmarks",
                   PROP_AXIS_MAJOR_TICKMARKS,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "MinorTickmarks",
                   PROP_AXIS_MINOR_TICKMARKS,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "MarkPosition",
                   PROP_AXIS_MARK_POSITION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisMarkPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //Properties for display units:
@@ -196,7 +196,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "BuiltInUnit",
                   PROP_AXIS_BUILTINUNIT,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

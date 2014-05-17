@@ -412,8 +412,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
             {
                 bHasDataRowSource =
                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(
-                        ::getCppuType( reinterpret_cast<
-                                       const ::com::sun::star::chart::ChartDataRowSource * >(0))));
+                        cppu::UnoType<com::sun::star::chart::ChartDataRowSource>::get()));
             }
             else if ( aProperty.Name == "FirstCellAsLabel" )
             {

@@ -142,14 +142,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "String",
                   PROP_TITLE_STRING,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_TITLE_TEXT_ROTATION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(

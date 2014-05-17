@@ -42,7 +42,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DTransformMatrix",
                   PROP_SCENE_TRANSF_MATRIX,
-                  ::getCppuType( reinterpret_cast< const drawing::HomogenMatrix * >(0)),
+                  cppu::UnoType<drawing::HomogenMatrix>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -51,7 +51,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneDistance",
                   PROP_SCENE_DISTANCE,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -60,7 +60,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneFocalLength",
                   PROP_SCENE_FOCAL_LENGTH,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -69,7 +69,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneShadowSlant",
                   PROP_SCENE_SHADOW_SLANT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -78,7 +78,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneShadeMode",
                   PROP_SCENE_SHADE_MODE,
-                  ::getCppuType( reinterpret_cast< const drawing::ShadeMode * >(0)),
+                  cppu::UnoType<drawing::ShadeMode>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -87,7 +87,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneAmbientColor",
                   PROP_SCENE_AMBIENT_COLOR,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -105,7 +105,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DCameraGeometry",
                   PROP_SCENE_CAMERA_GEOMETRY,
-                  ::getCppuType( reinterpret_cast< const drawing::CameraGeometry * >(0)),
+                  cppu::UnoType<drawing::CameraGeometry>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -114,7 +114,7 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DScenePerspective",
                   PROP_SCENE_PERSPECTIVE,
-                  ::getCppuType( reinterpret_cast< const drawing::ProjectionMode * >(0)),
+                  cppu::UnoType<drawing::ProjectionMode>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -124,14 +124,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor1",
                   PROP_SCENE_LIGHT_COLOR_1,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection1",
                   PROP_SCENE_LIGHT_DIRECTION_1,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -146,14 +146,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor2",
                   PROP_SCENE_LIGHT_COLOR_2,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection2",
                   PROP_SCENE_LIGHT_DIRECTION_2,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -168,14 +168,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor3",
                   PROP_SCENE_LIGHT_COLOR_3,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection3",
                   PROP_SCENE_LIGHT_DIRECTION_3,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -190,14 +190,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor4",
                   PROP_SCENE_LIGHT_COLOR_4,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection4",
                   PROP_SCENE_LIGHT_DIRECTION_4,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -212,14 +212,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor5",
                   PROP_SCENE_LIGHT_COLOR_5,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection5",
                   PROP_SCENE_LIGHT_DIRECTION_5,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -234,14 +234,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor6",
                   PROP_SCENE_LIGHT_COLOR_6,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection6",
                   PROP_SCENE_LIGHT_DIRECTION_6,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -256,14 +256,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor7",
                   PROP_SCENE_LIGHT_COLOR_7,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection7",
                   PROP_SCENE_LIGHT_DIRECTION_7,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -278,14 +278,14 @@ void SceneProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "D3DSceneLightColor8",
                   PROP_SCENE_LIGHT_COLOR_8,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "D3DSceneLightDirection8",
                   PROP_SCENE_LIGHT_DIRECTION_8,
-                  ::getCppuType( reinterpret_cast< const drawing::Direction3D * >(0)),
+                  cppu::UnoType<drawing::Direction3D>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));

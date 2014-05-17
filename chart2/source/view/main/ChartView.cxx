@@ -2821,7 +2821,7 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
     try
     {
         ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer
-            .getContainer( ::getCppuType((const uno::Reference< util::XModeChangeListener >*)0) );
+            .getContainer( cppu::UnoType<util::XModeChangeListener>::get());
         if( pIC )
         {
             util::ModeChangeEvent aEvent( static_cast< uno::XWeak* >( this ), rNewMode );
@@ -2846,13 +2846,13 @@ void SAL_CALL ChartView::addModeChangeListener( const uno::Reference< util::XMod
     throw (uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.addInterface(
-        ::getCppuType((const uno::Reference< util::XModeChangeListener >*)0), xListener );
+        cppu::UnoType<util::XModeChangeListener>::get(), xListener );
 }
 void SAL_CALL ChartView::removeModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
     throw (uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.removeInterface(
-        ::getCppuType((const uno::Reference< util::XModeChangeListener >*)0), xListener );
+        cppu::UnoType<util::XModeChangeListener>::get(), xListener );
 }
 void SAL_CALL ChartView::addModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
     throw (lang::NoSupportException, uno::RuntimeException, std::exception)

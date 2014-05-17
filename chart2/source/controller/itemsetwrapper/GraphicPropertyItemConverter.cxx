@@ -700,7 +700,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 if( rItem.QueryValue( aValue ))
                 {
                     OSL_ENSURE( ! aValue.isExtractableTo(
-                                    ::getCppuType( reinterpret_cast< const sal_Int16 * >(0))),
+                                    cppu::UnoType<sal_Int16>::get()),
                                 "TransparenceItem QueryValue bug is fixed. Remove hack." );
                     sal_Int32 nValue = 0;
                     if( aValue >>= nValue )
@@ -737,7 +737,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 if( rItem.QueryValue( aValue ))
                 {
                     OSL_ENSURE( ! aValue.isExtractableTo(
-                                    ::getCppuType( reinterpret_cast< const sal_Int16 * >(0))),
+                                    cppu::UnoType<sal_Int16>::get()),
                                 "TransparenceItem QueryValue bug is fixed. Remove hack." );
                     sal_Int32 nValue = 0;
                     if( aValue >>= nValue )

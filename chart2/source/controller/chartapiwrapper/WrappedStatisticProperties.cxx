@@ -992,13 +992,13 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "ConstantErrorLow",
                   PROP_CHART_STATISTIC_CONST_ERROR_LOW,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "ConstantErrorHigh",
                   PROP_CHART_STATISTIC_CONST_ERROR_HIGH,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
@@ -1010,49 +1010,49 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "ErrorCategory",
                   PROP_CHART_STATISTIC_ERROR_CATEGORY,
-                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartErrorCategory * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartErrorCategory>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "ErrorBarStyle",
                   PROP_CHART_STATISTIC_ERROR_BAR_STYLE,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "PercentageError",
                   PROP_CHART_STATISTIC_PERCENT_ERROR,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "ErrorMargin",
                   PROP_CHART_STATISTIC_ERROR_MARGIN,
-                  ::getCppuType( reinterpret_cast< double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "ErrorIndicator",
                   PROP_CHART_STATISTIC_ERROR_INDICATOR,
-                  ::getCppuType( reinterpret_cast< ::com::sun::star::chart::ChartErrorIndicatorType * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartErrorIndicatorType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "ErrorBarRangePositive",
                   PROP_CHART_STATISTIC_ERROR_RANGE_POSITIVE,
-                  ::getCppuType( reinterpret_cast< OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "ErrorBarRangeNegative",
                   PROP_CHART_STATISTIC_ERROR_RANGE_NEGATIVE,
-                  ::getCppuType( reinterpret_cast< OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "RegressionCurves",
                   PROP_CHART_STATISTIC_REGRESSION_CURVES,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartRegressionCurveType * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartRegressionCurveType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

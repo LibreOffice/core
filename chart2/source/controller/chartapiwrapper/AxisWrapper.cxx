@@ -110,28 +110,28 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Max",
                   PROP_AXIS_MAX,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "Min",
                   PROP_AXIS_MIN,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "StepMain",
                   PROP_AXIS_STEPMAIN,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "StepHelpCount",
                   PROP_AXIS_STEPHELP_COUNT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -139,7 +139,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "StepHelp",
                   PROP_AXIS_STEPHELP,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -174,21 +174,21 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AxisType",
                   PROP_AXIS_TYPE,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), //type com::sun::star::chart::ChartAxisType
+                  cppu::UnoType<sal_Int32>::get(), //type com::sun::star::chart::ChartAxisType
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "TimeIncrement",
                   PROP_AXIS_TIME_INCREMENT,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
+                  cppu::UnoType<com::sun::star::chart::TimeIncrement>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "ExplicitTimeIncrement",
                   PROP_AXIS_EXPLICIT_TIME_INCREMENT,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
+                  cppu::UnoType<com::sun::star::chart::TimeIncrement>::get(),
                   beans::PropertyAttribute::READONLY |
                   beans::PropertyAttribute::MAYBEVOID ));
 
@@ -217,19 +217,19 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "CrossoverPosition",
                   PROP_AXIS_CROSSOVER_POSITION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisPosition * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "CrossoverValue",
                   PROP_AXIS_CROSSOVER_VALUE,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "Origin",
                   PROP_AXIS_ORIGIN,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -244,21 +244,21 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Marks",
                   PROP_AXIS_MARKS,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "HelpMarks",
                   PROP_AXIS_HELPMARKS,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "MarkPosition",
                   PROP_AXIS_MARK_POSITION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisMarkPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //Properties for labels:
@@ -272,7 +272,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "NumberFormat",
                   PROP_AXIS_NUMBERFORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -286,20 +286,20 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LabelPosition",
                   PROP_AXIS_LABEL_POSITION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisLabelPosition * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisLabelPosition>::get(),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_AXIS_TEXT_ROTATION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ArrangeOrder",
                   PROP_AXIS_ARRANGE_ORDER,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisArrangeOrderType * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartAxisArrangeOrderType>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -328,14 +328,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Overlap",
                   PROP_AXIS_OVERLAP,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "GapWidth",
                   PROP_AXIS_GAP_WIDTH,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -351,7 +351,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "BuiltInUnit",
                   PROP_AXIS_BUILTINUNIT,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

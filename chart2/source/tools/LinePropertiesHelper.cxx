@@ -38,14 +38,14 @@ void LinePropertiesHelper::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LineStyle",
                   PROP_LINE_STYLE,
-                  ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
+                  cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
      rOutProperties.push_back(
          Property( "LineDash",
                    PROP_LINE_DASH,
-                   ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+                   cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND
                    | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -53,7 +53,7 @@ void LinePropertiesHelper::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LineDashName",
                   PROP_LINE_DASH_NAME,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -61,28 +61,28 @@ void LinePropertiesHelper::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LineColor",
                   PROP_LINE_COLOR,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "LineTransparence",
                   PROP_LINE_TRANSPARENCE,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "LineWidth",
                   PROP_LINE_WIDTH,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "LineJoint",
                   PROP_LINE_JOINT,
-                  ::getCppuType( reinterpret_cast< const drawing::LineJoint * >(0)),
+                  cppu::UnoType<drawing::LineJoint>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

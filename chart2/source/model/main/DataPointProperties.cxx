@@ -52,7 +52,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Color",
                   PROP_DATAPOINT_COLOR,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -60,7 +60,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Transparency",
                   PROP_DATAPOINT_TRANSPARENCY,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -68,14 +68,14 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "FillStyle",
                   PROP_DATAPOINT_FILL_STYLE,
-                  ::getCppuType( reinterpret_cast< const drawing::FillStyle * >(0)),
+                  cppu::UnoType<drawing::FillStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "TransparencyGradientName",
                   PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -83,7 +83,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "GradientName",
                   PROP_DATAPOINT_GRADIENT_NAME,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -91,14 +91,14 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         beans::Property( "GradientStepCount",
                   PROP_DATAPOINT_GRADIENT_STEPCOUNT,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "HatchName",
                   PROP_DATAPOINT_HATCH_NAME,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -106,7 +106,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "FillBitmapName",
                   PROP_DATAPOINT_FILL_BITMAP_NAME,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID  ));
@@ -122,32 +122,32 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "BorderColor",
                   PROP_DATAPOINT_BORDER_COLOR,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "BorderStyle",
                   PROP_DATAPOINT_BORDER_STYLE,
-                  ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
+                  cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "BorderWidth",
                   PROP_DATAPOINT_BORDER_WIDTH,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "BorderDashName",
                   PROP_DATAPOINT_BORDER_DASH_NAME,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "BorderTransparency",
                   PROP_DATAPOINT_BORDER_TRANSPARENCY,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -155,25 +155,25 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LineStyle",
                   LinePropertiesHelper::PROP_LINE_STYLE,
-                  ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
+                  cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "LineWidth",
                   LinePropertiesHelper::PROP_LINE_WIDTH,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
          Property( "LineDash",
                    LinePropertiesHelper::PROP_LINE_DASH,
-                   ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+                   cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND
                    | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "LineDashName",
                   LinePropertiesHelper::PROP_LINE_DASH_NAME,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -182,35 +182,35 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "FillBitmapOffsetX",
                   FillProperties::PROP_FILL_BITMAP_OFFSETX,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "FillBitmapOffsetY",
                   FillProperties::PROP_FILL_BITMAP_OFFSETY,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "FillBitmapPositionOffsetX",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "FillBitmapPositionOffsetY",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "FillBitmapRectanglePoint",
                   FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT,
-                  ::getCppuType( reinterpret_cast< const drawing::RectanglePoint * >(0)),
+                  cppu::UnoType<drawing::RectanglePoint>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -224,21 +224,21 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "FillBitmapSizeX",
                   FillProperties::PROP_FILL_BITMAP_SIZEX,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "FillBitmapSizeY",
                   FillProperties::PROP_FILL_BITMAP_SIZEY,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "FillBitmapMode",
                   FillProperties::PROP_FILL_BITMAP_MODE,
-                  ::getCppuType( reinterpret_cast< const drawing::BitmapMode * >(0)),
+                  cppu::UnoType<drawing::BitmapMode>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -246,40 +246,40 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Symbol",
                   PROP_DATAPOINT_SYMBOL_PROP,
-                  ::getCppuType( reinterpret_cast< const chart2::Symbol * >(0)),
+                  cppu::UnoType<chart2::Symbol>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "Offset",
                   PROP_DATAPOINT_OFFSET,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "Geometry3D",
                   PROP_DATAPOINT_GEOMETRY3D,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "Label",
                   PROP_DATAPOINT_LABEL,
-                  ::getCppuType( reinterpret_cast< const chart2::DataPointLabel * >(0)),
+                  cppu::UnoType<chart2::DataPointLabel>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "LabelSeparator",
                   PROP_DATAPOINT_LABEL_SEPARATOR,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "NumberFormat",
                   PROP_DATAPOINT_NUMBER_FORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -287,28 +287,28 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "PercentageNumberFormat",
                   PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "LabelPlacement",
                   PROP_DATAPOINT_LABEL_PLACEMENT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "ReferencePageSize",
                   PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
-                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
         rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_DATAPOINT_TEXT_ROTATION,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -317,14 +317,14 @@ void DataPointProperties::AddPropertiesToVector(
         Property( "ErrorBarX",
                   PROP_DATAPOINT_ERROR_BAR_X,
                   // XPropertySet supporting service ErrorBar
-                  ::getCppuType( reinterpret_cast< const uno::Reference< beans::XPropertySet > * >(0)),
+                  cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "ErrorBarY",
                   PROP_DATAPOINT_ERROR_BAR_Y,
                   // XPropertySet supporting service ErrorBar
-                  ::getCppuType( reinterpret_cast< const uno::Reference< beans::XPropertySet > * >(0)),
+                  cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
@@ -336,7 +336,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "PercentDiagonal",
                   PROP_DATAPOINT_PERCENT_DIAGONAL,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }

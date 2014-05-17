@@ -662,7 +662,7 @@ void SAL_CALL ChartModel::impl_notifyModifiedListeners()
     ChartViewHelper::setViewToDirtyState( this );
 
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
-        .getContainer( ::getCppuType((const uno::Reference< util::XModifyListener >*)0) );
+        .getContainer( cppu::UnoType<util::XModifyListener>::get());
     if( pIC )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
@@ -712,7 +712,7 @@ void SAL_CALL ChartModel::addModifyListener(
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.addInterface(
-        ::getCppuType((const uno::Reference< util::XModifyListener >*)0), xListener );
+        cppu::UnoType<util::XModifyListener>::get(), xListener );
 }
 
 void SAL_CALL ChartModel::removeModifyListener(
@@ -723,7 +723,7 @@ void SAL_CALL ChartModel::removeModifyListener(
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface(
-        ::getCppuType((const uno::Reference< util::XModifyListener >*)0), xListener );
+        cppu::UnoType<util::XModifyListener>::get(), xListener );
 }
 
 // util::XModifyListener
@@ -788,7 +788,7 @@ void SAL_CALL ChartModel::impl_notifyStorageChangeListeners()
     throw( uno::RuntimeException)
 {
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
-          .getContainer( ::getCppuType((const uno::Reference< document::XStorageChangeListener >*)0) );
+          .getContainer( cppu::UnoType<document::XStorageChangeListener>::get());
     if( pIC )
     {
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
@@ -808,7 +808,7 @@ void SAL_CALL ChartModel::addStorageChangeListener( const Reference< document::X
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.addInterface(
-        ::getCppuType((const uno::Reference< document::XStorageChangeListener >*)0), xListener );
+        cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
 }
 
 void SAL_CALL ChartModel::removeStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
@@ -818,7 +818,7 @@ void SAL_CALL ChartModel::removeStorageChangeListener( const Reference< document
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface(
-        ::getCppuType((const uno::Reference< document::XStorageChangeListener >*)0), xListener );
+        cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
 }
 
 } //  namespace chart

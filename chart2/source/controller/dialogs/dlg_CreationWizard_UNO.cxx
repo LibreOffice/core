@@ -85,27 +85,27 @@ void SAL_CALL CreationWizardUnoDlg::release() throw ()
 }
 uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rType ) throw (uno::RuntimeException, std::exception)
 {
-    if (rType == ::getCppuType( (uno::Reference< ui::dialogs::XExecutableDialog > const *)0 ))
+    if (rType == cppu::UnoType<ui::dialogs::XExecutableDialog>::get())
     {
         void * p = static_cast< ui::dialogs::XExecutableDialog * >( this );
         return uno::Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (uno::Reference< lang::XServiceInfo > const *)0 ))
+    else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
     {
         void * p = static_cast< lang::XTypeProvider * >( this );
         return uno::Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (uno::Reference< lang::XInitialization > const *)0 ))
+    else if (rType == cppu::UnoType<lang::XInitialization>::get())
     {
         void * p = static_cast< lang::XInitialization * >( this );
         return uno::Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (uno::Reference< frame::XTerminateListener > const *)0 ))
+    else if (rType == cppu::UnoType<frame::XTerminateListener>::get())
     {
         void * p = static_cast< frame::XTerminateListener * >( this );
         return uno::Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (uno::Reference< beans::XPropertySet > const *)0 ))
+    else if (rType == cppu::UnoType<beans::XPropertySet>::get())
     {
         void * p = static_cast< beans::XPropertySet * >( this );
         return uno::Any( &p, rType );

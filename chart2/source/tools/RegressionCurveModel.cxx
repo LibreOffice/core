@@ -72,28 +72,28 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "PolynomialDegree",
                 PROPERTY_DEGREE,
-                ::getCppuType( reinterpret_cast< const sal_Int32* >(0)),
+                cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "MovingAveragePeriod",
                 PROPERTY_PERIOD,
-                ::getCppuType( reinterpret_cast< const sal_Int32* >(0)),
+                cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ExtrapolateForward",
                 PROPERTY_EXTRAPOLATE_FORWARD,
-                ::getCppuType( reinterpret_cast< const double* >(0) ),
+                cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ExtrapolateBackward",
                 PROPERTY_EXTRAPOLATE_BACKWARD,
-                ::getCppuType( reinterpret_cast< const double* >(0) ),
+                cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -107,14 +107,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "InterceptValue",
                 PROPERTY_INTERCEPT_VALUE,
-                ::getCppuType( reinterpret_cast< const double* >(0) ),
+                cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "CurveName",
                 PROPERTY_CURVE_NAME,
-                ::getCppuType( reinterpret_cast< const OUString* >(0) ),
+                cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ));
 }
 

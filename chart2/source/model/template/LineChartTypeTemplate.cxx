@@ -58,19 +58,19 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( CHART_UNONAME_CURVE_STYLE,
                   PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE,
-                  ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
+                  cppu::UnoType<chart2::CurveStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( CHART_UNONAME_CURVE_RESOLUTION,
                   PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( CHART_UNONAME_SPLINE_ORDER,
                   PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

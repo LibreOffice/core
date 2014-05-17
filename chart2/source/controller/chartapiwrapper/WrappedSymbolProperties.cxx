@@ -185,21 +185,21 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
     rOutProperties.push_back(
         Property( "SymbolType",
                   PROP_CHART_SYMBOL_TYPE,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "SymbolBitmapURL",
                   PROP_CHART_SYMBOL_BITMAP_URL,
-                  ::getCppuType( reinterpret_cast< OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "SymbolSize",
                   PROP_CHART_SYMBOL_SIZE,
-                  ::getCppuType( reinterpret_cast< awt::Size * >(0)),
+                  cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

@@ -71,42 +71,42 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ParaAdjust",
                   PROP_TITLE_PARA_ADJUST,
-                  ::getCppuType( reinterpret_cast< ::com::sun::star::style::ParagraphAdjust * >(0)),
+                  cppu::UnoType<com::sun::star::style::ParagraphAdjust>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ParaLastLineAdjust",
                   PROP_TITLE_PARA_LAST_LINE_ADJUST,
-                  ::getCppuType( reinterpret_cast< sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ParaLeftMargin",
                   PROP_TITLE_PARA_LEFT_MARGIN,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ParaRightMargin",
                   PROP_TITLE_PARA_RIGHT_MARGIN,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ParaTopMargin",
                   PROP_TITLE_PARA_TOP_MARGIN,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "ParaBottomMargin",
                   PROP_TITLE_PARA_BOTTOM_MARGIN,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -120,7 +120,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_TITLE_TEXT_ROTATION,
-                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
@@ -133,14 +133,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "RelativePosition",
                   PROP_TITLE_REL_POS,
-                  ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
+                  cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "ReferencePageSize",
                   PROP_TITLE_REF_PAGE_SIZE,
-                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }

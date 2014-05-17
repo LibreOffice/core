@@ -229,7 +229,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
         {
             //--call queryClosing on all registered close listeners
             ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
-                        ::getCppuType((const uno::Reference< util::XCloseListener >*)0) );;
+                        cppu::UnoType<util::XCloseListener>::get());;
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );
@@ -354,7 +354,7 @@ bool CloseableLifeTimeManager::impl_shouldCloseAtNextChance()
         {
             //--call notifyClosing on all registered close listeners
             ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
-                        ::getCppuType((const uno::Reference< util::XCloseListener >*)0) );;
+                        cppu::UnoType<util::XCloseListener>::get());;
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );
@@ -396,7 +396,7 @@ bool CloseableLifeTimeManager::impl_shouldCloseAtNextChance()
         return false;
     //mutex is acquired
 
-    m_aListenerContainer.addInterface( ::getCppuType((const uno::Reference< util::XCloseListener >*)0),xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<util::XCloseListener>::get(),xListener );
     m_bOwnership = false;
     return true;
 }

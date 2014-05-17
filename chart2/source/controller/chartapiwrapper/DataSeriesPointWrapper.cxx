@@ -88,56 +88,56 @@ void lcl_AddPropertiesToVector_PointProperties(
     rOutProperties.push_back(
         Property( "SolidType",
                   PROP_SERIES_DATAPOINT_SOLIDTYPE,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "SegmentOffset",
                   PROP_SERIES_DATAPOINT_SEGMENT_OFFSET,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "D3DPercentDiagonal",
                   PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
-                  ::getCppuType( reinterpret_cast< sal_Int16 * >(0)),
+                  cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "LabelSeparator",
                   PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "NumberFormat",
                   PROP_SERIES_NUMBERFORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "PercentageNumberFormat",
                   PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "LabelPlacement",
                   PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "TextRotation",
                   PROP_SERIES_DATAPOINT_TEXT_ROTATION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -148,7 +148,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
     rOutProperties.push_back(
         Property( "Axis",
                   PROP_SERIES_ATTACHED_AXIS,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

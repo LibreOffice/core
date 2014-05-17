@@ -52,13 +52,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Dimension",
                   PROP_BAR_TEMPLATE_DIMENSION,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
         Property( "Geometry3D",
                   PROP_BAR_TEMPLATE_GEOMETRY3D,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

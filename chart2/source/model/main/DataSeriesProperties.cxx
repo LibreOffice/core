@@ -48,7 +48,7 @@ void DataSeriesProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "StackingDirection",
                   PROP_DATASERIES_STACKING_DIRECTION,
-                  ::getCppuType( reinterpret_cast< const chart2::StackingDirection * >(0)),
+                  cppu::UnoType<chart2::StackingDirection>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -62,7 +62,7 @@ void DataSeriesProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AttachedAxisIndex",
                   PROP_DATASERIES_ATTACHED_AXIS_INDEX,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));

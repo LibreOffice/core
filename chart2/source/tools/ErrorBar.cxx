@@ -57,19 +57,19 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
     {
         {OUString("ShowPositiveError"),0,getBooleanCppuType(), 0, 0},
         {OUString("ShowNegativeError"),1,getBooleanCppuType(), 0, 0},
-        {OUString("PositiveError"),2,getCppuType((const double*)0),0,0},
-        {OUString("NegativeError"),3,getCppuType((const double*)0), 0, 0},
-        {OUString("PercentageError"),4,getCppuType((const double*)0), 0, 0},
+        {OUString("PositiveError"),2,cppu::UnoType<double>::get(),0,0},
+        {OUString("NegativeError"),3,cppu::UnoType<double>::get(), 0, 0},
+        {OUString("PercentageError"),4,cppu::UnoType<double>::get(), 0, 0},
         {OUString("ErrorBarStyle"),5,cppu::UnoType<sal_Int32>::get(),0,0},
         {OUString("ErrorBarRangePositive"),6,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
         {OUString("ErrorBarRangeNegative"),7,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
-        {OUString("Weight"),8,getCppuType((const double*)0),0,0},
-        {OUString("LineStyle"),9,getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
-        {OUString("LineDash"),10,getCppuType((drawing::LineDash*)0),0,0},
+        {OUString("Weight"),8,cppu::UnoType<double>::get(),0,0},
+        {OUString("LineStyle"),9,cppu::UnoType<com::sun::star::drawing::LineStyle>::get(),0,0},
+        {OUString("LineDash"),10,cppu::UnoType<drawing::LineDash>::get(),0,0},
         {OUString("LineWidth"),11,cppu::UnoType<sal_Int32>::get(),0,0},
-        {OUString("LineColor"),12,getCppuType((com::sun::star::util::Color*)0),0,0},
-        {OUString("LineTransparence"),13,getCppuType((sal_Int16*)0),0,0},
-        {OUString("LineJoint"),14,getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},
+        {OUString("LineColor"),12,cppu::UnoType<com::sun::star::util::Color>::get(),0,0},
+        {OUString("LineTransparence"),13,cppu::UnoType<sal_Int16>::get(),0,0},
+        {OUString("LineJoint"),14,cppu::UnoType<com::sun::star::drawing::LineJoint>::get(),0,0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );

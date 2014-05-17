@@ -224,14 +224,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Alignment",
                   PROP_LEGEND_ALIGNMENT,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendPosition * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartLegendPosition>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "Expansion",
                   PROP_LEGEND_EXPANSION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
+                  cppu::UnoType<com::sun::star::chart::ChartLegendExpansion>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 }

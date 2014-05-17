@@ -201,7 +201,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "BaseDiagram",
                   PROP_DOCUMENT_BASEDIAGRAM,
-                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(

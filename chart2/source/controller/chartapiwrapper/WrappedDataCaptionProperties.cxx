@@ -104,7 +104,7 @@ void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rO
     rOutProperties.push_back(
         Property( "DataCaption",
                   PROP_CHART_DATAPOINT_DATA_CAPTION,
-                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }

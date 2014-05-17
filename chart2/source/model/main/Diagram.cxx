@@ -86,14 +86,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "RelativePosition",
                   PROP_DIAGRAM_REL_POS,
-                  ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
+                  cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "RelativeSize",
                   PROP_DIAGRAM_REL_SIZE,
-                  ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
+                  cppu::UnoType<chart2::RelativeSize>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -135,7 +135,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "StartingAngle",
                   PROP_DIAGRAM_STARTING_ANGLE,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0) ),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -149,31 +149,31 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "Perspective",
                   PROP_DIAGRAM_PERSPECTIVE,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "RotationHorizontal",
                   PROP_DIAGRAM_ROTATION_HORIZONTAL,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "RotationVertical",
                   PROP_DIAGRAM_ROTATION_VERTICAL,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "MissingValueTreatment",
                   PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
    rOutProperties.push_back(
         Property( "3DRelativeHeight",
                   PROP_DIAGRAM_3DRELATIVEHEIGHT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
    rOutProperties.push_back(
        Property( "DataTableHBorder",
@@ -196,7 +196,7 @@ void lcl_AddPropertiesToVector(
    rOutProperties.push_back(
         Property( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
-                  ::getCppuType( reinterpret_cast< const OUString   * >(0)),
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::MAYBEVOID ));
 }
 

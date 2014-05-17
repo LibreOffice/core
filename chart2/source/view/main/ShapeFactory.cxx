@@ -171,7 +171,7 @@ uno::Any createPolyPolygon_Cube(
         *pInnerSequenceX++ = -fWidthH;
         *pInnerSequenceX++ = -fWidthH + fOffset;
     }
-    return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
+    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
 uno::Any createPolyPolygon_Cylinder(
@@ -253,7 +253,7 @@ uno::Any createPolyPolygon_Cylinder(
     *pInnerSequenceX++ = 0.0;
     *pInnerSequenceY++ = fY2;
 
-    return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
+    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
 uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeight
@@ -330,7 +330,7 @@ uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeig
     *pInnerSequenceY++ = fY3;
     *pInnerSequenceX++ = fX3;
 
-    return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
+    return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
 //  methods for 3D shape creation

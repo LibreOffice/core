@@ -76,21 +76,21 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ReferencePageSize",
                   PROP_EQUATION_REF_PAGE_SIZE,
-                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "RelativePosition",
                   PROP_EQUATION_REL_POS,
-                  ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
+                  cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( "NumberFormat",
                   PROP_EQUATION_NUMBER_FORMAT,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }

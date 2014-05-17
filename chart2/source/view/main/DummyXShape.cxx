@@ -1111,7 +1111,7 @@ void SAL_CALL DummyXShapes::remove( const uno::Reference< drawing::XShape>& xSha
 uno::Type SAL_CALL DummyXShapes::getElementType()
     throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(( const uno::Reference< drawing::XShape >*)0);
+    return cppu::UnoType<drawing::XShape>::get();
 }
 
 sal_Bool SAL_CALL SAL_CALL DummyXShapes::hasElements()

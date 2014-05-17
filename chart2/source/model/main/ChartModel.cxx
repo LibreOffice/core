@@ -261,7 +261,7 @@ void SAL_CALL ChartModel::impl_notifyCloseListeners()
         throw( uno::RuntimeException)
 {
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
-        .getContainer( ::getCppuType((const uno::Reference< util::XCloseListener >*)0) );
+        .getContainer( cppu::UnoType<util::XCloseListener>::get());
     if( pIC )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
@@ -577,7 +577,7 @@ void SAL_CALL ChartModel::addEventListener( const uno::Reference< lang::XEventLi
     if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEventListener > & xListener )
@@ -586,7 +586,7 @@ void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEven
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
     return;
 }
 
@@ -603,7 +603,7 @@ void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XClos
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< util::XCloseListener >*)0), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
     return;
 }
 
@@ -1233,7 +1233,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
     {
         if( m_xOldModelAgg.is() )
         {
-            Any aAny = m_xOldModelAgg->queryAggregation( ::getCppuType((const uno::Reference< lang::XMultiServiceFactory >*)0) );
+            Any aAny = m_xOldModelAgg->queryAggregation( cppu::UnoType<lang::XMultiServiceFactory>::get());
             uno::Reference< lang::XMultiServiceFactory > xOldModelFactory;
             if( (aAny >>= xOldModelFactory) && xOldModelFactory.is() )
             {
@@ -1260,7 +1260,7 @@ Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
 
     if( m_xOldModelAgg.is())
     {
-        Any aAny = m_xOldModelAgg->queryAggregation( ::getCppuType((const uno::Reference< lang::XMultiServiceFactory >*)0) );
+        Any aAny = m_xOldModelAgg->queryAggregation( cppu::UnoType<lang::XMultiServiceFactory>::get());
         uno::Reference< lang::XMultiServiceFactory > xOldModelFactory;
         if( (aAny >>= xOldModelFactory) && xOldModelFactory.is() )
         {
