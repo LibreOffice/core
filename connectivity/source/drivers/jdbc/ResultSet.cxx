@@ -872,7 +872,7 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
 
 ::cppu::IPropertyArrayHelper* java_sql_ResultSet::createArrayHelper( ) const
 {
-    Sequence< Property > aProps(5);
+    Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
