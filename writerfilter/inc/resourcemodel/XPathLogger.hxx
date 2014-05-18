@@ -29,19 +29,16 @@
 
 namespace writerfilter
 {
-using ::std::stack;
-using ::std::string;
-using ::std::vector;
 
 class XPathLogger
 {
-    typedef boost::unordered_map<string, unsigned int> TokenMap_t;
+    typedef boost::unordered_map<std::string, unsigned int> TokenMap_t;
     typedef boost::shared_ptr<TokenMap_t> TokenMapPointer_t;
 
     TokenMapPointer_t mp_tokenMap;
-    stack<TokenMapPointer_t> m_tokenMapStack;
-    vector<string> m_path;
-    string m_currentPath;
+    std::stack<TokenMapPointer_t> m_tokenMapStack;
+    std::vector<std::string> m_path;
+    std::string m_currentPath;
 
     void updateCurrentPath();
 
@@ -49,8 +46,8 @@ public:
     explicit XPathLogger();
     virtual ~XPathLogger();
 
-    string getXPath() const;
-    void startElement(string _token);
+    std::string getXPath() const;
+    void startElement(std::string _token);
     void endElement();
 };
 }

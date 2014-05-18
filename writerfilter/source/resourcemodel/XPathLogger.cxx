@@ -33,7 +33,7 @@ XPathLogger::~XPathLogger()
 {
 }
 
-string XPathLogger::getXPath() const
+std::string XPathLogger::getXPath() const
 {
     return m_currentPath;
 }
@@ -42,7 +42,7 @@ void XPathLogger::updateCurrentPath()
 {
     m_currentPath = "";
 
-    for (vector<string>::const_iterator aIt = m_path.begin();
+    for (std::vector<std::string>::const_iterator aIt = m_path.begin();
          aIt != m_path.end();
          ++aIt)
     {
@@ -53,7 +53,7 @@ void XPathLogger::updateCurrentPath()
     }
 }
 
-void XPathLogger::startElement(string _token)
+void XPathLogger::startElement(std::string _token)
 {
     TokenMap_t::const_iterator aIt = mp_tokenMap->find(_token);
 
