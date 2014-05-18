@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MyProtocolHandler_HXX
-#define _MyProtocolHandler_HXX
+#ifndef INCLUDED_COMPLEXTOOLBARCONTROLS_MYPROTOCOLHANDLER_H
+#define INCLUDED_COMPLEXTOOLBARCONTROLS_MYPROTOCOLHANDLER_H
 
 #include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

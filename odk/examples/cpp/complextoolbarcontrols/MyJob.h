@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MyJob_HXX
-#define _MyJob_HXX
+#ifndef INCLUDED_COMPLEXTOOLBARCONTROLS_MYJOB_H
+#define INCLUDED_COMPLEXTOOLBARCONTROLS_MYJOB_H
 
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
