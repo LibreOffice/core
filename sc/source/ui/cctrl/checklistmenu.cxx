@@ -1511,9 +1511,6 @@ void ScCheckListMenuWindow::initMembers()
     {
         if (maMembers[i].mbDate)
         {
-            maChecks.InsertEntry(maMembers[i].maName, NULL, false, TREELIST_APPEND, NULL,
-                SvLBoxButtonKind_enabledCheckbox );
-
             maChecks.CheckEntry(maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
             // Expand first node of checked dates
             if (!maMembers[i].mpParent && maChecks.IsChecked(maMembers[i].maName,  maMembers[i].mpParent))
