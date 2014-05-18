@@ -48,10 +48,7 @@ SAL_IMPLEMENT_MAIN()
     Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
 
     if( !xServiceManager.is() )
-    {
-        fprintf( stderr, "Failed to bootstrap\n" );
-        exit( 1 );
-    }
+        Application::Abort( "Failed to bootstrap" );
 
     comphelper::setProcessServiceFactory( xServiceManager );
 
