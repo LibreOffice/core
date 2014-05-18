@@ -822,9 +822,6 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                     ::std::vector< OUString >::iterator aAutoEnd = m_aAutoColumns.end();
                     for (sal_Int32 i = 1;aAutoIter !=  aAutoEnd && i <= nColumnCount; ++aAutoIter,++i)
                     {
-#if OSL_DEBUG_LEVEL > 1
-                        OUString sColumnName( xMd->getColumnName(i) );
-#endif
                         SelectColumnsMetaData::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != m_pKeyColumnNames->end() )
                             (_rInsertRow->get())[aFind->second.nPosition].fill(i, aFind->second.nType, xRow);
