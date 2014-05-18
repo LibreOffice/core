@@ -216,7 +216,7 @@ int SAL_CALL main (void)
 
     /* ECB */
     cipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
-    OSL_ASSERT(cipher != 0);
+    SAL_WARN_IF(cipher == 0, "SAL", "cipher == 0");
     if (cipher != 0)
     {
         rtlCipherError result;
@@ -226,26 +226,27 @@ int SAL_CALL main (void)
         result = rtl_cipher_init (
             cipher, rtl_Cipher_DirectionBoth,
             cbc_key, sizeof(cbc_key), NULL, 0);
-        OSL_ASSERT(result == rtl_Cipher_E_None);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
         memset (ecb_out, 0, sizeof(ecb_out));
         result = rtl_cipher_encode (
             cipher, cbc_data, length, ecb_out, sizeof(ecb_out));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
-        OSL_ASSERT(memcmp (ecb_out, ecb_ok, sizeof(ecb_ok)) == 0);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+	SAL_WARN_IF(memcmp(ecb_out, ecb_ok, sizeof(ecb_ok)) != 0, "SAL", "memcmp(ecb_out, ecb_ok, sizeof(ecb_ok)) != 0");
 
         memset (ecb_in,  0, sizeof(ecb_in));
         result = rtl_cipher_decode (
             cipher, ecb_out, length, ecb_in, sizeof(ecb_in));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
-        OSL_ASSERT(memcmp (ecb_in, cbc_data, length) == 0);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+	SAL_WARN_IF(memcmp(ecb_in, cbc_data, length) != 0, "SAL", "memcmp(ecb_in, cbc_data, length) != 0")
 
         rtl_cipher_destroy (cipher);
     }
 
     /* CBC */
     cipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeCBC);
-    OSL_ASSERT(cipher != 0);
+    SAL_WARN_IF(cipher == 0, "SAL", "cipher == 0");
+
     if (cipher != 0)
     {
         rtlCipherError result;
@@ -255,31 +256,31 @@ int SAL_CALL main (void)
         result = rtl_cipher_init (
             cipher, rtl_Cipher_DirectionEncode,
             cbc_key, sizeof(cbc_key), cbc_iv, sizeof(cbc_iv));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
         memset (cbc_out, 0, sizeof(cbc_out));
         result = rtl_cipher_encode (
             cipher, cbc_data, length, cbc_out, sizeof(cbc_out));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
-        OSL_ASSERT(memcmp (cbc_out, cbc_ok, sizeof(cbc_ok)) == 0);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+        SAL_WARN_IF(memcmp (cbc_out, cbc_ok, sizeof(cbc_ok)) != 0, "SAL", "memcmp(cbc_out, cbc_ok, sizeof(cbc_ok)) != 0");
 
         result = rtl_cipher_init (
             cipher, rtl_Cipher_DirectionDecode,
             cbc_key, sizeof(cbc_key), cbc_iv, sizeof(cbc_iv));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
         memset (cbc_in,  0, sizeof(cbc_in));
         result = rtl_cipher_decode (
             cipher, cbc_out, length, cbc_in, sizeof(cbc_in));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
-        OSL_ASSERT(memcmp (cbc_in, cbc_data, length) == 0);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+        SAL_WARN_IF(memcmp (cbc_in, cbc_data, length) != 0, "SAL", "memcmp(cbc_in, cbc_data, length) != 0");
 
         rtl_cipher_destroy (cipher);
      }
 
     /* CFB */
     cipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-    OSL_ASSERT(cipher != 0);
+    SAL_WARN_IF(cipher == 0, "SAL", "cipher == 0");
     if (cipher != 0)
     {
         rtlCipherError result;
@@ -289,31 +290,32 @@ int SAL_CALL main (void)
         result = rtl_cipher_init (
             cipher, rtl_Cipher_DirectionEncode,
             cbc_key, sizeof(cbc_key), cbc_iv, sizeof(cbc_iv));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
         memset (cfb_out, 0, sizeof(cfb_out));
         result = rtl_cipher_encode (
             cipher, cbc_data, length, cfb_out, sizeof(cfb_out));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
-        OSL_ASSERT(memcmp (cfb_out, cfb_ok, sizeof(cfb_ok)) == 0);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+        SAL_WARN_IF(memcmp(cfb_out, cfb_ok, sizeof(cfb_ok)) != 0, "SAL", "memcmp(cfb_out, cfb_ok, sizeof(cfb_ok)) != 0");
 
         result = rtl_cipher_init (
             cipher, rtl_Cipher_DirectionDecode,
             cbc_key, sizeof(cbc_key), cbc_iv, sizeof(cbc_iv));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
         memset (cfb_in,  0, sizeof(cfb_in));
         result = rtl_cipher_decode (
             cipher, cfb_out, length, cfb_in, sizeof(cfb_in));
-        OSL_ASSERT(result == rtl_Cipher_E_None);
-        OSL_ASSERT(memcmp (cfb_in, cbc_data, length) == 0);
+        SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+        SAL_WARN_IF(memcmp (cfb_in, cbc_data, length) != 0, "SAL", "memcmp (cfb_in, cbc_data, length) != 0");
 
         rtl_cipher_destroy (cipher);
     }
 
     /* ARCFOUR */
     cipher = rtl_cipher_create (rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
-    OSL_ASSERT(cipher != 0);
+    SAL_WARN_IF(cipher == 0, "SAL", "cipher == 0");
+
     if (cipher != 0)
     {
         rtlCipherError result;
@@ -329,14 +331,14 @@ int SAL_CALL main (void)
             result = rtl_cipher_init (
                 cipher, rtl_Cipher_DirectionBoth,
                 &(arcfour_key[i][1]), arcfour_key[i][0], 0, 0);
-            OSL_ASSERT(result == rtl_Cipher_E_None);
+            SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
             memset (arcfour_out, 0, sizeof(arcfour_out));
             result = rtl_cipher_encode (
                 cipher, &(arcfour_data[i][0]), length,
                 arcfour_out, sizeof(arcfour_out));
-            OSL_ASSERT(result == rtl_Cipher_E_None);
-            OSL_ASSERT(memcmp (arcfour_out, arcfour_ok[i], length) == 0);
+            SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_Non"e);
+            SAL_WARN_IF(memcmp (arcfour_out, arcfour_ok[i], length) != 0, "SAL", "memcmp (arcfour_out, arcfour_ok[i], length) != 0");
         }
 
         n = arcfour_data_len[3];
@@ -347,15 +349,15 @@ int SAL_CALL main (void)
             result = rtl_cipher_init (
                 cipher, rtl_Cipher_DirectionBoth,
                 &(arcfour_key[3][1]), arcfour_key[3][0], 0, 0);
-            OSL_ASSERT(result == rtl_Cipher_E_None);
+            SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
             memset (arcfour_out, 0, sizeof(arcfour_out));
             result = rtl_cipher_encode (
                 cipher, &(arcfour_data[3][0]), length,
                 arcfour_out, sizeof(arcfour_out));
-            OSL_ASSERT(result == rtl_Cipher_E_None);
-            OSL_ASSERT(memcmp (arcfour_out, arcfour_ok[3], length) == 0);
-            OSL_ASSERT(arcfour_out[length] == 0);
+            SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+            SAL_WARN_IF(memcmp (arcfour_out, arcfour_ok[3], length) != 0, "SAL", "memcmp (arcfour_out, arcfour_ok[3], length) != 0");
+            SAL_WARN_IF(arcfour_out[length] != 0, "SAL", "arcfour_out[length] != 0");
         }
 
         n = arcfour_data_len[3];
@@ -366,20 +368,21 @@ int SAL_CALL main (void)
             result = rtl_cipher_init (
                 cipher, rtl_Cipher_DirectionBoth,
                 &(arcfour_key[3][1]), arcfour_key[3][0], 0, 0);
-            OSL_ASSERT(result == rtl_Cipher_E_None);
+            SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+
 
             memset (arcfour_out, 0, sizeof(arcfour_out));
             result = rtl_cipher_encode (
                 cipher, &(arcfour_data[3][0]), length,
                 &(arcfour_out[0]), sizeof(arcfour_out));
-            OSL_ASSERT(result == rtl_Cipher_E_None);
+            SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
 
             result = rtl_cipher_encode (
                 cipher, &(arcfour_data[3][length]), n - length,
                 &(arcfour_out[length]), sizeof(arcfour_out) - length);
-            OSL_ASSERT(result == rtl_Cipher_E_None);
+            SAL_WARN_IF(result != rtl_Cipher_E_None, "SAL", "result != rtl_Cipher_E_None");
+            SAL_WARN_IF(memcmp (arcfour_out, arcfour_ok[3], length) != 0, "SAL", "memcmp (arcfour_out, arcfour_ok[3], length) != 0");
 
-            OSL_ASSERT(memcmp (arcfour_out, arcfour_ok[3], length) == 0);
         }
 
         rtl_cipher_destroy (cipher);
