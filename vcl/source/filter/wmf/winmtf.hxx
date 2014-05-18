@@ -800,16 +800,7 @@ class EnhWMFReader : public WinMtf
     Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
 public:
-    EnhWMFReader(
-        SvStream& rStreamWMF,
-        GDIMetaFile& rGDIMetaFile,
-        FilterConfigItem* pConfigItem = NULL)
-        : WinMtf(new WinMtfOutput(rGDIMetaFile), rStreamWMF , pConfigItem)
-        , bRecordPath(false)
-        , nRecordCount(0)
-        , bEMFPlus(false)
-    {
-    }
+    EnhWMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL);
     ~EnhWMFReader();
 
     bool ReadEnhWMF();
@@ -819,6 +810,8 @@ private:
     template <class T> void ReadAndDrawPolyLine();
     template <class T> Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
     template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const bool skipFirst);
+
+    Rectangle ReadRectangle();
 };
 
 class WMFReader : public WinMtf

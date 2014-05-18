@@ -153,6 +153,9 @@ using namespace std;
 #define EMR_SETLINKEDUFIS              119
 #define EMR_SETTEXTJUSTIFICATION       120
 
+namespace
+{
+
 #ifdef OSL_BIGENDIAN
 // little endian <-> big endian switch
 static float GetSwapFloat( SvStream& rSt )
@@ -238,6 +241,18 @@ static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nL
     }
     return bOk;
 }
+
+} // anonymous namespace
+
+EnhWMFReader::EnhWMFReader(SvStream& rStream,GDIMetaFile& rGDIMetaFile,FilterConfigItem* pConfigItem)
+    : WinMtf(new WinMtfOutput(rGDIMetaFile), rStream , pConfigItem)
+    , bRecordPath(false)
+    , nRecordCount(0)
+    , bEMFPlus(false)
+{}
+
+EnhWMFReader::~EnhWMFReader()
+{}
 
 void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 {
@@ -1489,12 +1504,13 @@ bool EnhWMFReader::ReadHeader()
 {
     sal_uInt32      nType, nSignature, nVersion;
     sal_uInt32      nHeaderSize, nPalEntries;
-    sal_Int32       nLeft, nTop, nRight, nBottom;
 
     // Spare me the METAFILEHEADER here
     // Reading the METAHEADER - EMR_HEADER ([MS-EMF] section 2.3.4.2 EMR_HEADER Record Types)
     pWMF->ReadUInt32( nType ).ReadUInt32( nHeaderSize );
-    if ( nType != 1 ) { // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
+    if (nType != 0x00000001)
+    {
+        // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
         SAL_WARN("vcl.emf", "EMF header type is not set to 0x00000001 - possibly corrupted file?");
         return false;
     }
@@ -1502,54 +1518,48 @@ bool EnhWMFReader::ReadHeader()
     // Start reading the EMR_HEADER Header object
 
     // bound size (RectL object, see [MS-WMF] section 2.2.2.19)
-    Rectangle rclBounds;    // rectangle in logical units
-    pWMF->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
-    rclBounds.Left() = nLeft;
-    rclBounds.Top() = nTop;
-    rclBounds.Right() = nRight;
-    rclBounds.Bottom() = nBottom;
+    Rectangle rclBounds = ReadRectangle(); // rectangle in logical units
 
     // picture frame size (RectL object)
-    Rectangle rclFrame;     // rectangle in device units 1/100th mm
-    pWMF->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
-    rclFrame.Left() = nLeft;
-    rclFrame.Top() = nTop;
-    rclFrame.Right() = nRight;
-    rclFrame.Bottom() = nBottom;
+    Rectangle rclFrame = ReadRectangle(); // rectangle in device units 1/100th mm
 
     pWMF->ReadUInt32( nSignature );
 
     // nSignature MUST be the ASCII characters "FME", see [WS-EMF] 2.2.9 Header Object
     // and 2.1.14 FormatSignature Enumeration
-    if ( nSignature != 0x464d4520 ) {
+    if (nSignature != 0x464d4520)
+    {
         SAL_WARN("vcl.emf", "EMF\t\tSignature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
         return false;
     }
 
-    pWMF->ReadUInt32( nVersion );  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
-                        // Microsoft note that not even Windows checks this...
-    if ( nVersion != 0x00010000 ) {
+    pWMF->ReadUInt32(nVersion);  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
+                                   // Microsoft note that not even Windows checks this...
+    if (nVersion != 0x00010000)
+    {
         SAL_WARN("vcl.emf", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
     }
 
-    pWMF->ReadUInt32( nEndPos );                                   // size of metafile
+    pWMF->ReadUInt32(nEndPos); // size of metafile
     nEndPos += nStartPos;
 
-    sal_uInt32 nStrmPos = pWMF->Tell();                 // checking if nEndPos is valid
-    pWMF->Seek( STREAM_SEEK_TO_END );
+    sal_uInt32 nStrmPos = pWMF->Tell(); // checking if nEndPos is valid
+    pWMF->Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nActualFileSize = pWMF->Tell();
 
-    if ( nActualFileSize < nEndPos ) {
+    if ( nActualFileSize < nEndPos )
+    {
         SAL_WARN("vcl.emf", "EMF\t\tEMF Header object records number of bytes as " << nEndPos
                             << ", however the file size is actually " << nActualFileSize
                             << " bytes. Possible file corruption?");
         nEndPos = nActualFileSize;
     }
-    pWMF->Seek( nStrmPos );
+    pWMF->Seek(nStrmPos);
 
-    pWMF->ReadInt32( nRecordCount );
+    pWMF->ReadInt32(nRecordCount);
 
-    if ( !nRecordCount ) {
+    if (nRecordCount == 0)
+    {
         SAL_WARN("vcl.emf", "EMF\t\tEMF Header object shows record counter as 0! This shouldn't "
                             "be possible... indicator of possible file corruption?");
         return false;
@@ -1558,16 +1568,17 @@ bool EnhWMFReader::ReadHeader()
     // the number of "handles", or graphics objects used in the metafile
 
     sal_uInt16 nHandlesCount;
-    pWMF->ReadUInt16( nHandlesCount );
+    pWMF->ReadUInt16(nHandlesCount);
 
     // the next 2 bytes are reserved, but according to [MS-EMF] section 2.2.9
     // it MUST be 0x000 and MUST be ignored... the thing is, having such a specific
     // value is actually pretty useful in checking if there is possible corruption
 
     sal_uInt16 nReserved;
-    pWMF->ReadUInt16( nReserved );
+    pWMF->ReadUInt16(nReserved);
 
-    if ( nReserved != 0x0000 ) {
+    if ( nReserved != 0x0000 )
+    {
         SAL_WARN("vcl.emf", "EMF\t\tEMF Header object's reserved field is NOT 0x0000... possible "
                             "corruption?");
     }
@@ -1577,30 +1588,39 @@ bool EnhWMFReader::ReadHeader()
     // metafile description... zero means no description string.
     // For now, we ignore it.
 
-    pWMF->SeekRel( 0x8 );
+    pWMF->SeekRel(0x8);
 
     sal_Int32 nPixX, nPixY, nMillX, nMillY;
-    pWMF->ReadUInt32( nPalEntries ).ReadInt32( nPixX ).ReadInt32( nPixY ).ReadInt32( nMillX ).ReadInt32( nMillY );
+    pWMF->ReadUInt32(nPalEntries);
+    pWMF->ReadInt32(nPixX);
+    pWMF->ReadInt32(nPixY);
+    pWMF->ReadInt32(nMillX);
+    pWMF->ReadInt32(nMillY);
 
-    pOut->SetrclFrame( rclFrame );
-    pOut->SetrclBounds( rclBounds );
-    pOut->SetRefPix( Size( nPixX, nPixY ) );
-    pOut->SetRefMill( Size( nMillX, nMillY ) );
+    pOut->SetrclFrame(rclFrame);
+    pOut->SetrclBounds(rclBounds);
+    pOut->SetRefPix(Size( nPixX, nPixY ) );
+    pOut->SetRefMill(Size( nMillX, nMillY ) );
 
-    pWMF->Seek( nStartPos + nHeaderSize );
+    pWMF->Seek(nStartPos + nHeaderSize);
     return true;
 }
 
-Rectangle  EnhWMFReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
+Rectangle EnhWMFReader::ReadRectangle()
+{
+    sal_Int32 nLeft, nTop, nRight, nBottom;
+    pWMF->ReadInt32(nLeft);
+    pWMF->ReadInt32(nTop);
+    pWMF->ReadInt32(nRight);
+    pWMF->ReadInt32(nBottom);
+    return Rectangle(nLeft, nTop, nRight, nBottom);
+}
+
+Rectangle EnhWMFReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {
     Point aTL ( Point( x1, y1 ) );
     Point aBR( Point( --x2, --y2 ) );
     return Rectangle( aTL, aBR );
 }
-
-EnhWMFReader::~EnhWMFReader()
-{
-
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
