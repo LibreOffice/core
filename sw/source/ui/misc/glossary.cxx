@@ -265,7 +265,12 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
     }
     else
-        ShowAutoText(aEmptyOUStr, aEmptyOUStr);
+    {
+        m_pNameED->SetText("");
+        m_pShortNameEdit->SetText("");
+        m_pShortNameEdit->Enable(false);
+        ShowAutoText("", "");
+    }
     // update controls
     NameModify(m_pShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
