@@ -31,7 +31,7 @@ template <class Interface, class ChildClass>
 class RefAndPointer
 {
     mutable ChildClass * mpHandler;
-    mutable uno::Reference<Interface> mRef;
+    mutable css::uno::Reference<Interface> mRef;
 
 public:
     RefAndPointer()
@@ -48,7 +48,7 @@ public:
 #endif
     }
 
-    RefAndPointer(uno::Reference<Interface> xRef)
+    RefAndPointer(css::uno::Reference<Interface> xRef)
     : mRef(xRef)
     {
         mpHandler = dynamic_cast<ChildClass *>(xRef.get());
@@ -74,14 +74,14 @@ public:
         mRef = pHandler;
     }
 
-    void set(uno::Reference<Interface> xHandler)
+    void set(css::uno::Reference<Interface> xHandler)
     {
         mpHandler = dynamic_cast<ChildClass*>(xHandler.get());
         mRef = xHandler;
     }
 
     ChildClass * getPointer() const { return mpHandler; }
-    const uno::Reference<Interface> getRef() const { return mRef; }
+    const css::uno::Reference<Interface> getRef() const { return mRef; }
 
     RefAndPointer & operator=
     (const RefAndPointer & rSrc)
@@ -94,7 +94,7 @@ public:
     bool is() { return getRef().is(); }
 
     operator ChildClass* () { return getPointer(); }
-    operator uno::Reference<Interface> () { return getRef(); }
+    operator css::uno::Reference<Interface> () { return getRef(); }
 };
 }}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_REFANDPOINTER_HXX

@@ -127,10 +127,10 @@ public:
 class OOXMLInputStreamValue : public OOXMLValue
 {
 protected:
-    css::uno::Reference<io::XInputStream> mxInputStream;
+    css::uno::Reference<css::io::XInputStream> mxInputStream;
 
 public:
-    explicit OOXMLInputStreamValue(uno::Reference<io::XInputStream> xInputStream);
+    explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> xInputStream);
     virtual ~OOXMLInputStreamValue();
 
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
@@ -231,7 +231,7 @@ class OOXMLShapeValue : public OOXMLValue
 protected:
     css::uno::Reference<css::drawing::XShape> mrShape;
 public:
-    explicit OOXMLShapeValue(uno::Reference<css::drawing::XShape> rShape);
+    explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> rShape);
     virtual ~OOXMLShapeValue();
 
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
@@ -242,9 +242,9 @@ public:
 class OOXMLStarMathValue : public OOXMLValue
 {
 protected:
-    css::uno::Reference< embed::XEmbeddedObject > component;
+    css::uno::Reference< css::embed::XEmbeddedObject > component;
 public:
-    explicit OOXMLStarMathValue( css::uno::Reference< embed::XEmbeddedObject > component );
+    explicit OOXMLStarMathValue( css::uno::Reference< css::embed::XEmbeddedObject > component );
     virtual ~OOXMLStarMathValue();
 
     virtual css::uno::Any getAny() const SAL_OVERRIDE;

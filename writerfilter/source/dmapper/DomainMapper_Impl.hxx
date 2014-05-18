@@ -70,8 +70,6 @@ namespace com{ namespace sun{ namespace star{
 namespace writerfilter {
 namespace dmapper {
 
-using namespace com::sun::star;
-
 class SdtHelper;
 
 struct _PageMar

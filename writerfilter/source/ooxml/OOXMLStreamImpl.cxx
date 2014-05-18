@@ -32,7 +32,7 @@ namespace writerfilter {
 namespace ooxml
 {
 
-using namespace ::std;
+using namespace com::sun::star;
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (uno::Reference<uno::XComponentContext> xContext,

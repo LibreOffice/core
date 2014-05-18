@@ -31,17 +31,16 @@
 namespace writerfilter {
 namespace ooxml
 {
-using namespace ::com::sun::star;
 
 class OOXMLFastContextHandler;
 
 class OOXMLFastDocumentHandler:
     public ::cppu::WeakImplHelper1<
-        xml::sax::XFastDocumentHandler>
+        css::xml::sax::XFastDocumentHandler>
 {
 public:
     OOXMLFastDocumentHandler(
-        uno::Reference< uno::XComponentContext > const & context,
+        css::uno::Reference< css::uno::XComponentContext > const & context,
         Stream* pStream,
         OOXMLDocumentImpl* pDocument,
         sal_Int32 nXNoteId );
@@ -49,42 +48,42 @@ public:
 
     // ::com::sun::star::xml::sax::XFastDocumentHandler:
     virtual void SAL_CALL startDocument()
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endDocument()
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDocumentLocator
-    (const uno::Reference< xml::sax::XLocator > & xLocator)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    (const css::uno::Reference< css::xml::sax::XLocator > & xLocator)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
     (::sal_Int32 Element,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL startUnknownElement
     (const OUString & Namespace,
      const OUString & Name,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endFastElement(::sal_Int32 Element)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endUnknownElement
     (const OUString & Namespace,
      const OUString & Name)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext
     (::sal_Int32 Element,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext
     (const OUString & Namespace,
      const OUString & Name,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL characters(const OUString & aChars)
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     void setIsSubstream( bool bSubstream );
 
@@ -92,7 +91,7 @@ private:
     OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &); // not defined
     void operator =(OOXMLFastDocumentHandler &); // not defined
 
-    uno::Reference< uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     Stream * mpStream;
 #ifdef DEBUG_ELEMENT

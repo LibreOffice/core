@@ -71,8 +71,6 @@ namespace writerfilter {
 namespace ooxml
 {
 
-using namespace com::sun::star;
-
 class OOXMLStream
 {
 public:
@@ -85,21 +83,21 @@ public:
     /**
        Returns parser for this stream.
      */
-    virtual uno::Reference<xml::sax::XParser> getParser() = 0;
+    virtual css::uno::Reference<css::xml::sax::XParser> getParser() = 0;
 
     /**
        Returns fast parser for this stream.
      */
-    virtual uno::Reference<xml::sax::XFastParser> getFastParser() = 0;
+    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() = 0;
 
-    virtual uno::Reference<io::XInputStream> getDocumentStream() = 0;
+    virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() = 0;
 
-    virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
+    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() = 0;
 
     /**
        Returns component context for this stream.
      */
-    virtual uno::Reference<uno::XComponentContext> getContext() = 0;
+    virtual css::uno::Reference<css::uno::XComponentContext> getContext() = 0;
 
     /**
        Returns target URL from relationships for a given id.
@@ -112,8 +110,8 @@ public:
 
     virtual const OUString & getTarget() const = 0;
 
-    virtual uno::Reference<xml::sax::XFastTokenHandler>
-    getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext) = 0;
+    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler>
+    getFastTokenHandler(css::uno::Reference<css::uno::XComponentContext> rContext) = 0;
 
 };
 
@@ -226,30 +224,29 @@ public:
      */
     virtual OUString getTargetForId(const OUString & rId) = 0;
 
-    virtual void setModel(uno::Reference<frame::XModel> xModel) = 0;
-    virtual uno::Reference<frame::XModel> getModel() = 0;
-    virtual void setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage) = 0;
-    virtual uno::Reference<drawing::XDrawPage> getDrawPage() = 0;
-    virtual uno::Reference<io::XInputStream> getInputStream() = 0;
-    virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
-    virtual uno::Reference<io::XInputStream> getInputStreamForId
-    (const OUString & rId) = 0;
+    virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) = 0;
+    virtual css::uno::Reference<css::frame::XModel> getModel() = 0;
+    virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) = 0;
+    virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() = 0;
+    virtual css::uno::Reference<css::io::XInputStream> getInputStream() = 0;
+    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() = 0;
+    virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) = 0;
     virtual void setXNoteId(const sal_Int32 nId) = 0;
     virtual sal_Int32 getXNoteId() const = 0;
     virtual void setXNoteType(const Id & nId) = 0;
     virtual const Id & getXNoteType() const = 0;
     virtual const OUString & getTarget() const = 0;
-    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
-    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) = 0;
-    virtual uno::Reference<xml::dom::XDocument> getThemeDom( ) = 0;
-    virtual void setThemeDom( uno::Reference<xml::dom::XDocument> xThemeDom ) = 0;
-    virtual uno::Reference<xml::dom::XDocument> getGlossaryDocDom( ) = 0;
-    virtual uno::Sequence<uno::Sequence< uno::Any> > getGlossaryDomList() = 0;
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList( ) = 0;
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList( ) = 0;
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList( ) = 0;
-    virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList() = 0;
-    virtual uno::Sequence<beans::PropertyValue > getEmbeddingsList() = 0;
+    virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
+    virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) = 0;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom( ) = 0;
+    virtual void setThemeDom( css::uno::Reference<css::xml::dom::XDocument> xThemeDom ) = 0;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom( ) = 0;
+    virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> > getGlossaryDomList() = 0;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList( ) = 0;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList( ) = 0;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getActiveXDomList( ) = 0;
+    virtual css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > getActiveXBinList() = 0;
+    virtual css::uno::Sequence<css::beans::PropertyValue > getEmbeddingsList() = 0;
 };
 
 
@@ -257,8 +254,8 @@ class OOXMLDocumentFactory
 {
 public:
     static OOXMLStream::Pointer_t
-    createStream(uno::Reference<uno::XComponentContext> rContext,
-                 uno::Reference<io::XInputStream> rStream,
+    createStream(css::uno::Reference<css::uno::XComponentContext> rContext,
+                 css::uno::Reference<css::io::XInputStream> rStream,
                  bool bRepairStorage,
                  OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
 
@@ -270,7 +267,7 @@ public:
     createStream(OOXMLStream::Pointer_t pStream, const OUString & rId);
 
     static OOXMLDocument *
-    createDocument(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator);
+    createDocument(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator);
 
 };
 

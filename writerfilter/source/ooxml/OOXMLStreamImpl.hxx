@@ -33,19 +33,17 @@ namespace writerfilter {
 namespace ooxml
 {
 
-using namespace com::sun::star;
-
 class OOXMLStreamImpl : public OOXMLStream
 {
     void init();
 
-    uno::Reference<uno::XComponentContext> mxContext;
-    uno::Reference<io::XInputStream> mxStorageStream;
-    uno::Reference<embed::XStorage> mxStorage;
-    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    uno::Reference<io::XStream> mxDocumentStream;
-    uno::Reference<xml::sax::XFastParser> mxFastParser;
-    uno::Reference<xml::sax::XFastTokenHandler> mxFastTokenHandler;
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<css::io::XInputStream> mxStorageStream;
+    css::uno::Reference<css::embed::XStorage> mxStorage;
+    css::uno::Reference<css::embed::XRelationshipAccess> mxRelationshipAccess;
+    css::uno::Reference<css::io::XStream> mxDocumentStream;
+    css::uno::Reference<css::xml::sax::XFastParser> mxFastParser;
+    css::uno::Reference<css::xml::sax::XFastTokenHandler> mxFastTokenHandler;
 
     StreamType_t mnStreamType;
 
@@ -56,7 +54,7 @@ class OOXMLStreamImpl : public OOXMLStream
     /// Cache holding an Id <-> Target map of external relations.
     std::map<OUString, OUString> maIdCache;
 
-    bool lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
+    bool lcl_getTarget(css::uno::Reference<css::embed::XRelationshipAccess>
                        xRelationshipAccess,
                        StreamType_t nStreamType,
                        const OUString & rId,
@@ -67,26 +65,26 @@ public:
     OOXMLStreamImpl
     (OOXMLStreamImpl & rStream, StreamType_t nType);
     OOXMLStreamImpl
-    (uno::Reference<uno::XComponentContext> xContext,
-     uno::Reference<io::XInputStream> xStorageStream,
+    (css::uno::Reference<css::uno::XComponentContext> xContext,
+     css::uno::Reference<css::io::XInputStream> xStorageStream,
      StreamType_t nType, bool bRepairStorage);
     OOXMLStreamImpl(OOXMLStreamImpl & rStream, const OUString & rId);
 
     virtual ~OOXMLStreamImpl();
 
-    virtual uno::Reference<xml::sax::XParser> getParser() SAL_OVERRIDE;
-    virtual uno::Reference<xml::sax::XFastParser> getFastParser() SAL_OVERRIDE;
-    virtual uno::Reference<io::XInputStream> getDocumentStream() SAL_OVERRIDE;
-    virtual uno::Reference<io::XInputStream> getStorageStream() SAL_OVERRIDE;
-    virtual uno::Reference<uno::XComponentContext> getContext() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::sax::XParser> getParser() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XComponentContext> getContext() SAL_OVERRIDE;
     virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;
     virtual const OUString & getTarget() const SAL_OVERRIDE;
 
-    virtual uno::Reference<xml::sax::XFastTokenHandler>
-    getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler>
+    getFastTokenHandler(css::uno::Reference<css::uno::XComponentContext> rContext) SAL_OVERRIDE;
 
-    void setInputStream(uno::Reference<io::XInputStream> rxInputStream);
-    uno::Reference<io::XStream> accessDocumentStream();
+    void setInputStream(css::uno::Reference<css::io::XInputStream> rxInputStream);
+    css::uno::Reference<css::io::XStream> accessDocumentStream();
 };
 }}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLSTREAMIMPL_HXX

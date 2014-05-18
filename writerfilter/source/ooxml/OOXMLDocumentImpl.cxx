@@ -43,7 +43,7 @@
 // this extern variable is declared in OOXMLStreamImpl.hxx
 OUString customTarget;
 OUString embeddingsTarget;
-using ::com::sun::star::xml::sax::SAXException;
+using namespace ::com::sun::star;
 namespace writerfilter {
 namespace ooxml
 {
@@ -51,8 +51,6 @@ namespace ooxml
 #if OSL_DEBUG_LEVEL > 1
 TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 #endif
-
-using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator)
     : mpStream(pStream)
@@ -873,7 +871,7 @@ uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const OU
     return pStream->getDocumentStream();
 }
 
-string OOXMLDocumentImpl::getType() const
+std::string OOXMLDocumentImpl::getType() const
 {
     return "OOXMLDocumentImpl";
 }

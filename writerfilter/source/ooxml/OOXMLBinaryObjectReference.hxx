@@ -29,7 +29,7 @@ class OOXMLBinaryObjectReference :
         public writerfilter::Reference<BinaryObj>
 {
     OOXMLStream::Pointer_t mpStream;
-    uno::Sequence<sal_Int8> mSequence;
+    css::uno::Sequence<sal_Int8> mSequence;
     bool mbRead;
 
     void read();

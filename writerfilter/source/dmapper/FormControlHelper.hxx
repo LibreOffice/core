@@ -28,19 +28,17 @@
 namespace writerfilter {
 namespace dmapper {
 
-using namespace ::com::sun::star;
-
 class FormControlHelper
 {
 public:
     typedef boost::shared_ptr<FormControlHelper> Pointer_t;
     FormControlHelper(FieldId eFieldId,
-                      uno::Reference<text::XTextDocument> rTextDocument,
+                      css::uno::Reference<css::text::XTextDocument> rTextDocument,
                       FFDataHandler::Pointer_t pFFData);
     ~FormControlHelper();
 
-    bool insertControl(uno::Reference<text::XTextRange> xTextRange);
-    bool processField(uno::Reference<text::XFormField> xFormField);
+    bool insertControl(css::uno::Reference<css::text::XTextRange> xTextRange);
+    bool processField(css::uno::Reference<css::text::XFormField> xFormField);
     bool hasFFDataHandler() const { return (m_pFFData != 0); }
 private:
     FFDataHandler::Pointer_t m_pFFData;
@@ -48,9 +46,9 @@ private:
     typedef boost::shared_ptr<FormControlHelper_Impl> ImplPointer_t;
     ImplPointer_t m_pImpl;
 
-    bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
+    bool createCheckbox(css::uno::Reference<css::text::XTextRange> xTextRange,
                         const OUString & rControlName);
-    bool createDropdown(uno::Reference<text::XTextRange> xTextRange,
+    bool createDropdown(css::uno::Reference<css::text::XTextRange> xTextRange,
                         const OUString & rControlName);
 };
 

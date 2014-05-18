@@ -32,30 +32,28 @@ namespace writerfilter {
 namespace ooxml
 {
 
-using namespace ::com::sun::star;
-
 class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
-    uno::Reference<task::XStatusIndicator> mxStatusIndicator;
+    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
     sal_Int32 mnXNoteId;
     Id mXNoteType;
 
-    uno::Reference<frame::XModel> mxModel;
-    uno::Reference<drawing::XDrawPage> mxDrawPage;
-    uno::Reference<xml::dom::XDocument> mxGlossaryDocDom;
-    uno::Sequence < uno::Sequence< uno::Any > > mxGlossaryDomList;
-    uno::Reference<xml::sax::XFastShapeContextHandler> mxShapeContext;
-    uno::Reference<xml::dom::XDocument> mxThemeDom;
-    uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomList;
-    uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomPropsList;
-    uno::Reference<xml::dom::XDocument> mxCustomXmlProsDom;
-    uno::Sequence<uno::Reference<xml::dom::XDocument> > mxActiveXDomList;
-    uno::Sequence<uno::Reference<io::XInputStream> > mxActiveXBinList;
-    uno::Reference<io::XInputStream> mxActiveXBin;
-    uno::Reference<io::XInputStream> mxEmbeddings;
-    uno::Sequence < beans::PropertyValue > mxEmbeddingsList;
-    std::vector<beans::PropertyValue> mxEmbeddingsListTemp;
+    css::uno::Reference<css::frame::XModel> mxModel;
+    css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
+    css::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
+    css::uno::Sequence < css::uno::Sequence< css::uno::Any > > mxGlossaryDomList;
+    css::uno::Reference<css::xml::sax::XFastShapeContextHandler> mxShapeContext;
+    css::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
+    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
+    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
+    css::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
+    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxActiveXDomList;
+    css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > mxActiveXBinList;
+    css::uno::Reference<css::io::XInputStream> mxActiveXBin;
+    css::uno::Reference<css::io::XInputStream> mxEmbeddings;
+    css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
+    std::vector<css::beans::PropertyValue> mxEmbeddingsListTemp;
     bool mbIsSubstream;
     /// How many paragraphs equal to 1 percent?
     sal_Int32 mnPercentSize;
@@ -74,7 +72,7 @@ protected:
                                       writerfilter::Reference<Stream>::Pointer_t pStream,
                       sal_uInt32 nId);
 
-    uno::Reference<xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
+    css::uno::Reference<css::xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
 
     void importSubStreamRelations(OOXMLStream::Pointer_t pStream, OOXMLStream::StreamType_t nType);
 
@@ -92,7 +90,7 @@ protected:
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream);
 public:
-    OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator);
+    OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator);
     virtual ~OOXMLDocumentImpl();
 
     virtual void resolve(Stream & rStream) SAL_OVERRIDE;
@@ -120,29 +118,29 @@ public:
 
     virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;
 
-    virtual void setModel(uno::Reference<frame::XModel> xModel) SAL_OVERRIDE;
-    virtual uno::Reference<frame::XModel> getModel() SAL_OVERRIDE;
-    virtual void setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage) SAL_OVERRIDE;
-    virtual uno::Reference<drawing::XDrawPage> getDrawPage() SAL_OVERRIDE;
-    virtual uno::Reference<io::XInputStream> getInputStream() SAL_OVERRIDE;
-    virtual uno::Reference<io::XInputStream> getStorageStream() SAL_OVERRIDE;
-    virtual uno::Reference<io::XInputStream> getInputStreamForId(const OUString & rId) SAL_OVERRIDE;
+    virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::frame::XModel> getModel() SAL_OVERRIDE;
+    virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::io::XInputStream> getInputStream() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) SAL_OVERRIDE;
     virtual void setXNoteId(const sal_Int32 nId) SAL_OVERRIDE;
     virtual sal_Int32 getXNoteId() const SAL_OVERRIDE;
     virtual void setXNoteType(const Id & rId) SAL_OVERRIDE;
     virtual const Id & getXNoteType() const SAL_OVERRIDE;
     virtual const OUString & getTarget() const SAL_OVERRIDE;
-    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) SAL_OVERRIDE;
-    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) SAL_OVERRIDE;
-    virtual void setThemeDom(uno::Reference<xml::dom::XDocument> xThemeDom) SAL_OVERRIDE;
-    virtual uno::Reference<xml::dom::XDocument> getThemeDom() SAL_OVERRIDE;
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList() SAL_OVERRIDE;
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList() SAL_OVERRIDE;
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList() SAL_OVERRIDE;
-    virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList() SAL_OVERRIDE;
-    virtual uno::Reference<xml::dom::XDocument> getGlossaryDocDom() SAL_OVERRIDE;
-    virtual uno::Sequence<uno::Sequence< uno::Any> >  getGlossaryDomList() SAL_OVERRIDE;
-    virtual uno::Sequence<beans::PropertyValue >  getEmbeddingsList() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) SAL_OVERRIDE;
+    virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) SAL_OVERRIDE;
+    virtual void setThemeDom(css::uno::Reference<css::xml::dom::XDocument> xThemeDom) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getActiveXDomList() SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > getActiveXBinList() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom() SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> >  getGlossaryDomList() SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::beans::PropertyValue >  getEmbeddingsList() SAL_OVERRIDE;
 
     void incrementProgress();
 };
