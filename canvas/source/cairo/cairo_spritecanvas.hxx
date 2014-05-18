@@ -133,10 +133,10 @@ namespace cairocanvas
         virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // SurfaceProvider
-        virtual SurfaceSharedPtr getSurface() SAL_OVERRIDE;
-        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
-        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) SAL_OVERRIDE;
-        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr getSurface() SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) SAL_OVERRIDE;
         virtual OutputDevice* getOutputDevice() SAL_OVERRIDE;
 
         // RepaintTarget
@@ -144,8 +144,8 @@ namespace cairocanvas
                               const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState ) SAL_OVERRIDE;
 
-        SurfaceSharedPtr getWindowSurface();
-        SurfaceSharedPtr getBufferSurface();
+        ::cairo::SurfaceSharedPtr getWindowSurface();
+        ::cairo::SurfaceSharedPtr getBufferSurface();
 
         const ::basegfx::B2ISize& getSizePixel();
         void setSizePixel( const ::basegfx::B2ISize& rSize );
