@@ -1238,21 +1238,21 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
         {
             aColorSet.SetNoSelection();
 
-            Color rColor;
+            Color aColor;
             if ( pState->ISA( SvxColorItem ) )
-                rColor = ((const SvxColorItem*)pState)->GetValue();
+                aColor = ((const SvxColorItem*)pState)->GetValue();
             else if ( pState->ISA( XLineColorItem ) )
-                rColor = ((const XLineColorItem*)pState)->GetColorValue();
+                aColor = ((const XLineColorItem*)pState)->GetColorValue();
 
             for ( size_t i = 1; i <= aColorSet.GetItemCount(); ++i )
             {
-                if ( rColor == aColorSet.GetItemColor(i) )
+                if ( aColor == aColorSet.GetItemColor(i) )
                 {
                     aColorSet.SelectItem(i);
                     return;
                 }
             }
-            if ( rColor == COL_AUTO || rColor == COL_TRANSPARENT )
+            if ( aColor == COL_AUTO || aColor == COL_TRANSPARENT )
                 aColorSet.SelectItem(0);
         }
     }
