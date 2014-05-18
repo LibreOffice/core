@@ -82,8 +82,8 @@ gb_EXTRAMERGEDLIBS := \
 	$(if $(filter-out ANDROID IOS,$(OS)),scn) \
 	sd \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
-	storagefd \
 	spell \
+	storagefd \
 	svgfilter \
 	swd \
 	t602filter \
