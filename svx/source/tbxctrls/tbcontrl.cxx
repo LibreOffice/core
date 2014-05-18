@@ -1244,7 +1244,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
             else if ( pState->ISA( XLineColorItem ) )
                 rColor = ((const XLineColorItem*)pState)->GetColorValue();
 
-            for ( size_t i = 1; i < aColorSet.GetItemCount(); i++ )
+            for ( size_t i = 1; i <= aColorSet.GetItemCount(); ++i )
             {
                 if ( rColor == aColorSet.GetItemColor(i) )
                 {
