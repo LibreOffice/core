@@ -241,11 +241,6 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
 
                 for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
                 {
-                    #if OSL_DEBUG_LEVEL > 1
-                    // Sometimes it's better to see what's going on :-)
-                    OUString sPropName   = lInNames[nSourceCounter];
-                    OUString sLocaleName = lPropertyNames[nPropertyCounter];
-                    #endif
                     lProperties[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter];
                     OUString sLocaleValue;
                     xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue;
