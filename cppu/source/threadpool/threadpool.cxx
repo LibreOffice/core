@@ -35,6 +35,7 @@
 
 using namespace ::std;
 using namespace ::osl;
+using namespace ::rtl;
 
 namespace cppu_threadpool
 {
