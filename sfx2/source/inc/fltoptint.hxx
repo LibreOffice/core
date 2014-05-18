@@ -24,8 +24,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/interaction.hxx>
 
-//using namespace ::framework;
-
 class FilterOptionsContinuation : public comphelper::OInteraction< ::com::sun::star::document::XInteractionFilterOptions >
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties;
