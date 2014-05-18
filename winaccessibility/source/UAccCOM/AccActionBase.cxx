@@ -32,9 +32,7 @@
 
 #include "AccessibleKeyStroke.h"
 
-#ifndef __ACCCOMMON_H_
 #include "acccommon.h"
-#endif
 
 using namespace com::sun::star::accessibility::AccessibleRole;
 using namespace com::sun::star::accessibility;

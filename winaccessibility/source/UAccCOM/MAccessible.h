@@ -27,12 +27,8 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <AccObjectManagerAgent.hxx>
 #include "EnumVariant.h"
-#ifndef __ACCCOMMON_H_
 #include "acccommon.h"
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 #define     OBJID_WINDOW        ((LONG)0x00000000)
 #define     OBJID_SYSMENU       ((LONG)0xFFFFFFFF)
