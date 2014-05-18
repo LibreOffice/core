@@ -306,10 +306,18 @@ class WinMtfPathObj : public PolyPolygon
 {
     bool    bClosed;
 
-public :
+public:
 
-                WinMtfPathObj() { bClosed = true; }
-    void        Init() { Clear(); bClosed = true; };
+    WinMtfPathObj() :
+        bClosed(true)
+    {}
+
+    void        Init()
+    {
+        Clear();
+        bClosed = true;
+    }
+
     void        ClosePath();
     void        AddPoint( const Point& rPoint );
     void        AddPolygon( const Polygon& rPoly );
@@ -324,9 +332,9 @@ struct WinMtfFontStyle
     WinMtfFontStyle( LOGFONTW& rLogFont );
 };
 
-// -----------------------------------------------------------------------------
 
-typedef enum {
+typedef enum
+{
     FillStyleSolid,
     FillStylePattern
 } WinMtfFillStyleType;
@@ -342,53 +350,51 @@ struct WinMtfFillStyle
         : aFillColor(Color(COL_BLACK))
         , bTransparent(false)
         , aType(FillStyleSolid)
-    {
-    }
+    {}
 
     WinMtfFillStyle(const Color& rColor, bool bTrans = false)
         : aFillColor(rColor)
         , bTransparent(bTrans)
         , aType(FillStyleSolid)
-    {
-    }
+    {}
 
     WinMtfFillStyle(Bitmap& rBmp)
         : bTransparent(false)
         , aType(FillStylePattern)
         , aBmp(rBmp)
-    {
-    }
+    {}
 
     bool operator==( const WinMtfFillStyle& rStyle )
-        {
-            return (  ( aFillColor == rStyle.aFillColor )
-                   && ( bTransparent == rStyle.bTransparent )
-                   && ( aType == rStyle.aType )
-                   );
-        }
-    bool operator==( WinMtfFillStyle* pStyle )
-        {
-            return (  ( aFillColor == pStyle->aFillColor )
-                   && ( bTransparent == pStyle->bTransparent )
-                   && ( aType == pStyle->aType )
-                   );
-        }
-    WinMtfFillStyle& operator=( const WinMtfFillStyle& rStyle )
-        {
-            aFillColor = rStyle.aFillColor;
-            bTransparent = rStyle.bTransparent;
-            aBmp = rStyle.aBmp;
-            aType = rStyle.aType;
-            return *this;
-        }
-    WinMtfFillStyle& operator=( WinMtfFillStyle* pStyle )
-        {
-            aFillColor = pStyle->aFillColor;
-            bTransparent = pStyle->bTransparent;
-            aBmp = pStyle->aBmp;
-            aType = pStyle->aType;
-            return *this;
-        }
+    {
+        return aFillColor == rStyle.aFillColor
+            && bTransparent == rStyle.bTransparent
+            && aType == rStyle.aType;
+    }
+
+    bool operator==(WinMtfFillStyle* pStyle)
+    {
+        return aFillColor == pStyle->aFillColor
+            && bTransparent == pStyle->bTransparent
+            && aType == pStyle->aType;
+    }
+
+    WinMtfFillStyle& operator=(const WinMtfFillStyle& rStyle)
+    {
+        aFillColor = rStyle.aFillColor;
+        bTransparent = rStyle.bTransparent;
+        aBmp = rStyle.aBmp;
+        aType = rStyle.aType;
+        return *this;
+    }
+
+    WinMtfFillStyle& operator=(WinMtfFillStyle* pStyle)
+    {
+        aFillColor = pStyle->aFillColor;
+        bTransparent = pStyle->bTransparent;
+        aBmp = pStyle->aBmp;
+        aType = pStyle->aType;
+        return *this;
+    }
 };
 
 struct WinMtfLineStyle
@@ -397,33 +403,36 @@ struct WinMtfLineStyle
     LineInfo    aLineInfo;
     bool        bTransparent;
 
-    WinMtfLineStyle() :
-        aLineColor  ( COL_BLACK ),
-        bTransparent( false ) {}
+    WinMtfLineStyle()
+        : aLineColor  (COL_BLACK)
+        , bTransparent(false)
+    {}
 
-    WinMtfLineStyle( const Color& rColor, bool bTrans = false ) :
-        aLineColor  ( rColor ),
-        bTransparent( bTrans ) {}
+    WinMtfLineStyle(const Color& rColor, bool bTrans = false)
+        : aLineColor  (rColor)
+        , bTransparent(bTrans)
+    {}
 
-    WinMtfLineStyle( const Color& rColor, const LineInfo& rStyle, bool bTrans = false ) :
-        aLineColor  ( rColor ),
-        aLineInfo   ( rStyle ),
-        bTransparent( bTrans ) {}
+    WinMtfLineStyle( const Color& rColor, const LineInfo& rStyle, bool bTrans = false)
+        : aLineColor  (rColor)
+        , aLineInfo   (rStyle)
+        , bTransparent(bTrans)
+    {}
 
     bool operator==( const WinMtfLineStyle& rStyle )
-        {
-            return (  ( aLineColor == rStyle.aLineColor )
-                   && ( bTransparent == rStyle.bTransparent )
-                   && ( aLineInfo == rStyle.aLineInfo )
-                   );
-        }
-    bool operator==( WinMtfLineStyle* pStyle )
-        {
-            return (  ( aLineColor == pStyle->aLineColor )
-                   && ( bTransparent == pStyle->bTransparent )
-                   && ( aLineInfo == pStyle->aLineInfo )
-                   );
-        }
+    {
+        return aLineColor == rStyle.aLineColor
+            && bTransparent == rStyle.bTransparent
+            && aLineInfo == rStyle.aLineInfo;
+    }
+
+    bool operator==(WinMtfLineStyle* pStyle)
+    {
+        return aLineColor == pStyle->aLineColor
+            && bTransparent == pStyle->bTransparent
+            && aLineInfo == pStyle->aLineInfo;
+    }
+
     WinMtfLineStyle& operator=( const WinMtfLineStyle& rStyle )
     {
         aLineColor = rStyle.aLineColor;
@@ -449,11 +458,15 @@ struct XForm
     float   eM22;
     float   eDx;
     float   eDy;
+
     XForm()
-    {
-        eM11 =  eM22 = 1.0f;
-        eDx = eDy = eM12 = eM21 = 0.0f;
-    }
+        : eM11(1.0f)
+        , eM12(0.0f)
+        , eM21(0.0f)
+        , eM22(1.0f)
+        , eDx(0.0f)
+        , eDy(0.0f)
+    {}
 };
 
 struct SaveStruct
@@ -480,7 +493,7 @@ struct SaveStruct
     bool            bFillStyleSelected;
 };
 
-typedef ::boost::shared_ptr< SaveStruct > SaveStructPtr;
+typedef boost::shared_ptr<SaveStruct> SaveStructPtr;
 
 struct BSaveStruct
 {
@@ -489,22 +502,19 @@ struct BSaveStruct
     sal_uInt32      nWinRop;
     WinMtfFillStyle aStyle;
 
-        BSaveStruct(
-            const Bitmap& rBmp,
-            const Rectangle& rOutRect,
-            sal_uInt32 nRop,
-            WinMtfFillStyle& rStyle
-        )
-            : aBmp( rBmp )
-            , aOutRect( rOutRect )
-            , nWinRop( nRop )
-            , aStyle ( rStyle )
-        {}
+    BSaveStruct(const Bitmap& rBmp, const Rectangle& rOutRect,
+                sal_uInt32 nRop, WinMtfFillStyle& rStyle)
+        : aBmp(rBmp)
+        , aOutRect(rOutRect)
+        , nWinRop(nRop)
+        , aStyle (rStyle)
+    {}
 };
 
 typedef ::std::vector< BSaveStruct* > BSaveStructList_impl;
 
-enum GDIObjectType {
+enum GDIObjectType
+{
     GDI_DUMMY = 0,
     GDI_PEN = 1,
     GDI_BRUSH = 2,
@@ -519,36 +529,45 @@ struct GDIObj
     void*           pStyle;
     GDIObjectType   eType;
 
-    GDIObj() :
-        pStyle  ( NULL ),
-        eType   ( GDI_DUMMY )
+    GDIObj()
+        : pStyle (NULL)
+        , eType  (GDI_DUMMY)
+    {}
+
+    GDIObj(GDIObjectType eT, void* pS)
     {
+        pStyle = pS;
+        eType = eT;
     }
 
-    GDIObj( GDIObjectType eT, void* pS ) { pStyle = pS; eType = eT; }
-    void Set( GDIObjectType eT, void* pS ) { pStyle = pS; eType = eT; }
+    void Set(GDIObjectType eT, void* pS)
+    {
+        pStyle = pS;
+        eType = eT;
+    }
+
     void Delete()
     {
-        if ( pStyle )
-        {
-            switch ( eType )
-            {
-                case GDI_PEN :
-                    delete (WinMtfLineStyle*)pStyle;
-                break;
-                case GDI_BRUSH :
-                    delete (WinMtfFillStyle*)pStyle;
-                break;
-                case GDI_FONT :
-                    delete (WinMtfFontStyle*)pStyle;
-                break;
+        if (pStyle == NULL)
+            return;
 
-                default:
-                    OSL_FAIL( "unsupported style deleted" );
-                    break;
-            }
-            pStyle = NULL;
+        switch (eType)
+        {
+            case GDI_PEN :
+                delete (WinMtfLineStyle*)pStyle;
+            break;
+            case GDI_BRUSH :
+                delete (WinMtfFillStyle*)pStyle;
+            break;
+            case GDI_FONT :
+                delete (WinMtfFontStyle*)pStyle;
+            break;
+
+            default:
+                OSL_FAIL( "unsupported style deleted" );
+                break;
         }
+        pStyle = NULL;
     }
 
     ~GDIObj()
@@ -793,8 +812,8 @@ public:
     }
     ~EnhWMFReader();
 
-    bool        ReadEnhWMF();
-    void            ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
+    bool ReadEnhWMF();
+    void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
 private:
     template <class T> void ReadAndDrawPolyPolygon();
     template <class T> void ReadAndDrawPolyLine();
