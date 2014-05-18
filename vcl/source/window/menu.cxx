@@ -6130,4 +6130,21 @@ ImplMenuDelData::~ImplMenuDelData()
         const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }
 
+namespace vcl
+{
+    MenuInvalidator::MenuInvalidator() {};
+
+    static VclEventListeners2* pMenuInvalidateListeners = NULL;
+    VclEventListeners2* MenuInvalidator::GetMenuInvalidateListeners()
+    {
+        if(!pMenuInvalidateListeners)
+            pMenuInvalidateListeners = new VclEventListeners2();
+        return pMenuInvalidateListeners;
+    }
+    void MenuInvalidator::Invalidated()
+    {
+        VclSimpleEvent aEvent(0);
+        GetMenuInvalidateListeners()->callListeners(&aEvent);
+    };
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

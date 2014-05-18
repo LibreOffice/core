@@ -11,6 +11,8 @@
 
 #ifdef ENABLE_GMENU_INTEGRATION
 
+#include <generic/gendata.hxx>
+#include <unx/saldisp.hxx>
 #include <unx/gtk/glomenu.h>
 #include <unx/gtk/gloactiongroup.h>
 #include <vcl/menu.hxx>
@@ -448,9 +450,50 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     pItem->mpSubMenu = pGtkSubMenu;
 }
 
+static bool bInvalidMenus = false;
+static gboolean RefreshMenusUnity(gpointer)
+{
+    SalDisplay* pSalDisplay = GetGenericData()->GetSalDisplay();
+    std::list< SalFrame* >::const_iterator pSalFrame = pSalDisplay->getFrames().begin();
+    std::list< SalFrame* >::const_iterator pEndSalFrame = pSalDisplay->getFrames().end();
+    for(; pSalFrame != pEndSalFrame; ++pSalFrame) {
+        const GtkSalFrame* pGtkSalFrame = static_cast< const GtkSalFrame* >( *pSalFrame );
+        GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(pGtkSalFrame);
+        GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(pFrameNonConst->GetMenu());
+        if(pSalMenu) {
+            pSalMenu->Activate();
+            pSalMenu->UpdateFull();
+        }
+    }
+    bInvalidMenus = false;
+    return FALSE;
+}
+
+static long RefreshMenusUnity(void*, void*)
+{
+    if(!bInvalidMenus) {
+        g_timeout_add(10, &RefreshMenusUnity, NULL);
+        bInvalidMenus = true;
+    }
+    return 0;
+}
+
+static Link* getRefreshLinkInstance()
+{
+    static Link* pLink = NULL;
+    if(!pLink) {
+        pLink = new Link(NULL, &RefreshMenusUnity);
+    }
+    return pLink;
+}
+
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
     SolarMutexGuard aGuard;
+    {
+        vcl::MenuInvalidator aInvalidator;
+        aInvalidator.GetMenuInvalidateListeners()->addListener(*getRefreshLinkInstance());
+    }
 
     assert(mbMenuBar);
     SAL_INFO("vcl.unity", "GtkSalMenu set to frame");

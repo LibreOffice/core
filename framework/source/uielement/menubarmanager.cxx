@@ -67,6 +67,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
@@ -429,6 +430,10 @@ throw ( RuntimeException, std::exception )
     OUString aFeatureURL = Event.FeatureURL.Complete;
 
     SolarMutexGuard aSolarGuard;
+    {
+        vcl::MenuInvalidator aInvalidator;
+        aInvalidator.Invalidated();
+    }
     {
         if ( m_bDisposed )
             return;
@@ -914,9 +919,9 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
                                 if ( !bPopupMenu )
                                 {
-                                    // We need only an update to reflect the current state
                                     xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                                     xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                                    xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                                 }
                             }
                             else if ( !bPopupMenu )
