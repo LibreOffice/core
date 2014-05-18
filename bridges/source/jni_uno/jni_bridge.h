@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JNI_BRIDGE_H
-#define INCLUDED_JNI_BRIDGE_H
+#ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BRIDGE_H
+#define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BRIDGE_H
 
 #include "jni_base.h"
 #include "jni_info.h"
