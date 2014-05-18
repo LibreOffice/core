@@ -21,10 +21,7 @@
 
 #define DLG_ROW_HEIGHT          (RC_TABLE_BEGIN + 4)
 
-
 #define MSG_ERR_TABLE_MERGE     (RC_TABLE_BEGIN + 7)
-
-
 
 #define MSG_WRONG_TABLENAME     (RC_TABLE_BEGIN + 13)
 

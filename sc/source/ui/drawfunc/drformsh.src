@@ -153,7 +153,6 @@
         };\
     };
 
-
  // Popup-Menues ---------------------------------------------------------------------
 
 String RID_POPUP_DRAWFORM
@@ -174,7 +173,6 @@ Menu RID_POPUP_DRAWFORM
         MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
         //-#i68101#----------------------
-
 
         MenuItem { Separator = TRUE ; };
 

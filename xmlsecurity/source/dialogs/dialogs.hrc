@@ -49,7 +49,6 @@
 #define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
 #define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_DESC_X-RSC_CD_PUSHBUTTON_WIDTH)
 
-
 // --------- tab dialog Certificate viewer ---------
 
 #define CS_COL_0                        RSC_SP_DLG_INNERBORDER_LEFT

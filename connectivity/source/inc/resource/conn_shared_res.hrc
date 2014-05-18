@@ -20,7 +20,6 @@
 #ifndef CONNECTIVITY_SHARED_RES_HRC
 #define CONNECTIVITY_SHARED_RES_HRC
 
-
 // = normal resource ids, per driver
 
 // Mozilla driver resource ids

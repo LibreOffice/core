@@ -111,7 +111,6 @@
         Text [ en-US ] = "~Page Setup..." ; \
     };
 
-
 #define MN_INSERT_SLIDE \
     MenuItem\
     {\
@@ -164,7 +163,6 @@
         HelpId = CMD_SID_DISPLAY_MASTER_OBJECTS ; \
         Text [ en-US ] = "Display Objects from Master" ; \
     };
-
 
 #define MN_PAGE_MENU \
     MenuItem\
@@ -236,8 +234,6 @@
         HelpId = CMD_SID_DELETE_MASTER_PAGE ; \
         Text [ en-US ] = "D~elete Master" ; \
     };
-
-
 
 #define MN_DELETE_PAGE \
     MenuItem\
@@ -829,7 +825,6 @@
         HelpId = CMD_SID_DELETE ; \
         Text [ en-US ] = "~Delete" ; \
     };
-
 
 #define MN_SET_DEFAULT\
     MenuItem\

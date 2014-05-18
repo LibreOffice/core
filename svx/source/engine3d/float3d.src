@@ -49,7 +49,6 @@
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
-
 DockingWindow RID_SVXFLOAT_3D
 {
     HelpID = CMD_SID_3D_WIN ;

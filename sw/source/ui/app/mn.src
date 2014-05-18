@@ -48,7 +48,6 @@
         Text [ en-US ] = "Pa~ge..." ; \
     };
 
-
 #define MN_TEXT_ATTR\
     MenuItem\
     {\
@@ -185,7 +184,6 @@
 
 /* --------------------- D O C U M E N T -------------------------- */
 
-
 #define _MN_EDIT_FIELD                                                      \
         MenuItem                                                            \
         {                                                                   \
@@ -261,7 +259,6 @@
     SEPARATOR ;                                                         \
     _MN_EDIT_OPEN_HYPERLINK                                             \
     _MN_EDIT_OPEN_SMARTTAGMENU
-
 
 #define MN_RESET\
     MenuItem\
@@ -650,7 +647,6 @@
         ITEM_FORMAT_FRAME_TO_TOP\
     };\
 
-
 #define MN_DRAW5 \
     MenuItem\
     {\
@@ -715,7 +711,6 @@
         ITEM_REPLACE_CONTROL\
     };\
 
-
 #define MN_ANNOTATIONS \
     MenuItem\
     {\
@@ -775,7 +770,6 @@ String MN_TEXT_POPUPMENU
 {
     Text [ en-US ] = "Text" ;
 };
-
 
 String MN_TAB_POPUPMENU
 {
@@ -897,7 +891,6 @@ Menu MN_TAB_POPUPMENU
             };\
         };\
     };
-
 
 #define MN_MOUSE_FRAME_WITH_CONTOUR MN_MOUSE_FRAME_BEGIN
 

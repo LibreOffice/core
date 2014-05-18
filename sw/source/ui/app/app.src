@@ -165,8 +165,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
 };
 
-
-
 // Bitmap for the NumberingTemplates in the Organizer
 Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
 
@@ -190,7 +188,6 @@ String STR_WRITER_DOCUMENT_FULLTYPE
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Text Document";
 };
-
 
 String STR_CANTOPEN
 {
@@ -284,9 +281,7 @@ String STR_DOC_STAT
     Text [ en-US ] = "Statistics" ;
 };
 
-
  // Statusbar-titles
-
 
 String STR_STATSTR_W4WREAD
 {
@@ -377,7 +372,6 @@ String STR_STATSTR_SWGPRTOLENOTIFY
 {
     Text [ en-US ] = "Adapt Objects...";
 };
-
 
 QueryBox MSG_COMCORE_ASKSEARCH
 {
@@ -707,7 +701,6 @@ ToolBox RID_MODULE_TOOLBOX
     };
     Scroll = TRUE ;
 };
-
 
 String STR_CAPTION_TABLE
 {

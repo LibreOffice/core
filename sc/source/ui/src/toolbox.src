@@ -56,7 +56,6 @@ String SCSTR_QHELP_BTNEQUAL
     Text [ en-US ] = "Function" ;
 };
 
-
 String SCSTR_QHELP_EXPAND_FORMULA
 {
     Text [ en-US ] = "Expand Formula Bar" ;

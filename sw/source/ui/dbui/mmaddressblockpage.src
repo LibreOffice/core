@@ -26,7 +26,6 @@
             < "< none >" ; > ;        \
         };
 
-
 #define WORKAROUND\
     Text [ en-US ] = "New Address Block";
 

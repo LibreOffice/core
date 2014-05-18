@@ -24,7 +24,6 @@
 #include "dbu_dlg.hrc"
 #include "browserids.hxx"
 
-
 #define STR_DBASE_HELPTEXT                  28
 #define STR_MSACCESS_HELPTEXT               29
 #define STR_TEXT_HELPTEXT                   30
@@ -73,7 +72,6 @@
 #define STR_MYSQL_DRIVERCLASSTEXT       85
 #define STR_LDAP_DEFAULT                86
 #define STR_PAGETITLE_MYSQL_NATIVE      87
-
 
 #define FT_LDAP_HELPTEXT                2
 #define FT_MYSQL_HELPTEXT               3

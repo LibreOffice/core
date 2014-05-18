@@ -33,7 +33,6 @@
 #define RID_QUERYBOX_START              RID_ABP_START
 #define RID_BITMAP_START                RID_ABP_START
 
-
 // dialogs
 
 #define RID_DLG_ADDRESSBOOKSOURCEPILOT  ( RID_DIALOG_START +  0 )
@@ -53,14 +52,12 @@
 
 #define RID_STRING_END                  RID_STR_NOFIELDSASSIGNED
 
-
 // error boxes
 
 #define RID_ERR_NEEDTYPESELECTION       ( RID_ERRORBOX_START +  0 )
 // please adjust RID_ERRORBOX_END (below) when adding new error boxes
 
 #define RID_ERRORBOX_END                RID_ERR_NEEDTYPESELECTION
-
 
 // query boxes
 
@@ -71,7 +68,6 @@
 
 #define RID_QUERYBOX_END                RID_QRY_NO_EVO_GW
 
-
 // untyped resources
 
 #define RID_RSC_NOTUSEDYET              ( RID_UNTYPED_START +  0 )
@@ -79,15 +75,12 @@
 
 #define RID_UNTYPED_END                 RID_RSC_NOTUSEDYET
 
-
 // bitmaps
 
 #define BMP_HEADERIMAGE                 ( RID_BITMAP_START +  0 )
 // please adjust RID_BITMAP_END (below) when adding new bitmaps
 
 #define RID_BITMAP_END                  BMP_HEADERIMAGE
-
-
 
 //= range checks
 
@@ -110,7 +103,6 @@
     #error "please adjust the resource id ranges!!"
 #endif
 
-
 // local resource ids
 #define FL_SEPARATOR            1
 
@@ -121,7 +113,6 @@
 #define STR_TABLE_SELECTION         3
 #define STR_MANUAL_FIELD_MAPPING    4
 #define STR_FINAL_CONFIRM           5
-
 
 // some defines
 #define WINDOW_SIZE_X   240

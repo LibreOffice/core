@@ -80,7 +80,6 @@
 #define ST_CUSTOM4                  (RID_BIB_STRING +  35)
 #define ST_CUSTOM5                  (RID_BIB_STRING +  36)
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

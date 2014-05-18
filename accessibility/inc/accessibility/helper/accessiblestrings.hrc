@@ -22,7 +22,6 @@
 
 #define RID_TK_ACC_START        1000
 
-
 // Accessible Action Id's
 #define RID_STR_ACC_ACTION_CLICK            ( RID_TK_ACC_START +    0 )
 #define RID_STR_ACC_ACTION_TOGGLEPOPUP      ( RID_TK_ACC_START +    1 )

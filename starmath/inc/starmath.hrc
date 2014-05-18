@@ -677,7 +677,6 @@
 #define RID_LLINT_FROMTOX_HELP      (RID_APP_START + 4189)
 #define RID_LLLINT_FROMTOX_HELP     (RID_APP_START + 4190)
 
-
 #define RID_ALIGNLX_HELP                  (RID_APP_START + 4275)
 #define RID_ALIGNCX_HELP                  (RID_APP_START + 4276)
 #define RID_ALIGNRX_HELP                  (RID_APP_START + 4277)

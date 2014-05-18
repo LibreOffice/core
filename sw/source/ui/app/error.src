@@ -38,7 +38,6 @@ InfoBox ERR_CLPBRD_READ
     Message [ en-US ] = "Error reading from the clipboard." ;
 };
 
-
 #define ERR_CODE( class, err )  (class | (err - ERROR_SW_BASE))
 #define WARN_CODE( class, err ) (class | ( err - WARN_SW_BASE))
 
@@ -135,7 +134,6 @@ Resource RID_SW_ERRHDL
     {
         Text [ en-US ] = "The structure of a linked table cannot be modified." ;
     };
-
 
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
     {

@@ -24,7 +24,6 @@
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 
-
 FloatingWindow RID_TOOLBOXWINDOW
 {
     HelpId = HID_SMA_OPERATOR_WIN ;
@@ -1505,8 +1504,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         };
     };
 };
-
-
 
 #define UNBINOPS_IDLIST         \
     IdList =                \

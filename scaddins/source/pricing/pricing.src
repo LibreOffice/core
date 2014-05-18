@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "pricing.hrc"
-
 
 // function and parameter description
 Resource RID_PRICING_FUNCTION_DESCRIPTIONS
@@ -149,8 +147,6 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
     };
 
-
-
     Resource PRICING_FUNCDESC_OptTouch
     {
         String 1    // description
@@ -258,7 +254,6 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
     };
 
-
     Resource PRICING_FUNCDESC_OptProbHit
     {
         String 1    // description
@@ -320,7 +315,6 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
             Text [ en-US ] = "Upper barrier (set to 0 for no upper barrier)";
         };
     };
-
 
     Resource PRICING_FUNCDESC_OptProbInMoney
     {
@@ -402,11 +396,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
     };
 
-
-
-
 };
-
 
 // function names as accessible from cells
 Resource RID_PRICING_FUNCTION_NAMES
@@ -430,7 +420,6 @@ Resource RID_PRICING_FUNCTION_NAMES
 
 };
 
-
 // These were originally meant to be able to load Excel documents that for
 // some time were stored with localized function names.
 // This is not relevant to this add-in, so we only supply the same
@@ -445,7 +434,6 @@ Resource RID_PRICING_DEFFUNCTION_NAMES
             < "OPT_BARRIER"; >;
         };
     };
-
 
     StringArray PRICING_DEFFUNCNAME_OptTouch
     {

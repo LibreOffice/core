@@ -25,17 +25,14 @@
 #define FT_COMMON_PORT_DEFAULT          3
 #define FT_COMMON_PORT                  4
 
-
 #define RB_MYSQL_HOST_PORT              1
 #define RB_MYSQL_SOCKET                 2
 #define RB_MYSQL_NAMED_PIPE             3
-
 
 #define ED_MYSQL_DATABASE_NAME          1
 #define ED_MYSQL_SOCKET                 2
 #define ED_COMMON_HOST_NAME             3
 #define ED_MYSQL_NAMED_PIPE             4
-
 
 #define NF_COMMON_PORT                  1
 

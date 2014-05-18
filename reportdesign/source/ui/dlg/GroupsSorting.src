@@ -22,7 +22,6 @@
 #include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
 
-
 FloatingWindow RID_GROUPS_SORTING
 {
     OutputSize = TRUE ;
@@ -357,7 +356,6 @@ Menu RID_GROUPSROWPOPUPMENU
         };
     };
 };
-
 
 #define DEF_MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 

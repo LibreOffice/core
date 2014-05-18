@@ -19,7 +19,6 @@
 
 #include <svx/dialogs.hrc>
 
-
 String RID_SVXSTR_QRY_PRINT_TITLE
 {
     Text [ en-US ] = "Printing selection";

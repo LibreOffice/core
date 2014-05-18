@@ -188,7 +188,6 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
         SpinSize = 5 ;
     };
 
-
     ToolBox BTN_LEFT_SECOND
     {
         Border = FALSE ;

@@ -19,7 +19,6 @@
 
 #include "deployment.hrc"
 
-
 String RID_STR_UNOPKG_ACCEPT_LIC_1
 {
     Text [ en-US ] = "Extension Software License Agreement of $NAME:";

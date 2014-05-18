@@ -25,7 +25,6 @@
 
 #define MN_PROPS    25
 
-
 String RID_STR_NEW_FORM
 {
     Text [ en-US ] = "Create Form in Design View..." ;

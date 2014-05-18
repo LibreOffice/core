@@ -27,7 +27,6 @@
 #define RID_STR_HELPPROCESSING_GENERAL_ERROR        (RID_DEPLOYMENT_HELP_START+3)
 #define RID_STR_HELPPROCESSING_XMLPARSING_ERROR     (RID_DEPLOYMENT_HELP_START+4)
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

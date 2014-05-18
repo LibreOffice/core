@@ -255,8 +255,6 @@
 #define STR_FORMULA             (STR_EXTRA  + 12)
 #define STR_ALL_DATABASE        (STR_EXTRA  + 13)
 
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

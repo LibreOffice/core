@@ -27,7 +27,6 @@
 #define TOOLBOX_BORDER_WIDTH    107
 #define POPUPPANEL_MARGIN_SMALL_PIXEL   8
 
-
 Image IMG_CELL_BORDER
 {
     ImageBitmap = Bitmap{File = "sidebar/CellBorder.png";};
@@ -69,7 +68,6 @@ Image IMG_LINE_STYLE9
     ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_750.png";};
 };
 
-
 // fill color popup
 
 Control RID_POPUPPANEL_CELLAPPEARANCE_FILLCOLOR
@@ -95,7 +93,6 @@ Control RID_POPUPPANEL_CELLAPPEARANCE_FILLCOLOR
     };
 };
 
-
 // line color popup
 
 Control RID_POPUPPANEL_CELLAPPEARANCE_LINECOLOR
@@ -115,7 +112,6 @@ Control RID_POPUPPANEL_CELLAPPEARANCE_LINECOLOR
         Text [ en-US ] = "Color";
     };
 };
-
 
 // cell line style popup
 
@@ -151,7 +147,6 @@ Control RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE
         File = "sidebar/morebutton.png";
     };
 };
-
 
 // cell border style popup
 

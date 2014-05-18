@@ -48,7 +48,6 @@
 #define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 24)
 #define MN_READONLY_BACKGROUNDTOGALLERY (RC_DOCVW_BEGIN + 60)
 
-
 #define STR_CHAIN_OK                    (RC_DOCVW_BEGIN + 2)
 #define STR_CHAIN_NOT_EMPTY             (RC_DOCVW_BEGIN + 3)
 #define STR_CHAIN_IS_IN_CHAIN           (RC_DOCVW_BEGIN + 4)
@@ -84,7 +83,6 @@
 #if DOCVW_ACT_END > RC_DOCVW_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
-
 
 #endif
 

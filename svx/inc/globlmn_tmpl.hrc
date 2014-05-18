@@ -128,7 +128,6 @@
     Command = CMD_SID_SET_SUB_SCRIPT; \
     Text [ en-US ] = "Su~bscript"; \
 
-
 #define ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT \
     Identifier = SID_ATTR_PARA_ADJUST_LEFT ; \
     Command = ".uno:LeftPara" ; \
@@ -239,7 +238,6 @@
     Command = ".uno:ToggleObjectBezierMode" ; \
     Text [ en-US ] = "Edit ~Points" ;\
 
-
 #define ITEM_EDIT_PASTE \
     Identifier = SID_PASTE ; \
     Command = ".uno:Paste" ; \
@@ -275,14 +273,12 @@
     Command = ".uno:Zoom" ; \
     Text [ en-US ] = "~Zoom..." ; \
 
-
 #define ITEM_FORMAT_NUMBERING \
     MenuItem\
     {\
         Identifier = DEFINE_SLOTID_FOR_NUMBER_BULLETS ; \
         Text [ en-US ] = "~Bullets and Numbering..." ; \
             };
-
 
 #define ITEM_POLY_MERGE \
     MenuItem\
@@ -322,7 +318,6 @@
             };\
         };\
     };
-
 
 /*------------------------------------------------------------------------
                              Context Menus
@@ -516,7 +511,6 @@
     Identifier = SID_OPEN_SMARTTAGMENU ; \
     Command = CMD_SID_OPEN_SMARTTAGMENU; \
     Text [ en-US ] = "Open ~Smart Tag Menu" ;   \
-
 
 #endif // #ifndef _GLOBLMN_HRC
 

@@ -24,7 +24,6 @@
 // Tabelle
 #define SBA_WHICHID_START       100
 
-
 // Spalten
 // Formatierung
 #define SBA_DEF_RANGEFORMAT     (SBA_WHICHID_START+143) // RangeItem

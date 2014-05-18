@@ -19,7 +19,6 @@
 
 #include "xmlfilterdialogstrings.hrc"
 
-
 String STR_COLUMN_HEADER_NAME
 {
     Text [ en-US ]      = "Name";

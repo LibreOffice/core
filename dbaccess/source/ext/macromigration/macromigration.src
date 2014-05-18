@@ -20,7 +20,6 @@
 #include "dbmm_global.hrc"
 #include "macromigration.hrc"
 
-
 ModalDialog DLG_MACRO_MIGRATION
 {
     HelpID = "dbaccess:ModalDialog:DLG_MACRO_MIGRATION";
@@ -52,9 +51,7 @@ ModalDialog DLG_MACRO_MIGRATION
     };
 };
 
-
 //= PreparationPage
-
 
 TabPage TP_PREPARE
 {
@@ -103,9 +100,7 @@ TabPage TP_PREPARE
     };
 };
 
-
 //= SaveDBDocPage
-
 
 TabPage TP_SAVE_DBDOC_AS
 {
@@ -180,9 +175,7 @@ TabPage TP_SAVE_DBDOC_AS
     };
 };
 
-
 //= ProgressPage
-
 
 TabPage TP_MIGRATE
 {
@@ -294,9 +287,7 @@ TabPage TP_MIGRATE
     };
 };
 
-
 //= ResultPage
-
 
 TabPage TP_SUMMARY
 {
@@ -432,7 +423,6 @@ String STR_EXCEPTION
 {
     Text [ en-US ] = "caught exception:";
 };
-
 
 ErrorBox ERR_INVALID_BACKUP_LOCATION
 {

@@ -40,7 +40,6 @@
 #define FL_SEPARATOR3       (23)
 #define TB_TOOLBOX                      (27)
 
-
 #define CHECKBOX_HEIGHT      8
 #define FIXEDTEXT_HEIGHT     8
 #define FIXEDTEXT_WIDTH     60

@@ -28,7 +28,6 @@
 #define BT_OK           7
 #define BT_CANCEL       8
 
-
 #define STR_COULD_NOT_CONVERT_PARAM 1
 
 #endif // _DBAUI_PARAMDIALOG_HRC_

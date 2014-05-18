@@ -108,7 +108,6 @@
 #define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
 #define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
 
-
 #define STR_PACKNGO_NOACCESS                (RID_SFX_DOC_START+ 79)
 #define STR_PACKNGO_NEWMEDIUM               (RID_SFX_DOC_START+ 80)
 
@@ -117,7 +116,6 @@
 #define RID_CNT_STR_WAITING                 (RID_SFX_DOC_START+ 83)
 
 #define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
-
 
 #define DLG_MACROQUERY                      (RID_SFX_DOC_START+87)
 #define BTN_OK                              (RID_SFX_DOC_START+88)

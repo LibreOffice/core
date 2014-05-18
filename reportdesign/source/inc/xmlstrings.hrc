@@ -25,7 +25,6 @@
 #include "stringconstants.hrc"
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
 
-
 //= XML
 
 #define SERVICE_SETTINGSIMPORTER "com.sun.star.comp.Report.XMLOasisSettingsImporter"

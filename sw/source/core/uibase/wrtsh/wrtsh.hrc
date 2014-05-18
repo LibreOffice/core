@@ -21,8 +21,6 @@
 
 #include "rcid.hrc"
 
-
-
 #define STR_DDEERROR_APP1       (RC_WRTSH_BEGIN +  2)
 #define STR_DDEERROR_APP2       (RC_WRTSH_BEGIN +  3)
 #define STR_DDEERROR_DATA1      (RC_WRTSH_BEGIN +  4)

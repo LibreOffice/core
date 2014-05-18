@@ -17,7 +17,6 @@
 #define STR_PAGE_BREAK                      RC_PAGEFRM_BEGIN + 1
 #define STR_COLUMN_BREAK                    RC_PAGEFRM_BEGIN + 2
 
-
 // If you add resources, don't forget to update this
 #define PAGEFRM_ACT_END           STR_COLUMN_BREAK
 

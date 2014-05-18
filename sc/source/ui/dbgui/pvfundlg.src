@@ -37,8 +37,6 @@ StringArray SCSTR_DPFUNCLISTBOX
     };
 };
 
-
-
 ModalDialog RID_SCDLG_DPSHOWDETAIL
 {
     OutputSize = TRUE;
@@ -84,7 +82,5 @@ ModalDialog RID_SCDLG_DPSHOWDETAIL
     };
     Text [ en-US ] = "Show Detail";
 };
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,6 @@
 #define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
 #define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)
 
-
 // various unsorted stuff
 
 #define STR_SVT_AUTOMATIC_COLOR         (RID_SVTOOLS_START+16)
@@ -251,20 +250,15 @@
 #define STR_LOGICAL_FIELD_NAMES             (STR_SVT_ADDRESSTEMPLATE_START+32)
 #define STR_SVT_ADDRESSTEMPLATE_END         (STR_LOGICAL_FIELD_NAMES)
 
-
-
-
 // dialogs
 
 #define DLG_LOGIN                       (RID_SVTOOLS_START+113)
 #define DLG_ADDRESSBOOKSOURCE           (RID_SVTOOLS_START+114)
 
-
 // bitmaps
 
 #define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   3)
 #define BMP_LIST_ADD                    (RID_SVTOOLS_BITMAP_START +   4)
-
 
 // image lists
 
@@ -283,7 +277,6 @@
 // RID_SVTOOLS_START + 24 unused
 #define WARNINGBOX_INVALIDJAVASETTINGS_MAC  (RID_SVTOOLS_START+25)
 #define ERRORBOX_JVMCREATIONFAILED_MAC      (RID_SVTOOLS_START+26)
-
 
 // images
 #define RID_IMG_TREENODE_COLLAPSED      (RID_SVTOOLS_START +  0)

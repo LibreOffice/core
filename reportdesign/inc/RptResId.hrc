@@ -121,7 +121,6 @@
 #define STR_TRANSPARENT                     ( RID_STRING_START +  68 )
 #define RID_STR_FIELDSELECTION              ( RID_STRING_START +  69 )
 
-
 #define RID_STR_UNDO_ADD_GROUP_HEADER       ( RID_STRING_START +  70 )
 #define RID_STR_UNDO_REMOVE_GROUP_HEADER    ( RID_STRING_START +  71 )
 #define RID_STR_UNDO_ADD_GROUP_FOOTER       ( RID_STRING_START +  72 )
@@ -218,7 +217,6 @@
 #define RID_STR_F_MAXIMUM                   (RID_STRING_START + 159)
 #define RID_STR_VERTICALALIGN               (RID_STRING_START + 160)
 #define RID_STR_PARAADJUST                  (RID_STRING_START + 161)
-
 
 #define RID_IMG_TREENODE_COLLAPSED          ( RID_IMAGE_START +   1 )
 #define RID_IMG_TREENODE_EXPANDED           ( RID_IMAGE_START +   2 )

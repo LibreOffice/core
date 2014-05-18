@@ -94,7 +94,6 @@ String RID_STR_CLEAR_GRAPHICS
     Text [ en-US ] = "Remove Image";
 };
 
-
 String RID_STR_INVALIDSTREAM
 {
     Text [ en-US ] = "The given stream is invalid.";

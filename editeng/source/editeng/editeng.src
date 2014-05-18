@@ -65,7 +65,6 @@ String RID_EDITUNDO_TRANSLITERATE
     Text [ en-US ] = "Change Case";
 };
 
-
 Menu RID_MENU_SPELL
 {
     ItemList =
@@ -108,7 +107,6 @@ Menu RID_MENU_SPELL
         };
     };
 };
-
 
 String RID_STR_WORD
 {

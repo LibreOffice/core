@@ -25,7 +25,6 @@
 
 // = the kab driver's resource strings
 
-
 #define STR_NO_KDE_INST                 ( STR_KAB_BASE +    0 )
 #define STR_KDE_VERSION_TOO_OLD         ( STR_KAB_BASE +    1 )
 #define STR_KDE_VERSION_TOO_NEW         ( STR_KAB_BASE +    2 )

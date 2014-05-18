@@ -33,7 +33,6 @@
 #define STR_PRIVATEOLE              (RC_DOCHDL_BEGIN + 10)
 #define STR_DDEFORMAT               (RC_DOCHDL_BEGIN + 11)
 
-
 #define DOCHDL_ACT_END              STR_DDEFORMAT
 
 #if DOCHDL_ACT_END > RC_DOCHDL_END

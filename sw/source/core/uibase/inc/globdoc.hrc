@@ -27,13 +27,9 @@
 #define STR_WRITER_GLOBALDOC_FULLTYPE_50        (RC_GLOBDOC_BEGIN + 4)
 #define STR_WRITER_GLOBALDOC_FULLTYPE           (RC_GLOBDOC_BEGIN + 5)
 
-
-
 #define MN_GLOBAL_TEXT_POPUPMENU                  (RC_GLOBDOC_BEGIN + 63)
 
-
 #define GLOBDOC_ACT_END             MN_GLOBAL_TEXT_POPUPMENU
-
 
 #if GLOBDOC_ACT_END > RC_GLOBDOC_END
 #error Resource-Id Ueberlauf in #file, #line

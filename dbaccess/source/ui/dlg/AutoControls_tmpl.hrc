@@ -23,7 +23,6 @@
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
 
-
 #define CHECKBOX_HEIGHT     8
 #define FIXEDTEXT_HEIGHT    8
 #define RELATED_CONTROLS    4
@@ -87,7 +86,6 @@
 #define STR_AUTODELIMITER_MUST_DIFFER   104
 #define STR_AUTONO_WILDCARDS            105
 
-
 #define AUTO_WIZARDHELPTEXT( AUTO_LINECOUNT )                                                       \
     FixedText FT_AUTOWIZARDHEADER                                                                   \
     {                                                                                               \
@@ -104,9 +102,6 @@
         Text[ en-US ]  = "";                                                                        \
         WordBreak = TRUE;                                                                           \
     };
-
-
-
 
 #define  AUTO_BROWSECONTROLGROUP( AUTO_X, AUTO_Y, AUTOPAGE_X, AUTO_HID, AUTO_HID2)                                      \
     FixedText FT_AUTOBROWSEURL {                                                                    \
@@ -143,9 +138,6 @@
          Text[ en-US ]  = "Create New";                                                     \
     };
 
-
-
-
 #define AUTO_NAMECONTROLGROUP(AUTO_Y, AUTO_HID)                                                     \
     FixedText FT_AUTODATABASENAME                                                                   \
     {                                                                                               \
@@ -162,9 +154,6 @@
         TabStop = TRUE ;                                                                            \
         Border = TRUE ;                                                                             \
     };
-
-
-
 
 #define AUTO_HOSTCONTROLGROUP(AUTO_Y, AUTO_HID)                                                     \
     FixedText FT_AUTOHOSTNAME                                                                       \
@@ -183,9 +172,6 @@
         Border = TRUE ;                                                                             \
     };
 
-
-
-
 #define AUTO_BASEDNCONTROLGROUP(AUTO_Y, AUTO_HID)                                                   \
     FixedText FT_AUTOBASEDN                                                                         \
     {                                                                                               \
@@ -202,8 +188,6 @@
         TabStop = TRUE ;                                                                            \
         Border = TRUE ;                                                                             \
     };                                                                                              \
-
-
 
 // MBA: the HID set in the FixText can't make any sense; in case this macro was called from within the
 // AUTOHELP_JDBCCONTROLGROUP, the FixText would have got the same HID as an EditField from the
@@ -233,8 +217,6 @@
         Text[ en-US ]   = "" ;                                                                      \
     };
 
-
-
 #define AUTO_CHARSET( AUTO_Y, AUTOPAGE_X )                                                          \
     FixedLine FL_DATACONVERT                                                                        \
     {                                                                                               \
@@ -258,7 +240,6 @@
         DropDown = TRUE ;                                                                           \
         CurPos = 0 ;                                                                                \
     };                                                                                              \
-
 
 #define AUTO_SEPARATORCONTROLGROUP(AUTO_Y,AUTOPAGE_X)                                               \
                                                                                                     \
@@ -431,15 +412,9 @@
         Text[ en-US ]  = "Wildcards such as ?,* are not allowed in #1." ;                                                   \
     };
 
-
-
-
 #define AUTO_HELP_BROWSECONTROLGROUP(AUTO_LINECOUNT, AUTO_HID, AUTO_HID2)                           \
     AUTO_WIZARDHELPTEXT(AUTO_LINECOUNT)                                                 \
     AUTO_BROWSECONTROLGROUP(START_X, INIT_Y + AUTO_LINECOUNT * FIXEDTEXT_HEIGHT + 2, WIZARD_PAGE_X, AUTO_HID, AUTO_HID2)
-
-
-
 
 #define AUTO_JDBCDRIVERCLASSGROUP(AUTO_Y, AUTO_HID, AUTO_HID2)                                   \
                                                                                       \
@@ -469,8 +444,6 @@
         Text[ en-US ]  = "Test class" ;                                                                             \
     };
 
-
-
 #define AUTO_SOCKETCONTROLGROUP(AUTO_Y)                                                             \
     FixedText FT_SOCKET                                                                             \
     {                                                                                               \
@@ -487,7 +460,6 @@
         Border = TRUE ;                                                                             \
     };
 
-
 #define AUTOHELP_JDBCCONTROLGROUP( AUTO_HID, AUTO_HID2, AUTO_HID3, AUTO_HID4, AUTO_HID5 )                                           \
     AUTO_WIZARDHELPTEXT( 6 )                                                            \
     AUTO_NAMECONTROLGROUP( INIT_Y + 6 * FIXEDTEXT_HEIGHT + 2, AUTO_HID )                \
@@ -495,9 +467,6 @@
     AUTO_PORTCONTROLGROUP(113, AUTO_HID3 )                                              \
     AUTO_SOCKETCONTROLGROUP(129)                                                        \
     AUTO_JDBCDRIVERCLASSGROUP(146, AUTO_HID4, AUTO_HID5)
-
-
-
 
 #endif
 

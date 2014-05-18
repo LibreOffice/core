@@ -22,9 +22,7 @@
 
 #include <svl/solar.hrc>
 
-
 #define RID_FRM_STRINGS_START       RID_FORMLAYER_START
-
 
 //- String-IDs
 #define RID_BASELISTBOX_ERROR_FILLLIST          ( RID_FRM_STRINGS_START +  0 )

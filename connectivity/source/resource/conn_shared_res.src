@@ -27,9 +27,7 @@
 #include "resource/kab_res.hrc"
 #include "resource/hsqldb_res.hrc"
 
-
 // = the mozab driver's resource strings
-
 
 String STR_MOZILLA_ADDRESSBOOKS
 {
@@ -195,7 +193,6 @@ String STR_COULD_NOT_CONNECT_LDAP
     Text [ en-US ] = "The connection to the LDAP server could not be established.";
 };
 
-
 // = common strings
 
 String STR_NO_CONNECTION_GIVEN
@@ -320,7 +317,6 @@ String STR_LOAD_FILE_ERROR_MESSAGE
 {
     Text [ en-US ] = "The attempt to load the file resulted in the following error message ($exception_type$):\n\n$error_message$";
 };
-
 
 // = the ado driver's resource strings
 
@@ -523,7 +519,6 @@ String STR_NO_VALID_FILE_URL
 {
     Text [ en-US ] = "The URL '$URL$' is not valid. A connection can not be created.";
 };
-
 
 String STR_NO_CLASSNAME
 {

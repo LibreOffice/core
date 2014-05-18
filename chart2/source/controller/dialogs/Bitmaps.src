@@ -275,7 +275,6 @@ Bitmap BMP_POINTS_STACKED
     File = "stackdirectpoints_52x60.png" ;
 };
 
-
 Bitmap BMP_LINE_P_XVALUES
 {
     File = "valueaxisdirectboth_52x60.png" ;
@@ -288,7 +287,6 @@ Bitmap BMP_LINE3D_XVALUES
 {
     File = "valueaxisdirect3d_52x60.png" ;
 };
-
 
 Bitmap BMP_LINE_P_XCATEGORY
 {
@@ -303,7 +301,6 @@ Bitmap BMP_LINE3D_XCATEGORY
     File = "nostackdirect3d_52x60.png" ;
 };
 
-
 Bitmap BMP_LINE_P_STACKED
 {
     File = "stackdirectboth_52x60.png" ;
@@ -316,7 +313,6 @@ Bitmap BMP_LINE3D_STACKED
 {
     File = "stackdirect3d_52x60.png" ;
 };
-
 
 Bitmap BMP_LINE_P_XVALUES_SMOOTH
 {
@@ -509,8 +505,6 @@ Bitmap BMP_STOCK_4
     File = "stockcolumnsattach_52x60.png" ;
 };
 
-
-
 //error indicator
 Image BMP_INDICATE_BOTH_VERTI
 {
@@ -554,7 +548,6 @@ Image BMP_INDICATE_LEFT
         File = "errorleft_30.png" ;
     };
 };
-
 
 //regression curves
 Image BMP_REGRESSION_NONE

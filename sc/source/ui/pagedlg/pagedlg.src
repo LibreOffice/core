@@ -29,5 +29,4 @@ Image IMG_TOPDOWN
         MaskColor = STD_MASKCOLOR;
     };
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

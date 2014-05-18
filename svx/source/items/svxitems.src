@@ -87,7 +87,6 @@ StringArray RID_ATTR_NAMES
     };
 };
 
-
 String RID_SVXITEMS_EXTRAS_CHARCOLOR
 {
     Text [ en-US ] = "Font color" ;

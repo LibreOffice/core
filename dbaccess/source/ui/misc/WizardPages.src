@@ -182,7 +182,6 @@ Menu RID_SBA_RTF_PKEYPOPUP
     };
 };
 
-
 TabPage TAB_WIZ_NAME_MATCHING
 {
     HelpID = "dbaccess:TabPage:TAB_WIZ_NAME_MATCHING";

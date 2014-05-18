@@ -22,7 +22,6 @@
 #include "helpid.h"
 #include "comcore.hrc"
 
-
 Resource RID_SHELLRES_AUTOFMTSTRS
 {
     String STR_AUTOFMTREDL_DEL_EMPTY_PARA+1

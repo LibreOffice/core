@@ -64,7 +64,6 @@
 #define ED_NEWWORD                  21
 #define FT_SUGGESTION               22
 
-
 // Hangul / Hanja Options Dialog
 
 #define BTN_OPTIONS                 10

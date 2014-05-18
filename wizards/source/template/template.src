@@ -302,7 +302,6 @@ String CorrespondenceDialog+3
     Text [ en-US ] = "Use of This Template";
 };
 
-
 String CorrespondenceFields
 {
     Text [ en-US ] = "Click placeholder and overwrite";
@@ -338,7 +337,6 @@ String CorrespondenceFields+6
     Text [ en-US ] = "Country";
 };
 
-
 String CorrespondenceFields+7
 {
     Text [ en-US ] = "ZIP/Postal Code";
@@ -354,120 +352,100 @@ String CorrespondenceFields+9
     Text [ en-US ] = "Title";
 };
 
-
 String CorrespondenceFields+10
 {
     Text [ en-US ] = "Position";
 };
-
 
 String CorrespondenceFields+11
 {
     Text [ en-US ] = "Form of Address";
 };
 
-
 String CorrespondenceFields+12
 {
     Text [ en-US ] = "Initials";
 };
-
 
 String CorrespondenceFields+13
 {
     Text [ en-US ] = "Salutation";
 };
 
-
 String CorrespondenceFields+14
 {
     Text [ en-US ] = "Home Phone";
 };
-
 
 String CorrespondenceFields+15
 {
     Text [ en-US ] = "Work Phone";
 };
 
-
 String CorrespondenceFields+16
 {
     Text [ en-US ] = "Fax";
 };
-
 
 String CorrespondenceFields+17
 {
     Text [ en-US ] = "E-Mail";
 };
 
-
 String CorrespondenceFields+18
 {
     Text [ en-US ] = "URL";
 };
-
 
 String CorrespondenceFields+19
 {
     Text [ en-US ] = "Notes";
 };
 
-
 String CorrespondenceFields+20
 {
     Text [ en-US ] = "Alt. Field 1";
 };
-
 
 String CorrespondenceFields+21
 {
     Text [ en-US ] = "Alt. Field 2";
 };
 
-
 String CorrespondenceFields+22
 {
     Text [ en-US ] = "Alt. Field 3";
 };
-
 
 String CorrespondenceFields+23
 {
     Text [ en-US ] = "Alt. Field 4";
 };
 
-
 String CorrespondenceFields+24
 {
     Text [ en-US ] = "ID";
 };
-
 
 String CorrespondenceFields+25
 {
     Text [ en-US ] = "State";
 };
 
-
 String CorrespondenceFields+26
 {
     Text [ en-US ] = "Office Phone";
 };
-
 
 String CorrespondenceFields+27
 {
     Text [ en-US ] = "Pager";
 };
 
-
 String CorrespondenceFields+28
 {
     Text [ en-US ] = "Mobile Phone";
 };
-
 
 String CorrespondenceFields+29
 {
@@ -484,7 +462,6 @@ String CorrespondenceFields+31
     Text [ en-US ] = "Invite";
 };
 
-
 String TextField
 {
     Text [ en-US ] = "User data field is not defined!";
@@ -495,7 +472,6 @@ String Newsletter
 {
     Text [ en-US ] = "General layout";
 };
-
 
 String Newsletter + 1
 {

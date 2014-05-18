@@ -19,7 +19,6 @@
 
 #include "frm_resource.hrc"
 
-
 String RID_STR_XFORMS_NO_BINDING_EXPRESSION
 {
     Text [ en-US ] = "Please enter a binding expression.";

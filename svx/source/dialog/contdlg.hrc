@@ -18,13 +18,10 @@
  */
 #include <svx/dialogs.hrc>
 
-
 // ImapDlg dialog
 #define RID_SVX_CONTOURDLG_START    RID_SVX_CONTOUR_START
 
-
 /******************************************************************************/
-
 
 #define RID_SVXDLG_CONTOUR      (RID_SVX_CONTOURDLG_START)
 
@@ -58,8 +55,6 @@
 
 #define CD_IMAPDLG              1300
 
-
 /******************************************************************************/
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

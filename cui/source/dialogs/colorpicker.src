@@ -64,8 +64,6 @@
 #define CMYK_Y3 (CMYK_Y2 + METRIC_HEIGHT + 2)
 #define CMYK_Y4 (CMYK_Y3 + METRIC_HEIGHT + 2)
 
-
-
 ModalDialog RID_CUI_DIALOG_COLORPICKER
 {
     HelpID = "cui:ModalDialog:ColorPicker";
@@ -270,9 +268,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         TabStop = TRUE ;
     };
 
-
 // HSB
-
 
     FixedLine FL_HSB
     {
@@ -345,9 +341,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Unit = FUNIT_PERCENT ;
     };
 
-
 // CMYK
-
 
     FixedLine FL_CMYK
     {
@@ -440,9 +434,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Unit = FUNIT_PERCENT ;
     };
 
-
     // bottom buttons
-
 
     FixedLine FT_BOTTOMLINE
     {

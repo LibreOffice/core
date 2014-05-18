@@ -105,7 +105,6 @@
 
 #define SID_QUERY_PROP_DLG              ( SID_DBACCESS_START +  69 )
 
-
 #endif // _DBACCESS_SLOTID_HRC_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

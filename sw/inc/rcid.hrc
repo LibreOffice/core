@@ -25,7 +25,6 @@
 
 // Areas for the UI-Directories
 
-
 #define RC_BASE                     RID_SW_START    // From solar.hrc
 
 #define RC_APP                      RC_BASE
@@ -121,7 +120,6 @@
 #define RC_INDEX_BEGIN              RC_INDEX
 //      RC_INDEX_END                (RC_INDEX + 99)
 
-
 #define RC_RIBBAR_BEGIN             RC_RIBBAR
 #define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 79)
 
@@ -165,7 +163,6 @@
 #define RC_CONFIG_BEGIN             RC_CONFIG
 #define RC_CONFIG_END               (RC_CONFIG + 99)
 
-
 // Miscellaneous
 #define RC_MISC_BEGIN               RC_MISC
 #define RC_MISC_END                 (RC_MISC + 99)
@@ -183,7 +180,6 @@
 //      RC_POOLCHRFMT_END           (RC_POOLCHRFMT + 29)
 #define RC_POOLCHRFMT_HTML_BEGIN    RC_POOLHTMLCHRFMT
 //      RC_POOLCHRFMT_HTML_END      (RC_POOLHTMLCHRFMT+ 30)
-
 
 // Frame-Templates
 #define RC_POOLFRMFMT_BEGIN         RC_POOLFRMFMT
@@ -203,7 +199,6 @@
 //      RC_POOLCOLL_DOC_END         (RC_POOLTXTCOLL + 139)
 #define RC_POOLCOLL_HTML_BEGIN      (RC_POOLTXTCOLL + 140)
 //      RC_POOLCOLL_HTML_END        (RC_POOLTXTCOLL + 169)
-
 
 // Pooltemplates Page
 #define RC_POOLPAGEDESC_BEGIN       RC_POOLPAGEDESC

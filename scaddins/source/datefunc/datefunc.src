@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "datefunc.hrc"
-
 
 Resource RID_DATE_FUNCTION_DESCRIPTIONS
 {
@@ -200,7 +198,6 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     };
 };
 
-
 Resource RID_DATE_FUNCTION_NAMES
 {
     String DATE_FUNCNAME_DiffWeeks
@@ -236,7 +233,6 @@ Resource RID_DATE_FUNCTION_NAMES
         Text [ en-US ] = "ROT13";
     };
 };
-
 
 Resource RID_DATE_DEFFUNCTION_NAMES
 {

@@ -34,12 +34,10 @@
 #define STR_REPLY                       (RC_ANNOTATION_BEGIN +  7)
 #define STR_FORMAT_ALL_NOTES            (RC_ANNOTATION_BEGIN +  8)
 
-
 #define ANNOTATION_ACT_END   STR_REPLY
 #if ANNOTATION_ACT_END > RC_ANNOTATION_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
-
 
 #endif
 

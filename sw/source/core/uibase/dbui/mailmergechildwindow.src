@@ -27,7 +27,6 @@
 #define WORKAROUND \
     Text [ en-US ] = "Return to Mail Merge Wizard" ; \
 
-
 FloatingWindow DLG_MAILMERGECHILD\
 {
     OutputSize = TRUE ;

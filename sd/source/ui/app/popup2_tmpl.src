@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 #include "menuids3.src"
 
 #ifndef SD_POPUP
 #define SD_POPUP RID_DRAW_TEXTOBJ_POPUP
 #include "menuids.src"
 #endif
-
-
-
 
 // TEXTOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -68,7 +63,6 @@
         MN_STYLEDT
     };
 };
-
 
 // OUTLINETEXTOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -111,7 +105,6 @@
     };
 };
 
-
 // GEOMOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_GEOMOBJ_POPUP
@@ -153,7 +146,6 @@
         MN_STYLEDT
     };
 };
-
 
 // Customshape POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -199,7 +191,6 @@
     };
 };
 
-
 // 3DOSCENE_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_3DSCENE_POPUP
@@ -236,7 +227,6 @@
 //      MN_STYLEDT
     };
 };
-
 
 // 3DOSCENE2_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -276,7 +266,6 @@
     };
 };
 
-
 // 3DOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_3DOBJ_POPUP
@@ -313,7 +302,6 @@
         MN_STYLEDT
     };
 };
-
 
 // GROUPOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -354,7 +342,6 @@
     };
 };
 
-
 // LINEOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_LINEOBJ_POPUP
@@ -394,7 +381,6 @@
         MN_STYLEDT
     };
 };
-
 
 // EDGEOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -438,7 +424,6 @@
     };
 };
 
-
 // MEASUREOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_MEASUREOBJ_POPUP
@@ -480,8 +465,6 @@
         MN_STYLEDT
     };
 };
-
-
 
 // POLYLINEOBJ_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -525,7 +508,6 @@
     };
 };
 
-
 // NOSEL_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_NOSEL_POPUP
@@ -554,7 +536,6 @@
         MN_LEAVE_GROUP
     };
 };
-
 
 // MULTISELECTION_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -594,7 +575,6 @@
 #endif
     };
 };
-
 
 // GRAPHIC_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
@@ -708,7 +688,6 @@
     };
 };
 
-
 // Media_POPUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
     Menu RID_DRAW_MEDIA_POPUP
@@ -738,7 +717,6 @@
 #endif
     };
 };
-
 
 // Table shape context menu
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP

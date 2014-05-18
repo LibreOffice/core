@@ -27,13 +27,11 @@
 #define RID_DB_REPORT_WIZARD_START		2400
 #define RID_DB_TABLE_WIZARD_START    2600
 
-
 #define RID_LETTERWIZARDDIALOG_START		3000
 #define RID_LETTERWIZARDGREETING_START	3080
 #define RID_LETTERWIZARDSALUTATION_START	3090
 #define RID_LETTERWIZARDROADMAP_START	3100
 #define RID_LETTERWIZARDLANGUAGE_START	3110
-
 
 #define RID_FAXWIZARDDIALOG_START			3200
 #define RID_FAXWIZARDCOMMUNICATION_START	3270
@@ -49,10 +47,6 @@
 // agenda wizard
 
 #define RID_AGENDAWIZARDDIALOG_START              5000
-
-
-
-
 
 String RID_COMMON_START + 0
 {
@@ -164,9 +158,7 @@ String RID_COMMON_START + 21
     Text [ en-US] = "The wizard could not be run, because important files were not found.\nUnder 'Tools - Options - %PRODUCTNAME - Paths' click the 'Default' button to reset the paths to the original default settings.\nThen run the wizard again.";
 };
 
-
 // end of common section
-
 
 String RID_DB_COMMON_START + 0
 {
@@ -200,7 +192,6 @@ String RID_DB_COMMON_START + 6
     Text [ en-US] = "An error occurred while running the wizard. The wizard will be terminated.";
 };
 
-
 String RID_DB_COMMON_START + 14
 {
     Text [ en-US ] = "No connection to the database could be established.";
@@ -216,12 +207,10 @@ String RID_DB_COMMON_START + 21
     Text [ en-US ] = "~Stop";
 };
 
-
 String RID_DB_COMMON_START + 30
 {
     Text[ en-US ] = "The document could not be saved.";
 };
-
 
 String RID_DB_COMMON_START + 33
 {
@@ -238,12 +227,10 @@ String RID_DB_COMMON_START + 35
     Text[ en-US ] = "The connection to the data source could not be established.";
 };
 
-
 String RID_DB_COMMON_START + 36
 {
     Text[ en-US ] = "The file path entered is not valid.";
 };
-
 
 String RID_DB_COMMON_START + 37
 {
@@ -290,11 +277,7 @@ String RID_DB_COMMON_START + 45
      Text [ en-US] = "The field names from '%NAME' could not be retrieved.";
 };
 
-
-
-
 // Form Wizard
-
 
 String RID_DB_FORM_WIZARD_START + 0
 {
@@ -356,7 +339,6 @@ String RID_DB_FORM_WIZARD_START + 13
     Text [ en-US ] = "Fields in form";
 };
 
-
 String RID_DB_FORM_WIZARD_START + 19
 {
     Text [ en-US ] = "The join '<FIELDNAME1>' and '<FIELDNAME2>' has been selected twice.\nBut joins may only be used once.";
@@ -402,8 +384,6 @@ String RID_DB_FORM_WIZARD_START + 27
     Text [ en-US ] = "F~ourth joined main form field";
 };
 
-
-
 String RID_DB_FORM_WIZARD_START + 28
 {
     Text [ en-US ] = "Field border";
@@ -413,7 +393,6 @@ String RID_DB_FORM_WIZARD_START + 29
 {
     Text [ en-US ] = "No border";
 };
-
 
 String RID_DB_FORM_WIZARD_START + 30
 {
@@ -470,7 +449,6 @@ String RID_DB_FORM_WIZARD_START + 40
     Text [ en-US ] = "As Data Sheet";
 };
 
-
 String RID_DB_FORM_WIZARD_START + 41
 {
     Text [ en-US ] = "Arrangement of the main form";
@@ -480,7 +458,6 @@ String RID_DB_FORM_WIZARD_START + 42
 {
     Text [ en-US ] = "Arrangement of the subform";
 };
-
 
 String RID_DB_FORM_WIZARD_START + 44
 {
@@ -512,20 +489,15 @@ String RID_DB_FORM_WIZARD_START + 49
     Text [ en-US ] = "Do not allow ~addition of new data";
 };
 
-
-
 String RID_DB_FORM_WIZARD_START + 50
 {
     Text [ en-US ] = "Name of ~the form";
 };
 
-
-
 String RID_DB_FORM_WIZARD_START + 51
 {
     Text [ en-US ] = "How do you want to proceed after creating the form?";
 };
-
 
 String RID_DB_FORM_WIZARD_START + 52
 {
@@ -537,25 +509,20 @@ String RID_DB_FORM_WIZARD_START + 53
     Text [ en-US ] = "~Modify the form";
 };
 
-
 String RID_DB_FORM_WIZARD_START + 55
 {
     Text [ en-US ] = "~Page Styles";
 };
-
-
 
 String RID_DB_FORM_WIZARD_START + 80
 {
     Text [ en-US ] = "Field selection";
 };
 
-
 String RID_DB_FORM_WIZARD_START + 81
 {
     Text [ en-US ] = "Set up a subform";
 };
-
 
 String RID_DB_FORM_WIZARD_START + 82
 {
@@ -597,12 +564,10 @@ String RID_DB_FORM_WIZARD_START + 89
     Text [ en-US ] = "(Time)";
 };
 
-
 String RID_DB_FORM_WIZARD_START + 90
 {
     Text [ en-US ] = "Select the fields of your form";
 };
-
 
 String RID_DB_FORM_WIZARD_START + 91
 {
@@ -644,9 +609,6 @@ String RID_DB_FORM_WIZARD_START + 98
     Text [ en-US ] = "A form with the name '%FORMNAME' already exists.\nChoose another name.";
 };
 
-
-
-
 String RID_DB_QUERY_WIZARD_START + 0
 {
     Text [ en-US ] = "Query Wizard";
@@ -657,12 +619,10 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text [ en-US] = "Query";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 2
 {
     Text [ en-US] = "Query Wizard";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 3
 {
@@ -673,7 +633,6 @@ String RID_DB_QUERY_WIZARD_START + 4
 {
     Text [ en-US] = "A~vailable fields";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 5
 {
@@ -695,7 +654,6 @@ String RID_DB_QUERY_WIZARD_START + 8
     Text [ en-US] = "~How do you want to proceed after creating the query?";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 9
 {
     Text [ en-US] = "Match ~all of the following";
@@ -716,12 +674,10 @@ String RID_DB_QUERY_WIZARD_START + 12
     Text [ en-US] = "~Summary query (Shows only results of aggregate functions.)";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 16
 {
     Text [ en-US] = "Aggregate functions";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 17
 {
@@ -732,7 +688,6 @@ String RID_DB_QUERY_WIZARD_START + 18
 {
     Text [ en-US] = "~Group by";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 19
 {
@@ -749,12 +704,10 @@ String RID_DB_QUERY_WIZARD_START + 21
     Text [ en-US] = "Table: ";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 22
 {
     Text [ en-US] = "Query: ";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 24
 {
@@ -765,7 +718,6 @@ String RID_DB_QUERY_WIZARD_START + 25
 {
     Text [ en-US] = "Value";
 };
-
 
 // don't change anything to the next 10 values
 // they are list elements and need to be as follows
@@ -778,7 +730,6 @@ String RID_DB_QUERY_WIZARD_START + 27
 {
     Text [ en-US] = "is not equal to";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 28
 {
@@ -820,7 +771,6 @@ String RID_DB_QUERY_WIZARD_START + 35
     Text [ en-US] = "is not null";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 36
 {
     Text [ en-US] = "true";
@@ -841,7 +791,6 @@ String RID_DB_QUERY_WIZARD_START + 39
     Text [ en-US] = "or";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 40
 {
     Text [ en-US] = "get the sum of";
@@ -852,7 +801,6 @@ String RID_DB_QUERY_WIZARD_START + 41
     Text [ en-US] = "get the average of";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 42
 {
     Text [ en-US] = "get the minimum of";
@@ -862,7 +810,6 @@ String RID_DB_QUERY_WIZARD_START + 43
 {
     Text [ en-US] = "get the maximum of";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 44
 {
@@ -884,7 +831,6 @@ String RID_DB_QUERY_WIZARD_START + 47
     Text [ en-US] = "get the maximum of <FIELD>";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 48
 {
     Text [ en-US] = "(none)";
@@ -895,18 +841,15 @@ String RID_DB_QUERY_WIZARD_START + 50
     Text [ en-US] = "Fie~lds in the Query: ";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 51
 {
     Text [ en-US] = "Sorting order: ";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 52
 {
     Text [ en-US] = "No sorting fields were assigned.";
    };
-
 
 String RID_DB_QUERY_WIZARD_START + 53
 {
@@ -918,18 +861,15 @@ String RID_DB_QUERY_WIZARD_START + 54
     Text [ en-US] = "No conditions were assigned.";
   };
 
-
 String RID_DB_QUERY_WIZARD_START + 55
 {
     Text [ en-US] = "Aggregate functions: ";
  };
 
-
 String RID_DB_QUERY_WIZARD_START + 56
 {
     Text [ en-US] = "No aggregate functions were assigned.";
  };
-
 
 String RID_DB_QUERY_WIZARD_START + 57
 {
@@ -941,18 +881,15 @@ String RID_DB_QUERY_WIZARD_START + 58
     Text [ en-US] = "No Groups were assigned.";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 59
 {
     Text [ en-US ] = "Grouping conditions: ";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 60
 {
     Text [ en-US] = "No grouping conditions were assigned.";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 70
 {
@@ -964,12 +901,10 @@ String RID_DB_QUERY_WIZARD_START + 71
     Text [ en-US] = "Select the sorting order";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 72
 {
     Text [ en-US] = "Select the search conditions";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 73
 {
@@ -986,24 +921,20 @@ String RID_DB_QUERY_WIZARD_START + 75
     Text [ en-US] = "Select the grouping conditions";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 76
 {
     Text [ en-US] = "Assign aliases if desired";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 77
 {
     Text [ en-US] = "Check the overview and decide how to proceed";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 80
 {
     Text [ en-US] = "Field selection";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 81
 {
@@ -1040,12 +971,10 @@ String RID_DB_QUERY_WIZARD_START + 87
     Text [ en-US] = "Overview";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 88
 {
     Text [ en-US] = "A field that has not been assigned an aggregate function must be used in a group.";
 };
-
 
 String RID_DB_QUERY_WIZARD_START + 89
 {
@@ -1067,7 +996,6 @@ String RID_DB_QUERY_WIZARD_START + 92
     Text [ en-US] = "<FIELDTITLE> (<FIELDNAME>)";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 93
 {
     Text [ en-US] = "<FIELDNAME> (<SORTMODE>)";
@@ -1083,7 +1011,6 @@ String RID_DB_QUERY_WIZARD_START + 95
     Text [ en-US] = "<CALCULATEDFUNCTION> <FIELDNAME>";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 96
 {
     Text [ en-US] = "<FIELDNAME> <LOGICOPERATOR> <VALUE>";
@@ -1094,7 +1021,6 @@ String RID_DB_REPORT_WIZARD_START + 0
     Text [ en-US ] = "Report Wizard";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 3
 {
     Text [ en-US ] = "~Table";
@@ -1104,7 +1030,6 @@ String RID_DB_REPORT_WIZARD_START + 4
 {
     Text [ en-US ] = "Colu~mns";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 7
 {
@@ -1121,8 +1046,6 @@ String RID_DB_REPORT_WIZARD_START + 9
     Text [ en-US ] = "~Fields in report";
 };
 
-
-
 String RID_DB_REPORT_WIZARD_START + 11
 {
     Text [ en-US ] = "Grouping";
@@ -1138,12 +1061,10 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text [ en-US ] = "Choose layout";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 14
 {
     Text [ en-US ] = "Create report";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 15
 {
@@ -1155,7 +1076,6 @@ String RID_DB_REPORT_WIZARD_START + 16
     Text [ en-US ] = "Layout of headers and footers";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 19
 {
     Text [ en-US ] = "Fields";
@@ -1166,12 +1086,10 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text [ en-US ] = "~Sort by";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 21
 {
     Text [ en-US ] = "T~hen by";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 22
 {
@@ -1188,43 +1106,35 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text [ en-US ] = "Landscape";
 };
 
-
-
 String RID_DB_REPORT_WIZARD_START + 28
 {
     Text [ en-US ] = "Which fields do you want to have in your report?";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 29
 {
     Text [ en-US ] = "Do you want to add grouping levels?";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 30
 {
     Text [ en-US ] = "According to which fields do you want to sort the data?";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 31
 {
     Text [ en-US ] = "How do you want your report to look?";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 32
 {
     Text [ en-US ] = "Decide how you want to proceed";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 33
 {
     Text [ en-US ] = "Title of report";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 34
 {
@@ -1246,12 +1156,10 @@ String RID_DB_REPORT_WIZARD_START + 37
     Text [ en-US ] = "Descending";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 40
 {
     Text [ en-US ] = "~Dynamic report";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 41
 {
@@ -1268,13 +1176,10 @@ String RID_DB_REPORT_WIZARD_START + 43
     Text [ en-US ] = "Static report";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 44
 {
     Text [ en-US ] = "Save as";
 };
-
-
 
 String RID_DB_REPORT_WIZARD_START + 50
 {
@@ -1321,12 +1226,10 @@ String RID_DB_REPORT_WIZARD_START + 58
     Text [ en-US ] = "De~scending";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 60
 {
     Text [ en-US ] = "Binary fields cannot be displayed in the report.";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 61
 {
@@ -1363,12 +1266,10 @@ String RID_DB_REPORT_WIZARD_START + 67
     Text [ en-US ] = "Importing data...";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 68
 {
     Text [ en-US ] = "Labeling fields";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 69
 {
@@ -1380,42 +1281,35 @@ String RID_DB_REPORT_WIZARD_START + 70
     Text [ en-US ] = "Label";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 71
 {
     Text [ en-US ] = "Field";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 72
 {
     Text [ en-US ] = "An error occurred in the wizard.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 73
 {
     Text [ en-US ] = "There is an invalid user field in a table.";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 74
 {
     Text [ en-US ] = "The sort criterion '<FIELDNAME>' was chosen twice. Each criterion can only be chosen once.";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 75
 {
     Text [ en-US ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
 };
 
-
 String RID_DB_REPORT_WIZARD_START + 76
 {
     Text [ en-US ] = "A report '%REPORTNAME' already exists in the database. Please assign another name.";
 };
-
 
 String RID_DB_REPORT_WIZARD_START + 78
 {
@@ -1601,8 +1495,6 @@ String RID_DB_REPORT_WIZARD_START + 122
     Text [ en-US ] = "Worldmap";
 };
 
-
-
 String RID_DB_TABLE_WIZARD_START + 1
 {
     Text [ en-US] = "Table Wizard";
@@ -1628,7 +1520,6 @@ String RID_DB_TABLE_WIZARD_START + 5
     Text [ en-US] = "Create table";
 };
 
-
 String RID_DB_TABLE_WIZARD_START + 8
 {
     Text [ en-US] = "Select fields for your table";
@@ -1649,7 +1540,6 @@ String RID_DB_TABLE_WIZARD_START + 11
     Text [ en-US] = "Create table";
 };
 
-
 String RID_DB_TABLE_WIZARD_START + 14
 {
     Text [ en-US] = "This wizard helps you to create a table for your database. After selecting a table category and a sample table, choose the fields you want to include in your table. You can include fields from more than one sample table.";
@@ -1659,7 +1549,6 @@ String RID_DB_TABLE_WIZARD_START + 15
 {
     Text [ en-US] = "Ca~tegory";
 };
-
 
 String RID_DB_TABLE_WIZARD_START + 16
 {
@@ -1676,12 +1565,10 @@ String RID_DB_TABLE_WIZARD_START + 18
     Text [ en-US] = "~Sample tables";
 };
 
-
 String RID_DB_TABLE_WIZARD_START + 19
 {
     Text [ en-US] = "A~vailable fields";
 };
-
 
 String RID_DB_TABLE_WIZARD_START + 20
 {
@@ -1708,12 +1595,10 @@ String RID_DB_TABLE_WIZARD_START + 24
     Text [ en-US] = "Field type";
 };
 
-
 String RID_DB_TABLE_WIZARD_START + 25
 {
     Text [ en-US] = "~Selected fields";
 };
-
 
 String RID_DB_TABLE_WIZARD_START + 26
 {
@@ -1724,7 +1609,6 @@ String RID_DB_TABLE_WIZARD_START + 27
 {
     Text [ en-US] = "~Create a primary key";
 };
-
 
 String RID_DB_TABLE_WIZARD_START + 28
 {
@@ -1746,18 +1630,15 @@ String RID_DB_TABLE_WIZARD_START + 31
     Text [ en-US] = "F~ieldname";
 };
 
-
 String RID_DB_TABLE_WIZARD_START + 32
 {
     Text [ en-US] = "~Primary key fields";
 };
 
-
 String RID_DB_TABLE_WIZARD_START + 33
 {
     Text [ en-US] = "Auto ~value";
 };
-
 
 String RID_DB_TABLE_WIZARD_START + 34
 {
@@ -1768,7 +1649,6 @@ String RID_DB_TABLE_WIZARD_START + 35
 {
     Text [ en-US] = "Congratulations. You have entered all the information needed to create your table.";
 };
-
 
 String RID_DB_TABLE_WIZARD_START + 36
 {
@@ -1800,12 +1680,10 @@ String RID_DB_TABLE_WIZARD_START + 41
   Text [ en-US] = "The table name '%TABLENAME' contains a character ('%SPECIALCHAR') that might not be supported by the database.";
 };
 
-
 String RID_DB_TABLE_WIZARD_START + 42
 {
   Text [ en-US] = "The field name '%FIELDNAME' contains a special character ('%SPECIALCHAR') that might not be supported by the database.";
 };
-
 
 String RID_DB_TABLE_WIZARD_START + 43
 {
@@ -2211,7 +2089,6 @@ String RID_LETTERWIZARDGREETING_START + 3
     Text [ en-US] = "Cheers";
 };
 
-
 // Letter Wizard Roadmap Start
 String RID_LETTERWIZARDROADMAP_START + 1
 {
@@ -2557,7 +2434,6 @@ String RID_FAXWIZARDSALUTATION_START + 4
     Text [ en-US] = "Hi,";
 };
 
-
 // Fax Wizard Greeting Start
 String RID_FAXWIZARDGREETING_START + 1
 {
@@ -2578,7 +2454,6 @@ String RID_FAXWIZARDGREETING_START + 4
 {
     Text [ en-US] = "Love";
 };
-
 
 // Fax Wizard Roadmap Start
 String RID_FAXWIZARDROADMAP_START + 1
@@ -2691,7 +2566,6 @@ String RID_WEBWIZARDDIALOG_START +22
 {
     Text [ en-US  ] = "Modified:";
 };
-
 
 String RID_WEBWIZARDDIALOG_START +24
 {
@@ -2887,7 +2761,6 @@ String RID_WEBWIZARDDIALOG_START +73
 {
     Text [ en-US  ] = "FTP target '%FILENAME' is a file.";
 };
-
 
 String RID_WEBWIZARDDIALOG_START +74
 {
@@ -3248,7 +3121,6 @@ String RID_WEBWIZARDDIALOG_START +151
 {
     Text [ en-US  ] = "Size: %NUMBERKB";
 };
-
 
 String RID_WEBWIZARDDIALOG_START +152
 {

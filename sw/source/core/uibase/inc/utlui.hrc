@@ -22,11 +22,8 @@
 
 #include "rcid.hrc"
 
-
 #define RID_SW_SHELLRES             (RC_UTLUI_BEGIN + 1)
 #define RID_STR_SYSTEM              (RC_UTLUI_BEGIN + 2)
-
-
 
 // Strings in NumberFormatter-Listbox
 #define STR_DEFINE_NUMBERFORMAT                 (RC_UTLUI_BEGIN + 4)
@@ -138,7 +135,6 @@
 #define STR_AUTH_FIELD_ISBN             (STR_AUTH_FIELD_START + 30)
 #define STR_AUTH_FIELD_END              (STR_AUTH_FIELD_ISBN)
 
-
 #define RES_FRMEX_MENU                  (STR_AUTH_FIELD_END + 1)
 
 #define DLG_NAVIGATION_PI           (RC_UTLUI_BEGIN + 1)
@@ -153,7 +149,6 @@
 #define IMG_VIEWLAYOUT_SINGLECOLUMN              (RC_UTLUI_BEGIN +  16)
 #define IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE       (RC_UTLUI_BEGIN +  17)
 #define IMG_PAGE_BREAK                          (RC_UTLUI_BEGIN +  18)
-
 
 //local ids of the Database ImageLists
 #define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/

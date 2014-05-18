@@ -99,7 +99,6 @@ String STR_NAME_ALREADY_EXISTS
     Text [ en-US ] = "The name \"#\" already exists.";
 };
 
-
 String STR_NO_COLUMNNAME_MATCHING
 {
     Text [ en-US ] = "No matching column names were found.";

@@ -41,7 +41,6 @@ String RID_STR_CLASS_FORMATTEDFIELD
     Text = "FormattedField" ;
 };
 
-
 // Property Browser Headline ----------------------------------------------------------------
 
 String RID_STR_BRWTITLE_PROPERTIES
@@ -93,7 +92,6 @@ String RID_STR_PROPTITLE_GROUP
 {
     Text [ en-US ] = "Group";
 };
-
 
 Image RID_IMG_TREENODE_COLLAPSED
 {

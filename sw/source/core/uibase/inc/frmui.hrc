@@ -64,7 +64,6 @@
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-
 #endif // FRMUI_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

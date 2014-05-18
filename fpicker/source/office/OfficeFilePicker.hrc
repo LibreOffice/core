@@ -20,6 +20,5 @@
 #define RID_FILEOPEN_NOTEXISTENTFILE                (RID_FPICKER_START+24)
 #define STR_SVT_NOREMOVABLEDEVICE                   (RID_FPICKER_START+25)
 
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

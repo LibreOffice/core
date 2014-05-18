@@ -252,7 +252,6 @@
 #define RID_DRAW_OUTLINETEXTOBJ_POPUP       RID_APP_START+95
 #define RID_GRAPHIC_OUTLINETEXTOBJ_POPUP    RID_APP_START+96
 
-
 /*
  * Do not change ResourceIDs for toolboxes without also changing the strings in
  * strings.hrc to the same IDs. A toolbox and its configuration string have to

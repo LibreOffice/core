@@ -198,7 +198,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
     };
 };
 
-
 DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
 {
     HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_LIGHTING";

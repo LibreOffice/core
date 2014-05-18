@@ -63,8 +63,6 @@
 
 #define RID_QRYBOX_LANGUAGE                 ( RID_DLG_START +  70 )
 
-
-
 #endif // BASCTL_DLGRESID_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

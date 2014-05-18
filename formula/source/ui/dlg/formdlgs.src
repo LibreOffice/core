@@ -21,7 +21,6 @@
 #include "ForResId.hrc"
 #include "helpids.hrc"
 
-
 #define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
 
 TabPage RID_FORMULATAB_FUNCTION
@@ -446,7 +445,6 @@ ModelessDialog RID_FORMULADLG_FORMULA
         Text [ en-US ] = "~End" ;
     };
 };
-
 
 Image RID_BMP_REFBTN1
 {

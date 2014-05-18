@@ -25,7 +25,6 @@
 
 // = the file driver's resource strings
 
-
 #define STR_QUERY_COMPLEX_COUNT         ( STR_FILE_BASE +    0 )
 #define STR_QUERY_INVALID_BETWEEN       ( STR_FILE_BASE +    1 )
 #define STR_TABLE_READONLY              ( STR_FILE_BASE +    2 )

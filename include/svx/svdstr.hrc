@@ -323,11 +323,9 @@
 #define STR_UndoObjDescription       (STR_UndoBegin +18)
 #define STR_UndoEnd                  (STR_UndoObjDescription)
 
-
 #define STR_LayerBegin               (STR_UndoEnd+1)
 #define STR_StandardLayerName        (STR_LayerBegin +0)
 #define STR_LayerEnd                 (STR_StandardLayerName)
-
 
 #define STR_ItemBegin                    (STR_LayerEnd+1)
 #define STR_ItemValBegin                 (STR_ItemBegin)

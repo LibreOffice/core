@@ -88,8 +88,6 @@
 #define sSumMSTableTemplates      3211
 #define sSumMSDrawTemplates       3212
 
-
-
 String sHelpButton
 {
     Text [ en-US ] = "~Help";
@@ -130,8 +128,6 @@ String sWelcometextLabel3
     Text [ en-US ] = "Select the document type for conversion:";
 };
 
-
-
 String sMSTemplateCheckbox_1_
 {
     Text [ en-US ] = "Word templates";
@@ -162,20 +158,15 @@ String sMSDocumentCheckbox_3_
     Text [ en-US ] = "PowerPoint/Publisher documents";
 };
 
-
 String sSearchInSubDir
 {
     Text [ en-US ] = "Including subdirectories";
 };
 
-
-
 String sMSContainerName
 {
     Text [ en-US ] = "Microsoft Office";
 };
-
-
 
 String sSummaryHeader
 {
@@ -187,18 +178,15 @@ String sTextImportLabel
     Text [ en-US ] = "Import from:";
 };
 
-
 String sTextExportLabel
 {
     Text [ en-US ] = "Save to:";
 };
 
-
 String sGroupnameDefault
 {
     Text [ en-US ] = "Imported_Templates";
 };
-
 
 String sProgressDesc1
 {
@@ -215,30 +203,25 @@ String sProgressMoreDocs
     Text [ en-US ] = "Documents";
 };
 
-
 String sProgressMoreTemplates
 {
     Text [ en-US ] = "Templates";
 };
-
 
 String sNoDirCreation
 {
     Text [ en-US ] = "The '%1' directory cannot be created: ";
 };
 
-
 String sMsgDirNotThere
 {
     Text [ en-US ] = "The '%1' directory does not exist.";
 };
 
-
 String sQueryfornewCreation
 {
     Text [ en-US ] = "Do you want to create it now?";
 };
-
 
 String sFileExists
 {
@@ -250,12 +233,10 @@ String sMorePathsError3
     Text [ en-US ] = "Directories do not exist";
 };
 
-
 String sOverwriteallFiles
 {
     Text [ en-US ] = "Do you want to overwrite documents without being asked?";
 };
-
 
 String sreeditMacro
 {
@@ -267,13 +248,10 @@ String scouldNotsaveDocument
     Text [ en-US ] = "Document '<1>' could not be saved.";
 };
 
-
 String scouldNotopenDocument
 {
     Text [ en-US ] = "Document '<1>' could not be opened.";
 };
-
-
 
 String sConvertError1
 {
@@ -294,7 +272,6 @@ String sRTErrorHeader
 {
     Text [ en-US ] = "Error";
 };
-
 
 String sPathDialogMessage
 {
@@ -321,12 +298,10 @@ String sProgressPage3
     Text [ en-US ] = "Converting the documents";
 };
 
-
 String sProgressFound
 {
     Text [ en-US ] = "Found:";
 };
-
 
 String sProgressPage5
 {
@@ -338,12 +313,10 @@ String sReady
     Text [ en-US ] = "Finished";
 };
 
-
 String sSourceDocuments
 {
     Text [ en-US ] = "Source documents";
 };
-
 
 String sTargetDocuments
 {
@@ -355,25 +328,20 @@ String sCreateLogfile
     Text [ en-US ] = "Create log file";
 };
 
-
 String sLogfileSummary
 {
     Text [ en-US ] = "<COUNT> documents converted";
 };
-
-
 
 String sLogfileHelpText
 {
     Text [ en-US ] = "A log file will be created in your work directory";
 };
 
-
 String sshowLogfile
 {
     Text [ en-US ] = "Show log file";
 };
-
 
 String sSumInclusiveSubDir
 {
@@ -385,36 +353,30 @@ String sSumSaveDokumente
     Text [ en-US ] = "These will be exported to the following directory:";
 };
 
-
 String sSumMSTextDocuments
 {
     Text [ en-US ] = "All Word documents contained in the following directory will be imported:";
 };
-
 
 String sSumMSTableDocuments
 {
     Text [ en-US ] = "All Excel documents contained in the following directory will be imported:";
 };
 
-
 String sSumMSDrawDocuments
 {
     Text [ en-US ] = "All PowerPoint/Publisher documents contained in the following directory will be imported:";
 };
-
 
 String sSumMSTextTemplates
 {
     Text [ en-US ] = "All Word templates contained in the following directory will be imported:";
 };
 
-
 String sSumMSTableTemplates
 {
     Text [ en-US ] = "All Excel templates contained in the following directory will be imported:";
 };
-
 
 String sSumMSDrawTemplates
 {

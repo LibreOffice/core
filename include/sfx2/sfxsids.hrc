@@ -27,7 +27,6 @@
 // Changing just one part here doesn't add new
 // docking windows automatically!
 
-
 #define SID_DOCKWIN_0               SID_DOCKWIN_START
 #define SID_DOCKWIN_1               SID_DOCKWIN_START+1
 #define SID_DOCKWIN_2               SID_DOCKWIN_START+2
@@ -39,11 +38,7 @@
 #define SID_DOCKWIN_8               SID_DOCKWIN_START+8
 #define SID_DOCKWIN_9               SID_DOCKWIN_START+9
 
-
-
 #define SID_UNKNOWN                         SID_SFX_START
-
-
 
 // default-ids for application
 #define SID_QUITAPP                         (SID_SFX_START + 300)
@@ -285,7 +280,6 @@
 
 //      SID_SFX_free_START                  (SID_SFX_START + 1728)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
-
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
     // FREE, was SID_VIEW_ZOOM_MODE
@@ -538,7 +532,6 @@
 #define SID_ATTR_YEAR2000               (SID_OPTIONS_START + 87)
 #define SID_ATTR_APPLYCHARUNIT          (SID_OPTIONS_START + 88)
 
-
 // PathTabPage
 #define SID_ATTR_PATHGROUP              (SID_OPTIONS_START + 10)
 #define SID_ATTR_PATHNAME               (SID_OPTIONS_START + 11)
@@ -703,8 +696,6 @@
 #define ID_VAL_ZOOM                         (SID_SD_START+234)
 #define SID_SIZE_OPTIMAL                    (SID_SD_START+99)
 
-
-
 #define SID_ZOOM_OPTIMAL                    (SID_SIZE_OPTIMAL)
 #define SID_ZOOM_ENTIRE_PAGE                (SID_SIZE_PAGE)
 #define SID_ZOOM_PAGE_WIDTH                 (SID_SVX_START + 1420)
@@ -713,8 +704,6 @@
 #define SID_ZOOM_100_PERCENT                (SID_SIZE_REAL)
 #define SID_ZOOM_150_PERCENT                (SID_SVX_START + 1423)
 #define SID_ZOOM_200_PERCENT                (SID_SVX_START + 1424)
-
-
 
 // SfxScriptOrganizerItem
 #define MID_SCRIPT_ORGANIZER_LANGUAGE       1 // Don't use zero for MID's. It's forbidden to do it!
@@ -725,11 +714,9 @@
 #define FN_XFORMS_INIT                      (SID_SW_START + 1053)
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 
-
 #define SID_RESTORE_EDITING_VIEW            (SID_SFX_START + 1663)
 
 #endif  // #ifndef _SFXSIDS_HRC
-
 
 // SfxSecurityPage related stuff
 

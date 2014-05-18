@@ -19,7 +19,6 @@
 #include "MenuResIds.hrc"
 #include "ShapeController.hrc"
 
-
 Menu RID_CONTEXTMENU_SHAPE
 {
     ItemList =

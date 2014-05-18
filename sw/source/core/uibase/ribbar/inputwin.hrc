@@ -19,7 +19,6 @@
 #ifndef _INPUTWIN_HRC
 #define _INPUTWIN_HRC
 
-
 //PopupMenu Id's
 #define MN_CALC_PHD         1
 #define MN_CALC_SQRT        2

@@ -23,7 +23,6 @@
 #include "resource/conn_shared_res.hrc"
 #include "resource/common_res.hrc"
 
-
 // = the ado driver's resource strings
 
 #define STR_INVALID_COLUMN_DESCRIPTOR_ERROR     ( STR_ADO_BASE +  1 )
@@ -36,7 +35,6 @@
 #define STR_VIEW_NO_COMMAND_ERROR               ( STR_ADO_BASE +  8 )
 #define STR_TYPE_NOT_CONVERT                    ( STR_ADO_BASE +  9 )
 #define STR_NO_CONNECTION                       ( STR_ADO_BASE + 10 )
-
 
 #endif // CONNECTIVITY_RESOURCE_ADO_HRC
 

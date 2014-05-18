@@ -25,7 +25,6 @@
 
 // = the macab driver's resource strings
 
-
 #define STR_NO_TABLE                    ( STR_MACAB_BASE +    0 )
 #define STR_NO_MAC_OS_FOUND             ( STR_MACAB_BASE +    1 )
 

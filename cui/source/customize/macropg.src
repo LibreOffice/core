@@ -69,7 +69,6 @@ ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
     };
 };
 
-
 //DF
 String RID_SVXSTR_EVENT_STARTAPP
 {

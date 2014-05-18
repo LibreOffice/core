@@ -20,7 +20,6 @@
 #ifndef _MEMBERID_HRC
 #define _MEMBERID_HRC
 
-
 #define MID_X       1
 #define MID_Y       2
 #define MID_RECT_LEFT    3
@@ -54,7 +53,6 @@
 #define MID_SEARCH_INSERTEDCHARS        17
 #define MID_SEARCH_TRANSLITERATEFLAGS   18
 #define MID_SEARCH_COMMAND              19
-
 
 #endif
 

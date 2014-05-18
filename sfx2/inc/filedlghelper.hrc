@@ -38,7 +38,6 @@
 #define STR_LB_VERSION              (RID_SFX_EXPLORER_START + 64)
 #define STR_PB_SAVEACOPY            (RID_SFX_EXPLORER_START + 65)
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

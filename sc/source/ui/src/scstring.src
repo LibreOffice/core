@@ -410,7 +410,6 @@ String SCSTR_CHAR_ATTRS
     Text [ en-US ] = "Font Attributes" ;
 };
 
-
 String SCSTR_CLPBRD_CLEAR
 {
     Text [ en-US ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;

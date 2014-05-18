@@ -19,7 +19,6 @@
 
 #include "dbu_misc.hrc"
 
-
 Resource RSC_CHARSETS
 {
     String 1

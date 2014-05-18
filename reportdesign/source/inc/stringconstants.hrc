@@ -24,9 +24,7 @@
 #error "don't include this file directly! use dbastrings.hrc or dbustrings.hrc instead!"
 #endif
 
-
 //= service names
-
 
 #define SERVICE_FIXEDTEXT "com.sun.star.report.FixedText"
 #define SERVICE_FORMATTEDFIELD "com.sun.star.report.FormattedField"
@@ -41,7 +39,6 @@
 #define SERVICE_OLEOBJECT "com.sun.star.report.OleObject"
 
 //= property names
-
 
 #define PROPERTY_VISIBLE "Visible"
 #define PROPERTY_NAME "Name"

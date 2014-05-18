@@ -22,9 +22,7 @@
 
 #include <svl/solar.hrc>
 
-
 #define RID_CORE_STRINGS_START                  RID_RPT_START
-
 
 //- String-IDs
 #define RID_STR_DETAIL                      ( RID_CORE_STRINGS_START +  0 )
@@ -43,7 +41,6 @@
 #define RID_STR_GROUP_HEADER                ( RID_CORE_STRINGS_START +  13 )
 #define RID_STR_GROUP_FOOTER                ( RID_CORE_STRINGS_START +  14 )
 #define RID_STR_FIXEDLINE                   ( RID_CORE_STRINGS_START +  15 )
-
 
 #endif // REPORTDESIGN_CORE_RESOURCE_HRC_
 

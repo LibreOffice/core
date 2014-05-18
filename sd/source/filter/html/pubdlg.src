@@ -80,7 +80,6 @@ ModalDialog DLG_PUBLISHING
         Text [ en-US ] = "Select an existing design or create a new one";
     };
 
-
     // Page 2, type of publishing
     FixedLine PAGE2_TITEL
     {

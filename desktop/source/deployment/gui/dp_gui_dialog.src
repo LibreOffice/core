@@ -49,7 +49,6 @@ String RID_CTX_ITEM_OPTIONS
     Text [ en-US ] = "~Options...";
 };
 
-
 String RID_STR_ADDING_PACKAGES
 {
     Text [ en-US ] = "Adding %EXTENSION_NAME";
@@ -167,7 +166,6 @@ WARNINGBOX RID_WARNINGBOX_DISABLE_SHARED_EXTENSION
     "Click 'OK' to disable the extension.\n"
     "Click 'Cancel' to stop disabling the extension.";
 };
-
 
 String RID_STR_UNSUPPORTED_PLATFORM
 {

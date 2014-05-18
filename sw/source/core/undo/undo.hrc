@@ -69,7 +69,6 @@
 // !!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!
 #define CORE_REPEAT_END          STR_REPEAT_DUMMY_9// !!!! umsetzen !!!
 
-
 // Id's nur fuer die Undo/Redo faehigen "Funktionen"
 #define STR_MOVE_UNDO           (CORE_REPEAT_END      + 1)
 #define STR_INSERT_GLOSSARY     (CORE_REPEAT_END      + 2)

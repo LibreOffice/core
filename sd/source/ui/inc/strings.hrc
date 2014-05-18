@@ -253,7 +253,6 @@
 
 #define STR_EFFECT_NONE                     (RID_APP_START+400)
 
-
 #define STR_INSERT_TEXT                     (RID_APP_START+432)
 #define STR_SLIDE_SINGULAR                  (RID_APP_START+433)
 #define STR_SLIDE_PLURAL                    (RID_APP_START+434)
@@ -286,7 +285,6 @@
 
 #define STR_NEW_CUSTOMSHOW                  (RID_APP_START+512)
 #define STR_COPY_CUSTOMSHOW                 (RID_APP_START+513)
-
 
 #define STR_BREAK_METAFILE                  (RID_APP_START+521)
 #define STR_BREAK_FAIL                      (RID_APP_START+522)

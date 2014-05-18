@@ -60,9 +60,6 @@ String STR_TEMPLATE_NAME10_DEF
     Text = "Vintage" ;
 };
 
-
-
-
 String STR_TEMPLATE_NAME1
 {
     Text [ en-US ] = "Abstract Green" ;

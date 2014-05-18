@@ -273,7 +273,6 @@
 
 // functions
 
-
 #define SID_OPEN_CALC           (SC_FUNCTION_START + 4)
 #define FILE_MENU_END           (SC_FUNCTION_START + 20)
 
@@ -476,7 +475,6 @@
 #define SID_INSERT_MATRIX       (SID_API_SLOTS+1)
 
 #define SID_DELETE_NOTE         (SID_API_SLOTS+2)
-
 
 #define SID_PREVIEW_START       (SID_API_SLOTS+20)
 #define SID_PREVIEW_NEXT        (SID_PREVIEW_START)
@@ -745,7 +743,6 @@
 
 #define SCSTR_SHOWTABLE         (STR_START + 20)
 #define SCSTR_HIDDENTABLES      (STR_START + 21)
-
 
 #define SCSTR_TABLE             (STR_START + 24)
 #define SCSTR_NAME              (STR_START + 25)
