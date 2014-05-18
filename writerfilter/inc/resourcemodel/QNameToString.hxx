@@ -28,12 +28,11 @@
 
 namespace writerfilter
 {
-using namespace ::std;
 
 class QNameToString
 {
     typedef boost::shared_ptr<QNameToString> Pointer_t;
-    typedef map < Id, string > Map;
+    typedef std::map < Id, string > Map;
 
     static Pointer_t pInstance;
 
@@ -59,7 +58,7 @@ class SprmIdToString
 
     static Pointer_t pInstance;
 
-    map<sal_uInt32, string> mMap;
+    std::map<sal_uInt32, string> mMap;
 
 protected:
     /**
@@ -70,7 +69,7 @@ protected:
 public:
     static Pointer_t Instance();
 #ifdef DEBUG_LOGGING
-    string operator()(sal_uInt32 nId);
+    std::string operator()(sal_uInt32 nId);
 #endif
 };
 
