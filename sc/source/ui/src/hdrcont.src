@@ -18,8 +18,6 @@
  */
 #include "sc.hrc"
 
-
-
 #define PART1 \
     MenuItem\
     {\
@@ -27,7 +25,6 @@
         HelpId = CMD_FID_CELL_FORMAT ; \
         Text [ en-US ] = "~Format Cells..." ; \
     };
-
 
 #define PART2 \
     MenuItem\
@@ -48,8 +45,6 @@
         HelpId = CMD_SID_PASTE ; \
         Text [ en-US ] = "~Paste" ; \
     };
-
-
 
 Menu RID_POPUP_ROWHEADER
 {
@@ -119,8 +114,6 @@ Menu RID_POPUP_ROWHEADER
         };
     };
 };
-
-
 
 Menu RID_POPUP_COLHEADER
 {

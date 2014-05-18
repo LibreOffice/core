@@ -409,8 +409,6 @@ String STR_STATUS_PIE_SEGMENT_EXPLODED
     Text [ en-US ] = "Pie exploded by %PERCENTVALUE percent";
 };
 
-
-
 String STR_OBJECT_FOR_SERIES
 {
     Text [ en-US ] = "%OBJECTNAME for Data Series '%SERIESNAME'" ;
@@ -420,8 +418,6 @@ String STR_OBJECT_FOR_ALL_SERIES
 {
     Text [ en-US ] = "%OBJECTNAME for all Data Series" ;
 };
-
-
 
 String STR_ACTION_EDIT_CHARTTYPE
 {
@@ -476,10 +472,6 @@ String STR_ROW_LABEL
 {
     Text [ en-US ] = "Row %ROWNUMBER" ;
 };
-
-
-
-
 
 //for range didalog
 String STR_DATA_ROLE_LABEL

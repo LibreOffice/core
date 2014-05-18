@@ -33,7 +33,6 @@
 #define MID_LINESPACE           0x3b
 #define MID_LINE_STYLE          0x90
 
-
 //NameOrIndex
 #define MID_NAME                16
 #define MID_GRAFURL             32

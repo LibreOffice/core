@@ -23,7 +23,6 @@
 
 #define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
 
-
 #define FT_ARGBLOCK( y )                    \
     Pos = MAP_APPFONT (6 , y ) ; \
     Size = MAP_APPFONT ( 74 , 8 ) ; \
@@ -53,8 +52,6 @@
     Size = MAP_APPFONT ( 13 , 15 ) ; \
     TabStop = FALSE ;   \
     QuickHelpText [ en-US ] = "Select"; \
-
-
 
  // jetzt alles zusammen
 

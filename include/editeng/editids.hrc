@@ -138,7 +138,6 @@
 #define SID_ATTR_BRUSH                                  ( SID_EDIT_START + 3 )
 #define SID_ATTR_BRUSH_CHAR                             ( SID_EDIT_START + 4 )
 
-
 #define SID_FIELD                                       ( SID_EDIT_START + 7 )
 #define SID_ATTR_FRAMEDIRECTION                         ( SID_EDIT_START + 8 )
 #define SID_ATTR_PARA                                   ( SID_EDIT_START + 9 )

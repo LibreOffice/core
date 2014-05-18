@@ -19,7 +19,6 @@
 
 #include "abpresid.hrc"
 
-
 ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 {
     Text [ en-US ] = "Address Book Data Source Wizard" ;
@@ -65,7 +64,6 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message [ en-US ] = "Please select a type of address book.";
 };
 
-
 QueryBox RID_QRY_NOTABLES
 {
     Buttons = WB_YES_NO;
@@ -74,7 +72,6 @@ QueryBox RID_QRY_NOTABLES
     Message [ en-US ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
 };
 
-
 QueryBox RID_QRY_NO_EVO_GW
 {
     Buttons = WB_YES_NO;
@@ -82,7 +79,6 @@ QueryBox RID_QRY_NO_EVO_GW
 
     Message [ en-US ] = "You don't seem to have any GroupWise account configured in Evolution.\nDo you want to set it up as an address data source, anyway?";
 };
-
 
 String RID_STR_DEFAULT_NAME
 {
@@ -113,7 +109,6 @@ String RID_STR_NOFIELDSASSIGNED
 {
     Text [ en-US ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
 };
-
 
 Bitmap BMP_HEADERIMAGE
 {

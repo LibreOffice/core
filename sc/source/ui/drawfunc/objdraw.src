@@ -364,10 +364,6 @@
         };\
     };
 
-
-
-
-
  //     Objekt-Leisten
 
 String RID_DRAW_OBJECTBAR
@@ -413,7 +409,6 @@ Menu RID_POPUP_DRAW
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-
         MenuItem { Separator = TRUE ; };
 
         MN_MIRRORSUB
@@ -447,9 +442,7 @@ Menu RID_POPUP_DRAW
     };
 };
 
-
  //     Popup-Menue fuer (Uno-) Controls
-
 
 Menu RID_POPUP_CONTROL
 {
@@ -462,7 +455,6 @@ Menu RID_POPUP_CONTROL
         MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
         //-#i68101#----------------------
-
 
         MenuItem { Separator = TRUE ; };
 
@@ -481,9 +473,7 @@ Menu RID_POPUP_CONTROL
     };
 };
 
-
  //     Grafik
-
 
 Menu RID_POPUP_GRAPHIC
 {
@@ -500,7 +490,6 @@ Menu RID_POPUP_GRAPHIC
         MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
         //-#i68101#----------------------
-
 
         MenuItem { Separator = TRUE ; };
 
@@ -524,9 +513,7 @@ Menu RID_POPUP_GRAPHIC
     };
 };
 
-
  //     Media
-
 
 Menu RID_POPUP_MEDIA
 {
@@ -539,7 +526,6 @@ Menu RID_POPUP_MEDIA
         MN_TITLE_DESCRIPTION_OBJECT
         MN_RENAME_OBJECT
         //-#i68101#----------------------
-
 
         MenuItem { Separator = TRUE ; };
 
@@ -554,9 +540,7 @@ Menu RID_POPUP_MEDIA
        };
 };
 
-
  //     Ole-Objekt
-
 
 Menu RID_POPUP_OLE
 {
@@ -577,7 +561,6 @@ Menu RID_POPUP_OLE
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-
         MenuItem { Separator = TRUE ; };
 
         MN_ARRANGESUB
@@ -590,9 +573,7 @@ Menu RID_POPUP_OLE
     };
 };
 
-
  //     Charts
-
 
 Menu RID_POPUP_CHART
 {
@@ -613,7 +594,6 @@ Menu RID_POPUP_CHART
         MN_RENAME_OBJECT
         //-#i68101#----------------------
 
-
         MenuItem { Separator = TRUE ; };
 
         MN_ARRANGESUB
@@ -632,9 +612,7 @@ Menu RID_POPUP_CHART
     };
 };
 
-
  //  PopUpDraw Text
-
 
 String RID_POPUP_DRAWTEXT
 {

@@ -89,7 +89,4 @@ String STR_ADD_TABLE_OR_QUERY
     Text [ en-US ] = "Add Table or Query" ;
 };
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

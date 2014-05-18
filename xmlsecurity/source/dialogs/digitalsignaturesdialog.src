@@ -32,7 +32,6 @@ ErrorBox RID_XMLSECDLG_OLD_ODF_FORMAT
         "Save document in ODF 1.2 format and add all desired signatures again.";
 };
 
-
 QueryBox MSG_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN
 {
     Buttons = WB_YES_NO ;

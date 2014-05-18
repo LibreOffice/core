@@ -131,7 +131,6 @@
 #error Resource-Ueberlauf bei den HIDs der OFA
 #endif
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

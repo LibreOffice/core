@@ -155,7 +155,6 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Identifier = TBI_REDO ;
                 HelpId = HID_CONTDLG_REDO ;
 
-
                 Text [ en-US ] = "Redo " ;
             };
             ToolBoxItem

@@ -43,7 +43,6 @@
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-
 #endif // _POPUP_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

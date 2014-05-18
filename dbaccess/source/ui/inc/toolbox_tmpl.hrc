@@ -23,42 +23,35 @@
     Identifier = ID_BROWSER_REFRESH ; \
     Text [ en-US ] = "Refresh"; \
 
-
 #define MID_NEW_VIEW_DESIGN \
     Identifier = ID_NEW_VIEW_DESIGN;    \
     HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ; \
     Text [ en-US ] = "New ~View Design" ; \
-
 
 #define MID_NEW_TABLE_DESIGN \
     Identifier = ID_NEW_TABLE_DESIGN;   \
     HelpId = HID_BROWSER_TABLE_CREATE_DESIGN ; \
     Text [ en-US ] = "New ~Table Design" ;\
 
-
 #define MID_QUERY_NEW_DESIGN    \
     Identifier = ID_NEW_QUERY_DESIGN;   \
     HelpId = HID_BROWSER_QUERY_CREATE_DESIGN ; \
     Text [ en-US ] = "New ~Query (Design View)" ; \
-
 
 #define MID_QUERY_NEW_SQL   \
     Identifier = ID_NEW_QUERY_SQL;  \
     HelpId = HID_BROWSER_QUERY_CREATE_TEXT ; \
     Text [ en-US ] = "New Query (~SQL View)" ; \
 
-
 #define MID_DBUI_QUERY_EDIT_JOINCONNECTION                                    \
     Identifier = ID_QUERY_EDIT_JOINCONNECTION;                                \
     HelpId = HID_QUERY_EDIT_JOINCONNECTION ;                                    \
     Text [ en-US ] = "Edit..."; \
 
-
 #define MID_COLUMN_WIDTH\
     Identifier = ID_BROWSER_COLWIDTH ;\
     HelpID = HID_BROWSER_COLUMNWIDTH ;\
     Text [ en-US ] = "Column ~Width..." ;\
-
 
 #define MID_DOCUMENT_CREATE_REPWIZ\
     Identifier = ID_DOCUMENT_CREATE_REPWIZ ;\

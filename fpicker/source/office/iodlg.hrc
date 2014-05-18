@@ -55,7 +55,6 @@
 #define BTN_EXPLORERFILE_CONNECT_TO_SERVER  51
 #define EXPLORERFILE_SPLITTER               52
 
-
 #define STR_EXPLORERFILE_OPEN               1
 #define STR_EXPLORERFILE_SAVE               2
 #define STR_EXPLORERFILE_BUTTONSAVE         3

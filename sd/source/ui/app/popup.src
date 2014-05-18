@@ -230,8 +230,6 @@ Menu RID_FORM_CONTROL_POPUP
     };
 };
 
-
-
 Menu RID_DRAW_SNAPOBJECT_POPUP
 {
     ItemList =
@@ -241,7 +239,6 @@ Menu RID_DRAW_SNAPOBJECT_POPUP
         MN_DELETE_SNAPITEM
     };
 };
-
 
 Menu RID_DRAW_GLUEPOINT_POPUP
 {
@@ -266,7 +263,6 @@ Menu RID_DRAW_GLUEPOINT_POPUP
     };
 };
 
-
 Menu RID_SLIDE_SORTER_IMPRESS_SEL_POPUP
 {
     ItemList =
@@ -285,7 +281,6 @@ Menu RID_SLIDE_SORTER_IMPRESS_SEL_POPUP
     };
 };
 
-
 Menu RID_SLIDE_SORTER_IMPRESS_NOSEL_POPUP
 {
     ItemList =
@@ -303,7 +298,6 @@ Menu RID_SLIDE_SORTER_DRAW_SEL_POPUP
         MN_RENAME_PAGE
     };
 };
-
 
 Menu RID_SLIDE_SORTER_DRAW_NOSEL_POPUP
 {
@@ -325,7 +319,6 @@ Menu RID_SLIDE_SORTER_MASTER_SEL_POPUP
     };
 };
 
-
 Menu RID_SLIDE_SORTER_MASTER_NOSEL_POPUP
 {
     ItemList =
@@ -333,7 +326,6 @@ Menu RID_SLIDE_SORTER_MASTER_NOSEL_POPUP
         MN_INSERT_MASTER
     };
 };
-
 
 Menu RID_OUTLINE_POPUP
 {
@@ -354,7 +346,6 @@ Menu RID_OUTLINE_POPUP
     };
 };
 
-
 Menu RID_BEZIER_POPUP
 {
     ItemList =
@@ -362,7 +353,6 @@ Menu RID_BEZIER_POPUP
         MN_BEZIER
     };
 };
-
 
 Menu RID_LAYERTAB_POPUP
 {
@@ -440,7 +430,6 @@ Menu RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP
             HelpId = CMD_SID_TP_APPLY_TO_SELECTED_SLIDES;
             Text [ en-US ] = "Apply to ~Selected Slides";
         };
-
 
         SEPARATOR
 

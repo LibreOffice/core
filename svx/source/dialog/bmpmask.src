@@ -22,9 +22,7 @@
 #include "bmpmask.hrc"
 #include "helpid.hrc"
 
-
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-
 
  // RID_SVXDLG_BMPMASK ----------------------------------------------------
 DockingWindow RID_SVXDLG_BMPMASK

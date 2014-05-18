@@ -230,7 +230,6 @@ ModelessDialog RID_SVXDLG_IMAP
         HScroll = TRUE ;
     };
 
-
 #define IMAPDLG_IDLIST \
         IdList =            \
         {                   \
@@ -343,6 +342,5 @@ Menu RID_SVXMN_IMAP
 };
 
 /******************************************************************************/
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

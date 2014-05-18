@@ -41,7 +41,6 @@
 #define FL_SAVE_BOTTOM              8
 #define BT_SAVE_OK                  9
 
-
 #define SAVE_WIDTH                  290
 #define SAVE_HEIGHT                 238
 #define SAVE_TITLEWINHEIGHT         36

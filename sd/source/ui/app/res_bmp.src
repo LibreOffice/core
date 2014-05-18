@@ -336,8 +336,6 @@ Bitmap BMP_WAIT_ICON
     File = "waiticon.bmp";
 };
 
-
-
 Bitmap BMP_FADE_EFFECT_INDICATOR
 {
     File = "fade_effect_indicator.bmp";

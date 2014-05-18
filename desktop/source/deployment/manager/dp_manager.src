@@ -19,7 +19,6 @@
 
 #include "dp_manager.hrc"
 
-
 String RID_STR_COPYING_PACKAGE
 {
     Text [ en-US ] = "Copying: ";

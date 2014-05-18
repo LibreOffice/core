@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dochdl.hrc"
 #include "globals.hrc"
-
 
 String STR_NOGLOS
 {
@@ -30,7 +28,6 @@ String STR_NO_TABLE
 {
     Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
 };
-
 
 InfoBox MSG_ERR_INSERT_GLOS
 {

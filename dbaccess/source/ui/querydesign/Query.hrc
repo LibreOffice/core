@@ -22,7 +22,6 @@
 #define IMG_PRIMARY_KEY                 1
 #define IMG_FOREIGN_KEY                 2
 
-
 #endif // DBAUI_QUERY_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

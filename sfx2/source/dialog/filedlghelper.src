@@ -20,7 +20,6 @@
 #include "sfxlocal.hrc"
 #include "filedlghelper.hrc"
 
-
 String STR_SFX_FILEDLG_ACTUALVERSION
 {
     Text [ en-US ] = "Current version";
@@ -105,7 +104,6 @@ String STR_PB_SAVEACOPY
 {
     Text [ en-US ] = "Save a Copy" ;
 };
-
 
 String STR_LB_IMAGE_TEMPLATE
 {

@@ -31,7 +31,6 @@
 #define STR_CLOSELINKMSG_MULTI                  32024
 #define STR_WAITINGLINK                         32028
 
-
 #define MD_UPDATE_BASELINKS 32002
 #define FT_FILES               31
 #define FT_LINKS               32

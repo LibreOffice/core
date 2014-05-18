@@ -485,7 +485,6 @@
 
 #define SC_OPCODE_NONE           0xFFFF
 
-
 #endif /* FORMULA_COMPILER_HRC */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

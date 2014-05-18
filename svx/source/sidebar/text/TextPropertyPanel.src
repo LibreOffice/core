@@ -20,7 +20,6 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include "helpid.hrc"
 
-
 Control RID_POPUPPANEL_TEXTPAGE_UNDERLINE
 {
     OutputSize = TRUE;
@@ -46,7 +45,6 @@ Control RID_POPUPPANEL_TEXTPAGE_UNDERLINE
         TabStop = TRUE;
         Text [ en-US ] = "~More Options...";
     };
-
 
     Image IMG_SINGLE
     {
@@ -179,7 +177,6 @@ Control RID_POPUPPANEL_TEXTPAGE_UNDERLINE
     };
 
 };
-
 
 Control RID_POPUPPANEL_TEXTPAGE_SPACING
 {

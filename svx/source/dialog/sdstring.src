@@ -185,7 +185,6 @@ String STR_INSERT_VIDEO_TITLE
     Text [ en-US ] = "Insert video" ;
 };
 
-
 // BM: some additional standard colors
 
 String RID_SVXSTR_COLOR_VIOLET
@@ -347,10 +346,7 @@ String RID_SVXSTR_LINECAP_SQUARE
     Text [ en-US ] = "Line cap square";
 };
 
-
-
 // Reference-strings for standardcolor-table
-
 
 /* do not translate */
 String RID_SVXSTR_COLOR_BLACK_DEF
@@ -484,10 +480,7 @@ String RID_SVXSTR_COLOR_BLUE_CLASSIC_DEF
     Text = "Blue classic" ;
 };
 
-
-
 // Reference-strings for standard-gradient-table
-
 
 /* do not translate */
 String RID_SVXSTR_GRDT0_DEF
@@ -1249,10 +1242,7 @@ String RID_SVXSTR_GRDT69
     Text [ en-US ] = "Green Gradient";
 };
 
-
-
 // Reference-strings for standard-hatch-table
-
 
 /* do not translate */
 String RID_SVXSTR_HATCH0_DEF
@@ -1355,10 +1345,7 @@ String RID_SVXSTR_HATCH10
     Text [ en-US ] = "Hatching" ;
 };
 
-
-
 // Reference-strings for standard-bitmap-table
-
 
 /* do not translate */
 String RID_SVXSTR_BMP0_DEF
@@ -1562,9 +1549,7 @@ String RID_SVXSTR_BMP21
     Text [ en-US ] = "Bitmap";
 };
 
-
 // Reference-strings for standard-dash-table
-
 
 /* do not translate */
 String RID_SVXSTR_DASH0_DEF
@@ -1687,10 +1672,7 @@ String RID_SVXSTR_DASH12
     Text [ en-US ] = "Line Style";
 };
 
-
-
 // Reference-strings for standard-line-end-table
-
 
 /* do not translate */
 String RID_SVXSTR_LEND0_DEF
@@ -1885,10 +1867,7 @@ String RID_SVXSTR_LEND20
     Text [ en-US ] = "Arrowhead";
 };
 
-
-
 // Reference-strings for standard transparence gradients
-
 
 /* do not translate */
 String RID_SVXSTR_TRASNGR0_DEF
@@ -1900,7 +1879,6 @@ String RID_SVXSTR_TRASNGR0
 {
     Text [ en-US ] = "Transparency";
 };
-
 
  // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
 

@@ -300,7 +300,6 @@ Resource RID_STATISTICS_DLGS
         Text [ en-US ] = "Variable 2";
     };
 
-
     /*F Test */
     String STR_FTEST_OBSERVATIONS_LABEL
     {

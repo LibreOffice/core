@@ -289,7 +289,6 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED
     MaskColor = STD_MASKCOLOR;
 };
 
-
 Image RID_SVXBMP_SLIDERBUTTON
 {
     ImageBitmap = Bitmap

@@ -24,8 +24,6 @@
 #include "browserids.hxx"
 #include "admincontrols.hrc"
 
-
-
 #define AUTO_USECATALOG(AUTO_Y)                                 \
     CheckBox CB_USECATALOG                                      \
     {                                                           \
@@ -35,8 +33,6 @@
         HelpId = HID_DSADMIN_USECATALOG;                        \
         Text[ en-US ] = "Use catalog for file-based databases"; \
     };
-
-
 
 #define AUTO_FIXEDLINE_CONNSETTINGS(AUTO_Y) \
     FixedLine FL_SEPARATOR1                                                                             \
@@ -77,7 +73,6 @@
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
     };
 
-
 ModalDialog DLG_DATABASE_TYPE_CHANGE
 {
     OutputSize = TRUE ;
@@ -92,8 +87,6 @@ ModalDialog DLG_DATABASE_TYPE_CHANGE
     };
     Text [ en-US ] = "Database properties" ;
 };
-
-
 
 TabPage PAGE_DBASE
 {
@@ -140,8 +133,6 @@ TabPage PAGE_DBASE
     };
 };
 
-
-
 TabPage PAGE_ADO
 {
     SVLook = TRUE ;
@@ -151,8 +142,6 @@ TabPage PAGE_ADO
     HelpId = HID_DSADMIN_PAGE_ADO;
     AUTO_CHARSET(UNRELATED_CONTROLS,PAGE_X)
 };
-
-
 
 TabPage PAGE_ODBC
 {
@@ -187,8 +176,6 @@ TabPage PAGE_ODBC
 
     AUTO_USECATALOG(        3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS )
 };
-
-
 
 TabPage PAGE_MYSQL_ODBC
 {
@@ -324,8 +311,6 @@ TabPage PAGE_ORACLE_JDBC
     AUTO_CHARSET( 5*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT+ EDIT_HEIGHT, PAGE_X )
 };
 
-
-
 TabPage PAGE_LDAP
 {
     SVLook = TRUE ;
@@ -398,9 +383,6 @@ TabPage PAGE_LDAP
     };
 };
 
-
-
-
 TabPage PAGE_TEXT
 {
     SVLook = TRUE ;
@@ -411,7 +393,6 @@ TabPage PAGE_TEXT
 
     AUTO_SEPARATORCONTROLGROUP(UNRELATED_CONTROLS, PAGE_X)
 };
-
 
 TabPage PAGE_USERDRIVER
 {

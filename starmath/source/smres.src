@@ -234,7 +234,6 @@ String STR_STATSTR_WRITING
     Text [ en-US ] = "Saving document..." ;
 };
 
-
 String STR_MATH_DOCUMENT_FULLTYPE_CURRENT
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Formula";

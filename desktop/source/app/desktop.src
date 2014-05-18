@@ -19,7 +19,6 @@
 
 #include "desktop.hrc"
 
-
 String STR_RECOVER_QUERY
 {
     Text [ en-US ] = "Should the file \"$1\" be restored?" ;

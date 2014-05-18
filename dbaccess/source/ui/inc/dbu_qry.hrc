@@ -74,7 +74,6 @@
 #define STR_QUERY_NATURAL_JOIN              RID_STR_QRY_START + 52
     // please adjust checking when inserting new strings
 
-
 #if STR_QUERY_NATURAL_JOIN > RID_STR_QRY_END
 #error resource id overflow in #file, #line
 #endif

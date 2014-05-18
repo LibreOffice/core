@@ -22,7 +22,6 @@
 #define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 #endif
 
-
 String STR_SVT_AUTOMATIC_COLOR
 {
     Text [ en-US ] = "Automatic";

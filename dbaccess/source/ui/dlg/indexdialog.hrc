@@ -20,7 +20,6 @@
 #ifndef _DBAUI_INDEXDIALOG_HRC_
 #define _DBAUI_INDEXDIALOG_HRC_
 
-
 #define CTR_INDEXLIST       1
 #define CTR_FIELDS          2
 

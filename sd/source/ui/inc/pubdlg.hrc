@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define PAGE1_TITEL         2
 #define PAGE1_NEW_DESIGN    3
 #define PAGE1_OLD_DESIGN    4
 #define PAGE1_DESIGNS       5
 #define PAGE1_DEL_DESIGN    6
 #define PAGE1_DESC          7
-
-
 
 #define PAGE2_TITEL         21
 #define PAGE2_STANDARD      22
@@ -61,8 +58,6 @@
 #define PAGE2_CGI           48
 #define PAGE2_VERT          49
 
-
-
 #define PAGE3_TITEL_1       51
 #define PAGE3_PNG           51
 #define PAGE3_GIF           52
@@ -78,8 +73,6 @@
 #define PAGE3_VERT          62
 #define PAGE3_HIDDEN_SLIDES 63
 
-
-
 #define PAGE4_TITEL_1       66
 #define PAGE4_AUTHOR_TXT    67
 #define PAGE4_AUTHOR        68
@@ -92,13 +85,9 @@
 #define PAGE4_DOWNLOAD      75
 #define PAGE4_CREATED       76
 
-
-
 #define PAGE5_TITEL         81
 #define PAGE5_TEXTONLY      82
 #define PAGE5_BUTTONS       83
-
-
 
 #define PAGE6_TITEL         101
 #define PAGE6_DEFAULT       102
@@ -111,16 +100,12 @@
 #define PAGE6_DOCCOLORS     109
 #define PAGE6_PREVIEW       111
 
-
-
 #define BUT_LAST 200
 #define BUT_NEXT 201
 #define BUT_FINISH 202
 #define BUT_CANCEL 203
 #define BUT_HELP 204
 #define BOTTOM_LINE 205
-
-
 
 #define DLG_PUBLISHING 739
 

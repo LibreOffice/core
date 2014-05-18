@@ -41,7 +41,6 @@
 #define INDENTED_X           6
 #define INDENT_BELOW_RADIO   10
 
-
 #define STR_PARENTTITLE_GENERAL             RID_STR_DLG_START + 0
     // FREE
     // FREE

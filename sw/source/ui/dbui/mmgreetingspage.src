@@ -26,7 +26,6 @@
             < "< not available >" ; > ; \
         };
 
-
 #define GREETINGS_BODY  \
     CheckBox CB_PERSONALIZED                                                    \
     {                                                                               \

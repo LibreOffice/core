@@ -259,7 +259,6 @@
         Hide = TRUE; \
     };
 
-
  // Object bar
 
 #define TBI_FORMAT_BEZIER_EDIT_RC \
@@ -325,8 +324,6 @@
         HelpID = SID_OBJECT_MIRROR; \
         Hide = TRUE; \
     };
-
-
 
  // Option bar
 

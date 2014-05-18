@@ -8746,7 +8746,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
 
-
      // -=*# Resource for function CHISQDIST #*=-
     Resource SC_OPCODE_CHISQ_DIST
     {
@@ -8828,7 +8827,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function." ;
         };
     };
-
 
      // -=*# Resource for function CHIINV #*=-
     Resource SC_OPCODE_CHI_INV
