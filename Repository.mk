@@ -62,6 +62,11 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	unoidl-read \
 	unoidl-write \
 	xrmex \
+	$(if $(filter-out ANDROID IOS,$(OS)), \
+        svdemo \
+        svptest \
+        svpclient \
+        vcldemo) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
@@ -118,11 +123,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		unopkg \
 		unopkg_com \
 	) \
-	$(if $(filter-out ANDROID IOS,$(OS)), \
-        svdemo \
-        svptest \
-        svpclient \
-        vcldemo) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
