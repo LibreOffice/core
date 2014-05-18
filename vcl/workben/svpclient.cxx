@@ -18,7 +18,12 @@
  */
 
 #include <sal/main.h>
+
+#include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
 #include <vcl/event.hxx>
@@ -28,6 +33,8 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/imgctrl.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/graph.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 #include <tools/stream.hxx>
 
@@ -36,10 +43,6 @@
 
 #include <math.h>
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
-
 #include <errno.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -47,10 +50,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-using namespace cppu;
-using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace cppu;
 
 // Forward declaration
 void Main();
@@ -60,23 +62,13 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     // create the global service-manager
-    Reference< XMultiServiceFactory > xFactory;
-    try
-    {
-        Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
-        xFactory = Reference< XMultiServiceFactory >(  xCtx->getServiceManager(), UNO_QUERY );
-        if( xFactory.is() )
-            setProcessServiceFactory( xFactory );
-    }
-    catch(const com::sun::star::uno::Exception&)
-    {
-    }
+    Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
+    Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
 
-    if( ! xFactory.is() )
-    {
-        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
-        exit( 1 );
-    }
+    if( !xServiceManager.is() )
+        Application::Abort( "Failed to bootstrap" );
+
+    comphelper::setProcessServiceFactory( xServiceManager );
 
     InitVCL();
     ::Main();
@@ -235,13 +227,18 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
     {
         OStringBuffer aCommand( 64 );
         aCommand.append( "get " );
-        aCommand.append( OUStringToOString( aEntry.Copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
+        aCommand.append( OUStringToOString( aEntry.copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
         OString aAnswer( processCommand( aCommand.makeStringAndClear() ) );
         SvMemoryStream aStream( aAnswer.getLength() );
         aStream.Write( aAnswer.getStr(), aAnswer.getLength() );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
-        Bitmap aBitmap;
-        aStream >> aBitmap;
+
+        Graphic aGraphicResult;
+        GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
+        rFilter.ImportGraphic( aGraphicResult, OUString("import"), aStream );
+
+        Bitmap aBitmap = aGraphicResult.GetBitmap();
+
         fprintf( stderr, "got bitmap of size %ldx%ld\n",
                  sal::static_int_cast< long >(aBitmap.GetSizePixel().Width()),
                  sal::static_int_cast< long >(aBitmap.GetSizePixel().Height()));

@@ -121,6 +121,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter-out ANDROID IOS,$(OS)), \
         svdemo \
         svptest \
+        svpclient \
         vcldemo) \
 ))
 

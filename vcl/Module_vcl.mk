@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter-out ANDROID IOS,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
+        Executable_svpclient \
         Executable_vcldemo) \
     Library_vclopengl \
 ))
