@@ -359,6 +359,17 @@ public:
 };
 
 
+namespace vcl
+{
+    class VCL_DLLPUBLIC MenuInvalidator
+    {
+        public:
+            MenuInvalidator();
+            VclEventListeners2* GetMenuInvalidateListeners();
+            void Invalidated();
+    };
+}
+
 // - MenuBar -
 
 

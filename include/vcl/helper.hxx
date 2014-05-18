@@ -23,6 +23,7 @@
 #include <list>
 
 #include <vcl/dllapi.h>
+#include <vcl/vclevent.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -54,6 +55,8 @@ enum whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 OUString VCL_DLLPUBLIC getOfficePath( enum whichOfficePath ePath );
 } // namespace
 
+
+bool VCL_DLLPUBLIC GetMenuInvalidateListeners();
 #endif // INCLUDED_VCL_HELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
