@@ -990,7 +990,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     PolyPolygon aPolyPoly;
                     if ( cbRgnData )
                         ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
-                    pOut->SetClipPath( aPolyPoly, iMode, sal_True );
+                    pOut->SetClipPath( aPolyPoly, iMode, sal_False );
                 }
                 break;
 
