@@ -24,8 +24,6 @@
 
 #include "cairo_cairo.hxx"
 
-using namespace ::cairo;
-
 namespace cairocanvas
 {
     /* Definition of RepaintTarget interface */

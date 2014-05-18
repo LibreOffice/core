@@ -25,8 +25,6 @@
 
 #include "cairo_cairo.hxx"
 
-using namespace ::cairo;
-
 class OutputDevice;
 class Bitmap;
 
@@ -50,18 +48,18 @@ namespace cairocanvas
 
             This should return the default surface to render on.
          */
-        virtual SurfaceSharedPtr getSurface() = 0;
+        virtual ::cairo::SurfaceSharedPtr getSurface() = 0;
 
         /// create new surface in given size
-        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize,
-                                                Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) = 0;
+        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize,
+                                                         ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) = 0;
         /// create new surface from given bitmap
-        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;
+        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;
 
         /** convert surface between alpha and non-alpha
             channel. returns new surface on success, NULL otherwise
         */
-        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) = 0;
+        virtual ::cairo::SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) = 0;
 
         /** Provides the underlying vcl outputdevice this surface renders on
          */

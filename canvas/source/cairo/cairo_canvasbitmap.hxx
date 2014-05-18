@@ -95,14 +95,14 @@ namespace cairocanvas
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // SurfaceProvider
-        virtual SurfaceSharedPtr getSurface() SAL_OVERRIDE;
-        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
-        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) SAL_OVERRIDE;
-        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr getSurface() SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) SAL_OVERRIDE;
         virtual OutputDevice* getOutputDevice() SAL_OVERRIDE;
 
         // RepaintTarget
-        virtual bool repaint( const SurfaceSharedPtr&                         pSurface,
+        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
                               const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState ) SAL_OVERRIDE;
 

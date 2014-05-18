@@ -307,8 +307,8 @@ namespace cairocanvas
         /// When true, content is able to represent alpha
         bool mbHaveAlpha;
 
-        CairoSharedPtr     mpCairo;
-        SurfaceSharedPtr   mpSurface;
+        ::cairo::CairoSharedPtr     mpCairo;
+        ::cairo::SurfaceSharedPtr   mpSurface;
         ::basegfx::B2ISize maSize;
     };
 
