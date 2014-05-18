@@ -703,6 +703,9 @@ static PyTypeObject PyUNOType =
 #if PY_VERSION_HEX >= 0x02060000
     , 0
 #endif
+#if PY_VERSION_HEX >= 0x03040000
+    , 0
+#endif
 };
 
 int PyUNO_initType()
