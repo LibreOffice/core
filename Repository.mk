@@ -118,7 +118,9 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		unopkg \
 		unopkg_com \
 	) \
-	$(if $(filter-out ANDROID IOS,$(OS)),svdemo) \
+	$(if $(filter-out ANDROID IOS,$(OS)), \
+        svdemo \
+        vcldemo) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\

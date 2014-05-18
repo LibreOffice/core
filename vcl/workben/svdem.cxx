@@ -31,8 +31,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <cstdio>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
