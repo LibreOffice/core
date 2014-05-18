@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_TYPES_H_
-#define _SAL_TYPES_H_
+#ifndef INCLUDED_SAL_TYPES_H
+#define INCLUDED_SAL_TYPES_H
 
 #include <sal/config.h>
 #include <sal/macros.h>
@@ -603,6 +603,6 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define SAL_WARN_UNUSED
 #endif
 
-#endif /*_SAL_TYPES_H_ */
+#endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
