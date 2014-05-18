@@ -158,36 +158,40 @@ namespace
 
 #ifdef OSL_BIGENDIAN
 // little endian <-> big endian switch
-static float GetSwapFloat( SvStream& rSt )
+static float GetSwapFloat(SvStream& rStream)
 {
-    float   fTmp;
+    float fTmp;
     sal_Int8* pPtr = (sal_Int8*)&fTmp;
-    rSt.ReadSChar( pPtr[3] );
-    rSt.ReadSChar( pPtr[2] );
-    rSt.ReadSChar( pPtr[1] );
-    rSt.ReadSChar( pPtr[0] );
+    rStream.ReadSChar(pPtr[3]);
+    rStream.ReadSChar(pPtr[2]);
+    rStream.ReadSChar(pPtr[1]);
+    rStream.ReadSChar(pPtr[0]);
     return fTmp;
 }
 #endif
 
-struct BLENDFUNCTION{
+struct BLENDFUNCTION
+{
     unsigned char aBlendOperation;
     unsigned char aBlendFlags;
     unsigned char aSrcConstantAlpha;
     unsigned char aAlphaFormat;
 
-    friend SvStream& operator>>( SvStream& rIn, BLENDFUNCTION& rBlendFun );
+    friend SvStream& operator>>(SvStream& rInStream, BLENDFUNCTION& rBlendFun);
 };
 
-SvStream& operator>>( SvStream& rIn, BLENDFUNCTION& rBlendFun )
+SvStream& operator>>(SvStream& rInStream, BLENDFUNCTION& rBlendFun)
 {
-    rIn.ReadUChar( rBlendFun.aBlendOperation ).ReadUChar( rBlendFun.aBlendFlags ).ReadUChar( rBlendFun.aSrcConstantAlpha ).ReadUChar( rBlendFun.aAlphaFormat );
-    return rIn;
+    rInStream.ReadUChar(rBlendFun.aBlendOperation);
+    rInStream.ReadUChar(rBlendFun.aBlendFlags);
+    rInStream.ReadUChar(rBlendFun.aSrcConstantAlpha);
+    rInStream.ReadUChar(rBlendFun.aAlphaFormat);
+    return rInStream;
 }
 
-SvStream& operator>>( SvStream& rIn, XForm& rXForm )
+SvStream& operator>>(SvStream& rInStream, XForm& rXForm)
 {
-    if ( sizeof( float ) != 4 )
+    if (sizeof(float) != 4)
     {
         OSL_FAIL( "EnhWMFReader::sizeof( float ) != 4" );
         rXForm = XForm();
@@ -195,51 +199,59 @@ SvStream& operator>>( SvStream& rIn, XForm& rXForm )
     else
     {
 #ifdef OSL_BIGENDIAN
-    rXForm.eM11 = GetSwapFloat( rIn );
-    rXForm.eM12 = GetSwapFloat( rIn );
-    rXForm.eM21 = GetSwapFloat( rIn );
-    rXForm.eM22 = GetSwapFloat( rIn );
-    rXForm.eDx = GetSwapFloat( rIn );
-    rXForm.eDy = GetSwapFloat( rIn );
+    rXForm.eM11 = GetSwapFloat(rInStream);
+    rXForm.eM12 = GetSwapFloat(rInStream);
+    rXForm.eM21 = GetSwapFloat(rInStream);
+    rXForm.eM22 = GetSwapFloat(rInStream);
+    rXForm.eDx = GetSwapFloat(rInStream);
+    rXForm.eDy = GetSwapFloat(rInStream);
 #else
-    rIn.ReadFloat( rXForm.eM11 ).ReadFloat( rXForm.eM12 ).ReadFloat( rXForm.eM21 ).ReadFloat( rXForm.eM22 )
-           .ReadFloat( rXForm.eDx ).ReadFloat( rXForm.eDy );
+    rInStream.ReadFloat(rXForm.eM11);
+    rInStream.ReadFloat(rXForm.eM12);
+    rInStream.ReadFloat(rXForm.eM21);
+    rInStream.ReadFloat(rXForm.eM22);
+    rInStream.ReadFloat(rXForm.eDx);
+    rInStream.ReadFloat(rXForm.eDy);
 #endif
     }
-    return rIn;
+    return rInStream;
 }
 
-static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nLen )
+static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
 {
-    bool bOk = false;
-    if ( nLen )
+    if (nLen == 0)
+        return false;
+
+    sal_uInt32 nHdSize, nType, nCount, nRgnSize, i;
+    rStream.ReadUInt32(nHdSize);
+    rStream.ReadUInt32(nType);
+    rStream.ReadUInt32(nCount);
+    rStream.ReadUInt32(nRgnSize);
+
+    if (   nCount > 0
+        && nType == RDH_RECTANGLES
+        && nLen >= ((nCount << 4) + (nHdSize - 16)))
     {
-        sal_uInt32 nHdSize, nType, nCount, nRgnSize, i;
-        rSt.ReadUInt32( nHdSize )
-           .ReadUInt32( nType )
-           .ReadUInt32( nCount )
-           .ReadUInt32( nRgnSize );
+        sal_Int32 nx1, ny1, nx2, ny2;
 
-        if ( nCount && ( nType == RDH_RECTANGLES ) &&
-                ( nLen >= ( ( nCount << 4 ) + ( nHdSize - 16 ) ) ) )
+        for (i = 0; i < nCount; i++)
         {
-            sal_Int32 nx1, ny1, nx2, ny2;
+            rStream.ReadInt32(nx1);
+            rStream.ReadInt32(ny1);
+            rStream.ReadInt32(nx2);
+            rStream.ReadInt32(ny2);
 
-            for ( i = 0; i < nCount; i++ )
-            {
-                rSt.ReadInt32( nx1 ).ReadInt32( ny1 ).ReadInt32( nx2 ).ReadInt32( ny2 );
+            Rectangle aRectangle(Point(nx1, ny1), Point(nx2, ny2));
 
-                Rectangle aRect( Point( nx1, ny1 ), Point( nx2, ny2 ) );
-                Polygon aPolygon( aRect );
-                PolyPolygon aPolyPolyOr1( aPolygon );
-                PolyPolygon aPolyPolyOr2( rPolyPoly );
-                rPolyPoly.GetUnion( aPolyPolyOr1, aPolyPolyOr2 );
-                rPolyPoly = aPolyPolyOr2;
-            }
-            bOk = true;
+            Polygon aPolygon(aRectangle);
+            PolyPolygon aPolyPolyOr1(aPolygon);
+            PolyPolygon aPolyPolyOr2(rPolyPoly);
+            rPolyPoly.GetUnion(aPolyPolyOr1, aPolyPolyOr2);
+            rPolyPoly = aPolyPolyOr2;
         }
+        return true;
     }
-    return bOk;
+    return false;
 }
 
 } // anonymous namespace
