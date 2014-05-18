@@ -32,6 +32,7 @@
 #include "threadpool.hxx"
 
 using namespace osl;
+using namespace rtl;
 
 namespace cppu_threadpool {
 

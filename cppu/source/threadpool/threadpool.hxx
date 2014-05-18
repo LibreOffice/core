@@ -35,7 +35,6 @@
 #include "jobqueue.hxx"
 
 
-using namespace ::rtl;
 namespace cppu_threadpool {
     class ORequestThread;
 
@@ -61,7 +60,7 @@ namespace cppu_threadpool {
 
     typedef ::boost::unordered_map
     <
-        ByteSequence, // ThreadID
+        ::rtl::ByteSequence, // ThreadID
         ::std::pair < JobQueue * , JobQueue * >,
         HashThreadId,
         EqualThreadId
@@ -127,18 +126,18 @@ namespace cppu_threadpool {
         void dispose( sal_Int64 nDisposeId );
         void destroy( sal_Int64 nDisposeId );
 
-        void addJob( const ByteSequence &aThreadId,
+        void addJob( const ::rtl::ByteSequence &aThreadId,
                      bool bAsynchron,
                      void *pThreadSpecificData,
                      RequestFun * doRequest );
 
-        void prepare( const ByteSequence &aThreadId );
-        void * enter( const ByteSequence &aThreadId, sal_Int64 nDisposeId );
+        void prepare( const ::rtl::ByteSequence &aThreadId );
+        void * enter( const ::rtl::ByteSequence &aThreadId, sal_Int64 nDisposeId );
 
         /********
          * @return true, if queue could be successfully revoked.
          ********/
-        bool revokeQueue( const ByteSequence & aThreadId , bool bAsynchron );
+        bool revokeQueue( const ::rtl::ByteSequence & aThreadId , bool bAsynchron );
 
         void waitInPool( rtl::Reference< ORequestThread > const & pThread );
 
@@ -147,7 +146,7 @@ namespace cppu_threadpool {
         ThreadAdmin & getThreadAdmin() { return m_aThreadAdmin; }
 
     private:
-        void createThread( JobQueue *pQueue, const ByteSequence &aThreadId, bool bAsynchron);
+        void createThread( JobQueue *pQueue, const ::rtl::ByteSequence &aThreadId, bool bAsynchron);
 
 
         ThreadIdHashMap m_mapQueue;
