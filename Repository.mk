@@ -62,7 +62,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	unoidl-read \
 	unoidl-write \
 	xrmex \
-	$(if $(filter-out ANDROID IOS,$(OS)), \
+	$(if $(filter-out ANDROID IOS WNT,$(OS)), \
         svdemo \
         svptest \
         svpclient \
