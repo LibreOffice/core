@@ -666,7 +666,7 @@
       </node>
       <node oor:name=".uno:StatisticsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Statistics</value>
+          <value xml:lang="en-US">Statistics</value>
         </prop>
       </node>
       <node oor:name=".uno:SamplingDialog" oor:op="replace">
