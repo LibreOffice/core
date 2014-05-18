@@ -340,7 +340,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     glm::vec3 actualNormals[3];
     std::vector<unsigned short> indeices[5];
     glm::vec3 externSurNormal;
-    glm::mat4 corrctCoord = glm::translate(glm::vec3(width / 2.0f, height / 2.0f, depth / 2.0f - fRadius));
+    glm::mat4 corrctCoord = glm::translate(glm::vec3(0.0f, 0.0f, depth / 2.0f - fRadius));
     m_RoundBarMesh.topThreshold = topThreshold;
     m_RoundBarMesh.bottomThreshold = bottomThreshold;
     m_RoundBarMesh.iMeshStartIndices = m_Vertices.size();
@@ -964,13 +964,14 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     glm::vec4 DirX = modelMatrix * glm::vec4(1.0, 0.0, 0.0, 0.0);
     glm::vec4 DirY = modelMatrix * glm::vec4(0.0, 1.0, 0.0, 0.0);
     glm::vec4 DirZ = modelMatrix * glm::vec4(0.0, 0.0, 1.0, 0.0);
+    float crossZ = glm::normalize(glm::dot(glm::vec3(DirZ), glm::vec3(0.0, 0.0, 1.0)));
+    m_Extrude3DInfo.reverse = (crossZ > 0 ? 0 : 1);
     m_Extrude3DInfo.xScale = glm::length(DirX);
     m_Extrude3DInfo.yScale = glm::length(DirY);
     m_Extrude3DInfo.zScale = glm::length(DirZ);
     glm::mat4 transformMatrixInverse = glm::inverse(glm::translate(glm::vec3(tranform)));
-    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.yScale, m_Extrude3DInfo.zScale));
+    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.yScale, m_Extrude3DInfo.zScale * crossZ));
     m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
-
     //color
     m_Extrude3DInfo.extrudeColor = getColorAsVector(nColor);
     m_Extrude3DInfo.material.materialColor = m_Extrude3DInfo.extrudeColor;//material color seems to be the same for all parts, so we use the polygon color
@@ -1006,8 +1007,8 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, m_Extrude3DInfo.xTransform);
     m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, m_Extrude3DInfo.yTransform + m_Extrude3DInfo.yScale);
     m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, m_Extrude3DInfo.yTransform );
-    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, m_Extrude3DInfo.zTransform + m_Extrude3DInfo.zScale);
-    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, m_Extrude3DInfo.zTransform);
+    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, m_Extrude3DInfo.zTransform - (m_Extrude3DInfo.reverse - 1) * m_Extrude3DInfo.zScale);
+    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, m_Extrude3DInfo.zTransform - m_Extrude3DInfo.reverse * m_Extrude3DInfo.zScale);
 }
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
@@ -1114,7 +1115,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     }
     else
     {
-        glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, actualZTrans));
+        glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, -actualZTrans));
         glm::mat4 topScale = glm::scale(xyScale, xyScale, xyScale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale;
@@ -1326,7 +1327,6 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
             CHECK_GL_ERROR();
             glBindBuffer(GL_UNIFORM_BUFFER, 0);
         }
-        extrude3DInfo.reverse = 0;
         if (extrude3DInfo.rounded)
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
