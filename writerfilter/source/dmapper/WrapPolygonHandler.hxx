@@ -28,8 +28,6 @@
 namespace writerfilter {
 namespace dmapper {
 
-using resourcemodel::Fraction;
-
 class WrapPolygon
 {
 public:
@@ -53,7 +51,7 @@ public:
     size_t size() const;
 
     WrapPolygon::Pointer_t move(const css::awt::Point & rMove);
-    WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
+    WrapPolygon::Pointer_t scale(const resourcemodel::Fraction & rFractionX, const resourcemodel::Fraction & rFractionY);
     WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize);
     css::drawing::PointSequenceSequence getPointSequenceSequence() const;
 };

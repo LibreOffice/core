@@ -88,7 +88,7 @@ WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fraction & rFractionY)
+WrapPolygon::Pointer_t WrapPolygon::scale(const resourcemodel::Fraction & rFractionX, const resourcemodel::Fraction & rFractionY)
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);
 
@@ -97,7 +97,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fra
 
     while (aIt != aItEnd)
     {
-        awt::Point aPoint(Fraction(aIt->X) * rFractionX, Fraction(aIt->Y) * rFractionY);
+        awt::Point aPoint(resourcemodel::Fraction(aIt->X) * rFractionX, resourcemodel::Fraction(aIt->Y) * rFractionY);
         pResult->addPoint(aPoint);
         ++aIt;
     }
@@ -111,17 +111,17 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 
     const sal_uInt32 nWrap100Percent = 21600;
 
-    Fraction aMove(nWrap100Percent, rSrcSize.Width);
-    aMove = aMove * Fraction(15, 1);
+    resourcemodel::Fraction aMove(nWrap100Percent, rSrcSize.Width);
+    aMove = aMove * resourcemodel::Fraction(15, 1);
     awt::Point aMovePoint(aMove, 0);
     pResult = move(aMovePoint);
 
-    Fraction aScaleX(nWrap100Percent, Fraction(nWrap100Percent) + aMove);
-    Fraction aScaleY(nWrap100Percent, Fraction(nWrap100Percent) - aMove);
+    resourcemodel::Fraction aScaleX(nWrap100Percent, resourcemodel::Fraction(nWrap100Percent) + aMove);
+    resourcemodel::Fraction aScaleY(nWrap100Percent, resourcemodel::Fraction(nWrap100Percent) - aMove);
     pResult = pResult->scale(aScaleX, aScaleY);
 
-    Fraction aScaleSrcX(rSrcSize.Width, nWrap100Percent);
-    Fraction aScaleSrcY(rSrcSize.Height, nWrap100Percent);
+    resourcemodel::Fraction aScaleSrcX(rSrcSize.Width, nWrap100Percent);
+    resourcemodel::Fraction aScaleSrcY(rSrcSize.Height, nWrap100Percent);
     pResult = pResult->scale(aScaleSrcX, aScaleSrcY);
 
     return pResult;

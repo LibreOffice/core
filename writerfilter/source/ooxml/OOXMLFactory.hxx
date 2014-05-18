@@ -32,8 +32,6 @@
 namespace writerfilter {
 namespace ooxml {
 
-using namespace std;
-
 enum ResourceType_t {
     RT_NoResource,
     RT_Table,
