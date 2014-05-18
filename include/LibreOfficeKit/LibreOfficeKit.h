@@ -98,6 +98,11 @@ struct _LibreOfficeKitDocumentClass
                            const int nTilePosY,
                            const int nTileWidth,
                            const int nTileHeight);
+
+  // Get the document sizes in twips.
+  void (*getDocumentSize) (LibreOfficeKitDocument* pThis,
+                           long* pWidth,
+                           long* pHeight);
 #endif // LOK_USE_UNSTABLE_API
 };
 
