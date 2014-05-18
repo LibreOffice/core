@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Executable_ui-previewer) \
     $(if $(filter-out ANDROID IOS,$(OS)), \
         Executable_svdemo \
+        Executable_svptest \
         Executable_vcldemo) \
     Library_vclopengl \
 ))
