@@ -48,7 +48,6 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineStyleToolBoxControl, XLineStyleItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineWidthToolBoxControl, XLineWidthItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxLineColorToolBoxControl, XLineColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineEndToolBoxControl,   SfxBoolItem );
 
 /*************************************************************************
@@ -262,83 +261,7 @@ Window* SvxLineWidthToolBoxControl::CreateItemWindow( Window *pParent )
     return( new SvxMetricField( pParent, m_xFrame ) );
 }
 
-/*************************************************************************
-|*
-|* SvxLineColorToolBoxControl
-|*
-\************************************************************************/
 
-SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    addStatusListener( OUString( ".uno:ColorTableState" ));
-}
-
-
-
-SvxLineColorToolBoxControl::~SvxLineColorToolBoxControl()
-{
-}
-
-
-
-void SvxLineColorToolBoxControl::StateChanged(
-
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-
-{
-    SvxColorBox* pBox = (SvxColorBox*)GetToolBox().GetItemWindow( GetId() );
-    DBG_ASSERT( pBox, "Window not found" );
-
-    if ( nSID != SID_COLOR_TABLE )
-    {
-        if ( eState == SFX_ITEM_DISABLED )
-        {
-            pBox->Disable();
-            pBox->SetNoSelection();
-        }
-        else
-        {
-            pBox->Enable();
-
-            if ( eState == SFX_ITEM_AVAILABLE )
-            {
-                DBG_ASSERT( pState->ISA(XLineColorItem), "wrong ItemType" );
-                pBox->Update( (const XLineColorItem*) pState );
-            }
-            else
-                pBox->Update( NULL );
-        }
-    }
-    else
-        Update( pState );
-}
-
-
-
-void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
-{
-    if ( pState && ( pState->ISA( SvxColorListItem ) ) )
-    {
-        SvxColorBox* pBox = (SvxColorBox*)GetToolBox().GetItemWindow( GetId() );
-
-        DBG_ASSERT( pBox, "Window not found" );
-
-        // The list of colors (ColorTable) has changed:
-        ::Color aTmpColor( pBox->GetSelectEntryColor() );
-        pBox->Clear();
-        pBox->Fill( ( (SvxColorListItem*)pState )->GetColorList() );
-        pBox->SelectEntry( aTmpColor );
-    }
-}
-
-
-
-Window* SvxLineColorToolBoxControl::CreateItemWindow( Window *pParent )
-{
-    return new SvxColorBox( pParent, m_aCommandURL, m_xFrame );
-}
 
 /*************************************************************************
 |*

@@ -30,7 +30,6 @@ class XLineStyleItem;
 class XLineDashItem;
 class SvxLineBox;
 class SvxMetricField;
-class SvxColorBox;
 
 
 // SvxLineStyleController:
@@ -73,23 +72,6 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
-
-// SvxLineColorController:
-
-
-class SVX_DLLPUBLIC SvxLineColorToolBoxControl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxLineColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxLineColorToolBoxControl();
-
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
-    void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
-};
 
 
 // class SvxLineEndWindow

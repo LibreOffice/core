@@ -67,6 +67,9 @@ namespace svx
             case SID_BACKGROUND_COLOR :
                 Update( COL_YELLOW );
                 break;
+            case SID_ATTR_LINE_COLOR:
+                Update( COL_BLACK );
+                break;
             default :
                 Update( COL_TRANSPARENT );
         }

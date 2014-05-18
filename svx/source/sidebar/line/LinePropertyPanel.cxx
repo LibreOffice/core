@@ -203,7 +203,7 @@ LinePropertyPanel::LinePropertyPanel(
     get(mpLBCapStyle, "linecapstyle");
 
     const sal_uInt16 nIdColor = mpTBColor->GetItemId(UNO_SELECTCOLOR);
-    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_LINE_COLOR, nIdColor, mpTBColor)),
+    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(0 /* not defined, default is transparent */, nIdColor, mpTBColor)),
     Initialize();
 }
 

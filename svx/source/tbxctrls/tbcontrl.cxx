@@ -87,6 +87,7 @@
 #include <svx/tbxcolorupdate.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
+#include <svx/xlnclit.hxx>
 
 
 
@@ -115,6 +116,7 @@ using namespace ::com::sun::star::lang;
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxColorToolBoxControl, SvxColorItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxLineColorToolBoxControl, XLineColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
@@ -1119,9 +1121,13 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
             aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
         }
     }
-    else
+    else if ( SID_FRAME_LINECOLOR == theSlotId )
     {
         aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
+    }
+    else
+    {
+        aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
     }
 
     if ( pColorList.is() )
@@ -1228,10 +1234,16 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
             aColorSet.Clear();
             aColorSet.addEntriesForXColorList(*pColorList);
         }
-        else if ((SFX_ITEM_DEFAULT <= eState ) && ( pState->ISA( SvxColorItem )))
+        else if ( SFX_ITEM_DEFAULT <= eState )
         {
             aColorSet.SetNoSelection();
-            const Color rColor = ((const SvxColorItem*)pState)->GetValue();
+
+            Color rColor;
+            if ( pState->ISA( SvxColorItem ) )
+                rColor = ((const SvxColorItem*)pState)->GetValue();
+            else if ( pState->ISA( XLineColorItem ) )
+                rColor = ((const XLineColorItem*)pState)->GetColorValue();
+
             for ( size_t i = 1; i < aColorSet.GetItemCount(); i++ )
             {
                 if ( rColor == aColorSet.GetItemColor(i) )
@@ -2461,6 +2473,75 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
     aArgs[0].Name  = aParamName;
     aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
     Dispatch( aCommand, aArgs );
+}
+
+
+// class SvxLineColorToolBoxControl ----------------------------------------
+
+SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
+    sal_uInt16 nSlotId,
+    sal_uInt16 nId,
+    ToolBox& rTbx ) :
+
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
+    mLastColor( COL_BLACK )
+{
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    addStatusListener( OUString( ".uno:XLineColor" ) );
+    pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
+}
+
+SvxLineColorToolBoxControl::~SvxLineColorToolBoxControl()
+{
+}
+
+SfxPopupWindowType SvxLineColorToolBoxControl::GetPopupWindowType() const
+{
+    return SFX_POPUPWINDOW_ONTIMEOUT;
+}
+
+SfxPopupWindow* SvxLineColorToolBoxControl::CreatePopupWindow()
+{
+    SvxColorWindow_Impl* pColorWin =
+        new SvxColorWindow_Impl(
+                            m_aCommandURL,
+                            GetSlotId(),
+                            m_xFrame,
+                            SVX_RESSTR( RID_SVXSTR_LINECOLOR ),
+                            &GetToolBox() );
+
+    pColorWin->StartPopupMode( &GetToolBox(),
+        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+    pColorWin->StartSelection();
+    SetPopupWindow( pColorWin );
+    pColorWin->SetSelectedHdl( LINK( this, SvxLineColorToolBoxControl, SelectedHdl ) );
+    return pColorWin;
+}
+
+IMPL_LINK(SvxLineColorToolBoxControl, SelectedHdl, Color*, pColor)
+{
+    pBtnUpdater->Update( *pColor );
+    mLastColor = *pColor;
+    return 0;
+}
+
+void SvxLineColorToolBoxControl::StateChanged(
+
+    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* /*pState*/ )
+
+{
+    ToolBox& rTbx = GetToolBox();
+    sal_uInt16 nId = GetId();
+    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+}
+
+void SvxLineColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
+{
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name  = "XLineColor";
+    aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
+    Dispatch( OUString( ".uno:XLineColor" ), aArgs );
 }
 
 

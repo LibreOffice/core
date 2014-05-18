@@ -25,7 +25,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
  <toolbar:toolbarseparator/>
