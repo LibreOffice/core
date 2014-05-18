@@ -260,7 +260,7 @@
   <block-list:block block-list:abbreviated-name="dissonent" block-list:name="dissonant"/>
   <block-list:block block-list:abbreviated-name="distribusion" block-list:name="distribution"/>
   <block-list:block block-list:abbreviated-name="divsion" block-list:name="division"/>
-  <block-list:block block-list:abbreviated-name="docuement" block-list:name="documents"/>
+  <block-list:block block-list:abbreviated-name="docuement" block-list:name="document"/>
   <block-list:block block-list:abbreviated-name="docuemnt" block-list:name="document"/>
   <block-list:block block-list:abbreviated-name="documetn" block-list:name="document"/>
   <block-list:block block-list:abbreviated-name="documnet" block-list:name="document"/>
@@ -301,7 +301,7 @@
   <block-list:block block-list:abbreviated-name="exprienced" block-list:name="experienced"/>
   <block-list:block block-list:abbreviated-name="eyt" block-list:name="yet"/>
   <block-list:block block-list:abbreviated-name="faeture" block-list:name="feature"/>
-  <block-list:block block-list:abbreviated-name="faetures" block-list:name="feature"/>
+  <block-list:block block-list:abbreviated-name="faetures" block-list:name="features"/>
   <block-list:block block-list:abbreviated-name="familair" block-list:name="familiar"/>
   <block-list:block block-list:abbreviated-name="familar" block-list:name="familiar"/>
   <block-list:block block-list:abbreviated-name="familliar" block-list:name="familiar"/>
