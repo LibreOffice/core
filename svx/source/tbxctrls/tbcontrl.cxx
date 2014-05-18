@@ -2404,10 +2404,10 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     return pColorWin;
 }
 
-IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, aColor)
+IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, pColor)
 {
-    pBtnUpdater->Update( *aColor );
-    mLastColor = *aColor;
+    pBtnUpdater->Update( *pColor );
+    mLastColor = *pColor;
     return 0;
 }
 
