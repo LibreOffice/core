@@ -1000,21 +1000,21 @@ bool EnhWMFReader::ReadEnhWMF()
                 case EMR_SELECTCLIPPATH :
                 {
                     sal_Int32 nClippingMode;
-                    pWMF->ReadInt32( nClippingMode );
-                    pOut->SetClipPath( pOut->GetPathObj(), nClippingMode, true );
+                    pWMF->ReadInt32(nClippingMode);
+                    pOut->SetClipPath(pOut->GetPathObj(), nClippingMode, true);
                 }
                 break;
 
                 case EMR_EXTSELECTCLIPRGN :
                 {
-                    sal_Int32 iMode, cbRgnData;
-                    pWMF->ReadInt32( cbRgnData )
-                         .ReadInt32( iMode );
+                    sal_Int32 nClippingMode, cbRgnData;
+                    pWMF->ReadInt32(cbRgnData);
+                    pWMF->ReadInt32(nClippingMode);
 
                     PolyPolygon aPolyPoly;
-                    if ( cbRgnData )
-                        ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
-                    pOut->SetClipPath( aPolyPoly, iMode, true );
+                    if (cbRgnData)
+                        ImplReadRegion(aPolyPoly, *pWMF, nRecSize);
+                    pOut->SetClipPath(aPolyPoly, nClippingMode, false);
                 }
                 break;
 

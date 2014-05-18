@@ -294,16 +294,13 @@ Color WinMtf::ReadColor()
     return Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
 };
 
-Point WinMtfOutput::ImplScale( const Point& rPt) // Hack to set varying defaults for incompletely defined files.
+Point WinMtfOutput::ImplScale(const Point& rPoint) // Hack to set varying defaults for incompletely defined files.
 {
-    if (mbIsMapDevSet)
-        return rPt; //fdo#73764
-
-    if (mbIsMapWinSet)
-        return Point(rPt.X() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Left(),
-                     rPt.Y() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Top());
-
-    return ImplMap(rPt);
+    if (!mbIsMapDevSet)
+        return Point(rPoint.X() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Left(),
+                     rPoint.Y() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Top());
+    else
+        return rPoint;
 }
 
 Point WinMtfOutput::ImplMap( const Point& rPt )
@@ -782,16 +779,16 @@ void WinMtfOutput::MoveClipRegion( const Size& rSize )
 void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
 {
     mbClipNeedsUpdate = true;
-    if (bIsMapped)
+    PolyPolygon aPolyPolygon(rPolyPolygon);
+
+    if (!bIsMapped)
     {
-        PolyPolygon aPP( rPolyPolygon );
-        aClipPath.setClipPath( ImplScale( aPP ), nClippingMode );
+        if (!mbIsMapDevSet && (mnMapMode == MM_ISOTROPIC || mnMapMode == MM_ANISOTROPIC))
+            aPolyPolygon = ImplScale(aPolyPolygon);
+        else
+            aPolyPolygon = ImplMap(aPolyPolygon);
     }
-    else
-    {
-        PolyPolygon aPP( rPolyPolygon );
-        aClipPath.setClipPath( ImplMap( aPP ), nClippingMode );
-    }
+    aClipPath.setClipPath(aPolyPolygon, nClippingMode);
 }
 
 WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
