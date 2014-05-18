@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
 
 static sal_uInt16 const aImplBig5Hkscs2001ToUnicodeData[] = {
  /* row 0: --- */

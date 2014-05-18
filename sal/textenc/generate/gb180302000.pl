@@ -224,13 +224,9 @@ open OUT, ("> " . $filename) or die "Cannot write " . $filename;
 }
 
 print OUT "\n",
-          "#ifndef INCLUDED_RTL_TEXTENC_CONVERTGB18030_H\n",
           "#include \"convertgb18030.h\"\n",
-          "#endif\n",
           "\n",
-          "#ifndef _SAL_TYPES_H_\n",
           "#include \"sal/types.h\"\n",
-          "#endif\n",
           "\n";
 
 print OUT "static sal_Unicode const aImpl", $id, "ToUnicodeData[] = {\n  ";

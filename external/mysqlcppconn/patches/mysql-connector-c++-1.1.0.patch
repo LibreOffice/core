@@ -1,13 +1,11 @@
 --- misc/mysql-connector-c++-1.1.0/cppconn/build_config.h	2010-09-10 11:47:47.000000000 +0200
 +++ misc/build/mysql-connector-c++-1.1.0/cppconn/build_config.h	2011-11-12 00:45:19.000000000 +0100
-@@ -25,25 +25,23 @@
+@@ -25,25 +25,21 @@
  #ifndef _SQL_BUILD_CONFIG_H_
  #define _SQL_BUILD_CONFIG_H_
  
 -#ifndef CPPCONN_PUBLIC_FUNC
-+#ifndef _SAL_TYPES_H_
 +#include <sal/types.h>
-+#endif
  
 -#if defined(_WIN32)
   // mysqlcppconn_EXPORTS is added by cmake and defined for dynamic lib build only

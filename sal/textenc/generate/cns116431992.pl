@@ -433,9 +433,7 @@ open OUT, ("> " . $filename) or die "Cannot write " . $filename;
 }
 
 print OUT "\n",
-          "#ifndef _SAL_TYPES_H_\n",
           "#include \"sal/types.h\"\n",
-          "#endif\n",
           "\n";
 
 print OUT "static sal_uInt16 const aImpl", $id, "ToUnicodeData[] = {\n";
