@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_aae30b04",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-18T09:29:18Z",
+      "side": 1,
+      "message": "Given that you removed the \"above check\", a later reader will have no idea what such an above check would be. Please move the comment to the commit message instead.",
+      "revId": "385c42ea0a1763c7313cfcfeb6284a5b0494b8d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
