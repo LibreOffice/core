@@ -28,13 +28,12 @@
 namespace writerfilter {
 namespace dmapper {
 
-using namespace ::com::sun::star;
 using resourcemodel::Fraction;
 
 class WrapPolygon
 {
 public:
-    typedef ::std::deque<awt::Point> Points_t;
+    typedef ::std::deque<css::awt::Point> Points_t;
     typedef ::boost::shared_ptr<WrapPolygon> Pointer_t;
 
 private:
@@ -44,7 +43,7 @@ public:
     WrapPolygon();
     virtual ~WrapPolygon();
 
-    void addPoint(const awt::Point & rPoint);
+    void addPoint(const css::awt::Point & rPoint);
 
     Points_t::const_iterator begin() const;
     Points_t::const_iterator end() const;
@@ -53,10 +52,10 @@ public:
 
     size_t size() const;
 
-    WrapPolygon::Pointer_t move(const awt::Point & rMove);
+    WrapPolygon::Pointer_t move(const css::awt::Point & rMove);
     WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
-    WrapPolygon::Pointer_t correctWordWrapPolygon(const awt::Size & rSrcSize);
-    drawing::PointSequenceSequence getPointSequenceSequence() const;
+    WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize);
+    css::drawing::PointSequenceSequence getPointSequenceSequence() const;
 };
 
 class WrapPolygonHandler : public LoggedProperties

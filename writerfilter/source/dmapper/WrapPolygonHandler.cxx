@@ -29,6 +29,7 @@
 namespace writerfilter {
 
 using resourcemodel::resolveSprmProps;
+using namespace com::sun::star;
 
 namespace dmapper {
 

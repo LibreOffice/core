@@ -37,8 +37,6 @@ namespace dmapper
 {
 class DomainMapper;
 
-using namespace std;
-
 struct SettingsTable_Impl;
 
 class SettingsTable : public LoggedProperties, public LoggedTable
