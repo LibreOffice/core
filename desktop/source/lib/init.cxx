@@ -174,6 +174,7 @@ static int doc_getNumberOfParts(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
 static unsigned char* doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
+                          int* pRowStride,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
 
@@ -410,6 +411,7 @@ boost::shared_array< sal_uInt8 > ourBuffer;
 // which /shouldn't/ apply in our case, but better to be safe here.
 static unsigned char* doc_paintTile (LibreOfficeKitDocument* pThis,
                            const int nCanvasWidth, const int nCanvasHeight,
+                           int* pRowStride,
                            const int nTilePosX, const int nTilePosY,
                            const int nTileWidth, const int nTileHeight)
 {
@@ -432,6 +434,7 @@ static unsigned char* doc_paintTile (LibreOfficeKitDocument* pThis,
         SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
         basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
 
+        *pRowStride = pBmpDev->getScanlineStride();
         ourBuffer = pBmpDev->getBuffer();
 
         pRet = ourBuffer.get();
