@@ -27,6 +27,8 @@
 
 #include "dmapperLoggers.hxx"
 
+using namespace com::sun::star;
+
 namespace writerfilter {
 
 using resourcemodel::resolveSprmProps;

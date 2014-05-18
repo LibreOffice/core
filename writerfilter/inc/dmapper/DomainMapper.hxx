@@ -124,9 +124,9 @@ public:
     /// Enable storing of seen tokens in a named grab bag.
     void enableInteropGrabBag(const OUString& aName);
     /// Get the stored tokens and clear the internal storage.
-    beans::PropertyValue getInteropGrabBag();
+    css::beans::PropertyValue getInteropGrabBag();
 
-    uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
+    css::uno::Sequence<css::beans::PropertyValue> GetThemeFontLangProperties() const;
     css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
 
     void HandleRedline( Sprm& rSprm );
@@ -150,7 +150,7 @@ private:
                            writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_substream(Id name,
                                ::writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
-    virtual void lcl_info(const string & info) SAL_OVERRIDE;
+    virtual void lcl_info(const std::string & info) SAL_OVERRIDE;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;

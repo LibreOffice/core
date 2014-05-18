@@ -23,7 +23,7 @@ namespace dmapper
 class LatentStyleHandler
     : public LoggedProperties
 {
-    std::vector<beans::PropertyValue> m_aAttributes;
+    std::vector<css::beans::PropertyValue> m_aAttributes;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value& val) SAL_OVERRIDE;

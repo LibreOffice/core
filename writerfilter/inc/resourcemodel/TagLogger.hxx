@@ -64,7 +64,7 @@ namespace writerfilter
 
 #ifdef DEBUG_DOMAINMAPPER
         void element(const std::string & name);
-        void unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet);
+        void unoPropertySet(css::uno::Reference<css::beans::XPropertySet> rPropSet);
 #endif
 #if OSL_DEBUG_LEVEL > 1
         void startElement(const std::string & name);
@@ -73,7 +73,7 @@ namespace writerfilter
 #if OSL_DEBUG_LEVEL > 1
         void attribute(const std::string & name, const OUString & value);
         void attribute(const std::string & name, sal_uInt32 value);
-        void attribute(const std::string & name, const uno::Any aAny);
+        void attribute(const std::string & name, const css::uno::Any aAny);
         void chars(const std::string & chars);
         void chars(const OUString & chars);
         void endElement();

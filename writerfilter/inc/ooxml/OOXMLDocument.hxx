@@ -139,7 +139,7 @@ public:
 
        DEBUGGING PURPOSE ONLY.
      */
-    virtual string getType() const SAL_OVERRIDE = 0;
+    virtual std::string getType() const SAL_OVERRIDE = 0;
 
     /**
        Resolves a footnote to a stream handler.

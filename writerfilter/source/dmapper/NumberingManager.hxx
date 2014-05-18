@@ -181,7 +181,7 @@ private:
     AbstractListDef::Pointer             m_pAbstractDef;
 
     // Cache for the UNO numbering rules
-    uno::Reference< container::XIndexReplace > m_xNumRules;
+    css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
 public:
     typedef boost::shared_ptr< ListDef > Pointer;

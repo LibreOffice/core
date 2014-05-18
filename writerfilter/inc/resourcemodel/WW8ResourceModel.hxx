@@ -55,8 +55,6 @@
 typedef sal_uInt32 Id;
 
 namespace writerfilter {
-using namespace ::com::sun::star;
-using namespace ::std;
 
 /**
     Reference to an resource that generates events and sends them to a
@@ -103,7 +101,7 @@ public:
     /**
        Returns the type of the reference aka the name of the access class.
      */
-    virtual string getType() const = 0;
+    virtual std::string getType() const = 0;
 
 protected:
     ~Reference() {}
@@ -277,7 +275,7 @@ public:
 
        @param info     the information
      */
-    virtual void info(const string & info) = 0;
+    virtual void info(const std::string & info) = 0;
 
 protected:
     ~Stream() {}
@@ -297,7 +295,7 @@ public:
        Pointer to a value.
      */
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    typedef auto_ptr<Value> Pointer_t;
+    typedef std::auto_ptr<Value> Pointer_t;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     virtual ~Value() {}
@@ -315,7 +313,7 @@ public:
     /**
        Returns representation of the value as uno::Any.
      */
-    virtual uno::Any getAny() const = 0;
+    virtual css::uno::Any getAny() const = 0;
 
     /**
        Returns properties of this value.
@@ -335,7 +333,7 @@ public:
     /**
        Returns string representation of this value.
      */
-    virtual string toString() const = 0;
+    virtual std::string toString() const = 0;
 };
 
 /**
@@ -346,7 +344,7 @@ class Sprm
 {
 public:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    typedef auto_ptr<Sprm> Pointer_t;
+    typedef std::auto_ptr<Sprm> Pointer_t;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     enum Kind { UNKNOWN, CHARACTER, PARAGRAPH, TABLE };
 
@@ -384,12 +382,12 @@ public:
     /**
        Returns name of sprm.
     */
-    virtual string getName() const = 0;
+    virtual std::string getName() const = 0;
 
     /**
        Returns string repesentation of sprm.
      */
-    virtual string toString() const = 0;
+    virtual std::string toString() const = 0;
 
 protected:
     ~Sprm() {}

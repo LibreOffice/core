@@ -27,15 +27,15 @@ namespace dmapper
 {
 
 void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger,
-        const uno::Any & rTableColumnSeparators);
+        const css::uno::Any & rTableColumnSeparators);
 void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger,
-        beans::PropertyValues & rValues);
+        css::beans::PropertyValues & rValues);
 
-typedef uno::Sequence<beans::PropertyValues> PropertyValueSeq_t;
+typedef css::uno::Sequence<css::beans::PropertyValues> PropertyValueSeq_t;
 void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger,
      PropertyValueSeq_t & rPropValSeq);
 
-typedef uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
+typedef css::uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
 void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger,
         PropertyValueSeqSeq_t & rPropValSeqSeq);
 }

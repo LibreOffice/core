@@ -29,6 +29,8 @@
 
 #include "dmapperLoggers.hxx"
 
+using namespace com::sun::star;
+
 namespace writerfilter {
 namespace dmapper
 {
@@ -213,7 +215,7 @@ void FontTable::lcl_substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
 {
 }
 
-void FontTable::lcl_info(const string& )
+void FontTable::lcl_info(const std::string& )
 {
 }
 

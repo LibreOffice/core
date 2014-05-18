@@ -33,14 +33,14 @@ QNameToString::Pointer_t QNameToString::Instance()
 }
 
 #ifdef DEBUG_LOGGING
-string QNameToString::operator()(Id qName)
+std::string QNameToString::operator()(Id qName)
 {
     Map::const_iterator aIt = mMap.find(qName);
 
     if (aIt != mMap.end())
         return aIt->second;
 
-    return string();
+    return std::string();
 }
 #endif
 

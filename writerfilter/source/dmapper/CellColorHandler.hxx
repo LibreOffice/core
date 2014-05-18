@@ -40,13 +40,13 @@ private:
     OutputFormat m_OutputFormat;
 
     OUString m_aInteropGrabBagName;
-    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
-    void createGrabBag(const OUString& aName, uno::Any aValue);
+    void createGrabBag(const OUString& aName, css::uno::Any aValue);
 
 public:
     CellColorHandler( );
@@ -57,7 +57,7 @@ public:
     void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 
     void enableInteropGrabBag(const OUString& aName);
-    beans::PropertyValue getInteropGrabBag();
+    css::beans::PropertyValue getInteropGrabBag();
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled();
 };

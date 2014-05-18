@@ -73,10 +73,10 @@ typedef boost::shared_ptr<WrapHandler> WrapHandlerPtr;
 class GraphicZOrderHelper
 {
 public:
-    void addItem( uno::Reference< beans::XPropertySet > props, sal_Int32 relativeHeight );
+    void addItem( css::uno::Reference< css::beans::XPropertySet > props, sal_Int32 relativeHeight );
     sal_Int32 findZOrder( sal_Int32 relativeHeight, bool bOldStyle = false );
 private:
-    typedef std::map< sal_Int32, uno::Reference< beans::XPropertySet > > Items;
+    typedef std::map< sal_Int32, css::uno::Reference< css::beans::XPropertySet > > Items;
     Items items;
 };
 

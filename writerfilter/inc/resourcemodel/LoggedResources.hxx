@@ -31,26 +31,26 @@ namespace writerfilter
 class LoggedResourcesHelper
 {
 public:
-    explicit LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const string & sPrefix);
+    explicit LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
     virtual ~LoggedResourcesHelper();
 
-    void startElement(const string & sElement);
-    void endElement(const string & sElement);
+    void startElement(const std::string & sElement);
+    void endElement(const std::string & sElement);
     void chars(const OUString & rChars);
-    void chars(const string & rChars);
-    void attribute(const string & rName, const string & rValue);
-    void attribute(const string & rName, sal_uInt32 nValue);
+    void chars(const std::string & rChars);
+    void attribute(const std::string & rName, const std::string & rValue);
+    void attribute(const std::string & rName, sal_uInt32 nValue);
 
 private:
     TagLogger::Pointer_t mpLogger;
-    string msPrefix;
+    std::string msPrefix;
 };
 #endif
 
 class LoggedStream : public Stream
 {
 public:
-    explicit LoggedStream(TagLogger::Pointer_t pLogger, const string & sPrefix);
+    explicit LoggedStream(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
     virtual ~LoggedStream();
 
     void startSectionGroup() SAL_OVERRIDE;
@@ -67,7 +67,7 @@ public:
     void props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
     void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
     void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
-    void info(const string & info) SAL_OVERRIDE;
+    void info(const std::string & info) SAL_OVERRIDE;
 
 protected:
     virtual void lcl_startSectionGroup() = 0;
@@ -84,7 +84,7 @@ protected:
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
     virtual void lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
-    virtual void lcl_info(const string & info) = 0;
+    virtual void lcl_info(const std::string & info) = 0;
 
 #ifdef DEBUG_LOGGING
     LoggedResourcesHelper mHelper;
@@ -94,7 +94,7 @@ protected:
 class LoggedProperties : public Properties
 {
 public:
-    explicit LoggedProperties(TagLogger::Pointer_t pLogger, const string & sPrefix);
+    explicit LoggedProperties(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
     virtual ~LoggedProperties();
 
     void attribute(Id name, Value & val) SAL_OVERRIDE;
@@ -112,7 +112,7 @@ protected:
 class LoggedTable : public Table
 {
 public:
-    explicit LoggedTable(TagLogger::Pointer_t pLogger, const string & sPrefix);
+    explicit LoggedTable(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
     virtual ~LoggedTable();
 
     void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;

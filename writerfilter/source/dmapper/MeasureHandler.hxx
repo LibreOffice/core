@@ -38,7 +38,7 @@ class MeasureHandler : public LoggedProperties
     sal_Int16 m_nRowHeightSizeType; //table row height type
 
     OUString m_aInteropGrabBagName;
-    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
@@ -55,7 +55,7 @@ public:
 
     sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType;}
     void enableInteropGrabBag(const OUString& aName);
-    beans::PropertyValue getInteropGrabBag();
+    css::beans::PropertyValue getInteropGrabBag();
 };
 typedef boost::shared_ptr
     < MeasureHandler >  MeasureHandlerPtr;

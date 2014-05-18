@@ -22,7 +22,7 @@ namespace rtftok
 class RTFSdrImport
 {
 public:
-    RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
+    RTFSdrImport(RTFDocumentImpl& rImport, css::uno::Reference<css::lang::XComponent> const& xDstDoc);
     virtual ~RTFSdrImport();
 
     void resolve(RTFShape& rShape, bool bClose);
@@ -30,25 +30,25 @@ public:
     void append(const OUString& aKey, const OUString& aValue);
     /// Append property on the current parent.
     void appendGroupProperty(const OUString& aKey, const OUString& aValue);
-    void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
-    void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
+    void resolveDhgt(css::uno::Reference<css::beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
+    void resolveFLine(css::uno::Reference<css::beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
     /**
      * These are the default in Word, but not in Writer.
      *
      * @param bNew if the frame is new-style or old-style.
      */
-    std::vector<beans::PropertyValue> getTextFrameDefaults(bool bNew);
+    std::vector<css::beans::PropertyValue> getTextFrameDefaults(bool bNew);
     /// Push a new group shape to the parent stack.
-    void pushParent(uno::Reference<drawing::XShapes> xParent);
+    void pushParent(css::uno::Reference<css::drawing::XShapes> xParent);
     /// Pop the current group shape from the parent stack.
     void popParent();
 private:
-    void createShape(const OUString& aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
-    void applyProperty(uno::Reference<drawing::XShape> xShape, const OUString& aKey, const OUString& aValue);
+    void createShape(const OUString& aService, css::uno::Reference<css::drawing::XShape>& xShape, css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    void applyProperty(css::uno::Reference<css::drawing::XShape> xShape, const OUString& aKey, const OUString& aValue);
 
     RTFDocumentImpl& m_rImport;
-    std::stack< uno::Reference<drawing::XShapes> > m_aParents;
-    uno::Reference<drawing::XShape> m_xShape;
+    std::stack< css::uno::Reference<css::drawing::XShapes> > m_aParents;
+    css::uno::Reference<css::drawing::XShape> m_xShape;
     /// If m_xShape is imported as a Writer text frame (instead of a drawinglayer rectangle).
     bool m_bTextFrame;
 };

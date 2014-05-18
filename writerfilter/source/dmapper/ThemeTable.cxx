@@ -25,6 +25,8 @@
 #include <resourcemodel/QNameToString.hxx>
 #endif
 
+using namespace com::sun::star;
+
 namespace writerfilter {
 namespace dmapper
 {

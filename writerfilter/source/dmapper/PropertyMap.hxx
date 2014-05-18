@@ -73,18 +73,18 @@ enum GrabBagType
 
 class PropValue
 {
-    uno::Any m_aValue;
+    css::uno::Any m_aValue;
     GrabBagType m_rGrabBagType;
 
 public:
-    PropValue(const uno::Any& rValue, GrabBagType rGrabBagType = NO_GRAB_BAG) :
+    PropValue(const css::uno::Any& rValue, GrabBagType rGrabBagType = NO_GRAB_BAG) :
         m_aValue(rValue), m_rGrabBagType(rGrabBagType) {}
 
     PropValue() : m_aValue(), m_rGrabBagType(NO_GRAB_BAG) {}
 
     PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_rGrabBagType = rProp.m_rGrabBagType; return *this; }
 
-    const uno::Any& getValue() const { return m_aValue; }
+    const css::uno::Any& getValue() const { return m_aValue; }
     bool hasGrabBag() const { return m_rGrabBagType != NO_GRAB_BAG; }
     GrabBagType getGrabBagType() const { return m_rGrabBagType; }
 };

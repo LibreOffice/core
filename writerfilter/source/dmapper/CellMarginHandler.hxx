@@ -36,7 +36,7 @@ private:
     sal_Int32   m_nType; ///< Unit of the value (dxa, etc).
 
     OUString m_aInteropGrabBagName;
-    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
@@ -61,7 +61,7 @@ public:
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
     void enableInteropGrabBag(const OUString& aName);
-    beans::PropertyValue getInteropGrabBag();
+    css::beans::PropertyValue getInteropGrabBag();
 
 };
 typedef boost::shared_ptr< CellMarginHandler >          CellMarginHandlerPtr;

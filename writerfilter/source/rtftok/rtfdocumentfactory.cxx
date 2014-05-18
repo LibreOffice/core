@@ -14,11 +14,11 @@ namespace writerfilter
 namespace rtftok
 {
 
-RTFDocument::Pointer_t RTFDocumentFactory::createDocument(uno::Reference< uno::XComponentContext > const& xContext,
-        uno::Reference< io::XInputStream > const& xInputStream,
-        uno::Reference< lang::XComponent > const& xDstDoc,
-        uno::Reference< frame::XFrame > const& xFrame,
-        uno::Reference< task::XStatusIndicator > const& xStatusIndicator)
+RTFDocument::Pointer_t RTFDocumentFactory::createDocument(css::uno::Reference< css::uno::XComponentContext > const& xContext,
+        css::uno::Reference< css::io::XInputStream > const& xInputStream,
+        css::uno::Reference< css::lang::XComponent > const& xDstDoc,
+        css::uno::Reference< css::frame::XFrame > const& xFrame,
+        css::uno::Reference< css::task::XStatusIndicator > const& xStatusIndicator)
 {
     return RTFDocument::Pointer_t(new RTFDocumentImpl(xContext, xInputStream, xDstDoc, xFrame, xStatusIndicator));
 }

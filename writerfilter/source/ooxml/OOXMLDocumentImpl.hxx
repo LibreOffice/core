@@ -97,7 +97,7 @@ public:
 
     virtual void resolve(Stream & rStream) SAL_OVERRIDE;
 
-    virtual string getType() const SAL_OVERRIDE;
+    virtual std::string getType() const SAL_OVERRIDE;
 
     virtual void resolveFootnote(Stream & rStream,
                                  const Id & rType,

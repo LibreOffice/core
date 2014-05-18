@@ -143,9 +143,9 @@ class RTFDrawingObject : public RTFShape
 {
 public:
     RTFDrawingObject();
-    uno::Reference<drawing::XShape> xShape;
-    uno::Reference<beans::XPropertySet> xPropertySet;
-    std::vector<beans::PropertyValue> aPendingProperties;
+    css::uno::Reference<css::drawing::XShape> xShape;
+    css::uno::Reference<css::beans::XPropertySet> xPropertySet;
+    std::vector<css::beans::PropertyValue> aPendingProperties;
     sal_uInt8 nLineColorR, nLineColorG, nLineColorB;
     bool bHasLineColor;
     sal_uInt8 nFillColorR, nFillColorG, nFillColorB;
@@ -153,7 +153,7 @@ public:
     sal_Int32 nDhgt;
     sal_Int32 nFLine;
     sal_Int32 nPolyLineCount;
-    uno::Sequence<awt::Point> aPolyLinePoints;
+    css::uno::Sequence<css::awt::Point> aPolyLinePoints;
     bool bHadShapeText;
 };
 
@@ -313,11 +313,11 @@ class RTFDocumentImpl
 {
 public:
     typedef ::boost::shared_ptr<RTFDocumentImpl> Pointer_t;
-    RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
-                    uno::Reference<io::XInputStream> const& xInputStream,
-                    uno::Reference<lang::XComponent> const& xDstDoc,
-                    uno::Reference<frame::XFrame> const& xFrame,
-                    uno::Reference<task::XStatusIndicator> const& xStatusIndicator);
+    RTFDocumentImpl(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                    css::uno::Reference<css::io::XInputStream> const& xInputStream,
+                    css::uno::Reference<css::lang::XComponent> const& xDstDoc,
+                    css::uno::Reference<css::frame::XFrame> const& xFrame,
+                    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
     virtual ~RTFDocumentImpl();
 
     // RTFDocument
@@ -350,7 +350,7 @@ public:
     void setAuthorInitials(OUString& rAuthorInitials);
     void setIgnoreFirst(OUString& rIgnoreFirst);
     void seek(sal_Size nPos);
-    uno::Reference<lang::XMultiServiceFactory> getModelFactory();
+    css::uno::Reference<css::lang::XMultiServiceFactory> getModelFactory();
     bool isInBackground();
     void setDestinationText(OUString& rString);
     /// Resolve a picture: If not inline, then anchored.
@@ -421,13 +421,13 @@ private:
     void backupTableRowProperties();
     void restoreTableRowProperties();
 
-    uno::Reference<uno::XComponentContext> const& m_xContext;
-    uno::Reference<io::XInputStream> const& m_xInputStream;
-    uno::Reference<lang::XComponent> const& m_xDstDoc;
-    uno::Reference<frame::XFrame> const& m_xFrame;
-    uno::Reference<task::XStatusIndicator> const& m_xStatusIndicator;
-    uno::Reference<lang::XMultiServiceFactory> m_xModelFactory;
-    uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
+    css::uno::Reference<css::uno::XComponentContext> const& m_xContext;
+    css::uno::Reference<css::io::XInputStream> const& m_xInputStream;
+    css::uno::Reference<css::lang::XComponent> const& m_xDstDoc;
+    css::uno::Reference<css::frame::XFrame> const& m_xFrame;
+    css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xModelFactory;
+    css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
     boost::shared_ptr<SvStream> m_pInStream;
     Stream* m_pMapperStream;
     boost::shared_ptr<RTFSdrImport> m_pSdrImport;

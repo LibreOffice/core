@@ -42,7 +42,7 @@ public:
 
     const OUString getFontNameForTheme(const Id id) const;
     static OUString getStringForTheme(const Id id);
-    void setThemeFontLangProperties(const uno::Sequence<beans::PropertyValue>& aPropSeq);
+    void setThemeFontLangProperties(const css::uno::Sequence<css::beans::PropertyValue>& aPropSeq);
 
  private:
     // Properties

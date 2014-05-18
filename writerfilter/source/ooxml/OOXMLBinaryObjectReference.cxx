@@ -70,7 +70,7 @@ void OOXMLBinaryObjectReference::resolve(BinaryObj & rHandler)
                   mSequence.getLength(), pRef);
 }
 
-string OOXMLBinaryObjectReference::getType() const
+std::string OOXMLBinaryObjectReference::getType() const
 {
     return "OOXMLBinaryObjectReference";
 }

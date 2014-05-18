@@ -10,6 +10,8 @@
 #include <rtfreferenceproperties.hxx>
 #include <rtfdocumentimpl.hxx>
 
+using namespace com::sun::star;
+
 namespace writerfilter
 {
 namespace rtftok

@@ -40,6 +40,8 @@
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 
+using namespace com::sun::star;
+
 namespace writerfilter
 {
 namespace rtftok

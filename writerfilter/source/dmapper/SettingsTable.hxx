@@ -74,11 +74,11 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetSplitPgBreakAndParaMark() const;
     bool GetMirrorMarginSettings() const;
 
-    uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
+    css::uno::Sequence<css::beans::PropertyValue> GetThemeFontLangProperties() const;
 
-    uno::Sequence<beans::PropertyValue> GetCompatSettings() const;
+    css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
 
-    void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
+    void ApplyProperties( css::uno::Reference< css::text::XTextDocument > xDoc );
 
  private:
     // Properties

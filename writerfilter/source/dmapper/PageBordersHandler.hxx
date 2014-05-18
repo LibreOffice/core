@@ -52,7 +52,7 @@ private:
     // See implementation of SectionPropertyMap::ApplyBorderToPageStyles
     sal_Int32 m_nDisplay;
     sal_Int32 m_nOffset;
-    vector<_PgBorder> m_aBorders;
+    std::vector<_PgBorder> m_aBorders;
 
     // Properties
     virtual void lcl_attribute( Id eName, Value& rVal ) SAL_OVERRIDE;

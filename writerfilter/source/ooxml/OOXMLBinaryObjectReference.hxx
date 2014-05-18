@@ -40,7 +40,7 @@ public:
 
     virtual void resolve(BinaryObj & rHandler) SAL_OVERRIDE;
 
-    virtual string getType() const SAL_OVERRIDE;
+    virtual std::string getType() const SAL_OVERRIDE;
 };
 }}
 
