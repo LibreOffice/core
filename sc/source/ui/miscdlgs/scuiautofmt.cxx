@@ -50,6 +50,7 @@
 #include "scuiautofmt.hxx"
 #include "scresid.hxx"
 #include "document.hxx"
+#include <boost/scoped_ptr.hpp>
 
 
 // AutoFormat-Dialog:
@@ -203,16 +204,15 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
     {
         OUString aStrStandard( SfxResId(STR_STANDARD) );
         OUString aFormatName;
-        ScStringInputDlg*   pDlg;
         bool bOk = false;
 
         while ( !bOk )
         {
-            pDlg = new ScStringInputDlg( this,
+            boost::scoped_ptr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
                                          aStrTitle,
                                          aStrLabel,
                                          aFormatName,
-                                         HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME );
+                                         HID_SC_ADD_AUTOFMT, HID_SC_AUTOFMT_NAME ));
 
             if ( pDlg->Execute() == RET_OK )
             {
@@ -261,8 +261,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
             }
             else
                 bOk = true;
-
-            delete pDlg;
         }
     }
 
@@ -316,11 +314,11 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
         OUString aFormatName = m_pLbFormat->GetSelectEntry();
         OUString aEntry;
 
-        ScStringInputDlg* pDlg = new ScStringInputDlg( this,
+        boost::scoped_ptr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
                                          aStrRename,
                                          aStrLabel,
                                          aFormatName,
-                                         HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME );
+                                         HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME ));
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;
@@ -386,7 +384,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
         }
         else
             bOk = true;
-        delete pDlg;
     }
 
     return 0;

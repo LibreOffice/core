@@ -790,7 +790,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg(GetDialogParent());
+                boost::scoped_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
                     OUString( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
@@ -811,7 +811,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     sal_uInt16 nSelIx;
                     for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
                         aIndexList.insert( aIndexList.begin()+nSelIx, pDlg->GetSelectEntryPos( nSelIx ) );
-                    delete pDlg;
+                    pDlg.reset();
                     rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, aIndexList ) );
                 }
                 else

@@ -83,6 +83,7 @@ using namespace ::com::sun::star;
 #include "drawview.hxx"
 #include "markdata.hxx"
 #include "gridwin.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace {
 
@@ -245,9 +246,9 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
             case SID_INSERT_FLOATINGFRAME :
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                SfxAbstractInsertObjectDialog* pDlg =
+                boost::scoped_ptr<SfxAbstractInsertObjectDialog> pDlg(
                         pFact->CreateInsertObjectDialog( pViewShell->GetWindow(), SC_MOD()->GetSlotPool()->GetSlot(nSlot)->GetCommandString(),
-                        xStorage, &aServerLst );
+                        xStorage, &aServerLst ));
                 if ( pDlg )
                 {
                     pDlg->Execute();
@@ -261,7 +262,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                         pViewSh->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                     // damit DrawShell eingeschaltet wird (Objekt aktivieren ist unnoetig):
                     bIsFromFile = !pDlg->IsCreateNew();
-                    DELETEZ( pDlg );
                 }
 
                 break;

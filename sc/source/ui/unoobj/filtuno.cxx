@@ -40,6 +40,7 @@
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <boost/scoped_ptr.hpp>
 
 
 using namespace ::com::sun::star;
@@ -194,11 +195,11 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
 
         INetURLObject aURL( aFileName );
         OUString aPrivDatName(aURL.getName());
-        SvStream* pInStream = NULL;
+        boost::scoped_ptr<SvStream> pInStream;
         if ( xInputStream.is() )
-            pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
+            pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
 
-        AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, SC_IMPORTFILE);
+        boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
@@ -208,8 +209,6 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
             aFilterOptions = aOptions.WriteToString();
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
-        delete pDlg;
-        delete pInStream;
     }
     else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
     {
@@ -301,9 +300,9 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
 
-        AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg(NULL,
+        boost::scoped_ptr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(NULL,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
-                                                                            !bExport);
+                                                                            !bExport));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
@@ -315,7 +314,6 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
                 aFilterOptions = aOptions.aStrFont;
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
-        delete pDlg;
     }
 
     xInputStream.clear();   // don't hold the stream longer than necessary

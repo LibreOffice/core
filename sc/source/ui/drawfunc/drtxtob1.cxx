@@ -38,6 +38,7 @@
 #include "scresid.hxx"
 
 #include "scabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 
 bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
@@ -46,9 +47,9 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
         pViewData->GetDialogParent(), &rArgs,
-        pViewData->GetSfxDocShell());
+        pViewData->GetSfxDocShell()));
     OSL_ENSURE(pDlg, "Dialog create fail!");
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
@@ -62,7 +63,6 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
         if ( pNewAttrs )
             rOutSet.Put( *pNewAttrs );
     }
-    delete pDlg;
 
     return bRet;
 }
@@ -94,8 +94,8 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg(
-        pViewData->GetDialogParent(), &aNewAttr);
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScParagraphDlg(
+        pViewData->GetDialogParent(), &aNewAttr));
     OSL_ENSURE(pDlg, "Dialog create fail!");
     bool bRet = ( pDlg->Execute() == RET_OK );
 
@@ -105,7 +105,6 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
         if ( pNewAttrs )
             rOutSet.Put( *pNewAttrs );
     }
-    delete pDlg;
 
     return bRet;
 }
@@ -115,7 +114,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SdrView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
+    boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
 
     pDlg->Insert( SOT_FORMAT_STRING, EMPTY_OUSTRING );
     pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_OUSTRING );
@@ -133,7 +132,6 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
         else
             pOutView->PasteSpecial();
     }
-    delete pDlg;
 }
 
 

@@ -272,7 +272,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_PASTE_SPECIAL:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
+                boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
                 sal_uLong nFormat = 0;
                 if ( pDlg )
                 {
@@ -283,8 +283,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
                     nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
-                    DELETEZ(pDlg);
                 }
+                pDlg.reset();
 
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())

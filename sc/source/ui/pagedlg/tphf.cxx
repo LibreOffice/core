@@ -41,6 +41,7 @@
 #include "scresid.hxx"
 #include "scuitphfedit.hxx"
 #undef _TPHF_CXX
+#include <boost/scoped_ptr.hpp>
 
 
 // class ScHFPage
@@ -191,21 +192,19 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg(
-            pViewSh->GetViewFrame(), this, aDataSet, aStrPageStyle, nResId);
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
+            pViewSh->GetViewFrame(), this, aDataSet, aStrPageStyle, nResId));
 
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             aDataSet.Put( *pDlg->GetOutputItemSet() );
         }
-
-        delete pDlg;
     }
     else
     {
         OUString  aText;
-        SfxSingleTabDialog* pDlg = new SfxSingleTabDialog(this, aDataSet);
+        boost::scoped_ptr<SfxSingleTabDialog> pDlg(new SfxSingleTabDialog(this, aDataSet));
         const int nSettingsId = 42;
         bool bRightPage =   m_pCntSharedBox->IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
@@ -239,8 +238,6 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         {
             aDataSet.Put( *pDlg->GetOutputItemSet() );
         }
-
-        delete pDlg;
     }
 
     return 0;

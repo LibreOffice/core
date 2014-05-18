@@ -698,12 +698,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-                    AbstractScTabBgColorDlg* pDlg = pFact->CreateScTabBgColorDlg(
+                    boost::scoped_ptr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
                                                                 GetDialogParent(),
                                                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
                                                                 OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)),
                                                                 aTabBgColor,
-                                                                CMD_FID_TAB_SET_TAB_BG_COLOR);
+                                                                CMD_FID_TAB_SET_TAB_BG_COLOR));
                     while ( !bDone && nRet == RET_OK )
                     {
                         nRet = pDlg->Execute();
@@ -747,7 +747,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                             }
                         }
-                        delete( pDlg );
                     }
                 }
                 break;

@@ -76,6 +76,8 @@
 #define ScDrawTextObjectBar
 #include "scslots.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL))
@@ -833,14 +835,14 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, pView );
+                    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, pView ));
 
                     bDone = ( RET_OK == pDlg->Execute() );
 
                     if ( bDone )
                         aNewAttr.Put( *pDlg->GetOutputItemSet() );
 
-                    delete pDlg;
+                    pDlg.reset();
 
                     SfxBindings& rBindings = pViewData->GetBindings();
                     rBindings.Invalidate( SID_TABLE_VERT_NONE );
