@@ -27,23 +27,20 @@ namespace writerfilter {
 
 namespace ooxml
 {
-using namespace ::std;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::xml::sax;
 
 template <class T>
 class OOXMLFastHelper
 {
 public:
-    static uno::Reference<XFastContextHandler> createAndSetParent
+    static css::uno::Reference<css::xml::sax::XFastContextHandler> createAndSetParent
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId);
 
-    static uno::Reference<XFastContextHandler> createAndSetParentAndDefine
+    static css::uno::Reference<css::xml::sax::XFastContextHandler> createAndSetParentAndDefine
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine);
 
-    static uno::Reference<XFastContextHandler> createAndSetParentRef
+    static css::uno::Reference<css::xml::sax::XFastContextHandler> createAndSetParentRef
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken,
-     const uno::Reference < xml::sax::XFastAttributeList > & Attribs);
+     const css::uno::Reference < css::xml::sax::XFastAttributeList > & Attribs);
 
     static void newProperty(OOXMLFastContextHandler * pHandler,
                             Id nId,
@@ -54,11 +51,11 @@ public:
 
     static void attributes
     (OOXMLFastContextHandler * pContext,
-     const uno::Reference < xml::sax::XFastAttributeList > & Attribs);
+     const css::uno::Reference < css::xml::sax::XFastAttributeList > & Attribs);
 };
 
 template <class T>
-uno::Reference<XFastContextHandler>
+uno::Reference<css::xml::sax::XFastContextHandler>
 OOXMLFastHelper<T>::createAndSetParent
 (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId)
 {
@@ -85,13 +82,13 @@ OOXMLFastHelper<T>::createAndSetParent
     debug_logger->endElement("helper.createAndSetParent");
 #endif
 
-    uno::Reference<XFastContextHandler> aResult(pTmp);
+    css::uno::Reference<css::xml::sax::XFastContextHandler> aResult(pTmp);
 
     return aResult;
 }
 
 template <class T>
-uno::Reference<XFastContextHandler>
+uno::Reference<css::xml::sax::XFastContextHandler>
 OOXMLFastHelper<T>::createAndSetParentAndDefine
 (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine)
 {
@@ -120,16 +117,16 @@ OOXMLFastHelper<T>::createAndSetParentAndDefine
     debug_logger->endElement("helper.createAndSetParentAndDefine");
 #endif
 
-    uno::Reference<XFastContextHandler> aResult(pTmp);
+    css::uno::Reference<css::xml::sax::XFastContextHandler> aResult(pTmp);
 
     return aResult;
 }
 
 template <class T>
-uno::Reference<XFastContextHandler>
+uno::Reference<css::xml::sax::XFastContextHandler>
 OOXMLFastHelper<T>::createAndSetParentRef
 (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken,
- const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
+ const css::uno::Reference < css::xml::sax::XFastAttributeList > & Attribs)
 {
 #ifdef DEBUG_HELPER
     debug_logger->startElement("helper.createAndSetParentRef");
@@ -139,7 +136,7 @@ OOXMLFastHelper<T>::createAndSetParentRef
 
     boost::shared_ptr<OOXMLFastContextHandler> pTmp(new T(pHandler));
 
-    uno::Reference<XFastContextHandler> xChild =
+    css::uno::Reference<css::xml::sax::XFastContextHandler> xChild =
         pTmp->createFastChildContext(nToken, Attribs);
 
     if (xChild.is())

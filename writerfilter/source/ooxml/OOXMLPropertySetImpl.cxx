@@ -689,7 +689,7 @@ string OOXMLUniversalMeasureValue::toString() const
  */
 
 
-OOXMLShapeValue::OOXMLShapeValue(uno::Reference<XShape> rShape)
+OOXMLShapeValue::OOXMLShapeValue(uno::Reference<drawing::XShape> rShape)
 : mrShape(rShape)
 {
 }

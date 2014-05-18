@@ -26,8 +26,6 @@
 namespace writerfilter {
 namespace ooxml
 {
-using namespace ::com::sun::star;
-using namespace ::std;
 
 template <class Interface, class ChildClass>
 class RefAndPointer
@@ -45,8 +43,8 @@ public:
     : mpHandler(pHandler), mRef(pHandler)
     {
 #ifdef DEBUG_MEMORY
-        clog << "MEMORY:" << mpHandler->getInstanceNumber() << ":RefAndPointer"
-             << endl;
+        std::clog << "MEMORY:" << mpHandler->getInstanceNumber() << ":RefAndPointer"
+             << std::endl;
 #endif
     }
 
@@ -56,8 +54,8 @@ public:
         mpHandler = dynamic_cast<ChildClass *>(xRef.get());
 #ifdef DEBUG_MEMORY
         if (mpHandler != NULL)
-            clog << "MEMORY:" << mpHandler->getInstanceNumber()
-                 << ":RefAndPointer" << endl;
+            std::clog << "MEMORY:" << mpHandler->getInstanceNumber()
+                 << ":RefAndPointer" << std::endl;
 #endif
     }
 
@@ -65,8 +63,8 @@ public:
     {
 #ifdef DEBUG_MEMORY
         if (mpHandler != NULL)
-            clog << "MEMORY:" << mpHandler->getInstanceNumber()
-                 << ":~RefAndPointer" << endl;
+            std::clog << "MEMORY:" << mpHandler->getInstanceNumber()
+                 << ":~RefAndPointer" << std::endl;
 #endif
     }
 

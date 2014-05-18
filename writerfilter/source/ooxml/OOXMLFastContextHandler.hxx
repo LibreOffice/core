@@ -41,9 +41,6 @@
 namespace writerfilter {
 namespace ooxml
 {
-using namespace ::std;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::xml::sax;
 
 typedef boost::shared_ptr<Stream> StreamPointer_t;
 
@@ -555,25 +552,25 @@ public:
     bool isShapeSent( ) { return m_bShapeSent; }
 
 protected:
-    typedef uno::Reference<XFastShapeContextHandler> ShapeContextRef;
+    typedef css::uno::Reference<css::xml::sax::XFastShapeContextHandler> ShapeContextRef;
     ShapeContextRef mrShapeContext;
 
     virtual void lcl_startFastElement
     (Token_t Element,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException) SAL_OVERRIDE;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException) SAL_OVERRIDE;
 
     virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException) SAL_OVERRIDE;
 
     virtual uno::Reference< xml::sax::XFastContextHandler >
     lcl_createFastChildContext
     (Token_t Element,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException) SAL_OVERRIDE;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException) SAL_OVERRIDE;
 
     virtual void lcl_characters(const OUString & aChars)
-                throw (uno::RuntimeException, xml::sax::SAXException) SAL_OVERRIDE;
+                throw (css::uno::RuntimeException, css::xml::sax::SAXException) SAL_OVERRIDE;
 
 };
 

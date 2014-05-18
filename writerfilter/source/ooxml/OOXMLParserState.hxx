@@ -32,8 +32,6 @@ namespace writerfilter {
 namespace ooxml
 {
 
-using ::std::stack;
-
 class OOXMLParserState
 {
     bool mbInSectionGroup;
@@ -46,9 +44,9 @@ class OOXMLParserState
     OOXMLDocumentImpl* mpDocument;
     OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
-    stack<OOXMLPropertySet::Pointer_t> mCellProps;
-    stack<OOXMLPropertySet::Pointer_t> mRowProps;
-    stack<OOXMLPropertySet::Pointer_t> mTableProps;
+    std::stack<OOXMLPropertySet::Pointer_t> mCellProps;
+    std::stack<OOXMLPropertySet::Pointer_t> mRowProps;
+    std::stack<OOXMLPropertySet::Pointer_t> mTableProps;
     bool inTxbxContent;
     // these 4 save when inTxbxContent
     bool savedInParagraphGroup;
@@ -79,7 +77,7 @@ public:
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
 
-    const string getHandle() const;
+    const std::string getHandle() const;
     void setHandle();
 
     void setDocument(OOXMLDocumentImpl* pDocument);

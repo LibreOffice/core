@@ -99,7 +99,7 @@ bool OOXMLParserState::isForwardEvents() const
     return mbForwardEvents;
 }
 
-const string OOXMLParserState::getHandle() const
+const std::string OOXMLParserState::getHandle() const
 {
     char sBuffer[256];
 
@@ -306,7 +306,7 @@ void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
 {
     pLogger->startElement("parserstate");
 
-    string sTmp;
+    std::string sTmp;
 
     if (isInSectionGroup())
         sTmp += "s";
