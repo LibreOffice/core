@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDT_UNOMID_HXX
-#define _EDT_UNOMID_HXX
+#ifndef _EDT_UNOMID_HRC
+#define _EDT_UNOMID_HRC
 
 #include <svl/memberid.hrc>
 
