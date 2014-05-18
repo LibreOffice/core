@@ -39,11 +39,23 @@ bool drawCallback(GtkWidget* /* The eventbox */, void* /* cairo_t* cr */, gpoint
 
     Document* pDocument = static_cast< Document* >( pData );
 
-    // Hardcoded tile just to see whether or not we get any sort of output.
-    unsigned char* pBuffer = pDocument->paintTile( 1000, 1000, 0, 0, 10000, 10000 );
+    long nWidth, nHeight;
+    pDocument->getDocumentSize( &nWidth, &nHeight );
+
+    // Draw the whole document at once (for now)
+    int nRenderWidth = nWidth / 10;
+    int nRenderHeight = nHeight / 10;
+    int nRowStride;
+    unsigned char* pBuffer = pDocument->paintTile( nRenderWidth, nRenderHeight,
+                                                   &nRowStride,
+                                                   0, 0, // origin
+                                                   nWidth, nHeight );
+
 
     GdkPixbuf* pBixBuf = gdk_pixbuf_new_from_data( pBuffer, GDK_COLORSPACE_RGB,
-                                                   false, 8, 1000, 1000, 3*1000,
+                                                   false, 8,
+                                                   nRenderWidth, nRenderHeight,
+                                                   nRowStride,
                                                    0, 0 );
     pBixBuf = gdk_pixbuf_flip( pBixBuf, false );
     gtk_image_set_from_pixbuf( GTK_IMAGE(ourCanvas), pBixBuf );
