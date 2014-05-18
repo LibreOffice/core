@@ -27,37 +27,46 @@ using namespace css;
 
 class WmfTest : public test::BootstrapFixture, public XmlTestTools
 {
+    OUString maDataUrl;
+
+    OUString getFullUrl(OUString sFileName)
+    {
+        return getURLFromSrc(maDataUrl) + sFileName;
+    }
+
 public:
     WmfTest() :
-        BootstrapFixture(true, false)
+        BootstrapFixture(true, false),
+        maDataUrl("/vcl/qa/cppunit/wmf/data/")
     {}
 
     void testNonPlaceableWmf();
+    void testSine();
+    void testEmfProblem();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testNonPlaceableWmf);
+    CPPUNIT_TEST(testSine);
+    CPPUNIT_TEST(testEmfProblem);
     CPPUNIT_TEST_SUITE_END();
 };
 
 void WmfTest::testNonPlaceableWmf()
 {
-    OUString aUrl = getURLFromSrc("/vcl/qa/cppunit/wmf/data/");
-
-    SvFileStream aFileStream(aUrl + "visio_import_source.wmf", STREAM_READ);
+    SvFileStream aFileStream(getFullUrl("visio_import_source.wmf"), STREAM_READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    boost::scoped_ptr<SvMemoryStream> aStream(new SvMemoryStream);
+    SvMemoryStream aStream;
 
-    MetafileXmlDump dumper(*aStream);
+    MetafileXmlDump dumper(aStream);
     dumper.filterAllActionTypes();
     dumper.filterActionType(META_POLYLINE_ACTION, false);
     dumper.dump(aGDIMetaFile);
 
-    aStream->WriteChar(0);
-    aStream->Seek(STREAM_SEEK_TO_BEGIN);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-    xmlDocPtr pDoc = parseXmlStream(aStream.get());
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -75,6 +84,61 @@ void WmfTest::testNonPlaceableWmf()
 
     assertXPath(pDoc, "/metafile/polyline[1]/point[5]", "x", "16798");
     assertXPath(pDoc, "/metafile/polyline[1]/point[5]", "y", "1003");
+}
+
+void WmfTest::testSine()
+{
+    SvFileStream aFileStream(getFullUrl("sine_wave.emf"), STREAM_READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    SvMemoryStream aStream;
+
+    MetafileXmlDump dumper(aStream);
+    dumper.filterAllActionTypes();
+    dumper.filterActionType(META_ISECTRECTCLIPREGION_ACTION, false);
+    dumper.dump(aGDIMetaFile);
+
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+
+    CPPUNIT_ASSERT (pDoc);
+
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "top", "0");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "left", "0");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "bottom", "1155947");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "right", "1155378");
+
+    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "top", "1411");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "left", "2962");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "bottom", "16651");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "right", "20698");
+}
+
+void WmfTest::testEmfProblem()
+{
+    SvFileStream aFileStream(getFullUrl("computer_mail.emf"), STREAM_READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    SvMemoryStream aStream;
+
+    MetafileXmlDump dumper(aStream);
+    dumper.filterAllActionTypes();
+    dumper.filterActionType(META_ISECTRECTCLIPREGION_ACTION, false);
+    dumper.dump(aGDIMetaFile);
+
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+
+    CPPUNIT_ASSERT (pDoc);
+
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "top", "427");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "left", "740");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "bottom", "2823");
+    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "right", "1876");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);
