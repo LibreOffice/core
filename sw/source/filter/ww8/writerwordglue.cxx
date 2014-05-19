@@ -745,6 +745,83 @@ namespace sw
             return nDT;
         }
 
+
+        /** Find cFind in rParams if not embedded in " double quotes.
+            Will NOT find '\\' or '"'.
+         */
+        sal_Int32 findUnquoted( const OUString& rParams, sal_Unicode cFind, sal_Int32 nFromPos )
+        {
+            const sal_Int32 nLen = rParams.getLength();
+            if (nFromPos < 0 || nLen <= nFromPos)
+                return -1;
+            for (sal_Int32 nI = nFromPos; nI < nLen; ++nI)
+            {
+                const sal_Unicode c = rParams[nI];
+                if (c == '\\')
+                    ++nI;
+                else if (c == '\"')
+                {
+                    ++nI;
+                    // While not at the end and not at an unescaped end quote
+                    while (nI < nLen)
+                    {
+                        if (rParams[nI] == '\"' && rParams[nI-1] != '\\')
+                            break;
+                        ++nI;
+                    }
+                }
+                else //normal unquoted section
+                {
+                    if (c == cFind)
+                        return nI;
+                }
+            }
+            return -1;
+        }
+
+        /** Find all rFind in rParams if not embedded in " double quotes and
+            replace with rReplace. Will NOT find '\\' or '"'.
+         */
+        bool replaceUnquoted( OUString& rParams, const OUString& rFind, const OUString& rReplace )
+        {
+            bool bReplaced = false;
+            if (rFind.isEmpty())
+                return bReplaced;
+            const sal_Unicode cFirst = rFind[0];
+
+            sal_Int32 nLen = rParams.getLength();
+            for (sal_Int32 nI = 0; nI < nLen; ++nI)
+            {
+                const sal_Unicode c = rParams[nI];
+                if (rParams[nI] == '\\')
+                    ++nI;
+                else if (rParams[nI] == '\"')
+                {
+                    ++nI;
+                    // While not at the end and not at an unescaped end quote
+                    while (nI < nLen)
+                    {
+                        if (rParams[nI] == '\"' && rParams[nI-1] != '\\')
+                            break;
+                        ++nI;
+                    }
+                }
+                else //normal unquoted section
+                {
+                    if (c == cFirst && rParams.match( rFind, nI))
+                    {
+                        const sal_Int32 nFindLen = rFind.getLength();
+                        const sal_Int32 nDiff = rReplace.getLength() - nFindLen;
+                        rParams.replaceAt( nI, nFindLen, rReplace);
+                        nI += nFindLen + nDiff - 1;
+                        nLen += nDiff;
+                        bReplaced = true;
+                    }
+                }
+            }
+            return bReplaced;
+        }
+
         sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams,
             SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri,
             sal_uInt16 nDocLang)
@@ -756,36 +833,39 @@ namespace sw
 
             SwapQuotesInField(rParams);
 
-            // Force to Japanese when finding one of 'geaE'
-            bool bForceJapanese = (-1 != rParams.indexOf('g')
-                || -1 != rParams.indexOf('e') || -1 != rParams.indexOf('E') );
-            if ( bForceJapanese )
-            {
-                rParams = rParams.replaceAll( "ee", "yyyy" ).replaceAll( "EE", "YYYY" );
-            }
+            // Force to Japanese when finding one of 'geE'.
+            // XXX This actually may not be correct, all era keywords could be
+            // used in other locales as well. I just don't know about Word. But
+            // this is how it was for 10 years..
+            bool bForceJapanese = (-1 != findUnquoted( rParams, 'g', 0));
+            // XXX Why replace? The number formatter does handle them and this
+            // effectively changes from Gengou to Gregorian calendar. Legacy
+            // because it wasn't supported a decade ago and now moot? Or is
+            // that a Word specialty?
+            bForceJapanese |= replaceUnquoted( rParams, "ee", "yyyy");
+            bForceJapanese |= replaceUnquoted( rParams, "EE", "YYYY");
             if (LANGUAGE_FRENCH != nDocLang)
             {
                 // Handle the 'a' case here
                 sal_Int32 nLastPos = 0;
                 do
                 {
-                    sal_Int32 nPos = rParams.indexOf( 'a', nLastPos + 1 );
+                    sal_Int32 nPos = findUnquoted( rParams, 'a', nLastPos + 1 );
                     bForceJapanese |= ( nPos != -1 && IsNotAM( rParams, nPos ) );
                     nLastPos = nPos;
                 } while ( -1 != nLastPos );
             }
 
             // Force to NatNum when finding one of 'oOA'
-            OUString sOldParams( rParams );
-            rParams = rParams.replaceAll( "o", "m" ).replaceAll( "O", "M" );
-            bool bForceNatNum = !sOldParams.equals( rParams );
+            bool bForceNatNum  = replaceUnquoted( rParams, "o", "m");
+                 bForceNatNum |= replaceUnquoted( rParams, "O", "M");
             if (LANGUAGE_FRENCH != nDocLang)
             {
                 // Handle the 'A' case here
                 sal_Int32 nLastPos = 0;
                 do
                 {
-                    sal_Int32 nPos = rParams.indexOf( 'A', nLastPos + 1 );
+                    sal_Int32 nPos = findUnquoted( rParams, 'A', nLastPos + 1 );
                     bool bIsCharA = ( nPos != -1 && IsNotAM( rParams, nPos ) );
                     bForceNatNum |= bIsCharA;
                     if ( bIsCharA )
