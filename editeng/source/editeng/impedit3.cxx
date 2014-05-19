@@ -3698,7 +3698,12 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
             sal_uInt8 nColorDiff = aFontColor.GetColorError( aBackgroundColor );
             if( nColorDiff < 8 )
                 aBackgroundColor = aFontColor.IsDark() ? COL_WHITE : COL_BLACK;
+
+            // XXX: BEGIN my changes
+            aBackgroundColor = COL_GRAY;
             pVDev->SetBackground( aBackgroundColor );
+            // END my changes
+            //pVDev->SetBackground( aBackgroundColor ); // original code
         }
 
         bool bVDevValid = true;
