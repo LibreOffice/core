@@ -81,6 +81,7 @@
 #include "sdxfer.hxx"
 #include <vcl/svapp.hxx>
 #include "undo/undoobjects.hxx"
+#include <boost/scoped_ptr.hpp>
 #include "glob.hrc"
 
 using namespace com::sun::star;
@@ -200,7 +201,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     sal_uLong                                       nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() );
+    boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() ));
     if ( pDlg )
     {
         ::com::sun::star::datatransfer::DataFlavor  aFlavor;
@@ -242,8 +243,6 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
                 }
             }
         }
-
-        delete pDlg;
     }
 }
 
@@ -450,9 +449,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 case SID_INSERT_FLOATINGFRAME :
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    SfxAbstractInsertObjectDialog* pDlg =
+                    boost::scoped_ptr<SfxAbstractInsertObjectDialog> pDlg(
                             pFact->CreateInsertObjectDialog( mpViewShell->GetActiveWindow(), SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommandString(),
-                            xStorage, &aServerLst );
+                            xStorage, &aServerLst ));
                     if ( pDlg )
                     {
                         pDlg->Execute();
@@ -465,7 +464,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                         if ( xObj.is() )
                             mpViewShell->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
-                        DELETEZ( pDlg );
                     }
 
                     break;

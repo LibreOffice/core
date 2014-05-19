@@ -38,6 +38,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "drawview.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #include "app.hrc"
 
@@ -190,9 +191,9 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             aSet.Put( *pFontItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractDialog* pDlg = pFact ? pFact->CreateSfxDialog( &mpView->GetViewShell()->GetViewFrame()->GetWindow(), aSet,
+        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact ? pFact->CreateSfxDialog( &mpView->GetViewShell()->GetViewFrame()->GetWindow(), aSet,
             mpView->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(),
-            RID_SVXDLG_CHARMAP ) : 0;
+            RID_SVXDLG_CHARMAP ) : 0);
         if( !pDlg )
             return;
 
@@ -215,8 +216,6 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             if ( pCItem )
                 aChars  = pCItem->GetValue();
         }
-
-        delete( pDlg );
     }
 
     if (!aChars.isEmpty())

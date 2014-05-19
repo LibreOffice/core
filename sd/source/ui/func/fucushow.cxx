@@ -32,6 +32,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "sdabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -59,7 +60,7 @@ rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window
 void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    AbstractSdCustomShowDlg* pDlg = pFact ? pFact->CreateSdCustomShowDlg( NULL, *mpDoc ) : 0;
+    boost::scoped_ptr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg( NULL, *mpDoc ) : 0);
     if( pDlg )
     {
         sal_uInt16 nRet = pDlg->Execute();
@@ -69,7 +70,7 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
             sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
             rSettings.mbCustomShow = pDlg->IsCustomShow();
         }
-        delete pDlg;
+        pDlg.reset();
 
         if( nRet == RET_YES )
         {
