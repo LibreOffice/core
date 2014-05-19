@@ -168,7 +168,7 @@ namespace drawinglayer
 
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
-            // overloaded to allow callbacks to wrap_DoPaintObject
+            // override to allow callbacks to wrap_DoPaintObject
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             // data read access
@@ -233,7 +233,7 @@ namespace drawinglayer
             // when they do not know this primitive (and they do not). Inside wrap_DoPaintObject
             // there needs to be a test that paint is only done during SW repaints (see there).
             // Using this mechanism guarantees the correct Z-Order of the VirtualObject-based FlyFrames.
-            getSwVirtFlyDrawObj().wrap_DoPaintObject();
+            getSwVirtFlyDrawObj().wrap_DoPaintObject(rViewInformation);
 
             // call parent
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
@@ -445,7 +445,8 @@ namespace
 }
 // <--
 
-void SwVirtFlyDrawObj::wrap_DoPaintObject() const
+void SwVirtFlyDrawObj::wrap_DoPaintObject(
+    drawinglayer::geometry::ViewInformation2D const& rViewInformation) const
 {
     SwViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
 
@@ -465,6 +466,9 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 
         if ( bDrawObject )
         {
+            // if there's no viewport set, all fly-frames will be painted,
+            // which is slow, wastes memory, and can cause other trouble.
+            assert(!rViewInformation.getViewport().isEmpty());
             if ( !pFlyFrm->IsFlyInCntFrm() )
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
