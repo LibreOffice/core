@@ -112,7 +112,25 @@ using namespace com::sun::star;
 namespace
 {
     class theSfxFilterListener : public rtl::Static<SfxFilterListener, theSfxFilterListener> {};
-    class theSfxFilterArray : public rtl::Static<SfxFilterList_Impl, theSfxFilterArray > {};
+    class SfxFilterArray
+    {
+        SfxFilterList_Impl aList;
+    public:
+        ~SfxFilterArray()
+        {
+            SfxFilterList_Impl::iterator aEnd = aList.end();
+            for (SfxFilterList_Impl::iterator aI = aList.begin(); aI != aEnd; ++aI)
+            {
+                SfxFilter *pFilter = *aI;
+                delete pFilter;
+            }
+        }
+        SfxFilterList_Impl *getList()
+        {
+            return &aList;
+        }
+    };
+    class theSfxFilterArray : public rtl::Static<SfxFilterArray, theSfxFilterArray > {};
 }
 
 static SfxFilterList_Impl* pFilterArr = 0;
@@ -120,16 +138,14 @@ static bool bFirstRead = true;
 
 static void CreateFilterArr()
 {
-    pFilterArr = &theSfxFilterArray::get();
+    pFilterArr = theSfxFilterArray::get().getList();
     theSfxFilterListener::get();
 }
-
 
 inline OUString ToUpper_Impl( const OUString &rStr )
 {
     return SvtSysLocale().GetCharClass().uppercase( rStr );
 }
-
 
 class SfxFilterContainer_Impl
 {
