@@ -1282,14 +1282,6 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXArray );
 
-#if defined(MACOSX) || defined(IOS)
-    // CoreText layouts are immutable and already contain the text color
-    // so we need to provide the color already for the layout request
-    // even if this layout will never be drawn
-    if( mbInitTextColor )
-        const_cast<OutputDevice&>(*this).ImplInitTextColor();
-#endif
-
     // get matching layout object for base font
     SalLayout* pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
 
