@@ -127,12 +127,14 @@ function local_file()
 function filter_ignore()
 (
 # - filter out all files that are not normal headers
+# - unicode/datefm.h is a icu header, clashes with DateFormat definition
 # - gperffasttoken.hxx is not a proper header
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
 # - jerror.h and jpeglib.h are not self-contained
 # - service1.hxx/service2.hxx are inside comments in frameworks/
     grep -E -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
+    grep -v -F -e '#include <unicode/datefmt.h>' | \
     grep -v -F -e '#include "gperffasttoken.hxx"' | \
     grep -v -F -e '#include <svtools/sores.hxx>' | \
     grep -v -F -e '#include <editeng/eeitemid.hxx>' | \
