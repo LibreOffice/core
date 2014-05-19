@@ -3165,9 +3165,11 @@ endef
 
 else # !SYSTEM_HSQLDB
 
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	hsqldb \
 ))
+endif
 
 define gb_Jar__use_hsqldb
 $(call gb_Jar_use_jar,$(1),hsqldb)
@@ -3187,9 +3189,11 @@ endef
 
 else # !SYSTEM_BSH
 
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
 	bsh \
 ))
+endif
 
 define gb_Jar__use_bsh
 $(call gb_Jar_use_jar,$(1),bsh)
@@ -3206,9 +3210,11 @@ endef
 
 else # !SYSTEM_RHINO
 
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
 	js \
 ))
+endif
 
 define gb_Jar__use_rhino
 $(call gb_Jar_use_jar,$(1),js)
@@ -3240,9 +3246,11 @@ gb_ExternalProject__use_commons-logging :=
 
 else # !SYSTEM_APACHE_COMMONS
 
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 	commons-logging-1.1.3 \
 ))
+endif
 $(eval $(call gb_Helper_register_jars,OXT,\
 	commons-codec-1.9 \
 	commons-httpclient-3.1 \
@@ -3332,6 +3340,7 @@ endef
 
 else # !SYSTEM_JFREEREPORT
 
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 	flow-engine \
 	flute-1.1.6 \
@@ -3345,6 +3354,7 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 	libxml-1.1.7 \
 	sac \
 ))
+endif
 
 define gb_Jar__use_flow-engine
 $(call gb_Jar_use_jar,$(1),flow-engine)
