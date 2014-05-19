@@ -19,7 +19,7 @@
 
 #include <vcl/msgbox.hxx>
 
-#include <ids.hrc>
+#include "ids.hrc"
 #include "sslwarndlg.hxx"
 
 #include <comphelper/processfactory.hxx>

@@ -19,7 +19,7 @@
 
 #define __RSC
 
-#include <ids.hrc>
+#include "ids.hrc"
 
 String STR_OPENLOCKED_TITLE
 {

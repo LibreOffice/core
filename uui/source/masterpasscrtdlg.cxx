@@ -20,7 +20,7 @@
 #include <sal/macros.h>
 #include <vcl/msgbox.hxx>
 
-#include <ids.hrc>
+#include "ids.hrc"
 #include "masterpasscrtdlg.hxx"
 
 // MasterPasswordCreateDialog---------------------------------------------------
