@@ -74,14 +74,4 @@
 
 #include "xfilter/xfglobal.hxx"
 
-using namespace ::rtl;
-using namespace ::cppu;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

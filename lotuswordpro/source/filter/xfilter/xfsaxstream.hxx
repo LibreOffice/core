@@ -71,16 +71,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace ::rtl;
-using namespace ::cppu;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
-
 class XFSaxAttrList;
 class IXFAttrList;
 
@@ -91,7 +81,7 @@ class IXFAttrList;
 class XFSaxStream : public IXFStream
 {
 public:
-    XFSaxStream(Reference<XDocumentHandler>& xHandler);
+    XFSaxStream(css::uno::Reference<css::xml::sax::XDocumentHandler>& xHandler);
 
     virtual ~XFSaxStream();
 
@@ -127,7 +117,7 @@ public:
     virtual IXFAttrList*    GetAttrList() SAL_OVERRIDE;
 
 public:
-    Reference<XDocumentHandler> m_aHandler;
+    css::uno::Reference<css::xml::sax::XDocumentHandler> m_aHandler;
     XFSaxAttrList               *m_pAttrList;
 };
 
