@@ -18,7 +18,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 	$(call gb_ExternalProject_run,build,\
 		cd ../builds/win32/vc2010/ && \
 		msbuild.exe freetype.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
+		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110_xp /p:VisualStudioVersion=11.0) \
 	,objs)
 else
 $(call gb_ExternalProject_get_state_target,freetype,build) :

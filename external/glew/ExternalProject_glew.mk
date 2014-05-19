@@ -17,7 +17,7 @@ ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,glew,build) :
 	$(call gb_ExternalProject_run,build,\
 		msbuild.exe glew_shared.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
+		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110_xp /p:VisualStudioVersion=11.0) \
 	,build/vc10)
 
 else
