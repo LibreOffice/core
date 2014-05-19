@@ -33,19 +33,17 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/vector/b3dvector.hxx>
-
-#include <vector>
-
 #ifdef _WIN32
-// <GL/gl.h> includes <windows.h>, so include that early through
-// <prewin.h> to avoid name clashes from at least GDI's Rectangle().
 #include <prewin.h>
 #include <postwin.h>
 #endif
 
 #include <GL/gl.h>
+
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/vector/b3dvector.hxx>
+
+#include <vector>
 
 class Primitive;
 class Operation;

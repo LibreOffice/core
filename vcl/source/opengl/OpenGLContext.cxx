@@ -551,6 +551,17 @@ bool OpenGLContext::ImplInit()
     return true;
 }
 
+void OpenGLContext::setWinPosAndSize(const Point &rPos, const Size& rSize)
+{
+    if(m_pWindow)
+        m_pWindow->SetPosSizePixel(rPos, rSize);
+    if( m_pChildWindow )
+        m_pChildWindow->SetPosSizePixel(rPos, rSize);
+
+    m_aGLWin.Width = rSize.Width();
+    m_aGLWin.Height = rSize.Height();
+}
+
 void OpenGLContext::setWinSize(const Size& rSize)
 {
     if(m_pWindow)
@@ -793,6 +804,26 @@ void OpenGLContext::swapBuffers()
 #elif defined( UNX )
     glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
 #endif
+}
+
+void OpenGLContext::sync()
+{
+#if defined( WNT )
+    // nothing
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+    // nothing
+#elif defined( UNX )
+    glXWaitGL();
+    XSync(m_aGLWin.dpy, false);
+#endif
+}
+
+void OpenGLContext::show()
+{
+    if (m_pChildWindow)
+        m_pChildWindow->Show();
+    else if (m_pWindow)
+        m_pWindow->Show();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

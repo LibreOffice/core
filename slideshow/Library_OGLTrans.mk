@@ -31,11 +31,13 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
     cppuhelper \
     sal \
     vcl \
+    vclopengl \
 	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,OGLTrans,\
 	boost_headers \
+	glew \
 	mesa_headers \
 ))
 
