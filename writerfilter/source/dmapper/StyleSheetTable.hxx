@@ -50,7 +50,7 @@ enum StyleType
 struct StyleSheetTable_Impl;
 class StyleSheetEntry
 {
-    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 public:
     OUString sStyleIdentifierI;
     OUString sStyleIdentifierD;
@@ -64,13 +64,13 @@ public:
     OUString sStyleName1;
     PropertyMapPtr  pProperties;
     OUString sConvertedStyleName;
-    std::vector<beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
-    std::vector<beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
+    std::vector<css::beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
+    std::vector<css::beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
     bool           bAutoRedefine; ///< Writer calls this auto-update.
 
-    void AppendInteropGrabBag(beans::PropertyValue aValue);
-    beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
-    beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
+    void AppendInteropGrabBag(css::beans::PropertyValue aValue);
+    css::beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
+    css::beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
 
     StyleSheetEntry();
     virtual ~StyleSheetEntry();

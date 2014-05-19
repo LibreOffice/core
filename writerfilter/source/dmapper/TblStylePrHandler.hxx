@@ -57,7 +57,7 @@ private:
 
     TblStyleType                m_nType;
     PropertyMapPtr              m_pProperties;
-    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
@@ -71,7 +71,7 @@ public:
     inline TblStyleType         getType() { return m_nType; };
     OUString getTypeString();
     void appendInteropGrabBag(const OUString& aKey, const OUString& aValue);
-    beans::PropertyValue getInteropGrabBag(const OUString& aName);
+    css::beans::PropertyValue getInteropGrabBag(const OUString& aName);
 
 private:
 

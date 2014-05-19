@@ -83,7 +83,7 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
 
-    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, uno::Sequence<beans::PropertyValue>& rFrameProperties);
+    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, css::uno::Sequence<css::beans::PropertyValue>& rFrameProperties);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges);
     RowPropertyValuesSeq_t endTableGetRowProperties();
 
