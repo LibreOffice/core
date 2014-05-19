@@ -15,13 +15,7 @@
 */
 
 #include "assert.h"
-#include "rtl/textenc.h"
 #include "string.h"
-#include "svx/xbitmap.hxx"
-#include "tools/stream.hxx"
-#include "vcl/bmpacc.hxx"
-#include "vcl/dibtools.hxx"
-#include "xmloff/attrlist.hxx"
 #include <assert.h>
 #include <boost/cast.hpp>
 #include <boost/scoped_array.hpp>
@@ -71,10 +65,13 @@
 #include <sstream>
 #include <stdio.h>
 #include <string.h>
+#include <svx/xbitmap.hxx>
 #include <tools/stream.hxx>
 #include <ucbhelper/content.hxx>
 #include <unicode/timezone.h>
 #include <unicode/udat.h>
+#include <vcl/bmpacc.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vector>

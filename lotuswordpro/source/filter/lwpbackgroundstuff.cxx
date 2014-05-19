@@ -63,10 +63,10 @@
 #include "lwppttntbl.hxx"
 #include "xfilter/xfbgimage.hxx"
 
-#include "tools/stream.hxx"
-#include "vcl/dibtools.hxx"
-#include "vcl/bmpacc.hxx"
-#include "svx/xbitmap.hxx"
+#include <tools/stream.hxx>
+#include <vcl/dibtools.hxx>
+#include <vcl/bmpacc.hxx>
+#include <svx/xbitmap.hxx>
 
 void LwpBackgroundStuff::Read(LwpObjectStream* pStrm)
 {
