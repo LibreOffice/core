@@ -48,6 +48,29 @@ private:
     bool CopyPersonaToGallery( const OUString &rURL );
 };
 
+/** Dialog that will allow the user to choose a Persona to use.
+
+So far there is no better possibility than just to paste the URL from
+https://addons.mozilla.org/firefox/themes ...
+*/
+class SelectPersonaDialog : public ModalDialog
+{
+private:
+    Edit *m_pEdit;                          ///< The input line for the Persona URL
+
+public:
+    SelectPersonaDialog( Window *pParent );
+
+    /// Get the URL from the Edit field.
+    OUString GetPersonaURL() const;
+
+private:
+    /// Handle the [Visit Firefox Personas] button
+    DECL_LINK( VisitPersonas, PushButton* );
+};
+
+
+
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
