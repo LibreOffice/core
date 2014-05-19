@@ -29,7 +29,7 @@ class WmfTest : public test::BootstrapFixture, public XmlTestTools
 {
     OUString maDataUrl;
 
-    OUString getFullUrl(OUString sFileName)
+    OUString getFullUrl(OUString& sFileName)
     {
         return getURLFromSrc(maDataUrl) + sFileName;
     }
