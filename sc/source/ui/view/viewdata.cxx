@@ -58,6 +58,7 @@
 #include "markdata.hxx"
 #include "stlalgorithm.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
+#include <gridwin.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <boost/checked_delete.hpp>
 #include <comphelper/processfactory.hxx>
@@ -2115,7 +2116,7 @@ Window* ScViewData::GetDialogParent()
     return pViewShell->GetDialogParent();
 }
 
-Window* ScViewData::GetActiveWin()
+ScGridWindow* ScViewData::GetActiveWin()
 {
     OSL_ENSURE( pView, "GetActiveWin() ohne View" );
     return pView->GetActiveWin();

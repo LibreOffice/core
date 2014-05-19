@@ -39,6 +39,7 @@
 #include "scmod.hxx"
 #include "globstr.hrc"
 #include "chartarr.hxx"
+#include <gridwin.hxx>
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

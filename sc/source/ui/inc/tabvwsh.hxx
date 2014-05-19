@@ -191,6 +191,8 @@ private:
     void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
                                      ::com::sun::star::beans::PropertyValue >& rSettings );
 
+    void AddOpenGLChartWindows();
+
     DECL_LINK( SimpleRefClose, void* );
     DECL_LINK( SimpleRefDone, OUString* );
     DECL_LINK( SimpleRefAborted, OUString* );
@@ -331,7 +333,7 @@ public:
     ObjectSelectionType GetCurObjectSelectionType();
 
     virtual ErrCode DoVerb(long nVerb) SAL_OVERRIDE;
-
+    virtual void Initialize() SAL_OVERRIDE;
 
     void            StopEditShell();
     bool            IsDrawTextShell() const;

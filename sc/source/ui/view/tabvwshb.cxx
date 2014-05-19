@@ -58,6 +58,7 @@
 #include "chartarr.hxx"
 #include "drawview.hxx"
 #include "ChartRangeSelectionListener.hxx"
+#include <gridwin.hxx>
 
 #include <tools/urlobj.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -241,6 +242,11 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
     }
 
     return nErr;
+}
+
+void ScTabViewShell::Initialize()
+{
+    AddOpenGLChartWindows();
 }
 
 void ScTabViewShell::DeactivateOle()

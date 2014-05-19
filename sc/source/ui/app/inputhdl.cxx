@@ -78,6 +78,7 @@
 #include "funcdesc.hxx"
 #include "markdata.hxx"
 #include "tokenarray.hxx"
+#include <gridwin.hxx>
 
 // Maximum Ranges in RangeFinder
 #define RANGEFIND_MAX   32

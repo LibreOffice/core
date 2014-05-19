@@ -35,6 +35,7 @@
 #include "client.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
+#include <gridwin.hxx>
 
 using namespace com::sun::star;
 

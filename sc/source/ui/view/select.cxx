@@ -30,6 +30,7 @@
 #include "docsh.hxx"
 #include "tabprotection.hxx"
 #include "markdata.hxx"
+#include <gridwin.hxx>
 
 #if defined WNT
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65

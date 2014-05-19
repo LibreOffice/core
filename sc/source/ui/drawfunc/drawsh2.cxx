@@ -45,6 +45,7 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include <gridwin.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 

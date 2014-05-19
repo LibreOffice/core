@@ -51,6 +51,7 @@
 #include <refhint.hxx>
 #include <refupdatecontext.hxx>
 #include <validat.hxx>
+#include <gridwin.hxx>
 
 #include <set>
 #include <boost/scoped_ptr.hpp>

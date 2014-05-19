@@ -65,6 +65,7 @@
 #include "undodat.hxx"
 #include "drawview.hxx"
 #include "cliputil.hxx"
+#include <gridwin.hxx>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;

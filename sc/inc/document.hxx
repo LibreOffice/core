@@ -569,6 +569,9 @@ public:
     bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartByName( const OUString& rChartName );
+    std::vector<std::pair<css::uno::Reference<
+        css::chart2::XChartDocument>, Rectangle> > GetAllCharts();
+
     SC_DLLPUBLIC void            GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
     void            SetChartRanges( const OUString& rChartName, const ::std::vector< ScRangeList >& rRanges );
 

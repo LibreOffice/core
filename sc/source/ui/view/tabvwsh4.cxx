@@ -39,6 +39,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
+#include <vcl/openglwin.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -88,8 +89,10 @@
 #include "preview.hxx"
 #include "docoptio.hxx"
 #include <documentlinkmgr.hxx>
+#include <gridwin.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 
 extern SfxViewShell* pScActiveViewShell;            // global.cxx
 
@@ -527,6 +530,30 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
     TestHintWindow();
 
     //! if ViewData has more tables than document, remove tables in ViewData
+}
+
+void ScTabViewShell::AddOpenGLChartWindows()
+{
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScGridWindow* pParentWindow = GetActiveWin();
+
+    std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> > aCharts = pDoc->GetAllCharts();
+
+    for(std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> >::iterator itr = aCharts.begin(),
+            itrEnd = aCharts.end(); itr != itrEnd; ++itr)
+    {
+        OpenGLWindow* pOpenGLWindow = new OpenGLWindow(pParentWindow);
+        pOpenGLWindow->Show(false);
+        Size aSize = itr->second.GetSize();
+
+        pOpenGLWindow->SetSizePixel(aSize);
+        Point aPos = itr->second.TopLeft();
+        pOpenGLWindow->SetPosPixel(aPos);
+        pParentWindow->AddChildWindow(pOpenGLWindow);
+        uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( itr->first, uno::UNO_QUERY_THROW );
+        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pOpenGLWindow);
+        x3DWindowProvider->setWindow(nWindowPtr);
+    }
 }
 
 // DoReadUserData is also called from ctor when switching from print preview

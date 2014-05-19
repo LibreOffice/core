@@ -101,6 +101,7 @@ class ScPatternAttr;
 class ScExtDocOptions;
 class ScViewData;
 class ScMarkData;
+class ScGridWindow;
 
 class ScViewDataTable                           // per-sheet data
 {
@@ -240,7 +241,7 @@ public:
     const ScMarkData& GetMarkData() const;
 
     Window*         GetDialogParent();          // forwarded from tabvwsh
-    Window*         GetActiveWin();             // from View
+    ScGridWindow*   GetActiveWin();             // from View
     ScDrawView*     GetScDrawView();            // from View
     bool            IsMinimized();              // from View
 

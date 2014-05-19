@@ -67,6 +67,7 @@
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 #include <refupdatecontext.hxx>
+#include <gridwin.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

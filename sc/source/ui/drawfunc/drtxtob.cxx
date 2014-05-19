@@ -72,6 +72,7 @@
 #include "viewutil.hxx"
 #include "scresid.hxx"
 #include "tabvwsh.hxx"
+#include <gridwin.hxx>
 
 #define ScDrawTextObjectBar
 #include "scslots.hxx"

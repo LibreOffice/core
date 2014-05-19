@@ -18,6 +18,7 @@
 #include "rangelst.hxx"
 #include "viewutil.hxx"
 #include "markdata.hxx"
+#include <gridwin.hxx>
 
 #include <vcl/waitobj.hxx>
 

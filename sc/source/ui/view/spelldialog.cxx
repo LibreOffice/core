@@ -34,6 +34,7 @@
 #include "scmod.hxx"
 #include "editable.hxx"
 #include "undoblk.hxx"
+#include <gridwin.hxx>
 #include <refupdatecontext.hxx>
 
 SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )

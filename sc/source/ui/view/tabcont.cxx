@@ -33,6 +33,7 @@
 #include "clipparam.hxx"
 #include "dragdata.hxx"
 #include "markdata.hxx"
+#include <gridwin.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

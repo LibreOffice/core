@@ -46,6 +46,7 @@
 #include "docsh.hxx"
 #include "convuno.hxx"
 #include "dragdata.hxx"
+#include <gridwin.hxx>
 
 extern Point aDragStartDiff;
 

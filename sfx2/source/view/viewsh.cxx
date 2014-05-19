@@ -1269,7 +1269,10 @@ SfxViewShell::~SfxViewShell()
     DELETEZ( pIPClientList );
 }
 
-
+void SfxViewShell::Initialize()
+{
+    // overloaded by the application.
+}
 
 bool SfxViewShell::PrepareClose
 (
