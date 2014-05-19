@@ -663,6 +663,38 @@ uno::Reference< embed::XEmbeddedObject >
     return uno::Reference< embed::XEmbeddedObject >();
 }
 
+std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> > ScDocument::GetAllCharts()
+{
+    std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> > aRet;
+    if (!pDrawLayer)
+        return aRet;
+
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++)
+    {
+        if (!maTabs[nTab])
+            continue;
+
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+        OSL_ENSURE(pPage,"Page ?");
+
+        if (!pPage)
+            continue;
+
+        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+
+        for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
+        {
+            if ( pObject->GetObjIdentifier() != OBJ_OLE2 )
+                continue;
+
+            uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
+            Rectangle aRect = pObject->GetLastBoundRect();
+            aRet.push_back(std::pair<uno::Reference<chart2::XChartDocument>, Rectangle>(xChartDoc, aRect));
+        }
+    }
+    return aRet;
+}
+
 void ScDocument::UpdateChartListenerCollection()
 {
     OSL_ASSERT(pChartListenerCollection);
@@ -702,8 +734,6 @@ void ScDocument::UpdateChartListenerCollection()
             }
             else
             {
-                bool bIsChart = false;
-
                 uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                 OSL_ENSURE( xIPObj.is(), "No embedded object is given!");
                 uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
@@ -728,15 +758,12 @@ void ScDocument::UpdateChartListenerCollection()
                     // => we have to do this stuff here, BEFORE the chart is actually loaded
                 }
 
-                if (!bIsChart)
-                {
-                    //  put into list of other ole objects, so the object doesn't have to
-                    //  be swapped in the next time UpdateChartListenerCollection is called
-                    //! remove names when objects are no longer there?
-                    //  (object names aren't used again before reloading the document)
+                //  put into list of other ole objects, so the object doesn't have to
+                //  be swapped in the next time UpdateChartListenerCollection is called
+                //! remove names when objects are no longer there?
+                //  (object names aren't used again before reloading the document)
 
-                    rNonOleObjects.insert(aObjName);
-                }
+                rNonOleObjects.insert(aObjName);
             }
         }
     }

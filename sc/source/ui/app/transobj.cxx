@@ -62,6 +62,7 @@
 #include "cellsuno.hxx"
 #include "stringutil.hxx"
 #include "formulaiter.hxx"
+#include <gridwin.hxx>
 
 using namespace com::sun::star;
 

@@ -40,6 +40,7 @@
 #include "inputhdl.hxx"
 #include <svx/srchdlg.hxx>
 #include "document.hxx"
+#include <gridwin.hxx>
 
 OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 {

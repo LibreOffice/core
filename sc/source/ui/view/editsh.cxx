@@ -69,6 +69,7 @@
 #include "tabvwsh.hxx"
 #include "editutil.hxx"
 #include "globstr.hrc"
+#include <gridwin.hxx>
 
 #define ScEditShell
 #include "scslots.hxx"

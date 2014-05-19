@@ -47,6 +47,7 @@
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 #include "tabvwsh.hxx"
+#include <gridwin.hxx>
 #include <sfx2/bindings.hxx>
 
 #define ScDrawShell

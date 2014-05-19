@@ -863,7 +863,7 @@ double ScTabView::GetPendingRelTabBarWidth() const
     return mfPendingTabBarWidth;
 }
 
-Window* ScTabView::GetActiveWin()
+ScGridWindow* ScTabView::GetActiveWin()
 {
     ScSplitPos ePos = aViewData.GetActivePart();
     OSL_ENSURE(pGridWin[ePos],"kein aktives Fenster");

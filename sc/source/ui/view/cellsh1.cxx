@@ -83,6 +83,7 @@
 #include <cellvalue.hxx>
 #include <tokenarray.hxx>
 #include <formulacell.hxx>
+#include <gridwin.hxx>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

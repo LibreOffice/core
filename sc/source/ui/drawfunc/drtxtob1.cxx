@@ -36,6 +36,7 @@
 #include "drawview.hxx"
 #include "viewdata.hxx"
 #include "scresid.hxx"
+#include <gridwin.hxx>
 
 #include "scabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>

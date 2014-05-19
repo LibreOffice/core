@@ -41,6 +41,7 @@
 #include "sc.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
+#include <gridwin.hxx>
 
 // Create default drawing objects via keyboard
 #include <svx/svdpagv.hxx>

@@ -324,7 +324,7 @@ public:
     void            StopMarking();
     void            FakeButtonUp( ScSplitPos eWhich );
 
-    Window*         GetActiveWin();
+    ScGridWindow*   GetActiveWin();
     Window*         GetWindowByPos( ScSplitPos ePos );
 
     ScSplitPos      FindWindow( Window* pWindow ) const;

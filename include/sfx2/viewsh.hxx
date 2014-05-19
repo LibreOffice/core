@@ -190,6 +190,13 @@ public:
     void                        VisAreaChanged(const Rectangle& rRect);
 
     // Misc
+
+    /**
+     * Initialize is called after the frame has been loaded and the controller
+     * has been set.  By the time this is called the document has been fully
+     * imported.
+     */
+    virtual void                Initialize();
     virtual bool                PrepareClose( bool bUI = true );
     virtual OUString            GetSelectionText( bool bCompleteWords = false );
     virtual bool                HasSelection( bool bText = true ) const;

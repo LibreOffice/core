@@ -28,6 +28,7 @@
 #include "transobj.hxx"
 #include "scmod.hxx"
 #include "cellsuno.hxx"
+#include <gridwin.hxx>
 
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>

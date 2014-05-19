@@ -1524,4 +1524,10 @@ void SAL_CALL SfxBaseController::removeTitleChangeListener(const Reference< fram
         xBroadcaster->removeTitleChangeListener (xListener);
 }
 
+void SfxBaseController::initialize( const ::css::uno::Sequence< ::css::uno::Any >& /*aArguments*/ )
+{
+    if (m_pData->m_pViewShell)
+        m_pData->m_pViewShell->Initialize();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

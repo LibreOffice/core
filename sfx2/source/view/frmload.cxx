@@ -50,6 +50,7 @@
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -71,6 +72,7 @@
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <osl/mutex.hxx>
 
+using namespace com::sun::star;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XContainerQuery;
 using ::com::sun::star::container::XEnumeration;
@@ -720,7 +722,16 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         const OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetAPIViewName() );
 
         // plug the document into the frame
-        impl_createDocumentView( xModel, _rTargetFrame, aViewCreationArgs, sViewName );
+        Reference<XController2> xController =
+            impl_createDocumentView( xModel, _rTargetFrame, aViewCreationArgs, sViewName );
+
+        Reference<lang::XInitialization> xInit(xController, UNO_QUERY);
+        if (xInit.is())
+        {
+            uno::Sequence<uno::Any> aArgs; // empty for now.
+            xInit->initialize(aArgs);
+        }
+
         bLoadSuccess = true;
     }
     catch ( Exception& )

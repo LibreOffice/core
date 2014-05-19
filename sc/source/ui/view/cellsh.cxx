@@ -56,6 +56,7 @@
 #include "cliputil.hxx"
 #include "clipparam.hxx"
 #include "markdata.hxx"
+#include <gridwin.hxx>
 
 #define ScCellShell
 #define CellMovement

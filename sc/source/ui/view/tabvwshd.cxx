@@ -28,6 +28,7 @@
 #include "scmod.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
+#include <gridwin.hxx>
 
 
 // STATIC DATA -----------------------------------------------------------

@@ -26,6 +26,7 @@
 #include "hints.hxx"
 #include "scmod.hxx"
 #include "markdata.hxx"
+#include <gridwin.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

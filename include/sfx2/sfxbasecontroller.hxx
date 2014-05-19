@@ -35,7 +35,8 @@
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/implbase9.hxx>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <cppuhelper/implbase10.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
@@ -60,7 +61,7 @@ sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID );
 //  class declarations
 
 
-typedef ::cppu::WeakImplHelper9 <   css::frame::XController2
+typedef ::cppu::WeakImplHelper10 <   css::frame::XController2
                                 ,   css::frame::XControllerBorder
                                 ,   css::frame::XDispatchProvider
                                 ,   css::task::XStatusIndicatorSupplier
@@ -69,6 +70,7 @@ typedef ::cppu::WeakImplHelper9 <   css::frame::XController2
                                 ,   css::frame::XDispatchInformationProvider
                                 ,   css::frame::XTitle
                                 ,   css::frame::XTitleChangeBroadcaster
+                                ,   css::lang::XInitialization
                                 >   SfxBaseController_Base;
 
 class SFX2_DLLPUBLIC SfxBaseController  :public SfxBaseController_Base
@@ -165,6 +167,9 @@ public:
     // css::frame::XTitleChangeBroadcaster
     virtual void SAL_CALL addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )     throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // css::lang::XInitialization
+    virtual void SAL_CALL initialize( const ::css::uno::Sequence< ::css::uno::Any >& aArguments ) SAL_OVERRIDE;
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
