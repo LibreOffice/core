@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <documentdigitalsignatures.hxx>
+#include "documentdigitalsignatures.hxx"
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
@@ -40,9 +40,9 @@
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
-#include "comphelper/documentconstants.hxx"
+#include <comphelper/documentconstants.hxx>
 
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <stdio.h>
 

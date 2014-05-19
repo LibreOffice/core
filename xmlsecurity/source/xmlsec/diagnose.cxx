@@ -20,8 +20,8 @@
 #include "diagnose.hxx"
 #include <stdio.h>
 #include <stdarg.h>
-#include "rtl/instance.hxx"
-#include "rtl/bootstrap.hxx"
+#include <rtl/instance.hxx>
+#include <rtl/bootstrap.hxx>
 
 namespace xmlsecurity {
 

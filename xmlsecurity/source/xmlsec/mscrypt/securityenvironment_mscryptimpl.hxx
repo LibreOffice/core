@@ -47,7 +47,7 @@
 #include <list>
 #include "xmlsecurity/xmlsec-wrapper.h"
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 
 class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<

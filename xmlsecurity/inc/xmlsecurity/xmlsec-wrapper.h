@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSEC_WRAPPER_H
 #define INCLUDED_XMLSECURITY_INC_XMLSECURITY_XMLSEC_WRAPPER_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 // Cf. xmlsec's configure.in:
 #if SAL_TYPES_SIZEOFPOINTER != 4

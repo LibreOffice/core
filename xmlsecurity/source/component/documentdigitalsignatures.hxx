@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-#include "com/sun/star/lang/XInitialization.hpp"
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

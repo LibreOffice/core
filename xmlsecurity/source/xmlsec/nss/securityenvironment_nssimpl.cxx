@@ -38,7 +38,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <vector>
-#include "boost/scoped_array.hpp"
+#include <boost/scoped_array.hpp>
 #include <osl/thread.h>
 
 #include "secerror.hxx"

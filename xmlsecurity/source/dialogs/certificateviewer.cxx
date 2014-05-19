@@ -26,7 +26,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/datetime.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"

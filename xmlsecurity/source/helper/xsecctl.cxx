@@ -18,7 +18,7 @@
  */
 
 
-#include <xsecctl.hxx>
+#include "xsecctl.hxx"
 #include <tools/debug.hxx>
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>

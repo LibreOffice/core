@@ -29,9 +29,9 @@
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 
-#include <resourcemanager.hxx>
+#include "resourcemanager.hxx"
 #include <vcl/msgbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace ::com::sun::star;
 

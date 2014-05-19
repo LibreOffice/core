@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "test/officeconnection.hxx"
+#include <test/officeconnection.hxx>
 
 #include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/ExtAltNameType.hpp>
@@ -27,16 +27,16 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
-#include "cppuhelper/bootstrap.hxx"
+#include <cppuhelper/bootstrap.hxx>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "sal/types.h"
-#include "comphelper/sequence.hxx"
+#include <sal/types.h>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 
 #include <neon/ne_ssl.h>

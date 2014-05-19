@@ -36,7 +36,7 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
 #include "pk11func.h"
 #include "keyhi.h"

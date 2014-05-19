@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <certificatecontainer.hxx>
+#include "certificatecontainer.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
 #include <sal/config.h>

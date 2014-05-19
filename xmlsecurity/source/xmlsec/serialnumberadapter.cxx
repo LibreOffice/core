@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/security/XSerialNumberAdapter.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/security/XSerialNumberAdapter.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include "xmlsecurity/biginteger.hxx"
 
 #include "serialnumberadapter.hxx"
