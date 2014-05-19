@@ -298,30 +298,6 @@ Window::Window( Window* pParent, const ResId& rResId )
         Show();
 }
 
-
-#ifdef DBG_UTIL
-const char* ImplDbgCheckWindow( const void* pObj )
-{
-    DBG_TESTSOLARMUTEX();
-
-    const Window* pWindow = (Window*)pObj;
-
-    if ( (pWindow->GetType() < WINDOW_FIRST) || (pWindow->GetType() > WINDOW_LAST) )
-        return "Window data overwrite";
-
-    // check window-chain
-    Window* pChild = pWindow->mpWindowImpl->mpFirstChild;
-    while ( pChild )
-    {
-        if ( pChild->mpWindowImpl->mpParent != pWindow )
-            return "Child-Window-Parent wrong";
-        pChild = pChild->mpWindowImpl->mpNext;
-    }
-
-    return NULL;
-}
-#endif
-
 bool Window::AcquireGraphics() const
 {
     DBG_TESTSOLARMUTEX();
