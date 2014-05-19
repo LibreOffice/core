@@ -403,7 +403,7 @@ void Window::EnableRTL ( bool bEnable )
     OutputDevice::EnableRTL(bEnable);
 }
 
-void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
+void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;
@@ -426,7 +426,7 @@ void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
         return;
     }
 
-    OutputDevice::CopyAreaFinal(aPosAry, nFlags);
+    OutputDevice::CopyDeviceArea(aPosAry, nFlags);
 }
 
 bool Window::HasMirroredGraphics() const

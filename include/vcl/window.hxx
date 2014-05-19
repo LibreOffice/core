@@ -643,7 +643,7 @@ protected:
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void                 ImplAdjustNWFSizes();
 
-    virtual void                        CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags) SAL_OVERRIDE;
+    virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags) SAL_OVERRIDE;
     virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) SAL_OVERRIDE;
     virtual bool                        UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
 

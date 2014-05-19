@@ -516,7 +516,7 @@ public:
 
 protected:
 
-    virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
+    virtual void                CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags);
 
 private:
 
