@@ -300,13 +300,19 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
         if(pMouseEvt && pMouseEvt->IsLeft())
         {
             const Point& aCurPos = pMouseEvt->GetPosPixel();
+            float fSensitivity = std::min(m_pHandle->viewport.width, m_pHandle->viewport.height);
+            if (fSensitivity == 0.0)
+                fSensitivity = 1.0;
+            else
+                fSensitivity = 540.0 / fSensitivity;
 
             long nDeltaX = m_aLastMousePos.X()-aCurPos.X();
             long nDeltaY = aCurPos.Y()-m_aLastMousePos.Y();
-            static const float fSensitivity = 1.0;
             // TODO: It seems this method just moves the camera but not rotate it.
             gltf_renderer_rotate_camera((float)nDeltaX*fSensitivity,(float)nDeltaY*fSensitivity,0.0,0.0);
             update();
+
+            m_aLastMousePos = aCurPos;
         }
     }
     return 0;
