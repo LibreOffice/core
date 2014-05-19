@@ -999,9 +999,6 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 // this box is selected
                                 pLastBox = pBox;
                                 rBoxes.insert( pBox );
-#if OSL_DEBUG_LEVEL > 1
-                                Point aInsPoint( (pCell->Frm().*fnRect->fnGetPos)() );
-#endif
                                 aPosArr.insert(
                                     _CmpLPt( (pCell->Frm().*fnRect->fnGetPos)(),
                                     pBox, bVert ) );
