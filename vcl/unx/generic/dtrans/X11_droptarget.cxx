@@ -21,6 +21,7 @@
 #include <X11_selection.hxx>
 
 using namespace x11;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::datatransfer;
