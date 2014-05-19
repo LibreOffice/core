@@ -101,7 +101,9 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleParent(  )
     throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    return mrPixelCtl.GetParent()->GetAccessible( true );
+    Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
+    assert(pTabPage && WINDOW_TABPAGE == pTabPage->GetType());
+    return pTabPage->GetAccessible( true );
 }
 
 sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
@@ -109,7 +111,8 @@ sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     sal_uInt16 nIdx = 0;
-    Window* pTabPage = mrPixelCtl.GetParent();
+    Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
+    assert(pTabPage && WINDOW_TABPAGE == pTabPage->GetType());
     sal_uInt16 nChildren = pTabPage->GetChildCount();
     for(nIdx = 0; nIdx < nChildren; nIdx++)
         if(pTabPage->GetChild( nIdx ) == &mrPixelCtl)
