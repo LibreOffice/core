@@ -18,7 +18,7 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "idlc/astmember.hxx"
 #include "idlc/astoperation.hxx"

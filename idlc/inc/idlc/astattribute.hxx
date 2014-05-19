@@ -22,8 +22,8 @@
 #include <idlc/astdeclaration.hxx>
 #include "idlc/astscope.hxx"
 
-#include "registry/types.h"
-#include "rtl/ustring.hxx"
+#include <registry/types.h>
+#include <rtl/ustring.hxx>
 
 namespace typereg { class Writer; }
 

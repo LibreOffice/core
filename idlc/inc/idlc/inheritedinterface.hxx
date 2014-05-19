@@ -22,7 +22,7 @@
 
 #include "idlc/idlc.hxx"
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 class AstInterface;
 class AstType;

@@ -20,7 +20,7 @@
 #include <idlc/astconstant.hxx>
 #include <idlc/astscope.hxx>
 
-#include "registry/writer.hxx"
+#include <registry/writer.hxx>
 
 using namespace ::rtl;
 

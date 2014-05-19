@@ -20,9 +20,9 @@
 
 #include "idlc/options.hxx"
 
-#include "osl/diagnose.h"
-#include "rtl/string.hxx"
-#include "rtl/strbuf.hxx"
+#include <osl/diagnose.h>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <stdio.h>
 #include <string.h>

@@ -23,8 +23,8 @@
 #include "idlc/asttype.hxx"
 #include "idlc/idlctypes.hxx"
 
-#include "rtl/strbuf.hxx"
-#include "rtl/string.hxx"
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
 
 namespace {
 

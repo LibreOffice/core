@@ -29,8 +29,8 @@
 #include <idlc/astsequence.hxx>
 #include "idlc/astoperation.hxx"
 
-#include "registry/version.h"
-#include "registry/writer.hxx"
+#include <registry/version.h>
+#include <registry/writer.hxx>
 
 using namespace ::rtl;
 
