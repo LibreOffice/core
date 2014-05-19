@@ -307,7 +307,11 @@ SdrMediaObj* View::Insert3DModelURL(
         if (!bRet) { return 0; }
     }
 
-    return InsertMediaObj( sRealURL, "application/vnd.gltf+json", rAction, rPos, rSize );
+    SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "application/vnd.gltf+json", rAction, rPos, rSize );
+    avmedia::MediaItem aItem = pRetObject->getMediaProperties();
+    aItem.setLoop(true);
+    pRetObject->setMediaProperties(aItem);
+    return pRetObject;
 }
 
 SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rMimeType, sal_Int8& rAction,
