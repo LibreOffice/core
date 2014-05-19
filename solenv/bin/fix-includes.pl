@@ -49,7 +49,7 @@ sub check_headers
       }
     }
     # If a local file is defined global, make it local
-    elsif($line =~ /#include <((\w*)\.(hxx|h))>/){
+    elsif($line =~ /#include <((\w*)\.(hxx|h|hrc|src))>/){
       # check if file exists, then it must be local so replace the <> to ""
       if(-e "$dir/$1" ){
         print "global header $line\n";
@@ -69,13 +69,13 @@ sub check_headers
   close($fh);
 }
 
-# routine that checks the headers of every cxx,hxx,c,h file in a directory
+# routine that checks the headers of every cxx,hxx,c,h,hrc,src file in a directory
 sub check_routine
 {
   my ($dir) = @_;
   opendir(my $fh, $dir) or die "Program stopping, could't open directory \n";
   while(my $file = readdir($fh)){
-    if($file =~ m/\.(cxx|hxx|c|h)$/i ){
+    if($file =~ m/\.(cxx|hxx|c|h|hrc|src)$/i ){
       check_headers($dir,"$dir/$file",@subdirs);
     }
   }
