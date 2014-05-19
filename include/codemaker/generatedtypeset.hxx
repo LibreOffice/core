@@ -61,7 +61,7 @@ public:
 
 private:
     GeneratedTypeSet(GeneratedTypeSet &); // not implemented
-    void operator =(GeneratedTypeSet); // not implemented
+    void operator =(const GeneratedTypeSet&); // not implemented
 
     boost::unordered_set< OString, OStringHash > m_set;
 };

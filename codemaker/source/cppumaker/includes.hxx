@@ -68,7 +68,7 @@ public:
 
 private:
     Includes(Includes &); // not implemented
-    void operator =(Includes); // not implemented;
+    void operator =(const Includes&); // not implemented;
 
     bool isInterfaceType(OString const & entityName) const;
 

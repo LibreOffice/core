@@ -699,7 +699,7 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
     return bLeftToRightDirection;
 }
 
-void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
+void SvxTextAttrPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,false);
 

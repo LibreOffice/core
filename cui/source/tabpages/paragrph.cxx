@@ -915,7 +915,7 @@ void    SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
     nMinFixDist = nMinTwip;
 }
 
-void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
+void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
 
 /* different bit represent call to different method of SvxStdParagraphTabPage
@@ -1310,7 +1310,7 @@ void SvxParaAlignTabPage::EnableJustifyExt()
 
 }
 
-void SvxParaAlignTabPage::PageCreated (SfxAllItemSet aSet)
+void SvxParaAlignTabPage::PageCreated (const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pBoolItem,SfxBoolItem,SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,false);
     if (pBoolItem)
@@ -2104,7 +2104,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox *, pListBox )
     return 0;
 }
 
-void SvxExtParagraphTabPage::PageCreated(SfxAllItemSet aSet)
+void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pDisablePageBreakItem,SfxBoolItem,SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,false);
 

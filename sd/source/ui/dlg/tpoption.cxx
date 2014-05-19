@@ -649,7 +649,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
     m_pCbxUsePrinterMetrics->Enable (bIsEnabled);
 }
 
-void SdTpOptionsMisc::PageCreated (SfxAllItemSet aSet)
+void SdTpOptionsMisc::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,false);
     if (pFlagItem)

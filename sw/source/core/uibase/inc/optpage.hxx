@@ -131,7 +131,7 @@ public:
     void                SetFax( const std::vector<OUString>& );
     void                SelectFax( const OUString& );
     void                SetPreview(bool bPrev);
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated( const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
 };
 
@@ -202,7 +202,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated( const SfxAllItemSet& aSet ) SAL_OVERRIDE;
 };
 
 class SwTableOptionsTabPage : public SfxTabPage
@@ -244,7 +244,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void SetWrtShell(SwWrtShell* pSh) {pWrtShell = pSh;}
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated( const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
 };
 
@@ -290,7 +290,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void    SetWrtShell( SwWrtShell * pSh ) { m_pWrtShell = pSh; }
-    virtual void        PageCreated( SfxAllItemSet aSet ) SAL_OVERRIDE;
+    virtual void        PageCreated( const SfxAllItemSet& aSet ) SAL_OVERRIDE;
 };
 
 /*-----------------------------------------------------------------------

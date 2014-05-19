@@ -117,7 +117,7 @@ private:
     DECL_LINK( GetFillCharHdl_Impl, Edit* );
     DECL_LINK( GetDezCharHdl_Impl, Edit* );
 
-    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_TABSTPGE_HXX

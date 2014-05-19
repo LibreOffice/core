@@ -113,7 +113,7 @@ public:
     void                    EnableAutoFirstLine();
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
-    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
     virtual                ~SvxStdParagraphTabPage();
 };
@@ -167,7 +167,7 @@ public:
     virtual void            Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                    EnableJustifyExt();
-    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 // class SvxExtParagraphTabPage ------------------------------------------
@@ -252,7 +252,7 @@ private:
     DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
     DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
 
-    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 

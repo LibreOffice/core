@@ -131,7 +131,7 @@ public:
 
     private:
         Code(Code &); // not implemented
-        void operator =(Code); // not implemented
+        void operator =(const Code&); // not implemented
 
         Code(ClassFile & classFile);
 
@@ -182,7 +182,7 @@ private:
     typedef std::map< rtl::OString, sal_uInt16 > Map;
 
     ClassFile(ClassFile &); // not implemented
-    void operator =(ClassFile); // not implemented
+    void operator =(const ClassFile&); // not implemented
 
     sal_uInt16 nextConstantPoolIndex(sal_uInt16 width);
     sal_uInt16 addUtf8Info(rtl::OString const & value);

@@ -1672,7 +1672,7 @@ bool SvxPageDescPage::IsMarginOutOfRange()
     return bRet;
 }
 
-void SvxPageDescPage::PageCreated (SfxAllItemSet aSet)
+void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,false);
     SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,false);

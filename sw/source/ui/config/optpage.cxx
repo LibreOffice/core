@@ -488,7 +488,7 @@ IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, SelectHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, SelectHdl)
 
-void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
+void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST,false);
     SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE,false);
@@ -1058,7 +1058,7 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
     return 0;
 }
 
-void SwStdFontTabPage::PageCreated (SfxAllItemSet aSet)
+void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt16Item, SID_FONTMODE_TYPE, false);
     if (pFlagItem)
@@ -1256,7 +1256,7 @@ IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl)
     return 0;
 }
 
-void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
+void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,false);
     if (pWrtSh)
@@ -1334,7 +1334,7 @@ SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet&
     return new SwShdwCrsrOptionsTabPage( pParent, rSet );
 }
 
-void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
+void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
 {
     SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,false);
     if (pWrtSh)

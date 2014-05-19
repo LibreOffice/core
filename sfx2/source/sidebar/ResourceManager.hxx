@@ -119,7 +119,7 @@ private:
         const ::rtl::OUString& rsModuleName) const;
     void GetToolPanelNodeNames (
         ::std::vector<rtl::OUString>& rMatchingNames,
-        const ::utl::OConfigurationTreeRoot aRoot) const;
+        const ::utl::OConfigurationTreeRoot& aRoot) const;
     bool IsDeckEnabled (
         const ::rtl::OUString& rsDeckId,
         const Context& rContext,

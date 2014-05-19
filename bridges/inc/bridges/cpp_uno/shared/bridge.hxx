@@ -78,7 +78,7 @@ public:
 
 private:
     Bridge(Bridge &); // not implemented
-    void operator =(Bridge); // not implemented
+    void operator =(const Bridge&); // not implemented
 
     Bridge(
         uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,

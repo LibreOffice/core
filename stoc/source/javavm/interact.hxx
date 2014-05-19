@@ -52,7 +52,7 @@ private:
     class RetryContinuation;
 
     InteractionRequest(InteractionRequest &); // not implemented
-    void operator =(InteractionRequest); // not implemented
+    void operator =(const InteractionRequest&); // not implemented
 
     virtual ~InteractionRequest();
 

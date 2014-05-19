@@ -69,8 +69,8 @@ public:
     virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    void    SetDrawMode();
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    void         SetDrawMode();
+    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 

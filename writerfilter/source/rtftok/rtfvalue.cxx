@@ -21,7 +21,7 @@ namespace rtftok
 RTFValue::RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes,
                    RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
                    uno::Reference<io::XInputStream> xStream, uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString,
-                   RTFShape aShape)
+                   const RTFShape& aShape)
     : m_nValue(nValue),
       m_sValue(sValue),
       m_xShape(xShape),
@@ -138,7 +138,7 @@ RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
     m_pShape.reset(new RTFShape());
 }
 
-RTFValue::RTFValue(RTFShape aShape)
+RTFValue::RTFValue(const RTFShape& aShape)
     : m_nValue(),
       m_sValue(),
       m_xShape(),

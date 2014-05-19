@@ -1360,7 +1360,7 @@ private:
                                     const Size& rSrcSizePixel );
 
     SAL_DLLPRIVATE Bitmap       BlendBitmap(
-                                    Bitmap              aBmp,
+                                    Bitmap&             aBmp,
                                     BitmapReadAccess*   pP,
                                     BitmapReadAccess*   pA,
                                     const sal_Int32     nOffY,
@@ -1375,7 +1375,7 @@ private:
                                     const long*         pMapY );
 
     SAL_DLLPRIVATE Bitmap       BlendBitmapWithAlpha(
-                                    Bitmap              aBmp,
+                                    Bitmap&             aBmp,
                                     BitmapReadAccess*   pP,
                                     BitmapReadAccess*   pA,
                                     const Rectangle&    aDstRect,

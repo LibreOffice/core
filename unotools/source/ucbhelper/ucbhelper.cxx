@@ -111,7 +111,7 @@ std::vector<OUString> getContents(OUString const & url) {
     }
 }
 
-OUString getCasePreservingUrl(INetURLObject url) {
+OUString getCasePreservingUrl(const INetURLObject& url) {
     return
         content(url).executeCommand(
             OUString("getCasePreservingURL"),

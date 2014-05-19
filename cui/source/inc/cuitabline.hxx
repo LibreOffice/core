@@ -234,7 +234,7 @@ public:
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
-    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
