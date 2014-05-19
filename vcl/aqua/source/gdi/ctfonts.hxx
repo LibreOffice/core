@@ -39,7 +39,7 @@ public:
     virtual bool    GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     virtual bool    GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
-    virtual void    SetTextColor( const RGBAColor& );
+    virtual void    SetTextColor( const RGBAColor& ) {}
 
 private:
     /// CoreText text style object

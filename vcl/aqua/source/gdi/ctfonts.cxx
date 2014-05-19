@@ -140,6 +140,9 @@ CTTextStyle::CTTextStyle( const ImplFontSelectData& rFSD )
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
 
+    // allow delayed setting the font color, i.e. after the text layout
+    CFDictionarySetValue( mpStyleDict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue );
+
     // handle emulation of bold styles if requested and the font that doesn't provide them
     if( (pReqFont->meWeight > WEIGHT_MEDIUM)
     &&  (mpFontData->meWeight <= WEIGHT_MEDIUM)
@@ -280,21 +283,6 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon
     }
 
     return true;
-}
-
-// -----------------------------------------------------------------------
-
-void CTTextStyle::SetTextColor( const RGBAColor& rColor )
-{
-#if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
-    CGColorRef pCGColor = CGColorCreateGenericRGB( rColor.GetRed(),
-        rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha() );
-#else // for builds on OSX 10.4 SDK
-    const CGColorSpaceRef pCGColorSpace = GetSalData()->mxRGBSpace;
-    CGColorRef pCGColor = CGColorCreate( pCGColorSpace, rColor.AsArray() );
-#endif
-    CFDictionarySetValue( mpStyleDict, kCTForegroundColorAttributeName, pCGColor );
-    CFRelease( pCGColor);
 }
 
 // =======================================================================
