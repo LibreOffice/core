@@ -66,7 +66,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svdemo \
         svptest \
         svpclient \
-        vcldemo) \
+        vcldemo \
+        pixelctl ) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
