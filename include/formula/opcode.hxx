@@ -461,6 +461,7 @@ enum OpCodeEnum
         ocEuroConvert       = SC_OPCODE_EUROCONVERT,
         ocFilterXML         = SC_OPCODE_FILTERXML,
         ocWebservice        = SC_OPCODE_WEBSERVICE,
+        ocColor             = SC_OPCODE_COLOR,
         ocErf_MS            = SC_OPCODE_ERF_MS,
         ocErfc_MS           = SC_OPCODE_ERFC_MS,
     // internal stuff
