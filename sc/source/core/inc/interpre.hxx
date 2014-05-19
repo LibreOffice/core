@@ -833,6 +833,7 @@ void ScMidB();
 
 void ScFilterXML();
 void ScWebservice();
+void ScColor();
 void ScErf();
 void ScErfc();
 

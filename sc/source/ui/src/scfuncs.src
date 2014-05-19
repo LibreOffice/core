@@ -11999,6 +11999,53 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "String containing a valid XPath expression";
         };
     };
+    Resource SC_OPCODE_COLOR
+    {
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_COLOR );
+            4; 0; 0; 0; 1;
+            0;
+        };
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns an implementation defined value representing a RGBA color";
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Red";
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Value of red";
+        };
+        String 4 // Name of parameter 2
+        {
+            Text [ en-US ] = "Green";
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Value of green";
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Blue";
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Value of blue";
+        };
+        String 8 // Name of parameter 4
+        {
+            Text [ en-US ] = "Alpha";
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "Value of alpha";
+        };
+    };
     Resource SC_OPCODE_WEBSERVICE
     {
         String 1 // Description

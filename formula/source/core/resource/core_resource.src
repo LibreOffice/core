@@ -423,6 +423,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     /* END defined ERROR.TYPE() values. */
     String SC_OPCODE_FILTERXML     { Text = "COM.MICROSOFT.FILTERXML";};
     String SC_OPCODE_WEBSERVICE    { Text = "COM.MICROSOFT.WEBSERVICE"; };
+    String SC_OPCODE_COLOR         { Text = "COLOR"; };
     String SC_OPCODE_ERF_MS { Text = "COM.MICROSOFT.ERF.PRECISE" ; };
     String SC_OPCODE_ERFC_MS { Text = "COM.MICROSOFT.ERFC.PRECISE" ; };
 };
@@ -1237,6 +1238,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     /* END defined ERROR.TYPE() values. */
     String SC_OPCODE_FILTERXML     { Text = "FILTERXML";};
     String SC_OPCODE_WEBSERVICE    { Text = "WEBSERVICE"; };
+    String SC_OPCODE_COLOR         { Text = "COLOR"; };
     String SC_OPCODE_ERF_MS { Text = "ERF.PRECISE" ; };
     String SC_OPCODE_ERFC_MS { Text = "ERFC.PRECISE" ; };
 };
@@ -2766,6 +2768,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_FILTERXML
     {
         Text [ en-US ] = "FILTERXML";
+    };
+    String SC_OPCODE_COLOR
+    {
+        Text [ en-US ] = "COLOR";
     };
     String SC_OPCODE_WEBSERVICE
     {

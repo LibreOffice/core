@@ -274,4 +274,48 @@ void ScInterpreter::ScErfc()
     }
 }
 
+void ScInterpreter::ScColor()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if(MustHaveParamCount(nParamCount, 3, 4))
+    {
+        double nAlpha = 0;
+        if(nParamCount == 4)
+            nAlpha = rtl::math::approxFloor(GetDouble());
+
+        if(nAlpha < 0 || nAlpha > 255)
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        double nBlue = rtl::math::approxFloor(GetDouble());
+
+        if(nBlue < 0 || nBlue > 255)
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        double nGreen = rtl::math::approxFloor(GetDouble());
+
+        if(nGreen < 0 || nGreen > 255)
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        double nRed = rtl::math::approxFloor(GetDouble());
+
+        if(nRed < 0 || nRed > 255)
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        double nVal = 256*256*256*nAlpha + 256*256*nRed + 256*nGreen + nBlue;
+        PushDouble(nVal);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

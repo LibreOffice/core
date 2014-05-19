@@ -2509,6 +2509,7 @@ void Test::testFunctionLists()
         "BITXOR",
         "CEILING",
         "CEILING.PRECISE",
+        "COLOR",
         "COMBIN",
         "COMBINA",
         "CONVERT",
