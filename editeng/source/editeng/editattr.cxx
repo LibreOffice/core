@@ -217,7 +217,9 @@ EditCharAttribColor::EditCharAttribColor( const SvxColorItem& rAttr, sal_uInt16 
 
 void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetColor( ((const SvxColorItem*)GetItem())->GetValue() );
+    Color aColor = ((const SvxColorItem*)GetItem())->GetValue();
+    rFont.SetColor( aColor);
+    fprintf(stderr, "Called SetFont\n");
 }
 
 
