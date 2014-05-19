@@ -174,8 +174,11 @@ public:
     bool SwapIn( bool bWaitForData = false );
     /// Remove graphic in order to free memory.
     bool SwapOut();
-    /// Access to storage stream-name.
-    void SetStreamName( const OUString& r ) { maGrfObj.SetUserData( r ); }
+    /// applying new stream name for embedded graphic - needed as saving the document might change this stream name
+    void ApplyNewEmbeddedStreamName(const OUString& r)
+    {
+        maGrfObj.SetUserData(r);
+    }
     /// Is this node selected by any shell?
     bool IsSelected() const;
 
