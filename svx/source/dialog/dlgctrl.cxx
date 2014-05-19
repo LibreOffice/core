@@ -815,6 +815,7 @@ SvxPixelCtl::SvxPixelCtl(Window* pParent, sal_uInt16 nNumber)
     , bPaintable(true)
     , aFocusPosition(0,0)
 {
+    assert(nLines); // can't have no lines
     SetPixelColor( Color( COL_BLACK ) );
     SetBackgroundColor( Color( COL_WHITE ) );
     SetLineColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
