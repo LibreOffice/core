@@ -47,6 +47,12 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,avmedia,\
+	-lrt \
+))
+endif
+
 ifneq (,$(filter COLLADA2GLTF,$(BUILD_TYPE)))
 $(eval $(call gb_Library_set_warnings_not_errors,avmedia))
 
