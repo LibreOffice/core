@@ -29,9 +29,9 @@ class WmfTest : public test::BootstrapFixture, public XmlTestTools
 {
     OUString maDataUrl;
 
-    OUString getFullUrl(OUString& sFileName)
+    OUString getFullUrl(const char * sFileName)
     {
-        return getURLFromSrc(maDataUrl) + sFileName;
+        return getURLFromSrc(maDataUrl) + OUString(sFileName, strlen(sFileName), RTL_TEXTENCODING_UTF8);
     }
 
 public:
