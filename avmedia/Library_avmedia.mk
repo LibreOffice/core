@@ -50,6 +50,12 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 ifneq (,$(filter COLLADA2GLTF,$(BUILD_TYPE)))
 $(eval $(call gb_Library_set_warnings_not_errors,avmedia))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,avmedia,\
+	-lrt \
+))
+endif
+
 $(eval $(call gb_Library_use_externals,avmedia,\
 	collada2gltf \
 	libxml2 \
