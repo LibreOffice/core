@@ -67,8 +67,6 @@
 #define BEN_EXPORT
 #endif
 
-using namespace std;
-
 #include "ut.hxx"
 #include "utlist.hxx"
 #include <tools/stream.hxx>
@@ -416,7 +414,7 @@ public: // Internal methods
     pCBenNamedObjectListElmt GetNameListElmt() { return &cNameListElmt; }
 
 private: // Data
-    string csName;
+    std::string csName;
     CBenNamedObjectListElmt cNameListElmt;
     BenContainerPos cPos;
 };

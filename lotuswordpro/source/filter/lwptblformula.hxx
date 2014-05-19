@@ -64,8 +64,6 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLFORMULA_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLFORMULA_HXX
 
-using namespace std;
-
 /* These token types are written to the file.  Don't change their
 values unless you filter them.
 */
@@ -178,7 +176,7 @@ public:
     OUString ToArgString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 
 protected:
-    vector<LwpFormulaArg*> m_aArgs;
+    std::vector<LwpFormulaArg*> m_aArgs;
     sal_uInt16 m_nTokenType;
 };
 
@@ -214,7 +212,7 @@ protected:
     bool ReadArguments(LwpFormulaFunc& aFunc);
     bool m_bSupported;
 private:
-    vector<LwpFormulaArg*> m_aStack;
+    std::vector<LwpFormulaArg*> m_aStack;
     bool ReadConst();
     void MarkUnsupported(sal_uInt16 TokenType);
 
