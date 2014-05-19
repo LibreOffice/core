@@ -71,15 +71,15 @@ class MyWin : public WorkWindow
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
 
-    void        MouseMove( const MouseEvent& rMEvt );
-    void        MouseButtonDown( const MouseEvent& rMEvt );
-    void        MouseButtonUp( const MouseEvent& rMEvt );
-    void        KeyInput( const KeyEvent& rKEvt );
-    void        KeyUp( const KeyEvent& rKEvt );
-    void        Paint( const Rectangle& rRect );
-    void        Resize();
+    void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    void        KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    void        Resize() SAL_OVERRIDE;
 
-    bool        Close();
+    bool        Close() SAL_OVERRIDE;
 };
 
 void Main()
