@@ -397,12 +397,6 @@ void Window::ReleaseGraphics( bool bRelease )
     mpNextGraphics  = NULL;
 }
 
-void Window::EnableRTL ( bool bEnable )
-{
-    StateChanged( STATE_CHANGE_MIRRORING );
-    OutputDevice::EnableRTL(bEnable);
-}
-
 void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
@@ -427,12 +421,6 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
     }
 
     OutputDevice::CopyDeviceArea(aPosAry, nFlags);
-}
-
-bool Window::HasMirroredGraphics() const
-{
-    const OutputDevice* pOutDev = GetOutDev();
-    return pOutDev->OutputDevice::HasMirroredGraphics();
 }
 
 void Window::ImplInitAppFontData( Window* pWindow )
