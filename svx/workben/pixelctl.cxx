@@ -24,7 +24,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/ImageScaleMode.hpp>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -37,13 +36,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <math.h>
-
-#include <errno.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
