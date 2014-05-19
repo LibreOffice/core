@@ -20,7 +20,7 @@
 #ifndef _FRAMEWORK_HRC
 #define _FRAMEWORK_HRC
 
-#include "svl/solar.hrc"
+#include <svl/solar.hrc>
 
 #define RID_FWK_START                       260
 
