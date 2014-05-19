@@ -42,7 +42,7 @@ VectorRef::VectorRef(const std::string &s, FormulaTreeNodeRef ft, int idx):
 VectorRef::~VectorRef()
 {
     if (mpClmem) {
-        cl_int ret = clReleaseMemObject(mpClmem);
+        clReleaseMemObject(mpClmem);
     }
 }
 
