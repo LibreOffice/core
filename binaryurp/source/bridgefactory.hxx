@@ -117,6 +117,8 @@ private:
         com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
     SAL_CALL getExistingBridges() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    void SAL_CALL disposing() SAL_OVERRIDE;
+
     typedef
         std::list<
             com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >

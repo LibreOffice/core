@@ -116,6 +116,11 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
     rtl::Reference< Bridge > b;
     {
         osl::MutexGuard g(m_aMutex);
+        if (rBHelper.bDisposed) {
+            throw css::lang::DisposedException(
+                "BridgeFactory disposed",
+                static_cast< cppu::OWeakObject * >(this));
+        }
         if (named_.find(sName) != named_.end()) {
             throw css::bridge::BridgeExistsException(
                 sName, static_cast< cppu::OWeakObject * >(this));
@@ -171,6 +176,32 @@ BridgeFactory::getExistingBridges() throw (css::uno::RuntimeException, std::exce
         s[i++] = j->second;
     }
     return s;
+}
+
+void BridgeFactory::disposing() {
+    BridgeList l1;
+    BridgeMap l2;
+    {
+        osl::MutexGuard g(m_aMutex);
+        l1.swap(unnamed_);
+        l2.swap(named_);
+    }
+    for (BridgeList::iterator i(l1.begin()); i != l1.end(); ++i) {
+        try {
+            css::uno::Reference<css::lang::XComponent>(
+                *i, css::uno::UNO_QUERY_THROW)->dispose();
+        } catch (css::uno::Exception & e) {
+            SAL_WARN("binaryurp", "ignoring Exception " << e.Message);
+        }
+    }
+    for (BridgeMap::iterator i(l2.begin()); i != l2.end(); ++i) {
+        try {
+            css::uno::Reference<css::lang::XComponent>(
+                i->second, css::uno::UNO_QUERY_THROW)->dispose();
+        } catch (css::uno::Exception & e) {
+            SAL_WARN("binaryurp", "ignoring Exception " << e.Message);
+        }
+    }
 }
 
 }
