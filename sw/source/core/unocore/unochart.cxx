@@ -2498,10 +2498,6 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     if (bDisposed)
         throw lang::DisposedException();
 
-#if OSL_DEBUG_LEVEL > 1
-    OUString aBoxName( rBox.GetName() );
-#endif
-
     // to be set if the last box of the data-sequence was removed here
     bool bNowEmpty = false;
 
