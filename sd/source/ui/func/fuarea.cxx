@@ -34,6 +34,7 @@
 #include "app.hrc"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 TYPEINIT1( FuArea, FuPoor );
@@ -61,10 +62,10 @@ void FuArea::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( aNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        AbstractSvxAreaTabDialog * pDlg = pFact ? pFact->CreateSvxAreaTabDialog( NULL,
+        boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog( NULL,
                                                                         &aNewAttr,
                                                                         mpDoc,
-                                                                        true) : 0;
+                                                                        true) : 0);
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
@@ -82,8 +83,6 @@ void FuArea::DoExecute( SfxRequest& rReq )
                         0 };
 
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
-
-        delete pDlg;
     }
 
     rReq.Ignore ();

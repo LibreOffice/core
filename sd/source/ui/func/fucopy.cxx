@@ -38,6 +38,8 @@
 #include <svx/xfillit0.hxx>
 #include <sfx2/request.hxx>
 #include "sdabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
+
 namespace sd {
 
 TYPEINIT1( FuCopy, FuPoor );
@@ -99,7 +101,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if( pFact )
             {
-                AbstractCopyDlg* pDlg = pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorList(), mpView );
+                boost::scoped_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorList(), mpView ));
                 if (!pDlg)
                     return;
 
@@ -115,12 +117,11 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
                     default:
                     {
-                        delete pDlg;
+                        pDlg.reset();
                         mpView->EndUndo();
                     }
                     return; // Cancel
                 }
-                delete pDlg;
             }
         }
 
@@ -167,7 +168,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         // remove handles
         //HMHmpView->HideMarkHdl();
 
-        SfxProgress*    pProgress = NULL;
+        boost::scoped_ptr<SfxProgress> pProgress;
         bool            bWaiting = false;
 
         if( nNumber > 1 )
@@ -175,7 +176,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             OUString aStr( SD_RESSTR( STR_OBJECTS ) );
             aStr += " " + SD_RESSTR( STR_UNDO_COPYOBJECTS );
 
-            pProgress = new SfxProgress( mpDocSh, aStr, nNumber );
+            pProgress.reset(new SfxProgress( mpDocSh, aStr, nNumber ));
             mpDocSh->SetWaitCursor( true );
             bWaiting = true;
         }
@@ -277,8 +278,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             }
         }
 
-        if ( pProgress )
-            delete pProgress;
+        pProgress.reset();
 
         if ( bWaiting )
             mpDocSh->SetWaitCursor( false );

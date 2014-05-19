@@ -82,6 +82,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -1562,15 +1563,13 @@ void CustomAnimationPane::showOptions(const OString& sPage)
 {
     STLPropertySet* pSet = createSelectionSet();
 
-    CustomAnimationDialog* pDlg = new CustomAnimationDialog(this, pSet, sPage);
+    boost::scoped_ptr<CustomAnimationDialog> pDlg(new CustomAnimationDialog(this, pSet, sPage));
     if( pDlg->Execute() )
     {
         addUndo();
         changeSelection( pDlg->getResultSet(), pSet );
         updateControls();
     }
-
-    delete pDlg;
 }
 
 void CustomAnimationPane::onChangeCurrentPage()
@@ -1743,7 +1742,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
     }
 
-    CustomAnimationCreateDialog* pDlg = new CustomAnimationCreateDialog( this, this, aTargets, bHasText, sPresetId, fDuration );
+    boost::scoped_ptr<CustomAnimationCreateDialog> pDlg(new CustomAnimationCreateDialog( this, this, aTargets, bHasText, sPresetId, fDuration ));
     if( pDlg->Execute() )
     {
         addUndo();
@@ -1812,7 +1811,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         mrBase.GetDocShell()->SetModified();
     }
 
-    delete pDlg;
+    pDlg.reset();
 
     updateControls();
 

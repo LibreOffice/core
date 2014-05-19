@@ -56,6 +56,7 @@
 #include "View.hxx"
 #include "slideshow.hxx"
 #include "fuhhconv.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -283,9 +284,8 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                 if (pFact && mpViewShell)
                 {
-                    VclAbstractDialog* pDlg = pFact->CreateVclDialog( mpViewShell->GetActiveWindow(), SID_LANGUAGE_OPTIONS );
+                    boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( mpViewShell->GetActiveWindow(), SID_LANGUAGE_OPTIONS ));
                     pDlg->Execute();
-                    delete pDlg;
                 }
             }
             else

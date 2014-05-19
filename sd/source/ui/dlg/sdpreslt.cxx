@@ -29,6 +29,7 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "DrawDocShell.hxx"
+#include <boost/scoped_ptr.hpp>
 
 
 SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
@@ -171,14 +172,11 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
  */
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 {
-    SfxNewFileDialog* pDlg = new SfxNewFileDialog(this, SFXWB_PREVIEW);
+    boost::scoped_ptr<SfxNewFileDialog> pDlg(new SfxNewFileDialog(this, SFXWB_PREVIEW));
     pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())
-    {
-        delete pDlg;
         return 0;
-    }
 
     sal_uInt16 nResult = pDlg->Execute();
     // Inserted update to force repaint
@@ -205,7 +203,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
         default:
             bCancel = true;
     }
-    delete pDlg;
+    pDlg.reset();
 
     if( !bCancel )
     {
