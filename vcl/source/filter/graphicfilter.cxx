@@ -1592,7 +1592,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             {
                 nStatus = GRFILTER_FORMATERROR;
             }
-            else
+            else if (aFilterName.equalsIgnoreAsciiCase(IMP_BMP))
             {
                 // #i15508# added BMP type (checked, works)
                 eLinkType = GFX_LINK_TYPE_NATIVE_BMP;
