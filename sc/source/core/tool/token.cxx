@@ -2083,6 +2083,18 @@ FormulaToken* ScTokenArray::AddColRowName( const ScSingleRefData& rRef )
     return Add( new ScSingleRefToken( rRef, ocColRowName ) );
 }
 
+void ScTokenArray::AssignXMLString( const OUString &rText, const OUString &rFormulaNmsp )
+{
+    sal_uInt16 nTokens = 1;
+    FormulaToken *aTokens[2];
+
+    aTokens[0] = new FormulaStringOpToken( ocStringXML, rText );
+    if( !rFormulaNmsp.isEmpty() )
+        aTokens[ nTokens++ ] = new FormulaStringOpToken( ocStringXML, rFormulaNmsp );
+
+    Assign( nTokens, aTokens );
+}
+
 bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
         const ScAddress& rPos, ScDirection eDir )
 {

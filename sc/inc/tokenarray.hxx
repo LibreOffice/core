@@ -110,6 +110,9 @@ public:
         NULL if there is no pCode (which actually would be caller's fault). */
     formula::FormulaToken* MergeRangeReference( const ScAddress & rPos );
 
+    /// Assign XML string placeholder to the array
+    void AssignXMLString( const OUString &rText, const OUString &rFormulaNmsp );
+
     /// Assignment with references to ScToken entries (not copied!)
     ScTokenArray& operator=( const ScTokenArray& );
 

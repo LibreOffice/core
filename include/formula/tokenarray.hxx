@@ -82,6 +82,7 @@ protected:
 
 protected:
     void                    Assign( const FormulaTokenArray& );
+    void                    Assign( sal_uInt16 nCode, FormulaToken **pTokens );
 
     /// Also used by the compiler. The token MUST had been allocated with new!
     FormulaToken*           Add( FormulaToken* );
