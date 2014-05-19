@@ -848,10 +848,6 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
     //the Cntnts is always the left upper corner.
     //The Cnt should preferably be above the point.
 
-#if OSL_DEBUG_LEVEL > 1
-    Point arPoint( rPt );
-#endif
-
     rpCnt = 0;
     sal_uInt64 nDistance = SAL_MAX_UINT64;
     sal_uInt64 nNearest  = SAL_MAX_UINT64;
