@@ -30,7 +30,7 @@ namespace
 {
     void lclWriteCorrelationFormulas(
             AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
-            ScRangeList aRangeList, const OUString& aTemplateString)
+            const ScRangeList& aRangeList, const OUString& aTemplateString)
     {
         for (size_t i = 0; i < aRangeList.size(); i++)
         {

@@ -1830,7 +1830,7 @@ sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
 }
 
 sal_uInt8 ScColumn::GetRangeScriptType(
-    sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2, sc::CellStoreType::iterator itrCells )
+    sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2, const sc::CellStoreType::iterator& itrCells )
 {
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
         return 0;
@@ -2183,7 +2183,7 @@ namespace {
 
 template<typename _Blk>
 void getBlockIterators(
-    sc::CellStoreType::iterator it, size_t& rLenRemain,
+    const sc::CellStoreType::iterator& it, size_t& rLenRemain,
     typename _Blk::iterator& rData, typename _Blk::iterator& rDataEnd )
 {
     rData = _Blk::begin(*it->data);
@@ -2203,14 +2203,14 @@ void getBlockIterators(
 
 bool appendToBlock(
     ScDocument* pDoc, sc::FormulaGroupContext& rCxt, sc::FormulaGroupContext::ColArray& rColArray,
-    size_t nPos, size_t nArrayLen, sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
+    size_t nPos, size_t nArrayLen, const sc::CellStoreType::iterator& _it, const sc::CellStoreType::iterator& itEnd )
 {
     svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
     size_t nLenRemain = nArrayLen - nPos;
     double fNan;
     rtl::math::setNan(&fNan);
 
-    for (; it != itEnd; ++it)
+    for (sc::CellStoreType::iterator it = _it; it != itEnd; ++it)
     {
         switch (it->type)
         {
@@ -2343,7 +2343,7 @@ void copyFirstStringBlock(
 
 sc::FormulaGroupContext::ColArray*
 copyFirstFormulaBlock(
-    sc::FormulaGroupContext& rCxt, sc::CellStoreType::iterator itBlk, size_t nArrayLen,
+    sc::FormulaGroupContext& rCxt, const sc::CellStoreType::iterator& itBlk, size_t nArrayLen,
     SCTAB nTab, SCCOL nCol )
 {
     double fNan;

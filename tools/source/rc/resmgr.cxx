@@ -1329,12 +1329,13 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
 }
 
 ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
-                              LanguageTag aLocale )
+                              const LanguageTag& _aLocale )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
 
+    LanguageTag aLocale = _aLocale;
     if( aLocale.isSystemLocale() )
         aLocale = ResMgrContainer::get().getDefLocale();
 

@@ -838,7 +838,7 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     return bRet;
 }
 
-bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
+bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, const INetURLObject& _aIniPath )
 {
 #if OSL_DEBUG_LEVEL > 1 // check record size. New compiler possibly aligns different!
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return false;
@@ -850,6 +850,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
     sal_uLong   nNext;
     bool        bRet=false;        // return value
 
+    INetURLObject aIniPath = _aIniPath;
     aIniPath.Append(OUString("sgf.ini"));
 
     pSgfFonts = new SgfFontLst;

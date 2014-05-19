@@ -235,7 +235,7 @@ void    SdPrintOptions::SetDrawMode()
     }
 }
 
-void SdPrintOptions::PageCreated (SfxAllItemSet
+void SdPrintOptions::PageCreated (const SfxAllItemSet&
 #ifdef MACOSX
                                   aSet
 #endif

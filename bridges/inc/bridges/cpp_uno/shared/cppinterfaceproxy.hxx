@@ -67,7 +67,7 @@ public:
 
 private:
     CppInterfaceProxy(CppInterfaceProxy &); // not implemented
-    void operator =(CppInterfaceProxy); // not implemented
+    void operator =(const CppInterfaceProxy&); // not implemented
 
     CppInterfaceProxy(
         Bridge * pBridge_, uno_Interface * pUnoI_,

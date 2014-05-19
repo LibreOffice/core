@@ -142,7 +142,7 @@ namespace dbaui
         virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
-        OPrimKeyUndoAct( OTableEditorCtrl* pOwner, MultiSelection aDeletedKeys, MultiSelection aInsertedKeys );
+        OPrimKeyUndoAct( OTableEditorCtrl* pOwner, const MultiSelection& aDeletedKeys, const MultiSelection& aInsertedKeys );
         virtual ~OPrimKeyUndoAct();
     };
 }

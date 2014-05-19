@@ -122,7 +122,7 @@ public:
 
 private:
     JavaVirtualMachine(JavaVirtualMachine &); // not implemented
-    void operator =(JavaVirtualMachine); // not implemented
+    void operator =(const JavaVirtualMachine&); // not implemented
 
     virtual ~JavaVirtualMachine();
 

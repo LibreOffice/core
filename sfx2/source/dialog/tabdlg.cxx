@@ -321,7 +321,7 @@ const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
     return pItem;
 }
 
-void SfxTabPage::PageCreated( SfxAllItemSet /*aSet*/ )
+void SfxTabPage::PageCreated( const SfxAllItemSet& /*aSet*/ )
 {
     DBG_ASSERT(false, "SfxTabPage::PageCreated should not be called");
 }

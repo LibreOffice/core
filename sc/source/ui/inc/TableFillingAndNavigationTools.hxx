@@ -45,7 +45,7 @@ public:
     void      autoReplaceAddress(const OUString& aVariable, ScAddress aAddress);
 
     void      applyRange(const OUString& aVariable, ScRange aRange);
-    void      applyRangeList(const OUString& aVariable, ScRangeList aRangeList);
+    void      applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList);
     void      applyAddress(const OUString& aVariable, ScAddress aAddress);
     void      applyString(const OUString& aVariable, const OUString& aValue);
     void      applyNumber(const OUString& aVariable, sal_Int32 aValue);

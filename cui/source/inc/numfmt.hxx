@@ -85,7 +85,7 @@ public:
     void                    SetOkHdl( const Link& rOkHandler );
     void                    HideLanguage(bool nFlag=true);
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void            PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 private:
     SvxNumberFormatTabPage( Window* pParent,
                             const SfxItemSet& rCoreAttrs );

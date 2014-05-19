@@ -64,7 +64,7 @@ void FormulaTemplate::applyRange(const OUString& aVariable, ScRange aRange)
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyRangeList(const OUString& aVariable, ScRangeList aRangeList)
+void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList)
 {
     OUString aString;
     aRangeList.Format(aString, SCR_ABS, mDocument);

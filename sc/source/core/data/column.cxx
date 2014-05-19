@@ -2874,7 +2874,7 @@ class FindEditCellsHandler
 
 public:
     FindEditCellsHandler(ScColumn& rColumn, sc::CellTextAttrStoreType& rAttrs,
-            sc::CellStoreType::iterator rCellItr) :
+            const sc::CellStoreType::iterator& rCellItr) :
         mrColumn(rColumn), miAttrPos(rAttrs.begin()), miCellPos(rCellItr) {}
 
     bool operator() (size_t, const EditTextObject*)

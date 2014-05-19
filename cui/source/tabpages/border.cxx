@@ -1193,7 +1193,7 @@ void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
 }
 
-void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet)
+void SvxBorderTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE,false);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);

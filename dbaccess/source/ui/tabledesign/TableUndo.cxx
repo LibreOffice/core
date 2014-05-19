@@ -324,7 +324,7 @@ void OTableEditorInsNewUndoAct::Redo()
 }
 
 // class OPrimKeyUndoAct
-OPrimKeyUndoAct::OPrimKeyUndoAct( OTableEditorCtrl* pOwner, MultiSelection aDeletedKeys, MultiSelection aInsertedKeys) :
+OPrimKeyUndoAct::OPrimKeyUndoAct( OTableEditorCtrl* pOwner, const MultiSelection& aDeletedKeys, const MultiSelection& aInsertedKeys) :
      OTableEditorUndoAct( pOwner ,STR_TABLEDESIGN_UNDO_PRIMKEY)
     ,m_aDelKeys( aDeletedKeys )
     ,m_aInsKeys( aInsertedKeys )

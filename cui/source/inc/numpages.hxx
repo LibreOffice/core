@@ -155,7 +155,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetCharFmtName(const OUString& rName){sBulletCharFmtName = rName;}
-    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 #define NUM_VALUSET_COUNT 16
@@ -200,7 +200,7 @@ class SvxNumPickTabPage : public SfxTabPage
     void                SetCharFmtNames(const OUString& rCharName, const OUString& rBulName)
                             {   sNumCharFmtName = rCharName;
                                 sBulletCharFmtName = rBulName;}
-    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 
@@ -363,7 +363,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     ListBox&            GetCharFmtListBox() {return *m_pCharFmtLB;}
     void                SetModified(bool bRepaint = true);
-    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
     /** Get the numberings provided by the i18n framework (CTL, Asian, ...) and
         add them to the listbox. Extended numbering schemes present in the
@@ -459,7 +459,7 @@ public:
 
     void                SetMetric(FieldUnit eSet);
     void                SetModified(bool bRepaint = true);
-    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 #endif

@@ -1493,7 +1493,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
     SetGfxMode( nOldGfxMode );
 }
 
-void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap )
+void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap )
 {
     BitmapEx aBmpEx( rBitmap );
     if ( mbComplexClip )

@@ -499,7 +499,7 @@ public:
      * update script types on demand if they have not been determined.
      */
     sal_uInt8 GetRangeScriptType( sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2,
-            sc::CellStoreType::iterator itr);
+            const sc::CellStoreType::iterator& itr);
 
     void SetScriptType( SCROW nRow, sal_uInt8 nType );
     void UpdateScriptTypes( SCROW nRow1, SCROW nRow2 );
@@ -611,7 +611,7 @@ private:
     void ActivateNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin = true );
     void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
     void BroadcastNewCell( SCROW nRow );
-    bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
+    bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::CellStoreType::iterator& itr );
 
     const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;
 

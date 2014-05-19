@@ -74,7 +74,7 @@ public:
 
 private:
     UnoInterfaceProxy(UnoInterfaceProxy &); // not implemented
-    void operator =(UnoInterfaceProxy); // not implemented
+    void operator =(const UnoInterfaceProxy&); // not implemented
 
     UnoInterfaceProxy(
         Bridge * pBridge_, com::sun::star::uno::XInterface * pCppI_,
