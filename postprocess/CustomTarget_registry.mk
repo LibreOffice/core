@@ -396,7 +396,8 @@ postprocess_FILES_reportbuilder := \
 	$(postprocess_MOD)/org/openoffice/Setup-reportbuilder.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-reportbuilder.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess-reportbuilder.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/Embedding-reportbuilder.xcu
+	$(postprocess_MOD)/org/openoffice/Office/Embedding-reportbuilder.xcu \
+	$(postprocess_MOD)/org/openoffice/Office/UI/Controller-reportbuilder.xcu
 endif
 
 postprocess_DEPS_writer := main
