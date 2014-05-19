@@ -400,7 +400,7 @@ void SdPageObjsTLB::InitEntry(SvTreeListEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SdPageObjsTLB::SaveExpandedTreeItemState(SvTreeListEntry* pEntry, vector<OUString>& vectTreeItem)
+void SdPageObjsTLB::SaveExpandedTreeItemState(SvTreeListEntry* pEntry, std::vector<OUString>& vectTreeItem)
 {
     if (pEntry)
     {
@@ -800,7 +800,7 @@ void SdPageObjsTLB::AddShapeList (
             bIsExcluded ? rIconProvider.maImgPageObjsExcl : rIconProvider.maImgPageObjs);
         if (mbSaveTreeItemState)
         {
-            vector<OUString>::iterator iteStart = maTreeItem.begin();
+            std::vector<OUString>::iterator iteStart = maTreeItem.begin();
             while (iteStart != maTreeItem.end())
             {
                 OUString strEntry = GetEntryText(pEntry);
