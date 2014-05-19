@@ -63,15 +63,15 @@ SAL_IMPLEMENT_MAIN()
 class MyWin : public WorkWindow
 {
 public:
-                MyWin( Window* pParent, WinBits nWinStyle );
+                 MyWin( Window* pParent, WinBits nWinStyle );
 
-    void        MouseMove( const MouseEvent& rMEvt );
-    void        MouseButtonDown( const MouseEvent& rMEvt );
-    void        MouseButtonUp( const MouseEvent& rMEvt );
-    void        KeyInput( const KeyEvent& rKEvt );
-    void        KeyUp( const KeyEvent& rKEvt );
-    void        Paint( const Rectangle& rRect );
-    void        Resize();
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 void Main()
