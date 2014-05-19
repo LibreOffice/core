@@ -233,7 +233,7 @@ bool SwGrfNode::ReRead(
     else if( pGraphic && rGrfName.isEmpty() )
     {
         // Old stream must be deleted before the new one is set.
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
             DelStreamName();
 
         maGrfObj.SetGraphic( *pGraphic );
@@ -243,7 +243,7 @@ bool SwGrfNode::ReRead(
     else if( pGrfObj && rGrfName.isEmpty() )
     {
         // Old stream must be deleted before the new one is set.
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
             DelStreamName();
 
         maGrfObj = *pGrfObj;
@@ -257,7 +257,7 @@ bool SwGrfNode::ReRead(
         return true;
     else
     {
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
             DelStreamName();
 
         // create new link for the graphic object
@@ -563,7 +563,7 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
     else if( maGrfObj.IsSwappedOut() )
     {
         // graphic is in storage or in a temp file
-        if( !HasStreamName() )
+        if( !HasEmbeddedStreamName() )
         {
             bRet = maGrfObj.SwapIn();
         }
@@ -617,7 +617,7 @@ bool SwGrfNode::SwapOut()
             // Swapping is only needed for embedded pictures.
             // The graphic will be written into a temp file if it is new, i.e.
             // if there is no stream name in the storage yet
-            if( !HasStreamName() )
+            if( !HasEmbeddedStreamName() )
                 if( !maGrfObj.SwapOut() )
                     return false;
         }
@@ -669,7 +669,7 @@ bool SwGrfNode::SavePersistentData()
     }
 
     // swap in first if already in storage
-    if( HasStreamName() && !SwapIn() )
+    if( HasEmbeddedStreamName() && !SwapIn() )
         return false;
 
     // #i44367#
@@ -860,7 +860,7 @@ void SwGrfNode::ScaleImageMap()
 
 void SwGrfNode::DelStreamName()
 {
-    if( HasStreamName() )
+    if( HasEmbeddedStreamName() )
     {
         // then remove graphic from storage
         uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
@@ -969,7 +969,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     Graphic aTmpGrf;
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
-    if( !pLink && HasStreamName() )
+    if( !pLink && HasEmbeddedStreamName() )
     {
         try
         {
@@ -1048,7 +1048,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     {
         pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
 
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
         {
             try
             {

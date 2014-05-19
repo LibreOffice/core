@@ -2247,7 +2247,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             if( !bIsEmptyPresObj )
             {
                 OUString aStreamURL;
-                OUString aStr;
 
                 xPropSet->getPropertyValue("GraphicStreamURL") >>= aStreamURL;
                 xPropSet->getPropertyValue("GraphicURL") >>= sImageURL;
@@ -2255,7 +2254,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 OUString aResolveURL( sImageURL );
                 const OUString sPackageURL( "vnd.sun.star.Package:" );
 
-                    // sj: trying to preserve the filename
+                // trying to preserve the filename
                 if ( aStreamURL.match( sPackageURL, 0 ) )
                 {
                     OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
@@ -2272,15 +2271,19 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     }
                 }
 
-                aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
+                const OUString aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
 
                 if( !aStr.isEmpty() )
                 {
+                    aStreamURL = sPackageURL;
                     if( aStr[ 0 ] == '#' )
                     {
-                        aStreamURL = sPackageURL;
                         aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                    }
+                    else
+                    {
+                        aStreamURL = aStreamURL.concat( aStr );
                     }
 
                     // update stream URL for load on demand
