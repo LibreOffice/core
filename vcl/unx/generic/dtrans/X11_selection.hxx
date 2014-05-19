@@ -43,8 +43,6 @@
 #define XDND_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndSupport"
 #define XDND_DROPTARGET_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndDropTarget"
 
-using namespace ::com::sun::star::uno;
-
 namespace x11 {
 
     class PixmapHolder; // in bmp.hxx
@@ -54,10 +52,10 @@ namespace x11 {
     class SelectionAdaptor
     {
     public:
-        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() = 0;
+        virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() = 0;
         virtual void clearTransferable() = 0;
         virtual void fireContentsChanged() = 0;
-        virtual com::sun::star::uno::Reference< XInterface > getReference() = 0;
+        virtual css::uno::Reference< css::uno::XInterface > getReference() = 0;
         // returns a reference that will keep the SelectionAdaptor alive until the
         // refernce is released
 
@@ -67,9 +65,9 @@ namespace x11 {
 
     class DropTarget :
         public ::cppu::WeakComponentImplHelper3<
-            ::com::sun::star::datatransfer::dnd::XDropTarget,
-            ::com::sun::star::lang::XInitialization,
-            ::com::sun::star::lang::XServiceInfo
+            css::datatransfer::dnd::XDropTarget,
+            css::lang::XInitialization,
+            css::lang::XServiceInfo
         >
     {
     public:
@@ -78,26 +76,26 @@ namespace x11 {
         sal_Int8                    m_nDefaultActions;
         XLIB_Window                 m_aTargetWindow;
         class SelectionManager*     m_pSelectionManager;
-        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
+        css::uno::Reference< css::datatransfer::dnd::XDragSource >
                                     m_xSelectionManager;
-        ::std::list< com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener > >
+        ::std::list< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
                             m_aListeners;
 
         DropTarget();
         virtual ~DropTarget();
 
         // convenience functions that loop over listeners
-        void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) throw();
-        void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw();
-        void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw();
-        void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw();
+        void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) throw();
+        void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw();
+        void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw();
+        void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw();
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
+        virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& args ) throw ( css::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         // XDropTarget
-        virtual void        SAL_CALL addDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
-        virtual void        SAL_CALL removeDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
         virtual sal_Bool    SAL_CALL isActive() throw(std::exception) SAL_OVERRIDE;
         virtual void        SAL_CALL setActive( sal_Bool active ) throw(std::exception) SAL_OVERRIDE;
         virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception) SAL_OVERRIDE;
@@ -106,19 +104,19 @@ namespace x11 {
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
         virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw(std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual css::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
     };
 
     class SelectionManagerHolder :
         public ::cppu::WeakComponentImplHelper3<
-            ::com::sun::star::datatransfer::dnd::XDragSource,
-            ::com::sun::star::lang::XInitialization,
-            ::com::sun::star::lang::XServiceInfo
+            css::datatransfer::dnd::XDragSource,
+            css::lang::XInitialization,
+            css::lang::XServiceInfo
         >
     {
         ::osl::Mutex m_aMutex;
-        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
+        css::uno::Reference< css::datatransfer::dnd::XDragSource >
             m_xRealDragSource;
     public:
         SelectionManagerHolder();
@@ -127,30 +125,30 @@ namespace x11 {
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
         virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw(std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString >
+        virtual css::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
+        virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& arguments ) throw( css::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) SAL_OVERRIDE;
         virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception) SAL_OVERRIDE;
         virtual void        SAL_CALL startDrag(
-            const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
+            const css::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+            const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
+            const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener
             ) throw(std::exception) SAL_OVERRIDE;
 
     };
 
     class SelectionManager :
         public ::cppu::WeakImplHelper4<
-            ::com::sun::star::datatransfer::dnd::XDragSource,
-            ::com::sun::star::lang::XInitialization,
-            ::com::sun::star::awt::XEventHandler,
-            ::com::sun::star::frame::XTerminateListener
+            css::datatransfer::dnd::XDragSource,
+            css::lang::XInitialization,
+            css::awt::XEventHandler,
+            css::frame::XTerminateListener
         >,
         public SelectionAdaptor
     {
@@ -165,7 +163,7 @@ namespace x11 {
         // property used to transfer the data
         struct IncrementalTransfer
         {
-            Sequence< sal_Int8 >            m_aData;
+            css::uno::Sequence< sal_Int8 >  m_aData;
             int                             m_nBufferPos;
             XLIB_Window                         m_aRequestor;
             Atom                            m_aProperty;
@@ -187,8 +185,8 @@ namespace x11 {
             SelectionAdaptor*           m_pAdaptor;
             Atom                        m_aAtom;
             ::osl::Condition            m_aDataArrived;
-            Sequence< sal_Int8 >        m_aData;
-            Sequence< ::com::sun::star::datatransfer::DataFlavor >
+            css::uno::Sequence< sal_Int8 > m_aData;
+            css::uno::Sequence< css::datatransfer::DataFlavor >
                                         m_aTypes;
             std::vector< Atom >         m_aNativeTypes;
             // this is used for caching
@@ -251,8 +249,8 @@ namespace x11 {
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
         XLIB_Window                 m_aWindow;
-        com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 > m_xDesktop;
-        com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection >
+        css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
+        css::uno::Reference< css::awt::XDisplayConnection >
                                     m_xDisplayConnection;
         sal_Int32                   m_nSelectionTimeout;
         XLIB_Time                   m_nSelectionTimestamp;
@@ -274,7 +272,7 @@ namespace x11 {
         XLIB_Time                   m_nDropTime;
         sal_Int8                    m_nLastDropAction;
         // XTransferable for Xdnd with foreign drag source
-        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
+        css::uno::Reference< css::datatransfer::XTransferable >
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
         XLIB_Time                   m_nDropTimestamp;
@@ -292,13 +290,13 @@ namespace x11 {
         XLIB_Window                 m_aDropProxy;
         XLIB_Window                 m_aDragSourceWindow;
         // XTransferable for Xdnd when we are drag source
-        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
+        css::uno::Reference< css::datatransfer::XTransferable >
                                     m_xDragSourceTransferable;
-        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >
+        css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >
                                     m_xDragSourceListener;
         // root coordinates
         int                         m_nLastDragX, m_nLastDragY;
-        Sequence< ::com::sun::star::datatransfer::DataFlavor >
+        css::uno::Sequence< css::datatransfer::DataFlavor >
                                     m_aDragFlavors;
         // the rectangle the pointer must leave until a new XdndPosition should
         // be sent. empty unless the drop target told to fill
@@ -395,13 +393,13 @@ namespace x11 {
         // coordinates on root XLIB_Window
         void updateDragWindow( int nX, int nY, XLIB_Window aRoot );
 
-        bool getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData );
+        bool getPasteData( Atom selection, Atom type, css::uno::Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
-        bool convertData( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
+        bool convertData( const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
                           Atom nType,
                           Atom nSelection,
                           int & rFormat,
-                          Sequence< sal_Int8 >& rData );
+                          css::uno::Sequence< sal_Int8 >& rData );
         bool sendData( SelectionAdaptor* pAdaptor, XLIB_Window requestor, Atom target, Atom property, Atom selection );
 
         // thread dispatch loop
@@ -445,11 +443,11 @@ namespace x11 {
         // multiple types to the same list
         void convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront = false );
         OUString convertTypeFromNative( Atom nType, Atom selection, int& rFormat );
-        void getNativeTypeList( const Sequence< com::sun::star::datatransfer::DataFlavor >& rTypes, std::list< Atom >& rOutTypeList, Atom targetselection );
+        void getNativeTypeList( const css::uno::Sequence< css::datatransfer::DataFlavor >& rTypes, std::list< Atom >& rOutTypeList, Atom targetselection );
 
         // methods for transferable
-        bool getPasteDataTypes( Atom selection, Sequence< ::com::sun::star::datatransfer::DataFlavor >& rTypes );
-        bool getPasteData( Atom selection, const OUString& rType, Sequence< sal_Int8 >& rData );
+        bool getPasteDataTypes( Atom selection, css::uno::Sequence< css::datatransfer::DataFlavor >& rTypes );
+        bool getPasteData( Atom selection, const OUString& rType, css::uno::Sequence< sal_Int8 >& rData );
 
         // for XDropTarget to register/deregister itself
         void registerDropTarget( XLIB_Window aXLIB_Window, DropTarget* pTarget );
@@ -469,45 +467,45 @@ namespace x11 {
         void shutdown() throw();
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
+        virtual void        SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& arguments ) throw( css::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         // XEventHandler
-        virtual sal_Bool    SAL_CALL handleEvent(const Any& event)
+        virtual sal_Bool    SAL_CALL handleEvent(const css::uno::Any& event)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) SAL_OVERRIDE;
         virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception) SAL_OVERRIDE;
         virtual void        SAL_CALL startDrag(
-            const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
+            const css::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+            const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
+            const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener
             ) throw(std::exception) SAL_OVERRIDE;
 
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
-        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() throw() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() throw() SAL_OVERRIDE;
         virtual void clearTransferable() throw() SAL_OVERRIDE;
         virtual void fireContentsChanged() throw() SAL_OVERRIDE;
-        virtual com::sun::star::uno::Reference< XInterface > getReference() throw() SAL_OVERRIDE;
+        virtual css::uno::Reference< css::uno::XInterface > getReference() throw() SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-                throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-                throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent )
+                throw( css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent )
+                throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     };
 
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_createInstance(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
+    css::uno::Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > SAL_CALL Xdnd_createInstance(
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
+    css::uno::Sequence< OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 }
 

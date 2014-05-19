@@ -29,8 +29,6 @@
 #include <X11/Xlib.h>
 #include <postx.h>
 
-using namespace com::sun::star::uno;
-
 namespace x11 {
 
     class SelectionManager;
