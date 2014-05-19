@@ -27,6 +27,8 @@
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
+#include <osl/file.h>
+#include <osl/detail/file.h>
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
@@ -274,14 +276,8 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
         else
         {
             File aFile( aTmp );
-#ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
-#endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
-#ifdef UNX
-umask(old_mode);
-#endif
+            FileBase::RC err = aFile.open(
+                osl_File_OpenFlag_Create | osl_File_OpenFlag_Private);
             if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
                 _rImpl.aName = aTmp;

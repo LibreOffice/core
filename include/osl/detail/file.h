@@ -28,10 +28,11 @@ extern "C" {
 #endif
 
 /* More flags needed for semantics that match the open() call that
-   used to be in SvFileStream::Open().
+   used to be in SvFileStream::Open(), and for temp files:
 */
 #define osl_File_OpenFlag_Trunc     0x00000010L
 #define osl_File_OpenFlag_NoExcl    0x00000020L
+#define osl_File_OpenFlag_Private   0x00000040L
 
 /*  Get the OS specific "handle" of an open file. */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileOSHandle(
