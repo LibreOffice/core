@@ -18,20 +18,20 @@
  */
 
 
-#include "com/sun/star/security/CertificateValidity.hpp"
-#include "com/sun/star/security/XCertificateExtension.hpp"
-#include "com/sun/star/security/XSanExtension.hpp"
+#include <com/sun/star/security/CertificateValidity.hpp>
+#include <com/sun/star/security/XCertificateExtension.hpp>
+#include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/ExtAltNameType.hpp>
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/task/XInteractionApprove.hpp"
-#include "com/sun/star/task/XInteractionRequest.hpp"
-#include "com/sun/star/ucb/CertificateValidationRequest.hpp"
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/ucb/CertificateValidationRequest.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "svl/zforlist.hxx"
-#include "vcl/svapp.hxx"
+#include <svl/zforlist.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include "ids.hrc"

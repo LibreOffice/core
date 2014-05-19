@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
-#include "com/sun/star/task/DocumentPasswordRequest.hpp"
-#include "com/sun/star/task/DocumentPasswordRequest2.hpp"
-#include "com/sun/star/task/DocumentMSPasswordRequest.hpp"
-#include "com/sun/star/task/DocumentMSPasswordRequest2.hpp"
-#include "com/sun/star/task/MasterPasswordRequest.hpp"
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/task/XInteractionPassword.hpp"
-#include "com/sun/star/task/XInteractionPassword2.hpp"
-#include "com/sun/star/task/XInteractionRetry.hpp"
-#include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
-#include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
+#include <com/sun/star/task/DocumentPasswordRequest.hpp>
+#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
+#include <com/sun/star/task/DocumentMSPasswordRequest.hpp>
+#include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
+#include <com/sun/star/task/MasterPasswordRequest.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/task/XInteractionPassword.hpp>
+#include <com/sun/star/task/XInteractionPassword2.hpp>
+#include <com/sun/star/task/XInteractionRetry.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
+#include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 
-#include "osl/diagnose.h"
-#include "rtl/digest.h"
-#include "osl/mutex.hxx"
-#include "tools/errcode.hxx"
-#include "vcl/msgbox.hxx"
-#include "vcl/abstdlg.hxx"
-#include "vcl/svapp.hxx"
+#include <osl/diagnose.h>
+#include <rtl/digest.h>
+#include <osl/mutex.hxx>
+#include <tools/errcode.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/abstdlg.hxx>
+#include <vcl/svapp.hxx>
 
 #include "ids.hrc"
 #include "getcontinuations.hxx"

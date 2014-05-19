@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/mutex.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/msgbox.hxx"
+#include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
 
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/task/XInteractionApprove.hpp"
-#include "com/sun/star/task/XInteractionDisapprove.hpp"
-#include "com/sun/star/task/XInteractionRetry.hpp"
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/task/XInteractionDisapprove.hpp>
+#include <com/sun/star/task/XInteractionRetry.hpp>
 
-#include "tools/errinf.hxx"
-#include "svtools/svtools.hrc"
+#include <tools/errinf.hxx>
+#include <svtools/svtools.hrc>
 
 #include "ids.hrc"
 #include "getcontinuations.hxx"

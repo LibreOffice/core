@@ -20,10 +20,10 @@
 #ifndef INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
 #define INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
 
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/task/XInteractionRequestStringResolver.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/implbase2.hxx"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/implbase2.hxx>
 
 class UUIInteractionHelper;
 

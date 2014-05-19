@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/task/XInteractionRequest.hpp"
-#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 #include "ids.hrc"
 
