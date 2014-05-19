@@ -155,7 +155,7 @@ private:
     void    ReadResource();
     void    ClearResource();
     void impl_clear();
-    void impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
+    DeletionWatcher * impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
 
 protected:
 #define MAX_FAMILIES            5
