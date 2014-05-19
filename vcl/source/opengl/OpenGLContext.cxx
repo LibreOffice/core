@@ -605,7 +605,7 @@ bool OpenGLContext::initWindow()
         m_pChildWindow->EnableEraseBackground( false );
         m_pChildWindow->SetControlForeground();
         m_pChildWindow->SetControlBackground();
-        m_pChildWindow->EnablePaint(false);
+        //m_pChildWindow->EnablePaint(false);
 
         const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
         m_aGLWin.hWnd = sysData->hWnd;
