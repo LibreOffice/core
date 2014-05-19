@@ -1191,7 +1191,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
     //fdo#58170 use current page's layout child HelpId, unless there isn't a
     //current page
-    OUString sHelpId(HID_OFADLG_TREELISTBOX);
+    OString sHelpId(HID_OFADLG_TREELISTBOX);
     if (::isLayoutEnabled(pNewPage))
     {
         Window *pFirstChild = pNewPage->GetWindow(WINDOW_FIRSTCHILD);
