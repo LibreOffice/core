@@ -36,6 +36,7 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,svx,\
     Executable_gengal \
     Package_gengal \
+    Executable_pixelctl \
 ))
 endif
 
