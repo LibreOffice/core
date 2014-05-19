@@ -853,16 +853,19 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
 #endif
 
     /* set mode and flags */
-    int defmode  = S_IRUSR | S_IRGRP | S_IROTH;
+    int defmode = uFlags & osl_File_OpenFlag_Private
+        ? S_IRUSR : S_IRUSR | S_IRGRP | S_IROTH;
     int flags = O_RDONLY;
     if (uFlags & osl_File_OpenFlag_Write)
     {
-        defmode |= S_IWUSR | S_IWGRP | S_IWOTH;
+        defmode |= uFlags & osl_File_OpenFlag_Private
+            ? S_IWUSR : S_IWUSR | S_IWGRP | S_IWOTH;
         flags = OPEN_WRITE_FLAGS;
     }
     if (uFlags & osl_File_OpenFlag_Create)
     {
-        defmode |= S_IWUSR | S_IWGRP | S_IWOTH;
+        defmode |= uFlags & osl_File_OpenFlag_Private
+            ? S_IWUSR : S_IWUSR | S_IWGRP | S_IWOTH;
         flags = OPEN_CREATE_FLAGS;
     }
     if (mode == mode_t(-1))
