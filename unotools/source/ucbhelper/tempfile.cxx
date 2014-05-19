@@ -29,6 +29,7 @@
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
+#include <osl/detail/file.h>
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
@@ -258,14 +259,9 @@ OUString lcl_createName(
         {
             DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
             File aFile( aTmp );
-#ifdef UNX
-            /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-#endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create | (bLock ? 0 : osl_File_OpenFlag_NoLock));
-#ifdef UNX
-            umask(old_mode);
-#endif
+            FileBase::RC err = aFile.open(
+                osl_File_OpenFlag_Create | osl_File_OpenFlag_Private
+                | (bLock ? 0 : osl_File_OpenFlag_NoLock));
             if ( err == FileBase::E_None || (bLock && err == FileBase::E_NOLCK) )
             {
                 aFile.close();
