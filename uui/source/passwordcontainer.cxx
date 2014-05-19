@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/processfactory.hxx"
-#include "cppuhelper/factory.hxx"
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/task/NoMasterException.hpp"
-#include "com/sun/star/task/PasswordContainer.hpp"
-#include "com/sun/star/task/XInteractionHandler2.hpp"
-#include "com/sun/star/ucb/AuthenticationRequest.hpp"
-#include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
-#include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
-#include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/task/NoMasterException.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
+#include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 
 #include "passwordcontainer.hxx"
 

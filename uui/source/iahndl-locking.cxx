@@ -19,19 +19,19 @@
 
 #include <memory>
 
-#include "com/sun/star/document/ChangedByOthersRequest.hpp"
-#include "com/sun/star/document/LockedDocumentRequest.hpp"
-#include "com/sun/star/document/LockedOnSavingRequest.hpp"
-#include "com/sun/star/document/LockFileIgnoreRequest.hpp"
-#include "com/sun/star/document/OwnLockOnDocumentRequest.hpp"
-#include "com/sun/star/task/XInteractionApprove.hpp"
-#include "com/sun/star/task/XInteractionDisapprove.hpp"
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/task/XInteractionRequest.hpp"
+#include <com/sun/star/document/ChangedByOthersRequest.hpp>
+#include <com/sun/star/document/LockedDocumentRequest.hpp>
+#include <com/sun/star/document/LockedOnSavingRequest.hpp>
+#include <com/sun/star/document/LockFileIgnoreRequest.hpp>
+#include <com/sun/star/document/OwnLockOnDocumentRequest.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/task/XInteractionDisapprove.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include "osl/mutex.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/msgbox.hxx"
+#include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
 
 #include "ids.hrc"
 #include "getcontinuations.hxx"

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
 #define INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
 
-#include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/implbase2.hxx>
 
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/task/XInteractionHandler2.hpp"
-#include "com/sun/star/task/XPasswordContainer2.hpp"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 
 namespace com {
     namespace sun {

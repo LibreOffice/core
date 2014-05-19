@@ -20,8 +20,8 @@
 #ifndef INCLUDED_UUI_SOURCE_GETCONTINUATIONS_HXX
 #define INCLUDED_UUI_SOURCE_GETCONTINUATIONS_HXX
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace task {

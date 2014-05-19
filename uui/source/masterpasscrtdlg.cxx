@@ -21,7 +21,7 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <masterpasscrtdlg.hxx>
+#include "masterpasscrtdlg.hxx"
 
 // MasterPasswordCreateDialog---------------------------------------------------
 

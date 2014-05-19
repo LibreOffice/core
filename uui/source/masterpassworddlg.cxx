@@ -20,7 +20,7 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <masterpassworddlg.hxx>
+#include "masterpassworddlg.hxx"
 
 // MasterPasswordDialog---------------------------------------------------
 

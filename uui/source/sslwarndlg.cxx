@@ -20,7 +20,7 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <sslwarndlg.hxx>
+#include "sslwarndlg.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

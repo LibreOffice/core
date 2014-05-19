@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 
-#include <iahndl.hxx>
+#include "iahndl.hxx"
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>

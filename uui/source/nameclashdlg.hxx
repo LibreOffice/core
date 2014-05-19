@@ -20,10 +20,10 @@
 #ifndef INCLUDED_UUI_SOURCE_NAMECLASHDLG_HXX
 #define INCLUDED_UUI_SOURCE_NAMECLASHDLG_HXX
 
-#include "vcl/button.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/edit.hxx"
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
 
 
 

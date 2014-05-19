@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/sequence.hxx>
-#include "comphelper/documentconstants.hxx"
+#include <comphelper/documentconstants.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/macros.h>
 

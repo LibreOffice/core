@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/msgbox.hxx"
-#include "osl/file.hxx"
+#include <vcl/msgbox.hxx>
+#include <osl/file.hxx>
 
 #include "ids.hrc"
 #include "nameclashdlg.hrc"

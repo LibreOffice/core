@@ -20,7 +20,7 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <unknownauthdlg.hxx>
+#include "unknownauthdlg.hxx"
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

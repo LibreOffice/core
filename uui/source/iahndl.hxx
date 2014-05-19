@@ -22,19 +22,19 @@
 
 #include <vector>
 
-#include "osl/mutex.hxx"
-#include "rtl/ustring.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/task/InteractionClassification.hpp"
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/task/InteractionClassification.hpp>
 
-#include "tools/errcode.hxx"
-#include "tools/rc.hxx"
-#include "tools/wintypes.hxx"
+#include <tools/errcode.hxx>
+#include <tools/rc.hxx>
+#include <tools/wintypes.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace awt {
