@@ -8,6 +8,7 @@
  */
 
 #include <string>
+#include <set>
 
 #include "plugin.hxx"
 
@@ -46,27 +47,32 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
             continue;
         }
         string typeName = t1.getUnqualifiedType().getCanonicalType().getAsString();
-        if (typeName == "class rtl::OUString") {
+
+        bool bFound = false;
+        if (typeName == "class rtl::OUString" ||
+            typeName == "class rtl::OString" ||
+            typeName.find("class com::sun::star::uno::Sequence") == 0) {
+            bFound = true;
+        }
+
+        if (!bFound && !t1->isIncompleteType()) {
+            const clang::Type* type = t1.getTypePtrOrNull();
+            if (type != nullptr) {
+                clang::CharUnits size =  compiler.getASTContext().getTypeSizeInChars(type);
+                if (size.getQuantity() > 64) {
+                    bFound = true;
+                }
+            }
+        }
+
+        if (bFound) {
             report(
                 DiagnosticsEngine::Warning,
-                "passing OUString by value, rather pass by reference .e.g. 'const OUString&'",
+                "passing " + typeName + " by value, rather pass by reference .e.g. 'const " + typeName + "&'",
                 pvDecl->getSourceRange().getBegin())
               << pvDecl->getSourceRange();
         }
-        else if (typeName == "class rtl::OString") {
-            report(
-                DiagnosticsEngine::Warning,
-                "passing OString by value, rather pass by reference .e.g. 'const OString&'",
-                pvDecl->getSourceRange().getBegin())
-              << pvDecl->getSourceRange();
-        }
-        else if (typeName.find("class com::sun::star::uno::Sequence") == 0) {
-            report(
-                DiagnosticsEngine::Warning,
-                "passing css::uno::Sequence by value, rather pass by reference .e.g. 'const css::uno::Sequence&' " + typeName,
-                pvDecl->getSourceRange().getBegin())
-              << pvDecl->getSourceRange();
-        }
+
     }
     return true;
 }

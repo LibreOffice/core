@@ -645,7 +645,7 @@ class WinMtfOutput
     void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
     void                ImplSetNonPersistentLineColorTransparenz();
     void                ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly );
-    void                ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap );
+    void                ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap );
 
 public:
 

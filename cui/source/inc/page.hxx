@@ -191,7 +191,7 @@ public:
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
     void                SetCollectionList(const std::vector<OUString> &aList);
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_PAGE_HXX

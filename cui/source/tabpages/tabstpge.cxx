@@ -724,7 +724,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
     return 0;
 }
 
-void SvxTabulatorTabPage::PageCreated(SfxAllItemSet aSet)
+void SvxTabulatorTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pControlItem,SfxUInt16Item,SID_SVXTABULATORTABPAGE_CONTROLFLAGS,false);
     if (pControlItem)

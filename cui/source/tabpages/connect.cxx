@@ -508,7 +508,7 @@ void SvxConnectionPage::FillTypeLB()
         }
     }
 }
-void SvxConnectionPage::PageCreated (SfxAllItemSet aSet)
+void SvxConnectionPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,false);
     if (pOfaPtrItem)

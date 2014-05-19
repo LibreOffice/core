@@ -520,7 +520,7 @@ void ScColumn::BroadcastNewCell( SCROW nRow )
     Broadcast(nRow);
 }
 
-bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr )
+bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::CellStoreType::iterator& itr )
 {
     if (rAttr.mnScriptType != SC_SCRIPTTYPE_UNKNOWN)
         // Already updated. Nothing to do.
@@ -533,9 +533,9 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellSt
         return false;
 
     sc::CellStoreType::position_type pos = maCells.position(itr, nRow);
-    itr = pos.first;
+    sc::CellStoreType::iterator itr2 = pos.first;
     size_t nOffset = pos.second;
-    ScRefCellValue aCell = GetCellValue( itr, nOffset );
+    ScRefCellValue aCell = GetCellValue( itr2, nOffset );
     ScAddress aPos(nCol, nRow, nTab);
 
     const SfxItemSet* pCondSet = NULL;

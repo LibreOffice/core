@@ -209,7 +209,7 @@ void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
     LaunchFillGroup();
 }
 
-void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
+void _SfxMacroTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SfxPoolItem* pEventsItem;
     if( !mpImpl->bGotEvents && SFX_ITEM_SET == aSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )

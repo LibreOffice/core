@@ -165,7 +165,7 @@ public:
     void                SetPreviewBackgroundToCharacter();
 
     void                DisableControls( sal_uInt16 nDisable );
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 // class SvxCharEffectsPage ----------------------------------------------
@@ -241,7 +241,7 @@ public:
     void                EnableFlash();
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 // class SvxCharPositionPage ---------------------------------------------
@@ -318,7 +318,7 @@ public:
     virtual void        FillUserData() SAL_OVERRIDE;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 // class SvxCharTwoLinesPage ---------------------------------------------
@@ -360,7 +360,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CHARDLG_HXX

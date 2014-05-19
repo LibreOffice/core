@@ -77,7 +77,7 @@ public:
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
 };
 

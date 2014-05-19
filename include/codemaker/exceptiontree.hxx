@@ -108,7 +108,7 @@ public:
 
 private:
     ExceptionTree(ExceptionTree &); // not implemented
-    void operator =(ExceptionTree); // not implemented
+    void operator =(const ExceptionTree&); // not implemented
 
     ExceptionTreeNode m_root;
 };

@@ -122,7 +122,7 @@ private:
     class BaseOffset;
 
     VtableFactory(VtableFactory &); // not implemented
-    void operator =(VtableFactory); // not implemented
+    void operator =(const VtableFactory&); // not implemented
 
     bool createBlock(Block &block, sal_Int32 slotCount) const;
 

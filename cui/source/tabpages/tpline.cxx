@@ -1821,7 +1821,7 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
+void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,false);
     SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,false);

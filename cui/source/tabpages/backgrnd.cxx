@@ -1832,7 +1832,7 @@ void SvxBackgroundTabPage::EnableTransparency(bool bColor, bool bGraphic)
     m_pColTransMF->Show(bColor);
 }
 
-void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
+void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
 

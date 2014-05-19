@@ -621,7 +621,7 @@ void ResourceManager::StorePanelExpansionState (
 
 void ResourceManager::GetToolPanelNodeNames (
     ::std::vector<OUString>& rMatchingNames,
-    const ::utl::OConfigurationTreeRoot aRoot) const
+    const ::utl::OConfigurationTreeRoot& aRoot) const
 {
     Sequence<OUString> aChildNodeNames (aRoot.getNodeNames());
     const sal_Int32 nCount (aChildNodeNames.getLength());

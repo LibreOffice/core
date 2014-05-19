@@ -1265,7 +1265,7 @@ void SvxCharNamePage::SetPreviewBackgroundToCharacter()
 }
 
 
-void SvxCharNamePage::PageCreated (SfxAllItemSet aSet)
+void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFontListItem,SvxFontListItem,SID_ATTR_CHAR_FONTLIST,false);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
@@ -2518,7 +2518,7 @@ void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
 }
 
 
-void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet)
+void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pDisableCtlItem,SfxUInt16Item,SID_DISABLE_CTL,false);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
@@ -3289,7 +3289,7 @@ void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
     m_bPreviewBackgroundToCharacter = true;
 }
 
-void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet)
+void SvxCharPositionPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
     if (pFlagItem)
@@ -3533,7 +3533,7 @@ void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
 }
 
 
-void SvxCharTwoLinesPage::PageCreated (SfxAllItemSet aSet)
+void SvxCharTwoLinesPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
     if (pFlagItem)

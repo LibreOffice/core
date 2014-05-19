@@ -541,7 +541,7 @@ void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
     ModifyShadowHdl_Impl( pWindow );
 }
 
-void SvxShadowTabPage::PageCreated (SfxAllItemSet aSet)
+void SvxShadowTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,false);
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);

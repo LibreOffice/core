@@ -149,7 +149,7 @@ public:
         <member>SetDrawMode()</member> method more than once.
     */
     void SetImpressMode (void);
-    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

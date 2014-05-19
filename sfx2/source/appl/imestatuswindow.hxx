@@ -89,7 +89,7 @@ public:
 
 private:
     ImeStatusWindow(ImeStatusWindow &); // not implemented
-    void operator =(ImeStatusWindow); // not implemented
+    void operator =(const ImeStatusWindow&); // not implemented
 
     virtual ~ImeStatusWindow();
 

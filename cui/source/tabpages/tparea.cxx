@@ -560,7 +560,7 @@ void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
     }
 }
 
-void SvxTransparenceTabPage::PageCreated (SfxAllItemSet aSet)
+void SvxTransparenceTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
@@ -2374,7 +2374,7 @@ void SvxAreaTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
     ModifyTileHdl_Impl( pWindow );
 }
 
-void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
+void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,false);
     SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,false);

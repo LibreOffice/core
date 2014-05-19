@@ -134,8 +134,8 @@ public:
     /// Language-dependent resource library
     static ResMgr*      SearchCreateResMgr( const sal_Char* pPrefixName,
                                             LanguageTag& rLocale );
-     static ResMgr*     CreateResMgr( const sal_Char* pPrefixName,
-                                      LanguageTag aLocale = LanguageTag( LANGUAGE_SYSTEM) );
+    static ResMgr*      CreateResMgr( const sal_Char* pPrefixName,
+                                      const LanguageTag& aLocale = LanguageTag( LANGUAGE_SYSTEM) );
 
     #ifdef DBG_UTIL
     /// Test whether resource still exists

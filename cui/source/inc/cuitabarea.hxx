@@ -173,7 +173,7 @@ public:
 
     void SetPageType(sal_uInt16 nInType) { nPageType = nInType; }
     void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
-    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -312,7 +312,7 @@ public:
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPos( sal_uInt16 nInPos ) { nPos = nInPos; }
     void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
@@ -371,7 +371,7 @@ public:
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
     void    DisablePage( bool bIn ) { bDisable = bIn; }
 };
 

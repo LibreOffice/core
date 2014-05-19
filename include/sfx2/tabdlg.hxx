@@ -284,7 +284,7 @@ public:
     OUString                GetUserData() { return aUserString; }
     virtual void            FillUserData();
     virtual bool            IsReadOnly() const;
-    virtual void PageCreated (SfxAllItemSet aSet);
+    virtual void PageCreated (const SfxAllItemSet& aSet);
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);

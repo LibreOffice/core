@@ -90,7 +90,7 @@ private:
             const OUString                                                                  m_aContextParam;
             StringHashMap                                                                   m_aTypedCustomHandlers;
     UUIInteractionHelper(UUIInteractionHelper &); // not implemented
-    void operator =(UUIInteractionHelper); // not implemented
+    void operator =(const UUIInteractionHelper&); // not implemented
 
 public:
     UUIInteractionHelper(

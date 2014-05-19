@@ -24,7 +24,7 @@
 sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion);
 bool SgfBMapFilter(SvStream& rInp, SvStream& rOut);
 bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf);
-bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
+bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, const INetURLObject& aIniPath );
 
 // constants for CheckSgfTyp()
 #define SGF_BITIMAGE   1     /* Bitmap                 */

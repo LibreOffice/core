@@ -1239,7 +1239,7 @@ namespace
 }
 
 Bitmap OutputDevice::BlendBitmapWithAlpha(
-            Bitmap              aBmp,
+            Bitmap&             aBmp,
             BitmapReadAccess*   pP,
             BitmapReadAccess*   pA,
             const Rectangle&    aDstRect,
@@ -1337,7 +1337,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
 }
 
 Bitmap OutputDevice::BlendBitmap(
-            Bitmap              aBmp,
+            Bitmap&             aBmp,
             BitmapReadAccess*   pP,
             BitmapReadAccess*   pA,
             const sal_Int32     nOffY,
