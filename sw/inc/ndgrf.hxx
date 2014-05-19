@@ -74,7 +74,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
     sal_Bool ImportGraphic( SvStream& rStrm );
-    sal_Bool HasStreamName() const { return maGrfObj.HasUserData(); }
     /** adjust return type and rename method to
        indicate that its an private one. */
 
@@ -172,8 +171,12 @@ public:
     short SwapIn( sal_Bool bWaitForData = sal_False );
     /// Remove graphic in order to free memory.
     short SwapOut();
-    /// Access to storage stream-name.
-    void SetStreamName( const OUString& r ) { maGrfObj.SetUserData( r ); }
+    bool HasEmbeddedStreamName() const { return maGrfObj.HasUserData(); }
+    /// applying new stream name for embedded graphic - needed as saving the document might change this stream name
+    void ApplyNewEmbeddedStreamName(const OUString& r)
+    {
+        maGrfObj.SetUserData(r);
+    }
     /// Is this node selected by any shell?
     sal_Bool IsSelected() const;
 
