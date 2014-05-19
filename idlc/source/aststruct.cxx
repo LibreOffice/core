@@ -20,8 +20,8 @@
 #include <idlc/aststruct.hxx>
 #include <idlc/astmember.hxx>
 
-#include "registry/version.h"
-#include "registry/writer.hxx"
+#include <registry/version.h>
+#include <registry/writer.hxx>
 
 using namespace ::rtl;
 

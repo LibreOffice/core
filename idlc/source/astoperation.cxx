@@ -23,7 +23,7 @@
 #include <idlc/astparameter.hxx>
 #include <idlc/errorhandler.hxx>
 
-#include "registry/writer.hxx"
+#include <registry/writer.hxx>
 
 using namespace ::rtl;
 

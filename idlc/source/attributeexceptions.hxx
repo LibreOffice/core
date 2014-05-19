@@ -20,7 +20,7 @@
 #ifndef INCLUDED_IDLC_SOURCE_ATTRIBUTEEXCEPTIONS_HXX
 #define INCLUDED_IDLC_SOURCE_ATTRIBUTEEXCEPTIONS_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 struct AttributeExceptions {
     struct Part {
