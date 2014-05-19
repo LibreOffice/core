@@ -63,7 +63,7 @@
 
 #include <cassert>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include <rtl/ustring.hxx>
 

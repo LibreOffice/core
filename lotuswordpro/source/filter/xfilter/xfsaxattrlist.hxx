@@ -61,7 +61,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSAXATTRLIST_HXX
 
 #include "ixfattrlist.hxx"
-#include "xmloff/attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 class   XFSaxAttrList : public IXFAttrList

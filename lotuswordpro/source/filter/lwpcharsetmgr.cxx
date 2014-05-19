@@ -59,7 +59,7 @@
  ************************************************************************/
 #include "lwpcharsetmgr.hxx"
 //Added for SS migration
-#include "rtl/textenc.h"
+#include <rtl/textenc.h>
 
 LwpCharSetMgr* LwpCharSetMgr::Instance = NULL;
 

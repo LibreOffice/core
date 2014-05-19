@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDEFS_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDEFS_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 enum    enumXFContent
 {
