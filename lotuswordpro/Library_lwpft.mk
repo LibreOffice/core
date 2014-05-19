@@ -11,6 +11,8 @@ $(eval $(call gb_Library_Library,lwpft))
 
 $(eval $(call gb_Library_use_sdk_api,lwpft))
 
+$(eval $(call gb_Library_set_precompiled_header,lwpft,$(SRCDIR)/lotuswordpro/inc/pch/precompiled_lwpft))
+
 $(eval $(call gb_Library_use_libraries,lwpft,\
     comphelper \
     cppu \

@@ -70,7 +70,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;

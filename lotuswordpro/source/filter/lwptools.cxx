@@ -79,7 +79,6 @@
 #define SEPARATOR '\\'
 #endif
 
-using namespace icu;
 using namespace ::rtl;
 using namespace ::osl;
 
