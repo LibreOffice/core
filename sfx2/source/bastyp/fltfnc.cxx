@@ -497,7 +497,9 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
                 // Type detection returned a suitable filter for this.  Use it.
                 pFilter = SfxFilter::GetFilterByName(aFilterName);
 
-            if (!pFilter)
+            // fdo#78742 respect requested document service if set
+            if (!pFilter || (!m_rImpl.aName.isEmpty()
+                             && m_rImpl.aName != pFilter->GetServiceName()))
             {
                 // detect filter by given type
                 // In case of this matcher is bound to a particular document type:
