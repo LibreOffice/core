@@ -26,10 +26,9 @@
  *
  ************************************************************************/
 
-// Includes <GL/gl.h>
-#include "OGLTrans_TransitionImpl.hxx"
+#include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
 
-#include <string.h>
 #include <sal/types.h>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -61,32 +60,16 @@
 #include <tools/diagnose_ex.h>
 
 #include <vcl/canvastools.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/window.hxx>
-#include <vcl/syschild.hxx>
 
 #include <boost/noncopyable.hpp>
 
-#if defined( _WIN32 )
-    // OGLTrans_TransitionImpl.hxx already included <prewin.h> and thus <windows.h>
-    #include <GL/glu.h>
-    #include <GL/glext.h>
-    #include <GL/wglext.h>
-#elif defined( MACOSX )
-    #include "premac.h"
-    #include <Cocoa/Cocoa.h>
-    #include "postmac.h"
-#elif defined( UNX )
-    #include <GL/glu.h>
-    #include <GL/glext.h>
+#include "OGLTrans_TransitionImpl.hxx"
 
-    namespace unx
-    {
-        #include <X11/keysym.h>
-        #include <X11/X.h>
-        #define GLX_GLXEXT_PROTOTYPES 1
-        #include <GL/glx.h>
-        #include <GL/glxext.h>
-    }
+#if defined( UNX )
+    #include <X11/keysym.h>
+    #include <X11/X.h>
 #endif
 
 #include <vcl/sysdata.hxx>
@@ -173,7 +156,7 @@ int calcComponentOrderIndex(const uno::Sequence<sal_Int8>& rTags)
 
 // not thread safe
 static bool errorTriggered;
-int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
+int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 {
     errorTriggered = true;
 
@@ -204,7 +187,6 @@ public:
     throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    void disposeContextAndWindow();
     void disposeTextures();
 
     // WeakComponentImplHelperBase
@@ -215,10 +197,9 @@ protected:
         return (rBHelper.bDisposed || rBHelper.bInDispose);
     }
 
-    bool createWindow( Window* pPWindow );
     void createTexture( unsigned int* texID,
 #if defined( GLX_EXT_texture_from_pixmap )
-            unx::GLXPixmap pixmap,
+            GLXPixmap pixmap,
             bool usePixmap,
 #endif
             bool useMipmap,
@@ -228,7 +209,9 @@ protected:
     const OGLFormat* chooseFormats();
 
 private:
-    static void impl_initializeOnce( bool const bGLXPresent );
+    void impl_initializeFlags( bool const bGLXPresent );
+
+    void impl_dispose();
 
     void setSlides( const Reference< rendering::XBitmap >& xLeavingSlide , const uno::Reference< rendering::XBitmap >& xEnteringSlide );
     void impl_prepareSlides();
@@ -243,34 +226,8 @@ private:
     void impl_prepareTransition();
     void impl_finishTransition();
 
-    /// Holds the information of our new child window
-    struct GLWindow
-    {
-#if defined( _WIN32 )
-        HWND                    hWnd;
-        HDC                     hDC;
-        HGLRC                   hRC;
-#elif defined( MACOSX )
-#elif defined( UNX )
-        unx::Display*           dpy;
-        int                     screen;
-        unx::Window             win;
-#if defined( GLX_EXT_texture_from_pixmap )
-        unx::GLXFBConfig        fbc;
-#endif
-        unx::XVisualInfo*       vi;
-        unx::GLXContext         ctx;
-
-        bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
-        const char*             GLXExtensions;
-#endif
-        unsigned int            bpp;
-        unsigned int            Width;
-        unsigned int            Height;
-        const GLubyte*          GLExtensions;
-
-        bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
-    } GLWin;
+private:
+    boost::shared_ptr<OpenGLContext> mpContext;
 
     /** OpenGL handle to the leaving slide's texture
     */
@@ -278,10 +235,6 @@ private:
     /** OpenGL handle to the entering slide's texture
     */
     unsigned int GLenteringSlide;
-
-    /** pointer to our window which we MIGHT create.
-    */
-    class SystemChildWindow* pWindow;
 
     Reference< presentation::XSlideShowView > mxView;
     Reference< rendering::XIntegerBitmap > mxLeavingBitmap;
@@ -296,8 +249,8 @@ private:
     uno::Sequence<sal_Int8> LeavingBytes;
 
 #if defined( GLX_EXT_texture_from_pixmap )
-    unx::GLXPixmap LeavingPixmap;
-    unx::GLXPixmap EnteringPixmap;
+    GLXPixmap LeavingPixmap;
+    GLXPixmap EnteringPixmap;
 #endif
     bool mbRestoreSync;
     bool mbUseLeavingPixmap;
@@ -305,8 +258,8 @@ private:
     bool mbFreeLeavingPixmap;
     bool mbFreeEnteringPixmap;
 #ifdef UNX
-    unx::Pixmap maLeavingPixmap;
-    unx::Pixmap maEnteringPixmap;
+    Pixmap maLeavingPixmap;
+    Pixmap maEnteringPixmap;
 #endif
 
     /** the form the raw bytes are in for the bitmaps
@@ -324,11 +277,11 @@ private:
 public:
     /** whether we are running on ATI fglrx with bug related to textures
      */
-    static bool cbBrokenTexturesATI;
+    bool cbBrokenTexturesATI;
 
     /** GL version
      */
-    static float cnGLVersion;
+    float cnGLVersion;
 
 #ifdef UNX
     float mnGLXVersion;
@@ -337,11 +290,11 @@ public:
     /**
        Whether the display has GLX extension on X11, always true otherwise (?)
      */
-    static bool cbGLXPresent;
+    bool cbGLXPresent;
 
     /** Whether Mesa is the OpenGL vendor
      */
-    static bool cbMesa;
+    bool cbMesa;
 
     /**
        whether texture from pixmap extension is available
@@ -368,275 +321,38 @@ public:
 #endif
 };
 
-// declare the static variables as some gcc versions have problems declaring them automatically
-bool OGLTransitionerImpl::cbBrokenTexturesATI;
-float OGLTransitionerImpl::cnGLVersion;
-bool OGLTransitionerImpl::cbMesa;
-bool OGLTransitionerImpl::cbGLXPresent;
-
 bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowView >& xView,
         const Reference< rendering::XBitmap >& xLeavingSlide,
         const Reference< rendering::XBitmap >& xEnteringSlide )
 {
     bool const bGLXPresent( initWindowFromSlideShowView( xView ) );
-    impl_initializeOnce( bGLXPresent );
+    impl_initializeFlags( bGLXPresent );
 
     setSlides( xLeavingSlide, xEnteringSlide );
 
     return cbGLXPresent;
 }
 
-void OGLTransitionerImpl::impl_initializeOnce( bool const bGLXPresent )
+void OGLTransitionerImpl::impl_initializeFlags( bool const bGLXPresent )
 {
-    // not thread safe
-    static bool initialized = false;
+    cbGLXPresent = bGLXPresent;
+    if ( bGLXPresent ) {
+        const GLubyte* version = glGetString( GL_VERSION );
+        if( version && version[0] ) {
+            cnGLVersion = version[0] - '0';
+            if( version[1] == '.' && version[2] )
+                cnGLVersion += (version[2] - '0')/10.0;
+        } else
+            cnGLVersion = 1.0;
+        SAL_INFO("slideshow.opengl", "GL version: " << version << " parsed: " << cnGLVersion << "" );
 
-    if( !initialized ) {
-        cbGLXPresent = bGLXPresent;
-        if ( bGLXPresent ) {
-            const GLubyte* version = glGetString( GL_VERSION );
-            if( version && version[0] ) {
-                cnGLVersion = version[0] - '0';
-                if( version[1] == '.' && version[2] )
-                    cnGLVersion += (version[2] - '0')/10.0;
-            } else
-                cnGLVersion = 1.0;
-            SAL_INFO("slideshow.opengl", "GL version: " << version << " parsed: " << cnGLVersion << "" );
+        const GLubyte* vendor = glGetString( GL_VENDOR );
+        cbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );
+        SAL_INFO("slideshow.opengl", "GL vendor: " << vendor << " identified as Mesa: " << cbMesa << "" );
 
-            const GLubyte* vendor = glGetString( GL_VENDOR );
-            cbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );
-            SAL_INFO("slideshow.opengl", "GL vendor: " << vendor << " identified as Mesa: " << cbMesa << "" );
-
-            /* TODO: check for version once the bug in fglrx driver is fixed */
-            cbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
-
-        }
-        initialized = true;
+        /* TODO: check for version once the bug in fglrx driver is fixed */
+        cbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
     }
-}
-
-#if defined( UNX )
-SystemEnvData const*
-lcl_createSystemWindow(
-        unx::XVisualInfo* const pXVisual,
-        Window* const pParentWindow,
-        SystemChildWindow** const pChildWindow )
-{
-    assert(pChildWindow);
-
-    SystemWindowData winData;
-    winData.nSize = sizeof(winData);
-    SAL_INFO("slideshow.opengl", "using VisualID " << pXVisual->visualid);
-    winData.pVisual = (void*)(pXVisual->visual);
-    SystemChildWindow* pWindow = new SystemChildWindow(pParentWindow, 0, &winData, false);
-    SystemEnvData const* const pChildSysData = pWindow->GetSystemData();
-    if( !pChildSysData ) {
-        delete pWindow, pWindow=NULL;
-    }
-
-    *pChildWindow = pWindow;
-    return pChildSysData;
-}
-#endif
-
-bool OGLTransitionerImpl::createWindow( Window* pPWindow )
-{
-    const SystemEnvData* sysData(pPWindow->GetSystemData());
-#if defined( _WIN32 )
-    GLWin.hWnd = sysData->hWnd;
-#elif defined( UNX )
-    GLWin.dpy = reinterpret_cast<unx::Display*>(sysData->pDisplay);
-
-    if( !unx::glXQueryExtension( GLWin.dpy, NULL, NULL ) )
-        return false;
-
-    GLWin.win = sysData->aWindow;
-
-    SAL_INFO("slideshow.opengl", "parent window: " << GLWin.win);
-
-    unx::XWindowAttributes xattr;
-    unx::XGetWindowAttributes( GLWin.dpy, GLWin.win, &xattr );
-
-    GLWin.screen = XScreenNumberOfScreen( xattr.screen );
-
-    unx::XVisualInfo* vi( NULL );
-#if defined( GLX_EXT_texture_from_pixmap )
-    unx::XVisualInfo* visinfo;
-    unx::XVisualInfo* firstVisual( NULL );
-#endif
-    static int attrList3[] =
-        {
-            GLX_RGBA,//only TrueColor or DirectColor
-            //single buffered
-            GLX_RED_SIZE,4,//use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,//use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,//use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,0,//no depth buffer
-            None
-        };
-    static int attrList2[] =
-    {
-            GLX_RGBA,//only TrueColor or DirectColor
-            /// single buffered
-            GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
-            None
-        };
-    static int attrList1[] =
-        {
-            GLX_RGBA,//only TrueColor or DirectColor
-            GLX_DOUBLEBUFFER,/// only double buffer
-            GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,0,/// no depth buffer
-            None
-        };
-    static int attrList0[] =
-        {
-            GLX_RGBA,//only TrueColor or DirectColor
-            GLX_DOUBLEBUFFER,/// only double buffer
-            GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
-            GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
-            GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
-            GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
-            None
-       };
-    static int* attrTable[] =
-        {
-            attrList0,
-            attrList1,
-            attrList2,
-            attrList3,
-            NULL
-        };
-    int** pAttributeTable = attrTable;
-    const SystemEnvData* pChildSysData = NULL;
-    delete pWindow;
-    pWindow=NULL;
-
-#if defined( GLX_EXT_texture_from_pixmap )
-    unx::GLXFBConfig* fbconfigs = NULL;
-    int nfbconfigs = 0, value = 0, i = 0;
-#endif
-
-    while( *pAttributeTable )
-    {
-        // try to find a visual for the current set of attributes
-        vi = unx::glXChooseVisual( GLWin.dpy,
-                                   GLWin.screen,
-                                   *pAttributeTable );
-
-        if( vi ) {
-#if defined( GLX_EXT_texture_from_pixmap )
-            if( !firstVisual )
-                firstVisual = vi;
-            SAL_INFO("slideshow.opengl", "trying VisualID " << vi->visualid);
-            fbconfigs = glXGetFBConfigs (GLWin.dpy, GLWin.screen, &nfbconfigs);
-            for ( ; i < nfbconfigs; i++)
-            {
-                visinfo = glXGetVisualFromFBConfig (GLWin.dpy, fbconfigs[i]);
-                if( !visinfo )
-                    continue;
-
-                unx::VisualID visualid = visinfo->visualid;
-                XFree ( visinfo );
-
-                if ( visualid != vi->visualid )
-                    continue;
-
-                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
-                if (!(value & GLX_PIXMAP_BIT))
-                    continue;
-
-                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
-                                        GLX_BIND_TO_TEXTURE_TARGETS_EXT,
-                                        &value);
-                if (!(value & GLX_TEXTURE_2D_BIT_EXT))
-                    continue;
-
-                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
-                                        GLX_BIND_TO_TEXTURE_RGB_EXT,
-                                        &value);
-                if (value == sal_False)
-                    continue;
-
-                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
-                                        GLX_BIND_TO_MIPMAP_TEXTURE_EXT,
-                                        &value);
-                if (value == sal_False)
-                    continue;
-
-                /* TODO: handle non Y inverted cases */
-                break;
-            }
-            if (vi != firstVisual)
-                XFree (vi);
-
-            if( i != nfbconfigs ) {
-                vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
-                GLWin.fbc = fbconfigs[i];
-                mbHasTFPVisual = true;
-                pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
-                SAL_INFO("slideshow.opengl", "found visual suitable for texture_from_pixmap");
-            } else if( firstVisual && pAttributeTable[1] == NULL ) {
-                vi = firstVisual;
-                mbHasTFPVisual = false;
-                pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
-                SAL_INFO("slideshow.opengl", "did not find visual suitable for texture_from_pixmap, using " << vi->visualid);
-            }
-            XFree ( fbconfigs );
-#else
-            pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
-            XFree ( vi );
-#endif
-            if ( pChildSysData )
-                break;
-        }
-
-        ++pAttributeTable;
-    }
-
-#if defined( GLX_EXT_texture_from_pixmap )
-    if ( firstVisual && vi != firstVisual )
-        XFree (firstVisual);
-#endif
-
-#endif
-
-#if defined( _WIN32 )
-    SystemWindowData winData;
-    winData.nSize = sizeof(winData);
-    pWindow=new SystemChildWindow(pPWindow, 0, &winData, sal_False);
-    pWindow->GetSystemData();
-#endif
-
-#if defined( UNX )
-    if (pWindow && pChildSysData)
-#endif
-    {
-        pWindow->SetMouseTransparent( true );
-        pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        pWindow->EnableEraseBackground( false );
-        pWindow->SetControlForeground();
-        pWindow->SetControlBackground();
-        pWindow->EnablePaint(false);
-#if defined( _WIN32 )
-        GLWin.hWnd = sysData->hWnd;
-#elif defined( UNX )
-        GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
-        GLWin.win = pChildSysData->aWindow;
-        GLWin.vi = vi;
-        GLWin.GLXExtensions = unx::glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
-        SAL_INFO("slideshow.opengl", "available GLX extensions: " << GLWin.GLXExtensions);
-#endif
-
-        return true;
-    }
-
-    return false;
 }
 
 bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presentation::XSlideShowView >& xView )
@@ -664,111 +380,27 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     sal_Int64 aVal = 0;
     aDeviceParams[1] >>= aVal;
-    if( !createWindow( reinterpret_cast< Window* >( aVal ) ) )
+
+    mpContext = boost::make_shared<OpenGLContext>();
+
+    if( !mpContext->init( reinterpret_cast< Window* >( aVal ) ) )
         return false;
 
     awt::Rectangle aCanvasArea = mxView->getCanvasArea();
-    pWindow->setPosSizePixel(aCanvasArea.X, aCanvasArea.Y, aCanvasArea.Width, aCanvasArea.Height);
-    GLWin.Width = aCanvasArea.Width;
-    GLWin.Height = aCanvasArea.Height;
+    mpContext->setWinPosAndSize(Point(aCanvasArea.X, aCanvasArea.Y), Size(aCanvasArea.Width, aCanvasArea.Height));
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
 
-#if defined( _WIN32 )
-    GLWin.hDC = GetDC(GLWin.hWnd);
-#elif defined( UNX )
-    GLWin.ctx = glXCreateContext(GLWin.dpy,
-                                 GLWin.vi,
-                                 0,
-                                 GL_TRUE);
-    XFree ( GLWin.vi );
-    if( GLWin.ctx == NULL ) {
-        SAL_INFO("slideshow.opengl", "unable to create GLX context");
-        return false;
-    }
-#endif
+    GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
 
-#if defined( _WIN32 )
-    PIXELFORMATDESCRIPTOR PixelFormatFront =                    // PixelFormat Tells Windows How We Want Things To Be
-    {
-        sizeof(PIXELFORMATDESCRIPTOR),
-        1,                              // Version Number
-        PFD_DRAW_TO_WINDOW |
-        PFD_SUPPORT_OPENGL |
-        PFD_DOUBLEBUFFER,
-        PFD_TYPE_RGBA,                  // Request An RGBA Format
-        (BYTE)32,                       // Select Our Color Depth
-        0, 0, 0, 0, 0, 0,               // Color Bits Ignored
-        0,                              // No Alpha Buffer
-        0,                              // Shift Bit Ignored
-        0,                              // No Accumulation Buffer
-        0, 0, 0, 0,                     // Accumulation Bits Ignored
-        64,                             // 32 bit Z-BUFFER
-        0,                              // 0 bit stencil buffer
-        0,                              // No Auxiliary Buffer
-        0,                              // now ignored
-        0,                              // Reserved
-        0, 0, 0                         // Layer Masks Ignored
-    };
-    int WindowPix = ChoosePixelFormat(GLWin.hDC,&PixelFormatFront);
-    SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
-    GLWin.hRC = wglCreateContext(GLWin.hDC);
-    wglMakeCurrent(GLWin.hDC,GLWin.hRC);
-#elif defined( UNX )
-    if( !glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx ) ) {
-        SAL_INFO("slideshow.opengl", "unable to select current GLX context");
-        return false;
-    }
-
-    int glxMinor, glxMajor;
-    mnGLXVersion = 0;
-    if( glXQueryVersion( GLWin.dpy, &glxMajor, &glxMinor ) )
-        mnGLXVersion = glxMajor + 0.1*glxMinor;
-    SAL_INFO("slideshow.opengl", "available GLX version: " << mnGLXVersion);
-
-    GLWin.GLExtensions = glGetString( GL_EXTENSIONS );
-    SAL_INFO("slideshow.opengl", "available GL  extensions: " << GLWin.GLExtensions);
-
-    mbTextureFromPixmap = GLWin.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
-    mbGenerateMipmap = GLWin.HasGLExtension( "GL_SGIS_generate_mipmap" );
-
-    if( GLWin.HasGLXExtension("GLX_SGI_swap_control" ) ) {
-        // enable vsync
-        typedef GLint (*glXSwapIntervalProc)(GLint);
-        glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) unx::glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
-        if( glXSwapInterval ) {
-            int (*oldHandler)(unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/);
-
-            // replace error handler temporarily
-            oldHandler = unx::XSetErrorHandler( oglErrorHandler );
-
-            errorTriggered = false;
-
-            glXSwapInterval( 1 );
-
-            // sync so that we possibly get an XError
-            unx::glXWaitGL();
-            XSync(GLWin.dpy, false);
-
-            if( errorTriggered )
-                SAL_INFO("slideshow.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
-            else
-                SAL_INFO("slideshow.opengl", "set swap interval to 1 (enable vsync)");
-
-            // restore the error handler
-            unx::XSetErrorHandler( oldHandler );
-        }
-    }
-#endif
+    mbTextureFromPixmap = m_rGLWindow.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
+    mbGenerateMipmap = m_rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor (0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
-#if defined( _WIN32 )
-    SwapBuffers(GLWin.hDC);
-#elif defined( UNX )
-    unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
-#endif
+
+    mpContext->swapBuffers();
 
     glEnable(GL_LIGHTING);
     GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
@@ -777,6 +409,8 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
+
+    glViewport(0, 0, aCanvasArea.Width, aCanvasArea.Height);
 
     return true;
 }
@@ -810,13 +444,12 @@ void OGLTransitionerImpl::impl_prepareSlides()
     SlideRect.Y1 = 0;
     SlideRect.Y2 = SlideSize.Height;
 
-#ifdef UNX
-    unx::glXWaitGL();
-    XSync(GLWin.dpy, false);
-#endif
+    mpContext->sync();
 
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
+
+    GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
 
 #if defined( GLX_EXT_texture_from_pixmap )
 
@@ -843,20 +476,18 @@ void OGLTransitionerImpl::impl_prepareSlides()
 
             // sync so that we possibly get an pending XError, before we set our handler.
             // this way we will not miss any error from other code
-            unx::glXWaitGL();
-            XSync(GLWin.dpy, false);
+            mpContext->sync();
 
-            int (*oldHandler)(unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/);
+            int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
 
             // replace error handler temporarily
-            oldHandler = unx::XSetErrorHandler( oglErrorHandler );
+            oldHandler = XSetErrorHandler( oglErrorHandler );
 
             errorTriggered = false;
-            LeavingPixmap = glXCreatePixmap( GLWin.dpy, GLWin.fbc, maLeavingPixmap, pixmapAttribs );
+            LeavingPixmap = glXCreatePixmap( m_rGLWindow.dpy, m_rGLWindow.fbc, maLeavingPixmap, pixmapAttribs );
 
             // sync so that we possibly get an XError
-            unx::glXWaitGL();
-            XSync(GLWin.dpy, false);
+            mpContext->sync();
 
             if( !errorTriggered )
                 mbUseLeavingPixmap = true;
@@ -864,17 +495,16 @@ void OGLTransitionerImpl::impl_prepareSlides()
                 SAL_INFO("slideshow.opengl", "XError triggered");
                 OSL_TRACE("XError triggered");
                 if( mbFreeLeavingPixmap ) {
-                    unx::XFreePixmap( GLWin.dpy, maLeavingPixmap );
+                    XFreePixmap( m_rGLWindow.dpy, maLeavingPixmap );
                     mbFreeLeavingPixmap = false;
                 }
                 errorTriggered = false;
             }
 
-            EnteringPixmap = glXCreatePixmap( GLWin.dpy, GLWin.fbc, maEnteringPixmap, pixmapAttribs );
+            EnteringPixmap = glXCreatePixmap( m_rGLWindow.dpy, m_rGLWindow.fbc, maEnteringPixmap, pixmapAttribs );
 
             // sync so that we possibly get an XError
-            unx::glXWaitGL();
-            XSync(GLWin.dpy, false);
+            mpContext->sync();
 
             SAL_INFO("slideshow.opengl", "created glx pixmap " << LeavingPixmap << " and " << EnteringPixmap << " depth: " << depth);
             if( !errorTriggered )
@@ -882,13 +512,13 @@ void OGLTransitionerImpl::impl_prepareSlides()
             else {
                 SAL_INFO("slideshow.opengl", "XError triggered");
                 if( mbFreeEnteringPixmap ) {
-                    unx::XFreePixmap( GLWin.dpy, maEnteringPixmap );
+                    XFreePixmap( m_rGLWindow.dpy, maEnteringPixmap );
                     mbFreeEnteringPixmap = false;
                 }
             }
 
             // restore the error handler
-            unx::XSetErrorHandler( oldHandler );
+            XSetErrorHandler( oldHandler );
         }
     }
 
@@ -898,25 +528,17 @@ void OGLTransitionerImpl::impl_prepareSlides()
     if( !mbUseEnteringPixmap )
         EnteringBytes = mxEnteringBitmap->getData(SlideBitmapLayout,SlideRect);
 
-// TODO
-#ifdef UNX
-    if(GLWin.ctx)//if we have a rendering context, let's init the slides
-        GLInitSlides();
-#else
     GLInitSlides();
-#endif
 
     SAL_WARN_IF(SlideBitmapLayout.PlaneStride != 0, "slideshow.opengl","only handle no plane stride now");
 
-#ifdef UNX
-    /* flush & sync */
-    unx::glXWaitGL();
-    XSync( GLWin.dpy, false );
+    mpContext->sync();
 
+#ifdef UNX
     // synchronized X still gives us much smoother play
     // I suspect some issues in above code in slideshow
     // synchronize whole transition for now
-    XSynchronize( GLWin.dpy, true );
+    XSynchronize( m_rGLWindow.dpy, true );
     mbRestoreSync = true;
 #endif
 }
@@ -946,7 +568,7 @@ void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> co
 
 void OGLTransitionerImpl::createTexture( unsigned int* texID,
 #if defined( GLX_EXT_texture_from_pixmap )
-                     unx::GLXPixmap pixmap,
+                     GLXPixmap pixmap,
                      bool usePixmap,
 #endif
                      bool useMipmap,
@@ -960,12 +582,12 @@ void OGLTransitionerImpl::createTexture( unsigned int* texID,
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 
 #if defined( GLX_EXT_texture_from_pixmap )
-    unx::PFNGLXBINDTEXIMAGEEXTPROC myglXBindTexImageEXT = (unx::PFNGLXBINDTEXIMAGEEXTPROC) unx::glXGetProcAddress( (const GLubyte*) "glXBindTexImageEXT" );
+    PFNGLXBINDTEXIMAGEEXTPROC myglXBindTexImageEXT = (PFNGLXBINDTEXIMAGEEXTPROC) glXGetProcAddress( (const GLubyte*) "glXBindTexImageEXT" );
 
     if( usePixmap ) {
         if( mbGenerateMipmap )
             glTexParameteri( GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, True);
-        myglXBindTexImageEXT (GLWin.dpy, pixmap, GLX_FRONT_LEFT_EXT, NULL);
+        myglXBindTexImageEXT (mpContext->getOpenGLWindow().dpy, pixmap, GLX_FRONT_LEFT_EXT, NULL);
         if( mbGenerateMipmap && useMipmap ) {
             SAL_INFO("slideshow.opengl", "use mipmaps");
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -1565,10 +1187,7 @@ void OGLTransitionerImpl::GLInitSlides()
            EnteringBytes,
            pFormat );
 
-#ifdef UNX
-    unx::glXWaitGL();
-    XSync(GLWin.dpy, false);
-#endif
+    mpContext->sync();
 }
 
 void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeException, std::exception)
@@ -1586,35 +1205,24 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     if (isDisposed() || !cbGLXPresent || mpTransition->getSettings().mnRequiredGLVersion > cnGLVersion)
         return;
 
-#ifdef _WIN32
-    wglMakeCurrent(GLWin.hDC,GLWin.hRC);
-#endif
-#ifdef UNX
-    glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx );
-#endif
+    mpContext->makeCurrent();
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if(mpTransition)
+    {
+        GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
         mpTransition->display( nTime, GLleavingSlide, GLenteringSlide,
                               SlideSize.Width, SlideSize.Height,
-                              static_cast<double>(GLWin.Width),
-                              static_cast<double>(GLWin.Height) );
+                              static_cast<double>(m_rGLWindow.Width),
+                              static_cast<double>(m_rGLWindow.Height) );
+    }
 
-#if defined( _WIN32 )
-    SwapBuffers(GLWin.hDC);
-#elif defined( UNX )
-    unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
-#endif
-    if( pWindow )
-        pWindow->Show();
+    mpContext->swapBuffers();
 
-#ifdef UNX
-    /* flush & sync */
-    unx::glXWaitGL();
-    XSync( GLWin.dpy, false );
-#endif
+    mpContext->show();
+    mpContext->sync();
 
 #if OSL_DEBUG_LEVEL > 1
     maUpdateEndTime = microsec_clock::local_time();
@@ -1632,9 +1240,7 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
 {
     SAL_INFO("slideshow.opengl", "transitioner: view changed");
 
-    impl_finishTransition();
-    disposeTextures();
-    disposeContextAndWindow();
+    impl_dispose();
 
     initWindowFromSlideShowView( rView );
     setSlides( rLeavingBitmap, rEnteringBitmap );
@@ -1642,60 +1248,30 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
     impl_prepareTransition();
 }
 
-void OGLTransitionerImpl::disposeContextAndWindow()
-{
-#if defined( _WIN32 )
-    if (GLWin.hRC)
-    {
-        wglMakeCurrent( GLWin.hDC, 0 );     // kill Device Context
-        wglDeleteContext( GLWin.hRC );      // Kill Render Context
-        ReleaseDC( GLWin.hWnd, GLWin.hDC );         // Release Window
-    }
-#elif defined( UNX )
-    if(GLWin.ctx)
-    {
-        glXMakeCurrent(GLWin.dpy, None, NULL);
-        if( glGetError() != GL_NO_ERROR ) {
-            SAL_INFO("slideshow.opengl", "glError: " << (char *)gluErrorString(glGetError()));
-        }
-        glXDestroyContext(GLWin.dpy, GLWin.ctx);
-        GLWin.ctx = NULL;
-        GLWin.win = 0;
-    }
-#endif
-    if( pWindow ) {
-        delete pWindow;
-        pWindow = NULL;
-    }
-}
-
 void OGLTransitionerImpl::disposeTextures()
 {
-#ifdef _WIN32
-    wglMakeCurrent(GLWin.hDC,GLWin.hRC);
-#endif
-#ifdef UNX
-    glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx );
-#endif
+    mpContext->makeCurrent();
+
+    GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
 
 #if defined( GLX_EXT_texture_from_pixmap )
-    unx::PFNGLXRELEASETEXIMAGEEXTPROC myglXReleaseTexImageEXT = (unx::PFNGLXRELEASETEXIMAGEEXTPROC) unx::glXGetProcAddress( (const GLubyte*) "glXReleaseTexImageEXT" );
+    PFNGLXRELEASETEXIMAGEEXTPROC myglXReleaseTexImageEXT = (PFNGLXRELEASETEXIMAGEEXTPROC) glXGetProcAddress( (const GLubyte*) "glXReleaseTexImageEXT" );
     if( mbUseLeavingPixmap ) {
-        myglXReleaseTexImageEXT( GLWin.dpy, LeavingPixmap, GLX_FRONT_LEFT_EXT );
-        glXDestroyGLXPixmap( GLWin.dpy, LeavingPixmap );
+        myglXReleaseTexImageEXT( m_rGLWindow.dpy, LeavingPixmap, GLX_FRONT_LEFT_EXT );
+        glXDestroyGLXPixmap( m_rGLWindow.dpy, LeavingPixmap );
         LeavingPixmap = 0;
         if( mbFreeLeavingPixmap ) {
-            unx::XFreePixmap( GLWin.dpy, maLeavingPixmap );
+            XFreePixmap( m_rGLWindow.dpy, maLeavingPixmap );
             mbFreeLeavingPixmap = false;
             maLeavingPixmap = 0;
         }
     }
     if( mbUseEnteringPixmap ) {
-        myglXReleaseTexImageEXT( GLWin.dpy, EnteringPixmap, GLX_FRONT_LEFT_EXT );
-        glXDestroyGLXPixmap( GLWin.dpy, EnteringPixmap );
+        myglXReleaseTexImageEXT( m_rGLWindow.dpy, EnteringPixmap, GLX_FRONT_LEFT_EXT );
+        glXDestroyGLXPixmap( m_rGLWindow.dpy, EnteringPixmap );
         EnteringPixmap = 0;
         if( mbFreeEnteringPixmap ) {
-            unx::XFreePixmap( GLWin.dpy, maEnteringPixmap );
+            XFreePixmap( m_rGLWindow.dpy, maEnteringPixmap );
             mbFreeEnteringPixmap = false;
             maEnteringPixmap = 0;
         }
@@ -1713,6 +1289,13 @@ void OGLTransitionerImpl::disposeTextures()
 
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
+}
+
+void OGLTransitionerImpl::impl_dispose()
+{
+    impl_finishTransition();
+    disposeTextures();
+    mpContext.reset();
 }
 
 // we are about to be disposed (someone call dispose() on us)
@@ -1738,20 +1321,15 @@ void OGLTransitionerImpl::disposing()
     }
 #endif
 
-    if( pWindow ) {
-        impl_finishTransition();
-        disposeTextures();
-
 #ifdef UNX
-        if( mbRestoreSync ) {
-            // try to reestablish synchronize state
-            char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
-            XSynchronize( GLWin.dpy, sal_synchronize && *sal_synchronize == '1' );
-        }
+    if( mbRestoreSync && bool(mpContext) ) {
+        // try to reestablish synchronize state
+        char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
+        XSynchronize( mpContext->getOpenGLWindow().dpy, sal_synchronize && *sal_synchronize == '1' );
+    }
 #endif
 
-        disposeContextAndWindow();
-    }
+    impl_dispose();
 
     mpTransition.reset();
 
@@ -1762,9 +1340,9 @@ void OGLTransitionerImpl::disposing()
 
 OGLTransitionerImpl::OGLTransitionerImpl()
     : OGLTransitionerImplBase(m_aMutex)
+    , mpContext()
     , GLleavingSlide(0)
     , GLenteringSlide(0)
-    , pWindow(NULL)
     , mxView()
     , EnteringBytes()
     , LeavingBytes()
@@ -1790,7 +1368,6 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , mbGenerateMipmap(false)
     , mbHasTFPVisual(false)
 {
-    memset(&GLWin, 0, sizeof(GLWin));
 }
 
 typedef cppu::WeakComponentImplHelper1<presentation::XTransitionFactory> OGLTransitionFactoryImplBase;
@@ -1854,7 +1431,7 @@ public:
         if ( !xRes->initialize( view, leavingBitmap, enteringBitmap ) )
             return uno::Reference< presentation::XTransition >();
 
-        if( OGLTransitionerImpl::cbMesa && (
+        if( xRes->cbMesa && (
             ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) ||
             ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::FADEOVERCOLOR ) ||
             ( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) ) )

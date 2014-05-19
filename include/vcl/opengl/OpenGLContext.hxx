@@ -150,7 +150,10 @@ public:
 
     void makeCurrent();
     void swapBuffers();
+    void sync();
+    void show();
 
+    void setWinPosAndSize(const Point &rPos, const Size& rSize);
     void setWinSize(const Size& rSize);
     GLWindow& getOpenGLWindow();
 
