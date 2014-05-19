@@ -182,7 +182,8 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpFldTypes->dumpAsXml( writer );
     mpTxtFmtCollTbl->dumpAsXml( writer );
     mpCharFmtTbl->dumpAsXml( writer );
-    mpSpzFrmFmtTbl->dumpAsXml( writer );
+    mpFrmFmtTbl->dumpAsXml( writer, "frmFmtTbl" );
+    mpSpzFrmFmtTbl->dumpAsXml( writer, "spzFrmFmtTbl" );
     mpSectionFmtTbl->dumpAsXml( writer );
     mpNumRuleTbl->dumpAsXml( writer );
     mpRedlineTbl->dumpAsXml( writer );
@@ -489,6 +490,24 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 }
                 break;
             }
+            case XATTR_FILLCOLOR:
+                pWhich = "fill color";
+                break;
+            case XATTR_FILLBITMAP:
+                pWhich = "fill bitmap";
+                break;
+            case XATTR_FILLTRANSPARENCE:
+                pWhich = "fill transparence";
+                break;
+            case XATTR_FILLBMP_TILE:
+                pWhich = "fill bitmap tile";
+                break;
+            case XATTR_FILLBMP_POS:
+                pWhich = "fill bitmap position";
+                break;
+            case XATTR_FILLBMP_STRETCH:
+                pWhich = "fill bitmap stretch";
+                break;
             case RES_COL:
             {
                 pWhich = "columns formatting";
@@ -505,6 +524,15 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_COLUMNBALANCE:
                 pWhich = "column balance";
                 break;
+            case RES_LR_SPACE:
+                pWhich = "left-right space";
+                break;
+            case RES_UL_SPACE:
+                pWhich = "upper-lower space";
+                break;
+            case RES_SHADOW:
+                pWhich = "shadow";
+                break;
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
@@ -515,12 +543,12 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
     }
 }
 
-void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w)
+void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName)
 {
     WriterHelper writer(w);
     if (size())
     {
-        writer.startElement("swfrmfmts");
+        writer.startElement(pName);
         for (size_t i = 0; i < size(); ++i)
         {
             SwFrmFmt* pFmt = static_cast<SwFrmFmt*>(GetFmt(i));
