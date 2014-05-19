@@ -1211,6 +1211,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         }//else
     }
 
+    delete[] pShapes;
+
     //Checked for FlyFrm
     if (mpFrmMap)
     {
