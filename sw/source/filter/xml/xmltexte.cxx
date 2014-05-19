@@ -222,7 +222,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     {
         String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
         aNewURL += String(rURL);
-        pGrfNd->SetNewStreamName( aNewURL );
+        pGrfNd->ApplyNewEmbeddedStreamName( aNewURL );
 
         // #i15411# save-as will swap all graphics in; we need to swap
         // them out again, to prevent excessive memory use
