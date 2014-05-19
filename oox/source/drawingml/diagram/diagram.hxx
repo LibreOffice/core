@@ -35,8 +35,6 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace dom { class XDocument; } }
 } } }
 
-using namespace ::com::sun::star;
-
 namespace oox { namespace drawingml {
 
 namespace dgm {
@@ -156,8 +154,8 @@ typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
 
 
 
-typedef std::map< OUString, uno::Reference<xml::dom::XDocument> > DiagramDomMap;
-typedef uno::Sequence< uno::Sequence< uno::Any > > DiagramRelsMap;
+typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
+typedef css::uno::Sequence< css::uno::Sequence< css::uno::Any > > DiagramRelsMap;
 
 
 
@@ -300,7 +298,7 @@ public:
     DiagramRelsMap & getDataRelsMap() { return maDataRelsMap; }
     void addTo( const ShapePtr & pShape );
 
-    uno::Sequence<beans::PropertyValue> getDomsAsPropertyValues() const;
+    css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
 private:
     void build( );
     DiagramDataPtr                 mpData;
