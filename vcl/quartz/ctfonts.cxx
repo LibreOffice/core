@@ -100,6 +100,10 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
 
+    // allow delayed setting the font color, i.e. after the text layout
+    CFDictionarySetValue( mpStyleDict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue );
+
+
 #if 0 // LastResort is implicit in CoreText's font cascading
     const void* aGFBDescriptors[] = { CTFontDescriptorCreateWithNameAndSize( CFSTR("LastResort"), 0) }; // TODO: use the full GFB list
     const int nGfbCount = sizeof(aGFBDescriptors) / sizeof(*aGFBDescriptors);
@@ -216,16 +220,6 @@ bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolyg
     CFRelease( xPath );
 
     return true;
-}
-
-void CoreTextStyle::SetTextColor( const RGBAColor& rColor )
-{
-    CGFloat aColor[] = { rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha() };
-    CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
-    CGColorRef pCGColor = CGColorCreate( cs, aColor );
-    CGColorSpaceRelease( cs );
-    CFDictionarySetValue( mpStyleDict, kCTForegroundColorAttributeName, pCGColor );
-    CFRelease( pCGColor);
 }
 
 PhysicalFontFace* CoreTextFontData::Clone( void ) const
