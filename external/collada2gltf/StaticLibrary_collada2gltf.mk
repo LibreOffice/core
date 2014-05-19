@@ -30,12 +30,6 @@ $(eval $(call gb_StaticLibrary_add_defs,collada2gltf,\
 
 endif
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_StaticLibrary_add_libs,collada2gltf,\
-	-lrt \
-))
-endif
-
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,collada2gltf,cpp))
 
 $(eval $(call gb_StaticLibrary_set_include,collada2gltf,\
