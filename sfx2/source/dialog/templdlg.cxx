@@ -101,20 +101,22 @@ class SfxCommonTemplateDialog_Impl::DeletionWatcher : private boost::noncopyable
 public:
     explicit DeletionWatcher(SfxCommonTemplateDialog_Impl& rDialog)
         : m_pDialog(&rDialog)
+        , m_pPrevious(m_pDialog->impl_setDeletionWatcher(this))
     {
-        m_pDialog->impl_setDeletionWatcher(this);
     }
 
     ~DeletionWatcher()
     {
         if (m_pDialog)
-            m_pDialog->impl_setDeletionWatcher(0);
+            m_pDialog->impl_setDeletionWatcher(m_pPrevious);
     }
 
     // Signal that the dialog was deleted
     void signal()
     {
         m_pDialog = 0;
+        if (m_pPrevious)
+            m_pPrevious->signal();
     }
 
     // Return true if the dialog was deleted
@@ -125,6 +127,7 @@ public:
 
 private:
     SfxCommonTemplateDialog_Impl* m_pDialog;
+    DeletionWatcher *const m_pPrevious; /// let's add more epicycles!
 };
 
 // Re-direct functions
@@ -961,11 +964,14 @@ void SfxCommonTemplateDialog_Impl::impl_clear()
     DELETEZ( m_pStyleFamiliesId );
 }
 
-void SfxCommonTemplateDialog_Impl::impl_setDeletionWatcher(DeletionWatcher* pNewWatcher)
+SfxCommonTemplateDialog_Impl::DeletionWatcher *
+SfxCommonTemplateDialog_Impl::impl_setDeletionWatcher(
+        DeletionWatcher *const pNewWatcher)
 {
+    DeletionWatcher *const pRet(m_pDeletionWatcher);
     m_pDeletionWatcher = pNewWatcher;
+    return pRet;
 }
-
 
 
 void SfxCommonTemplateDialog_Impl::Initialize()
