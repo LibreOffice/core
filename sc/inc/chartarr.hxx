@@ -33,26 +33,26 @@ class ScDocument;
 
 class ScMemChart
 {
-    short           nRowCnt;
-    short           nColCnt;
-    double*         pData;
+    SCROW nRowCnt;
+    SCCOL nColCnt;
+    double* pData;
     OUString* pColText;
     OUString* pRowText;
 
     ScMemChart(const ScMemChart& rMemChart);      // not implemented
 
 public:
-    ScMemChart(short nCols, short nRows);
+    ScMemChart(SCCOL nCols, SCROW nRows);
     ~ScMemChart();
 
-    short GetColCount() const { return nColCnt; }
-    short GetRowCount() const { return nRowCnt; }
-    const OUString& GetColText(short nCol) const { return pColText[nCol]; }
-    const OUString& GetRowText(short nRow) const { return pRowText[nRow]; }
-    double GetData(short nCol, short nRow) const { return pData[nCol * nRowCnt + nRow]; }
-    void SetData(short nCol, short nRow, const double& rVal) { pData[nCol * nRowCnt + nRow] = rVal; }
-    void SetColText(short nCol, const OUString& rText) { pColText[nCol] = rText; }
-    void SetRowText(short nRow, const OUString& rText) { pRowText[nRow] = rText; }
+    SCCOL GetColCount() const { return nColCnt; }
+    SCROW GetRowCount() const { return nRowCnt; }
+    const OUString& GetColText(SCCOL nCol) const { return pColText[nCol]; }
+    const OUString& GetRowText(SCROW nRow) const { return pRowText[nRow]; }
+    double GetData(SCCOL nCol, SCROW nRow) const { return pData[nCol * nRowCnt + nRow]; }
+    void SetData(SCCOL nCol, SCROW nRow, const double& rVal) { pData[nCol * nRowCnt + nRow] = rVal; }
+    void SetColText(SCCOL nCol, const OUString& rText) { pColText[nCol] = rText; }
+    void SetRowText(SCROW nRow, const OUString& rText) { pRowText[nRow] = rText; }
 };
 
 class SC_DLLPUBLIC ScChartArray             // only parameter-struct

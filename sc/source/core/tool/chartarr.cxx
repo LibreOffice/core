@@ -33,7 +33,7 @@
 
 using ::std::vector;
 
-ScMemChart::ScMemChart(short nCols, short nRows)
+ScMemChart::ScMemChart(SCCOL nCols, SCROW nRows)
 {
     nRowCnt = nRows;
     nColCnt = nCols;
@@ -43,8 +43,8 @@ ScMemChart::ScMemChart(short nCols, short nRows)
     {
         double *pFill = pData;
 
-        for (short i = 0; i < nColCnt; i++)
-            for (short j = 0; j < nRowCnt; j++)
+        for (SCCOL i = 0; i < nColCnt; i++)
+            for (SCROW j = 0; j < nRowCnt; j++)
                 *(pFill ++) = 0.0;
     }
 
@@ -238,12 +238,8 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         aRows.push_back(nStrRow);
     }
 
-
-        //  Data
-
-
-    ScMemChart* pMemChart = new ScMemChart(
-            static_cast<short>(nColCount), static_cast<short>(nRowCount) );
+    //  Data
+    ScMemChart* pMemChart = new ScMemChart( nColCount, nRowCount );
     if (pMemChart)
     {
         if ( bValidData )
@@ -256,7 +252,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
                     // DBL_MIN is a Hack for Chart to recognize empty cells.
                     ScAddress aPos(aCols[nCol], aRows[nRow], nTab1);
                     double nVal = getCellValue(*pDocument, aPos, DBL_MIN, bCalcAsShown);
-                    pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
+                    pMemChart->SetData(nCol, nRow, nVal);
                 }
             }
         }
@@ -265,7 +261,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             // Flag marking data as invalid?
             for (nCol=0; nCol<nColCount; nCol++)
                 for (nRow=0; nRow<nRowCount; nRow++)
-                    pMemChart->SetData( static_cast<short>(nCol), static_cast<short>(nRow), DBL_MIN );
+                    pMemChart->SetData( nCol, nRow, DBL_MIN );
         }
 
 
@@ -287,7 +283,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 
                 aString = aBuf.makeStringAndClear();
             }
-            pMemChart->SetColText( static_cast<short>(nCol), aString);
+            pMemChart->SetColText( nCol, aString);
         }
 
 
@@ -309,7 +305,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
                 aBuf.append(static_cast<sal_Int32>(aRows[nRow]+1));
                 aString = aBuf.makeStringAndClear();
             }
-            pMemChart->SetRowText( static_cast<short>(nRow), aString);
+            pMemChart->SetRowText( nRow, aString);
         }
     }
 
@@ -340,12 +336,8 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         nRowCount = 1;
     }
 
-
     //  Data
-
-
-    ScMemChart* pMemChart = new ScMemChart(
-            static_cast<short>(nColCount), static_cast<short>(nRowCount) );
+    ScMemChart* pMemChart = new ScMemChart( nColCount, nRowCount );
     if (pMemChart)
     {
         SCSIZE nCol = 0;
@@ -364,7 +356,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                         // otherwise: Gap
                         nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
 
-                    pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
+                    pMemChart->SetData(nCol, nRow, nVal);
                 }
             }
         }
@@ -378,7 +370,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                     // otherwise: Gap
                     nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
 
-                pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
+                pMemChart->SetData(nCol, nRow, nVal);
             }
         }
 
@@ -408,7 +400,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                 aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
                 aString = aBuf.makeStringAndClear();
             }
-            pMemChart->SetColText( static_cast<short>(nCol), aString);
+            pMemChart->SetColText( nCol, aString);
         }
 
 
@@ -434,7 +426,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                 aBuf.append(static_cast<sal_Int32>(nPosRow));
                 aString = aBuf.makeStringAndClear();
             }
-            pMemChart->SetRowText( static_cast<short>(nRow), aString);
+            pMemChart->SetRowText( nRow, aString);
         }
     }
 

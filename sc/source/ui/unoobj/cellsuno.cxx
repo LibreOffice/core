@@ -3047,7 +3047,7 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
             uno::Sequence<double> aColSeq( nColCount );
             double* pColAry = aColSeq.getArray();
             for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
-                pColAry[nCol] = pMemChart->GetData( static_cast<short>(nCol), static_cast<short>(nRow) );
+                pColAry[nCol] = pMemChart->GetData( nCol, nRow );
 
             pRowAry[nRow] = aColSeq;
         }
@@ -3155,7 +3155,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
         uno::Sequence<OUString> aSeq( nRowCount );
         OUString* pAry = aSeq.getArray();
         for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
-            pAry[nRow] = pMemChart->GetRowText(static_cast<short>(nRow));
+            pAry[nRow] = pMemChart->GetRowText(nRow);
 
         return aSeq;
     }
@@ -3226,7 +3226,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
         uno::Sequence<OUString> aSeq( nColCount );
         OUString* pAry = aSeq.getArray();
         for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
-            pAry[nCol] = pMemChart->GetColText(static_cast<short>(nCol));
+            pAry[nCol] = pMemChart->GetColText(nCol);
 
         return aSeq;
     }
