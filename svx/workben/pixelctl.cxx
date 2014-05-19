@@ -80,8 +80,6 @@ public:
     void        Resize();
 
     bool        Close();
-
-    DECL_LINK( PixelCtlHdl, SvxPixelCtl* );
 };
 
 void Main()
@@ -108,11 +106,6 @@ bool MyWin::Close()
     if( bRet )
         Application::Quit();
     return bRet;
-}
-
-IMPL_LINK( MyWin, PixelCtlHdl, SvxPixelCtl*, )
-{
-    return 0;
 }
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
