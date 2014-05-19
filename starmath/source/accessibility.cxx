@@ -534,10 +534,6 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
                 delete[] pXAry;
 
-#if OSL_DEBUG_LEVEL > 1
-    Point aLP00( pWin->LogicToPixel( Point(0,0)) );
-    Point aPL00( pWin->PixelToLogic( Point(0,0)) );
-#endif
                 aTLPos = pWin->LogicToPixel( aTLPos );
                 aSize  = pWin->LogicToPixel( aSize );
                 aRes.X = aTLPos.X();
@@ -593,10 +589,6 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             Point   aTLPos ( aOffset );
             aTLPos.X() -= 0;
             Size  aSize( pNode->GetSize() );
-#if OSL_DEBUG_LEVEL > 1
-    Point aLP00( pWin->LogicToPixel( Point(0,0)) );
-    Point aPL00( pWin->PixelToLogic( Point(0,0)) );
-#endif
 
             Rectangle aRect( aTLPos, aSize );
             if (aRect.IsInside( aPos ))
