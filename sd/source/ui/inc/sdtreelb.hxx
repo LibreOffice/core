@@ -30,7 +30,6 @@
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
 #include <vector>
-using namespace std;
 #include <boost/scoped_ptr.hpp>
 #include <boost/function.hpp>
 
@@ -134,7 +133,7 @@ protected:
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
     SdNavigatorWin*         mpDropNavWin;
     SfxViewFrame*           mpFrame;
-    vector<OUString>        maTreeItem;
+    std::vector<OUString>   maTreeItem;
     bool                mbSaveTreeItemState;
     OUString                maSelectionEntryText;
 
@@ -215,7 +214,7 @@ public:
 
     void                    Clear();
     void                    SetSaveTreeItemStateFlag(bool bState){mbSaveTreeItemState = bState;}
-    void                    SaveExpandedTreeItemState(SvTreeListEntry* pEntry, vector<OUString>& vectTreeItem);
+    void                    SaveExpandedTreeItemState(SvTreeListEntry* pEntry, std::vector<OUString>& vectTreeItem);
 
     /** return selected entries
           nDepth == 0 -> pages
