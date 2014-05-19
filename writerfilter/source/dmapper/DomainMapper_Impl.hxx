@@ -181,8 +181,8 @@ struct TextAppendContext
            const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >& xCur ) :
         xTextAppend( xAppend )
     {
-        xCursor.set(xCur, uno::UNO_QUERY);
-        xInsertPosition.set(xCursor, uno::UNO_QUERY);
+        xCursor.set(xCur, css::uno::UNO_QUERY);
+        xInsertPosition.set(xCursor, css::uno::UNO_QUERY);
     }
 };
 
@@ -246,7 +246,7 @@ struct RedlineParams
     sal_Int32       m_nToken;
 
     /// This can hold properties of runs that had formatted 'track changes' properties
-    uno::Sequence<beans::PropertyValue> m_aRevertProperties;
+    css::uno::Sequence<css::beans::PropertyValue> m_aRevertProperties;
 };
 typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
 
@@ -272,19 +272,19 @@ struct LineNumberSettings
 /// Contains information about a table that will be potentially converted to a floating one at the section end.
 struct FloatingTableInfo
 {
-    uno::Reference<text::XTextRange> m_xStart;
-    uno::Reference<text::XTextRange> m_xEnd;
-    uno::Sequence<beans::PropertyValue> m_aFrameProperties;
+    css::uno::Reference<css::text::XTextRange> m_xStart;
+    css::uno::Reference<css::text::XTextRange> m_xEnd;
+    css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
     sal_Int32 m_nTableWidth;
 
-    FloatingTableInfo(uno::Reference<text::XTextRange> xStart, uno::Reference<text::XTextRange> xEnd, const uno::Sequence<beans::PropertyValue>& aFrameProperties, sal_Int32 nTableWidth)
+    FloatingTableInfo(css::uno::Reference<css::text::XTextRange> xStart, css::uno::Reference<css::text::XTextRange> xEnd, const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties, sal_Int32 nTableWidth)
         : m_xStart(xStart),
         m_xEnd(xEnd),
         m_aFrameProperties(aFrameProperties),
         m_nTableWidth(nTableWidth)
     {
     }
-    uno::Any getPropertyValue(const OUString &propertyName);
+    css::uno::Any getPropertyValue(const OUString &propertyName);
 };
 
 class DomainMapper;
@@ -304,7 +304,7 @@ private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >     m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xPageStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               m_xBodyText;
-    ::com::sun::star::uno::Reference<text::XTextContent>                            m_xEmbedded;
+    ::com::sun::star::uno::Reference< css::text::XTextContent >                     m_xEmbedded;
 
     TextAppendStack                                                                 m_aTextAppendStack;
 
@@ -365,9 +365,9 @@ private:
     bool                            m_bIsCustomFtnMark;
 
     //registered frame properties
-    ::com::sun::star::uno::Sequence< beans::PropertyValue >   m_aFrameProperties;
-    ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameStartRange;
-    ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameEndRange;
+    ::com::sun::star::uno::Sequence< css::beans::PropertyValue >   m_aFrameProperties;
+    ::com::sun::star::uno::Reference< css::text::XTextRange >      m_xFrameStartRange;
+    ::com::sun::star::uno::Reference< css::text::XTextRange >      m_xFrameEndRange;
 
     // Redline stack
     std::stack< std::vector< RedlineParamsPtr > > m_aRedlines;
@@ -388,11 +388,11 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
 
-    uno::Reference< text::XTextCursor > xTOCMarkerCursor;
-    uno::Reference< text::XTextCursor > mxTOCTextCursor;
+    css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
+    css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
 
     //annotation import
-    uno::Reference< beans::XPropertySet > m_xAnnotationField;
+    css::uno::Reference< css::beans::XPropertySet > m_xAnnotationField;
     sal_Int32 m_nAnnotationId;
     AnnotationPositions_t m_aAnnotationPositions;
 
@@ -414,10 +414,10 @@ private:
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
-            uno::Reference < uno::XComponentContext >  xContext,
-            uno::Reference< lang::XComponent >  xModel,
+            css::uno::Reference < css::uno::XComponentContext >  xContext,
+            css::uno::Reference< css::lang::XComponent >  xModel,
             SourceDocumentType eDocumentType,
-            uno::Reference< text::XTextRange > xInsertTextRange,
+            css::uno::Reference< css::text::XTextRange > xInsertTextRange,
             bool bIsNewDoc );
     virtual ~DomainMapper_Impl();
 
@@ -440,7 +440,7 @@ public:
     {
         return m_xTextDocument;
     }
-    void SetDocumentSettingsProperty( const OUString& rPropName, const uno::Any& rValue );
+    void SetDocumentSettingsProperty( const OUString& rPropName, const css::uno::Any& rValue );
 
     void CreateRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange, RedlineParamsPtr& pRedline  );
 
@@ -481,7 +481,7 @@ public:
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
-                            const uno::Sequence< beans::PropertyValue >& );
+                            const css::uno::Sequence< css::beans::PropertyValue >& );
     void appendOLE( const OUString& rStreamName, OLEHandlerPtr pOleHandler );
     void appendStarMath( const Value& v );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
@@ -580,36 +580,36 @@ public:
     void handleFieldAsk
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
-        uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties);
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::beans::XPropertySet > xFieldProperties);
     void handleAutoNum
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
-        uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties);
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::beans::XPropertySet > xFieldProperties);
     void handleAuthor
         (OUString const& rFirstParam,
         PropertyNameSupplier& rPropNameSupplier,
-        uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties,
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::beans::XPropertySet > xFieldProperties,
         FieldId eFieldId);
     void handleDocProperty
         (FieldContextPtr pContext,
         OUString const& rFirstParam,
         PropertyNameSupplier& rPropNameSupplier,
-        uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties);
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::beans::XPropertySet > xFieldProperties);
     void handleToc
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
-        uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties,
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::beans::XPropertySet > xFieldProperties,
         const OUString & sTOCServiceName);
     void handleIndex
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
-        uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties,
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::beans::XPropertySet > xFieldProperties,
         const OUString & sTOCServiceName);
 
     void handleBibliography
@@ -701,7 +701,7 @@ public:
     void SetCurrentRedlineDate( const OUString& sDate );
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
-    void SetCurrentRedlineRevertProperties( const uno::Sequence<beans::PropertyValue>& aProperties );
+    void SetCurrentRedlineRevertProperties( const css::uno::Sequence<css::beans::PropertyValue>& aProperties );
     void RemoveCurrentRedline( );
     void ResetParaMarkerRedline( );
     void SetCurrentRedlineInitials( const OUString& sInitials );
@@ -762,8 +762,8 @@ public:
     std::vector<FloatingTableInfo> m_aPendingFloatingTables;
 
     /// Append a property to a sub-grabbag if necessary (e.g. 'lineRule', 'auto')
-    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue);
-    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, std::vector<beans::PropertyValue>& rValue);
+    void appendGrabBag(std::vector<css::beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue);
+    void appendGrabBag(std::vector<css::beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, std::vector<css::beans::PropertyValue>& rValue);
 
     /// Enable, disable an check status of grabbags
     void enableInteropGrabBag(const OUString& aName);
@@ -774,10 +774,10 @@ public:
     OUString m_aInteropGrabBagName;
 
     /// A toplevel dmapper grabbag, like 'pPr'.
-    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     /// A sub-grabbag of m_aInteropGrabBag, like 'spacing'.
-    std::vector<beans::PropertyValue> m_aSubInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aSubInteropGrabBag;
 
     /// ST_PositivePercentage values we received
     std::queue<OUString> m_aPositivePercentages;
@@ -791,7 +791,7 @@ public:
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
-    std::vector<uno::Reference< drawing::XShape > > m_vTextFramesForChaining ;
+    std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
 };
 } //namespace dmapper
 } //namespace writerfilter

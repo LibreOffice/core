@@ -24,6 +24,8 @@
 #include <resourcemodel/QNameToString.hxx>
 #include <boost/unordered_map.hpp>
 
+using namespace css;
+
 namespace writerfilter
 {
     TagLogger::TagLogger(const char* name)
@@ -38,12 +40,12 @@ namespace writerfilter
     }
 
 #ifdef DEBUG_IMPORT
-    void TagLogger::setFileName( const string & filename )
+    void TagLogger::setFileName( const std::string & filename )
     {
         if ( pWriter )
             endDocument();
 
-        string fileName;
+        std::string fileName;
         char * temp = getenv("TAGLOGGERTMP");
 
         if (temp != NULL)
@@ -51,7 +53,7 @@ namespace writerfilter
         else
             fileName += "/tmp";
 
-        string sPrefix = filename;
+        std::string sPrefix = filename;
         size_t nLastSlash = sPrefix.find_last_of('/');
         size_t nLastBackslash = sPrefix.find_last_of('\\');
         size_t nCutPos = nLastSlash;
@@ -87,19 +89,19 @@ namespace writerfilter
 
     TagLogger::Pointer_t TagLogger::getInstance(const char * name)
     {
-        typedef boost::unordered_map<string, TagLogger::Pointer_t> TagLoggerHashMap_t;
+        typedef boost::unordered_map<std::string, TagLogger::Pointer_t> TagLoggerHashMap_t;
         static TagLoggerHashMap_t tagLoggers;
 
         TagLoggerHashMap_t::iterator aIt = tagLoggers.end();
 
-        string sName = name;
+        std::string sName = name;
         if (! tagLoggers.empty())
             aIt = tagLoggers.find(sName);
 
         if (aIt == tagLoggers.end())
         {
             TagLogger::Pointer_t pTagLogger(new TagLogger(name));
-            pair<string, TagLogger::Pointer_t> entry(sName, pTagLogger);
+            std::pair<std::string, TagLogger::Pointer_t> entry(sName, pTagLogger);
             aIt = tagLoggers.insert(entry).first;
         }
 
@@ -107,7 +109,7 @@ namespace writerfilter
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    void TagLogger::element(const string & name)
+    void TagLogger::element(const std::string & name)
     {
         startElement(name);
         endElement();
@@ -148,7 +150,7 @@ namespace writerfilter
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
-    void TagLogger::startElement(const string & name)
+    void TagLogger::startElement(const std::string & name)
     {
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlTextWriterStartElement( pWriter, xmlName );
@@ -156,7 +158,7 @@ namespace writerfilter
     }
 #endif
 
-    void TagLogger::attribute(const string & name, const string & value)
+    void TagLogger::attribute(const std::string & name, const std::string & value)
     {
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlChar* xmlValue = xmlCharStrdup( value.c_str() );
@@ -167,12 +169,12 @@ namespace writerfilter
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    void TagLogger::attribute(const string & name, const OUString & value)
+    void TagLogger::attribute(const std::string & name, const OUString & value)
     {
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
 
-    void TagLogger::attribute(const string & name, sal_uInt32 value)
+    void TagLogger::attribute(const std::string & name, sal_uInt32 value)
     {
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
@@ -180,11 +182,11 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
-    void TagLogger::attribute(const string & name, const uno::Any aAny)
+    void TagLogger::attribute(const std::string & name, const uno::Any aAny)
     {
-        string aTmpStrInt;
-        string aTmpStrFloat;
-        string aTmpStrString;
+        std::string aTmpStrInt;
+        std::string aTmpStrFloat;
+        std::string aTmpStrString;
 
         sal_Int32 nInt = 0;
         float nFloat = 0.0;
@@ -208,7 +210,7 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
-    void TagLogger::chars(const string & rChars)
+    void TagLogger::chars(const std::string & rChars)
     {
         xmlChar* xmlChars = xmlCharStrdup( rChars.c_str() );
         xmlTextWriterWriteString( pWriter, xmlChars );
@@ -277,7 +279,7 @@ namespace writerfilter
     {
         m_pLogger->startElement( "sprm" );
 
-        string sName;
+        std::string sName;
 
         if (mpIdToString != IdToString::Pointer_t())
             sName = mpIdToString->toString(rSprm.getId());

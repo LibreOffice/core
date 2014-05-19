@@ -1045,7 +1045,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 
             mpTableDataHandler->endTable(mTableDataStack.size() - 1);
         }
-        catch (uno::Exception const& e)
+        catch (css::uno::Exception const& e)
         {
             (void) e;
 #if OSL_DEBUG_LEVEL > 0

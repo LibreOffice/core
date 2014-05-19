@@ -25,6 +25,8 @@
 
 #include "dmapperLoggers.hxx"
 
+using namespace css;
+
 namespace writerfilter {
 namespace dmapper {
 

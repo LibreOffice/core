@@ -19,21 +19,20 @@
 
 #ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_UTIL_HXX
 #define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_UTIL_HXX
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <string>
 
 namespace writerfilter
 {
-    using namespace ::std;
-    using namespace ::com::sun::star;
-
-    string xmlify(const string & str);
+    std::string xmlify(const std::string & str);
 
 #if OSL_DEBUG_LEVEL > 1
-    string toString(uno::Reference< text::XTextRange > textRange);
+    std::string toString(css::uno::Reference< css::text::XTextRange > textRange);
 #endif
 }
+
 #endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_UTIL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

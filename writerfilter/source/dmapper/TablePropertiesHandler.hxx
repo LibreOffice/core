@@ -39,9 +39,9 @@ typedef TableManager<Handle_t , TablePropertyMapPtr > DomainMapperTableManager_B
 class TablePropertiesHandler
 {
 private:
-    vector< PropertyMapPtr > m_rPropertiesStack;
+    std::vector< PropertyMapPtr > m_rPropertiesStack;
     PropertyMapPtr m_pCurrentProperties;
-    std::vector<beans::PropertyValue>* m_pCurrentInteropGrabBag;
+    std::vector<css::beans::PropertyValue>* m_pCurrentInteropGrabBag;
     DomainMapperTableManager_Base_t *m_pTableManager;
     bool m_bOOXML;
 
@@ -61,7 +61,7 @@ public:
         m_pCurrentProperties = pProperties;
     };
 
-    void SetInteropGrabBag(std::vector<beans::PropertyValue>& rValue);
+    void SetInteropGrabBag(std::vector<css::beans::PropertyValue>& rValue);
 
 private:
 
