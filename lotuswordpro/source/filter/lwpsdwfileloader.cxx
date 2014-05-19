@@ -78,7 +78,7 @@ LwpSdwFileLoader::~LwpSdwFileLoader(void)
  * @descr   entry of lwp-drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
-void LwpSdwFileLoader::CreateDrawObjects(vector <XFFrame*>* pDrawObjVector)
+void LwpSdwFileLoader::CreateDrawObjects(std::vector <XFFrame*>* pDrawObjVector)
 {
     unsigned char BinSignature[2];
     m_pStream->Read(BinSignature,2);

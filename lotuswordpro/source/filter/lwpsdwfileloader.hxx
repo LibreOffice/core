@@ -63,7 +63,6 @@
 #include "lwpheader.hxx"
 #include "xfilter/ixfstream.hxx"
 #include <vector>
-using namespace std;
 
 class XFFrame;
 class LwpGraphicObject;
@@ -80,7 +79,7 @@ public:
 //  void RegisterStyle(void);
 
     // add by  ,03/25/2005
-    void CreateDrawObjects(vector <XFFrame*>* pDrawObjVector);
+    void CreateDrawObjects(std::vector <XFFrame*>* pDrawObjVector);
     // end add
 };
 

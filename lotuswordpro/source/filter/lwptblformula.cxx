@@ -597,7 +597,7 @@ OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
     aFormula += " ";//Append a blank space
 
     //Append args
-    vector<LwpFormulaArg*>::iterator aItr;
+    std::vector<LwpFormulaArg*>::iterator aItr;
     for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();++aItr)
     {
         aFormula += (*aItr)->ToArgString(pCellsMap) + "|"; //separator
@@ -628,7 +628,7 @@ OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
     OUString aFormula;
     if (2==m_aArgs.size())
     {
-        vector<LwpFormulaArg*>::iterator aItr = m_aArgs.end();
+        std::vector<LwpFormulaArg*>::iterator aItr = m_aArgs.end();
         --aItr;
 
         aFormula += (*aItr)->ToArgString(pCellsMap) + " ";
@@ -661,7 +661,7 @@ OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
         OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
         aFormula += aFuncName;
 
-        vector<LwpFormulaArg*>::iterator aItr = m_aArgs.begin();
+        std::vector<LwpFormulaArg*>::iterator aItr = m_aArgs.begin();
         aFormula += (*aItr)->ToArgString(pCellsMap);
     }
     else
