@@ -106,6 +106,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     m_vRunData.release();
     bLayouted = false;
 
+    // release an eventual older layout
     if( mpAttrString )
         CFRelease( mpAttrString );
     mpAttrString = NULL;
@@ -113,6 +114,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
         CFRelease( mpCTLine );
     mpCTLine = NULL;
 
+    // initialize the new layout
     SalLayout::AdjustLayout( rArgs );
     mnCharCount = mnEndCharPos - mnMinCharPos;
 
@@ -328,7 +330,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
     CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
-    // Draw the text
+    // set the text transformation (e.g. position)
     CGPoint aTextPos = GetTextDrawPosition();
 
     if( pStyle->mfFontRotation != 0.0 )
@@ -341,6 +343,11 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     }
 
     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
+
+    // set the text color as fill color (see kCTForegroundColorFromContextAttributeName)
+    CGContextSetFillColor( rAquaGraphics.mrContext, rAquaGraphics.maTextColor.AsArray() );
+
+    // draw the text
     CTLineDraw( ctline, rAquaGraphics.mrContext );
 #ifndef IOS
     // request an update of the changed window area
