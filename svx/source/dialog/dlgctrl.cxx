@@ -264,21 +264,12 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
             SetActualRP( eRP );
 
-            Window* pParent = GetParent();
-            while (pParent)
-            {
-                if( WINDOW_TABPAGE == pParent->GetType() )
-                {
-                    ( (SvxTabPage*) pParent )->PointChanged( this, eRP );
-                    break;
-                }
-                pParent = pParent->GetParent();
-            }
+            Window *pTabPage = getNonLayoutParent(this);
+            if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+                ( (SvxTabPage*)pTabPage)->PointChanged( this, eRP );
         }
     }
 }
-
-
 
 void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 {
@@ -812,7 +803,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
 
     Window *pTabPage = getNonLayoutParent(this);
     if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
-        ( (SvxTabPage*) GetParent() )->PointChanged( this, RP_MM ); // RectPoint ist dummy
+        ( (SvxTabPage*)pTabPage)->PointChanged( this, RP_MM ); // RectPoint ist dummy
 
     return GetFoucsPosIndex();
 
