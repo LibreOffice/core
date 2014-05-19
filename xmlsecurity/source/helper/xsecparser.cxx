@@ -20,7 +20,7 @@
 
 #include "xsecparser.hxx"
 #include <tools/debug.hxx>
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <string.h>
 

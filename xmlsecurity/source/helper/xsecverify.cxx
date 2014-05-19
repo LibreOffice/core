@@ -18,7 +18,7 @@
  */
 
 
-#include <xsecctl.hxx>
+#include "xsecctl.hxx"
 #include "xsecparser.hxx"
 #include <tools/debug.hxx>
 

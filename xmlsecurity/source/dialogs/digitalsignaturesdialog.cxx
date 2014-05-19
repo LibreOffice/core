@@ -47,7 +47,7 @@
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include "dialogs.hrc"
 #include "digitalsignaturesdialog.hrc"

@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include "com/sun/star/uno/SecurityException.hpp"
+#include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
 #include "cert.h"

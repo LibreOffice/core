@@ -23,7 +23,7 @@
  */
 #include "xmlstreamio.hxx"
 #include <rtl/ustring.hxx>
-#include "rtl/uri.hxx"
+#include <rtl/uri.hxx>
 
 #include <libxml/uri.h>
 #include "xmlsecurity/xmlsec-wrapper.h"
