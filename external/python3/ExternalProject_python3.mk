@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
 			$(if $(filter 100,$(VCVER)), \
 				/ToolsVersion:4.0, \
-				/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
+				/p:PlatformToolset=v110_xp /p:VisualStudioVersion=11.0) \
 		&& cd $(EXTERNAL_WORKDIR) \
 		&& ln -s PCbuild LO_lib \
 	,PCBuild)
