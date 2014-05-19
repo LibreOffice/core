@@ -1189,6 +1189,17 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         // then set the focus to the new page or if we are on a group set the focus to the options treebox
         pNewPage ? pNewPage->GrabFocus() : pBox->GrabFocus();
 
+    //fdo#58170 use current page's layout child HelpId, unless there isn't a
+    //current page
+    OUString sHelpId(HID_OFADLG_TREELISTBOX);
+    if (::isLayoutEnabled(pNewPage))
+    {
+        Window *pFirstChild = pNewPage->GetWindow(WINDOW_FIRSTCHILD);
+        assert(pFirstChild);
+        sHelpId = pFirstChild->GetHelpId();
+    }
+    pBox->SetHelpId(sHelpId);
+
     return;
 }
 
