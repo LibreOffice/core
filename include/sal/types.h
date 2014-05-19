@@ -603,6 +603,46 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define SAL_WARN_UNUSED
 #endif
 
+#ifdef __GNUC__
+        /*  It provides to compiler branch prediction information.
+         *
+         *  This allow to say wich branch will be execute less likely
+         *  than another.
+         *
+         *  @since LibreOffice 4.3
+         */
+          #define SAL_LIKELY(x) __builtin_expect((x),1)
+
+         /*  It provides to compiler branch prediction information.
+          *
+          *  This allow to say wich branch will be execute more likely
+          *  than another.
+          *
+          *  @since LibreOffice 4.3
+          */
+          #define SAL_UNLIKELY(x) __builtin_expect((x),0)
+
+          /*  Hint that the marked function is "cold" and should be optimized for size,
+           *  predicted as unlikely for branch prediction, and/or placed near other
+           *  "cold" functions (so other functions can have improved cache locality).
+           *
+           *  @since LibreOffice 4.3
+           */
+           #ifndef SAL_HOT
+           #   define SAL_HOT __attribute__((hot))
+           #endif
+
+          /*  Hint that the marked function is "hot" and should be optimized more
+           *  aggressively and/or placed near other "hot" functions (for cache locality)
+           *
+           *  @since LibreOffice 4.3
+           */
+           #ifndef SAL_COLD
+           #   define SAL_COLD __attribute__((cold))
+           #endif
+
+#endif // End of #ifdef __GNUC__
+
 #endif /*_SAL_TYPES_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
