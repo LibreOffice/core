@@ -47,6 +47,15 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
         xSeqProp->setPropertyValue("Role", uno::makeAny( rRole));
     xLabeledSeq->setValues( xSeq );
 
+    Reference< chart2::data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY );
+    if( xSink.is())
+    {
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xSeriesSource->getDataSequences());
+        aData.realloc( aData.getLength() + 1 );
+        aData[ aData.getLength() - 1 ] = xLabeledSeq;
+        xSink->setData( aData );
+    }
+
     return xLabeledSeq;
 }
 
