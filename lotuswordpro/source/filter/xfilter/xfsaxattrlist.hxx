@@ -64,9 +64,6 @@
 #include "xmloff/attrlist.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
-
 class   XFSaxAttrList : public IXFAttrList
 {
 public:
@@ -80,16 +77,16 @@ public:
 
     virtual void    Clear() SAL_OVERRIDE;
 
-    Reference<XAttributeList>   GetAttributeList() const;
+    css::uno::Reference<css::xml::sax::XAttributeList>   GetAttributeList() const;
 
     friend class XFSaxStream;
 private:
     SvXMLAttributeList  *m_pSvAttrList;
-    Reference<XAttributeList>   m_xAttrList;
+    css::uno::Reference<css::xml::sax::XAttributeList>   m_xAttrList;
 
 };
 
-inline Reference<XAttributeList>    XFSaxAttrList::GetAttributeList() const
+inline css::uno::Reference<css::xml::sax::XAttributeList>    XFSaxAttrList::GetAttributeList() const
 {
     return m_xAttrList;
 }

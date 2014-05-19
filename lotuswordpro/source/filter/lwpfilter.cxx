@@ -89,7 +89,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 
@@ -178,7 +177,7 @@ using namespace OpenStormBento;
     }
     return bCompressed;
 }
-int ReadWordproFile(SvStream &rStream, uno::Reference<XDocumentHandler>& xHandler)
+int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHandler>& xHandler)
 {
     try
     {
