@@ -11906,6 +11906,12 @@
       <value name="venn" tokenid="ooxml:Value_vml_ST_EditAs_venn">venn</value>
       <value name="bullseye" tokenid="ooxml:Value_vml_ST_EditAs_bullseye">bullseye</value>
     </resource>
+    <resource name="CT_Background" resource="Properties" tag="shape">
+      <attribute name="id" tokenid="ooxml:CT_Background_id"/>
+    </resource>
+    <resource name="background" resource="Properties" tag="shape">
+      <element name="background" tokenid="ooxml:background_background"/>
+    </resource>
   </namespace>
   <namespace name="vml-officeDrawing" file="vml-officeDrawing.rng">
     <start name="shapedefaults"/>
@@ -14201,7 +14207,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
+    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:v="urn:schemas-microsoft-com:vml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
       <!-- ISO RELAX NG Schema -->
       <include href="shared-customXmlSchemaProperties.rng"/>
       <include href="shared-math.rng"/>
@@ -16772,6 +16778,11 @@
             <text/>
             <xs:documentation>Border Theme Color Shade</xs:documentation>
           </attribute>
+        </optional>
+        <optional>
+          <element name="v:background">
+            <ref name="BUILT_IN_ANY_TYPE"/>
+          </element>
         </optional>
       </define>
       <define name="CT_Rel">
@@ -23949,11 +23960,12 @@
       <attribute name="shapeid" tokenid="ooxml:CT_Control_shapeid"/>
       <attribute name="r:id" tokenid="ooxml:CT_Control_r_id"/>
     </resource>
-    <resource name="CT_Background" resource="Properties">
+    <resource xmlns:v="urn:schemas-microsoft-com:vml" name="CT_Background" resource="Properties">
       <attribute name="color" tokenid="ooxml:CT_Background_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Background_themeColor"/>
       <attribute name="themeTint" tokenid="ooxml:CT_Background_themeTint"/>
       <attribute name="themeShade" tokenid="ooxml:CT_Background_themeShade"/>
+      <element name="v:background" tokenid="ooxml:CT_Background_v_background"/>
     </resource>
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Rel" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Rel_id"/>

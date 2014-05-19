@@ -1013,6 +1013,16 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl*
 
 void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 {
+    // These SPRM's are not specific to any section, so it's expected that there is no context yet.
+    switch (rSprm.getId())
+    {
+    case NS_ooxml::LN_background_background:
+        return;
+        break;
+    default:
+        break;
+    }
+
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())
         return ;
