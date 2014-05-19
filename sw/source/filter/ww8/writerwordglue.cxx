@@ -812,7 +812,7 @@ namespace sw
                     {
                         const sal_Int32 nFindLen = rFind.getLength();
                         const sal_Int32 nDiff = rReplace.getLength() - nFindLen;
-                        rParams.replaceAt( nI, nFindLen, rReplace);
+                        rParams = rParams.replaceAt( nI, nFindLen, rReplace);
                         nI += nFindLen + nDiff - 1;
                         nLen += nDiff;
                         bReplaced = true;
