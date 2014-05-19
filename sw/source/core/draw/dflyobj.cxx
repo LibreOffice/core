@@ -468,6 +468,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
         {
             // if there's no viewport set, all fly-frames will be painted,
             // which is slow, wastes memory, and can cause other trouble.
+            (void) rViewInformation; // suppress "unused parameter" warning
             assert(!rViewInformation.getViewport().isEmpty());
             if ( !pFlyFrm->IsFlyInCntFrm() )
             {
