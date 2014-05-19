@@ -139,7 +139,7 @@
                               <object class="GtkGrid" id="grid2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -290,13 +290,13 @@
                               <object class="GtkBox" id="box6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="image">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="stock">gtk-missing-image</property>
                                   </object>
                                   <packing>
@@ -375,7 +375,7 @@
                               <object class="GtkGrid" id="grid3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -435,13 +435,13 @@
                               <object class="GtkBox" id="box10">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="1image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist11.png</property>
                                   </object>
                                   <packing>
@@ -454,7 +454,7 @@
                                   <object class="GtkImage" id="1image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist12.png</property>
                                   </object>
                                   <packing>
@@ -467,7 +467,7 @@
                                   <object class="GtkImage" id="1image3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist13.png</property>
                                   </object>
                                   <packing>
@@ -545,7 +545,7 @@
                               <object class="GtkGrid" id="grid4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -590,13 +590,13 @@
                               <object class="GtkBox" id="box13">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="2image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist21.png</property>
                                   </object>
                                   <packing>
@@ -609,7 +609,7 @@
                                   <object class="GtkImage" id="2image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist22.png</property>
                                   </object>
                                   <packing>
@@ -687,7 +687,7 @@
                               <object class="GtkGrid" id="grid5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -732,13 +732,13 @@
                               <object class="GtkBox" id="box16">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="3image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist31.png</property>
                                   </object>
                                   <packing>
@@ -751,7 +751,7 @@
                                   <object class="GtkImage" id="3image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist32.png</property>
                                   </object>
                                   <packing>
@@ -829,7 +829,7 @@
                               <object class="GtkGrid" id="grid6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -874,13 +874,13 @@
                               <object class="GtkBox" id="box19">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="4image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist41.png</property>
                                   </object>
                                   <packing>
@@ -893,7 +893,7 @@
                                   <object class="GtkImage" id="4image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist42.png</property>
                                   </object>
                                   <packing>
@@ -971,7 +971,7 @@
                               <object class="GtkGrid" id="grid7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1016,13 +1016,13 @@
                               <object class="GtkBox" id="box22">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="5image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist51.png</property>
                                   </object>
                                   <packing>
@@ -1035,7 +1035,7 @@
                                   <object class="GtkImage" id="5image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist52.png</property>
                                   </object>
                                   <packing>
@@ -1113,7 +1113,7 @@
                               <object class="GtkGrid" id="grid8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1173,13 +1173,13 @@
                               <object class="GtkBox" id="box25">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="6image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist61.png</property>
                                   </object>
                                   <packing>
@@ -1192,7 +1192,7 @@
                                   <object class="GtkImage" id="6image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist62.png</property>
                                   </object>
                                   <packing>
@@ -1205,7 +1205,7 @@
                                   <object class="GtkImage" id="6image4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist61.png</property>
                                   </object>
                                   <packing>
@@ -1283,7 +1283,7 @@
                               <object class="GtkGrid" id="grid9">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1328,13 +1328,13 @@
                               <object class="GtkBox" id="box28">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="7image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist71.png</property>
                                   </object>
                                   <packing>
@@ -1347,7 +1347,7 @@
                                   <object class="GtkImage" id="7image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist72.png</property>
                                   </object>
                                   <packing>
@@ -1425,7 +1425,7 @@
                               <object class="GtkGrid" id="grid10">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1470,13 +1470,13 @@
                               <object class="GtkBox" id="box31">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="8image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist81.png</property>
                                   </object>
                                   <packing>
@@ -1489,7 +1489,7 @@
                                   <object class="GtkImage" id="8image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist82.png</property>
                                   </object>
                                   <packing>
@@ -1567,7 +1567,7 @@
                               <object class="GtkGrid" id="grid11">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1612,13 +1612,13 @@
                               <object class="GtkBox" id="box34">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="9image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist91.png</property>
                                   </object>
                                   <packing>
@@ -1631,7 +1631,7 @@
                                   <object class="GtkImage" id="9image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist92.png</property>
                                   </object>
                                   <packing>
@@ -1709,7 +1709,7 @@
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1784,13 +1784,13 @@
                               <object class="GtkBox" id="box7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
+                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="10image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist101.png</property>
                                   </object>
                                   <packing>
@@ -1803,7 +1803,7 @@
                                   <object class="GtkImage" id="10image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist102.png</property>
                                   </object>
                                   <packing>
@@ -1816,7 +1816,7 @@
                                   <object class="GtkImage" id="10image3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist103.png</property>
                                   </object>
                                   <packing>
@@ -1829,7 +1829,7 @@
                                   <object class="GtkImage" id="10image4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">center</property>
+                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist104.png</property>
                                   </object>
                                   <packing>
