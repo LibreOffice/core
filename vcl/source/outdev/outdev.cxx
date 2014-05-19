@@ -679,7 +679,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
         AdjustTwoRect( aPosAry, aSrcOutRect );
 
-        CopyAreaFinal ( aPosAry, nFlags );
+        CopyDeviceArea ( aPosAry, nFlags );
     }
 
     SetRasterOp( eOldRop );
@@ -690,7 +690,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
 // Direct OutputDevice drawing protected function
 
-void OutputDevice::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
+void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;
