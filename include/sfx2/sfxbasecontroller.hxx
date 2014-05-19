@@ -169,7 +169,7 @@ public:
     virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css::lang::XInitialization
-    virtual void SAL_CALL initialize( const ::css::uno::Sequence< ::css::uno::Any >& aArguments ) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const ::css::uno::Sequence< ::css::uno::Any >& aArguments ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
