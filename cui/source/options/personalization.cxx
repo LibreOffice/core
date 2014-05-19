@@ -21,6 +21,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -30,28 +31,6 @@
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-
-
-/** Dialog that will allow the user to choose a Persona to use.
-
-So far there is no better possibility than just to paste the URL from
-https://addons.mozilla.org/firefox/themes ...
-*/
-class SelectPersonaDialog : public ModalDialog
-{
-private:
-    Edit *m_pEdit;                          ///< The input line for the Persona URL
-
-public:
-    SelectPersonaDialog( Window *pParent );
-
-    /// Get the URL from the Edit field.
-    OUString GetPersonaURL() const;
-
-private:
-    /// Handle the [Visit Firefox Personas] button
-    DECL_LINK( VisitPersonas, PushButton* );
-};
 
 SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
@@ -76,9 +55,6 @@ OUString SelectPersonaDialog::GetPersonaURL() const
 
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 {
-    // uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell( com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
-
-    // xSystemShell->execute( "https://addons.mozilla.org/firefox/themes/", OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
     PersonasDocHandler* pHandler = new PersonasDocHandler();
