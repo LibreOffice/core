@@ -1362,7 +1362,6 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
     ScDocumentImport& rDoc = rXMLImport.GetDoc();
 
     OUString aText = maFormula->first;
-    OUString aFormulaNmsp = maFormula->second;
 
     ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard (
             new ScExternalRefManager::ApiGuard(pDoc));
@@ -1372,13 +1371,15 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         if ( aText[0] == '=' && aText.getLength() > 1 )
         {
             // temporary formula string as string tokens
-            boost::scoped_ptr<ScTokenArray> pCode(new ScTokenArray);
-            pCode->AddStringXML( aText );
-            if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !aFormulaNmsp.isEmpty() )
-                pCode->AddStringXML( aFormulaNmsp );
+            ScTokenArray *pCode = new ScTokenArray();
+
+            OUString aFormulaNmsp = maFormula->second;
+            if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
+                aFormulaNmsp = OUString();
+            pCode->AssignXMLString( aText, aFormulaNmsp );
 
             rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
-            ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, *pCode, eGrammar, MM_NONE);
+            ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, MM_NONE);
             SetFormulaCell(pNewCell);
             rDoc.setFormulaCell(rCellPos, pNewCell);
 

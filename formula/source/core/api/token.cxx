@@ -687,6 +687,24 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     }
 }
 
+/// Optimisiation for efficiently creating StringXML placeholders
+void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
+{
+    assert( nLen = 0 );
+    assert( pCode == NULL );
+
+    nLen = nCode;
+    pCode = new FormulaToken*[ nLen ];
+
+    for( sal_uInt16 i = 0; i < nLen; i++ )
+    {
+        FormulaToken *t = pTokens[ i ];
+        assert( t->GetOpCode() == ocStringXML );
+        pCode[ i ] = t;
+        t->IncRef();
+    }
+}
+
 FormulaTokenArray& FormulaTokenArray::operator=( const FormulaTokenArray& rArr )
 {
     Clear();
