@@ -277,14 +277,20 @@ void PDFIProcessor::processGlyphLine()
 
 void PDFIProcessor::drawGlyphs( const OUString&             rGlyphs,
                                 const geometry::RealRectangle2D& rRect,
-                                const geometry::Matrix2D&        rFontMatrix )
+                                const geometry::Matrix2D&        rFontMatrix,
+                                double fontSize)
 {
+    double ascent = getFont(getCurrentContext().FontId).ascent;
+
+    double ascentdx = rFontMatrix.m01 * ascent * fontSize;
+    double ascentdy = rFontMatrix.m11 * ascent * fontSize;
+
     basegfx::B2DHomMatrix totalTextMatrix1(
-        rFontMatrix.m00, rFontMatrix.m01, rRect.X1,
-        rFontMatrix.m10, rFontMatrix.m11, rRect.Y1);
+        rFontMatrix.m00, rFontMatrix.m01, rRect.X1 + ascentdx,
+        rFontMatrix.m10, rFontMatrix.m11, rRect.Y1 + ascentdy);
     basegfx::B2DHomMatrix totalTextMatrix2(
-        rFontMatrix.m00, rFontMatrix.m01, rRect.X2,
-        rFontMatrix.m10, rFontMatrix.m11, rRect.Y2);
+        rFontMatrix.m00, rFontMatrix.m01, rRect.X2 + ascentdx,
+        rFontMatrix.m10, rFontMatrix.m11, rRect.Y2 + ascentdy);
     totalTextMatrix1 *= getCurrentContext().Transformation;
     totalTextMatrix2 *= getCurrentContext().Transformation;
 
