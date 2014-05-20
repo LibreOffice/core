@@ -806,7 +806,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
     ScProgress aProgress(GetDocumentShell(), "Updating external links", aRefLinks.size());
     for (size_t i = 0, n = aRefLinks.size(); i < n; ++i)
     {
-        aProgress.SetState(i);
+        aProgress.SetState(i+1);
 
         ScExternalRefLink* pRefLink = aRefLinks[i];
         if (pRefLink->Update())
