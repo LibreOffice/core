@@ -2845,7 +2845,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             aRenderer[ nRenderDataIdxStart + 7 ].Name  = "NUpVerticalSpacing";
             aRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
             {
-                Printer* pPrinter = pDocShell->GetDoc()->getPrinter( false );
+                Printer* pPrinter = pDocShell->GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( false );
                 if ( pPrinter )
                 {
                     awt::Size aNewPageSize;

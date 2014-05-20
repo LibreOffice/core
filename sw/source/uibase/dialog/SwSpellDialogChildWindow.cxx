@@ -769,7 +769,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     SdrOutliner aTmpOutliner(pDoc->GetDrawModel()->
                                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                                                 OUTLINERMODE_TEXTOBJECT );
-                    aTmpOutliner.SetRefDevice( pDoc->getPrinter( false ) );
+                    aTmpOutliner.SetRefDevice( pDoc->getIDocumentDeviceAccessConst()->getPrinter( false ) );
                     MapMode aMapMode (MAP_TWIP);
                     aTmpOutliner.SetRefMapMode(aMapMode);
                     aTmpOutliner.SetPaperSize( pTextObj->GetLogicRect().GetSize() );

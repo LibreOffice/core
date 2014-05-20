@@ -1401,7 +1401,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue("TabOverMargin", makeAny( false ) );
 
     SwDoc *pDoc = getDoc();
-    SfxPrinter *pPrinter = pDoc->getPrinter( false );
+    SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
     if( pPrinter )
     {
         // If the printer is known, then the OLE objects will

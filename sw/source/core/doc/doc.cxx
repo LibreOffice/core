@@ -254,16 +254,6 @@ IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccess()
     return m_DeviceAccess.get();
 }
 
-SfxPrinter* SwDoc::getPrinter(/*[in]*/ bool bCreate ) const
-{
-    return getIDocumentDeviceAccessConst()->getPrinter( bCreate );
-}
-
-void SwDoc::setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
-{
-    getIDocumentDeviceAccess()->setPrinter( pP, bDeleteOld, bCallPrtDataChanged );
-}
-
 VirtualDevice* SwDoc::getVirtualDevice(/*[in]*/ bool bCreate ) const
 {
     return getIDocumentDeviceAccessConst()->getVirtualDevice( bCreate );

@@ -173,7 +173,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
         {
             bool bDelPrinter = false;
-            SfxPrinter* pPrt = pDoc ? pDoc->getPrinter(false) : 0;
+            SfxPrinter* pPrt = pDoc ? pDoc->getIDocumentDeviceAccessConst()->getPrinter(false) : 0;
             if( !pPrt )
             {
                 SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),

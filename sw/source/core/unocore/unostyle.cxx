@@ -1785,7 +1785,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case RES_PAPER_BIN:
         {
-            SfxPrinter *pPrinter = pDoc->getPrinter( true );
+            SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccessConst()->getPrinter( true );
             OUString sTmp;
             sal_uInt16 nBin = USHRT_MAX;
             if ( !( aValue >>= sTmp ) )
@@ -2343,7 +2343,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     aRet <<= OUString( "[From printer settings]" );
                 else
                 {
-                    SfxPrinter *pPrinter = pDoc->getPrinter( false );
+                    SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
                     OUString sTmp;
                     if (pPrinter )
                         sTmp = pPrinter->GetPaperBinName ( nBin );
@@ -3042,10 +3042,10 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     SwFmtFrmSize aFrmSz( ATT_FIX_SIZE );
                     if( RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFmtId() )
                     {
-                        if( m_pDoc->getPrinter( false ) )
+                        if( m_pDoc->getIDocumentDeviceAccessConst()->getPrinter( false ) )
                         {
                             const Size aPhysSize( SvxPaperInfo::GetPaperSize(
-                                        static_cast<Printer*>( m_pDoc->getPrinter( false ) )) );
+                                        static_cast<Printer*>( m_pDoc->getIDocumentDeviceAccessConst()->getPrinter( false ) )) );
                             aFrmSz.SetSize( aPhysSize );
                         }
                         else

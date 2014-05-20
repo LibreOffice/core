@@ -131,7 +131,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         // for all
 
         SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
-        SfxPrinter* pPrt = pDoc->getPrinter( false );
+        SfxPrinter* pPrt = pDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
 
         OUString sEntry;
         sal_uInt16 aFontWhich[] =
