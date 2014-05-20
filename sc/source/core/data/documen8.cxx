@@ -780,6 +780,9 @@ bool ScDocument::IsInLinkUpdate() const
 
 void ScDocument::UpdateExternalRefLinks(Window* pWin)
 {
+    if (!pExternalRefMgr.get())
+        return;
+
     sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
     if (!pMgr)
         return;
@@ -788,33 +791,48 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
     sal_uInt16 nCount = rLinks.size();
 
     bool bAny = false;
+
+    // Collect all the external ref links first.
+    std::vector<ScExternalRefLink*> aRefLinks;
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         ScExternalRefLink* pRefLink = dynamic_cast<ScExternalRefLink*>(pBase);
         if (pRefLink)
-        {
-            if (pRefLink->Update())
-                bAny = true;
-            else
-            {
-                // Update failed.  Notify the user.
-
-                OUString aFile;
-                pMgr->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
-                // Decode encoded URL for display friendliness.
-                INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
-                aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
-
-                OUStringBuffer aBuf;
-                aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
-                aBuf.appendAscii("\n\n");
-                aBuf.append(aFile);
-                ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
-                aBox.Execute();
-            }
-        }
+            aRefLinks.push_back(pRefLink);
     }
+
+    pExternalRefMgr->enableDocTimer(false);
+    ScProgress aProgress(GetDocumentShell(), "Updating external links", aRefLinks.size());
+    for (size_t i = 0, n = aRefLinks.size(); i < n; ++i)
+    {
+        aProgress.SetState(i);
+
+        ScExternalRefLink* pRefLink = aRefLinks[i];
+        if (pRefLink->Update())
+        {
+            bAny = true;
+            continue;
+        }
+
+        // Update failed.  Notify the user.
+
+        OUString aFile;
+        pMgr->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
+        // Decode encoded URL for display friendliness.
+        INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
+        aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+
+        OUStringBuffer aBuf;
+        aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
+        aBuf.appendAscii("\n\n");
+        aBuf.append(aFile);
+        ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+        aBox.Execute();
+    }
+
+    pExternalRefMgr->enableDocTimer(true);
+
     if (bAny)
     {
         TrackFormulas();
