@@ -2054,16 +2054,25 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
     }
     else
     {
-        nMonth = GetMonth(rString, nPos);
-        if ( nMonth )    // month (Jan 1)?
+        const sal_Int32 nMonthStart = nPos;
+        short nTempMonth = GetMonth(rString, nPos);
+        if ( nTempMonth )    // month (Jan 1)?
         {
-            eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
-            nMonthPos = 1;                          // month at the beginning
-            if ( nMonth < 0 )
+            if (nPos < rString.getLength())         // Jan1 without separator is not a date
             {
-                SkipChar( '.', rString, nPos );     // abbreviated
+                eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date !!!
+                nMonth = nTempMonth;
+                nMonthPos = 1;                      // month at the beginning
+                if ( nMonth < 0 )
+                {
+                    SkipChar( '.', rString, nPos ); // abbreviated
+                }
+                SkipBlanks(rString, nPos);
             }
-            SkipBlanks(rString, nPos);
+            else
+            {
+                nPos = nMonthStart;                 // rewind month
+            }
         }
         else
         {
@@ -2089,15 +2098,23 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
                         SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
                     }
                     SkipBlanks(rString, nPos);
-                    nMonth = GetMonth(rString, nPos);
-                    if ( nMonth ) // month (Jan 1)?
+                    nTempMonth = GetMonth(rString, nPos);
+                    if ( nTempMonth ) // month (Jan 1)?
                     {
-                        nMonthPos = 1; // month a the beginning
-                        if ( nMonth < 0 )
+                        if (nPos < rString.getLength())         // Jan1 without separator is not a date
                         {
-                            SkipChar( '.', rString, nPos ); // abbreviated
+                            nMonth = nTempMonth;
+                            nMonthPos = 1; // month a the beginning
+                            if ( nMonth < 0 )
+                            {
+                                SkipChar( '.', rString, nPos ); // abbreviated
+                            }
+                            SkipBlanks(rString, nPos);
                         }
-                        SkipBlanks(rString, nPos);
+                        else
+                        {
+                            nPos = nMonthStart;                 // rewind month
+                        }
                     }
                 }
                 if (!nMonth)
@@ -2282,6 +2299,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         }
     }
 
+    const sal_Int32 nMonthStart = nPos;
     short nTempMonth = GetMonth(rString, nPos);     // month in the middle (10 Jan 94)
     if (nTempMonth)
     {
@@ -2294,15 +2312,22 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         {
             return MatchedReturn();
         }
-        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date
-        nMonth = nTempMonth;
-        nMonthPos = 2;                              // month in the middle
-        if ( nMonth < 0 )
+        if (nMonthStart > 0 && nPos < rString.getLength())  // 10Jan or Jan94 without separator are not dates
         {
-            SkipChar( '.', rString, nPos );         // abbreviated
+            eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date
+            nMonth = nTempMonth;
+            nMonthPos = 2;                          // month in the middle
+            if ( nMonth < 0 )
+            {
+                SkipChar( '.', rString, nPos );     // abbreviated
+            }
+            SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
+            SkipBlanks(rString, nPos);
         }
-        SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
-        SkipBlanks(rString, nPos);
+        else
+        {
+            nPos = nMonthStart;                     // rewind month
+        }
     }
 
     if ( SkipChar('E', rString, nPos) ||            // 10E, 10e, 10,Ee
@@ -2630,6 +2655,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         }
     }
 
+    const sal_Int32 nMonthStart = nPos;
     short nTempMonth = GetMonth(rString, nPos);     // 10 Jan
     if (nTempMonth)
     {
@@ -2642,14 +2668,21 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         {
             return MatchedReturn();
         }
-        eScannedType = NUMBERFORMAT_DATE;
-        nMonth = nTempMonth;
-        nMonthPos = 3;                              // month at end
-        if ( nMonth < 0 )
+        if (nMonthStart > 0)                        // 10Jan without separator is not a date
         {
-            SkipChar( '.', rString, nPos );         // abbreviated
+            eScannedType = NUMBERFORMAT_DATE;
+            nMonth = nTempMonth;
+            nMonthPos = 3;                          // month at end
+            if ( nMonth < 0 )
+            {
+                SkipChar( '.', rString, nPos );     // abbreviated
+            }
+            SkipBlanks(rString, nPos);
         }
-        SkipBlanks(rString, nPos);
+        else
+        {
+            nPos = nMonthStart;                     // rewind month
+        }
     }
 
     sal_Int32 nOrigPos = nPos;
