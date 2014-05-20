@@ -904,22 +904,22 @@ cssu::Type Theme::GetCppuType (const PropertyType eType)
     switch(eType)
     {
         case PT_Image:
-            return getCppuType((rtl::OUString*)NULL);
+            return cppu::UnoType<rtl::OUString>::get();
 
         case PT_Color:
-            return getCppuType((sal_uInt32*)NULL);
+            return cppu::UnoType<sal_uInt32>::get();
 
         case PT_Paint:
             return getCppuVoidType();
 
         case PT_Integer:
-            return getCppuType((sal_Int32*)NULL);
+            return cppu::UnoType<sal_Int32>::get();
 
         case PT_Boolean:
-            return getCppuType((sal_Bool*)NULL);
+            return cppu::UnoType<sal_Bool>::get();
 
         case PT_Rectangle:
-            return getCppuType((awt::Rectangle*)NULL);
+            return cppu::UnoType<awt::Rectangle>::get();
 
         case PT_Invalid:
         default:

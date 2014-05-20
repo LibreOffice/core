@@ -340,15 +340,15 @@ uno::Any SAL_CALL SvxUnoDrawPool::queryAggregation( const uno::Type & rType )
 {
     uno::Any aAny;
 
-    if( rType == ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0) )
+    if( rType == cppu::UnoType<lang::XServiceInfo>::get())
         aAny <<= uno::Reference< lang::XServiceInfo >(this);
-    else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
+    else if( rType == cppu::UnoType<lang::XTypeProvider>::get())
         aAny <<= uno::Reference< lang::XTypeProvider >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
+    else if( rType == cppu::UnoType<beans::XPropertySet>::get())
         aAny <<= uno::Reference< beans::XPropertySet >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertyState >*)0) )
+    else if( rType == cppu::UnoType<beans::XPropertyState>::get())
         aAny <<= uno::Reference< beans::XPropertyState >(this);
-    else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
+    else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
     else
         aAny <<= OWeakAggObject::queryAggregation( rType );
@@ -372,12 +372,12 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
     uno::Sequence< uno::Type > aTypes( 6 );
     uno::Type* pTypes = aTypes.getArray();
 
-    *pTypes++ = ::getCppuType((const uno::Reference< uno::XAggregation>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet>*)0);
+    *pTypes++ = cppu::UnoType<uno::XAggregation>::get();
+    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
+    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
 
     return aTypes;
 }

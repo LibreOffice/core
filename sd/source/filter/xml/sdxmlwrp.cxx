@@ -447,7 +447,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         { OUString("Preview"),         0, ::cppu::UnoType<sal_Bool>::get(),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("PageLayouts"), 0, cppu::UnoType<container::XNameAccess>::get(),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
         { OUString("PrivateData"), 0,
-              ::getCppuType( (Reference<XInterface> *)0 ),
+              cppu::UnoType<XInterface>::get(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("BaseURI"), 0,
               ::cppu::UnoType<OUString>::get(),

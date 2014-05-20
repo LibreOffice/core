@@ -65,7 +65,7 @@ void XMLAutoTextEventImport::initialize(
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
         const Type& rType = rArguments[i].getValueType();
-        if ( rType == ::getCppuType( (Reference<XEventsSupplier>*)NULL ) )
+        if ( rType == cppu::UnoType<XEventsSupplier>::get())
         {
             Reference<XEventsSupplier> xSupplier;
             rArguments[i] >>= xSupplier;
@@ -73,7 +73,7 @@ void XMLAutoTextEventImport::initialize(
 
             xEvents = xSupplier->getEvents();
         }
-        else if (rType == ::getCppuType( (Reference<XNameReplace>*)NULL ) )
+        else if (rType == cppu::UnoType<XNameReplace>::get())
         {
             rArguments[i] >>= xEvents;
             DBG_ASSERT(xEvents.is(), "need XEventsSupplier or XNameReplace");

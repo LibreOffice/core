@@ -83,7 +83,7 @@ NameOrIndex* SvxUnoDashTable::createItem() const throw()
 uno::Type SAL_CALL SvxUnoDashTable::getElementType(  )
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const struct drawing::LineDash*)0);
+    return cppu::UnoType<drawing::LineDash>::get();
 }
 
 /**

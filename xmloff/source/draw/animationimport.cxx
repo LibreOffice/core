@@ -1304,7 +1304,7 @@ AnimationsImport::~AnimationsImport() throw ()
 // XInterface
 Any SAL_CALL AnimationsImport::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
 {
-    if ( aType == ::getCppuType((Reference<XAnimationNodeSupplier> *)0) )
+    if ( aType == cppu::UnoType<XAnimationNodeSupplier>::get())
     {
         return makeAny( Reference<XAnimationNodeSupplier>( this ) );
     }

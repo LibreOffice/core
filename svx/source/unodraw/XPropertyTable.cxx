@@ -348,7 +348,7 @@ uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw
 XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
 
-    if( !rAny.getValue() || rAny.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
+    if( !rAny.getValue() || rAny.getValueType() != cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
         return NULL;
 
     basegfx::B2DPolyPolygon aPolyPolygon;
@@ -366,7 +366,7 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno:
 uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const drawing::PolyPolygonBezierCoords*)0);
+    return cppu::UnoType<drawing::PolyPolygonBezierCoords>::get();
 }
 
 // XServiceInfo
@@ -447,7 +447,7 @@ XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::An
 uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const drawing::LineDash*)0);
+    return cppu::UnoType<drawing::LineDash>::get();
 }
 
 // XServiceInfo
@@ -523,7 +523,7 @@ XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const uno::A
 uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const drawing::Hatch*)0);
+    return cppu::UnoType<drawing::Hatch>::get();
 }
 
 // XServiceInfo
@@ -611,7 +611,7 @@ XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno
 uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const awt::Gradient*)0);
+    return cppu::UnoType<awt::Gradient>::get();
 }
 
 // XServiceInfo

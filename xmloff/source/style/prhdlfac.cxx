@@ -392,7 +392,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             break;
         case XML_TYPE_COLOR_MODE:
             pPropHdl = new XMLEnumPropertyHdl( aXML_ColorMode_EnumMap,
-                            ::getCppuType((const drawing::ColorMode*)0) );
+                            cppu::UnoType<drawing::ColorMode>::get());
             break;
         case XML_TYPE_DURATION16_MS:
             pPropHdl = new XMLDurationMS16PropHdl_Impl;
@@ -400,7 +400,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
         case XML_TYPE_TEXT_HORIZONTAL_ADJUST:
             pPropHdl = new XMLEnumPropertyHdl(
                 aXML_HorizontalAdjust_Enum,
-                ::getCppuType((const text::HorizontalAdjust*)0) );
+                cppu::UnoType<text::HorizontalAdjust>::get());
             break;
         case XML_TYPE_TEXT_DRAW_ASPECT:
             pPropHdl = new DrawAspectHdl;

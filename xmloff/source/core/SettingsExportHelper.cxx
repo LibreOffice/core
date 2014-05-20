@@ -142,27 +142,27 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 aAny >>= aProps;
                 exportbase64Binary(aProps, rName);
             }
-            else if (aType.equals(getCppuType( (uno::Reference<container::XNameContainer> *)0 ) ) ||
-                    aType.equals(getCppuType( (uno::Reference<container::XNameAccess> *)0 ) ))
+            else if (aType.equals(cppu::UnoType<container::XNameContainer>::get()) ||
+                    aType.equals(cppu::UnoType<container::XNameAccess>::get()))
             {
                 uno::Reference< container::XNameAccess> aNamed;
                 aAny >>= aNamed;
                 exportNameAccess(aNamed, rName);
             }
-            else if (aType.equals(getCppuType( (uno::Reference<container::XIndexAccess> *)0 ) ) ||
-                    aType.equals(getCppuType( (uno::Reference<container::XIndexContainer> *)0 ) ) )
+            else if (aType.equals(cppu::UnoType<container::XIndexAccess>::get()) ||
+                    aType.equals(cppu::UnoType<container::XIndexContainer>::get()) )
             {
                 uno::Reference<container::XIndexAccess> aIndexed;
                 aAny >>= aIndexed;
                 exportIndexAccess(aIndexed, rName);
             }
-            else if (aType.equals(getCppuType( (util::DateTime *)0 ) ) )
+            else if (aType.equals(cppu::UnoType<util::DateTime>::get()) )
             {
                 util::DateTime aDateTime;
                 aAny >>= aDateTime;
                 exportDateTime(aDateTime, rName);
             }
-            else if( aType.equals(getCppuType( (uno::Reference<i18n::XForbiddenCharacters> *)0 ) ) )
+            else if( aType.equals(cppu::UnoType<i18n::XForbiddenCharacters>::get()) )
             {
                 exportForbiddenCharacters( aAny, rName );
             }

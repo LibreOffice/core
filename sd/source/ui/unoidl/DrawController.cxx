@@ -68,7 +68,7 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
           OMultiTypeInterfaceContainerHelper::keyType>& >(
               BroadcastHelperOwner::maBroadcastHelper)),
       m_aSelectionTypeIdentifier(
-        ::getCppuType( (Reference<view::XSelectionChangeListener > *)0 )),
+        cppu::UnoType<view::XSelectionChangeListener>::get()),
       mpBase(&rBase),
       maLastVisArea(),
       mpCurrentPage(NULL),
@@ -125,9 +125,9 @@ Sequence<Type> SAL_CALL DrawController::getTypes (void)
     // OPropertySetHelper does not provide getTypes, so we have to
     // implement this method manually and list its three interfaces.
     OTypeCollection aTypeCollection (
-        ::getCppuType (( const Reference<beans::XMultiPropertySet>*)NULL),
-        ::getCppuType (( const Reference<beans::XFastPropertySet>*)NULL),
-        ::getCppuType (( const Reference<beans::XPropertySet>*)NULL));
+        cppu::UnoType<beans::XMultiPropertySet>::get(),
+        cppu::UnoType<beans::XFastPropertySet>::get(),
+        cppu::UnoType<beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(
         SfxBaseController::getTypes(),
@@ -328,7 +328,7 @@ void  SAL_CALL
     ThrowIfDisposed();
     // Have to forward the event to our selection change listeners.
     OInterfaceContainerHelper* pListeners = BroadcastHelperOwner::maBroadcastHelper.getContainer(
-        ::getCppuType((Reference<view::XSelectionChangeListener>*)0));
+        cppu::UnoType<view::XSelectionChangeListener>::get());
     if (pListeners)
     {
         // Re-send the event to all of our listeners.
@@ -706,13 +706,13 @@ void DrawController::FillPropertyTable (
         beans::Property(
             "SubController",
             PROPERTY_SUB_CONTROLLER,
-            ::getCppuType((const Reference<drawing::XDrawSubController>*)0),
+            cppu::UnoType<drawing::XDrawSubController>::get(),
             beans::PropertyAttribute::BOUND));
     rProperties.push_back(
         beans::Property(
             "CurrentPage",
             PROPERTY_CURRENTPAGE,
-            ::getCppuType((const Reference< drawing::XDrawPage > *)0),
+            cppu::UnoType<drawing::XDrawPage>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("IsLayerMode",
@@ -727,7 +727,7 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property("ActiveLayer",
             PROPERTY_ACTIVE_LAYER,
-            ::getCppuType((const Reference< drawing::XLayer > *)0),
+            cppu::UnoType<drawing::XLayer>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("ZoomValue",

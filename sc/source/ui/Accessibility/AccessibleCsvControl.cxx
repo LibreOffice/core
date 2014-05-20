@@ -736,7 +736,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName() throw( RuntimeEx
 Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes() throw( RuntimeException, std::exception )
 {
     Sequence< ::com::sun::star::uno::Type > aSeq( 1 );
-    aSeq[ 0 ] = getCppuType( static_cast< const Reference< XAccessibleText >* >( NULL ) );
+    aSeq[ 0 ] = cppu::UnoType<XAccessibleText>::get();
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 
@@ -1234,8 +1234,8 @@ OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName() throw( RuntimeExc
 Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes() throw( RuntimeException, std::exception )
 {
     Sequence< ::com::sun::star::uno::Type > aSeq( 2 );
-    aSeq[ 0 ] = getCppuType( static_cast< const Reference< XAccessibleTable >* >( NULL ) );
-    aSeq[ 1 ] = getCppuType( static_cast< const Reference< XAccessibleSelection >* >( NULL ) );
+    aSeq[ 0 ] = cppu::UnoType<XAccessibleTable>::get();
+    aSeq[ 1 ] = cppu::UnoType<XAccessibleSelection>::get();
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 

@@ -1866,12 +1866,12 @@ Any OOo2OasisTransformer::queryInterface( const Type& rType )
     throw (RuntimeException, std::exception)
 {
     Any aRet;
-    if ( rType == ::getCppuType((Reference<XImporter> *)0) )
+    if ( rType == cppu::UnoType<XImporter>::get())
     {
         Reference<XImporter> xThis( this );
            aRet <<= xThis;
     }
-    else if ( rType == ::getCppuType((Reference<XFilter> *)0) )
+    else if ( rType == cppu::UnoType<XFilter>::get())
     {
         Reference<XFilter> xThis( this );
         aRet <<= xThis;
@@ -2047,8 +2047,8 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL
     aTypes.realloc( nIndex + 2 );
 
     ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
-    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XImporter > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XFilter > * >( 0 ) );
+    pTypes[nIndex++] = cppu::UnoType<XImporter>::get();
+    pTypes[nIndex++] = cppu::UnoType<XFilter>::get();
 
     return aTypes;
 }

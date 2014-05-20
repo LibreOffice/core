@@ -911,14 +911,14 @@ frame::BorderWidths SAL_CALL SfxBaseController::getBorder()
 void SAL_CALL SfxBaseController::addBorderResizeListener( const Reference< frame::XBorderResizeListener >& xListener )
     throw ( RuntimeException, std::exception )
 {
-    m_pData->m_aListenerContainer.addInterface( ::getCppuType((const Reference< frame::XBorderResizeListener >*)0),
+    m_pData->m_aListenerContainer.addInterface( cppu::UnoType<frame::XBorderResizeListener>::get(),
                                                 xListener );
 }
 
 void SAL_CALL SfxBaseController::removeBorderResizeListener( const Reference< frame::XBorderResizeListener >& xListener )
     throw ( RuntimeException, std::exception )
 {
-    m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const Reference< frame::XBorderResizeListener >*)0),
+    m_pData->m_aListenerContainer.removeInterface( cppu::UnoType<frame::XBorderResizeListener>::get(),
                                                 xListener );
 }
 
@@ -939,7 +939,7 @@ awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectang
 void SfxBaseController::BorderWidthsChanged_Impl()
 {
        ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer(
-                        ::getCppuType( ( const Reference< frame::XBorderResizeListener >*) NULL ) );
+                        cppu::UnoType<frame::XBorderResizeListener>::get());
     if ( pContainer )
     {
         frame::BorderWidths aBWidths = getBorder();
@@ -1037,7 +1037,7 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException, std::excepti
 
 void SAL_CALL SfxBaseController::addEventListener( const Reference< lang::XEventListener >& aListener ) throw( RuntimeException, std::exception )
 {
-    m_pData->m_aListenerContainer.addInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
+    m_pData->m_aListenerContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 
@@ -1046,7 +1046,7 @@ void SAL_CALL SfxBaseController::addEventListener( const Reference< lang::XEvent
 
 void SAL_CALL SfxBaseController::removeEventListener( const Reference< lang::XEventListener >& aListener ) throw( RuntimeException, std::exception )
 {
-    m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
+    m_pData->m_aListenerContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 void SfxBaseController::ReleaseShell_Impl()

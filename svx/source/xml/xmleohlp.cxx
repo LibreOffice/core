@@ -748,9 +748,9 @@ Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
 {
     MutexGuard          aGuard( maMutex );
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
-        return ::getCppuType((const Reference<XOutputStream>*)0);
+        return cppu::UnoType<XOutputStream>::get();
     else
-        return ::getCppuType((const Reference<XInputStream>*)0);
+        return cppu::UnoType<XInputStream>::get();
 }
 
 sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()

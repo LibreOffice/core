@@ -273,12 +273,12 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     uno::Type* pBaseTypes = aBaseTypes.getArray();
 
     // from MasterPropertySet
-    pBaseTypes[0] = ::getCppuType((Reference< XPropertySet >*)0);
-    pBaseTypes[1] = ::getCppuType((Reference< XPropertyState >*)0);
-    pBaseTypes[2] = ::getCppuType((Reference< XMultiPropertySet >*)0);
+    pBaseTypes[0] = cppu::UnoType<XPropertySet>::get();
+    pBaseTypes[1] = cppu::UnoType<XPropertyState>::get();
+    pBaseTypes[2] = cppu::UnoType<XMultiPropertySet>::get();
 
-    pBaseTypes[3] = ::getCppuType((Reference< XServiceInfo >*)0);
-    pBaseTypes[4] = ::getCppuType((Reference< XTypeProvider >*)0);
+    pBaseTypes[3] = cppu::UnoType<XServiceInfo>::get();
+    pBaseTypes[4] = cppu::UnoType<XTypeProvider>::get();
 
     return aBaseTypes;
 }

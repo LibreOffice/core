@@ -136,7 +136,7 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
         if( pAny->getValueType() ==
-                ::getCppuType((const Reference< XDocumentHandler >*)0))
+                cppu::UnoType<XDocumentHandler>::get())
         {
             *pAny >>= xHandler;
             *pAny >>= xExtHandler;

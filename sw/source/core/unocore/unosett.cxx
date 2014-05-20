@@ -1479,7 +1479,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             {
                  awt::FontDescriptor aDesc;
                 SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
-                pData = new PropValData((void*)&aDesc, UNO_NAME_BULLET_FONT, ::getCppuType((const awt::FontDescriptor*)0));
+                pData = new PropValData((void*)&aDesc, UNO_NAME_BULLET_FONT, cppu::UnoType<awt::FontDescriptor>::get());
                 aPropertyValues.push_back(pData);
             }
         }

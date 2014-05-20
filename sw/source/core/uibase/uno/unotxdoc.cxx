@@ -255,7 +255,7 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
     else
     {
         GetNumberFormatter();
-        Any aNumTunnel = xNumFmtAgg->queryAggregation(::getCppuType((Reference<XUnoTunnel>*)0));
+        Any aNumTunnel = xNumFmtAgg->queryAggregation(cppu::UnoType<XUnoTunnel>::get());
         Reference<XUnoTunnel> xNumTunnel;
         aNumTunnel >>= xNumTunnel;
         if(xNumTunnel.is())
@@ -271,19 +271,19 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
     if ( !aRet.hasValue() )
         aRet = SfxBaseModel::queryInterface(rType);
     if ( !aRet.hasValue() &&
-        rType == ::getCppuType((Reference<lang::XMultiServiceFactory>*)0))
+        rType == cppu::UnoType<lang::XMultiServiceFactory>::get())
     {
         Reference<lang::XMultiServiceFactory> xTmp = this;
         aRet <<= xTmp;
     }
 
     if ( !aRet.hasValue()
-        && rType != ::getCppuType((Reference< com::sun::star::document::XDocumentEventBroadcaster>*)0)
-        && rType != ::getCppuType((Reference< com::sun::star::frame::XController>*)0)
-        && rType != ::getCppuType((Reference< com::sun::star::frame::XFrame>*)0)
-        && rType != ::getCppuType((Reference< com::sun::star::script::XInvocation>*)0)
-        && rType != ::getCppuType((Reference< com::sun::star::beans::XFastPropertySet>*)0)
-        && rType != ::getCppuType((Reference< com::sun::star::awt::XWindow>*)0))
+        && rType != cppu::UnoType<com::sun::star::document::XDocumentEventBroadcaster>::get()
+        && rType != cppu::UnoType<com::sun::star::frame::XController>::get()
+        && rType != cppu::UnoType<com::sun::star::frame::XFrame>::get()
+        && rType != cppu::UnoType<com::sun::star::script::XInvocation>::get()
+        && rType != cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get()
+        && rType != cppu::UnoType<com::sun::star::awt::XWindow>::get())
     {
         GetNumberFormatter();
         if(xNumFmtAgg.is())
@@ -316,7 +316,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
     GetNumberFormatter();
     if(xNumFmtAgg.is())
     {
-        const uno::Type& rProvType = ::getCppuType((Reference <XTypeProvider>*)0);
+        const uno::Type& rProvType = cppu::UnoType<XTypeProvider>::get();
         Any aNumProv = xNumFmtAgg->queryAggregation(rProvType);
         Reference<XTypeProvider> xNumProv;
         if(aNumProv >>= xNumProv)
@@ -339,7 +339,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
     {
         pBaseTypes[nIndex++] = pNumTypes[nPos];
     }
-    pBaseTypes[nIndex++] = ::getCppuType((Reference<lang::XMultiServiceFactory>*)0);
+    pBaseTypes[nIndex++] = cppu::UnoType<lang::XMultiServiceFactory>::get();
     return aBaseTypes;
 }
 
@@ -435,7 +435,7 @@ void SwXTextDocument::GetNumberFormatter()
         }
         else
         {
-            const uno::Type& rTunnelType = ::getCppuType((Reference <XUnoTunnel>*)0);
+            const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
             Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
             SvNumberFormatsSupplierObj* pNumFmt = 0;
             Reference< XUnoTunnel > xNumTunnel;
@@ -1386,7 +1386,7 @@ void SwXTextDocument::Invalidate()
     bObjectValid = false;
     if(xNumFmtAgg.is())
     {
-        const uno::Type& rTunnelType = ::getCppuType((Reference <XUnoTunnel>*)0);
+        const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
         SvNumberFormatsSupplierObj* pNumFmt = 0;
         Reference< XUnoTunnel > xNumTunnel;
@@ -1455,7 +1455,7 @@ void    SwXTextDocument::InitNewDoc()
 
     if(xNumFmtAgg.is())
     {
-        const uno::Type& rTunnelType = ::getCppuType((Reference <XUnoTunnel>*)0);
+        const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
         SvNumberFormatsSupplierObj* pNumFmt = 0;
         Reference< XUnoTunnel > xNumTunnel;
@@ -3355,7 +3355,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextTables(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((Reference<XPropertySet>*)0));
+        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sFrames)
     {
@@ -3363,7 +3363,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextFrames(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
+        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sSections)
     {
@@ -3371,7 +3371,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextSections(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
+        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sGraphics)
     {
@@ -3379,7 +3379,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getGraphicObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
+        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sOLEs)
     {
@@ -3387,7 +3387,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getEmbeddedObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
+        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sOutlines)
     {
@@ -3395,7 +3395,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         *pxDoc, sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
+        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sBookmarks)
     {
@@ -3403,7 +3403,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XNameAccess >  xBkms = new SwXLinkNameAccessWrapper(
                                         pxDoc->getBookmarks(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xBkms, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
+        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else
         throw NoSuchElementException();
@@ -3443,7 +3443,7 @@ sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
 uno::Type  SwXLinkTargetSupplier::getElementType(void)
                                     throw( RuntimeException, std::exception )
 {
-    return ::getCppuType((Reference< XPropertySet>*)0);
+    return cppu::UnoType<XPropertySet>::get();
 
 }
 
@@ -3526,7 +3526,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                         lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
                     {
                         Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
-                        aRet.setValue(&xOutline, ::getCppuType((Reference<XPropertySet>*)0));
+                        aRet.setValue(&xOutline, cppu::UnoType<XPropertySet>::get());
                         bFound = true;
                     }
                 }
@@ -3627,7 +3627,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
 uno::Type  SwXLinkNameAccessWrapper::getElementType(void)
                                 throw( RuntimeException, std::exception )
 {
-    return ::getCppuType((Reference<XPropertySet>*)0);
+    return cppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException, std::exception )
@@ -3691,7 +3691,7 @@ static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
         const Image& rImage = aEntryImages.GetImage( nImgId );
         Bitmap aBitmap( rImage.GetBitmapEx().GetBitmap() );
         Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( aBitmap );
-        aRet.setValue( &xBmp, ::getCppuType((Reference<awt::XBitmap>*)0) );
+        aRet.setValue( &xBmp, cppu::UnoType<awt::XBitmap>::get());
     }
     return aRet;
 }

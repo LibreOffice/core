@@ -190,7 +190,7 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("GradientTableURL"),      HANDLE_GRADIENTTABLEURL,    ::cppu::UnoType<OUString>::get(),     0,  0 },
             { OUString("BitmapTableURL"),        HANDLE_BITMAPTABLEURL,      ::cppu::UnoType<OUString>::get(),     0,  0 },
 
-            { OUString("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      ::getCppuType((const Reference< XForbiddenCharacters >*)0),    0, 0 },
+            { OUString("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      cppu::UnoType<XForbiddenCharacters>::get(),    0, 0 },
             { OUString("ApplyUserData"),         HANDLE_APPLYUSERDATA,       ::getBooleanCppuType(),                0,  0 },
 
             { OUString("PageNumberFormat"),      HANDLE_PAGENUMFMT,          ::cppu::UnoType<sal_Int32>::get(),    0,  0 },

@@ -94,7 +94,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
     rOutProperties.push_back(
         Property( "FillBackground",
                   FillProperties::PROP_FILL_BACKGROUND,
-                  ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
+                  cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -147,7 +147,7 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
     rOutProperties.push_back(
         Property( "FillBitmapLogicalSize",
                   FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
-                  ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
+                  cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 

@@ -310,14 +310,14 @@ namespace svxform
 
             // das Element muss den Typ haben, den der Container erwartet
             if (xContainer->getElementType() ==
-                ::getCppuType((const Reference< XForm>*)0))
+                cppu::UnoType<XForm>::get())
 
             {
                 Reference< XForm >  xElementAsForm(xElement, UNO_QUERY);
                 xContainer->insertByIndex(nRelPos, makeAny(xElementAsForm));
             }
             else if (xContainer->getElementType() ==
-                ::getCppuType((const Reference< XFormComponent>*)0))
+                cppu::UnoType<XFormComponent>::get())
 
             {
                 Reference< XFormComponent >  xElementAsComponent(xElement, UNO_QUERY);
@@ -531,7 +531,7 @@ namespace svxform
             FmFormData* pSubFormData;
             for (sal_Int32 i=0; i<xForms->getCount(); ++i)
             {
-                DBG_ASSERT( xForms->getByIndex(i).getValueType() == ::getCppuType((const Reference< XForm>*)NULL),
+                DBG_ASSERT( xForms->getByIndex(i).getValueType() == cppu::UnoType<XForm>::get(),
                     "NavigatorTreeModel::FillBranch : the root container should supply only elements of type XForm");
 
                 xForms->getByIndex(i) >>= xSubForm;

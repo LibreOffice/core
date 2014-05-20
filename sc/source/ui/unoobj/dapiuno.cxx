@@ -493,7 +493,7 @@ Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDataPilotTablesObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((Reference<XDataPilotTable2>*)0);
+    return cppu::UnoType<XDataPilotTable2>::get();
 }
 
 sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements() throw(RuntimeException, std::exception)
@@ -620,12 +620,12 @@ Sequence< uno::Type > SAL_CALL ScDataPilotDescriptorBase::getTypes()
     {
         aTypes.realloc( 6 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[ 0 ] = getCppuType( (const Reference< XDataPilotDescriptor >*)0 );
-        pPtr[ 1 ] = getCppuType( (const Reference< XPropertySet >*)0 );
-        pPtr[ 2 ] = getCppuType( (const Reference< XDataPilotDataLayoutFieldSupplier >*)0 );
-        pPtr[ 3 ] = getCppuType( (const Reference< lang::XUnoTunnel >*)0 );
-        pPtr[ 4 ] = getCppuType( (const Reference< lang::XTypeProvider >*)0 );
-        pPtr[ 5 ] = getCppuType( (const Reference< lang::XServiceInfo >*)0 );
+        pPtr[ 0 ] = cppu::UnoType<XDataPilotDescriptor>::get();
+        pPtr[ 1 ] = cppu::UnoType<XPropertySet>::get();
+        pPtr[ 2 ] = cppu::UnoType<XDataPilotDataLayoutFieldSupplier>::get();
+        pPtr[ 3 ] = cppu::UnoType<lang::XUnoTunnel>::get();
+        pPtr[ 4 ] = cppu::UnoType<lang::XTypeProvider>::get();
+        pPtr[ 5 ] = cppu::UnoType<lang::XServiceInfo>::get();
     }
     return aTypes;
 }
@@ -1128,8 +1128,8 @@ Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes() throw(RuntimeExce
         for (sal_Int32 i = 0; i < nParentLen; ++i)
             pPtr[ i ] = pParentPtr[ i ];               // parent types first
 
-        pPtr[ nParentLen ] = getCppuType( (const Reference< XDataPilotTable2 >*)0 );
-        pPtr[ nParentLen+1 ] = getCppuType( (const Reference< XModifyBroadcaster >*)0 );
+        pPtr[ nParentLen ] = cppu::UnoType<XDataPilotTable2>::get();
+        pPtr[ nParentLen+1 ] = cppu::UnoType<XModifyBroadcaster>::get();
     }
     return aTypes;
 }
@@ -1737,7 +1737,7 @@ Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((Reference<XPropertySet>*)0);
+    return cppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldsObj::hasElements() throw(RuntimeException, std::exception)
@@ -2969,7 +2969,7 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration() 
 uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType( (Reference< XNameAccess >*)0 );
+    return cppu::UnoType<XNameAccess>::get();
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasElements() throw(RuntimeException, std::exception)
@@ -3153,7 +3153,7 @@ Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration()
 uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType( (Reference< XNamed >*)0 );
+    return cppu::UnoType<XNamed>::get();
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements() throw(RuntimeException, std::exception)
@@ -3312,7 +3312,7 @@ Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDataPilotItemsObj::getElementType() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType((Reference<XPropertySet>*)0);
+    return cppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(RuntimeException, std::exception)

@@ -1091,7 +1091,7 @@ sal_Bool SAL_CALL FormController::hasElements(void) throw( RuntimeException, std
 
 Type SAL_CALL  FormController::getElementType(void) throw( RuntimeException, std::exception )
 {
-    return ::getCppuType((const Reference< XFormController>*)0);
+    return cppu::UnoType<XFormController>::get();
 
 }
 

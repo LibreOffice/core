@@ -623,7 +623,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             // unpack th URL and check for a valid and well known protocol
             OUString sTemp;
             if (
-                ( rProp.Value.getValueType()!=::getCppuType((const OUString*)0))  ||
+                ( rProp.Value.getValueType()!=cppu::UnoType<OUString>::get())  ||
                 (!(rProp.Value>>=sTemp))
                )
             {
@@ -807,7 +807,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
     }
 
     ::cppu::OInterfaceContainerHelper* pContainer = m_aInterfaceContainer.getContainer(
-        ::getCppuType( ( const uno::Reference< view::XPrintJobListener >*) NULL ) );
+        cppu::UnoType<view::XPrintJobListener>::get());
     if ( !pContainer )
         return;
 
@@ -823,13 +823,13 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
 void SAL_CALL SfxPrintHelper::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference < view::XPrintJobListener>*)0), xListener );
+    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<view::XPrintJobListener>::get(), xListener );
 }
 
 void SAL_CALL SfxPrintHelper::removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference < view::XPrintJobListener>*)0), xListener );
+    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<view::XPrintJobListener>::get(), xListener );
 }
 
 
