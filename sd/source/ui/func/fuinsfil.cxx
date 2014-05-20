@@ -63,6 +63,7 @@
 #include "unmovss.hxx"
 #include "Outliner.hxx"
 #include "sdabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -321,7 +322,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    AbstractSdInsertPagesObjsDlg* pDlg = pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0;
+    boost::scoped_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0);
 
     if( !pDlg )
         return false;
@@ -404,8 +405,6 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             mpDoc->RemoveUnnecessaryMasterPages();
     }
 
-    delete pDlg;
-
     return (bOK);
 }
 
@@ -414,7 +413,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    AbstractSdInsertPagesObjsDlg* pDlg = pFact ? pFact->CreateSdInsertPagesObjsDlg(NULL, mpDoc, NULL, aFile ) : 0;
+    boost::scoped_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(NULL, mpDoc, NULL, aFile ) : 0);
     if( !pDlg )
         return;
 
@@ -439,7 +438,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
            - the draw outliner of the drawing engine has to draw something in
              between
            - the global outliner could be used in SdPage::CreatePresObj */
-        SdrOutliner* pOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
+        boost::scoped_ptr<SdrOutliner> pOutliner(new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT ));
 
         // set reference device
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -542,10 +541,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 }
             }
         }
-        delete pOutliner;
     }
-
-    delete pDlg;
 }
 
 
@@ -595,7 +591,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
        - the draw outliner of the drawing engine has to draw something in
          between
        - the global outliner could be used in SdPage::CreatePresObj */
-    ::Outliner* pOutliner = new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT );
+    boost::scoped_ptr< ::Outliner> pOutliner(new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT ));
     pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
 
     // set reference device
@@ -631,7 +627,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         mpDocSh->SetWaitCursor( false );
 
-        SfxProgress* pProgress = new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nNewPages);
+        boost::scoped_ptr<SfxProgress> pProgress(new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nNewPages));
         if( pProgress )
             pProgress->SetState( 0, 100 );
 
@@ -675,13 +671,10 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         pDocliner->GetUndoManager().LeaveListAction();
 
-        if( pProgress )
-            delete pProgress;
+        pProgress.reset();
 
         mpDocSh->SetWaitCursor( true );
     }
-
-    delete pOutliner;
 }
 
 

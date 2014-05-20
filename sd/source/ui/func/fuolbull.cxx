@@ -82,7 +82,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0;
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0);
         if( pDlg )
         {
             sal_uInt16 nResult = pDlg->Execute();
@@ -114,13 +114,8 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                 break;
 
                 default:
-                {
-                    delete pDlg;
                     return;
-                }
             }
-
-            delete pDlg;
         }
     }
 

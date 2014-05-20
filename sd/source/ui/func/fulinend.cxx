@@ -32,6 +32,7 @@
 #include "drawdoc.hxx"
 #include "View.hxx"
 #include "Window.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -114,7 +115,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( NULL, aName, aDesc ) : 0;
+        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( NULL, aName, aDesc ) : 0);
 
         if( pDlg )
         {
@@ -144,7 +145,6 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 }
             }
         }
-        delete pDlg;
     }
 }
 

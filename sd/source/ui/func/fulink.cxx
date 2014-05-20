@@ -29,6 +29,7 @@
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 #include "app.hrc"
+#include <boost/scoped_ptr.hpp>
 
 
 class SfxRequest;
@@ -60,12 +61,11 @@ void FuLink::DoExecute( SfxRequest& )
     sfx2::LinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager );
+    boost::scoped_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager ));
     if ( pDlg )
     {
         pDlg->Execute();
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
-        delete pDlg;
     }
 }
 

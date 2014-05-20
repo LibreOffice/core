@@ -43,6 +43,7 @@
 #include <svx/svditer.hxx>
 
 #include <basegfx/color/bcolor.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -93,7 +94,7 @@ void FuMorph::DoExecute( SfxRequest& )
         SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
         SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        AbstractMorphDlg* pDlg = pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0;
+        boost::scoped_ptr<AbstractMorphDlg> pDlg(pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0);
         if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
         {
             B2DPolyPolygonList_impl aPolyPolyList;
@@ -176,7 +177,6 @@ void FuMorph::DoExecute( SfxRequest& )
                 }
             }
         }
-        delete pDlg;
         SdrObject::Free( pCloneObj1 );
         SdrObject::Free( pCloneObj2 );
 
