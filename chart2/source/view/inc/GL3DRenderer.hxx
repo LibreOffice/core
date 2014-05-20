@@ -106,7 +106,6 @@ struct Extrude3DInfo
     int reverse;
 };
 
-
 struct CameraInfo
 {
     glm::vec3 cameraPos;
@@ -149,7 +148,6 @@ typedef struct SceneBox{
     float maxZCoord;
     float minZCoord;
 }SceneBox;
-
 
 class OpenGL3DRenderer
 {
