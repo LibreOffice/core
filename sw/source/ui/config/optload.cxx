@@ -217,7 +217,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
           m_pShowStandardizedPageCount->IsChecked(),
           batch);
         batch->commit();
-        bRet = sal_True;
+        bRet = true;
     }
 
     if (m_pStandardizedPageSizeNF->GetText() != m_pStandardizedPageSizeNF->GetSavedValue())
@@ -228,11 +228,11 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
           m_pStandardizedPageSizeNF->GetValue(),
           batch);
         batch->commit();
-        bRet = sal_True;
+        bRet = true;
     }
 
     bool bIsSquaredPageModeFlag = m_pUseSquaredPageMode->IsChecked();
-    if ( bIsSquaredPageModeFlag != m_pUseSquaredPageMode->GetSavedValue() )
+    if ( bIsSquaredPageModeFlag != static_cast<bool>(m_pUseSquaredPageMode->GetSavedValue()) )
     {
         pMod->ApplyDefaultPageMode( bIsSquaredPageModeFlag );
         if ( m_pWrtShell )
