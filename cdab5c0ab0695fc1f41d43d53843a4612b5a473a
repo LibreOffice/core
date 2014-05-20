@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "fa963961_42be9200",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-20T09:21:03Z",
+      "side": 1,
+      "message": "Just \"return false\" would be more readable here.",
+      "revId": "cdab5c0ab0695fc1f41d43d53843a4612b5a473a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_c2c982ae",
         "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
         "patchSetId": 2
@@ -30,6 +47,23 @@
       "writtenOn": "2014-05-20T09:16:52Z",
       "side": 1,
       "message": "What is this hardcoded \\001? If we produce this ourselves, could you please use a named constant instead?",
+      "revId": "cdab5c0ab0695fc1f41d43d53843a4612b5a473a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_22bb8e10",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2956,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-20T09:21:03Z",
+      "side": 1,
+      "message": "Same here, this is always false, so more readable to get rid of the bPostponedFlyFrame variable, especially that it\u0027s non-cost, so someone may change it. ;-)",
       "revId": "cdab5c0ab0695fc1f41d43d53843a4612b5a473a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
