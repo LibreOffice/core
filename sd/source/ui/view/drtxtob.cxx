@@ -253,88 +253,96 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 bool bDisableRight    = true;
                 bool bDisableUp       = true;
                 bool bDisableDown     = true;
-                OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                if (mpView->ISA(OutlineView))
+                //fdo#78151 it doesn't make sense to promote or demote outline levels in master view.
+                const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+                const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EM_MASTERPAGE;
+
+                if (!bInMasterView)
                 {
-                    pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                        mpViewShell->GetActiveWindow());
-                }
+                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                bool bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
-
-                if (pOLV &&
-                    ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
-                {
-                    // Outliner at outline-mode
-                    ::Outliner* pOutl = pOLV->GetOutliner();
-
-                    std::vector<Paragraph*> aSelList;
-                    pOLV->CreateSelectionList(aSelList);
-                    Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
-
-                    // find out if we are a OutlineView
-                    bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
-
-                    // This is ONLY for OutlineViews
-                    if(bIsOutlineView)
+                    if (mpView->ISA(OutlineView))
                     {
-                        // allow move up if position is 2 or greater OR it
-                        // is a title object (and thus depth==1)
-                        if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
-                        {
-                            // not at top
-                            bDisableUp = false;
-                        }
-                    }
-                    else
-                    {
-                        // old behaviour for OUTLINERMODE_OUTLINEOBJECT
-                        if(pOutl->GetAbsPos(pPara) > 0)
-                        {
-                            // not at top
-                            bDisableUp = false;
-                        }
+                        pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
+                            mpViewShell->GetActiveWindow());
                     }
 
-                    for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
+                    bool bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
+
+                    if (pOLV &&
+                        ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
                     {
-                        pPara = *iter;
+                        // Outliner at outline-mode
+                        ::Outliner* pOutl = pOLV->GetOutliner();
 
-                        sal_Int16 nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+                        std::vector<Paragraph*> aSelList;
+                        pOLV->CreateSelectionList(aSelList);
+                        Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
-                        if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
+                        // find out if we are a OutlineView
+                        bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
+
+                        // This is ONLY for OutlineViews
+                        if(bIsOutlineView)
                         {
-                            // not minimum depth
-                            bDisableLeft = false;
+                            // allow move up if position is 2 or greater OR it
+                            // is a title object (and thus depth==1)
+                            if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
+                            {
+                                // not at top
+                                bDisableUp = false;
+                            }
+                        }
+                        else
+                        {
+                            // old behaviour for OUTLINERMODE_OUTLINEOBJECT
+                            if(pOutl->GetAbsPos(pPara) > 0)
+                            {
+                                // not at top
+                                bDisableUp = false;
+                            }
                         }
 
-                        if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
-                            (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
+                        for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
                         {
-                            // not maximum depth and not at top
-                            bDisableRight = false;
+                            pPara = *iter;
+
+                            sal_Int16 nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+
+                            if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
+                            {
+                                // not minimum depth
+                                bDisableLeft = false;
+                            }
+
+                            if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
+                                (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
+                            {
+                                // not maximum depth and not at top
+                                bDisableRight = false;
+                            }
                         }
-                    }
 
-                    if ( ( pOutl->GetAbsPos(pPara) < pOutl->GetParagraphCount() - 1 ) &&
-                         ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
-                    {
-                        // not last paragraph
-                        bDisableDown = false;
-                    }
+                        if ( ( pOutl->GetAbsPos(pPara) < pOutl->GetParagraphCount() - 1 ) &&
+                             ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
+                        {
+                            // not last paragraph
+                            bDisableDown = false;
+                        }
 
-                    // disable when first para and 2nd is not a title
-                    pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+                        // disable when first para and 2nd is not a title
+                        pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
-                    if(!bDisableDown && bIsOutlineView
-                        && pPara
-                        && 0 == pOutl->GetAbsPos(pPara)
-                        && pOutl->GetParagraphCount() > 1
-                        && !pOutl->HasParaFlag( pOutl->GetParagraph(1), PARAFLAG_ISPAGE ) )
-                    {
-                        // Needs to be disabled
-                        bDisableDown = true;
+                        if(!bDisableDown && bIsOutlineView
+                            && pPara
+                            && 0 == pOutl->GetAbsPos(pPara)
+                            && pOutl->GetParagraphCount() > 1
+                            && !pOutl->HasParaFlag( pOutl->GetParagraph(1), PARAFLAG_ISPAGE ) )
+                        {
+                            // Needs to be disabled
+                            bDisableDown = true;
+                        }
                     }
                 }
 
