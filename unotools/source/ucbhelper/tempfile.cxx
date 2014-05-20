@@ -263,7 +263,10 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
             aTmp += OUString( ".tmp" );
         if ( bDirectory )
         {
-            FileBase::RC err = Directory::create( aTmp );
+            FileBase::RC err = Directory::create(
+                aTmp,
+                (osl_File_OpenFlag_Read | osl_File_OpenFlag_Write
+                 | osl_File_OpenFlag_Private));
             if ( err == FileBase::E_None )
             {
                 _rImpl.aName = aTmp;
