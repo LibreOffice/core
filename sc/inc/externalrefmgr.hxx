@@ -55,6 +55,12 @@ class SharedStringPool;
 
 }
 
+namespace sc {
+
+class ColumnSpanSet;
+
+}
+
 class ScExternalRefLink : public ::sfx2::SvBaseLink
 {
 public:
@@ -144,6 +150,8 @@ public:
 
         Table();
         ~Table();
+
+        void clear();
 
         /**
          * Add cell value to the cache.
@@ -268,6 +276,13 @@ public:
     void setAllCacheTableReferencedStati( bool bReferenced );
     bool areAllCacheTablesReferenced() const;
 
+    /**
+     * Collect all cached non-empty cell positions, inferred directly from the
+     * cached data, not the cached range metadata stored separately in the
+     * Table.
+     */
+    void getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const;
+
 private:
     struct ReferencedStatus
     {
@@ -295,7 +310,16 @@ public:
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex);
 
+    /**
+     * Clear all caches including the cache tables.
+     */
     void clearCache(sal_uInt16 nFileId);
+
+    /**
+     * Clear all caches but keep the tables.  All cache tables will be empty
+     * after the call, but the tables will not be removed.
+     */
+    void clearCacheTables(sal_uInt16 nFileId);
 
 private:
     struct RangeHash
