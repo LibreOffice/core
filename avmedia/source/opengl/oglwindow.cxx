@@ -32,9 +32,9 @@ OGLWindow::~OGLWindow()
 void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::exception)
 {
     m_pContext->makeCurrent();
-    gltf_prepare_renderer(&m_pHandle->viewport);
+    gltf_prepare_renderer(m_pHandle);
     gltf_renderer(m_pHandle);
-    gltf_complete_renderer();
+    gltf_complete_renderer(m_pHandle);
     m_pContext->swapBuffers();
 }
 
@@ -257,8 +257,8 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     glm::vec3 vEye;
                     glm::vec3 vView;
                     glm::vec3 vUp;
-                    gltf_get_camera_pos(&vEye,&vView,&vUp);
-                    float fModelSize =(float)gltf_get_model_size();
+                    gltf_get_camera_pos(m_pHandle, &vEye,&vView,&vUp);
+                    float fModelSize =(float)gltf_get_model_size(m_pHandle);
 
                     glm::vec3 vMove = vView-vEye;
                     vMove = glm::normalize(vMove);
@@ -277,7 +277,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     if(nCode == KEY_W)vMoveBy -= vMup*(0.001f*fModelSize);
                     if(nCode == KEY_S)vMoveBy += vMup*(0.001f*fModelSize);
                 }
-                gltf_renderer_move_camera(vMoveBy.x,vMoveBy.y,vMoveBy.z,0.0);
+                gltf_renderer_move_camera(m_pHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
                 update();
             }
         }
@@ -309,7 +309,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             long nDeltaX = m_aLastMousePos.X()-aCurPos.X();
             long nDeltaY = aCurPos.Y()-m_aLastMousePos.Y();
             // TODO: It seems this method just moves the camera but not rotate it.
-            gltf_renderer_rotate_camera((float)nDeltaX*fSensitivity,(float)nDeltaY*fSensitivity,0.0,0.0);
+            gltf_renderer_rotate_camera(m_pHandle, (float)nDeltaX*fSensitivity, (float)nDeltaY*fSensitivity, 0.0, 0.0);
             update();
 
             m_aLastMousePos = aCurPos;
