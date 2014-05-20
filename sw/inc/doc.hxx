@@ -679,8 +679,6 @@ public:
     // IDocumentDeviceAccess
     const IDocumentDeviceAccess* getIDocumentDeviceAccessConst() const;
     IDocumentDeviceAccess* getIDocumentDeviceAccess();
-    virtual SfxPrinter* getPrinter(/*[in]*/ bool bCreate ) const;
-    virtual void setPrinter(/*[in]*/ SfxPrinter* pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged );
     virtual VirtualDevice* getVirtualDevice(/*[in]*/ bool bCreate ) const;
     virtual void setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged );
     virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const;

@@ -327,7 +327,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     //! Make a copy of it since it gets destroyed with the temporary document
     //! used for PDF export
     if (pPrt)
-        pPrtDoc->setPrinter( new SfxPrinter(*pPrt), true, true );
+        pPrtDoc->getIDocumentDeviceAccess()->setPrinter( new SfxPrinter(*pPrt), true, true );
 
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();

@@ -664,7 +664,7 @@ sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool )
     SwDocShell* pDocSh = GetDocShell();
     if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
     {
-        pDocSh->GetDoc()->setPrinter( pNew, true, true );
+        pDocSh->GetDoc()->getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
         if ( nDiffFlags & SFX_PRINTER_PRINTER )
             pDocSh->SetModified();
     }
@@ -682,7 +682,7 @@ sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool )
 
 SfxPrinter* SwSrcView::GetPrinter( bool bCreate )
 {
-    return  GetDocShell()->GetDoc()->getPrinter( bCreate );
+    return  GetDocShell()->GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( bCreate );
 }
 
 sal_Int32 SwSrcView::PrintSource(

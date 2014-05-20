@@ -380,7 +380,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             {
                 if( !mpPrinter && !sPrinterName.isEmpty() && mpDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
-                    SfxPrinter* pPrinter = mpDoc->getPrinter( true );
+                    SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccessConst()->getPrinter( true );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
                     {
                         SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
@@ -821,7 +821,7 @@ void SwXDocumentSettings::_postSetValues ()
         aOptions.Put(aAddPrinterItem);
         mpPrinter->SetOptions( aOptions );
 
-        mpDoc->setPrinter( mpPrinter, true, true );
+        mpDoc->getIDocumentDeviceAccess()->setPrinter( mpPrinter, true, true );
     }
 
     mpPrinter = 0;
@@ -891,13 +891,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_NAME:
         {
-            SfxPrinter *pPrinter = mpDoc->getPrinter( false );
+            SfxPrinter *pPrinter = mpDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
             rValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
         }
         break;
         case HANDLE_PRINTER_SETUP:
         {
-            SfxPrinter *pPrinter = mpDoc->getPrinter( false );
+            SfxPrinter *pPrinter = mpDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
             if (pPrinter)
             {
                 SvMemoryStream aStream;
