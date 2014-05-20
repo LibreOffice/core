@@ -9560,24 +9560,26 @@ else
 fi
 AC_SUBST(ENABLE_LPSOLVE)
 
-AC_MSG_CHECKING([which lpsolve to use])
-if test "$with_system_lpsolve" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_LPSOLVE=TRUE
-    AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
-       [ AC_MSG_ERROR(lpsolve headers not found.)], [])
-    save_LIBS=$LIBS
-    # some systems need this. Like Ubuntu....
-    AC_CHECK_LIB(m, floor)
-    AC_CHECK_LIB(dl, dlopen)
-    AC_CHECK_LIB([lpsolve55], [make_lp], [:],
-        [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
-    LIBS=$save_LIBS
-    libo_MINGW_CHECK_DLL([lpsolve55])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_LPSOLVE=
-    BUILD_TYPE="$BUILD_TYPE LPSOLVE"
+if test "$ENABLE_LPSOLVE" = TRUE; then
+    AC_MSG_CHECKING([which lpsolve to use])
+    if test "$with_system_lpsolve" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_LPSOLVE=TRUE
+        AC_CHECK_HEADER(lpsolve/lp_lib.h, [],
+           [ AC_MSG_ERROR(lpsolve headers not found.)], [])
+        save_LIBS=$LIBS
+        # some systems need this. Like Ubuntu....
+        AC_CHECK_LIB(m, floor)
+        AC_CHECK_LIB(dl, dlopen)
+        AC_CHECK_LIB([lpsolve55], [make_lp], [:],
+            [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
+        LIBS=$save_LIBS
+        libo_MINGW_CHECK_DLL([lpsolve55])
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_LPSOLVE=
+        BUILD_TYPE="$BUILD_TYPE LPSOLVE"
+    fi
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
 
