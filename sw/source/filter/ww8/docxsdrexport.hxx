@@ -96,6 +96,7 @@ public:
     void writeVMLTextFrame(sw::Frame* pParentFrame);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
     bool checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0);
+    void writeOnlyTextOfFrame(sw::Frame* pParentFrame);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX

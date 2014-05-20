@@ -1671,13 +1671,17 @@ SwXText::convertToTextFrame(
     SwXTextFrame *const pNewFrame = new SwXTextFrame(m_pImpl->m_pDoc);
     const uno::Reference< text::XTextFrame > xNewFrame = pNewFrame;
     pNewFrame->SetSelection( aStartPam );
+    bool bFramePrInPara = false;
     try
     {
         const beans::PropertyValue* pValues = rFrameProperties.getConstArray();
         for (sal_Int32 nProp = 0; nProp < rFrameProperties.getLength(); ++nProp)
         {
-            pNewFrame->SwXFrame::setPropertyValue(
+            if (pValues[nProp].Name != "ParaFrameProperties")
+                pNewFrame->SwXFrame::setPropertyValue(
                     pValues[nProp].Name, pValues[nProp].Value);
+            else
+                pValues[nProp].Value >>=bFramePrInPara ;
         }
 
         {   // has to be in a block to remove the SwIndexes before
@@ -1686,7 +1690,10 @@ SwXText::convertToTextFrame(
                 new SwXTextRange(aStartPam, this);
             aStartPam.DeleteMark(); // mark position node may be deleted!
             pNewFrame->attach( xInsertTextRange );
-            pNewFrame->setName(m_pImpl->m_pDoc->GetUniqueFrameName());
+            if (!bFramePrInPara)
+                pNewFrame->setName(m_pImpl->m_pDoc->GetUniqueFrameName());
+            else
+                pNewFrame->setName("DummyTextboxForFramePr");
         }
 
         SwTxtNode *const pTxtNode(aStartPam.GetNode()->GetTxtNode());

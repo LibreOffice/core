@@ -118,6 +118,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_STYLE_NAME:      sName = "ParaStyleName"; break;
             case PROP_PARA_ADJUST:     sName = "ParaAdjust"; break;
             case PROP_PARA_VERT_ALIGNMENT: sName = "ParaVertAlignment"; break;
+            case PROP_PARA_FRAME_PROPERTIES: sName = "ParaFrameProperties"; break;
             case PROP_PARA_LAST_LINE_ADJUST:     sName = "ParaLastLineAdjust"; break;
             case PROP_PARA_RIGHT_MARGIN     :    sName = "ParaRightMargin"; break;
             case PROP_PARA_LEFT_MARGIN      :    sName = "ParaLeftMargin"; break;

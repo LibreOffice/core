@@ -416,6 +416,7 @@ private:
     void EndTableCell( );
     void EndTableRow( );
     void EndTable();
+    void populateFrameProperties(const SwFrmFmt* pFrmFmt, const Size& rSize);
 
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
