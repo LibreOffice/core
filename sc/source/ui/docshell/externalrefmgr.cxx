@@ -71,8 +71,8 @@ using ::std::list;
 using ::std::unary_function;
 using namespace formula;
 
-#define SRCDOC_LIFE_SPAN     6000       // 1 minute (in 100th of a sec)
-#define SRCDOC_SCAN_INTERVAL 1000*5     // every 5 seconds (in msec)
+#define SRCDOC_LIFE_SPAN     30000      // 5 minutes (in 100th of a sec)
+#define SRCDOC_SCAN_INTERVAL 1000*30    // every 30 seconds (in msec)
 
 namespace {
 
@@ -1537,7 +1537,8 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
     mpDoc(pDoc),
     mbInReferenceMarking(false),
-    mbUserInteractionEnabled(true)
+    mbUserInteractionEnabled(true),
+    mbDocTimerEnabled(true)
 {
     maSrcDocTimer.SetTimeoutHdl( LINK(this, ScExternalRefManager, TimeOutHdl) );
     maSrcDocTimer.SetTimeout(SRCDOC_SCAN_INTERVAL);
@@ -2009,6 +2010,27 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr->second.insert(pCell);
 }
 
+void ScExternalRefManager::enableDocTimer( bool bEnable )
+{
+    if (mbDocTimerEnabled == bEnable)
+        return;
+
+    mbDocTimerEnabled = bEnable;
+    if (mbDocTimerEnabled)
+    {
+        if (!maDocShells.empty())
+        {
+            DocShellMap::iterator it = maDocShells.begin(), itEnd = maDocShells.end();
+            for (; it != itEnd; ++it)
+                it->second.maLastAccess = Time(Time::SYSTEM);
+
+            maSrcDocTimer.Start();
+        }
+    }
+    else
+        maSrcDocTimer.Stop();
+}
+
 void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const
 {
     if (!pFmt)
@@ -2331,7 +2353,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
 
 ScDocument* ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell )
 {
-    if (maDocShells.empty())
+    if (mbDocTimerEnabled && maDocShells.empty())
         // If this is the first source document insertion, start up the timer.
         maSrcDocTimer.Start();
 
