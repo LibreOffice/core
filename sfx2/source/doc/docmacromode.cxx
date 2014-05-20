@@ -343,7 +343,7 @@ namespace sfx2
                             if( aElement == aStdLibName || aElement == aVBAProject )
                             {
                                 Reference < XNameAccess > xLib;
-                                Any aAny = xContainer->getByName( aStdLibName );
+                                Any aAny = xContainer->getByName( aElement );
                                 aAny >>= xLib;
                                 if ( xLib.is() && xLib->hasElements() )
                                     return sal_True;
