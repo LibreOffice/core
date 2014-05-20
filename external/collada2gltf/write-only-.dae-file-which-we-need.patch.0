@@ -74,7 +74,7 @@ index d193784..3b5bdfc 100644
 +                continue;
  
 -            FILE *fp = fopen(strFilePath.c_str(),"wb");
-+            unsigned int pos = strlen(pFileName) - 1;
++            int pos = strlen(pFileName) - 1;
 +            while (pos >= 0) {
 +                if (pFileName[pos] == '\\' || pFileName[pos] == '/')
 +                    break;
