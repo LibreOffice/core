@@ -136,17 +136,18 @@ struct UpdateFormulaCell : public unary_function<ScFormulaCell*, void>
         // Check to make sure the cell really contains ocExternalRef.
         // External names, external cell and range references all have a
         // ocExternalRef token.
-        const ScTokenArray* pCode = pCell->GetCode();
+        ScTokenArray* pCode = pCell->GetCode();
         if (!pCode->HasExternalRef())
             return;
 
-        ScTokenArray* pArray = pCell->GetCode();
-        if (pArray)
+        if (pCode->GetCodeError())
+        {
             // Clear the error code, or a cell with error won't get re-compiled.
-            pArray->SetCodeError(0);
+            pCode->SetCodeError(0);
+            pCell->SetCompile(true);
+            pCell->CompileTokenArray();
+        }
 
-        pCell->SetCompile(true);
-        pCell->CompileTokenArray();
         pCell->SetDirty();
     }
 };
@@ -1258,7 +1259,8 @@ void ScExternalRefLink::Closed()
     if (pCurFile->equals(aFile))
     {
         // Refresh the current source document.
-        pMgr->refreshNames(mnFileId);
+        if (!pMgr->refreshSrcDocument(mnFileId))
+            return ERROR_GENERAL;
     }
     else
     {
@@ -2234,17 +2236,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         return NULL;
     }
 
-    if (maDocShells.empty())
-    {
-        // If this is the first source document insertion, start up the timer.
-        maSrcDocTimer.Start();
-    }
-
-    maDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
-    SfxObjectShell* p = aSrcDoc.maShell;
-    ScDocument* pSrcDoc = static_cast<ScDocShell*>(p)->GetDocument();
-    initDocInCache(maRefCache, pSrcDoc, nFileId);
-    return pSrcDoc;
+    return cacheNewDocShell(nFileId, aSrcDoc);
 }
 
 SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUString& rFilter)
@@ -2321,7 +2313,12 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     }
     pExtOptNew->GetDocSettings().mnLinkCnt = nLinkCount + 1;
 
-    pNewShell->DoLoad(pMedium.release());
+    if (!pNewShell->DoLoad(pMedium.release()))
+    {
+        aRef->DoClose();
+        aRef.Clear();
+        return aRef;
+    }
 
     // with UseInteractionHandler, options may be set by dialog during DoLoad
     OUString aNew = ScDocumentLoader::GetOptions(*pNewShell->GetMedium());
@@ -2330,6 +2327,19 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     setFilterData(nFileId, rFilter, aOptions);    // update the filter data, including the new options
 
     return aRef;
+}
+
+ScDocument* ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell )
+{
+    if (maDocShells.empty())
+        // If this is the first source document insertion, start up the timer.
+        maSrcDocTimer.Start();
+
+    maDocShells.insert(DocShellMap::value_type(nFileId, rSrcShell));
+    SfxObjectShell& rShell = *rSrcShell.maShell;
+    ScDocument* pSrcDoc = static_cast<ScDocShell&>(rShell).GetDocument();
+    initDocInCache(maRefCache, pSrcDoc, nFileId);
+    return pSrcDoc;
 }
 
 bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
@@ -2548,18 +2558,43 @@ void ScExternalRefManager::clearCache(sal_uInt16 nFileId)
     maRefCache.clearCache(nFileId);
 }
 
-void ScExternalRefManager::refreshNames(sal_uInt16 nFileId)
+bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
 {
-    clearCache(nFileId);
-    lcl_removeByFileId(nFileId, maDocShells);
+    OUString aFilter;
+    SfxObjectShellRef xDocShell;
+    try
+    {
+        xDocShell = loadSrcDocument(nFileId, aFilter);
+    }
+    catch ( const css::uno::Exception& ) {}
 
-    if (maDocShells.empty())
-        maSrcDocTimer.Stop();
+    if (!xDocShell.Is())
+        // Failed to load the document.  Bail out.
+        return false;
+
+    // Clear the existing cache, and store the loaded doc shell until it expires.
+    clearCache(nFileId);
+    DocShellMap::iterator it = maDocShells.find(nFileId);
+    if (it != maDocShells.end())
+    {
+        it->second.maShell->DoClose();
+        it->second.maShell = xDocShell;
+        it->second.maLastAccess = Time(Time::SYSTEM);
+    }
+    else
+    {
+        SrcShell aSrcDoc;
+        aSrcDoc.maShell = xDocShell;
+        aSrcDoc.maLastAccess = Time(Time::SYSTEM);
+        cacheNewDocShell(nFileId, aSrcDoc);
+    }
 
     // Update all cells containing names from this source document.
     refreshAllRefCells(nFileId);
 
     notifyAllLinkListeners(nFileId, LINK_MODIFIED);
+
+    return true;
 }
 
 void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
@@ -2615,7 +2650,7 @@ void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const OUString& rNe
         maSrcFiles[nFileId].maFilterName = rNewFilter;
         maSrcFiles[nFileId].maFilterOptions = OUString();
     }
-    refreshNames(nFileId);
+    refreshSrcDocument(nFileId);
 }
 
 void ScExternalRefManager::setRelativeFileName(sal_uInt16 nFileId, const OUString& rRelUrl)

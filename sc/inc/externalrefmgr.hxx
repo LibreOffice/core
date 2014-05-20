@@ -599,7 +599,7 @@ public:
     const OUString* getRealTableName(sal_uInt16 nFileId, const OUString& rTabName) const;
     const OUString* getRealRangeName(sal_uInt16 nFileId, const OUString& rRangeName) const;
     void clearCache(sal_uInt16 nFileId);
-    void refreshNames(sal_uInt16 nFileId);
+    bool refreshSrcDocument(sal_uInt16 nFileId);
     void breakLink(sal_uInt16 nFileId);
     void switchSrcFile(sal_uInt16 nFileId, const OUString& rNewFile, const OUString& rNewFilter);
 
@@ -737,6 +737,11 @@ private:
     ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
     ScDocument* getSrcDocument(sal_uInt16 nFileId);
     SfxObjectShellRef loadSrcDocument(sal_uInt16 nFileId, OUString& rFilter);
+
+    /**
+     * Caller must ensure that the passed shell is not already stored.
+     */
+    ScDocument* cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell );
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
 
