@@ -22,7 +22,8 @@
 
 
 
-SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nBits)
+SvxRelativeField::SvxRelativeField(
+        Window *const pParent, WinBits const nBits, FieldUnit const eUnit)
     : MetricField( pParent, nBits)
     , nRelMin(0)
     , nRelMax(0)
@@ -32,15 +33,20 @@ SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nBits)
     , bNegativeEnabled(false)
 
 {
-
+    SetUnit(eUnit);
     SetDecimalDigits( 2 );
     SetMin( 0 );
     SetMax( 9999 );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxRelativeField(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL
+makeSvxRelativeField(Window *const pParent, VclBuilder::stringmap & rMap)
 {
-    return new SvxRelativeField(pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_LEFT | WB_GROUP);
+    OString const custom(VclBuilder::extractCustomProperty(rMap));
+    FieldUnit const eUnit(VclBuilder::detectUnit(custom));
+    SvxRelativeField *const pRet = new SvxRelativeField(pParent,
+            WB_BORDER | WB_SPIN | WB_REPEAT | WB_LEFT | WB_GROUP, eUnit);
+    return pRet;
 }
 
 
