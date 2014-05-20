@@ -1,0 +1,25 @@
+# -*- Mode: Diff -*-
+# Patch to avoid building any programs for CoinMP
+#
+--- coinmp/Clp/src/Makefile.in
++++ coinmp/Clp/src/Makefile.in
+@@ -95,7 +95,7 @@
+ @COIN_HAS_AMD_FALSE@@COIN_HAS_CHOLMOD_FALSE@@COIN_HAS_GLPK_TRUE@am__append_4 = ClpCholeskyUfl.cpp ClpCholeskyUfl.hpp
+ @COIN_HAS_MUMPS_TRUE@am__append_5 = ClpCholeskyMumps.cpp ClpCholeskyMumps.hpp
+ @COIN_HAS_WSMP_TRUE@am__append_6 = ClpCholeskyWssmp.cpp ClpCholeskyWssmp.hpp ClpCholeskyWssmpKKT.cpp ClpCholeskyWssmpKKT.hpp
+-bin_PROGRAMS = clp$(EXEEXT)
++bin_PROGRAMS = 
+ @COIN_HAS_CHOLMOD_TRUE@am__append_7 = -I`$(CYGPATH_W) $(CHOLMODINCDIR)`
+ @COIN_HAS_AMD_TRUE@am__append_8 = -I`$(CYGPATH_W) $(AMDINCDIR)`
+ @COIN_HAS_ABC_TRUE@am__append_9 = AbcSimplex.hpp CoinAbcCommon.hpp AbcCommon.hpp
+--- coinmp/Cbc/src/Makefile.in
++++ coinmp/Cbc/src/Makefile.in
+@@ -44,7 +44,7 @@
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+-bin_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2)
++bin_PROGRAMS =
+ 
+ ########################################################################
+ #                            cbc program                               #
