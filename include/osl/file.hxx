@@ -1849,6 +1849,10 @@ public:
         @param ustrDirectoryURL [in]
         Full qualified URL of the directory to create.
 
+        @param flags [in]
+        Optional flags, see osl_createDirectoryWithFlags for details.  This
+        defaulted parameter is new since LibreOffice 4.3.
+
         @return
         E_None on success
         E_INVAL the format of the parameters was not valid
@@ -1871,9 +1875,12 @@ public:
         @see remove()
     */
 
-    inline static RC create( const ::rtl::OUString& ustrDirectoryURL )
+    inline static RC create(
+        const ::rtl::OUString& ustrDirectoryURL,
+        sal_Int32 flags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write )
     {
-        return static_cast< RC >( osl_createDirectory( ustrDirectoryURL.pData ) );
+        return static_cast< RC >(
+            osl_createDirectoryWithFlags( ustrDirectoryURL.pData, flags ) );
     }
 
     /** Remove an empty directory.

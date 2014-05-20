@@ -131,7 +131,8 @@ oslFileType DirectoryItem_Impl::getFileType() const
     return osl_File_Type_Unknown;
 }
 
-static oslFileError osl_psz_createDirectory(const sal_Char* pszPath);
+static oslFileError osl_psz_createDirectory(
+    char const * pszPath, sal_uInt32 flags);
 static oslFileError osl_psz_removeDirectory(const sal_Char* pszPath);
 
 oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirectory* pDirectory)
@@ -395,6 +396,13 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
 
 oslFileError SAL_CALL osl_createDirectory( rtl_uString* ustrDirectoryURL )
 {
+    return osl_createDirectoryWithFlags(
+        ustrDirectoryURL, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
+}
+
+oslFileError osl_createDirectoryWithFlags(
+    rtl_uString * ustrDirectoryURL, sal_uInt32 flags)
+{
     char path[PATH_MAX];
     oslFileError eRet;
 
@@ -410,7 +418,7 @@ oslFileError SAL_CALL osl_createDirectory( rtl_uString* ustrDirectoryURL )
       return oslTranslateFileError( OSL_FET_ERROR, errno );
 #endif/* MACOSX */
 
-    return osl_psz_createDirectory( path );
+    return osl_psz_createDirectory( path, flags );
 }
 
 oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
@@ -433,10 +441,20 @@ oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
     return osl_psz_removeDirectory( path );
 }
 
-static oslFileError osl_psz_createDirectory( const sal_Char* pszPath )
+oslFileError osl_psz_createDirectory(char const * pszPath, sal_uInt32 flags)
 {
     int nRet=0;
-    int mode = S_IRWXU | S_IRWXG | S_IRWXO;
+    int mode
+        = (((flags & osl_File_OpenFlag_Read) == 0
+            ? 0
+            : ((flags & osl_File_OpenFlag_Private) == 0
+               ? S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
+               : S_IRUSR | S_IXUSR))
+           | ((flags & osl_File_OpenFlag_Write) == 0
+              ? 0
+              : ((flags & osl_File_OpenFlag_Private) == 0
+                 ? S_IWUSR | S_IWGRP | S_IWOTH
+                 : S_IWUSR)));
 
     nRet = mkdir(pszPath,mode);
 
