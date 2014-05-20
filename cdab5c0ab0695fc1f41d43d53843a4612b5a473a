@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_a2455e18",
+        "filename": "sw/source/filter/ww8/attributeoutputbase.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000599
+      },
+      "writtenOn": "2014-05-20T09:32:40Z",
+      "side": 1,
+      "message": "since I intended not to have any base class definition, I had commented the argument as the compiler was raising warnings for every file that included this header file.",
+      "parentUuid": "fa963961_e2d48648",
+      "revId": "cdab5c0ab0695fc1f41d43d53843a4612b5a473a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_42be9200",
         "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
         "patchSetId": 2
@@ -47,6 +65,24 @@
       "writtenOn": "2014-05-20T09:16:52Z",
       "side": 1,
       "message": "What is this hardcoded \\001? If we produce this ourselves, could you please use a named constant instead?",
+      "revId": "cdab5c0ab0695fc1f41d43d53843a4612b5a473a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_824b7a2b",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2070,
+      "author": {
+        "id": 1000599
+      },
+      "writtenOn": "2014-05-20T09:32:40Z",
+      "side": 1,
+      "message": "I will be changing this in a while.",
+      "parentUuid": "fa963961_c2c982ae",
       "revId": "cdab5c0ab0695fc1f41d43d53843a4612b5a473a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
