@@ -30,8 +30,7 @@ OGLPlayer::OGLPlayer()
 
 OGLPlayer::~OGLPlayer()
 {
-    // Comment out while it causes segmentation fault
-    // gltf_renderer_release(m_pHandle);
+    gltf_renderer_release(m_pHandle);
 }
 
 static bool lcl_LoadFile( glTFFile* io_pFile, const OUString& rURL)
