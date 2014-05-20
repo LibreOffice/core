@@ -13,6 +13,8 @@ $(eval $(call gb_ExternalPackage_use_external_project,coinmp,coinmp))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/CoinMP.dll,CoinMP/MSVisualStudio/v9/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.dll))
+else ifneq ($(DISABLE_DYNLOADING),)
+# Just use the static archives from workdir. See bin/lo-all-static-libs
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libCbc.3.dylib,Cbc/src/.libs/libCbc.3.dylib))
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libCbcSolver.3.dylib,Cbc/src/.libs/libCbcSolver.3.dylib))
