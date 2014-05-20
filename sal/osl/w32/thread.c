@@ -73,7 +73,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     /* alloc mem. for our internal data structure */
     pThreadImpl= malloc(sizeof(osl_TThreadImpl));
 
-    SAL_WARN_IF(!pThreadImpl, "sal.osl", "!pThreadImpl - malloc error");
+    OSL_ASSERT(pThreadImpl);
 
     if ( pThreadImpl == 0 )
     {
@@ -160,7 +160,7 @@ void SAL_CALL osl_resumeThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
-    SAL_WARN_IF(!pThreadImpl, "sal.osl", "!pThreadImpl - invalid ptr");        /* valid ptr? */
+    OSL_ASSERT(pThreadImpl);        /* valid ptr? */
 
     ResumeThread(pThreadImpl->m_hThread);
 }
@@ -172,7 +172,7 @@ void SAL_CALL osl_suspendThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
-    SAL_WARN_IF(!pThreadImpl, "sal.osl", "!pThreadImpl - invalid ptr");        /* valid ptr? */
+    OSL_ASSERT(pThreadImpl);        /* valid ptr? */
 
     SuspendThread(pThreadImpl->m_hThread);
 }
@@ -186,7 +186,7 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
     int winPriority;
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
-    SAL_WARN_IF(!pThreadImpl, "sal.osl", "!pThreadImpl - invalid ptr");        /* valid ptr? */
+    OSL_ASSERT(pThreadImpl);        /* valid ptr? */
 
     /*  map enum to WIN32 levels
         it would be faster and more elegant to preset
@@ -216,13 +216,13 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
         break;
 
     case osl_Thread_PriorityUnknown:
-        SAL_WARN_IF(TRUE, "sal.osl", "Unknown thread priority");      /* only fools try this...*/
+        OSL_ASSERT(FALSE);      /* only fools try this...*/
 
         /* let release-version behave friendly */
         return;
 
     default:
-        SAL_WARN_IF(TRUE, "sal.osl", "Expanded, but forgotten priority");      /* enum expanded, but forgotten here...*/
+        OSL_ASSERT(FALSE);      /* enum expanded, but forgotten here...*/
 
         /* let release-version behave friendly */
         return;
@@ -281,7 +281,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
         break;
 
     default:
-        SAL_WARN_IF(TRUE, "sal.osl", "New priority-level needed");      /* WIN32 API changed, incorporate new prio-level! */
+        OSL_ASSERT(FALSE);      /* WIN32 API changed, incorporate new prio-level! */
 
         /* release-version behaves friendly */
         Priority= osl_Thread_PriorityUnknown;
@@ -442,7 +442,7 @@ static void RemoveKeyFromList( PTLS pTls )
             pTls->pPrev->pNext = pTls->pNext;
         else
         {
-            SAL_WARN_IF( pTls != g_pThreadKeyList, "sal.osl", "pTls != g_pThreadKeyList" );
+            OSL_ASSERT( pTls == g_pThreadKeyList );
             g_pThreadKeyList = pTls->pNext;
         }
 
