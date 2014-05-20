@@ -231,10 +231,10 @@ private:
 
     /** OpenGL handle to the leaving slide's texture
     */
-    unsigned int GLleavingSlide;
+    unsigned int maLeavingSlideGL;
     /** OpenGL handle to the entering slide's texture
     */
-    unsigned int GLenteringSlide;
+    unsigned int maEnteringSlideGL;
 
     Reference< presentation::XSlideShowView > mxView;
     Reference< rendering::XIntegerBitmap > mxLeavingBitmap;
@@ -242,15 +242,15 @@ private:
 
     /** raw bytes of the entering bitmap
     */
-    uno::Sequence<sal_Int8> EnteringBytes;
+    uno::Sequence<sal_Int8> maEnteringBytes;
 
     /** raw bytes of the leaving bitmap
     */
-    uno::Sequence<sal_Int8> LeavingBytes;
+    uno::Sequence<sal_Int8> maLeavingBytes;
 
 #if defined( GLX_EXT_texture_from_pixmap )
-    GLXPixmap LeavingPixmap;
-    GLXPixmap EnteringPixmap;
+    GLXPixmap maLeavingPixmapGL;
+    GLXPixmap maEnteringPixmapGL;
 #endif
     bool mbRestoreSync;
     bool mbUseLeavingPixmap;
@@ -264,11 +264,11 @@ private:
 
     /** the form the raw bytes are in for the bitmaps
     */
-    rendering::IntegerBitmapLayout SlideBitmapLayout;
+    rendering::IntegerBitmapLayout maSlideBitmapLayout;
 
     /** the size of the slides
     */
-    geometry::IntegerSize2D SlideSize;
+    geometry::IntegerSize2D maSlideSize;
 
     /** Our Transition to be used.
     */
@@ -277,11 +277,11 @@ private:
 public:
     /** whether we are running on ATI fglrx with bug related to textures
      */
-    bool cbBrokenTexturesATI;
+    bool mbBrokenTexturesATI;
 
     /** GL version
      */
-    float cnGLVersion;
+    float mnGLVersion;
 
 #ifdef UNX
     float mnGLXVersion;
@@ -290,11 +290,11 @@ public:
     /**
        Whether the display has GLX extension on X11, always true otherwise (?)
      */
-    bool cbGLXPresent;
+    bool mbGLXPresent;
 
     /** Whether Mesa is the OpenGL vendor
      */
-    bool cbMesa;
+    bool mbMesa;
 
     /**
        whether texture from pixmap extension is available
@@ -330,28 +330,28 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
 
     setSlides( xLeavingSlide, xEnteringSlide );
 
-    return cbGLXPresent;
+    return mbGLXPresent;
 }
 
 void OGLTransitionerImpl::impl_initializeFlags( bool const bGLXPresent )
 {
-    cbGLXPresent = bGLXPresent;
+    mbGLXPresent = bGLXPresent;
     if ( bGLXPresent ) {
         const GLubyte* version = glGetString( GL_VERSION );
         if( version && version[0] ) {
-            cnGLVersion = version[0] - '0';
+            mnGLVersion = version[0] - '0';
             if( version[1] == '.' && version[2] )
-                cnGLVersion += (version[2] - '0')/10.0;
+                mnGLVersion += (version[2] - '0')/10.0;
         } else
-            cnGLVersion = 1.0;
-        SAL_INFO("slideshow.opengl", "GL version: " << version << " parsed: " << cnGLVersion << "" );
+            mnGLVersion = 1.0;
+        SAL_INFO("slideshow.opengl", "GL version: " << version << " parsed: " << mnGLVersion << "" );
 
         const GLubyte* vendor = glGetString( GL_VENDOR );
-        cbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );
-        SAL_INFO("slideshow.opengl", "GL vendor: " << vendor << " identified as Mesa: " << cbMesa << "" );
+        mbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );
+        SAL_INFO("slideshow.opengl", "GL vendor: " << vendor << " identified as Mesa: " << mbMesa << "" );
 
         /* TODO: check for version once the bug in fglrx driver is fixed */
-        cbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
+        mbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
     }
 }
 
@@ -390,10 +390,10 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     mpContext->setWinPosAndSize(Point(aCanvasArea.X, aCanvasArea.Y), Size(aCanvasArea.Width, aCanvasArea.Height));
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
 
-    GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
+    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
-    mbTextureFromPixmap = m_rGLWindow.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
-    mbGenerateMipmap = m_rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
+    mbTextureFromPixmap = rGLWindow.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
+    mbGenerateMipmap = rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -426,10 +426,10 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     mxLeavingBitmap.set( xLeavingSlide , UNO_QUERY_THROW );
     mxEnteringBitmap.set( xEnteringSlide , UNO_QUERY_THROW );
 
-    SlideSize = mxLeavingBitmap->getSize();
-    SAL_INFO("slideshow.opengl", "leaving bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
-    SlideSize = mxEnteringBitmap->getSize();
-    SAL_INFO("slideshow.opengl", "entering bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
+    maSlideSize = mxLeavingBitmap->getSize();
+    SAL_INFO("slideshow.opengl", "leaving bitmap area: " << maSlideSize.Width << "x" << maSlideSize.Height);
+    maSlideSize = mxEnteringBitmap->getSize();
+    SAL_INFO("slideshow.opengl", "entering bitmap area: " << maSlideSize.Width << "x" << maSlideSize.Height);
 }
 
 
@@ -438,18 +438,18 @@ void OGLTransitionerImpl::impl_prepareSlides()
     Reference< XFastPropertySet > xLeavingSet( mxLeavingBitmap , UNO_QUERY );
     Reference< XFastPropertySet > xEnteringSet( mxEnteringBitmap , UNO_QUERY );
 
-    geometry::IntegerRectangle2D SlideRect;
-    SlideRect.X1 = 0;
-    SlideRect.X2 = SlideSize.Width;
-    SlideRect.Y1 = 0;
-    SlideRect.Y2 = SlideSize.Height;
+    geometry::IntegerRectangle2D aSlideRect;
+    aSlideRect.X1 = 0;
+    aSlideRect.X2 = maSlideSize.Width;
+    aSlideRect.Y1 = 0;
+    aSlideRect.Y2 = maSlideSize.Height;
 
     mpContext->sync();
 
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
 
-    GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
+    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
 #if defined( GLX_EXT_texture_from_pixmap )
 
@@ -484,7 +484,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
             oldHandler = XSetErrorHandler( oglErrorHandler );
 
             errorTriggered = false;
-            LeavingPixmap = glXCreatePixmap( m_rGLWindow.dpy, m_rGLWindow.fbc, maLeavingPixmap, pixmapAttribs );
+            maLeavingPixmapGL = glXCreatePixmap( rGLWindow.dpy, rGLWindow.fbc, maLeavingPixmap, pixmapAttribs );
 
             // sync so that we possibly get an XError
             mpContext->sync();
@@ -495,24 +495,24 @@ void OGLTransitionerImpl::impl_prepareSlides()
                 SAL_INFO("slideshow.opengl", "XError triggered");
                 OSL_TRACE("XError triggered");
                 if( mbFreeLeavingPixmap ) {
-                    XFreePixmap( m_rGLWindow.dpy, maLeavingPixmap );
+                    XFreePixmap( rGLWindow.dpy, maLeavingPixmap );
                     mbFreeLeavingPixmap = false;
                 }
                 errorTriggered = false;
             }
 
-            EnteringPixmap = glXCreatePixmap( m_rGLWindow.dpy, m_rGLWindow.fbc, maEnteringPixmap, pixmapAttribs );
+            maEnteringPixmapGL = glXCreatePixmap( rGLWindow.dpy, rGLWindow.fbc, maEnteringPixmap, pixmapAttribs );
 
             // sync so that we possibly get an XError
             mpContext->sync();
 
-            SAL_INFO("slideshow.opengl", "created glx pixmap " << LeavingPixmap << " and " << EnteringPixmap << " depth: " << depth);
+            SAL_INFO("slideshow.opengl", "created glx pixmap " << maLeavingPixmapGL << " and " << maEnteringPixmapGL << " depth: " << depth);
             if( !errorTriggered )
                 mbUseEnteringPixmap = true;
             else {
                 SAL_INFO("slideshow.opengl", "XError triggered");
                 if( mbFreeEnteringPixmap ) {
-                    XFreePixmap( m_rGLWindow.dpy, maEnteringPixmap );
+                    XFreePixmap( rGLWindow.dpy, maEnteringPixmap );
                     mbFreeEnteringPixmap = false;
                 }
             }
@@ -524,13 +524,13 @@ void OGLTransitionerImpl::impl_prepareSlides()
 
 #endif
     if( !mbUseLeavingPixmap )
-        LeavingBytes = mxLeavingBitmap->getData(SlideBitmapLayout,SlideRect);
+        maLeavingBytes = mxLeavingBitmap->getData(maSlideBitmapLayout, aSlideRect);
     if( !mbUseEnteringPixmap )
-        EnteringBytes = mxEnteringBitmap->getData(SlideBitmapLayout,SlideRect);
+        maEnteringBytes = mxEnteringBitmap->getData(maSlideBitmapLayout, aSlideRect);
 
     GLInitSlides();
 
-    SAL_WARN_IF(SlideBitmapLayout.PlaneStride != 0, "slideshow.opengl","only handle no plane stride now");
+    SAL_WARN_IF(maSlideBitmapLayout.PlaneStride != 0, "slideshow.opengl","only handle no plane stride now");
 
     mpContext->sync();
 
@@ -538,20 +538,20 @@ void OGLTransitionerImpl::impl_prepareSlides()
     // synchronized X still gives us much smoother play
     // I suspect some issues in above code in slideshow
     // synchronize whole transition for now
-    XSynchronize( m_rGLWindow.dpy, true );
+    XSynchronize( rGLWindow.dpy, true );
     mbRestoreSync = true;
 #endif
 }
 
 void OGLTransitionerImpl::impl_prepareTransition()
 {
-    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= cnGLVersion )
-        mpTransition->prepare( GLleavingSlide, GLenteringSlide );
+    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
+        mpTransition->prepare( maLeavingSlideGL, maEnteringSlideGL );
 }
 
 void OGLTransitionerImpl::impl_finishTransition()
 {
-    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= cnGLVersion )
+    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
         mpTransition->finish();
 }
 
@@ -968,13 +968,13 @@ void OGLTransitionerImpl::impl_createTexture(
     {
         // force-convert color to ARGB8888 int color space
         uno::Sequence<sal_Int8> tempBytes(
-            SlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
+            maSlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
                 data,
                 getOGLColorSpace()));
         gluBuild2DMipmaps(GL_TEXTURE_2D,
                           4,
-                          SlideSize.Width,
-                          SlideSize.Height,
+                          maSlideSize.Width,
+                          maSlideSize.Height,
                           GL_RGBA,
                           GL_UNSIGNED_BYTE,
                           &tempBytes[0]);
@@ -986,12 +986,12 @@ void OGLTransitionerImpl::impl_createTexture(
         glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest_supported_anisotropy);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy);
     } else {
-        if( mpTransition && !cbBrokenTexturesATI && !useMipmap) {
-            glTexImage2D( GL_TEXTURE_2D, 0, pFormat->nInternalFormat, SlideSize.Width, SlideSize.Height, 0, pFormat->eFormat, pFormat->eType, &data[0] );
+        if( mpTransition && !mbBrokenTexturesATI && !useMipmap) {
+            glTexImage2D( GL_TEXTURE_2D, 0, pFormat->nInternalFormat, maSlideSize.Width, maSlideSize.Height, 0, pFormat->eFormat, pFormat->eType, &data[0] );
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         } else {
-            gluBuild2DMipmaps( GL_TEXTURE_2D, pFormat->nInternalFormat, SlideSize.Width, SlideSize.Height, pFormat->eFormat, pFormat->eType, &data[0] );
+            gluBuild2DMipmaps( GL_TEXTURE_2D, pFormat->nInternalFormat, maSlideSize.Width, maSlideSize.Height, pFormat->eFormat, pFormat->eType, &data[0] );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR ); //TRILINEAR FILTERING
 
@@ -1034,7 +1034,7 @@ const OGLFormat* OGLTransitionerImpl::chooseFormats()
 {
     const OGLFormat* pDetectedFormat=NULL;
     uno::Reference<rendering::XIntegerBitmapColorSpace> xIntColorSpace(
-        SlideBitmapLayout.ColorSpace);
+        maSlideBitmapLayout.ColorSpace);
 
     if( (xIntColorSpace->getType() == rendering::ColorSpaceType::RGB ||
          xIntColorSpace->getType() == rendering::ColorSpaceType::SRGB) )
@@ -1156,7 +1156,7 @@ void OGLTransitionerImpl::GLInitSlides()
 {
     osl::MutexGuard const guard( m_aMutex );
 
-    if (isDisposed() || mpTransition->getSettings().mnRequiredGLVersion > cnGLVersion)
+    if (isDisposed() || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1169,22 +1169,22 @@ void OGLTransitionerImpl::GLInitSlides()
     if( !mbUseLeavingPixmap || !mbUseEnteringPixmap )
         pFormat = chooseFormats();
 
-    createTexture( &GLleavingSlide,
+    createTexture( &maLeavingSlideGL,
 #if defined( GLX_EXT_texture_from_pixmap )
-           LeavingPixmap,
+           maLeavingPixmapGL,
            mbUseLeavingPixmap,
 #endif
            mpTransition->getSettings().mbUseMipMapLeaving,
-           LeavingBytes,
+           maLeavingBytes,
            pFormat );
 
-    createTexture( &GLenteringSlide,
+    createTexture( &maEnteringSlideGL,
 #if defined( GLX_EXT_texture_from_pixmap )
-           EnteringPixmap,
+           maEnteringPixmapGL,
            mbUseEnteringPixmap,
 #endif
            mpTransition->getSettings().mbUseMipMapEntering,
-           EnteringBytes,
+           maEnteringBytes,
            pFormat );
 
     mpContext->sync();
@@ -1202,7 +1202,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 #endif
     osl::MutexGuard const guard( m_aMutex );
 
-    if (isDisposed() || !cbGLXPresent || mpTransition->getSettings().mnRequiredGLVersion > cnGLVersion)
+    if (isDisposed() || !mbGLXPresent || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
     mpContext->makeCurrent();
@@ -1212,11 +1212,11 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 
     if(mpTransition)
     {
-        GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
-        mpTransition->display( nTime, GLleavingSlide, GLenteringSlide,
-                              SlideSize.Width, SlideSize.Height,
-                              static_cast<double>(m_rGLWindow.Width),
-                              static_cast<double>(m_rGLWindow.Height) );
+        GLWindow& rGLWindow(mpContext->getOpenGLWindow());
+        mpTransition->display( nTime, maLeavingSlideGL, maEnteringSlideGL,
+                              maSlideSize.Width, maSlideSize.Height,
+                              static_cast<double>(rGLWindow.Width),
+                              static_cast<double>(rGLWindow.Height) );
     }
 
     mpContext->swapBuffers();
@@ -1252,26 +1252,26 @@ void OGLTransitionerImpl::disposeTextures()
 {
     mpContext->makeCurrent();
 
-    GLWindow& m_rGLWindow(mpContext->getOpenGLWindow());
+    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
 #if defined( GLX_EXT_texture_from_pixmap )
     PFNGLXRELEASETEXIMAGEEXTPROC myglXReleaseTexImageEXT = (PFNGLXRELEASETEXIMAGEEXTPROC) glXGetProcAddress( (const GLubyte*) "glXReleaseTexImageEXT" );
     if( mbUseLeavingPixmap ) {
-        myglXReleaseTexImageEXT( m_rGLWindow.dpy, LeavingPixmap, GLX_FRONT_LEFT_EXT );
-        glXDestroyGLXPixmap( m_rGLWindow.dpy, LeavingPixmap );
-        LeavingPixmap = 0;
+        myglXReleaseTexImageEXT( rGLWindow.dpy, maLeavingPixmapGL, GLX_FRONT_LEFT_EXT );
+        glXDestroyGLXPixmap( rGLWindow.dpy, maLeavingPixmapGL );
+        maLeavingPixmapGL = 0;
         if( mbFreeLeavingPixmap ) {
-            XFreePixmap( m_rGLWindow.dpy, maLeavingPixmap );
+            XFreePixmap( rGLWindow.dpy, maLeavingPixmap );
             mbFreeLeavingPixmap = false;
             maLeavingPixmap = 0;
         }
     }
     if( mbUseEnteringPixmap ) {
-        myglXReleaseTexImageEXT( m_rGLWindow.dpy, EnteringPixmap, GLX_FRONT_LEFT_EXT );
-        glXDestroyGLXPixmap( m_rGLWindow.dpy, EnteringPixmap );
-        EnteringPixmap = 0;
+        myglXReleaseTexImageEXT( rGLWindow.dpy, maEnteringPixmapGL, GLX_FRONT_LEFT_EXT );
+        glXDestroyGLXPixmap( rGLWindow.dpy, maEnteringPixmapGL );
+        maEnteringPixmapGL = 0;
         if( mbFreeEnteringPixmap ) {
-            XFreePixmap( m_rGLWindow.dpy, maEnteringPixmap );
+            XFreePixmap( rGLWindow.dpy, maEnteringPixmap );
             mbFreeEnteringPixmap = false;
             maEnteringPixmap = 0;
         }
@@ -1279,12 +1279,12 @@ void OGLTransitionerImpl::disposeTextures()
 #endif
 
     if( !mbUseLeavingPixmap ) {
-        glDeleteTextures(1,&GLleavingSlide);
-        GLleavingSlide = 0;
+        glDeleteTextures(1,&maLeavingSlideGL);
+        maLeavingSlideGL = 0;
     }
     if( !mbUseEnteringPixmap ) {
-        glDeleteTextures(1,&GLenteringSlide);
-        GLenteringSlide = 0;
+        glDeleteTextures(1,&maEnteringSlideGL);
+        maEnteringSlideGL = 0;
     }
 
     mbUseLeavingPixmap = false;
@@ -1341,14 +1341,14 @@ void OGLTransitionerImpl::disposing()
 OGLTransitionerImpl::OGLTransitionerImpl()
     : OGLTransitionerImplBase(m_aMutex)
     , mpContext()
-    , GLleavingSlide(0)
-    , GLenteringSlide(0)
+    , maLeavingSlideGL(0)
+    , maEnteringSlideGL(0)
     , mxView()
-    , EnteringBytes()
-    , LeavingBytes()
+    , maEnteringBytes()
+    , maLeavingBytes()
 #if defined( GLX_EXT_texture_from_pixmap )
-    , LeavingPixmap(0)
-    , EnteringPixmap(0)
+    , maLeavingPixmapGL(0)
+    , maEnteringPixmapGL(0)
 #endif
     , mbRestoreSync(false)
     , mbUseLeavingPixmap(false)
@@ -1359,8 +1359,8 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , maLeavingPixmap(0)
     , maEnteringPixmap(0)
 #endif
-    , SlideBitmapLayout()
-    , SlideSize()
+    , maSlideBitmapLayout()
+    , maSlideSize()
 #ifdef UNX
     , mnGLXVersion(0.0)
 #endif
@@ -1431,7 +1431,7 @@ public:
         if ( !xRes->initialize( view, leavingBitmap, enteringBitmap ) )
             return uno::Reference< presentation::XTransition >();
 
-        if( xRes->cbMesa && (
+        if( xRes->mbMesa && (
             ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) ||
             ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::FADEOVERCOLOR ) ||
             ( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) ) )
