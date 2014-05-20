@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_c25742c9",
+        "filename": "writerfilter/source/dmapper/PropertyIds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-20T09:45:06Z",
+      "side": 1,
+      "message": "What is this ParaFrameProperties? I can\u0027t find any such property implemented in sw.",
+      "revId": "80fd4f40d06a28885de6c47ef5c46157e065bbd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
