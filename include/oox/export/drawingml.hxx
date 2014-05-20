@@ -82,6 +82,8 @@ public:
 
 private:
     static int mnImageCounter;
+    static int mnWdpImageCounter;
+    static std::map<OUString, OUString> maWdpCache;
 
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
@@ -176,6 +178,8 @@ public:
     void WriteShapeEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteShapeEffect( const OUString& sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
     void WriteShape3DEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
+    void WriteArtisticEffect( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
+    OString WriteWdpPicture( const OUString& rFileId, const ::com::sun::star::uno::Sequence< sal_Int8 >& rPictureData );
 
     static void ResetCounters();
 

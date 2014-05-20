@@ -414,6 +414,7 @@ YZ
 Year
 YearAccessed
 ZX
+a14
 a
 aa
 above
@@ -560,6 +561,7 @@ always
 alwaysMergeEmptyNamespace
 alwaysShow
 alwaysShowPlaceholderText
+amount
 amt
 anchor
 anchorCtr
@@ -640,6 +642,33 @@ array
 arrow
 arrowok
 artDeco
+artisticBlur
+artisticCement
+artisticChalkSketch
+artisticCrisscrossEtching
+artisticCutout
+artisticFilmGrain
+artisticGlass
+artisticGlowDiffused
+artisticGlowEdges
+artisticLightScreen
+artisticLineDrawing
+artisticMarker
+artisticMosiaicBubbles
+artisticPaintStrokes
+artisticPaintBrush
+artisticPastelsSmooth
+artisticPencilGrayscale
+artisticPencilSketch
+artisticPhotocopy
+artisticPlasticWrap
+artisticTexturizer
+artisticWatercolorSponge
+artisticBackgroundRemoval
+artisticBrightnessContrast
+artisticColorTemperature
+artisticSaturation
+artisticSharpenSoften
 asDisplayed
 ascending
 ascendingAlpha
@@ -947,6 +976,7 @@ brkBinSub
 brown
 browse
 browser
+brushSize
 bstr
 btLr
 btnFace
@@ -1257,6 +1287,7 @@ color2
 colorFilter
 colorId
 colorScale
+colorTemp
 colormenu
 colormode
 colormru
@@ -1390,6 +1421,7 @@ cover
 coverPg
 cp
 cr
+crackSpacing
 crashSave
 crazyMaze
 created
@@ -1729,6 +1761,7 @@ destId
 destOrd
 destination
 destinationFile
+detail
 detectmouseclick
 dgm
 dgmbasetextscale
@@ -2430,6 +2463,7 @@ gradientInactiveCaption
 gradientRadial
 gradientUnscaled
 gradientshapeok
+grainSize
 gramEnd
 gramStart
 grammar
@@ -2471,6 +2505,7 @@ gridDropZones
 gridLegend
 gridLines
 gridLinesSet
+gridSize
 gridSpacing
 gridSpan
 group
@@ -2732,7 +2767,10 @@ imagedata
 imagesize
 imeMode
 img
+imgEffect
 imgH
+imgLayer
+imgProps
 imgSz
 imgW
 immersive
@@ -2795,6 +2833,7 @@ intLim
 intVal
 integer
 integrated
+intensity
 interSp
 interactiveSeq
 intercept
@@ -3568,6 +3607,7 @@ numStyleLink
 numTab
 number
 numberInDash
+numberOfShades
 numberStoredAsText
 numbering
 numberingChange
@@ -3839,6 +3879,7 @@ pctPosVOffset
 pctWidth
 peachPuff
 penClr
+pencilSize
 pencils
 pentagon
 people
@@ -4002,6 +4043,7 @@ preserveSortFilterLayout
 presetClass
 presetID
 presetSubtype
+pressure
 prev
 prevAc
 prevCondLst
@@ -4710,6 +4752,7 @@ smartTags
 smileyFace
 smooth
 smoothMarker
+smoothness
 smtClean
 smtId
 snake
