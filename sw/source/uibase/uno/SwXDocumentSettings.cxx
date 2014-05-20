@@ -520,7 +520,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             else if ( nTmp != document::PrinterIndependentLayout::HIGH_RESOLUTION )
                 throw IllegalArgumentException();
 
-            mpDoc->setReferenceDeviceType( bUseVirDev, bHiResVirDev );
+            mpDoc->getIDocumentDeviceAccess()->setReferenceDeviceType( bUseVirDev, bHiResVirDev );
         }
         break;
         case HANDLE_IS_LABEL_DOC :

@@ -679,8 +679,6 @@ public:
     // IDocumentDeviceAccess
     const IDocumentDeviceAccess* getIDocumentDeviceAccessConst() const;
     IDocumentDeviceAccess* getIDocumentDeviceAccess();
-    virtual OutputDevice* getReferenceDevice(/*[in]*/ bool bCreate ) const;
-    virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes );
     virtual const JobSetup* getJobsetup() const;
     virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup );
     virtual const SwPrintData & getPrintData() const;

@@ -254,16 +254,6 @@ IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccess()
     return m_DeviceAccess.get();
 }
 
-OutputDevice* SwDoc::getReferenceDevice(/*[in]*/ bool bCreate ) const
-{
-    return getIDocumentDeviceAccessConst()->getReferenceDevice( bCreate );
-}
-
-void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes )
-{
-    getIDocumentDeviceAccess()->setReferenceDeviceType( bNewVirtual, bNewHiRes );
-}
-
 const JobSetup* SwDoc::getJobsetup() const
 {
     return getIDocumentDeviceAccessConst()->getJobsetup();

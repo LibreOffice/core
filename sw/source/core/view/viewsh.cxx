@@ -1999,7 +1999,7 @@ OutputDevice& SwViewShell::GetRefDev() const
     else if ( 0 != mpTmpRef )
         pTmpOut = mpTmpRef;
     else
-        pTmpOut = GetDoc()->getReferenceDevice( true );
+        pTmpOut = GetDoc()->getIDocumentDeviceAccessConst()->getReferenceDevice( true );
 
     return *pTmpOut;
 }
