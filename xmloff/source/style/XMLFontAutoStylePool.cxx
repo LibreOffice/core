@@ -325,6 +325,10 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
         osl::File file( fileUrl );
         if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
             return OUString();
+
+        if ( !GetExport().GetTargetStorage().is() )
+            return OUString();
+
         uno::Reference< embed::XStorage > storage;
         storage.set( GetExport().GetTargetStorage()->openStorageElement( OUString( "Fonts" ),
             ::embed::ElementModes::WRITE ), uno::UNO_QUERY_THROW );
