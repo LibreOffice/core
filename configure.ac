@@ -677,7 +677,7 @@ linux-android*)
     enable_lotuswordpro=no
     enable_mpl_subset=yes
     enable_opengl=no
-    enable_coinmp=no
+    enable_coinmp=yes
     enable_lpsolve=no
     enable_report_builder=no
     with_theme="tango"
@@ -7433,7 +7433,7 @@ if test $_os = iOS; then
     enable_mpl_subset=yes
     enable_opengl=no
     enable_lotuswordpro=no
-    enable_coinmp=no
+    enable_coinmp=yes
     enable_lpsolve=no
     enable_postgresql_sdbc=no
     enable_extension_integration=no
