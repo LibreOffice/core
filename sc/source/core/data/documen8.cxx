@@ -87,6 +87,7 @@
 #include "globalnames.hxx"
 #include "stringutil.hxx"
 #include <documentlinkmgr.hxx>
+#include <scopetools.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -801,6 +802,8 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
         if (pRefLink)
             aRefLinks.push_back(pRefLink);
     }
+
+    sc::WaitPointerSwitch aWaitSwitch(pWin);
 
     pExternalRefMgr->enableDocTimer(false);
     ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS).toString(), aRefLinks.size());

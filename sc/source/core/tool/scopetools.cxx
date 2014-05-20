@@ -9,6 +9,7 @@
 
 #include "scopetools.hxx"
 #include "document.hxx"
+#include <vcl/window.hxx>
 
 namespace sc {
 
@@ -54,6 +55,19 @@ IdleSwitch::IdleSwitch(ScDocument& rDoc, bool bEnableIdle) :
 IdleSwitch::~IdleSwitch()
 {
     mrDoc.EnableIdle(mbOldValue);
+}
+
+WaitPointerSwitch::WaitPointerSwitch(Window* pWin) :
+    mpFrameWin(pWin)
+{
+    if (mpFrameWin)
+        mpFrameWin->EnterWait();
+}
+
+WaitPointerSwitch::~WaitPointerSwitch()
+{
+    if (mpFrameWin)
+        mpFrameWin->LeaveWait();
 }
 
 }
