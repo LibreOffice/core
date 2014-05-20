@@ -790,7 +790,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
 
     if (_osl_isFullQualifiedDomainName(he->h_name))
     {
-        cn= (sal_Char *)strdup(he->h_name);
+        cn= strdup(he->h_name);
         OSL_ASSERT(cn);
         if (cn == NULL)
             return ((oslHostAddr)NULL);
@@ -887,7 +887,7 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
     if ((pszHostname == NULL) || (pAddr == NULL))
         return ((oslHostAddr)NULL);
 
-    cn = (sal_Char *) strdup(pszHostname);
+    cn = strdup(pszHostname);
     OSL_ASSERT(cn);
     if (cn == NULL)
         return ((oslHostAddr)NULL);
