@@ -164,7 +164,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     const bool bHasPostIts      = sw_GetPostIts( pDocShell->GetDoc(), 0 );
 
     // get default values to use in dialog from documents SwPrintData
-    const SwPrintData &rPrintData = pDocShell->GetDoc()->getPrintData();
+    const SwPrintData &rPrintData = pDocShell->GetDoc()->getIDocumentDeviceAccessConst()->getPrintData();
 
     // Get current page number
     sal_uInt16 nCurrentPage = 1;
@@ -2448,7 +2448,7 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     const SwPrintUIOptions &rPrintUIOptions,
     bool bIsPDFEXport )
 {
-    SwPrintData aDocPrintData( rDoc.getPrintData() );
+    SwPrintData aDocPrintData( rDoc.getIDocumentDeviceAccessConst()->getPrintData() );
 
     aDocPrintData.SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
     aDocPrintData.SetPrintTable( rPrintUIOptions.IsPrintTables() );
@@ -2469,7 +2469,7 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     aDocPrintData.SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
     aDocPrintData.SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
 
-    rDoc.setPrintData( aDocPrintData );
+    rDoc.getIDocumentDeviceAccess()->setPrintData( aDocPrintData );
 }
 
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(

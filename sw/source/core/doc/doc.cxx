@@ -254,16 +254,6 @@ IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccess()
     return m_DeviceAccess.get();
 }
 
-const SwPrintData & SwDoc::getPrintData() const
-{
-    return getIDocumentDeviceAccessConst()->getPrintData();
-}
-
-void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData)
-{
-    getIDocumentDeviceAccess()->setPrintData( rPrtData );
-}
-
 
 /* Implementations the next Interface here */
 

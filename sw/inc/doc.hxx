@@ -679,8 +679,6 @@ public:
     // IDocumentDeviceAccess
     const IDocumentDeviceAccess* getIDocumentDeviceAccessConst() const;
     IDocumentDeviceAccess* getIDocumentDeviceAccess();
-    virtual const SwPrintData & getPrintData() const;
-    virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData);
 
     // IDocumentMarkAccess
     IDocumentMarkAccess* getIDocumentMarkAccess();
