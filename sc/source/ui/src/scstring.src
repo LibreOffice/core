@@ -811,6 +811,11 @@ String SCSTR_EXTDOC_NOT_LOADED
     Text [ en-US ] = "The following external file could not be loaded. Data linked from this file did not get updated." ;
 };
 
+String SCSTR_UPDATE_EXTDOCS
+{
+    Text [ en-US ] = "Updating external links.";
+};
+
 String SCSTR_FORMULA_SYNTAX_CALC_A1
 {
     Text [ en-US ] = "Calc A1";

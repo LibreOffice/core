@@ -983,7 +983,8 @@
 #define STR_MID                 (STR_START + 431)
 #define STR_SOUTH               (STR_START + 432)
 #define STR_SUM                 (STR_START + 433)
-#define STR_END                 (STR_SUM)
+#define SCSTR_UPDATE_EXTDOCS    (STR_START + 434)
+#define STR_END                 (SCSTR_UPDATE_EXTDOCS)
 
 #define BMP_START               (STR_END)
 
