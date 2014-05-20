@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa963961_426c529c",
+        "filename": "sw/source/filter/ww8/attributeoutputbase.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-20T10:00:43Z",
+      "side": 1,
+      "message": "Oh, I see. Then please change it to: \"bool /*bAnchorLinkedToNode*/\", i.e. just drop the \" \u003dfalse\" part, which would suggest that the parameter is optional, while it is not.",
+      "parentUuid": "fa963961_a2455e18",
+      "revId": "cdab5c0ab0695fc1f41d43d53843a4612b5a473a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_42be9200",
         "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
         "patchSetId": 2
