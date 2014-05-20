@@ -451,13 +451,35 @@ int CTLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
         return STRING_LEN;
 
     CTTypesetterRef aCTTypeSetter = CTTypesetterCreateWithAttributedString( mpAttrString );
-    const double fCTMaxWidth = (double)nMaxWidth / (nFactor * mfFontScale);
-    CFIndex nIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
-    if( nIndex >= mnCharCount )
-        return STRING_LEN;
 
-    nIndex += mnMinCharPos;
-    return (int)nIndex;
+    CFIndex nBestGuess = (nCharExtra >= 0) ? 0 : mnCharCount;
+    for( int i = 1; i <= mnCharCount; i *= 2 )
+    {
+        // guess the target width considering char-extra expansion/condensation
+        const long nTargetWidth = nMaxWidth - nBestGuess * nCharExtra;
+        const double fCTMaxWidth = nTargetWidth / (nFactor * mfFontScale);
+        // calculate the breaking index for the guessed target width
+        const CFIndex nNewIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
+        if( nNewIndex >= mnCharCount ) {
+            CFRelease( aCTTypeSetter );
+            return STRING_LEN;
+        }
+        // check if the original extra-width guess was good
+        if( !nCharExtra )
+            nBestGuess = nNewIndex;
+        if( nBestGuess == nNewIndex )
+            break;
+        // prepare another round for a different number of characters
+        CFIndex nNewGuess = (nNewIndex + nBestGuess + 1) / 2;
+        if( nNewGuess == nBestGuess )
+            nNewGuess += (nNewIndex > nBestGuess) ? +1 : -1;
+        nBestGuess = nNewGuess;
+    }
+
+    // suggest the best fitting cluster break as breaking position
+    CFRelease( aCTTypeSetter );
+    const int nIndex = nBestGuess + mnMinCharPos;
+    return nIndex;
 }
 
 // -----------------------------------------------------------------------
