@@ -6874,6 +6874,7 @@ if test "$ENABLE_JAVA" != ""; then
     fi
 fi
 
+HAVE_JAVA6=
 dnl ===================================================================
 dnl Checks for JDK.
 dnl ===================================================================
@@ -6907,6 +6908,9 @@ if test "$ENABLE_JAVA" != ""; then
             if test "$_jdk_ver" -lt 10500; then
                 AC_MSG_ERROR([IBM JDK is too old, you need at least 1.5])
             fi
+            if test "$_jdk_ver" -ge 10600; then
+                HAVE_JAVA6=TRUE
+            fi
 
             AC_MSG_RESULT([checked (IBM JDK $_jdk)])
 
@@ -6930,6 +6934,9 @@ you must use the "--with-jdk-home" configure option explicitly])
             if test "$_jdk_ver" -gt 10600; then
                 JAVA_CLASSPATH_NOT_SET="1"
             fi
+            if test "$_jdk_ver" -ge 10600; then
+                HAVE_JAVA6=TRUE
+            fi
 
             AC_MSG_RESULT([checked (JDK $_jdk)])
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
@@ -6944,6 +6951,7 @@ else
     dnl Java disabled
     JAVA_HOME=NO_JAVA_HOME ; export JAVA_HOME
 fi
+AC_SUBST([HAVE_JAVA6])
 
 dnl ===================================================================
 dnl Set target Java bytecode version
@@ -10744,8 +10752,14 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
         AC_MSG_RESULT([external])
         if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
             if test -z $COMMONS_CODEC_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-codec-1.9.jar,
-                    [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.9.jar ],
+                _commons_codec_path=""
+                if test "$HAVE_JAVA6" = "TRUE"; then
+                    _commons_codec_path="/usr/share/java/commons-codec-1.9.jar"
+                else
+                    _commons_codec_path="/usr/share/java/commons-codec-1.6.jar"
+                fi
+                AC_CHECK_FILE($_commons_codec_path,
+                    [ COMMONS_CODEC_JAR=$_commons_codec_path ],
                     [
                         AC_CHECK_FILE(/usr/share/java/commons-codec.jar,
                             [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
@@ -10759,8 +10773,14 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
             fi
 
             if test -z $COMMONS_LANG_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-lang3-3.3.1-src.tar.gz,
-                    [ COMMONS_LANG_JAR=/usr/share/java/commons-lang3-3.3.1-src.tar.gz ],
+                _commons_lang_path=""
+                if test "$HAVE_JAVA6" = "TRUE"; then
+                    _commons_lang_path="/usr/share/java/commons-lang3-3.3.1-src.tar.gz"
+                else
+                    _commons_lang_path="/usr/share/java/commons-lang-2.4.jar"
+                fi
+                AC_CHECK_FILE($_commons_lang_path,
+                    [ COMMONS_LANG_JAR=$commons_lang_path ],
                     [
                         AC_CHECK_FILE(/usr/share/java/commons-lang.jar,
                             [ COMMONS_LANG_JAR=/usr/share/java/commons-lang.jar ],
