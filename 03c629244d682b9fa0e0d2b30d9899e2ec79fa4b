@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa963961_22b6ee3d",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-20T07:02:08Z",
+      "side": 1,
+      "message": "these macros, to be useful, need to be defined (potentially as no-ops) for all environments, not just __GNUC__",
+      "revId": "03c629244d682b9fa0e0d2b30d9899e2ec79fa4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_029beaca",
         "filename": "include/sal/types.h",
         "patchSetId": 1
@@ -42,6 +59,23 @@
         "endLine": 618,
         "endChar": 35
       },
+      "revId": "03c629244d682b9fa0e0d2b30d9899e2ec79fa4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_0282ca52",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-20T07:02:08Z",
+      "side": 1,
+      "message": "why wrap this in an ifndef?",
       "revId": "03c629244d682b9fa0e0d2b30d9899e2ec79fa4b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
