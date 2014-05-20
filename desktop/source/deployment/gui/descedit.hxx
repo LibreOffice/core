@@ -35,7 +35,7 @@ namespace dp_gui
         void                Init();
 
     public:
-        DescriptionEdit( Window* pParent, const ResId& rResId );
+        DescriptionEdit( Window* pParent);
         virtual inline ~DescriptionEdit() {}
 
         void                Clear();
