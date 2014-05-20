@@ -847,38 +847,13 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     if( u == NULL )
         return;
 
-    GfxFont* font = state->getFont();
-    double ascent = font->getAscent();
-    GooString* fontName = font->getName();
-
-    // Hackfix until incorrect ascent values are fixed in poppler (fdo#75667)
-    if ((fontName->cmpN("Arial", 5) == 0) &&
-        (ascent > 0.717) && (ascent < 0.719))
-    {
-        ascent = 0.905;
-    }
-    else if ((fontName->cmpN("Times New Roman", 15) == 0) &&
-        (ascent > 0.682) && (ascent < 0.684))
-    {
-        ascent = 0.891;
-    }
-
-    // normalize coordinates: correct from baseline-relative to upper
-    // left corner of glyphs
-    double x2(0.0), y2(0.0);
-    state->textTransformDelta( 0.0,
-                               ascent,
-                               &x2, &y2 );
-
-    const double fFontSize(state->getFontSize());
-    x += x2*fFontSize;
-    y += y2*fFontSize;
+    const double fontSize = state->getFontSize();
 
     const double aPositionX(x-originX);
     const double aPositionY(y-originY);
 
     const double* pTextMat=state->getTextMat();
-    printf( "drawChar %f %f %f %f %f %f %f %f ",
+    printf( "drawChar %f %f %f %f %f %f %f %f %f ",
             normalize(aPositionX),
             normalize(aPositionY),
             normalize(aPositionX + dx),
@@ -886,7 +861,9 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
             normalize(pTextMat[0]),
             normalize(pTextMat[2]),
             normalize(pTextMat[1]),
-            normalize(pTextMat[3]) );
+            normalize(pTextMat[3]),
+            normalize(fontSize)
+            );
 
     // silence spurious warning
     (void)&mapUCS2;

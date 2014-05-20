@@ -140,7 +140,8 @@ namespace pdfi
 
         virtual void drawGlyphs( const OUString&                               rGlyphs,
                                  const css::geometry::RealRectangle2D& rRect,
-                                 const css::geometry::Matrix2D&        rFontMatrix ) SAL_OVERRIDE;
+                                 const css::geometry::Matrix2D&        rFontMatrix,
+                                 double fontSize) SAL_OVERRIDE;
         virtual void endText() SAL_OVERRIDE;
 
         virtual void drawMask(const css::uno::Sequence<
