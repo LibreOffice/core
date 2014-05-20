@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_82ddba72",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-20T09:03:01Z",
+      "side": 0,
+      "message": "This is a problem, m_bDrawingOpen is exactly true if we\u0027re between the start of startDMLAnchorInline() and the end of endDMLAnchorInline(). With your change, it is true till the end of the paragraph, so it\u0027s no longer possible to know if we\u0027re indeed inside a drawing.\n\nPlease add a separate:\n\nbool m_bHadDrawing; ///\u003c Had drawing in this paragraph.\n\nif you really need that state, so it\u0027s clear that it\u0027s true till the end of the paragraph.",
+      "revId": "821c42b10a7095124a9afbbba3f9bc687ace40e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
