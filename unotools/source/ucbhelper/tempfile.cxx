@@ -242,7 +242,10 @@ OUString lcl_createName(
             aTmp += ".tmp";
         if ( bDirectory )
         {
-            FileBase::RC err = Directory::create( aTmp );
+            FileBase::RC err = Directory::create(
+                aTmp,
+                (osl_File_OpenFlag_Read | osl_File_OpenFlag_Write
+                 | osl_File_OpenFlag_Private));
             if ( err == FileBase::E_None )
             {
                 // !bKeep: only for creating a name, not a file or directory

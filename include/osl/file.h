@@ -1130,6 +1130,22 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
 
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectory( rtl_uString* pustrDirectoryURL );
 
+/** Create a directory, passing flags.
+
+    @param url
+    File URL of the directory to create.
+
+    @param flags
+    A combination of the same osl_File_OpenFlag_*s used by osl_openFile,
+    except that osl_File_OpenFlag_Create is implied and ignored.  Support for
+    the various flags can differ across operating systems.
+
+    @see osl_createDirectory()
+
+    @since LibreOffice 4.3
+*/
+SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryWithFlags(
+    rtl_uString * url, sal_uInt32 flags);
 
 /** Remove an empty directory.
 

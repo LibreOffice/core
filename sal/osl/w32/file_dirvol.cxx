@@ -691,6 +691,12 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
 oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
 {
+    return osl_createDirectoryWithFlags(
+        strPath, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
+}
+
+oslFileError osl_createDirectoryWithFlags(rtl_uString * strPath, sal_uInt32)
+{
     rtl_uString *strSysPath = NULL;
     oslFileError    error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
 
