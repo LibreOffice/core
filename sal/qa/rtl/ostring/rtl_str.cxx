@@ -711,7 +711,7 @@ namespace rtl_str
         void trim_WithLength_001()
         {
             char const *pStr = "  trim this";
-            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
+            sal_Char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, 2 );
@@ -724,7 +724,7 @@ namespace rtl_str
         void trim_WithLength_002()
         {
             char const *pStr = "trim this";
-            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
+            sal_Char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, 5 );
@@ -737,7 +737,7 @@ namespace rtl_str
         void trim_WithLength_003()
         {
             char const *pStr = "     trim   this";
-            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
+            sal_Char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 strcpy(pStr2, pStr);
@@ -751,7 +751,7 @@ namespace rtl_str
         void trim_WithLength_004()
         {
             char const *pStr = "\r\n\t \n\r    trim  \n this";
-            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
+            sal_Char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, 17 );
@@ -764,7 +764,7 @@ namespace rtl_str
         void trim_WithLength_005()
         {
             char const *pStr = "\r\n\t \n\r    trim \t this \n\r\t\t     ";
-            sal_Char *pStr2 = (sal_Char*)strdup(pStr);
+            sal_Char *pStr2 = strdup(pStr);
             if (pStr2)
             {
                 rtl_str_trim_WithLength( pStr2, strlen(pStr2) );
