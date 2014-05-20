@@ -75,6 +75,7 @@ wps                     http://schemas.microsoft.com/office/word/2010/wordproces
 wpg                     http://schemas.microsoft.com/office/word/2010/wordprocessingGroup
 wp14                    http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing
 w14                     http://schemas.microsoft.com/office/word/2010/wordml
+a14                     http://schemas.microsoft.com/office/drawingml/2010/main
 
 # extlst namespaces
 

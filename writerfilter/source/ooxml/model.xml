@@ -46,6 +46,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce" id="mce"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" alias="wp14" id="wp14"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordml" alias="w14" id="w14"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/drawing/2010/main" alias="a14" id="a14"/>
   <namespace-alias name="http://sprm" alias="sprm" id="sprm"/>
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -6792,6 +6793,417 @@
     <resource name="cntxtAlts" resource="Properties" tag="character">
       <element name="cntxtAlts" tokenid="ooxml:cntxtAlts_cntxtAlts"/>
     </resource>
+  </namespace>
+  <namespace name="a14" file="a14.rng">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawingml/2010/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <!-- Simple types -->
+      <define name="ST_ArtisticEffectParam10">
+        <data type="integer">
+          <xs:documentation>Integer value (0 to 10)</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">10</param>
+        </data>
+      </define>
+      <define name="ST_ArtisticEffectParam100">
+        <data type="integer">
+          <xs:documentation>Integer value (0 to 100)</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">100</param>
+        </data>
+      </define>
+      <define name="ST_ArtisticEffectParam4">
+        <data type="integer">
+          <xs:documentation>Integer value (0 to 4)</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">4</param>
+        </data>
+      </define>
+      <define name="ST_ArtisticEffectParam6">
+        <data type="integer">
+          <xs:documentation>Integer value (0 to 6)</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">6</param>
+        </data>
+      </define>
+      <define name="ST_ColorTemperature">
+        <data type="integer">
+          <xs:documentation>Integer value (1500 to 11500)</xs:documentation>
+          <param name="minInclusive">1500</param>
+          <param name="maxInclusive">11500</param>
+        </data>
+      </define>
+      <define name="ST_LegacySpreadsheetColorIndex">
+        <data type="integer">
+          <xs:documentation>Integer value (0 to 80)</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">80</param>
+        </data>
+      </define>
+      <define name="ST_SaturationAmount">
+        <data type="integer">
+          <xs:documentation>Integer value (0 to 400000)</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">400000</param>
+        </data>
+      </define>
+
+      <!-- Complex types for effects -->
+      <define name="CT_PictureEffectBlur">
+        <optional>
+          <attribute name="visible">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectCement">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="crackSpacing">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectChalkSketch">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="pressure">
+            <ref name="ST_ArtisticEffectParam4"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectCrisscrossEtching">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="pressure">
+            <ref name="ST_ArtisticEffectParam4"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectCutout">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="numberOfShades">
+            <ref name="ST_ArtisticEffectParam6"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectFilmGrain">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="grainSize">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectGlass">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="scaling">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectGlowDiffused">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="intensity">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectGlowEdges">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="smoothness">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectLightScreen">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="gridSize">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectLineDrawing">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="pencilSize">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectMarker">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="size">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectMosiaicBubbles">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="pressure">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectPaintStrokes">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="intensity">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectPaintBrush">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="brushSize">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectPastelsSmooth">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="scaling">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectPencilGrayscale">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="pencilSize">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectPencilSketch">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="pressure">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectPhotocopy">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="detail">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectPlasticWrap">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="smoothness">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectTexturizer">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="scaling">
+            <ref name="ST_ArtisticEffectParam100"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectWatercolorSponge">
+        <optional>
+          <attribute name="trans">
+            <ref name="a:ST_PositiveFixedPercentage"/>
+          </attribute>
+          <attribute name="brushSize">
+            <ref name="ST_ArtisticEffectParam10"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectBrightnessContrast">
+        <optional>
+          <attribute name="bright">
+            <ref name="a:ST_FixedPercentage"/>
+          </attribute>
+          <attribute name="contrast">
+            <ref name="a:ST_FixedPercentage"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectColorTemperature">
+        <optional>
+          <attribute name="colorTemp">
+            <ref name="ST_ColorTemperature"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectSaturation">
+        <optional>
+          <attribute name="sat">
+            <ref name="ST_SaturationAmount"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureEffectSharpenSoften">
+        <optional>
+          <attribute name="amount">
+            <ref name="ST_FixedPercentage"/>
+          </attribute>
+        </optional>
+      </define>
+
+      <!-- Complex types for containers -->
+      <define name="CT_PictureEffect">
+        <choice>
+          <element name="artisticBlur">
+            <ref name="CT_PictureEffectBlur"/>
+          </element>
+          <element name="artisticCement">
+            <ref name="CT_PictureEffectCement"/>
+          </element>
+          <element name="artisticChalkSketch">
+            <ref name="CT_PictureEffectChalkSketch"/>
+          </element>
+          <element name="artisticCrisscrossEtching">
+            <ref name="CT_PictureEffectCrisscrossEtching"/>
+          </element>
+          <element name="artisticCutout">
+            <ref name="CT_PictureEffectCutout"/>
+          </element>
+          <element name="artisticFilmGrain">
+            <ref name="CT_PictureEffectFilmGrain"/>
+          </element>
+          <element name="artisticGlass">
+            <ref name="CT_PictureEffectGlass"/>
+          </element>
+          <element name="artisticGlowDiffused">
+            <ref name="CT_PictureEffectGlowDiffused"/>
+          </element>
+          <element name="artisticGlowEdges">
+            <ref name="CT_PictureEffectGlowEdges"/>
+          </element>
+          <element name="artisticLightScreen">
+            <ref name="CT_PictureEffectLightScreen"/>
+          </element>
+          <element name="artisticLineDrawing">
+            <ref name="CT_PictureEffectLineDrawing"/>
+          </element>
+          <element name="artisticMarker">
+            <ref name="CT_PictureEffectMarker"/>
+          </element>
+          <element name="artisticMosiaicBubbles">
+            <ref name="CT_PictureEffectMosiaicBubbles"/>
+          </element>
+          <element name="artisticPaintStrokes">
+            <ref name="CT_PictureEffectPaintStrokes"/>
+          </element>
+          <element name="artisticPaintBrush">
+            <ref name="CT_PictureEffectPaintBrush"/>
+          </element>
+          <element name="artisticPastelsSmooth">
+            <ref name="CT_PictureEffectPastelsSmooth"/>
+          </element>
+          <element name="artisticPencilGrayscale">
+            <ref name="CT_PictureEffectPencilGrayscale"/>
+          </element>
+          <element name="artisticPencilSketch">
+            <ref name="CT_PictureEffectPencilSketch"/>
+          </element>
+          <element name="artisticPhotocopy">
+            <ref name="CT_PictureEffectPhotocopy"/>
+          </element>
+          <element name="artisticPlasticWrap">
+            <ref name="CT_PictureEffectPlasticWrap"/>
+          </element>
+          <element name="artisticTexturizer">
+            <ref name="CT_PictureEffectTexturizer"/>
+          </element>
+          <element name="artisticWatercolorSponge">
+            <ref name="CT_PictureEffectWatercolorSponge"/>
+          </element>
+          <element name="artisticBrightnessContrast">
+            <ref name="CT_PictureEffectBrightnessContrast"/>
+          </element>
+          <element name="artisticColorTemperature">
+            <ref name="CT_PictureEffectColorTemperature"/>
+          </element>
+          <element name="artisticSaturation">
+            <ref name="CT_PictureEffectSaturation"/>
+          </element>
+          <element name="artisticSharpenSoften">
+            <ref name="CT_PictureEffectSharpenSoften"/>
+          </element>
+        </choice>
+        <optional>
+          <attribute name="visible">
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+      </define>
+      <define name="CT_PictureLayer">
+        <zeroOrMore>
+          <element name="imgEffect">
+            <ref name="CT_PictureEffect"/>
+          </element>
+        </zeroOrMore>
+        <attribute name="r:embed">
+          <text/>
+          <xs:documentation>Embedded Image Relationship Target</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_Photo">
+        <zeroOrMore>
+          <element name="imgLayer">
+            <ref name="CT_PictureLayer"/>
+          </element>
+        </zeroOrMore>
+      </define>
+    </grammar>
   </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
