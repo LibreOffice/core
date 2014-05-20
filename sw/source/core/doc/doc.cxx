@@ -254,16 +254,6 @@ IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccess()
     return m_DeviceAccess.get();
 }
 
-const JobSetup* SwDoc::getJobsetup() const
-{
-    return getIDocumentDeviceAccessConst()->getJobsetup();
-}
-
-void SwDoc::setJobsetup(/*[in]*/ const JobSetup& rJobSetup )
-{
-    getIDocumentDeviceAccess()->setJobsetup( rJobSetup );
-}
-
 const SwPrintData & SwDoc::getPrintData() const
 {
     return getIDocumentDeviceAccessConst()->getPrintData();
