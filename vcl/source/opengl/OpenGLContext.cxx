@@ -390,7 +390,7 @@ bool OpenGLContext::ImplInit()
 #elif defined( ANDROID )
 
 #elif defined( UNX )
-    m_aGLWin.ctx = glXCreateContext(m_aGLWin.dpy,
+    m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
                                  m_aGLWin.vi,
                                  0,
                                  GL_TRUE);
@@ -690,7 +690,7 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
 
     Display *dpy = reinterpret_cast<Display*>(sysData->pDisplay);
 
-    if( !glXQueryExtension( dpy, NULL, NULL ) )
+    if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return aWinData;
 
     XLIB_Window win = sysData->aWindow;
