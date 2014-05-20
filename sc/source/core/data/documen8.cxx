@@ -803,7 +803,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
     }
 
     pExternalRefMgr->enableDocTimer(false);
-    ScProgress aProgress(GetDocumentShell(), "Updating external links", aRefLinks.size());
+    ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS).toString(), aRefLinks.size());
     for (size_t i = 0, n = aRefLinks.size(); i < n; ++i)
     {
         aProgress.SetState(i+1);
