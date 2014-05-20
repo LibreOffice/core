@@ -179,6 +179,8 @@ public:
     void ProcessUnrenderedShape();
 
     void SetPickingMode(bool bPickingMode);
+
+    sal_uInt32 GetPixelColorFromPoint(long nX, long nY);
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
@@ -362,6 +364,10 @@ private:
 
     bool mbPickingMode;
     SceneBox m_SenceBox;
+
+    GLuint mnPickingFbo;
+    GLuint mnPickingRbo;
+    GLuint mnPickingTexture;
 };
 
 }

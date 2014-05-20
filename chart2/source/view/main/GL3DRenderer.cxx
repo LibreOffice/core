@@ -249,6 +249,8 @@ void OpenGL3DRenderer::init()
     glBufferData(GL_ARRAY_BUFFER, sizeof(squareVertices), squareVertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    OpenGLHelper::createFramebuffer(m_iWidth, m_iHeight, mnPickingFbo, mnPickingRbo, mnPickingTexture);
+
     CHECK_GL_ERROR();
     Init3DUniformBlock();
 
@@ -1580,6 +1582,22 @@ void OpenGL3DRenderer::MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scal
 void OpenGL3DRenderer::SetPickingMode(bool bPickingMode)
 {
     mbPickingMode = bPickingMode;
+    if(mbPickingMode)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, mnPickingFbo);
+    }
+    else
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+}
+
+sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
+{
+    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[4]);
+    glReadPixels(nX, nY, 1, 1, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
+    Color aColor(buf[3], buf[2], buf[1], buf[0]);
+    return aColor.GetColor();
 }
 
 }
