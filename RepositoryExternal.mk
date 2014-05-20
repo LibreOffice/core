@@ -3252,14 +3252,17 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 ))
 endif
 $(eval $(call gb_Helper_register_jars,OXT,\
-	commons-codec-1.9 \
+	$(if $(filter TRUE,$(HAVE_JAVA6)),commons-codec-1.9,commons-codec-1.6) \
 	commons-httpclient-3.1 \
-	commons-lang3-3.3.1.jar \
+	$(if $(filter TRUE,$(HAVE_JAVA6)),commons-lang3-3.3.1.jar,commons-lang-2.4) \
 ))
 
 define gb_Jar__use_commons-codec
 $(call gb_Jar_use_external_project,$(1),apache_commons_codec)
-$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_codec)/dist/commons-codec-1.9.jar,commons-codec-1.9.jar)
+$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_codec)\
+$(if $(filter TRUE,$(HAVE_JAVA6)),/dist/commons-codec-1.9.jar,/dist/commons-codec-1.6.jar),\
+$(if $(filter TRUE,$(HAVE_JAVA6)),commons-codec-1.9.jar,commons-codec-1.6.jar)\
+)
 endef
 define gb_ExternalProject__use_commons-codec
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_codec)
@@ -3275,7 +3278,10 @@ endef
 
 define gb_Jar__use_commons-lang
 $(call gb_Jar_use_external_project,$(1),apache_commons_lang)
-$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_lang)/target/commons-lang3-3.3.1.jar,commons-lang3-3.3.1.jar)
+$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_lang)\
+$(if $(filter TRUE,$(HAVE_JAVA6)),/target/commons-lang3-3.3.1.jar,/dist/commons-lang-2.4.jar),\
+$(if $(filter TRUE,$(HAVE_JAVA6)),commons-lang3-3.3.1.jar,commons-lang-2.4.jar)\
+)
 endef
 define gb_ExternalProject__use_commons-lang
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_lang)
