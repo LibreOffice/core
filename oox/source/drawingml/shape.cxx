@@ -960,6 +960,11 @@ Reference< XShape > Shape::createAndInsert(
                 PUT_PROP( a3DEffectsGrabBag, 2, "Shape3D", Any( aShape3DEffects ) );
                 putPropertyToGrabBag( "3DEffectProperties", Any( a3DEffectsGrabBag ) );
             }
+
+            // store bitmap artistic effects in the grab bag
+            if( !mpGraphicPropertiesPtr->maBlipProps.maEffect.isEmpty() )
+                putPropertyToGrabBag( "ArtisticEffectProperties",
+                                      Any( mpGraphicPropertiesPtr->maBlipProps.maEffect.getEffect() ) );
         }
 
         else if( mbLockedCanvas )

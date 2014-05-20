@@ -78,6 +78,48 @@ private:
 
 
 
+/** Context handler that imports a14:imgProps, a14:imgLayer, a14:imgEffect containers
+    and the a14:artistic* effect tags defined in the MS-ODRAWXML extension. */
+class ArtisticEffectContext : public ::oox::core::ContextHandler2
+{
+public:
+    explicit            ArtisticEffectContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            ArtisticEffectProperties& rEffect );
+    virtual             ~ArtisticEffectContext();
+
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
+                            sal_Int32 nElement,
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+
+private:
+    ArtisticEffectProperties& maEffect;
+};
+
+
+
+/** Context handler that imports the a:extLst element inside a:blip and its
+    children a:ext, which can contain transformations to the bitmap. */
+class BlipExtensionContext : public ::oox::core::ContextHandler2
+{
+public:
+    explicit            BlipExtensionContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            BlipFillProperties& rBlipProps );
+    virtual             ~BlipExtensionContext();
+
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
+                            sal_Int32 nElement,
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+
+private:
+    BlipFillProperties& mrBlipProps;
+};
+
+
+
 /** Context handler that imports the a:duotone element containing the colors
     of a bitmap duotone transformation. */
 class DuotoneContext : public ::oox::core::ContextHandler2

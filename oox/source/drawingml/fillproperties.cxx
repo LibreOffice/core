@@ -205,6 +205,7 @@ void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
     maColorChangeTo.assignIfUsed( rSourceProps.maColorChangeTo );
     maDuotoneColors[0].assignIfUsed( rSourceProps.maDuotoneColors[0] );
     maDuotoneColors[1].assignIfUsed( rSourceProps.maDuotoneColors[1] );
+    maEffect.assignUsed( rSourceProps.maEffect );
 }
 
 
@@ -594,6 +595,198 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
     // Media content
     if( !maAudio.msEmbed.isEmpty() )
         rPropMap.setProperty(PROP_MediaURL, maAudio.msEmbed);
+}
+
+bool ArtisticEffectProperties::isEmpty() const
+{
+    return msName.isEmpty();
+}
+
+css::beans::PropertyValue ArtisticEffectProperties::getEffect()
+{
+    css::beans::PropertyValue pRet;
+    if( msName.isEmpty() )
+        return pRet;
+
+    css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
+    sal_uInt32 i = 0;
+    for( std::map< OUString, css::uno::Any >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it )
+    {
+        aSeq[i].Name = it->first;
+        aSeq[i].Value = it->second;
+        i++;
+    }
+
+    pRet.Name = msName;
+    pRet.Value = css::uno::Any( aSeq );
+
+    return pRet;
+}
+
+void ArtisticEffectProperties::assignUsed( const ArtisticEffectProperties& rSourceProps )
+{
+    if( !rSourceProps.isEmpty() )
+    {
+        msName = rSourceProps.msName;
+        maAttribs = rSourceProps.maAttribs;
+    }
+}
+
+OUString ArtisticEffectProperties::getEffectString( sal_Int32 nToken )
+{
+    switch( nToken )
+    {
+        // effects
+        case OOX_TOKEN( a14, artisticBlur ):                return OUString( "artisticBlur" );
+        case OOX_TOKEN( a14, artisticCement ):              return OUString( "artisticCement" );
+        case OOX_TOKEN( a14, artisticChalkSketch ):         return OUString( "artisticChalkSketch" );
+        case OOX_TOKEN( a14, artisticCrisscrossEtching ):   return OUString( "artisticCrisscrossEtching" );
+        case OOX_TOKEN( a14, artisticCutout ):              return OUString( "artisticCutout" );
+        case OOX_TOKEN( a14, artisticFilmGrain ):           return OUString( "artisticFilmGrain" );
+        case OOX_TOKEN( a14, artisticGlass ):               return OUString( "artisticGlass" );
+        case OOX_TOKEN( a14, artisticGlowDiffused ):        return OUString( "artisticGlowDiffused" );
+        case OOX_TOKEN( a14, artisticGlowEdges ):           return OUString( "artisticGlowEdges" );
+        case OOX_TOKEN( a14, artisticLightScreen ):         return OUString( "artisticLightScreen" );
+        case OOX_TOKEN( a14, artisticLineDrawing ):         return OUString( "artisticLineDrawing" );
+        case OOX_TOKEN( a14, artisticMarker ):              return OUString( "artisticMarker" );
+        case OOX_TOKEN( a14, artisticMosiaicBubbles ):      return OUString( "artisticMosiaicBubbles" );
+        case OOX_TOKEN( a14, artisticPaintStrokes ):        return OUString( "artisticPaintStrokes" );
+        case OOX_TOKEN( a14, artisticPaintBrush ):          return OUString( "artisticPaintBrush" );
+        case OOX_TOKEN( a14, artisticPastelsSmooth ):       return OUString( "artisticPastelsSmooth" );
+        case OOX_TOKEN( a14, artisticPencilGrayscale ):     return OUString( "artisticPencilGrayscale" );
+        case OOX_TOKEN( a14, artisticPencilSketch ):        return OUString( "artisticPencilSketch" );
+        case OOX_TOKEN( a14, artisticPhotocopy ):           return OUString( "artisticPhotocopy" );
+        case OOX_TOKEN( a14, artisticPlasticWrap ):         return OUString( "artisticPlasticWrap" );
+        case OOX_TOKEN( a14, artisticTexturizer ):          return OUString( "artisticTexturizer" );
+        case OOX_TOKEN( a14, artisticWatercolorSponge ):    return OUString( "artisticWatercolorSponge" );
+        case OOX_TOKEN( a14, artisticBrightnessContrast ):  return OUString( "artisticBrightnessContrast" );
+        case OOX_TOKEN( a14, artisticColorTemperature ):    return OUString( "artisticColorTemperature" );
+        case OOX_TOKEN( a14, artisticSaturation ):          return OUString( "artisticSaturation" );
+        case OOX_TOKEN( a14, artisticSharpenSoften ):       return OUString( "artisticSharpenSoften" );
+
+        // attributes
+        case XML_visible:           return OUString( "visible" );
+        case XML_trans:             return OUString( "trans" );
+        case XML_crackSpacing:      return OUString( "crackSpacing" );
+        case XML_pressure:          return OUString( "pressure" );
+        case XML_numberOfShades:    return OUString( "numberOfShades" );
+        case XML_grainSize:         return OUString( "grainSize" );
+        case XML_intensity:         return OUString( "intensity" );
+        case XML_smoothness:        return OUString( "smoothness" );
+        case XML_gridSize:          return OUString( "gridSize" );
+        case XML_pencilSize:        return OUString( "pencilSize" );
+        case XML_size:              return OUString( "size" );
+        case XML_brushSize:         return OUString( "brushSize" );
+        case XML_scaling:           return OUString( "scaling" );
+        case XML_detail:            return OUString( "detail" );
+        case XML_bright:            return OUString( "bright" );
+        case XML_contrast:          return OUString( "contrast" );
+        case XML_colorTemp:         return OUString( "colorTemp" );
+        case XML_sat:               return OUString( "sat" );
+        case XML_amount:            return OUString( "amount" );
+    }
+    SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectString - unexpected token" );
+    return OUString();
+}
+
+sal_Int32 ArtisticEffectProperties::getEffectToken( OUString sName )
+{
+    // effects
+    if( sName == "artisticBlur" )
+        return XML_artisticBlur;
+    else if( sName == "artisticCement" )
+        return XML_artisticCement;
+    else if( sName == "artisticChalkSketch" )
+        return XML_artisticChalkSketch;
+    else if( sName == "artisticCrisscrossEtching" )
+        return XML_artisticCrisscrossEtching;
+    else if( sName == "artisticCutout" )
+        return XML_artisticCutout;
+    else if( sName == "artisticFilmGrain" )
+        return XML_artisticFilmGrain;
+    else if( sName == "artisticGlass" )
+        return XML_artisticGlass;
+    else if( sName == "artisticGlowDiffused" )
+        return XML_artisticGlowDiffused;
+    else if( sName == "artisticGlowEdges" )
+        return XML_artisticGlowEdges;
+    else if( sName == "artisticLightScreen" )
+        return XML_artisticLightScreen;
+    else if( sName == "artisticLineDrawing" )
+        return XML_artisticLineDrawing;
+    else if( sName == "artisticMarker" )
+        return XML_artisticMarker;
+    else if( sName == "artisticMosiaicBubbles" )
+        return XML_artisticMosiaicBubbles;
+    else if( sName == "artisticPaintStrokes" )
+        return XML_artisticPaintStrokes;
+    else if( sName == "artisticPaintBrush" )
+        return XML_artisticPaintBrush;
+    else if( sName == "artisticPastelsSmooth" )
+        return XML_artisticPastelsSmooth;
+    else if( sName == "artisticPencilGrayscale" )
+        return XML_artisticPencilGrayscale;
+    else if( sName == "artisticPencilSketch" )
+        return XML_artisticPencilSketch;
+    else if( sName == "artisticPhotocopy" )
+        return XML_artisticPhotocopy;
+    else if( sName == "artisticPlasticWrap" )
+        return XML_artisticPlasticWrap;
+    else if( sName == "artisticTexturizer" )
+        return XML_artisticTexturizer;
+    else if( sName == "artisticWatercolorSponge" )
+        return XML_artisticWatercolorSponge;
+    else if( sName == "artisticBrightnessContrast" )
+        return XML_artisticBrightnessContrast;
+    else if( sName == "artisticColorTemperature" )
+        return XML_artisticColorTemperature;
+    else if( sName == "artisticSaturation" )
+        return XML_artisticSaturation;
+    else if( sName == "artisticSharpenSoften" )
+        return XML_artisticSharpenSoften;
+
+    // attributes
+    else if( sName == "visible" )
+        return XML_visible;
+    else if( sName == "trans" )
+        return XML_trans;
+    else if( sName == "crackSpacing" )
+        return XML_crackSpacing;
+    else if( sName == "pressure" )
+        return XML_pressure;
+    else if( sName == "numberOfShades" )
+        return XML_numberOfShades;
+    else if( sName == "grainSize" )
+        return XML_grainSize;
+    else if( sName == "intensity" )
+        return XML_intensity;
+    else if( sName == "smoothness" )
+        return XML_smoothness;
+    else if( sName == "gridSize" )
+        return XML_gridSize;
+    else if( sName == "pencilSize" )
+        return XML_pencilSize;
+    else if( sName == "size" )
+        return XML_size;
+    else if( sName == "brushSize" )
+        return XML_brushSize;
+    else if( sName == "scaling" )
+        return XML_scaling;
+    else if( sName == "detail" )
+        return XML_detail;
+    else if( sName == "bright" )
+        return XML_bright;
+    else if( sName == "contrast" )
+        return XML_contrast;
+    else if( sName == "colorTemp" )
+        return XML_colorTemp;
+    else if( sName == "sat" )
+        return XML_sat;
+    else if( sName == "amount" )
+        return XML_amount;
+
+    SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectToken - unexpected token name" );
+    return XML_none;
 }
 
 

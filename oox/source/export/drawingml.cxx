@@ -23,6 +23,7 @@
 #include "oox/export/drawingml.hxx"
 #include "oox/export/utils.hxx"
 #include <oox/drawingml/color.hxx>
+#include <oox/drawingml/fillproperties.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -836,6 +837,7 @@ OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, const OUStri
                    XML_bright, nBright ? I32S( nBright*1000 ) : NULL,
                    XML_contrast, nContrast ? I32S( nContrast*1000 ) : NULL,
                    FSEND );
+    WriteArtisticEffect( rXPropSet );
 
     mpFS->endElementNS( XML_a, XML_blip );
 
@@ -2563,6 +2565,60 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         mpFS->endElementNS( XML_a, XML_contourClr );
     }
     mpFS->endElementNS( XML_a, XML_sp3d );
+}
+
+void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
+{
+    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
+        return;
+
+    PropertyValue aEffect;
+    Sequence< PropertyValue > aGrabBag;
+    mAny >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+    {
+        if( aGrabBag[i].Name == "ArtisticEffectProperties" )
+        {
+            aGrabBag[i].Value >>= aEffect;
+            break;
+        }
+    }
+    sal_Int32 nEffectToken = ArtisticEffectProperties::getEffectToken( aEffect.Name );
+    if( nEffectToken == XML_none )
+        return;
+
+    Sequence< PropertyValue > aAttrs;
+    aEffect.Value >>= aAttrs;
+    sax_fastparser::FastAttributeList *aAttrList = mpFS->createAttrList();
+    for( sal_Int32 i=0; i < aAttrs.getLength(); ++i )
+    {
+        sal_Int32 nToken = ArtisticEffectProperties::getEffectToken( aAttrs[i].Name );
+        if( nToken != XML_none )
+        {
+            sal_Int32 nVal = 0;
+            aAttrs[i].Value >>= nVal;
+            aAttrList->add( nToken, OString::number( nVal ).getStr() );
+        }
+    }
+
+    mpFS->startElementNS( XML_a, XML_extLst, FSEND );
+    mpFS->startElementNS( XML_a, XML_ext,
+                          XML_uri, "{BEBA8EAE-BF5A-486C-A8C5-ECC9F3942E4B}",
+                          FSEND );
+    mpFS->startElementNS( XML_a14, XML_imgProps,
+                          FSNS( XML_xmlns, XML_a14 ), "http://schemas.microsoft.com/office/drawing/2010/main",
+                          FSEND );
+    mpFS->startElementNS( XML_a14, XML_imgLayer, FSEND );
+    mpFS->startElementNS( XML_a14, XML_imgEffect, FSEND );
+
+    sax_fastparser::XFastAttributeListRef xAttrList( aAttrList );
+    mpFS->singleElementNS( XML_a14, nEffectToken, xAttrList );
+
+    mpFS->endElementNS( XML_a14, XML_imgEffect );
+    mpFS->endElementNS( XML_a14, XML_imgLayer );
+    mpFS->endElementNS( XML_a14, XML_imgProps );
+    mpFS->endElementNS( XML_a, XML_ext );
+    mpFS->endElementNS( XML_a, XML_extLst );
 }
 
 }

@@ -650,7 +650,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         {
                             // if the shape contains effects in the grab bag, we should not transform it
                             // in a XTextContent so those effects can be preserved
-                            if( aGrabBag[i].Name == "EffectProperties" || aGrabBag[i].Name == "3DEffectProperties" )
+                            if( aGrabBag[i].Name == "EffectProperties" || aGrabBag[i].Name == "3DEffectProperties" ||
+                                    aGrabBag[i].Name == "ArtisticEffectProperties" )
                                 bContainsEffects = true;
                         }
 

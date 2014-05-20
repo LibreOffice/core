@@ -65,6 +65,28 @@ struct PatternFillProperties
     void                assignUsed( const PatternFillProperties& rSourceProps );
 };
 
+struct ArtisticEffectProperties
+{
+    OUString            msName;
+    std::map< OUString, css::uno::Any >
+                        maAttribs;
+
+    bool                isEmpty() const;
+
+    /** Returns the struct as a PropertyValue with Name = msName and
+     *  Value = maAttribs as a Sequence< PropertyValue >. */
+    css::beans::PropertyValue getEffect();
+
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const ArtisticEffectProperties& rSourceProps );
+
+    /** Translate effect tokens to strings. */
+    static OUString     getEffectString( sal_Int32 nToken );
+
+    /** Translate effect strings to tokens. */
+    static sal_Int32    getEffectToken( OUString sName );
+};
+
 struct BlipFillProperties
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
@@ -88,6 +110,8 @@ struct BlipFillProperties
     Color               maColorChangeFrom;      /// Start color of color transformation.
     Color               maColorChangeTo;        /// Destination color of color transformation.
     Color               maDuotoneColors[2];     /// Duotone Colors
+
+    ArtisticEffectProperties maEffect;          /// Artistic effect, not supported by core.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const BlipFillProperties& rSourceProps );

@@ -182,6 +182,9 @@ ContextHandlerRef BlipContext::onCreateContext(
         case A_TOKEN( duotone ):
             return new DuotoneContext( *this, rAttribs, mrBlipProps );
 
+        case A_TOKEN( extLst ):
+            return new BlipExtensionContext( *this, mrBlipProps );
+
         case A_TOKEN( lum ):
             mrBlipProps.moBrightness = rAttribs.getInteger( XML_bright );
             mrBlipProps.moContrast = rAttribs.getInteger( XML_contrast );
@@ -290,6 +293,73 @@ SimpleFillPropertiesContext::SimpleFillPropertiesContext( ContextHandler2Helper&
 SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
 {
     mrColor = getBestSolidColor();
+}
+
+BlipExtensionContext::BlipExtensionContext( ContextHandler2Helper& rParent, BlipFillProperties& rBlipProps ) :
+    ContextHandler2( rParent ),
+    mrBlipProps( rBlipProps )
+{
+}
+
+BlipExtensionContext::~BlipExtensionContext()
+{
+}
+
+ContextHandlerRef BlipExtensionContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& )
+{
+    switch( nElement )
+    {
+        case A_TOKEN( ext ):
+            return new BlipExtensionContext( *this, mrBlipProps );
+
+        case OOX_TOKEN( a14, imgProps ):
+            return new ArtisticEffectContext( *this, mrBlipProps.maEffect );
+    }
+    return 0;
+}
+
+ArtisticEffectContext::ArtisticEffectContext( ContextHandler2Helper& rParent, ArtisticEffectProperties& rEffect ) :
+    ContextHandler2( rParent ),
+    maEffect( rEffect )
+{
+}
+
+ArtisticEffectContext::~ArtisticEffectContext()
+{
+}
+
+ContextHandlerRef ArtisticEffectContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    // containers
+    if( nElement == OOX_TOKEN( a14, imgLayer ) || nElement == OOX_TOKEN( a14, imgEffect ) )
+        return new ArtisticEffectContext( *this, maEffect );
+        // TODO: manage r:embed attribute in a14:imgLayer
+
+    // effects
+    maEffect.msName = ArtisticEffectProperties::getEffectString( nElement );
+    if( maEffect.isEmpty() )
+        return 0;
+
+    // effect attributes
+    sal_Int32 aAttribs[19] = {
+            XML_visible, XML_trans, XML_crackSpacing, XML_pressure, XML_numberOfShades,
+            XML_grainSize, XML_intensity, XML_smoothness, XML_gridSize, XML_pencilSize,
+            XML_size, XML_brushSize, XML_scaling, XML_detail, XML_bright, XML_contrast,
+            XML_colorTemp, XML_sat, XML_amount
+    };
+    for( sal_Int32 i=0; i<19; ++i )
+    {
+        if( rAttribs.hasAttribute( aAttribs[i] ) )
+        {
+            OUString sName = ArtisticEffectProperties::getEffectString( aAttribs[i] );
+            if( !sName.isEmpty() )
+                maEffect.maAttribs[sName] = uno::makeAny( rAttribs.getInteger( aAttribs[i], 0 ) );
+        }
+    }
+
+    return 0;
 }
 
 } // namespace drawingml
