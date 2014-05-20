@@ -23,6 +23,7 @@
 #include "oox/export/drawingml.hxx"
 #include "oox/export/utils.hxx"
 #include <oox/drawingml/color.hxx>
+#include <oox/drawingml/fillproperties.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -118,10 +119,14 @@ namespace drawingml {
 
 // not thread safe
 int DrawingML::mnImageCounter = 1;
+int DrawingML::mnWdpImageCounter = 1;
+std::map<OUString, OUString> DrawingML::maWdpCache;
 
 void DrawingML::ResetCounters()
 {
     mnImageCounter = 1;
+    mnWdpImageCounter = 1;
+    maWdpCache.clear();
 }
 
 bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, const OUString& aName )
@@ -836,6 +841,7 @@ OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, const OUStri
                    XML_bright, nBright ? I32S( nBright*1000 ) : NULL,
                    XML_contrast, nContrast ? I32S( nContrast*1000 ) : NULL,
                    FSEND );
+    WriteArtisticEffect( rXPropSet );
 
     mpFS->endElementNS( XML_a, XML_blip );
 
@@ -2563,6 +2569,100 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         mpFS->endElementNS( XML_a, XML_contourClr );
     }
     mpFS->endElementNS( XML_a, XML_sp3d );
+}
+
+void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
+{
+    if( !GetProperty( rXPropSet, "InteropGrabBag" ) )
+        return;
+
+    PropertyValue aEffect;
+    Sequence< PropertyValue > aGrabBag;
+    mAny >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+    {
+        if( aGrabBag[i].Name == "ArtisticEffectProperties" )
+        {
+            aGrabBag[i].Value >>= aEffect;
+            break;
+        }
+    }
+    sal_Int32 nEffectToken = ArtisticEffectProperties::getEffectToken( aEffect.Name );
+    if( nEffectToken == XML_none )
+        return;
+
+    Sequence< PropertyValue > aAttrs;
+    aEffect.Value >>= aAttrs;
+    sax_fastparser::FastAttributeList *aAttrList = mpFS->createAttrList();
+    OString sRelId;
+    for( sal_Int32 i=0; i < aAttrs.getLength(); ++i )
+    {
+        sal_Int32 nToken = ArtisticEffectProperties::getEffectToken( aAttrs[i].Name );
+        if( nToken != XML_none )
+        {
+            sal_Int32 nVal = 0;
+            aAttrs[i].Value >>= nVal;
+            aAttrList->add( nToken, OString::number( nVal ).getStr() );
+        }
+        else if( aAttrs[i].Name == "OriginalGraphic" )
+        {
+            Sequence< PropertyValue > aGraphic;
+            aAttrs[i].Value >>= aGraphic;
+            Sequence< sal_Int8 > aGraphicData;
+            OUString sGraphicId;
+            for( sal_Int32 j=0; j < aGraphic.getLength(); ++j )
+            {
+                if( aGraphic[j].Name == "Id" )
+                    aGraphic[j].Value >>= sGraphicId;
+                else if( aGraphic[j].Name == "Data" )
+                    aGraphic[j].Value >>= aGraphicData;
+            }
+            sRelId = WriteWdpPicture( sGraphicId, aGraphicData );
+        }
+    }
+
+    mpFS->startElementNS( XML_a, XML_extLst, FSEND );
+    mpFS->startElementNS( XML_a, XML_ext,
+                          XML_uri, "{BEBA8EAE-BF5A-486C-A8C5-ECC9F3942E4B}",
+                          FSEND );
+    mpFS->startElementNS( XML_a14, XML_imgProps,
+                          FSNS( XML_xmlns, XML_a14 ), "http://schemas.microsoft.com/office/drawing/2010/main",
+                          FSEND );
+    mpFS->startElementNS( XML_a14, XML_imgLayer,
+                          FSNS( XML_r, XML_embed), sRelId.getStr(),
+                          FSEND );
+    mpFS->startElementNS( XML_a14, XML_imgEffect, FSEND );
+
+    sax_fastparser::XFastAttributeListRef xAttrList( aAttrList );
+    mpFS->singleElementNS( XML_a14, nEffectToken, xAttrList );
+
+    mpFS->endElementNS( XML_a14, XML_imgEffect );
+    mpFS->endElementNS( XML_a14, XML_imgLayer );
+    mpFS->endElementNS( XML_a14, XML_imgProps );
+    mpFS->endElementNS( XML_a, XML_ext );
+    mpFS->endElementNS( XML_a, XML_extLst );
+}
+
+OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal_Int8 >& rPictureData )
+{
+    std::map<OUString, OUString>::iterator aCachedItem = maWdpCache.find( rFileId );
+    if( aCachedItem != maWdpCache.end() )
+        return OUStringToOString( aCachedItem->second, RTL_TEXTENCODING_UTF8 );
+
+    OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter++ ) + ".wdp";
+    uno::Reference< io::XOutputStream > xOutStream =
+            mpFB->openFragmentStream( "word/" + sFileName,
+                                      "image/vnd.ms-photo" );
+    OUString sId;
+    xOutStream->writeBytes( rPictureData );
+    xOutStream->closeOutput();
+
+    sId = mpFB->addRelation( mpFS->getOutputStream(),
+                             "http://schemas.microsoft.com/office/2007/relationships/hdphoto",
+                             sFileName, false );
+
+    maWdpCache[rFileId] = sId;
+    return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
 }

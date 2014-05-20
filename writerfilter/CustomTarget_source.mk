@@ -41,6 +41,7 @@ writerfilter_OOXMLNAMESPACES= \
 	mce \
 	wp14 \
 	w14 \
+	a14 \
 	wml
 
 writerfilter_ALL = \
