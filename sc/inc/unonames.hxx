@@ -668,6 +668,9 @@
 
 #define SC_UNO_EMBED_FONTS     "EmbedFonts"
 
+#define SC_UNO_ODS_LOCK_SOLAR_MUTEX "ODSLockSolarMutex"
+#define SC_UNO_ODS_IMPORT_STYLES    "ODSImportStyles"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

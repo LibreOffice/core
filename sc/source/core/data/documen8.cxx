@@ -86,6 +86,7 @@
 #include "columniterator.hxx"
 #include "globalnames.hxx"
 #include "stringutil.hxx"
+#include <scopetools.hxx>
 
 #include <memory>
 #include <boost/scoped_ptr.hpp>
@@ -856,40 +857,61 @@ bool ScDocument::IsInLinkUpdate() const
 
 void ScDocument::UpdateExternalRefLinks(Window* pWin)
 {
-    if (!GetLinkManager())
+    sfx2::LinkManager* pMgr = GetLinkManager();
+    if (!pMgr)
+        return;
+
+    if (!pExternalRefMgr.get())
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.size();
 
     bool bAny = false;
+
+    // Collect all the external ref links first.
+    std::vector<ScExternalRefLink*> aRefLinks;
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         ScExternalRefLink* pRefLink = dynamic_cast<ScExternalRefLink*>(pBase);
         if (pRefLink)
-        {
-            if (pRefLink->Update())
-                bAny = true;
-            else
-            {
-                // Update failed.  Notify the user.
-
-                OUString aFile;
-                pLinkManager->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
-                // Decode encoded URL for display friendliness.
-                INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
-                aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
-
-                OUStringBuffer aBuf;
-                aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
-                aBuf.appendAscii("\n\n");
-                aBuf.append(aFile);
-                ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
-                aBox.Execute();
-            }
-        }
+            aRefLinks.push_back(pRefLink);
     }
+
+    sc::WaitPointerSwitch aWaitSwitch(pWin);
+
+    pExternalRefMgr->enableDocTimer(false);
+    ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS).toString(), aRefLinks.size());
+    for (size_t i = 0, n = aRefLinks.size(); i < n; ++i)
+    {
+        aProgress.SetState(i+1);
+
+        ScExternalRefLink* pRefLink = aRefLinks[i];
+        if (pRefLink->Update())
+        {
+            bAny = true;
+            continue;
+        }
+
+        // Update failed.  Notify the user.
+
+        OUString aFile;
+        pMgr->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
+        // Decode encoded URL for display friendliness.
+        INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
+        aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+
+        OUStringBuffer aBuf;
+        aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
+        aBuf.appendAscii("\n\n");
+        aBuf.append(aFile);
+        ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+        aBox.Execute();
+    }
+
+    pExternalRefMgr->enableDocTimer(true);
+
     if (bAny)
     {
         TrackFormulas();

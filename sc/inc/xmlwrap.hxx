@@ -27,10 +27,6 @@
 
 #include <importfilterdata.hxx>
 
-class ScDocument;
-class SfxMedium;
-class ScMySharedData;
-
 #include <tools/errcode.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -44,10 +40,16 @@ namespace com { namespace sun { namespace star {
         namespace sax { struct InputSource; class XParser; class XWriter; } }
 } } }
 
+class ScDocument;
+class SfxMedium;
+class ScMySharedData;
+class ScDocShell;
+
 class ScXMLImportWrapper
 {
     sc::ImportPostProcessData maPostProcessData;
 
+    ScDocShell& mrDocShell;
     ScDocument&     rDoc;
     SfxMedium*      pMedium;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
@@ -71,9 +73,18 @@ class ScXMLImportWrapper
         ScMySharedData*& pSharedData);
 
 public:
-    ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >&);
-    sal_Bool Import(sal_Bool bStylesOnly, ErrCode& );
-    sal_Bool Export(sal_Bool bStylesOnly);
+
+    static const sal_uInt8 STYLES   = 0x01;
+    static const sal_uInt8 CONTENT  = 0x02;
+    static const sal_uInt8 METADATA = 0x04;
+    static const sal_uInt8 SETTINGS = 0x08;
+    static const sal_uInt8 ALL      = STYLES | CONTENT | METADATA | SETTINGS;
+
+    ScXMLImportWrapper(
+        ScDocShell& rDocSh, SfxMedium* pM, const css::uno::Reference<css::embed::XStorage>& xStor );
+
+    bool Import( sal_uInt8 nMode, ErrCode& rError );
+    bool Export(bool bStylesOnly);
 
     const sc::ImportPostProcessData& GetImportPostProcessData() const;
 };

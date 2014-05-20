@@ -53,6 +53,8 @@
 #include "vcl/msgbox.hxx"
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
+#include <columnspanset.hxx>
+#include <column.hxx>
 
 #include <memory>
 #include <algorithm>
@@ -71,8 +73,8 @@ using ::std::list;
 using ::std::unary_function;
 using namespace formula;
 
-#define SRCDOC_LIFE_SPAN     6000       // 1 minute (in 100th of a sec)
-#define SRCDOC_SCAN_INTERVAL 1000*5     // every 5 seconds (in msec)
+#define SRCDOC_LIFE_SPAN     30000      // 5 minutes (in 100th of a sec)
+#define SRCDOC_SCAN_INTERVAL 1000*30    // every 30 seconds (in msec)
 
 namespace {
 
@@ -136,17 +138,18 @@ struct UpdateFormulaCell : public unary_function<ScFormulaCell*, void>
         // Check to make sure the cell really contains ocExternalRef.
         // External names, external cell and range references all have a
         // ocExternalRef token.
-        const ScTokenArray* pCode = pCell->GetCode();
+        ScTokenArray* pCode = pCell->GetCode();
         if (!pCode->HasExternalRef())
             return;
 
-        ScTokenArray* pArray = pCell->GetCode();
-        if (pArray)
+        if (pCode->GetCodeError())
+        {
             // Clear the error code, or a cell with error won't get re-compiled.
-            pArray->SetCodeError(0);
+            pCode->SetCodeError(0);
+            pCell->SetCompile(true);
+            pCell->CompileTokenArray();
+        }
 
-        pCell->SetCompile(true);
-        pCell->CompileTokenArray();
         pCell->SetDirty();
     }
 };
@@ -253,6 +256,13 @@ ScExternalRefCache::Table::Table()
 
 ScExternalRefCache::Table::~Table()
 {
+}
+
+void ScExternalRefCache::Table::clear()
+{
+    maRows.clear();
+    maCachedRanges.RemoveAll();
+    meReferenced = REFERENCED_MARKED;
 }
 
 void ScExternalRefCache::Table::setReferencedFlag( ScExternalRefCache::Table::ReferencedFlag eFlag )
@@ -446,9 +456,6 @@ void ScExternalRefCache::Table::setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCC
         maCachedRanges.Append(aRange);
     else
         maCachedRanges.Join(aRange);
-
-    OUString aStr;
-    maCachedRanges.Format(aStr, SCA_VALID);
 }
 
 void ScExternalRefCache::Table::setWholeTableCached()
@@ -1113,6 +1120,35 @@ bool ScExternalRefCache::areAllCacheTablesReferenced() const
     return maReferenced.mbAllReferenced;
 }
 
+void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const
+{
+    const DocItem* pDocItem = getDocItem(nFileId);
+    if (!pDocItem)
+        // This document is not cached.
+        return;
+
+    const std::vector<TableTypeRef>& rTables = pDocItem->maTables;
+    for (size_t nTab = 0, nTabCount = rTables.size(); nTab < nTabCount; ++nTab)
+    {
+        const Table& rTable = *rTables[nTab];
+        std::vector<SCROW> aRows;
+        rTable.getAllRows(aRows);
+        std::vector<SCROW>::const_iterator itRow = aRows.begin(), itRowEnd = aRows.end();
+        for (; itRow != itRowEnd; ++itRow)
+        {
+            SCROW nRow = *itRow;
+            std::vector<SCCOL> aCols;
+            rTable.getAllCols(nRow, aCols);
+            std::vector<SCCOL>::const_iterator itCol = aCols.begin(), itColEnd = aCols.end();
+            for (; itCol != itColEnd; ++itCol)
+            {
+                SCCOL nCol = *itCol;
+                rSet.set(nTab, nCol, nRow, true);
+            }
+        }
+    }
+}
+
 ScExternalRefCache::ReferencedStatus::ReferencedStatus() :
     mbAllReferenced(false)
 {
@@ -1206,6 +1242,28 @@ void ScExternalRefCache::clearCache(sal_uInt16 nFileId)
     maDocs.erase(nFileId);
 }
 
+void ScExternalRefCache::clearCacheTables(sal_uInt16 nFileId)
+{
+    osl::MutexGuard aGuard(&maMtxDocs);
+    DocItem* pDocItem = getDocItem(nFileId);
+    if (!pDocItem)
+        // This document is not cached at all.
+        return;
+
+    // Clear all cache table content, but keep the tables.
+    std::vector<TableTypeRef>& rTabs = pDocItem->maTables;
+    for (size_t i = 0, n = rTabs.size(); i < n; ++i)
+    {
+        Table& rTab = *rTabs[i];
+        rTab.clear();
+    }
+
+    // Clear the external range name caches.
+    pDocItem->maRangeNames.clear();
+    pDocItem->maRangeArrays.clear();
+    pDocItem->maRealRangeNameMap.clear();
+}
+
 ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) const
 {
     osl::MutexGuard aGuard(&maMtxDocs);
@@ -1268,7 +1326,8 @@ void ScExternalRefLink::Closed()
     if (pCurFile->equals(aFile))
     {
         // Refresh the current source document.
-        pMgr->refreshNames(mnFileId);
+        if (!pMgr->refreshSrcDocument(mnFileId))
+            return ERROR_GENERAL;
     }
     else
     {
@@ -1547,7 +1606,8 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
     mpDoc(pDoc),
     mbInReferenceMarking(false),
-    mbUserInteractionEnabled(true)
+    mbUserInteractionEnabled(true),
+    mbDocTimerEnabled(true)
 {
     maSrcDocTimer.SetTimeoutHdl( LINK(this, ScExternalRefManager, TimeOutHdl) );
     maSrcDocTimer.SetTimeout(SRCDOC_SCAN_INTERVAL);
@@ -2025,6 +2085,27 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr->second.insert(pCell);
 }
 
+void ScExternalRefManager::enableDocTimer( bool bEnable )
+{
+    if (mbDocTimerEnabled == bEnable)
+        return;
+
+    mbDocTimerEnabled = bEnable;
+    if (mbDocTimerEnabled)
+    {
+        if (!maDocShells.empty())
+        {
+            DocShellMap::iterator it = maDocShells.begin(), itEnd = maDocShells.end();
+            for (; it != itEnd; ++it)
+                it->second.maLastAccess = Time(Time::SYSTEM);
+
+            maSrcDocTimer.Start();
+        }
+    }
+    else
+        maSrcDocTimer.Stop();
+}
+
 void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const
 {
     if (!pFmt)
@@ -2246,17 +2327,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         return NULL;
     }
 
-    if (maDocShells.empty())
-    {
-        // If this is the first source document insertion, start up the timer.
-        maSrcDocTimer.Start();
-    }
-
-    maDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
-    SfxObjectShell* p = aSrcDoc.maShell;
-    ScDocument* pSrcDoc = static_cast<ScDocShell*>(p)->GetDocument();
-    initDocInCache(maRefCache, pSrcDoc, nFileId);
-    return pSrcDoc;
+    return cacheNewDocShell(nFileId, aSrcDoc);
 }
 
 SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUString& rFilter)
@@ -2313,7 +2384,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     // To load encrypted documents with password, user interaction needs to be enabled.
     pMedium->UseInteractionHandler(mbUserInteractionEnabled);
 
-    ScDocShell* pNewShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
+    ScDocShell* pNewShell = new ScDocShell(SFXMODEL_EXTERNAL_LINK);
     SfxObjectShellRef aRef = pNewShell;
 
     // increment the recursive link count of the source document.
@@ -2333,7 +2404,12 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     }
     pExtOptNew->GetDocSettings().mnLinkCnt = nLinkCount + 1;
 
-    pNewShell->DoLoad(pMedium.release());
+    if (!pNewShell->DoLoad(pMedium.release()))
+    {
+        aRef->DoClose();
+        aRef.Clear();
+        return aRef;
+    }
 
     // with UseInteractionHandler, options may be set by dialog during DoLoad
     OUString aNew = ScDocumentLoader::GetOptions(*pNewShell->GetMedium());
@@ -2342,6 +2418,19 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     setFilterData(nFileId, rFilter, aOptions);    // update the filter data, including the new options
 
     return aRef;
+}
+
+ScDocument* ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell )
+{
+    if (mbDocTimerEnabled && maDocShells.empty())
+        // If this is the first source document insertion, start up the timer.
+        maSrcDocTimer.Start();
+
+    maDocShells.insert(DocShellMap::value_type(nFileId, rSrcShell));
+    SfxObjectShell& rShell = *rSrcShell.maShell;
+    ScDocument* pSrcDoc = static_cast<ScDocShell&>(rShell).GetDocument();
+    initDocInCache(maRefCache, pSrcDoc, nFileId);
+    return pSrcDoc;
 }
 
 bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
@@ -2555,18 +2644,142 @@ void ScExternalRefManager::clearCache(sal_uInt16 nFileId)
     maRefCache.clearCache(nFileId);
 }
 
-void ScExternalRefManager::refreshNames(sal_uInt16 nFileId)
-{
-    clearCache(nFileId);
-    lcl_removeByFileId(nFileId, maDocShells);
+namespace {
 
-    if (maDocShells.empty())
-        maSrcDocTimer.Stop();
+class RefCacheFiller : public sc::ColumnSpanSet::ColumnAction
+{
+    svl::SharedStringPool& mrStrPool;
+
+    ScExternalRefCache& mrRefCache;
+    ScExternalRefCache::TableTypeRef mpRefTab;
+    sal_uInt16 mnFileId;
+    ScColumn* mpCurCol;
+    sc::ColumnBlockConstPosition maBlockPos;
+
+public:
+    RefCacheFiller( svl::SharedStringPool& rStrPool, ScExternalRefCache& rRefCache, sal_uInt16 nFileId ) :
+        mrStrPool(rStrPool), mrRefCache(rRefCache), mnFileId(nFileId), mpCurCol(NULL) {}
+
+    virtual void startColumn( ScColumn* pCol )
+    {
+        mpCurCol = pCol;
+        if (!mpCurCol)
+            return;
+
+        mpCurCol->InitBlockPosition(maBlockPos);
+        mpRefTab = mrRefCache.getCacheTable(mnFileId, mpCurCol->GetTab());
+    }
+
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal )
+    {
+        if (!mpCurCol || !bVal)
+            return;
+
+        if (!mpRefTab)
+            return;
+
+        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        {
+            ScExternalRefCache::TokenRef pTok;
+            ScRefCellValue aCell = mpCurCol->GetCellValue(maBlockPos, nRow);
+            switch (aCell.meType)
+            {
+                case CELLTYPE_STRING:
+                case CELLTYPE_EDIT:
+                {
+                    OUString aStr = aCell.getString(&mpCurCol->GetDoc());
+                    svl::SharedString aSS = mrStrPool.intern(aStr);
+                    pTok.reset(new formula::FormulaStringToken(aSS));
+                }
+                break;
+                case CELLTYPE_VALUE:
+                    pTok.reset(new formula::FormulaDoubleToken(aCell.mfValue));
+                break;
+                case CELLTYPE_FORMULA:
+                {
+                    sc::FormulaResultValue aRes = aCell.mpFormula->GetResult();
+                    switch (aRes.meType)
+                    {
+                        case sc::FormulaResultValue::Value:
+                            pTok.reset(new formula::FormulaDoubleToken(aRes.mfValue));
+                        break;
+                        case sc::FormulaResultValue::String:
+                        {
+                            // Re-intern the string to the host document pool.
+                            svl::SharedString aInterned = mrStrPool.intern(aRes.maString.getString());
+                            pTok.reset(new formula::FormulaStringToken(aInterned));
+                        }
+                        break;
+                        case sc::FormulaResultValue::Error:
+                        case sc::FormulaResultValue::Invalid:
+                        default:
+                            pTok.reset(new FormulaErrorToken(errNoValue));
+                    }
+                }
+                break;
+                default:
+                    pTok.reset(new FormulaErrorToken(errNoValue));
+            }
+
+            if (pTok)
+            {
+                // Cache this cell.
+                mpRefTab->setCell(mpCurCol->GetCol(), nRow, pTok, mpCurCol->GetNumberFormat(nRow));
+                mpRefTab->setCachedCell(mpCurCol->GetCol(), nRow);
+            }
+        }
+    };
+};
+
+}
+
+bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
+{
+    sc::ColumnSpanSet aCachedArea(false);
+    maRefCache.getAllCachedDataSpans(nFileId, aCachedArea);
+
+    OUString aFilter;
+    SfxObjectShellRef xDocShell;
+    try
+    {
+        xDocShell = loadSrcDocument(nFileId, aFilter);
+    }
+    catch ( const css::uno::Exception& ) {}
+
+    if (!xDocShell.Is())
+        // Failed to load the document.  Bail out.
+        return false;
+
+    ScDocShell& rDocSh = static_cast<ScDocShell&>(*xDocShell);
+    ScDocument* pSrcDoc = rDocSh.GetDocument();
+
+    // Clear the existing cache, and refill it.  Make sure we keep the
+    // existing cache table instances here.
+    maRefCache.clearCacheTables(nFileId);
+    RefCacheFiller aAction(mpDoc->GetSharedStringPool(), maRefCache, nFileId);
+    aCachedArea.executeColumnAction(*pSrcDoc, aAction);
+
+    DocShellMap::iterator it = maDocShells.find(nFileId);
+    if (it != maDocShells.end())
+    {
+        it->second.maShell->DoClose();
+        it->second.maShell = xDocShell;
+        it->second.maLastAccess = Time(Time::SYSTEM);
+    }
+    else
+    {
+        SrcShell aSrcDoc;
+        aSrcDoc.maShell = xDocShell;
+        aSrcDoc.maLastAccess = Time(Time::SYSTEM);
+        cacheNewDocShell(nFileId, aSrcDoc);
+    }
 
     // Update all cells containing names from this source document.
     refreshAllRefCells(nFileId);
 
     notifyAllLinkListeners(nFileId, LINK_MODIFIED);
+
+    return true;
 }
 
 void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
@@ -2622,7 +2835,7 @@ void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const OUString& rNe
         maSrcFiles[nFileId].maFilterName = rNewFilter;
         maSrcFiles[nFileId].maFilterOptions = OUString();
     }
-    refreshNames(nFileId);
+    refreshSrcDocument(nFileId);
 }
 
 void ScExternalRefManager::setRelativeFileName(sal_uInt16 nFileId, const OUString& rRelUrl)
@@ -2746,19 +2959,20 @@ void ScExternalRefManager::notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdate
 
 void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
 {
-    DocShellMap aNewDocShells;
+    // To avoid potentially freezing Calc, we close one stale document at a time.
     DocShellMap::iterator itr = maDocShells.begin(), itrEnd = maDocShells.end();
     for (; itr != itrEnd; ++itr)
     {
         // in 100th of a second.
         sal_Int32 nSinceLastAccess = (Time( Time::SYSTEM ) - itr->second.maLastAccess).GetTime();
-        if (nSinceLastAccess < nTimeOut)
-            aNewDocShells.insert(*itr);
-        else
-            // Timed out.  Let's close this.
+        if (nSinceLastAccess >= nTimeOut)
+        {
+            // Timed out.  Let's close this, and exit the loop.
             itr->second.maShell->DoClose();
+            maDocShells.erase(itr);
+            break;
+        }
     }
-    maDocShells.swap(aNewDocShells);
 
     if (maDocShells.empty())
         maSrcDocTimer.Stop();

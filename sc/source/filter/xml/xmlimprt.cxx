@@ -68,6 +68,7 @@
 #include "editattributemap.hxx"
 #include "documentimport.hxx"
 #include "pivotsource.hxx"
+#include <unonames.hxx>
 
 #include <comphelper/extract.hxx>
 
@@ -2116,7 +2117,8 @@ ScXMLImport::ScXMLImport(
     bRemoveLastChar(false),
     bNullDateSetted(false),
     bSelfImportingXMLSet(false),
-    bFromWrapper(false),
+    mbLockSolarMutex(true),
+    mbImportStyles(true),
     mbHasNewCondFormatData(false)
 {
     pStylesImportHelper = new ScMyStylesImportHelper(*this);
@@ -2254,7 +2256,25 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDetectiveOpArray;
 }
 
-// ---------------------------------------------------------------------
+void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
+{
+    SvXMLImport::initialize(aArguments);
+
+    uno::Reference<beans::XPropertySet> xInfoSet = getImportInfo();
+    if (!xInfoSet.is())
+        return;
+
+    uno::Reference<beans::XPropertySetInfo> xInfoSetInfo = xInfoSet->getPropertySetInfo();
+    if (!xInfoSetInfo.is())
+        return;
+
+    if (xInfoSetInfo->hasPropertyByName(SC_UNO_ODS_LOCK_SOLAR_MUTEX))
+        xInfoSet->getPropertyValue(SC_UNO_ODS_LOCK_SOLAR_MUTEX) >>= mbLockSolarMutex;
+
+    if (xInfoSetInfo->hasPropertyByName(SC_UNO_ODS_IMPORT_STYLES))
+        xInfoSet->getPropertyValue(SC_UNO_ODS_IMPORT_STYLES) >>= mbImportStyles;
+}
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
                                                         const uno::Reference<xml::sax::XAttributeList>& xAttrList)
@@ -2763,6 +2783,9 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                           const sal_Int16 nCellType,
                           const OUString& rCurrency)
 {
+    if (!mbImportStyles)
+        return;
+
     if ((nCellType != util::NumberFormat::TEXT) && (nCellType != util::NumberFormat::UNDEFINED))
     {
         if (rNumberFormat == -1)
@@ -2830,6 +2853,9 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
 
 void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
 {
+    if (!mbImportStyles)
+        return;
+
     if (!xSheetCellRanges.is() && GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
@@ -2843,6 +2869,9 @@ void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
 
 void ScXMLImport::SetStyleToRanges()
 {
+    if (!mbImportStyles)
+        return;
+
     if (!sPrevStyleName.isEmpty())
     {
         uno::Reference <beans::XPropertySet> xProperties (xSheetCellRanges, uno::UNO_QUERY);
@@ -2899,6 +2928,9 @@ void ScXMLImport::SetStyleToRanges()
 void ScXMLImport::SetStyleToRange(const ScRange& rRange, const OUString* pStyleName,
                                   const sal_Int16 nCellType, const OUString* pCurrency)
 {
+    if (!mbImportStyles)
+        return;
+
     if (sPrevStyleName.isEmpty())
     {
         nPrevCellType = nCellType;
@@ -2979,8 +3011,6 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     mpDocImport.reset(new ScDocumentImport(*pDoc));
     mpComp.reset(new ScCompiler(pDoc, ScAddress()));
     mpComp->SetGrammar(formula::FormulaGrammar::GRAM_ODFF);
-
-    bFromWrapper = pDoc->IsXMLFromWrapper();    // UnlockSolarMutex below still works normally
 
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
@@ -3320,7 +3350,7 @@ void ScXMLImport::LockSolarMutex()
 {
     // #i62677# When called from DocShell/Wrapper, the SolarMutex is already locked,
     // so there's no need to allocate (and later delete) the SolarMutexGuard.
-    if (bFromWrapper)
+    if (!mbLockSolarMutex)
     {
         DBG_TESTSOLARMUTEX();
         return;

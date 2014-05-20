@@ -962,7 +962,8 @@
 
 #define SCSTR_VALERR            (STR_START + 414)
 
-#define STR_END                 (SCSTR_VALERR)
+#define SCSTR_UPDATE_EXTDOCS    (STR_START + 415)
+#define STR_END                 (SCSTR_UPDATE_EXTDOCS)
 
 #define BMP_START               (STR_END)
 
