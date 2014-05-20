@@ -154,39 +154,39 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_openProfile");
+    SAL_INFO("sal.osl", "In  osl_openProfile");
 #endif
 
 #ifdef DEBUG_OSL_PROFILE
     Flags=osl_Profile_FLUSHWRITE;
 
-    OSL_TRACE("opening '%s'",pszProfileName);
+    SAL_INFO("sal.osl", "opening " << pszProfileName);
     if ( Flags == osl_Profile_DEFAULT )
     {
-        OSL_TRACE("with osl_Profile_DEFAULT");
+        SAL_INFO("sal.osl", "with osl_Profile_DEFAULT");
     }
     if ( Flags & osl_Profile_SYSTEM )
     {
-        OSL_TRACE("with osl_Profile_SYSTEM");
+        SAL_INFO("sal.osl", "with osl_Profile_SYSTEM");
     }
     if ( Flags & osl_Profile_READLOCK )
     {
-        OSL_TRACE("with osl_Profile_READLOCK");
+        SAL_INFO("sal.osl", "with osl_Profile_READLOCK");
     }
     if ( Flags & osl_Profile_WRITELOCK )
     {
-        OSL_TRACE("with osl_Profile_WRITELOCK");
+        SAL_INFO("sal.osl", "with osl_Profile_WRITELOCK");
     }
     if ( Flags & osl_Profile_FLUSHWRITE )
     {
-        OSL_TRACE("with osl_Profile_FLUSHWRITE");
+        SAL_INFO("sal.osl", "with osl_Profile_FLUSHWRITE");
     }
 #endif
 
     if ( ( pFile = openFileImpl(pszProfileName, Flags ) ) == NULL )
     {
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_openProfile [not opened]");
+    SAL_INFO("sal.osl", "Out osl_openProfile [not opened]");
 #endif
         return (NULL);
     }
@@ -212,13 +212,13 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
     pProfile->m_Stamp = OslProfile_getFileStamp(pFile);
     bRet=loadProfile(pFile, pProfile);
     bRet &= realpath(pszProfileName, pProfile->m_FileName) != NULL;
-    OSL_ASSERT(bRet);
+    SAL_WARN_IF(!bRet, "sal.osl", "realpath(pszProfileName, pProfile->m_FileName) != NULL ==> false");
 
     if (pProfile->m_pFile == NULL)
         closeFileImpl(pFile,pProfile->m_Flags);
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_openProfile [ok]");
+    SAL_INFO("sal.osl", "Out osl_openProfile [ok]");
 #endif
     return (pProfile);
 }
@@ -229,13 +229,13 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
     osl_TProfileImpl* pTmpProfile;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_closeProfile");
+    SAL_INFO("sal.osl", "In  osl_closeProfile");
 #endif
 
     if ( Profile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_closeProfile [profile==0]");
+        SAL_INFO("sal.osl", "Out osl_closeProfile [profile==0]");
 #endif
         return sal_False;
     }
@@ -244,10 +244,10 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 
     if ( pProfile->m_bIsValid == false )
     {
-        OSL_ASSERT(pProfile->m_bIsValid);
+        SAL_WARN_IF(!pProfile->m_bIsValid, "sal.osl", "!pProfile->m_bIsValid");
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_closeProfile [not valid]");
+        SAL_INFO("sal.osl", "Out osl_closeProfile [not valid]");
 #endif
         return sal_False;
     }
@@ -261,7 +261,7 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
         if ( pTmpProfile != 0 )
         {
             bool bRet = storeProfile(pTmpProfile, true);
-            OSL_ASSERT(bRet);
+            SAL_WARN_IF(!bRet, "sal.osl", "storeProfile(pTmpProfile, true) ==> false");
             (void)bRet;
         }
     }
@@ -274,7 +274,7 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
     {
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_closeProfile [pProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_closeProfile [pProfile==0]");
 #endif
         return sal_False;
     }
@@ -327,7 +327,7 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
     free(pProfile);
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_closeProfile [ok]");
+    SAL_INFO("sal.osl", "Out osl_closeProfile [ok]");
 #endif
     return (sal_True);
 }
@@ -339,13 +339,13 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_flushProfile()");
+    SAL_INFO("sal.osl", "In  osl_flushProfile()");
 #endif
 
     if ( pProfile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_flushProfile() [pProfile == 0]");
+        SAL_INFO("sal.osl", "Out osl_flushProfile() [pProfile == 0]");
 #endif
         return sal_False;
     }
@@ -354,10 +354,10 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 
     if ( pProfile->m_bIsValid == false )
     {
-        OSL_ASSERT(pProfile->m_bIsValid);
+        SAL_WARN_IF(!pProfile->m_bIsValid, "sal.osl", "!pProfile->m_bIsValid");
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_flushProfile [not valid]");
+        SAL_INFO("sal.osl", "Out osl_flushProfile [not valid]");
 #endif
         return sal_False;
     }
@@ -367,7 +367,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
     {
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_flushProfile() [invalid file]");
+        SAL_INFO("sal.osl", "Out osl_flushProfile() [invalid file]");
 #endif
         return sal_False;
     }
@@ -375,14 +375,14 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
     if ( pProfile->m_Flags & FLG_MODIFIED )
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("swapping to storeprofile");
+        SAL_INFO("sal.osl", "swapping to storeprofile");
 #endif
         bRet = storeProfile(pProfile, false);
-        OSL_ASSERT(bRet);
+        SAL_WARN_IF(!bRet, "sal.osl", "storeProfile(pProfile, false) ==> false");
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_flushProfile() [ok]");
+    SAL_INFO("sal.osl", "Out osl_flushProfile() [ok]");
 #endif
     pthread_mutex_unlock(&(pProfile->m_AccessLock));
     return bRet;
@@ -395,25 +395,25 @@ static bool writeProfileImpl(osl_TFile* pFile)
 #endif
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_writeProfileImpl()");
+    SAL_INFO("sal.osl", "In  osl_writeProfileImpl()");
 #endif
 
     if ( !( pFile != 0 && pFile->m_Handle >= 0 ) || ( pFile->m_pWriteBuf == 0 ) )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_writeProfileImpl() [invalid args]");
+        SAL_INFO("sal.osl", "Out osl_writeProfileImpl() [invalid args]");
 #endif
         return false;
     }
 
 #if OSL_DEBUG_LEVEL > 1
     nLen=strlen(pFile->m_pWriteBuf);
-    OSL_ASSERT(nLen == (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree));
+    SAL_WARN_IF(nLen != (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree), "sal.osl", "nLen != (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree)");
 #endif
 
     if ( !safeWrite(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree) )
     {
-        OSL_TRACE("write failed '%s'",strerror(errno));
+        SAL_INFO("sal.osl", "write failed " << strerror(errno));
         return false;
     }
 
@@ -422,7 +422,7 @@ static bool writeProfileImpl(osl_TFile* pFile)
     pFile->m_nWriteBufLen=0;
     pFile->m_nWriteBufFree=0;
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_writeProfileImpl() [ok]");
+    SAL_INFO("sal.osl", "Out osl_writeProfileImpl() [ok]");
 #endif
     return true;
 }
@@ -442,7 +442,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_readProfileString");
+    SAL_INFO("sal.osl", "In  osl_readProfileString");
 #endif
 
     pTmpProfile = (osl_TProfileImpl*) Profile;
@@ -450,7 +450,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     if ( pTmpProfile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_readProfileString [pTmpProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_readProfileString [pTmpProfile==0]");
 #endif
         return sal_False;
     }
@@ -461,7 +461,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     {
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_readProfileString [not valid]");
+        SAL_INFO("sal.osl", "Out osl_readProfileString [not valid]");
 #endif
         return sal_False;
     }
@@ -472,7 +472,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     {
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_readProfileString [pProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_readProfileString [pProfile==0]");
 #endif
         return (sal_False);
     }
@@ -504,14 +504,14 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     { /* not implemented */ }
 
     bRet=releaseProfile(pProfile);
-    OSL_ASSERT(bRet);
+    SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
     (void)bRet;
 
     if ( pStr == 0 )
     {
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_readProfileString [pStr==0]");
+        SAL_INFO("sal.osl", "Out osl_readProfileString [pStr==0]");
 #endif
         return sal_False;
     }
@@ -519,7 +519,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_readProfileString [ok]");
+    SAL_INFO("sal.osl", "Out osl_readProfileString [ok]");
 #endif
 
     return (sal_True);
@@ -534,7 +534,7 @@ sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
     Line[0] = '\0';
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_readProfileBool");
+    SAL_INFO("sal.osl", "In  osl_readProfileBool");
 #endif
 
     if (osl_readProfileString(Profile, pszSection, pszEntry, Line, sizeof(Line), ""))
@@ -551,7 +551,7 @@ sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_readProfileBool [ok]");
+    SAL_INFO("sal.osl", "Out osl_readProfileBool [ok]");
 #endif
 
     return (Default);
@@ -569,7 +569,7 @@ sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
     Line[0] = '\0';
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_readProfileIdent");
+    SAL_INFO("sal.osl", "In  osl_readProfileIdent");
 #endif
 
     if (osl_readProfileString(Profile, pszSection, pszEntry, Line, sizeof(Line), ""))
@@ -587,7 +587,7 @@ sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_readProfileIdent [ok]");
+    SAL_INFO("sal.osl", "Out osl_readProfileIdent [ok]");
 #endif
     return (Default);
 }
@@ -607,7 +607,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     osl_TProfileImpl*    pTmpProfile = 0;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_writeProfileString");
+    SAL_INFO("sal.osl", "In  osl_writeProfileString");
 #endif
 
     pTmpProfile = (osl_TProfileImpl*) Profile;
@@ -615,7 +615,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     if ( pTmpProfile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_writeProfileString [pTmpProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_writeProfileString [pTmpProfile==0]");
 #endif
         return sal_False;
     }
@@ -624,10 +624,10 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
 
     if ( pTmpProfile->m_bIsValid == false )
     {
-        OSL_ASSERT(pTmpProfile->m_bIsValid);
+        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid");
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_writeProfileString [not valid]");
+        SAL_INFO("sal.osl", "Out osl_writeProfileString [not valid]");
 #endif
         return sal_False;
     }
@@ -638,7 +638,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     {
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_writeProfileString [pProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_writeProfileString [pProfile==0]");
 #endif
         return (sal_False);
     }
@@ -661,14 +661,14 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
                 (! addSection(pProfile, pProfile->m_NoLines - 1, &pStr[1], strlen(pszSection))))
             {
                 bRet=releaseProfile(pProfile);
-                OSL_ASSERT(bRet);
+                SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
 
                 pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
                 free(Line);
 
 #ifdef TRACE_OSL_PROFILE
-                OSL_TRACE("Out osl_writeProfileString [not added]");
+                SAL_INFO("sal.osl", "Out osl_writeProfileString [not added]");
 #endif
                 return (sal_False);
             }
@@ -693,13 +693,13 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
                 (! addEntry(pProfile, pSec, i, pStr, strlen(pszEntry))))
             {
                 bRet=releaseProfile(pProfile);
-                OSL_ASSERT(bRet);
+                SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
 
                 pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
                 free(Line);
 
 #ifdef TRACE_OSL_PROFILE
-                OSL_TRACE("Out osl_writeProfileString [not inserted]");
+                SAL_INFO("sal.osl", "Out osl_writeProfileString [not inserted]");
 #endif
                 return (sal_False);
             }
@@ -721,7 +721,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     }
 
     bRet = releaseProfile(pProfile);
-    OSL_ASSERT(bRet);
+    SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
     if ( Line!= 0 )
@@ -730,7 +730,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_writeProfileString [ok]");
+    SAL_INFO("sal.osl", "Out osl_writeProfileString [ok]");
 #endif
 
     return bRet;
@@ -744,7 +744,7 @@ sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_writeProfileBool");
+    SAL_INFO("sal.osl", "In  osl_writeProfileBool");
 #endif
 
     if (Value)
@@ -753,7 +753,7 @@ sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
         bRet=osl_writeProfileString(Profile, pszSection, pszEntry, STR_INI_BOOLZERO);
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_writeProfileBool [ok]");
+    SAL_INFO("sal.osl", "Out osl_writeProfileBool [ok]");
 #endif
 
     return bRet;
@@ -770,7 +770,7 @@ sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_writeProfileIdent");
+    SAL_INFO("sal.osl", "In  osl_writeProfileIdent");
 #endif
 
     while (Strings[n] != NULL)
@@ -782,7 +782,7 @@ sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
         bRet = osl_writeProfileString(Profile, pszSection, pszEntry, Strings[i]);
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_writeProfileIdent");
+    SAL_INFO("sal.osl", "Out osl_writeProfileIdent");
 #endif
     return bRet;
 }
@@ -798,7 +798,7 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_removeProfileEntry");
+    SAL_INFO("sal.osl", "In  osl_removeProfileEntry");
 #endif
 
     pTmpProfile = (osl_TProfileImpl*) Profile;
@@ -806,7 +806,7 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     if ( pTmpProfile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_removeProfileEntry [pProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_removeProfileEntry [pProfile==0]");
 #endif
         return sal_False;
     }
@@ -815,10 +815,10 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
 
     if ( pTmpProfile->m_bIsValid == false )
     {
-        OSL_ASSERT(pTmpProfile->m_bIsValid);
+        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid");
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_removeProfileEntry [not valid]");
+        SAL_INFO("sal.osl", "Out osl_removeProfileEntry [not valid]");
 #endif
         return sal_False;
     }
@@ -829,7 +829,7 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     {
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_removeProfileEntry [pProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_removeProfileEntry [pProfile==0]");
 #endif
         return (sal_False);
     }
@@ -859,12 +859,12 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     { /* not implemented */ }
 
     bRet = releaseProfile(pProfile);
-    OSL_ASSERT(bRet);
+    SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_removeProfileEntry [ok]");
+    SAL_INFO("sal.osl", "Out osl_removeProfileEntry [ok]");
 #endif
     return bRet;
 }
@@ -882,7 +882,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_getProfileSectionEntries");
+    SAL_INFO("sal.osl", "In  osl_getProfileSectionEntries");
 #endif
 
     pTmpProfile = (osl_TProfileImpl*) Profile;
@@ -890,7 +890,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
     if ( pTmpProfile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_getProfileSectionEntries [pTmpProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_getProfileSectionEntries [pTmpProfile==0]");
 #endif
         return sal_False;
 
@@ -900,12 +900,12 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
     if ( pTmpProfile->m_bIsValid == false )
     {
-        OSL_ASSERT(pTmpProfile->m_bIsValid);
+        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid"); 
 
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_getProfileSectionEntries [not valid]");
+        SAL_INFO("sal.osl", "Out osl_getProfileSectionEntries [not valid]");
 #endif
 
         return sal_False;
@@ -918,7 +918,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_getProfileSectionEntries [pProfile=0]");
+        SAL_INFO("sal.osl", "Out osl_getProfileSectionEntries [pProfile=0]");
 #endif
 
         return (0);
@@ -962,13 +962,13 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
     }
 
     bRet=releaseProfile(pProfile);
-    OSL_ASSERT(bRet);
+    SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
     (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_getProfileSectionEntries [ok]");
+    SAL_INFO("sal.osl", "Out osl_getProfileSectionEntries [ok]");
 #endif
 
     return (n);
@@ -985,7 +985,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
     bool bRet = false;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_getProfileSections");
+    SAL_INFO("sal.osl", "In  osl_getProfileSections");
 #endif
 
     pTmpProfile = (osl_TProfileImpl*) Profile;
@@ -993,7 +993,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
     if ( pTmpProfile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_getProfileSections [pTmpProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_getProfileSections [pTmpProfile==0]");
 #endif
         return sal_False;
     }
@@ -1002,10 +1002,10 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
 
     if ( pTmpProfile->m_bIsValid == false )
     {
-        OSL_ASSERT(pTmpProfile->m_bIsValid);
+        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid"); 
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_getProfileSections [not valid]");
+        SAL_INFO("sal.osl", "Out osl_getProfileSections [not valid]");
 #endif
         return sal_False;
     }
@@ -1017,7 +1017,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out osl_getProfileSections [pProfile==0]");
+        SAL_INFO("sal.osl", "Out osl_getProfileSections [pProfile==0]");
 #endif
         return (0);
     }
@@ -1055,13 +1055,13 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
     { /* not implemented */ }
 
     bRet=releaseProfile(pProfile);
-    OSL_ASSERT(bRet);
+    SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
     (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_getProfileSections [ok]");
+    SAL_INFO("sal.osl", "Out osl_getProfileSections [ok]");
 #endif
 
     return (n);
@@ -1087,7 +1087,7 @@ static bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
     static bool bLockingDisabled;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  OslProfile_lockFile");
+    SAL_INFO("sal.osl", "In  OslProfile_lockFile");
 #endif
 
     if ( !bIsInitialized )
@@ -1111,7 +1111,7 @@ static bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
     if (pFile->m_Handle < 0)
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out OslProfile_lockFile [invalid file handle]");
+        SAL_INFO("sal.osl", "Out OslProfile_lockFile [invalid file handle]");
 #endif
         return false;
     }
@@ -1119,7 +1119,7 @@ static bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
     if ( bLockingDisabled )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out OslProfile_lockFile [locking disabled]");
+        SAL_INFO("sal.osl", "Out OslProfile_lockFile [locking disabled]");
 #endif
         return true;
     }
@@ -1150,15 +1150,15 @@ static bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
     if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 && errno != ENOTSUP )
 #endif
     {
-        OSL_TRACE("fcntl returned -1 (%s)",strerror(errno));
+        SAL_INFO("sal.osl", "fcntl returned -1 (" << strerror(errno) << ")");
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out OslProfile_lockFile [fcntl F_SETLKW]");
+        SAL_INFO("sal.osl", "Out OslProfile_lockFile [fcntl F_SETLKW]");
 #endif
         return false;
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out OslProfile_lockFile [ok]");
+    SAL_INFO("sal.osl", "Out OslProfile_lockFile [ok]");
 #endif
     return true;
 }
@@ -1172,7 +1172,7 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
     if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ) )
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("setting bWriteable to TRUE");
+        SAL_INFO("sal.osl", "setting bWriteable to TRUE");
 #endif
         bWriteable = true;
     }
@@ -1180,7 +1180,7 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
     if (! bWriteable)
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("opening '%s' read only",pszFilename);
+        SAL_INFO("sal.osl", "opening " << pszFilename << " read only");
 #endif
 
         pFile->m_Handle = open(pszFilename, O_RDONLY);
@@ -1190,14 +1190,14 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
     else
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("opening '%s' read/write",pszFilename);
+        SAL_INFO("sal.osl", "opening " << pszFilename << " read/write");
 #endif
         if (((pFile->m_Handle = open(pszFilename, O_RDWR | O_CREAT | O_EXCL, DEFAULT_PMODE)) < 0) &&
             ((pFile->m_Handle = open(pszFilename, O_RDWR)) < 0))
         {
             free(pFile);
 #ifdef TRACE_OSL_PROFILE
-            OSL_TRACE("Out openFileImpl [open read/write]");
+            SAL_INFO("sal.osl", "Out openFileImpl [open read/write]");
 #endif
             return (NULL);
         }
@@ -1220,13 +1220,13 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
     if ( ProfileFlags & (osl_Profile_WRITELOCK | osl_Profile_READLOCK ) )
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("locking '%s' file",pszFilename);
+        SAL_INFO("sal.osl", "locking " << pszFilename << " file");
 #endif
         OslProfile_lockFile(pFile, bWriteable ? write_lock : read_lock);
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out openFileImpl [ok]");
+    SAL_INFO("sal.osl", "Out openFileImpl [ok]");
 #endif
     return (pFile);
 }
@@ -1236,13 +1236,13 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
     osl_TStamp stamp = 0;
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  closeFileImpl");
+    SAL_INFO("sal.osl", "In  closeFileImpl");
 #endif
 
     if ( pFile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out closeFileImpl [pFile == 0]");
+        SAL_INFO("sal.osl", "Out closeFileImpl [pFile == 0]");
 #endif
         return stamp;
     }
@@ -1268,7 +1268,7 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
     free(pFile);
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out closeFileImpl [ok]");
+    SAL_INFO("sal.osl", "Out closeFileImpl [ok]");
 #endif
 
     return(stamp);
@@ -1278,7 +1278,7 @@ static bool OslProfile_rewindFile(osl_TFile* pFile, bool bTruncate)
 {
     bool bRet = true;
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  osl_OslProfile_rewindFile");
+    SAL_INFO("sal.osl", "In  osl_OslProfile_rewindFile");
 #endif
 
     if (pFile->m_Handle >= 0)
@@ -1286,14 +1286,14 @@ static bool OslProfile_rewindFile(osl_TFile* pFile, bool bTruncate)
         pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);
 
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("rewinding");
+        SAL_INFO("sal.osl", "rewinding");
 #endif
         bRet = (lseek(pFile->m_Handle, SEEK_SET, 0L) == 0L);
 
         if (bTruncate)
         {
 #ifdef DEBUG_OSL_PROFILE
-            OSL_TRACE("truncating");
+            SAL_INFO("sal.osl", "truncating");
 #endif
             bRet &= (ftruncate(pFile->m_Handle, 0L) == 0);
         }
@@ -1301,7 +1301,7 @@ static bool OslProfile_rewindFile(osl_TFile* pFile, bool bTruncate)
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out osl_OslProfile_rewindFile [ok]");
+    SAL_INFO("sal.osl", "Out osl_OslProfile_rewindFile [ok]");
 #endif
     return bRet;
 }
@@ -1335,7 +1335,7 @@ static sal_Char* OslProfile_getLine(osl_TFile* pFile)
 
             if ((Max = read(pFile->m_Handle, &pFile->m_ReadBuf[Bytes], Free)) < 0)
             {
-                OSL_TRACE("read failed '%s'",strerror(errno));
+                SAL_INFO("sal.osl", "read failed " << strerror(errno));
 
                 if( pLine )
                     rtl_freeMemory( pLine );
@@ -1838,7 +1838,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     {
         bWasAdded = addLine( pProfile, pLine );
         rtl_freeMemory( pLine );
-        OSL_ASSERT(bWasAdded);
+	SAL_WARN_IF(!bWasAdded, "sal.osl", "addLine( pProfile, pLine ) ==> false");
         if ( ! bWasAdded )
             return false;
     }
@@ -1864,7 +1864,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
             if (! addEntry(pProfile, &pProfile->m_Sections[pProfile->m_NoSections - 1],
                            i, pStr, pChar - pStr))
             {
-                OSL_ASSERT(false);
+                SAL_WARN_IF(true, "sal.osl", "Adding entry => false");
                 continue;
             }
 
@@ -1875,7 +1875,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 
             if (! addSection(pProfile, i, pStr + 1, pChar - pStr - 1))
             {
-                OSL_ASSERT(false);
+                SAL_WARN_IF(true, "sal.osl", "Adding section => false");
                 continue;
             }
 
@@ -1888,7 +1888,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 static bool storeProfile(osl_TProfileImpl* pProfile, bool bCleanup)
 {
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  storeProfile");
+    SAL_INFO("sal.osl", "In  storeProfile");
 #endif
 
     if (pProfile->m_Lines != NULL)
@@ -1923,7 +1923,7 @@ static bool storeProfile(osl_TProfileImpl* pProfile, bool bCleanup)
                 pTmpFile->m_nWriteBufFree=0;
 
 #ifdef TRACE_OSL_PROFILE
-                OSL_TRACE("Out storeProfile [not flushed]");
+                SAL_INFO("sal.osl", "Out storeProfile [not flushed]");
 #endif
                 closeFileImpl(pTmpFile,pProfile->m_Flags);
 
@@ -1962,7 +1962,7 @@ static bool storeProfile(osl_TProfileImpl* pProfile, bool bCleanup)
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out storeProfile [ok]");
+    SAL_INFO("sal.osl", "Out storeProfile [ok]");
 #endif
     return true;
 }
@@ -2076,7 +2076,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
     if (pProfile == NULL)
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("AUTOOPEN MODE");
+        SAL_INFO("sal.osl", "AUTOOPEN MODE");
 #endif
 
         if ( ( pProfile = (osl_TProfileImpl*) osl_openProfile(0, PFlags ) ) != NULL )
@@ -2087,7 +2087,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
     else
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("try to acquire");
+        SAL_INFO("sal.osl", "try to acquire");
 #endif
 
         if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
@@ -2097,7 +2097,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
                 osl_TStamp Stamp;
 
 #ifdef DEBUG_OSL_PROFILE
-                OSL_TRACE("Profile acquire DEFAULT MODE");
+                SAL_INFO("sal.osl", "Profile acquire DEFAULT MODE");
 #endif
                 if (! (pProfile->m_pFile = openFileImpl(pProfile->m_FileName, pProfile->m_Flags | PFlags )))
                     return NULL;
@@ -2111,14 +2111,14 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
                     pProfile->m_Stamp = Stamp;
 
                     bRet=loadProfile(pProfile->m_pFile, pProfile);
-                    OSL_ASSERT(bRet);
+                    SAL_WARN_IF(!bRet, "sal.osl", "loadProfile(pProfile->m_pFile, pProfile) ==> false");
                     (void)bRet;
                 }
             }
             else
             {
 #ifdef DEBUG_OSL_PROFILE
-                OSL_TRACE("Profile acquire READ/WRITELOCK MODE");
+                SAL_INFO("sal.osl", "Profile acquire READ/WRITELOCK MODE");
 #endif
                 /* A readlock file could not be written */
                 if ((pProfile->m_Flags & osl_Profile_READLOCK) && bWriteable)
@@ -2135,13 +2135,13 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
 static bool releaseProfile(osl_TProfileImpl* pProfile)
 {
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("In  releaseProfile");
+    SAL_INFO("sal.osl", "In  releaseProfile");
 #endif
 
     if ( pProfile == 0 )
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out releaseProfile [profile==0]");
+        SAL_INFO("sal.osl", "Out releaseProfile [profile==0]");
 #endif
         return false;
     }
@@ -2149,21 +2149,21 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
     if (pProfile->m_Flags & FLG_AUTOOPEN)
     {
 #ifdef TRACE_OSL_PROFILE
-        OSL_TRACE("Out releaseProfile [AUTOOPEN]");
+        SAL_INFO("sal.osl", "Out releaseProfile [AUTOOPEN]");
 #endif
         return (osl_closeProfile((oslProfile)pProfile));
     }
     else
     {
 #ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("DEFAULT MODE");
+        SAL_INFO("sal.osl", "EFAULT MODE");
 #endif
         if (! (pProfile->m_Flags & (osl_Profile_READLOCK | osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE )))
         {
             if (pProfile->m_Flags & FLG_MODIFIED)
             {
                 bool bRet = storeProfile(pProfile, false);
-                OSL_ASSERT(bRet);
+                SAL_WARN_IF(!bRet, "sal.osl", "storeProfile(pProfile, false) ==> false");
                 (void)bRet;
             }
 
@@ -2173,7 +2173,7 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
     }
 
 #ifdef TRACE_OSL_PROFILE
-    OSL_TRACE("Out releaseProfile [ok]");
+    SAL_INFO("sal.osl", "Out releaseProfile [ok]");
 #endif
     return true;
 }
