@@ -143,10 +143,10 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
         { OUString("FrameIsAutoScroll"),    WID_FRAME_IS_AUTO_SCROLL,   ::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
         { OUString("FrameIsBorder"),        WID_FRAME_IS_BORDER,        ::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
         { OUString("FrameIsScrollingMode"), WID_FRAME_IS_SCROLLING_MODE,::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-        { OUString("FrameMarginHeight"),    WID_FRAME_MARGIN_HEIGHT,    ::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
-        { OUString("FrameMarginWidth"),     WID_FRAME_MARGIN_WIDTH,     ::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
-        { OUString("FrameName"),            WID_FRAME_NAME,             ::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
-        { OUString("FrameURL"),             WID_FRAME_URL,              ::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameMarginHeight"),    WID_FRAME_MARGIN_HEIGHT,    cppu::UnoType<sal_Int32>::get(), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameMarginWidth"),     WID_FRAME_MARGIN_WIDTH,     cppu::UnoType<sal_Int32>::get(), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameName"),            WID_FRAME_NAME,             cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameURL"),             WID_FRAME_URL,              cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aIFramePropertyMap_Impl;

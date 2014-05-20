@@ -44,7 +44,7 @@ class XMLLegendPositionPropertyHdl : public XMLEnumPropertyHdl
 {
 public:
     XMLLegendPositionPropertyHdl()
-        : XMLEnumPropertyHdl( aXMLLegendPositionEnumMap, ::getCppuType((const chart::ChartLegendPosition*)0) ) {}
+        : XMLEnumPropertyHdl( aXMLLegendPositionEnumMap, cppu::UnoType<chart::ChartLegendPosition>::get()) {}
     virtual ~XMLLegendPositionPropertyHdl() {};
 };
 
@@ -65,7 +65,7 @@ class XMLLegendExpansionPropertyHdl : public XMLEnumPropertyHdl
 {
 public:
     XMLLegendExpansionPropertyHdl()
-        : XMLEnumPropertyHdl( aXMLLegendExpansionEnumMap, ::getCppuType((const chart::ChartLegendExpansion*)0) ) {}
+        : XMLEnumPropertyHdl( aXMLLegendExpansionEnumMap, cppu::UnoType<chart::ChartLegendExpansion>::get()) {}
     virtual ~XMLLegendExpansionPropertyHdl() {};
 };
 

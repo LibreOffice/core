@@ -238,7 +238,7 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
 // XElementAccess
 uno::Type SAL_CALL SvxShapeCollection::getElementType() throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType(( const Reference< drawing::XShape >*)0);
+    return cppu::UnoType<drawing::XShape>::get();
 }
 
 sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException, std::exception )

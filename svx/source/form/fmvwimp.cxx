@@ -240,7 +240,7 @@ sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements(void) throw( RuntimeExc
 
 Type SAL_CALL  FormViewPageWindowAdapter::getElementType(void) throw( RuntimeException, std::exception )
 {
-    return ::getCppuType((const Reference< XFormController>*)0);
+    return cppu::UnoType<XFormController>::get();
 }
 
 // XEnumerationAccess

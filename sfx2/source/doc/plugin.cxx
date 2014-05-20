@@ -73,8 +73,8 @@ const SfxItemPropertyMapEntry* lcl_GetPluginPropertyMap_Impl()
     static const SfxItemPropertyMapEntry aPluginPropertyMap_Impl[] =
     {
         { OUString("PluginCommands"), WID_COMMANDS, ::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), PROPERTY_UNBOUND, 0},
-        { OUString("PluginMimeType"), WID_MIMETYPE, ::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
-        { OUString("PluginURL"),      WID_URL     , ::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
+        { OUString("PluginMimeType"), WID_MIMETYPE, cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
+        { OUString("PluginURL"),      WID_URL     , cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aPluginPropertyMap_Impl;

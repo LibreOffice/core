@@ -63,7 +63,7 @@ static void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "OffsetMode",
                   PROP_PIE_TEMPLATE_OFFSET_MODE,
-                  ::getCppuType( reinterpret_cast< const chart2::PieChartOffsetMode * >(0)),
+                  cppu::UnoType<chart2::PieChartOffsetMode>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(

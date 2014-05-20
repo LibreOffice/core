@@ -277,13 +277,13 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 void SAL_CALL ToolboxController::addEventListener( const Reference< XEventListener >& xListener )
 throw ( RuntimeException, std::exception )
 {
-    m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 void SAL_CALL ToolboxController::removeEventListener( const Reference< XEventListener >& aListener )
 throw ( RuntimeException, std::exception )
 {
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), aListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), aListener );
 }
 
 // XEventListener

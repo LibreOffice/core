@@ -727,7 +727,7 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
         if ( !mXShape.is() )
             break;
 
-        Any aAny( mXShape->queryInterface( ::getCppuType( (const Reference< XPropertySet >*) 0 ) ));
+        Any aAny( mXShape->queryInterface( cppu::UnoType<XPropertySet>::get()));
         aAny >>= mXPropSet;
 
         if ( !mXPropSet.is() )

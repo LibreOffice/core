@@ -2576,8 +2576,7 @@ bool SwMSConvertControls::InsertControl(
     uno::Reference< text::XTextRange >  xTxtRg =
         new SwXTextRange( *pPaM, xDummyTxtRef );
 
-    aTmp.setValue(&xTxtRg,::getCppuType((
-        uno::Reference< text::XTextRange >*)0));
+    aTmp.setValue(&xTxtRg, cppu::UnoType<text::XTextRange>::get());
     xShapePropSet->setPropertyValue("TextRange", aTmp );
 
     // Das Control-Model am Control-Shape setzen

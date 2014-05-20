@@ -82,7 +82,7 @@ NameOrIndex* SvxUnoTransGradientTable::createItem() const throw()
 uno::Type SAL_CALL SvxUnoTransGradientTable::getElementType(  )
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const struct awt::Gradient*)0);
+    return cppu::UnoType<awt::Gradient>::get();
 }
 
 /**

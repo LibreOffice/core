@@ -268,13 +268,13 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
                 lWindowTypes = xProvider->getTypes();
 
             static ::cppu::OTypeCollection aTypeCollection(
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XInitialization >*)NULL ),
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XTypeProvider >*)NULL ),
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XServiceInfo >*)NULL ),
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::frame::XController >*)NULL ),
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XComponent >*)NULL ),
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::frame::XDispatchProvider >*)NULL ),
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::frame::XDispatch >*)NULL ),
+                    cppu::UnoType<css::lang::XInitialization>::get(),
+                    cppu::UnoType<css::lang::XTypeProvider>::get(),
+                    cppu::UnoType<css::lang::XServiceInfo>::get(),
+                    cppu::UnoType<css::frame::XController>::get(),
+                    cppu::UnoType<css::lang::XComponent>::get(),
+                    cppu::UnoType<css::frame::XDispatchProvider>::get(),
+                    cppu::UnoType<css::frame::XDispatch>::get(),
                     lWindowTypes);
 
             pTypeCollection = &aTypeCollection;

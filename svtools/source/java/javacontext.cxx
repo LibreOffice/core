@@ -43,9 +43,9 @@ JavaContext::~JavaContext()
 Any SAL_CALL JavaContext::queryInterface(const Type& aType )
     throw (RuntimeException, std::exception)
 {
-    if (aType == getCppuType(reinterpret_cast<Reference<XInterface>*>(0)))
+    if (aType == cppu::UnoType<XInterface>::get())
         return Any(Reference<XInterface>(static_cast<XInterface*>(this)));
-    else if (aType == getCppuType(reinterpret_cast<Reference<XCurrentContext>*>(0)))
+    else if (aType == cppu::UnoType<XCurrentContext>::get())
         return Any(Reference<XCurrentContext>( static_cast<XCurrentContext*>(this)));
     return Any();
 }

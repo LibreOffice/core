@@ -80,7 +80,7 @@ NameOrIndex* SvxUnoHatchTable::createItem() const throw()
 uno::Type SAL_CALL SvxUnoHatchTable::getElementType(  )
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const struct drawing::Hatch*)0);
+    return cppu::UnoType<drawing::Hatch>::get();
 }
 
 /**

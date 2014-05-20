@@ -53,7 +53,7 @@ SvUnoAttributeContainer::~SvUnoAttributeContainer()
 uno::Type SAL_CALL SvUnoAttributeContainer::getElementType(void)
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType((const xml::AttributeData*)0);
+    return cppu::UnoType<xml::AttributeData>::get();
 }
 
 sal_Bool SAL_CALL SvUnoAttributeContainer::hasElements(void)
@@ -159,7 +159,7 @@ sal_Bool SAL_CALL SvUnoAttributeContainer::hasByName(const OUString& aName) thro
 void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, const uno::Any& aElement)
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
-    if( aElement.hasValue() && aElement.getValueType() == ::getCppuType((const xml::AttributeData*)0) )
+    if( aElement.hasValue() && aElement.getValueType() == cppu::UnoType<xml::AttributeData>::get())
     {
         sal_uInt16 nAttr = getIndexByName(aName );
         if( nAttr == USHRT_MAX )
@@ -201,7 +201,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
 void SAL_CALL SvUnoAttributeContainer::insertByName(const OUString& aName, const uno::Any& aElement)
 throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
-    if( !aElement.hasValue() || aElement.getValueType() != ::getCppuType((const xml::AttributeData*)0) )
+    if( !aElement.hasValue() || aElement.getValueType() != cppu::UnoType<xml::AttributeData>::get())
         throw lang::IllegalArgumentException();
 
     sal_uInt16 nAttr = getIndexByName(aName );

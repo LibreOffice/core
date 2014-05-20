@@ -195,7 +195,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AddIn",
                   PROP_DOCUMENT_ADDIN,
-                  ::getCppuType( reinterpret_cast< Reference< util::XRefreshable > * >(0)),
+                  cppu::UnoType<util::XRefreshable>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
@@ -207,7 +207,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "AdditionalShapes",
                   PROP_DOCUMENT_ADDITIONAL_SHAPES,
-                  ::getCppuType( reinterpret_cast< Reference< drawing::XShapes > * >(0)),
+                  cppu::UnoType<drawing::XShapes>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::READONLY ));

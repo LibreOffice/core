@@ -1059,21 +1059,21 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
     rOutProperties.push_back(
         Property( "DataRegressionProperties",
                   PROP_CHART_STATISTIC_REGRESSION_PROPERTIES,
-                  ::getCppuType( reinterpret_cast< const Reference< beans::XPropertySet > * >(0)),
+                  cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::READONLY
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "DataErrorProperties",
                   PROP_CHART_STATISTIC_ERROR_PROPERTIES,
-                  ::getCppuType( reinterpret_cast< const Reference< beans::XPropertySet > * >(0)),
+                  cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::READONLY
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "DataMeanValueProperties",
                   PROP_CHART_STATISTIC_MEAN_VALUE_PROPERTIES,
-                  ::getCppuType( reinterpret_cast< const Reference< beans::XPropertySet > * >(0)),
+                  cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::READONLY
                   | beans::PropertyAttribute::MAYBEVOID ));

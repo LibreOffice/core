@@ -114,11 +114,11 @@ uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()
     uno::Sequence< uno::Type >  aTypes( 5 );
     uno::Type*                  pTypes = aTypes.getArray();
 
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< container::XElementAccess>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< container::XIndexAccess>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< gallery::XGalleryTheme>*)0);
+    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+    *pTypes++ = cppu::UnoType<container::XElementAccess>::get();
+    *pTypes++ = cppu::UnoType<container::XIndexAccess>::get();
+    *pTypes++ = cppu::UnoType<gallery::XGalleryTheme>::get();
 
     return aTypes;
 }
@@ -134,7 +134,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
 uno::Type SAL_CALL GalleryTheme::getElementType()
     throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType( (const uno::Reference< gallery::XGalleryItem >*) 0);
+    return cppu::UnoType<gallery::XGalleryItem>::get();
 }
 
 

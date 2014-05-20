@@ -266,14 +266,14 @@ void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProp
     rOutProperties.push_back(
         Property( "Volume",
                   PROP_CHART_STOCK_VOLUME,
-                  ::getCppuType( reinterpret_cast< sal_Bool * >(0)),
+                  cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "UpDown",
                   PROP_CHART_STOCK_UPDOWN,
-                  ::getCppuType( reinterpret_cast< sal_Bool * >(0)),
+                  cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));

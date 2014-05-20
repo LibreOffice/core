@@ -94,17 +94,17 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
             case XML_SCH_TYPE_AXIS_LABEL_POSITION:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartAxisLabelPositionEnumMap,
-                                               ::getCppuType((const chart::ChartAxisLabelPosition*)0) );
+                                               cppu::UnoType<chart::ChartAxisLabelPosition>::get());
                 break;
 
             case XML_SCH_TYPE_TICK_MARK_POSITION:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartAxisMarkPositionEnumMap,
-                                               ::getCppuType((const chart::ChartAxisMarkPosition*)0) );
+                                               cppu::UnoType<chart::ChartAxisMarkPosition>::get());
                 break;
 
             case XML_SCH_TYPE_AXIS_ARRANGEMENT:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartAxisArrangementEnumMap,
-                                               ::getCppuType((const chart::ChartAxisArrangeOrderType*)0) );
+                                               cppu::UnoType<chart::ChartAxisArrangeOrderType>::get());
                 break;
 
             case XML_SCH_TYPE_ERROR_BAR_STYLE:
@@ -132,7 +132,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
             case XML_SCH_TYPE_DATAROWSOURCE:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartDataRowSourceTypeEnumMap,
-                                               ::getCppuType((const chart::ChartDataRowSource*)0) );
+                                               cppu::UnoType<chart::ChartDataRowSource>::get());
                 break;
             case XML_SCH_TYPE_TEXT_ORIENTATION:
                 pHdl = new XMLTextOrientationHdl();

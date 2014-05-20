@@ -187,15 +187,15 @@ namespace svx
         {
             static PropertyMapEntry const s_aDesriptorProperties[] =
             {
-                { OUString("ActiveConnection"),   daConnection,           ::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
+                { OUString("ActiveConnection"),   daConnection,           cppu::UnoType<XConnection>::get(),   PropertyAttribute::TRANSIENT, 0 },
                 { OUString("BookmarkSelection"),  daBookmarkSelection,    ::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Column"),             daColumnObject,         ::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Column"),             daColumnObject,         cppu::UnoType<XPropertySet>::get(),  PropertyAttribute::TRANSIENT, 0 },
                 { OUString("ColumnName"),         daColumnName,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
                 { OUString("Command"),            daCommand,              ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
                 { OUString("CommandType"),        daCommandType,          ::cppu::UnoType<sal_Int32>::get(),                  PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Component"),          daComponent,            ::getCppuType( static_cast< Reference< XContent >* >(NULL) ),      PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Component"),          daComponent,            cppu::UnoType<XContent>::get(),      PropertyAttribute::TRANSIENT, 0 },
                 { OUString("ConnectionResource"), daConnectionResource,   ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Cursor"),             daCursor,               ::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
+                { OUString("Cursor"),             daCursor,               cppu::UnoType<XResultSet>::get(),     PropertyAttribute::TRANSIENT, 0 },
                 { OUString("DataSourceName"),     daDataSource,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
                 { OUString("DatabaseLocation"),   daDatabaseLocation,     ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
                 { OUString("EscapeProcessing"),   daEscapeProcessing,     ::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },

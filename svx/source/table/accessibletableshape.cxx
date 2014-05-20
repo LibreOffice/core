@@ -360,7 +360,7 @@ SvxTableController* AccessibleTableShape::getTableController()
 
 Any SAL_CALL AccessibleTableShape::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
 {
-    if ( aType == ::getCppuType((Reference<XAccessibleTableSelection> *)0) )
+    if ( aType == cppu::UnoType<XAccessibleTableSelection>::get())
     {
         Reference<XAccessibleTableSelection> xThis( this );
         Any aRet;

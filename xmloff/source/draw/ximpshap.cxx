@@ -2078,7 +2078,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
                 if ( bApplySVGD )
                 {
-                    assert(maPath.getValueType() == ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
+                    assert(maPath.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get());
                     xProps->setPropertyValue("PolyPolygonBezier", maPath);
                 }
             }

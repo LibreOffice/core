@@ -430,15 +430,15 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         // uses queryInterface, and the model also has a XPropertySet interface.
 
         // document handler
-        if( ::getCppuType( (const Reference< XDocumentHandler >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
+        if( cppu::UnoType<XDocumentHandler>::get().isAssignableFrom( pAny->getValueType() ) )
             m_xHandler.set( *pAny, UNO_QUERY );
 
         // property set to transport data across
-        if( ::getCppuType( (const Reference< XPropertySet >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
+        if( cppu::UnoType<XPropertySet>::get().isAssignableFrom( pAny->getValueType() ) )
             m_xPropSet.set( *pAny, UNO_QUERY );
 
         // xmodel
-        if( ::getCppuType( (const Reference< ::com::sun::star::frame::XModel >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
+        if( cppu::UnoType<com::sun::star::frame::XModel>::get().isAssignableFrom( pAny->getValueType() ) )
             mxModel.set( *pAny, UNO_QUERY );
     }
 

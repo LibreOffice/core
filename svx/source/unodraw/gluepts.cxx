@@ -520,7 +520,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
 uno::Type SAL_CALL SvxUnoGluePointAccess::getElementType()
     throw( uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((const struct drawing::GluePoint2*)0);
+    return cppu::UnoType<drawing::GluePoint2>::get();
 }
 
 sal_Bool SAL_CALL SvxUnoGluePointAccess::hasElements()

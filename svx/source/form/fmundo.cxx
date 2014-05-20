@@ -1089,7 +1089,7 @@ void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
     {
         // insert the element
         Any aVal;
-        if ( m_xContainer->getElementType() == ::getCppuType( static_cast< const Reference< XFormComponent >* >( NULL ) ) )
+        if ( m_xContainer->getElementType() == cppu::UnoType<XFormComponent>::get() )
         {
             aVal <<= Reference< XFormComponent >( m_xElement, UNO_QUERY );
         }

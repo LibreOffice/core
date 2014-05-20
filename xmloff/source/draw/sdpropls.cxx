@@ -876,12 +876,12 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
         {
             case XML_SD_TYPE_STROKE :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_LineStyle_EnumMap, ::getCppuType((const drawing::LineStyle*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_LineStyle_EnumMap, cppu::UnoType<drawing::LineStyle>::get());
                 break;
             }
             case XML_SD_TYPE_LINEJOIN :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_LineJoint_EnumMap, ::getCppuType((const drawing::LineJoint*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_LineJoint_EnumMap, cppu::UnoType<drawing::LineJoint>::get());
                 break;
             }
             case XML_SD_TYPE_LINECAP :
@@ -891,7 +891,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_FILLSTYLE :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, ::getCppuType((const drawing::FillStyle*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, cppu::UnoType<drawing::FillStyle>::get());
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_TYPE :
@@ -916,7 +916,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_PRESPAGE_SPEED :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_TransSpeed_EnumMap, ::getCppuType((const presentation::AnimationSpeed*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_TransSpeed_EnumMap, cppu::UnoType<presentation::AnimationSpeed>::get());
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_DURATION :
@@ -936,7 +936,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_WRITINGMODE :
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_WritingMode_EnumMap, ::getCppuType((const text::WritingMode*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_WritingMode_EnumMap, cppu::UnoType<text::WritingMode>::get());
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_VISIBILITY :
@@ -963,7 +963,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
             case XML_SD_TYPE_NORMALS_KIND:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_NormalsKind_EnumMap, ::getCppuType((const drawing::NormalsKind*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_NormalsKind_EnumMap, cppu::UnoType<drawing::NormalsKind>::get());
                 break;
             }
             case XML_SD_TYPE_NORMALS_DIRECTION:
@@ -973,22 +973,22 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_TEX_GENERATION_MODE_X:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_TexGenerationX_EnumMap, ::getCppuType((const drawing::TextureProjectionMode*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_TexGenerationX_EnumMap, cppu::UnoType<drawing::TextureProjectionMode>::get());
                 break;
             }
             case XML_SD_TYPE_TEX_GENERATION_MODE_Y:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_TexGenerationY_EnumMap, ::getCppuType((const drawing::TextureProjectionMode*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_TexGenerationY_EnumMap, cppu::UnoType<drawing::TextureProjectionMode>::get());
                 break;
             }
             case XML_SD_TYPE_TEX_KIND:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_TexKind_EnumMap, ::getCppuType((const drawing::TextureKind*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_TexKind_EnumMap, cppu::UnoType<drawing::TextureKind>::get());
                 break;
             }
             case XML_SD_TYPE_TEX_MODE:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_TexMode_EnumMap, ::getCppuType((const drawing::TextureMode*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_TexMode_EnumMap, cppu::UnoType<drawing::TextureMode>::get());
                 break;
             }
             case XML_SD_TYPE_NUMBULLET:
@@ -1003,7 +1003,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_BITMAP_MODE:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const drawing::BitmapMode*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, cppu::UnoType<drawing::BitmapMode>::get());
                 break;
             }
             case XML_SD_TYPE_BITMAPREPOFFSETX:
@@ -1024,26 +1024,26 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_BITMAP_REFPOINT:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, getCppuType((const ::com::sun::star::drawing::RectanglePoint*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, cppu::UnoType<com::sun::star::drawing::RectanglePoint>::get());
                 break;
             }
             case XML_TYPE_TEXT_ANIMATION:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Enum, ::getCppuType((const com::sun::star::drawing::TextAnimationKind*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Enum, cppu::UnoType<com::sun::star::drawing::TextAnimationKind>::get());
                 break;
             case XML_TYPE_TEXT_ANIMATION_BLINKING:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Blinking_Enum, ::getCppuType((const com::sun::star::drawing::TextAnimationKind*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimation_Blinking_Enum, cppu::UnoType<com::sun::star::drawing::TextAnimationKind>::get());
                 break;
             case XML_TYPE_TEXT_ANIMATION_DIRECTION:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimationDirection_Enum, ::getCppuType((const com::sun::star::drawing::TextAnimationDirection*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAnimationDirection_Enum, cppu::UnoType<com::sun::star::drawing::TextAnimationDirection>::get());
                 break;
             case XML_TYPE_TEXT_ANIMATION_STEPS:
                 pHdl = new XMLTextAnimationStepPropertyHdl;
                 break;
             case XML_SD_TYPE_TEXT_ALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_TextAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextHorizontalAdjust*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_TextAlign_Enum, cppu::UnoType<com::sun::star::drawing::TextHorizontalAdjust>::get());
                 break;
             case XML_SD_TYPE_VERTICAL_ALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextVerticalAdjust*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, cppu::UnoType<com::sun::star::drawing::TextVerticalAdjust>::get());
                 break;
             case XML_SD_TYPE_FITTOSIZE:
                 {
@@ -1064,10 +1064,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( pXML_MeasureUnit_Enum, ::cppu::UnoType<sal_Int32>::get() );
                 break;
             case XML_SD_TYPE_MEASURE_HALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_Measure_HAlign_Enum, ::getCppuType((const com::sun::star::drawing::MeasureTextHorzPos*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_Measure_HAlign_Enum, cppu::UnoType<com::sun::star::drawing::MeasureTextHorzPos>::get());
                 break;
             case XML_SD_TYPE_MEASURE_VALIGN:
-                pHdl = new XMLEnumPropertyHdl( pXML_Measure_VAlign_Enum, ::getCppuType((const com::sun::star::drawing::MeasureTextVertPos*)0) );
+                pHdl = new XMLEnumPropertyHdl( pXML_Measure_VAlign_Enum, cppu::UnoType<com::sun::star::drawing::MeasureTextVertPos>::get());
                 break;
             case XML_SD_TYPE_MEASURE_PLACING:
                 {

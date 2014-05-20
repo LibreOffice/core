@@ -1675,7 +1675,7 @@ uno::Type SAL_CALL ScExternalDocLinkObj::getElementType()
         throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType(static_cast<Reference<sheet::XExternalDocLink>*>(0));
+    return cppu::UnoType<sheet::XExternalDocLink>::get();
 }
 
 sal_Bool SAL_CALL ScExternalDocLinkObj::hasElements()
@@ -1789,7 +1789,7 @@ uno::Type SAL_CALL ScExternalDocLinksObj::getElementType()
         throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return getCppuType(static_cast<Reference<sheet::XExternalDocLinks>*>(0));
+    return cppu::UnoType<sheet::XExternalDocLinks>::get();
 }
 
 sal_Bool SAL_CALL ScExternalDocLinksObj::hasElements()

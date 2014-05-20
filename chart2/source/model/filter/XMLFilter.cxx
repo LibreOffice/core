@@ -339,7 +339,7 @@ sal_Int32 XMLFilter::impl_Import(
             { OUString("ProgressMax"),     0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("PrivateData"), 0,
-                ::getCppuType( (Reference<XInterface> *)0 ),
+                cppu::UnoType<XInterface>::get(),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("BaseURI"), 0,
                 ::cppu::UnoType<OUString>::get(),

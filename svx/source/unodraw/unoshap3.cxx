@@ -235,7 +235,7 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
 uno::Type SAL_CALL Svx3DSceneObject::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType(( const Reference< drawing::XShape>*)0);
+    return cppu::UnoType<drawing::XShape>::get();
 }
 
 

@@ -40,7 +40,7 @@ DNDListenerContainer::~DNDListenerContainer()
 void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
     throw(RuntimeException, std::exception)
 {
-    rBHelper.addListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
+    rBHelper.addListener( cppu::UnoType<XDragGestureListener>::get(), dgl );
 }
 
 // DNDListenerContainer::removeDragGestureListener
@@ -48,7 +48,7 @@ void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDr
 void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl )
     throw(RuntimeException, std::exception)
 {
-    rBHelper.removeListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
+    rBHelper.removeListener( cppu::UnoType<XDragGestureListener>::get(), dgl );
 }
 
 // DNDListenerContainer::resetRecognizer
@@ -63,7 +63,7 @@ void SAL_CALL DNDListenerContainer::resetRecognizer(  )
 void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
     throw(RuntimeException, std::exception)
 {
-    rBHelper.addListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
+    rBHelper.addListener( cppu::UnoType<XDropTargetListener>::get(), dtl );
 }
 
 // DNDListenerContainer::removeDropTargetListener
@@ -71,7 +71,7 @@ void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDro
 void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
     throw(RuntimeException, std::exception)
 {
-    rBHelper.removeListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
+    rBHelper.removeListener( cppu::UnoType<XDropTargetListener>::get(), dtl );
 }
 
 // DNDListenerContainer::isActive
@@ -115,7 +115,7 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
+    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
     if( pContainer && m_bActive )
     {
@@ -184,7 +184,7 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
+    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
     if( pContainer && m_bActive )
     {
@@ -227,7 +227,7 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
+    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
     if( pContainer && m_bActive )
     {
@@ -291,7 +291,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
+    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
     if( pContainer && m_bActive )
     {
@@ -354,7 +354,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
+    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
     if( pContainer && m_bActive )
     {
@@ -417,7 +417,7 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
     sal_uInt32 nRet = 0;
 
     // fire DropTargetDropEvent on all XDropTargetListeners
-    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDragGestureListener > * ) 0) );
+    OInterfaceContainerHelper *pContainer = rBHelper.getContainer( cppu::UnoType<XDragGestureListener>::get());
 
     if( pContainer )
     {

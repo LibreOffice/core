@@ -1392,7 +1392,7 @@ bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 
         if( rVal.hasValue() && rVal.getValue() )
         {
-            if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
+            if( rVal.getValueType() != cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
                 return false;
 
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
@@ -1970,7 +1970,7 @@ bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 n
 
         if( rVal.hasValue() && rVal.getValue() )
         {
-            if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
+            if( rVal.getValueType() != cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
                 return false;
 
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();

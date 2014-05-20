@@ -930,7 +930,7 @@ sal_Bool SAL_CALL FmXGridControl::hasElements() throw( RuntimeException, std::ex
 
 Type SAL_CALL FmXGridControl::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return ::getCppuType((const Reference< ::com::sun::star::awt::XTextComponent >*)NULL);
+    return cppu::UnoType<com::sun::star::awt::XTextComponent>::get();
 }
 
 // XEnumerationAccess
@@ -2350,7 +2350,7 @@ sal_Bool FmXGridPeer::hasElements() throw( RuntimeException, std::exception )
 
 Type SAL_CALL FmXGridPeer::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return ::getCppuType((Reference< ::com::sun::star::awt::XControl> *)NULL);
+    return cppu::UnoType<com::sun::star::awt::XControl>::get();
 }
 
 // XEnumerationAccess

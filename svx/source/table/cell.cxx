@@ -74,20 +74,20 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         FILL_PROPERTIES
 //      { "HasLevels",                    OWN_ATTR_HASLEVELS,             ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
         { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType< ::com::sun::star::style::XStyle >::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          ::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
-        { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
+        { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          cppu::UnoType<com::sun::star::text::WritingMode>::get(),                         0,      0},
+        { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<com::sun::star::drawing::TextHorizontalAdjust>::get(),  0,      0}, \
         { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
         { OUString(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
         { OUString(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
         { OUString(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextVerticalAdjust*)0),    0,      0},\
+        { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<com::sun::star::drawing::TextVerticalAdjust>::get(),    0,      0},\
         { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          ::getBooleanCppuType(),        0,      0}, \
 
-        { OUString("TableBorder"),                  OWN_ATTR_TABLEBORDER,           ::getCppuType((const TableBorder*)0), 0, 0 }, \
-        { OUString("TopBorder"),                    SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
-        { OUString("BottomBorder"),                 SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
-        { OUString("LeftBorder"),                   SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
-        { OUString("RightBorder"),                  SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
+        { OUString("TableBorder"),                  OWN_ATTR_TABLEBORDER,           cppu::UnoType<TableBorder>::get(), 0, 0 }, \
+        { OUString("TopBorder"),                    SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER }, \
+        { OUString("BottomBorder"),                 SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER }, \
+        { OUString("LeftBorder"),                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER }, \
+        { OUString("RightBorder"),                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER }, \
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -1037,7 +1037,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         case OWN_ATTR_TABLEBORDER:
         {
-            if(rValue.getValueType() != ::getCppuType((const TableBorder*)0) )
+            if(rValue.getValueType() != cppu::UnoType<TableBorder>::get())
                 break;
 
             const TableBorder* pBorder = (const TableBorder* )rValue.getValue();

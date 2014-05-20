@@ -316,17 +316,17 @@ Any SAL_CALL SvUnoImageMapObject::queryAggregation( const Type & rType )
 {
     Any aAny;
 
-    if( rType == ::getCppuType((const Reference< XServiceInfo >*)0) )
+    if( rType == cppu::UnoType<XServiceInfo>::get())
         aAny <<= Reference< XServiceInfo >(this);
-    else if( rType == ::getCppuType((const Reference< XTypeProvider >*)0) )
+    else if( rType == cppu::UnoType<XTypeProvider>::get())
         aAny <<= Reference< XTypeProvider >(this);
-    else if( rType == ::getCppuType((const Reference< XPropertySet >*)0) )
+    else if( rType == cppu::UnoType<XPropertySet>::get())
         aAny <<= Reference< XPropertySet >(this);
-    else if( rType == ::getCppuType((const Reference< XEventsSupplier >*)0) )
+    else if( rType == cppu::UnoType<XEventsSupplier>::get())
         aAny <<= Reference< XEventsSupplier >(this);
-    else if( rType == ::getCppuType((const Reference< XMultiPropertySet >*)0) )
+    else if( rType == cppu::UnoType<XMultiPropertySet>::get())
         aAny <<= Reference< XMultiPropertySet >(this);
-    else if( rType == ::getCppuType((const Reference< XUnoTunnel >*)0) )
+    else if( rType == cppu::UnoType<XUnoTunnel>::get())
         aAny <<= Reference< XUnoTunnel >(this);
     else
         aAny <<= OWeakAggObject::queryAggregation( rType );
@@ -684,7 +684,7 @@ Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
 // XElementAccess
 Type SAL_CALL SvUnoImageMap::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return ::getCppuType((const Reference< XPropertySet >*)0);
+    return cppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL SvUnoImageMap::hasElements(  ) throw(RuntimeException, std::exception)

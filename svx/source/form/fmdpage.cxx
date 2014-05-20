@@ -64,7 +64,7 @@ Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type&
     aTypes.realloc(aTypes.getLength() + 1);
     ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
 
-    pTypes[aTypes.getLength()-1] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormsSupplier>*)0);
+    pTypes[aTypes.getLength()-1] = cppu::UnoType<com::sun::star::form::XFormsSupplier>::get();
     return aTypes;
 }
 

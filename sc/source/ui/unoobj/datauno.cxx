@@ -95,7 +95,7 @@ static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
         {OUString(SC_UNONAME_COPYOUT),  0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_ISCASE),   0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_MAXFLD),   0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0},
-        {OUString(SC_UNONAME_ORIENT),   0,  getCppuType((table::TableOrientation*)0),  0, 0},
+        {OUString(SC_UNONAME_ORIENT),   0,  cppu::UnoType<table::TableOrientation>::get(),  0, 0},
         {OUString(SC_UNONAME_OUTPOS),   0,  cppu::UnoType<table::CellAddress>::get(),       0, 0},
         {OUString(SC_UNONAME_SAVEOUT),  0,  getBooleanCppuType(),                      0, 0},
         {OUString(SC_UNONAME_SKIPDUP),  0,  getBooleanCppuType(),                      0, 0},

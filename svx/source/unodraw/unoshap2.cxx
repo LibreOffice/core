@@ -348,7 +348,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
 
 uno::Type SAL_CALL SvxShapeGroup::getElementType() throw( uno::RuntimeException, std::exception )
 {
-    return ::getCppuType(( const Reference< drawing::XShape >*)0);
+    return cppu::UnoType<drawing::XShape>::get();
 }
 
 
@@ -1322,7 +1322,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
     {
     case OWN_ATTR_VALUE_POLYPOLYGONBEZIER:
     {
-        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0) ) )
+        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get()) )
         {
             basegfx::B2DPolyPolygon aNewPolyPolygon(
                 basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
@@ -1334,7 +1334,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
     }
     case OWN_ATTR_BASE_GEOMETRY:
     {
-        if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0)) )
+        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get()) )
         {
             if( mpObj.is() )
             {

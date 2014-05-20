@@ -474,22 +474,22 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
         }
         else if ( rLocalName == "marker-table" )
         {
-            if( aType == ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
+            if( aType == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_marker, mrTable, bOOoFormat );
         }
         else if ( rLocalName == "dash-table" )
         {
-            if( aType == ::getCppuType((const drawing::LineDash*)0) )
+            if( aType == cppu::UnoType<drawing::LineDash>::get())
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_dash, mrTable, bOOoFormat );
         }
         else if ( rLocalName == "hatch-table" )
         {
-            if( aType == ::getCppuType((const drawing::Hatch*)0) )
+            if( aType == cppu::UnoType<drawing::Hatch>::get())
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_hatch, mrTable, bOOoFormat );
         }
         else if ( rLocalName == "gradient-table" )
         {
-            if( aType == ::getCppuType((const awt::Gradient*)0))
+            if( aType == cppu::UnoType<awt::Gradient>::get())
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_gradient, mrTable, bOOoFormat );
         }
         else if ( rLocalName == "bitmap-table" )

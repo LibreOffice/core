@@ -59,13 +59,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "WhiteDay",
                   PROP_CANDLESTICKCHARTTYPE_WHITE_DAY,
-                  ::getCppuType( reinterpret_cast< Reference< beans::XPropertySet > *>(0)),
+                  cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( "BlackDay",
                   PROP_CANDLESTICKCHARTTYPE_BLACK_DAY,
-                  ::getCppuType( reinterpret_cast< Reference< beans::XPropertySet > *>(0)),
+                  cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 

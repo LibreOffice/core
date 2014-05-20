@@ -39,7 +39,7 @@ void lcl_fireModifyEvent(
     const lang::EventObject * pEvent )
 {
     ::cppu::OInterfaceContainerHelper * pCntHlp = rBroadcastHelper.getContainer(
-        ::getCppuType( reinterpret_cast< Reference< util::XModifyListener > * >(0)));
+        cppu::UnoType<util::XModifyListener>::get());
     if( pCntHlp )
     {
         lang::EventObject aEventToSend;
@@ -156,7 +156,7 @@ void ModifyEventForwarder::RemoveListener( const Reference< util::XModifyListene
 void ModifyEventForwarder::DisposeAndClear( const Reference< uno::XWeak > & xSource )
 {
     ::cppu::OInterfaceContainerHelper * pCntHlp = m_aModifyListeners.getContainer(
-        ::getCppuType( reinterpret_cast< Reference< util::XModifyListener > * >(0)));
+        cppu::UnoType<util::XModifyListener>::get());
     if( pCntHlp )
         pCntHlp->disposeAndClear( lang::EventObject( xSource ) );
 }

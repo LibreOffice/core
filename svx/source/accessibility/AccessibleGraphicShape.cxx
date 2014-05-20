@@ -158,7 +158,7 @@ uno::Sequence<uno::Type> SAL_CALL
     long nTypeCount = aTypeList.getLength();
     aTypeList.realloc (nTypeCount + 1);
     const uno::Type aImageType =
-        ::getCppuType((const uno::Reference<XAccessibleImage>*)0);
+        cppu::UnoType<XAccessibleImage>::get();
     aTypeList[nTypeCount] = aImageType;
 
     return aTypeList;

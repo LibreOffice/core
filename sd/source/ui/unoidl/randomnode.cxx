@@ -547,7 +547,7 @@ Reference< XCloneable > SAL_CALL RandomAnimationNode::createClone() throw (Runti
 // XElementAccess
 Type SAL_CALL RandomAnimationNode::getElementType() throw (RuntimeException, std::exception)
 {
-    return ::getCppuType((const Reference< XAnimationNode >*)0);
+    return cppu::UnoType<XAnimationNode>::get();
 }
 
 

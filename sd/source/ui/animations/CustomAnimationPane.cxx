@@ -1671,7 +1671,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
         maViewSelection = xSel->getSelection();
 
-        if( maViewSelection.getValueType() == ::getCppuType((const Reference< XShapes >*)0) )
+        if( maViewSelection.getValueType() == cppu::UnoType<XShapes>::get())
         {
             Reference< XIndexAccess > xShapes;
             maViewSelection >>= xShapes;
@@ -1691,7 +1691,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 }
             }
         }
-        else if ( maViewSelection.getValueType() == ::getCppuType((const Reference< XShape >*)0) )
+        else if ( maViewSelection.getValueType() == cppu::UnoType<XShape>::get())
         {
             aTargets.push_back( maViewSelection );
             Reference< XText > xText;
@@ -1699,7 +1699,7 @@ void CustomAnimationPane::onChange( bool bCreate )
             if( !xText.is() || xText->getString().isEmpty() )
                 bHasText = false;
         }
-        else if ( maViewSelection.getValueType() == ::getCppuType((const Reference< XTextCursor >*)0) )
+        else if ( maViewSelection.getValueType() == cppu::UnoType<XTextCursor>::get())
         {
             Reference< XShape > xShape;
             std::list< sal_Int16 > aParaList;

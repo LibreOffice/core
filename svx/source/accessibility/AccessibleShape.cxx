@@ -1032,11 +1032,11 @@ uno::Sequence<uno::Type> SAL_CALL
     uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
     // ... define local types, ...
     const uno::Type aLangEventListenerType =
-        ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
+        cppu::UnoType<lang::XEventListener>::get();
     const uno::Type aDocumentEventListenerType =
-        ::getCppuType((const uno::Reference<document::XEventListener>*)0);
+        cppu::UnoType<document::XEventListener>::get();
     const uno::Type aUnoTunnelType =
-        ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        cppu::UnoType<lang::XUnoTunnel>::get();
 
     // ... and merge them all into one list.
     sal_Int32   nTypeCount (aTypeList.getLength()),

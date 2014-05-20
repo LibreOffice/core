@@ -166,7 +166,7 @@ uno::Sequence<uno::Type> SAL_CALL
     long nTypeCount = aTypeList.getLength();
     aTypeList.realloc (nTypeCount + 1);
     const uno::Type aActionType =
-        ::getCppuType((const uno::Reference<XAccessibleAction>*)0);
+        cppu::UnoType<XAccessibleAction>::get();
     aTypeList[nTypeCount] = aActionType;
 
     return aTypeList;

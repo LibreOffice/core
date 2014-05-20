@@ -333,7 +333,7 @@ void SAL_CALL SfxPrintHelperListener_Impl::disposing( const lang::EventObject& )
 
 void SAL_CALL SfxPrintHelperListener_Impl::printJobEvent( const view::PrintJobEvent& rEvent ) throw (RuntimeException, std::exception)
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const Reference< view::XPrintJobListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<view::XPrintJobListener>::get());
     if ( pContainer!=NULL )
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -802,7 +802,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const Reference< lang::XEventListe
     throw(RuntimeException, std::exception)
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
+    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 
@@ -813,7 +813,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const Reference< lang::XEventLi
     throw(RuntimeException, std::exception)
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
+    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 void
@@ -859,11 +859,11 @@ void SAL_CALL SfxBaseModel::disposing( const lang::EventObject& aObject )
     Reference< document::XEventListener >  xDocListener( aObject.Source, UNO_QUERY );
 
     if ( xMod.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< util::XModifyListener >*)0), xMod );
+        m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<util::XModifyListener>::get(), xMod );
     else if ( xListener.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), xListener );
+        m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
     else if ( xDocListener.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< document::XEventListener >*)0), xListener );
+        m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }
 
 
@@ -1337,7 +1337,7 @@ void SAL_CALL SfxBaseModel::addModifyListener(const Reference< util::XModifyList
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const Reference< util::XModifyListener >*)0),xListener );
+    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<util::XModifyListener>::get(),xListener );
 }
 
 
@@ -1348,7 +1348,7 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const Reference< util::XModifyL
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< util::XModifyListener >*)0), xListener );
+    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
 }
 
 
@@ -1363,7 +1363,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
 
     Reference< XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
     lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const Reference< util::XCloseListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
     if (pContainer!=NULL)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -1391,7 +1391,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
 
     // no own objections against closing!
     m_pData->m_bClosing = true;
-    pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const Reference< util::XCloseListener >*) NULL ) );
+    pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
     if (pContainer!=NULL)
     {
         ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
@@ -1422,7 +1422,7 @@ void SAL_CALL SfxBaseModel::addCloseListener( const Reference< util::XCloseListe
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const Reference< util::XCloseListener >*)0), xListener );
+    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
 
 
@@ -1433,7 +1433,7 @@ void SAL_CALL SfxBaseModel::removeCloseListener( const Reference< util::XCloseLi
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< util::XCloseListener >*)0), xListener );
+    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
 
 
@@ -2058,7 +2058,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 }
             }
             else if ( GraphicHelper::supportsMetaFileHandle_Impl()
-              && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
+              && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
@@ -2094,7 +2094,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 }
             }
             else if ( GraphicHelper::supportsMetaFileHandle_Impl()
-              && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
+              && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
             {
                 // means HGLOBAL handler to memory storage containing METAFILEPICT structure
 
@@ -2225,12 +2225,12 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
         aFlavorSeq[8].MimeType =
             OUString( "application/x-openoffice-emf;windows_formatname=\"Image EMF\""  );
         aFlavorSeq[8].HumanPresentableName = "Enhanced Windows MetaFile";
-        aFlavorSeq[8].DataType = getCppuType( (const sal_uInt64*) 0 );
+        aFlavorSeq[8].DataType = cppu::UnoType<sal_uInt64>::get();
 
         aFlavorSeq[9].MimeType =
             OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\""  );
         aFlavorSeq[9].HumanPresentableName = "Windows MetaFile";
-        aFlavorSeq[9].DataType = getCppuType( (const sal_uInt64*) 0 );
+        aFlavorSeq[9].DataType = cppu::UnoType<sal_uInt64>::get();
     }
 
     return aFlavorSeq;
@@ -2261,7 +2261,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
-          && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
+          && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
             return sal_True;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )
@@ -2269,7 +2269,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const datatransfer::DataF
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
-          && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
+          && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
             return sal_True;
     }
     else if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )
@@ -2390,7 +2390,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const Reference< document::XEventL
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const Reference< document::XEventListener >*)0), aListener );
+    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<document::XEventListener>::get(), aListener );
 }
 
 
@@ -2401,7 +2401,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const Reference< document::XEve
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< document::XEventListener >*)0), aListener );
+    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<document::XEventListener>::get(), aListener );
 }
 
 
@@ -2412,7 +2412,7 @@ void SAL_CALL SfxBaseModel::addDocumentEventListener( const Reference< document:
     throw ( RuntimeException, std::exception )
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const Reference< document::XDocumentEventListener >*)0), aListener );
+    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<document::XDocumentEventListener>::get(), aListener );
 }
 
 
@@ -2420,7 +2420,7 @@ void SAL_CALL SfxBaseModel::removeDocumentEventListener( const Reference< docume
     throw ( RuntimeException, std::exception )
 {
     SfxModelGuard aGuard( *this );
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const Reference< document::XDocumentEventListener >*)0), aListener );
+    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<document::XDocumentEventListener>::get(), aListener );
 }
 
 
@@ -2834,7 +2834,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
 void SfxBaseModel::NotifyModifyListeners_Impl() const
 {
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const Reference< util::XModifyListener >*)0) );
+    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XModifyListener>::get());
     if ( pIC )
     {
         lang::EventObject aEvent( (frame::XModel *)this );
@@ -3164,7 +3164,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
         return;
 
     ::cppu::OInterfaceContainerHelper* pIC =
-        m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const Reference< document::XDocumentEventListener >*)0 ) );
+        m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XDocumentEventListener>::get());
     if ( pIC )
     {
         SAL_INFO("sfx.doc", "SfxDocumentEvent: " + aName);
@@ -3177,7 +3177,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
                 aDocumentEvent ) );
     }
 
-    pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const Reference< document::XEventListener >*)0 ) );
+    pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get());
     if ( pIC )
     {
         SAL_INFO("sfx.doc", "SfxEvent: " + aName);
@@ -3250,7 +3250,7 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
         return;
 
     ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
-                                        ::getCppuType((const Reference< document::XEventListener >*)0) );
+                                        cppu::UnoType<document::XEventListener>::get());
     if( pIC )
 
     {
@@ -3272,7 +3272,7 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
 /** returns true if someone added a XEventListener to this XEventBroadcaster */
 bool SfxBaseModel::hasEventListeners() const
 {
-    return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const Reference< document::XEventListener >*)0) ) );
+    return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get()) );
 }
 
 void SAL_CALL SfxBaseModel::addPrintJobListener( const Reference< view::XPrintJobListener >& xListener ) throw (RuntimeException, std::exception)
@@ -3869,7 +3869,7 @@ void SAL_CALL SfxBaseModel::addStorageChangeListener(
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
     m_pData->m_aInterfaceContainer.addInterface(
-                                    ::getCppuType((const Reference< document::XStorageChangeListener >*)0), xListener );
+                                    cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
 }
 
 void SAL_CALL SfxBaseModel::removeStorageChangeListener(
@@ -3879,7 +3879,7 @@ void SAL_CALL SfxBaseModel::removeStorageChangeListener(
     SfxModelGuard aGuard( *this );
 
     m_pData->m_aInterfaceContainer.removeInterface(
-                                    ::getCppuType((const Reference< document::XStorageChangeListener >*)0), xListener );
+                                    cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
 }
 
 #include "printhelper.hxx"

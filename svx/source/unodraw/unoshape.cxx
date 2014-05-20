@@ -767,18 +767,18 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     aTypeSequence.realloc( 12 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
+                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
                     *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
+                    *pTypes++ = cppu::UnoType<container::XChild>::get();
+                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
                 }
             }
             return aTypeSequence;
@@ -799,20 +799,20 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     aTypeSequence.realloc( 14 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
+                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
                     *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapes>*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapeGroup>*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
+                    *pTypes++ = cppu::UnoType<container::XChild>::get();
+                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
+                    *pTypes++ = cppu::UnoType<drawing::XShapes>::get();
+                    *pTypes++ = cppu::UnoType<drawing::XShapeGroup>::get();
                 }
             }
             return aTypeSequence;
@@ -833,24 +833,24 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     aTypeSequence.realloc( 17 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
+                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
                     *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XConnectorShape>*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
+                    *pTypes++ = cppu::UnoType<container::XChild>::get();
+                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
+                    *pTypes++ = cppu::UnoType<drawing::XConnectorShape>::get();
                     // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextAppend >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCopy >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
+                    *pTypes++ = cppu::UnoType<text::XTextAppend>::get();
+                    *pTypes++ = cppu::UnoType<text::XTextCopy>::get();
+                    *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
+                    *pTypes++ = cppu::UnoType<text::XTextRangeMover>::get();
                 }
             }
             return aTypeSequence;
@@ -871,19 +871,19 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     aTypeSequence.realloc( 13 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
+                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
                     *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XControlShape>*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
+                    *pTypes++ = cppu::UnoType<container::XChild>::get();
+                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
+                    *pTypes++ = cppu::UnoType<drawing::XControlShape>::get();
                 }
             }
             return aTypeSequence;
@@ -904,19 +904,19 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     aTypeSequence.realloc( 13 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
+                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
                     *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapes>*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
+                    *pTypes++ = cppu::UnoType<container::XChild>::get();
+                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
+                    *pTypes++ = cppu::UnoType<drawing::XShapes>::get();
                 }
             }
             return aTypeSequence;
@@ -936,23 +936,23 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     aTypeSequence.realloc( 16 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
+                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
                     *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
+                    *pTypes++ = cppu::UnoType<container::XChild>::get();
+                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
                     // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< drawing::XEnhancedCustomShapeDefaulter >*)0);
+                    *pTypes++ = cppu::UnoType<text::XText>::get();
+                    *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
+                    *pTypes++ = cppu::UnoType<text::XTextRangeMover>::get();
+                    *pTypes++ = cppu::UnoType<drawing::XEnhancedCustomShapeDefaulter>::get();
                 }
             }
             return aTypeSequence;
@@ -990,23 +990,23 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     aTypeSequence.realloc( 16 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XShape>::get();
+                    *pTypes++ = cppu::UnoType<lang::XComponent>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+                    *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
                     *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    *pTypes++ = cppu::UnoType<drawing::XGluePointsSupplier>::get();
+                    *pTypes++ = cppu::UnoType<container::XChild>::get();
+                    *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+                    *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+                    *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
+                    *pTypes++ = cppu::UnoType<container::XNamed>::get();
                     // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextAppend >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCopy >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
+                    *pTypes++ = cppu::UnoType<text::XTextAppend>::get();
+                    *pTypes++ = cppu::UnoType<text::XTextCopy>::get();
+                    *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
+                    *pTypes++ = cppu::UnoType<text::XTextRangeMover>::get();
                 }
             }
             return aTypeSequence;
@@ -1871,7 +1871,7 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     else
     {
         uno::Reference< beans::XPropertySet > xSet;
-        queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
+        queryInterface( cppu::UnoType<beans::XPropertySet>::get()) >>= xSet;
 
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
         {
@@ -1933,7 +1933,7 @@ void SvxShape::endSetPropertyValues()
     else
     {
         uno::Reference< beans::XPropertySet > xSet;
-        queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
+        queryInterface( cppu::UnoType<beans::XPropertySet>::get()) >>= xSet;
 
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++, pNames++ )
         {
@@ -2310,7 +2310,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                         aNewPolyPolygon = basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
                             *(const drawing::PointSequenceSequence*)rValue.getValue());
                     }
-                    else if( rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0))
+                    else if( rValue.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
                     {
                         // get polygpon data from PolyPolygonBezierCoords
                         aNewPolyPolygon = basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
