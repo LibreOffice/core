@@ -206,6 +206,14 @@ public:
             manager.load(testlib, args);
         } catch (const CppUnit::DynamicLibraryManagerException &e) {
             std::cerr << "DynamicLibraryManagerException: \"" << e.what() << "\"\n";
+#ifdef WIN32
+            const char *pPath = getenv ("PATH");
+            if (pPath && strlen (pPath) > 256)
+            {
+                std::cerr << "Windows has significant build problems with long PATH variables ";
+                std::cerr << "please check your PATH variable and re-autogen.\n";
+            }
+#endif
             return false;
         }
 #endif
