@@ -718,7 +718,6 @@ void ScInputHandler::GetFormulaData()
         else
         {
             pFormulaData = new ScTypedCaseStrSet;
-            miAutoPosFormula = pFormulaData->end();
         }
 
         if( pFormulaDataPara )
@@ -749,6 +748,7 @@ void ScInputHandler::GetFormulaData()
                 pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
             }
         }
+        miAutoPosFormula = pFormulaData->end();
         pDoc->GetFormulaEntries( *pFormulaData );
         pDoc->GetFormulaEntries( *pFormulaDataPara );
     }
