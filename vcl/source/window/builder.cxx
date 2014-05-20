@@ -904,6 +904,12 @@ namespace
     }
 }
 
+FieldUnit VclBuilder::detectUnit(OString const& rString)
+{
+    OString const unit(extractUnit(rString));
+    return detectMetricUnit(unit);
+}
+
 void VclBuilder::ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
 {
     OString sWidthChars("width-chars");

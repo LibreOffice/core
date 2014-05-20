@@ -13,6 +13,7 @@
 #include <typeinfo>
 #include <osl/module.hxx>
 #include <tools/resmgr.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <xmlreader/xmlreader.hxx>
@@ -303,6 +304,7 @@ public:
     static OString convertMnemonicMarkup(const OString &rIn);
 
     static OString extractCustomProperty(stringmap &rMap);
+    static FieldUnit detectUnit(OString const&);
 
     static bool extractDropdown(stringmap &rMap);
 
