@@ -13,6 +13,7 @@
 #include "scdllapi.h"
 
 class ScDocument;
+class Window;
 
 namespace sc {
 
@@ -53,6 +54,14 @@ class SC_DLLPUBLIC IdleSwitch
 public:
     IdleSwitch(ScDocument& rDoc, bool bEnableIdle);
     ~IdleSwitch();
+};
+
+class WaitPointerSwitch
+{
+    Window* mpFrameWin;
+public:
+    WaitPointerSwitch(Window* pWin);
+    ~WaitPointerSwitch();
 };
 
 }
