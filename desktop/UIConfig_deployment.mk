@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_uifiles,desktop,\
     desktop/uiconfig/ui/extensionmanager \
     desktop/uiconfig/ui/licensedialog \
     desktop/uiconfig/ui/showlicensedialog \
+    desktop/uiconfig/ui/updatedialog \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -18,6 +18,7 @@
  */
 
 
+#include <vcl/builder.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>
@@ -30,9 +31,9 @@ using dp_gui::DescriptionEdit;
 
 // DescriptionEdit -------------------------------------------------------
 
-DescriptionEdit::DescriptionEdit( Window* pParent, const ResId& rResId ) :
+DescriptionEdit::DescriptionEdit( Window* pParent) :
 
-    ExtMultiLineEdit( pParent, rResId ),
+    ExtMultiLineEdit( pParent),
 
     m_bIsVerticalScrollBarHidden( true )
 
@@ -40,6 +41,11 @@ DescriptionEdit::DescriptionEdit( Window* pParent, const ResId& rResId ) :
     Init();
 }
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDescriptionEdit(Window* pParent, VclBuilder::stringmap &)
+{
+    return new DescriptionEdit(pParent);
+}
 
 
 void DescriptionEdit::Init()
