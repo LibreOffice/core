@@ -474,6 +474,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         }
     }
     break;
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     case AppleRemoteEvent:
     {
         sal_Int16 nCommand = 0;
@@ -536,6 +537,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 
     }
     break;
+#endif
 
     case YieldWakeupEvent:
         // do nothing, fall out of Yield
