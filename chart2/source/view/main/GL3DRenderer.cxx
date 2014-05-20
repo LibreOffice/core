@@ -706,7 +706,10 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList->size() * sizeof(glm::vec3), &pointList[0][0], GL_STATIC_DRAW);
-        glUniform4fv(maResources.m_2DColorID, 1, &polygon.polygonColor[0]);
+        if(mbPickingMode)
+            glUniform4fv(maResources.m_2DColorID, 1, &polygon.id[0]);
+        else
+            glUniform4fv(maResources.m_2DColorID, 1, &polygon.polygonColor[0]);
         glUniformMatrix4fv(maResources.m_MatrixID, 1, GL_FALSE, &m_3DMVP[0][0]);
 
         // 1rst attribute buffer : vertices
@@ -786,6 +789,7 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         {
             glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
             glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
+            glUniform4fv(maResources.m_2DColorID, 1, &polygon.id[0]);
         }
 
         GLint maVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
@@ -878,9 +882,10 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::
     }
 }
 
-void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly, sal_uInt32 nLineColor,long fillStyle, sal_uInt32 specular)
+void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly, sal_uInt32 nLineColor,long fillStyle, sal_uInt32 specular, sal_uInt32 nUniqueId)
 {
     m_Polygon3DInfo.polygonColor = getColorAsVector(nColor);
+    m_Polygon3DInfo.id = getColorAsVector(nUniqueId);
     m_Polygon3DInfo.material.materialColor = m_Polygon3DInfo.polygonColor;//material color seems to be the same for all parts, so we use the polygon color
     //line or Polygon
     m_Polygon3DInfo.lineOnly = lineOnly;
@@ -960,8 +965,9 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
     m_Polygon3DInfo.vertices = NULL;
 }
 
-void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nColor, sal_uInt32 specular, glm::mat4 modelMatrix)
+void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nColor, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId)
 {
+    m_Extrude3DInfo.id = getColorAsVector(nUniqueId);
     glm::vec4 tranform = modelMatrix * glm::vec4(0.0, 0.0, 0.0, 1.0);
     glm::vec4 DirX = modelMatrix * glm::vec4(1.0, 0.0, 0.0, 0.0);
     glm::vec4 DirY = modelMatrix * glm::vec4(0.0, 1.0, 0.0, 0.0);
@@ -1091,6 +1097,7 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
+        glUniform4fv(maResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
 
     glDrawElements(GL_TRIANGLES, extrude3D.size[surIndex], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[surIndex]));
@@ -1134,6 +1141,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
+        glUniform4fv(maResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
     glDrawElements(GL_TRIANGLES, extrude3D.size[BOTTOM_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[BOTTOM_SURFACE]));
 }
@@ -1178,6 +1186,7 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
+        glUniform4fv(maResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
     glDrawElements(GL_TRIANGLES, extrude3D.size[MIDDLE_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[MIDDLE_SURFACE]));
 }
@@ -1223,6 +1232,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
+        glUniform4fv(maResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
     glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[TOP_SURFACE]));
     RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
@@ -1253,6 +1263,7 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
     {
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
         glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
+        glUniform4fv(maResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
@@ -1279,7 +1290,9 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     if(mbPickingMode)
+    {
         glUseProgram(maPickingResources.m_CommonProID);
+    }
     else
     {
         Update3DUniformBlock();
@@ -1294,6 +1307,9 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         Extrude3DInfo extrude3DInfo = m_Extrude3DList[i];
         GLuint vertexBuf = extrude3DInfo.rounded ? m_CubeVertexBuf : m_BoundBox;
         GLuint normalBuf = extrude3DInfo.rounded ? m_CubeNormalBuf : m_BoundBoxNormal;
+
+        if(mbPickingMode)
+            glUniform4fv(maResources.m_2DColorID, 1, &extrude3DInfo.id[0]);
         // 1st attribute buffer : vertices
 
         GLint aVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
@@ -1348,13 +1364,14 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     glDisable(GL_CULL_FACE);
 }
 
-void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft)
+void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft, sal_uInt32 nUniqueId)
 {
     long bmpWidth = rBitmapEx.GetSizePixel().Width();
     long bmpHeight = rBitmapEx.GetSizePixel().Height();
     boost::scoped_array<sal_uInt8> bitmapBuf(OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx));
 
     TextInfo aTextInfo;
+    aTextInfo.id = getColorAsVector(nUniqueId);
     aTextInfo.vertex[0] = vBottomRight.x;
     aTextInfo.vertex[1] = vBottomRight.y;
     aTextInfo.vertex[2] = vBottomRight.z * m_fHeightWeight;
