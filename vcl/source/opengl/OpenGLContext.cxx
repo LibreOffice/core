@@ -385,9 +385,18 @@ bool OpenGLContext::ImplInit()
     m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
 #elif defined( MACOSX )
 
+    SAL_INFO("vcl.opengl", "OpenGLContext not implemented yet for OS X");
+    return false;
+
 #elif defined( IOS )
 
+    SAL_INFO("vcl.opengl", "OpenGLContext not implemented yet for iOS");
+    return false;
+
 #elif defined( ANDROID )
+
+    SAL_INFO("vcl.opengl", "OpenGLContext not implemented yet for Android");
+    return false;
 
 #elif defined( UNX )
     m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
