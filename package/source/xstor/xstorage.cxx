@@ -576,13 +576,19 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
     {
         // Init from original stream
         uno::Reference< io::XInputStream > xRelInfoStream = GetRelInfoStreamForName( OUString() );
-        if ( xRelInfoStream.is() )
-            m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
+        try
+        {
+            if ( xRelInfoStream.is() )
+                m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                     xRelInfoStream,
                                     "_rels/.rels",
                                     m_xContext );
-
-        m_nRelInfoStatus = RELINFO_READ;
+            m_nRelInfoStatus = RELINFO_READ;
+        }
+        catch (css::uno::Exception & e)
+        {
+            SAL_INFO("package.xstor", "caught Exception " << e.Message);
+        }
     }
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
     {
