@@ -49,6 +49,10 @@
 #include <boost/scoped_ptr.hpp>
 
 namespace editeng { class SvxBorderLine; }
+namespace svl {
+    class SharedString;
+    class SharedStringPool;
+}
 namespace sc {
     struct FormulaGroupContext;
     class StartListeningContext;
@@ -237,6 +241,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
+
+    SC_DLLPUBLIC svl::SharedStringPool& GetSharedStringPool();
+    const svl::SharedStringPool& GetSharedStringPool() const;
+
+    svl::SharedString GetSharedString( const ScAddress& rPos ) const;
 
     ScCalcConfig        maCalcConfig;
 
