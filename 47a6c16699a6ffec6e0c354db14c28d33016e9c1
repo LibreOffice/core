@@ -16,6 +16,24 @@
       "revId": "47a6c16699a6ffec6e0c354db14c28d33016e9c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_42e7b240",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3027,
+      "author": {
+        "id": 1000629
+      },
+      "writtenOn": "2014-05-20T09:06:27Z",
+      "side": 1,
+      "message": "Sorry my comment was not clear.. what I meant was.. if the initial size of the marker was 6, then WITHOUT my changes nSize was coming as 5 , hence I had to add 1 in order to make it 6.\nMy comment \" the value is always 1 less than the actual value\" was actually referring to nSize without my change",
+      "parentUuid": "fa963961_6293d6a4",
+      "revId": "47a6c16699a6ffec6e0c354db14c28d33016e9c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
