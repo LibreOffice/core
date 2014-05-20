@@ -1409,19 +1409,15 @@ void ScInputHandler::GetColData()
         if ( pColumnData )
             pColumnData->clear();
         else
-        {
             pColumnData = new ScTypedCaseStrSet;
-            miAutoPosColumn = pColumnData->end();
-        }
 
         std::vector<ScTypedStrData> aEntries;
         pDoc->GetDataEntries(
             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), true, aEntries, true);
         if (!aEntries.empty())
-        {
             pColumnData->insert(aEntries.begin(), aEntries.end());
-            miAutoPosColumn = pColumnData->end();
-        }
+
+        miAutoPosColumn = pColumnData->end();
     }
 }
 
