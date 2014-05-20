@@ -681,6 +681,8 @@ public:
 
     void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
 
+    void enableDocTimer( bool bEnable );
+
 private:
     ScExternalRefManager();
     ScExternalRefManager(const ScExternalRefManager&);
@@ -803,6 +805,8 @@ private:
      * user interaction when calling from the API.
      */
     bool mbUserInteractionEnabled:1;
+
+    bool mbDocTimerEnabled:1;
 
     AutoTimer maSrcDocTimer;
     DECL_LINK(TimeOutHdl, AutoTimer*);
