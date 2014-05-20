@@ -237,7 +237,16 @@ bool ScDocument::GetCodeName( SCTAB nTab, OUString& rName ) const
 
 bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
 {
-    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpperName;
+    static OUString aCacheName, aCacheUpperName;
+
+    if (aCacheName != rName)
+    {
+        aCacheName = rName;
+        // surprisingly slow ...
+        aCacheUpperName = ScGlobal::pCharClass->uppercase(rName);
+    }
+    aUpperName = aCacheUpperName;
 
     for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
