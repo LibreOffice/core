@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_029beaca",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-05-20T00:03:49Z",
+      "side": 1,
+      "message": "typo: wich -\u003e which",
+      "range": {
+        "startLine": 609,
+        "startChar": 30,
+        "endLine": 609,
+        "endChar": 34
+      },
+      "revId": "03c629244d682b9fa0e0d2b30d9899e2ec79fa4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_e29fe6b2",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-05-20T00:03:49Z",
+      "side": 1,
+      "message": "typo: wich -\u003e which",
+      "range": {
+        "startLine": 618,
+        "startChar": 31,
+        "endLine": 618,
+        "endChar": 35
+      },
+      "revId": "03c629244d682b9fa0e0d2b30d9899e2ec79fa4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
