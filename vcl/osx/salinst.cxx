@@ -475,7 +475,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     }
     break;
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    case AppleRemoteEvent:
+    case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
     {
         sal_Int16 nCommand = 0;
         SalData* pSalData = GetSalData();
