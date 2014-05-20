@@ -804,10 +804,10 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     JobSetup *pOrig = 0;
     if ( !rSetup.GetPrinterName().isEmpty() && ASPECT_THUMBNAIL != nAspect )
     {
-        pOrig = const_cast<JobSetup*>(pDoc->getJobsetup());
+        pOrig = const_cast<JobSetup*>(pDoc->getIDocumentDeviceAccessConst()->getJobsetup());
         if( pOrig )         // then we copy that
             pOrig = new JobSetup( *pOrig );
-        pDoc->setJobsetup( rSetup );
+        pDoc->getIDocumentDeviceAccess()->setJobsetup( rSetup );
     }
 
     Rectangle aRect( nAspect == ASPECT_THUMBNAIL ?
@@ -824,7 +824,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
 
     if( pOrig )
     {
-        pDoc->setJobsetup( *pOrig );
+        pDoc->getIDocumentDeviceAccess()->setJobsetup( *pOrig );
         delete pOrig;
     }
     if ( bResetModified )
@@ -882,7 +882,7 @@ OutputDevice* SwDocShell::GetDocumentRefDev()
 void SwDocShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
 {
     if ( pNewPrinter )
-        GetDoc()->setJobsetup( pNewPrinter->GetJobSetup() );
+        GetDoc()->getIDocumentDeviceAccess()->setJobsetup( pNewPrinter->GetJobSetup() );
     else
         GetDoc()->getIDocumentDeviceAccess()->setPrinter( 0, true, true );
 }
