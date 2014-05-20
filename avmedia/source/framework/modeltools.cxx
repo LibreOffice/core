@@ -142,7 +142,8 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
 #ifdef ENABLE_COLLADA2GLTF
     if (rSourceURL.endsWith(".dae") || rSourceURL.endsWith(".kmz"))
     {
-        OUString sName = ::utl::TempFile::CreateTempName();
+        OUString sName;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sName);
         // remove .tmp extension
         sName = sName.copy(0, sName.getLength() - 4);
         const INetURLObject aSourceURLObj(rSourceURL);
@@ -162,7 +163,7 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
         GLTF::COLLADA2GLTFWriter writer(asset);
         writer.write();
         // Path to the .json file created by COLLADA2GLTFWriter
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sName + "/" + GetFilename(sName) + ".json", sSource);
+        sSource = sName + "/" + GetFilename(sName) + ".json";
     }
 #endif
 
