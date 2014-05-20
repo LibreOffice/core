@@ -251,7 +251,7 @@ CommandProcessorInfo::CommandProcessorInfo()
         = ucb::CommandInfo(
             OUString( CHECKIN_NAME ), // Name
             CHECKIN_HANDLE, // Handle
-            cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ); // ArgType
+            cppu::UnoType<ucb::CheckinArgument>::get() ); // ArgType
 }
 
 
