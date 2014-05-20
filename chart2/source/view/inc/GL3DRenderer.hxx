@@ -79,6 +79,7 @@ struct Polygon3DInfo
     bool twoSidesLighting;
     long fillStyle;
     glm::vec4 polygonColor;
+    glm::vec4 id;
     Vertices3D *vertices;
     UVs3D *uvs;
     Normals3D *normals;
@@ -93,6 +94,7 @@ struct Extrude3DInfo
     bool rounded;
     bool twoSidesLighting;
     glm::vec4 extrudeColor;
+    glm::vec4 id;
     float xScale;
     float yScale;
     float zScale;
@@ -136,6 +138,7 @@ struct PackedVertex{
 
 struct TextInfo
 {
+    glm::vec4 id;
     GLuint texture;
     float vertex[12];
 };
@@ -159,20 +162,20 @@ public:
     void Set3DSenceInfo(sal_uInt32 color = 255, bool twoSidesLighting = true);
     void SetLightInfo(bool lightOn, sal_uInt32 color, const glm::vec4& direction);
     void AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, sal_uInt32 lineColor,
-            long fillStyle, sal_uInt32 specular);
+            long fillStyle, sal_uInt32 specular, sal_uInt32 nUniqueId);
     void EndAddShapePolygon3DObject();
     void AddPolygon3DObjectNormalPoint(float x, float y, float z);
     void EndAddPolygon3DObjectNormalPoint();
     void AddPolygon3DObjectPoint(float x, float y, float z);
     void EndAddPolygon3DObjectPoint();
-    void AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 color, sal_uInt32 specular, glm::mat4 modelMatrix);
+    void AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 color, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId);
     void EndAddShape3DExtrudeObject();
     double GetTime();
     void SetFPS(float fps);
     void RenderClickPos(Point aMPos);
     void SetSize(const Size& rSize);
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
-    void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft);
+    void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft, sal_uInt32 nUniqueId);
     void ProcessUnrenderedShape();
 
     void SetPickingMode(bool bPickingMode);
