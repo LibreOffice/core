@@ -61,9 +61,8 @@ static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
            way and always set EINVAL, so be resilient here: */
         return false;
     } else {
-        OSL_ASSERT(
-            m >= 0
-            && (unsigned long) m < std::numeric_limits<std::size_t>::max());
+        SAL_WARN_IF( m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max(), "sal.osl", 
+                "m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max()");
         *value = (std::size_t) m;
         return true;
     }
@@ -218,7 +217,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     bRet = osl_psz_getUserIdent(Security,pszIdent,sizeof(pszIdent));
 
     rtl_string2UString( ustrIdent, pszIdent, rtl_str_getLength( pszIdent ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-    OSL_ASSERT(*ustrIdent != NULL);
+    SAL_WARN_IF(*ustrIdent == NULL, "sal.osl", "*ustrIdent == NULL");
 
     return bRet;
 }
@@ -252,7 +251,7 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
 
     rtl_string2UString( ustrName, pszName, rtl_str_getLength( pszName ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-    OSL_ASSERT(*ustrName != NULL);
+    SAL_WARN_IF(*ustrName == NULL, "sal.osl", "ustrName == NULL");
 
     return bRet;
 }
@@ -281,7 +280,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     if ( bRet )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-        OSL_ASSERT(*pustrDirectory != NULL);
+        SAL_WARN_IF(*pustrDirectory == NULL, "sal.osl", "*pustrDirectory == NULL");
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
 
@@ -376,7 +375,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     if ( bRet )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-        OSL_ASSERT(*pustrDirectory != NULL);
+        SAL_WARN_IF(*pustrDirectory == NULL, "sal.osl", "*pustrDirectory == NULL");
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
 
@@ -422,19 +421,19 @@ static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDir
                 struct stat st;
                 if (stat(pszDirectory, &st) != 0)
                 {
-                    OSL_TRACE("Could not stat $HOME/.config");
+                    SAL_INFO("sal.osl","Could not stat $HOME/.config");
                     dirOK = false;
                 }
                 else
                 {
                     if (!S_ISDIR(st.st_mode))
                     {
-                        OSL_TRACE("$HOME/.config is not a directory");
+                        SAL_INFO("sal.osl", "$HOME/.config is not a directory");
                         dirOK = false;
                     }
                     if (!(st.st_mode & S_IRUSR && st.st_mode & S_IWUSR && st.st_mode & S_IXUSR))
                     {
-                        OSL_TRACE("$HOME/.config has bad permissions");
+                        SAL_INFO("sal.osl", "$HOME/.config has bad permissions");
                         dirOK = false;
                     }
                 }
