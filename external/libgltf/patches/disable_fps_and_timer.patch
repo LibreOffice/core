@@ -1,0 +1,124 @@
+diff --git libgltf/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+index 88c5c9a..6639572 100644
+--- libgltf/src/RenderScene.cpp
++++ libgltf/src/RenderScene.cpp
+@@ -383,7 +383,9 @@ void RenderWithFBO::releaseFbo()
+ 
+ 
+ CPhysicalCamera* RenderScene::sCamera = NULL;
++#if ENABLE_FPS
+ FPSCounter* RenderScene::pFPSCounter = NULL;
++#endif
+ ShaderProgram RenderScene::mShaderProgram = ShaderProgram();
+ 
+ RenderScene::RenderScene()
+@@ -400,10 +402,12 @@ RenderScene::RenderScene()
+ 
+ RenderScene::~RenderScene()
+ {
++#if ENABLE_FPS
+     if (pFPSCounter != NULL)
+     {
+         delete pFPSCounter;
+     }
++#endif
+ #if ENABLE_TIMER
+     if(pTimer != NULL)
+     {
+@@ -815,8 +819,10 @@ int RenderScene::initRender(glTFHandle* handle)
+ 
+ void RenderScene::initFPS(unsigned char* fontBuf,unsigned int bufSize)
+ {
++#if ENABLE_FPS
+     pFPSCounter = new FPSCounter(fontBuf,bufSize);
+     pFPSCounter->loadFPSShader(&mShaderProgram);
++#endif
+ }
+ 
+ void RenderScene::renderPrimitive(RenderPrimitive* pPrimitive,
+@@ -1132,10 +1138,12 @@ void RenderScene::drawTriangle(RenderPrimitive* pPrimitive)
+ 
+ void RenderScene::prepareRender(void* lpParam)
+ {
++#if ENABLE_FPS
+     if (pFPSCounter != NULL)
+     {
+         pFPSCounter->timeStamp();
+     }
++#endif
+     viewport = *((glTFViewport*)lpParam);
+     fbo.createAndBindFbo(viewport.width * SSAA, viewport.height * SSAA);
+     glBindFramebuffer(GL_FRAMEBUFFER, fbo.mFboId);
+@@ -1229,10 +1237,12 @@ void RenderScene::renderShader(Technique* pTechnique)
+ 
+ void RenderScene::completeRender()
+ {
++#if ENABLE_FPS
+     if (pFPSCounter != NULL)
+     {
+         pFPSCounter->printFPS(&viewport);
+     }
++#endif
+     glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+     fbo.renderFboTexture();
+@@ -1356,4 +1366,4 @@ double RenderScene::getAnimDuration()
+ int  RenderScene::isAnimPlay()
+ {
+     return this->mAnimationPlay ? 1 : 0;
+-}
+\ No newline at end of file
++}
+diff --git libgltf/src/RenderScene.h libgltf/src/RenderScene.h
+index cc0b3e5..065a689 100644
+--- libgltf/src/RenderScene.h
++++ libgltf/src/RenderScene.h
+@@ -8,12 +8,22 @@
+ #ifndef RENDERSCENE_H
+ #define RENDERSCENE_H
+ 
++#ifndef ENABLE_FPS
++#define ENABLE_FPS 0
++#endif
++
++#ifndef ENABLE_TIMER
++#define ENABLE_TIMER 0
++#endif
++
+ #include "Shaders.h"
+ #include "Common.h"
+ #include "Texture.h"
+ #include "Camera.h"
+ #include "LoadScene.h"
++#if ENABLE_FPS
+ #include "FPSCounter.h"
++#endif
+ #include "Timer.h"
+ 
+ using namespace glTF;
+@@ -246,7 +256,9 @@ private:
+     bool loadFPSShader();
+     int getFPS();
+     void printFPS(glTFViewport* pViewpoit);
++#if ENABLE_FPS
+     static FPSCounter* pFPSCounter;
++#endif
+     RenderWithFBO fbo;
+ #if ENABLE_TIMER
+     Timer* pTimer;
+diff --git libgltf/src/Timer.h libgltf/src/Timer.h
+index e4d778b..9ab2d74 100644
+--- libgltf/src/Timer.h
++++ libgltf/src/Timer.h
+@@ -10,7 +10,10 @@
+ #include "time.h"
+ #include "Common.h"
+ 
+-#define ENABLE_TIMER 1
++#ifndef ENABLE_TIMER
++#define ENABLE_TIMER 0
++#endif
++
+ #define DETAILED_INFO 1
+ 
+ #if ENABLE_TIMER
