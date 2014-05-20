@@ -423,7 +423,7 @@ void SwDocShell::UpdateFontList()
         if( pDoc )
         {
             delete pFontList;
-            pFontList = new FontList( pDoc->getReferenceDevice( true ) );
+            pFontList = new FontList( pDoc->getIDocumentDeviceAccessConst()->getReferenceDevice( true ) );
             PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
         }
         bInUpdateFontList = false;
