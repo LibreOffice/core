@@ -302,14 +302,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         try
         {
-            SAL_DEBUG("OFilteredContainer::construct(). "
-                      "Getting metadata ...");
-
             Reference< XConnection > xCon( m_xConnection, UNO_SET_THROW );
             m_xMetaData.set( xCon->getMetaData(), UNO_SET_THROW );
-
-            SAL_DEBUG("OFilteredContainer::construct(). "
-                      "Metadata got.");
 
             // create a table table filter suitable for the XDatabaseMetaData::getTables call,
             // taking into account both the externally-provided table type filter, and any
@@ -318,9 +312,6 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
             if ( !sInherentTableTypeRestriction.isEmpty() )
             {
-                SAL_DEBUG("OFilteredContainer::construct(). "
-                          "NOT InherentTableTypeRestriction.");
-
                 if ( _rTableTypeFilter.getLength() != 0 )
                 {
                     const OUString* tableType    = _rTableTypeFilter.getConstArray();
@@ -342,9 +333,6 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             }
             else
             {
-                SAL_DEBUG("OFilteredContainer::construct(). "
-                          "InherentTableTypeRestriction.");
-
                 // no container-inherent restriction for the table types
                 if ( _rTableTypeFilter.getLength() == 0 )
                 {   // no externally-provided table type filter => use the default filter
@@ -356,15 +344,9 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                 }
             }
 
-            SAL_DEBUG("OFilteredContainer::construct(). "
-                      "Getting tables ...");
-
             static const OUString sAll("%");
             Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
             Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
-
-            SAL_DEBUG("OFilteredContainer::construct(). "
-                      "Tables got.");
 
             TableInfos aUnfilteredTables;
 
