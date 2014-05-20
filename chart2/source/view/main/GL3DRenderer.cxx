@@ -1030,7 +1030,7 @@ void OpenGL3DRenderer::Init3DUniformBlock()
     {
         return;
     }
-    int nUniformBufferAlignSize = 0;
+    int nUniformBufferAlignSize = 1;
     glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &nUniformBufferAlignSize);
     GLint nBlockDataSizeLight = 0, nBlockDataSizeMertrial = 0;
     glGetActiveUniformBlockiv(maResources.m_3DProID, a3DLightBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeLight);
