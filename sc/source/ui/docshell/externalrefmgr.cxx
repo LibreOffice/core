@@ -2796,19 +2796,20 @@ void ScExternalRefManager::notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdate
 
 void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
 {
-    DocShellMap aNewDocShells;
+    // To avoid potentially freezing Calc, we close one stale document at a time.
     DocShellMap::iterator itr = maDocShells.begin(), itrEnd = maDocShells.end();
     for (; itr != itrEnd; ++itr)
     {
         // in 100th of a second.
         sal_Int32 nSinceLastAccess = (Time( Time::SYSTEM ) - itr->second.maLastAccess).GetTime();
-        if (nSinceLastAccess < nTimeOut)
-            aNewDocShells.insert(*itr);
-        else
-            // Timed out.  Let's close this.
+        if (nSinceLastAccess >= nTimeOut)
+        {
+            // Timed out.  Let's close this, and exit the loop.
             itr->second.maShell->DoClose();
+            maDocShells.erase(itr);
+            break;
+        }
     }
-    maDocShells.swap(aNewDocShells);
 
     if (maDocShells.empty())
         maSrcDocTimer.Stop();
