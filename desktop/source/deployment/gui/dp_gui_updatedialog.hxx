@@ -30,6 +30,7 @@
 #include "svtools/svlbitm.hxx"
 #include "svx/checklbx.hxx"
 #include "tools/link.hxx"
+#include <vcl/layout.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -109,8 +110,7 @@ private:
     class CheckListBox: public SvxCheckListBox {
     public:
         CheckListBox(
-            UpdateDialog & dialog, ResId const & resource,
-            Image const & normalStaticImage);
+            Window* pParent, UpdateDialog & dialog);
 
         virtual ~CheckListBox();
 
@@ -159,7 +159,7 @@ private:
                          OUString const & sReleaseNotes);
     bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
-    bool showDescription( const OUString& rDescription, bool bWithPublisher );
+    bool showDescription( const OUString& rDescription);
     bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
     DECL_LINK(selectionHandler, void *);
@@ -170,21 +170,21 @@ private:
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_context;
-    FixedText m_checking;
-    Throbber m_throbber;
-    FixedText m_update;
-    UpdateDialog::CheckListBox m_updates;
-    CheckBox m_all;
-    FixedLine m_description;
-    FixedText m_PublisherLabel;
-    FixedHyperlink m_PublisherLink;
-    FixedText m_ReleaseNotesLabel;
-    FixedHyperlink m_ReleaseNotesLink;
-    dp_gui::DescriptionEdit m_descriptions;
-    FixedLine m_line;
-    HelpButton m_help;
-    PushButton m_ok;
-    PushButton m_close;
+    FixedText* m_pchecking;
+    Throbber* m_pthrobber;
+    FixedText* m_pUpdate;
+    VclScrolledWindow* m_pContainer;
+    UpdateDialog::CheckListBox* m_pUpdates;
+    CheckBox* m_pAll;
+    FixedText* m_pDescription;
+    FixedText* m_pPublisherLabel;
+    FixedHyperlink* m_pPublisherLink;
+    FixedText* m_pReleaseNotesLabel;
+    FixedHyperlink* m_pReleaseNotesLink;
+    dp_gui::DescriptionEdit* m_pDescriptions;
+    HelpButton* m_pHelp;
+    PushButton* m_pOk;
+    PushButton* m_pClose;
     OUString m_error;
     OUString m_none;
     OUString m_noInstallable;
