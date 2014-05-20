@@ -802,6 +802,7 @@ void DocxAttributeOutput::EndRun()
             }
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
+            m_endPageRef = false;
             m_nHyperLinkCount--;
         }
         m_closeHyperlinkInPreviousRun = false;
