@@ -254,16 +254,6 @@ IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccess()
     return m_DeviceAccess.get();
 }
 
-VirtualDevice* SwDoc::getVirtualDevice(/*[in]*/ bool bCreate ) const
-{
-    return getIDocumentDeviceAccessConst()->getVirtualDevice( bCreate );
-}
-
-void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged )
-{
-    getIDocumentDeviceAccess()->setVirtualDevice( pVd, bDeleteOld, bCallVirDevDataChanged );
-}
-
 OutputDevice* SwDoc::getReferenceDevice(/*[in]*/ bool bCreate ) const
 {
     return getIDocumentDeviceAccessConst()->getReferenceDevice( bCreate );
