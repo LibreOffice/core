@@ -109,6 +109,7 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_RenderTexCoordBuf);
     glDeleteBuffers(1, &m_RenderVertexBuf);
     glDeleteBuffers(1, &m_3DUBOBuffer);
+    glDeleteBuffers(1, &m_VertexBuffer);
 }
 
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
@@ -216,6 +217,7 @@ void OpenGL3DRenderer::init()
     glGenBuffers(1, &m_CubeVertexBuf);
     glGenBuffers(1, &m_CubeNormalBuf);
     glGenBuffers(1, &m_CubeElementBuf);
+    glGenBuffers(1, &m_VertexBuffer);
     glGenBuffers(1, &m_BoundBox);
     glBindBuffer(GL_ARRAY_BUFFER, m_BoundBox);
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBox), boundBox, GL_STATIC_DRAW);
