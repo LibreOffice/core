@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_static_libraries,pdfimport,\
 
 $(eval $(call gb_Library_use_externals,pdfimport,\
 	boost_headers \
+    $(if $(filter-out WNT MACOSX,$(OS)),fontconfig) \
     zlib \
     poppler \
 ))
