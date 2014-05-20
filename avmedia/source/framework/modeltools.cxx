@@ -148,7 +148,9 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
 {
     OUString sSource = rSourceURL;
 #ifdef ENABLE_COLLADA2GLTF
-    if (rSourceURL.endsWith(".dae") || rSourceURL.endsWith(".kmz"))
+    const bool bIsDAE = rSourceURL.endsWithIgnoreAsciiCase(".dae");
+    const bool bIsKMZ = rSourceURL.endsWithIgnoreAsciiCase(".kmz");
+    if (bIsDAE || bIsKMZ)
     {
         OUString sName;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sName);
@@ -160,7 +162,7 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
         std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
         asset->setInputFilePath(sSourcePath);
 
-        if (rSourceURL.endsWith(".kmz"))
+        if (bIsKMZ)
         {
             std::string strDaeFilePath = GLTF::Kmz2Collada()(asset->getInputFilePath());
             if (strDaeFilePath == "")
