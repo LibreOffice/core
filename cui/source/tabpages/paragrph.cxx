@@ -429,8 +429,6 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
         SetFieldUnit( *m_pLineDistAtMetricBox, eFUnit );
     }
 
-    ELRLoseFocusHdl( NULL ); // reset min/max values
-
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxItemState eItemState = rSet.GetItemState( _nWhich );
 
@@ -588,6 +586,10 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
         }
     }
 
+    // this sets the min/max limits; do this _after_ setting the values,
+    // because for Impress the min of first-line indent depends on value of
+    // left-indent!
+    ELRLoseFocusHdl( NULL );
     m_pAutoCB->SaveValue();
     m_pContextualCB->SaveValue();
     m_pLineDist->SaveValue();
