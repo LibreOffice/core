@@ -25,6 +25,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
+#include <boost/optional.hpp>
 
 #ifdef ENABLE_COLLADA2GLTF
 #include <COLLADA2GLTFWriter.h>
@@ -71,7 +72,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
 
     // Parse json, read externals' URI and modify this relative URI's so they remain valid in the new context.
     std::vector<std::string> vExternals;
-    ptree aTree, aEmptyTree;
+    ptree aTree;
     try
     {
         json_parser::read_json( sUrl, aTree );
@@ -85,12 +86,19 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
             aTree.put("buffers." + rVal.first + ".path.",sBufferUri.substr(sBufferUri.find_last_of('/')+1));
         }
         // Images for textures
-        BOOST_FOREACH(ptree::value_type &rVal,aTree.get_child("images", aEmptyTree))
+        boost::optional< ptree& > aImages = aTree.get_child_optional("images");
+        if( aImages )
         {
-            const std::string sImageUri(rVal.second.get<std::string>("path"));
-            vExternals.push_back(sImageUri);
-            // Change path: make it contain only a file name
-            aTree.put("images." + rVal.first + ".path.",sImageUri.substr(sImageUri.find_last_of('/')+1));
+            BOOST_FOREACH(ptree::value_type &rVal,aImages.get())
+            {
+                const std::string sImageUri(rVal.second.get<std::string>("path"));
+                if( !sImageUri.empty() )
+                {
+                    vExternals.push_back(sImageUri);
+                    // Change path: make it contain only a file name
+                    aTree.put("images." + rVal.first + ".path.",sImageUri.substr(sImageUri.find_last_of('/')+1));
+                }
+            }
         }
         // Shaders (contains names only)
         BOOST_FOREACH(ptree::value_type &rVal,aTree.get_child("programs"))
