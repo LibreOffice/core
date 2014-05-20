@@ -56,6 +56,10 @@
 #include "basegfx/tools/canvastools.hxx"
 #include "basegfx/tools/unopolypolygon.hxx"
 
+#include <vcl/metric.hxx>
+#include <vcl/font.hxx>
+#include <vcl/virdev.hxx>
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <string.h>
@@ -356,6 +360,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
 
 void Parser::readChar()
 {
+    double fontSize;
     geometry::Matrix2D aUnoMatrix;
     geometry::RealRectangle2D aRect;
 
@@ -367,15 +372,15 @@ void Parser::readChar()
     readDouble(aUnoMatrix.m01);
     readDouble(aUnoMatrix.m10);
     readDouble(aUnoMatrix.m11);
+    readDouble(fontSize);
 
     OString aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
 
     // chars gobble up rest of line
     m_nCharIndex = -1;
 
-    m_pSink->drawGlyphs( OStringToOUString( aChars,
-                                                 RTL_TEXTENCODING_UTF8 ),
-                         aRect, aUnoMatrix );
+    m_pSink->drawGlyphs(OStringToOUString(aChars, RTL_TEXTENCODING_UTF8),
+        aRect, aUnoMatrix, fontSize);
 }
 
 void Parser::readLineCap()
@@ -598,7 +603,8 @@ void Parser::readFont()
                             nIsItalic != 0,
                             nIsUnderline != 0,
                             false,
-                            nSize );
+                            nSize,
+                            1.0);
 
     // extract textual attributes (bold, italic in the name, etc.)
     parseFontFamilyName(aResult);
@@ -625,8 +631,11 @@ void Parser::readFont()
                 uno::Any aRes( xMat->getMaterial() );
                 if( aRes >>= aFD )
                 {
-                    aResult.familyName  = aFD.Name;
-                parseFontFamilyName(aResult);
+                    if (!aFD.Name.isEmpty())
+                    {
+                        aResult.familyName = aFD.Name;
+                        parseFontFamilyName(aResult);
+                    }
                     aResult.isBold      = (aFD.Weight > 100.0);
                     aResult.isItalic    = (aFD.Slant == awt::FontSlant_OBLIQUE ||
                                            aFD.Slant == awt::FontSlant_ITALIC );
@@ -647,6 +656,16 @@ void Parser::readFont()
         }
 
     }
+
+    static VirtualDevice* vDev = 0;
+    if (vDev == 0)
+        vDev = new VirtualDevice;
+
+    Font font(aResult.familyName, Size(0, 1000));
+    vDev->SetFont(font);
+    FontMetric metric(vDev->GetFontMetric());
+    aResult.ascent = metric.GetAscent() / 1000.0;
+
     m_aFontMap[nFontID] = aResult;
 
     aResult.size = nSize;

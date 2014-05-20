@@ -346,7 +346,8 @@ namespace
 
         virtual void drawGlyphs( const OUString&             rGlyphs,
                                  const geometry::RealRectangle2D& /*rRect*/,
-                                 const geometry::Matrix2D&        /*rFontMatrix*/ ) SAL_OVERRIDE
+                                 const geometry::Matrix2D&        /*rFontMatrix*/,
+                                 double /*fontSize*/) SAL_OVERRIDE
         {
             m_aTextOut.append(rGlyphs);
         }

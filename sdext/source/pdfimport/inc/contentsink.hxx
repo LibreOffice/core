@@ -52,13 +52,15 @@ namespace pdfi
                         bool                 isItalic_,
                         bool                 isUnderline_,
                         bool                 isOutline_,
-                        double               size_ ) :
+                        double               size_,
+                        double               ascent_) :
             familyName(familyName_),
             isBold(isBold_),
             isItalic(isItalic_),
             isUnderline(isUnderline_),
             isOutline(isOutline_),
-            size(size_)
+            size(size_),
+            ascent(ascent_)
         {}
 
         FontAttributes() :
@@ -67,7 +69,8 @@ namespace pdfi
             isItalic(false),
             isUnderline(false),
             isOutline(false),
-            size(0.0)
+            size(0.0),
+            ascent(1.0)
         {}
 
         OUString     familyName;
@@ -76,6 +79,7 @@ namespace pdfi
         bool                isUnderline;
         bool                isOutline;
         double              size; // device pixel
+        double              ascent;
 
         bool operator==(const FontAttributes& rFont) const
         {
@@ -84,7 +88,8 @@ namespace pdfi
                 !isItalic == !rFont.isItalic &&
                 !isUnderline == !rFont.isUnderline &&
                 !isOutline == !rFont.isOutline &&
-                size == rFont.size;
+                size == rFont.size &&
+                ascent == rFont.ascent;
         }
     };
 
@@ -135,9 +140,10 @@ namespace pdfi
         virtual void intersectEoClip(const css::uno::Reference<
                                            css::rendering::XPolyPolygon2D >& rPath) = 0;
 
-        virtual void drawGlyphs( const OUString&                               rGlyphs,
+        virtual void drawGlyphs( const OUString& rGlyphs,
                                  const css::geometry::RealRectangle2D& rRect,
-                                 const css::geometry::Matrix2D&        rFontMatrix ) = 0;
+                                 const css::geometry::Matrix2D&        rFontMatrix,
+                                 double fontSize) = 0;
 
         /// issued when a sequence of associated glyphs is drawn
         virtual void endText() = 0;
