@@ -74,8 +74,7 @@ private:
     void            ImplWriteBack();
 
 public:
-                    ZCodec( sal_uIntPtr nInBuf, sal_uIntPtr nOutBuf, sal_uIntPtr nMemUsage = MAX_MEM_USAGE );
-                    ZCodec();
+                    ZCodec( sal_uIntPtr nInBuf = DEFAULT_IN_BUFSIZE, sal_uIntPtr nOutBuf = DEFAULT_OUT_BUFSIZE, sal_uIntPtr nMemUsage = MAX_MEM_USAGE );
     virtual         ~ZCodec();
 
     virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
