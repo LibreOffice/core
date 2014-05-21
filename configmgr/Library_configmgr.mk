@@ -8,6 +8,8 @@
 
 $(eval $(call gb_Library_Library,configmgr))
 
+$(eval $(call gb_Library_set_precompiled_header,configmgr,$(SRCDIR)/configmgr/inc/pch/precompiled_configmgr))
+
 $(eval $(call gb_Library_add_exception_objects,configmgr, \
     configmgr/source/access \
     configmgr/source/broadcaster \
