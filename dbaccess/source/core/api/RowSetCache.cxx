@@ -1589,7 +1589,7 @@ bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
             // we found only one element so it must some kind of join here
             OSQLParseNode* pJoin = pTableRefCommalist->getByRule(::connectivity::OSQLParseNode::qualified_join);
             if(pJoin)
-            { // we are only intereseted in qualified joins like RIGHT or LEFT
+            { // we are only interested in qualified joins like RIGHT or LEFT
                 OSQLParseNode* pJoinType    = pJoin->getChild(1);
                 OSQLParseNode* pOuterType   = NULL;
                 if(SQL_ISRULE(pJoinType,join_type) && pJoinType->count() == 2)
