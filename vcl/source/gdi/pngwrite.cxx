@@ -49,7 +49,6 @@ public:
 
                 PNGWriterImpl( const BitmapEx& BmpEx,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData = NULL );
-                ~PNGWriterImpl();
 
     bool    Write( SvStream& rOStm );
 
@@ -66,7 +65,7 @@ private:
 
     BitmapReadAccess*   mpAccess;
     BitmapReadAccess*   mpMaskAccess;
-    ZCodec*             mpZCodec;
+    ZCodec              mpZCodec;
 
     sal_uInt8*              mpDeflateInBuf;         // as big as the size of a scanline + alphachannel + 1
     sal_uInt8*              mpPreviousScan;         // as big as mpDeflateInBuf
@@ -102,7 +101,6 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     , mbStatus(true)
     , mpAccess(NULL)
     , mpMaskAccess(NULL)
-    , mpZCodec(new ZCodec)
     , mpDeflateInBuf(NULL)
     , mpPreviousScan(NULL)
     , mpCurrentScan(NULL)
@@ -238,11 +236,6 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             ImplCloseChunk();
         }
     }
-}
-
-PNGWriterImpl::~PNGWriterImpl()
-{
-    delete mpZCodec;
 }
 
 bool PNGWriterImpl::Write( SvStream& rOStm )
@@ -386,56 +379,56 @@ void PNGWriterImpl::ImplWriteIDAT ()
         mpCurrentScan = new sal_uInt8[ mnDeflateInSize ];
         ImplClearFirstScanline();
     }
-    mpZCodec->BeginCompression( mnCompLevel, true );
-    mpZCodec->SetCRC( mnCRC );
+    mpZCodec.BeginCompression( mnCompLevel, true );
+    mpZCodec.SetCRC( mnCRC );
     SvMemoryStream aOStm;
     if ( mnInterlaced == 0 )
     {
         for ( sal_uLong nY = 0; nY < mnHeight; nY++ )
-            mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter( nY ) );
+            mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter( nY ) );
     }
     else
     {
         // interlace mode
         sal_uLong nY;
         for ( nY = 0; nY < mnHeight; nY+=8 )                                                // pass 1
-            mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 8 ) );
+            mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 8 ) );
         ImplClearFirstScanline();
 
         for ( nY = 0; nY < mnHeight; nY+=8 )                                                // pass 2
-            mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 4, 8 ) );
+            mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 4, 8 ) );
         ImplClearFirstScanline();
 
         if ( mnHeight >= 5 )                                                                // pass 3
         {
             for ( nY = 4; nY < mnHeight; nY+=8 )
-                mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 4 ) );
+                mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 4 ) );
             ImplClearFirstScanline();
         }
 
         for ( nY = 0; nY < mnHeight; nY+=4 )                                                // pass 4
-            mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 2, 4 ) );
+            mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 2, 4 ) );
         ImplClearFirstScanline();
 
         if ( mnHeight >= 3 )                                                                // pass 5
         {
             for ( nY = 2; nY < mnHeight; nY+=4 )
-                mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 2 ) );
+                mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 2 ) );
             ImplClearFirstScanline();
         }
 
         for ( nY = 0; nY < mnHeight; nY+=2 )                                                // pass 6
-            mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 1, 2 ) );
+            mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 1, 2 ) );
         ImplClearFirstScanline();
 
         if ( mnHeight >= 2 )                                                                // pass 7
         {
             for ( nY = 1; nY < mnHeight; nY+=2 )
-                mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 1 ) );
+                mpZCodec.Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 1 ) );
         }
     }
-    mpZCodec->EndCompression();
-    mnCRC = mpZCodec->GetCRC();
+    mpZCodec.EndCompression();
+    mnCRC = mpZCodec.GetCRC();
 
     if ( mnFilterType )         // using filter type 4 we need memory for the scanline 3 times
     {
