@@ -20,48 +20,36 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
 #define INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
 
-#include <vcl/dllapi.h>
-
-class GlyphCache;
-class GlyphMetric;
-class GlyphData;
-class ServerFont;
-class GlyphCachePeer;
-class ServerFontLayoutEngine;
-class ServerFontLayout;
-class ImplFontOptions;
-class PhysicalFontCollection;
-
-#include <tools/gen.hxx>
-#include <basebmp/bitmapdevice.hxx>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
-#include <boost/shared_ptr.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-
-namespace basegfx { class B2DPolyPolygon; }
-
-class RawBitmap;
-
-#include <outfont.hxx>
-#include <impfont.hxx>
-
-class ServerFontLayout;
-#include <sallayout.hxx>
-
 #include <config_graphite.h>
-#if ENABLE_GRAPHITE
-class GraphiteFaceWrapper;
-#endif
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-namespace vcl
-{
-    struct FontCapabilities;
-}
+#include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
+
+#include <basebmp/bitmapdevice.hxx>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <tools/gen.hxx>
+#include <vcl/dllapi.h>
+
+#include <outfont.hxx>
+#include <impfont.hxx>
+#include <sallayout.hxx>
+
+class FtFontInfo;
+class GlyphCachePeer;
+class GlyphData;
+class GraphiteFaceWrapper;
+class ImplFontOptions;
+class PhysicalFontCollection;
+class RawBitmap;
+class ServerFont;
+class ServerFontLayout;
+class ServerFontLayoutEngine;
+namespace basegfx { class B2DPolyPolygon; }
+namespace vcl { struct FontCapabilities; }
 
 class VCL_DLLPUBLIC GlyphCache
 {
@@ -172,8 +160,6 @@ private:
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
 };
-
-class FtFontInfo;
 
 class VCL_DLLPUBLIC ServerFont
 {
