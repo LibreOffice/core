@@ -38,7 +38,7 @@
 static const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 
 ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize )
-    : mbInit(0)
+    : meState(STATE_INIT)
     , mbStatus(false)
     , mbFinish(false)
     , mpIStm(NULL)
@@ -63,7 +63,7 @@ ZCodec::~ZCodec()
 
 void ZCodec::BeginCompression( int nCompressLevel, bool updateCrc, bool gzLib )
 {
-    mbInit = 0;
+    assert(meState == STATE_INIT);
     mbStatus = true;
     mbFinish = false;
     mpIStm = mpOStm = NULL;
@@ -83,9 +83,9 @@ long ZCodec::EndCompression()
 {
     long retvalue = 0;
 
-    if ( mbInit != 0 )
+    if (meState != STATE_INIT)
     {
-        if ( mbInit & 2 )   // 1->decompress, 3->compress
+        if (meState == STATE_COMPRESS)
         {
             do
             {
@@ -105,6 +105,7 @@ long ZCodec::EndCompression()
         }
         delete[] mpOutBuf;
         delete[] mpInBuf;
+        meState = STATE_INIT;
     }
     return ( mbStatus ) ? retvalue : -1;
 }
@@ -113,13 +114,11 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
 {
     long nOldTotal_In = PZSTREAM->total_in;
 
-    if ( mbInit == 0 )
-    {
-        mpIStm = &rIStm;
-        mpOStm = &rOStm;
-        ImplInitBuf( false );
-        mpInBuf = new sal_uInt8[ mnInBufSize ];
-    }
+    assert(meState == STATE_INIT);
+    mpIStm = &rIStm;
+    mpOStm = &rOStm;
+    ImplInitBuf( false );
+    mpInBuf = new sal_uInt8[ mnInBufSize ];
     while (( PZSTREAM->avail_in = mpIStm->Read( PZSTREAM->next_in = mpInBuf, mnInBufSize )) != 0 )
     {
         if ( PZSTREAM->avail_out == 0 )
@@ -139,16 +138,11 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     sal_uIntPtr nInToRead;
     long    nOldTotal_Out = PZSTREAM->total_out;
 
-    if ( mbFinish )
-        return PZSTREAM->total_out - nOldTotal_Out;
-
-    if ( mbInit == 0 )
-    {
-        mpIStm = &rIStm;
-        mpOStm = &rOStm;
-        ImplInitBuf( true );
-        PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
-    }
+    assert(meState == STATE_INIT);
+    mpIStm = &rIStm;
+    mpOStm = &rOStm;
+    ImplInitBuf( true );
+    PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
     do
     {
         if ( PZSTREAM->avail_out == 0 ) ImplWriteBack();
@@ -173,14 +167,12 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     while ( ( err != Z_STREAM_END)  && ( PZSTREAM->avail_in || mnInToRead ) );
     ImplWriteBack();
 
-    if ( err == Z_STREAM_END )
-        mbFinish = true;
     return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
 
 long ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
 {
-    if ( mbInit == 0 )
+    if (meState == STATE_INIT)
     {
         mpOStm = &rOStm;
         ImplInitBuf( false );
@@ -212,7 +204,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
         return 0;           // PZSTREAM->total_out;
 
     mpIStm = &rIStm;
-    if ( mbInit == 0 )
+    if (meState == STATE_INIT)
     {
         ImplInitBuf( true );
     }
@@ -256,7 +248,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
     if ( mbFinish )
         return 0;           // PZSTREAM->total_out;
 
-    if ( mbInit == 0 )
+    if (meState == STATE_INIT)
     {
         mpIStm = &rIStm;
         ImplInitBuf( true );
@@ -308,7 +300,7 @@ void ZCodec::ImplWriteBack()
 
     if ( nAvail )
     {
-        if ( mbInit & 2 && mbUpdateCrc )
+        if (meState == STATE_COMPRESS && mbUpdateCrc)
             UpdateCRC( mpOutBuf, nAvail );
         mpOStm->Write( PZSTREAM->next_out = mpOutBuf, nAvail );
         PZSTREAM->avail_out = mnOutBufSize;
@@ -337,74 +329,72 @@ sal_uIntPtr ZCodec::GetCRC()
 
 void ZCodec::ImplInitBuf ( bool nIOFlag )
 {
-    if ( mbInit == 0 )
+    assert(meState == STATE_INIT);
+    if ( nIOFlag )
     {
-        if ( nIOFlag )
+        meState = STATE_DECOMPRESS;
+        if ( mbStatus &&  mbGzLib )
         {
-            mbInit = 1;
-            if ( mbStatus &&  mbGzLib )
+            sal_uInt8 n1, n2, j, nMethod, nFlags;
+            for ( int i = 0; i < 2; i++ )   // gz - magic number
             {
-                sal_uInt8 n1, n2, j, nMethod, nFlags;
-                for ( int i = 0; i < 2; i++ )   // gz - magic number
+                mpIStm->ReadUChar( j );
+                if ( j != gz_magic[ i ] )
+                    mbStatus = false;
+            }
+            mpIStm->ReadUChar( nMethod );
+            mpIStm->ReadUChar( nFlags );
+            if ( nMethod != Z_DEFLATED )
+                mbStatus = false;
+            if ( ( nFlags & GZ_RESERVED ) != 0 )
+                mbStatus = false;
+            /* Discard time, xflags and OS code: */
+            mpIStm->SeekRel( 6 );
+            /* skip the extra field */
+            if ( nFlags & GZ_EXTRA_FIELD )
+            {
+                mpIStm->ReadUChar( n1 ).ReadUChar( n2 );
+                mpIStm->SeekRel( n1 + ( n2 << 8 ) );
+            }
+            /* skip the original file name */
+            if ( nFlags & GZ_ORIG_NAME)
+            {
+                do
                 {
                     mpIStm->ReadUChar( j );
-                    if ( j != gz_magic[ i ] )
-                        mbStatus = false;
                 }
-                mpIStm->ReadUChar( nMethod );
-                mpIStm->ReadUChar( nFlags );
-                if ( nMethod != Z_DEFLATED )
-                    mbStatus = false;
-                if ( ( nFlags & GZ_RESERVED ) != 0 )
-                    mbStatus = false;
-                /* Discard time, xflags and OS code: */
-                mpIStm->SeekRel( 6 );
-                /* skip the extra field */
-                if ( nFlags & GZ_EXTRA_FIELD )
-                {
-                    mpIStm->ReadUChar( n1 ).ReadUChar( n2 );
-                    mpIStm->SeekRel( n1 + ( n2 << 8 ) );
-                }
-                /* skip the original file name */
-                if ( nFlags & GZ_ORIG_NAME)
-                {
-                    do
-                    {
-                        mpIStm->ReadUChar( j );
-                    }
-                    while ( j && !mpIStm->IsEof() );
-                }
-                /* skip the .gz file comment */
-                if ( nFlags & GZ_COMMENT )
-                {
-                    do
-                    {
-                        mpIStm->ReadUChar( j );
-                    }
-                    while ( j && !mpIStm->IsEof() );
-                }
-                /* skip the header crc */
-                if ( nFlags & GZ_HEAD_CRC )
-                    mpIStm->SeekRel( 2 );
-                if ( mbStatus )
-                    mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? false : true;
+                while ( j && !mpIStm->IsEof() );
             }
-            else
+            /* skip the .gz file comment */
+            if ( nFlags & GZ_COMMENT )
             {
-                mbStatus = ( inflateInit( PZSTREAM ) >= 0 );
+                do
+                {
+                    mpIStm->ReadUChar( j );
+                }
+                while ( j && !mpIStm->IsEof() );
             }
-            mpInBuf = new sal_uInt8[ mnInBufSize ];
+            /* skip the header crc */
+            if ( nFlags & GZ_HEAD_CRC )
+                mpIStm->SeekRel( 2 );
+            if ( mbStatus )
+                mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? false : true;
         }
         else
         {
-            mbInit = 3;
-
-            mbStatus = ( deflateInit2_( PZSTREAM, mnCompressLevel, Z_DEFLATED,
-                MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY,
-                    ZLIB_VERSION, sizeof( z_stream ) ) >= 0 );
-
-            PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
+            mbStatus = ( inflateInit( PZSTREAM ) >= 0 );
         }
+        mpInBuf = new sal_uInt8[ mnInBufSize ];
+    }
+    else
+    {
+        meState = STATE_COMPRESS;
+
+        mbStatus = ( deflateInit2_( PZSTREAM, mnCompressLevel, Z_DEFLATED,
+            MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY,
+                ZLIB_VERSION, sizeof( z_stream ) ) >= 0 );
+
+        PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
     }
 }
 
