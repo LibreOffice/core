@@ -177,6 +177,7 @@ long ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
         mpOStm = &rOStm;
         ImplInitBuf( false );
     }
+    assert(&rOStm == mpOStm);
 
     PZSTREAM->avail_in = nSize;
     PZSTREAM->next_in = (unsigned char*)pData;
