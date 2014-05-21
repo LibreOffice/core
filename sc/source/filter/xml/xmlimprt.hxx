@@ -965,6 +965,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     bool                    bNullDateSetted;
     bool                    bSelfImportingXMLSet;
     bool mbLockSolarMutex;
+    bool mbImportStyles;
     bool mbHasNewCondFormatData;
 
 

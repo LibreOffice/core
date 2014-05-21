@@ -2372,7 +2372,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     // To load encrypted documents with password, user interaction needs to be enabled.
     pMedium->UseInteractionHandler(mbUserInteractionEnabled);
 
-    ScDocShell* pNewShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
+    ScDocShell* pNewShell = new ScDocShell(SFXMODEL_EXTERNAL_LINK);
     SfxObjectShellRef aRef = pNewShell;
 
     // increment the recursive link count of the source document.

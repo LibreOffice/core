@@ -2104,6 +2104,7 @@ ScXMLImport::ScXMLImport(
     bNullDateSetted(false),
     bSelfImportingXMLSet(false),
     mbLockSolarMutex(true),
+    mbImportStyles(true),
     mbHasNewCondFormatData(false)
 {
     pStylesImportHelper = new ScMyStylesImportHelper(*this);
@@ -2256,6 +2257,9 @@ void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArgument
 
     if (xInfoSetInfo->hasPropertyByName(SC_UNO_ODS_LOCK_SOLAR_MUTEX))
         xInfoSet->getPropertyValue(SC_UNO_ODS_LOCK_SOLAR_MUTEX) >>= mbLockSolarMutex;
+
+    if (xInfoSetInfo->hasPropertyByName(SC_UNO_ODS_IMPORT_STYLES))
+        xInfoSet->getPropertyValue(SC_UNO_ODS_IMPORT_STYLES) >>= mbImportStyles;
 }
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -2765,6 +2769,9 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                           const sal_Int16 nCellType,
                           const OUString& rCurrency)
 {
+    if (!mbImportStyles)
+        return;
+
     if ((nCellType != util::NumberFormat::TEXT) && (nCellType != util::NumberFormat::UNDEFINED))
     {
         if (rNumberFormat == -1)
@@ -2832,6 +2839,9 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
 
 void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
 {
+    if (!mbImportStyles)
+        return;
+
     if (!xSheetCellRanges.is() && GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
@@ -2845,6 +2855,9 @@ void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
 
 void ScXMLImport::SetStyleToRanges()
 {
+    if (!mbImportStyles)
+        return;
+
     if (!sPrevStyleName.isEmpty())
     {
         uno::Reference <beans::XPropertySet> xProperties (xSheetCellRanges, uno::UNO_QUERY);
@@ -2901,6 +2914,9 @@ void ScXMLImport::SetStyleToRanges()
 void ScXMLImport::SetStyleToRange(const ScRange& rRange, const OUString* pStyleName,
                                   const sal_Int16 nCellType, const OUString* pCurrency)
 {
+    if (!mbImportStyles)
+        return;
+
     if (sPrevStyleName.isEmpty())
     {
         nPrevCellType = nCellType;
