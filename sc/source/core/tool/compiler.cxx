@@ -2344,7 +2344,6 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     bool bFound = (iLook != mxSymbols->getHashMap()->end());
     if (bFound)
     {
-        ScRawToken aToken;
         OpCode eOp = iLook->second;
         if (bInArray)
         {
@@ -2353,8 +2352,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
                 eOp = ocArrayRowSep;
         }
-        aToken.SetOpCode(eOp);
-        pRawToken = aToken.Clone();
+        maRawToken.SetOpCode(eOp);
     }
     else if (mxSymbols->isODFF())
     {
@@ -2382,9 +2380,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         {
             if (rName.equalsIgnoreAsciiCaseAscii( aOdffAliases[i].pName))
             {
-                ScRawToken aToken;
-                aToken.SetOpCode( aOdffAliases[i].eOp);
-                pRawToken = aToken.Clone();
+                maRawToken.SetOpCode( aOdffAliases[i].eOp);
                 bFound = true;
                 break;  // for
             }
@@ -2417,9 +2413,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             // Old (deprecated) addins first for legacy.
             if (ScGlobal::GetFuncCollection()->findByName(cSymbol))
             {
-                ScRawToken aToken;
-                aToken.SetExternal( cSymbol );
-                pRawToken = aToken.Clone();
+                maRawToken.SetExternal( cSymbol );
             }
             else
                 // bLocalFirst=false for (English) upper full original name
@@ -2429,14 +2423,12 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         }
         if (!aIntName.isEmpty())
         {
-            ScRawToken aToken;
-            aToken.SetExternal( aIntName.getStr() );     // international name
-            pRawToken = aToken.Clone();
+            maRawToken.SetExternal( aIntName.getStr() );     // international name
             bFound = true;
         }
     }
     OpCode eOp;
-    if (bFound && ((eOp = pRawToken->GetOpCode()) == ocSub || eOp == ocNegSub))
+    if (bFound && ((eOp = maRawToken.GetOpCode()) == ocSub || eOp == ocNegSub))
     {
         bool bShouldBeNegSub =
             (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
@@ -2444,10 +2436,10 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
              eLastOp == ocArrayOpen ||
              eLastOp == ocArrayColSep || eLastOp == ocArrayRowSep);
         if (bShouldBeNegSub && eOp == ocSub)
-            pRawToken->NewOpCode( ocNegSub );
+            maRawToken.NewOpCode( ocNegSub );
             //! if ocNegSub had ForceArray we'd have to set it here
         else if (!bShouldBeNegSub && eOp == ocNegSub)
-            pRawToken->NewOpCode( ocSub );
+            maRawToken.NewOpCode( ocSub );
     }
     return bFound;
 }
@@ -2462,9 +2454,7 @@ bool ScCompiler::IsOpCode2( const OUString& rName )
 
     if (bFound)
     {
-        ScRawToken aToken;
-        aToken.SetOpCode( (OpCode) --i );
-        pRawToken = aToken.Clone();
+        maRawToken.SetOpCode( (OpCode) --i );
     }
     return bFound;
 }
@@ -2499,9 +2489,7 @@ bool ScCompiler::IsValue( const OUString& rSym )
     if( nType == NUMBERFORMAT_TEXT )
         // HACK: number too big!
         SetError( errIllegalArgument );
-    ScRawToken aToken;
-    aToken.SetDouble( fVal );
-    pRawToken = aToken.Clone();
+    maRawToken.SetDouble( fVal );
     return true;
 }
 
@@ -2520,11 +2508,9 @@ bool ScCompiler::IsString()
     if ( bQuote )
     {
         cSymbol[nLen] = '\0';
-        ScRawToken aToken;
         const sal_Unicode* pStr = cSymbol+1;
         svl::SharedString aSS = pDoc->GetSharedStringPool().intern(OUString(pStr));
-        aToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
-        pRawToken = aToken.Clone();
+        maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
         return true;
     }
     return false;
@@ -2595,7 +2581,6 @@ bool ScCompiler::IsDoubleReference( const OUString& rName )
     sal_uInt16 nFlags = aRange.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
     if( nFlags & SCA_VALID )
     {
-        ScRawToken aToken;
         ScComplexRefData aRef;
         aRef.InitRange( aRange );
         aRef.Ref1.SetColRel( (nFlags & SCA_COL_ABSOLUTE) == 0 );
@@ -2615,15 +2600,14 @@ bool ScCompiler::IsDoubleReference( const OUString& rName )
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
             const OUString* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
-            aToken.SetExternalDoubleRef(
+            maRawToken.SetExternalDoubleRef(
                 aExtInfo.mnFileId, pRealTab ? *pRealTab : aExtInfo.maTabName, aRef);
             maExternalFiles.push_back(aExtInfo.mnFileId);
         }
         else
         {
-            aToken.SetDoubleReference(aRef);
+            maRawToken.SetDoubleReference(aRef);
         }
-        pRawToken = aToken.Clone();
     }
 
     return ( nFlags & SCA_VALID ) != 0;
@@ -2639,7 +2623,6 @@ bool ScCompiler::IsSingleReference( const OUString& rName )
     // as a (wrong) reference.
     if( nFlags & ( SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB ) )
     {
-        ScRawToken aToken;
         ScSingleRefData aRef;
         aRef.InitAddress( aAddr );
         aRef.SetColRel( (nFlags & SCA_COL_ABSOLUTE) == 0 );
@@ -2663,13 +2646,12 @@ bool ScCompiler::IsSingleReference( const OUString& rName )
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
             const OUString* pRealTab = pRefMgr->getRealTableName(aExtInfo.mnFileId, aExtInfo.maTabName);
-            aToken.SetExternalSingleRef(
+            maRawToken.SetExternalSingleRef(
                 aExtInfo.mnFileId, pRealTab ? *pRealTab : aExtInfo.maTabName, aRef);
             maExternalFiles.push_back(aExtInfo.mnFileId);
         }
         else
-            aToken.SetSingleReference(aRef);
-        pRawToken = aToken.Clone();
+            maRawToken.SetSingleReference(aRef);
     }
 
     return ( nFlags & SCA_VALID ) != 0;
@@ -2827,10 +2809,8 @@ bool ScCompiler::IsMacro( const OUString& rName )
         rSolarMutex.release();
         return false;
     }
-    ScRawToken aToken;
-    aToken.SetExternal( aName.getStr() );
-    aToken.eOp = ocMacro;
-    pRawToken = aToken.Clone();
+    maRawToken.SetExternal( aName.getStr() );
+    maRawToken.eOp = ocMacro;
     rSolarMutex.release();
     return true;
 #endif
@@ -2857,9 +2837,7 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
 
     if (pData)
     {
-        ScRawToken aToken;
-        aToken.SetName(bGlobal, pData->GetIndex());
-        pRawToken = aToken.Clone();
+        maRawToken.SetName(bGlobal, pData->GetIndex());
         return true;
     }
     else
@@ -2881,7 +2859,6 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
     if (!pConv->parseExternalName( rSymbol, aFile, aName, pDoc, &maExternalLinks))
         return false;
 
-    ScRawToken aToken;
     if (aFile.getLength() > MAXSTRLEN || aName.getLength() > MAXSTRLEN)
         return false;
 
@@ -2895,8 +2872,7 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
         return false;
 
     const OUString* pRealName = pRefMgr->getRealRangeName(nFileId, aName);
-    aToken.SetExternalName(nFileId, pRealName ? *pRealName : OUString(aTmp));
-    pRawToken = aToken.Clone();
+    maRawToken.SetExternalName(nFileId, pRealName ? *pRealName : OUString(aTmp));
     maExternalFiles.push_back(nFileId);
     return true;
 }
@@ -2905,13 +2881,11 @@ bool ScCompiler::IsDBRange( const OUString& rName )
 {
     if (rName.equalsAscii("[]"))
     {
-        if (pRawToken && pRawToken->GetOpCode() == ocDBArea)
+        if (maRawToken.GetOpCode() == ocDBArea)
         {
             // In OOXML, a database range is named Table1[], Table2[] etc.
             // Skip the [] part if the previous token is a valid db range.
-            ScRawToken aToken;
-            aToken.eOp = ocSkip;
-            pRawToken = aToken.Clone();
+            maRawToken.eOp = ocSkip;
             return true;
         }
     }
@@ -2920,10 +2894,8 @@ bool ScCompiler::IsDBRange( const OUString& rName )
     if (!p)
         return false;
 
-    ScRawToken aToken;
-    aToken.SetName(true, p->GetIndex()); // DB range is always global.
-    aToken.eOp = ocDBArea;
-    pRawToken = aToken.Clone();
+    maRawToken.SetName(true, p->GetIndex()); // DB range is always global.
+    maRawToken.eOp = ocDBArea;
     return true;
 }
 
@@ -3169,10 +3141,8 @@ bool ScCompiler::IsColRowName( const OUString& rName )
     }
     if ( bFound )
     {
-        ScRawToken aToken;
-        aToken.SetSingleReference( aRef );
-        aToken.eOp = ocColRowName;
-        pRawToken = aToken.Clone();
+        maRawToken.SetSingleReference( aRef );
+        maRawToken.eOp = ocColRowName;
         return true;
     }
     else
@@ -3186,9 +3156,7 @@ bool ScCompiler::IsBoolean( const OUString& rName )
         ((*iLook).second == ocTrue ||
          (*iLook).second == ocFalse) )
     {
-        ScRawToken aToken;
-        aToken.SetOpCode( (*iLook).second );
-        pRawToken = aToken.Clone();
+        maRawToken.SetOpCode( (*iLook).second );
         return true;
     }
     else
@@ -3200,9 +3168,7 @@ bool ScCompiler::IsErrorConstant( const OUString& rName ) const
     sal_uInt16 nError = GetErrorConstant( rName);
     if (nError)
     {
-        ScRawToken aToken;
-        aToken.SetErrorConstant( nError);
-        pRawToken = aToken.Clone();
+        maRawToken.SetErrorConstant( nError);
         return true;
     }
     else
@@ -3448,11 +3414,9 @@ bool ScCompiler::NextNewToken( bool bInArray )
              * original string containing partial valid address
              * information if not ODFF (in that case it was already handled).
              * */
-            ScRawToken aToken;
             svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aStr);
-            aToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
-            aToken.NewOpCode( ocBad );
-            pRawToken = aToken.Clone();
+            maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
+            maRawToken.NewOpCode( ocBad );
         }
         return true;
     }
@@ -3545,7 +3509,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
             // If a syntactically correct reference was recognized but invalid
             // e.g. because of non-existing sheet name => entire reference
             // ocBad to preserve input instead of #REF!.A1
-            if (!pRawToken->IsValidReference())
+            if (!maRawToken.IsValidReference())
             {
                 aUpper = aOrg;          // ensure for ocBad
                 break;                  // do; create ocBad token or set error.
@@ -3598,11 +3562,9 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // would prematurely end compilation. Simple unknown names are handled by
     // the interpreter.
     aUpper = ScGlobal::pCharClass->lowercase( aUpper );
-    ScRawToken aToken;
     svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aUpper);
-    aToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
-    aToken.NewOpCode( ocBad );
-    pRawToken = aToken.Clone();
+    maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
+    maRawToken.NewOpCode( ocBad );
     if ( bAutoCorrect )
         AutoCorrectParsedSymbol();
     return true;
@@ -3694,7 +3656,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     eLastOp = ocOpen;
     while( NextNewToken( bInArray ) )
     {
-        const OpCode eOp = pRawToken->GetOpCode();
+        const OpCode eOp = maRawToken.GetOpCode();
         if (eOp == ocSkip)
             continue;
 
@@ -3824,7 +3786,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 ++pFunctionStack[ nFunction ].nSep;
             }
         }
-        FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( pRawToken->CreateToken());
+        FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( maRawToken.CreateToken());
         if (!pNewToken)
         {
             SetError(errCodeOverflow); break;
@@ -3832,7 +3794,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         else if (eLastOp == ocRange && pNewToken->GetOpCode() == ocPush &&
                 pNewToken->GetType() == svSingleRef)
             static_cast<ScTokenArray*>(pArr)->MergeRangeReference( aPos);
-        eLastOp = pRawToken->GetOpCode();
+        eLastOp = maRawToken.GetOpCode();
         if ( bAutoCorrect )
             aCorrectedFormula += aCorrectedSymbol;
     }
