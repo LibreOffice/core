@@ -328,7 +328,9 @@ private:
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
     std::vector<sal_uInt16> maExternalFiles;
-    std::vector<OUString> maTabNames;
+
+    std::vector<OUString> maTabNames;                /// sheet names mangled for the current grammer for output
+    std::vector<OUString> &GetSetupTabNames() const; /// get or setup tab names for the current grammar
 
     bool   NextNewToken(bool bInArray = false);
 
