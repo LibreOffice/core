@@ -78,7 +78,7 @@ private:
     Bitmap*             mpMaskBmp;
     AlphaMask*          mpAlphaMask;
     BitmapWriteAccess*  mpMaskAcc;
-    ZCodec*             mpZCodec;
+    ZCodec              mpZCodec;
     sal_uInt8*              mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
     sal_uInt8*              mpScanPrior;    // pointer to the latest scanline
     sal_uInt8*              mpTransTab;     // for transparency in images with palette colortype
@@ -169,7 +169,6 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpMaskBmp       ( NULL ),
     mpAlphaMask     ( NULL ),
     mpMaskAcc       ( NULL ),
-    mpZCodec        ( new ZCodec ),
     mpInflateInBuf  ( NULL ),
     mpScanPrior     ( NULL ),
     mpTransTab      ( NULL ),
@@ -241,7 +240,7 @@ PNGReaderImpl::~PNGReaderImpl()
     mrPNGStream.SetNumberFormatInt( mnOrigStreamMode );
 
     if ( mbzCodecInUse )
-        mpZCodec->EndCompression();
+        mpZCodec.EndCompression();
 
     if( mpColorTable != mpDefaultColorTable )
         delete[] mpColorTable;
@@ -252,7 +251,6 @@ PNGReaderImpl::~PNGReaderImpl()
     delete[] mpTransTab;
     delete[] mpInflateInBuf;
     delete[] mpScanPrior;
-    delete mpZCodec;
 
     delete[] mpScanline;
     delete[] mpScanlineAlpha;
@@ -900,16 +898,16 @@ void PNGReaderImpl::ImplReadIDAT()
         if ( !mbzCodecInUse )
         {
             mbzCodecInUse = true;
-            mpZCodec->BeginCompression( ZCODEC_NO_COMPRESSION, true );
+            mpZCodec.BeginCompression( ZCODEC_NO_COMPRESSION, true );
         }
-        mpZCodec->SetBreak( mnChunkLen );
+        mpZCodec.SetBreak( mnChunkLen );
         SvMemoryStream aIStrm( &(*maDataIter), mnChunkLen, STREAM_READ );
 
-        while ( ( mpZCodec->GetBreak() ) )
+        while ( ( mpZCodec.GetBreak() ) )
         {
             // get bytes needed to fill the current scanline
             sal_Int32 nToRead = mnScansize - (mpScanCurrent - mpInflateInBuf);
-            sal_Int32 nRead = mpZCodec->ReadAsynchron( aIStrm, mpScanCurrent, nToRead );
+            sal_Int32 nRead = mpZCodec.ReadAsynchron( aIStrm, mpScanCurrent, nToRead );
             if ( nRead < 0 )
             {
                 mbStatus = false;
@@ -942,7 +940,7 @@ void PNGReaderImpl::ImplReadIDAT()
 
     if( mbIDAT )
     {
-        mpZCodec->EndCompression();
+        mpZCodec.EndCompression();
         mbzCodecInUse = false;
     }
 }
