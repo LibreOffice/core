@@ -42,6 +42,17 @@ GL3DBarChart::~GL3DBarChart()
     mrWindow.setRenderer(NULL);
 }
 
+namespace {
+
+const float TEXT_HEIGHT = 10.0f;
+
+float calculateTextWidth(const OUString& rText)
+{
+    return rText.getLength() * 5.0;
+}
+
+}
+
 void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
         ExplicitCategoriesProvider& rCatProvider)
 {
@@ -88,13 +99,12 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
-        Size aTextSize = p->getSize();
         glm::vec3 aTopLeft, aTopRight, aBottomRight;
-        aTopLeft.x = aTextSize.getWidth() * -1.0;
+        aTopLeft.x = calculateTextWidth(aSeriesName) * -1.0;
         aTopLeft.y = nYPos;
         aTopRight.y = nYPos;
         aBottomRight = aTopRight;
-        aBottomRight.y += aTextSize.getHeight();
+        aBottomRight.y += TEXT_HEIGHT;
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
 
         sal_Int32 nColor = aSeriesColor[nSeriesIndex % SAL_N_ELEMENTS(aSeriesColor)].GetColor();
@@ -164,13 +174,12 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
-        Size aTextSize = p->getSize();
         aTopLeft.x = nXPos;
         aTopLeft.y = nYPos;
         aTopRight = aTopLeft;
-        aTopRight.x += aTextSize.getWidth();
+        aTopRight.x += calculateTextWidth(aCats[i]);
         aBottomRight = aTopRight;
-        aBottomRight.y += aTextSize.getHeight();
+        aBottomRight.y += TEXT_HEIGHT;
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
 }
