@@ -23,9 +23,7 @@
 #include <tools/toolsdllapi.h>
 
 #define ZCODEC_NO_COMPRESSION       0
-#define ZCODEC_BEST_SPEED           1
 #define ZCODEC_DEFAULT_COMPRESSION  6
-#define ZCODEC_BEST_COMPRESSION     9
 
 class SvStream;
 
