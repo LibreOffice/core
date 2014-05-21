@@ -285,10 +285,14 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
     :   pImp( new SfxObjectShell_Impl( *this ) )
     ,   pMedium(0)
     ,   pStyleSheetPool(0)
-    ,   eCreateMode( ( i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD )
+    ,   eCreateMode(SFX_CREATE_MODE_STANDARD)
     ,   bHasName( false )
     ,   bIsInGenerateThumbnail ( false )
 {
+    if (i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT)
+        eCreateMode = SFX_CREATE_MODE_EMBEDDED;
+    else if (i_nCreationFlags & SFXMODEL_EXTERNAL_LINK)
+        eCreateMode = SFX_CREATE_MODE_INTERNAL;
 
     const bool bScriptSupport = ( i_nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
     if ( !bScriptSupport )
