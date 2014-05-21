@@ -34,6 +34,7 @@
 #include "drawdoc.hxx"
 #include "sdabstdlg.hxx"
 #include "sdattr.hrc"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -90,7 +91,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0;
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0);
         if (!pDlg)
             return;
 
@@ -107,12 +108,8 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
             break;
 
             default:
-            {
-                delete pDlg;
-            }
             return; // Cancel
         }
-        delete( pDlg );
     }
     mpView->SetAttributes( *pArgs );
 

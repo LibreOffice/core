@@ -65,6 +65,7 @@
 #include "strings.hrc"
 #include "helpids.h"
 #include "sdabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -296,8 +297,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
             if( pStyleSheet )
             {
-                SfxAbstractTabDialog*  pStdDlg  = NULL;
-                SfxAbstractTabDialog*  pPresDlg = NULL;
+                boost::scoped_ptr<SfxAbstractTabDialog> pStdDlg;
+                boost::scoped_ptr<SfxAbstractTabDialog> pPresDlg;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 bool bOldDocInOtherLanguage = false;
                 SfxItemSet aOriSet( pStyleSheet->GetItemSet() );
@@ -306,7 +307,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if (eFamily == SD_STYLE_FAMILY_GRAPHICS)
                 {
-                    pStdDlg = pFact ? pFact->CreateSdTabTemplateDlg( 0, mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : 0;
+                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg( 0, mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : 0);
                 }
                 else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {
@@ -370,7 +371,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg = pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : 0;
+                        pPresDlg.reset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : 0);
                     }
                 }
                 else if (eFamily == SD_STYLE_FAMILY_CELL)
@@ -579,13 +580,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     {
                         if( nSId == SID_STYLE_NEW )
                             pSSPool->Remove( pStyleSheet );
-                        delete pStdDlg;
-                        delete pPresDlg;
                     }
                     return; // Cancel
                 }
-                delete pStdDlg;
-                delete pPresDlg;
             }
         }
         break;

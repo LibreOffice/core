@@ -26,6 +26,7 @@
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "drawdoc.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -58,7 +59,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, mpView );
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( NULL, &aNewAttr, mpView ));
 
         sal_uInt16 nResult = pDlg->Execute();
 
@@ -73,12 +74,8 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
             break;
 
             default:
-            {
-                delete( pDlg );
-            }
             return; // Cancel
         }
-        delete( pDlg );
     }
     mpView->SetAttributes( *pArgs );
 }
