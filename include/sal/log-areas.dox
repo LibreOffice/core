@@ -373,6 +373,7 @@ certain functionality.
 @li @c vcl.filter
 @li @c vcl.fonts - font-specific code
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
+@li @c vcl.gdi.fontmetric
 @li @c vcl.gtk - Gtk+ 2/3 plugin
 @li @c vcl.harfbuzz - HarfBuzz text layout
 @li @c vcl.headless - bitmap-based backend

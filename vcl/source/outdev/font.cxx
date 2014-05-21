@@ -201,7 +201,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
 
-    SAL_INFO("vcl.gdi", "OutputDevice::GetFontMetric:" << aMetric);
+    SAL_INFO("vcl.gdi.fontmetric", "OutputDevice::GetFontMetric:" << aMetric);
 
     return aMetric;
 }
