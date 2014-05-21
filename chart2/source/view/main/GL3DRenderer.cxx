@@ -110,6 +110,10 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_RenderVertexBuf);
     glDeleteBuffers(1, &m_3DUBOBuffer);
     glDeleteBuffers(1, &m_VertexBuffer);
+
+    glDeleteFramebuffers(1, &mnPickingFbo);
+    glDeleteRenderbuffers(1, &mnPickingRbo);
+    glDeleteTextures(1, &mnPickingTexture);
 }
 
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
