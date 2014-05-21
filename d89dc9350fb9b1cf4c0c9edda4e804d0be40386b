@@ -19,6 +19,58 @@
     },
     {
       "key": {
+        "uuid": "fa963961_02bc0a6b",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-21T09:59:15Z",
+      "side": 1,
+      "message": "Given that the osl/profile.h functionality is deprecated and virtually unused anyway, I would not bother amending effectively dead code inside #ifdef DEBUG/TRACE_OSL_PROFILE (which are always undefined).  Just remove all those #ifdef DEBUG/TRACE_OSL_PROFILE blocks completely, plus the commented out defines of those two macros further up in this file.",
+      "parentUuid": "fa963961_c2d062cc",
+      "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_e2c006e3",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-21T09:59:15Z",
+      "side": 1,
+      "message": "the condition !pProfile-\u003em_bIsValid must always be true here, so rather use SAL_WARN",
+      "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_c2b5027f",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-21T09:59:15Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa963961_a2d55eba",
         "filename": "sal/osl/unx/profile.cxx",
         "patchSetId": 1
@@ -47,6 +99,23 @@
       "writtenOn": "2014-05-21T05:21:59Z",
       "side": 1,
       "message": "Again, change to SAL_WARN.",
+      "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_42aa121b",
+        "filename": "sal/osl/unx/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-21T09:59:15Z",
+      "side": 1,
+      "message": "do not introduce tab characters into the source code; always use spaces",
       "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
