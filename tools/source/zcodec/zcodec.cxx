@@ -159,7 +159,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
             mnInToRead -= nInToRead;
 
             if ( mbUpdateCrc )
-                mnCRC = UpdateCRC( mnCRC, mpInBuf, nInToRead );
+                UpdateCRC( mpInBuf, nInToRead );
 
         }
         err = inflate( PZSTREAM, Z_NO_FLUSH );
@@ -228,7 +228,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
             mnInToRead -= nInToRead;
 
             if ( mbUpdateCrc )
-                mnCRC = UpdateCRC( mnCRC, mpInBuf, nInToRead );
+                UpdateCRC( mpInBuf, nInToRead );
 
         }
         err = inflate( PZSTREAM, Z_NO_FLUSH );
@@ -282,7 +282,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
             mnInToRead -= nInToRead;
 
             if ( mbUpdateCrc )
-                mnCRC = UpdateCRC( mnCRC, mpInBuf, nInToRead );
+                UpdateCRC( mpInBuf, nInToRead );
 
         }
         err = inflate( PZSTREAM, Z_NO_FLUSH );
@@ -309,7 +309,7 @@ void ZCodec::ImplWriteBack()
     if ( nAvail )
     {
         if ( mbInit & 2 && mbUpdateCrc )
-            mnCRC = UpdateCRC( mnCRC, mpOutBuf, nAvail );
+            UpdateCRC( mpOutBuf, nAvail );
         mpOStm->Write( PZSTREAM->next_out = mpOutBuf, nAvail );
         PZSTREAM->avail_out = mnOutBufSize;
     }
@@ -408,9 +408,9 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
     }
 }
 
-sal_uIntPtr ZCodec::UpdateCRC ( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize)
+void ZCodec::UpdateCRC ( sal_uInt8* pSource, long nDatSize)
 {
-    return rtl_crc32( nLatestCRC, pSource, nDatSize );
+    mnCRC = rtl_crc32( mnCRC, pSource, nDatSize );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
