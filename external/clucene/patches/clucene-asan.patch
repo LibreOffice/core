@@ -1,0 +1,26 @@
+--- src/core/CLucene/index/IndexWriter.cpp
++++ src/core/CLucene/index/IndexWriter.cpp
+@@ -53,7 +53,6 @@
+ 
+ DEFINE_MUTEX(IndexWriter::MESSAGE_ID_LOCK)
+ int32_t IndexWriter::MESSAGE_ID = 0;
+-const int32_t IndexWriter::MAX_TERM_LENGTH = DocumentsWriter::MAX_TERM_LENGTH;
+ 
+ class IndexWriter::Internal{
+ public:
+--- src/core/CLucene/index/IndexWriter.h
++++ src/core/CLucene/index/IndexWriter.h
+@@ -384,13 +384,6 @@
+    */
+   static const int32_t DEFAULT_MAX_MERGE_DOCS;
+ 
+-  /**
+-   * Absolute hard maximum length for a term.  If a term
+-   * arrives from the analyzer longer than this length, it
+-   * is skipped and a message is printed to infoStream, if
+-   * set (see {@link #setInfoStream}).
+-   */
+-  static const int32_t MAX_TERM_LENGTH;
+ 
+ 
+   /* Determines how often segment indices are merged by addDocument().  With
