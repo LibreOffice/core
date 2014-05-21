@@ -22,6 +22,7 @@
 #if defined(OPENBSD)
 #include <sched.h>
 #endif
+#include <config_options.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
@@ -251,8 +252,9 @@ static oslThread osl_thread_create_Impl (
     short             nFlags)
 {
     Thread_Impl* pImpl;
-#if defined(OPENBSD)
+#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
     pthread_attr_t attr;
+    size_t stacksize;
 #endif
     int nRet=0;
 
@@ -266,11 +268,16 @@ static oslThread osl_thread_create_Impl (
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
-#if defined(OPENBSD)
+#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
     if (pthread_attr_init(&attr) != 0)
         return (0);
 
-    if (pthread_attr_setstacksize(&attr, 262144) != 0) {
+#if defined OPENBSD
+    stacksize = 262144;
+#else
+    stacksize = 100 * PTHREAD_STACK_MIN;
+#endif
+    if (pthread_attr_setstacksize(&attr, stacksize) != 0) {
         pthread_attr_destroy(&attr);
         return (0);
     }
@@ -278,7 +285,7 @@ static oslThread osl_thread_create_Impl (
 
     if ((nRet = pthread_create (
         &(pImpl->m_hThread),
-#if defined(OPENBSD)
+#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
         &attr,
 #else
         PTHREAD_ATTR_DEFAULT,
@@ -295,7 +302,7 @@ static oslThread osl_thread_create_Impl (
         return (0);
     }
 
-#if defined(OPENBSD)
+#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
     pthread_attr_destroy(&attr);
 #endif
 
