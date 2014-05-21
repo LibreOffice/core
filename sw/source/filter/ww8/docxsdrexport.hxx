@@ -65,7 +65,6 @@ public:
     bool getFrameBtLr();
 
     bool IsDrawingOpen();
-    void setDrawingOpen(bool bDrawingOpen);
     bool IsParagraphHasDrawing();
     void setParagraphHasDrawing(bool bParagraphHasDrawing);
     sax_fastparser::FastAttributeList*& getFlyFillAttrList();
