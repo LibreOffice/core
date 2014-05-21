@@ -32,7 +32,6 @@
 
 #include <com/sun/star/style/TabStop.hpp>
 
-using namespace ::com::sun::star;
 class SwLayoutFrm;
 class SwRootFrm;
 class SwPageFrm;
@@ -434,9 +433,9 @@ protected:
     virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
 
 public:
-    virtual uno::Sequence< style::TabStop > GetTabStopInfo( SwTwips )
+    virtual css::uno::Sequence< css::style::TabStop > GetTabStopInfo( SwTwips )
     {
-        return uno::Sequence< style::TabStop >();
+        return css::uno::Sequence< css::style::TabStop >();
     }
 
     TYPEINFO_OVERRIDE(); // already in base class

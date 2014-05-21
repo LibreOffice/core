@@ -413,7 +413,7 @@ const SwRect & WW8TableNodeInfoInner::getRect() const
              mnShadowsAfter,
              mbVertMerge ? "yes" : "no");
 
-    return string(buffer);
+    return ::std::string(buffer);
 }
 #endif
 
