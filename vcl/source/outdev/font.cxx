@@ -231,42 +231,8 @@ bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( !mpFontEntry )
         return false;
 
-#ifdef ENABLE_IFC_CACHE // a little font charmap cache helps considerably
-    static const int NMAXITEMS = 16;
-    static int nUsedItems = 0, nCurItem = 0;
-
-    struct CharMapCacheItem { const PhysicalFontFace* mpFontData; FontCharMap maCharMap; };
-    static CharMapCacheItem aCache[ NMAXITEMS ];
-
-    const PhysicalFontFace* pFontData = mpFontEntry->maFontSelData.mpFontData;
-
-    int i;
-    for( i = nUsedItems; --i >= 0; )
-        if( pFontData == aCache[i].mpFontData )
-            break;
-    if( i >= 0 ) // found in cache
-    {
-        rFontCharMap.Reset( aCache[i].maCharMap.mpImpl );
-    }
-    else // need to cache
-#endif // ENABLE_IFC_CACHE
-    {
-        const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
-        rFontCharMap.Reset( pNewMap );
-
-#ifdef ENABLE_IFC_CACHE
-        // manage cache round-robin and insert data
-        CharMapCacheItem& rItem = aCache[ nCurItem ];
-        rItem.mpFontData = pFontData;
-        rItem.maCharMap.Reset( pNewMap );
-
-        if( ++nCurItem >= NMAXITEMS )
-            nCurItem = 0;
-
-        if( ++nUsedItems >= NMAXITEMS )
-            nUsedItems = NMAXITEMS;
-#endif // ENABLE_IFC_CACHE
-    }
+    const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
+    rFontCharMap.Reset( pNewMap );
 
     if( rFontCharMap.IsDefaultMap() )
         return false;
