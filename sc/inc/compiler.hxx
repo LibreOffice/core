@@ -317,7 +317,7 @@ private:
     sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
     OUString    aFormula;                           // formula source code
     sal_Int32   nSrcPos;                            // tokenizer position (source code)
-    mutable ScRawTokenRef pRawToken;
+    mutable ScRawToken maRawToken;
 
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
