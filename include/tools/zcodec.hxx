@@ -50,6 +50,8 @@ private:
     void            ImplInitBuf( bool nIOFlag );
     void            ImplWriteBack();
 
+    void            UpdateCRC( sal_uInt8* pSource, long nDatSize );
+
 public:
                     ZCodec( sal_uIntPtr nInBuf = 0x8000UL, sal_uIntPtr nOutBuf = 0x8000UL );
                     ~ZCodec();
@@ -67,7 +69,6 @@ public:
     void            SetBreak( sal_uIntPtr );
     sal_uIntPtr     GetBreak();
     void            SetCRC( sal_uIntPtr nCurrentCRC );
-    sal_uIntPtr     UpdateCRC( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize );
     sal_uIntPtr     GetCRC();
 };
 
