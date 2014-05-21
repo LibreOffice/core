@@ -20,7 +20,7 @@
 #include <config_features.h>
 #include <config_folders.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <stdlib.h>
 
@@ -30,16 +30,16 @@
 #include <sys/types.h>
 #endif
 
-#include "osl/process.h"
-#include "osl/thread.h"
-#include "rtl/bootstrap.hxx"
-#include "rtl/string.hxx"
-#include "rtl/textcvt.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "tools/extendapplicationenvironment.hxx"
+#include <osl/process.h>
+#include <osl/thread.h>
+#include <rtl/bootstrap.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textcvt.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <tools/extendapplicationenvironment.hxx>
 
 namespace tools {
 

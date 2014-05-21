@@ -20,7 +20,7 @@
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 void MultiSelection::ImplClear()
 {

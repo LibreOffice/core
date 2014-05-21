@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #if defined UNX
 
 #include <cstddef>
 
-#include "osl/diagnose.h"
-#include "rtl/strbuf.hxx"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "sal/types.h"
-#include "tools/appendunixshellword.hxx"
+#include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <sal/types.h>
+#include <tools/appendunixshellword.hxx>
 
 namespace tools {
 

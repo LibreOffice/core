@@ -15,7 +15,7 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-#include "tools/tenccvt.hxx"
+#include <tools/tenccvt.hxx>
 
 //Tests for getBestMSEncodingByChar
 

@@ -20,15 +20,15 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/util/XStringWidth.hpp"
-#include "osl/diagnose.h"
-#include "osl/file.hxx"
-#include "rtl/character.hxx"
-#include "rtl/string.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/util/XStringWidth.hpp>
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <rtl/character.hxx>
+#include <rtl/string.h>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <rtl/character.hxx>
 

@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 

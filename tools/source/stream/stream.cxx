@@ -26,7 +26,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#include "boost/static_assert.hpp"
+#include <boost/static_assert.hpp>
 
 #include <osl/endian.h>
 

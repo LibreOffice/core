@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
-#include "osl/diagnose.h"
-#include "osl/file.hxx"
-#include "osl/process.h"
-#include "rtl/bootstrap.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "tools/getprocessworkingdir.hxx"
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <rtl/bootstrap.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <tools/getprocessworkingdir.hxx>
 
 namespace tools {
 

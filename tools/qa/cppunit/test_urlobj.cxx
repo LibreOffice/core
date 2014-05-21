@@ -12,7 +12,7 @@
 #include <sal/types.h>
 #include "cppunit/TestFixture.h"
 #include <cppunit/extensions/HelperMacros.h>
-#include "tools/urlobj.hxx"
+#include <tools/urlobj.hxx>
 
 #define OUSTR_TO_STDSTR( oustr ) std::string( OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ).getStr() )
 
