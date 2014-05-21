@@ -66,7 +66,7 @@
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
 #include <vcl/openglwin.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/IOpenGLContext.hxx>
 
 #include <drawinglayer/XShapeDumper.hxx>
 

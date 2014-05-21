@@ -55,6 +55,8 @@ class SalSession;
 struct SystemGraphicsData;
 struct SystemWindowData;
 class Menu;
+class Window;
+namespace vcl { class IOpenGLContext; }
 
 class VCL_PLUGIN_PUBLIC SalInstance
 {
@@ -134,6 +136,9 @@ public:
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession() = 0;
+
+    virtual vcl::IOpenGLContext* CreateOpenGLContext() = 0;
+    virtual SystemWindowData GenerateSystemWindowData(Window* pParent) = 0;
 
     // methods for XDisplayConnection
 

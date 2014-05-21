@@ -8,27 +8,28 @@
  */
 
 #include <vcl/openglwin.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/IOpenGLContext.hxx>
 #include <vcl/event.hxx>
 
 class OpenGLWindowImpl
 {
 public:
     OpenGLWindowImpl(SystemChildWindow* pWindow);
-    OpenGLContext* getContext();
+    vcl::IOpenGLContext* getContext();
 private:
-    OpenGLContext maContext;
+    boost::scoped_ptr<vcl::IOpenGLContext> mpContext;
 };
 
 OpenGLWindowImpl::OpenGLWindowImpl(SystemChildWindow* pWindow)
+    : mpContext(vcl::createOpenGLContext())
 {
-    maContext.init(pWindow);
+    mpContext->init(pWindow);
     pWindow->SetMouseTransparent(false);
 }
 
-OpenGLContext* OpenGLWindowImpl::getContext()
+vcl::IOpenGLContext* OpenGLWindowImpl::getContext()
 {
-    return &maContext;
+    return mpContext.get();
 }
 
 OpenGLWindow::OpenGLWindow(Window* pParent):
@@ -42,7 +43,7 @@ OpenGLWindow::~OpenGLWindow()
 {
 }
 
-OpenGLContext* OpenGLWindow::getContext()
+vcl::IOpenGLContext* OpenGLWindow::getContext()
 {
     return mpImpl->getContext();
 }

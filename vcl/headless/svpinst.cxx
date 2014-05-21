@@ -358,6 +358,18 @@ SalSession* SvpSalInstance::CreateSalSession()
     return NULL;
 }
 
+vcl::IOpenGLContext* SvpSalInstance::CreateOpenGLContext()
+{
+    return NULL;
+}
+
+SystemWindowData SvpSalInstance::GenerateSystemWindowData(Window* /*pParent*/)
+{
+    SystemWindowData aWinData;
+    aWinData.nSize = sizeof(aWinData);
+    return aWinData;
+}
+
 void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
     rReturnedBytes  = 1;

@@ -15,7 +15,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-class OpenGLContext;
+namespace vcl { class IOpenGLContext; }
 class OpenGLWindowImpl;
 
 class VCLOPENGL_DLLPUBLIC IRenderer
@@ -32,7 +32,7 @@ class VCLOPENGL_DLLPUBLIC OpenGLWindow : public SystemChildWindow
 public:
     OpenGLWindow(Window* pParent);
     virtual ~OpenGLWindow();
-    OpenGLContext* getContext();
+    vcl::IOpenGLContext* getContext();
 
     void setRenderer(IRenderer* pRenderer);
 

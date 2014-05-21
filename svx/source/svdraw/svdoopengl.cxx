@@ -20,7 +20,7 @@ SdrOpenGLObj::SdrOpenGLObj()
     mpContext(NULL)
 {
 #if HAVE_FEATURE_DESKTOP
-    mpContext = new OpenGLContext;
+    mpContext = vcl::createOpenGLContext();
 #endif
 }
 
@@ -34,7 +34,7 @@ sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfOpenGLObj(*this);
 }
 
-OpenGLContext* SdrOpenGLObj::getOpenGLContext()
+vcl::IOpenGLContext* SdrOpenGLObj::getOpenGLContext()
 {
     return mpContext;
 }

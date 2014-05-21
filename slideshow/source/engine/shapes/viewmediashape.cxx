@@ -48,7 +48,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/modeltools.hxx>
 
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/IOpenGLContext.hxx>
 
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -478,7 +478,7 @@ namespace slideshow
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                                 mpEventHandlerParent->EnablePaint(false);
                                 mpEventHandlerParent->Show();
-                                SystemWindowData aWinData = OpenGLContext::generateWinData(mpEventHandlerParent.get());
+                                SystemWindowData aWinData = vcl::generateSystemWindowData(mpEventHandlerParent.get());
                                 mpMediaWindow.reset(new SystemChildWindow(mpEventHandlerParent.get(), 0, &aWinData));
                                 mpMediaWindow->SetPosSizePixel( Point( 0, 0 ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );

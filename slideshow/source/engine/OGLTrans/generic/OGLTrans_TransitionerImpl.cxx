@@ -26,8 +26,9 @@
  *
  ************************************************************************/
 
-#include <boost/make_shared.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <GL/glu.h>
 
 #include <sal/types.h>
 
@@ -60,7 +61,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <vcl/canvastools.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/IOpenGLContext.hxx>
 #include <vcl/window.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -68,6 +69,8 @@
 #include "OGLTrans_TransitionImpl.hxx"
 
 #if defined( UNX )
+    #include "prex.h"
+    #include "postx.h"
     #include <X11/keysym.h>
     #include <X11/X.h>
 #endif
@@ -227,7 +230,7 @@ private:
     void impl_finishTransition();
 
 private:
-    boost::shared_ptr<OpenGLContext> mpContext;
+    boost::shared_ptr<vcl::IOpenGLContext> mpContext;
 
     /** OpenGL handle to the leaving slide's texture
     */
@@ -381,19 +384,18 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     sal_Int64 aVal = 0;
     aDeviceParams[1] >>= aVal;
 
-    mpContext = boost::make_shared<OpenGLContext>();
-
-    if( !mpContext->init( reinterpret_cast< Window* >( aVal ) ) )
+    mpContext.reset(vcl::createOpenGLContextFor(reinterpret_cast<Window*>(aVal)));
+    if( !mpContext )
         return false;
 
     awt::Rectangle aCanvasArea = mxView->getCanvasArea();
     mpContext->setWinPosAndSize(Point(aCanvasArea.X, aCanvasArea.Y), Size(aCanvasArea.Width, aCanvasArea.Height));
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
 
-    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
+    // GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
-    mbTextureFromPixmap = rGLWindow.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
-    mbGenerateMipmap = rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
+    // mbTextureFromPixmap = rGLWindow.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
+    mbGenerateMipmap = mpContext->hasGLExtension( "GL_SGIS_generate_mipmap" );
 
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -449,9 +451,9 @@ void OGLTransitionerImpl::impl_prepareSlides()
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
 
-    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
-
 #if defined( GLX_EXT_texture_from_pixmap )
+
+    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
     if( mnGLXVersion >= 1.2999 && mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
         Sequence< Any > leaveArgs;
@@ -538,7 +540,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
     // synchronized X still gives us much smoother play
     // I suspect some issues in above code in slideshow
     // synchronize whole transition for now
-    XSynchronize( rGLWindow.dpy, true );
+    // XSynchronize( rGLWindow.dpy, true );
     mbRestoreSync = true;
 #endif
 }
@@ -1211,13 +1213,10 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if(mpTransition)
-    {
-        GLWindow& rGLWindow(mpContext->getOpenGLWindow());
         mpTransition->display( nTime, maLeavingSlideGL, maEnteringSlideGL,
                               maSlideSize.Width, maSlideSize.Height,
-                              static_cast<double>(rGLWindow.Width),
-                              static_cast<double>(rGLWindow.Height) );
-    }
+                              static_cast<double>(mpContext->getWidth()),
+                              static_cast<double>(mpContext->getHeight()) );
 
     mpContext->swapBuffers();
 
@@ -1252,9 +1251,9 @@ void OGLTransitionerImpl::disposeTextures()
 {
     mpContext->makeCurrent();
 
+#if defined( GLX_EXT_texture_from_pixmap )
     GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
-#if defined( GLX_EXT_texture_from_pixmap )
     PFNGLXRELEASETEXIMAGEEXTPROC myglXReleaseTexImageEXT = (PFNGLXRELEASETEXIMAGEEXTPROC) glXGetProcAddress( (const GLubyte*) "glXReleaseTexImageEXT" );
     if( mbUseLeavingPixmap ) {
         myglXReleaseTexImageEXT( rGLWindow.dpy, maLeavingPixmapGL, GLX_FRONT_LEFT_EXT );
@@ -1324,8 +1323,8 @@ void OGLTransitionerImpl::disposing()
 #ifdef UNX
     if( mbRestoreSync && bool(mpContext) ) {
         // try to reestablish synchronize state
-        char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
-        XSynchronize( mpContext->getOpenGLWindow().dpy, sal_synchronize && *sal_synchronize == '1' );
+        // char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
+        // XSynchronize( mpContext->getOpenGLWindow().dpy, sal_synchronize && *sal_synchronize == '1' );
     }
 #endif
 

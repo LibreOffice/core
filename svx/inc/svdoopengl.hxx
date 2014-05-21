@@ -11,7 +11,7 @@
 #define INCLUDED_SVX_INC_SVDOOPENGL_HXX
 
 #include <svx/svdobj.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/IOpenGLContext.hxx>
 
 #include <vcl/opengl/IOpenGLRenderer.hxx>
 
@@ -30,7 +30,7 @@ public:
     virtual ~SdrOpenGLObj();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
-    OpenGLContext* getOpenGLContext();
+    vcl::IOpenGLContext* getOpenGLContext();
 
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
@@ -40,8 +40,7 @@ public:
     virtual bool isOpenGLInitialized() SAL_OVERRIDE;
 
 private:
-
-    OpenGLContext* mpContext;
+    vcl::IOpenGLContext* mpContext;
 
     boost::scoped_ptr<IOpenGLRenderer> mpRenderer;
 };

@@ -37,6 +37,7 @@
 #include <win/salobj.h>
 #include <win/saltimer.h>
 #include <win/salbmp.h>
+#include <win/WinOpenGLContext.h>
 
 #include <salimestatus.hxx>
 #include <salsys.hxx>
@@ -1066,6 +1067,18 @@ const OUString& SalGetDesktopEnvironment()
 SalSession* WinSalInstance::CreateSalSession()
 {
     return NULL;
+}
+
+vcl::IOpenGLContext* WinSalInstance::CreateOpenGLContext()
+{
+    return new WinOpenGLContext();
+}
+
+SystemWindowData WinSalInstance::GenerateSystemWindowData()
+{
+    SystemWindowData aWinData;
+    aWinData.nSize = sizeof(aWinData);
+    return aWinData;
 }
 
 #if !defined ( __MINGW32__ ) || defined ( _WIN64 )

@@ -25,6 +25,9 @@
 #include <list>
 #include <map>
 
+#include <GL/glew.h>
+#include <GL/gl.h>
+
 #define MAX_LIGHT_NUM 8
 
 namespace chart {

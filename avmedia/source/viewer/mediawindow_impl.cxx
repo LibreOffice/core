@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <vcl/sysdata.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/IOpenGLContext.hxx>
 
 using namespace ::com::sun::star;
 
@@ -508,7 +508,7 @@ void MediaWindowImpl::onURLChanged()
     }
     else if ( m_sMimeType == AVMEDIA_MIMETYPE_JSON )
     {
-        SystemWindowData aWinData = OpenGLContext::generateWinData(this);
+        SystemWindowData aWinData = vcl::generateSystemWindowData(this);
         mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
         mbEventTransparent = false;
     }

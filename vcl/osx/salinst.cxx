@@ -964,6 +964,18 @@ SalSession* AquaSalInstance::CreateSalSession()
     return NULL;
 }
 
+vcl::IOpenGLContext* AquaSalInstance::CreateOpenGLContext()
+{
+    return NULL;
+}
+
+SystemWindowData AquaSalInstance::GenerateSystemWindowData(Window* /*pParent*/)
+{
+    SystemWindowData aWinData;
+    aWinData.nSize = sizeof(aWinData);
+    return aWinData;
+}
+
 class MacImeStatus : public SalI18NImeStatus
 {
 public:

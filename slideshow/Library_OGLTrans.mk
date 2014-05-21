@@ -15,12 +15,6 @@ $(eval $(call gb_Library_add_defs,OGLTrans,\
 ))
 endif
 
-ifneq ($(strip $(debug)$(DEBUG)),)
-$(eval $(call gb_Library_add_defs,OGLTrans,\
-    -DBOOST_SP_ENABLE_DEBUG_HOOKS \
-))
-endif
-
 $(eval $(call gb_Library_use_sdk_api,OGLTrans))
 
 $(eval $(call gb_Library_use_libraries,OGLTrans,\

@@ -115,6 +115,8 @@ public:
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData ) SAL_OVERRIDE;
     virtual void            DestroyMenuItem( SalMenuItem* ) SAL_OVERRIDE;
     virtual SalSession*     CreateSalSession() SAL_OVERRIDE;
+    virtual vcl::IOpenGLContext* CreateOpenGLContext() SAL_OVERRIDE;
+    virtual SystemWindowData GenerateSystemWindowData(Window *pParent) SAL_OVERRIDE;
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
 

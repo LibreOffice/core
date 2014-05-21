@@ -24,7 +24,7 @@ ViewObjectContactOfOpenGLObj::ViewObjectContactOfOpenGLObj(
     : ViewObjectContactOfSdrObj( rObjectContact, rViewContact )
 {
 #if HAVE_FEATURE_DESKTOP
-    OpenGLContext* pContext = static_cast<SdrOpenGLObj&>(static_cast<ViewContactOfSdrObj&>(rViewContact).GetSdrObject()).getOpenGLContext();
+    vcl::IOpenGLContext* pContext = static_cast<SdrOpenGLObj&>(static_cast<ViewContactOfSdrObj&>(rViewContact).GetSdrObject()).getOpenGLContext();
     if (pContext)
         pContext->init(getWindow());
 #endif

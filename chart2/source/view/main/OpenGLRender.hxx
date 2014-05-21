@@ -11,7 +11,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vcl/font.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/IOpenGLContext.hxx>
 
 // Include GLM
 #include <list>
@@ -20,6 +20,9 @@
 #include "glm/gtx/transform.hpp"
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/quaternion.hpp"
+
+#include <GL/glew.h>
+#include <GL/gl.h>
 
 #define BMP_HEADER_LEN 54
 

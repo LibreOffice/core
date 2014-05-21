@@ -69,6 +69,8 @@ public:
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );
     virtual void                DestroyMenuItem( SalMenuItem* );
     virtual SalSession*                         CreateSalSession();
+    virtual vcl::IOpenGLContext* CreateOpenGLContext() SAL_OVERRIDE;
+    virtual SystemWindowData    GenerateSystemWindowData(Window *pParent) SAL_OVERRIDE;
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
 

@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_sdk_api,vclplug_gen))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gen,\
     vcl \
+    vclopengl \
     tl \
     utl \
     sot \
@@ -46,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_gen,\
 $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	boost_headers \
 	cairo \
+	glew \
 	graphite \
 	harfbuzz \
 	icuuc \
@@ -54,6 +56,8 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_gen,\
+	-lGL \
+	-lGLU \
 	-lX11 \
 	-lXext \
 	-lSM \
@@ -75,6 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/saltimer \
     vcl/unx/generic/app/sm \
     vcl/unx/generic/app/wmadaptor \
+    vcl/unx/generic/app/X11OpenGLContext \
     vcl/unx/generic/dtrans/bmp \
     vcl/unx/generic/dtrans/config \
     vcl/unx/generic/dtrans/X11_clipboard \
