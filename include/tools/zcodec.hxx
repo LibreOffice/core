@@ -71,11 +71,11 @@ private:
     void*           mpsC_Stream;
 
     void            ImplInitBuf( bool nIOFlag );
-    void            ImplWriteBack( void );
+    void            ImplWriteBack();
 
 public:
                     ZCodec( sal_uIntPtr nInBuf, sal_uIntPtr nOutBuf, sal_uIntPtr nMemUsage = MAX_MEM_USAGE );
-                    ZCodec( void );
+                    ZCodec();
     virtual         ~ZCodec();
 
     virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
@@ -90,7 +90,7 @@ public:
     long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize );
 
     void            SetBreak( sal_uIntPtr );
-    sal_uIntPtr     GetBreak( void );
+    sal_uIntPtr     GetBreak();
     void            SetCRC( sal_uIntPtr nCurrentCRC );
     sal_uIntPtr     UpdateCRC( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize );
     sal_uIntPtr     GetCRC();
