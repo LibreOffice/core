@@ -2685,4 +2685,44 @@ com::sun::star::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUS
     return LanguageTag( rBcp47).makeFallback().getLocale( true);
 }
 
+
+// static
+bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicalized )
+{
+    struct guard
+    {
+        lt_tag_t* mpLangtag;
+        guard()
+        {
+            theDataRef::get().incRef();
+            mpLangtag = lt_tag_new();
+        }
+        ~guard()
+        {
+            lt_tag_unref( mpLangtag);
+            theDataRef::get().decRef();
+        }
+    } aVar;
+
+    myLtError aError;
+
+    if (lt_tag_parse( aVar.mpLangtag, OUStringToOString( rString, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
+    {
+        char* pTag = lt_tag_canonicalize( aVar.mpLangtag, &aError.p);
+        SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTag:isValidBcp47: could not canonicalize '" << rString << "'");
+        if (pTag)
+        {
+            if (o_pCanonicalized)
+                *o_pCanonicalized = OUString::createFromAscii( pTag);
+            free( pTag);
+            return true;
+        }
+    }
+    else
+    {
+        SAL_INFO( "i18nlangtag", "LanguageTag:isValidBcp47: could not parse '" << rString << "'");
+    }
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
