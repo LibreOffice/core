@@ -80,6 +80,8 @@ int main()
     };
 
     printf("//Do not edit manually, generated from bestreversemap.cxx\n");
+    printf("#include <rtl/textenc.h>\n");
+    printf("#include <tools/tenccvt.hxx>\n");
     printf("rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c)\n");
     printf("{\n");
 
