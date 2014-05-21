@@ -20,7 +20,6 @@
  *************************************************************/
 
 
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
@@ -36,13 +35,6 @@
 #include "aqua/aqua11yfactory.h"
 
 #define WHEEL_EVENT_FACTOR 1.5
-
-// for allowing fullscreen support on deployment targets < OSX 10.7
-#if !defined(MAC_OS_X_VERSION_10_7)
-    #define NSWindowCollectionBehaviorFullScreenPrimary   (1 << 7)
-    #define NSWindowCollectionBehaviorFullScreenAuxiliary (1 << 8)
-//  #define NSFullScreenWindowMask (1 << 14)
-#endif
 
 
 static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
@@ -80,15 +72,15 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
         KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W,
         KEY_X, KEY_Y, KEY_Z, 0, 0, 0, KEY_TILDE, KEY_BACKSPACE
     };
-    
+
     // Note: the mapping 0x7f should by rights be KEY_DELETE
     // however if you press "backspace" 0x7f is reported
     // whereas for "delete" 0xf728 gets reported
-    
+
     // Note: the mapping of 0x19 to KEY_TAB is because for unknown reasons
     // tab alone is reported as 0x09 (as expected) but shift-tab is
     // reported as 0x19 (end of medium)
-    
+
     static sal_uInt16 aFunctionKeyCodeMap[ 128 ] =
     {
         KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_F1, KEY_F2, KEY_F3, KEY_F4,
@@ -108,7 +100,7 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0
     };
-    
+
     sal_uInt16 nKeyCode = 0;
     if( aCode < sizeof( aKeyCodeMap) / sizeof( aKeyCodeMap[0] ) )
         nKeyCode = aKeyCodeMap[ aCode ];
@@ -179,7 +171,7 @@ static AquaSalFrame* getMouseContainerFrame()
         [pNSWindow performSelector:setRestorable withObject:(id)NO];
     }
 
-    return pNSWindow;
+    return (SalFrameWindow*)pNSWindow;
 }
 
 -(AquaSalFrame*)getSalFrame
@@ -237,7 +229,7 @@ static AquaSalFrame* getMouseContainerFrame()
         static const sal_uLong nGuessDocument = SAL_FRAME_STYLE_MOVEABLE|
                                             SAL_FRAME_STYLE_SIZEABLE|
                                             SAL_FRAME_STYLE_CLOSEABLE;
-        
+
         if( mpFrame->mpMenu )
             mpFrame->mpMenu->setMainMenu();
         else if( ! mpFrame->mpParent &&
@@ -547,7 +539,7 @@ private:
         pDispatchFrame = s_pMouseFrame;
     else
         pDispatchFrame = mpFrame;
-    
+
     /* #i81645# Cocoa reports mouse events while a button is pressed
        to the window in which it was first pressed. This is reasonable and fine and
        gets one around most cases where on other platforms one uses CaptureMouse or XGrabPointer,
@@ -560,7 +552,7 @@ private:
         // is this event actually inside that NSWindow ?
         NSPoint aPt = [NSEvent mouseLocation];
         NSRect aFrameRect = [pDispatchFrame->getNSWindow() frame];
-        
+
 	if ( ! NSPointInRect( aPt, aFrameRect ) )
         {
             // no, it is not
@@ -573,7 +565,7 @@ private:
                NSWindow* pWindow = [NSApp makeWindowsPerform: @selector(containsMouse) inOrder: YES];
                if( pWindow && [pWindow isMemberOfClass: [SalFrameWindow class]] )
                    pDispatchFrame = [(SalFrameWindow*)pWindow getSalFrame];
-               
+
                However if a non SalFrameWindow is on screen (like e.g. the file dialog)
                it can be hit with the containsMouse selector, which it doesn't support.
                Sadly NSApplication:makeWindowsPerform does not check (for performance reasons
@@ -584,7 +576,7 @@ private:
                 pDispatchFrame = pMouseFrame;
         }
     }
-    
+
     if( pDispatchFrame && AquaSalFrame::isAlive( pDispatchFrame ) )
     {
         pDispatchFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
@@ -592,7 +584,7 @@ private:
 
         NSPoint aPt = [NSEvent mouseLocation];
         pDispatchFrame->CocoaToVCL( aPt );
-        
+
         sal_uInt16 nModMask = ImplGetModifierMask( [pEvent modifierFlags] );
         // #i82284# emulate ctrl left
         if( nModMask == KEY_MOD3 && nButton == MOUSE_LEFT )
@@ -611,7 +603,7 @@ private:
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = pDispatchFrame->maGeometry.nWidth-1-aEvent.mnX;
-        
+
         pDispatchFrame->CallCallback( nEvent, &aEvent );
     }
 }
@@ -654,7 +646,7 @@ private:
 -(void)mouseEntered: (NSEvent*)pEvent
 {
     s_pMouseFrame = mpFrame;
- 
+
     // #i107215# the only mouse events we get when inactive are enter/exit
     // actually we would like to have all of them, but better none than some
     if( [NSApp isActive] )
@@ -722,7 +714,7 @@ private:
 - (void)magnifyWithEvent: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     // TODO: ??  -(float)magnification;
     if( AquaSalFrame::isAlive( mpFrame ) )
 	{
@@ -761,7 +753,7 @@ private:
 
         NSPoint aPt = [NSEvent mouseLocation];
         mpFrame->CocoaToVCL( aPt );
-        
+
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
         aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
@@ -769,11 +761,11 @@ private:
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
         aEvent.mbDeltaIsPixel   = TRUE;
-        
+
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
-        
+
         aEvent.mnDelta = nDeltaZ;
         aEvent.mnNotchDelta = (nDeltaZ >= 0) ? +1 : -1;
         if( aEvent.mnDelta == 0 )
@@ -796,12 +788,12 @@ private:
 - (void)swipeWithEvent: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-        
+
         // merge pending scroll wheel events
         CGFloat dX = 0.0;
         CGFloat dY = 0.0;
@@ -815,21 +807,21 @@ private:
                 break;
             pEvent = pNextEvent;
         }
-        
+
         NSPoint aPt = [NSEvent mouseLocation];
         mpFrame->CocoaToVCL( aPt );
-        
+
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
         aEvent.mnX              = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
         aEvent.mnY              = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel   = TRUE;
-        
+
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
-        
+
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
@@ -856,7 +848,7 @@ private:
 -(void)scrollWheel: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
@@ -897,7 +889,7 @@ private:
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
-            aEvent.mnScrollLines = (dX > 0) ? +dX/WHEEL_EVENT_FACTOR : -dX/WHEEL_EVENT_FACTOR;
+            aEvent.mnScrollLines = fabs(dX) / WHEEL_EVENT_FACTOR;
             if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
 
@@ -910,8 +902,8 @@ private:
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = (dY > 0) ? +dY/WHEEL_EVENT_FACTOR : -dY/WHEEL_EVENT_FACTOR;
-            if( aEvent.mnScrollLines < 1 )
+            aEvent.mnScrollLines = fabs(dY) / WHEEL_EVENT_FACTOR;
+            if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
 
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
@@ -923,7 +915,7 @@ private:
 -(void)keyDown: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpLastEvent = pEvent;
@@ -933,7 +925,7 @@ private:
 
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-        
+
         if( ! [self handleKeyDownException: pEvent] )
         {
             NSArray* pArray = [NSArray arrayWithObject: pEvent];
@@ -963,7 +955,7 @@ private:
         }
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
         sal_uInt16 nKeyCode = ImplMapCharCode( keyChar );
-        
+
         // Caution: should the table grow to more than 5 or 6 entries,
         // we must consider moving it to a kind of hash map
         const unsigned int nExceptions = sizeof( aExceptionalKeys ) / sizeof( aExceptionalKeys[0] );
@@ -985,7 +977,7 @@ private:
 -(void)flagsChanged: (NSEvent*)pEvent
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
@@ -996,7 +988,7 @@ private:
 -(void)insertText:(id)aString
 {
     YIELD_GUARD;
-    
+
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         NSString* pInsert = nil;
@@ -1004,14 +996,14 @@ private:
             pInsert = [aString string];
         else
             pInsert = aString;
-        
+
         int nLen = 0;
         if( pInsert && ( nLen = [pInsert length] ) > 0 )
         {
             OUString aInsertString( GetOUString( pInsert ) );
              // aCharCode initializer is safe since aInsertString will at least contain '\0'
             sal_Unicode aCharCode = *aInsertString.getStr();
-            
+
             if( nLen == 1 &&
                 aCharCode < 0x80 &&
                 aCharCode > 0x1f &&
@@ -1023,7 +1015,7 @@ private:
 
                 // #i99567#
                 // find out the unmodified key code
-    
+
                 // sanity check
                 if( mpLastEvent && ( [mpLastEvent type] == NSKeyDown || [mpLastEvent type] == NSKeyUp ) )
                 {
@@ -1443,7 +1435,7 @@ private:
                 mpLastSuperEvent = mpLastEvent;
                 [NSApp performSelector:@selector(sendSuperEvent:) withObject: mpLastEvent];
                 mpLastSuperEvent = pLastSuperEvent;
-                
+
                 std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
                 if( it != GetSalData()->maKeyEventAnswer.end() )
                     it->second = true;
@@ -1466,7 +1458,7 @@ private:
 -(BOOL)sendKeyToFrameDirect: (sal_uInt16)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
     YIELD_GUARD;
-    
+
     long nRet = 0;
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
@@ -1551,7 +1543,7 @@ private:
     // and b) why we should have a marked range at this point.
     if( ! mbInKeyInput )
         return NSMakeRange( 0, 0 );
-    
+
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
 
@@ -1589,7 +1581,7 @@ private:
         {
             unsigned int nUnderlineValue;
             NSRange effectiveRange;
-            
+
             effectiveRange = NSMakeRange(i, 1);
             nUnderlineValue = [[aString attribute:NSUnderlineStyleAttributeName atIndex:i effectiveRange:&effectiveRange] unsignedIntValue];
 
