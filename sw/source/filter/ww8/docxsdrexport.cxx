@@ -250,11 +250,6 @@ bool DocxSdrExport::IsDrawingOpen()
     return m_pImpl->m_bDrawingOpen;
 }
 
-void DocxSdrExport::setDrawingOpen(bool bDrawingOpen)
-{
-    m_pImpl->m_bDrawingOpen = bDrawingOpen;
-}
-
 bool DocxSdrExport::IsParagraphHasDrawing()
 {
     return m_pImpl->m_bParagraphHasDrawing;
