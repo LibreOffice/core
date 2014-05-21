@@ -27,10 +27,16 @@
 
 class SvStream;
 
+// The overall client call protocol is one of:
+// * BeginCompression, Compress, EndCompression
+// * BeginCompression, Decompress, EndCompression
+// * BeginCompression, Write*, EndCompression
+// * BeginCompression, Read*, EndCompression
+// * BeginCompression, ReadAsynchron*, EndCompression
 class TOOLS_DLLPUBLIC ZCodec
 {
-private:
-    sal_uIntPtr     mbInit;
+    enum State { STATE_INIT, STATE_DECOMPRESS, STATE_COMPRESS };
+    State           meState;
     bool            mbStatus;
     bool            mbFinish;
     SvStream*       mpIStm;
