@@ -964,7 +964,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     bool                    bRemoveLastChar;
     bool                    bNullDateSetted;
     bool                    bSelfImportingXMLSet;
-    bool                    bFromWrapper;           // called from ScDocShell / ScXMLImportWrapper?
+    bool mbLockSolarMutex;
     bool mbHasNewCondFormatData;
 
 
@@ -985,6 +985,10 @@ public:
         OUString const & implementationName, sal_uInt16 nImportFlag);
 
     virtual ~ScXMLImport() throw();
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles

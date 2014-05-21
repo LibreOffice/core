@@ -26,10 +26,6 @@
 #include "importfilterdata.hxx"
 #include <sal/types.h>
 
-class ScDocument;
-class SfxMedium;
-class ScMySharedData;
-
 #include <tools/errcode.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -43,10 +39,16 @@ namespace com { namespace sun { namespace star {
         namespace sax { struct InputSource; class XParser; class XWriter; } }
 } } }
 
+class ScDocument;
+class SfxMedium;
+class ScMySharedData;
+class ScDocShell;
+
 class ScXMLImportWrapper
 {
     sc::ImportPostProcessData maPostProcessData;
 
+    ScDocShell& mrDocShell;
     ScDocument&     rDoc;
     SfxMedium*      pMedium;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
@@ -70,7 +72,9 @@ class ScXMLImportWrapper
         ScMySharedData*& pSharedData);
 
 public:
-    ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >&);
+    ScXMLImportWrapper(
+        ScDocShell& rDocSh, SfxMedium* pM, const css::uno::Reference<css::embed::XStorage>& xStor );
+
     bool Import(bool bStylesOnly, ErrCode& );
     bool Export(bool bStylesOnly);
 

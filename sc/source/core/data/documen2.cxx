@@ -194,7 +194,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         bInsertingFromOtherDoc( false ),
         bLoadingMedium( false ),
         bImportingXML( false ),
-        bXMLFromWrapper( false ),
         bCalcingAfterLoad( false ),
         bNoListening( false ),
         mbIdleEnabled(true),
