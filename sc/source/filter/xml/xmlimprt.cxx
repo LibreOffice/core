@@ -69,6 +69,7 @@
 #include "editattributemap.hxx"
 #include "documentimport.hxx"
 #include "pivotsource.hxx"
+#include <unonames.hxx>
 
 #include <comphelper/extract.hxx>
 
@@ -2253,8 +2254,8 @@ void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArgument
     if (!xInfoSetInfo.is())
         return;
 
-    if (xInfoSetInfo->hasPropertyByName("LockSolarMutex"))
-        xInfoSet->getPropertyValue("LockSolarMutex") >>= mbLockSolarMutex;
+    if (xInfoSetInfo->hasPropertyByName(SC_UNO_ODS_LOCK_SOLAR_MUTEX))
+        xInfoSet->getPropertyValue(SC_UNO_ODS_LOCK_SOLAR_MUTEX) >>= mbLockSolarMutex;
 }
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
