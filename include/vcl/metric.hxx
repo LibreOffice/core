@@ -76,13 +76,13 @@ public:
                             { return !operator==( rMetric ); }
 };
 
-
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const FontMetric& rMetric )
 {
     stream << "{"
            << "name=" << "\"" << rMetric.GetName() << "\""
+           << ",size=(" << rMetric.GetSize().Width() << "," << rMetric.GetSize().Height() << ")"
            << ",ascent=" << rMetric.GetAscent()
            << ",descent=" << rMetric.GetDescent()
            << ",intLeading=" << rMetric.GetIntLeading()
