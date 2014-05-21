@@ -208,7 +208,7 @@ static AquaSalFrame* getMouseContainerFrame()
         [pNSWindow performSelector:setRestorable withObject:(id)NO];
     }
 
-    return (SalFrameWindow *) pNSWindow;
+    return (SalFrameWindow *)pNSWindow;
 }
 
 -(AquaSalFrame*)getSalFrame
@@ -590,7 +590,7 @@ private:
         NSPoint aPt = [NSEvent mouseLocation];
         NSRect aFrameRect = [pDispatchFrame->getNSWindow() frame];
 
-    if ( ! NSPointInRect( aPt, aFrameRect ) )
+	if ( ! NSPointInRect( aPt, aFrameRect ) )
         {
             // no, it is not
             // now we need to find the one it may be in
@@ -840,8 +840,8 @@ private:
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         // merge pending scroll wheel events
-        float dX = 0.0;
-        float dY = 0.0;
+        CGFloat dX = 0.0;
+        CGFloat dY = 0.0;
         for(;;)
         {
             dX += [pEvent deltaX];
@@ -870,7 +870,7 @@ private:
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
-            aEvent.mnNotchDelta = dX < 0 ? -1 : 1;
+            aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
@@ -880,7 +880,7 @@ private:
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ))
         {
             aEvent.mnDelta = static_cast<long>(floor(dY));
-            aEvent.mnNotchDelta = dY < 0 ? -1 : 1;
+            aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
@@ -900,8 +900,8 @@ private:
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         // merge pending scroll wheel events
-        float dX = 0.0;
-        float dY = 0.0;
+        CGFloat dX = 0.0;
+        CGFloat dY = 0.0;
         for(;;)
         {
             dX += [pEvent deltaX];
@@ -930,11 +930,11 @@ private:
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
-            aEvent.mnNotchDelta = dX < 0 ? -1 : 1;
+            aEvent.mnNotchDelta = (dX < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
-            aEvent.mnScrollLines = dX > 0 ? dX/WHEEL_EVENT_FACTOR : -dX/WHEEL_EVENT_FACTOR;
+            aEvent.mnScrollLines = fabs(dX) / WHEEL_EVENT_FACTOR;
             if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
 
@@ -943,12 +943,12 @@ private:
         if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
         {
             aEvent.mnDelta = static_cast<long>(floor(dY));
-            aEvent.mnNotchDelta = dY < 0 ? -1 : 1;
+            aEvent.mnNotchDelta = (dY < 0) ? -1 : +1;
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = dY > 0 ? dY/WHEEL_EVENT_FACTOR : -dY/WHEEL_EVENT_FACTOR;
-            if( aEvent.mnScrollLines < 1 )
+            aEvent.mnScrollLines = fabs(dY) / WHEEL_EVENT_FACTOR;
+            if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
 
             mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
