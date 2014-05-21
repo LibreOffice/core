@@ -101,6 +101,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/window/settings \
     vcl/source/window/resource \
     vcl/source/window/abstdlg \
     vcl/source/window/accel \
@@ -134,6 +135,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/mnemonic \
     vcl/source/window/mnemonicengine \
     vcl/source/window/mouseevent \
+    vcl/source/window/event \
     vcl/source/window/msgbox \
     vcl/source/window/popupmenuwindow \
     vcl/source/window/printdlg \
