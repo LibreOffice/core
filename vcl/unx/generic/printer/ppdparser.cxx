@@ -316,19 +316,13 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
     mpFileStream->Seek( 0 );
 
     // check for compress'ed or gzip'ed file
-    sal_uLong nCompressMethod = 0;
-    if( aLine.getLength() > 1 && static_cast<unsigned char>(aLine[0]) == 0x1f )
-    {
-        if( static_cast<unsigned char>(aLine[1]) == 0x8b ) // check for gzip
-            nCompressMethod = ZCODEC_DEFAULT_COMPRESSION | ZCODEC_GZ_LIB;
-    }
-
-    if( nCompressMethod != 0 )
+    if( aLine.getLength() > 1 && static_cast<unsigned char>(aLine[0]) == 0x1f
+        && static_cast<unsigned char>(aLine[1]) == 0x8b /* check for gzip */ )
     {
         // so let's try to decompress the stream
         mpMemStream = new SvMemoryStream( 4096, 4096 );
         ZCodec aCodec;
-        aCodec.BeginCompression( nCompressMethod );
+        aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION | ZCODEC_GZ_LIB );
         long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
         aCodec.EndCompression();
         if( nComp < 0 )
