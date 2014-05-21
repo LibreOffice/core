@@ -314,7 +314,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                 {
                     SvMemoryStream* pDest = new SvMemoryStream;
                     ZCodec aZCodec( 0x8000, 0x8000 );
-                    aZCodec.BeginCompression(ZCODEC_GZ_LIB);
+                    aZCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
                     mpOStm->Seek( 0 );
                     aZCodec.Decompress( *mpOStm, *pDest );
 
