@@ -71,6 +71,7 @@
 #include "sheetdata.hxx"
 #include "XMLCodeNameProvider.hxx"
 #include <docsh.hxx>
+#include <unonames.hxx>
 
 using namespace com::sun::star;
 
@@ -343,12 +344,12 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
         { OUString("OrganizerMode"), 0, ::getBooleanCppuType(),
             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("LockSolarMutex"), 0, getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString(SC_UNO_ODS_LOCK_SOLAR_MUTEX), 0, getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 
-    xInfoSet->setPropertyValue("LockSolarMutex", uno::makeAny(false));
+    xInfoSet->setPropertyValue(SC_UNO_ODS_LOCK_SOLAR_MUTEX, uno::makeAny(false));
 
     // ---- get BuildId from parent container if available
 
