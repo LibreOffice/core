@@ -154,6 +154,7 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) SAL_OVERRIDE;
     virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
         < ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
+    virtual bool isLoadedStorable() SAL_OVERRIDE;
 
 public:
     SfxScriptLibrary

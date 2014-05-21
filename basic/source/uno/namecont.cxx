@@ -1909,8 +1909,6 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
         if( pImplLib->implIsModified() || bComplete )
         {
-// For the moment don't copy storage (as an optimisation )
-// but instead always write to storage from memory.
 // Testing pImplLib->implIsModified() is not reliable,
 // IMHO the value of pImplLib->implIsModified() should
 // reflect whether the library ( in-memory ) model
@@ -1921,9 +1919,14 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 // temp storage when saving ( and later sets the root storage of the
 // library container ) and similar madness in dbaccess means some surgery
 // is required to make it possible to successfully use this optimisation
-#if 0
+// It would be possible to do the implSetModified() call below only
+// conditionally, but that would require an additional boolean to be
+// passed in via the XStorageBasedDocument::storeLibrariesToStorage()...
+// fdo#68983: If there's a password and the password is not known, only
+// copying the storage works!
             // Can we simply copy the storage?
-            if( !mbOldInfoFormat && !pImplLib->implIsModified() && !mbOasis2OOoFormat && xSourceLibrariesStor.is() )
+            if (!mbOldInfoFormat && !pImplLib->isLoadedStorable() &&
+                !mbOasis2OOoFormat && xSourceLibrariesStor.is())
             {
                 try
                 {
@@ -1936,7 +1939,6 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 }
             }
             else
-#endif
             {
                 uno::Reference< embed::XStorage > xLibraryStor;
                 if( bStorage )
@@ -3035,6 +3037,11 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
         , mbSharedIndexFile( false )
         , mbExtension( false )
 {
+}
+
+bool SfxLibrary::isLoadedStorable()
+{
+    return mbLoaded && (!mbPasswordProtected || mbPasswordVerified);
 }
 
 void SfxLibrary::implSetModified( bool _bIsModified )

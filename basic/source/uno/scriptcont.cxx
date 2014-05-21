@@ -1259,6 +1259,12 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
 {
 }
 
+bool SfxScriptLibrary::isLoadedStorable()
+{
+    // note: mbLoadedSource can only be true for password-protected lib!
+    return SfxLibrary::isLoadedStorable() && (!mbPasswordProtected || mbLoadedSource);
+}
+
 // Provide modify state including resources
 bool SfxScriptLibrary::isModified( void )
 {
