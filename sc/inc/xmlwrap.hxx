@@ -72,10 +72,17 @@ class ScXMLImportWrapper
         ScMySharedData*& pSharedData);
 
 public:
+
+    static const sal_uInt8 STYLES   = 0x01;
+    static const sal_uInt8 CONTENT  = 0x02;
+    static const sal_uInt8 METADATA = 0x04;
+    static const sal_uInt8 SETTINGS = 0x08;
+    static const sal_uInt8 ALL      = STYLES | CONTENT | METADATA | SETTINGS;
+
     ScXMLImportWrapper(
         ScDocShell& rDocSh, SfxMedium* pM, const css::uno::Reference<css::embed::XStorage>& xStor );
 
-    bool Import(bool bStylesOnly, ErrCode& );
+    bool Import( sal_uInt8 nMode, ErrCode& rError );
     bool Export(bool bStylesOnly);
 
     const sc::ImportPostProcessData& GetImportPostProcessData() const;

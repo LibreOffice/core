@@ -309,7 +309,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     return nReturn;
 }
 
-bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
+bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
 {
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
@@ -349,6 +349,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 
+    // No need to lock solar mutex when calling from the wrapper.
     xInfoSet->setPropertyValue(SC_UNO_ODS_LOCK_SOLAR_MUTEX, uno::makeAny(false));
 
     // ---- get BuildId from parent container if available
@@ -403,14 +404,14 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
         }
     }
 
-    if (bStylesOnly)
-        xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(sal_True));
+    if (mrDocShell.GetCreateMode() == SFX_CREATE_MODE_ORGANIZER)
+        xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(true));
 
     xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
 
     bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
-    if (!bStylesOnly && bOasis)
+    if ((nMode & METADATA) == METADATA && bOasis)
     {
         // RDF metadata: ODF >= 1.2
         try
@@ -428,34 +429,37 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
             ucb::InteractiveAugmentedIOException iaioe;
             if ( e.TargetException >>= iaioe )
             {
-                nError = SCERR_IMPORT_UNKNOWN;
+                rError = SCERR_IMPORT_UNKNOWN;
             }
             else
             {
-                nError = SCWARN_IMPORT_FEATURES_LOST;
+                rError = SCWARN_IMPORT_FEATURES_LOST;
             }
         }
         catch ( const uno::Exception &)
         {
-            nError = SCWARN_IMPORT_FEATURES_LOST;
+            rError = SCWARN_IMPORT_FEATURES_LOST;
         }
     }
 
     // #i103539#: always read meta.xml for generator
     sal_uInt32 nMetaRetval(0);
-    uno::Sequence<uno::Any> aMetaArgs(1);
-    uno::Any* pMetaArgs = aMetaArgs.getArray();
-    pMetaArgs[0] <<= xInfoSet;
+    if ((nMode & METADATA) == METADATA)
+    {
+        uno::Sequence<uno::Any> aMetaArgs(1);
+        uno::Any* pMetaArgs = aMetaArgs.getArray();
+        pMetaArgs[0] <<= xInfoSet;
 
-    SAL_INFO( "sc.filter", "meta import start" );
+        SAL_INFO( "sc.filter", "meta import start" );
 
-    nMetaRetval = ImportFromComponent(
-                            xContext, xModel, xXMLParser, aParserInput,
-                            bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
-                            : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
-                            "meta.xml", "Meta.xml", aMetaArgs, false);
+        nMetaRetval = ImportFromComponent(
+                                xContext, xModel, xXMLParser, aParserInput,
+                                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
+                                : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
+                                "meta.xml", "Meta.xml", aMetaArgs, false);
 
-    SAL_INFO( "sc.filter", "meta import end" );
+        SAL_INFO( "sc.filter", "meta import end" );
+    }
 
     SvXMLGraphicHelper* pGraphicHelper = NULL;
     uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
@@ -479,7 +483,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
     pStylesArgs[3] <<= xObjectResolver;
 
     sal_uInt32 nSettingsRetval(0);
-    if (!bStylesOnly)
+    if ((nMode & SETTINGS) == SETTINGS)
     {
         //  Settings must be loaded first because of the printer setting,
         //  which is needed in the page styles (paper tray).
@@ -500,6 +504,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
     }
 
     sal_uInt32 nStylesRetval(0);
+    if ((nMode & STYLES) == STYLES)
     {
         SAL_INFO( "sc.filter", "styles import start" );
 
@@ -513,7 +518,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
     }
 
     sal_uInt32 nDocRetval(0);
-    if (!bStylesOnly)
+    if ((nMode & CONTENT) == CONTENT)
     {
         uno::Sequence<uno::Any> aDocArgs(4);
         uno::Any* pDocArgs = aDocArgs.getArray();
@@ -542,34 +547,24 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
     if (xStatusIndicator.is())
         xStatusIndicator->end();
 
-    bool bRet(false);
-    if (bStylesOnly)
+    bool bRet = false;
+    if (nDocRetval)
     {
-        if (nStylesRetval)
-            nError = nStylesRetval;
-        else
+        rError = nDocRetval;
+        if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW ||
+            nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
+            nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
+            nDocRetval == SCWARN_IMPORT_SHEET_OVERFLOW)
             bRet = true;
     }
+    else if (nStylesRetval)
+        rError = nStylesRetval;
+    else if (nMetaRetval)
+        rError = nMetaRetval;
+    else if (nSettingsRetval)
+        rError = nSettingsRetval;
     else
-    {
-        if (nDocRetval)
-        {
-            nError = nDocRetval;
-            if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW ||
-                nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
-                nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
-                nDocRetval == SCWARN_IMPORT_SHEET_OVERFLOW)
-                bRet = true;
-        }
-        else if (nStylesRetval)
-            nError = nStylesRetval;
-        else if (nMetaRetval)
-            nError = nMetaRetval;
-        else if (nSettingsRetval)
-            nError = nSettingsRetval;
-        else
-            bRet = true;
-    }
+        bRet = true;
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
