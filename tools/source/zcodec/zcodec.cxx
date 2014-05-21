@@ -396,7 +396,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
             mbInit = 3;
 
             mbStatus = ( deflateInit2_( PZSTREAM, mnCompressMethod & 0xff, Z_DEFLATED,
-                MAX_WBITS, MAX_MEM_LEVEL, ( mnCompressMethod >> 8 ) & 0xff,
+                MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY,
                     ZLIB_VERSION, sizeof( z_stream ) ) >= 0 );
 
             PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
