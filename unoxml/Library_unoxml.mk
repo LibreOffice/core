@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,unoxml))
 
 $(eval $(call gb_Library_set_componentfile,unoxml,unoxml/source/service/unoxml))
 
+$(eval $(call gb_Library_set_precompiled_header,unoxml,$(SRCDIR)/unoxml/inc/pch/precompiled_unoxml))
+
 $(eval $(call gb_Library_use_sdk_api,unoxml))
 
 $(eval $(call gb_Library_use_libraries,unoxml,\
