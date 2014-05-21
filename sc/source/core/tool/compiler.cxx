@@ -228,14 +228,24 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
         if (eMyGrammar != GetGrammar())
             SetGrammarAndRefConvention( eMyGrammar, eOldGrammar);
     }
+}
 
-    if (pDoc && maTabNames.empty())
+// Unclear how this was intended to be refreshed when the
+// grammer or sheet count is changed ? Ideally this would be
+// a method on Document that would globally cache these.
+std::vector<OUString> &ScCompiler::GetSetupTabNames() const
+{
+    std::vector<OUString> &rTabNames = const_cast<ScCompiler *>(this)->maTabNames;
+
+    if (pDoc && rTabNames.empty())
     {
-        maTabNames = pDoc->GetAllTableNames();
-        std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
+        rTabNames = pDoc->GetAllTableNames();
+        std::vector<OUString>::iterator it = rTabNames.begin(), itEnd = rTabNames.end();
         for (; it != itEnd; ++it)
             ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(meGrammar));
     }
+
+    return rTabNames;
 }
 
 void ScCompiler::SetNumberFormatter( SvNumberFormatter* pFormatter )
@@ -4207,17 +4217,20 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
         else
         {
             rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
-            pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, maTabNames, aRef, true);
+            pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
+                              GetSetupTabNames(), aRef, true);
         }
     }
     else
-        pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, maTabNames, aRef, true);
+        pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
+                          GetSetupTabNames(), aRef, true);
 }
 
 void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
-    pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, maTabNames, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false);
+    pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
+                      static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false);
 }
 
 void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
