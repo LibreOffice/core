@@ -889,7 +889,7 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
     }
     catch(Exception&)
     {
-        // not intereseted in
+        // not interested in
     }
     return bIsEmbedded;
 }
