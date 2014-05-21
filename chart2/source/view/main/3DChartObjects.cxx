@@ -75,13 +75,17 @@ Text::Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId):
     Font aFont = aDevice.GetFont();
     aFont.SetSize(Size(0, 96));
     aFont.SetColor(COL_BLACK);
+    ::Rectangle aRect;
     aDevice.SetFont(aFont);
     aDevice.Erase();
-    aDevice.SetOutputSizePixel(Size(160,96));
+    aDevice.GetTextBoundRect(aRect, rStr);
+    Size aSize = aRect.GetSize();
+    aSize.Height() *= 2;
+    aDevice.SetOutputSizePixel(aSize);
     aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice.DrawText(Point(0,0), rStr);
 
-    maText = BitmapEx(aDevice.GetBitmapEx(Point(0,0), Size(160,96)));
+    maText = BitmapEx(aDevice.GetBitmapEx(Point(0,0), aSize));
 }
 
 void Text::render()
