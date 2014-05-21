@@ -44,7 +44,6 @@
 #include <writerhelper.hxx>
 #include <comphelper/seqstream.hxx>
 
-#include <climits>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -426,6 +425,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             break;
         }
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND);
+        /**
+        * Sizes of integral types
+        * climits header defines constants with the limits of integral types for the specific system and compiler implemetation used.
+        * Use of this might cause platform dependent problem like posOffset exceed the limit.
+        **/
+        const sal_Int64 MAX_INTEGER_VALUE = 2147483647;
+        const sal_Int64 MIN_INTEGER_VALUE = -2147483648;
         if (alignH != NULL)
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align, FSEND);
@@ -447,13 +453,14 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
              *
              * Please refer : http://www.schemacentral.com/sc/xsd/t-xsd_int.html
              */
-            if (nTwipstoEMU > INT_MAX)
+
+            if (nTwipstoEMU > MAX_INTEGER_VALUE)
             {
-                nTwipstoEMU = INT_MAX;
+                nTwipstoEMU = MAX_INTEGER_VALUE;
             }
-            else if (nTwipstoEMU < INT_MIN)
+            else if (nTwipstoEMU < MIN_INTEGER_VALUE)
             {
-                nTwipstoEMU = INT_MIN;
+                nTwipstoEMU = MIN_INTEGER_VALUE;
             }
             m_pImpl->m_pSerializer->write(nTwipstoEMU);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
@@ -470,13 +477,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
             sal_Int64 nTwipstoEMU = TwipsToEMU(aPos.Y);
-            if (nTwipstoEMU > INT_MAX)
+            if (nTwipstoEMU > MAX_INTEGER_VALUE)
             {
-                nTwipstoEMU = INT_MAX;
+                nTwipstoEMU = MAX_INTEGER_VALUE;
             }
-            else if (nTwipstoEMU < INT_MIN)
+            else if (nTwipstoEMU < MIN_INTEGER_VALUE)
             {
-                nTwipstoEMU = INT_MIN;
+                nTwipstoEMU = MIN_INTEGER_VALUE;
             }
             m_pImpl->m_pSerializer->write(nTwipstoEMU);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
@@ -502,11 +509,49 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
 
     // now the common parts
     // extent of the image
-    OString aWidth(OString::number(TwipsToEMU(rSize.Width())));
-    OString aHeight(OString::number(TwipsToEMU(rSize.Height())));
+    /**
+    * Extent width is of type long ( i.e cx & cy ) as
+    *
+    * per ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference
+    * [ 20.4.2.7 extent (Drawing Object Size)]
+    *
+    * cy is of type a:ST_PositiveCoordinate.
+    * Minimum inclusive: 0
+    * Maximum inclusive: 27273042316900
+    *
+    * reference : http://www.schemacentral.com/sc/ooxml/e-wp_extent-1.html
+    *
+    *   Though ECMA mentions the max value as aforementioned. It appears that MSO does not
+    *  handle for the same, infact it acutally can handles a max value of int32 i.e
+    *   2147483647( MAX_INTEGER_VALUE ).
+    *  Therefore changing the following accordingly so that LO sync's up with MSO.
+    **/
+    sal_uInt64 cx = 0 ;
+    sal_uInt64 cy = 0 ;
+    const sal_Int64 MAX_INTEGER_VALUE = 2147483647;
+    if (rSize.Width() > MAX_INTEGER_VALUE)
+        cx = MAX_INTEGER_VALUE ;
+    else if (0 > rSize.Width())
+        cx = 0 ;
+    else
+        cx = rSize.Width();
+
+    if (rSize.Height() > MAX_INTEGER_VALUE)
+        cy = MAX_INTEGER_VALUE ;
+    else if (0 > rSize.Height())
+        cy = 0 ;
+    else
+        cy = rSize.Height();
+
+    OString aWidth(OString::number(TwipsToEMU(cx)));
+    //we explicitly check the converted EMU value for the range as mentioned in above comment.
+    aWidth = (aWidth.toInt64() > 0 ? (aWidth.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE) : aWidth.getStr()): "0");
+    OString aHeight(OString::number(TwipsToEMU(cy)));
+    aHeight = (aHeight.toInt64() > 0 ? (aHeight.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE) : aHeight.getStr()): "0");
+
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_extent,
-                                            XML_cx, (rSize.Width() > 0 ? aWidth.getStr() : "0"),
-                                            XML_cy, (rSize.Height() > 0 ? aHeight.getStr() : "0"),
+                                            XML_cx, aWidth,
+                                            XML_cy, aHeight,
                                             FSEND);
 
     // effectExtent, extent including the effect (shadow only for now)

@@ -3498,6 +3498,21 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78910, "fdo78910.docx")
     assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[5]/w:fldChar", "fldCharType", "end" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo78957, "fdo78957.docx")
+{
+    xmlDocPtr pXmlHeader = parseExport("word/header2.xml");
+
+    if(!pXmlHeader)
+        return;
+
+    const sal_Int64 IntMax = 2147483647;
+    sal_Int64 cx = 0, cy = 0;
+    cx = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cx").toInt64();
+    cy = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cy").toInt64();
+    //  Here we check the values of extent width & height
+    CPPUNIT_ASSERT(cx <= IntMax );
+    CPPUNIT_ASSERT(cy >= 0 );
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
