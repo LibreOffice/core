@@ -1306,12 +1306,6 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
-AC_ARG_ENABLE(libc++,
-    AS_HELP_STRING([--enable-libc++],
-        [Use the libc++ C++ library instead of GNU libstdc++ on OS X. Only effective
-         if --with-macosx-version-min-required is 10.7 or later.]),
-,)
-
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
         [Build for the iOS Simulator, not iOS device.]),
@@ -2891,17 +2885,11 @@ if test $_os = Darwin; then
         AC_MSG_CHECKING([what compiler to use])
         case $with_macosx_sdk in
         10.5)
-            if test "$enable_libc__" = yes; then
-                AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
-            fi
             CC="${gccprefix}gcc-4.2 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             CXX="${gccprefix}g++-4.2 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             ;;
         10.6)
-            if test "$enable_libc__" = yes; then
-                AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
-            fi
             # did someone copy her 10.6 sdk into xcode 4 (needed on Mountain Lion)?
             if test "$(echo $MACOSX_SDK_PATH | cut -c1-23)" = "/Applications/Xcode.app"; then
                 CC="`xcrun -find gcc` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
@@ -2914,10 +2902,7 @@ if test $_os = Darwin; then
             LIBTOOL=libtool
             ;;
         10.7|10.8|10.9)
-            if test "$enable_libc__" = yes; then
-                if test "$with_macosx_version_min_required" = 10.6; then
-                    AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
-                fi
+            if test "$with_macosx_version_min_required" != 10.6; then
                 # Use libc++ instead of libstdc++ when possible
                 stdlib=-stdlib=libc++
             fi
@@ -3118,14 +3103,8 @@ if test $_os = iOS; then
     XCODE_CLANG_CXX_LIBRARY=libstdc++
     case $ios_sdk in
     6.*)
-        if test "$enable_libc__" = yes; then
-            AC_MSG_ERROR([--enable-libc++ requires using Xcode 5 and iOS SDK 7 or newer it seems])
-        fi
         ;;
     *)
-        if test "$enable_libc__" = no; then
-            AC_MSG_ERROR([--disable-libc++ not allowed])
-        fi
         XCODE_CLANG_CXX_LIBRARY=libc++
         ;;
     esac
