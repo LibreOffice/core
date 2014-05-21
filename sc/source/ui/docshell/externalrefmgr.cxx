@@ -2653,7 +2653,7 @@ public:
     RefCacheFiller( svl::SharedStringPool& rStrPool, ScExternalRefCache& rRefCache, sal_uInt16 nFileId ) :
         mrStrPool(rStrPool), mrRefCache(rRefCache), mnFileId(nFileId), mpCurCol(NULL) {}
 
-    virtual void startColumn( ScColumn* pCol )
+    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
     {
         mpCurCol = pCol;
         if (!mpCurCol)
@@ -2663,7 +2663,7 @@ public:
         mpRefTab = mrRefCache.getCacheTable(mnFileId, mpCurCol->GetTab());
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal )
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
     {
         if (!mpCurCol || !bVal)
             return;
