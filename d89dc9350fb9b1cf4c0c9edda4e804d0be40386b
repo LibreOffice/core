@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_c2d062cc",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-05-21T05:21:59Z",
+      "side": 1,
+      "message": "I think it would make sense to remove the uses of TRACE_OSL_PROFILE and DEBUG_OSL_PROFILE and put the info messages to sal.osl.profile area instead.",
+      "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_a2d55eba",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-05-21T05:21:59Z",
+      "side": 1,
+      "message": "Plain SAL_WARN should be used here.",
+      "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_82db7aed",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1878,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-05-21T05:21:59Z",
+      "side": 1,
+      "message": "Again, change to SAL_WARN.",
+      "revId": "d89dc9350fb9b1cf4c0c9edda4e804d0be40386b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
