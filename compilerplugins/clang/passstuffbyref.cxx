@@ -39,6 +39,13 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (functionDecl->isThisDeclarationADefinition() && functionDecl->getPreviousDecl() != nullptr) {
         return true;
     }
+    // only consider base declarations, not overriden ones, or we warn on methods that
+    // are overriding stuff from external libraries
+    if (isa<CXXMethodDecl>(functionDecl)) {
+        CXXMethodDecl const * m = dyn_cast<CXXMethodDecl>(functionDecl);
+        if (m->size_overridden_methods() > 0)
+            return true;
+    }
     unsigned n = functionDecl->getNumParams();
     for (unsigned i = 0; i != n; ++i) {
         const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
