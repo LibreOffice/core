@@ -3124,6 +3124,16 @@ DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val","%1" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
+{
+    /* File getting crash while saving in LO.
+     * Checking if document.xml file is getting created after fix
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+}
+
 DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

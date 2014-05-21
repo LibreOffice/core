@@ -1134,8 +1134,8 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
            std::find( aChrTxtAtrArr.begin(), aChrTxtAtrArr.end(), &rAttr );
         if ( it != aChrTxtAtrArr.end() )
         {
-            aChrTxtAtrArr.erase( it );
             aChrSetArr.erase( aChrSetArr.begin() + (it - aChrTxtAtrArr.begin()) );
+            aChrTxtAtrArr.erase( it );
         }
     }
 }
