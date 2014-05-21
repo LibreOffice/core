@@ -655,9 +655,9 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         // check if it is gzipped -> svgz
         if(sFirstBytes[0] == 0x1F && sFirstBytes[1] == 0x8B)
         {
-            GZCodec aCodec;
+            ZCodec aCodec;
             rStream.Seek(nStreamPos);
-            aCodec.BeginCompression();
+            aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
             nDecompressedSize = aCodec.Read(rStream, sExtendedOrDecompressedFirstBytes, 2048);
             nCheckSize = nDecompressedSize < 256 ? nDecompressedSize : 256;
             aCodec.EndCompression();
@@ -1517,10 +1517,10 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 if(aTwoBytes[0] == 0x1F && aTwoBytes[1] == 0x8B)
                 {
                     SvMemoryStream aMemStream;
-                    GZCodec aCodec;
+                    ZCodec aCodec;
                     long nMemoryLength;
 
-                    aCodec.BeginCompression();
+                    aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
                     nMemoryLength = aCodec.Decompress(rIStream, aMemStream);
                     aCodec.EndCompression();
 

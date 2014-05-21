@@ -67,8 +67,8 @@ bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             return false;
 
         SvStream* pMemoryStream = new SvMemoryStream;
-        GZCodec aCodec;
-        aCodec.BeginCompression();
+        ZCodec aCodec;
+        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
         aCodec.Decompress(*aStream.get(), *pMemoryStream);
         aCodec.EndCompression();
         pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);

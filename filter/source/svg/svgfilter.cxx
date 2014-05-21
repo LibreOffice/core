@@ -370,8 +370,8 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor) throw 
             return OUString();
         xSeek->seek(0);
 
-        GZCodec aCodec;
-        aCodec.BeginCompression();
+        ZCodec aCodec;
+        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
         aCodec.Decompress(*aStream.get(), *pMemoryStream);
         aCodec.EndCompression();
         pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);
