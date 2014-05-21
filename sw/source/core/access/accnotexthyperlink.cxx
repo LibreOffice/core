@@ -31,9 +31,11 @@
 #include <svtools/imapobj.hxx>
 
 #include <accmap.hxx>
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
+
+using namespace css;
+using namespace css::lang;
+using namespace css::uno;
+using namespace css::accessibility;
 
 SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrm *aFrm, sal_uInt16 nIndex) :
     xFrame( p ),

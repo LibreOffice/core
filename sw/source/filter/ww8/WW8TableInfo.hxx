@@ -37,8 +37,6 @@ class AttributeOutputBase;
 
 namespace ww8
 {
-using namespace ::std;
-
 const unsigned int MAXTABLECELLS = 63;
 
 class WW8TableNodeInfo;
@@ -157,15 +155,15 @@ public:
 #endif
 };
 
-typedef ::std::multiset<CellInfo, less<CellInfo> > CellInfoMultiSet;
+typedef ::std::multiset<CellInfo, ::std::less<CellInfo> > CellInfoMultiSet;
 typedef boost::shared_ptr<CellInfoMultiSet> CellInfoMultiSetPtr;
 
 class WW8TableInfo;
 class WW8TableNodeInfo
 {
 public:
-    typedef map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t,
-                greater<sal_uInt32> > Inners_t;
+    typedef ::std::map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t,
+                ::std::greater<sal_uInt32> > Inners_t;
 
 private:
     WW8TableInfo * mpParent;

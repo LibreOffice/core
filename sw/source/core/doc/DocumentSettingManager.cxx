@@ -362,10 +362,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
     }
 }
 
-const i18n::ForbiddenCharacters*
+const css::i18n::ForbiddenCharacters*
     sw::DocumentSettingManager::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
 {
-    const i18n::ForbiddenCharacters* pRet = 0;
+    const css::i18n::ForbiddenCharacters* pRet = 0;
     if( mxForbiddenCharsTable.is() )
         pRet = mxForbiddenCharsTable->GetForbiddenCharacters( nLang, false );
     if( bLocaleData && !pRet && g_pBreakIt )
