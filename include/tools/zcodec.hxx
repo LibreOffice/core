@@ -22,16 +22,6 @@
 
 #include <tools/toolsdllapi.h>
 
-// Defines
-
-#define DEFAULT_IN_BUFSIZE          (0x00008000UL)
-#define DEFAULT_OUT_BUFSIZE         (0x00008000UL)
-
-// memory requirement using compress:
-//  [ INBUFFER ] + [ OUTBUFFER ] + 128KB + 1 << (MEM_USAGE+9)
-// memory requirement using decompress:
-//  [ INBUFFER ] + [ OUTBUFFER ] + 32KB
-
 #define ZCODEC_NO_COMPRESSION       (0x00000000UL)
 #define ZCODEC_BEST_SPEED           (0x00000001UL)
 #define ZCODEC_DEFAULT_COMPRESSION  (0x00000006UL)
@@ -71,7 +61,7 @@ private:
     void            ImplWriteBack();
 
 public:
-                    ZCodec( sal_uIntPtr nInBuf = DEFAULT_IN_BUFSIZE, sal_uIntPtr nOutBuf = DEFAULT_OUT_BUFSIZE );
+                    ZCodec( sal_uIntPtr nInBuf = 0x8000UL, sal_uIntPtr nOutBuf = 0x8000UL );
     virtual         ~ZCodec();
 
     virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
