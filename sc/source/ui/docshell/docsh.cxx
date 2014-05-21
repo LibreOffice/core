@@ -441,13 +441,13 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
 
     ScXMLImportWrapper aImport(*this, pLoadMedium, xStor);
 
-    bool bRet(false);
+    bool bRet = false;
     ErrCode nError = ERRCODE_NONE;
     aDocument.EnableAdjustHeight(false);
-    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
-        bRet = aImport.Import(false, nError);
+    if (GetCreateMode() == SFX_CREATE_MODE_ORGANIZER)
+        bRet = aImport.Import(ScXMLImportWrapper::STYLES, nError);
     else
-        bRet = aImport.Import(true, nError);
+        bRet = aImport.Import(ScXMLImportWrapper::ALL, nError);
 
     if ( nError )
         pLoadMedium->SetError( nError, OUString( OSL_LOG_PREFIX ) );
