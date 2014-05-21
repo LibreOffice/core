@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/fntstyle.hxx>
 
@@ -33,7 +34,6 @@ class SvStream;
 
 class Impl_Font;
 class ImplFontAttributes;
-class Size;
 
 class VCL_DLLPUBLIC Font
 {
