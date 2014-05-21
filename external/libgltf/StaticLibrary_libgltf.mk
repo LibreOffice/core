@@ -24,7 +24,6 @@ $(eval $(call gb_StaticLibrary_use_externals,libgltf,\
     mesa_headers \
     glew \
     zlib \
-    freetype \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,libgltf,\
@@ -35,8 +34,6 @@ $(eval $(call gb_StaticLibrary_set_include,libgltf,\
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,libgltf,\
 	UnpackedTarball/libgltf/src/Camera \
 	UnpackedTarball/libgltf/src/Common \
-	UnpackedTarball/libgltf/src/Font \
-	UnpackedTarball/libgltf/src/FPSCounter \
 	UnpackedTarball/libgltf/src/libgltf \
 	UnpackedTarball/libgltf/src/LoadScene \
 	UnpackedTarball/libgltf/src/RenderScene \
