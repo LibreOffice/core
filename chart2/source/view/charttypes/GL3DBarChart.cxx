@@ -44,11 +44,11 @@ GL3DBarChart::~GL3DBarChart()
 
 namespace {
 
-const float TEXT_HEIGHT = 10.0f;
+const float TEXT_HEIGHT = 15.0f;
 
 float calculateTextWidth(const OUString& rText)
 {
-    return rText.getLength() * 5.0;
+    return rText.getLength() * 7.5;
 }
 
 }

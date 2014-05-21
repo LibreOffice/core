@@ -73,14 +73,15 @@ Text::Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId):
     // Convert OUString to BitmapEx.
     VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
     Font aFont = aDevice.GetFont();
+    aFont.SetSize(Size(0, 96));
     aFont.SetColor(COL_BLACK);
     aDevice.SetFont(aFont);
     aDevice.Erase();
-    aDevice.SetOutputSizePixel(Size(20,12));
+    aDevice.SetOutputSizePixel(Size(160,96));
     aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice.DrawText(Point(0,0), rStr);
 
-    maText = BitmapEx(aDevice.GetBitmapEx(Point(0,0), Size(20,12)));
+    maText = BitmapEx(aDevice.GetBitmapEx(Point(0,0), Size(160,96)));
 }
 
 void Text::render()
