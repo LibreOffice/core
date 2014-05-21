@@ -448,14 +448,7 @@ bool SvxLanguageBoxBase::IsLanguageSelected( const LanguageType eLangType ) cons
 
 sal_Int32 SvxLanguageBoxBase::ImplTypeToPos( LanguageType eType ) const
 {
-    sal_Int32 nPos   = LISTBOX_ENTRY_NOTFOUND;
-    sal_Int32 nCount = ImplGetEntryCount();
-
-    for ( sal_Int32 i=0; nPos == LISTBOX_ENTRY_NOTFOUND && i<nCount; i++ )
-        if ( eType == LanguageType((sal_uIntPtr)ImplGetEntryData(i)) )
-            nPos = i;
-
-    return nPos;
+    return ImplGetEntryPos( (void*)(sal_uIntPtr)eType);
 }
 
 
@@ -624,6 +617,17 @@ bool SvxLanguageBox::ImplIsEntryPosSelected( sal_Int32 nPos ) const
 bool SvxLanguageComboBox::ImplIsEntryPosSelected( sal_Int32 nPos ) const
 {
     return IsEntryPosSelected( nPos);
+}
+
+
+sal_Int32 SvxLanguageBox::ImplGetEntryPos( const void* pData ) const
+{
+    return GetEntryPos( pData);
+}
+
+sal_Int32 SvxLanguageComboBox::ImplGetEntryPos( const void* pData ) const
+{
+    return GetEntryPos( pData);
 }
 
 
