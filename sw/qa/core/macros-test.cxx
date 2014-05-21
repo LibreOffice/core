@@ -20,7 +20,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -35,6 +39,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <basic/sbxdef.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <doc.hxx>
 #include "docsh.hxx"
@@ -63,6 +68,7 @@ public:
     void testVba();
 #endif
     void testFdo55289();
+    void testFdo68983();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
 #if !defined(MACOSX) && !defined(WNT)
     //enable this test if you want to play with star basic macros in unit tests
@@ -71,6 +77,7 @@ public:
     CPPUNIT_TEST(testVba);
 #endif
     CPPUNIT_TEST(testFdo55289);
+    CPPUNIT_TEST(testFdo68983);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -189,6 +196,47 @@ void SwMacrosTest::testFdo55289()
     uno::Reference<text::XTextContent> const xShapeContent(xShape, UNO_QUERY);
     xShapeContent->attach(xEnd);
 }
+
+void SwMacrosTest::testFdo68983()
+{
+    const OUString aFileNameBase("StarBasic.");
+    OUString aFileName;
+    createFileURL("fdo68983.", "odt", aFileName);
+    Reference< com::sun::star::lang::XComponent > xComponent =
+        loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
+
+    Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDocStorable.is());
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    Sequence<beans::PropertyValue> desc(1);
+    desc[0].Name = "FilterName";
+    desc[0].Value <<= OUString("writer8");
+    xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
+
+    Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
+
+    // re-load
+    xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+    // check that password-protected library survived store and re-load
+    Reference<document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    Reference<script::XStorageBasedLibraryContainer> xStorBasLib(xDocScr->getBasicLibraries());
+    Reference<script::XLibraryContainer> xBasLib(xStorBasLib, UNO_QUERY_THROW);
+    Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xBasLibPwd->isLibraryPasswordProtected("Library1"));
+    CPPUNIT_ASSERT(xBasLibPwd->verifyLibraryPassword("Library1", "foo"));
+    xBasLib->loadLibrary("Library1");
+    CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("Library1"));
+
+    // close
+    Reference<util::XCloseable> xDocCloseable(xComponent, UNO_QUERY_THROW);
+    xDocCloseable->close(false);
+}
+
 
 SwMacrosTest::SwMacrosTest()
       : m_aBaseString("/sw/qa/core/data")
