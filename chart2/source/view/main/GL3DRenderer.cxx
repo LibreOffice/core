@@ -112,8 +112,8 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_VertexBuffer);
 
     glDeleteFramebuffers(1, &mnPickingFbo);
-    glDeleteRenderbuffers(1, &mnPickingRbo);
-    glDeleteTextures(1, &mnPickingTexture);
+    glDeleteRenderbuffers(1, &mnPickingRboDepth);
+    glDeleteRenderbuffers(1, &mnPickingRboColor);
 }
 
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
@@ -253,7 +253,7 @@ void OpenGL3DRenderer::init()
     glBufferData(GL_ARRAY_BUFFER, sizeof(squareVertices), squareVertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    OpenGLHelper::createFramebuffer(m_iWidth, m_iHeight, mnPickingFbo, mnPickingRbo, mnPickingTexture);
+    OpenGLHelper::createFramebuffer(m_iWidth, m_iHeight, mnPickingFbo, mnPickingRboDepth, mnPickingRboColor);
 
     CHECK_GL_ERROR();
     Init3DUniformBlock();
@@ -1601,6 +1601,9 @@ sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
     boost::scoped_array<sal_uInt8> buf(new sal_uInt8[4]);
     glReadPixels(nX, nY, 1, 1, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
     Color aColor(buf[3], buf[2], buf[1], buf[0]);
+    static sal_Int32 i = 0;
+    OUString aFileName = OUString("/home/moggi/Documents/work/shader") + OUString::number(i) + ".png";
+    OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
     return aColor.GetColor();
 }
 

@@ -366,8 +366,8 @@ private:
     SceneBox m_SenceBox;
 
     GLuint mnPickingFbo;
-    GLuint mnPickingRbo;
-    GLuint mnPickingTexture;
+    GLuint mnPickingRboDepth;
+    GLuint mnPickingRboColor;
 };
 
 }
