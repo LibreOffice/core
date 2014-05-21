@@ -3180,6 +3180,17 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77890 , "fdo77890.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:br", "type", "page");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78887, "fdo78887.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[1]", 1);
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:t[1]", "Lyrics: ");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[2]", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testNumberedList,"NumberedList.docx")
 {
     //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
