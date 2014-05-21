@@ -586,6 +586,22 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( uab.isIsoLocale() == false );
         CPPUNIT_ASSERT( uab.isIsoODF() == false );
     }
+
+    // test static isValidBcp47() method
+    {
+        OUString aCanonicalized;
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-US", &aCanonicalized) && aCanonicalized == "en-US" );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "x-foobar", &aCanonicalized) && aCanonicalized == "x-foobar" );
+        CPPUNIT_ASSERT( !LanguageTag::isValidBcp47( "unreg-and-bad", &aCanonicalized) );
+#if USE_LIBLANGTAG
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) && aCanonicalized == "de-DE" );
+        /* TODO: at least some (those we know) grandfathered tags should be
+         * recognized by the replacement code. */
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-GB-oed", &aCanonicalized) && aCanonicalized == "en-GB-oed" );
+#else
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) && aCanonicalized == "de-Latn-DE" );
+#endif
+    }
 }
 
 static bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
