@@ -3486,6 +3486,18 @@ DECLARE_OOXMLEXPORT_TEST(testWordArtWithinDraingtool, "testWordArtWithinDraingto
     assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[4]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]",1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo78910, "fdo78910.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // This is to ensure that the fld starts and ends inside a hyperlink...
+    assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[1]/w:fldChar", "fldCharType", "begin" );
+    assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[5]/w:fldChar", "fldCharType", "end" );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

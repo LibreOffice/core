@@ -759,6 +759,13 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bS
 
 void DocxAttributeOutput::EndRun()
 {
+    int nFieldsInPrevHyperlink = m_nFieldsInHyperlink;
+    // Reset m_nFieldsInHyperlink if a new hyperlink is about to start
+    if ( m_pHyperlinkAttrList )
+    {
+        m_nFieldsInHyperlink = 0;
+    }
+
     // Write field starts
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
     {
@@ -766,6 +773,11 @@ void DocxAttributeOutput::EndRun()
         if ( pIt->bOpen && pIt->pField )
         {
             StartField_Impl( *pIt );
+
+            if ( m_pHyperlinkAttrList )
+            {
+                m_nFieldsInHyperlink++;
+            }
 
             // Remove the field from the stack if only the start has to be written
             // Unknown fields sould be removed too
@@ -791,7 +803,7 @@ void DocxAttributeOutput::EndRun()
     {
         if ( m_startedHyperlink )
         {
-            for ( int i = 0; i < m_nFieldsInHyperlink; i++ )
+            for ( int i = 0; i < nFieldsInPrevHyperlink; i++ )
             {
                 // If fields begin before hyperlink then
                 // it should end before hyperlink close
@@ -836,7 +848,6 @@ void DocxAttributeOutput::EndRun()
         m_pHyperlinkAttrList = NULL;
         m_startedHyperlink = true;
         m_nHyperLinkCount++;
-        m_nFieldsInHyperlink = 0;
     }
 
     // if there is some redlining in the document, output it
