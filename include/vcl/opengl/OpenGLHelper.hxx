@@ -32,10 +32,10 @@ public:
 
     /**
      * The caller is responsible for deleting the buffer objects identified by
-     * nFramebufferId, nRenderbufferId and nTexturebufferId
+     * nFramebufferId, nRenderbufferDepthId and nRenderbufferColorId
      */
     static void createFramebuffer(long nWidth, long nHeight,
-            GLuint& nFramebufferId, GLuint& nRenderbufferId, GLuint& nTexturebufferId);
+            GLuint& nFramebufferId, GLuint& nRenderbufferTextId, GLuint& nRenderbufferColorId);
 };
 
 VCLOPENGL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix);

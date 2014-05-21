@@ -221,11 +221,11 @@ void GL3DBarChart::clickedAt(const Point& rPos)
 {
     sal_uInt32 nId = 1;
     {
-        PickingModeSetter(mpRenderer.get());
+        PickingModeSetter aPickingModeSetter(mpRenderer.get());
         render();
         nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
     }
-    if (mpCamera)
+    if (mpCamera && nId != COL_WHITE)
         mpCamera->zoom(nId);
 }
 
