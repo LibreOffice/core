@@ -668,7 +668,8 @@
 
 #define SC_UNO_EMBED_FONTS     "EmbedFonts"
 
-#define SC_UNO_ODS_LOCK_SOLAR_MUTEX "LockSolarMutex"
+#define SC_UNO_ODS_LOCK_SOLAR_MUTEX "ODSLockSolarMutex"
+#define SC_UNO_ODS_IMPORT_STYLES    "ODSImportStyles"
 
 #endif
 

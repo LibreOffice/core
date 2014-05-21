@@ -345,6 +345,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(SC_UNO_ODS_LOCK_SOLAR_MUTEX), 0, getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString(SC_UNO_ODS_IMPORT_STYLES), 0, getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
@@ -520,6 +521,10 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     sal_uInt32 nDocRetval(0);
     if ((nMode & CONTENT) == CONTENT)
     {
+        if (mrDocShell.GetCreateMode() == SFX_CREATE_MODE_INTERNAL)
+            // We only need to import content for external link cache document.
+            xInfoSet->setPropertyValue(SC_UNO_ODS_IMPORT_STYLES, uno::makeAny(false));
+
         uno::Sequence<uno::Any> aDocArgs(4);
         uno::Any* pDocArgs = aDocArgs.getArray();
         pDocArgs[0] <<= xInfoSet;
