@@ -56,7 +56,6 @@ public:
 
     void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = false );
     long            EndCompression();
-    bool            IsFinished () const { return mbFinish; }
 
     long            Compress( SvStream& rIStm, SvStream& rOStm );
     long            Decompress( SvStream& rIStm, SvStream& rOStm );
