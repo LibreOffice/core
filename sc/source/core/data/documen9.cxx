@@ -620,11 +620,6 @@ void ScDocument::SetImportingXML( bool bVal )
     SetLoadingMedium(bVal);
 }
 
-void ScDocument::SetXMLFromWrapper( bool bVal )
-{
-    bXMLFromWrapper = bVal;
-}
-
 rtl::Reference<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
 {
     return xForbiddenCharacters;
