@@ -2086,12 +2086,12 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
     pStream->Seek( STREAM_SEEK_TO_END );
     sal_uLong nEndPos = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
+    ZCodec pCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
-    pCodec->BeginCompression();
-    pCodec->Write( aStream, (const sal_uInt8*)pStream->GetData(), nEndPos );
-    pCodec->EndCompression();
-    delete pCodec;
+    pCodec.BeginCompression();
+    pCodec.Write( aStream, (const sal_uInt8*)pStream->GetData(), nEndPos );
+    pCodec.EndCompression();
+    assert(false);
     nEndPos = aStream.Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -3701,12 +3701,11 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
                       "end\n"
                       "end\n" );
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
+    ZCodec pCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
-    pCodec->BeginCompression();
-    pCodec->Write( aStream, (const sal_uInt8*)aContents.getStr(), aContents.getLength() );
-    pCodec->EndCompression();
-    delete pCodec;
+    pCodec.BeginCompression();
+    pCodec.Write( aStream, (const sal_uInt8*)aContents.getStr(), aContents.getLength() );
+    pCodec.EndCompression();
 #endif
 
     #if OSL_DEBUG_LEVEL > 1
