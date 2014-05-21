@@ -3418,6 +3418,17 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78300,"fdo78300.docx")
                 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO78887, "fdo78887.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/w:br[1]", 1);
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/w:t[1]", "Lyrics: ");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/w:br[2]", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo78651, "fdo78651.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
