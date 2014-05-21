@@ -25,9 +25,10 @@
 
 #define U2S(s) OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()
 
-
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::lang::IllegalArgumentException;
+using namespace css::uno;
+using namespace css::xml::dom::events;
+using css::lang::XMultiServiceFactory;
+using css::lang::IllegalArgumentException;
 
 
 namespace DOM { namespace events

@@ -24,6 +24,8 @@
 #include <entitiesmap.hxx>
 #include <notationsmap.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom;
 
 namespace DOM
 {
@@ -41,11 +43,11 @@ namespace DOM
     A NamedNodeMap containing the general entities, both external and
     internal, declared in the DTD.
     */
-    Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities() throw (RuntimeException, std::exception)
+    css::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        Reference< XNamedNodeMap > aMap;
+        css::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != NULL)
         {
             aMap.set(new CEntitiesMap(this));
@@ -82,11 +84,11 @@ namespace DOM
     /**
     A NamedNodeMap containing the notations declared in the DTD.
     */
-    Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations() throw (RuntimeException, std::exception)
+    css::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        Reference< XNamedNodeMap > aMap;
+        css::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != NULL)
         {
             aMap.set(new CNotationsMap(this));

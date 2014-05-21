@@ -26,6 +26,9 @@
 
 #include "../dom/document.hxx"
 
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::dom::events;
 
 namespace DOM { namespace events {
 

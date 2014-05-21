@@ -38,11 +38,6 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::dom::events;
-
 namespace DOM
 {
     class CElement;
@@ -50,8 +45,8 @@ namespace DOM
     typedef std::vector< xmlNodePtr > nodevector_t;
 
     class CElementList
-        : public cppu::WeakImplHelper2< XNodeList,
-                com::sun::star::xml::dom::events::XEventListener >
+        : public cppu::WeakImplHelper2< css::xml::dom::XNodeList,
+                css::xml::dom::events::XEventListener >
     {
     private:
         ::rtl::Reference<CElement> const m_pElement;
@@ -72,16 +67,16 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         /**
         Returns the indexth item in the collection.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

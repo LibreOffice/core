@@ -29,7 +29,7 @@
 
 namespace DOM { namespace events {
 
-typedef ::cppu::ImplInheritanceHelper1< CUIEvent, XMouseEvent >
+typedef ::cppu::ImplInheritanceHelper1< CUIEvent, css::xml::dom::events::XMouseEvent >
     CMouseEvent_Base;
 
 class CMouseEvent
@@ -45,27 +45,27 @@ protected:
     bool m_altKey;
     bool m_metaKey;
     sal_Int16 m_button;
-    Reference< XEventTarget > m_relatedTarget;
+    css::uno::Reference< css::xml::dom::events::XEventTarget > m_relatedTarget;
 
 public:
     explicit CMouseEvent();
 
-    virtual sal_Int32 SAL_CALL getScreenX() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getScreenY() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getClientX() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getClientY() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getCtrlKey() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getShiftKey() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getAltKey() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getMetaKey() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL getButton() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XEventTarget > SAL_CALL getRelatedTarget()  throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getScreenX() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getScreenY() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getClientX() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getClientY() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getCtrlKey() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getShiftKey() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getAltKey() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getMetaKey() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL getButton() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getRelatedTarget()  throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL initMouseEvent(
                         const OUString& typeArg,
                         sal_Bool canBubbleArg,
                         sal_Bool cancelableArg,
-                        const Reference< XAbstractView >& viewArg,
+                        const css::uno::Reference< css::xml::dom::views::XAbstractView >& viewArg,
                         sal_Int32 detailArg,
                         sal_Int32 screenXArg,
                         sal_Int32 screenYArg,
@@ -76,31 +76,31 @@ public:
                         sal_Bool shiftKeyArg,
                         sal_Bool metaKeyArg,
                         sal_Int16 buttonArg,
-                        const Reference< XEventTarget >& relatedTargetArg)
-        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+                        const css::uno::Reference< css::xml::dom::events::XEventTarget >& relatedTargetArg)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // delegate to CUIevent
-    virtual Reference< XAbstractView > SAL_CALL getView() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getDetail() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::dom::views::XAbstractView > SAL_CALL getView() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getDetail() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL initUIEvent(const OUString& typeArg,
                      sal_Bool canBubbleArg,
                      sal_Bool cancelableArg,
-                     const Reference< XAbstractView >& viewArg,
-                     sal_Int32 detailArg) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual com::sun::star::util::Time SAL_CALL getTimeStamp() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL stopPropagation() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL preventDefault() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+                     const css::uno::Reference< css::xml::dom::views::XAbstractView >& viewArg,
+                     sal_Int32 detailArg) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getBubbles() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getCancelable() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::util::Time SAL_CALL getTimeStamp() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL stopPropagation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL preventDefault() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL initEvent(
         const OUString& eventTypeArg,
         sal_Bool canBubbleArg,
         sal_Bool cancelableArg)
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 }}
 #endif

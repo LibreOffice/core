@@ -19,6 +19,10 @@
 
 #include <uievent.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom::events;
+using namespace css::xml::dom::views;
+
 namespace DOM { namespace events
 {
     CUIEvent::CUIEvent()
@@ -86,7 +90,7 @@ namespace DOM { namespace events
         return sal_False;
     }
 
-    com::sun::star::util::Time SAL_CALL CUIEvent::getTimeStamp() throw (RuntimeException, std::exception)
+    css::util::Time SAL_CALL CUIEvent::getTimeStamp() throw (RuntimeException, std::exception)
     {
         return CEvent::getTimeStamp();
     }

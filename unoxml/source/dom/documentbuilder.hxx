@@ -39,18 +39,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::sax;
-using namespace com::sun::star::io;
-
 namespace DOM
 {
     typedef ::cppu::WeakImplHelper2
-        < XDocumentBuilder
-        , ::com::sun::star::lang::XServiceInfo
+        < css::xml::dom::XDocumentBuilder
+        , css::lang::XServiceInfo
         > CDocumentBuilder_Base;
 
     class CDocumentBuilder
@@ -58,98 +51,98 @@ namespace DOM
     {
     private:
         ::osl::Mutex m_Mutex;
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > const
+        css::uno::Reference< css::lang::XMultiServiceFactory > const
             m_xFactory;
-        Reference< XEntityResolver > m_xEntityResolver;
-        Reference< XErrorHandler > m_xErrorHandler;
+        css::uno::Reference< css::xml::sax::XEntityResolver > m_xEntityResolver;
+        css::uno::Reference< css::xml::sax::XErrorHandler > m_xErrorHandler;
 
     public:
 
         // ctor
         CDocumentBuilder(
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
+            css::uno::Reference< css::lang::XMultiServiceFactory > const&
                 xFactory);
 
         // call for factory
-        static Reference< XInterface > getInstance(
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
+        static css::uno::Reference< XInterface > getInstance(
+            css::uno::Reference< css::lang::XMultiServiceFactory > const&
                 xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
-        static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
+        static css::uno::Sequence< OUString > _getSupportedServiceNames();
+        static css::uno::Reference< XInterface > _getInstance(
+            css::uno::Reference< css::lang::XMultiServiceFactory > const&
                 rSMgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames ()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Obtain an instance of a DOMImplementation object.
         */
-        virtual Reference< XDOMImplementation > SAL_CALL getDOMImplementation()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDOMImplementation > SAL_CALL getDOMImplementation()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Indicates whether or not this parser is configured to understand
         namespaces.
         */
         virtual sal_Bool SAL_CALL isNamespaceAware()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Indicates whether or not this parser is configured to validate XML
         documents.
         */
         virtual sal_Bool SAL_CALL isValidating()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Obtain a new instance of a DOM Document object to build a DOM tree
         with.
         */
-        virtual Reference< XDocument > SAL_CALL newDocument()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL newDocument()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Parse the content of the given InputStream as an XML document and
         return a new DOM Document object.
         */
-        virtual Reference< XDocument > SAL_CALL parse(const Reference< XInputStream >& is)
-            throw (RuntimeException, SAXParseException, IOException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL parse(const css::uno::Reference< css::io::XInputStream >& is)
+            throw (css::uno::RuntimeException, css::xml::sax::SAXParseException, css::io::IOException, std::exception) SAL_OVERRIDE;
 
         /**
         Parse the content of the given URI as an XML document and return
         a new DOM Document object.
         */
-        virtual Reference< XDocument > SAL_CALL parseURI(const OUString& uri)
-            throw (RuntimeException, SAXParseException, IOException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL parseURI(const OUString& uri)
+            throw (css::uno::RuntimeException, css::xml::sax::SAXParseException, css::io::IOException, std::exception) SAL_OVERRIDE;
 
         /**
         Specify the EntityResolver to be used to resolve entities present
         in the XML document to be parsed.
         */
-        virtual void SAL_CALL setEntityResolver(const Reference< XEntityResolver >& er)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setEntityResolver(const css::uno::Reference< css::xml::sax::XEntityResolver >& er)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual Reference< XEntityResolver > SAL_CALL getEntityResolver()
-            throw (RuntimeException);
+        virtual css::uno::Reference< css::xml::sax::XEntityResolver > SAL_CALL getEntityResolver()
+            throw (css::uno::RuntimeException);
 
 
         /**
         Specify the ErrorHandler to be used to report errors present in
         the XML document to be parsed.
         */
-        virtual void SAL_CALL setErrorHandler(const Reference< XErrorHandler >& eh)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setErrorHandler(const css::uno::Reference< css::xml::sax::XErrorHandler >& eh)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

@@ -45,6 +45,13 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
+using namespace css;
+using namespace css::io;
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::dom::events;
+using namespace css::xml::sax;
+
 namespace DOM
 {
     static xmlNodePtr lcl_getDocumentType(xmlDocPtr const i_pDocument)
@@ -988,7 +995,7 @@ namespace DOM
         return Reference< XEvent >(pEvent);
     }
 
-    // ::com::sun::star::xml::sax::XSAXSerializable
+    // css::xml::sax::XSAXSerializable
     void SAL_CALL CDocument::serialize(
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
@@ -1016,7 +1023,7 @@ namespace DOM
         saxify(i_xHandler);
     }
 
-    // ::com::sun::star::xml::sax::XFastSAXSerializable
+    // css::xml::sax::XFastSAXSerializable
     void SAL_CALL CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler,
                                             const Reference< XFastTokenHandler >& i_xTokenHandler,
                                             const Sequence< beans::StringPair >& i_rNamespaces,

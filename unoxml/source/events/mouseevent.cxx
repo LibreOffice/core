@@ -19,6 +19,10 @@
 
 #include <mouseevent.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom::events;
+using namespace css::xml::dom::views;
+
 namespace DOM { namespace events
 {
     CMouseEvent::CMouseEvent()
@@ -168,7 +172,7 @@ namespace DOM { namespace events
         return CUIEvent::getCancelable();
     }
 
-    com::sun::star::util::Time SAL_CALL CMouseEvent::getTimeStamp() throw (RuntimeException, std::exception)
+    css::util::Time SAL_CALL CMouseEvent::getTimeStamp() throw (RuntimeException, std::exception)
     {
         return CUIEvent::getTimeStamp();
     }

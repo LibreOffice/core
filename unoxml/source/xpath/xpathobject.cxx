@@ -24,6 +24,9 @@
 #include "../dom/document.hxx"
 #include <nodelist.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::xpath;
 
 namespace XPath
 {

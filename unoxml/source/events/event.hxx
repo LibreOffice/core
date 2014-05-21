@@ -31,15 +31,9 @@
 
 #include "../dom/node.hxx"
 
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::dom::events;
-
-
 namespace DOM {namespace events
 {
-class CEvent : public cppu::WeakImplHelper1< XEvent >
+class CEvent : public cppu::WeakImplHelper1< css::xml::dom::events::XEvent >
 {
 friend class CEventDispatcher;
 
@@ -47,31 +41,31 @@ protected:
     ::osl::Mutex m_Mutex;
     bool m_canceled;
     OUString m_eventType;
-    Reference< XEventTarget > m_target;
-    Reference< XEventTarget > m_currentTarget;
-    PhaseType m_phase;
+    css::uno::Reference< css::xml::dom::events::XEventTarget > m_target;
+    css::uno::Reference< css::xml::dom::events::XEventTarget > m_currentTarget;
+    css::xml::dom::events::PhaseType m_phase;
     bool m_bubbles;
     bool m_cancelable;
-    com::sun::star::util::Time m_time;
+    css::util::Time m_time;
 
 public:
 
     explicit CEvent();
 
     virtual ~CEvent();
-    virtual OUString SAL_CALL getType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual com::sun::star::util::Time SAL_CALL getTimeStamp() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL stopPropagation() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL preventDefault() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getBubbles() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getCancelable() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::util::Time SAL_CALL getTimeStamp() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL stopPropagation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL preventDefault() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL initEvent(
         const OUString& eventTypeArg,
         sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)  throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        sal_Bool cancelableArg)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 }}
 #endif

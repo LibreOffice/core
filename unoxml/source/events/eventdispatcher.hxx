@@ -33,18 +33,13 @@
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
 
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::dom::events;
-
 namespace DOM {
 
 class CDocument;
 
 namespace events {
 
-typedef std::multimap< xmlNodePtr, Reference< com::sun::star::xml::dom::events::XEventListener> > ListenerMap;
+typedef std::multimap< xmlNodePtr, css::uno::Reference< css::xml::dom::events::XEventListener> > ListenerMap;
 typedef std::map< OUString, ListenerMap*> TypeListenerMap;
 typedef std::vector<ListenerMap::value_type> ListenerPairVector;
 
@@ -58,27 +53,27 @@ public:
     void addListener(
         xmlNodePtr pNode,
         const OUString& aType,
-        const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
+        const css::uno::Reference<css::xml::dom::events::XEventListener>& aListener,
         bool bCapture);
 
     void removeListener(
         xmlNodePtr pNode,
         const OUString& aType,
-        const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
+        const css::uno::Reference<css::xml::dom::events::XEventListener>& aListener,
         bool bCapture);
 
     static void callListeners(
         TypeListenerMap const& rTMap,
         xmlNodePtr const pNode,
         const OUString& aType,
-        const Reference< XEvent >& xEvent);
+        const css::uno::Reference< css::xml::dom::events::XEvent >& xEvent);
 
     bool dispatchEvent(
         DOM::CDocument & rDocument,
         ::osl::Mutex & rMutex,
         xmlNodePtr const pNode,
-        Reference<XNode> const& xNode,
-        Reference< XEvent > const& xEvent) const;
+        css::uno::Reference<css::xml::dom::XNode> const& xNode,
+        css::uno::Reference< css::xml::dom::events::XEvent > const& xEvent) const;
 
     ~CEventDispatcher();
 };

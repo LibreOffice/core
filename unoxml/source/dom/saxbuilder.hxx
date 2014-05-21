@@ -41,97 +41,89 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::sax;
-
-using com::sun::star::lang::XServiceInfo;
-using com::sun::star::lang::XSingleServiceFactory;
-using com::sun::star::lang::XMultiServiceFactory;
-
 namespace DOM
 {
 
-    typedef std::stack< Reference< XNode > > NodeStack;
+    typedef std::stack< css::uno::Reference< css::xml::dom::XNode > > NodeStack;
     typedef std::map< OUString, OUString > NSMap;
     typedef std::map< OUString, OUString > AttrMap;
     typedef std::stack< NSMap > NSStack;
 
     class  CSAXDocumentBuilder
-        : public ::cppu::WeakImplHelper2< XSAXDocumentBuilder2, XServiceInfo >
+        : public ::cppu::WeakImplHelper2< css::xml::dom::XSAXDocumentBuilder2, css::lang::XServiceInfo >
     {
 
     private:
         ::osl::Mutex m_Mutex;
-        const Reference< XMultiServiceFactory > m_aServiceManager;
+        const css::uno::Reference< css::lang::XMultiServiceFactory > m_aServiceManager;
 
-        SAXDocumentBuilderState m_aState;
+        css::xml::dom::SAXDocumentBuilderState m_aState;
         NodeStack m_aNodeStack;
         NSStack m_aNSStack;
 
         OUString resolvePrefix(const OUString& aPrefix);
 
-        Reference< XDocument > m_aDocument;
-        Reference< XDocumentFragment > m_aFragment;
-        Reference< XLocator > m_aLocator;
+        css::uno::Reference< css::xml::dom::XDocument > m_aDocument;
+        css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
+        css::uno::Reference< css::xml::sax::XLocator > m_aLocator;
 
 
     public:
 
         // call for factory
-        static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
+        static css::uno::Reference< XInterface > getInstance(const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;
     static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
-        static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
+        static css::uno::Sequence< OUString > _getSupportedServiceNames();
+        static css::uno::Reference< XInterface > _getInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr);
 
-        CSAXDocumentBuilder(const Reference< XMultiServiceFactory >& mgr);
+        CSAXDocumentBuilder(const css::uno::Reference< css::lang::XMultiServiceFactory >& mgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames ()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL endDocument()
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL startElement( const OUString& aName,
-             const Reference< XAttributeList >& xAttribs )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL endElement( const OUString& aName )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL characters( const OUString& aChars )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL processingInstruction( const OUString& aTarget,
              const OUString& aData )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
+            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
 
 
         // XSAXDocumentBuilder
-        virtual SAXDocumentBuilderState SAL_CALL getState()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::xml::dom::SAXDocumentBuilderState SAL_CALL getState()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL reset()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< XDocument > SAL_CALL getDocument()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< XDocumentFragment > SAL_CALL getDocumentFragment()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL startDocumentFragment(const Reference< XDocument >& ownerDoc)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getDocument()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL getDocumentFragment()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL startDocumentFragment(const css::uno::Reference< css::xml::dom::XDocument >& ownerDoc)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL endDocumentFragment()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     };

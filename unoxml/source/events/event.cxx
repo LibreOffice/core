@@ -19,6 +19,9 @@
 
 #include <event.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom::events;
+
 namespace DOM { namespace events
 {
 
@@ -72,7 +75,7 @@ namespace DOM { namespace events
         return m_cancelable;
     }
 
-    com::sun::star::util::Time SAL_CALL
+    css::util::Time SAL_CALL
     CEvent::getTimeStamp() throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);

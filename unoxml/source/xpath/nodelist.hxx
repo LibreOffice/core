@@ -35,10 +35,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::xpath;
-
 namespace DOM {
     class CDocument;
 }
@@ -46,7 +42,7 @@ namespace DOM {
 namespace XPath
 {
 
-    class CNodeList : public cppu::WeakImplHelper1< XNodeList >
+    class CNodeList : public cppu::WeakImplHelper1< css::xml::dom::XNodeList >
     {
     private:
         /// #i115995# keep document alive
@@ -64,12 +60,12 @@ namespace XPath
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         /**
         Returns the indexth item in the collection.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

@@ -45,11 +45,15 @@
 #include <node.hxx>
 #include <document.hxx>
 
-
-using ::com::sun::star::xml::sax::InputSource;
+using namespace css::io;
+using namespace css::lang;
+using namespace css::ucb;
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::sax;
 using namespace ucbhelper;
-using namespace ::com::sun::star::ucb;
-using ::com::sun::star::task::XInteractionHandler;
+using css::task::XInteractionHandler;
+using css::xml::sax::InputSource;
 
 
 namespace DOM
@@ -59,7 +63,7 @@ namespace DOM
     {
     public:
         virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             InputSource is;
             is.sPublicId = sPublicId;
@@ -73,7 +77,7 @@ namespace DOM
                 Content aContent(sSystemId, aEnvironment, comphelper::getProcessComponentContext());
 
                 is.aInputStream = aContent.openStream();
-            } catch (const com::sun::star::uno::Exception&) {
+            } catch (const css::uno::Exception&) {
                 OSL_FAIL("exception in default entity resolver");
                 is.aInputStream.clear();
             }
@@ -205,7 +209,7 @@ namespace DOM
             // copy bytes to the provided buffer
             memcpy(buffer, chunk.getConstArray(), nread);
             return nread;
-        } catch (const com::sun::star::uno::Exception& ex) {
+        } catch (const css::uno::Exception& ex) {
             (void) ex;
             OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
@@ -225,7 +229,7 @@ namespace DOM
             if (pctx->freeOnClose)
                 delete pctx;
             return 0;
-        } catch (const com::sun::star::uno::Exception& ex) {
+        } catch (const css::uno::Exception& ex) {
             (void) ex;
             OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
@@ -297,7 +301,7 @@ namespace DOM
 
     void throwEx(xmlParserCtxtPtr ctxt)
     {
-        com::sun::star::xml::sax::SAXParseException saxex;
+        css::xml::sax::SAXParseException saxex;
         saxex.Message = make_error_message(ctxt);
         saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
         saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);

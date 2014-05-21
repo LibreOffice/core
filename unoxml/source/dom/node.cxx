@@ -43,9 +43,11 @@
 #include "../events/eventdispatcher.hxx"
 #include "../events/mutationevent.hxx"
 
-
-
-using namespace ::com::sun::star;
+using namespace css;
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::dom::events;
+using namespace css::xml::sax;
 
 namespace
 {
@@ -987,7 +989,7 @@ namespace DOM
 
         // --- XEventTarget
     void SAL_CALL CNode::addEventListener(const OUString& eventType,
-        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener,
+        const Reference< css::xml::dom::events::XEventListener >& listener,
         sal_Bool useCapture)
         throw (RuntimeException, std::exception)
     {
@@ -999,7 +1001,7 @@ namespace DOM
     }
 
     void SAL_CALL CNode::removeEventListener(const OUString& eventType,
-        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener,
+        const Reference< css::xml::dom::events::XEventListener >& listener,
         sal_Bool useCapture)
         throw (RuntimeException, std::exception)
     {

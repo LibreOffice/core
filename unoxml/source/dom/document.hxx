@@ -48,15 +48,6 @@
 
 #include "node.hxx"
 
-
-using namespace std;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::sax;
-using namespace com::sun::star::io;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::dom::events;
-
 namespace DOM
 {
     namespace events {
@@ -66,9 +57,9 @@ namespace DOM
     class CElement;
 
     typedef ::cppu::ImplInheritanceHelper6<
-            CNode, XDocument, XDocumentEvent,
-            XActiveDataControl, XActiveDataSource,
-            XSAXSerializable, XFastSAXSerializable>
+            CNode, css::xml::dom::XDocument, css::xml::dom::events::XDocumentEvent,
+            css::io::XActiveDataControl, css::io::XActiveDataSource,
+            css::xml::sax::XSAXSerializable, css::xml::sax::XFastSAXSerializable>
         CDocument_Base;
 
     class CDocument
@@ -84,12 +75,12 @@ namespace DOM
         xmlDocPtr const m_aDocPtr;
 
         // datacontrol/source state
-        typedef set< Reference< XStreamListener > > listenerlist_t;
+        typedef std::set< css::uno::Reference< css::io::XStreamListener > > listenerlist_t;
         listenerlist_t m_streamListeners;
-        Reference< XOutputStream > m_rOutputStream;
+        css::uno::Reference< css::io::XOutputStream > m_rOutputStream;
 
         typedef std::map< const xmlNodePtr,
-                    ::std::pair< WeakReference<XNode>, CNode* > > nodemap_t;
+                    ::std::pair< css::uno::WeakReference<css::xml::dom::XNode>, CNode* > > nodemap_t;
         nodemap_t m_NodeMap;
 
         ::std::auto_ptr<events::CEventDispatcher> const m_pEventDispatcher;
@@ -118,271 +109,271 @@ namespace DOM
 
         virtual CDocument & GetOwnerDocument() SAL_OVERRIDE;
 
-        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler) SAL_OVERRIDE;
+        virtual void saxify(const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler) SAL_OVERRIDE;
 
         virtual void fastSaxify( Context& rContext ) SAL_OVERRIDE;
 
-        virtual bool IsChildTypeAllowed(NodeType const nodeType) SAL_OVERRIDE;
+        virtual bool IsChildTypeAllowed(css::xml::dom::NodeType const nodeType) SAL_OVERRIDE;
 
         /**
         Creates an Attr of the given name.
         */
-        virtual Reference< XAttr > SAL_CALL createAttribute(const OUString& name)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XAttr > SAL_CALL createAttribute(const OUString& name)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates an attribute of the given qualified name and namespace URI.
         */
-        virtual Reference< XAttr > SAL_CALL createAttributeNS(const OUString& namespaceURI, const OUString& qualifiedName)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XAttr > SAL_CALL createAttributeNS(const OUString& namespaceURI, const OUString& qualifiedName)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates a CDATASection node whose value is the specified string.
         */
-        virtual Reference< XCDATASection > SAL_CALL createCDATASection(const OUString& data)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XCDATASection > SAL_CALL createCDATASection(const OUString& data)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates a Comment node given the specified string.
         */
-        virtual Reference< XComment > SAL_CALL createComment(const OUString& data)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XComment > SAL_CALL createComment(const OUString& data)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates an empty DocumentFragment object.
         */
-        virtual Reference< XDocumentFragment > SAL_CALL createDocumentFragment()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL createDocumentFragment()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates an element of the type specified.
         */
-        virtual Reference< XElement > SAL_CALL createElement(const OUString& tagName)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL createElement(const OUString& tagName)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates an element of the given qualified name and namespace URI.
         */
-        virtual Reference< XElement > SAL_CALL createElementNS(const OUString& namespaceURI, const OUString& qualifiedName)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL createElementNS(const OUString& namespaceURI, const OUString& qualifiedName)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates an EntityReference object.
         */
-        virtual Reference< XEntityReference > SAL_CALL createEntityReference(const OUString& name)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XEntityReference > SAL_CALL createEntityReference(const OUString& name)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates a ProcessingInstruction node given the specified name and
         data strings.
         */
-        virtual Reference< XProcessingInstruction > SAL_CALL createProcessingInstruction(
+        virtual css::uno::Reference< css::xml::dom::XProcessingInstruction > SAL_CALL createProcessingInstruction(
                 const OUString& target, const OUString& data)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates a Text node given the specified string.
         */
-        virtual Reference< XText > SAL_CALL createTextNode(const OUString& data)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XText > SAL_CALL createTextNode(const OUString& data)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The Document Type Declaration (see DocumentType) associated with this
         document.
         */
-        virtual Reference< XDocumentType > SAL_CALL getDoctype()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL getDoctype()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         This is a convenience attribute that allows direct access to the child
         node that is the root element of the document.
         */
-        virtual Reference< XElement > SAL_CALL getDocumentElement()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL getDocumentElement()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Returns the Element whose ID is given by elementId.
         */
-        virtual Reference< XElement > SAL_CALL getElementById(const OUString& elementId)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL getElementById(const OUString& elementId)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Returns a NodeList of all the Elements with a given tag name in the
         order in which they are encountered in a preorder traversal of the
         Document tree.
         */
-        virtual Reference< XNodeList > SAL_CALL getElementsByTagName(const OUString& tagname)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getElementsByTagName(const OUString& tagname)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Returns a NodeList of all the Elements with a given local name and
         namespace URI in the order in which they are encountered in a preorder
         traversal of the Document tree.
         */
-        virtual Reference< XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, const OUString& localName)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, const OUString& localName)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The DOMImplementation object that handles this document.
         */
-        virtual Reference< XDOMImplementation > SAL_CALL getImplementation()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDOMImplementation > SAL_CALL getImplementation()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Imports a node from another document to this document.
         */
-        virtual Reference< XNode > SAL_CALL importNode(const Reference< XNode >& importedNode, sal_Bool deep)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL importNode(const css::uno::Reference< css::xml::dom::XNode >& importedNode, sal_Bool deep)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
         // XDocumentEvent
-        virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::events::XEvent > SAL_CALL createEvent(const OUString& eventType) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XActiveDataControl,
         // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
-        virtual void SAL_CALL addListener(const Reference< XStreamListener >& aListener )  throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeListener(const Reference< XStreamListener >& aListener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL start() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL terminate() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addListener(const css::uno::Reference< css::io::XStreamListener >& aListener )  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeListener(const css::uno::Reference< css::io::XStreamListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL start() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL terminate() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XActiveDataSource
         // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
-        virtual void SAL_CALL setOutputStream(  const Reference< XOutputStream >& aStream ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< XOutputStream > SAL_CALL getOutputStream() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setOutputStream(  const css::uno::Reference< css::io::XOutputStream >& aStream ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        // --- delegation for XNde base.
-        virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(sal_Bool deep)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        // --- delegation for XNode base.
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL appendChild(const css::uno::Reference< css::xml::dom::XNode >& newChild)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE
         {
             return CNode::appendChild(newChild);
         }
-        virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getAttributes();
         }
-        virtual Reference< XNodeList > SAL_CALL getChildNodes()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getChildNodes();
         }
-        virtual Reference< XNode > SAL_CALL getFirstChild()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getFirstChild();
         }
-        virtual Reference< XNode > SAL_CALL getLastChild()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getLastChild();
         }
         virtual OUString SAL_CALL getLocalName()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getLocalName();
         }
         virtual OUString SAL_CALL getNamespaceURI()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getNamespaceURI();
         }
-        virtual Reference< XNode > SAL_CALL getNextSibling()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getNextSibling();
         }
-        virtual NodeType SAL_CALL getNodeType()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::xml::dom::NodeType SAL_CALL getNodeType()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getNodeType();
         }
-        virtual Reference< XDocument > SAL_CALL getOwnerDocument()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getOwnerDocument();
         }
-        virtual Reference< XNode > SAL_CALL getParentNode()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getParentNode();
         }
         virtual OUString SAL_CALL getPrefix()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
            return CNode::getPrefix();
         }
-        virtual Reference< XNode > SAL_CALL getPreviousSibling()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::getPreviousSibling();
         }
         virtual sal_Bool SAL_CALL hasAttributes()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::hasAttributes();
         }
         virtual sal_Bool SAL_CALL hasChildNodes()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::hasChildNodes();
         }
-        virtual Reference< XNode > SAL_CALL insertBefore(
-                const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
+                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& refChild)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE
         {
             return CNode::insertBefore(newChild, refChild);
         }
         virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return CNode::isSupported(feature, ver);
         }
         virtual void SAL_CALL normalize()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             CNode::normalize();
         }
-        virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const css::uno::Reference< css::xml::dom::XNode >& oldChild)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE
         {
             return CNode::removeChild(oldChild);
         }
-        virtual Reference< XNode > SAL_CALL replaceChild(
-                const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
+                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& oldChild)
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE
         {
             return CNode::replaceChild(newChild, oldChild);
         }
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE
         {
             return CNode::setNodeValue(nodeValue);
         }
         virtual void SAL_CALL setPrefix(const OUString& prefix)
-            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE
         {
             return CNode::setPrefix(prefix);
         }
 
-        // ::com::sun::star::xml::sax::XSAXSerializable
+        // css::xml::sax::XSAXSerializable
         virtual void SAL_CALL serialize(
-            const Reference< XDocumentHandler >& i_xHandler,
-            const Sequence< beans::StringPair >& i_rNamespaces)
-            throw (RuntimeException, SAXException, std::exception) SAL_OVERRIDE;
+            const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler,
+            const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces)
+            throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-        // ::com::sun::star::xml::sax::XFastSAXSerializable
-        virtual void SAL_CALL fastSerialize( const Reference< XFastDocumentHandler >& handler,
-                                             const Reference< XFastTokenHandler >& tokenHandler,
-                                             const Sequence< beans::StringPair >& i_rNamespaces,
-                                             const Sequence< beans::Pair< OUString, sal_Int32 > >& namespaces )
-            throw (SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
+        // css::xml::sax::XFastSAXSerializable
+        virtual void SAL_CALL fastSerialize( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& handler,
+                                             const css::uno::Reference< css::xml::sax::XFastTokenHandler >& tokenHandler,
+                                             const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces,
+                                             const css::uno::Sequence< css::beans::Pair< OUString, sal_Int32 > >& namespaces )
+            throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

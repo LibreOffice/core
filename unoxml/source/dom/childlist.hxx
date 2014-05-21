@@ -29,16 +29,12 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-
 namespace DOM
 {
     class CNode;
 
     class CChildList
-        : public cppu::WeakImplHelper1< XNodeList >
+        : public cppu::WeakImplHelper1< css::xml::dom::XNodeList >
     {
     private:
         ::rtl::Reference<CNode> const m_pNode;
@@ -51,12 +47,12 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         /**
         Returns the indexth item in the collection.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

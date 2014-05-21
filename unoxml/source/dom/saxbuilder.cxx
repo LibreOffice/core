@@ -26,6 +26,11 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+using namespace css::lang;
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::sax;
+
 namespace DOM
 {
     Reference< XInterface > CSAXDocumentBuilder::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)

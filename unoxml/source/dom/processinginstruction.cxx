@@ -23,6 +23,9 @@
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::sax;
 
 namespace DOM
 {

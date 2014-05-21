@@ -19,6 +19,10 @@
 
 #include <mutationevent.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::dom::events;
+
 namespace DOM { namespace events
 {
     CMutationEvent::CMutationEvent()
@@ -108,7 +112,7 @@ namespace DOM { namespace events
         return CEvent::getCancelable();
     }
 
-    com::sun::star::util::Time SAL_CALL CMutationEvent::getTimeStamp() throw (RuntimeException, std::exception)
+    css::util::Time SAL_CALL CMutationEvent::getTimeStamp() throw (RuntimeException, std::exception)
     {
         return CEvent::getTimeStamp();
     }

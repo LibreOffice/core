@@ -24,6 +24,8 @@
 #include <element.hxx>
 #include <document.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom;
 
 namespace DOM
 {

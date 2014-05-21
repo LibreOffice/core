@@ -43,15 +43,15 @@ public:
     explicit CBlankNode(css::uno::Reference< css::uno::XComponentContext > const & context);
     virtual ~CBlankNode() {}
 
-    // ::com::sun::star::lang::XServiceInfo:
+    // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception) SAL_OVERRIDE;
+    // css::lang::XInitialization:
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::rdf::XNode:
+    // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
@@ -80,8 +80,8 @@ css::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames() t
     return comp_CBlankNode::_getSupportedServiceNames();
 }
 
-// ::com::sun::star::lang::XInitialization:
-void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
+// css::lang::XInitialization:
+void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< css::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
 {
     if (aArguments.getLength() != 1) {
         throw css::lang::IllegalArgumentException(
@@ -106,7 +106,7 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
     }
 }
 
-// ::com::sun::star::rdf::XNode:
+// css::rdf::XNode:
 OUString SAL_CALL CBlankNode::getStringValue() throw (css::uno::RuntimeException, std::exception)
 {
     return m_NodeID;

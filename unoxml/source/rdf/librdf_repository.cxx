@@ -284,7 +284,7 @@ public:
         uno::Reference< uno::XComponentContext > const & i_xContext);
     virtual ~librdf_Repository();
 
-    // ::com::sun::star::lang::XServiceInfo:
+    // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(
@@ -292,7 +292,7 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::rdf::XRepository:
+    // css::rdf::XRepository:
     virtual uno::Reference< rdf::XBlankNode > SAL_CALL createBlankNode()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Reference<rdf::XNamedGraph> SAL_CALL importGraph(
@@ -344,7 +344,7 @@ public:
         throw (uno::RuntimeException, rdf::QueryException,
             rdf::RepositoryException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::rdf::XDocumentRepository:
+    // css::rdf::XDocumentRepository:
     virtual void SAL_CALL setStatementRDFa(
             const uno::Reference< rdf::XResource > & i_xSubject,
             const uno::Sequence< uno::Reference< rdf::XURI > > & i_rPredicates,
@@ -369,9 +369,9 @@ public:
         throw (uno::RuntimeException,
             rdf::RepositoryException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XInitialization:
+    // css::lang::XInitialization:
     virtual void SAL_CALL initialize(
-            const uno::Sequence< ::com::sun::star::uno::Any > & i_rArguments)
+            const uno::Sequence< css::uno::Any > & i_rArguments)
         throw (uno::RuntimeException, uno::Exception, std::exception) SAL_OVERRIDE;
 
     // XNamedGraph forwards ---------------------------------------------
@@ -483,7 +483,7 @@ public:
         const_cast<boost::shared_ptr<librdf_query>& >(m_pQuery).reset();
     }
 
-    // ::com::sun::star::container::XEnumeration:
+    // css::container::XEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Any SAL_CALL nextElement()
@@ -508,7 +508,7 @@ private:
 };
 
 
-// ::com::sun::star::container::XEnumeration:
+// css::container::XEnumeration:
 sal_Bool SAL_CALL
 librdf_GraphResult::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
@@ -531,7 +531,7 @@ librdf_node* librdf_GraphResult::getContext_Lock() const
     return m_pContext.get();
 }
 
-::com::sun::star::uno::Any SAL_CALL
+css::uno::Any SAL_CALL
 librdf_GraphResult::nextElement()
 throw (uno::RuntimeException, container::NoSuchElementException,
     lang::WrappedTargetException, std::exception)
@@ -596,14 +596,14 @@ public:
         const_cast<boost::shared_ptr<librdf_query>& >(m_pQuery).reset();
     }
 
-    // ::com::sun::star::container::XEnumeration:
+    // css::container::XEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Any SAL_CALL nextElement()
         throw (uno::RuntimeException, container::NoSuchElementException,
             lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::rdf::XQuerySelectResult:
+    // css::rdf::XQuerySelectResult:
     virtual uno::Sequence< OUString > SAL_CALL getBindingNames()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -623,7 +623,7 @@ private:
 };
 
 
-// ::com::sun::star::container::XEnumeration:
+// css::container::XEnumeration:
 sal_Bool SAL_CALL
 librdf_QuerySelectResult::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
@@ -645,7 +645,7 @@ public:
     }
 };
 
-::com::sun::star::uno::Any SAL_CALL
+css::uno::Any SAL_CALL
 librdf_QuerySelectResult::nextElement()
 throw (uno::RuntimeException, container::NoSuchElementException,
     lang::WrappedTargetException, std::exception)
@@ -682,7 +682,7 @@ throw (uno::RuntimeException, container::NoSuchElementException,
     }
 }
 
-// ::com::sun::star::rdf::XQuerySelectResult:
+// css::rdf::XQuerySelectResult:
 uno::Sequence< OUString > SAL_CALL
 librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException, std::exception)
 {
@@ -710,17 +710,17 @@ public:
 
     virtual ~librdf_NamedGraph() {}
 
-    // ::com::sun::star::rdf::XNode:
+    // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::rdf::XURI:
+    // css::rdf::XURI:
     virtual OUString SAL_CALL getNamespace()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getLocalName()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::rdf::XNamedGraph:
+    // css::rdf::XNamedGraph:
     virtual uno::Reference<rdf::XURI> SAL_CALL getName()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL clear()
@@ -754,14 +754,14 @@ private:
 };
 
 
-// ::com::sun::star::rdf::XNode:
+// css::rdf::XNode:
 OUString SAL_CALL librdf_NamedGraph::getStringValue()
 throw (uno::RuntimeException, std::exception)
 {
     return m_xName->getStringValue();
 }
 
-// ::com::sun::star::rdf::XURI:
+// css::rdf::XURI:
 OUString SAL_CALL librdf_NamedGraph::getNamespace()
 throw (uno::RuntimeException, std::exception)
 {
@@ -774,7 +774,7 @@ throw (uno::RuntimeException, std::exception)
     return m_xName->getLocalName();
 }
 
-// ::com::sun::star::rdf::XNamedGraph:
+// css::rdf::XNamedGraph:
 uno::Reference< rdf::XURI > SAL_CALL librdf_NamedGraph::getName()
 throw (uno::RuntimeException, std::exception)
 {
@@ -909,7 +909,7 @@ librdf_Repository::getSupportedServiceNames() throw (uno::RuntimeException, std:
     return comp_librdf_Repository::_getSupportedServiceNames();
 }
 
-// ::com::sun::star::rdf::XRepository:
+// css::rdf::XRepository:
 uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
 throw (uno::RuntimeException, std::exception)
 {
@@ -1494,7 +1494,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
         ? sal_True : sal_False;
 }
 
-// ::com::sun::star::rdf::XDocumentRepository:
+// css::rdf::XDocumentRepository:
 void SAL_CALL librdf_Repository::setStatementRDFa(
     const uno::Reference< rdf::XResource > & i_xSubject,
     const uno::Sequence< uno::Reference< rdf::XURI > > & i_rPredicates,
@@ -1747,9 +1747,9 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
                                   ::boost::shared_ptr<librdf_node>());
 }
 
-// ::com::sun::star::lang::XInitialization:
+// css::lang::XInitialization:
 void SAL_CALL librdf_Repository::initialize(
-    const uno::Sequence< ::com::sun::star::uno::Any > & i_rArguments)
+    const uno::Sequence< css::uno::Any > & i_rArguments)
 throw (uno::RuntimeException, uno::Exception, std::exception)
 {
     (void) i_rArguments;
