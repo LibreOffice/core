@@ -55,24 +55,6 @@ ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize, sal_uIntPtr nMe
     mpsC_Stream = new z_stream;
 }
 
-ZCodec::ZCodec()
-    : mbInit(0)
-    , mbStatus(false)
-    , mbFinish(false)
-    , mnMemUsage(MAX_MEM_USAGE)
-    , mpIStm(NULL)
-    , mpInBuf(NULL)
-    , mnInBufSize(DEFAULT_IN_BUFSIZE)
-    , mnInToRead(0)
-    , mpOStm(NULL)
-    , mpOutBuf(NULL)
-    , mnOutBufSize(DEFAULT_OUT_BUFSIZE)
-    , mnCRC(0)
-    , mnCompressMethod(0)
-{
-    mpsC_Stream = new z_stream;
-}
-
 ZCodec::~ZCodec()
 {
     delete (z_stream*) mpsC_Stream;
