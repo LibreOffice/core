@@ -2091,7 +2091,6 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
     pCodec.BeginCompression();
     pCodec.Write( aStream, (const sal_uInt8*)pStream->GetData(), nEndPos );
     pCodec.EndCompression();
-    assert(false);
     nEndPos = aStream.Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
