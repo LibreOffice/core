@@ -237,7 +237,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         xDocSh->GetDoc()->GetIDocumentUndoRedo().DoUndo( false );
 
         xDocSh->GetWrtShell()->InsertGlossary( *pGroup, rShortName );
-        if( !xDocSh->GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( false ) )
+        if( !xDocSh->GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) )
         {
             // we create a default SfxPrinter.
             // ItemSet is deleted by Sfx!
@@ -249,7 +249,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
             SfxPrinter* pPrinter = new SfxPrinter( pSet );
 
             // and append it to the document.
-            xDocSh->GetDoc()->getIDocumentDeviceAccess()->setPrinter( pPrinter, true, true );
+            xDocSh->GetDoc()->getIDocumentDeviceAccess().setPrinter( pPrinter, true, true );
         }
 
         xDocSh->SetTitle( aDocTitle );

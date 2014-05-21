@@ -1999,7 +1999,7 @@ OutputDevice& SwViewShell::GetRefDev() const
     else if ( 0 != mpTmpRef )
         pTmpOut = mpTmpRef;
     else
-        pTmpOut = GetDoc()->getIDocumentDeviceAccessConst()->getReferenceDevice( true );
+        pTmpOut = GetDoc()->getIDocumentDeviceAccess().getReferenceDevice( true );
 
     return *pTmpOut;
 }
@@ -2508,8 +2508,8 @@ SwPostItMgr* SwViewShell::GetPostItMgr()
  */
 const IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() const { return mpDoc; }
 IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() { return mpDoc; }
-const IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() const { return mpDoc->getIDocumentDeviceAccessConst(); }
-IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() { return mpDoc->getIDocumentDeviceAccess(); }
+const IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() const { return &mpDoc->getIDocumentDeviceAccess(); }
+IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() { return &mpDoc->getIDocumentDeviceAccess(); }
 const IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() const { return mpDoc->getIDocumentMarkAccess(); }
 IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() { return mpDoc->getIDocumentMarkAccess(); }
 const IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() const { return mpDoc; }

@@ -64,7 +64,7 @@ void SwRenderData::DeletePostItData()
     if (HasPostItData())
     {
         // printer needs to remain at the real document
-        m_pPostItShell->GetDoc()->getIDocumentDeviceAccess()->setPrinter( 0, false, false );
+        m_pPostItShell->GetDoc()->getIDocumentDeviceAccess().setPrinter( 0, false, false );
         m_pPostItShell.reset();
         m_pPostItFields.reset();
     }

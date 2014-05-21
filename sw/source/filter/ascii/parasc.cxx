@@ -112,8 +112,8 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     if( !rOpt.GetFontName().isEmpty() )
     {
         Font aTextFont( rOpt.GetFontName(), Size( 0, 10 ) );
-        if( pDoc->getIDocumentDeviceAccessConst()->getPrinter( false ) )
-            aTextFont = pDoc->getIDocumentDeviceAccessConst()->getPrinter( false )->GetFontMetric( aTextFont );
+        if( pDoc->getIDocumentDeviceAccess().getPrinter( false ) )
+            aTextFont = pDoc->getIDocumentDeviceAccess().getPrinter( false )->GetFontMetric( aTextFont );
         SvxFontItem aFont( aTextFont.GetFamily(), aTextFont.GetName(),
                            OUString(), aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
         pItemSet->Put( aFont );

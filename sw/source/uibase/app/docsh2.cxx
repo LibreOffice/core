@@ -154,8 +154,8 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
     if( pTempView )
     {
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
-        if( !GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( false ) )
-            pTempView->SetPrinter( GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( false ), SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
+        if( !GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) )
+            pTempView->SetPrinter( GetDoc()->getIDocumentDeviceAccess().getPrinter( false ), SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
         GetDoc()->CheckDefaultPageFmt();
         SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, false);
         while (pTmpFrm)
@@ -631,7 +631,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxPrinter* pSavePrinter = 0;
                 if( 0 != pSrcView)
                 {
-                    SfxPrinter* pTemp = GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( false );
+                    SfxPrinter* pTemp = GetDoc()->getIDocumentDeviceAccess().getPrinter( false );
                     if(pTemp)
                         pSavePrinter = new SfxPrinter(*pTemp);
                     bSetModified = IsModified() || pSrcView->IsModified();
@@ -660,7 +660,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     GetDoc()->SetModified();
                 if(pSavePrinter)
                 {
-                    GetDoc()->getIDocumentDeviceAccess()->setPrinter( pSavePrinter, true, true);
+                    GetDoc()->getIDocumentDeviceAccess().setPrinter( pSavePrinter, true, true);
                     //pSavePrinter must not be deleted again
                 }
                 pViewFrm->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));

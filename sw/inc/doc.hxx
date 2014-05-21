@@ -272,7 +272,6 @@ class SW_DLLPUBLIC SwDoc :
 
     // private Member
     ::boost::scoped_ptr<SwNodes> m_pNodes;  //< document content (Nodes Array)
-    ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_DeviceAccess;
     SwAttrPool* mpAttrPool;             //< the attribute pool
     SwPageDescs maPageDescs;             //< PageDescriptors
     Link        maOle2Link;              //< OLE 2.0-notification
@@ -294,6 +293,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
     const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
+    ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -677,8 +677,8 @@ public:
     virtual void setRsidRoot( sal_uInt32 nVal );
 
     // IDocumentDeviceAccess
-    const IDocumentDeviceAccess* getIDocumentDeviceAccessConst() const;
-    IDocumentDeviceAccess* getIDocumentDeviceAccess();
+    IDocumentDeviceAccess const & getIDocumentDeviceAccess() const;
+    IDocumentDeviceAccess & getIDocumentDeviceAccess();
 
     // IDocumentMarkAccess
     IDocumentMarkAccess* getIDocumentMarkAccess();

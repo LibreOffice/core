@@ -244,14 +244,14 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
 }
 
 // IDocumentDeviceAccess
-const IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccessConst() const
+IDocumentDeviceAccess const & SwDoc::getIDocumentDeviceAccess() const
 {
-    return m_DeviceAccess.get();
+    return *m_pDeviceAccess;
 }
 
-IDocumentDeviceAccess* SwDoc::getIDocumentDeviceAccess()
+IDocumentDeviceAccess & SwDoc::getIDocumentDeviceAccess()
 {
-    return m_DeviceAccess.get();
+    return *m_pDeviceAccess;
 }
 
 

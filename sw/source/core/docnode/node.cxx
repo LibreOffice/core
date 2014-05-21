@@ -1913,7 +1913,7 @@ SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnly
  * Document Interface Access
  */
 const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return GetDoc(); }
-const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return GetDoc()->getIDocumentDeviceAccessConst(); }
+const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return &GetDoc()->getIDocumentDeviceAccess(); }
 const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return GetDoc(); }
 const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }
 const IDocumentLineNumberAccess* SwNode::getIDocumentLineNumberAccess() const { return GetDoc(); }
