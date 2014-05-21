@@ -51,6 +51,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editdata.hxx>
 #include "sdabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd
 {
@@ -148,7 +149,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     else
     {
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        AbstractSdPresLayoutDlg* pDlg = pFact ? pFact->CreateSdPresLayoutDlg(mpDocSh, NULL, aSet ) : 0;
+        boost::scoped_ptr<AbstractSdPresLayoutDlg> pDlg(pFact ? pFact->CreateSdPresLayoutDlg(mpDocSh, NULL, aSet ) : 0);
 
         sal_uInt16 nResult = pDlg ? pDlg->Execute() : static_cast<short>(RET_CANCEL);
 
@@ -171,7 +172,6 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             default:
                 bError = true;
         }
-        delete pDlg;
     }
 
     if (!bError)

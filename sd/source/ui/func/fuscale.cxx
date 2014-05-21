@@ -39,6 +39,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxdlg.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -70,7 +71,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SfxItemSet aNewAttr( mpDoc->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
-        SvxZoomItem* pZoomItem;
+        boost::scoped_ptr<SvxZoomItem> pZoomItem;
         sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
 
         nValue = (sal_Int16) mpWindow->GetZoom();
@@ -79,11 +80,11 @@ void FuScale::DoExecute( SfxRequest& rReq )
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) &&
             static_cast<DrawViewShell*>(mpViewShell)->IsZoomOnPage() )
         {
-            pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nValue );
+            pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nValue ));
         }
         else
         {
-            pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nValue );
+            pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_PERCENT, nValue ));
         }
 
         // limit range
@@ -109,11 +110,11 @@ void FuScale::DoExecute( SfxRequest& rReq )
         pZoomItem->SetValueSet( nZoomValues );
         aNewAttr.Put( *pZoomItem );
 
-        AbstractSvxZoomDialog* pDlg=NULL;
+        boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            pDlg = pFact->CreateSvxZoomDialog(NULL, aNewAttr);
+            pDlg.reset(pFact->CreateSvxZoomDialog(NULL, aNewAttr));
         }
 
         if( pDlg )
@@ -124,8 +125,6 @@ void FuScale::DoExecute( SfxRequest& rReq )
             {
                 case RET_CANCEL:
                 {
-                    delete pDlg;
-                    delete pZoomItem;
                     rReq.Ignore ();
                     return; // Cancel
                 }
@@ -141,7 +140,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
             const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
 
-            delete pDlg;
+            pDlg.reset();
 
             switch (((const SvxZoomItem &) aArgs.Get (SID_ATTR_ZOOM)).GetType ())
             {
@@ -177,8 +176,6 @@ void FuScale::DoExecute( SfxRequest& rReq )
                     break;
             }
         }
-
-        delete pZoomItem;
     }
     else if(mpViewShell && (pArgs->Count () == 1))
     {
