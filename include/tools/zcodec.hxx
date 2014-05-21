@@ -54,7 +54,7 @@ class TOOLS_DLLPUBLIC ZCodec
     void*           mpsC_Stream;
 
     void            InitCompress();
-    void            InitDecompress();
+    void            InitDecompress(SvStream & inStream);
     void            ImplWriteBack();
 
     void            UpdateCRC( sal_uInt8* pSource, long nDatSize );
