@@ -320,7 +320,7 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
     if( aLine.getLength() > 1 && static_cast<unsigned char>(aLine[0]) == 0x1f )
     {
         if( static_cast<unsigned char>(aLine[1]) == 0x8b ) // check for gzip
-            nCompressMethod = ZCODEC_DEFAULT | ZCODEC_GZ_LIB;
+            nCompressMethod = ZCODEC_DEFAULT_COMPRESSION | ZCODEC_GZ_LIB;
     }
 
     if( nCompressMethod != 0 )
