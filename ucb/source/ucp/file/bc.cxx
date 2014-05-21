@@ -582,7 +582,7 @@ BaseContent::addProperty(
 {
     if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name.isEmpty() )
     {
-        throw lang::IllegalArgumentException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
     }
 
     m_pMyShell->associate( m_aUncPath,Name,DefaultValue,Attributes );
@@ -598,7 +598,7 @@ BaseContent::removeProperty(
 {
 
     if( m_nState & Deleted )
-        throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
     m_pMyShell->deassociate( m_aUncPath, Name );
 }
@@ -744,7 +744,7 @@ BaseContent::setParent(
     throw( lang::NoSupportException,
            RuntimeException, std::exception)
 {
-    throw lang::NoSupportException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+    throw lang::NoSupportException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 
@@ -925,12 +925,12 @@ BaseContent::setPropertyValues(
             OUString NewTitle;
             if( !( Values[i].Value >>= NewTitle ) )
             {
-                ret[i] <<= beans::IllegalTypeException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+                ret[i] <<= beans::IllegalTypeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
                 break;
             }
             else if( NewTitle.isEmpty() )
             {
-                ret[i] <<= lang::IllegalArgumentException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >(), 0 );
+                ret[i] <<= lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
                 break;
             }
 

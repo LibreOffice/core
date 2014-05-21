@@ -205,7 +205,7 @@ FileProvider::queryContent(
                                               aUnc );
 
     if(  err )
-        throw IllegalIdentifierException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+        throw IllegalIdentifierException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 
     return Reference< XContent >( new BaseContent( m_pMyShell,xIdentifier,aUnc ) );
 }
@@ -396,7 +396,7 @@ XPropertySetInfoImpl2::getPropertyByName(
         if( m_seq[i].Name == aName )
             return m_seq[i];
 
-    throw UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+    throw UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 
@@ -478,7 +478,7 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
         aPropertyName.equalsAscii( "HostName" ) )
         return;
     else
-        throw UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 
@@ -510,7 +510,7 @@ FileProvider::getPropertyValue(
         return aAny;
     }
     else
-        throw UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 
