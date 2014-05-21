@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_0231aa0b",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-05-21T12:44:59Z",
+      "side": 1,
+      "message": "That\u0027s not what I meant.  Remove the whole #ifdef DEBUG/TRACE_OSL_PROFILE code blocks, not just the #ifdefs around them.  They really serve zero usefulness.  And then it also serves zero usefulness to introduce a special sal.osl.profile log area; just go with sal.osl for the few remaining SAL_WARN[_IF]s.",
+      "revId": "0778fed9dfb67223686a7a2c8701d6fe102e1736",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
