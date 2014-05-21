@@ -31,7 +31,6 @@
 #define ZCODEC_GZ_LIB               (0x00020000UL)
 
 #define ZCODEC_PNG_DEFAULT ( ZCODEC_NO_COMPRESSION | ZCODEC_UPDATE_CRC )
-#define ZCODEC_DEFAULT  ( ZCODEC_DEFAULT_COMPRESSION )
 
 class SvStream;
 
@@ -60,7 +59,7 @@ public:
                     ZCodec( sal_uIntPtr nInBuf = 0x8000UL, sal_uIntPtr nOutBuf = 0x8000UL );
     virtual         ~ZCodec();
 
-    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
+    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT_COMPRESSION );
     virtual long    EndCompression();
     bool            IsFinished () const { return mbFinish; }
 
@@ -83,7 +82,7 @@ class GZCodec : public ZCodec
 public:
                     GZCodec(){};
                     virtual ~GZCodec(){};
-    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT ) SAL_OVERRIDE
+    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT_COMPRESSION ) SAL_OVERRIDE
     {
         ZCodec::BeginCompression( nCompressMethod | ZCODEC_GZ_LIB );
     };
