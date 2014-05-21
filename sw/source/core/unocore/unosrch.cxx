@@ -581,7 +581,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
         };
     }
     else
-        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 }
 
 uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
@@ -617,7 +617,7 @@ SET_UINT16:
         };
     }
     else
-        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     return aRet;
 }
 
