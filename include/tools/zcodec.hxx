@@ -27,8 +27,6 @@
 #define DEFAULT_IN_BUFSIZE          (0x00008000UL)
 #define DEFAULT_OUT_BUFSIZE         (0x00008000UL)
 
-#define MAX_MEM_USAGE 8
-
 // memory requirement using compress:
 //  [ INBUFFER ] + [ OUTBUFFER ] + 128KB + 1 << (MEM_USAGE+9)
 // memory requirement using decompress:
@@ -57,7 +55,6 @@ private:
     sal_uIntPtr     mbInit;
     bool            mbStatus;
     bool            mbFinish;
-    sal_uIntPtr     mnMemUsage;
     SvStream*       mpIStm;
     sal_uInt8*      mpInBuf;
     sal_uIntPtr     mnInBufSize;
@@ -74,7 +71,7 @@ private:
     void            ImplWriteBack();
 
 public:
-                    ZCodec( sal_uIntPtr nInBuf = DEFAULT_IN_BUFSIZE, sal_uIntPtr nOutBuf = DEFAULT_OUT_BUFSIZE, sal_uIntPtr nMemUsage = MAX_MEM_USAGE );
+                    ZCodec( sal_uIntPtr nInBuf = DEFAULT_IN_BUFSIZE, sal_uIntPtr nOutBuf = DEFAULT_OUT_BUFSIZE );
     virtual         ~ZCodec();
 
     virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );

@@ -37,11 +37,10 @@
 
 static const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 
-ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize, sal_uIntPtr nMemUsage )
+ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize )
     : mbInit(0)
     , mbStatus(false)
     , mbFinish(false)
-    , mnMemUsage(nMemUsage)
     , mpIStm(NULL)
     , mpInBuf(NULL)
     , mnInBufSize(nInBufSize)
@@ -397,7 +396,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
             mbInit = 3;
 
             mbStatus = ( deflateInit2_( PZSTREAM, mnCompressMethod & 0xff, Z_DEFLATED,
-                MAX_WBITS, mnMemUsage, ( mnCompressMethod >> 8 ) & 0xff,
+                MAX_WBITS, MAX_MEM_LEVEL, ( mnCompressMethod >> 8 ) & 0xff,
                     ZLIB_VERSION, sizeof( z_stream ) ) >= 0 );
 
             PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
