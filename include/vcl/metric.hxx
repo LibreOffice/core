@@ -77,8 +77,23 @@ public:
 };
 
 
-// - FontCharMap -
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const FontMetric& rMetric )
+{
+    stream << "{"
+           << "name=" << "\"" << rMetric.GetName() << "\""
+           << ",ascent=" << rMetric.GetAscent()
+           << ",descent=" << rMetric.GetDescent()
+           << ",intLeading=" << rMetric.GetIntLeading()
+           << ",extLeading=" << rMetric.GetExtLeading()
+           << ",lineHeight=" << rMetric.GetLineHeight()
+           << ",slant=" << rMetric.GetSlant()
+           << "}";
+    return stream;
+}
 
+// - FontCharMap -
 
 class VCL_DLLPUBLIC FontCharMap
 {
