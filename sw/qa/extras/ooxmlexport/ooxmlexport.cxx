@@ -2060,7 +2060,16 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
 }
 #endif
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
+{
+    /* File getting crash while saving in LO.
+     * Checking if document.xml file is getting created after fix
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+}
 
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
