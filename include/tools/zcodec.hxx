@@ -39,7 +39,6 @@ class TOOLS_DLLPUBLIC ZCodec
     State           meState;
     bool            mbStatus;
     bool            mbFinish;
-    SvStream*       mpIStm;
     sal_uInt8*      mpInBuf;
     sal_uIntPtr     mnInBufSize;
     sal_uIntPtr     mnInToRead;

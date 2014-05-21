@@ -41,7 +41,6 @@ ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize )
     : meState(STATE_INIT)
     , mbStatus(false)
     , mbFinish(false)
-    , mpIStm(NULL)
     , mpInBuf(NULL)
     , mnInBufSize(nInBufSize)
     , mnInToRead(0)
@@ -66,7 +65,7 @@ void ZCodec::BeginCompression( int nCompressLevel, bool updateCrc, bool gzLib )
     assert(meState == STATE_INIT);
     mbStatus = true;
     mbFinish = false;
-    mpIStm = mpOStm = NULL;
+    mpOStm = NULL;
     mnInToRead = 0xffffffff;
     mpInBuf = mpOutBuf = NULL;
     PZSTREAM->total_out = PZSTREAM->total_in = 0;
@@ -249,7 +248,6 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
     if (meState == STATE_INIT)
     {
         InitDecompress(rIStm);
-        mpIStm = &rIStm;
     }
     PZSTREAM->avail_out = nSize;
     PZSTREAM->next_out = pData;
@@ -267,7 +265,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
                 break;
             }
 
-            PZSTREAM->avail_in = mpIStm->Read (
+            PZSTREAM->avail_in = rIStm.Read (
                 PZSTREAM->next_in = mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
 
