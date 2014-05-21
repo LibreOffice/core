@@ -2861,20 +2861,6 @@ if test $_os = Darwin; then
                 ;;
             esac
             ;;
-        10.6)
-            case "$with_macosx_sdk" in
-            10.6)
-                ;;
-            *)
-                AC_MSG_WARN([Building with a SDK > 10.6 possibly breaks 10.6 compatibility. Do not use for the TDF build])
-                add_warning "Building with a SDK > 10.6 possibly breaks 10.6 compatibility. Do not use for the TDF build"
-                ;;
-            esac
-            ;;
-        *)
-            AC_MSG_WARN([Building with a minimum version requirement > 10.6 breaks 10.6 compatibility. Do not use for the TDF build])
-            add_warning "Building with a minimum version requirement > 10.6 breaks 10.6 compatibility. Do not use for the TDF build"
-            ;;
         esac
     fi
 
