@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_429332fb",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-21T09:56:09Z",
+      "side": 1,
+      "message": "Please never mix whitespace and functional changes in the same commit.",
+      "revId": "1b530f7e9c652b54dcd6870d6f04758a2c121e4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
