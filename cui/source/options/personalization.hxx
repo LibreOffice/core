@@ -11,8 +11,12 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <salhelper/thread.hxx>
+#include <rtl/ref.hxx>
+#include <vcl/prgsbar.hxx>
 
 class FixedText;
+class SearchAndParseThread;
 
 class SvxPersonalizationTabPage : public SfxTabPage
 {
@@ -57,9 +61,12 @@ class SelectPersonaDialog : public ModalDialog
 {
 private:
     Edit *m_pEdit;                          ///< The input line for the Persona URL
+    PushButton *pButton;
+
 
 public:
     SelectPersonaDialog( Window *pParent );
+    ::rtl::Reference< SearchAndParseThread > m_aSearchThread;
 
     /// Get the URL from the Edit field.
     OUString GetPersonaURL() const;
@@ -69,7 +76,21 @@ private:
     DECL_LINK( VisitPersonas, PushButton* );
 };
 
+class SearchAndParseThread: public salhelper::Thread
+{
+private:
 
+    SelectPersonaDialog *m_pPersonaDialog;
+    OUString m_aURL;
+
+    virtual ~SearchAndParseThread();
+    virtual void execute() SAL_OVERRIDE;
+
+public:
+
+    SearchAndParseThread( SelectPersonaDialog* pDialog,
+                          const OUString& rURL );
+};
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_PERSONALIZATION_HXX
 

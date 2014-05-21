@@ -35,7 +35,6 @@ using namespace ::com::sun::star::ucb;
 SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
 {
-    PushButton *pButton;
     get( pButton, "search_personas" );
     pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
 
@@ -55,29 +54,10 @@ OUString SelectPersonaDialog::GetPersonaURL() const
 
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 {
-    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-    PersonasDocHandler* pHandler = new PersonasDocHandler();
-    Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
-    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-    uno::Reference< io::XInputStream > xStream;
-    xParser->setDocumentHandler( xDocHandler );
-
     OUString searchTerm = m_pEdit->GetText();
     OUString rURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/";
-    if ( !xFileAccess.is() )
-        return false;
-
-    try {
-        xStream = xFileAccess->openFileRead( rURL );
-    }
-    catch (...)
-    {
-        return false;
-    }
-    xml::sax::InputSource aParserInput;
-    aParserInput.aInputStream = xStream;
-    xParser->parseStream( aParserInput );
+    m_aSearchThread = new SearchAndParseThread( this, rURL );
+    m_aSearchThread->launch();
     return 0;
 }
 
@@ -295,6 +275,44 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
     m_aPersonaSettings = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
 
     return true;
+}
+
+
+SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
+                          const OUString& rURL ) :
+            Thread( "cuiPersonasSearchThread" ),
+            m_pPersonaDialog( pDialog ),
+            m_aURL( rURL )
+{
+}
+
+SearchAndParseThread::~SearchAndParseThread()
+{
+}
+
+void SearchAndParseThread::execute()
+{
+    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
+    PersonasDocHandler* pHandler = new PersonasDocHandler();
+    Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
+    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+    uno::Reference< io::XInputStream > xStream;
+    xParser->setDocumentHandler( xDocHandler );
+
+    // if ( !xFileAccess.is() )
+    //     return false;
+
+    try {
+        xStream = xFileAccess->openFileRead( m_aURL );
+    }
+    catch (...)
+    {
+        // return false;
+    }
+    xml::sax::InputSource aParserInput;
+    aParserInput.aInputStream = xStream;
+    xParser->parseStream( aParserInput );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
