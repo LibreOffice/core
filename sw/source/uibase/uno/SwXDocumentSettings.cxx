@@ -380,7 +380,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             {
                 if( !mpPrinter && !sPrinterName.isEmpty() && mpDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
-                    SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccessConst()->getPrinter( true );
+                    SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
                     {
                         SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
@@ -520,7 +520,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             else if ( nTmp != document::PrinterIndependentLayout::HIGH_RESOLUTION )
                 throw IllegalArgumentException();
 
-            mpDoc->getIDocumentDeviceAccess()->setReferenceDeviceType( bUseVirDev, bHiResVirDev );
+            mpDoc->getIDocumentDeviceAccess().setReferenceDeviceType( bUseVirDev, bHiResVirDev );
         }
         break;
         case HANDLE_IS_LABEL_DOC :
@@ -816,12 +816,12 @@ void SwXDocumentSettings::_postSetValues ()
         // #i86352# the printer is also used as container for options by sfx
         // when setting a printer it should have decent default options
         SfxItemSet aOptions( mpPrinter->GetOptions() );
-        SwPrintData aPrtData( mpDoc->getIDocumentDeviceAccessConst()->getPrintData() );
+        SwPrintData aPrtData( mpDoc->getIDocumentDeviceAccess().getPrintData() );
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         aOptions.Put(aAddPrinterItem);
         mpPrinter->SetOptions( aOptions );
 
-        mpDoc->getIDocumentDeviceAccess()->setPrinter( mpPrinter, true, true );
+        mpDoc->getIDocumentDeviceAccess().setPrinter( mpPrinter, true, true );
     }
 
     mpPrinter = 0;
@@ -891,13 +891,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_NAME:
         {
-            SfxPrinter *pPrinter = mpDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
+            SfxPrinter *pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( false );
             rValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
         }
         break;
         case HANDLE_PRINTER_SETUP:
         {
-            SfxPrinter *pPrinter = mpDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
+            SfxPrinter *pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( false );
             if (pPrinter)
             {
                 SvMemoryStream aStream;

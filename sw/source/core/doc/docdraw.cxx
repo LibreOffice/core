@@ -596,7 +596,7 @@ void SwDoc::InitDrawModel()
     mpDrawModel->SetLinkManager( &GetLinkManager() );
     mpDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
 
-    OutputDevice* pRefDev = getIDocumentDeviceAccessConst()->getReferenceDevice( false );
+    OutputDevice* pRefDev = getIDocumentDeviceAccess().getReferenceDevice( false );
     if ( pRefDev )
         mpDrawModel->SetRefDevice( pRefDev );
 

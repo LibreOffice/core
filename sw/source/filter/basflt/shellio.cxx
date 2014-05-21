@@ -558,7 +558,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     pTemplate = new SwDoc;
     pTemplate->acquire();
     pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
-    pTemplate->getIDocumentDeviceAccessConst()->getPrinter( true );
+    pTemplate->getIDocumentDeviceAccess().getPrinter( true );
     pTemplate->RemoveAllFmtLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
     aTemplateNm = "$$Dummy$$";
@@ -818,7 +818,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     // (e.g. if no printer was set) then set it to DIN A4.
     // #i37248# - Modifications are only allowed at a new document.
     // <pOutDoc> contains a new document, if <pDoc> is set - see above.
-    if ( pDoc && !pOutDoc->getIDocumentDeviceAccessConst()->getPrinter( false ) )
+    if ( pDoc && !pOutDoc->getIDocumentDeviceAccess().getPrinter( false ) )
     {
         const SwPageDesc& rPgDsc = pOutDoc->GetPageDesc( 0 );
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );

@@ -164,7 +164,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     const bool bHasPostIts      = sw_GetPostIts( pDocShell->GetDoc(), 0 );
 
     // get default values to use in dialog from documents SwPrintData
-    const SwPrintData &rPrintData = pDocShell->GetDoc()->getIDocumentDeviceAccessConst()->getPrintData();
+    const SwPrintData &rPrintData = pDocShell->GetDoc()->getIDocumentDeviceAccess().getPrintData();
 
     // Get current page number
     sal_uInt16 nCurrentPage = 1;
@@ -2448,7 +2448,7 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     const SwPrintUIOptions &rPrintUIOptions,
     bool bIsPDFEXport )
 {
-    SwPrintData aDocPrintData( rDoc.getIDocumentDeviceAccessConst()->getPrintData() );
+    SwPrintData aDocPrintData( rDoc.getIDocumentDeviceAccess().getPrintData() );
 
     aDocPrintData.SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
     aDocPrintData.SetPrintTable( rPrintUIOptions.IsPrintTables() );
@@ -2469,7 +2469,7 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     aDocPrintData.SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
     aDocPrintData.SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
 
-    rDoc.getIDocumentDeviceAccess()->setPrintData( aDocPrintData );
+    rDoc.getIDocumentDeviceAccess().setPrintData( aDocPrintData );
 }
 
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
@@ -2845,7 +2845,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             aRenderer[ nRenderDataIdxStart + 7 ].Name  = "NUpVerticalSpacing";
             aRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
             {
-                Printer* pPrinter = pDocShell->GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( false );
+                Printer* pPrinter = pDocShell->GetDoc()->getIDocumentDeviceAccess().getPrinter( false );
                 if ( pPrinter )
                 {
                     awt::Size aNewPageSize;

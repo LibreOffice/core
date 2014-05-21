@@ -124,14 +124,14 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         pDoc->set(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION,
                   !aAsian.IsKerningWesternTextOnly());
         pDoc->setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
-        pDoc->getIDocumentDeviceAccess()->setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
+        pDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
 
         SubInitNew();
 
         // for all
 
         SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
-        SfxPrinter* pPrt = pDoc->getIDocumentDeviceAccessConst()->getPrinter( false );
+        SfxPrinter* pPrt = pDoc->getIDocumentDeviceAccess().getPrinter( false );
 
         OUString sEntry;
         sal_uInt16 aFontWhich[] =
@@ -423,7 +423,7 @@ void SwDocShell::UpdateFontList()
         if( pDoc )
         {
             delete pFontList;
-            pFontList = new FontList( pDoc->getIDocumentDeviceAccessConst()->getReferenceDevice( true ) );
+            pFontList = new FontList( pDoc->getIDocumentDeviceAccess().getReferenceDevice( true ) );
             PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
         }
         bInUpdateFontList = false;
@@ -676,7 +676,7 @@ void SwDocShell::SubInitNew()
 /*
  * Document Interface Access
  */
-IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc->getIDocumentDeviceAccess(); }
+IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return &pDoc->getIDocumentDeviceAccess(); }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
 

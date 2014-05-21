@@ -184,13 +184,13 @@ static void lcl_DelFmtIndices( SwFmt* pFmt )
  */
 SwDoc::SwDoc()
     : m_pNodes( new SwNodes(this) ),
-    m_DeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
     mpAttrPool(new SwAttrPool(this)),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     m_pUndoManager(new ::sw::UndoManager(
             boost::shared_ptr<SwNodes>(new SwNodes(this)), *this, *this, *this)),
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
+    m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -578,7 +578,7 @@ SwDoc::~SwDoc()
     // Without explicitly freeing the DocumentDeviceManager
     // and relying on the implicit freeing there would be a crash
     // due to it happening after SwAttrPool is freed.
-    m_DeviceAccess.reset();
+    m_pDeviceAccess.reset();
 
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)

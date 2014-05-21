@@ -150,7 +150,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)rDocument.getIDocumentDeviceAccessConst()->getPrinter( true )),
+                            : (OutputDevice*)rDocument.getIDocumentDeviceAccess().getPrinter( true )),
     mpTmpRef( 0 ),
     mpOpt( 0 ),
     mpAccOptions( new SwAccessibilityOptions ),
@@ -226,7 +226,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)rShell.GetDoc()->getIDocumentDeviceAccessConst()->getPrinter( true )),
+                            : (OutputDevice*)rShell.GetDoc()->getIDocumentDeviceAccess().getPrinter( true )),
     mpTmpRef( 0 ),
     mpOpt( 0 ),
     mpAccOptions( new SwAccessibilityOptions ),
