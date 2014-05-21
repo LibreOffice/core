@@ -386,7 +386,7 @@ void PNGWriterImpl::ImplWriteIDAT ()
         mpCurrentScan = new sal_uInt8[ mnDeflateInSize ];
         ImplClearFirstScanline();
     }
-    mpZCodec->BeginCompression( ZCODEC_PNG_DEFAULT + mnCompLevel );
+    mpZCodec->BeginCompression( mnCompLevel, true );
     mpZCodec->SetCRC( mnCRC );
     SvMemoryStream aOStm;
     if ( mnInterlaced == 0 )

@@ -900,7 +900,7 @@ void PNGReaderImpl::ImplReadIDAT()
         if ( !mbzCodecInUse )
         {
             mbzCodecInUse = true;
-            mpZCodec->BeginCompression( ZCODEC_PNG_DEFAULT );
+            mpZCodec->BeginCompression( ZCODEC_NO_COMPRESSION, true );
         }
         mpZCodec->SetBreak( mnChunkLen );
         SvMemoryStream aIStrm( &(*maDataIter), mnChunkLen, STREAM_READ );

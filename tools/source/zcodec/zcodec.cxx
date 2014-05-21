@@ -49,7 +49,9 @@ ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize )
     , mpOutBuf(NULL)
     , mnOutBufSize(nOutBufSize)
     , mnCRC(0)
-    , mnCompressMethod(0)
+    , mnCompressLevel(0)
+    , mbUpdateCrc(false)
+    , mbGzLib(false)
 {
     mpsC_Stream = new z_stream;
 }
@@ -59,7 +61,7 @@ ZCodec::~ZCodec()
     delete (z_stream*) mpsC_Stream;
 }
 
-void ZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
+void ZCodec::BeginCompression( int nCompressLevel, bool updateCrc, bool gzLib )
 {
     mbInit = 0;
     mbStatus = true;
@@ -68,7 +70,9 @@ void ZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
     mnInToRead = 0xffffffff;
     mpInBuf = mpOutBuf = NULL;
     PZSTREAM->total_out = PZSTREAM->total_in = 0;
-    mnCompressMethod = nCompressMethod;
+    mnCompressLevel = nCompressLevel;
+    mbUpdateCrc = updateCrc;
+    mbGzLib = gzLib;
     PZSTREAM->zalloc = ( alloc_func )0;
     PZSTREAM->zfree = ( free_func )0;
     PZSTREAM->opaque = ( voidpf )0;
@@ -154,7 +158,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
             PZSTREAM->avail_in = mpIStm->Read( PZSTREAM->next_in = mpInBuf, nInToRead );
             mnInToRead -= nInToRead;
 
-            if ( mnCompressMethod & ZCODEC_UPDATE_CRC )
+            if ( mbUpdateCrc )
                 mnCRC = UpdateCRC( mnCRC, mpInBuf, nInToRead );
 
         }
@@ -223,7 +227,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
                 PZSTREAM->next_in = mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
 
-            if ( mnCompressMethod & ZCODEC_UPDATE_CRC )
+            if ( mbUpdateCrc )
                 mnCRC = UpdateCRC( mnCRC, mpInBuf, nInToRead );
 
         }
@@ -277,7 +281,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
                 PZSTREAM->next_in = mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
 
-            if ( mnCompressMethod & ZCODEC_UPDATE_CRC )
+            if ( mbUpdateCrc )
                 mnCRC = UpdateCRC( mnCRC, mpInBuf, nInToRead );
 
         }
@@ -304,7 +308,7 @@ void ZCodec::ImplWriteBack()
 
     if ( nAvail )
     {
-        if ( mbInit & 2 && ( mnCompressMethod & ZCODEC_UPDATE_CRC ) )
+        if ( mbInit & 2 && mbUpdateCrc )
             mnCRC = UpdateCRC( mnCRC, mpOutBuf, nAvail );
         mpOStm->Write( PZSTREAM->next_out = mpOutBuf, nAvail );
         PZSTREAM->avail_out = mnOutBufSize;
@@ -338,7 +342,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
         if ( nIOFlag )
         {
             mbInit = 1;
-            if ( mbStatus && ( mnCompressMethod & ZCODEC_GZ_LIB ) )
+            if ( mbStatus &&  mbGzLib )
             {
                 sal_uInt8 n1, n2, j, nMethod, nFlags;
                 for ( int i = 0; i < 2; i++ )   // gz - magic number
@@ -395,7 +399,7 @@ void ZCodec::ImplInitBuf ( bool nIOFlag )
         {
             mbInit = 3;
 
-            mbStatus = ( deflateInit2_( PZSTREAM, mnCompressMethod & 0xff, Z_DEFLATED,
+            mbStatus = ( deflateInit2_( PZSTREAM, mnCompressLevel, Z_DEFLATED,
                 MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY,
                     ZLIB_VERSION, sizeof( z_stream ) ) >= 0 );
 

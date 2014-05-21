@@ -22,15 +22,10 @@
 
 #include <tools/toolsdllapi.h>
 
-#define ZCODEC_NO_COMPRESSION       (0x00000000UL)
-#define ZCODEC_BEST_SPEED           (0x00000001UL)
-#define ZCODEC_DEFAULT_COMPRESSION  (0x00000006UL)
-#define ZCODEC_BEST_COMPRESSION     (0x00000009UL)
-
-#define ZCODEC_UPDATE_CRC           (0x00010000UL)
-#define ZCODEC_GZ_LIB               (0x00020000UL)
-
-#define ZCODEC_PNG_DEFAULT ( ZCODEC_NO_COMPRESSION | ZCODEC_UPDATE_CRC )
+#define ZCODEC_NO_COMPRESSION       0
+#define ZCODEC_BEST_SPEED           1
+#define ZCODEC_DEFAULT_COMPRESSION  6
+#define ZCODEC_BEST_COMPRESSION     9
 
 class SvStream;
 
@@ -49,7 +44,9 @@ private:
     sal_uIntPtr     mnOutBufSize;
 
     sal_uIntPtr     mnCRC;
-    sal_uIntPtr     mnCompressMethod;
+    int             mnCompressLevel;
+    bool            mbUpdateCrc;
+    bool            mbGzLib;
     void*           mpsC_Stream;
 
     void            ImplInitBuf( bool nIOFlag );
@@ -59,7 +56,7 @@ public:
                     ZCodec( sal_uIntPtr nInBuf = 0x8000UL, sal_uIntPtr nOutBuf = 0x8000UL );
     virtual         ~ZCodec();
 
-    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT_COMPRESSION );
+    virtual void    BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = false );
     virtual long    EndCompression();
     bool            IsFinished () const { return mbFinish; }
 
@@ -82,9 +79,9 @@ class GZCodec : public ZCodec
 public:
                     GZCodec(){};
                     virtual ~GZCodec(){};
-    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT_COMPRESSION ) SAL_OVERRIDE
+    virtual void    BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = true ) SAL_OVERRIDE
     {
-        ZCodec::BeginCompression( nCompressMethod | ZCODEC_GZ_LIB );
+        ZCodec::BeginCompression( nCompressLevel, updateCrc, gzLib );
     };
 };
 

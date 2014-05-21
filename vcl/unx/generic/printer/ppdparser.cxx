@@ -322,7 +322,7 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
         // so let's try to decompress the stream
         mpMemStream = new SvMemoryStream( 4096, 4096 );
         ZCodec aCodec;
-        aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION | ZCODEC_GZ_LIB );
+        aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, false, true );
         long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
         aCodec.EndCompression();
         if( nComp < 0 )
