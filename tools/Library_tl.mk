@@ -24,6 +24,8 @@ $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,tl,$(SRCDIR)/tools/inc/pch/precompiled_tl))
+
 $(eval $(call gb_Library_add_defs,tl,\
     -DTOOLS_DLLIMPLEMENTATION \
 ))
