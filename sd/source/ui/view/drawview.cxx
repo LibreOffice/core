@@ -236,9 +236,18 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         ++iter;
                         pPara = iter != aSelList.rend() ? *iter : NULL;
 
-                        if( !pPara && nDepth > 0 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
-                            pOutliner->GetDepth( pOutliner->GetAbsPos(*(aSelList.begin())) ) > 0 )
-                            pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
+                        bool bJumpToLevel1 = false;
+                        if( !pPara && nDepth > 0 && rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+                            bJumpToLevel1 = true;
+
+                        if (bJumpToLevel1)
+                        {
+                            iter = aSelList.rend();
+                            --iter;
+
+                            if (pOutliner->GetDepth(pOutliner->GetAbsPos(*iter)) > 0)
+                                pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
+                        }
                     }
 
                     mpDocSh->SetWaitCursor( false );
