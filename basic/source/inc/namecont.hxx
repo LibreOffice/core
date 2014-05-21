@@ -582,7 +582,9 @@ private:
     sal_Bool mbReadOnlyLink;
     sal_Bool mbPreload;
 
+protected:
     sal_Bool mbPasswordProtected;
+private:
     sal_Bool mbPasswordVerified;
     bool mbDoc50Password;
     OUString maPassword;
@@ -702,6 +704,8 @@ public:
     }
 
 protected:
+    virtual bool isLoadedStorable();
+
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
 };
 
