@@ -115,11 +115,10 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     long nOldTotal_In = PZSTREAM->total_in;
 
     assert(meState == STATE_INIT);
-    mpIStm = &rIStm;
     mpOStm = &rOStm;
     InitCompress();
     mpInBuf = new sal_uInt8[ mnInBufSize ];
-    while (( PZSTREAM->avail_in = mpIStm->Read( PZSTREAM->next_in = mpInBuf, mnInBufSize )) != 0 )
+    while (( PZSTREAM->avail_in = rIStm.Read( PZSTREAM->next_in = mpInBuf, mnInBufSize )) != 0 )
     {
         if ( PZSTREAM->avail_out == 0 )
             ImplWriteBack();
@@ -139,9 +138,8 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     long    nOldTotal_Out = PZSTREAM->total_out;
 
     assert(meState == STATE_INIT);
-    mpIStm = &rIStm;
     mpOStm = &rOStm;
-    InitDecompress();
+    InitDecompress(rIStm);
     PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
     do
     {
@@ -149,7 +147,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
             nInToRead = ( mnInBufSize > mnInToRead ) ? mnInToRead : mnInBufSize;
-            PZSTREAM->avail_in = mpIStm->Read( PZSTREAM->next_in = mpInBuf, nInToRead );
+            PZSTREAM->avail_in = rIStm.Read( PZSTREAM->next_in = mpInBuf, nInToRead );
             mnInToRead -= nInToRead;
 
             if ( mbUpdateCrc )
@@ -204,10 +202,9 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
     if ( mbFinish )
         return 0;           // PZSTREAM->total_out;
 
-    mpIStm = &rIStm;
     if (meState == STATE_INIT)
     {
-        InitDecompress();
+        InitDecompress(rIStm);
     }
     PZSTREAM->avail_out = nSize;
     PZSTREAM->next_out = pData;
@@ -216,7 +213,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
             nInToRead = (mnInBufSize > mnInToRead) ? mnInToRead : mnInBufSize;
-            PZSTREAM->avail_in = mpIStm->Read (
+            PZSTREAM->avail_in = rIStm.Read (
                 PZSTREAM->next_in = mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
 
@@ -251,8 +248,8 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
 
     if (meState == STATE_INIT)
     {
+        InitDecompress(rIStm);
         mpIStm = &rIStm;
-        InitDecompress();
     }
     PZSTREAM->avail_out = nSize;
     PZSTREAM->next_out = pData;
@@ -340,7 +337,7 @@ void ZCodec::InitCompress()
     PZSTREAM->avail_out = mnOutBufSize;
 }
 
-void ZCodec::InitDecompress()
+void ZCodec::InitDecompress(SvStream & inStream)
 {
     assert(meState == STATE_INIT);
     meState = STATE_DECOMPRESS;
@@ -349,45 +346,45 @@ void ZCodec::InitDecompress()
         sal_uInt8 n1, n2, j, nMethod, nFlags;
         for ( int i = 0; i < 2; i++ )   // gz - magic number
         {
-            mpIStm->ReadUChar( j );
+            inStream.ReadUChar( j );
             if ( j != gz_magic[ i ] )
                 mbStatus = false;
         }
-        mpIStm->ReadUChar( nMethod );
-        mpIStm->ReadUChar( nFlags );
+        inStream.ReadUChar( nMethod );
+        inStream.ReadUChar( nFlags );
         if ( nMethod != Z_DEFLATED )
             mbStatus = false;
         if ( ( nFlags & GZ_RESERVED ) != 0 )
             mbStatus = false;
         /* Discard time, xflags and OS code: */
-        mpIStm->SeekRel( 6 );
+        inStream.SeekRel( 6 );
         /* skip the extra field */
         if ( nFlags & GZ_EXTRA_FIELD )
         {
-            mpIStm->ReadUChar( n1 ).ReadUChar( n2 );
-            mpIStm->SeekRel( n1 + ( n2 << 8 ) );
+            inStream.ReadUChar( n1 ).ReadUChar( n2 );
+            inStream.SeekRel( n1 + ( n2 << 8 ) );
         }
         /* skip the original file name */
         if ( nFlags & GZ_ORIG_NAME)
         {
             do
             {
-                mpIStm->ReadUChar( j );
+                inStream.ReadUChar( j );
             }
-            while ( j && !mpIStm->IsEof() );
+            while ( j && !inStream.IsEof() );
         }
         /* skip the .gz file comment */
         if ( nFlags & GZ_COMMENT )
         {
             do
             {
-                mpIStm->ReadUChar( j );
+                inStream.ReadUChar( j );
             }
-            while ( j && !mpIStm->IsEof() );
+            while ( j && !inStream.IsEof() );
         }
         /* skip the header crc */
         if ( nFlags & GZ_HEAD_CRC )
-            mpIStm->SeekRel( 2 );
+            inStream.SeekRel( 2 );
         if ( mbStatus )
             mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? false : true;
     }
