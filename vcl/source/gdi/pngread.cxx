@@ -169,7 +169,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpMaskBmp       ( NULL ),
     mpAlphaMask     ( NULL ),
     mpMaskAcc       ( NULL ),
-    mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
+    mpZCodec        ( new ZCodec ),
     mpInflateInBuf  ( NULL ),
     mpScanPrior     ( NULL ),
     mpTransTab      ( NULL ),

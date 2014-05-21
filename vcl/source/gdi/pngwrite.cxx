@@ -102,7 +102,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     , mbStatus(true)
     , mpAccess(NULL)
     , mpMaskAccess(NULL)
-    , mpZCodec(new ZCodec(DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE))
+    , mpZCodec(new ZCodec)
     , mpDeflateInBuf(NULL)
     , mpPreviousScan(NULL)
     , mpCurrentScan(NULL)
