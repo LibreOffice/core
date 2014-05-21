@@ -52,10 +52,10 @@ private:
 
 public:
                     ZCodec( sal_uIntPtr nInBuf = 0x8000UL, sal_uIntPtr nOutBuf = 0x8000UL );
-    virtual         ~ZCodec();
+                    ~ZCodec();
 
-    virtual void    BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = false );
-    virtual long    EndCompression();
+    void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = false );
+    long            EndCompression();
     bool            IsFinished () const { return mbFinish; }
 
     long            Compress( SvStream& rIStm, SvStream& rOStm );
@@ -70,17 +70,6 @@ public:
     void            SetCRC( sal_uIntPtr nCurrentCRC );
     sal_uIntPtr     UpdateCRC( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize );
     sal_uIntPtr     GetCRC();
-};
-
-class GZCodec : public ZCodec
-{
-public:
-                    GZCodec(){};
-                    virtual ~GZCodec(){};
-    virtual void    BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool updateCrc = false, bool gzLib = true ) SAL_OVERRIDE
-    {
-        ZCodec::BeginCompression( nCompressLevel, updateCrc, gzLib );
-    };
 };
 
 #endif
