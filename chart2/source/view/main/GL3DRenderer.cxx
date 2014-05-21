@@ -1601,7 +1601,6 @@ sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
     boost::scoped_array<sal_uInt8> buf(new sal_uInt8[4]);
     glReadPixels(nX, nY, 1, 1, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
     Color aColor(buf[3], buf[2], buf[1], buf[0]);
-    static sal_Int32 i = 0;
     return aColor.GetColor();
 }
 
