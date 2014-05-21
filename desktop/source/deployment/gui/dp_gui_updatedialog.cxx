@@ -907,7 +907,6 @@ void UpdateDialog::initDescription()
     m_pPublisherLink->Hide();
     m_pReleaseNotesLabel->Hide();
     m_pReleaseNotesLink->Hide();
-    m_pDescriptions->Hide();
 
     Link aLink = LINK( this, UpdateDialog, hyperlink_clicked );
     m_pPublisherLink->SetClickHdl( aLink );
@@ -924,8 +923,7 @@ void UpdateDialog::clearDescription()
     m_pReleaseNotesLabel->Hide();
     m_pReleaseNotesLink->Hide();
     m_pReleaseNotesLink->SetURL( sEmpty );
-    m_pDescriptions->Hide();
-    m_pDescriptions->Clear();
+    m_pDescriptions->SetText("");
 }
 
 bool UpdateDialog::showDescription(uno::Reference< xml::dom::XNode > const & aUpdateInfo)
@@ -976,7 +974,6 @@ bool UpdateDialog::showDescription( const OUString& rDescription)
         // nothing to show
         return false;
 
-    m_pDescriptions->Show();
     m_pDescriptions->SetText( rDescription );
     return true;
 }

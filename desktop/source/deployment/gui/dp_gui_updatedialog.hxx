@@ -37,7 +37,6 @@
 #include <vcl/fixedhyper.hxx>
 #include <vcl/throbber.hxx>
 
-#include "descedit.hxx"
 #include "dp_gui_updatedata.hxx"
 
 /// @HTML
@@ -181,7 +180,7 @@ private:
     FixedHyperlink* m_pPublisherLink;
     FixedText* m_pReleaseNotesLabel;
     FixedHyperlink* m_pReleaseNotesLink;
-    dp_gui::DescriptionEdit* m_pDescriptions;
+    VclMultiLineEdit* m_pDescriptions;
     HelpButton* m_pHelp;
     PushButton* m_pOk;
     PushButton* m_pClose;
