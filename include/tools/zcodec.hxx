@@ -53,7 +53,8 @@ class TOOLS_DLLPUBLIC ZCodec
     bool            mbGzLib;
     void*           mpsC_Stream;
 
-    void            ImplInitBuf( bool nIOFlag );
+    void            InitCompress();
+    void            InitDecompress();
     void            ImplWriteBack();
 
     void            UpdateCRC( sal_uInt8* pSource, long nDatSize );
