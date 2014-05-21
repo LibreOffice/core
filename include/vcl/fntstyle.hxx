@@ -22,12 +22,7 @@
 
 #include <sal/types.h>
 
-#ifndef ENUM_FONTRELIEF_DECLARED
-#define ENUM_FONTRELIEF_DECLARED
-
 enum FontRelief { RELIEF_NONE, RELIEF_EMBOSSED, RELIEF_ENGRAVED, FontRelief_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
-
-#endif
 
 typedef sal_uInt8 FontKerning;
 #define KERNING_FONTSPECIFIC        ((FontKerning)0x01)
