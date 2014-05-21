@@ -1726,6 +1726,8 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     if ( m_pRedlineData && m_pRedlineData->GetType() == nsRedlineType_t::REDLINE_DELETE )
         nTextToken = XML_delText;
 
+    sal_Unicode prevUnicode = *pBegin;
+
     for ( const sal_Unicode *pIt = pBegin; pIt < pEnd; ++pIt )
     {
         switch ( *pIt )
@@ -1733,20 +1735,26 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
             case 0x09: // tab
                 impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
                 m_pSerializer->singleElementNS( XML_w, XML_tab, FSEND );
+                prevUnicode = *pIt;
                 break;
             case 0x0b: // line break
                 {
-                    if (impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt ))
+                    if (impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt ) || (prevUnicode == *pIt))
+                    {
                         m_pSerializer->singleElementNS( XML_w, XML_br, FSEND );
+                        prevUnicode = *pIt;
+                    }
                 }
                 break;
             case 0x1E: //non-breaking hyphen
                 impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
                 m_pSerializer->singleElementNS( XML_w, XML_noBreakHyphen, FSEND );
+                prevUnicode = *pIt;
                 break;
             case 0x1F: //soft (on demand) hyphen
                 impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
                 m_pSerializer->singleElementNS( XML_w, XML_softHyphen, FSEND );
+                prevUnicode = *pIt;
                 break;
             default:
                 if ( *pIt < 0x0020 ) // filter out the control codes
@@ -1754,6 +1762,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
                     impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt );
                     OSL_TRACE( "Ignored control code %x in a text run.", *pIt );
                 }
+                prevUnicode = *pIt;
                 break;
         }
     }
