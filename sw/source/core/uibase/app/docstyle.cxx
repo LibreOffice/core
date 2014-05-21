@@ -1338,7 +1338,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
                         if( USHRT_MAX != nPoolId ) // It's a standard numbering rule
                         {
-                            pRule = rDoc.GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
+                            rDoc.GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
                         }
                     }
                 }
