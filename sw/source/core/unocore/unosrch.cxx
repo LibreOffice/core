@@ -74,19 +74,18 @@ void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Prope
                 throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException )
 {
     const beans::PropertyValue* pProps = aSearchAttribs.getConstArray();
-    sal_uInt32 i;
 
     //delete all existing values
-    for( i = 0; i < nArrLen; i++)
+    for(sal_uInt32 i = 0; i < nArrLen; ++i)
     {
         delete pValueArr[i];
         pValueArr[i] = 0;
     }
 
-    sal_uInt32 nLen = aSearchAttribs.getLength();
-    for(i = 0; i < nLen; i++)
+    const sal_uInt32 nLen = aSearchAttribs.getLength();
+    for(sal_uInt32 i = 0; i < nLen; ++i)
     {
-        sal_uInt16 nIndex = 0;
+        sal_uInt32 nIndex = 0;
         PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
         while(pProps[i].Name != aIt->sName)
         {
