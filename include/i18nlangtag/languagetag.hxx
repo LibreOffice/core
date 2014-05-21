@@ -228,6 +228,8 @@ public:
     /** If this is a valid BCP 47 language tag.
 
         Always resolves an empty tag to the system locale.
+
+        @seealso    static bool isValidBcp47(const OUString&)
      */
     bool                            isValidBcp47() const;
 
@@ -478,6 +480,20 @@ public:
         Always resolves an empty tag to the system locale.
      */
     static com::sun::star::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
+
+    /** If rString represents a valid BCP 47 language tag.
+
+        Never resolves an empty tag to the system locale, in fact an empty
+        string is invalid here. Does not create an instance to be registered
+        with a conversion to Locale or LanguageType.
+
+        @param  o_pCanonicalized
+                If given and rString is a valid BCP 47 language tag, the
+                canonicalized form is assigned, which may differ from the
+                original string even if that was a valid tag. If rString is not
+                a valid tag, nothing is assigned.
+     */
+    static bool         isValidBcp47( const OUString& rString, OUString* o_pCanonicalized = NULL );
 
     /** If nLang is a generated on-the-fly LangID */
     static bool         isOnTheFlyID( LanguageType nLang );
