@@ -710,7 +710,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     const OUString aFileName( rMedium.GetName() );
 
     // No View, so the whole Document!
-    if ( pWrtShell )
+    if ( pWrtShell && !Application::IsHeadlessModeEnabled() )
     {
         SwWait aWait( *this, true );
         // #i106906#

@@ -196,7 +196,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     OUString aThumbnail;
     // don't generate thumbnail when in headless mode, or on non-desktop (?)
 #if HAVE_FEATURE_DESKTOP
-    if (!pDocSh->IsModified() && !Application::IsHeadlessModeRequested())
+    if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled())
     {
         // not modified => the document matches what is in the shell
         boost::shared_ptr<GDIMetaFile> pMetaFile = pDocSh->GetPreviewMetaFile();
