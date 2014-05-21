@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_42e572a6",
+        "filename": "include/sal/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-05-21T05:27:40Z",
+      "side": 0,
+      "message": "Are you _sure_ these builtins exist on other compilers than gcc? My guess is they do not. IOW, the macros need to be defined specifically for every compiler.",
+      "revId": "03c629244d682b9fa0e0d2b30d9899e2ec79fa4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
