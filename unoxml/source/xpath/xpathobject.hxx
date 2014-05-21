@@ -34,24 +34,19 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::xpath;
-
-
 namespace DOM {
     class CDocument;
 }
 
 namespace XPath
 {
-    class CXPathObject : public cppu::WeakImplHelper1< XXPathObject >
+    class CXPathObject : public cppu::WeakImplHelper1< css::xml::xpath::XXPathObject >
     {
     private:
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
         ::osl::Mutex & m_rMutex;
         boost::shared_ptr<xmlXPathObject> const m_pXPathObj;
-        XPathObjectType const m_XPathObjectType;
+        css::xml::xpath::XPathObjectType const m_XPathObjectType;
 
     public:
         CXPathObject( ::rtl::Reference<DOM::CDocument> const& pDocument,
@@ -61,53 +56,53 @@ namespace XPath
     /**
         get object type
     */
-    virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::xml::xpath::XPathObjectType SAL_CALL getObjectType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get the nodes from a nodelist type object
     */
-    virtual Reference< XNodeList > SAL_CALL getNodeList()
-        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getNodeList()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
      /**
         get value of a boolean object
      */
-     virtual sal_Bool SAL_CALL getBoolean() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+     virtual sal_Bool SAL_CALL getBoolean() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as byte
     */
-    virtual sal_Int8 SAL_CALL getByte() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int8 SAL_CALL getByte() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as short
     */
-    virtual sal_Int16 SAL_CALL getShort() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL getShort() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as long
     */
-    virtual sal_Int32 SAL_CALL getLong() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getLong() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as hyper
     */
-    virtual sal_Int64 SAL_CALL getHyper() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getHyper() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as float
     */
-    virtual float SAL_CALL getFloat() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual float SAL_CALL getFloat() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as double
     */
-    virtual double SAL_CALL getDouble() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getDouble() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get string value
     */
-    virtual OUString SAL_CALL getString() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getString() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     };
 }

@@ -21,6 +21,8 @@
 
 #include <rtl/instance.hxx>
 
+using namespace css::uno;
+using namespace css::xml::dom;
 
 namespace DOM
 {

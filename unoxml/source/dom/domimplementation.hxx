@@ -29,14 +29,10 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-
 namespace DOM
 {
     class CDOMImplementation
-        : public cppu::WeakImplHelper1< XDOMImplementation >
+        : public cppu::WeakImplHelper1< css::xml::dom::XDOMImplementation >
     {
 
     public:
@@ -49,20 +45,20 @@ namespace DOM
         /**
         Creates a DOM Document object of the specified type with its document element.
         */
-        virtual Reference <XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const Reference< XDocumentType >& doctype)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const css::uno::Reference< css::xml::dom::XDocumentType >& doctype)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates an empty DocumentType node.
         */
-        virtual Reference< XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Test if the DOM implementation implements a specific feature.
         */
         virtual sal_Bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
 }
 #endif

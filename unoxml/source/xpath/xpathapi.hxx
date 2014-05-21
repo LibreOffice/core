@@ -43,18 +43,14 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::xpath;
-
 namespace XPath
 {
     typedef std::map<OUString, OUString> nsmap_t;
-    typedef std::vector< Reference<XXPathExtension> > extensions_t;
+    typedef std::vector< css::uno::Reference<css::xml::xpath::XXPathExtension> > extensions_t;
 
     typedef ::cppu::WeakImplHelper2
-        <   XXPathAPI
-        ,   ::com::sun::star::lang::XServiceInfo
+        <   css::xml::xpath::XXPathAPI
+        ,   css::lang::XServiceInfo
         > CXPathAPI_Base;
 
     class  CXPathAPI
@@ -64,78 +60,78 @@ namespace XPath
     private:
         ::osl::Mutex m_Mutex;
         nsmap_t m_nsmap;
-        const Reference< ::com::sun::star::lang::XMultiServiceFactory > m_aFactory;
+        const css::uno::Reference< css::lang::XMultiServiceFactory > m_aFactory;
         extensions_t m_extensions;
 
     public:
         // ctor
         CXPathAPI(
-            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+            const css::uno::Reference< css::lang::XMultiServiceFactory >&
                 rSMgr);
 
         // call for factory
-        static Reference< XInterface > getInstance(
-            const Reference < ::com::sun::star::lang::XMultiServiceFactory >&
+        static css::uno::Reference< XInterface > getInstance(
+            const css::uno::Reference < css::lang::XMultiServiceFactory >&
                 xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
-        static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(
-            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+        static css::uno::Sequence< OUString > _getSupportedServiceNames();
+        static css::uno::Reference< XInterface > _getInstance(
+            const css::uno::Reference< css::lang::XMultiServiceFactory >&
                 rSMgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames ()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // --- XXPathAPI ---
 
         virtual void SAL_CALL registerNS(const OUString& aPrefix, const OUString& aURI)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL unregisterNS(const OUString& aPrefix, const OUString& aURI)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Use an XPath string to select a nodelist.
         */
-        virtual Reference< XNodeList > SAL_CALL selectNodeList(const Reference< XNode >& contextNode, const OUString& str)
-            throw (RuntimeException, XPathException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL selectNodeList(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str)
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
 
         /**
         Use an XPath string to select a nodelist.
         */
-        virtual Reference< XNodeList > SAL_CALL selectNodeListNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
-            throw (RuntimeException, XPathException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL selectNodeListNS(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const css::uno::Reference< css::xml::dom::XNode >&  namespaceNode)
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
 
         /**
         Use an XPath string to select a single node.
         */
-        virtual Reference< XNode > SAL_CALL selectSingleNode(const Reference< XNode >& contextNode, const OUString& str)
-            throw (RuntimeException, XPathException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL selectSingleNode(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str)
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
 
         /**
         Use an XPath string to select a single node.
         */
-        virtual Reference< XNode > SAL_CALL selectSingleNodeNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
-            throw (RuntimeException, XPathException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL selectSingleNodeNS(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const css::uno::Reference< css::xml::dom::XNode >&  namespaceNode)
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
 
-        virtual Reference< XXPathObject > SAL_CALL eval(const Reference< XNode >& contextNode, const OUString& str)
-            throw (RuntimeException, XPathException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::xpath::XXPathObject > SAL_CALL eval(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str)
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
 
-        virtual Reference< XXPathObject > SAL_CALL evalNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
-            throw (RuntimeException, XPathException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::xpath::XXPathObject > SAL_CALL evalNS(const css::uno::Reference< css::xml::dom::XNode >& contextNode, const OUString& str, const css::uno::Reference< css::xml::dom::XNode >&  namespaceNode)
+            throw (css::uno::RuntimeException, css::xml::xpath::XPathException, std::exception) SAL_OVERRIDE;
 
-        virtual void SAL_CALL registerExtension(const OUString& aName) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL registerExtensionInstance(const Reference< XXPathExtension>& aExtension) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL registerExtension(const OUString& aName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL registerExtensionInstance(const css::uno::Reference< css::xml::xpath::XXPathExtension>& aExtension) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     };
 }

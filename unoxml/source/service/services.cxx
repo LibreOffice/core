@@ -37,9 +37,9 @@
 using namespace ::DOM;
 using namespace ::DOM::events;
 using namespace ::XPath;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::registry;
 
 extern "C"
 {

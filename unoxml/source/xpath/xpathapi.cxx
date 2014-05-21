@@ -37,8 +37,11 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-using ::com::sun::star::lang::XMultiServiceFactory;
-
+using namespace css::io;
+using namespace css::uno;
+using namespace css::xml::dom;
+using namespace css::xml::xpath;
+using css::lang::XMultiServiceFactory;
 
 namespace XPath
 {

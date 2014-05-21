@@ -36,18 +36,13 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::xml::dom;
-using namespace com::sun::star::xml::dom::events;
-
 namespace DOM { namespace events
 {
 
     typedef ::cppu::WeakImplHelper3
-        < ::com::sun::star::xml::dom::events::XEventListener
-        , ::com::sun::star::lang::XInitialization
-        , ::com::sun::star::lang::XServiceInfo
+        < css::xml::dom::events::XEventListener
+        , css::lang::XInitialization
+        , css::lang::XServiceInfo
         > CTestListener_Base;
 
     class  CTestListener
@@ -55,8 +50,8 @@ namespace DOM { namespace events
     {
 
     private:
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > m_factory;
-        Reference <XEventTarget> m_target;
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_factory;
+        css::uno::Reference <css::xml::dom::events::XEventTarget> m_target;
         OUString m_type;
         bool m_capture;
         OUString m_name;
@@ -67,13 +62,13 @@ namespace DOM { namespace events
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
-        static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(
-            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+        static css::uno::Sequence< OUString > _getSupportedServiceNames();
+        static css::uno::Reference< XInterface > _getInstance(
+            const css::uno::Reference< css::lang::XMultiServiceFactory >&
                 rSMgr);
 
         CTestListener(
-                const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+                const css::uno::Reference< css::lang::XMultiServiceFactory >&
                     rSMgr)
             : m_factory(rSMgr)
             , m_capture(false)
@@ -84,17 +79,17 @@ namespace DOM { namespace events
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames ()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XEventListener
-        virtual void SAL_CALL initialize(const Sequence< Any >& args) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& args) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     };
