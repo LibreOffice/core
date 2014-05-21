@@ -690,7 +690,7 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
 /// Optimisiation for efficiently creating StringXML placeholders
 void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
 {
-    assert( nLen = 0 );
+    assert( nLen == 0 );
     assert( pCode == NULL );
 
     nLen = nCode;
