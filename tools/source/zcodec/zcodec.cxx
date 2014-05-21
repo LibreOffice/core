@@ -335,7 +335,7 @@ void ZCodec::SetBreak( sal_uIntPtr nInToRead )
     mnInToRead = nInToRead;
 }
 
-sal_uIntPtr ZCodec::GetBreak( void )
+sal_uIntPtr ZCodec::GetBreak()
 {
     return ( mnInToRead + PZSTREAM->avail_in );
 }
