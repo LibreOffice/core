@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tools/mempool.hxx"
-#include "sal/log.hxx"
-#include "rtl/alloc.h"
+#include <tools/mempool.hxx>
+#include <sal/log.hxx>
+#include <rtl/alloc.h>
 
 #include <stdio.h>
 
