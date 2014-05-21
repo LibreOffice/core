@@ -1921,7 +1921,6 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
 
         // Put the data into cache.
         putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
-        fprintf(stdout, "ScExternalRefManager::getDoubleRefTokens:   in memory!\n");
         return pArray;
     }
 
@@ -1929,11 +1928,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     ScExternalRefCache::TokenArrayRef pArray =
         maRefCache.getCellRangeData(nFileId, rTabName, rRange);
     if (pArray)
-    {
         // Cache hit !
-        fprintf(stdout, "ScExternalRefManager::getDoubleRefTokens:   cached!\n");
         return pArray;
-    }
 
     pSrcDoc = getSrcDocument(nFileId);
     if (!pSrcDoc)

@@ -439,12 +439,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
 
     BeforeXMLLoading();
 
-    // #i62677# BeforeXMLLoading is also called from ScXMLImport::startDocument when invoked
-    // from an external component. The XMLFromWrapper flag is only set here, when called
-    // through ScDocShell.
-    aDocument.SetXMLFromWrapper( true );
-
-    ScXMLImportWrapper aImport( aDocument, pLoadMedium, xStor );
+    ScXMLImportWrapper aImport(*this, pLoadMedium, xStor);
 
     bool bRet(false);
     ErrCode nError = ERRCODE_NONE;
@@ -508,7 +503,6 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
         aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
     }
 
-    aDocument.SetXMLFromWrapper( false );
     AfterXMLLoading(bRet);
 
     aDocument.EnableAdjustHeight(true);
@@ -519,7 +513,7 @@ bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::R
 {
     aDocument.EnableIdle(false);
 
-    ScXMLImportWrapper aImport( aDocument, pSaveMedium, xStor );
+    ScXMLImportWrapper aImport(*this, pSaveMedium, xStor);
     bool bRet(false);
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Export(false);

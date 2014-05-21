@@ -70,12 +70,14 @@
 #include "docuno.hxx"
 #include "sheetdata.hxx"
 #include "XMLCodeNameProvider.hxx"
+#include <docsh.hxx>
 
 using namespace com::sun::star;
 
 
-ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
-    rDoc(rD),
+ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
+    mrDocShell(rDocSh),
+    rDoc(*rDocSh.GetDocument()),
     pMedium(pM),
     xStorage(xStor)
 {
@@ -321,303 +323,294 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
     uno::Reference<xml::sax::XParser> xXMLParser = xml::sax::Parser::create(xContext);
 
     // get filter
-    SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
-    if ( pObjSh )
+    OUString sEmpty;
+    uno::Reference<frame::XModel> xModel = mrDocShell.GetModel();
+
+    /** property map for export info set */
+    comphelper::PropertyMapEntry const aImportInfoMap[] =
     {
-        OUString sEmpty;
-        uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
+        { OUString("ProgressRange"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("ProgressMax"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("NumberStyles"), 0, cppu::UnoType<container::XNameAccess>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("PrivateData"), 0, cppu::UnoType<uno::XInterface>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("VBACompatibilityMode"), 0, ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("ScriptConfiguration"), 0, cppu::UnoType<container::XNameAccess>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("OrganizerMode"), 0, ::getBooleanCppuType(),
+            ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("LockSolarMutex"), 0, getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 
-        /** property map for export info set */
-        comphelper::PropertyMapEntry const aImportInfoMap[] =
+    xInfoSet->setPropertyValue("LockSolarMutex", uno::makeAny(false));
+
+    // ---- get BuildId from parent container if available
+
+    uno::Reference< container::XChild > xChild( xModel, uno::UNO_QUERY );
+    if( xChild.is() )
+    {
+        uno::Reference< beans::XPropertySet > xParentSet( xChild->getParent(), uno::UNO_QUERY );
+        if( xParentSet.is() )
         {
-            { OUString("ProgressRange"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressMax"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("NumberStyles"), 0, cppu::UnoType<container::XNameAccess>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("PrivateData"), 0, cppu::UnoType<uno::XInterface>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("VBACompatibilityMode"), 0, ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("ScriptConfiguration"), 0, cppu::UnoType<container::XNameAccess>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { OUString("OrganizerMode"), 0, ::getBooleanCppuType(),
-                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 }
-        };
-        uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
-
-        // ---- get BuildId from parent container if available
-
-        uno::Reference< container::XChild > xChild( xModel, uno::UNO_QUERY );
-        if( xChild.is() )
-        {
-            uno::Reference< beans::XPropertySet > xParentSet( xChild->getParent(), uno::UNO_QUERY );
-            if( xParentSet.is() )
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
+            OUString sPropName("BuildId" );
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
             {
-                uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
-                OUString sPropName("BuildId" );
-                if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
-                {
-                    xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
-                }
+                xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
             }
         }
+    }
 
-        uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
-        if (xStatusIndicator.is())
+    uno::Reference<task::XStatusIndicator> xStatusIndicator = GetStatusIndicator();
+    if (xStatusIndicator.is())
+    {
+        sal_Int32 nProgressRange(1000000);
+        xStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), nProgressRange);
+        xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
+    }
+
+    // Set base URI
+    OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
+    OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : OUString();
+    OUString sPropName("BaseURI");
+    xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
+
+    // TODO/LATER: do not do it for embedded links
+    OUString aName;
+    if (SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode())
+    {
+        if ( pMedium && pMedium->GetItemSet() )
         {
-            sal_Int32 nProgressRange(1000000);
-            xStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), nProgressRange);
-            xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
+            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+            if ( pDocHierarchItem )
+                aName = pDocHierarchItem->GetValue();
         }
+        else
+            aName = "dummyObjectName";
 
-        // Set base URI
-        OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
-        OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : OUString();
-        OUString sPropName("BaseURI");
-        xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
-
-        // TODO/LATER: do not do it for embedded links
-        OUString aName;
-        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
+        if( !aName.isEmpty() )
         {
-            if ( pMedium && pMedium->GetItemSet() )
+            sPropName = "StreamRelPath";
+            xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
+        }
+    }
+
+    if (bStylesOnly)
+        xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(sal_True));
+
+    xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
+
+    bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+
+    if (!bStylesOnly && bOasis)
+    {
+        // RDF metadata: ODF >= 1.2
+        try
+        {
+            const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
+                xModel, uno::UNO_QUERY_THROW );
+            const uno::Reference< rdf::XURI > xBaseURI(
+                ::sfx2::createBaseURI( xContext, xStorage, aBaseURL, aName ) );
+            uno::Reference<task::XInteractionHandler> xHandler =
+                mrDocShell.GetMedium()->GetInteractionHandler();
+            xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
+        }
+        catch ( const lang::WrappedTargetException & e)
+        {
+            ucb::InteractiveAugmentedIOException iaioe;
+            if ( e.TargetException >>= iaioe )
             {
-                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                    pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
-                if ( pDocHierarchItem )
-                    aName = pDocHierarchItem->GetValue();
+                nError = SCERR_IMPORT_UNKNOWN;
             }
             else
-                aName = "dummyObjectName";
-
-            if( !aName.isEmpty() )
-            {
-                sPropName = "StreamRelPath";
-                xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
-            }
-        }
-
-        if (bStylesOnly)
-        {
-            OUString const sOrganizerMode(
-                "OrganizerMode");
-            xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
-        }
-
-        xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
-
-        bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
-
-        if (!bStylesOnly && bOasis)
-        {
-            // RDF metadata: ODF >= 1.2
-            try
-            {
-                const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
-                    xModel, uno::UNO_QUERY_THROW );
-                const uno::Reference< rdf::XURI > xBaseURI(
-                    ::sfx2::createBaseURI( xContext, xStorage, aBaseURL, aName ) );
-                const uno::Reference< task::XInteractionHandler > xHandler(
-                    pObjSh->GetMedium()->GetInteractionHandler() );
-                xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
-            }
-            catch ( const lang::WrappedTargetException & e)
-            {
-                ucb::InteractiveAugmentedIOException iaioe;
-                if ( e.TargetException >>= iaioe )
-                {
-                    nError = SCERR_IMPORT_UNKNOWN;
-                }
-                else
-                {
-                    nError = SCWARN_IMPORT_FEATURES_LOST;
-                }
-            }
-            catch ( const uno::Exception &)
             {
                 nError = SCWARN_IMPORT_FEATURES_LOST;
             }
         }
-
-        // #i103539#: always read meta.xml for generator
-        sal_uInt32 nMetaRetval(0);
-        uno::Sequence<uno::Any> aMetaArgs(1);
-        uno::Any* pMetaArgs = aMetaArgs.getArray();
-        pMetaArgs[0] <<= xInfoSet;
-
-        SAL_INFO( "sc.filter", "meta import start" );
-
-        nMetaRetval = ImportFromComponent(
-                                xContext, xModel, xXMLParser, aParserInput,
-                                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
-                                : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
-                                "meta.xml", "Meta.xml", aMetaArgs, false);
-
-        SAL_INFO( "sc.filter", "meta import end" );
-
-        SvXMLGraphicHelper* pGraphicHelper = NULL;
-        uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
-
-        uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-        SvXMLEmbeddedObjectHelper *pObjectHelper = NULL;
-
-        if( xStorage.is() )
+        catch ( const uno::Exception &)
         {
-            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_READ );
-            xGrfContainer = pGraphicHelper;
-
-            if( pObjSh )
-            {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, *pObjSh, EMBEDDEDOBJECTHELPER_MODE_READ, false );
-                xObjectResolver = pObjectHelper;
-            }
+            nError = SCWARN_IMPORT_FEATURES_LOST;
         }
-        uno::Sequence<uno::Any> aStylesArgs(4);
-        uno::Any* pStylesArgs = aStylesArgs.getArray();
-        pStylesArgs[0] <<= xInfoSet;
-        pStylesArgs[1] <<= xGrfContainer;
-        pStylesArgs[2] <<= xStatusIndicator;
-        pStylesArgs[3] <<= xObjectResolver;
-
-        sal_uInt32 nSettingsRetval(0);
-        if (!bStylesOnly)
-        {
-            //  Settings must be loaded first because of the printer setting,
-            //  which is needed in the page styles (paper tray).
-
-            uno::Sequence<uno::Any> aSettingsArgs(1);
-            uno::Any* pSettingsArgs = aSettingsArgs.getArray();
-            pSettingsArgs[0] <<= xInfoSet;
-
-            SAL_INFO( "sc.filter", "settings import start" );
-
-            nSettingsRetval = ImportFromComponent(
-                                xContext, xModel, xXMLParser, aParserInput,
-                                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
-                                       : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
-                                "settings.xml", sEmpty, aSettingsArgs, false);
-
-            SAL_INFO( "sc.filter", "settings import end" );
-        }
-
-        sal_uInt32 nStylesRetval(0);
-        {
-            SAL_INFO( "sc.filter", "styles import start" );
-
-            nStylesRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
-                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
-                       : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
-                OUString("styles.xml"),
-                sEmpty, aStylesArgs, true);
-
-            SAL_INFO( "sc.filter", "styles import end" );
-        }
-
-        sal_uInt32 nDocRetval(0);
-        if (!bStylesOnly)
-        {
-            uno::Sequence<uno::Any> aDocArgs(4);
-            uno::Any* pDocArgs = aDocArgs.getArray();
-            pDocArgs[0] <<= xInfoSet;
-            pDocArgs[1] <<= xGrfContainer;
-            pDocArgs[2] <<= xStatusIndicator;
-            pDocArgs[3] <<= xObjectResolver;
-
-            SAL_INFO( "sc.filter", "content import start" );
-
-            nDocRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
-                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
-                       : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
-                OUString("content.xml"),
-                OUString("Content.xml"), aDocArgs,
-                true);
-
-            SAL_INFO( "sc.filter", "content import end" );
-        }
-        if( pGraphicHelper )
-            SvXMLGraphicHelper::Destroy( pGraphicHelper );
-
-        if( pObjectHelper )
-            SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-
-        if (xStatusIndicator.is())
-            xStatusIndicator->end();
-
-        bool bRet(false);
-        if (bStylesOnly)
-        {
-            if (nStylesRetval)
-                nError = nStylesRetval;
-            else
-                bRet = true;
-        }
-        else
-        {
-            if (nDocRetval)
-            {
-                nError = nDocRetval;
-                if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW ||
-                    nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
-                    nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
-                    nDocRetval == SCWARN_IMPORT_SHEET_OVERFLOW)
-                    bRet = true;
-            }
-            else if (nStylesRetval)
-                nError = nStylesRetval;
-            else if (nMetaRetval)
-                nError = nMetaRetval;
-            else if (nSettingsRetval)
-                nError = nSettingsRetval;
-            else
-                bRet = true;
-        }
-
-        // set BuildId on XModel for later OLE object loading
-        if( xInfoSet.is() )
-        {
-            uno::Reference< beans::XPropertySet > xModelSet( xModel, uno::UNO_QUERY );
-            if( xModelSet.is() )
-            {
-                uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-                OUString sBuildPropName("BuildId" );
-                if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sBuildPropName) )
-                {
-                    xModelSet->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
-                }
-            }
-
-            // Set Code Names
-            uno::Any aAny = xInfoSet->getPropertyValue("ScriptConfiguration");
-            uno::Reference <container::XNameAccess> xCodeNameAccess;
-            if( aAny >>= xCodeNameAccess )
-                XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
-
-            // VBA compatibility
-            bool bVBACompat = false;
-            if ( (xInfoSet->getPropertyValue("VBACompatibilityMode") >>= bVBACompat) && bVBACompat )
-            {
-                /*  Set library container to VBA compatibility mode, this
-                    forces loading the Basic project, which in turn creates the
-                    VBA Globals object and does all related initialization. */
-                if ( xModelSet.is() ) try
-                {
-                    uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModelSet->getPropertyValue(
-                        OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
-                    xVBACompat->setVBACompatibilityMode( sal_True );
-                }
-                catch( const uno::Exception& )
-                {
-                }
-            }
-        }
-
-        // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
-        return bRet;//!bStylesOnly ? bDocRetval : bStylesRetval;
     }
-    return false;
+
+    // #i103539#: always read meta.xml for generator
+    sal_uInt32 nMetaRetval(0);
+    uno::Sequence<uno::Any> aMetaArgs(1);
+    uno::Any* pMetaArgs = aMetaArgs.getArray();
+    pMetaArgs[0] <<= xInfoSet;
+
+    SAL_INFO( "sc.filter", "meta import start" );
+
+    nMetaRetval = ImportFromComponent(
+                            xContext, xModel, xXMLParser, aParserInput,
+                            bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
+                            : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
+                            "meta.xml", "Meta.xml", aMetaArgs, false);
+
+    SAL_INFO( "sc.filter", "meta import end" );
+
+    SvXMLGraphicHelper* pGraphicHelper = NULL;
+    uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
+
+    uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = NULL;
+
+    if( xStorage.is() )
+    {
+        pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_READ );
+        xGrfContainer = pGraphicHelper;
+
+        pObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, mrDocShell, EMBEDDEDOBJECTHELPER_MODE_READ, false);
+        xObjectResolver = pObjectHelper;
+    }
+    uno::Sequence<uno::Any> aStylesArgs(4);
+    uno::Any* pStylesArgs = aStylesArgs.getArray();
+    pStylesArgs[0] <<= xInfoSet;
+    pStylesArgs[1] <<= xGrfContainer;
+    pStylesArgs[2] <<= xStatusIndicator;
+    pStylesArgs[3] <<= xObjectResolver;
+
+    sal_uInt32 nSettingsRetval(0);
+    if (!bStylesOnly)
+    {
+        //  Settings must be loaded first because of the printer setting,
+        //  which is needed in the page styles (paper tray).
+
+        uno::Sequence<uno::Any> aSettingsArgs(1);
+        uno::Any* pSettingsArgs = aSettingsArgs.getArray();
+        pSettingsArgs[0] <<= xInfoSet;
+
+        SAL_INFO( "sc.filter", "settings import start" );
+
+        nSettingsRetval = ImportFromComponent(
+                            xContext, xModel, xXMLParser, aParserInput,
+                            bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
+                                   : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
+                            "settings.xml", sEmpty, aSettingsArgs, false);
+
+        SAL_INFO( "sc.filter", "settings import end" );
+    }
+
+    sal_uInt32 nStylesRetval(0);
+    {
+        SAL_INFO( "sc.filter", "styles import start" );
+
+        nStylesRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
+            bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
+                   : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
+            OUString("styles.xml"),
+            sEmpty, aStylesArgs, true);
+
+        SAL_INFO( "sc.filter", "styles import end" );
+    }
+
+    sal_uInt32 nDocRetval(0);
+    if (!bStylesOnly)
+    {
+        uno::Sequence<uno::Any> aDocArgs(4);
+        uno::Any* pDocArgs = aDocArgs.getArray();
+        pDocArgs[0] <<= xInfoSet;
+        pDocArgs[1] <<= xGrfContainer;
+        pDocArgs[2] <<= xStatusIndicator;
+        pDocArgs[3] <<= xObjectResolver;
+
+        SAL_INFO( "sc.filter", "content import start" );
+
+        nDocRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
+            bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
+                   : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
+            OUString("content.xml"),
+            OUString("Content.xml"), aDocArgs,
+            true);
+
+        SAL_INFO( "sc.filter", "content import end" );
+    }
+    if( pGraphicHelper )
+        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+    if( pObjectHelper )
+        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+
+    if (xStatusIndicator.is())
+        xStatusIndicator->end();
+
+    bool bRet(false);
+    if (bStylesOnly)
+    {
+        if (nStylesRetval)
+            nError = nStylesRetval;
+        else
+            bRet = true;
+    }
+    else
+    {
+        if (nDocRetval)
+        {
+            nError = nDocRetval;
+            if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW ||
+                nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
+                nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
+                nDocRetval == SCWARN_IMPORT_SHEET_OVERFLOW)
+                bRet = true;
+        }
+        else if (nStylesRetval)
+            nError = nStylesRetval;
+        else if (nMetaRetval)
+            nError = nMetaRetval;
+        else if (nSettingsRetval)
+            nError = nSettingsRetval;
+        else
+            bRet = true;
+    }
+
+    // set BuildId on XModel for later OLE object loading
+    if( xInfoSet.is() )
+    {
+        uno::Reference< beans::XPropertySet > xModelSet( xModel, uno::UNO_QUERY );
+        if( xModelSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
+            OUString sBuildPropName("BuildId" );
+            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sBuildPropName) )
+            {
+                xModelSet->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
+            }
+        }
+
+        // Set Code Names
+        uno::Any aAny = xInfoSet->getPropertyValue("ScriptConfiguration");
+        uno::Reference <container::XNameAccess> xCodeNameAccess;
+        if( aAny >>= xCodeNameAccess )
+            XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
+
+        // VBA compatibility
+        bool bVBACompat = false;
+        if ( (xInfoSet->getPropertyValue("VBACompatibilityMode") >>= bVBACompat) && bVBACompat )
+        {
+            /*  Set library container to VBA compatibility mode, this
+                forces loading the Basic project, which in turn creates the
+                VBA Globals object and does all related initialization. */
+            if ( xModelSet.is() ) try
+            {
+                uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModelSet->getPropertyValue(
+                    OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
+                xVBACompat->setVBACompatibilityMode( sal_True );
+            }
+            catch( const uno::Exception& )
+            {
+            }
+        }
+    }
+
+    // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
+    return bRet;//!bStylesOnly ? bDocRetval : bStylesRetval;
 }
 
 static bool lcl_HasValidStream(ScDocument& rDoc)

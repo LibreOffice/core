@@ -2102,7 +2102,7 @@ ScXMLImport::ScXMLImport(
     bRemoveLastChar(false),
     bNullDateSetted(false),
     bSelfImportingXMLSet(false),
-    bFromWrapper(false),
+    mbLockSolarMutex(true),
     mbHasNewCondFormatData(false)
 {
     pStylesImportHelper = new ScMyStylesImportHelper(*this);
@@ -2238,6 +2238,23 @@ ScXMLImport::~ScXMLImport() throw()
     delete pMyLabelRanges;
     delete pValidations;
     delete pDetectiveOpArray;
+}
+
+void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
+{
+    SvXMLImport::initialize(aArguments);
+
+    uno::Reference<beans::XPropertySet> xInfoSet = getImportInfo();
+    if (!xInfoSet.is())
+        return;
+
+    uno::Reference<beans::XPropertySetInfo> xInfoSetInfo = xInfoSet->getPropertySetInfo();
+    if (!xInfoSetInfo.is())
+        return;
+
+    if (xInfoSetInfo->hasPropertyByName("LockSolarMutex"))
+        xInfoSet->getPropertyValue("LockSolarMutex") >>= mbLockSolarMutex;
 }
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -2964,8 +2981,6 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     mpComp.reset(new ScCompiler(pDoc, ScAddress()));
     mpComp->SetGrammar(formula::FormulaGrammar::GRAM_ODFF);
 
-    bFromWrapper = pDoc->IsXMLFromWrapper();    // UnlockSolarMutex below still works normally
-
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
@@ -3284,7 +3299,7 @@ void ScXMLImport::LockSolarMutex()
 {
     // #i62677# When called from DocShell/Wrapper, the SolarMutex is already locked,
     // so there's no need to allocate (and later delete) the SolarMutexGuard.
-    if (bFromWrapper)
+    if (!mbLockSolarMutex)
     {
         DBG_TESTSOLARMUTEX();
         return;
