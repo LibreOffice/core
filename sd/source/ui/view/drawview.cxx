@@ -197,35 +197,40 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         OUString aName = rPage.GetLayoutName() + " " +
                             OUString::number((nDepth <= 0) ? 1 : nDepth + 1);
                         SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
-                        DBG_ASSERT(pSheet, "StyleSheet not found");
-
-                        SfxItemSet aTempSet( pSheet->GetItemSet() );
-                        aTempSet.Put( rSet );
-                        aTempSet.ClearInvalidItems();
-
-                        if( nDepth > 0 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+                        //We have no stylesheet if we access outline level 10
+                        //in the master preview, there is no true style backing
+                        //that entry
+                        SAL_WARN_IF(!pSheet, "sd", "StyleSheet " << aName << " not found");
+                        if (pSheet)
                         {
-                            // no SvxNumBulletItem in outline level 1 to 8!
-                            aTempSet.ClearItem( EE_PARA_NUMBULLET );
-                        }
+                            SfxItemSet aTempSet( pSheet->GetItemSet() );
+                            aTempSet.Put( rSet );
+                            aTempSet.ClearInvalidItems();
 
-                        // Undo-Action
-                        StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
-                        mpDocSh->GetUndoManager()->AddUndoAction(pAction);
+                            if( nDepth > 0 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+                            {
+                                // no SvxNumBulletItem in outline level 1 to 8!
+                                aTempSet.ClearItem( EE_PARA_NUMBULLET );
+                            }
 
-                        pSheet->GetItemSet().Put(aTempSet);
-                        pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                            // Undo-Action
+                            StyleSheetUndoAction* pAction = new StyleSheetUndoAction(&mrDoc, pSheet, &aTempSet);
+                            mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                        // now also broadcast any child sheets
-                        sal_Int16 nChild;
-                        for( nChild = nDepth + 1; nChild < 9; nChild++ )
-                        {
-                            OUString aSheetName = rPage.GetLayoutName() + " " +
-                                OUString::number((nChild <= 0) ? 1 : nChild + 1);
-                            SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
+                            pSheet->GetItemSet().Put(aTempSet);
+                            pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 
-                            if( pOutlSheet )
-                                pOutlSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                            // now also broadcast any child sheets
+                            sal_Int16 nChild;
+                            for( nChild = nDepth + 1; nChild < 9; nChild++ )
+                            {
+                                OUString aSheetName = rPage.GetLayoutName() + " " +
+                                    OUString::number((nChild <= 0) ? 1 : nChild + 1);
+                                SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
+
+                                if( pOutlSheet )
+                                    pOutlSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                            }
                         }
 
                         ++iter;
