@@ -84,7 +84,7 @@ XPropertySetInfo_impl::getPropertyByName(
   for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
     if( m_seq[i].Name == aName ) return m_seq[i];
 
-  throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
+  throw beans::UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 
