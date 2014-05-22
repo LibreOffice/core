@@ -608,13 +608,19 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
     if( msName.isEmpty() )
         return pRet;
 
-    css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
+    css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() + 1 );
     sal_uInt32 i = 0;
     for( std::map< OUString, css::uno::Any >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it )
     {
         aSeq[i].Name = it->first;
         aSeq[i].Value = it->second;
         i++;
+    }
+
+    if( mrOleObjectInfo.maEmbeddedData.hasElements() )
+    {
+        aSeq[i].Name = "OriginalGraphic";
+        aSeq[i].Value = uno::makeAny( mrOleObjectInfo.maEmbeddedData );
     }
 
     pRet.Name = msName;

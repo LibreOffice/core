@@ -119,10 +119,12 @@ namespace drawingml {
 
 // not thread safe
 int DrawingML::mnImageCounter = 1;
+int DrawingML::mnWdpImageCounter = 1;
 
 void DrawingML::ResetCounters()
 {
     mnImageCounter = 1;
+    mnWdpImageCounter = 1;
 }
 
 bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, const OUString& aName )
@@ -2590,6 +2592,7 @@ void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
     Sequence< PropertyValue > aAttrs;
     aEffect.Value >>= aAttrs;
     sax_fastparser::FastAttributeList *aAttrList = mpFS->createAttrList();
+    OString sRelId;
     for( sal_Int32 i=0; i < aAttrs.getLength(); ++i )
     {
         sal_Int32 nToken = ArtisticEffectProperties::getEffectToken( aAttrs[i].Name );
@@ -2598,6 +2601,12 @@ void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
             sal_Int32 nVal = 0;
             aAttrs[i].Value >>= nVal;
             aAttrList->add( nToken, OString::number( nVal ).getStr() );
+        }
+        else if( aAttrs[i].Name == "OriginalGraphic" )
+        {
+            Sequence< sal_Int8 > aGraphicData;
+            aAttrs[i].Value >>= aGraphicData;
+            sRelId = WriteWdpPicture( aGraphicData );
         }
     }
 
@@ -2608,7 +2617,9 @@ void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
     mpFS->startElementNS( XML_a14, XML_imgProps,
                           FSNS( XML_xmlns, XML_a14 ), "http://schemas.microsoft.com/office/drawing/2010/main",
                           FSEND );
-    mpFS->startElementNS( XML_a14, XML_imgLayer, FSEND );
+    mpFS->startElementNS( XML_a14, XML_imgLayer,
+                          FSNS( XML_r, XML_embed), sRelId.getStr(),
+                          FSEND );
     mpFS->startElementNS( XML_a14, XML_imgEffect, FSEND );
 
     sax_fastparser::XFastAttributeListRef xAttrList( aAttrList );
@@ -2619,6 +2630,23 @@ void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
     mpFS->endElementNS( XML_a14, XML_imgProps );
     mpFS->endElementNS( XML_a, XML_ext );
     mpFS->endElementNS( XML_a, XML_extLst );
+}
+
+OString DrawingML::WriteWdpPicture( const Sequence< sal_Int8 >& rPictureData )
+{
+    OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter++ ) + ".wdp";
+    uno::Reference< io::XOutputStream > xOutStream =
+            mpFB->openFragmentStream( "word/" + sFileName,
+                                      "image/vnd.ms-photo" );
+    OUString sId;
+    xOutStream->writeBytes( rPictureData );
+    xOutStream->closeOutput();
+
+    sId = mpFB->addRelation( mpFS->getOutputStream(),
+                             "http://schemas.microsoft.com/office/2007/relationships/hdphoto",
+                             sFileName, false );
+
+    return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
 }
