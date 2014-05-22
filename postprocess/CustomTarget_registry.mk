@@ -595,27 +595,28 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 # find shell command below (see issue 110041):
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
-	$(call gb_Helper_abbreviate_dirs, \
-		echo '<list>' > $@ \
-		&& ( find $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/) -name *.xcu -size +0c -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
-		&& echo '</list>' >> $@ \
+	$(call gb_Helper_abbreviate_dirs,\
+	    find $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/)\
+	         -name *.xcu -size +0c \
+	        | awk 'BEGIN{print "<list>"} \
+	                    {print "<filename>"$$0"</filename>"} \
+	               END  {print "</list>"}' > $@ \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
-	echo '<list>' > $@ \
-	&& $(call gb_Helper_abbreviate_dirs, \
-		(find $(call gb_XcuResTarget_get_target,registry/$*/) -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
-		$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
-			$(foreach driver,$(postprocess_DRIVERS), \
-				&& (find $(call gb_XcuResTarget_get_target,$(driver)/$*/) -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
-			) \
-		) \
-		$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
-			&& (find $(call gb_XcuResTarget_get_target,updchk/$*/) -name *.xcu -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
-		) \
-	) \
-	&& echo '</list>' >> $@
+	$(call gb_Helper_abbreviate_dirs,\
+	    find $(call gb_XcuResTarget_get_target,registry/$*/)\
+	         $(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
+	             $(foreach driver,$(postprocess_DRIVERS),\
+	                 $(call gb_XcuResTarget_get_target,$(driver)/$*/)))\
+	         $(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
+	             $(call gb_XcuResTarget_get_target,updchk/$*/))\
+	         -name *.xcu \
+	        | awk 'BEGIN{print "<list>"} \
+	                    {print "<filename>"$$0"</filename>"} \
+	               END  {print "</list>"}' > $@ \
+	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
