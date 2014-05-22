@@ -23,6 +23,7 @@
 #include <stdio.h>
 
 #include <algorithm>
+#include <limits>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -34,6 +35,21 @@
 namespace rtl_OUString
 {
 
+namespace {
+
+// Avoid -fsanitize=undefined warning e.g. "runtime error: value 1e+99 is
+// outside the range of representable values of type 'float'":
+float doubleToFloat(double x) {
+    return
+        x < -std::numeric_limits<float>::max()
+        ? -std::numeric_limits<float>::infinity()
+        : x > std::numeric_limits<float>::max()
+        ? std::numeric_limits<float>::infinity()
+        : static_cast<float>(x);
+}
+
+}
+
 class number : public CppUnit::TestFixture
 {
     void number_float_test_impl(float _nValue)
@@ -43,7 +59,7 @@ class number : public CppUnit::TestFixture
             sValue <<= suValue;
             printf("nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
-            float nValueATOF = static_cast<float>(atof( sValue.getStr() ));
+            double nValueATOF = doubleToFloat(atof( sValue.getStr() ));
 
             bool bEqualResult = is_float_equal(_nValue, nValueATOF);
             CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
@@ -439,7 +455,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         void toFloat_test_impl(rtl::OString const& _sValue)
             {
                 //printf("the original str is %s\n", _sValue.getStr());
-                float nValueATOF = static_cast<float>(atof( _sValue.getStr() ));
+                float nValueATOF = doubleToFloat(atof( _sValue.getStr() ));
         //printf("the original str is %.10f\n", nValueATOF);
                 rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
                 float nValueToFloat = suValue.toFloat();

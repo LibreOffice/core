@@ -148,11 +148,26 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
     return nLen;
 }
 
+namespace {
+
+// Avoid -fsanitize=undefined warning e.g. "runtime error: value 1e+99 is
+// outside the range of representable values of type 'float'":
+float doubleToFloat(double x) {
+    return
+        x < -std::numeric_limits<float>::max()
+        ? -std::numeric_limits<float>::infinity()
+        : x > std::numeric_limits<float>::max()
+        ? std::numeric_limits<float>::infinity()
+        : static_cast<float>(x);
+}
+
+}
+
 float SAL_CALL rtl_ustr_toFloat(sal_Unicode const * pStr) SAL_THROW_EXTERN_C()
 {
-    return (float) rtl_math_uStringToDouble(pStr,
+    return doubleToFloat(rtl_math_uStringToDouble(pStr,
                                             pStr + rtl_ustr_getLength(pStr),
-                                            '.', 0, 0, 0);
+                                            '.', 0, 0, 0));
 }
 
 double SAL_CALL rtl_ustr_toDouble(sal_Unicode const * pStr) SAL_THROW_EXTERN_C()
