@@ -579,7 +579,7 @@ namespace cppcanvas
                                             uno::Reference< rendering::XPolyPolygon2D >&    o_rTextLines,
                                             const CanvasSharedPtr&                          rCanvas,
                                             const uno::Sequence< double >&                  rOffsets,
-                                            const tools::TextLineInfo                       rLineInfo   )
+                                            const tools::TextLineInfo&                      rLineInfo   )
             {
                 const ::basegfx::B2DPolyPolygon aPoly(
                     textLinesFromLogicalOffsets(
@@ -597,7 +597,7 @@ namespace cppcanvas
                                             uno::Reference< rendering::XPolyPolygon2D >&    o_rTextLines,
                                             const CanvasSharedPtr&                          rCanvas,
                                             double                                          nLineWidth,
-                                            const tools::TextLineInfo                       rLineInfo   )
+                                            const tools::TextLineInfo&                      rLineInfo   )
             {
                 const ::basegfx::B2DPolyPolygon aPoly(
                     tools::createTextLinesPolyPolygon( 0.0, nLineWidth,
