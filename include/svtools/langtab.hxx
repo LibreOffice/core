@@ -29,6 +29,7 @@ class SVT_DLLPUBLIC SvtLanguageTable
 {
 public:
 
+    static bool         HasLanguageType( const LanguageType eType );
     static OUString     GetLanguageString( const LanguageType eType );
     static LanguageType GetLanguageType( const OUString& rStr );
     static sal_uInt32   GetLanguageEntryCount();
