@@ -68,6 +68,7 @@ public:
         CPPUNIT_ASSERT( aVec.erase(p2) == 0 );
 
         aVec.DeleteAndDestroyAll();
+        delete p1;
         delete p2;
         delete p4;
     }
@@ -118,6 +119,9 @@ public:
         aVec2.insert( aVec1 );
 
         CPPUNIT_ASSERT( aVec2.size() == 3 );
+        delete p1;
+        delete p2;
+        delete p3;
     }
 
     void testLowerBound()
@@ -134,6 +138,9 @@ public:
 
         CPPUNIT_ASSERT( aVec.lower_bound(p1) == aVec.begin() );
         CPPUNIT_ASSERT( aVec.lower_bound(p4) == aVec.end() );
+        delete p1;
+        delete p2;
+        delete p3;
         delete p4;
     }
 
@@ -193,7 +200,9 @@ public:
         CPPUNIT_ASSERT( aVec.size() == 3 );
 
         aVec.DeleteAndDestroyAll();
+        delete p1;
         delete p2;
+        delete p2_3;
         delete p4;
     }
 
@@ -245,6 +254,8 @@ public:
 
         aVec.DeleteAndDestroyAll();
         CPPUNIT_ASSERT( aVec.size() == 0 );
+        delete p1;
+        delete p1_3;
         delete p4;
     }
 
