@@ -24,6 +24,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <iostream>
 
 #include "boost/noncopyable.hpp"
 #include "rtl/alloc.h"
@@ -2680,7 +2681,8 @@ private:
     virtual void dumpDeclaration(FileStream & out) SAL_OVERRIDE;
 
     bool dumpBaseMembers(
-        FileStream & out, OUString const & base, bool withType);
+        FileStream & out, OUString const & base, bool withType,
+        bool withDefaults, bool parentsHadDirectMember);
 
     sal_uInt32 getTotalMemberCount(OUString const & base) const;
 
@@ -2730,7 +2732,7 @@ void ExceptionType::dumpHxxFile(
     out << "}\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline " << id_ << "::" << id_ << "(";
-        first = !dumpBaseMembers(out, base, true);
+        first = !dumpBaseMembers(out, base, true, false, false);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
@@ -2748,7 +2750,7 @@ void ExceptionType::dumpHxxFile(
         if (!base.isEmpty()) {
             out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
                 << "(";
-            dumpBaseMembers(out, base, false);
+            dumpBaseMembers(out, base, false, false, false);
             out << ")\n";
             first = false;
         }
@@ -2984,7 +2986,9 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
         << "() SAL_THROW(());\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(";
-        bool first = !dumpBaseMembers(out, base, true);
+        bool withDefaults = true;
+        bool parentsHadDirectMembers = !entity_->getDirectMembers().empty();
+        bool first = !dumpBaseMembers(out, base, true, withDefaults, parentsHadDirectMembers);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
@@ -3023,7 +3027,7 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
 }
 
 bool ExceptionType::dumpBaseMembers(
-    FileStream & out, OUString const & base, bool withType)
+    FileStream & out, OUString const & base, bool withType, bool withDefaults, bool parentsHadDirectMember)
 {
     bool hasMember = false;
     if (!base.isEmpty()) {
@@ -3036,10 +3040,12 @@ bool ExceptionType::dumpBaseMembers(
         rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
             dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
         assert(ent2.is());
-        hasMember = dumpBaseMembers(out, ent2->getDirectBase(), withType);
+        hasMember = dumpBaseMembers( out, ent2->getDirectBase(), withType,
+                        withDefaults, parentsHadDirectMember || !ent2->getDirectMembers().empty() );
+        int memberCount = 0;
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(ent2->getDirectMembers().begin());
-             i != ent2->getDirectMembers().end(); ++i)
+             i != ent2->getDirectMembers().end(); ++i, ++memberCount)
         {
             if (hasMember) {
                 out << ", ";
@@ -3049,6 +3055,17 @@ bool ExceptionType::dumpBaseMembers(
                 out << " ";
             }
             out << i->name << "_";
+            // We want to provide a default parameter value for uno::Exception subtype
+            // constructors, since most of the time we don't pass a Context object in to the exception
+            // throw sites.
+            if (withDefaults
+                  && !parentsHadDirectMember
+                  && base == "com.sun.star.uno.Exception"
+                  && memberCount == 1
+                  && i->name == "Context"
+                  && i->type == "com.sun.star.uno.XInterface") {
+                out << " = ::css::uno::Reference< ::css::uno::XInterface >()";
+            }
             hasMember = true;
         }
     }

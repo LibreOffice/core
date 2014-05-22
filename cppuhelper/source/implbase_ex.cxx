@@ -53,7 +53,7 @@ static inline void checkInterface( Type const & rType )
     {
         OUString msg( "querying for interface \"" + rType.getTypeName() + "\": no interface type!" );
         SAL_WARN( "cppuhelper", msg );
-        throw RuntimeException( msg, Reference< XInterface >() );
+        throw RuntimeException( msg );
     }
 }
 
@@ -96,7 +96,7 @@ static inline type_entry * __getTypeEntries( class_data * cd )
                 {
                     OUString msg( "type \"" + rType.getTypeName() + "\" is no interface type!" );
                     SAL_WARN( "cppuhelper", msg );
-                    throw RuntimeException( msg, Reference< XInterface >() );
+                    throw RuntimeException( msg );
                 }
                 // ref is statically held by getCppuType()
                 pEntry->m_type.typeRef = rType.getTypeLibType();
@@ -202,7 +202,7 @@ static inline void * __queryDeepNoXInterface(
         {
             OUString msg( "cannot get type description for type \"" + OUString(pEntries[ n ].m_type.typeRef->pTypeName) + "\"!" );
             SAL_WARN( "cppuhelper", msg );
-            throw RuntimeException( msg, Reference< XInterface >() );
+            throw RuntimeException( msg );
         }
     }
     return 0;

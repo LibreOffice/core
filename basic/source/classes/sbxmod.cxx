@@ -257,7 +257,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         sal_Int32 nSbxCount = n - 1;
         if ( nParamsCount < nSbxCount - nSbxOptional )
         {
-            throw RuntimeException( "wrong number of parameters!", Reference< XInterface >() );
+            throw RuntimeException( "wrong number of parameters!" );
         }
     }
     // set parameters
