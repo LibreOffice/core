@@ -24,6 +24,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <iostream>
 
 #include "boost/noncopyable.hpp"
 #include "rtl/alloc.h"
@@ -2680,7 +2681,7 @@ private:
     virtual void dumpDeclaration(FileStream & out) SAL_OVERRIDE;
 
     bool dumpBaseMembers(
-        FileStream & out, OUString const & base, bool withType);
+        FileStream & out, OUString const & base, bool withType, bool withDefaults);
 
     sal_uInt32 getTotalMemberCount(OUString const & base) const;
 
@@ -2730,7 +2731,7 @@ void ExceptionType::dumpHxxFile(
     out << "}\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline " << id_ << "::" << id_ << "(";
-        first = !dumpBaseMembers(out, base, true);
+        first = !dumpBaseMembers(out, base, true, false);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
@@ -2748,7 +2749,7 @@ void ExceptionType::dumpHxxFile(
         if (!base.isEmpty()) {
             out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
                 << "(";
-            dumpBaseMembers(out, base, false);
+            dumpBaseMembers(out, base, false, false);
             out << ")\n";
             first = false;
         }
@@ -2984,7 +2985,10 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
         << "() SAL_THROW(());\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(";
-        bool first = !dumpBaseMembers(out, base, true);
+        // we only want to provide default parameter values for Exception subtypes
+        // which don't have any members beyond the ones defined in css::uno::Exception
+        bool withDefaults = entity_->getDirectMembers().empty() && getInheritedMemberCount() == 2;
+        bool first = !dumpBaseMembers(out, base, true, withDefaults);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
@@ -3023,7 +3027,7 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
 }
 
 bool ExceptionType::dumpBaseMembers(
-    FileStream & out, OUString const & base, bool withType)
+    FileStream & out, OUString const & base, bool withType, bool withDefaults)
 {
     bool hasMember = false;
     if (!base.isEmpty()) {
@@ -3036,7 +3040,7 @@ bool ExceptionType::dumpBaseMembers(
         rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
             dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
         assert(ent2.is());
-        hasMember = dumpBaseMembers(out, ent2->getDirectBase(), withType);
+        hasMember = dumpBaseMembers(out, ent2->getDirectBase(), withType, withDefaults);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(ent2->getDirectMembers().begin());
              i != ent2->getDirectMembers().end(); ++i)
@@ -3049,6 +3053,15 @@ bool ExceptionType::dumpBaseMembers(
                 out << " ";
             }
             out << i->name << "_";
+            // Most of the time we don't pass a Context object in to the exception
+            // throw sites, so provide a default value for this parameter.
+            if (withDefaults) {
+                //std::cout << i->name << " " << i->type << "  " << base + "\n";
+                if (i->name == "Context" && i->type == "com.sun.star.uno.XInterface") {
+                    //std::cout << "YESSSSSSSSSSSSSSSSSSSSSSS  " << base << "  \n";
+                    out << " = ::css::uno::Reference< ::css::uno::XInterface >()";
+                }
+            }
             hasMember = true;
         }
     }
