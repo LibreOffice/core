@@ -339,7 +339,10 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
         {
             OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( embed ), OUString() ) );
             if( !aFragmentPath.isEmpty() )
+            {
                 getFilter().importBinaryData( maEffect.mrOleObjectInfo.maEmbeddedData, aFragmentPath );
+                maEffect.mrOleObjectInfo.maProgId = aFragmentPath;
+            }
         }
         return new ArtisticEffectContext( *this, maEffect );
     }

@@ -1378,9 +1378,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artisti
     OUString sEmbedId2 = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
             "embed");
-    sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId2 + "']";
-    sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
+    CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId2);
 
     // 3rd picture: pencil sketch
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
@@ -1395,9 +1393,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artisti
     OUString sEmbedId3 = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
             "embed");
-    sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId3 + "']";
-    sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
+    CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId3);
 
     // 4th picture: light screen
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
@@ -1425,9 +1421,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artisti
     OUString sEmbedId5 = getXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
             "embed");
-    sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId5 + "']";
-    sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
+    CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId5);
 
     // 6th picture: photocopy (no attributes)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
@@ -1437,9 +1431,10 @@ DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artisti
     OUString sEmbedId6 = getXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
             "embed");
-    sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId6 + "']";
-    sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
+    CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId6);
+
+    // no redundant wdp files saved
+    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/hdphoto3.wdp")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(fdo77719, "fdo77719.docx")
