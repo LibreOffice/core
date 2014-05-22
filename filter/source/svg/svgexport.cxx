@@ -353,8 +353,8 @@ SVGExport::SVGExport(
     // Native Decoration
     mbIsUseNativeTextDecoration = mbIsUseTinyProfile ? sal_False : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, sal_False);
 
-    // Tiny Opacity
-    mbIsUseOpacity = mbIsUseTinyProfile ? sal_False : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, sal_True);
+    // Tiny Opacity (supported from SVG Tiny 1.2)
+    mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, sal_True);
 
     // Positioned Characters    (Seems to be experimental, as it was always initialized with false)
     mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, sal_False);
