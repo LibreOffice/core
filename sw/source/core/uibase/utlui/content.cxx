@@ -1494,7 +1494,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 
 bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
-    bool bRet;
+    bool bRet(false);
     if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
             (nRootType == CONTENT_TYPE_OUTLINE))
     {
