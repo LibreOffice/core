@@ -74,6 +74,8 @@
 #include <unistd.h>
 #endif
 
+#include <config_options.h>
+
 /* modes */
 #ifdef __windows
 #define FILE_O_RDONLY     _O_RDONLY
@@ -590,6 +592,11 @@ off_t       size = -1;
     return size;
 }
 
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+static void * file_load_buffers[100];
+static size_t file_load_buffer_count = 0;
+#endif
+
 static char* file_load(const char* name, off_t* size, int* return_rc)
 {
 off_t local_size = 0;
@@ -610,6 +617,20 @@ int fd;
         if (!(fd == -1))
         {
             buffer = malloc((size_t)(*size + 1));
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+            if (buffer != NULL)
+            {
+                if (file_load_buffer_count == 100)
+                {
+                    free(buffer);
+                    buffer = NULL;
+                }
+                else
+                {
+                    file_load_buffers[file_load_buffer_count++] = buffer;
+                }
+            }
+#endif
             if (buffer == NULL)
             {
                 rc = ENOMEM;
@@ -1089,7 +1110,7 @@ off_t in_list_size = 0;
 char* in_list;
 char* in_list_cursor;
 char* in_list_base;
-struct hash* dep_hash;
+struct hash* dep_hash = 0;
 const char *env_str;
 
     if(argc < 2)
@@ -1149,6 +1170,13 @@ const char *env_str;
                 dep_hash->collisions, dep_hash->memcmp, dep_hash->cost);
 #endif
     }
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+    hash_destroy(dep_hash);
+    for (size_t i = 0; i != file_load_buffer_count; ++i)
+    {
+        free(file_load_buffers[i]);
+    }
+#endif
     return rc;
 }
 
