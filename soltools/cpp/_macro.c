@@ -133,6 +133,7 @@ void
 
         tap = normtokenrow(args);
         dofree(args->bp);
+        dofree(args);
         args = tap;
     }
     np->ap = args;
