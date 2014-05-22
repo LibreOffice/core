@@ -456,6 +456,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
     const sal_Int32 nIdx, const sal_Int32 nLen, const sal_Int32* pDXArray ) const
 {
+
     // Font has to be selected in OutputDevice...
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
     {

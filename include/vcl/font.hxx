@@ -60,6 +60,11 @@ public:
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
+    // XXX: now font has background iff it is (single-y) underlined
+    bool                HasBackgroundColor() const {
+                return GetUnderline() == UNDERLINE_SINGLE;
+    }
+
     void                SetName( const OUString& rFamilyName );
     const OUString&     GetName() const;
     void                SetStyleName( const OUString& rStyleName );

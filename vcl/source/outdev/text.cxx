@@ -279,7 +279,10 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     return true;
 }
 
-bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, bool bTextLines, sal_uInt32 flags )
+bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
+                                                                    bool bTextLines,
+                                                                    bool bTextBkg,
+                                                                    sal_uInt32 flags )
 {
     if( mpFontEntry->mnOwnOrientation )
         if( ImplDrawRotateText( rSalLayout ) )
@@ -326,6 +329,11 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, bool bTextLines, s
         ImplDrawTextLines( rSalLayout,
             maFont.GetStrikeout(), maFont.GetUnderline(), maFont.GetOverline(),
             maFont.IsWordLineMode(), ImplIsUnderlineAbove( maFont ) );
+
+    // draw background
+    if ( bTextBkg ) {
+
+    }
 
     // emphasis marks
     if( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
@@ -422,7 +430,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( maFont.IsOutline() )
         {
-            if(! ImplDrawTextDirect( rSalLayout, mbTextLines, DRAWTEXT_F_OUTLINE))
+            if(! ImplDrawTextDirect( rSalLayout, mbTextLines, false, DRAWTEXT_F_OUTLINE))
             {
                 rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
                 ImplDrawTextDirect( rSalLayout, mbTextLines );
@@ -473,7 +481,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     if( mbTextSpecial )
         ImplDrawSpecialText( rSalLayout );
     else
-        ImplDrawTextDirect( rSalLayout, mbTextLines );
+        ImplDrawTextDirect( rSalLayout, mbTextLines, mbTextBackground );
 }
 
 long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
