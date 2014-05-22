@@ -58,7 +58,7 @@ namespace dbaui
         void reSyncRows();
         void assignTable();                 // set the table if a name is given
         void loadData();
-        bool checkColumns(bool _bNew) throw(::com::sun::star::sdbc::SQLException);      // check if we have double column names
+        bool checkColumns(bool _bNew) throw(css::sdbc::SQLException, std::exception);      // check if we have double column names
         OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const OUString& _rDefault);
         void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns = false);
         void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup, bool _bNew);

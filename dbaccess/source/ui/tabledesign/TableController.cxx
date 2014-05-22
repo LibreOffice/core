@@ -919,7 +919,7 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
     return getPrimaryKeyColumns_throw(m_xTable);
 }
 
-bool OTableController::checkColumns(bool _bNew) throw(::com::sun::star::sdbc::SQLException)
+bool OTableController::checkColumns(bool _bNew) throw(css::sdbc::SQLException, std::exception)
 {
     bool bOk = true;
     bool bFoundPKey = false;
