@@ -86,7 +86,7 @@ static bool handleEmbeddedWPGImage(const WPXBinaryData &input, WPXBinaryData &ou
 }
 
 bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
