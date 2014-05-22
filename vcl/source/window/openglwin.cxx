@@ -40,6 +40,8 @@ OpenGLWindow::OpenGLWindow(Window* pParent):
 
 OpenGLWindow::~OpenGLWindow()
 {
+    if(mpRenderer)
+        mpRenderer->contextDestroyed();
 }
 
 OpenGLContext* OpenGLWindow::getContext()

@@ -29,7 +29,8 @@ GL3DBarChart::GL3DBarChart(
     mxChartType(xChartType),
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
     mrWindow(rWindow),
-    mpCamera(NULL)
+    mpCamera(NULL),
+    mbValidContext(true)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -39,7 +40,8 @@ GL3DBarChart::GL3DBarChart(
 
 GL3DBarChart::~GL3DBarChart()
 {
-    mrWindow.setRenderer(NULL);
+    if(mbValidContext)
+        mrWindow.setRenderer(NULL);
 }
 
 namespace {
@@ -186,6 +188,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
 void GL3DBarChart::render()
 {
+    if(!mbValidContext)
+        return;
+
     mrWindow.getContext()->makeCurrent();
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -236,6 +241,11 @@ void GL3DBarChart::clickedAt(const Point& rPos)
     }
     if (mpCamera && nId != COL_WHITE)
         mpCamera->zoom(nId);
+}
+
+void GL3DBarChart::contextDestroyed()
+{
+    mbValidContext = false;
 }
 
 }
