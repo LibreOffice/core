@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/config.h>
 #ifdef SAL_UNX
 #include <sal/alloca.h>
@@ -34,6 +33,10 @@
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "cppuhelper/exc_hlp.hxx"
+
+using namespace css::lang;
+using namespace css::reflection;
+using namespace css::uno;
 
 namespace stoc_corefl
 {
@@ -104,13 +107,13 @@ void IdlAttributeFieldImpl::release() throw()
 Sequence< Type > IdlAttributeFieldImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! s_pTypes)
         {
-            static OTypeCollection s_aTypes(
+            static ::cppu::OTypeCollection s_aTypes(
                 ::getCppuType( (const Reference< XIdlField2 > *)0 ),
                 ::getCppuType( (const Reference< XIdlField > *)0 ),
                 IdlMemberImpl::getTypes() );
@@ -133,7 +136,7 @@ Reference< XIdlClass > IdlAttributeFieldImpl::getDeclaringClass()
 {
     if (! _xDeclClass.is())
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
         {
             OUString aName(getAttributeTypeDescr()->aBase.aBase.pTypeName);
@@ -399,13 +402,13 @@ void IdlInterfaceMethodImpl::release() throw()
 Sequence< Type > IdlInterfaceMethodImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! s_pTypes)
         {
-            static OTypeCollection s_aTypes(
+            static ::cppu::OTypeCollection s_aTypes(
                 ::getCppuType( (const Reference< XIdlMethod > *)0 ),
                 IdlMemberImpl::getTypes() );
             s_pTypes = &s_aTypes;
@@ -427,7 +430,7 @@ Reference< XIdlClass > IdlInterfaceMethodImpl::getDeclaringClass()
 {
     if (! _xDeclClass.is())
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
         {
             OUString aName(getMethodTypeDescr()->aBase.aBase.pTypeName);
@@ -458,7 +461,7 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getExceptionTypes()
 {
     if (! _pExceptionTypes)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _pExceptionTypes)
         {
             sal_Int32 nExc = getMethodTypeDescr()->nExceptions;
@@ -484,7 +487,7 @@ Sequence< Reference< XIdlClass > > IdlInterfaceMethodImpl::getParameterTypes()
 {
     if (! _pParamTypes)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _pParamTypes)
         {
             sal_Int32 nParams = getMethodTypeDescr()->nParams;
@@ -510,7 +513,7 @@ Sequence< ParamInfo > IdlInterfaceMethodImpl::getParameterInfos()
 {
     if (! _pParamInfos)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _pParamInfos)
         {
             sal_Int32 nParams = getMethodTypeDescr()->nParams;
@@ -778,7 +781,7 @@ InterfaceIdlClassImpl::~InterfaceIdlClassImpl()
 Sequence< Reference< XIdlClass > > InterfaceIdlClassImpl::getSuperclasses()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    MutexGuard aGuard(getMutexAccess());
+    ::osl::MutexGuard aGuard(getMutexAccess());
     if (_xSuperClasses.getLength() == 0) {
         typelib_InterfaceTypeDescription * pType = getTypeDescr();
         _xSuperClasses.realloc(pType->nBaseTypes);
@@ -853,7 +856,7 @@ Uik InterfaceIdlClassImpl::getUik()
 Sequence< Reference< XIdlMethod > > InterfaceIdlClassImpl::getMethods()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    MutexGuard aGuard( getMutexAccess() );
+    ::osl::MutexGuard aGuard( getMutexAccess() );
     if (! _pSortedMemberInit)
         initMembers();
 
@@ -873,7 +876,7 @@ Sequence< Reference< XIdlMethod > > InterfaceIdlClassImpl::getMethods()
 Sequence< Reference< XIdlField > > InterfaceIdlClassImpl::getFields()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    MutexGuard aGuard( getMutexAccess() );
+    ::osl::MutexGuard aGuard( getMutexAccess() );
     if (! _pSortedMemberInit)
         initMembers();
 
@@ -893,7 +896,7 @@ Sequence< Reference< XIdlField > > InterfaceIdlClassImpl::getFields()
 Reference< XIdlMethod > InterfaceIdlClassImpl::getMethod( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    MutexGuard aGuard( getMutexAccess() );
+    ::osl::MutexGuard aGuard( getMutexAccess() );
     if (! _pSortedMemberInit)
         initMembers();
 
@@ -923,7 +926,7 @@ Reference< XIdlMethod > InterfaceIdlClassImpl::getMethod( const OUString & rName
 Reference< XIdlField > InterfaceIdlClassImpl::getField( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    MutexGuard aGuard( getMutexAccess() );
+    ::osl::MutexGuard aGuard( getMutexAccess() );
     if (! _pSortedMemberInit)
         initMembers();
 

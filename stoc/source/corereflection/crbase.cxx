@@ -22,6 +22,9 @@
 
 #include "base.hxx"
 
+using namespace css::reflection;
+using namespace css::uno;
+
 namespace stoc_corefl
 {
 
@@ -30,15 +33,15 @@ ClassNameList g_aClassNames;
 #endif
 
 
-Mutex & getMutexAccess()
+::osl::Mutex & getMutexAccess()
 {
-    static Mutex * s_pMutex = 0;
+    static ::osl::Mutex * s_pMutex = 0;
     if (! s_pMutex)
     {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (! s_pMutex)
         {
-            static Mutex s_aMutex;
+            static ::osl::Mutex s_aMutex;
             s_pMutex = &s_aMutex;
         }
     }
@@ -263,7 +266,7 @@ Reference< XIdlClass > IdlMemberImpl::getDeclaringClass()
     if (! _xDeclClass.is())
     {
         Reference< XIdlClass > xDeclClass( getReflection()->forType( getDeclTypeDescr() ) );
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
             _xDeclClass = xDeclClass;
     }

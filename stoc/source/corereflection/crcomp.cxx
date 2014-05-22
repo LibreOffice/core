@@ -25,6 +25,9 @@
 
 #include "base.hxx"
 
+using namespace css::lang;
+using namespace css::reflection;
+using namespace css::uno;
 
 namespace stoc_corefl
 {
@@ -92,13 +95,13 @@ void IdlCompFieldImpl::release() throw()
 Sequence< Type > IdlCompFieldImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! s_pTypes)
         {
-            static OTypeCollection s_aTypes(
+            static ::cppu::OTypeCollection s_aTypes(
                 ::getCppuType( (const Reference< XIdlField2 > *)0 ),
                 ::getCppuType( (const Reference< XIdlField > *)0 ),
                 IdlMemberImpl::getTypes() );
@@ -121,7 +124,7 @@ Reference< XIdlClass > IdlCompFieldImpl::getDeclaringClass()
 {
     if (! _xDeclClass.is())
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
         {
             typelib_CompoundTypeDescription * pTD =
@@ -311,7 +314,7 @@ Sequence< Reference< XIdlClass > > CompoundIdlClassImpl::getSuperclasses()
 {
     if (! _xSuperClass.is())
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _xSuperClass.is())
         {
             typelib_CompoundTypeDescription * pCompTypeDescr = getTypeDescr()->pBaseTypeDescription;
@@ -341,7 +344,7 @@ Reference< XIdlField > CompoundIdlClassImpl::getField( const OUString & rName )
 Sequence< Reference< XIdlField > > CompoundIdlClassImpl::getFields()
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    MutexGuard aGuard( getMutexAccess() );
+    ::osl::MutexGuard aGuard( getMutexAccess() );
     if (! _pFields)
     {
         sal_Int32 nAll = 0;

@@ -22,6 +22,9 @@
 
 #include "base.hxx"
 
+using namespace css::lang;
+using namespace css::reflection;
+using namespace css::uno;
 
 namespace stoc_corefl
 {
@@ -50,13 +53,13 @@ void ArrayIdlClassImpl::release() throw()
 Sequence< Type > ArrayIdlClassImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! s_pTypes)
         {
-            static OTypeCollection s_aTypes(
+            static ::cppu::OTypeCollection s_aTypes(
                 ::getCppuType( (const Reference< XIdlArray > *)0 ),
                 IdlClassImpl::getTypes() );
             s_pTypes = &s_aTypes;
