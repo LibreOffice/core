@@ -15,6 +15,8 @@
 #include <rtl/ref.hxx>
 #include <vcl/prgsbar.hxx>
 
+#include <vector>
+
 class FixedText;
 class SearchAndParseThread;
 
@@ -61,8 +63,9 @@ class SelectPersonaDialog : public ModalDialog
 {
 private:
     Edit *m_pEdit;                          ///< The input line for the Persona URL
-    PushButton *pButton;
-
+    PushButton *m_pButton;
+    FixedText *m_pProgressLabel;
+    FixedImage *m_vImageList[9];
 
 public:
     SelectPersonaDialog( Window *pParent );
@@ -70,6 +73,8 @@ public:
 
     /// Get the URL from the Edit field.
     OUString GetPersonaURL() const;
+    void SetProgress( OUString& );
+    void SetImages( std::vector<Image> &);
 
 private:
     /// Handle the [Visit Firefox Personas] button
@@ -85,6 +90,7 @@ private:
 
     virtual ~SearchAndParseThread();
     virtual void execute() SAL_OVERRIDE;
+    OUString getPreviewFile( const OUString& );
 
 public:
 
