@@ -2704,16 +2704,4 @@ void SwDoc::setExternalData(::sw::tExternalDataType eType,
     return m_externalData[eType];
 }
 
-sal_uInt16 SwNumRuleTbl::GetPos(const SwNumRule* pRule) const
-{
-    const_iterator it = std::find(begin(), end(), pRule);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-SwNumRuleTbl::~SwNumRuleTbl()
-{
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
