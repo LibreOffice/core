@@ -35,11 +35,23 @@ using namespace ::com::sun::star::ucb;
 SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
 {
-    get( pButton, "search_personas" );
-    pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
+    get( m_pButton, "search_personas" );
+    m_pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
 
     get( m_pEdit, "search_term" );
     m_pEdit->SetPlaceholderText( "Search term..." );
+
+    get( m_pProgressLabel, "progress_label" );
+
+    get(m_vImageList[0], "image1");
+    get(m_vImageList[1], "image2");
+    get(m_vImageList[2], "image3");
+    get(m_vImageList[3], "image4");
+    get(m_vImageList[4], "image5");
+    get(m_vImageList[5], "image6");
+    get(m_vImageList[6], "image7");
+    get(m_vImageList[7], "image8");
+    get(m_vImageList[8], "image9");
 }
 
 OUString SelectPersonaDialog::GetPersonaURL() const
@@ -55,10 +67,27 @@ OUString SelectPersonaDialog::GetPersonaURL() const
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 {
     OUString searchTerm = m_pEdit->GetText();
-    OUString rURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/";
+    OUString rURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
     m_aSearchThread = new SearchAndParseThread( this, rURL );
     m_aSearchThread->launch();
     return 0;
+}
+
+void SelectPersonaDialog::SetProgress( OUString& rProgress )
+{
+    if(rProgress.isEmpty())
+        m_pProgressLabel->Hide();
+    else
+        m_pProgressLabel->SetText( rProgress );
+}
+
+void SelectPersonaDialog::SetImages( std::vector<Image> &rImageList )
+{
+    sal_Int32 nCount = 0;
+    for( std::vector<Image>::iterator it=rImageList.begin(); it!=rImageList.end(); ++it )
+    {
+        m_vImageList[nCount++]->SetImage( *it );
+    }
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
@@ -187,7 +216,9 @@ static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OStri
 }
 
 /// Parse the Persona web page, and find where to get the bitmaps + the color values.
-static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUString *pFooterURL, OUString *pTextColor, OUString *pAccentColor )
+static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUString *pFooterURL,
+                              OUString *pTextColor, OUString *pAccentColor, OUString *pPreviewURL,
+                              OUString *pName )
 {
     // it is the first attribute that contains "persona="
     sal_Int32 persona = rBuffer.indexOf( "data-browsertheme=\"{" );
@@ -208,6 +239,14 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
         return false;
 
     *pAccentColor = searchValue( rBuffer, persona, "&#34;accentcolor&#34;:&#34;" );
+    if ( pAccentColor->isEmpty() )
+        return false;
+
+    *pPreviewURL = searchValue( rBuffer, persona, "&#34;previewURL&#34;:&#34;" );
+    if ( pAccentColor->isEmpty() )
+        return false;
+
+    *pName = searchValue( rBuffer, persona, "&#34;name&#34;:&#34;" );
     if ( pAccentColor->isEmpty() )
         return false;
 
@@ -249,9 +288,9 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
     xStream->closeInput();
 
     // get the important bits of info
-    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor;
+    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
 
-    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor ) )
+    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) ) // Temp
         return false;
 
     // copy the images to the user's gallery
@@ -292,6 +331,8 @@ SearchAndParseThread::~SearchAndParseThread()
 
 void SearchAndParseThread::execute()
 {
+    OUString sProgress( "Searching.. Please Wait.." );
+    m_pPersonaDialog->SetProgress( sProgress );
     Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
     PersonasDocHandler* pHandler = new PersonasDocHandler();
@@ -313,6 +354,82 @@ void SearchAndParseThread::execute()
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xStream;
     xParser->parseStream( aParserInput );
+
+    std::vector<OUString> vLearnmoreURLs = pHandler->getLearnmoreURLs();
+    std::vector<OUString>::iterator it;
+    std::vector<Image> vImageList;
+    GraphicFilter aFilter;
+    Graphic aGraphic;
+
+    for( it = vLearnmoreURLs.begin(); it!=vLearnmoreURLs.end(); ++it )
+    {
+        OUString sHeaderFile = getPreviewFile( *it );
+        INetURLObject aURLObj( sHeaderFile );
+        aFilter.ImportGraphic( aGraphic, aURLObj );
+        Bitmap aBmp = aGraphic.GetBitmap();
+        vImageList.push_back( Image( aBmp ) );
+    }
+    m_pPersonaDialog->SetImages( vImageList );
+    sProgress = "";
+    m_pPersonaDialog->SetProgress( sProgress );
 }
 
+// TODO: Think of some way to retrieve only the preview image and skip the rest!
+OUString SearchAndParseThread::getPreviewFile( const OUString& rURL )
+{
+    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+    if ( !xFileAccess.is() )
+        return OUString();
+
+    uno::Reference< io::XInputStream > xStream;
+    try {
+        xStream = xFileAccess->openFileRead( rURL );
+    }
+    catch (...)
+    {
+        return OUString();
+    }
+    if ( !xStream.is() )
+        return OUString();
+
+    // read the persona specification
+    // NOTE: Parsing for real is an overkill here; and worse - I tried, and
+    // the HTML the site provides is not 100% valid ;-)
+    const sal_Int32 BUF_LEN = 8000;
+    uno::Sequence< sal_Int8 > buffer( BUF_LEN );
+    OStringBuffer aBuffer( 64000 );
+
+    sal_Int32 nRead = 0;
+    while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+
+    if ( nRead > 0 )
+        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+
+    xStream->closeInput();
+
+    // get the important bits of info
+    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
+
+    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) )
+        return OUString();
+
+    // copy the images to the user's gallery
+    OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros( gallery );
+    gallery += "/user/gallery/personas/";
+    gallery += aName + "/";
+    osl::Directory::createPath( gallery );
+
+    OUString aPreviewFile( INetURLObject( aPreviewURL ).getName() );
+
+    try {
+        xFileAccess->copy( aPreviewURL, gallery + aPreviewFile );
+    }
+    catch ( const uno::Exception & )
+    {
+        return OUString();
+    }
+    return gallery + aPreviewFile;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
