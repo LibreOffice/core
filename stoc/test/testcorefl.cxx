@@ -228,7 +228,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     try
     {
-        fprintf( stderr, "%1\n" );
+        SAL_WARN( "stoc", "case 1" );
         Any bla = xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->get(Any());
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 63");
         return sal_False;
@@ -239,7 +239,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     try
     {
-        fprintf( stderr, "%2\n" );
+        SAL_WARN( "stoc", "case 2" );
         Any blup;
         blup <<= aStructC;
         Any gulp;
@@ -254,7 +254,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     try
     {
-        fprintf( stderr, "%3\n" );
+        SAL_WARN( "stoc", "case 3" );
         Any gulp;
         gulp <<= 3.14f;
         Any blup;
@@ -280,7 +280,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     try
     {
         Sequence< Any > params;
-        fprintf( stderr, "%4\n" );
+        SAL_WARN( "stoc", "case 4" );
 
         Any a;
         a <<= xAI;
