@@ -17,7 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <math.h>
+
+#include <sal/mathconf.h>
 
 #define PREC_float 1
 #define PREC_double 2
@@ -26,6 +30,10 @@
 template<class T>
 bool is_equal(T x, T y, sal_Int16 _nPrec)
 {
+    if (!(SAL_MATH_FINITE(x) && SAL_MATH_FINITE(y))) {
+        return x == y;
+    }
+
     // due to the fact that this check looks only if both values are equal
     // we only need to look on one value
 
