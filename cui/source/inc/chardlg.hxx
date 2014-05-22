@@ -86,7 +86,7 @@ private:
     FixedText*          m_pWestFontSizeFT;
     FontSizeBox*        m_pWestFontSizeLB;
     FixedText*          m_pWestFontLanguageFT;
-    SvxLanguageBox*     m_pWestFontLanguageLB;
+    SvxLanguageComboBox* m_pWestFontLanguageLB;
     FixedText*          m_pWestFontTypeFT;
 
     VclContainer*       m_pEastFrame;
