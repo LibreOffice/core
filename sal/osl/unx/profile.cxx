@@ -1133,7 +1133,7 @@ static sal_Char* OslProfile_getLine(osl_TFile* pFile)
 
         pFile->m_pReadPtr = pChr;
     }
-    while (Max > 0);
+    while (Max > 0) ;
 
     return pLine;
 }
