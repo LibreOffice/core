@@ -370,25 +370,25 @@ void FocusManager::RemoveWindow (Window& rWindow)
 
 
 bool FocusManager::MoveFocusInsidePanel (
-    const FocusLocation aFocusLocation,
+    const FocusLocation& rFocusLocation,
     const sal_Int32 nDirection)
 {
     const bool bHasToolBoxItem (
-        maPanels[aFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GetItemCount() > 0);
-    switch (aFocusLocation.meComponent)
+        maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GetItemCount() > 0);
+    switch (rFocusLocation.meComponent)
     {
         case  PC_PanelTitle:
             if (nDirection > 0 && bHasToolBoxItem)
-                maPanels[aFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GrabFocus();
+                maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GrabFocus();
             else
-                FocusPanelContent(aFocusLocation.mnIndex);
+                FocusPanelContent(rFocusLocation.mnIndex);
             return true;
 
         case PC_PanelToolBox:
             if (nDirection < 0 && bHasToolBoxItem)
-                maPanels[aFocusLocation.mnIndex]->GetTitleBar()->GrabFocus();
+                maPanels[rFocusLocation.mnIndex]->GetTitleBar()->GrabFocus();
             else
-                FocusPanelContent(aFocusLocation.mnIndex);
+                FocusPanelContent(rFocusLocation.mnIndex);
             return true;
 
         default:
@@ -400,7 +400,7 @@ bool FocusManager::MoveFocusInsidePanel (
 
 
 bool FocusManager::MoveFocusInsideDeckTitle (
-    const FocusLocation aFocusLocation,
+    const FocusLocation& rFocusLocation,
     const sal_Int32 nDirection)
 {
     // Note that when the title bar of the first (and only) panel is
@@ -409,7 +409,7 @@ bool FocusManager::MoveFocusInsideDeckTitle (
     // of panel 0.
     const bool bHasToolBoxItem (
         mpDeckTitleBar->GetToolBox().GetItemCount() > 0);
-    switch (aFocusLocation.meComponent)
+    switch (rFocusLocation.meComponent)
     {
         case  PC_DeckTitle:
             if (nDirection<0 && ! IsPanelTitleVisible(0))
