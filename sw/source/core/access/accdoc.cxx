@@ -189,7 +189,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
             if( xAcc->getAccessibleChild( i ) == xThis )
                 return i;
         }
-        catch(::com::sun::star::lang::IndexOutOfBoundsException e)
+        catch(::com::sun::star::lang::IndexOutOfBoundsException)
         {
             return -1L;
         }
@@ -253,7 +253,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
 
         return aBox;
     }
-    catch(::com::sun::star::lang::IndexOutOfBoundsException e)
+    catch(::com::sun::star::lang::IndexOutOfBoundsException)
     {
         return awt::Rectangle();
     }
