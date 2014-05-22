@@ -24,6 +24,8 @@ public:
     virtual ~IRenderer() {}
     virtual void update() = 0;
     virtual void clickedAt(const Point& rPos) = 0;
+
+    virtual void contextDestroyed() = 0;
 };
 
 // pImpl Pattern to avoid linking against OpenGL libs when using the class without the context
