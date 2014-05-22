@@ -1,0 +1,46 @@
+diff -u hyphen/hyphen.c build/hyphen/hyphen.c
+--- hyphen/hyphen.c	2014-05-22 00:28:13.164587974 +0200
++++ build/hyphen/hyphen.c	2014-05-22 11:08:55.000000000 +0200
+@@ -44,6 +44,11 @@
+ #include <unistd.h> /* for exit */
+ #endif
+ 
++#ifdef _WIN32
++#include <windows.h>
++#include <wchar.h>
++#endif
++
+ #define noVERBOSE
+ 
+ /* calculate hyphenmin values with long ligature length (2 or 3 characters
+@@ -371,6 +376,21 @@
+ 	    }
+ }
+ 
++FILE * hnj_fopen(const char * path, const char * mode) {
++#ifdef _WIN32
++#define WIN32_LONG_PATH_PREFIX "\\\\?\\"
++    if (strncmp(path, WIN32_LONG_PATH_PREFIX, 4) == 0) {
++        int len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
++        wchar_t *buff = (wchar_t *) malloc(len * sizeof(wchar_t));
++        MultiByteToWideChar(CP_UTF8, 0, path, -1, buff, len);
++        FILE * f = _wfopen(buff, (strcmp(mode, "r") == 0) ? L"r" : L"rb");
++        free(buff);
++        return f;
++    }
++#endif
++    return fopen(path, mode);
++}
++
+ HyphenDict *
+ hnj_hyphen_load (const char *fn)
+ {
+@@ -383,7 +403,7 @@
+   HashEntry *e;
+   int state_num = 0;
+ 
+-  f = fopen (fn, "r");
++  f = hnj_fopen (fn, "r");
+   if (f == NULL)
+     return NULL;
+ 

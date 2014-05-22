@@ -285,14 +285,12 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             OUString dictpath;
 
             osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
-            OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
 #if defined(WNT)
-            // workaround for Windows specific problem that the
-            // path length in calls to 'fopen' is limted to somewhat
-            // about 120+ characters which will usually be exceed when
-            // using dictionaries as extensions.
-            sTmp = Win_GetShortPathName( dictpath );
+            // Hyphen waits UTF-8 encoded paths with \\?\ long path prefix.
+            OString sTmp = OUStringToOString(dicpath, RTL_TEXTENCODING_UTF8);
+#else
+            OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 #endif
 
             if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
