@@ -3512,6 +3512,19 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78910, "fdo78910.docx")
     assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[5]/w:fldChar", "fldCharType", "end" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
+{
+    xmlDocPtr pXmlFootNotes = parseExport("word/footnotes.xml");
+    if (!pXmlFootNotes)
+        return;
+    assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", "w14 wp14");
+
+    xmlDocPtr pXmlEndNotes = parseExport("word/endnotes.xml");
+    if (!pXmlEndNotes)
+        return;
+    assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo78957, "fdo78957.docx")
 {
     xmlDocPtr pXmlHeader = parseExport("word/header2.xml");
