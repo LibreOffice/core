@@ -187,7 +187,7 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
                     }
                 }
             }
-            catch (::com::sun::star::uno::RuntimeException e)
+            catch (::com::sun::star::uno::RuntimeException)
             {
                 // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
                 // but keep revoking these windows in hide(s).
