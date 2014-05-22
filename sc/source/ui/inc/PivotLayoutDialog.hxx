@@ -82,14 +82,12 @@ private:
     formula::RefButton* mpDestinationButton;
 
     PushButton*      mpButtonApply;
-    OKButton*        mpButtonOk;
     CloseButton*     mpButtonClose;
 
     formula::RefEdit*   mpActiveEdit;
     ScAddress::Details  maAddressDetails;
     bool                mbDialogLostFocus;
 
-    DECL_LINK(OkClicked,              PushButton*);
     DECL_LINK(CloseClicked,           PushButton*);
     DECL_LINK(ApplyClicked,           PushButton*);
     DECL_LINK(GetFocusHandler,        Control*);
