@@ -1,0 +1,12 @@
+diff -ur coinmp.org/CoinUtils/src/CoinMessageHandler.cpp coinmp/CoinUtils/src/CoinMessageHandler.cpp
+--- CoinUtils/src/CoinMessageHandler.cpp	2014-05-21 23:14:01.384874167 +0200
++++ CoinUtils/src/CoinMessageHandler.cpp	2014-05-21 23:14:47.708874712 +0200
+@@ -820,7 +820,7 @@
+ 	  sprintf(messageOut_,g_format_,doublevalue);
+ 	  if (next != format_+2) {
+ 	    messageOut_+=strlen(messageOut_);
+-	    sprintf(messageOut_,format_+2);
++	    sprintf(messageOut_,"%s",format_+2);
+ 	  }
+ 	}
+ 	messageOut_+=strlen(messageOut_);
