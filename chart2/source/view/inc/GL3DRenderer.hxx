@@ -84,7 +84,6 @@ struct Polygon3DInfo
     UVs3D *uvs;
     Normals3D *normals;
     std::list <Vertices3D *> verticesList;
-    std::list <UVs3D *> uvsList;
     std::list <Normals3D *> normalsList;
     MaterialParameters material;
 };
