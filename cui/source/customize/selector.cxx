@@ -558,7 +558,7 @@ Image SvxConfigGroupListBox::GetImage(
                 Any aAny = xModuleManager->getByName(appModule);
                 if( !( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException("SFTreeListBox::Init: failed to get PropertyValue", Reference< XInterface >());
+                    throw RuntimeException("SFTreeListBox::Init: failed to get PropertyValue");
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();

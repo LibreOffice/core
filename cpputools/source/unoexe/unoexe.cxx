@@ -105,9 +105,7 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
         if (*pnIndex >= rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
         {
-            throw RuntimeException(
-                "incomplete option \"-" + aOpt + "\" given!",
-                Reference< XInterface >() );
+            throw RuntimeException( "incomplete option \"-" + aOpt + "\" given!" );
         }
         else
         {
@@ -170,9 +168,7 @@ void createInstance(
 
     if (! x.is())
     {
-        throw RuntimeException(
-            "cannot get service instance \"" + rServiceName + "\"!",
-            Reference< XInterface >() );
+        throw RuntimeException( "cannot get service instance \"" + rServiceName + "\"!" );
     }
 
     rxOut = Reference< T >::query( x );
@@ -182,8 +178,7 @@ void createInstance(
         throw RuntimeException(
             "service instance \"" + rServiceName +
             "\" does not support demanded interface \"" +
-            rType.getTypeName() + "\"!",
-            Reference< XInterface >() );
+            rType.getTypeName() + "\"!" );
     }
 }
 
@@ -217,8 +212,7 @@ static Reference< XInterface > loadComponent(
         else
         {
             throw RuntimeException(
-                "unknown extension of \"" + rLocation + "\"!  No loader available!",
-                Reference< XInterface >() );
+                "unknown extension of \"" + rLocation + "\"!  No loader available!" );
         }
 
         Reference< XInterface > xInstance;
@@ -249,8 +243,7 @@ static Reference< XInterface > loadComponent(
         if (! xInstance.is())
         {
             throw RuntimeException(
-                "activating component \"" + rImplName + "\" from location \"" + rLocation + "\" failed!",
-                Reference< XInterface >() );
+                "activating component \"" + rImplName + "\" from location \"" + rLocation + "\" failed!" );
         }
 
         return xInstance;
@@ -258,8 +251,7 @@ static Reference< XInterface > loadComponent(
     else
     {
         throw RuntimeException(
-            "location \"" + rLocation + "\" has no extension!  Cannot determine loader to be used!",
-            Reference< XInterface >() );
+            "location \"" + rLocation + "\" has no extension!  Cannot determine loader to be used!" );
     }
 }
 
@@ -357,8 +349,7 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         out( rExc.Message );
     }
     throw NoSuchElementException(
-        "no such element \"" + rName + "\"!",
-        Reference< XInterface >() );
+        "no such element \"" + rName + "\"!" );
 }
 
 struct ODisposingListener : public WeakImplHelper1< XEventListener >
@@ -437,8 +428,7 @@ SAL_IMPLEMENT_MAIN()
                   readOption( &bSingleInstance, "singleinstance", &nPos, arg)))
             {
                 throw RuntimeException(
-                    "unexpected argument \"" + arg + "\"",
-                    Reference< XInterface >() );
+                    "unexpected argument \"" + arg + "\"" );
             }
         }
 
@@ -448,15 +438,13 @@ SAL_IMPLEMENT_MAIN()
         {
             if (! aUnoUrl.endsWithIgnoreAsciiCase( ";uno.ComponentContext" ))
                 throw RuntimeException(
-                    OUString("expected UNO-URL with instance name uno.ComponentContext!" ),
-                    Reference<XInterface>() );
+                    OUString("expected UNO-URL with instance name uno.ComponentContext!" ) );
             if (bSingleInstance)
                 throw RuntimeException(
-                    OUString("unexpected option --singleinstance!"),
-                    Reference<XInterface>() );
+                    OUString("unexpected option --singleinstance!") );
         }
         if (!aImplName.isEmpty() && aLocation.isEmpty())
-            throw RuntimeException("give component location!", Reference< XInterface >() );
+            throw RuntimeException("give component location!" );
         if (!aServiceName.isEmpty() && !aLocation.isEmpty())
             out( "\n> warning: service name given, will ignore location!" );
 
@@ -481,7 +469,7 @@ SAL_IMPLEMENT_MAIN()
             if (nTokens != 3 || aUnoUrl.getLength() < 10 ||
                 !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( "uno:" ))
             {
-                throw RuntimeException("illegal uno url given!", Reference< XInterface >() );
+                throw RuntimeException("illegal uno url given!" );
             }
             nIndex = 0;
             OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
@@ -528,7 +516,7 @@ SAL_IMPLEMENT_MAIN()
                 {
                     Reference< XComponent > xComp( xBridge, UNO_QUERY );
                     if (! xComp.is())
-                        throw RuntimeException( OUString( "bridge factory does not export interface \"com.sun.star.lang.XComponent\"!" ), Reference< XInterface >() );
+                        throw RuntimeException( OUString( "bridge factory does not export interface \"com.sun.star.lang.XComponent\"!" ) );
                     ODisposingListener::waitFor( xComp );
                     xComp->dispose();
                         // explicitly dispose the remote bridge so that it joins
@@ -557,7 +545,7 @@ SAL_IMPLEMENT_MAIN()
                 Reference< XComponent > xComp( xInstance, UNO_QUERY );
                 if (xComp.is())
                     xComp->dispose();
-                throw RuntimeException( OUString( "component does not export interface interface \"com.sun.star.lang.XMain\"!" ), Reference< XInterface >() );
+                throw RuntimeException( OUString( "component does not export interface interface \"com.sun.star.lang.XMain\"!" ) );
             }
         }
     }
