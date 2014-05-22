@@ -56,9 +56,9 @@ Sequence< Type > OPropertyContainer::getBaseTypes() throw (RuntimeException, std
 {
     // just the types from our one and only base class
     ::cppu::OTypeCollection aTypes(
-        ::getCppuType( static_cast< Reference< XPropertySet >* >(NULL)),
-        ::getCppuType( static_cast< Reference< XFastPropertySet >* >(NULL)),
-        ::getCppuType( static_cast< Reference< XMultiPropertySet >* >(NULL))
+        cppu::UnoType<XPropertySet>::get(),
+        cppu::UnoType<XFastPropertySet>::get(),
+        cppu::UnoType<XMultiPropertySet>::get()
     );
     return aTypes.getTypes();
 }

@@ -273,12 +273,12 @@ void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeExc
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    pImp->aLC.addInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
+    pImp->aLC.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    pImp->aLC.removeInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
+    pImp->aLC.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)

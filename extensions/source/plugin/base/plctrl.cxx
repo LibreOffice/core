@@ -205,84 +205,84 @@ void PluginControl_Impl::setDesignMode( sal_Bool bOn )
 void PluginControl_Impl::addPaintListener( const Reference< ::com::sun::star::awt::XPaintListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XPaintListener >*)0), l );
+    getMultiplexer()->advise( cppu::UnoType<com::sun::star::awt::XPaintListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removePaintListener( const Reference< ::com::sun::star::awt::XPaintListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XPaintListener >*)0), l );
+    getMultiplexer()->unadvise( cppu::UnoType<com::sun::star::awt::XPaintListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addWindowListener( const Reference< ::com::sun::star::awt::XWindowListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0), l );
+    getMultiplexer()->advise( cppu::UnoType<com::sun::star::awt::XWindowListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeWindowListener( const Reference< ::com::sun::star::awt::XWindowListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0), l );
+    getMultiplexer()->unadvise( cppu::UnoType<com::sun::star::awt::XWindowListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addFocusListener( const Reference< ::com::sun::star::awt::XFocusListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XFocusListener >*)0), l );
+    getMultiplexer()->advise( cppu::UnoType<com::sun::star::awt::XFocusListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeFocusListener( const Reference< ::com::sun::star::awt::XFocusListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XFocusListener >*)0), l );
+    getMultiplexer()->unadvise( cppu::UnoType<com::sun::star::awt::XFocusListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addKeyListener( const Reference< ::com::sun::star::awt::XKeyListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0), l );
+    getMultiplexer()->advise( cppu::UnoType<com::sun::star::awt::XKeyListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeKeyListener( const Reference< ::com::sun::star::awt::XKeyListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0), l );
+    getMultiplexer()->unadvise( cppu::UnoType<com::sun::star::awt::XKeyListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addMouseListener( const Reference< ::com::sun::star::awt::XMouseListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseListener >*)0), l );
+    getMultiplexer()->advise( cppu::UnoType<com::sun::star::awt::XMouseListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeMouseListener( const Reference< ::com::sun::star::awt::XMouseListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseListener >*)0), l );
+    getMultiplexer()->unadvise( cppu::UnoType<com::sun::star::awt::XMouseListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::addMouseMotionListener( const Reference< ::com::sun::star::awt::XMouseMotionListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->advise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseMotionListener >*)0), l );
+    getMultiplexer()->advise( cppu::UnoType<com::sun::star::awt::XMouseMotionListener>::get(), l );
 }
 
 //---- ::com::sun::star::awt::XWindow -------------------------------------------------------------------------------------
 void PluginControl_Impl::removeMouseMotionListener( const Reference< ::com::sun::star::awt::XMouseMotionListener > & l )
     throw( RuntimeException, std::exception )
 {
-    getMultiplexer()->unadvise( ::getCppuType((const Reference< ::com::sun::star::awt::XMouseMotionListener >*)0), l );
+    getMultiplexer()->unadvise( cppu::UnoType<com::sun::star::awt::XMouseMotionListener>::get(), l );
 }
 
 

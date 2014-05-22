@@ -127,7 +127,7 @@ void OHCatalog::refreshUsers()
 
 Any SAL_CALL OHCatalog::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if ( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) )
+    if ( rType == cppu::UnoType<XGroupsSupplier>::get())
         return Any();
 
     return OCatalog::queryInterface(rType);
@@ -142,7 +142,7 @@ Sequence< Type > SAL_CALL OHCatalog::getTypes(  ) throw(RuntimeException, std::e
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if ( !(*pBegin == ::getCppuType((const Reference<XGroupsSupplier>*)0)))
+        if ( !(*pBegin == cppu::UnoType<XGroupsSupplier>::get()))
         {
             aOwnTypes.push_back(*pBegin);
         }

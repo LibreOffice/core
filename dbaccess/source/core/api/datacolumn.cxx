@@ -58,8 +58,8 @@ ODataColumn::~ODataColumn()
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > ODataColumn::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XColumn > *)0 ),
-                           ::getCppuType( (const Reference< XColumnUpdate > *)0 ),
+    OTypeCollection aTypes(cppu::UnoType<XColumn>::get(),
+                           cppu::UnoType<XColumnUpdate>::get(),
                            OColumn::getTypes());
     return aTypes.getTypes();
 }

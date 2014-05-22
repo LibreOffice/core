@@ -532,7 +532,7 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 
 void Window::fireMousePressedEvent( const ::com::sun::star::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XMouseListener >*) 0 ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
 
     if( pContainer )
     {
@@ -545,7 +545,7 @@ void Window::fireMousePressedEvent( const ::com::sun::star::awt::MouseEvent& rEv
 
 void Window::fireMouseReleasedEvent( const ::com::sun::star::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XMouseListener >*) 0 ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
 
     if( pContainer )
     {
@@ -558,7 +558,7 @@ void Window::fireMouseReleasedEvent( const ::com::sun::star::awt::MouseEvent& rE
 
 void Window::fireMouseMovedEvent( const ::com::sun::star::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XMouseMotionListener >*) 0 ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseMotionListener>::get());
 
     if( pContainer )
     {
@@ -571,7 +571,7 @@ void Window::fireMouseMovedEvent( const ::com::sun::star::awt::MouseEvent& rEvt 
 
 void Window::fireSetFocusEvent( const ::com::sun::star::awt::FocusEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( getCppuType( (uno::Reference< awt::XFocusListener >*) 0 ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XFocusListener>::get());
 
     if( pContainer )
     {

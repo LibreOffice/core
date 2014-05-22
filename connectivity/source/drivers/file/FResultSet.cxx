@@ -179,9 +179,9 @@ Sequence< Type > SAL_CALL OResultSet::getTypes(  ) throw(RuntimeException, std::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                            ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ),
-                            ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
+    OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
+                            cppu::UnoType<com::sun::star::beans::XPropertySet>::get(),
+                            cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
@@ -1154,7 +1154,7 @@ void OResultSet::sortRows()
         // is just one field given for sorting
         // and this field is indexed, then the Index will be used
         Reference<XIndexesSupplier> xIndexSup;
-        m_pTable->queryInterface(::getCppuType((const Reference<XIndexesSupplier>*)0)) >>= xIndexSup;
+        m_pTable->queryInterface(cppu::UnoType<XIndexesSupplier>::get()) >>= xIndexSup;
 
         Reference<XIndexAccess> xIndexes;
         if(xIndexSup.is())

@@ -68,9 +68,9 @@ void OFileCatalog::refreshTables()
 
 Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) ||
-        rType == ::getCppuType((const Reference<XUsersSupplier>*)0) ||
-        rType == ::getCppuType((const Reference<XViewsSupplier>*)0))
+    if( rType == cppu::UnoType<XGroupsSupplier>::get()||
+        rType == cppu::UnoType<XUsersSupplier>::get()||
+        rType == cppu::UnoType<XViewsSupplier>::get())
         return Any();
 
 
@@ -89,9 +89,9 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException, std
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == ::getCppuType((const Reference<XGroupsSupplier>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XUsersSupplier>*)0)   ||
-            *pBegin == ::getCppuType((const Reference<XViewsSupplier>*)0)))
+        if(!(*pBegin == cppu::UnoType<XGroupsSupplier>::get()||
+            *pBegin == cppu::UnoType<XUsersSupplier>::get()||
+            *pBegin == cppu::UnoType<XViewsSupplier>::get()))
         {
             aOwnTypes.push_back(*pBegin);
         }

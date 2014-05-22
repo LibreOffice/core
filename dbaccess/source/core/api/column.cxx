@@ -291,9 +291,9 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
     }
     else if(!m_pTable || (m_pTable && !m_pTable->isNew()))
     {
-        if(!m_bAddColumn    && rType == getCppuType( (Reference<XAppend>*)0))
+        if(!m_bAddColumn    && rType == cppu::UnoType<XAppend>::get())
             return Any();
-        if(!m_bDropColumn   && rType == getCppuType( (Reference<XDrop>*)0))
+        if(!m_bDropColumn   && rType == cppu::UnoType<XDrop>::get())
             return Any();
     }
 
@@ -308,8 +308,8 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException, std::ex
     bool bAppendFound = false,bDropFound = false;
 
     sal_Int32 nSize = 0;
-    Type aAppendType = getCppuType( (Reference<XAppend>*)0);
-    Type aDropType   = getCppuType( (Reference<XDrop>*)0);
+    Type aAppendType = cppu::UnoType<XAppend>::get();
+    Type aDropType   = cppu::UnoType<XDrop>::get();
     if(m_xDrvColumns.is())
     {
         Reference<XTypeProvider> xTypes(m_xDrvColumns,UNO_QUERY);

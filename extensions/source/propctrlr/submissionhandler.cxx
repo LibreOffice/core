@@ -268,7 +268,7 @@ namespace pcr
         ::std::vector< Property > aProperties;
         if ( m_pHelper.get() )
         {
-            implAddPropertyDescription( aProperties, PROPERTY_SUBMISSION_ID, ::getCppuType( static_cast< Reference< submission::XSubmission > * >( NULL ) ) );
+            implAddPropertyDescription( aProperties, PROPERTY_SUBMISSION_ID, cppu::UnoType<submission::XSubmission>::get() );
             implAddPropertyDescription( aProperties, PROPERTY_XFORMS_BUTTONTYPE, ::cppu::UnoType<FormButtonType>::get() );
         }
         if ( aProperties.empty() )

@@ -265,7 +265,7 @@ IMPLEMENT_FORWARD_REFCOUNT( VCLXAccessibleToolBoxItem, AccessibleTextHelper_BASE
 Any SAL_CALL VCLXAccessibleToolBoxItem::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
 {
     // #i33611# - toolbox buttons without text don't support XAccessibleText
-    if ( _rType == ::getCppuType( ( const Reference< XAccessibleText >* ) 0 )
+    if ( _rType == cppu::UnoType<XAccessibleText>::get()
         && ( !m_pToolBox || m_pToolBox->GetButtonType() == BUTTON_SYMBOL ) )
         return Any();
 

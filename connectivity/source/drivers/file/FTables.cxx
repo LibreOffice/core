@@ -53,10 +53,10 @@ m_xMetaData.clear();
 
 Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if( rType == ::getCppuType((const Reference<XColumnLocate>*)0) ||
-        rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0) ||
-        rType == ::getCppuType((const Reference<XAppend>*)0) ||
-        rType == ::getCppuType((const Reference<XDrop>*)0))
+    if( rType == cppu::UnoType<XColumnLocate>::get()||
+        rType == cppu::UnoType<XDataDescriptorFactory>::get()||
+        rType == cppu::UnoType<XAppend>::get()||
+        rType == cppu::UnoType<XDrop>::get())
         return Any();
 
     typedef sdbcx::OCollection OTables_BASE;

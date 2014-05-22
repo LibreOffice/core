@@ -1209,11 +1209,11 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
                 bSuccessfullyReRouted = false;
             break;
         case typelib_TypeClass_STRUCT:
-            if (_rValue.getValueType() == ::getCppuType((const com::sun::star::util::DateTime*)0))
+            if (_rValue.getValueType() == cppu::UnoType<com::sun::star::util::DateTime>::get())
                 _rxParameters->setTimestamp(_nColumnIndex, *(com::sun::star::util::DateTime*)_rValue.getValue());
-            else if (_rValue.getValueType() == ::getCppuType((const com::sun::star::util::Date*)0))
+            else if (_rValue.getValueType() == cppu::UnoType<com::sun::star::util::Date>::get())
                 _rxParameters->setDate(_nColumnIndex, *(com::sun::star::util::Date*)_rValue.getValue());
-            else if (_rValue.getValueType() == ::getCppuType((const com::sun::star::util::Time*)0))
+            else if (_rValue.getValueType() == cppu::UnoType<com::sun::star::util::Time>::get())
                 _rxParameters->setTime(_nColumnIndex, *(com::sun::star::util::Time*)_rValue.getValue());
             else
                 bSuccessfullyReRouted = false;

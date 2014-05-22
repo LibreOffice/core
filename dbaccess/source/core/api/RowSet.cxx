@@ -170,7 +170,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::uno::XComponentContext >& _
     m_aPrematureParamValues.get().resize( 0 );
 
     // sdb.RowSet Properties
-    registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   ::getCppuType(static_cast< Reference< XConnection >* >(0)));
+    registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   cppu::UnoType<XConnection>::get());
     registerProperty(PROPERTY_DATASOURCENAME,       PROPERTY_ID_DATASOURCENAME,         PropertyAttribute::BOUND,       &m_aDataSourceName,     ::cppu::UnoType<OUString>::get());
     registerProperty(PROPERTY_COMMAND,              PROPERTY_ID_COMMAND,                PropertyAttribute::BOUND,       &m_aCommand,            ::cppu::UnoType<OUString>::get());
     registerProperty(PROPERTY_COMMAND_TYPE,         PROPERTY_ID_COMMAND_TYPE,           PropertyAttribute::BOUND,       &m_nCommandType,        ::cppu::UnoType<sal_Int32>::get());
@@ -184,7 +184,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::uno::XComponentContext >& _
     registerProperty(PROPERTY_PRIVILEGES,           PROPERTY_ID_PRIVILEGES,             nRT,                            &m_nPrivileges,         ::cppu::UnoType<sal_Int32>::get());
     registerProperty(PROPERTY_ISMODIFIED,           PROPERTY_ID_ISMODIFIED,             nBT,                            &m_bModified,           ::getBooleanCppuType());
     registerProperty(PROPERTY_ISNEW,                PROPERTY_ID_ISNEW,                  nRBT,                           &m_bNew,                ::getBooleanCppuType());
-    registerProperty(PROPERTY_SINGLESELECTQUERYCOMPOSER,PROPERTY_ID_SINGLESELECTQUERYCOMPOSER,  nRT,                    &m_xComposer,   ::getCppuType(static_cast< Reference< XSingleSelectQueryComposer >* >(0)));
+    registerProperty(PROPERTY_SINGLESELECTQUERYCOMPOSER,PROPERTY_ID_SINGLESELECTQUERYCOMPOSER,  nRT,                    &m_xComposer,   cppu::UnoType<XSingleSelectQueryComposer>::get());
 
     // sdbcx.ResultSet Properties
     registerProperty(PROPERTY_ISBOOKMARKABLE,       PROPERTY_ID_ISBOOKMARKABLE,         nRT,                            &m_bIsBookmarkable,      ::getBooleanCppuType());
@@ -198,7 +198,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::uno::XComponentContext >& _
     // sdbc.RowSet Properties
     registerProperty(PROPERTY_URL,                  PROPERTY_ID_URL,                    0,                              &m_aURL,                ::cppu::UnoType<OUString>::get());
     registerProperty(PROPERTY_TRANSACTIONISOLATION, PROPERTY_ID_TRANSACTIONISOLATION,   PropertyAttribute::TRANSIENT,   &m_nTransactionIsolation,::cppu::UnoType<sal_Int32>::get());
-    registerMayBeVoidProperty(PROPERTY_TYPEMAP,     PROPERTY_ID_TYPEMAP,                PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT,  &m_aTypeMap,            ::getCppuType(static_cast< Reference< XNameAccess >* >(0)));
+    registerMayBeVoidProperty(PROPERTY_TYPEMAP,     PROPERTY_ID_TYPEMAP,                PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT,  &m_aTypeMap,            cppu::UnoType<XNameAccess>::get());
     registerProperty(PROPERTY_ESCAPE_PROCESSING,PROPERTY_ID_ESCAPE_PROCESSING,  PropertyAttribute::BOUND,       &m_bUseEscapeProcessing,::getBooleanCppuType()  );
     registerProperty(PROPERTY_QUERYTIMEOUT,         PROPERTY_ID_QUERYTIMEOUT,           PropertyAttribute::TRANSIENT,   &m_nQueryTimeOut,       ::cppu::UnoType<sal_Int32>::get());
     registerProperty(PROPERTY_MAXFIELDSIZE,         PROPERTY_ID_MAXFIELDSIZE,           PropertyAttribute::TRANSIENT,   &m_nMaxFieldSize,       ::cppu::UnoType<sal_Int32>::get());
@@ -416,9 +416,9 @@ void SAL_CALL ORowSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 // com::sun::star::XTypeProvider
 Sequence< Type > SAL_CALL ORowSet::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
-                            ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
-                            ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    OTypeCollection aTypes(cppu::UnoType<XPropertySet>::get(),
+                            cppu::UnoType<XFastPropertySet>::get(),
+                            cppu::UnoType<XMultiPropertySet>::get(),
                            ::comphelper::concatSequences(ORowSet_BASE1::getTypes(),ORowSetBase::getTypes()));
     return aTypes.getTypes();
 }
@@ -2826,7 +2826,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
     sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
 
     // sdb.RowSet Properties
-    registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   &rParent.m_aActiveConnection,   ::getCppuType(static_cast< Reference< XConnection >* >(0)));
+    registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   &rParent.m_aActiveConnection,   cppu::UnoType<XConnection>::get());
     registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::READONLY,    &m_nResultSetConcurrency,::cppu::UnoType<sal_Int32>::get());
     registerProperty(PROPERTY_RESULTSETTYPE,        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::READONLY,    &m_nResultSetType,      ::cppu::UnoType<sal_Int32>::get());
     registerProperty(PROPERTY_FETCHDIRECTION,       PROPERTY_ID_FETCHDIRECTION,         PropertyAttribute::TRANSIENT,   &m_nFetchDirection,     ::cppu::UnoType<sal_Int32>::get());

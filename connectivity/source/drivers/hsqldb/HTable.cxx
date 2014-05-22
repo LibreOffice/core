@@ -351,7 +351,7 @@ Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException, std::
         const Type* pEnd = pIter + aTypes.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            if( *pIter != ::getCppuType((const Reference<XRename>*)0) )
+            if( *pIter != cppu::UnoType<XRename>::get())
             {
                 aOwnTypes.push_back(*pIter);
             }
@@ -401,7 +401,7 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, 
 
 Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if( m_Type.equalsAscii("VIEW") && rType == ::getCppuType((const Reference<XRename>*)0) )
+    if( m_Type.equalsAscii("VIEW") && rType == cppu::UnoType<XRename>::get())
         return Any();
 
     return OTableHelper::queryInterface(rType);

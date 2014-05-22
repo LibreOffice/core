@@ -482,7 +482,7 @@ HRESULT DropTarget::Drop( IDataObject  * /*pDataObj*/,
 
 void DropTarget::fire_drop( const DropTargetDropEvent& dte)
 {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
     {
         OInterfaceIteratorHelper iter( *pContainer);
@@ -496,7 +496,7 @@ void DropTarget::fire_drop( const DropTargetDropEvent& dte)
 
 void DropTarget::fire_dragEnter( const DropTargetDragEnterEvent& e )
 {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
     {
         OInterfaceIteratorHelper iter( *pContainer);
@@ -510,7 +510,7 @@ void DropTarget::fire_dragEnter( const DropTargetDragEnterEvent& e )
 
 void DropTarget::fire_dragExit( const DropTargetEvent& dte )
 {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
     if( pContainer)
     {
@@ -525,7 +525,7 @@ void DropTarget::fire_dragExit( const DropTargetEvent& dte )
 
 void DropTarget::fire_dragOver( const DropTargetDragEvent& dtde )
 {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
     {
         OInterfaceIteratorHelper iter( *pContainer );
@@ -539,7 +539,7 @@ void DropTarget::fire_dragOver( const DropTargetDragEvent& dtde )
 
 void DropTarget::fire_dropActionChanged( const DropTargetDragEvent& dtde )
 {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
     {
         OInterfaceIteratorHelper iter( *pContainer);

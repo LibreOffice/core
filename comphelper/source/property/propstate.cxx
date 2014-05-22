@@ -58,11 +58,11 @@ namespace comphelper
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes(4);
         ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
         // base class types
-        pTypes[0] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)NULL);
-        pTypes[1] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>*)NULL);
-        pTypes[2] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>*)NULL);
+        pTypes[0] = cppu::UnoType<com::sun::star::beans::XPropertySet>::get();
+        pTypes[1] = cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get();
+        pTypes[2] = cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get();
         // my own type
-        pTypes[3] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>*)NULL);
+        pTypes[3] = cppu::UnoType<com::sun::star::beans::XPropertyState>::get();
         return aTypes;
     }
 

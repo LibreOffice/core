@@ -116,9 +116,9 @@ Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(Runtim
 
 Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
-                                    ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
-                                    ::getCppuType( (const Reference< XPropertySet > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
+                                    cppu::UnoType<XFastPropertySet>::get(),
+                                    cppu::UnoType<XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OCommonStatement_IBASE::getTypes());
 }

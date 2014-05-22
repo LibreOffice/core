@@ -187,7 +187,7 @@ Sequence<Type > View::getTypes() throw( RuntimeException, std::exception )
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< com::sun::star::sdbcx::XRename> *) 0 ),
+                cppu::UnoType<com::sun::star::sdbcx::XRename>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }

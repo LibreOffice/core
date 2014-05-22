@@ -231,7 +231,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
     // find the end of the current chain
     Any* pChainIterator = &m_aContent;
     SQLException* pLastException = NULL;
-    const Type& aSQLExceptionType( ::getCppuType< SQLException >() );
+    const Type& aSQLExceptionType( cppu::UnoType<SQLException>::get() );
     while ( pChainIterator )
     {
         if ( !pChainIterator->hasValue() )

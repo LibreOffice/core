@@ -96,8 +96,8 @@ namespace accessibility
             SVX_UNOEDIT_CHAR_PROPERTIES,
             SVX_UNOEDIT_PARA_PROPERTIES,
             SVX_UNOEDIT_NUMBERING_PROPERTIE,
-            {OUString("TextUserDefinedAttributes"),     EE_CHAR_XMLATTRIBS,     ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-            {OUString("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
+            {OUString("TextUserDefinedAttributes"),     EE_CHAR_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
+            {OUString("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         static SvxItemPropertySet aPropSet( aPropMap, EditEngine::GetGlobalItemPool() );
@@ -672,17 +672,17 @@ namespace accessibility
         uno::Any aRet;
 
         // must provide XAccesibleText by hand, since it comes publicly inherited by XAccessibleEditableText
-        if ( rType == ::getCppuType((uno::Reference< XAccessibleText > *)0) )
+        if ( rType == cppu::UnoType<XAccessibleText>::get())
         {
             uno::Reference< XAccessibleText > aAccText = static_cast< XAccessibleEditableText * >(this);
             aRet <<= aAccText;
         }
-        else if ( rType == ::getCppuType((uno::Reference< XAccessibleEditableText > *)0) )
+        else if ( rType == cppu::UnoType<XAccessibleEditableText>::get())
         {
             uno::Reference< XAccessibleEditableText > aAccEditText = this;
             aRet <<= aAccEditText;
         }
-        else if ( rType == ::getCppuType((uno::Reference< XAccessibleHypertext > *)0) )
+        else if ( rType == cppu::UnoType<XAccessibleHypertext>::get())
         {
             uno::Reference< XAccessibleHypertext > aAccHyperText = this;
             aRet <<= aAccHyperText;

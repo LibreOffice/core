@@ -65,11 +65,11 @@ OPreparedStatement::~OPreparedStatement()
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > OPreparedStatement::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XServiceInfo > *)0 ),
-                           ::getCppuType( (const Reference< XPreparedStatement > *)0 ),
-                           ::getCppuType( (const Reference< XParameters > *)0 ),
-                           ::getCppuType( (const Reference< XResultSetMetaDataSupplier > *)0 ),
-                           ::getCppuType( (const Reference< XColumnsSupplier > *)0 ),
+    OTypeCollection aTypes(cppu::UnoType<XServiceInfo>::get(),
+                           cppu::UnoType<XPreparedStatement>::get(),
+                           cppu::UnoType<XParameters>::get(),
+                           cppu::UnoType<XResultSetMetaDataSupplier>::get(),
+                           cppu::UnoType<XColumnsSupplier>::get(),
                             OStatementBase::getTypes() );
 
     return aTypes.getTypes();

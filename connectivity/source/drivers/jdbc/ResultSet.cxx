@@ -122,9 +122,9 @@ m_xMetaData.clear();
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
+                                    cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
+                                    cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),java_sql_ResultSet_BASE::getTypes());
 }

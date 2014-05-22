@@ -113,8 +113,6 @@ uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rTyp
     return OComponentHelper::queryAggregation( rType );
 }
 
-#define LCL_CPPUTYPE(t) (::getCppuType( reinterpret_cast< const uno::Reference<t> *>(0)))
-
 uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeException, std::exception)
 {
     static uno::Sequence< uno::Type > aTypeList;
@@ -123,15 +121,15 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
     if( !aTypeList.getLength() )
     {
         ::std::vector< uno::Type > aTypes;
-        aTypes.push_back( LCL_CPPUTYPE( lang::XComponent ));
-        aTypes.push_back( LCL_CPPUTYPE( lang::XTypeProvider ));
-        aTypes.push_back( LCL_CPPUTYPE( uno::XAggregation ));
-        aTypes.push_back( LCL_CPPUTYPE( uno::XWeak ));
-        aTypes.push_back( LCL_CPPUTYPE( lang::XServiceInfo ));
-        aTypes.push_back( LCL_CPPUTYPE( lang::XInitialization ));
-        aTypes.push_back( LCL_CPPUTYPE( frame::XTerminateListener ));
-        aTypes.push_back( LCL_CPPUTYPE( ui::dialogs::XExecutableDialog ));
-        aTypes.push_back( LCL_CPPUTYPE( beans::XPropertySet ));
+        aTypes.push_back( cppu::UnoType<lang::XComponent>::get() );
+        aTypes.push_back( cppu::UnoType<lang::XTypeProvider>::get() );
+        aTypes.push_back( cppu::UnoType<uno::XAggregation>::get() );
+        aTypes.push_back( cppu::UnoType<uno::XWeak>::get() );
+        aTypes.push_back( cppu::UnoType<lang::XServiceInfo>::get() );
+        aTypes.push_back( cppu::UnoType<lang::XInitialization>::get() );
+        aTypes.push_back( cppu::UnoType<frame::XTerminateListener>::get() );
+        aTypes.push_back( cppu::UnoType<ui::dialogs::XExecutableDialog>::get() );
+        aTypes.push_back( cppu::UnoType<beans::XPropertySet>::get() );
         aTypeList = ::chart::ContainerHelper::ContainerToSequence( aTypes );
     }
 

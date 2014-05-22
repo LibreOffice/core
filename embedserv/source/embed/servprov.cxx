@@ -161,11 +161,8 @@ EmbedServer_Impl::getTypes( )
         if( ! pCollection )
         {
             static ::cppu::OTypeCollection collection(
-                getCppuType(
-                    reinterpret_cast<uno::Reference< uno::XWeak>*>(0)),
-                getCppuType(
-                    reinterpret_cast<
-                    uno::Reference< lang::XTypeProvider>*>(0)));
+                cppu::UnoType<uno::XWeak>::get(),
+                cppu::UnoType<lang::XTypeProvider>::get() );
             pCollection = &collection;
         }
     }

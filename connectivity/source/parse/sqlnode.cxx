@@ -1205,9 +1205,9 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         if (m_nFormatKey && m_xFormatter.is())
         {
             Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LOCALE) );
-            OSL_ENSURE(aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0), "OSQLParser::PredicateTree : invalid language property !");
+            OSL_ENSURE(aValue.getValueType() == cppu::UnoType<com::sun::star::lang::Locale>::get(), "OSQLParser::PredicateTree : invalid language property !");
 
-            if (aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0))
+            if (aValue.getValueType() == cppu::UnoType<com::sun::star::lang::Locale>::get())
                 aValue >>= m_pData->aLocale;
         }
         else

@@ -101,7 +101,7 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
 
     // notify all listeners on content changes
     OInterfaceContainerHelper *pContainer =
-        rBHelper.aLC.getContainer(getCppuType( (Reference < XClipboardListener > *) 0));
+        rBHelper.aLC.getContainer(cppu::UnoType<XClipboardListener>::get());
     if (pContainer)
     {
         ClipboardEvent aEvent(static_cast < XClipboard * > (this), m_aContents);
@@ -144,7 +144,7 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     if (!rBHelper.bInDispose && !rBHelper.bDisposed)
-        rBHelper.aLC.removeInterface( getCppuType( (const Reference< XClipboardListener > *) 0 ), listener ); \
+        rBHelper.aLC.removeInterface( cppu::UnoType<XClipboardListener>::get(), listener ); \
 }
 
 Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()

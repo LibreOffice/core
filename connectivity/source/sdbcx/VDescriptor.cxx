@@ -133,10 +133,10 @@ namespace connectivity
 
         Sequence< Type > SAL_CALL ODescriptor::getTypes(  ) throw(RuntimeException, std::exception)
         {
-            ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
-                                            ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
-                                            ::getCppuType( (const Reference< XPropertySet > *)0 ),
-                                            ::getCppuType( (const Reference< XUnoTunnel > *)0 ));
+            ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
+                                            cppu::UnoType<XFastPropertySet>::get(),
+                                            cppu::UnoType<XPropertySet>::get(),
+                                            cppu::UnoType<XUnoTunnel>::get());
             return aTypes.getTypes();
         }
 

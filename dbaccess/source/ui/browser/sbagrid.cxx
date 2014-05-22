@@ -181,7 +181,7 @@ Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException,
 
     sal_Int32 nTypes = aTypes.getLength();
     aTypes.realloc(nTypes + 1);
-    aTypes[nTypes] = ::getCppuType(static_cast< Reference< ::com::sun::star::frame::XDispatch >* >(NULL));
+    aTypes[nTypes] = cppu::UnoType<com::sun::star::frame::XDispatch>::get();
 
     return aTypes;
 }
@@ -526,7 +526,7 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException, std:
     Sequence< Type > aTypes = FmXGridPeer::getTypes();
     sal_Int32 nOldLen = aTypes.getLength();
     aTypes.realloc(nOldLen + 1);
-    aTypes.getArray()[nOldLen] = ::getCppuType( static_cast< Reference< ::com::sun::star::frame::XDispatch >* >(0) );
+    aTypes.getArray()[nOldLen] = cppu::UnoType<com::sun::star::frame::XDispatch>::get();
 
     return aTypes;
 }

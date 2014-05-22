@@ -85,19 +85,19 @@ void MRCListenerMultiplexerHelper::disposeAndClear()
 void MRCListenerMultiplexerHelper::adviseToPeer( const Reference< ::com::sun::star::awt::XWindow >  & rPeer, const Type & type )
 {
     // add a listener to the source (peer)
-    if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0) )
+    if( type == cppu::UnoType<com::sun::star::awt::XWindowListener>::get())
         rPeer->addWindowListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XKeyListener>::get())
         rPeer->addKeyListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XFocusListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XFocusListener>::get())
         rPeer->addFocusListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XMouseListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XMouseListener>::get())
         rPeer->addMouseListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XMouseMotionListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XMouseMotionListener>::get())
         rPeer->addMouseMotionListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XPaintListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XPaintListener>::get())
         rPeer->addPaintListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XTopWindowListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XTopWindowListener>::get())
     {
         Reference< ::com::sun::star::awt::XTopWindow >  xTop( rPeer, UNO_QUERY );
         if( xTop.is() )
@@ -113,19 +113,19 @@ void MRCListenerMultiplexerHelper::adviseToPeer( const Reference< ::com::sun::st
 void MRCListenerMultiplexerHelper::unadviseFromPeer( const Reference< ::com::sun::star::awt::XWindow >  & rPeer, const Type & type )
 {
     // the last listener is removed, remove the listener from the source (peer)
-    if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0) )
+    if( type == cppu::UnoType<com::sun::star::awt::XWindowListener>::get())
         rPeer->removeWindowListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XKeyListener>::get())
         rPeer->removeKeyListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XFocusListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XFocusListener>::get())
         rPeer->removeFocusListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XMouseListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XMouseListener>::get())
         rPeer->removeMouseListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XMouseMotionListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XMouseMotionListener>::get())
         rPeer->removeMouseMotionListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XPaintListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XPaintListener>::get())
         rPeer->removePaintListener( this );
-    else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XTopWindowListener >*)0) )
+    else if( type == cppu::UnoType<com::sun::star::awt::XTopWindowListener>::get())
     {
         Reference< ::com::sun::star::awt::XTopWindow >  xTop( rPeer, UNO_QUERY );
         if( xTop.is() )
@@ -172,7 +172,7 @@ void MRCListenerMultiplexerHelper::disposing(const ::com::sun::star::lang::Event
 
 #define MULTIPLEX( InterfaceName, MethodName, EventName )                   \
 ::cppu::OInterfaceContainerHelper * pCont;                                          \
-pCont = aListenerHolder.getContainer( ::getCppuType((const Reference< InterfaceName >*)0) );        \
+pCont = aListenerHolder.getContainer( cppu::UnoType<InterfaceName>::get());        \
 if( pCont )                                                                 \
 {                                                                           \
     ::cppu::OInterfaceIteratorHelper    aIt( *pCont );                              \

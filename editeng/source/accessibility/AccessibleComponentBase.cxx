@@ -210,9 +210,9 @@ uno::Sequence<uno::Type> SAL_CALL
     uno::Sequence<uno::Type> aTypeList (2);
     // ...and add the additional type for the component.
     const uno::Type aComponentType =
-         ::getCppuType((const uno::Reference<XAccessibleComponent>*)0);
+         cppu::UnoType<XAccessibleComponent>::get();
     const uno::Type aExtendedComponentType =
-        ::getCppuType((const uno::Reference<XAccessibleExtendedComponent>*)0);
+        cppu::UnoType<XAccessibleExtendedComponent>::get();
     aTypeList[0] = aComponentType;
     aTypeList[1] = aExtendedComponentType;
 

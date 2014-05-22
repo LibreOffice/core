@@ -35,8 +35,8 @@ using namespace ::osl;
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > OCallableStatement::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XRow > *)0 ),
-                           ::getCppuType( (const Reference< XOutParameters > *)0 ),
+    OTypeCollection aTypes(cppu::UnoType<XRow>::get(),
+                           cppu::UnoType<XOutParameters>::get(),
                             OPreparedStatement::getTypes() );
 
     return aTypes.getTypes();

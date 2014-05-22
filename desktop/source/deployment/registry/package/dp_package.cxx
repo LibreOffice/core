@@ -1377,9 +1377,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     catch (const Exception &) {
         const Any exc( ::cppu::getCaughtException() );
         if (notifyDetectionError ||
-            !exc.isExtractableTo(
-                ::getCppuType( reinterpret_cast<
-                               lang::IllegalArgumentException const *>(0) ) ))
+            !exc.isExtractableTo( cppu::UnoType<lang::IllegalArgumentException>::get()) )
         {
             interactContinuation(
                 Any( lang::WrappedTargetException("bundle item error!",

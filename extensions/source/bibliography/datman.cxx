@@ -1432,7 +1432,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
     {
         if(evt.PropertyName == FM_PROP_VALUE)
         {
-            if( evt.NewValue.getValueType() == ::getCppuType((Reference<io::XInputStream>*)0) )
+            if( evt.NewValue.getValueType() == cppu::UnoType<io::XInputStream>::get())
             {
                 Reference< io::XDataInputStream >  xStream(
                     *(const Reference< io::XInputStream > *)evt.NewValue.getValue(), UNO_QUERY );

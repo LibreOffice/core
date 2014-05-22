@@ -164,12 +164,12 @@ Sequence< com::sun::star::uno::Type > ReflectionBase::getTypes()
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     static cppu::OTypeCollection collection(
-        getCppuType( (Reference< XPropertySet >*) 0 ),
-        getCppuType( (Reference< XFastPropertySet > *) 0 ),
-        getCppuType( (Reference< XMultiPropertySet > *) 0 ),
-        getCppuType( (Reference< com::sun::star::lang::XServiceInfo > *) 0 ),
-        getCppuType( (Reference< com::sun::star::sdbcx::XDataDescriptorFactory > *) 0 ),
-        getCppuType( (Reference< com::sun::star::container::XNamed > *) 0 ),
+        cppu::UnoType<XPropertySet>::get(),
+        cppu::UnoType<XFastPropertySet>::get(),
+        cppu::UnoType<XMultiPropertySet>::get(),
+        cppu::UnoType<com::sun::star::lang::XServiceInfo>::get(),
+        cppu::UnoType<com::sun::star::sdbcx::XDataDescriptorFactory>::get(),
+        cppu::UnoType<com::sun::star::container::XNamed>::get(),
         OComponentHelper::getTypes());
     return collection.getTypes();
 }

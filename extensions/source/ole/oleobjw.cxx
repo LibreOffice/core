@@ -138,11 +138,11 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 Any IUnknownWrapper_Impl::queryInterface(const Type& t)
     throw (RuntimeException)
 {
-    if (t == getCppuType(static_cast<Reference<XDefaultMethod>*>( 0)) && !m_bHasDfltMethod )
+    if (t == cppu::UnoType<XDefaultMethod>::get() && !m_bHasDfltMethod )
         return Any();
-    if (t == getCppuType(static_cast<Reference<XDefaultProperty>*>( 0)) && !m_bHasDfltProperty )
+    if (t == cppu::UnoType<XDefaultProperty>::get() && !m_bHasDfltProperty )
         return Any();
-    if ( ( t == getCppuType(static_cast<Reference<XInvocation>*>( 0)) || t == getCppuType(static_cast<Reference<XAutomationInvocation>*>( 0)) ) && !m_spDispatch)
+    if ( ( t == cppu::UnoType<XInvocation>::get() || t == cppu::UnoType<XAutomationInvocation>::get() ) && !m_spDispatch)
         return Any();
     // XDirectInvocation seems to be an oracle replacement for XAutomationInvocation, however it is flawed esecially wrt. assumptions about whether to invoke a
     // Put or Get property, the implementation code has no business guessing that, it's up to the caller to decide that. Worse XDirectInvocation duplicates lots of code.

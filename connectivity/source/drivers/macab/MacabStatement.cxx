@@ -372,9 +372,9 @@ Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType ) throw(Ru
 
 Sequence< Type > SAL_CALL MacabCommonStatement::getTypes(  ) throw(RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
-                                    ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
-                                    ::getCppuType( (const Reference< XPropertySet > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
+                                    cppu::UnoType<XFastPropertySet>::get(),
+                                    cppu::UnoType<XPropertySet>::get());
 
     return comphelper::concatSequences(aTypes.getTypes(),MacabCommonStatement_BASE::getTypes());
 }

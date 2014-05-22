@@ -98,7 +98,7 @@ public:
     }
     virtual Type getType() const SAL_OVERRIDE
     {
-        return getCppuType( (Reference< XContainerListener > *)0 );
+        return cppu::UnoType<XContainerListener>::get();
     }
 };
 
@@ -120,7 +120,7 @@ public:
 
     virtual Type getType() const SAL_OVERRIDE
     {
-        return getCppuType( (Reference< XContainerListener > *)0 );
+        return cppu::UnoType<XContainerListener>::get();
     }
 };
 
@@ -141,7 +141,7 @@ public:
 
     virtual Type getType() const SAL_OVERRIDE
     {
-        return getCppuType( (Reference< XContainerListener > *)0 );
+        return cppu::UnoType<XContainerListener>::get();
     }
 };
 

@@ -199,13 +199,13 @@ Any SAL_CALL GenericPropertySet::queryAggregation( const Type & rType )
 {
     Any aAny;
 
-    if( rType == ::getCppuType((const Reference< XServiceInfo >*)0) )
+    if( rType == cppu::UnoType<XServiceInfo>::get())
         aAny <<= Reference< XServiceInfo >(this);
-    else if( rType == ::getCppuType((const Reference< XTypeProvider >*)0) )
+    else if( rType == cppu::UnoType<XTypeProvider>::get())
         aAny <<= Reference< XTypeProvider >(this);
-    else if( rType == ::getCppuType((const Reference< XPropertySet >*)0) )
+    else if( rType == cppu::UnoType<XPropertySet>::get())
         aAny <<= Reference< XPropertySet >(this);
-    else if( rType == ::getCppuType((const Reference< XMultiPropertySet >*)0) )
+    else if( rType == cppu::UnoType<XMultiPropertySet>::get())
         aAny <<= Reference< XMultiPropertySet >(this);
     else
         aAny <<= OWeakAggObject::queryAggregation( rType );
@@ -229,11 +229,11 @@ uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
     uno::Sequence< uno::Type > aTypes( 5 );
     uno::Type* pTypes = aTypes.getArray();
 
-    *pTypes++ = ::getCppuType((const uno::Reference< XAggregation>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XServiceInfo>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XTypeProvider>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XPropertySet>*)0);
-    *pTypes++ = ::getCppuType((const uno::Reference< XMultiPropertySet>*)0);
+    *pTypes++ = cppu::UnoType<XAggregation>::get();
+    *pTypes++ = cppu::UnoType<XServiceInfo>::get();
+    *pTypes++ = cppu::UnoType<XTypeProvider>::get();
+    *pTypes++ = cppu::UnoType<XPropertySet>::get();
+    *pTypes++ = cppu::UnoType<XMultiPropertySet>::get();
 
     return aTypes;
 }

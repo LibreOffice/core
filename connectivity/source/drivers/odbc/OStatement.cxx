@@ -131,7 +131,7 @@ void SAL_CALL OStatement_BASE2::release() throw()
 
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) )
+    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
         return Any();
     Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
@@ -139,14 +139,14 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(Runtime
 
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
-                                    ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
-                                    ::getCppuType( (const Reference< XPropertySet > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
+                                    cppu::UnoType<XFastPropertySet>::get(),
+                                    cppu::UnoType<XPropertySet>::get());
     Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
     if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() )
     {
         ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
-                        ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ));
+                        cppu::UnoType<XGeneratedResultSet>::get());
         aOldTypes.realloc(aOldTypes.getLength() - 1);
     }
 

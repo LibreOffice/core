@@ -103,9 +103,9 @@ namespace pcr
     Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException, std::exception)
     {
         ::cppu::OTypeCollection aTypes(
-            ::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),
-            ::getCppuType( static_cast< Reference< XMultiPropertySet >* >(NULL) ),
-            ::getCppuType( static_cast< Reference< XFastPropertySet >* >(NULL) ),
+            cppu::UnoType<XPropertySet>::get(),
+            cppu::UnoType<XMultiPropertySet>::get(),
+            cppu::UnoType<XFastPropertySet>::get(),
             OPropertyBrowserController::getTypes());
         return aTypes.getTypes();
     }

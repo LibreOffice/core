@@ -84,7 +84,7 @@ bool SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
 
-    rVal.setValue( &xContainer, ::getCppuType((Reference<XNameContainer>*)0) );
+    rVal.setValue( &xContainer, cppu::UnoType<XNameContainer>::get());
     return true;
 }
 
@@ -128,7 +128,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
                 const OUString aName( *pNames++ );
 
                 aAny = xContainer->getByName( aName );
-                if( aAny.getValue() == NULL || aAny.getValueType() != ::getCppuType((AttributeData*)0) )
+                if( aAny.getValue() == NULL || aAny.getValueType() != cppu::UnoType<AttributeData>::get() )
                     return false;
 
                 pData = (AttributeData*)aAny.getValue();

@@ -291,11 +291,11 @@ Sequence<Type > Table::getTypes() throw( RuntimeException, std::exception )
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< com::sun::star::sdbcx::XIndexesSupplier> *) 0 ),
-                getCppuType( (Reference< com::sun::star::sdbcx::XKeysSupplier> *) 0 ),
-                getCppuType( (Reference< com::sun::star::sdbcx::XColumnsSupplier> *) 0 ),
-                getCppuType( (Reference< com::sun::star::sdbcx::XRename> *) 0 ),
-                getCppuType( (Reference< com::sun::star::sdbcx::XAlterTable> *) 0 ),
+                cppu::UnoType<com::sun::star::sdbcx::XIndexesSupplier>::get(),
+                cppu::UnoType<com::sun::star::sdbcx::XKeysSupplier>::get(),
+                cppu::UnoType<com::sun::star::sdbcx::XColumnsSupplier>::get(),
+                cppu::UnoType<com::sun::star::sdbcx::XRename>::get(),
+                cppu::UnoType<com::sun::star::sdbcx::XAlterTable>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }
@@ -405,9 +405,9 @@ Sequence<Type > TableDescriptor::getTypes() throw( RuntimeException, std::except
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< com::sun::star::sdbcx::XIndexesSupplier> *) 0 ),
-                getCppuType( (Reference< com::sun::star::sdbcx::XKeysSupplier> *) 0 ),
-                getCppuType( (Reference< com::sun::star::sdbcx::XColumnsSupplier> *) 0 ),
+                cppu::UnoType<com::sun::star::sdbcx::XIndexesSupplier>::get(),
+                cppu::UnoType<com::sun::star::sdbcx::XKeysSupplier>::get(),
+                cppu::UnoType<com::sun::star::sdbcx::XColumnsSupplier>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }

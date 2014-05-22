@@ -219,7 +219,7 @@ namespace comphelper
         // append XComponent, coming from WeakComponentImplHelperBase
         sal_Int32 nLen = aTypes.getLength();
         aTypes.realloc( nLen + 1 );
-        aTypes[ nLen ] = ::getCppuType( static_cast< Reference< XComponent >* >( NULL ) );
+        aTypes[ nLen ] = cppu::UnoType<XComponent>::get();
 
         return aTypes;
     }

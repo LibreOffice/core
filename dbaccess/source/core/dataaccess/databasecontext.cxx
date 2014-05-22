@@ -580,7 +580,7 @@ void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Refer
 // ::com::sun::star::container::XElementAccess
 Type ODatabaseContext::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return::getCppuType(static_cast<Reference<XDataSource>*>(NULL));
+    returncppu::UnoType<XDataSource>::get();
 }
 
 sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException, std::exception )

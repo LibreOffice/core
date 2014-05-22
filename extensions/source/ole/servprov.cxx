@@ -64,8 +64,7 @@ ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XMultiServiceFa
 
     if (xInt.is())
     {
-        Any a= xInt->queryInterface( ::getCppuType( reinterpret_cast<
-                                                  Reference< XBridgeSupplier2>* >(0)));
+        Any a= xInt->queryInterface( cppu::UnoType<XBridgeSupplier2>::get() );
         a >>= m_bridgeSupplier;
 
     }
@@ -202,8 +201,7 @@ OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiS
 
     if (xInt.is())
     {
-        Any a= xInt->queryInterface( getCppuType(
-            reinterpret_cast< Reference<XBridgeSupplier2>*>(0)));
+        Any a= xInt->queryInterface( cppu::UnoType<XBridgeSupplier2>::get() );
         a >>= m_bridgeSupplier;
     }
 }
@@ -481,8 +479,7 @@ OleClient_Impl::OleClient_Impl( const Reference<XMultiServiceFactory>& smgr):
 
     if (xInt.is())
     {
-        Any a= xInt->queryInterface(getCppuType(
-            reinterpret_cast<Reference<XBridgeSupplier2>*>(0)));
+        Any a= xInt->queryInterface(cppu::UnoType<XBridgeSupplier2>::get() );
         a >>= m_bridgeSupplier;
     }
 }
@@ -597,8 +594,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
 
     if (xInt.is())
     {
-        Any a= xInt->queryInterface( getCppuType(
-            reinterpret_cast< Reference<XBridgeSupplier2>*>(0)));
+        Any a= xInt->queryInterface( cppu::UnoType<XBridgeSupplier2>::get() );
         a >>= m_bridgeSupplier;
     }
 
@@ -644,8 +640,8 @@ Sequence< Type > SAL_CALL OleServer_Impl::getTypes( ) throw(RuntimeException)
         if( ! pCollection )
         {
             static OTypeCollection collection(
-                getCppuType(reinterpret_cast< Reference< XWeak>*>(0)),
-                getCppuType(reinterpret_cast< Reference< XTypeProvider>*>(0)) );
+                cppu::UnoType<XWeak>::get(),
+                cppu::UnoType<XTypeProvider>::get() );
             pCollection = &collection;
         }
     }

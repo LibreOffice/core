@@ -520,9 +520,9 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aPropertyHelperTypes(   ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
-                                            ::getCppuType( (const Reference< XPropertySet > *)0 ),
-                                            ::getCppuType( (const Reference< XMultiPropertySet > *)0 ));
+    OTypeCollection aPropertyHelperTypes(   cppu::UnoType<XFastPropertySet>::get(),
+                                            cppu::UnoType<XPropertySet>::get(),
+                                            cppu::UnoType<XMultiPropertySet>::get());
 
     return ::comphelper::concatSequences(
         ODatabaseSource_Base::getTypes(),

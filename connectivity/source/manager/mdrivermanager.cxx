@@ -505,7 +505,7 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  ) thr
 
 ::com::sun::star::uno::Type SAL_CALL OSDBCDriverManager::getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast< Reference< XDriver >* >(NULL));
+    return cppu::UnoType<XDriver>::get();
 }
 
 

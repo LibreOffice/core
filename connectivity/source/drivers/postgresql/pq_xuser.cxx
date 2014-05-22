@@ -115,7 +115,7 @@ Sequence<Type > User::getTypes() throw( RuntimeException, std::exception )
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< com::sun::star::sdbcx::XUser> *) 0 ),
+                cppu::UnoType<com::sun::star::sdbcx::XUser>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }

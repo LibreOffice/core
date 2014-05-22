@@ -96,8 +96,8 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Type > FakedUpdateableResult
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< XResultSetUpdate> *) 0 ),
-                getCppuType( (Reference< XRowUpdate> *) 0 ),
+                cppu::UnoType<XResultSetUpdate>::get(),
+                cppu::UnoType<XRowUpdate>::get(),
                 ResultSet::getTypes());
             pCollection = &collection;
         }

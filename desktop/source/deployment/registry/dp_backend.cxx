@@ -582,8 +582,7 @@ void Package::exportTo(
 void Package::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * container = rBHelper.getContainer(
-        ::getCppuType( static_cast<Reference<
-                       util::XModifyListener> const *>(0) ) );
+        cppu::UnoType<util::XModifyListener>::get() );
     if (container != 0) {
         Sequence< Reference<XInterface> > elements(
             container->getElements() );
@@ -821,7 +820,7 @@ Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool smallIcon )
     if (! smallIcon)
         return Any();
     const sal_uInt16 nIconId = m_smallIcon;
-    return Any( &nIconId, getCppuType( static_cast<sal_uInt16 const *>(0) ) );
+    return Any( &nIconId, cppu::UnoType<cppu::UnoUnsignedShortType>::get() );
 }
 
 }

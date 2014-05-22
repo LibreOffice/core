@@ -62,18 +62,18 @@ OStatementBase::~OStatementBase()
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > OStatementBase::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
-                           ::getCppuType( (const Reference< XWarningsSupplier > *)0 ),
-                           ::getCppuType( (const Reference< XCloseable > *)0 ),
-                           ::getCppuType( (const Reference< XMultipleResults > *)0 ),
-                           ::getCppuType( (const Reference< ::com::sun::star::util::XCancellable > *)0 ),
+    OTypeCollection aTypes(cppu::UnoType<XPropertySet>::get(),
+                           cppu::UnoType<XWarningsSupplier>::get(),
+                           cppu::UnoType<XCloseable>::get(),
+                           cppu::UnoType<XMultipleResults>::get(),
+                           cppu::UnoType<com::sun::star::util::XCancellable>::get(),
                             OSubComponent::getTypes() );
     Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
     if ( xGRes.is() )
-        aTypes = OTypeCollection(::getCppuType( (const Reference< XGeneratedResultSet > *)0 ),aTypes.getTypes());
+        aTypes = OTypeCollection(cppu::UnoType<XGeneratedResultSet>::get(),aTypes.getTypes());
     Reference< XPreparedBatchExecution > xPreparedBatchExecution(m_xAggregateAsSet, UNO_QUERY);
     if ( xPreparedBatchExecution.is() )
-        aTypes = OTypeCollection(::getCppuType( (const Reference< XPreparedBatchExecution > *)0 ),aTypes.getTypes());
+        aTypes = OTypeCollection(cppu::UnoType<XPreparedBatchExecution>::get(),aTypes.getTypes());
 
     return aTypes.getTypes();
 }
@@ -94,13 +94,13 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
         if ( !aIface.hasValue() )
         {
             Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
-            if ( ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) == rType && xGRes.is() )
+            if ( cppu::UnoType<XGeneratedResultSet>::get()== rType && xGRes.is() )
                 aIface = ::cppu::queryInterface(rType,static_cast< XGeneratedResultSet * >( this ));
         }
         if ( !aIface.hasValue() )
         {
             Reference< XPreparedBatchExecution > xGRes(m_xAggregateAsSet, UNO_QUERY);
-            if ( ::getCppuType( (const Reference< XPreparedBatchExecution > *)0 ) == rType && xGRes.is() )
+            if ( cppu::UnoType<XPreparedBatchExecution>::get()== rType && xGRes.is() )
                 aIface = ::cppu::queryInterface(rType,static_cast< XPreparedBatchExecution * >( this ));
         }
     }

@@ -540,10 +540,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
         maTypeSequence.realloc( nOldCount + 4 ); // !DANGER! keep this updated
         uno::Type* pTypes = &maTypeSequence.getArray()[nOldCount];
 
-        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextField >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+        *pTypes++ = cppu::UnoType<text::XTextField>::get();
+        *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+        *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+        *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
     }
     return maTypeSequence;
 }

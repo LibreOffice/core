@@ -202,14 +202,14 @@ Sequence<Type > BaseResultSet::getTypes() throw( RuntimeException, std::exceptio
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< XResultSet> *) 0 ),
-                getCppuType( (Reference< XResultSetMetaDataSupplier> *) 0 ),
-                getCppuType( (Reference< XRow> *) 0 ),
-                getCppuType( (Reference< XColumnLocate> *) 0 ),
-                getCppuType( (Reference< XCloseable> *) 0 ),
-                getCppuType( (Reference< XPropertySet >*) 0 ),
-                getCppuType( (Reference< XFastPropertySet > *) 0 ),
-                getCppuType( (Reference< XMultiPropertySet > *) 0 ),
+                cppu::UnoType<XResultSet>::get(),
+                cppu::UnoType<XResultSetMetaDataSupplier>::get(),
+                cppu::UnoType<XRow>::get(),
+                cppu::UnoType<XColumnLocate>::get(),
+                cppu::UnoType<XCloseable>::get(),
+                cppu::UnoType<XPropertySet>::get(),
+                cppu::UnoType<XFastPropertySet>::get(),
+                cppu::UnoType<XMultiPropertySet>::get(),
                 OComponentHelper::getTypes());
             pCollection = &collection;
         }

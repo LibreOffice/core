@@ -496,7 +496,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
-    : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ), xContext, xSFI )
+    : SfxLibrary( _rModifiable, cppu::UnoType<XInputStreamProvider>::get(), xContext, xSFI )
     , m_pParent( pParent )
     , m_aName( aName )
 {
@@ -510,7 +510,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const OUString& aStorageURL,
                                     bool ReadOnly,
                                     SfxDialogLibraryContainer* pParent )
-    : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ),
+    : SfxLibrary( _rModifiable, cppu::UnoType<XInputStreamProvider>::get(),
                        xContext, xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
     , m_pParent( pParent )
     , m_aName( aName )

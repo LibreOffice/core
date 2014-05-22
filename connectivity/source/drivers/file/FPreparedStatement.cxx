@@ -121,9 +121,9 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-        ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
-                                        ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
-                                        ::getCppuType( (const ::com::sun::star::uno::Reference< XResultSetMetaDataSupplier > *)0 ));
+        ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
+                                        cppu::UnoType<XParameters>::get(),
+                                        cppu::UnoType<XResultSetMetaDataSupplier>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
 }

@@ -269,15 +269,15 @@ Sequence< Type > PreparedStatement::getTypes() throw ( RuntimeException, std::ex
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< XWarningsSupplier> *) 0 ),
-                getCppuType( (Reference< XPreparedStatement> *) 0 ),
-                getCppuType( (Reference< com::sun::star::sdbc::XResultSetMetaDataSupplier> *) 0 ),
-                getCppuType( (Reference< XParameters> *) 0 ),
-                getCppuType( (Reference< XCloseable> *) 0 ),
-                getCppuType( (Reference< XGeneratedResultSet> *) 0 ),
-                getCppuType( (Reference< XPropertySet >*) 0 ),
-                getCppuType( (Reference< XFastPropertySet > *) 0 ),
-                getCppuType( (Reference< XMultiPropertySet > *) 0 ),
+                cppu::UnoType<XWarningsSupplier>::get(),
+                cppu::UnoType<XPreparedStatement>::get(),
+                cppu::UnoType<com::sun::star::sdbc::XResultSetMetaDataSupplier>::get(),
+                cppu::UnoType<XParameters>::get(),
+                cppu::UnoType<XCloseable>::get(),
+                cppu::UnoType<XGeneratedResultSet>::get(),
+                cppu::UnoType<XPropertySet>::get(),
+                cppu::UnoType<XFastPropertySet>::get(),
+                cppu::UnoType<XMultiPropertySet>::get(),
                 OComponentHelper::getTypes());
             pCollection = &collection;
         }

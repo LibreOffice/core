@@ -847,7 +847,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
     Type aRetType = getCppuVoidType();
     switch( eType )
     {
-        case SbxNULL:       aRetType = ::getCppuType( (const Reference< XInterface > *)0 ); break;
+        case SbxNULL:       aRetType = cppu::UnoType<XInterface>::get(); break;
         case SbxINTEGER:    aRetType = cppu::UnoType<sal_Int16>::get(); break;
         case SbxLONG:       aRetType = cppu::UnoType<sal_Int32>::get(); break;
         case SbxSINGLE:     aRetType = cppu::UnoType<float>::get(); break;
@@ -891,7 +891,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
         SbxBaseRef xObj = (SbxBase*)pVal->GetObject();
         if( !xObj )
         {
-            aRetType = getCppuType( static_cast<Reference<XInterface> *>(0) );
+            aRetType = cppu::UnoType<XInterface>::get();
             return aRetType;
         }
 
@@ -1592,7 +1592,7 @@ Any invokeAutomationMethod( const OUString& Name, Sequence< Any >& args, SbxArra
 // Debugging help method to readout the imlemented interfaces of an object
 OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference< XIdlClass >& xClass, sal_uInt16 nRekLevel )
 {
-    Type aIfaceType = ::getCppuType( (const Reference< XInterface > *)0 );
+    Type aIfaceType = cppu::UnoType<XInterface>::get();
     static Reference< XIdlClass > xIfaceClass = TypeToIdlClass( aIfaceType );
 
     OUStringBuffer aRetStr;
@@ -2117,7 +2117,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             }
                         }
                         // get the value
-                        Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
+                        Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( cppu::UnoType<XPropertySet>::get()), UNO_QUERY );
                         Any aRetAny = xPropSet->getPropertyValue( pProp->GetName() );
                         // The use of getPropertyValue (instead of using the index) is
                         // suboptimal, but the refactoring to XInvocation is already pending
@@ -2188,7 +2188,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     try
                     {
                         // set the value
-                        Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
+                        Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( cppu::UnoType<XPropertySet>::get()), UNO_QUERY );
                         xPropSet->setPropertyValue( pProp->GetName(), aAnyValue );
                         // The use of getPropertyValue (instead of using the index) is
                         // suboptimal, but the refactoring to XInvocation is already pending
@@ -2701,7 +2701,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
             {
                 try
                 {
-                    Reference< XNameAccess > xNameAccess( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
+                    Reference< XNameAccess > xNameAccess( mxUnoAccess->queryAdapter( cppu::UnoType<XPropertySet>::get()), UNO_QUERY );
                     OUString aUName2( rName );
 
                     if( xNameAccess.is() && xNameAccess->hasByName( aUName2 ) )

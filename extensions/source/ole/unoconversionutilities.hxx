@@ -706,7 +706,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
         }
         case TypeClass_STRUCT:
         {
-            if (rAny.getValueType() == getCppuType((Date*)0))
+            if (rAny.getValueType() == cppu::UnoType<Date>::get() )
             {
                 Date d;
                 if (rAny >>= d)
@@ -1572,7 +1572,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                     rAny.setValue( & var.bVal, cppu::UnoType<sal_Int8>::get());
                     break;
                 case VT_UI2:
-                    rAny.setValue( & var.uiVal, getCppuType( (sal_uInt16*)0));
+                    rAny.setValue( & var.uiVal, cppu::UnoType<cppu::UnoUnsignedShortType>::get() );
                     break;
                 case VT_UI4:
                     rAny.setValue( & var.ulVal, cppu::UnoType<sal_uInt32>::get());
@@ -1704,10 +1704,10 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
         {
         case VT_EMPTY:
         case VT_UNKNOWN:
-            desiredType = getCppuType((Reference<XInterface>*) 0);
+            desiredType = cppu::UnoType<XInterface>::get();
             break;
         case VT_DISPATCH:
-            desiredType = getCppuType((Reference<XInvocation>*) 0);
+            desiredType = cppu::UnoType<XInvocation>::get();
             break;
         default:
             desiredType = aType;
@@ -1811,7 +1811,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     // If the object implements UNO interfaces then get the types.
     Sequence<Type> seqTypes = getImplementedInterfaces(spUnknown);
     if (seqTypes.getLength() == 0 &&
-        aType != VOID_TYPE && aType != getCppuType((Reference<XInvocation>*)0))
+        aType != VOID_TYPE && aType != cppu::UnoType<XInvocation>::get())
     {
         seqTypes = Sequence<Type>( & aType, 1);
     }
@@ -1847,7 +1847,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     // we have a wrapper object
     //The wrapper implements already XInvocation and XInterface. If
     //param aType is void then the object is supposed to have XInvocation.
-     if (aType == getCppuType((Reference<XInvocation>*)0) ||
+     if (aType == cppu::UnoType<XInvocation>::get()||
          (aType == VOID_TYPE && seqTypes.getLength() == 0 ))
      {
          ret = xIntNewProxy->queryInterface(desiredType);

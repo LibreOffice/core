@@ -334,7 +334,7 @@ void SAL_CALL ODefinitionContainer::removeContainerApproveListener( const Refere
 // XElementAccess
 Type SAL_CALL ODefinitionContainer::getElementType( ) throw (RuntimeException, std::exception)
 {
-    return ::getCppuType( static_cast< Reference< XContent >* >(NULL) );
+    return cppu::UnoType<XContent>::get();
 }
 
 sal_Bool SAL_CALL ODefinitionContainer::hasElements( ) throw (RuntimeException, std::exception)

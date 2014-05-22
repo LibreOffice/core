@@ -157,8 +157,8 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Type > UpdateableResultSet::
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< XResultSetUpdate> *) 0 ),
-                getCppuType( (Reference< XRowUpdate> *) 0 ),
+                cppu::UnoType<XResultSetUpdate>::get(),
+                cppu::UnoType<XRowUpdate>::get(),
                 SequenceResultSet::getTypes());
             pCollection = &collection;
         }
@@ -549,27 +549,27 @@ Sequence< Type > UpdateableResultSet::getStaticTypes( bool updateable )
     if( updateable )
     {
         cppu::OTypeCollection collection(
-            getCppuType( (Reference< XResultSetUpdate> *) 0 ),
-            getCppuType( (Reference< XRowUpdate> *) 0 ),
-//             getCppuType( (Reference< com::sun::star::sdbcx::XRowLocate > *) 0 ),
+            cppu::UnoType<XResultSetUpdate>::get(),
+            cppu::UnoType<XRowUpdate>::get(),
+//             cppu::UnoType<com::sun::star::sdbcx::XRowLocate>::get(),
             getStaticTypes( false /* updateable */ ) );
         return collection.getTypes();
     }
     else
     {
         cppu::OTypeCollection collection(
-            getCppuType( (Reference< XResultSet> *) 0 ),
-            getCppuType( (Reference< XResultSetMetaDataSupplier> *) 0 ),
-            getCppuType( (Reference< XRow> *) 0 ),
-            getCppuType( (Reference< XColumnLocate> *) 0 ),
-            getCppuType( (Reference< XCloseable> *) 0 ),
-            getCppuType( (Reference< XPropertySet >*) 0 ),
-            getCppuType( (Reference< XFastPropertySet > *) 0 ),
-            getCppuType( (Reference< XMultiPropertySet > *) 0 ),
-            getCppuType( (const Reference< com::sun::star::lang::XComponent > *)0 ),  // OComponentHelper
-            getCppuType( (const Reference< com::sun::star::lang::XTypeProvider > *)0 ),
-            getCppuType( (const Reference< com::sun::star::uno::XAggregation > *)0 ),
-            getCppuType( (const Reference< com::sun::star::uno::XWeak > *)0 ) );
+            cppu::UnoType<XResultSet>::get(),
+            cppu::UnoType<XResultSetMetaDataSupplier>::get(),
+            cppu::UnoType<XRow>::get(),
+            cppu::UnoType<XColumnLocate>::get(),
+            cppu::UnoType<XCloseable>::get(),
+            cppu::UnoType<XPropertySet>::get(),
+            cppu::UnoType<XFastPropertySet>::get(),
+            cppu::UnoType<XMultiPropertySet>::get(),
+            cppu::UnoType<com::sun::star::lang::XComponent>::get(),  // OComponentHelper
+            cppu::UnoType<com::sun::star::lang::XTypeProvider>::get(),
+            cppu::UnoType<com::sun::star::uno::XAggregation>::get(),
+            cppu::UnoType<com::sun::star::uno::XWeak>::get());
         return collection.getTypes();
     }
 }

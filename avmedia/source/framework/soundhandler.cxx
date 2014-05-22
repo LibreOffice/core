@@ -92,11 +92,11 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
             /* Create a static typecollection ...           */
             static ::cppu::OTypeCollection aTypeCollection
                 (
-                    ::getCppuType(( const ::com::sun::star::uno::Reference< css::lang::XTypeProvider >*)NULL ),
-                    ::getCppuType(( const ::com::sun::star::uno::Reference< css::lang::XServiceInfo >*)NULL ),
-                    ::getCppuType(( const ::com::sun::star::uno::Reference< css::frame::XNotifyingDispatch >*)NULL ),
-                    ::getCppuType(( const ::com::sun::star::uno::Reference< css::frame::XDispatch >*)NULL ),
-                    ::getCppuType(( const ::com::sun::star::uno::Reference< css::document::XExtendedFilterDetection >*)NULL )
+                    cppu::UnoType<css::lang::XTypeProvider>::get(),
+                    cppu::UnoType<css::lang::XServiceInfo>::get(),
+                    cppu::UnoType<css::frame::XNotifyingDispatch>::get(),
+                    cppu::UnoType<css::frame::XDispatch>::get(),
+                    cppu::UnoType<css::document::XExtendedFilterDetection>::get()
                 );
             /* ... and set his address to static pointer! */
             pTypeCollection = &aTypeCollection ;
