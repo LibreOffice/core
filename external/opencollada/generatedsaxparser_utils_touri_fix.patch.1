@@ -1,0 +1,35 @@
+diff -ur opencollada.org/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp opencollada/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
+--- opencollada.org/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp	2014-05-22 15:24:25.437939696 +0200
++++ opencollada/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp	2014-05-22 15:24:50.769938623 +0200
+@@ -865,13 +865,14 @@
+     {
+         if ( *buffer == bufferEnd )
+         {
+-            failed = false;
++            failed = true;
+             return COLLADABU::URI(0);
+         }
+         //Just get the string as it is for ids, so that we are able to read FBX-COLLADA
+         //Otherwise, calling toStringItem would result in a truncated string when an id contains spaces
+         //const ParserString& string = toStringListItem(buffer, bufferEnd, failed);
+         //return COLLADABU::URI(string.str, string.length);
++        failed = false;
+         return COLLADABU::URI((const char*)*buffer, bufferEnd - *buffer);
+     }
+ 
+@@ -880,13 +881,14 @@
+     {
+         if ( **buffer == '\0' )
+         {
+-            failed = false;
++            failed = true;
+             return COLLADABU::URI(0);
+         }
+         //Just get the string as it is for ids, so that we are able to read FBX-COLLADA
+         //Otherwise, calling toStringItem would result in a truncated string when an id contains spaces
+         //const ParserString& string = toStringListItem(buffer, failed);
+         //return COLLADABU::URI(string.str, string.length);
++        failed = false;
+         return COLLADABU::URI((const char*)*buffer);
+     }
+ 
