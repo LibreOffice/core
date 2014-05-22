@@ -410,7 +410,6 @@ void ODatabaseExport::insertValueIntoColumn()
 
 sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
-    double fOutNumber = 0.0;
     sal_Int16 nNumberFormat = 0;
 
     try
@@ -421,6 +420,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
         ensureFormatter();
         if ( m_pFormatter && !m_sNumToken.isEmpty() )
         {
+            double fOutNumber = 0.0;
             LanguageType eNumLang;
             sal_uInt32 nFormatKey(0);
             fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nFormatKey,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
