@@ -21,8 +21,10 @@
 #define INCLUDED_SAL_TYPES_H
 
 #include <sal/config.h>
-#include <sal/macros.h>
 
+#include <stddef.h>
+
+#include <sal/macros.h>
 #include <sal/typesizes.h>
 
 #ifdef __cplusplus
@@ -337,7 +339,7 @@ typedef struct _sal_Sequence
     char                elements[1];
 } sal_Sequence;
 
-#define SAL_SEQUENCE_HEADER_SIZE ((sal_Size)&((sal_Sequence *)0)->elements)
+#define SAL_SEQUENCE_HEADER_SIZE ((sal_Size) offsetof(sal_Sequence,elements))
 
 #if defined( SAL_W32)
 #pragma pack(pop)
