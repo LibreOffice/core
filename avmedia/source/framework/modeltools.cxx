@@ -153,12 +153,43 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
     if (bIsDAE || bIsKMZ)
     {
         std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
-        asset->setInputFilePath(OUStringToOString( rSourceURL, RTL_TEXTENCODING_UTF8 ).getStr());
+
+        OUString sOutput;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sOutput);
+        // remove .tmp extension
+        sOutput = sOutput.copy(0, sOutput.getLength()-4);
+        asset->setBundleOutputPath(OUStringToOString( sOutput, RTL_TEXTENCODING_UTF8 ).getStr());
+
+        const INetURLObject aSourceURLObj(sSource);
+        // If *.dae or *.kmz file is not in the local file system, then copy them to a temp folder for the conversion
+        if(aSourceURLObj.GetProtocol() != INET_PROT_FILE )
+        {
+            try
+            {
+               ::ucbhelper::Content aSourceContent(sSource,
+                    uno::Reference<ucb::XCommandEnvironment>(),
+                    comphelper::getProcessComponentContext());
+
+                const OUString sTarget = sOutput + GetFilename(sSource);
+                ::ucbhelper::Content aTempContent(sTarget,
+                    uno::Reference<ucb::XCommandEnvironment>(),
+                    comphelper::getProcessComponentContext());
+
+                aTempContent.writeStream(aSourceContent.openStream(), true);
+                sSource = sTarget;
+            }
+            catch (const uno::Exception&)
+            {
+                SAL_WARN("avmedia.opengl", "Exception while trying to copy source file to the temp folder for conversion:\n" << sSource);
+                return false;
+            }
+        }
+
+        asset->setInputFilePath(OUStringToOString( sSource, RTL_TEXTENCODING_UTF8 ).getStr());
 
         if (bIsKMZ)
         {
             // KMZ converter needs a system path
-            const INetURLObject aSourceURLObj(rSourceURL);
             const std::string sSourcePath =
                 OUStringToOString( aSourceURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
             const std::string strDaeFilePath = GLTF::Kmz2Collada()(sSourcePath);
@@ -171,12 +202,6 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
                 OStringToOUString(OString(strDaeFilePath.c_str()), RTL_TEXTENCODING_UTF8 ), sDaeFilePath);
             asset->setInputFilePath(OUStringToOString( sDaeFilePath, RTL_TEXTENCODING_UTF8 ).getStr());
         }
-
-        OUString sOutput;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sOutput);
-        // remove .tmp extension
-        sOutput = sOutput.copy(0, sOutput.getLength()-4);
-        asset->setBundleOutputPath(OUStringToOString( sOutput, RTL_TEXTENCODING_UTF8 ).getStr());
 
         GLTF::COLLADA2GLTFWriter writer(asset);
         writer.write();
