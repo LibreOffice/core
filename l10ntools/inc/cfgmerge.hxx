@@ -74,13 +74,13 @@ public:
     ~CfgStack();
 
     CfgStackData *Push(const OString &rTag, const OString &rId);
-    CfgStackData *Pop()
+    void Pop()
     {
-        if (maList.empty())
-            return NULL;
-        CfgStackData* temp = maList.back();
-        maList.pop_back();
-        return temp;
+        if (!maList.empty())
+        {
+            delete maList.back();
+            maList.pop_back();
+        }
     }
 
     CfgStackData *GetStackData();
