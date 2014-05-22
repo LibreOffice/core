@@ -124,7 +124,7 @@ void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
 }
 
 void ProgressBarWrapper::end()
-throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xWindow;
 
