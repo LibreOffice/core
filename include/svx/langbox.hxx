@@ -144,8 +144,20 @@ public:
     SvxLanguageComboBox( Window* pParent, WinBits nBits, bool bCheck = false );
     virtual ~SvxLanguageComboBox();
 
+    enum EditedAndValid
+    {
+        EDITED_NO,
+        EDITED_VALID,
+        EDITED_INVALID
+    };
+
+    EditedAndValid      GetEditedAndValid() const;
+    sal_Int32           SaveEditedAsEntry();
+
+
 private:
-    sal_Int32   mnSavedValuePos;
+    sal_Int32       mnSavedValuePos;
+    EditedAndValid  meEditedAndValid;
 
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplRemoveEntryAt( sal_Int32 nPos ) SAL_OVERRIDE;
@@ -164,6 +176,8 @@ private:
     SVX_DLLPRIVATE virtual void         ImplDisable() SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplSaveValue() SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetSavedValue() const SAL_OVERRIDE;
+
+    DECL_LINK( EditModifyHdl, SvxLanguageComboBox* );
 };
 
 #endif

@@ -33,6 +33,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/builder.hxx>
+#include <vcl/i18nhelp.hxx>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -507,6 +508,7 @@ SvxLanguageComboBox::SvxLanguageComboBox( Window* pParent, WinBits nBits, bool b
     : ComboBox( pParent, nBits )
     , SvxLanguageBoxBase( bCheck )
     , mnSavedValuePos( COMBOBOX_ENTRY_NOTFOUND )
+    , meEditedAndValid( EDITED_NO )
 {
     // display entries sorted
     SetStyle( GetStyle() | WB_SORT );
@@ -514,6 +516,8 @@ SvxLanguageComboBox::SvxLanguageComboBox( Window* pParent, WinBits nBits, bool b
     EnableMultiSelection( false );
 
     ImplLanguageBoxBaseInit();
+
+    SetModifyHdl( LINK( this, SvxLanguageComboBox, EditModifyHdl ) );
 }
 
 SvxLanguageComboBox::~SvxLanguageComboBox()
@@ -697,5 +701,74 @@ sal_Int32 SvxLanguageComboBox::ImplGetSavedValue() const
     return mnSavedValuePos;
 }
 
+
+IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
+{
+    OUString aStr( vcl::I18nHelper::filterFormattingChars( GetText()));
+    if (aStr.isEmpty())
+        meEditedAndValid = EDITED_INVALID;
+    else
+    {
+        const sal_Int32 nPos = GetEntryPos( aStr);
+        if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+            meEditedAndValid = EDITED_NO;
+        else
+        {
+            OUString aCanonicalized;
+            bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized);
+            meEditedAndValid = (bValid ? EDITED_VALID : EDITED_INVALID);
+            if (bValid && aCanonicalized != aStr)
+            {
+                SetText( aCanonicalized);
+                SetSelection( Selection( aCanonicalized.getLength()));
+            }
+        }
+    }
+    return 0;
+}
+
+
+SvxLanguageComboBox::EditedAndValid SvxLanguageComboBox::GetEditedAndValid() const
+{
+    return meEditedAndValid;
+}
+
+
+sal_Int32 SvxLanguageComboBox::SaveEditedAsEntry()
+{
+    if (meEditedAndValid != EDITED_VALID)
+        return COMBOBOX_ENTRY_NOTFOUND;
+
+    LanguageTag aLanguageTag( vcl::I18nHelper::filterFormattingChars( GetText()));
+    LanguageType nLang = aLanguageTag.getLanguageType();
+    if (nLang == LANGUAGE_DONTKNOW)
+    {
+        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: unknown tag");
+        return COMBOBOX_ENTRY_NOTFOUND;
+    }
+
+    sal_Int32 nPos = ImplTypeToPos( nLang);
+    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+        return nPos;    // Already present but with a different string.
+
+    if (SvtLanguageTable::HasLanguageType( nLang))
+    {
+        // In SvtLanguageTable but not in SvxLanguageComboBox. On purpose? This
+        // may be an entry with different settings or CTL instead of Western or
+        // ... all things we don't handle yet.
+        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: already in SvtLanguageTable: " <<
+                SvtLanguageTable::GetLanguageString( nLang) << ", " << nLang);
+    }
+    else
+    {
+        // Add to both, SvtLanguageTable and SvxLanguageComboBox.
+        /* TODO: a descriptive user comment would be a nice to have here. */
+        SvtLanguageTable::AddLanguageTag( aLanguageTag, OUString());
+    }
+
+    nPos = InsertLanguage( nLang);
+
+    return nPos;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
