@@ -480,7 +480,7 @@ void SAL_CALL OCollection::release() throw()
 
 Type SAL_CALL OCollection::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    returncppu::UnoType<XPropertySet>::get();
+    return cppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL OCollection::hasElements(  ) throw(RuntimeException, std::exception)
