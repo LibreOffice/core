@@ -449,20 +449,20 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 // think it should be, do nothing, and just let the implicit loading
 // that happens when loading the JVM take care of it.
 
-static void load_msvcr71(LPCWSTR jvm_dll)
+static void load_msvcr(LPCWSTR jvm_dll, wchar_t const* msvcr)
 {
-    wchar_t msvcr71_dll[MAX_PATH];
+    wchar_t msvcr_dll[MAX_PATH];
     wchar_t *slash;
 
     if (wcslen(jvm_dll) > MAX_PATH - 15)
         return;
 
-    wcscpy(msvcr71_dll, jvm_dll);
+    wcscpy(msvcr_dll, jvm_dll);
 
     // First check if msvcr71.dll is in the same folder as jvm.dll. It
     // normally isn't, at least up to 1.6.0_22, but who knows if it
     // might be in the future.
-    slash = wcsrchr(msvcr71_dll, L'\\');
+    slash = wcsrchr(msvcr_dll, L'\\');
 
     if (!slash)
     {
@@ -470,27 +470,27 @@ static void load_msvcr71(LPCWSTR jvm_dll)
         return;
     }
 
-    wcscpy(slash+1, L"msvcr71.dll");
-    if (LoadLibraryW(msvcr71_dll))
+    wcscpy(slash+1, msvcr);
+    if (LoadLibraryW(msvcr_dll))
         return;
 
     // Then check if msvcr71.dll is in the parent folder of where
     // jvm.dll is. That is currently (1.6.0_22) as far as I know the
     // normal case.
     *slash = 0;
-    slash = wcsrchr(msvcr71_dll, L'\\');
+    slash = wcsrchr(msvcr_dll, L'\\');
 
     if (!slash)
         return;
 
-    wcscpy(slash+1, L"msvcr71.dll");
-    LoadLibraryW(msvcr71_dll);
+    wcscpy(slash+1, msvcr);
+    LoadLibraryW(msvcr_dll);
 }
 
 // Check if the jvm DLL imports msvcr71.dll, and in that case try
 // loading it explicitly. In case something goes wrong, do nothing,
 // and just let the implicit loading try to take care of it.
-static void do_msvcr71_magic(rtl_uString *jvm_dll)
+static void do_msvcr_magic(rtl_uString *jvm_dll)
 {
     rtl_uString* Module(0);
     struct stat st;
@@ -524,18 +524,51 @@ static void do_msvcr71_magic(rtl_uString *jvm_dll)
 
     IMAGE_NT_HEADERS *nt_hdr = (IMAGE_NT_HEADERS *) ((char *)dos_hdr + dos_hdr->e_lfanew);
 
+    DWORD importsVA = nt_hdr->OptionalHeader
+            .DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
+    // first determine Virtual-to-File-address mapping for the section
+    // that contains the import directory
+    IMAGE_SECTION_HEADER *sections = IMAGE_FIRST_SECTION(nt_hdr);
+    ptrdiff_t VAtoPhys = -1;
+    for (int i = 0; i < nt_hdr->FileHeader.NumberOfSections; ++i)
+    {
+        if (sections->VirtualAddress <= importsVA &&
+            importsVA < sections->VirtualAddress + sections->SizeOfRawData)
+        {
+            VAtoPhys = sections->PointerToRawData - sections->VirtualAddress;
+            break;
+        }
+        ++sections;
+    }
+    if (-1 == VAtoPhys) // not found?
+    {
+        free(dos_hdr);
+        return;
+    }
     IMAGE_IMPORT_DESCRIPTOR *imports =
-        (IMAGE_IMPORT_DESCRIPTOR *) ((char *) dos_hdr + nt_hdr->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
+        (IMAGE_IMPORT_DESCRIPTOR *) ((char *) dos_hdr + importsVA + VAtoPhys);
 
     while (imports <= (IMAGE_IMPORT_DESCRIPTOR *) ((char *) dos_hdr + st.st_size - sizeof (IMAGE_IMPORT_DESCRIPTOR)) &&
            imports->Name != 0 &&
-           imports->Name < (DWORD) st.st_size)
+           imports->Name + VAtoPhys < (DWORD) st.st_size)
     {
-        // Intentional use of sizeof("msvcr71.dll") here to include the terminating zero byte
-        if (strnicmp((char *) dos_hdr + imports->Name, "msvcr71.dll", sizeof("msvcr71.dll")) == 0)
+        static struct { char const * name; wchar_t const * wname; } msvcrts[] =
         {
-            load_msvcr71(reinterpret_cast<LPCWSTR>(Module->buffer));
-            break;
+            { "msvcr71.dll" , L"msvcr71.dll"  },
+            { "msvcr100.dll", L"msvcr100.dll" },
+        };
+        char const* importName = (char *) dos_hdr + imports->Name + VAtoPhys;
+        for (size_t i = 0; i < SAL_N_ELEMENTS(msvcrts); ++i)
+        {
+            if (0 == strnicmp(importName,
+                // Intentional strlen() + 1 here to include terminating zero
+                        msvcrts[i].name, strlen(msvcrts[i].name) + 1))
+            {
+                load_msvcr(reinterpret_cast<LPCWSTR>(Module->buffer),
+                        msvcrts[i].wname);
+                free(dos_hdr);
+                return;
+            }
         }
         imports++;
     }
@@ -584,7 +617,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
                                    SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW)) == 0 )
 #else
 #if defined(WNT)
-    do_msvcr71_magic(sRuntimeLib.pData);
+    do_msvcr_magic(sRuntimeLib.pData);
 #endif
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT)) == 0)
 #endif
