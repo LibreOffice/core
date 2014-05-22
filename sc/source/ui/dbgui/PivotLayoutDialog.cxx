@@ -93,7 +93,6 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     get(mpCheckTotalRows,           "check-total-rows");
     get(mpCheckDrillToDetail,       "check-drill-to-details");
 
-    get(mpButtonOk,     "ok");
     get(mpButtonApply,  "apply");
     get(mpButtonClose,  "close");
 
@@ -147,7 +146,6 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mpDestinationButton->SetLoseFocusHdl(aLink);
 
     // Buttons
-    mpButtonOk->SetClickHdl(   LINK(this, ScPivotLayoutDialog, OkClicked));
     mpButtonClose->SetClickHdl(LINK(this, ScPivotLayoutDialog, CloseClicked));
     mpButtonApply->SetClickHdl(LINK(this, ScPivotLayoutDialog, ApplyClicked));
 
@@ -606,13 +604,6 @@ ScDPLabelDataVector& ScPivotLayoutDialog::GetLabelDataVector()
 void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames)
 {
     return mpListBoxData->PushDataFieldNames(rDataFieldNames);
-}
-
-IMPL_LINK( ScPivotLayoutDialog, OkClicked, PushButton*, /*pButton*/ )
-{
-    if (ApplyChanges())
-        CloseClicked(NULL);
-    return 0;
 }
 
 IMPL_LINK( ScPivotLayoutDialog, ApplyClicked, PushButton*, /*pButton*/ )
