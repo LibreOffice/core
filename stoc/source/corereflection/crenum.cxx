@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "base.hxx"
+
+using namespace css::lang;
+using namespace css::reflection;
+using namespace css::uno;
 
 namespace stoc_corefl
 {
@@ -90,13 +93,13 @@ void IdlEnumFieldImpl::release() throw()
 Sequence< Type > IdlEnumFieldImpl::getTypes()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static OTypeCollection * s_pTypes = 0;
+    static ::cppu::OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! s_pTypes)
         {
-            static OTypeCollection s_aTypes(
+            static ::cppu::OTypeCollection s_aTypes(
                 ::getCppuType( (const Reference< XIdlField2 > *)0 ),
                 ::getCppuType( (const Reference< XIdlField > *)0 ),
                 IdlMemberImpl::getTypes() );
@@ -193,7 +196,7 @@ Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
 {
     if (! _pFields)
     {
-        MutexGuard aGuard( getMutexAccess() );
+        ::osl::MutexGuard aGuard( getMutexAccess() );
         if (! _pFields)
         {
             sal_Int32 nFields = getTypeDescr()->nEnumValues;

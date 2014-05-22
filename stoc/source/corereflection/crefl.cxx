@@ -27,9 +27,11 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <uno/lbnames.h>
 
-using namespace com::sun::star;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
+using namespace css;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::reflection;
+using namespace css::registry;
 using namespace cppu;
 using namespace osl;
 
@@ -298,7 +300,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
             _aElements.setValue( rName, aRet );
         else
         {
-            throw NoSuchElementException( rName, Reference< XInterface >() );
+            throw container::NoSuchElementException( rName, Reference< XInterface >() );
         }
     }
     return aRet;
@@ -311,7 +313,7 @@ sal_Bool IdlReflectionServiceImpl::hasByHierarchicalName( const OUString & rName
     {
         return getByHierarchicalName( rName ).hasValue();
     }
-    catch (NoSuchElementException &)
+    catch (container::NoSuchElementException &)
     {
     }
     return sal_False;
