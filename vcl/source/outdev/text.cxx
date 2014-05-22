@@ -288,6 +288,7 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         if( ImplDrawRotateText( rSalLayout ) )
             return true;
 
+
     long nOldX = rSalLayout.DrawBase().X();
     if( HasMirroredGraphics() )
     {
@@ -330,10 +331,6 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
             maFont.GetStrikeout(), maFont.GetUnderline(), maFont.GetOverline(),
             maFont.IsWordLineMode(), ImplIsUnderlineAbove( maFont ) );
 
-    // draw background
-    if ( bTextBkg ) {
-
-    }
 
     // emphasis marks
     if( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
