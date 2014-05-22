@@ -191,7 +191,7 @@ throw (uno::RuntimeException)
 }
 
 void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
-throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xWindow;
     OUString aText;
