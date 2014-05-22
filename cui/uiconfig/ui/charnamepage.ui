@@ -54,7 +54,7 @@
               </packing>
             </child>
             <child>
-              <object class="svxcorelo-SvxLanguageBox" id="westlanglb-nocjk">
+              <object class="svxcorelo-SvxLanguageComboBox" id="westlanglb-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
@@ -342,7 +342,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxLanguageBox" id="westlanglb-cjk">
+                  <object class="svxcorelo-SvxLanguageComboBox" id="westlanglb-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
