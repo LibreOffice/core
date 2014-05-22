@@ -204,7 +204,6 @@ static bool readCentralDirectoryEntry(StreamInterface *stream, CentralDirectoryE
         entry.internal_attr = readShort(stream);
         entry.external_attr = readInt(stream);
         entry.offset = readInt(stream);
-        unsigned short i = 0;
         entry.filename.assign(readString(stream, entry.filename_size));
         entry.extra_field.assign(readString(stream, entry.extra_field_size));
         entry.file_comment.assign(readString(stream, entry.file_comment_size));
@@ -234,7 +233,6 @@ static bool readLocalFileHeader(StreamInterface *stream, LocalFileHeader &header
         header.uncompressed_size = readInt(stream);
         header.filename_size = readShort(stream);
         header.extra_field_size = readShort(stream);
-        unsigned short i = 0;
         header.filename.assign(readString(stream, header.filename_size));
         header.extra_field.assign(readString(stream, header.extra_field_size));
     }
