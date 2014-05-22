@@ -208,9 +208,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
                 now.GetHour(), now.GetDay(), now.GetMonth(),
                 now.GetYear(), false) );
             xDocProps->setModifiedBy( aUserName );
-            if ( !HasName() || pImp->bIsSaving )
-                // QUESTION: not in case of "real" SaveAs as this is meant to create a new document
-                UpdateTime_Impl( xDocProps );
+            UpdateTime_Impl( xDocProps );
         }
     }
 }
