@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_SVAPP_HXX
 #define INCLUDED_VCL_SVAPP_HXX
 
-#include <config_features.h>
-
 #include <sal/config.h>
 #include <sal/types.h>
 
@@ -851,8 +849,10 @@ public:
     */
     static ImplSVEvent *        PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
 
-#if !HAVE_FEATURE_DESKTOP
     /** Send zoom event
+
+     Experimental work in progress. Available only for iOS and Android, and unclear whether actually
+     is needed now with tiled rendering.
 
      @param     nEvent          Event ID for zoom event
      @param     pWin            Pointer to window to which the event is sent
@@ -862,12 +862,14 @@ public:
 
     /* Send scroll event
 
+     Experimental work in progress. Available only for iOS and Android, and unclear whether actually
+     is needed now with tiled rendering.
+
      @param      nEvent          Event ID for scroll event
      @param      pWin            Pointer to window to which the event is sent
      @param      pScrollEvent    Scroll event to send
     */
     static ImplSVEvent *         PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
-#endif
 
     /** Remove mouse and keypress events from a window... any also zoom and scroll events
      if the platform supports it.
