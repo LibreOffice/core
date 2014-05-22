@@ -64,10 +64,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     // guarantee they are positioned correctly.  In fact, they are guaranteed
     // to be positioned incorrectly.
 
-    const float nBarSizeX = 10;
-    const float nBarSizeY = 10;
-    const float nBarDistanceX = nBarSizeX / 2;
-    const float nBarDistanceY = nBarSizeY / 2;
+    const float nBarSizeX = 10.0f;
+    const float nBarSizeY = 30.0f;
+    const float nBarDistanceX = 5.0f;
+    const float nBarDistanceY = 5.0;
 
     sal_uInt32 nId = 1;
     float nXEnd = 0.0;
