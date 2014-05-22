@@ -873,6 +873,8 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
                 polygon.verticesList.end(), DeletePointer<Vertices3D>());
         std::for_each(polygon.normalsList.begin(),
                 polygon.normalsList.end(), DeletePointer<Normals3D>());
+        delete polygon.vertices;
+        delete polygon.normals;
         m_Polygon3DInfoList.pop_front();
     }
     glDepthMask(GL_TRUE);
