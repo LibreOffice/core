@@ -1345,7 +1345,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
 #ifdef DBG_UTIL
 ::std::string WW8TableCellGrid::toString()
 {
-    string sResult = "<WW8TableCellGrid>";
+    ::std::string sResult = "<WW8TableCellGrid>";
 
     RowTops_t::const_iterator aTopsIt = getRowTopsBegin();
     static char sBuffer[1024];
