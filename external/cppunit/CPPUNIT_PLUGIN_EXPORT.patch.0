@@ -1,0 +1,11 @@
+--- include/cppunit/plugin/TestPlugIn.h
++++ include/cppunit/plugin/TestPlugIn.h
+@@ -111,7 +111,7 @@
+ /*! \brief Type of the function exported by a plug-in.
+  * \ingroup WritingTestPlugIn
+  */
+-typedef CppUnitTestPlugIn *(*TestPlugInSignature)();
++extern "C" { typedef CppUnitTestPlugIn *(*TestPlugInSignature)(); }
+ 
+ 
+ /*! \brief Implements the function exported by the test plug-in
