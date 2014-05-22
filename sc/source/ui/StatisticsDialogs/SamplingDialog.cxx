@@ -57,8 +57,6 @@ ScSamplingDialog::ScSamplingDialog(
     get(mpPeriodicMethodRadio, "periodic-method-radio");
 
     get(mpButtonOk,     "ok");
-    get(mpButtonApply,  "apply");
-    get(mpButtonClose,  "close");
 
     Init();
     GetRangeFromSelection();
@@ -67,10 +65,7 @@ ScSamplingDialog::ScSamplingDialog(
 void ScSamplingDialog::Init()
 {
     mpButtonOk->SetClickHdl( LINK( this, ScSamplingDialog, OkClicked ) );
-    mpButtonClose->SetClickHdl( LINK( this, ScSamplingDialog, CloseClicked ) );
-    mpButtonApply->SetClickHdl( LINK( this, ScSamplingDialog, ApplyClicked ) );
     mpButtonOk->Enable(false);
-    mpButtonApply->Enable(false);
 
     Link aLink = LINK( this, ScSamplingDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
@@ -159,7 +154,6 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
 
             // Enable OK, Cancel if output range is set
             mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
-            mpButtonApply->Enable(!mpOutputRangeEdit->GetText().isEmpty());
         }
     }
 }
@@ -279,20 +273,7 @@ void ScSamplingDialog::PerformSampling()
 
 IMPL_LINK( ScSamplingDialog, OkClicked, PushButton*, /*pButton*/ )
 {
-    ApplyClicked(NULL);
-    CloseClicked(NULL);
-    return 0;
-}
-
-
-IMPL_LINK( ScSamplingDialog, ApplyClicked, PushButton*, /*pButton*/ )
-{
     PerformSampling();
-    return 0;
-}
-
-IMPL_LINK( ScSamplingDialog, CloseClicked, PushButton*, /*pButton*/ )
-{
     Close();
     return 0;
 }

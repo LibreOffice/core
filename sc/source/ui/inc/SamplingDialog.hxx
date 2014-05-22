@@ -48,10 +48,7 @@ private:
     RadioButton*        mpRandomMethodRadio;
     RadioButton*        mpPeriodicMethodRadio;
 
-    PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
-    CloseButton*        mpButtonClose;
-
 
     formula::RefEdit*   mpActiveEdit;
 
@@ -75,8 +72,6 @@ private:
     ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
 
     DECL_LINK( OkClicked,        PushButton* );
-    DECL_LINK( CloseClicked,     PushButton* );
-    DECL_LINK( ApplyClicked,     PushButton* );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
     DECL_LINK( SamplingSizeValueModified, void* );

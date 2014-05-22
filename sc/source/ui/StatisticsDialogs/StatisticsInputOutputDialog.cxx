@@ -78,8 +78,6 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     mpOutputRangeButton->SetReferences(this, mpOutputRangeEdit);
 
     get(mpButtonOk,     "ok");
-    get(mpButtonApply,  "apply");
-    get(mpButtonClose,  "close");
 
     get(mpGroupByColumnsRadio,   "groupedby-columns-radio");
     get(mpGroupByRowsRadio,      "groupedby-rows-radio");
@@ -94,10 +92,7 @@ ScStatisticsInputOutputDialog::~ScStatisticsInputOutputDialog()
 void ScStatisticsInputOutputDialog::Init()
 {
     mpButtonOk->SetClickHdl( LINK( this, ScStatisticsInputOutputDialog, OkClicked ) );
-    mpButtonClose->SetClickHdl( LINK( this, ScStatisticsInputOutputDialog, CloseClicked ) );
-    mpButtonApply->SetClickHdl( LINK( this, ScStatisticsInputOutputDialog, ApplyClicked ) );
     mpButtonOk->Enable(false);
-    mpButtonApply->Enable(false);
 
     Link aLink = LINK( this, ScStatisticsInputOutputDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
@@ -167,27 +162,13 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
 
             // Enable OK, Cancel if output range is set
             mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
-            mpButtonApply->Enable(!mpOutputRangeEdit->GetText().isEmpty());
         }
     }
 }
 
 IMPL_LINK( ScStatisticsInputOutputDialog, OkClicked, PushButton*, /*pButton*/ )
 {
-    ApplyClicked(NULL);
-    CloseClicked(NULL);
-    return 0;
-}
-
-
-IMPL_LINK( ScStatisticsInputOutputDialog, ApplyClicked, PushButton*, /*pButton*/ )
-{
     CalculateInputAndWriteToOutput();
-    return 0;
-}
-
-IMPL_LINK( ScStatisticsInputOutputDialog, CloseClicked, PushButton*, /*pButton*/ )
-{
     Close();
     return 0;
 }

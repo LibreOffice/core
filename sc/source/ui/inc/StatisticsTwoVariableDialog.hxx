@@ -69,9 +69,8 @@ protected:
 
 private:
     // Widgets
-    PushButton*         mpButtonApply;
     OKButton*           mpButtonOk;
-    CloseButton*        mpButtonClose;
+
     RadioButton*        mpGroupByColumnsRadio;
     RadioButton*        mpGroupByRowsRadio;
 
@@ -84,8 +83,6 @@ private:
 
     DECL_LINK( GroupByChanged,   void* );
     DECL_LINK( OkClicked,        PushButton* );
-    DECL_LINK( CloseClicked,     PushButton* );
-    DECL_LINK( ApplyClicked,     PushButton* );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );
 };

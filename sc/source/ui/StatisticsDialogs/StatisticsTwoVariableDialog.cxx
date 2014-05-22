@@ -56,8 +56,6 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     mpOutputRangeButton->SetReferences(this, mpOutputRangeEdit);
 
     get(mpButtonOk,     "ok");
-    get(mpButtonApply,  "apply");
-    get(mpButtonClose,  "close");
 
     get(mpGroupByColumnsRadio,   "groupedby-columns-radio");
     get(mpGroupByRowsRadio,      "groupedby-rows-radio");
@@ -72,10 +70,7 @@ ScStatisticsTwoVariableDialog::~ScStatisticsTwoVariableDialog()
 void ScStatisticsTwoVariableDialog::Init()
 {
     mpButtonOk->SetClickHdl( LINK( this, ScStatisticsTwoVariableDialog, OkClicked ) );
-    mpButtonClose->SetClickHdl( LINK( this, ScStatisticsTwoVariableDialog, CloseClicked ) );
-    mpButtonApply->SetClickHdl( LINK( this, ScStatisticsTwoVariableDialog, ApplyClicked ) );
     mpButtonOk->Enable(false);
-    mpButtonApply->Enable(false);
 
     Link aLink = LINK( this, ScStatisticsTwoVariableDialog, GetFocusHandler );
     mpVariable1RangeEdit->SetGetFocusHdl( aLink );
@@ -175,27 +170,13 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
 
             // Enable OK, Cancel if output range is set
             mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
-            mpButtonApply->Enable(!mpOutputRangeEdit->GetText().isEmpty());
         }
     }
 }
 
 IMPL_LINK( ScStatisticsTwoVariableDialog, OkClicked, PushButton*, /*pButton*/ )
 {
-    ApplyClicked(NULL);
-    CloseClicked(NULL);
-    return 0;
-}
-
-
-IMPL_LINK( ScStatisticsTwoVariableDialog, ApplyClicked, PushButton*, /*pButton*/ )
-{
     CalculateInputAndWriteToOutput();
-    return 0;
-}
-
-IMPL_LINK( ScStatisticsTwoVariableDialog, CloseClicked, PushButton*, /*pButton*/ )
-{
     Close();
     return 0;
 }
