@@ -231,7 +231,7 @@ struct FctHashOUString : public ::std::unary_function< const OUString &, size_t 
 
 /** Template instance for OUString keys, Any values.<br>
 */
-typedef LRU_Cache< OUString, ::com::sun::star::uno::Any,
+typedef LRU_Cache< OUString, css::uno::Any,
                    FctHashOUString, ::std::equal_to< OUString > >
     LRU_CacheAnyByOUString;
 

@@ -43,24 +43,24 @@ public:
     virtual ~IdlEnumFieldImpl();
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Any SAL_CALL queryInterface( const Type & rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
     virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIdlMember
-    virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XIdlField
-    virtual Reference< XIdlClass > SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual FieldAccessMode SAL_CALL getAccessMode() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Any SAL_CALL get( const Any & rObj ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XIdlClass > SAL_CALL getType() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual FieldAccessMode SAL_CALL getAccessMode() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Any SAL_CALL get( const Any & rObj ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) throw(css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XIdlField2: getType, getAccessMode and get are equal to XIdlField
-    virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 IdlEnumFieldImpl::~IdlEnumFieldImpl()
@@ -70,7 +70,7 @@ IdlEnumFieldImpl::~IdlEnumFieldImpl()
 // XInterface
 
 Any IdlEnumFieldImpl::queryInterface( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Any aRet( ::cppu::queryInterface( rType,
                                       static_cast< XIdlField * >( this ),
@@ -91,7 +91,7 @@ void IdlEnumFieldImpl::release() throw()
 // XTypeProvider
 
 Sequence< Type > IdlEnumFieldImpl::getTypes()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     static ::cppu::OTypeCollection * s_pTypes = 0;
     if (! s_pTypes)
@@ -110,7 +110,7 @@ Sequence< Type > IdlEnumFieldImpl::getTypes()
 }
 
 Sequence< sal_Int8 > IdlEnumFieldImpl::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -118,13 +118,13 @@ Sequence< sal_Int8 > IdlEnumFieldImpl::getImplementationId()
 // XIdlMember
 
 Reference< XIdlClass > IdlEnumFieldImpl::getDeclaringClass()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return IdlMemberImpl::getDeclaringClass();
 }
 
 OUString IdlEnumFieldImpl::getName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return IdlMemberImpl::getName();
 }
@@ -132,25 +132,25 @@ OUString IdlEnumFieldImpl::getName()
 // XIdlField
 
 Reference< XIdlClass > IdlEnumFieldImpl::getType()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return getDeclaringClass();
 }
 
 FieldAccessMode IdlEnumFieldImpl::getAccessMode()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return FieldAccessMode_READONLY;
 }
 
 Any IdlEnumFieldImpl::get( const Any & )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     return Any( &_nValue, getTypeDescr() );
 }
 
 void IdlEnumFieldImpl::set( const Any &, const Any & )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception)
 {
     throw IllegalAccessException(
         OUString("enum field is constant!"),
@@ -158,7 +158,7 @@ void IdlEnumFieldImpl::set( const Any &, const Any & )
 }
 
 void IdlEnumFieldImpl::set( Any &, const Any & )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception)
 {
     throw IllegalAccessException(
         OUString("enum field is constant!"),
@@ -179,7 +179,7 @@ EnumIdlClassImpl::~EnumIdlClassImpl()
 // IdlClassImpl modifications
 
 Reference< XIdlField > EnumIdlClassImpl::getField( const OUString & rName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (! _pFields)
         getFields(); // init members
@@ -192,7 +192,7 @@ Reference< XIdlField > EnumIdlClassImpl::getField( const OUString & rName )
 }
 
 Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (! _pFields)
     {
@@ -218,7 +218,7 @@ Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
 }
 
 void EnumIdlClassImpl::createObject( Any & rObj )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 eVal =
         ((typelib_EnumTypeDescription *)IdlClassImpl::getTypeDescr())->nDefaultEnumValue;

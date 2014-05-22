@@ -43,10 +43,10 @@
 
 #include <stocservices.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::script;
-using namespace com::sun::star::registry;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::script;
+using namespace css::registry;
 using namespace cppu;
 using namespace osl;
 #define SERVICENAME "com.sun.star.script.Converter"

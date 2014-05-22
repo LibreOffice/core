@@ -58,7 +58,7 @@ using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace stoc_sec;
 
 namespace {

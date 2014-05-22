@@ -67,15 +67,15 @@
 #include <rtl/strbuf.hxx>
 #include <boost/unordered_map.hpp>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::container;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::beans::PropertyAttribute;
-using namespace com::sun::star::beans::PropertyConcept;
-using namespace com::sun::star::beans::MethodConcept;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::reflection;
+using namespace css::container;
+using namespace css::registry;
+using namespace css::beans;
+using namespace css::beans::PropertyAttribute;
+using namespace css::beans::PropertyConcept;
+using namespace css::beans::MethodConcept;
 using namespace cppu;
 using namespace osl;
 

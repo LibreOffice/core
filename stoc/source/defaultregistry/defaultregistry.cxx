@@ -37,10 +37,10 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
+using namespace css::uno;
+using namespace css::registry;
+using namespace css::lang;
+using namespace css::container;
 using namespace cppu;
 using namespace osl;
 
@@ -112,17 +112,17 @@ public:
     virtual sal_Int32 SAL_CALL getLongValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setLongValue( sal_Int32 value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< sal_Int32 > SAL_CALL getLongListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setLongListValue( const ::com::sun::star::uno::Sequence< sal_Int32 >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setLongListValue( const css::uno::Sequence< sal_Int32 >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getAsciiValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setAsciiValue( const OUString& value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getAsciiListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setAsciiListValue( const ::com::sun::star::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setAsciiListValue( const css::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getStringValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setStringValue( const OUString& value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getStringListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setStringListValue( const ::com::sun::star::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setStringListValue( const css::uno::Sequence< OUString >& seqValue ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< sal_Int8 > SAL_CALL getBinaryValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setBinaryValue( const ::com::sun::star::uno::Sequence< sal_Int8 >& value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setBinaryValue( const css::uno::Sequence< sal_Int8 >& value ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< XRegistryKey > SAL_CALL openKey( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< XRegistryKey > SAL_CALL createKey( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL closeKey(  ) throw(InvalidRegistryException, RuntimeException, std::exception) SAL_OVERRIDE;

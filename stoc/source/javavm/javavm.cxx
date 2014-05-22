@@ -1536,7 +1536,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
             OUString("$URE_INTERNAL_JAVA_DIR/"));
     } catch (css::lang::IllegalArgumentException &) {
         throw css::uno::RuntimeException(
-            OUString("com::sun::star::lang::IllegalArgumentException"),
+            OUString("css::lang::IllegalArgumentException"),
             static_cast< cppu::OWeakObject * >(this));
     }
     OUString classPath;

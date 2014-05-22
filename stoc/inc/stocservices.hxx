@@ -31,55 +31,55 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace stoc_services
 {
     // typeconv
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & )
-    throw( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Sequence< OUString > tcv_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
+        const css::uno::Reference< css::uno::XComponentContext > & )
+    throw( css::uno::RuntimeException );
+    css::uno::Sequence< OUString > tcv_getSupportedServiceNames();
     OUString tcv_getImplementationName();
 
     namespace ExternalUriReferenceTranslator
     {
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context)
-        SAL_THROW((com::sun::star::uno::Exception));
+    css::uno::Reference< css::uno::XInterface > SAL_CALL create(
+        css::uno::Reference< css::uno::XComponentContext > const & context)
+        SAL_THROW((css::uno::Exception));
     OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace UriReferenceFactory
     {
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  const & context)
-        SAL_THROW((com::sun::star::uno::Exception));
+    css::uno::Reference< css::uno::XInterface > SAL_CALL create(
+        css::uno::Reference< css::uno::XComponentContext >  const & context)
+        SAL_THROW((css::uno::Exception));
     OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand
     {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL create(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const &)
-        SAL_THROW((::com::sun::star::uno::Exception));
+    css::uno::Reference< css::uno::XInterface > SAL_CALL create(
+        css::uno::Reference< css::uno::XComponentContext > const &)
+        SAL_THROW((css::uno::Exception));
     OUString SAL_CALL getImplementationName();
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace UriSchemeParser_vndDOTsunDOTstarDOTscript
     {
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &)
-        SAL_THROW((com::sun::star::uno::Exception));
+    css::uno::Reference< css::uno::XInterface > SAL_CALL create(
+        css::uno::Reference< css::uno::XComponentContext > const &)
+        SAL_THROW((css::uno::Exception));
     OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace VndSunStarPkgUrlReferenceFactory
     {
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context)
-        SAL_THROW((com::sun::star::uno::Exception));
+    css::uno::Reference< css::uno::XInterface > SAL_CALL create(
+        css::uno::Reference< css::uno::XComponentContext > const & context)
+        SAL_THROW((css::uno::Exception));
     OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 } // namespace
 

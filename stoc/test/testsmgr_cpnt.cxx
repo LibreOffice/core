@@ -52,10 +52,10 @@
 #define SERVICE_NAME "com.sun.star.ts.TestManagerImpl"
 
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
+using namespace css::uno;
+using namespace css::registry;
+using namespace css::lang;
+using namespace css::container;
 using namespace osl;
 using namespace cppu;
 

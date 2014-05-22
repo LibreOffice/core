@@ -37,9 +37,9 @@
 #define _MAX_PATH PATH_MAX
 #endif
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::loader;
-using namespace com::sun::star::lang;
+using namespace css::uno;
+using namespace css::loader;
+using namespace css::lang;
 using namespace osl;
 using namespace cppu;
 

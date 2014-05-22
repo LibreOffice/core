@@ -26,7 +26,7 @@
 #include "uno/environment.h"
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 using namespace cppu;
 using namespace osl;
 using namespace stoc_services;

@@ -56,7 +56,7 @@ using namespace ::std;
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 namespace stoc_invadp
 {

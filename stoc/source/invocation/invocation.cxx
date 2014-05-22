@@ -55,13 +55,13 @@
 #define SERVICENAME "com.sun.star.script.Invocation"
 #define IMPLNAME     "com.sun.star.comp.stoc.Invocation"
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::script;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::container;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::script;
+using namespace css::reflection;
+using namespace css::beans;
+using namespace css::registry;
+using namespace css::container;
 using namespace cppu;
 using namespace osl;
 
@@ -110,7 +110,7 @@ public:
 
 
     // XTypeProvider
-    virtual Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
+    virtual Sequence< css::uno::Type > SAL_CALL getTypes(  )
        throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  )
        throw( RuntimeException, std::exception) SAL_OVERRIDE;
