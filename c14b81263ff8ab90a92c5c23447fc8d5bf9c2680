@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_c56d0cce",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-22T09:24:16Z",
+      "side": 1,
+      "message": "This file had a consistent style till now (\"if (rSize\", not \"if ( rSize\"), please keep it that way.",
+      "revId": "c14b81263ff8ab90a92c5c23447fc8d5bf9c2680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
