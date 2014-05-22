@@ -28,6 +28,7 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/docinfohelper.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -658,7 +659,7 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_HyperlinksChanged,     "hyperlinks changed" );
     writeElement( pAppProps, XML_DigSig,                "digital signature" );
 #endif  /* def OOXTODO */
-    writeElement( pAppProps, XML_Application,           xProperties->getGenerator() );
+    writeElement( pAppProps, XML_Application,           utl::DocInfoHelper::GetGeneratorString() );
 #ifdef OOXTODO
     writeElement( pAppProps, XML_AppVersion,            "app version" );
     writeElement( pAppProps, XML_DocSecurity,           "doc security" );
