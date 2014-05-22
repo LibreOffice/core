@@ -22,25 +22,25 @@
 
 #include "UriReference.hxx"
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uri/XUriReference.hpp"
-#include "com/sun/star/uri/XUriSchemeParser.hpp"
-#include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/uri.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriSchemeParser.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/uri.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <exception>
 

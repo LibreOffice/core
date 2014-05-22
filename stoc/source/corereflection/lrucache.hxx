@@ -23,8 +23,8 @@
 //  #define __CACHE_DIAGNOSE 1
 
 #include <osl/mutex.hxx>
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <boost/unordered_map.hpp>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -25,29 +25,29 @@
 #include <exception>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uri/RelativeUriExcessParentSegments.hpp"
-#include "com/sun/star/uri/XUriReference.hpp"
-#include "com/sun/star/uri/XUriReferenceFactory.hpp"
-#include "com/sun/star/uri/XUriSchemeParser.hpp"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "rtl/character.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uri/RelativeUriExcessParentSegments.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/XUriSchemeParser.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <rtl/character.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include "UriReference.hxx"
 #include "stocservices.hxx"

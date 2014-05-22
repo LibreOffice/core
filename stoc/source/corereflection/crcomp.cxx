@@ -21,7 +21,7 @@
 
 #include <com/sun/star/reflection/XIdlField.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>
-#include "com/sun/star/uno/TypeClass.hpp"
+#include <com/sun/star/uno/TypeClass.hpp>
 
 #include "base.hxx"
 

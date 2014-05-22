@@ -17,38 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 #include <vector>
 
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/registry/InvalidRegistryException.hpp"
-#include "com/sun/star/registry/InvalidValueException.hpp"
-#include "com/sun/star/registry/MergeConflictException.hpp"
-#include "com/sun/star/registry/RegistryKeyType.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
-#include "com/sun/star/registry/XSimpleRegistry.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
-#include "registry/registry.hxx"
-#include "registry/regtype.h"
-#include "rtl/ref.hxx"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "rtl/textcvt.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <com/sun/star/registry/InvalidValueException.hpp>
+#include <com/sun/star/registry/MergeConflictException.hpp>
+#include <com/sun/star/registry/RegistryKeyType.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <registry/registry.hxx>
+#include <registry/regtype.h>
+#include <rtl/ref.hxx>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/textcvt.h>
+#include <rtl/textenc.h>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace {
 
