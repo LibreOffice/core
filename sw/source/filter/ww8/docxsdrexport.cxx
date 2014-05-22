@@ -152,6 +152,7 @@ struct DocxSdrExport::Impl
     sax_fastparser::FastAttributeList* m_pDashLineStyleAttr;
     sal_Int32 m_nId ;
     sal_Int32 m_nSeq ;
+    bool m_bDMLAndVMLDrawingOpen;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
@@ -172,7 +173,8 @@ struct DocxSdrExport::Impl
           m_pBodyPrAttrList(0),
           m_pDashLineStyleAttr(0),
           m_nId(0),
-          m_nSeq(0)
+          m_nSeq(0),
+          m_bDMLAndVMLDrawingOpen(false)
     {
     }
 
@@ -245,6 +247,11 @@ bool DocxSdrExport::getFrameBtLr()
 bool DocxSdrExport::IsDrawingOpen()
 {
     return m_pImpl->m_bDrawingOpen;
+}
+
+bool DocxSdrExport::IsDMLAndVMLDrawingOpen()
+{
+    return m_pImpl->m_bDMLAndVMLDrawingOpen;
 }
 
 bool DocxSdrExport::IsParagraphHasDrawing()
@@ -795,6 +802,8 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(uno::Reference<drawing::XShape> xS
 
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId)
 {
+    m_pImpl->m_bDMLAndVMLDrawingOpen = true;
+
     // Depending on the shape type, we actually don't write the shape as DML.
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
@@ -820,6 +829,8 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
     }
     else
         writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
+
+    m_pImpl->m_bDMLAndVMLDrawingOpen = false;
 }
 
 // Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)

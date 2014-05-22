@@ -414,7 +414,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Check for end of cell, rows, tables here
     FinishTableRowCell( pTextNodeInfoInner );
 
-    m_bParagraphOpened = false;
+    if( !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() )
+        m_bParagraphOpened = false;
 
 }
 
