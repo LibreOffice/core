@@ -120,11 +120,13 @@ namespace drawingml {
 // not thread safe
 int DrawingML::mnImageCounter = 1;
 int DrawingML::mnWdpImageCounter = 1;
+std::map<OUString, OUString> DrawingML::maWdpCache;
 
 void DrawingML::ResetCounters()
 {
     mnImageCounter = 1;
     mnWdpImageCounter = 1;
+    maWdpCache.clear();
 }
 
 bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, const OUString& aName )
@@ -2604,9 +2606,18 @@ void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
         }
         else if( aAttrs[i].Name == "OriginalGraphic" )
         {
+            Sequence< PropertyValue > aGraphic;
+            aAttrs[i].Value >>= aGraphic;
             Sequence< sal_Int8 > aGraphicData;
-            aAttrs[i].Value >>= aGraphicData;
-            sRelId = WriteWdpPicture( aGraphicData );
+            OUString sGraphicId;
+            for( sal_Int32 j=0; j < aGraphic.getLength(); ++j )
+            {
+                if( aGraphic[j].Name == "Id" )
+                    aGraphic[j].Value >>= sGraphicId;
+                else if( aGraphic[j].Name == "Data" )
+                    aGraphic[j].Value >>= aGraphicData;
+            }
+            sRelId = WriteWdpPicture( sGraphicId, aGraphicData );
         }
     }
 
@@ -2632,8 +2643,12 @@ void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
     mpFS->endElementNS( XML_a, XML_extLst );
 }
 
-OString DrawingML::WriteWdpPicture( const Sequence< sal_Int8 >& rPictureData )
+OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal_Int8 >& rPictureData )
 {
+    std::map<OUString, OUString>::iterator aCachedItem = maWdpCache.find( rFileId );
+    if( aCachedItem != maWdpCache.end() )
+        return OUStringToOString( aCachedItem->second, RTL_TEXTENCODING_UTF8 );
+
     OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter++ ) + ".wdp";
     uno::Reference< io::XOutputStream > xOutStream =
             mpFB->openFragmentStream( "word/" + sFileName,
@@ -2646,6 +2661,7 @@ OString DrawingML::WriteWdpPicture( const Sequence< sal_Int8 >& rPictureData )
                              "http://schemas.microsoft.com/office/2007/relationships/hdphoto",
                              sFileName, false );
 
+    maWdpCache[rFileId] = sId;
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
