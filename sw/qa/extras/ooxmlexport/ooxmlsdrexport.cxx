@@ -1414,6 +1414,16 @@ DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aSubViewSize[0].Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo76101, "fdo76101.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+
+    if (!pXmlDoc)
+       return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/w:styles/w:style");
+    CPPUNIT_ASSERT(4091 >= xmlXPathNodeSetGetLength(pXmlNodes));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
