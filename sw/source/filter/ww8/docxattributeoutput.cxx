@@ -6040,10 +6040,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     sal_Int32 nBody = bFootnotes? XML_footnotes: XML_endnotes;
     sal_Int32 nItem = bFootnotes? XML_footnote:  XML_endnote;
 
-    m_pSerializer->startElementNS( XML_w, nBody,
-            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-            FSEND );
+    m_pSerializer->startElementNS( XML_w, nBody, m_rExport.MainXmlNamespaces(m_pSerializer) );
 
     sal_Int32 nIndex = 0;
 
