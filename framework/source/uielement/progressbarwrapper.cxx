@@ -84,7 +84,7 @@ uno::Reference< awt::XWindow > ProgressBarWrapper::getStatusBar() const
 
 // wrapped methods of ::com::sun::star::task::XStatusIndicator
 void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
-throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xWindow;
     sal_Int32                      nValue( 0 );
