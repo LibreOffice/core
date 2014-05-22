@@ -172,7 +172,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // - CoreText handles spaces specially (in particular at the text end)
     if( mnTrailingSpaceCount )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
         // don't recreate line layout here, because this can lead to problems
         // (looks like internal issues inside early CoreText versions)
         mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
@@ -218,7 +218,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
     }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
     CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth - mfTrailingSpaceWidth );
 #else
     CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth);
@@ -235,7 +235,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
     mfCachedWidth = nPixelWidth;
 #else
     mfCachedWidth = nPixelWidth + mfTrailingSpaceWidth;
