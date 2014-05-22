@@ -840,6 +840,19 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     glUseProgram(0);
 }
 
+namespace {
+
+template< typename T >
+struct DeletePointer
+{
+    void operator()(T* p)
+    {
+        delete p;
+    }
+};
+
+}
+
 void OpenGL3DRenderer::RenderPolygon3DObject()
 {
     glDepthMask(GL_FALSE);
@@ -856,6 +869,10 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
         {
             RenderPolygon3D(polygon);
         }
+        std::for_each(polygon.verticesList.begin(),
+                polygon.verticesList.end(), DeletePointer<Vertices3D>());
+        std::for_each(polygon.normalsList.begin(),
+                polygon.normalsList.end(), DeletePointer<Normals3D>());
         m_Polygon3DInfoList.pop_front();
     }
     glDepthMask(GL_TRUE);
