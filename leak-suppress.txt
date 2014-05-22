@@ -1,5 +1,14 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
 
-#uno typelib
+# Use via environment variable LSAN_OPTIONS=.../leak-suppress.txt
+
+# uno typelib
 leak:cppu/source/typelib/typelib.cxx
 
 # uno component context
