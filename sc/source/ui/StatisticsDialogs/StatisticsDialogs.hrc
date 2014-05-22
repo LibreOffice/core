@@ -53,8 +53,10 @@
 #define STR_COVARIANCE_UNDO_NAME                    63
 #define STR_EXPONENTIAL_SMOOTHING_UNDO_NAME         64
 #define STR_MOVING_AVERAGE_UNDO_NAME                65
-#define STR_TTEST_UNDO_NAME                         66
-#define STR_FTEST_UNDO_NAME                         67
+#define STR_TTEST                                   66
+#define STR_FTEST                                   67
+#define STR_TTEST_UNDO_NAME                         68
+#define STR_FTEST_UNDO_NAME                         69
 
 #define STR_COLUMN_LABEL_TEMPLATE                   70
 #define STR_ROW_LABEL_TEMPLATE                      71
