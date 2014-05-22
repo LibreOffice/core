@@ -30,7 +30,7 @@ extern "C" int InitXrmExport( const char * );
 extern "C" int EndXrmExport();
 extern "C" int GetError();
 extern "C" int SetError();
-extern "C" char *GetOutputFile( int argc, char* argv[]);
+extern "C" bool GetOutputFile( int argc, char* argv[]);
 extern "C" FILE *GetXrmFile();
 extern "C" int isQuiet();
 extern "C" const char* getFilename();
