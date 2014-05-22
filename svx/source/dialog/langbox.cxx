@@ -711,7 +711,24 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
     {
         const sal_Int32 nPos = GetEntryPos( aStr);
         if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+        {
+            // Advance start of full selection by one so the next character
+            // will already continue the string instead of having to type the
+            // same character again to start a new string. The selection
+            // includes formatting characters and is reverse when obtained from
+            // the Edit control.
+            Selection aSel( GetSelection());
+            if (aSel.Max() == 1)
+            {
+                OUString aText( GetText());
+                if (aSel.Min() == aText.getLength())
+                {
+                    ++aSel.Max();
+                    SetSelection( aSel);
+                }
+            }
             meEditedAndValid = EDITED_NO;
+        }
         else
         {
             OUString aCanonicalized;
