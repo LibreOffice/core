@@ -199,7 +199,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
 
 bool DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage, const Reference< css::io::XStream >& xSignStream,
-    DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException)
+    DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException, std::exception)
 {
     bool bChanges = false;
     DigitalSignaturesDialog aSignaturesDialog(
