@@ -35,6 +35,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/infobar.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/aeitem.hxx>
@@ -137,6 +138,7 @@ SFX_IMPL_INTERFACE( basctl_Shell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_SHOW_PROPERTYBROWSER, BASICIDE_UI_FEATURE_SHOW_BROWSER);
+    SFX_CHILDWINDOW_REGISTRATION(SfxInfoBarContainerChild::GetChildWindowId());
     SFX_POPUPMENU_REGISTRATION( IDEResId( RID_POPUP_DLGED ) );
 }
 
@@ -250,7 +252,14 @@ Shell::~Shell()
 void Shell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
 {
     if (pCurWin)
+    {
         pCurWin->OnNewDocument();
+
+        // for VBA documents, show a warning that we can save them only in ODF
+        if (pCurWin->GetDocument().isInVBAMode())
+            GetViewFrame()->AppendInfoBar("vba_save", IDE_RESSTR(RID_STR_CANNOTSAVEVBA));
+    }
+
     UpdateWindows();
 }
 
