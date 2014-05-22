@@ -22,6 +22,7 @@ private:
     bool m_bLearnmoreTag;
 public:
     PersonasDocHandler(){ m_bLearnmoreTag = false; }
+    std::vector<OUString> getLearnmoreURLs() { return m_vLearnmoreURLs; }
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
