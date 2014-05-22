@@ -34,7 +34,7 @@ public:
     /** Paint a border around the given box by using a set of bitmaps for
         the corners and sides.
     */
-    void PaintFrame (OutputDevice&rDevice, const Rectangle aBox) const;
+    void PaintFrame (OutputDevice&rDevice, const Rectangle& rBox) const;
 
     /** Special functionality that takes the color from the center
         bitmap and replaces that color in all bitmaps by the given new

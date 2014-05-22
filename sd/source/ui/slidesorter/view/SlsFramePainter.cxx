@@ -63,21 +63,21 @@ FramePainter::~FramePainter (void)
 
 void FramePainter::PaintFrame (
     OutputDevice& rDevice,
-    const Rectangle aBox) const
+    const Rectangle& rBox) const
 {
     if ( ! mbIsValid)
         return;
 
     // Paint the shadow.
-    maTopLeft.PaintCorner(rDevice, aBox.TopLeft());
-    maTopRight.PaintCorner(rDevice, aBox.TopRight());
-    maBottomLeft.PaintCorner(rDevice, aBox.BottomLeft());
-    maBottomRight.PaintCorner(rDevice, aBox.BottomRight());
-    maLeft.PaintSide(rDevice, aBox.TopLeft(), aBox.BottomLeft(), maTopLeft, maBottomLeft);
-    maRight.PaintSide(rDevice, aBox.TopRight(), aBox.BottomRight(), maTopRight, maBottomRight);
-    maTop.PaintSide(rDevice, aBox.TopLeft(), aBox.TopRight(), maTopLeft, maTopRight);
-    maBottom.PaintSide(rDevice, aBox.BottomLeft(), aBox.BottomRight(), maBottomLeft, maBottomRight);
-    maCenter.PaintCenter(rDevice,aBox);
+    maTopLeft.PaintCorner(rDevice, rBox.TopLeft());
+    maTopRight.PaintCorner(rDevice, rBox.TopRight());
+    maBottomLeft.PaintCorner(rDevice, rBox.BottomLeft());
+    maBottomRight.PaintCorner(rDevice, rBox.BottomRight());
+    maLeft.PaintSide(rDevice, rBox.TopLeft(), rBox.BottomLeft(), maTopLeft, maBottomLeft);
+    maRight.PaintSide(rDevice, rBox.TopRight(), rBox.BottomRight(), maTopRight, maBottomRight);
+    maTop.PaintSide(rDevice, rBox.TopLeft(), rBox.TopRight(), maTopLeft, maTopRight);
+    maBottom.PaintSide(rDevice, rBox.BottomLeft(), rBox.BottomRight(), maBottomLeft, maBottomRight);
+    maCenter.PaintCenter(rDevice,rBox);
 }
 
 
