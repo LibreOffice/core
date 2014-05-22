@@ -594,17 +594,17 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 # zero-sized org/openoffice/TypeDectection/Filter.xcu; filter them out in the
 # find shell command below (see issue 110041):
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
 	$(call gb_Helper_abbreviate_dirs,\
 	    find $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/)\
 	         -name *.xcu -size +0c \
-	        | awk 'BEGIN{print "<list>"} \
+	        | $(gb_AWK) 'BEGIN{print "<list>"} \
 	                    {print "<filename>"$$0"</filename>"} \
 	               END  {print "</list>"}' > $@ \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
 	$(call gb_Helper_abbreviate_dirs,\
 	    find $(call gb_XcuResTarget_get_target,registry/$*/)\
 	         $(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
@@ -613,7 +613,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	         $(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
 	             $(call gb_XcuResTarget_get_target,updchk/$*/))\
 	         -name *.xcu \
-	        | awk 'BEGIN{print "<list>"} \
+	        | $(gb_AWK) 'BEGIN{print "<list>"} \
 	                    {print "<filename>"$$0"</filename>"} \
 	               END  {print "</list>"}' > $@ \
 	)

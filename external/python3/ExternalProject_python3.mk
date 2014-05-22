@@ -109,7 +109,7 @@ $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_Exter
 			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)-config \
 			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m-config \
 			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pyvenv-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) ; do \
-	{ rm "$$file" && awk '\
+	{ rm "$$file" && $(gb_AWK) '\
 		BEGIN {print "#!/bin/bash\n\
 origpath=$$(pwd)\n\
 bindir=$$(cd $$(dirname \"$$0\") ; pwd)\n\

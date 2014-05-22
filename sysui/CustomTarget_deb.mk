@@ -57,7 +57,7 @@ $(deb_WORKDIR)/%/DEBIAN/control: $(deb_SRCDIR)/control $(call gb_CustomTarget_ge
 		sed 's/%productname/$(PRODUCTNAME.$*) $(PRODUCTVERSION)/' \
 		>> $@
 	echo "Version: $(PKGVERSION)-$(LIBO_VERSION_PATCH)" >>$@
-	du -k -s $(deb_WORKDIR)/$* | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >>$@
+	du -k -s $(deb_WORKDIR)/$* | $(gb_AWK) -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >>$@
 
 $(deb_WORKDIR)/%$(PKGVERSIONSHORT)-debian-menus_$(PKGVERSION)-$(LIBO_VERSION_PATCH)_all.deb: $(deb_WORKDIR)/%/DEBIAN/postrm $(deb_WORKDIR)/%/DEBIAN/postinst $(deb_WORKDIR)/%/DEBIAN/prerm $(deb_WORKDIR)/%/DEBIAN/control $(call gb_Library_get_target,getuid)
 
