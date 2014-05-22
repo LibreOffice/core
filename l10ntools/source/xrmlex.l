@@ -205,12 +205,9 @@ void yyerror ( const char *s )
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 	/* error level */
 	int nRetValue = 0;
-	char *pOutput;
 	FILE *pFile;
 
-	pOutput = GetOutputFile( argc, argv );
-
-	if ( !pOutput )
+	if ( !GetOutputFile( argc, argv ) )
 	{
 		return 1;
 	}
