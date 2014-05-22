@@ -246,9 +246,6 @@ private:
     /// Write word/embeddings/Worksheet[n].xlsx
     void WriteEmbeddings();
 
-    /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
-    sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
-
     /// Get background color of the document, if there is one.
     boost::optional<const SvxBrushItem*> getBackground();
 
@@ -256,6 +253,9 @@ private:
     bool isMirroredMargin();
 
 public:
+    /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
+    sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
+
     /// FIXME this is temporary, remotely reminding the method of the same
     /// name in WW8Export.
     void WriteMainText();
