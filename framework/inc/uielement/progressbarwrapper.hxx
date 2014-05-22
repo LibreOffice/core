@@ -50,7 +50,7 @@ class ProgressBarWrapper : public UIElementWrapperBase
         void start( const OUString& Text, ::sal_Int32 Range ) throw (css::uno::RuntimeException, std::exception);
         void end() throw (::com::sun::star::uno::RuntimeException);
         void setText( const OUString& Text ) throw (::com::sun::star::uno::RuntimeException);
-        void setValue( ::sal_Int32 Value ) throw (::com::sun::star::uno::RuntimeException);
+        void setValue( ::sal_Int32 Value ) throw (css::uno::RuntimeException, std::exception);
         void reset() throw (::com::sun::star::uno::RuntimeException);
 
         // UNO interfaces
