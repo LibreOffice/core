@@ -328,16 +328,14 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                 OUString nidx;
                 osl::FileBase::getSystemPathFromFileURL(datpath,ndat);
                 osl::FileBase::getSystemPathFromFileURL(idxpath,nidx);
-                OString aTmpidx(OU2ENC(nidx,osl_getThreadTextEncoding()));
-                OString aTmpdat(OU2ENC(ndat,osl_getThreadTextEncoding()));
 
 #if defined(WNT)
-                // workaround for Windows specific problem that the
-                // path length in calls to 'fopen' is limted to somewhat
-                // about 120+ characters which will usually be exceed when
-                // using dictionaries as extensions.
-                aTmpidx = Win_GetShortPathName( nidx );
-                aTmpdat = Win_GetShortPathName( ndat );
+                // MyThes waits UTF-8 encoded paths with \\?\ long path prefix.
+                OString aTmpidx = OUStringToOString(nidx, RTL_TEXTENCODING_UTF8);
+                OString aTmpdat = OUStringToOString(ndat, RTL_TEXTENCODING_UTF8);
+#else
+                OString aTmpidx(OU2ENC(nidx,osl_getThreadTextEncoding()));
+                OString aTmpdat(OU2ENC(ndat,osl_getThreadTextEncoding()));
 #endif
 
                 aThes[i] = new MyThes(aTmpidx.getStr(),aTmpdat.getStr());

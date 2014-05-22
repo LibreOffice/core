@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,mythes,\
 	external/mythes/mythes-1.2.0-vanilla-th-gen-idx.patch \
 	external/mythes/mythes-1.2.0-android.patch \
 	external/mythes/mythes-ssizet.patch \
+	external/mythes/mythes-fdo48017-wfopen.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
