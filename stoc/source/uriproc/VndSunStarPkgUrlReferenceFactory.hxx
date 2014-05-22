@@ -34,15 +34,15 @@ namespace rtl { class OUString; }
 namespace stoc { namespace uriproc {
 
 namespace VndSunStarPkgUrlReferenceFactory {
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+    css::uno::Reference< css::uno::XInterface > SAL_CALL
     create(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        css::uno::Reference< css::uno::XComponentContext >
             const & context)
-        SAL_THROW((com::sun::star::uno::Exception));
+        SAL_THROW((css::uno::Exception));
 
     OUString SAL_CALL getImplementationName();
 
-    com::sun::star::uno::Sequence< OUString > SAL_CALL
+    css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames();
 }
 

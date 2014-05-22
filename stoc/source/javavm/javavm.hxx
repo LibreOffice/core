@@ -45,16 +45,16 @@ namespace jvmaccess {
 
 namespace stoc_javavm {
 
-bool configureJava(const com::sun::star::uno::Reference<
-                   com::sun::star::uno::XComponentContext>& xContext);
+bool configureJava(const css::uno::Reference<
+                   css::uno::XComponentContext>& xContext);
 // The MS compiler needs a typedef here, so the JavaVirtualMachine ctor can call
 // its base class ctor:
 typedef
-cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization,
-                                com::sun::star::lang::XServiceInfo,
-                                com::sun::star::java::XJavaVM,
-                                com::sun::star::java::XJavaThreadRegister_11,
-                                com::sun::star::container::XContainerListener >
+cppu::WeakComponentImplHelper5< css::lang::XInitialization,
+                                css::lang::XServiceInfo,
+                                css::java::XJavaVM,
+                                css::java::XJavaThreadRegister_11,
+                                css::container::XContainerListener >
 JavaVirtualMachine_Impl;
 
 class JavaVirtualMachine:
@@ -62,63 +62,63 @@ class JavaVirtualMachine:
 {
 public:
     explicit JavaVirtualMachine(
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > const & rContext);
+        css::uno::Reference<
+            css::uno::XComponentContext > const & rContext);
 
     // XInitialization
     virtual void SAL_CALL
-    initialize(com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
+    initialize(css::uno::Sequence< css::uno::Any > const &
                    rArguments)
-        throw (com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
     supportsService(OUString const & rServiceName)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XJavaVM
-    virtual com::sun::star::uno::Any SAL_CALL
-    getJavaVM(com::sun::star::uno::Sequence< sal_Int8 > const & rProcessId)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL
+    getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isVMStarted()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isVMEnabled()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XJavaThreadRegister_11
     virtual sal_Bool SAL_CALL isThreadAttached()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL registerThread()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL revokeThread()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContainerListener
     virtual void SAL_CALL
-    disposing(com::sun::star::lang::EventObject const & rSource)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    disposing(css::lang::EventObject const & rSource)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-    elementInserted(com::sun::star::container::ContainerEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    elementInserted(css::container::ContainerEvent const & rEvent)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-    elementRemoved(com::sun::star::container::ContainerEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    elementRemoved(css::container::ContainerEvent const & rEvent)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-    elementReplaced(com::sun::star::container::ContainerEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    elementReplaced(css::container::ContainerEvent const & rEvent)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     JavaVirtualMachine(JavaVirtualMachine &); // not implemented
@@ -129,7 +129,7 @@ private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     JavaVM * createJavaVM(JVM const & jvm, JNIEnv ** pMainThreadEnv);
-        // throws com::sun::star::uno::RuntimeException
+        // throws css::uno::RuntimeException
 
     void registerConfigChangesListener();
 
@@ -139,7 +139,7 @@ private:
 
     void handleJniException(JNIEnv * environment);
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         m_xContext;
 
     // the following are controlled by BaseMutex::m_aMutex:
@@ -152,9 +152,9 @@ private:
         // If the first creation of Java failed and this flag is set then the
         // next call to getJavaVM throws a RuntimException.  This is useful when
         // the second attempt to create Java might cause a crash.
-    com::sun::star::uno::Reference< com::sun::star::container::XContainer >
+    css::uno::Reference< css::container::XContainer >
         m_xInetConfiguration;
-    com::sun::star::uno::Reference< com::sun::star::container::XContainer >
+    css::uno::Reference< css::container::XContainer >
         m_xJavaConfiguration; // for Java settings
 
     osl::ThreadData m_aAttachGuards;

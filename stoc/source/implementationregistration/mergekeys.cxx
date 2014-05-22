@@ -27,7 +27,7 @@
 
 using namespace ::rtl;
 using namespace ::osl;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace ::com::sun::star;
 
 namespace stoc_impreg

@@ -55,11 +55,11 @@
 
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::loader;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
+using namespace css::uno;
+using namespace css::loader;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::registry;
 using namespace cppu;
 using namespace osl;
 
@@ -1245,8 +1245,8 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw(  ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw(  css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private: // helper methods
     void prepareRegister(
@@ -1342,8 +1342,8 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
 // XInitialization
 
 void ImplementationRegistration::initialize(
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArgs )
-    throw(  ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Sequence< css::uno::Any >& aArgs )
+    throw(  css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
 
     if( aArgs.getLength() != 4 ) {

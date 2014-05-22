@@ -48,12 +48,12 @@ using namespace ModuleB;
 using namespace ModuleC;
 using namespace ModuleA::ModuleB;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::container;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::registry;
+using namespace css::reflection;
+using namespace css::container;
 
 
 

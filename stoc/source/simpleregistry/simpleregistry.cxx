@@ -149,7 +149,7 @@ private:
         css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setLongListValue(
-        com::sun::star::uno::Sequence< sal_Int32 > const & seqValue)
+        css::uno::Sequence< sal_Int32 > const & seqValue)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

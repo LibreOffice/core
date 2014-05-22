@@ -55,11 +55,11 @@
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
-using namespace ::com::sun::star::java;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::loader;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::registry;
+using namespace css::java;
+using namespace css::lang;
+using namespace css::loader;
+using namespace css::uno;
+using namespace css::registry;
 
 using namespace ::cppu;
 using namespace ::rtl;
@@ -91,7 +91,7 @@ class JavaComponentLoader : public WeakImplHelper2<XImplementationLoader, XServi
     /** The retured Reference contains a null pointer if the office is not configured
         to run java.
 
-        @exception com::sun::star::uno::RuntimeException
+        @exception css::uno::RuntimeException
         If the Java implementation of the loader could not be obtained, for reasons other
         then that java was not configured the RuntimeException is thrown.
      */
@@ -316,19 +316,19 @@ JavaComponentLoader::~JavaComponentLoader() throw()
 
 // XServiceInfo
 OUString SAL_CALL JavaComponentLoader::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return loader_getImplementationName();
 }
 
 sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return loader_getSupportedServiceNames();
 }

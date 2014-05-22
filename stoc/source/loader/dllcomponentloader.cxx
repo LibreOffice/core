@@ -43,10 +43,10 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::loader;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
+using namespace css::uno;
+using namespace css::loader;
+using namespace css::lang;
+using namespace css::registry;
 using namespace cppu;
 using namespace osl;
 
@@ -62,12 +62,12 @@ public:
     virtual ~DllComponentLoader();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XImplementationLoader
     virtual Reference<XInterface> SAL_CALL activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) throw(CannotActivateFactoryException, RuntimeException, std::exception) SAL_OVERRIDE;
@@ -88,19 +88,19 @@ DllComponentLoader::~DllComponentLoader() {}
 
 
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.stoc.DLLComponentLoader");
 }
 
 sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > seqNames(1);
     seqNames[0] = "com.sun.star.loader.SharedLibrary";
@@ -108,8 +108,8 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 }
 
 
-void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+void DllComponentLoader::initialize( const css::uno::Sequence< css::uno::Any >& )
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
 //      if( aArgs.getLength() != 1 )

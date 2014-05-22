@@ -56,11 +56,11 @@
 #include <com/sun/star/uno/XUnloadingPreference.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::registry;
+using namespace css::lang;
+using namespace css::container;
 using namespace cppu;
 using namespace osl;
 using namespace std;
@@ -161,9 +161,9 @@ public:
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Any SAL_CALL nextElement()
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
     Mutex                               aMutex;
     Sequence< Reference<XInterface > >  aFactories;
@@ -171,7 +171,7 @@ private:
 };
 
 // XEnumeration
-sal_Bool ServiceEnumeration_Impl::hasMoreElements() throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool ServiceEnumeration_Impl::hasMoreElements() throw(css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( aMutex );
     return nIt != aFactories.getLength();
@@ -179,7 +179,7 @@ sal_Bool ServiceEnumeration_Impl::hasMoreElements() throw(::com::sun::star::uno:
 
 // XEnumeration
 Any ServiceEnumeration_Impl::nextElement()
-    throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( aMutex );
     if( nIt == aFactories.getLength() )
@@ -253,9 +253,9 @@ public:
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements()
-         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Any SAL_CALL nextElement()
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     Mutex                           aMutex;
@@ -268,7 +268,7 @@ ImplementationEnumeration_Impl::~ImplementationEnumeration_Impl() {}
 
 // XEnumeration
 sal_Bool ImplementationEnumeration_Impl::hasMoreElements()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( aMutex );
     return aIt != aImplementationMap.end();
@@ -276,7 +276,7 @@ sal_Bool ImplementationEnumeration_Impl::hasMoreElements()
 
 // XEnumeration
 Any ImplementationEnumeration_Impl::nextElement()
-    throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( aMutex );
     if( aIt == aImplementationMap.end() )
@@ -339,11 +339,11 @@ public:
         {}
 
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject & rEvt ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const EventObject & rEvt ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 void OServiceManager_Listener::disposing(const EventObject & rEvt )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Reference<XSet > x( xSMgr );
     if( x.is() )
@@ -391,9 +391,9 @@ public:
         throw (Exception, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMultiComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
@@ -408,48 +408,48 @@ public:
 //          throw (RuntimeException);
 
     // XMultiServiceFactory
-    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference<XInterface > SAL_CALL createInstance(const OUString &) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference<XInterface > SAL_CALL createInstance(const OUString &) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // The same as the getAvailableServiceNames, but only uique names
     Sequence< OUString > getUniqueAvailableServiceNames(
         HashSet_OWString & aNameSet );
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEnumerationAccess
-    virtual Reference<XEnumeration > SAL_CALL createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference<XEnumeration > SAL_CALL createEnumeration() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSet
-    virtual sal_Bool SAL_CALL has( const Any & Element ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL insert( const Any & Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL remove( const Any & Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL has( const Any & Element ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL insert( const Any & Element ) throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL remove( const Any & Element ) throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertySet
     Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Any SAL_CALL getPropertyValue(const OUString& PropertyName)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference<XPropertyChangeListener >& aListener)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener >& aListener)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     inline bool is_disposed() const SAL_THROW( (lang::DisposedException) );
@@ -699,7 +699,7 @@ OServiceManager::~OServiceManager() {}
 
 // XComponent
 void OServiceManager::dispose()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
@@ -755,7 +755,7 @@ void OServiceManager::disposing()
 
 // XPropertySet
 Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     if (! m_xPropertyInfo.is())
@@ -776,7 +776,7 @@ Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
 
 void OServiceManager::setPropertyValue(
     const OUString& PropertyName, const Any& aValue )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     if ( PropertyName == "DefaultContext" )
@@ -803,7 +803,7 @@ void OServiceManager::setPropertyValue(
 }
 
 Any OServiceManager::getPropertyValue(const OUString& PropertyName)
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     if ( PropertyName == "DefaultContext" )
@@ -824,7 +824,7 @@ Any OServiceManager::getPropertyValue(const OUString& PropertyName)
 
 void OServiceManager::addPropertyChangeListener(
     const OUString&, const Reference<XPropertyChangeListener >&)
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     throw UnknownPropertyException();
@@ -832,7 +832,7 @@ void OServiceManager::addPropertyChangeListener(
 
 void OServiceManager::removePropertyChangeListener(
     const OUString&, const Reference<XPropertyChangeListener >&)
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     throw UnknownPropertyException();
@@ -840,7 +840,7 @@ void OServiceManager::removePropertyChangeListener(
 
 void OServiceManager::addVetoableChangeListener(
     const OUString&, const Reference<XVetoableChangeListener >&)
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     throw UnknownPropertyException();
@@ -848,7 +848,7 @@ void OServiceManager::addVetoableChangeListener(
 
 void OServiceManager::removeVetoableChangeListener(
     const OUString&, const Reference<XVetoableChangeListener >&)
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     throw UnknownPropertyException();
@@ -1021,7 +1021,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
 
 // XMultiServiceFactory, XMultiComponentFactory, XContentEnumeration
 Sequence< OUString > OServiceManager::getAvailableServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     // all names
@@ -1032,7 +1032,7 @@ Sequence< OUString > OServiceManager::getAvailableServiceNames()
 // XMultibleServiceFactory
 Reference<XInterface > OServiceManager::createInstance(
     const OUString& rServiceSpecifier )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithContext(
         rServiceSpecifier, m_xContext );
@@ -1042,7 +1042,7 @@ Reference<XInterface > OServiceManager::createInstance(
 Reference<XInterface > OServiceManager::createInstanceWithArguments(
     const OUString& rServiceSpecifier,
     const Sequence<Any >& rArguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     return createInstanceWithArgumentsAndContext(
         rServiceSpecifier, rArguments, m_xContext );
@@ -1058,21 +1058,21 @@ void OServiceManager::initialize( Sequence< Any > const & )
 
 // XServiceInfo
 OUString OServiceManager::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.stoc.OServiceManager");
 }
 
 // XServiceInfo
 sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
 Sequence< OUString > OServiceManager::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > seqNames(2);
     seqNames[0] = "com.sun.star.lang.MultiServiceFactory";
@@ -1122,7 +1122,7 @@ Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
 // XContentEnumerationAccess
 Reference<XEnumeration > OServiceManager::createContentEnumeration(
     const OUString& aServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     Sequence< Reference< XInterface > > factories(
@@ -1134,7 +1134,7 @@ Reference<XEnumeration > OServiceManager::createContentEnumeration(
 }
 
 // XEnumeration
-Reference<XEnumeration > OServiceManager::createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception)
+Reference<XEnumeration > OServiceManager::createEnumeration() throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
@@ -1143,7 +1143,7 @@ Reference<XEnumeration > OServiceManager::createEnumeration() throw(::com::sun::
 
 // XElementAccess
 Type OServiceManager::getElementType()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     return ::getCppuType( (const Reference< XInterface > *)0 );
@@ -1151,7 +1151,7 @@ Type OServiceManager::getElementType()
 
 // XElementAccess
 sal_Bool OServiceManager::hasElements()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
@@ -1160,7 +1160,7 @@ sal_Bool OServiceManager::hasElements()
 
 // XSet
 sal_Bool OServiceManager::has( const Any & Element )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     if( Element.getValueTypeClass() == TypeClass_INTERFACE )
@@ -1183,7 +1183,7 @@ sal_Bool OServiceManager::has( const Any & Element )
 
 // XSet
 void OServiceManager::insert( const Any & Element )
-    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
@@ -1239,9 +1239,9 @@ bool OServiceManager::haveFactoryWithThisImplementation(const OUString& aImplNam
 
 // XSet
 void OServiceManager::remove( const Any & Element )
-     throw(::com::sun::star::lang::IllegalArgumentException,
-           ::com::sun::star::container::NoSuchElementException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+     throw(css::lang::IllegalArgumentException,
+           css::container::NoSuchElementException,
+           css::uno::RuntimeException, std::exception)
 {
     if (is_disposed())
         return;
@@ -1337,29 +1337,29 @@ public:
 
     // XInitialization
     void SAL_CALL initialize(const Sequence< Any >& Arguments)
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return OUString("com.sun.star.comp.stoc.ORegistryServiceManager"); }
 
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMultiServiceFactory
-    Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
-    Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
-    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OServiceManager
     Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Any SAL_CALL getPropertyValue(const OUString& PropertyName)
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     //OServiceManager
@@ -1404,7 +1404,7 @@ ORegistryServiceManager::~ORegistryServiceManager()
 
 // XComponent
 void ORegistryServiceManager::dispose()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
@@ -1544,7 +1544,7 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
 
 // XInitialization
 void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
@@ -1562,7 +1562,7 @@ void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
 
 // XMultiServiceFactory, XContentEnumeration
 Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
@@ -1577,7 +1577,7 @@ Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
 
 // XServiceInfo
 Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > seqNames(2);
     seqNames[0] = "com.sun.star.lang.MultiServiceFactory";
@@ -1609,7 +1609,7 @@ Sequence< Reference< XInterface > > ORegistryServiceManager::queryServiceFactori
 // XContentEnumerationAccess
 Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
     const OUString& aServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     MutexGuard aGuard( ((ORegistryServiceManager *)this)->m_mutex );
@@ -1632,7 +1632,7 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
 
 // OServiceManager
 Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     if (! m_xPropertyInfo.is())
@@ -1655,7 +1655,7 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
 }
 
 Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
     if ( PropertyName == "Registry" )

@@ -45,10 +45,10 @@
 #endif
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
+using namespace css::uno;
+using namespace css::registry;
+using namespace css::lang;
+using namespace css::beans;
 using namespace osl;
 
 
@@ -637,7 +637,7 @@ void test_DefaultRegistry(
     xReg.clear();
 
     // shutdown
-    Reference< ::com::sun::star::lang::XComponent > xComp( rSMgr, UNO_QUERY );
+    Reference< css::lang::XComponent > xComp( rSMgr, UNO_QUERY );
     OSL_ENSURE( xComp.is(), "### serivce manager has to implement XComponent!" );
     xComp->dispose();
 

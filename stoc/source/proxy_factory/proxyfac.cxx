@@ -44,7 +44,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 
 namespace
@@ -449,7 +449,7 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
 }
 
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return proxyfac_getSupportedServiceNames();
 }

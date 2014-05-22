@@ -34,17 +34,17 @@ namespace com { namespace sun { namespace star { namespace task {
 namespace stoc_javavm {
 
 class InteractionRequest:
-    public cppu::WeakImplHelper1< com::sun::star::task::XInteractionRequest >
+    public cppu::WeakImplHelper1< css::task::XInteractionRequest >
 {
 public:
-    explicit InteractionRequest(com::sun::star::uno::Any const & rRequest);
+    explicit InteractionRequest(css::uno::Any const & rRequest);
 
-    virtual com::sun::star::uno::Any SAL_CALL getRequest()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getRequest()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-        com::sun::star::task::XInteractionContinuation > > SAL_CALL
-    getContinuations() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Reference<
+        css::task::XInteractionContinuation > > SAL_CALL
+    getContinuations() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     bool retry() const;
 
@@ -56,9 +56,9 @@ private:
 
     virtual ~InteractionRequest();
 
-    com::sun::star::uno::Any m_aRequest;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-        com::sun::star::task::XInteractionContinuation > > m_aContinuations;
+    css::uno::Any m_aRequest;
+    css::uno::Sequence< css::uno::Reference<
+        css::task::XInteractionContinuation > > m_aContinuations;
     rtl::Reference< RetryContinuation > m_xRetryContinuation;
 };
 

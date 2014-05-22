@@ -201,71 +201,71 @@ public:
     {}
 
     virtual OUString SAL_CALL getUriReference()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getUriReference(); }
 
     virtual sal_Bool SAL_CALL isAbsolute()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.isAbsolute(); }
 
     virtual OUString SAL_CALL getScheme()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getScheme(); }
 
     virtual OUString SAL_CALL getSchemeSpecificPart()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getSchemeSpecificPart(); }
 
     virtual sal_Bool SAL_CALL isHierarchical()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.isHierarchical(); }
 
     virtual sal_Bool SAL_CALL hasAuthority()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.hasAuthority(); }
 
     virtual OUString SAL_CALL getAuthority()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getAuthority(); }
 
     virtual OUString SAL_CALL getPath()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getPath(); }
 
     virtual sal_Bool SAL_CALL hasRelativePath()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.hasRelativePath(); }
 
     virtual sal_Int32 SAL_CALL getPathSegmentCount()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getPathSegmentCount(); }
 
     virtual OUString SAL_CALL getPathSegment(sal_Int32 index)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getPathSegment(index); }
 
     virtual sal_Bool SAL_CALL hasQuery()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.hasQuery(); }
 
     virtual OUString SAL_CALL getQuery()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getQuery(); }
 
     virtual sal_Bool SAL_CALL hasFragment()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.hasFragment(); }
 
     virtual OUString SAL_CALL getFragment()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return m_base.getFragment(); }
 
     virtual void SAL_CALL setFragment(OUString const & fragment)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { m_base.setFragment(fragment); }
 
     virtual void SAL_CALL clearFragment()
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { m_base.clearFragment(); }
 
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

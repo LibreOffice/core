@@ -30,13 +30,13 @@ namespace com { namespace sun { namespace star { namespace registry {
 
 namespace stoc_impreg {
 
-// throws ::com::sun::star::registry::InvalidRegistryException,
-// ::com::sun::star::registry::MergeConflictException,
-// ::com::sun::star::uno::RuntimeException:
+// throws css::registry::InvalidRegistryException,
+// css::registry::MergeConflictException,
+// css::uno::RuntimeException:
 void mergeKeys(
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
+    css::uno::Reference< css::registry::XRegistryKey >
         const & xDest,
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
+    css::uno::Reference< css::registry::XRegistryKey >
         const & xSource);
 
 }

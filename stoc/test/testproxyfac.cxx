@@ -42,7 +42,7 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 
 typedef WeakImplHelper3< lang::XServiceInfo,

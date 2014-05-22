@@ -37,10 +37,10 @@
 
 using namespace std;
 using namespace cppu;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::java;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::registry;
+using namespace css::java;
 
 
 
@@ -125,7 +125,7 @@ SAL_IMPLEMENT_MAIN()
     {
         OUString sImplReg(
             "com.sun.star.registry.ImplementationRegistration");
-        Reference<com::sun::star::registry::XImplementationRegistration> xImplReg(
+        Reference<css::registry::XImplementationRegistration> xImplReg(
             xMgr->createInstance( sImplReg ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 

@@ -38,43 +38,43 @@ public:
     ~UriReference();
 
     OUString getUriReference()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    bool isAbsolute() throw (com::sun::star::uno::RuntimeException);
+    bool isAbsolute() throw (css::uno::RuntimeException);
 
-    OUString getScheme() throw (com::sun::star::uno::RuntimeException);
+    OUString getScheme() throw (css::uno::RuntimeException);
 
     OUString getSchemeSpecificPart()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    bool isHierarchical() throw (com::sun::star::uno::RuntimeException);
+    bool isHierarchical() throw (css::uno::RuntimeException);
 
-    bool hasAuthority() throw (com::sun::star::uno::RuntimeException);
+    bool hasAuthority() throw (css::uno::RuntimeException);
 
-    OUString getAuthority() throw (com::sun::star::uno::RuntimeException);
+    OUString getAuthority() throw (css::uno::RuntimeException);
 
-    OUString getPath() throw (com::sun::star::uno::RuntimeException);
+    OUString getPath() throw (css::uno::RuntimeException);
 
-    bool hasRelativePath() throw (com::sun::star::uno::RuntimeException);
+    bool hasRelativePath() throw (css::uno::RuntimeException);
 
     sal_Int32 getPathSegmentCount()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     OUString getPathSegment(sal_Int32 index)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    bool hasQuery() throw (com::sun::star::uno::RuntimeException);
+    bool hasQuery() throw (css::uno::RuntimeException);
 
-    OUString getQuery() throw (com::sun::star::uno::RuntimeException);
+    OUString getQuery() throw (css::uno::RuntimeException);
 
-    bool hasFragment() throw (com::sun::star::uno::RuntimeException);
+    bool hasFragment() throw (css::uno::RuntimeException);
 
-    OUString getFragment() throw (com::sun::star::uno::RuntimeException);
+    OUString getFragment() throw (css::uno::RuntimeException);
 
     void setFragment(OUString const & fragment)
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    void clearFragment() throw (com::sun::star::uno::RuntimeException);
+    void clearFragment() throw (css::uno::RuntimeException);
 
     osl::Mutex m_mutex;
     OUString m_scheme;
