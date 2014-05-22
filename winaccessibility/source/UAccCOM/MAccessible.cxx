@@ -1421,8 +1421,6 @@ STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
 */
 IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 {
-
-    long dChildIndex = 0;
     if(dChildID<0)
     {
         if(g_pAgent)
@@ -1756,7 +1754,6 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
 
 
         long nMax = 0;
-        long nReal = 0;
         get_nRelations(&nMax);
 
         *relation = (IAccessibleRelation*)::CoTaskMemAlloc(sizeof(IAccessibleRelation));
@@ -2006,7 +2003,6 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
                 if(accRelation.RelationType == 7)
                 {
                     Sequence< Reference< XInterface > > xTargets = accRelation.TargetSet;
-                    int nCount = xTargets.getLength();
 
                     Reference<XInterface> pRAcc = xTargets[0];
                     for(int j=0; j<pRParentContext->getAccessibleChildCount(); j++)
