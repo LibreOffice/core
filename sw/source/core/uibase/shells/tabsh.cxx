@@ -1059,8 +1059,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rReq.Done();
         return;
     }
-    else
-        bMore = false;
+
     // Now the slots which are working directly on the TableFmt.
     SwFrmFmt *pFmt = rSh.GetTableFmt();
     switch ( nSlot )
