@@ -26,6 +26,7 @@
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/drawingml/embeddedwavaudiofile.hxx>
+#include <oox/ole/oleobjecthelper.hxx>
 
 namespace oox {
     class GraphicHelper;
@@ -70,6 +71,7 @@ struct ArtisticEffectProperties
     OUString            msName;
     std::map< OUString, css::uno::Any >
                         maAttribs;
+    ::oox::ole::OleObjectInfo mrOleObjectInfo;  /// The original graphic as embedded object.
 
     bool                isEmpty() const;
 

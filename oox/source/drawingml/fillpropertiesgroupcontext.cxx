@@ -333,9 +333,18 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& rAttribs )
 {
     // containers
-    if( nElement == OOX_TOKEN( a14, imgLayer ) || nElement == OOX_TOKEN( a14, imgEffect ) )
+    if( nElement == OOX_TOKEN( a14, imgLayer ) )
+    {
+        if( rAttribs.hasAttribute( R_TOKEN( embed ) ) )
+        {
+            OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( embed ), OUString() ) );
+            if( !aFragmentPath.isEmpty() )
+                getFilter().importBinaryData( maEffect.mrOleObjectInfo.maEmbeddedData, aFragmentPath );
+        }
         return new ArtisticEffectContext( *this, maEffect );
-        // TODO: manage r:embed attribute in a14:imgLayer
+    }
+    if( nElement == OOX_TOKEN( a14, imgEffect ) )
+        return new ArtisticEffectContext( *this, maEffect );
 
     // effects
     maEffect.msName = ArtisticEffectProperties::getEffectString( nElement );
