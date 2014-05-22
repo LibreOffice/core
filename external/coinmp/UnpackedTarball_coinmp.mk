@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,coinmp,\
 $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/android.build.patch.1 \
 	external/coinmp/no-binaries.patch.1 \
+	external/coinmp/werror-format-security.patch.0 \
 	external/coinmp/windows.build.patch.1 \
 ))
 
