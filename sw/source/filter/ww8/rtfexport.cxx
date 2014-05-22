@@ -57,6 +57,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/docinfohelper.hxx>
 #include <vcl/svapp.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -425,6 +426,8 @@ void RtfExport::WriteMainText()
 
 void RtfExport::WriteInfo()
 {
+    OString aGenerator = OUStringToOString(utl::DocInfoHelper::GetGeneratorString(), RTL_TEXTENCODING_UTF8);
+    Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE LO_STRING_SVTOOLS_RTF_GENERATOR " ").WriteCharPtr(aGenerator.getStr()).WriteChar('}');
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_INFO);
 
     SwDocShell* pDocShell(pDoc->GetDocShell());
@@ -453,18 +456,6 @@ void RtfExport::WriteInfo()
         OutDateTime(OOO_STRING_SVTOOLS_RTF_PRINTIM, xDocProps->getPrintDate());
     }
 
-    Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_COMMENT).WriteCharPtr(" ");
-    Strm().WriteCharPtr(OUStringToOString(utl::ConfigManager::getProductName(), eCurrentEncoding).getStr()).WriteCharPtr("}{").WriteCharPtr(OOO_STRING_SVTOOLS_RTF_VERN);
-
-// The convention that we follow is that the version number
-// should be a non-negative 32-bit int
-#if LIBO_VERSION_MAJOR > 127
-#error Major version number must be less than 128
-#elif LIBO_VERSION_MINOR > 255 || LIBO_VERSION_MICRO > 255 || LIBO_VERSION_PATCH > 255
-#error Minor, micro and patchlevel version numbers must be less than 256
-#endif
-
-    Strm().WriteNumber((sal_Int32) LIBO_VERSION_ENCODED_IN_32BITS).WriteChar('}');
     Strm().WriteChar('}');
 }
 
