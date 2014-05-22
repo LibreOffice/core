@@ -134,10 +134,10 @@ private:
     void FocusButton (const sal_Int32 nButtonIndex);
     void ClickButton (const sal_Int32 nButtonIndex);
     bool MoveFocusInsidePanel (
-        const FocusLocation aLocation,
+        const FocusLocation& rLocation,
         const sal_Int32 nDirection);
     bool MoveFocusInsideDeckTitle (
-        const FocusLocation aLocation,
+        const FocusLocation& rLocation,
         const sal_Int32 nDirection);
 
     void HandleKeyEvent (
