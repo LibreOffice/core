@@ -42,7 +42,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
     bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 public:
     WordPerfectImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext )
