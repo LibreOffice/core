@@ -340,6 +340,7 @@ private:
     mutable bool                    mbKerning : 1;
     mutable bool                    mbNewFont : 1;
     mutable bool                    mbTextLines : 1;
+    mutable bool                    mbTextBackground : 1;
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
@@ -644,7 +645,7 @@ public:
     ///@}
 
 
-    /** @name Rectangle functions
+    /** @name Rectangle functionsf
      */
     ///@{
 
@@ -1096,7 +1097,7 @@ private:
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
 
 
-    SAL_DLLPRIVATE bool         ImplDrawTextDirect( SalLayout&, bool bTextLines, sal_uInt32 flags = 0 );
+    SAL_DLLPRIVATE bool         ImplDrawTextDirect( SalLayout&, bool bTextLines, bool bTextBkg = false, sal_uInt32 flags = 0 );
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 

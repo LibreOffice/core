@@ -3673,7 +3673,12 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
         VirtualDevice* pVDev = GetVirtualDevice( pTarget->GetMapMode(), pTarget->GetDrawMode() );
         pVDev->SetDigitLanguage( GetRefDevice()->GetDigitLanguage() );
 
+        /*
+         * Set the appropriate background color according
+         * to text criteria
+        */
         {
+
             Color aBackgroundColor( pView->GetBackgroundColor() );
             // #i47161# Check if text is visible on background
             SvxFont aTmpFont;
@@ -3699,11 +3704,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
             if( nColorDiff < 8 )
                 aBackgroundColor = aFontColor.IsDark() ? COL_WHITE : COL_BLACK;
 
-            // XXX: BEGIN my changes
-            aBackgroundColor = COL_GRAY;
             pVDev->SetBackground( aBackgroundColor );
-            // END my changes
-            //pVDev->SetBackground( aBackgroundColor ); // original code
         }
 
         bool bVDevValid = true;
