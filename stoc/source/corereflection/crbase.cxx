@@ -67,7 +67,7 @@ IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
     }
 
 #ifdef TEST_LIST_CLASSES
-    ClassNameList::const_iterator iFind( find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
+    ClassNameList::const_iterator iFind( std::find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
     OSL_ENSURE( iFind == g_aClassNames.end(), "### idl class already exists!" );
     g_aClassNames.push_front( _aName );
 #endif
@@ -81,7 +81,7 @@ IdlClassImpl::~IdlClassImpl()
         _pReflection->release();
 
 #ifdef TEST_LIST_CLASSES
-    ClassNameList::iterator iFind( find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
+    ClassNameList::iterator iFind( std::find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
     OSL_ENSURE( iFind != g_aClassNames.end(), "### idl class does not exist!" );
     g_aClassNames.erase( iFind );
 #endif
