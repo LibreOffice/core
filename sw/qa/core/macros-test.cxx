@@ -195,7 +195,6 @@ void SwMacrosTest::testFdo55289()
 
 void SwMacrosTest::testFdo68983()
 {
-    const OUString aFileNameBase("StarBasic.");
     OUString aFileName;
     createFileURL("fdo68983.", "odt", aFileName);
     Reference< com::sun::star::lang::XComponent > xComponent =
