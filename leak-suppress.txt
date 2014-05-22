@@ -16,3 +16,6 @@ leak:cppu::defaultBootstrap_InitialComponentContext
 
 # global objects
 leak:SfxFilterContainer::ReadSingleFilter_Impl
+
+# build-time tool soltools/cpp:
+leak:soltools/cpp/_cpp.c
