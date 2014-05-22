@@ -50,7 +50,7 @@ namespace stoc_corefl
 {
 
 #ifdef TEST_LIST_CLASSES
-typedef list< OUString > ClassNameList;
+typedef std::list< OUString > ClassNameList;
 extern ClassNameList g_aClassNames;
 #endif
 
