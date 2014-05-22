@@ -153,7 +153,7 @@ void DebugEventInjector::InjectTextEvent()
         };
 
         size_t i = getRandom() * SAL_N_ELEMENTS( nTextCodes );
-        int offset = trunc( getRandom() * ( nTextCodes[i].nCodeEnd - nTextCodes[i].nCodeStart ) );
+        int offset = int( getRandom() * ( nTextCodes[i].nCodeEnd - nTextCodes[i].nCodeStart ) );
         aKeyEvent.mnCode = nTextCodes[i].nCodeStart + offset;
         aKeyEvent.mnCharCode = nTextCodes[i].aCharStart + offset;
 //        fprintf( stderr, "Char '%c' offset %d into record %d base '%c'\n",
