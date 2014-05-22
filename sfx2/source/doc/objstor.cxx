@@ -1119,6 +1119,8 @@ bool SfxObjectShell::SaveTo_Impl
 {
     SAL_INFO( "sfx.doc", "saving \"" << rMedium.GetName() << "\"" );
 
+    UpdateDocInfoForSave();
+
     AddLog( OUString( OSL_LOG_PREFIX "Begin"  ) );
 
     ModifyBlocker_Impl aMod(this);

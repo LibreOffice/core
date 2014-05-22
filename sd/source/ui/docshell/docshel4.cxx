@@ -506,12 +506,7 @@ bool DrawDocShell::Save()
     bool bRet = SfxObjectShell::Save();
 
     if( bRet )
-    {
-        // Call UpdateDocInfoForSave() before export
-        UpdateDocInfoForSave();
-
         bRet = SdXMLFilter( *GetMedium(), *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
-    }
 
     return bRet;
 }
@@ -545,11 +540,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     bool    bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
-    {
-        // Call UpdateDocInfoForSave() before export
-        UpdateDocInfoForSave();
         bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
-    }
 
     if( GetError() == ERRCODE_NONE )
         SetError( nVBWarning, OSL_LOG_PREFIX );
@@ -587,13 +578,11 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
                  aTypeName.indexOf( "impress8" ) >= 0 )
         {
             pFilter = new SdXMLFilter( rMedium, *this, true );
-            UpdateDocInfoForSave();
         }
         else if( aTypeName.indexOf( "StarOffice_XML_Impress" ) >= 0 ||
                  aTypeName.indexOf( "StarOffice_XML_Draw" ) >= 0 )
         {
             pFilter = new SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
-            UpdateDocInfoForSave();
         }
         else
         {
