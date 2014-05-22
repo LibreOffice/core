@@ -112,7 +112,8 @@ OSectionWindow::~OSectionWindow()
     }
 }
 
-void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
+void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     const uno::Reference< report::XSection > xSection(_rEvent.Source,uno::UNO_QUERY);

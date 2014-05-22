@@ -51,7 +51,8 @@ namespace comphelper
             : m_pAdapter(NULL), m_rMutex(_rMutex) { }
         virtual ~OPropertyChangeListener();
 
-        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) = 0;
+        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent)
+            throw (css::uno::RuntimeException, std::exception) = 0;
         virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource)
             throw( ::com::sun::star::uno::RuntimeException, std::exception);
 
