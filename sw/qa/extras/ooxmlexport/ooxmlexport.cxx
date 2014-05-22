@@ -1670,6 +1670,19 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
     getParagraph(1, "Sample pages document.");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
+{
+    xmlDocPtr pXmlFootNotes = parseExport("word/footnotes.xml");
+    if (!pXmlFootNotes)
+        return;
+    assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", "w14 wp14");
+
+    xmlDocPtr pXmlEndNotes = parseExport("word/endnotes.xml");
+    if (!pXmlEndNotes)
+        return;
+    assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testPgMargin, "testPgMargin.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
