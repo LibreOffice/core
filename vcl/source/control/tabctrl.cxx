@@ -317,7 +317,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
 // http://stackoverflow.com/questions/9071205/balanced-word-wrap-minimum-raggedness-in-php
 namespace MinimumRaggednessWrap
 {
-    std::deque<size_t> GetEndOfLineIndexes(const std::vector<sal_Int32> rWidthsOf, sal_Int32 nLineWidth)
+    std::deque<size_t> GetEndOfLineIndexes(const std::vector<sal_Int32>& rWidthsOf, sal_Int32 nLineWidth)
     {
         ++nLineWidth;
 
