@@ -437,7 +437,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
         {
             Reference<XNumberFormatTypes> xNumType(xFormats,UNO_QUERY);
             sal_Int32 nFormatKey = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::ALL,m_aLocale),aCheckToken);
-            fOutNumber = m_xFormatter->convertStringToNumber(nFormatKey,aCheckToken);
+            m_xFormatter->convertStringToNumber(nFormatKey,aCheckToken);
 
             Reference<XPropertySet> xProp = xFormats->getByKey(nFormatKey);
             sal_Int16 nType = 0;
