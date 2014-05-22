@@ -3466,6 +3466,21 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78651, "fdo78651.docx")
     // ensure that there are only two tables
     assertXPath(pXmlDoc, "//w:tbl", 2);
 }
+
+DECLARE_OOXMLEXPORT_TEST(testfdo78882, "fdo78882.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that Section Break is getting written inside second paragraph
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:pPr[1]/w:sectPr[1]",1);
+
+    // Ensure that no dummy paragarph gets created inside second paragraph for Section Break
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:p[1]/w:pPr[1]/w:sectPr[1]",0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testWordArtWithinDraingtool, "testWordArtWithinDraingtool.docx")
 {
 /*   * Within a file, there is a 2007 wordArt enclosed in a drawing tool
