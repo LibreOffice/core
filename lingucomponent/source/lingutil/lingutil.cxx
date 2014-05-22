@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined(WNT)
-#include <windows.h>
-#endif
-
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
@@ -44,29 +40,6 @@
 
 using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
-
-#if defined(WNT)
-OString Win_GetShortPathName( const OUString &rLongPathName )
-{
-    OString aRes;
-
-    sal_Unicode aShortBuffer[1024] = {0};
-    sal_Int32   nShortBufSize = SAL_N_ELEMENTS( aShortBuffer );
-
-    // use the version of 'GetShortPathName' that can deal with Unicode...
-    sal_Int32 nShortLen = GetShortPathNameW(
-            reinterpret_cast<LPCWSTR>( rLongPathName.getStr() ),
-            reinterpret_cast<LPWSTR>( aShortBuffer ),
-            nShortBufSize );
-
-    if (nShortLen < nShortBufSize) // conversion successful?
-        aRes = OString( OU2ENC( OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
-    else
-        OSL_FAIL( "Win_GetShortPathName: buffer to short" );
-
-    return aRes;
-}
-#endif //defined(WNT)
 
 // build list of old style diuctionaries (not as extensions) to use.
 // User installed dictionaries (the ones residing in the user paths)

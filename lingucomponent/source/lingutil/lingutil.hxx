@@ -48,16 +48,6 @@ inline bool operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com
             rL1.Variant  ==  rL2.Variant;
 }
 
-#if defined(WNT)
-
-// to be use to get a short path name under Windows that still can be used with
-// the 'fopen' call. This is necessary since under Windows there seems to be
-// a restriction of only about 110-130 characters length to a path name in order
-// for it to work with 'fopen'. And that length is usually easily exceeded
-// when using extensions...
-OString Win_GetShortPathName( const OUString &rLongPathName );
-#endif
-
 // temporary function, to be removed when new style dictionaries
 // using configuration entries are fully implemented and provided
 std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char * pDicType );
