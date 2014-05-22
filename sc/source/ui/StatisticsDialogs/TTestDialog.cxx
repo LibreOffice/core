@@ -42,7 +42,9 @@ ScTTestDialog::ScTTestDialog(
     ScStatisticsTwoVariableDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "TTestDialog", "modules/scalc/ui/ttestdialog.ui" )
-{}
+{
+    SetText(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST));
+}
 
 ScTTestDialog::~ScTTestDialog()
 {}
