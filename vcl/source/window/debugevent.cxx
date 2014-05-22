@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// #include <stdio.h>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
 #include <tools/time.hxx>
@@ -110,11 +109,11 @@ void DebugEventInjector::InjectMenuEvent()
     SalMenuEvent aEvent = aIds[ getRandom() * aIds.size() ];
     bool bHandled = ImplWindowFrameProc( pSysWin, NULL, nEvent, &aEvent);
 
-/*    fprintf( stderr, "Injected menu event %p (%d) '%s' -> %d\n",
-             aEvent.mpMenu, aEvent.mnId,
-             OUStringToOString( ((Menu *)aEvent.mpMenu)->GetItemText( aEvent.mnId ),
-                                RTL_TEXTENCODING_UTF8 ).getStr(),
-             (int)bHandled); */
+    SAL_INFO( "vcl.debugevent",
+              "Injected menu event " << aEvent.mpMenu
+              << " (" << aEvent.mnId << ") "
+              << "'" << ((Menu *)aEvent.mpMenu)->GetItemText( aEvent.mnId ) << "'"
+              << " -> " << bHandled );
 }
 
 static void InitKeyEvent( SalKeyEvent &rKeyEvent )
@@ -165,8 +164,12 @@ void DebugEventInjector::InjectTextEvent()
         aKeyEvent.mnCode |= (sal_uInt16)( getRandom() * KEY_MODTYPE ) & KEY_MODTYPE;
 
     bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent);
-//    fprintf( stderr, "Injected key 0x%x -> %d win %p\n",
-//             (int) aKeyEvent.mnCode, (int)bHandled, pWindow );
+
+    SAL_INFO( "vcl.debugevent",
+              "Injected key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
+              << " -> " << bHandled
+              << " win " << pWindow );
+
     ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
 }
 
@@ -245,8 +248,11 @@ void DebugEventInjector::InjectKeyNavEdit()
     aKeyEvent.mnCharCode = 0x0; // hopefully unused.
 
     bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent );
-//    fprintf( stderr, "Injected edit / move key 0x%x -> %d win %p\n",
-//             (int) aKeyEvent.mnCode, (int)bHandled, pWindow );
+
+    SAL_INFO( "vcl.debugevent",
+              "Injected edit / move key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
+              << " -> " << bHandled
+              << " win " <<  pWindow );
     ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
 }
 
