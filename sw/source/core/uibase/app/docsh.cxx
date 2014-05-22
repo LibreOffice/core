@@ -598,7 +598,6 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             }
         }
 #endif
-        UpdateDocInfoForSave();
     }
 
     // #i76360# Update document statistics

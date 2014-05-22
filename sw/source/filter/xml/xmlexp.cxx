@@ -193,10 +193,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         // Update doc stat, so that correct values are exported and
         // the progress works correctly.
         pDoc->UpdateDocStat();
-
-        SfxObjectShell* pObjSh = pDoc->GetDocShell();
-        if( pObjSh )
-            pObjSh->UpdateDocInfoForSave();     // update information
     }
     if( bShowProgress )
     {
