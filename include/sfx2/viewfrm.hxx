@@ -194,7 +194,7 @@ public:
         The buttons will be added from Right to Left at the right of the info bar. The parent, size
         and position of each button will be changed: only the width will remain unchanged.
       */
-    void                    AppendInfoBar( const OUString& sId, const OUString& sMessage, std::vector< PushButton* > aButtons );
+    void                    AppendInfoBar( const OUString& sId, const OUString& sMessage, std::vector< PushButton* > aButtons = std::vector< PushButton* >() );
     void                    RemoveInfoBar( const OUString& sId );
 
     SAL_DLLPRIVATE void SetDowning_Impl();
