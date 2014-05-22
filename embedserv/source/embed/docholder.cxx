@@ -1046,7 +1046,7 @@ IDispatch* DocumentHolder::GetIDispatch()
                     bridge::ModelDependent::OLE );
 
                 if ( anyResult.getValueTypeClass() ==
-                     getCppuType((sal_uInt32*) 0).getTypeClass() )
+                     cppu::UnoType<sal_uInt32>::get().getTypeClass() )
                 {
                     VARIANT* pVariant = *(VARIANT**)anyResult.getValue();
                     if ( pVariant->vt == VT_DISPATCH )

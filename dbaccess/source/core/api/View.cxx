@@ -82,7 +82,7 @@ namespace dbaccess
 
     Any SAL_CALL View::queryInterface( const Type & _rType ) throw(RuntimeException, std::exception)
     {
-        if(_rType == getCppuType( (Reference<XAlterView>*)0) && !m_xViewAccess.is() )
+        if(_rType == cppu::UnoType<XAlterView>::get()&& !m_xViewAccess.is() )
             return Any();
         Any aReturn = View_Base::queryInterface( _rType );
         if ( !aReturn.hasValue() )
@@ -92,7 +92,7 @@ namespace dbaccess
 
     Sequence< Type > SAL_CALL View::getTypes(  ) throw(RuntimeException, std::exception)
     {
-        Type aAlterType = getCppuType( (Reference<XAlterView>*)0);
+        Type aAlterType = cppu::UnoType<XAlterView>::get();
 
         Sequence< Type > aTypes( ::comphelper::concatSequences(View_Base::getTypes(),View_IBASE::getTypes()) );
         ::std::vector<Type> aOwnTypes;

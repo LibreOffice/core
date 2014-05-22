@@ -134,7 +134,7 @@ Sequence<Type > Index::getTypes() throw( RuntimeException, std::exception )
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< com::sun::star::sdbcx::XColumnsSupplier> *) 0 ),
+                cppu::UnoType<com::sun::star::sdbcx::XColumnsSupplier>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }
@@ -207,7 +207,7 @@ Sequence<Type > IndexDescriptor::getTypes() throw( RuntimeException, std::except
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                getCppuType( (Reference< com::sun::star::sdbcx::XColumnsSupplier> *) 0 ),
+                cppu::UnoType<com::sun::star::sdbcx::XColumnsSupplier>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }

@@ -372,7 +372,7 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     , mnRunningVBAScripts( 0 )
     , mbVBACompat( false )
     , maModifiable( *this, maMutex )
-    , maNameContainer( getCppuType( (Reference< XNameAccess >*) NULL ) )
+    , maNameContainer( cppu::UnoType<XNameAccess>::get())
     , mbOldInfoFormat( false )
     , mbOasis2OOoFormat( false )
     , mpBasMgr( NULL )
@@ -3222,9 +3222,9 @@ Sequence< Type > SfxLibrary::getTypes()
             if( !s_pTypes_NameContainer )
             {
                 static OTypeCollection s_aTypes_NameContainer(
-                    ::getCppuType( (const Reference< XNameContainer > *)0 ),
-                    ::getCppuType( (const Reference< XContainer > *)0 ),
-                    ::getCppuType( (const Reference< XChangesNotifier > *)0 ),
+                    cppu::UnoType<XNameContainer>::get(),
+                    cppu::UnoType<XContainer>::get(),
+                    cppu::UnoType<XChangesNotifier>::get(),
                     OComponentHelper::getTypes() );
                 s_pTypes_NameContainer = &s_aTypes_NameContainer;
             }

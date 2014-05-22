@@ -734,22 +734,22 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
             break;
         }
         case VT_I1:
-            aValue.setValue( & cVal, getCppuType((sal_Int8*)0));
+            aValue.setValue( & cVal, cppu::UnoType<sal_Int8>::get());
             break;
         case VT_UI1: // there is no unsigned char in UNO
-            aValue.setValue( & bVal, getCppuType( (sal_Int8*)0));
+            aValue.setValue( & bVal, cppu::UnoType<sal_Int8>::get());
             break;
         case VT_UI2:
-            aValue.setValue( & uiVal, getCppuType( (sal_uInt16*)0));
+            aValue.setValue( & uiVal, cppu::UnoType<cppu::UnoUnsignedShortType>::get());
             break;
         case VT_UI4:
-            aValue.setValue( & ulVal, getCppuType( (sal_uInt32*)0));
+            aValue.setValue( & ulVal, cppu::UnoType<sal_uInt32>::get());
             break;
         case VT_INT:
             aValue.setValue( & intVal, cppu::UnoType<sal_Int32>::get());
             break;
         case VT_UINT:
-            aValue.setValue( & uintVal, getCppuType( (sal_uInt32*)0));
+            aValue.setValue( & uintVal, cppu::UnoType<sal_uInt32>::get());
             break;
         case VT_VOID:
             aValue.setValue( NULL, Type());

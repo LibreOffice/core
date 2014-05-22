@@ -121,7 +121,7 @@ void SAL_CALL OStatement_BASE2::release() throw()
 
 Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) )
+    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
         return Any();
     Any aRet( java_sql_Statement_BASE::queryInterface(rType) );
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
@@ -129,15 +129,15 @@ Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw
 
 Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                                ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                                ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
+                                                cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
+                                                cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
 
     Sequence< Type > aOldTypes = java_sql_Statement_BASE::getTypes();
     if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() )
     {
         ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
-                        ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ));
+                        cppu::UnoType<XGeneratedResultSet>::get());
         aOldTypes.realloc(aOldTypes.getLength() - 1);
     }
 

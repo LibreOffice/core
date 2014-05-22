@@ -64,8 +64,8 @@ sal_Bool SAL_CALL OFlatResultSet::supportsService( const OUString& _rServiceName
 
 Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if(rType == ::getCppuType((const Reference<XDeleteRows>*)0) || rType == ::getCppuType((const Reference<XResultSetUpdate>*)0)
-        || rType == ::getCppuType((const Reference<XRowUpdate>*)0))
+    if(rType == cppu::UnoType<XDeleteRows>::get()|| rType == cppu::UnoType<XResultSetUpdate>::get()
+        || rType == cppu::UnoType<XRowUpdate>::get())
         return Any();
 
     const Any aRet = OResultSet::queryInterface(rType);
@@ -81,9 +81,9 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException,
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == ::getCppuType((const Reference<XDeleteRows>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XResultSetUpdate>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XRowUpdate>*)0)))
+        if(!(*pBegin == cppu::UnoType<XDeleteRows>::get()||
+            *pBegin == cppu::UnoType<XResultSetUpdate>::get()||
+            *pBegin == cppu::UnoType<XRowUpdate>::get()))
         {
             aOwnTypes.push_back(*pBegin);
         }

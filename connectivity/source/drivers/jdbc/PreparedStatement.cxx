@@ -82,10 +82,10 @@ jclass java_sql_PreparedStatement::getMyClass() const
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_PreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< XResultSetMetaDataSupplier > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedBatchExecution > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
+                                    cppu::UnoType<XParameters>::get(),
+                                    cppu::UnoType<XResultSetMetaDataSupplier>::get(),
+                                    cppu::UnoType<XPreparedBatchExecution>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
 }

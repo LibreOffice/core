@@ -151,9 +151,9 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(Runtime
 
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                                                    ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                                                    ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
+                                                                    cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
+                                                                    cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }

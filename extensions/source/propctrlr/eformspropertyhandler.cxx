@@ -304,7 +304,7 @@ namespace pcr
             if ( m_pHelper->isListEntrySink() )
             {
                 implAddPropertyDescription( aProperties, PROPERTY_LIST_BINDING,
-                    ::getCppuType( static_cast< Reference< XListEntrySource > * >( NULL ) ) );
+                    cppu::UnoType<XListEntrySource>::get() );
             }
         }
 

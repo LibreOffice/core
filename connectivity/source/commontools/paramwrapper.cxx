@@ -119,11 +119,11 @@ namespace param
     Sequence< Type > SAL_CALL ParameterWrapper::getTypes(   ) throw(RuntimeException, std::exception)
     {
         Sequence< Type > aTypes( 5 );
-        aTypes[ 0 ] = ::getCppuType( static_cast< Reference< XWeak >*             >( NULL ) );
-        aTypes[ 1 ] = ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) );
-        aTypes[ 2 ] = ::getCppuType( static_cast< Reference< XPropertySet >*      >( NULL ) );
-        aTypes[ 3 ] = ::getCppuType( static_cast< Reference< XFastPropertySet >*  >( NULL ) );
-        aTypes[ 4 ] = ::getCppuType( static_cast< Reference< XMultiPropertySet >* >( NULL ) );
+        aTypes[ 0 ] = cppu::UnoType<XWeak>::get();
+        aTypes[ 1 ] = cppu::UnoType<XTypeProvider>::get();
+        aTypes[ 2 ] = cppu::UnoType<XPropertySet>::get();
+        aTypes[ 3 ] = cppu::UnoType<XFastPropertySet>::get();
+        aTypes[ 4 ] = cppu::UnoType<XMultiPropertySet>::get();
         return aTypes;
     }
 
@@ -295,7 +295,7 @@ namespace param
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_checkDisposed_throw();
-        return ::getCppuType( static_cast< Reference< XPropertySet >* >( NULL ) );
+        return cppu::UnoType<XPropertySet>::get();
     }
 
 

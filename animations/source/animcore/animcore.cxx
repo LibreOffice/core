@@ -663,48 +663,48 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
         Type * pTypeAr = types->getArray();
         sal_Int32 nPos = 0;
 
-        pTypeAr[nPos++] = ::getCppuType( (const Reference< XWeak > *)0 );
-        pTypeAr[nPos++] = ::getCppuType( (const Reference< XChild > *)0 );
-        pTypeAr[nPos++] = ::getCppuType( (const Reference< XCloneable > *)0 );
-        pTypeAr[nPos++] = ::getCppuType( (const Reference< XTypeProvider > *)0 );
-        pTypeAr[nPos++] = ::getCppuType( (const Reference< XServiceInfo > *)0 );
-        pTypeAr[nPos++] = ::getCppuType( (const Reference< XUnoTunnel > *)0 );
-        pTypeAr[nPos++] = ::getCppuType( (const Reference< XChangesNotifier> *)0 );
+        pTypeAr[nPos++] = cppu::UnoType<XWeak>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XChild>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XCloneable>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XTypeProvider>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XServiceInfo>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XUnoTunnel>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XChangesNotifier>::get();
 
         switch( nNodeType )
         {
         case AnimationNodeType::PAR:
         case AnimationNodeType::SEQ:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XTimeContainer > *)0 );
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XEnumerationAccess > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XTimeContainer>::get();
+            pTypeAr[nPos++] = cppu::UnoType<XEnumerationAccess>::get();
             break;
         case AnimationNodeType::ITERATE:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XIterateContainer > *)0 );
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XEnumerationAccess > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XIterateContainer>::get();
+            pTypeAr[nPos++] = cppu::UnoType<XEnumerationAccess>::get();
             break;
         case AnimationNodeType::ANIMATE:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XAnimate > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XAnimate>::get();
             break;
         case AnimationNodeType::ANIMATEMOTION:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XAnimateMotion > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XAnimateMotion>::get();
             break;
         case AnimationNodeType::ANIMATECOLOR:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XAnimateColor > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XAnimateColor>::get();
             break;
         case AnimationNodeType::ANIMATETRANSFORM:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XAnimateTransform > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XAnimateTransform>::get();
             break;
         case AnimationNodeType::SET:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XAnimateSet > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XAnimateSet>::get();
             break;
         case AnimationNodeType::TRANSITIONFILTER:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XTransitionFilter > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XTransitionFilter>::get();
             break;
         case AnimationNodeType::AUDIO:
-            pTypeAr[nPos++] = ::getCppuType( (const Reference< XAudio > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XAudio>::get();
             break;
         case AnimationNodeType::COMMAND:
-            pTypeAr[nPos++] = ::getCppuType( ( const Reference< XCommand > *)0 );
+            pTypeAr[nPos++] = cppu::UnoType<XCommand>::get();
             break;
         }
         mpTypes[nNodeType] = types;
@@ -1788,7 +1788,7 @@ void SAL_CALL AnimationNode::setParameter( const Any& _parameter ) throw (Runtim
 // XElementAccess
 Type SAL_CALL AnimationNode::getElementType() throw (RuntimeException, std::exception)
 {
-    return ::getCppuType((const Reference< XAnimationNode >*)0);
+    return cppu::UnoType<XAnimationNode>::get();
 }
 
 

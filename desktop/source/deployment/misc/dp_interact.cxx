@@ -43,9 +43,7 @@ public:
         : m_type( type ),
           m_pselect( pselect )
         { OSL_ASSERT(
-            ::getCppuType(
-                static_cast< Reference<task::XInteractionContinuation>
-                const *>(0) ).isAssignableFrom(m_type) ); }
+            cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(m_type) ); }
 
     // XInterface
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;

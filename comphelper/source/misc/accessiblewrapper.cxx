@@ -477,7 +477,7 @@ namespace comphelper
             ::osl::MutexGuard aGuard( m_rBHelper.rMutex );
 
             // translate the event
-            queryInterface( ::getCppuType( static_cast< Reference< XInterface >* >( NULL ) ) ) >>= aTranslatedEvent.Source;
+            queryInterface( cppu::UnoType<XInterface>::get() ) >>= aTranslatedEvent.Source;
             m_pChildMapper->translateAccessibleEvent( _rEvent, aTranslatedEvent );
 
             // see if any of these notifications affect our child manager

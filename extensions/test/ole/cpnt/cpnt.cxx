@@ -1237,7 +1237,7 @@ void SAL_CALL OComponent::methodStruct(const Property& aProp) throw( RuntimeExce
 
 Property SAL_CALL OComponent::retMethodStruct(void) throw( RuntimeException )
 {
-    Property a(L"OleTest_Property", 255, getCppuType( (Reference<XInterface>*)0), PropertyAttribute::MAYBEVOID |
+    Property a(L"OleTest_Property", 255, cppu::UnoType<XInterface>::get(), PropertyAttribute::MAYBEVOID |
         PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED |
         PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY |
         PropertyAttribute::MAYBEAMBIGUOUS | PropertyAttribute::MAYBEDEFAULT );
@@ -1246,7 +1246,7 @@ Property SAL_CALL OComponent::retMethodStruct(void) throw( RuntimeException )
 
 Property SAL_CALL OComponent::getAttrStruct(void) throw( RuntimeException)
 {
-    Property a(L"OleTest_Property", 255, getCppuType( (Reference<XInterface>*)0), PropertyAttribute::MAYBEVOID |
+    Property a(L"OleTest_Property", 255, cppu::UnoType<XInterface>::get(), PropertyAttribute::MAYBEVOID |
         PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED |
         PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY |
         PropertyAttribute::MAYBEAMBIGUOUS | PropertyAttribute::MAYBEDEFAULT );

@@ -252,17 +252,17 @@ IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_
 
 Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if(rType == getCppuType( (Reference<XRename>*)0) && !getRenameService().is() )
+    if(rType == cppu::UnoType<XRename>::get()&& !getRenameService().is() )
         return Any();
-    if(rType == getCppuType( (Reference<XAlterTable>*)0) && !getAlterService().is() )
+    if(rType == cppu::UnoType<XAlterTable>::get()&& !getAlterService().is() )
         return Any();
     return OTable_Base::queryInterface( rType);
 }
 
 Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException, std::exception)
 {
-    Type aRenameType = getCppuType( (Reference<XRename>*)0);
-    Type aAlterType = getCppuType( (Reference<XAlterTable>*)0);
+    Type aRenameType = cppu::UnoType<XRename>::get();
+    Type aAlterType = cppu::UnoType<XAlterTable>::get();
 
     Sequence< Type > aTypes(OTable_Base::getTypes());
     ::std::vector<Type> aOwnTypes;

@@ -130,7 +130,7 @@ Any SAL_CALL OTable::queryInterface( const Type & rType ) throw(RuntimeException
     {
         if(!isNew())
             aRet = OTable_BASE::queryInterface( rType);
-        if(isNew() && (rType == getCppuType( (Reference<XIndexesSupplier>*)0)))
+        if(isNew() && (rType == cppu::UnoType<XIndexesSupplier>::get()))
             return Any();
         if(!aRet.hasValue())
             aRet = OTableDescriptor_BASE::queryInterface( rType);

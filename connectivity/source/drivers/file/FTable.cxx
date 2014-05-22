@@ -107,11 +107,11 @@ void OFileTable::refreshIndexes()
 
 Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
-        rType == ::getCppuType((const Reference<XRename>*)0) ||
-        rType == ::getCppuType((const Reference<XAlterTable>*)0) ||
-        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
-        rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
+    if( rType == cppu::UnoType<XKeysSupplier>::get()||
+        rType == cppu::UnoType<XRename>::get()||
+        rType == cppu::UnoType<XAlterTable>::get()||
+        rType == cppu::UnoType<XIndexesSupplier>::get()||
+        rType == cppu::UnoType<XDataDescriptorFactory>::get())
         return Any();
 
     return OTable_TYPEDEF::queryInterface(rType);

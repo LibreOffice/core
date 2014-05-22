@@ -102,7 +102,7 @@ OResultSet::~OResultSet()
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > OResultSet::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
+    OTypeCollection aTypes(cppu::UnoType<XPropertySet>::get(),
                            OResultSetBase::getTypes());
 
     return aTypes.getTypes();

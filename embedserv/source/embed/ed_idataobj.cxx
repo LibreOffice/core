@@ -56,7 +56,7 @@ sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
             aFlavor.HumanPresentableName = "Windows GDIMetaFile";
         }
 
-        aFlavor.DataType = getCppuType( (const sal_uInt64*) 0 );
+        aFlavor.DataType = cppu::UnoType<sal_uInt64>::get();
 
         uno::Any aAny = xTransferable->getTransferData( aFlavor );
         aAny >>= pResult;

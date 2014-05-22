@@ -61,8 +61,8 @@ Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) th
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_CallableStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< starsdbc::XRow > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< starsdbc::XOutParameters > *)0 ));
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<starsdbc::XRow>::get(),
+                                    cppu::UnoType<starsdbc::XOutParameters>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),java_sql_PreparedStatement::getTypes());
 }

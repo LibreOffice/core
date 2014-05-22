@@ -47,9 +47,9 @@ OSubComponent::~OSubComponent()
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > OSubComponent::getTypes() throw (RuntimeException, std::exception)
 {
-    OTypeCollection aTypes(::getCppuType( (const Reference< XComponent > *)0 ),
-                           ::getCppuType( (const Reference< XTypeProvider > *)0 ),
-                           ::getCppuType( (const Reference< XWeak > *)0 ));
+    OTypeCollection aTypes(cppu::UnoType<XComponent>::get(),
+                           cppu::UnoType<XTypeProvider>::get(),
+                           cppu::UnoType<XWeak>::get());
 
     return aTypes.getTypes();
 }
@@ -112,7 +112,7 @@ void OSubComponent::release() throw ( )
 Any OSubComponent::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     Any aReturn;
-    if (!rType.equals(::getCppuType(static_cast< Reference< XAggregation >* >(NULL))))
+    if (!rType.equals(cppu::UnoType<XAggregation>::get()))
         aReturn = OComponentHelper::queryInterface(rType);
 
     return aReturn;

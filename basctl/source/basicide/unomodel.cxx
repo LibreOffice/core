@@ -76,7 +76,7 @@ uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  ) throw(uno::RuntimeEx
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 1);
     uno::Type* pTypes = aTypes.getArray();
-    pTypes[nLen++] = ::getCppuType((Reference<XServiceInfo>*)0);
+    pTypes[nLen++] = cppu::UnoType<XServiceInfo>::get();
 
     return aTypes;
 }

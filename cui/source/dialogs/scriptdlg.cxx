@@ -1404,18 +1404,18 @@ OUString GetErrorMessage( const Exception& e )
 OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
 {
     if ( aException.getValueType() ==
-         ::getCppuType( (const reflection::InvocationTargetException* ) NULL ) )
+         cppu::UnoType<reflection::InvocationTargetException>::get())
     {
         reflection::InvocationTargetException ite;
         aException >>= ite;
-        if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptErrorRaisedException* ) NULL ) )
+        if ( ite.TargetException.getValueType() == cppu::UnoType<provider::ScriptErrorRaisedException>::get())
         {
             // Error raised by script
             provider::ScriptErrorRaisedException scriptError;
             ite.TargetException >>= scriptError;
             return GetErrorMessage( scriptError );
         }
-        else if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptExceptionRaisedException* ) NULL ) )
+        else if ( ite.TargetException.getValueType() == cppu::UnoType<provider::ScriptExceptionRaisedException>::get())
         {
             // Exception raised by script
             provider::ScriptExceptionRaisedException scriptException;
@@ -1429,7 +1429,7 @@ OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
         }
 
     }
-    else if ( aException.getValueType() == ::getCppuType( ( const provider::ScriptFrameworkErrorException* ) NULL ) )
+    else if ( aException.getValueType() == cppu::UnoType<provider::ScriptFrameworkErrorException>::get())
     {
         // A Script Framework error has occurred
         provider::ScriptFrameworkErrorException sfe;

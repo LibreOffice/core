@@ -383,7 +383,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
 //      SVX_UNOEDIT_OUTLINER_PROPERTIES,
-        {OUString(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace>*)0), 0, 0 },
+        {OUString(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  cppu::UnoType<com::sun::star::container::XIndexReplace>::get(), 0, 0 },
         {OUString(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,::getBooleanCppuType(), 0, 0 },
         {OUString(UNO_NAME_NUMBERING_LEVEL),        EE_PARA_OUTLLEVEL,  ::cppu::UnoType<sal_Int16>::get(), 0, 0 },
         SVX_UNOEDIT_PARA_PROPERTIES,

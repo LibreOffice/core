@@ -179,17 +179,17 @@ namespace
             aTypeSequence.realloc( 11 ); // !DANGER! keep this updated
             uno::Type* pTypes = aTypeSequence.getArray();
 
-            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextContent >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+            *pTypes++ = cppu::UnoType<text::XTextRange>::get();
+            *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+            *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+            *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
+            *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
+            *pTypes++ = cppu::UnoType<text::XTextRangeCompare>::get();
+            *pTypes++ = cppu::UnoType<text::XTextContent>::get();
+            *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
+            *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+            *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+            *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
 
             return aTypeSequence;
         }
@@ -274,7 +274,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnum
 uno::Type SAL_CALL SvxUnoTextContent::getElementType()
     throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType((const uno::Reference< text::XTextRange >*)0);
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
@@ -481,7 +481,7 @@ SvxUnoTextCursor::~SvxUnoTextCursor() throw()
 uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {
-    if( rType == ::getCppuType((const uno::Reference< text::XTextRange >*)0) )
+    if( rType == cppu::UnoType<text::XTextRange>::get())
         return uno::makeAny(uno::Reference< text::XTextRange >((text::XText*)(this)));
     else QUERYINT( text::XTextCursor );
     else QUERYINT( beans::XMultiPropertyStates );
@@ -524,16 +524,16 @@ namespace
             aTypeSequence.realloc( 10 ); // !DANGER! keep this updated
             uno::Type* pTypes = aTypeSequence.getArray();
 
-            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCursor >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
-            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+            *pTypes++ = cppu::UnoType<text::XTextRange>::get();
+            *pTypes++ = cppu::UnoType<text::XTextCursor>::get();
+            *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+            *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
+            *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
+            *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
+            *pTypes++ = cppu::UnoType<text::XTextRangeCompare>::get();
+            *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+            *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
+            *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
 
             return aTypeSequence;
         }

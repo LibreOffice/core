@@ -659,14 +659,14 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException, std::
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(   *pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
-                *pBegin == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
-                *pBegin == ::getCppuType((const Reference<XRename>*)0) ||
-                *pBegin == ::getCppuType((const Reference<XAlterTable>*)0) ||
-                *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
+        if(!(   *pBegin == cppu::UnoType<XKeysSupplier>::get()||
+                *pBegin == cppu::UnoType<XIndexesSupplier>::get()||
+                *pBegin == cppu::UnoType<XRename>::get()||
+                *pBegin == cppu::UnoType<XAlterTable>::get()||
+                *pBegin == cppu::UnoType<XDataDescriptorFactory>::get()))
             aOwnTypes.push_back(*pBegin);
     }
-    aOwnTypes.push_back(::getCppuType( (const Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
+    aOwnTypes.push_back(cppu::UnoType<com::sun::star::lang::XUnoTunnel>::get());
 
     const Type* pAttrs = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
     return Sequence< Type >(pAttrs, aOwnTypes.size());
@@ -675,11 +675,11 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException, std::
 
 Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
-        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
-        rType == ::getCppuType((const Reference<XRename>*)0) ||
-        rType == ::getCppuType((const Reference<XAlterTable>*)0) ||
-        rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
+    if( rType == cppu::UnoType<XKeysSupplier>::get()||
+        rType == cppu::UnoType<XIndexesSupplier>::get()||
+        rType == cppu::UnoType<XRename>::get()||
+        rType == cppu::UnoType<XAlterTable>::get()||
+        rType == cppu::UnoType<XDataDescriptorFactory>::get())
         return Any();
 
     const Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));

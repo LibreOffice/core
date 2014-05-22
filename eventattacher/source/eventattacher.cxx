@@ -547,7 +547,7 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
         }
         catch( const CannotConvertException& e )
         {
-            throw InvocationTargetException( OUString(), Reference< XInterface >(), Any(&e, ::getCppuType( (CannotConvertException*)0)) );
+            throw InvocationTargetException( OUString(), Reference< XInterface >(), Any(&e, cppu::UnoType<CannotConvertException>::get()) );
         }
     }
     return aRet;
@@ -592,7 +592,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
         return Reference<XEventListener>();
 
     // Inspect Introspection
-    Any aObjAny( &xObject, ::getCppuType( (const Reference< XInterface > *)0) );
+    Any aObjAny( &xObject, cppu::UnoType<XInterface>::get());
 
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     if( !xAccess.is() )
@@ -735,7 +735,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
         return Sequence< Reference<XEventListener> >();
 
     // Inspect Introspection
-    Any aObjAny( &xObject, ::getCppuType(static_cast<const Reference<XInterface>*>(0)) );
+    Any aObjAny( &xObject, cppu::UnoType<XInterface>::get() );
 
     Reference<XIntrospectionAccess> xAccess = xIntrospection->inspect(aObjAny);
     if (!xAccess.is())
@@ -798,7 +798,7 @@ void EventAttacherImpl::removeListener
         throw IntrospectionException();
 
     //Inspect Introspection
-    Any aObjAny( &xObject, ::getCppuType( (const Reference< XInterface > *)0) );
+    Any aObjAny( &xObject, cppu::UnoType<XInterface>::get());
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     if( !xAccess.is() )
         throw IntrospectionException();

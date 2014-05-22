@@ -1491,8 +1491,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasByName(const OUString& aName) throw( Runti
 // ::com::sun::star::container::XElementAccess
 Type SAL_CALL SbaXFormAdapter::getElementType() throw(RuntimeException, std::exception)
 {
-    return ::getCppuType(
-        static_cast< Reference< ::com::sun::star::form::XFormComponent >* >(NULL));
+    return cppu::UnoType<com::sun::star::form::XFormComponent>::get();
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::hasElements() throw(RuntimeException, std::exception)

@@ -256,7 +256,7 @@ OCollection::~OCollection()
 
 Any SAL_CALL OCollection::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
 {
-    if ( m_bUseIndexOnly && rType == ::getCppuType(static_cast< Reference< XNameAccess > *> (NULL)) )
+    if ( m_bUseIndexOnly && rType == cppu::UnoType<XNameAccess>::get() )
     {
         return Any();
     }
@@ -273,7 +273,7 @@ Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException, std::
 
         ::std::vector<Type> aOwnTypes;
         aOwnTypes.reserve(aTypes.getLength());
-        Type aType = ::getCppuType(static_cast< Reference<XNameAccess> *>(NULL));
+        Type aType = cppu::UnoType<XNameAccess>::get();
         for(;pBegin != pEnd; ++pBegin)
         {
             if ( *pBegin != aType )
@@ -480,7 +480,7 @@ void SAL_CALL OCollection::release() throw()
 
 Type SAL_CALL OCollection::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return::getCppuType(static_cast< Reference< XPropertySet>*>(NULL));
+    returncppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL OCollection::hasElements(  ) throw(RuntimeException, std::exception)
