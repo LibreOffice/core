@@ -71,7 +71,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
              OUStringToOString( rFlavor.MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              OUStringToOString( aString, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
-        aRet <<= aString;
+        aRet <<= aString.replaceAll("\r\n", "\n");
     }
     else
         aRet <<= aData;
