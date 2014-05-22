@@ -91,7 +91,7 @@ namespace tools_urlobj
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) ;
+                            equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
