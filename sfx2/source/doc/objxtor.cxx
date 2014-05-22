@@ -842,7 +842,14 @@ void SfxObjectShell::InitBasicManager_Impl()
      */
 #ifndef DISABLE_SCRIPTING
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
-    pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
+    try
+    {
+        pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
+    }
+    catch (const css::ucb::ContentCreationException& e)
+    {
+        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+    }
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
     pImp->bBasicInitialized = true;
 #endif
