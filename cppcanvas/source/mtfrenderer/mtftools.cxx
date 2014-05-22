@@ -313,9 +313,9 @@ namespace cppcanvas
 
         // create line actions for text such as underline and
         // strikeout
-        ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const ::basegfx::B2DPoint rStartPos,
-                                                              const double&             rLineWidth,
-                                                              const TextLineInfo&       rTextLineInfo )
+        ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const ::basegfx::B2DPoint& rStartPos,
+                                                              const double&              rLineWidth,
+                                                              const TextLineInfo&        rTextLineInfo )
         {
             // fill the polypolygon with all text lines
             ::basegfx::B2DPolyPolygon aTextLinesPolyPoly;
