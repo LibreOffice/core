@@ -152,28 +152,36 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
     const bool bIsKMZ = rSourceURL.endsWithIgnoreAsciiCase(".kmz");
     if (bIsDAE || bIsKMZ)
     {
-        OUString sName;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sName);
-        // remove .tmp extension
-        sName = sName.copy(0, sName.getLength() - 4);
-        const INetURLObject aSourceURLObj(rSourceURL);
-        std::string sSourcePath = OUStringToOString( aSourceURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
-
         std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
-        asset->setInputFilePath(sSourcePath);
+        asset->setInputFilePath(OUStringToOString( rSourceURL, RTL_TEXTENCODING_UTF8 ).getStr());
 
         if (bIsKMZ)
         {
-            std::string strDaeFilePath = GLTF::Kmz2Collada()(asset->getInputFilePath());
+            // KMZ converter needs a system path
+            const INetURLObject aSourceURLObj(rSourceURL);
+            const std::string sSourcePath =
+                OUStringToOString( aSourceURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
+            const std::string strDaeFilePath = GLTF::Kmz2Collada()(sSourcePath);
             if (strDaeFilePath == "")
                 return false;
-            asset->setInputFilePath(strDaeFilePath);
+
+            // DAE converter needs URL
+            OUString sDaeFilePath;
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL(
+                OStringToOUString(OString(strDaeFilePath.c_str()), RTL_TEXTENCODING_UTF8 ), sDaeFilePath);
+            asset->setInputFilePath(OUStringToOString( sDaeFilePath, RTL_TEXTENCODING_UTF8 ).getStr());
         }
-        asset->setBundleOutputPath(OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr());
+
+        OUString sOutput;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sOutput);
+        // remove .tmp extension
+        sOutput = sOutput.copy(0, sOutput.getLength()-4);
+        asset->setBundleOutputPath(OUStringToOString( sOutput, RTL_TEXTENCODING_UTF8 ).getStr());
+
         GLTF::COLLADA2GLTFWriter writer(asset);
         writer.write();
         // Path to the .json file created by COLLADA2GLTFWriter
-        sSource = sName + "/" + GetFilename(sName) + ".json";
+        sSource = sOutput + "/" + GetFilename(sOutput) + ".json";
     }
 #endif
 
