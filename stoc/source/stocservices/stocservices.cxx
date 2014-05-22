@@ -20,10 +20,10 @@
 
 #include "stocservices.hxx"
 
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "sal/types.h"
-#include "uno/environment.h"
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <sal/types.h>
+#include <uno/environment.h>
 
 using namespace com::sun::star;
 using namespace css::uno;

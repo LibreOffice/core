@@ -18,26 +18,26 @@
  */
 
 
-#include "osl/diagnose.h"
-#include "osl/interlck.h"
-#include "osl/doublecheckedlocking.h"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "uno/dispatcher.hxx"
-#include "uno/data.h"
+#include <osl/diagnose.h>
+#include <osl/interlck.h>
+#include <osl/doublecheckedlocking.h>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <uno/dispatcher.hxx>
+#include <uno/data.h>
 #include <uno/lbnames.h>
-#include "uno/mapping.hxx"
-#include "uno/environment.hxx"
-#include "typelib/typedescription.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/factory.hxx"
+#include <uno/mapping.hxx>
+#include <uno/environment.hxx>
+#include <typelib/typedescription.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
-#include "com/sun/star/reflection/XProxyFactory.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #define SERVICE_NAME "com.sun.star.reflection.ProxyFactory"
 #define IMPL_NAME "com.sun.star.comp.reflection.ProxyFactory"

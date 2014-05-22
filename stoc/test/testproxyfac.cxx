@@ -18,22 +18,22 @@
  */
 
 
-#include "sal/main.h"
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
-#include "uno/environment.hxx"
+#include <sal/main.h>
+#include <osl/diagnose.h>
+#include <rtl/alloc.h>
+#include <uno/environment.hxx>
 #include <uno/lbnames.h>
-#include "cppuhelper/servicefactory.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase3.hxx"
-#include "com/sun/star/uno/XCurrentContext.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/registry/XSimpleRegistry.hpp"
-#include "com/sun/star/registry/XImplementationRegistration.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/reflection/XProxyFactory.hpp"
+#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
 
 #include <stdio.h>
 

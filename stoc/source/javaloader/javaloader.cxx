@@ -27,7 +27,7 @@
 #include <uno/environment.h>
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #ifdef LINUX
 #undef minor
@@ -52,8 +52,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include "jvmaccess/unovirtualmachine.hxx"
-#include "jvmaccess/virtualmachine.hxx"
+#include <jvmaccess/unovirtualmachine.hxx>
+#include <jvmaccess/virtualmachine.hxx>
 
 using namespace css::java;
 using namespace css::lang;

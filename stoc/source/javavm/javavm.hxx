@@ -22,16 +22,16 @@
 
 #include "jvmargs.hxx"
 
-#include "com/sun/star/container/XContainerListener.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/java/XJavaThreadRegister_11.hpp"
-#include "com/sun/star/java/XJavaVM.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "cppuhelper/basemutex.hxx"
-#include "cppuhelper/compbase5.hxx"
-#include "osl/thread.hxx"
-#include "rtl/ref.hxx"
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
+#include <com/sun/star/java/XJavaVM.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase5.hxx>
+#include <osl/thread.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {

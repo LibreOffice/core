@@ -20,11 +20,11 @@
 #ifndef INCLUDED_STOC_SOURCE_URIPROC_URIREFERENCE_HXX
 #define INCLUDED_STOC_SOURCE_URIPROC_URIREFERENCE_HXX
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/mutex.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "rtl/ustrbuf.hxx"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <rtl/ustrbuf.hxx>
 
 namespace stoc { namespace uriproc {
 

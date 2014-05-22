@@ -20,12 +20,12 @@
 #ifndef INCLUDED_STOC_SOURCE_JAVAVM_INTERACT_HXX
 #define INCLUDED_STOC_SOURCE_JAVAVM_INTERACT_HXX
 
-#include "com/sun/star/task/XInteractionRequest.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "rtl/ref.hxx"
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star { namespace task {
     class XInteractionContinuation;

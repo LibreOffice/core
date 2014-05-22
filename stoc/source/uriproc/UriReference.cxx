@@ -20,12 +20,12 @@
 
 #include "UriReference.hxx"
 
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
-#include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
+#include <rtl/string.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 using stoc::uriproc::UriReference;
 

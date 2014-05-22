@@ -46,7 +46,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #define SERVICENAME "com.sun.star.script.InvocationAdapterFactory"
 #define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
