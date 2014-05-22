@@ -14,9 +14,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,collada2gltf,$(COLLADA2GLTF_TARBALL
 $(eval $(call gb_UnpackedTarball_add_file,collada2gltf,.,external/collada2gltf/GitSHA1.cpp))
 
 $(eval $(call gb_UnpackedTarball_add_patches,collada2gltf,\
-	external/collada2gltf/add-unzip-kmz-files-to-collada-files-module.patch.3 \
-	external/collada2gltf/write-only-.dae-file-which-we-need.patch.0 \
-	external/collada2gltf/wrong_uri_usage.patch.1 \
+	external/collada2gltf/patches/add-unzip-kmz-files-to-collada-files-module.patch.3 \
+	external/collada2gltf/patches/write-only-.dae-file-which-we-need.patch.0 \
+	external/collada2gltf/patches/wrong_uri_usage.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
