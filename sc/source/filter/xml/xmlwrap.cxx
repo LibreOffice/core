@@ -788,8 +788,6 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
     if ( pObjSh && xStorage.is() )
     {
-        pObjSh->UpdateDocInfoForSave();     // update information
-
         uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         sal_Int32 nProgressRange(1000000);
