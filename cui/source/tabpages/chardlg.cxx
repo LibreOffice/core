@@ -1086,6 +1086,30 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     nWhich = GetWhich( nSlot );
     pOld = GetOldItem( rSet, nSlot );
+
+    // For language list boxes acting as ComboBox, check for, add and select an
+    // edited entry.
+    SvxLanguageComboBox* pLangComboBox = dynamic_cast<SvxLanguageComboBox*>(pLangBox);
+    if (pLangComboBox)
+    {
+        switch (pLangComboBox->GetEditedAndValid())
+        {
+            case SvxLanguageComboBox::EDITED_NO:
+                ;   // nothing to do
+                break;
+            case SvxLanguageComboBox::EDITED_VALID:
+                {
+                    const sal_Int32 nPos = pLangComboBox->SaveEditedAsEntry();
+                    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+                        pLangComboBox->SelectEntryPos( nPos);
+                }
+                break;
+            case SvxLanguageComboBox::EDITED_INVALID:
+                pLangComboBox->SelectEntryPos( pLangComboBox->GetSavedValueLBB());
+                break;
+        }
+    }
+
     sal_Int32 nLangPos = pLangBox->GetSelectEntryPosLBB();
     LanguageType eLangType = (LanguageType)(sal_uLong)pLangBox->GetEntryDataLBB( nLangPos );
 
