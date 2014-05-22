@@ -417,6 +417,9 @@ namespace sw { namespace mark
             " - Mark was not created.");
         MarkBase* pMarkBase = dynamic_cast<MarkBase*>(pMark.get());
 
+        if (!pMark)
+            return 0;
+
         if(pMark->GetMarkPos() != pMark->GetMarkStart())
             pMarkBase->Swap();
 
