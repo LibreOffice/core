@@ -12,8 +12,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,opencollada))
 $(eval $(call gb_UnpackedTarball_set_tarball,opencollada,$(OPENCOLLADA_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,opencollada,\
-	external/opencollada/opencollada.clang.patch.0 \
-	external/opencollada/opencollada.libxml.patch.0 \
+	external/opencollada/patches/opencollada.clang.patch.0 \
+	external/opencollada/patches/opencollada.libxml.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
