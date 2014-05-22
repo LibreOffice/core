@@ -822,7 +822,7 @@ private:
 
     struct PostponedOLE
     {
-        PostponedOLE( SwOLENode* rObject, const Size rSize, const SwFlyFrmFmt* rFrame ) : object( rObject ), size( rSize ), frame( rFrame ) {};
+        PostponedOLE( SwOLENode* rObject, const Size& rSize, const SwFlyFrmFmt* rFrame ) : object( rObject ), size( rSize ), frame( rFrame ) {};
         SwOLENode* object;
         const Size size;
         const SwFlyFrmFmt* frame;
