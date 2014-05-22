@@ -4474,7 +4474,7 @@ namespace {
         {
             const SfxBoolItem* pIsCountedInListItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
-            if ( pIsCountedInListItem->GetValue() !=
+            if ( pIsCountedInListItem && pIsCountedInListItem->GetValue() !=
                                 mrTxtNode.IsCountedInList() )
             {
                 mbUpdateListCount = true;
