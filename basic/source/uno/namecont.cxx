@@ -1328,6 +1328,12 @@ SfxLibrary* SfxLibraryContainer::getImplLib( const OUString& rLibraryName )
 }
 
 
+/* default don't copy from storage, copy from memory model */
+bool SfxLibraryContainer::shouldCopyLibStorage(SfxLibrary* /*pImplLib*/)
+{
+	return false;
+}
+
 // Storing with password encryption
 
 // Empty implementation, avoids unneccesary implementation in dlgcont.cxx
@@ -1894,6 +1900,26 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
         if( pImplLib->implIsModified() || bComplete )
         {
+            // Can we simply copy the storage?
+            if( shouldCopyLibStorage(pImplLib) )
+            {
+                try
+                {
+                    if ( mxStorage->hasByName( maLibrariesDir ) || bInplaceStorage )
+                    {
+                        xSourceLibrariesStor.set(mxStorage->openStorageElement( maLibrariesDir,
+                                                           bInplaceStorage ? embed::ElementModes::READWRITE : embed::ElementModes::READ ), UNO_QUERY_THROW);
+                    }
+                    xSourceLibrariesStor->copyElementTo( rLib.aName, xTargetLibrariesStor, rLib.aName );
+                }
+                catch( const uno::Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                    // TODO: error handling?
+                    throw;
+                }
+            }
+            else
             {
             uno::Reference< embed::XStorage > xLibraryStor;
             if( bStorage )

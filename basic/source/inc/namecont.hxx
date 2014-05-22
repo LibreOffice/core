@@ -357,6 +357,7 @@ protected:
     void SAL_CALL initializeFromDocumentURL( const OUString& _rInitialDocumentURL );
     void SAL_CALL initializeFromDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& _rxDocument );
 
+    virtual bool shouldCopyLibStorage(SfxLibrary* pImplLib);
     // OEventListenerAdapter
     virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
 

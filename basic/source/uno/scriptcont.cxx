@@ -573,7 +573,12 @@ void setStreamKey( uno::Reference< io::XStream > xStream, const OUString& aPass 
     }
 }
 
-
+/* if library is password protected but not loaded, then copy the storage */
+bool SfxScriptLibraryContainer::shouldCopyLibStorage(SfxLibrary* pImplLib)
+{
+	SfxScriptLibrary* pScriptLib = static_cast< SfxScriptLibrary* >( pImplLib );
+	return !pScriptLib->mbLoadedSource && pScriptLib->mbPasswordProtected;
+}
 // Impl methods
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
                                                           const OUString& aName,

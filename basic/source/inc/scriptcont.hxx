@@ -80,6 +80,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual void onNewRootStorage() SAL_OVERRIDE;
 
 
+    virtual bool shouldCopyLibStorage(SfxLibrary* pImplLib);
     // OldBasicPassword interface
     virtual void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword ) SAL_OVERRIDE;
     virtual OUString getLibraryPassword( const OUString& rLibraryName ) SAL_OVERRIDE;
