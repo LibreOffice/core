@@ -701,7 +701,7 @@ OUString ArtisticEffectProperties::getEffectString( sal_Int32 nToken )
     return OUString();
 }
 
-sal_Int32 ArtisticEffectProperties::getEffectToken( OUString sName )
+sal_Int32 ArtisticEffectProperties::getEffectToken( const OUString& sName )
 {
     // effects
     if( sName == "artisticBlur" )
