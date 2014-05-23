@@ -288,7 +288,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
 #if defined(WNT)
             // Hyphen waits UTF-8 encoded paths with \\?\ long path prefix.
-            OString sTmp = OUStringToOString(dicpath, RTL_TEXTENCODING_UTF8);
+            OString sTmp = OUStringToOString(dictpath, RTL_TEXTENCODING_UTF8);
 #else
             OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 #endif
