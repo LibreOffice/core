@@ -157,6 +157,8 @@ class OfaLanguagesTabPage : public SfxTabPage
     OUString        m_sUserLocaleValue;
     OUString        m_sSystemDefaultString;
 
+    bool            m_bDatePatternsValid;
+
     DECL_LINK(  SupportHdl, CheckBox* ) ;
     DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;
     DECL_LINK(  DatePatternsHdl, Edit* ) ;
