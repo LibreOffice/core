@@ -86,7 +86,7 @@ struct ArtisticEffectProperties
     static OUString     getEffectString( sal_Int32 nToken );
 
     /** Translate effect strings to tokens. */
-    static sal_Int32    getEffectToken( OUString sName );
+    static sal_Int32    getEffectToken( const OUString& sName );
 };
 
 struct BlipFillProperties
