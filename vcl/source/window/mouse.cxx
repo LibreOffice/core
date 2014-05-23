@@ -78,7 +78,7 @@ bool Window::ImplTestMousePointerSet()
 {
     // as soon as mouse is captured, switch mouse-pointer
     if ( IsMouseCaptured() )
-        return sal_True;
+        return true;
 
     // if the mouse is over the window, switch it
     Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
