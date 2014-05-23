@@ -169,11 +169,6 @@ public:
             maRows.push_back(i + nTopRow);
     }
 
-    void endFormulas()
-    {
-        mrDoc.EndListeningFormulaCells(maFormulaCells);
-    }
-
     const std::vector<SCROW>& getNonEmptyRows() const
     {
         return maRows;
@@ -266,12 +261,6 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     sc::AutoCalcSwitch aACSwitch(*pDocument, false);
 
-    // Parse all non-empty cells in the range to pick up their row positions,
-    // and end all formula cells.
-    DeleteRowsHandler aDeleteRowsFunc(*pDocument);
-    sc::ProcessFormula(itCell, maCells, nStartRow, nEndRow, aDeleteRowsFunc, aDeleteRowsFunc);
-    aDeleteRowsFunc.endFormulas();
-
     // Remove the cells.
     maCells.erase(nStartRow, nEndRow);
     maCells.resize(MAXROWCOUNT);
@@ -285,22 +274,11 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
 
-    // Single cell broadcasts on deleted cells.
-    BroadcastCells(aDeleteRowsFunc.getNonEmptyRows(), SC_HINT_DATACHANGED);
-
     // Shift the text attribute array too (before the broadcast).
     maCellTextAttrs.erase(nStartRow, nEndRow);
     maCellTextAttrs.resize(MAXROWCOUNT);
 
     CellStorageModified();
-
-    if (!bShiftCells)
-        return;
-
-    // Do area broadcast on the old non-empty cell ranges prior to the shift.
-    sc::SingleColumnSpanSet::SpansType aSpans;
-    aNonEmptySpans.getSpans(aSpans);
-    std::for_each(aSpans.begin(), aSpans.end(), RangeBroadcaster(*pDocument, nTab, nCol));
 }
 
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow )
