@@ -14,8 +14,8 @@ for the following registry formats:
 
 (While .idl files still contain #include directives for legacy idlc, the source-
 based formats ignore any preprocessing directives starting with "#" in the .idl
-files.)  unoidl::loadProvider transparently detects the registry format for a
-given URI and instantiates the corresponding provider implementation.
+files.)  unoidl::Manager::addProvider transparently detects the registry format
+for a given URI and instantiates the corresponding provider implementation.
 
 Executable_unoidl-write is a helper tool to convert from any of the registry
 formats to the UNOIDL format.  It is used at build-time to compile UNOIDL format

@@ -166,36 +166,14 @@ ServiceBasedSingletonEntity::~ServiceBasedSingletonEntity() throw () {}
 
 Provider::~Provider() throw () {}
 
-rtl::Reference< Provider > loadProvider(
-    rtl::Reference< Manager > const & manager, OUString const & uri)
-{
-    osl::DirectoryItem item;
-    if (osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None) {
-        osl::FileStatus status(osl_FileStatus_Mask_Type);
-        if (item.getFileStatus(status) == osl::FileBase::E_None
-            && status.getFileType() == osl::FileStatus::Directory)
-        {
-            return new detail::SourceTreeProvider(manager, uri);
-        }
+rtl::Reference< Provider > Manager::addProvider(OUString const & uri) {
+    rtl::Reference< Provider > p(loadProvider(uri));
+    assert(p.is());
+    {
+        osl::MutexGuard g(mutex_);
+        providers_.push_back(p);
     }
-    if (uri.endsWith(".idl")) {
-        return new detail::SourceFileProvider(manager, uri);
-    }
-    try {
-        return new detail::UnoidlProvider(uri);
-    } catch (FileFormatException & e) {
-        SAL_INFO(
-            "unoidl",
-            "FileFormatException \"" << e.getDetail() << "\", retrying <" << uri
-                << "> as legacy format");
-        return new detail::LegacyProvider(manager, uri);
-    }
-}
-
-void Manager::addProvider(rtl::Reference< Provider > const & provider) {
-    assert(provider.is());
-    osl::MutexGuard g(mutex_);
-    providers_.push_back(provider);
+    return p;
 }
 
 rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
@@ -220,6 +198,30 @@ rtl::Reference< MapCursor > Manager::createCursor(rtl::OUString const & name)
 }
 
 Manager::~Manager() throw () {}
+
+rtl::Reference< Provider > Manager::loadProvider(OUString const & uri) {
+    osl::DirectoryItem item;
+    if (osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None) {
+        osl::FileStatus status(osl_FileStatus_Mask_Type);
+        if (item.getFileStatus(status) == osl::FileBase::E_None
+            && status.getFileType() == osl::FileStatus::Directory)
+        {
+            return new detail::SourceTreeProvider(this, uri);
+        }
+    }
+    if (uri.endsWith(".idl")) {
+        return new detail::SourceFileProvider(this, uri);
+    }
+    try {
+        return new detail::UnoidlProvider(uri);
+    } catch (FileFormatException & e) {
+        SAL_INFO(
+            "unoidl",
+            "FileFormatException \"" << e.getDetail() << "\", retrying <" << uri
+                << "> as legacy format");
+        return new detail::LegacyProvider(this, uri);
+    }
+}
 
 }
 

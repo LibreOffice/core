@@ -2142,7 +2142,7 @@ void cppuhelper::TypeManager::readRdbFile(
     rtl::OUString const & uri, bool optional)
 {
     try {
-        manager_->addProvider(unoidl::loadProvider(manager_, uri));
+        manager_->addProvider(uri);
     } catch (unoidl::NoSuchFileException &) {
         if (!optional) {
             throw css::uno::DeploymentException(
