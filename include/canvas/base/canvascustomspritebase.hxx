@@ -105,7 +105,7 @@ namespace canvas
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
-        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
