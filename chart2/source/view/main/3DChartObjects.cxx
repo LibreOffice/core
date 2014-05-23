@@ -53,6 +53,7 @@ void Line::render()
     mpRenderer->AddShapePolygon3DObject(0, true, maLineColor.GetColor(), 0, 0, mnUniqueId);
     mpRenderer->AddPolygon3DObjectPoint(maPosBegin.x, maPosBegin.y, maPosBegin.z);
     mpRenderer->AddPolygon3DObjectPoint(maPosEnd.x, maPosEnd.y, maPosEnd.z);
+    mpRenderer->EndAddPolygon3DObjectPoint();
     mpRenderer->EndAddShapePolygon3DObject();
 }
 
@@ -131,6 +132,7 @@ void Rectangle::render()
     mpRenderer->AddPolygon3DObjectNormalPoint(normal.x, normal.y, normal.z);
     mpRenderer->EndAddPolygon3DObjectPoint();
     mpRenderer->EndAddPolygon3DObjectNormalPoint();
+    mpRenderer->EndAddShapePolygon3DObject();
     //we should render the edge if the edge color is different from the fill color
     if (maColor.GetColor() != maLineColor.GetColor())
     {
@@ -140,8 +142,8 @@ void Rectangle::render()
         mpRenderer->AddPolygon3DObjectPoint(maTopLeft.x, maTopLeft.y, maTopLeft.z);
         mpRenderer->AddPolygon3DObjectPoint(bottomLeft.x, bottomLeft.y, bottomLeft.z);
         mpRenderer->EndAddPolygon3DObjectPoint();
+        mpRenderer->EndAddShapePolygon3DObject();
     }
-    mpRenderer->EndAddShapePolygon3DObject();
 }
 
 void Rectangle::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight)
