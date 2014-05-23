@@ -641,7 +641,7 @@ Const cstThisSub = &quot;Events&quot;
 	If IsMissing(poEvent) Then Goto Exit_Function
 	If IsNull(poEvent) Then Goto Exit_Function
 
-	If Not Utils._CheckArgument(poEvent, 1, vbObject) Then Goto Exit_Function
+	If Not Utils._CheckArgument(poEvent, 1, vbObject, , False) Then Goto Exit_Function	&apos;	No error handling in CheckArgument
 	If Not Utils._hasUNOProperty(poEvent, &quot;Source&quot;) Then Goto Trace_Error
 	Set vEvent = New Event
 	vEvent._Initialize(poEvent)

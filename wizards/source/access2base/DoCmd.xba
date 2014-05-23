@@ -1297,7 +1297,7 @@ Error_Function:
 	Set OpenForm = Nothing
 	GoTo Exit_Function
 Error_NotApplicable:
-	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	TraceError(TRACEFATAL, ERRACTION, Utils._CalledSub(), 0, 1, cstThisSub)
 	Goto Exit_Function
 End Function		&apos;	Quit	V1.1.0
 
@@ -1792,7 +1792,7 @@ Exit_Function:
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function		
 Error_NotApplicable:
-	TraceError(TRACEFATAL, ERRMETHOD, Utils._CalledSub(), 0, 1, cstThisSub)
+	TraceError(TRACEFATAL, ERRACTION, Utils._CalledSub(), 0, 1, cstThisSub)
 	Goto Exit_Function
 Error_Function:
 	TraceError(TRACEABORT, Err, cstThisSub, Erl)
