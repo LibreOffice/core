@@ -2126,6 +2126,29 @@ DECLARE_OOXMLIMPORT_TEST(testInlineGroupshape, "inline-groupshape.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Opaque"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testBnc875718, "bnc875718.docx")
+{
+    // The frame in the footer must not accidentally end up in the document body.
+    // The easiest way for this to test I've found is checking that
+    // xray ThisComponent.TextFrames.GetByIndex( index ).Anchor.Text.ImplementationName
+    // is not SwXBodyText but rather SwXHeadFootText
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    for( int i = 0;
+         i < xIndexAccess->getCount();
+         ++i )
+    {
+        uno::Reference<text::XTextFrame> frame(xIndexAccess->getByIndex( i ), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> range(frame->getAnchor(), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> text(range->getText(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL( OUString( "SwXHeadFootText" ), text->getImplementationName());
+    }
+    // Also check that the footer contents are not in the body text.
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> text(textDocument->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString( "Text\n" ), text->getString());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
