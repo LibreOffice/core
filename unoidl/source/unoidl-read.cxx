@@ -1112,13 +1112,12 @@ SAL_IMPLEMENT_MAIN() {
         for (sal_uInt32 i = (published ? 1 : 0); i != args; ++i) {
             OUString uri(getArgumentUri(i));
             try {
-                prov = unoidl::loadProvider(mgr, uri);
+                prov = mgr->addProvider(uri);
             } catch (unoidl::NoSuchFileException &) {
                 std::cerr
                     << "Input <" << uri << "> does not exist" << std::endl;
                 std::exit(EXIT_FAILURE);
             }
-            mgr->addProvider(prov);
         }
         std::map<OUString, Entity> ents;
         scanMap(mgr, prov->createRootCursor(), published, "", ents);

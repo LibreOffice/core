@@ -34,9 +34,7 @@ TypeManager::TypeManager(): manager_(new unoidl::Manager) {}
 TypeManager::~TypeManager() {}
 
 void TypeManager::loadProvider(OUString const & uri, bool primary) {
-    rtl::Reference< unoidl::Provider > prov(
-        unoidl::loadProvider(manager_, uri));
-    manager_->addProvider(prov);
+    rtl::Reference< unoidl::Provider > prov(manager_->addProvider(uri));
     if (primary) {
         primaryProviders_.push_back(prov);
     }

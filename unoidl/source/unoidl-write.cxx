@@ -1038,13 +1038,12 @@ SAL_IMPLEMENT_MAIN() {
                 mapEntities(mgr, uri, map);
             } else {
                 try {
-                    prov = unoidl::loadProvider(mgr, uri);
+                    prov = mgr->addProvider(uri);
                 } catch (unoidl::NoSuchFileException &) {
                     std::cerr
                         << "Input <" << uri << "> does not exist" << std::endl;
                     std::exit(EXIT_FAILURE);
                 }
-                mgr->addProvider(prov);
             }
         }
         if (!entities) {

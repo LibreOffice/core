@@ -684,7 +684,8 @@ class LO_DLLPUBLIC_UNOIDL Manager: public salhelper::SimpleReferenceObject {
 public:
     Manager() {}
 
-    void addProvider(rtl::Reference< Provider > const & provider);
+    // throws FileFormatException, NoSuchFileException:
+    rtl::Reference< Provider > addProvider(rtl::OUString const & uri);
 
     // throws FileFormatException:
     rtl::Reference< Entity > findEntity(rtl::OUString const & name) const;
@@ -695,13 +696,12 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~Manager() throw ();
 
+    SAL_DLLPRIVATE rtl::Reference< Provider > loadProvider(
+        rtl::OUString const & uri);
+
     mutable osl::Mutex mutex_;
     std::vector< rtl::Reference< Provider > > providers_;
 };
-
-// throws FileFormatException, NoSuchFileException:
-LO_DLLPUBLIC_UNOIDL rtl::Reference< Provider > loadProvider(
-    rtl::Reference< Manager > const & manager, rtl::OUString const & uri);
 
 }
 

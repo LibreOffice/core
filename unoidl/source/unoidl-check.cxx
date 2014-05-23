@@ -1176,13 +1176,12 @@ SAL_IMPLEMENT_MAIN() {
                 side = 1;
             } else {
                 try {
-                    prov[side] = unoidl::loadProvider(mgr[side], uri);
+                    prov[side] = mgr[side]->addProvider(uri);
                 } catch (unoidl::NoSuchFileException &) {
                     std::cerr
                         << "Input <" << uri << "> does not exist" << std::endl;
                     std::exit(EXIT_FAILURE);
                 }
-                mgr[side]->addProvider(prov[side]);
             }
         }
         if (side == 0 || !(prov[0].is() && prov[1].is())) {

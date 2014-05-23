@@ -423,15 +423,13 @@ SAL_IMPLEMENT_MAIN()
              i != extra_registries.end(); ++i)
         {
             xSet->insert(makeAny(*i));
-            unoidlMgr->addProvider(unoidl::loadProvider(unoidlMgr, *i));
+            unoidlMgr->addProvider(*i);
         }
         for (vector< OUString >::iterator i(mandatory_registries.begin());
              i != mandatory_registries.end(); ++i)
         {
             xSet->insert(makeAny(*i));
-            rtl::Reference< unoidl::Provider > prov(
-                unoidl::loadProvider(unoidlMgr, *i));
-            unoidlMgr->addProvider(prov);
+            rtl::Reference< unoidl::Provider > prov(unoidlMgr->addProvider(*i));
             unoidlMandatoryProvs.push_back(prov);
         }
 
