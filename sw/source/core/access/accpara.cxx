@@ -3508,8 +3508,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
 
     }
 
-    bool bRet = false;
-
     // get cursor shell
     SwCrsrShell* pCrsrShell = GetCrsrShell();
     if( pCrsrShell != NULL )
@@ -3520,13 +3518,10 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
         aPaM->SetMark();
         aPaM->GetPoint()->nContent = GetPortionData().GetModelPosition(startOffset);
         aPaM->GetMark()->nContent =  GetPortionData().GetModelPosition(endOffset);
-        //pCrsrShell->ShowCrsr();
         pCrsrShell->EndAction();
-        // set PaM at cursor shell
-        //bRet = Select( aPaM );
     }
 
-    return bRet ? 1 : 0;
+    return 0;
 }
 
 /*accessibility::*/TextSegment SAL_CALL
