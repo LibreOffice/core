@@ -253,6 +253,12 @@ std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos)
     return rStrm;
 }
 
+std::ostream& operator<<(std::ostream& rStrm, const glm::vec3& rPos)
+{
+    rStrm << "( " << rPos[0] << ", " << rPos[1] << ", " << rPos[2] << ")";
+    return rStrm;
+}
+
 std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
 {
     for(int i = 0; i < 4; ++i)
