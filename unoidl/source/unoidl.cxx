@@ -206,7 +206,7 @@ rtl::Reference< Provider > Manager::loadProvider(OUString const & uri) {
         if (item.getFileStatus(status) == osl::FileBase::E_None
             && status.getFileType() == osl::FileStatus::Directory)
         {
-            return new detail::SourceTreeProvider(this, uri);
+            return new detail::SourceTreeProvider(*this, uri);
         }
     }
     if (uri.endsWith(".idl")) {
@@ -219,7 +219,7 @@ rtl::Reference< Provider > Manager::loadProvider(OUString const & uri) {
             "unoidl",
             "FileFormatException \"" << e.getDetail() << "\", retrying <" << uri
                 << "> as legacy format");
-        return new detail::LegacyProvider(this, uri);
+        return new detail::LegacyProvider(*this, uri);
     }
 }
 

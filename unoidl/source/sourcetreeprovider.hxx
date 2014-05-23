@@ -22,8 +22,7 @@ namespace unoidl { namespace detail {
 class SourceTreeProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
-    SourceTreeProvider(
-        rtl::Reference<Manager> const & manager, OUString const & uri);
+    SourceTreeProvider(Manager & manager, OUString const & uri);
 
     // throws FileFormatException:
     virtual rtl::Reference<MapCursor> createRootCursor() const SAL_OVERRIDE;
@@ -34,7 +33,7 @@ public:
 private:
     virtual ~SourceTreeProvider() throw ();
 
-    rtl::Reference<Manager> manager_;
+    Manager & manager_;
     OUString uri_;
     mutable std::map< OUString, rtl::Reference<Entity> > cache_; //TODO: at manager
 };

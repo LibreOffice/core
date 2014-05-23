@@ -778,8 +778,7 @@ rtl::Reference< Entity > readEntity(
 
 }
 
-LegacyProvider::LegacyProvider(
-    rtl::Reference< Manager > const & manager, OUString const & uri):
+LegacyProvider::LegacyProvider(Manager & manager, OUString const & uri):
     manager_(manager)
 {
     Registry reg;
@@ -811,14 +810,14 @@ LegacyProvider::LegacyProvider(
 }
 
 rtl::Reference< MapCursor > LegacyProvider::createRootCursor() const {
-    return new Cursor(manager_, ucr_, ucr_);
+    return new Cursor(&manager_, ucr_, ucr_);
 }
 
 rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & name)
     const
 {
     return ucr_.isValid()
-        ? readEntity(manager_, ucr_, ucr_, name.replace('.', '/'), true)
+        ? readEntity(&manager_, ucr_, ucr_, name.replace('.', '/'), true)
         : rtl::Reference< Entity >();
 }
 
