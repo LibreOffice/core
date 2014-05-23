@@ -50,7 +50,7 @@ const float TEXT_HEIGHT = 15.0f;
 
 float calculateTextWidth(const OUString& rText)
 {
-    return rText.getLength() * 7.5;
+    return rText.getLength() * 10;
 }
 
 }
