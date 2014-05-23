@@ -179,6 +179,7 @@ SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
 
 SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     : nStart(0)
+    , nBulletRelSize(100)
     , nFirstLineOffset(0)
     , nAbsLSpace(0)
     , nLSpace(0)
