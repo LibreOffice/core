@@ -23,8 +23,6 @@ class SearchResultsDlg : public ModelessDialog
 {
     SvSimpleTable *mpList;
     SfxBindings* mpBindings;
-    sal_uInt16 mnId;
-
     ScDocument* mpDoc;
 
     DECL_LINK( ListSelectHdl, void * );
