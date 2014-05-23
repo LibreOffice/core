@@ -145,8 +145,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
                 aCP1 += aHalfPointOfs;
                 aCP2 += aHalfPointOfs;
             }
-            SAL_INFO( "vcl.cg",
-                      "CGPathAddCurveToPoint(" << xPath << ",NULL," << aCP1.getX() << "," << aCP1.getY() << "," <<
+            CG_TRACE( "CGPathAddCurveToPoint(" << xPath << ",NULL," << aCP1.getX() << "," << aCP1.getY() << "," <<
                       aCP2.getX() << "," << aCP2.getY() << "," << aPoint.getX() << "," << aPoint.getY() << ")" );
             CGPathAddCurveToPoint( xPath, NULL, aCP1.getX(), aCP1.getY(),
                                     aCP2.getX(), aCP2.getY(), aPoint.getX(), aPoint.getY() );
