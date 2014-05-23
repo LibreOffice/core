@@ -114,6 +114,8 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     , pGraphicObject(NULL)
     , nStart(0)
     , nStyle(0)
+    , nScale(0)
+    , nJustify(0)
 {
     rStrm.ReadUInt16( nStyle );
 
@@ -149,7 +151,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     rStrm.ReadUInt16( nStart );
     rStrm.ReadUChar( nJustify );
 
-    char cTmpSymbol;
+    char cTmpSymbol(0);
     rStrm.ReadChar( cTmpSymbol );
     //convert single byte to unicode
     cSymbol = OUString(&cTmpSymbol, 1, aFont.GetCharSet()).toChar();
