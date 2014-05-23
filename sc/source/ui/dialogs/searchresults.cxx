@@ -21,9 +21,9 @@
 
 namespace sc {
 
-SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, Window* pParent, sal_uInt16 nId ) :
+SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, Window* pParent, sal_uInt16 /* nId */ ) :
     ModelessDialog(pParent, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui"),
-    mpBindings(_pBindings), mnId(nId), mpDoc(NULL)
+    mpBindings(_pBindings), mpDoc(NULL)
 {
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("results");
     Size aControlSize(150, 120);
