@@ -157,6 +157,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sFooterType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer");
     static OUString sHeaderType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/header");
     static OUString sOleObjectType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject");
+    static OUString sSignatureType("http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin");
     // OOXML strict
     static OUString sDocumentTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument");
     static OUString sStylesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/styles");
@@ -264,6 +265,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
             sStreamType = sHeaderType;
             sStreamTypeStrict = sHeaderTypeStrict;
           break;
+        case SIGNATURE:
+            sStreamType = sSignatureType;
+            break;
         default:
             break;
     }
