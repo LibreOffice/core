@@ -503,7 +503,7 @@ private:
 
     SAL_DLLPRIVATE bool                 ImplIsRealParentPath( const Window* pWindow ) const;
 
-    SAL_DLLPRIVATE int                  ImplTestMousePointerSet();
+    SAL_DLLPRIVATE bool                 ImplTestMousePointerSet();
 
     SAL_DLLPRIVATE void                 ImplResetReallyVisible();
     SAL_DLLPRIVATE void                 ImplSetReallyVisible();

@@ -74,7 +74,7 @@ sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
     return nHitTest;
 }
 
-int Window::ImplTestMousePointerSet()
+bool Window::ImplTestMousePointerSet()
 {
     // as soon as mouse is captured, switch mouse-pointer
     if ( IsMouseCaptured() )
@@ -83,9 +83,9 @@ int Window::ImplTestMousePointerSet()
     // if the mouse is over the window, switch it
     Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
     if ( aClientRect.IsInside( GetPointerPosPixel() ) )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 PointerStyle Window::ImplGetMousePointer() const
