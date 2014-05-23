@@ -178,7 +178,8 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
 
 MediaWindowImpl::~MediaWindowImpl()
 {
-    mpEvents->cleanUp();
+    if( mpEvents )
+        mpEvents->cleanUp();
 
     if( mxPlayerWindow.is() )
     {
@@ -515,7 +516,8 @@ void MediaWindowImpl::onURLChanged()
     if( !mpChildWindow )
         return;
     mpChildWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
-    mxEventsIf.set( static_cast< ::cppu::OWeakObject* >( mpEvents = new MediaEventListenersImpl( *mpChildWindow.get() ) ) );
+    mpEvents.reset(new MediaEventListenersImpl( *mpChildWindow.get() ) );
+    mxEventsIf.set( static_cast< ::cppu::OWeakObject* >( mpEvents.get() ) );
 
     if( mxPlayer.is() )
     {
