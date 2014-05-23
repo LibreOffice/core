@@ -2322,6 +2322,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
 
     bool bCameraRotationPresent = false;
     sax_fastparser::FastAttributeList *aCameraAttrList = mpFS->createAttrList();
+    sax_fastparser::XFastAttributeListRef xCameraAttrList( aCameraAttrList );
     sax_fastparser::FastAttributeList *aCameraRotationAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
@@ -2399,8 +2400,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
 
     if( aEffectProps.getLength() > 0 )
     {
-        sax_fastparser::XFastAttributeListRef xAttrList( aCameraAttrList );
-        mpFS->startElementNS( XML_a, XML_camera, xAttrList );
+        mpFS->startElementNS( XML_a, XML_camera, xCameraAttrList );
         if( bCameraRotationPresent )
         {
             sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
