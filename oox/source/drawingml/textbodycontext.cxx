@@ -146,6 +146,8 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
     case OOX_TOKEN( doc, t ):
         mbIsInText = true;
         break;
+    case OOX_TOKEN( doc, drawing ):
+        break;
     default:
         SAL_WARN("oox", "RegularTextRunContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
         break;
