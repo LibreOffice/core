@@ -161,7 +161,7 @@ void testFunctionsExcel2010_Impl( ScDocument* pDoc )
         SCROW nRow;
         bool  bEvaluate;
     } aTests[] = {
-        {  2, false },
+        {  2, false },  // name=[ AGGREGATE ], result=0, expected=1
         {  3, true  },
         {  4, true  },
         {  5, true  },
@@ -246,7 +246,7 @@ void testFunctionsExcel2010_Impl( ScDocument* pDoc )
     {
         if (aTests[i].bEvaluate)
         {
-            // Column A is description, B is formula, C is Excel result, D is
+            // Column 0 is description, 1 is formula, 2 is Excel result, 3 is
             // comparison.
             SCROW nRow = aTests[i].nRow - 1;    // 0-based
 

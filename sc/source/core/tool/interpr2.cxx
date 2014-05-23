@@ -1007,7 +1007,7 @@ void ScInterpreter::ScNPV()
                         sal_uInt16 nErr = 0;
                         double nCellVal;
                         PopDoubleRef( aRange, nParamCount, nRefInList);
-                        ScHorizontalValueIterator aValIter( pDok, aRange, glSubTotal);
+                        ScHorizontalValueIterator aValIter( pDok, aRange );
                         while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                         {
                             nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
@@ -1064,7 +1064,7 @@ void ScInterpreter::ScIRR()
         fNenner = 0.0;
         sal_uInt16 nErr = 0;
         PopDoubleRef( aRange );
-        ScValueIterator aValIter(pDok, aRange, glSubTotal);
+        ScValueIterator aValIter(pDok, aRange, mnSubTotalFlags);
         if (aValIter.GetFirst(fWert, nErr))
         {
             fZaehler +=           fWert / pow(1.0+x,(double)nCount);
@@ -1110,7 +1110,7 @@ void ScInterpreter::ScMIRR()
             double fPow_reinvest = 1.0;
             double fNPV_invest = 0.0;
             double fPow_invest = 1.0;
-            ScValueIterator aValIter( pDok, aRange, glSubTotal );
+            ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
             double fCellValue;
             sal_uLong nCount = 0;
             sal_uInt16 nIterError = 0;

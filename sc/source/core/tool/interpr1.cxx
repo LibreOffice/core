@@ -3419,7 +3419,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             {
                 sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
                 if (aValIter.GetFirst(nVal, nErr))
                 {
                     if (nMin > nVal)
@@ -3515,7 +3515,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             {
                 sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
                 if (aValIter.GetFirst(nVal, nErr))
                 {
                     if (nMax < nVal)
@@ -3617,7 +3617,7 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
             {
                 sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     do
@@ -4622,7 +4622,7 @@ void ScInterpreter::ScCountEmptyCells()
                         static_cast<sal_uLong>(aRange.aEnd.Col() - aRange.aStart.Col() + 1) *
                         static_cast<sal_uLong>(aRange.aEnd.Tab() - aRange.aStart.Tab() + 1);
 
-                    ScCellIterator aIter( pDok, aRange, glSubTotal);
+                    ScCellIterator aIter( pDok, aRange, mnSubTotalFlags);
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if (!aIter.hasEmptyData())
@@ -6577,22 +6577,20 @@ void ScInterpreter::ScSubTotal()
         const FormulaToken* p = pStack[ sp - nParamCount ];
         PushTempToken( *p );
         int nFunc = (int) ::rtl::math::approxFloor( GetDouble() );
-        bool bIncludeHidden = true;
+        mnSubTotalFlags |= SUBTOTAL_IGN_NESTED_ST_AG | SUBTOTAL_IGN_FILTERED;
         if (nFunc > 100)
         {
             // For opcodes 101 through 111, we need to skip hidden cells.
             // Other than that these opcodes are identical to 1 through 11.
-            bIncludeHidden = false;
+            mnSubTotalFlags |= SUBTOTAL_IGN_HIDDEN;
             nFunc -= 100;
         }
 
-        if (nFunc < 1 || nFunc > 11 || !bIncludeHidden)
+        if ( nFunc < 1 || nFunc > 11 )
             PushIllegalArgument();  // simulate return on stack, not SetError(...)
         else
         {
-            // TODO: Make use of bIncludeHidden flag. Then it's false, we do need to skip hidden cells.
             cPar = nParamCount - 1;
-            glSubTotal = true;
             switch( nFunc )
             {
                 case SUBTOTAL_FUNC_AVE  : ScAverage(); break;
@@ -6608,8 +6606,8 @@ void ScInterpreter::ScSubTotal()
                 case SUBTOTAL_FUNC_VARP : ScVarP();    break;
                 default : PushIllegalArgument();       break;
             }
-            glSubTotal = false;
         }
+        mnSubTotalFlags = 0x00;
         // Get rid of the 1st (fished) parameter.
         double nVal = GetDouble();
         Pop();
@@ -6635,45 +6633,38 @@ void ScInterpreter::ScAggregate()
             PushIllegalArgument();
         else
         {
-            sal_uInt16 nAggrFlags = 0x00;
             switch ( nOption)
             {
                 case 0 : // ignore nested SUBTOTAL and AGGREGATE functions
-                    nAggrFlags = AGGR_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SUBTOTAL_IGN_NESTED_ST_AG;
                     break;
                 case 1 : // ignore hidden rows, nested SUBTOTAL and AGGREGATE functions
-                    nAggrFlags = AGGR_IGN_HID_ROW | AGGR_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN | SUBTOTAL_IGN_NESTED_ST_AG;
                     break;
                 case 2 : // ignore error values, nested SUBTOTAL and AGGREGATE functions
-                    nAggrFlags = AGGR_IGN_ERR_VAL | AGGR_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SUBTOTAL_IGN_ERR_VAL | SUBTOTAL_IGN_NESTED_ST_AG;
                     break;
                 case 3 : // ignore hidden rows, error values, nested SUBTOTAL and AGGREGATE functions
-                    nAggrFlags = AGGR_IGN_HID_ROW | AGGR_IGN_ERR_VAL | AGGR_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN | SUBTOTAL_IGN_ERR_VAL | SUBTOTAL_IGN_NESTED_ST_AG;
                     break;
                 case 4 : // ignore nothing
+                    mnSubTotalFlags = 0x00;
                     break;
                 case 5 : // ignore hidden rows
-                    nAggrFlags = AGGR_IGN_HID_ROW ;
+                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN ;
                     break;
                 case 6 : // ignore error values
-                    nAggrFlags = AGGR_IGN_ERR_VAL ;
+                    mnSubTotalFlags = SUBTOTAL_IGN_ERR_VAL ;
                     break;
-                case 7 : // igniore hidden rows and error values
-                    nAggrFlags = AGGR_IGN_HID_ROW | AGGR_IGN_ERR_VAL ;
+                case 7 : // ignore hidden rows and error values
+                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN | SUBTOTAL_IGN_ERR_VAL ;
                     break;
                 default :
                     PushIllegalArgument();
                     return;
             }
-            // TODO: implement filter options
-            if ( nAggrFlags != 0x00 )
-            {
-                PushError( errUnknownVariable );
-                return;
-            }
 
             cPar = nParamCount - 2;
-            glSubTotal = true;
             switch ( nFunc )
             {
                 case SUBTOTAL_FUNC_AVE      : ScAverage(); break;
@@ -6697,7 +6688,7 @@ void ScInterpreter::ScAggregate()
                 case AGGREGATE_FUNC_QRTEXC  : ScQuartile( false );   break;
                 default : PushIllegalArgument();       break;
             }
-            glSubTotal = false;
+            mnSubTotalFlags = 0x00;
         }
         double nVal = GetDouble();
         // Get rid of the 1st and 2nd (fished) parameters.
