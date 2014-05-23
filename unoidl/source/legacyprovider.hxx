@@ -21,8 +21,7 @@ namespace unoidl { namespace detail {
 class LegacyProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
-    LegacyProvider(
-        rtl::Reference< Manager > const & manager, OUString const & uri);
+    LegacyProvider(Manager & manager, OUString const & uri);
 
     // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createRootCursor() const SAL_OVERRIDE;
@@ -34,7 +33,7 @@ public:
 private:
     virtual ~LegacyProvider() throw ();
 
-    rtl::Reference< Manager > manager_;
+    Manager & manager_;
     mutable RegistryKey ucr_;
 };
 

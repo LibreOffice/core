@@ -120,8 +120,7 @@ private:
 
 }
 
-SourceTreeProvider::SourceTreeProvider(
-    rtl::Reference<Manager> const & manager, OUString const & uri):
+SourceTreeProvider::SourceTreeProvider(Manager & manager, OUString const & uri):
     manager_(manager), uri_(uri.endsWith("/") ? uri : uri + "/")
 {}
 
@@ -189,7 +188,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
         ent = new SourceModuleEntity;
     } else {
         uri += ".idl";
-        SourceProviderScannerData data(manager_);
+        SourceProviderScannerData data(&manager_);
         if (parse(uri, &data)) {
             std::map<OUString, SourceProviderEntity>::const_iterator j(
                 data.entities.find(name));
