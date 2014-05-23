@@ -38,14 +38,14 @@ OString loadShader(const OUString& rFilename)
     {
         sal_uInt64 nSize = 0;
         aFile.getSize(nSize);
-        char* content = new char[nSize+1];
+        boost::scoped_array<char> content(new char[nSize+1]);
         sal_uInt64 nBytesRead = 0;
-        aFile.read(content, nSize, nBytesRead);
+        aFile.read(content.get(), nSize, nBytesRead);
         if(nSize != nBytesRead)
             assert(false);
 
         content[nSize] = 0;
-        return OString(content);
+        return OString(content.get());
     }
     else
     {
