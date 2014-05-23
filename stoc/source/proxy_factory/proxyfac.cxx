@@ -148,7 +148,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     {
         // exception occurred:
         OSL_ENSURE(
-            typelib_typedescriptionreference_isAssignableFrom( cppu::UnoType<RuntimeException>::get() ).getTypeLibType(),
+            typelib_typedescriptionreference_isAssignableFrom( cppu::UnoType<RuntimeException>::get().getTypeLibType(),
                 exc->pType ),
             "### RuntimeException expected!" );
         Any cpp_exc;
