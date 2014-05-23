@@ -3086,7 +3086,13 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
-        move() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
+        move()
+            : nError1(FileBase::E_None)
+            , nError2(FileBase::E_None)
+            , nCount_write(0)
+        {
+        }
+
         // initialization
         void setUp() SAL_OVERRIDE
         {
