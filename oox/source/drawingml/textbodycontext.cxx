@@ -181,6 +181,8 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
     case OOX_TOKEN( doc, sdtPr ):
     case OOX_TOKEN( doc, sdtEndPr ):
         break;
+    case OOX_TOKEN( doc, tbl ):
+        break;
     default:
         SAL_WARN("oox", "TextBodyContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }
