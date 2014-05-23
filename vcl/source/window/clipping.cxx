@@ -635,5 +635,179 @@ void Window::ImplIntersectWindowClipRegion( Region& rRegion )
     rRegion.Intersect( mpWindowImpl->maWinClipRegion );
 }
 
+void Window::ImplIntersectWindowRegion( Region& rRegion )
+{
+    rRegion.Intersect( Rectangle( Point( mnOutOffX, mnOutOffY ),
+                                  Size( mnOutWidth, mnOutHeight ) ) );
+    if ( mpWindowImpl->mbWinRegion )
+        rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+}
+
+void Window::ImplExcludeWindowRegion( Region& rRegion )
+{
+    if ( mpWindowImpl->mbWinRegion )
+    {
+        Point aPoint( mnOutOffX, mnOutOffY );
+        Region aRegion( Rectangle( aPoint,
+                                   Size( mnOutWidth, mnOutHeight ) ) );
+        aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+        rRegion.Exclude( aRegion );
+    }
+    else
+    {
+        Point aPoint( mnOutOffX, mnOutOffY );
+        rRegion.Exclude( Rectangle( aPoint,
+                                    Size( mnOutWidth, mnOutHeight ) ) );
+    }
+}
+
+void Window::ImplExcludeOverlapWindows( Region& rRegion )
+{
+    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    while ( pWindow )
+    {
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+        {
+            pWindow->ImplExcludeWindowRegion( rRegion );
+            pWindow->ImplExcludeOverlapWindows( rRegion );
+        }
+
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+}
+
+void Window::ImplExcludeOverlapWindows2( Region& rRegion )
+{
+    if ( mpWindowImpl->mbReallyVisible )
+        ImplExcludeWindowRegion( rRegion );
+
+    ImplExcludeOverlapWindows( rRegion );
+}
+
+void Window::ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion )
+{
+    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    while ( pWindow )
+    {
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+        {
+            Region aTempRegion( rInterRegion );
+            pWindow->ImplIntersectWindowRegion( aTempRegion );
+            rRegion.Union( aTempRegion );
+            pWindow->ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
+        }
+
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+}
+
+void Window::ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, Region& rRegion )
+{
+    if ( mpWindowImpl->mbReallyVisible )
+    {
+        Region aTempRegion( rInterRegion );
+        ImplIntersectWindowRegion( aTempRegion );
+        rRegion.Union( aTempRegion );
+    }
+
+    ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
+}
+
+void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion )
+{
+    // Clip Overlap Siblings
+    Window* pStartOverlapWindow;
+    if ( !ImplIsOverlapWindow() )
+        pStartOverlapWindow = mpWindowImpl->mpOverlapWindow;
+    else
+        pStartOverlapWindow = this;
+    while ( !pStartOverlapWindow->mpWindowImpl->mbFrame )
+    {
+        Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
+        while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
+        {
+            pOverlapWindow->ImplIntersectAndUnionOverlapWindows2( rInterRegion, rRegion );
+            pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
+        }
+        pStartOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow;
+    }
+
+    // Clip Child Overlap Windows
+    if ( !ImplIsOverlapWindow() )
+        mpWindowImpl->mpOverlapWindow->ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
+    else
+        ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
+}
+
+void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
+                                    bool bChildren, bool bParent, bool bSiblings )
+{
+    Region  aRegion( rSourceRect );
+    if ( mpWindowImpl->mbWinRegion )
+        rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+    Region  aTempRegion;
+    Window* pWindow;
+
+    ImplCalcOverlapRegionOverlaps( aRegion, rRegion );
+
+    // Parent-Boundaries
+    if ( bParent )
+    {
+        pWindow = this;
+        if ( !ImplIsOverlapWindow() )
+        {
+            pWindow = ImplGetParent();
+            do
+            {
+                aTempRegion = aRegion;
+                pWindow->ImplExcludeWindowRegion( aTempRegion );
+                rRegion.Union( aTempRegion );
+                if ( pWindow->ImplIsOverlapWindow() )
+                    break;
+                pWindow = pWindow->ImplGetParent();
+            }
+            while ( pWindow );
+        }
+        if ( pWindow && !pWindow->mpWindowImpl->mbFrame )
+        {
+            aTempRegion = aRegion;
+            aTempRegion.Exclude( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
+            rRegion.Union( aTempRegion );
+        }
+    }
+
+    // Siblings
+    if ( bSiblings && !ImplIsOverlapWindow() )
+    {
+        pWindow = mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild;
+        do
+        {
+            if ( pWindow->mpWindowImpl->mbReallyVisible && (pWindow != this) )
+            {
+                aTempRegion = aRegion;
+                pWindow->ImplIntersectWindowRegion( aTempRegion );
+                rRegion.Union( aTempRegion );
+            }
+            pWindow = pWindow->mpWindowImpl->mpNext;
+        }
+        while ( pWindow );
+    }
+
+    if ( bChildren )
+    {
+        pWindow = mpWindowImpl->mpFirstChild;
+        while ( pWindow )
+        {
+            if ( pWindow->mpWindowImpl->mbReallyVisible )
+            {
+                aTempRegion = aRegion;
+                pWindow->ImplIntersectWindowRegion( aTempRegion );
+                rRegion.Union( aTempRegion );
+            }
+            pWindow = pWindow->mpWindowImpl->mpNext;
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

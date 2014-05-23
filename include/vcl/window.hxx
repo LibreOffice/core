@@ -314,6 +314,8 @@ typedef sal_uInt16 StateChangedType;
 const char* ImplDbgCheckWindow( const void* pObj );
 #endif
 
+bool ImplDoTiledRendering();
+
 class Dialog;
 class WindowImpl;
 class PaintHelper;
