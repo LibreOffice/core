@@ -348,13 +348,16 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         SdPage* pPage = NULL;
         ::sd::View* pView = mpViewShell ? mpViewShell->GetView() : NULL;
 
-        if (pView->ISA(OutlineView))
+        if (pView)
         {
-            pPage = static_cast<OutlineView*>(pView)->GetActualPage();
-        }
-        else
-        {
-            pPage = static_cast<SdPage*>(pView->GetSdrPageView()->GetPage());
+            if (pView->ISA(OutlineView))
+            {
+                pPage = static_cast<OutlineView*>(pView)->GetActualPage();
+            }
+            else
+            {
+                pPage = static_cast<SdPage*>(pView->GetSdrPageView()->GetPage());
+            }
         }
 
         sal_uInt16 nPos = 0xFFFF;
