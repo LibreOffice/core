@@ -154,7 +154,7 @@ void ScInterpreter::ScGCD()
                     sal_uInt16 nErr = 0;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
                     double nCellVal;
-                    ScValueIterator aValIter(pDok, aRange, glSubTotal);
+                    ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                     if (aValIter.GetFirst(nCellVal, nErr))
                     {
                         do
@@ -247,7 +247,7 @@ void ScInterpreter:: ScLCM()
                     sal_uInt16 nErr = 0;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
                     double nCellVal;
-                    ScValueIterator aValIter(pDok, aRange, glSubTotal);
+                    ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                     if (aValIter.GetFirst(nCellVal, nErr))
                     {
                         do
