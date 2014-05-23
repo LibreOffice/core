@@ -3181,6 +3181,8 @@ endef
 endif # SYSTEM_HSQLDB
 
 
+ifeq ($(ENABLE_SCRIPTING_BEANSHELL),TRUE)
+
 ifneq ($(SYSTEM_BSH),)
 
 define gb_Jar__use_bsh
@@ -3201,6 +3203,9 @@ endef
 
 endif # SYSTEM_BSH
 
+endif
+
+ifeq ($(ENABLE_SCRIPTING_JAVASCRIPT),TRUE)
 
 ifneq ($(SYSTEM_RHINO),)
 
@@ -3221,6 +3226,8 @@ $(call gb_Jar_use_jar,$(1),js)
 endef
 
 endif # SYSTEM_RHINO
+
+endif
 
 ifneq ($(SYSTEM_APACHE_COMMONS),)
 
