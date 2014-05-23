@@ -21,7 +21,7 @@ using namespace com::sun::star;
 
 GLWindow::~GLWindow()
 {
-#if defined( UNX )
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     XFree(vi);
 #endif
 }
