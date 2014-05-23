@@ -2307,7 +2307,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                         // Set cursor back to the current position
                         pShell->GotoOutline( nActPos + nDir);
                     }
-                    else if(bModifier)
+                    else if(bModifier && pFirstEntry)
                     {
                         sal_uInt16 nActEndPos = nActPos;
                         SvTreeListEntry* pEntry = pFirstEntry;
