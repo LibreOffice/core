@@ -276,7 +276,7 @@ bool AdapterImpl::coerce_assign(
         {
             OSL_ASSERT(
                 p_exc->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
-            if (typelib_typedescriptionreference_isAssignableFrom( cppu::UnoType<RuntimeException>::get() ).getTypeLibType(),
+            if (typelib_typedescriptionreference_isAssignableFrom( cppu::UnoType<RuntimeException>::get().getTypeLibType(),
                     p_exc->pType ))
             {
                 // is RuntimeException or derived: rethrow
