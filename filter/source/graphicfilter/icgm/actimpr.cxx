@@ -567,7 +567,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
             {
                 ImplSetLineBundle();
                 drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
-                aAny.setValue( &eFillStyle, ::getCppuType((const drawing::FillStyle*)0) );
+                aAny.setValue( &eFillStyle, cppu::UnoType<drawing::FillStyle>::get());
                 maXPropSet->setPropertyValue( "FillStyle", aAny );
             }
         }
@@ -826,7 +826,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         if ( nWidth == -1 )
         {
             sal_Bool bTrue( sal_True );
-            aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0 ));
+            aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
             maXPropSet->setPropertyValue( "TextAutoGrowWidth", aAny );
 
             drawing::TextAdjust eTextAdjust;
@@ -850,11 +850,11 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         if ( nHeight == -1 )
         {
             sal_Bool bTrue = sal_True;
-            aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0) );
+            aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
             maXPropSet->setPropertyValue( "TextAutoGrowHeight", aAny );
         }
         uno::Reference< text::XText >  xText;
-        uno::Any aFirstQuery( maXShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0) ));
+        uno::Any aFirstQuery( maXShape->queryInterface( cppu::UnoType<text::XText>::get()));
         if( aFirstQuery >>= xText )
         {
             OUString aStr( OUString::createFromAscii( pString ) );
@@ -863,12 +863,12 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
             {
                 aXTextCursor->gotoEnd( sal_False );
                 uno::Reference< text::XTextRange >  aCursorText;
-                uno::Any aSecondQuery( aXTextCursor->queryInterface( ::getCppuType((const uno::Reference< text::XTextRange >*)0) ));
+                uno::Any aSecondQuery( aXTextCursor->queryInterface( cppu::UnoType<text::XTextRange>::get()));
                 if ( aSecondQuery >>= aCursorText )
                 {
                     uno::Reference< beans::XPropertySet >  aCursorPropSet;
 
-                    uno::Any aQuery( aCursorText->queryInterface( ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) ));
+                    uno::Any aQuery( aCursorText->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
                     if( aQuery >>= aCursorPropSet )
                     {
                         if ( nWidth != -1 )     // paragraph adjusting in a valid textbox ?
@@ -892,7 +892,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                         if ( nWidth > 0 && nHeight > 0 )    // restricted text
                         {
                             sal_Bool bTrue = sal_True;
-                            aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0));
+                            aAny.setValue( &bTrue, cppu::UnoType<sal_Bool>::get());
                             maXPropSet->setPropertyValue( "TextFitToSize", aAny );
                         }
                         aCursorText->setString( aStr );
@@ -919,7 +919,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
         if ( aShape.is() )
         {
             uno::Reference< text::XText >  xText;
-            uno::Any aFirstQuery(  aShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0)) );
+            uno::Any aFirstQuery(  aShape->queryInterface( cppu::UnoType<text::XText>::get()) );
             if( aFirstQuery >>= xText )
             {
                 OUString aStr( OUString::createFromAscii( pString ) );
@@ -929,11 +929,11 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
                 {
                     aXTextCursor->gotoEnd( sal_False );
                     uno::Reference< text::XTextRange >  aCursorText;
-                    uno::Any aSecondQuery(aXTextCursor->queryInterface( ::getCppuType((const uno::Reference< text::XTextRange >*)0) ));
+                    uno::Any aSecondQuery(aXTextCursor->queryInterface( cppu::UnoType<text::XTextRange>::get()));
                     if ( aSecondQuery >>= aCursorText )
                     {
                         uno::Reference< beans::XPropertySet >  aPropSet;
-                        uno::Any aQuery(aCursorText->queryInterface( ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) ));
+                        uno::Any aQuery(aCursorText->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
                         if( aQuery >>= aPropSet )
                         {
                             aCursorText->setString( aStr );

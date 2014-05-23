@@ -164,7 +164,7 @@ namespace frm
     Sequence< Type > OReferenceValueComponent::getSupportedBindingTypes()
     {
         ::std::list< Type > aTypes;
-        aTypes.push_back( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
+        aTypes.push_back( cppu::UnoType<sal_Bool>::get() );
 
         if ( !m_sReferenceValue.isEmpty() )
             aTypes.push_front( cppu::UnoType<OUString>::get() );

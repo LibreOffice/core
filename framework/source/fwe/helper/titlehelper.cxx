@@ -139,14 +139,14 @@ void SAL_CALL TitleHelper::addTitleChangeListener(const css::uno::Reference< css
     throw (css::uno::RuntimeException, std::exception)
 {
     // container is threadsafe by himself
-    m_aListener.addInterface( ::getCppuType( (const css::uno::Reference< css::frame::XTitleChangeListener >*)NULL ), xListener );
+    m_aListener.addInterface( cppu::UnoType<css::frame::XTitleChangeListener>::get(), xListener );
 }
 
 void SAL_CALL TitleHelper::removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
     // container is threadsafe by himself
-    m_aListener.removeInterface( ::getCppuType( (const css::uno::Reference< css::frame::XTitleChangeListener >*)NULL ), xListener );
+    m_aListener.removeInterface( cppu::UnoType<css::frame::XTitleChangeListener>::get(), xListener );
 }
 
 void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEvent)
@@ -265,7 +265,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
     aLock.clear ();
     // <- SYNCHRONIZED
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListener.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTitleChangeListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListener.getContainer( cppu::UnoType<css::frame::XTitleChangeListener>::get());
     if ( ! pContainer)
         return;
 

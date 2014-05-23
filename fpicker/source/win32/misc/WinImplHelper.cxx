@@ -333,7 +333,7 @@ Any SAL_CALL CheckboxGetState( HWND hwnd )
     LRESULT lChkState = SendMessageW( hwnd, BM_GETCHECK, 0, 0 );
     sal_Bool bChkState = (lChkState == BST_CHECKED) ? sal_True : sal_False;
     Any aAny;
-    aAny.setValue( &bChkState, getCppuType((sal_Bool*)0) );
+    aAny.setValue( &bChkState, cppu::UnoType<sal_Bool>::get());
     return aAny;
 }
 
@@ -348,7 +348,7 @@ void SAL_CALL CheckboxSetState(
     OSL_ASSERT( IsWindow( hwnd ) );
 
     if ( !aState.hasValue( ) ||
-         aState.getValueType( ) != getCppuType((sal_Bool*)0) )
+         aState.getValueType( ) != cppu::UnoType<sal_Bool>::get())
          throw IllegalArgumentException(
             OUString( "invalid value type or any has no value" ),
             rXInterface,

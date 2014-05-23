@@ -185,7 +185,7 @@ uno::Type SAL_CALL ConvDicNameContainer::getElementType(  )
     throw (RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return uno::Type( ::getCppuType( (uno::Reference< XConversionDictionary > *) 0) );
+    return uno::Type( cppu::UnoType<XConversionDictionary>::get());
 }
 
 sal_Bool SAL_CALL ConvDicNameContainer::hasElements(  )

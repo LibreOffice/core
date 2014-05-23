@@ -235,12 +235,12 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
     {
         { OUString("Alignment")                        , HANDLE_ALIGNMENT                          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
         { OUString("BaseFontHeight")                   , HANDLE_BASE_FONT_HEIGHT                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { OUString("BasicLibraries")                   , HANDLE_BASIC_LIBRARIES                    ,  ::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),  PropertyAttribute::READONLY,  0       },
+        { OUString("BasicLibraries")                   , HANDLE_BASIC_LIBRARIES                    ,  cppu::UnoType<script::XLibraryContainer>::get(),  PropertyAttribute::READONLY,  0       },
         { OUString("BottomMargin")                     , HANDLE_BOTTOM_MARGIN                      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_BOTTOMSPACE       },
         { OUString("CustomFontNameFixed")              , HANDLE_CUSTOM_FONT_NAME_FIXED             ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_FIXED             },
         { OUString("CustomFontNameSans")               , HANDLE_CUSTOM_FONT_NAME_SANS              ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SANS              },
         { OUString("CustomFontNameSerif")              , HANDLE_CUSTOM_FONT_NAME_SERIF             ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_SERIF             },
-        { OUString("DialogLibraries")                  , HANDLE_DIALOG_LIBRARIES                   ,  ::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),  PropertyAttribute::READONLY,  0       },
+        { OUString("DialogLibraries")                  , HANDLE_DIALOG_LIBRARIES                   ,  cppu::UnoType<script::XLibraryContainer>::get(),  PropertyAttribute::READONLY,  0       },
         { OUString("FontFixedIsBold")                  , HANDLE_CUSTOM_FONT_FIXED_WEIGHT           ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_FIXED             },
         { OUString("FontFixedIsItalic")                , HANDLE_CUSTOM_FONT_FIXED_POSTURE          ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_FIXED             },
         { OUString("FontFunctionsIsBold")              , HANDLE_FONT_FUNCTIONS_WEIGHT              ,  ::getBooleanCppuType(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
@@ -355,10 +355,10 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeExce
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 4);
     uno::Type* pTypes = aTypes.getArray();
-    pTypes[nLen++] = ::getCppuType((Reference<XServiceInfo>*)0);
-    pTypes[nLen++] = ::getCppuType((Reference<XPropertySet>*)0);
-    pTypes[nLen++] = ::getCppuType((Reference<XMultiPropertySet>*)0);
-    pTypes[nLen++] = ::getCppuType((Reference<XRenderable>*)0);
+    pTypes[nLen++] = cppu::UnoType<XServiceInfo>::get();
+    pTypes[nLen++] = cppu::UnoType<XPropertySet>::get();
+    pTypes[nLen++] = cppu::UnoType<XMultiPropertySet>::get();
+    pTypes[nLen++] = cppu::UnoType<XRenderable>::get();
 
     return aTypes;
 }

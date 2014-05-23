@@ -1933,53 +1933,53 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                 if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
                     ::cppu::OTypeCollection aTmpCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<io::XInputStream>::get()
+                                    ,   cppu::UnoType<io::XOutputStream>::get()
+                                    ,   cppu::UnoType<io::XStream>::get()
+                                    ,   cppu::UnoType<io::XSeekable>::get()
+                                    ,   cppu::UnoType<io::XTruncate>::get()
+                                    ,   cppu::UnoType<lang::XComponent>::get()
+                                    ,   cppu::UnoType<embed::XEncryptionProtectedSource2>::get()
+                                    ,   cppu::UnoType<embed::XEncryptionProtectedSource>::get()
+                                    ,   cppu::UnoType<embed::XExtendedStorageStream>::get()
+                                    ,   cppu::UnoType<embed::XTransactedObject>::get()
+                                    ,   cppu::UnoType<embed::XTransactionBroadcaster>::get());
 
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL )
+                                    (   cppu::UnoType<beans::XPropertySet>::get()
                                     ,   aTmpCollection.getTypes() );
                 }
                 else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<io::XInputStream>::get()
+                                    ,   cppu::UnoType<io::XOutputStream>::get()
+                                    ,   cppu::UnoType<io::XStream>::get()
+                                    ,   cppu::UnoType<io::XSeekable>::get()
+                                    ,   cppu::UnoType<io::XTruncate>::get()
+                                    ,   cppu::UnoType<lang::XComponent>::get()
+                                    ,   cppu::UnoType<embed::XRelationshipAccess>::get()
+                                    ,   cppu::UnoType<embed::XExtendedStorageStream>::get()
+                                    ,   cppu::UnoType<embed::XTransactedObject>::get()
+                                    ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
                 else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<io::XInputStream>::get()
+                                    ,   cppu::UnoType<io::XOutputStream>::get()
+                                    ,   cppu::UnoType<io::XStream>::get()
+                                    ,   cppu::UnoType<io::XSeekable>::get()
+                                    ,   cppu::UnoType<io::XTruncate>::get()
+                                    ,   cppu::UnoType<lang::XComponent>::get()
+                                    ,   cppu::UnoType<embed::XExtendedStorageStream>::get()
+                                    ,   cppu::UnoType<embed::XTransactedObject>::get()
+                                    ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
             }
             else
@@ -1987,41 +1987,41 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                 if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<io::XInputStream>::get()
+                                    ,   cppu::UnoType<io::XOutputStream>::get()
+                                    ,   cppu::UnoType<io::XStream>::get()
+                                    ,   cppu::UnoType<io::XSeekable>::get()
+                                    ,   cppu::UnoType<io::XTruncate>::get()
+                                    ,   cppu::UnoType<lang::XComponent>::get()
+                                    ,   cppu::UnoType<embed::XEncryptionProtectedSource2>::get()
+                                    ,   cppu::UnoType<embed::XEncryptionProtectedSource>::get()
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
                 else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<io::XInputStream>::get()
+                                    ,   cppu::UnoType<io::XOutputStream>::get()
+                                    ,   cppu::UnoType<io::XStream>::get()
+                                    ,   cppu::UnoType<io::XSeekable>::get()
+                                    ,   cppu::UnoType<io::XTruncate>::get()
+                                    ,   cppu::UnoType<lang::XComponent>::get()
+                                    ,   cppu::UnoType<embed::XRelationshipAccess>::get()
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
                 else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XStream >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<io::XInputStream>::get()
+                                    ,   cppu::UnoType<io::XOutputStream>::get()
+                                    ,   cppu::UnoType<io::XStream>::get()
+                                    ,   cppu::UnoType<io::XSeekable>::get()
+                                    ,   cppu::UnoType<io::XTruncate>::get()
+                                    ,   cppu::UnoType<lang::XComponent>::get()
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
             }
         }
@@ -2500,7 +2500,7 @@ void SAL_CALL OWriteStream::addEventListener(
         throw lang::DisposedException();
     }
 
-    m_pData->m_aListenersContainer.addInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0),
+    m_pData->m_aListenersContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(),
                                                  xListener );
 }
 
@@ -2516,7 +2516,7 @@ void SAL_CALL OWriteStream::removeEventListener(
         throw lang::DisposedException();
     }
 
-    m_pData->m_aListenersContainer.removeInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0),
+    m_pData->m_aListenersContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(),
                                                     xListener );
 }
 
@@ -3245,7 +3245,7 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
 
        ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
-                ::getCppuType( ( const uno::Reference< embed::XTransactionListener >*) NULL ) );
+                cppu::UnoType<embed::XTransactionListener>::get());
        if ( pContainer )
     {
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
@@ -3416,7 +3416,7 @@ void SAL_CALL OWriteStream::addTransactionListener( const uno::Reference< embed:
     if ( !m_bTransacted )
         throw uno::RuntimeException();
 
-    m_pData->m_aListenersContainer.addInterface( ::getCppuType((const uno::Reference< embed::XTransactionListener >*)0),
+    m_pData->m_aListenersContainer.addInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                 aListener );
 }
 
@@ -3434,7 +3434,7 @@ void SAL_CALL OWriteStream::removeTransactionListener( const uno::Reference< emb
     if ( !m_bTransacted )
         throw uno::RuntimeException();
 
-    m_pData->m_aListenersContainer.removeInterface( ::getCppuType((const uno::Reference< embed::XTransactionListener >*)0),
+    m_pData->m_aListenersContainer.removeInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                     aListener );
 }
 

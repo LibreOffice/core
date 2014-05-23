@@ -234,7 +234,7 @@ namespace xforms
     protected:
         typedef     VALUE_TYPE  ValueType;
         inline const ::com::sun::star::uno::Type&
-            getCppuType() const { return ::getCppuType( static_cast< ValueType* >( NULL ) ); }
+            getCppuType() const { return cppu::UnoType<ValueType>::get(); }
 
     protected:
         OValueLimitedType( const OUString& _rName, sal_Int16 _nTypeClass );

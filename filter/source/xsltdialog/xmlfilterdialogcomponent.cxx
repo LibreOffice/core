@@ -151,22 +151,22 @@ Any SAL_CALL XMLFilterDialogComponent::queryInterface( const Type& aType ) throw
 
 Any SAL_CALL XMLFilterDialogComponent::queryAggregation( Type const & rType ) throw (RuntimeException, std::exception)
 {
-    if (rType == ::getCppuType( (Reference< ::com::sun::star::ui::dialogs::XExecutableDialog > const *)0 ))
+    if (rType == cppu::UnoType<com::sun::star::ui::dialogs::XExecutableDialog>::get())
     {
         void * p = static_cast< ::com::sun::star::ui::dialogs::XExecutableDialog * >( this );
         return Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (Reference< XServiceInfo > const *)0 ))
+    else if (rType == cppu::UnoType<XServiceInfo>::get())
     {
         void * p = static_cast< XServiceInfo * >( this );
         return Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (Reference< XInitialization > const *)0 ))
+    else if (rType == cppu::UnoType<XInitialization>::get())
     {
         void * p = static_cast< XInitialization * >( this );
         return Any( &p, rType );
     }
-    else if (rType == ::getCppuType( (Reference< XTerminateListener > const *)0 ))
+    else if (rType == cppu::UnoType<XTerminateListener>::get())
     {
         void * p = static_cast< XTerminateListener * >( this );
         return Any( &p, rType );
@@ -230,14 +230,14 @@ namespace
     public:
         DialogComponentTypes() :
             m_aTypes(
-                ::getCppuType( (const Reference< XComponent > *)0 ),
-                ::getCppuType( (const Reference< XTypeProvider > *)0 ),
-                ::getCppuType( (const Reference< XAggregation > *)0 ),
-                ::getCppuType( (const Reference< XWeak > *)0 ),
-                ::getCppuType( (const Reference< XServiceInfo > *)0 ),
-                ::getCppuType( (const Reference< XInitialization > *)0 ),
-                ::getCppuType( (const Reference< XTerminateListener > *)0 ),
-                ::getCppuType( (const Reference< ::com::sun::star::ui::dialogs::XExecutableDialog > *)0 ))
+                cppu::UnoType<XComponent>::get(),
+                cppu::UnoType<XTypeProvider>::get(),
+                cppu::UnoType<XAggregation>::get(),
+                cppu::UnoType<XWeak>::get(),
+                cppu::UnoType<XServiceInfo>::get(),
+                cppu::UnoType<XInitialization>::get(),
+                cppu::UnoType<XTerminateListener>::get(),
+                cppu::UnoType<com::sun::star::ui::dialogs::XExecutableDialog>::get())
         {
         }
         OTypeCollection& getTypeCollection() { return m_aTypes; }

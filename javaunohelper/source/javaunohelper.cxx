@@ -104,10 +104,10 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                     {
                         void * pSMgr =
                             java2dest.mapInterface(
-                                jSMgr, getCppuType((Reference< lang::XMultiServiceFactory > *) 0) );
+                                jSMgr, cppu::UnoType<lang::XMultiServiceFactory>::get());
                         void * pKey =
                             java2dest.mapInterface(
-                                jRegKey, getCppuType((Reference< registry::XRegistryKey > *) 0) );
+                                jRegKey, cppu::UnoType<registry::XRegistryKey>::get());
 
                         uno_ExtEnvironment * env = loader_env.get()->pExtEnv;
                         if (pKey)
@@ -198,10 +198,10 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                     {
                         void * pSMgr =
                             java2dest.mapInterface(
-                                jSMgr, ::getCppuType((Reference< lang::XMultiServiceFactory > *) 0) );
+                                jSMgr, cppu::UnoType<lang::XMultiServiceFactory>::get());
                         void * pKey =
                             java2dest.mapInterface(
-                                jRegKey, ::getCppuType((Reference< registry::XRegistryKey > *) 0) );
+                                jRegKey, cppu::UnoType<registry::XRegistryKey>::get());
 
                         const char* pImplName = pJEnv->GetStringUTFChars( jImplName, NULL );
 
@@ -220,7 +220,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                         if (pSSF)
                         {
                             jobject jglobal = (jobject) dest2java.mapInterface(
-                                pSSF, getCppuType((Reference< XInterface > *) 0) );
+                                pSSF, cppu::UnoType<XInterface>::get());
                             joSLL_cpp = pJEnv->NewLocalRef( jglobal );
                             pJEnv->DeleteGlobalRef( jglobal );
                             if (env)

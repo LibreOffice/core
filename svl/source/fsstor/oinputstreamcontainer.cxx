@@ -56,17 +56,17 @@ uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
             if ( m_bSeekable )
             {
                 static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const uno::Reference< io::XStream >* )NULL ),
-                        ::getCppuType(( const uno::Reference< io::XInputStream >* )NULL ),
-                        ::getCppuType(( const uno::Reference< io::XSeekable >* )NULL ) );
+                        cppu::UnoType<io::XStream>::get(),
+                        cppu::UnoType<io::XInputStream>::get(),
+                        cppu::UnoType<io::XSeekable>::get());
 
                 pTypeCollection = &aTypeCollection ;
             }
             else
             {
                 static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const uno::Reference< io::XStream >* )NULL ),
-                        ::getCppuType(( const uno::Reference< io::XInputStream >* )NULL ) );
+                        cppu::UnoType<io::XStream>::get(),
+                        cppu::UnoType<io::XInputStream>::get());
 
                 pTypeCollection = &aTypeCollection ;
             }

@@ -61,7 +61,7 @@ namespace
             static const DataFlavorRepresentation aInstance[] =
             {
             /*  0 SOT_FORMAT_SYSTEM_START*/                 { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*  1 SOT_FORMAT_STRING*/                       { "text/plain;charset=utf-16", "Text", &::getCppuType( (const OUString*) 0 ) },
+            /*  1 SOT_FORMAT_STRING*/                       { "text/plain;charset=utf-16", "Text", &cppu::UnoType<OUString>::get()},
             /*  2 SOT_FORMAT_BITMAP*/                       { "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  3 SOT_FORMAT_GDIMETAFILE*/                  { "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  4 SOT_FORMAT_PRIVATE*/                      { "application/x-openoffice-private;windows_formatname=\"Private\"", "Private", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
@@ -261,7 +261,7 @@ sal_uLong SotExchange::RegisterFormatName( const OUString& rName )
 
     pNewFlavor->MimeType = rName;
     pNewFlavor->HumanPresentableName = rName;
-    pNewFlavor->DataType = ::getCppuType( (const OUString*) 0 );
+    pNewFlavor->DataType = cppu::UnoType<OUString>::get();
 
     rL.push_back( pNewFlavor );
 
@@ -296,7 +296,7 @@ sal_uLong SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
 
     pNewFlavor->MimeType = rMimeType;
     pNewFlavor->HumanPresentableName = rMimeType;
-    pNewFlavor->DataType = ::getCppuType( (const OUString*) 0 );
+    pNewFlavor->DataType = cppu::UnoType<OUString>::get();
 
     rL.push_back( pNewFlavor );
 

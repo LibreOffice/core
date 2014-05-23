@@ -736,7 +736,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 Type SAL_CALL UICommandDescription::getElementType()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return( ::getCppuType( (const Reference< XNameAccess >*)NULL ) );
+    return( cppu::UnoType<XNameAccess>::get());
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasElements()

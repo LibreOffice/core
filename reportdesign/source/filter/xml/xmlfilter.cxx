@@ -508,11 +508,11 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         static const OUString s_sOld("OldFormat");
         static comphelper::PropertyMapEntry const pMap[] =
         {
-            { OUString("OldFormat") , 1,    ::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
-            { OUString("StreamName"), 0,    ::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("PrivateData"),0,    ::getCppuType( (uno::Reference<XInterface> *)0 ),  beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("BaseURI"),    0,    ::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamRelPath"), 0, ::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("OldFormat") , 1,    cppu::UnoType<sal_Bool>::get(),                 beans::PropertyAttribute::BOUND,     0 },
+            { OUString("StreamName"), 0,    cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("PrivateData"),0,    cppu::UnoType<XInterface>::get(),  beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("BaseURI"),    0,    cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         utl::MediaDescriptor aDescriptor(rDescriptor);

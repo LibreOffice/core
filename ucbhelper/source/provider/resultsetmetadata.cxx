@@ -480,16 +480,16 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
         nType = DataType::TIME;     // XRow::getTime
     else if ( rType == cppu::UnoType<DateTime>::get() )
         nType = DataType::TIMESTAMP;// XRow::getTimestamp
-    else if ( rType == getCppuType( static_cast< Reference< XInputStream > * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<XInputStream>::get() )
         nType = DataType::LONGVARBINARY;    // XRow::getBinaryStream
 //      nType = DataType::LONGVARCHAR;      // XRow::getCharacterStream
-    else if ( rType == getCppuType( static_cast< Reference< XClob > * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<XClob>::get() )
         nType = DataType::CLOB; // XRow::getClob
-    else if ( rType == getCppuType( static_cast< Reference< XBlob > * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<XBlob>::get() )
         nType = DataType::BLOB; // XRow::getBlob
-    else if ( rType == getCppuType( static_cast< Reference< XArray > * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<XArray>::get() )
         nType = DataType::ARRAY;// XRow::getArray
-    else if ( rType == getCppuType( static_cast< Reference< XRef > * >( 0 ) ) )
+    else if ( rType == cppu::UnoType<XRef>::get() )
         nType = DataType::REF;// XRow::getRef
     else
         nType = DataType::OBJECT;// XRow::getObject

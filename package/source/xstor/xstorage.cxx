@@ -2074,7 +2074,7 @@ void OStorage::BroadcastModifiedIfNecessary()
 
        ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
-                ::getCppuType( ( const uno::Reference< util::XModifyListener >*) NULL ) );
+                cppu::UnoType<util::XModifyListener>::get());
        if ( pContainer )
     {
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
@@ -2106,7 +2106,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
 
        ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
-                ::getCppuType( ( const uno::Reference< embed::XTransactionListener >*) NULL ) );
+                cppu::UnoType<embed::XTransactionListener>::get());
        if ( pContainer )
     {
            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
@@ -2277,51 +2277,51 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                 if ( m_pData->m_bIsRoot )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorageRawAccess >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedStorage >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<embed::XStorage>::get()
+                                    ,   cppu::UnoType<embed::XStorage2>::get()
+                                    ,   cppu::UnoType<embed::XStorageRawAccess>::get()
+                                    ,   cppu::UnoType<embed::XTransactedObject>::get()
+                                    ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
+                                    ,   cppu::UnoType<util::XModifiable>::get()
+                                    ,   cppu::UnoType<embed::XEncryptionProtectedStorage>::get()
+                                    ,   cppu::UnoType<embed::XEncryptionProtectedSource2>::get()
+                                    ,   cppu::UnoType<embed::XEncryptionProtectedSource>::get()
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
                 else
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorageRawAccess >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<embed::XStorage>::get()
+                                    ,   cppu::UnoType<embed::XStorage2>::get()
+                                    ,   cppu::UnoType<embed::XStorageRawAccess>::get()
+                                    ,   cppu::UnoType<embed::XTransactedObject>::get()
+                                    ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
+                                    ,   cppu::UnoType<util::XModifiable>::get()
+                                    ,   cppu::UnoType<beans::XPropertySet>::get());
                 }
             }
             else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
             {
                 m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                (   cppu::UnoType<lang::XTypeProvider>::get()
+                                ,   cppu::UnoType<embed::XStorage>::get()
+                                ,   cppu::UnoType<embed::XTransactedObject>::get()
+                                ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
+                                ,   cppu::UnoType<util::XModifiable>::get()
+                                ,   cppu::UnoType<embed::XRelationshipAccess>::get()
+                                ,   cppu::UnoType<beans::XPropertySet>::get());
             }
             else
             {
                 m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                (   cppu::UnoType<lang::XTypeProvider>::get()
+                                ,   cppu::UnoType<embed::XStorage>::get()
+                                ,   cppu::UnoType<embed::XTransactedObject>::get()
+                                ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
+                                ,   cppu::UnoType<util::XModifiable>::get()
+                                ,   cppu::UnoType<beans::XPropertySet>::get());
             }
         }
     }
@@ -4098,7 +4098,7 @@ void SAL_CALL OStorage::addTransactionListener( const uno::Reference< embed::XTr
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    m_pData->m_aListenersContainer.addInterface( ::getCppuType((const uno::Reference< embed::XTransactionListener >*)0),
+    m_pData->m_aListenersContainer.addInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                 aListener );
 }
 
@@ -4113,7 +4113,7 @@ void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    m_pData->m_aListenersContainer.removeInterface( ::getCppuType((const uno::Reference< embed::XTransactionListener >*)0),
+    m_pData->m_aListenersContainer.removeInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                     aListener );
 }
 
@@ -4176,7 +4176,7 @@ void SAL_CALL OStorage::addModifyListener(
 
     osl_atomic_increment( &m_pImpl->m_nModifiedListenerCount );
     m_pData->m_aListenersContainer.addInterface(
-                                ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ), aListener );
+                                cppu::UnoType<util::XModifyListener>::get(), aListener );
 }
 
 void SAL_CALL OStorage::removeModifyListener(
@@ -4193,7 +4193,7 @@ void SAL_CALL OStorage::removeModifyListener(
 
     osl_atomic_decrement( &m_pImpl->m_nModifiedListenerCount );
     m_pData->m_aListenersContainer.removeInterface(
-                                ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ), aListener );
+                                cppu::UnoType<util::XModifyListener>::get(), aListener );
 }
 
 //  XNameAccess
@@ -4436,7 +4436,7 @@ void SAL_CALL OStorage::addEventListener(
     }
 
     m_pData->m_aListenersContainer.addInterface(
-                                ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ), xListener );
+                                cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL OStorage::removeEventListener(
@@ -4452,7 +4452,7 @@ void SAL_CALL OStorage::removeEventListener(
     }
 
     m_pData->m_aListenersContainer.removeInterface(
-                                ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ), xListener );
+                                cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
 //  XEncryptionProtectedSource

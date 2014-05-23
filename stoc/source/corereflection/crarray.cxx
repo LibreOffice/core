@@ -60,7 +60,7 @@ Sequence< Type > ArrayIdlClassImpl::getTypes()
         if (! s_pTypes)
         {
             static ::cppu::OTypeCollection s_aTypes(
-                ::getCppuType( (const Reference< XIdlArray > *)0 ),
+                cppu::UnoType<XIdlArray>::get(),
                 IdlClassImpl::getTypes() );
             s_pTypes = &s_aTypes;
         }

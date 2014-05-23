@@ -358,7 +358,7 @@ Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType) throw(RuntimeEx
     Any aReturn;
 
     // XTypeProvider first - don't ask the OBoundControl_BASE, it would deliver incomplete types
-    if ( _rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) ) )
+    if ( _rType.equals( cppu::UnoType<XTypeProvider>::get() ) )
         aReturn = OControl::queryAggregation( _rType );
 
     // ask our own interfaces
@@ -462,7 +462,7 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
         {
             aReturn = OPropertySetAggregationHelper::queryInterface(_rType);
             // our aggregate
-            if (!aReturn.hasValue() && m_xAggregate.is() && !_rType.equals(::getCppuType(static_cast< Reference< XCloneable>* >(NULL))))
+            if (!aReturn.hasValue() && m_xAggregate.is() && !_rType.equals(cppu::UnoType<XCloneable>::get()))
                 aReturn = m_xAggregate->queryAggregation(_rType);
         }
     }
@@ -975,12 +975,12 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
     switch (_nHandle)
     {
         case PROPERTY_ID_NAME:
-            DBG_ASSERT(_rValue.getValueType() == getCppuType((const OUString*)NULL),
+            DBG_ASSERT(_rValue.getValueType() == cppu::UnoType<OUString>::get(),
                 "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
             _rValue >>= m_aName;
             break;
         case PROPERTY_ID_TAG:
-            DBG_ASSERT(_rValue.getValueType() == getCppuType((const OUString*)NULL),
+            DBG_ASSERT(_rValue.getValueType() == cppu::UnoType<OUString>::get(),
                 "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
             _rValue >>= m_aTag;
             break;

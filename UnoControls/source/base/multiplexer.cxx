@@ -392,19 +392,19 @@ void OMRCListenerMultiplexerHelper::impl_adviseToPeer(  const   Reference< XWind
                                                         const   Type&                   aType   )
 {
     // add a listener to the source (peer)
-    if( aType == ::getCppuType((const Reference< XWindowListener >*)0) )
+    if( aType == cppu::UnoType<XWindowListener>::get())
         xPeer->addWindowListener( this );
-    else if( aType == ::getCppuType((const Reference< XKeyListener >*)0) )
+    else if( aType == cppu::UnoType<XKeyListener>::get())
         xPeer->addKeyListener( this );
-    else if( aType == ::getCppuType((const Reference< XFocusListener >*)0) )
+    else if( aType == cppu::UnoType<XFocusListener>::get())
         xPeer->addFocusListener( this );
-    else if( aType == ::getCppuType((const Reference< XMouseListener >*)0) )
+    else if( aType == cppu::UnoType<XMouseListener>::get())
         xPeer->addMouseListener( this );
-    else if( aType == ::getCppuType((const Reference< XMouseMotionListener >*)0) )
+    else if( aType == cppu::UnoType<XMouseMotionListener>::get())
         xPeer->addMouseMotionListener( this );
-    else if( aType == ::getCppuType((const Reference< XPaintListener >*)0) )
+    else if( aType == cppu::UnoType<XPaintListener>::get())
         xPeer->addPaintListener( this );
-    else if( aType == ::getCppuType((const Reference< XTopWindowListener >*)0) )
+    else if( aType == cppu::UnoType<XTopWindowListener>::get())
     {
         Reference< XTopWindow > xTop( xPeer, UNO_QUERY );
         if( xTop.is() )
@@ -422,19 +422,19 @@ void OMRCListenerMultiplexerHelper::impl_unadviseFromPeer(  const   Reference< X
                                                             const   Type&                   aType   )
 {
     // the last listener is removed, remove the listener from the source (peer)
-    if( aType == ::getCppuType((const Reference< XWindowListener >*)0) )
+    if( aType == cppu::UnoType<XWindowListener>::get())
         xPeer->removeWindowListener( this );
-    else if( aType == ::getCppuType((const Reference< XKeyListener >*)0) )
+    else if( aType == cppu::UnoType<XKeyListener>::get())
         xPeer->removeKeyListener( this );
-    else if( aType == ::getCppuType((const Reference< XFocusListener >*)0) )
+    else if( aType == cppu::UnoType<XFocusListener>::get())
         xPeer->removeFocusListener( this );
-    else if( aType == ::getCppuType((const Reference< XMouseListener >*)0) )
+    else if( aType == cppu::UnoType<XMouseListener>::get())
         xPeer->removeMouseListener( this );
-    else if( aType == ::getCppuType((const Reference< XMouseMotionListener >*)0) )
+    else if( aType == cppu::UnoType<XMouseMotionListener>::get())
         xPeer->removeMouseMotionListener( this );
-    else if( aType == ::getCppuType((const Reference< XPaintListener >*)0) )
+    else if( aType == cppu::UnoType<XPaintListener>::get())
         xPeer->removePaintListener( this );
-    else if( aType == ::getCppuType((const Reference< XTopWindowListener >*)0) )
+    else if( aType == cppu::UnoType<XTopWindowListener>::get())
     {
         Reference< XTopWindow >  xTop( xPeer, UNO_QUERY );
         if( xTop.is() )

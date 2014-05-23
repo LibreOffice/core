@@ -1542,11 +1542,11 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
         uno::Any aAny = aAttributes[j].Value;
         OString aValue;
 
-        if(aAny.getValueType() == getCppuType<sal_Int32>())
+        if(aAny.getValueType() == cppu::UnoType<sal_Int32>::get())
         {
             aValue = OString::number(aAny.get<sal_Int32>());
         }
-        else if(aAny.getValueType() == getCppuType<OUString>())
+        else if(aAny.getValueType() == cppu::UnoType<OUString>::get())
         {
             aValue =  OUStringToOString(aAny.get<OUString>(), RTL_TEXTENCODING_ASCII_US);
         }

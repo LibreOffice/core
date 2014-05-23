@@ -393,7 +393,7 @@ Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (Runtime
 {
     // if asked for the XTypeProvider, don't let OButtonControl_BASE do this
     Any aReturn;
-    if ( !_rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) ) )
+    if ( !_rType.equals( cppu::UnoType<XTypeProvider>::get() ) )
         aReturn = OButtonControl_BASE::queryInterface( _rType );
 
     if ( !aReturn.hasValue() )

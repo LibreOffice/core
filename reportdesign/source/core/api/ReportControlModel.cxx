@@ -142,7 +142,7 @@ void OReportControlModel::checkIndex(sal_Int32 _nIndex)
 
 bool OReportControlModel::isInterfaceForbidden(const uno::Type& _rType)
 {
-    return (_rType == ::getCppuType((const uno::Reference< beans::XPropertyState>* )0) || _rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet>* )0));
+    return (_rType == cppu::UnoType<beans::XPropertyState>::get()|| _rType == cppu::UnoType<beans::XMultiPropertySet>::get());
 }
 
 } // reportdesign

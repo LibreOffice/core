@@ -162,7 +162,7 @@ void TabWindow::impl_SetTitle( const OUString& rTitle )
 void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID ) const
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
-                                                        ::getCppuType( ( const css::uno::Reference< css::awt::XTabListener >*) NULL ) );
+                                                        cppu::UnoType<css::awt::XTabListener>::get());
     if (pContainer!=NULL)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -199,7 +199,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID ) co
 void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& rSeq ) const
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
-                                                        ::getCppuType( ( const css::uno::Reference< css::awt::XTabListener >*) NULL ) );
+                                                        cppu::UnoType<css::awt::XTabListener>::get());
     if (pContainer!=NULL)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -774,7 +774,7 @@ throw (css::uno::RuntimeException, std::exception)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     m_aListenerContainer.addInterface(
-        ::getCppuType( ( const css::uno::Reference< css::awt::XTabListener >* ) NULL ), xListener );
+        cppu::UnoType<css::awt::XTabListener>::get(), xListener );
 }
 
 void SAL_CALL TabWindow::removeTabListener( const css::uno::Reference< css::awt::XTabListener >& xListener )
@@ -788,7 +788,7 @@ throw (css::uno::RuntimeException, std::exception)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     m_aListenerContainer.removeInterface(
-        ::getCppuType( ( const css::uno::Reference< css::awt::XTabListener >* ) NULL ), xListener );
+        cppu::UnoType<css::awt::XTabListener>::get(), xListener );
 }
 
 //  OPropertySetHelper

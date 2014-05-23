@@ -247,7 +247,7 @@
     Any SAL_CALL OGeometryControlModel_Base::queryAggregation( const Type& _rType ) throw(RuntimeException, std::exception)
     {
         Any aReturn;
-        if (_rType.equals(::getCppuType(static_cast< Reference< XCloneable>* >(NULL))) && !m_bCloneable)
+        if (_rType.equals(cppu::UnoType<XCloneable>::get()) && !m_bCloneable)
             // somebody is asking for the XCloneable interface, but our aggregate does not support it
             // -> outta here
             // (need this extra check, cause OGCM_Base::queryAggregation would return this interface

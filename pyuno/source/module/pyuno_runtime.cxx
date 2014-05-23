@@ -592,7 +592,7 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
                 Any a = r.pyObject2Any(PyTuple_GetItem(types.get(),i));
                 a >>= ret[i];
             }
-            ret[size] = getCppuType( (Reference< com::sun::star::lang::XUnoTunnel> *) 0 );
+            ret[size] = cppu::UnoType<com::sun::star::lang::XUnoTunnel>::get();
         }
     }
     return ret;

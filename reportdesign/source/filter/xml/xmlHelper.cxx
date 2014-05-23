@@ -84,7 +84,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
                     { XML_TOKEN_INVALID, 0 }
                 };
 
-                pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::style::VerticalAlignment*)0) );
+                pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, cppu::UnoType<com::sun::star::style::VerticalAlignment>::get());
             }
             break;
         case (XML_SD_TYPES_START+34):
@@ -319,10 +319,10 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
 {
     static comphelper::PropertyMapEntry const pMap[] =
     {
-        {OUString(PROPERTY_BORDERLEFT),   0,          ::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
-        {OUString(PROPERTY_BORDERRIGHT),  1,          ::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
-        {OUString(PROPERTY_BORDERTOP),    2,          ::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
-        {OUString(PROPERTY_BORDERBOTTOM), 3,          ::getCppuType((const table::BorderLine2*)0)         ,PropertyAttribute::BOUND,0},
+        {OUString(PROPERTY_BORDERLEFT),   0,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
+        {OUString(PROPERTY_BORDERRIGHT),  1,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
+        {OUString(PROPERTY_BORDERTOP),    2,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
+        {OUString(PROPERTY_BORDERBOTTOM), 3,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));

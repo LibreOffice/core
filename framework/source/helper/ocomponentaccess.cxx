@@ -81,7 +81,7 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::e
 {
     // Elements in list an enumeration are components!
     // Return the uno-type of XComponent.
-    return ::getCppuType((const css::uno::Reference< XComponent >*)NULL);
+    return cppu::UnoType<XComponent>::get();
 }
 
 //  XElementAccess

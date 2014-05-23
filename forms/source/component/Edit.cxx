@@ -216,7 +216,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
         return;
 
     aTmp = xFormSet->getPropertyValue( PROPERTY_TARGET_URL );
-    if (!aTmp.getValueType().equals(::getCppuType((const OUString*)NULL)) ||
+    if (!aTmp.getValueType().equals(cppu::UnoType<OUString>::get()) ||
         getString(aTmp).isEmpty() )
         return;
 

@@ -114,8 +114,8 @@ Sequence< Type > IdlAttributeFieldImpl::getTypes()
         if (! s_pTypes)
         {
             static ::cppu::OTypeCollection s_aTypes(
-                ::getCppuType( (const Reference< XIdlField2 > *)0 ),
-                ::getCppuType( (const Reference< XIdlField > *)0 ),
+                cppu::UnoType<XIdlField2>::get(),
+                cppu::UnoType<XIdlField>::get(),
                 IdlMemberImpl::getTypes() );
             s_pTypes = &s_aTypes;
         }
@@ -409,7 +409,7 @@ Sequence< Type > IdlInterfaceMethodImpl::getTypes()
         if (! s_pTypes)
         {
             static ::cppu::OTypeCollection s_aTypes(
-                ::getCppuType( (const Reference< XIdlMethod > *)0 ),
+                cppu::UnoType<XIdlMethod>::get(),
                 IdlMemberImpl::getTypes() );
             s_pTypes = &s_aTypes;
         }
@@ -725,7 +725,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 &aExc.TargetException,
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
             uno_type_copyAndConvertData(
-                &aExc.TargetException, pUnoExc, ::getCppuType( (const Any *)0 ).getTypeLibType(),
+                &aExc.TargetException, pUnoExc, cppu::UnoType<Any>::get().getTypeLibType(),
                 getReflection()->getUno2Cpp().get() );
             uno_any_destruct( pUnoExc, 0 );
             throw aExc;

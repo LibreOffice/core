@@ -130,8 +130,8 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException, s
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  ( ::getCppuType(( const css::uno::Reference< XLayoutConstrains    >*)NULL )   ,
-                                                      ::getCppuType(( const css::uno::Reference< XStatusIndicator >*)NULL )   ,
+            static OTypeCollection aTypeCollection  ( cppu::UnoType<XLayoutConstrains>::get(),
+                                                      cppu::UnoType<XStatusIndicator>::get(),
                                                       BaseContainerControl::getTypes()
                                                     );
             // ... and set his address to static pointer!

@@ -152,10 +152,8 @@ ContentIdentifier::getTypes()
         if ( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                    getCppuType( static_cast<
-                        Reference < XTypeProvider > * >( 0 ) ),
-                    getCppuType( static_cast<
-                        Reference< XContentIdentifier > * >( 0 ) ) );
+                    cppu::UnoType<XTypeProvider>::get(),
+                    cppu::UnoType<XContentIdentifier>::get() );
             pCollection = &collection;
         }
     }

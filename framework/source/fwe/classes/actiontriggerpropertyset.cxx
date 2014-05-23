@@ -134,11 +134,11 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XPropertySet           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XFastPropertySet       >*)NULL ) ,
-                        ::getCppuType(( const Reference< XMultiPropertySet      >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) );
+                        cppu::UnoType<XPropertySet>::get(),
+                        cppu::UnoType<XFastPropertySet>::get(),
+                        cppu::UnoType<XMultiPropertySet>::get(),
+                        cppu::UnoType<XServiceInfo>::get(),
+                        cppu::UnoType<XTypeProvider>::get());
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection;
@@ -309,9 +309,9 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
     {
         Property( OUString( "CommandURL"    ), HANDLE_COMMANDURL   , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
         Property( OUString( "HelpURL"       ), HANDLE_HELPURL      , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "Image"         ), HANDLE_IMAGE     , ::getCppuType((Reference<XBitmap>*)0)     , PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "Image"         ), HANDLE_IMAGE     , cppu::UnoType<XBitmap>::get(), PropertyAttribute::TRANSIENT  ),
         Property( OUString( "SubContainer"  ), HANDLE_SUBCONTAINER , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "Text"          ), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
+        Property( OUString( "Text"          ), HANDLE_TEXT         , cppu::UnoType<XInterface>::get(), PropertyAttribute::TRANSIENT  )
     };
 
     // Use it to initialize sequence!

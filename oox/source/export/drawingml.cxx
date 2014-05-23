@@ -1489,7 +1489,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                             DBG(fprintf (stderr, "graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
                         } else if ( aPropName == "GraphicSize" )
                         {
-                            if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (awt::Size*)0) )
+                            if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<awt::Size>::get())
                             {
                                 // don't cast awt::Size to Size as on 64-bits they are not the same.
                                 ::com::sun::star::awt::Size aSize;

@@ -140,10 +140,10 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) );
+                        cppu::UnoType<XMultiServiceFactory>::get(),
+                        cppu::UnoType<XIndexContainer>::get(),
+                        cppu::UnoType<XServiceInfo>::get(),
+                        cppu::UnoType<XTypeProvider>::get());
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection;

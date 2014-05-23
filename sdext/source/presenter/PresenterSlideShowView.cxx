@@ -186,7 +186,7 @@ void PresenterSlideShowView::disposing (void)
     aEvent.Source = static_cast<XWeak*>(this);
 
     ::cppu::OInterfaceContainerHelper* pIterator
-          = maBroadcaster.getContainer(getCppuType((Reference<lang::XEventListener>*)NULL));
+          = maBroadcaster.getContainer(cppu::UnoType<lang::XEventListener>::get());
     if (pIterator != NULL)
         pIterator->disposeAndClear(aEvent);
 
@@ -391,7 +391,7 @@ void SAL_CALL PresenterSlideShowView::addTransformationChangedListener(
 {
     ThrowIfDisposed();
     maBroadcaster.addListener(
-        getCppuType((Reference<util::XModifyListener>*)NULL),
+        cppu::UnoType<util::XModifyListener>::get(),
         rxListener);
 }
 
@@ -401,7 +401,7 @@ void SAL_CALL PresenterSlideShowView::removeTransformationChangedListener(
 {
     ThrowIfDisposed();
     maBroadcaster.removeListener(
-        getCppuType((Reference<util::XModifyListener>*)NULL),
+        cppu::UnoType<util::XModifyListener>::get(),
         rxListener);
 }
 
@@ -411,7 +411,7 @@ void SAL_CALL PresenterSlideShowView::addPaintListener(
 {
     ThrowIfDisposed();
     maBroadcaster.addListener(
-        getCppuType((Reference<awt::XPaintListener>*)NULL),
+        cppu::UnoType<awt::XPaintListener>::get(),
         rxListener);
 }
 
@@ -421,7 +421,7 @@ void SAL_CALL PresenterSlideShowView::removePaintListener(
 {
     ThrowIfDisposed();
     maBroadcaster.removeListener(
-        getCppuType((Reference<awt::XPaintListener>*)NULL),
+        cppu::UnoType<awt::XPaintListener>::get(),
         rxListener);
 }
 
@@ -431,7 +431,7 @@ void SAL_CALL PresenterSlideShowView::addMouseListener(
 {
     ThrowIfDisposed();
     maBroadcaster.addListener(
-        getCppuType((Reference<awt::XMouseListener>*)NULL),
+        cppu::UnoType<awt::XMouseListener>::get(),
         rxListener);
 }
 
@@ -441,7 +441,7 @@ void SAL_CALL PresenterSlideShowView::removeMouseListener(
 {
     ThrowIfDisposed();
     maBroadcaster.removeListener(
-        getCppuType((Reference<awt::XMouseListener>*)NULL),
+        cppu::UnoType<awt::XMouseListener>::get(),
         rxListener);
 }
 
@@ -451,7 +451,7 @@ void SAL_CALL PresenterSlideShowView::addMouseMotionListener(
 {
     ThrowIfDisposed();
     maBroadcaster.addListener(
-        getCppuType((Reference<awt::XMouseMotionListener>*)NULL),
+        cppu::UnoType<awt::XMouseMotionListener>::get(),
         rxListener);
 }
 
@@ -461,7 +461,7 @@ void SAL_CALL PresenterSlideShowView::removeMouseMotionListener(
 {
     ThrowIfDisposed();
     maBroadcaster.removeListener(
-        getCppuType((Reference<awt::XMouseMotionListener>*)NULL),
+        cppu::UnoType<awt::XMouseMotionListener>::get(),
         rxListener);
 }
 
@@ -538,7 +538,7 @@ void SAL_CALL PresenterSlideShowView::mousePressed (const awt::MouseEvent& rEven
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<awt::XMouseListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&awt::XMouseListener::mousePressed, aEvent);
@@ -558,7 +558,7 @@ void SAL_CALL PresenterSlideShowView::mouseReleased (const awt::MouseEvent& rEve
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<awt::XMouseListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&awt::XMouseListener::mouseReleased, aEvent);
@@ -571,7 +571,7 @@ void SAL_CALL PresenterSlideShowView::mouseEntered (const awt::MouseEvent& rEven
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<awt::XMouseListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&awt::XMouseListener::mouseEntered, aEvent);
@@ -584,7 +584,7 @@ void SAL_CALL PresenterSlideShowView::mouseExited (const awt::MouseEvent& rEvent
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<awt::XMouseListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&awt::XMouseListener::mouseExited, aEvent);
@@ -599,7 +599,7 @@ void SAL_CALL PresenterSlideShowView::mouseDragged (const awt::MouseEvent& rEven
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<awt::XMouseMotionListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseMotionListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&awt::XMouseMotionListener::mouseDragged, aEvent);
@@ -612,7 +612,7 @@ void SAL_CALL PresenterSlideShowView::mouseMoved (const awt::MouseEvent& rEvent)
     awt::MouseEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<awt::XMouseMotionListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<awt::XMouseMotionListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&awt::XMouseMotionListener::mouseMoved, aEvent);
@@ -811,7 +811,7 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
     awt::PaintEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<awt::XPaintListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<awt::XPaintListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&awt::XPaintListener::windowPaint, aEvent);
@@ -920,7 +920,7 @@ void PresenterSlideShowView::Resize (void)
     // window has changed.
     lang::EventObject aEvent (static_cast<XWeak*>(this));
     ::cppu::OInterfaceContainerHelper* pIterator
-        = maBroadcaster.getContainer(getCppuType((Reference<util::XModifyListener>*)NULL));
+        = maBroadcaster.getContainer(cppu::UnoType<util::XModifyListener>::get());
     if (pIterator != NULL)
     {
         pIterator->notifyEach(&util::XModifyListener::modified, aEvent);

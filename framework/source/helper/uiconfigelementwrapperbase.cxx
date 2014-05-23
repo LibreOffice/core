@@ -435,13 +435,13 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
     const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_CONFIGLISTENER), UIELEMENT_PROPHANDLE_CONFIGLISTENER , cppu::UnoType<sal_Bool>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_CONFIGSOURCE), UIELEMENT_PROPHANDLE_CONFIGSOURCE   , ::getCppuType((const Reference< ::com::sun::star::ui::XUIConfigurationManager >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_FRAME), UIELEMENT_PROPHANDLE_FRAME          , ::getCppuType((const Reference< com::sun::star::frame::XFrame >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
+        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_CONFIGSOURCE), UIELEMENT_PROPHANDLE_CONFIGSOURCE   , cppu::UnoType<com::sun::star::ui::XUIConfigurationManager>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_FRAME), UIELEMENT_PROPHANDLE_FRAME          , cppu::UnoType<com::sun::star::frame::XFrame>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
         com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_NOCLOSE), UIELEMENT_PROPHANDLE_NOCLOSE        , cppu::UnoType<sal_Bool>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT ),
         com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_PERSISTENT), UIELEMENT_PROPHANDLE_PERSISTENT     , cppu::UnoType<sal_Bool>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_RESOURCEURL), UIELEMENT_PROPHANDLE_RESOURCEURL    , cppu::UnoType<OUString>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
         com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_TYPE), UIELEMENT_PROPHANDLE_TYPE           , cppu::UnoType<OUString>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
-        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_XMENUBAR), UIELEMENT_PROPHANDLE_XMENUBAR       , ::getCppuType((const Reference< com::sun::star::awt::XMenuBar >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY )
+        com::sun::star::beans::Property( OUString(UIELEMENT_PROPNAME_XMENUBAR), UIELEMENT_PROPHANDLE_XMENUBAR       , cppu::UnoType<com::sun::star::awt::XMenuBar>::get(), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY )
     };
     // Use it to initialize sequence!
     const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );

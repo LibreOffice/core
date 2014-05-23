@@ -562,10 +562,10 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     int e = 1;
-    aVal.setValue( &e, ::getCppuType( (const TypeClass *)0 ) );
+    aVal.setValue( &e, cppu::UnoType<TypeClass>::get());
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal.setValue( &e, ::getCppuType( (const FieldAccessMode *)0 ) );
+    aVal.setValue( &e, cppu::UnoType<FieldAccessMode>::get());
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==SEQ of INT==
@@ -618,17 +618,17 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
         const ConvBlock& rBlock = pTestBlocks[nPos];
         const Any & rVal        = rBlock._value;
 
-        convertTo( ::getCppuType( (const OUString *)0 ), rVal, rBlock._toString );
-        convertTo( ::getCppuType( (const float *)0 ), rVal, rBlock._toFloat );
-        convertTo( ::getCppuType( (const double *)0 ), rVal, rBlock._toDouble );
-        convertTo( ::getCppuType( (const sal_uInt32 *)0 ), rVal, rBlock._toUINT32 );
-        convertTo( ::getCppuType( (const sal_Int32 *)0 ), rVal, rBlock._toINT32 );
-        convertTo( ::getCppuType( (const sal_uInt16 *)0 ), rVal, rBlock._toUINT16 );
-        convertTo( ::getCppuType( (const sal_Int16 *)0 ), rVal, rBlock._toINT16 );
-        convertTo( ::getCppuType( (const sal_Int8 *)0 ), rVal, rBlock._toBYTE );
+        convertTo( cppu::UnoType<OUString>::get(), rVal, rBlock._toString );
+        convertTo( cppu::UnoType<float>::get(), rVal, rBlock._toFloat );
+        convertTo( cppu::UnoType<double>::get(), rVal, rBlock._toDouble );
+        convertTo( cppu::UnoType<sal_uInt32>::get(), rVal, rBlock._toUINT32 );
+        convertTo( cppu::UnoType<sal_Int32>::get(), rVal, rBlock._toINT32 );
+        convertTo( cppu::UnoType<cppu::UnoUnsignedShortType>::get(), rVal, rBlock._toUINT16 );
+        convertTo( cppu::UnoType<sal_Int16>::get(), rVal, rBlock._toINT16 );
+        convertTo( cppu::UnoType<sal_Int8>::get(), rVal, rBlock._toBYTE );
         convertTo( ::getBooleanCppuType(), rVal, rBlock._toBOOL );
         convertTo( ::getCharCppuType(), rVal, rBlock._toChar );
-        convertTo( ::getCppuType( (const TypeClass *)0 ), rVal, rBlock._toTypeClass );
+        convertTo( cppu::UnoType<TypeClass>::get(), rVal, rBlock._toTypeClass );
         convertTo( ::getCppuType( (const Sequence< sal_Int16 > *)0 ), rVal, rBlock._toSeqINT16 );
         convertTo( ::getCppuType( (const Sequence< Any > *)0 ), rVal, rBlock._toSeqAny );
 
@@ -639,18 +639,18 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
     delete [] pTestBlocks;
 
     Any aRet;
-    aRet = xConverter->convertTo( Any( &xMgr, ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) ),
-                                  ::getCppuType( (const Reference< XServiceInfo > *)0 ) );
-    aRet = xConverter->convertTo( aRet, ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
-    aRet = xConverter->convertTo( aRet, ::getCppuType( (const Reference< XServiceInfo > *)0 ) );
+    aRet = xConverter->convertTo( Any( &xMgr, cppu::UnoType<XMultiServiceFactory>::get()),
+                                  cppu::UnoType<XServiceInfo>::get());
+    aRet = xConverter->convertTo( aRet, cppu::UnoType<XMultiServiceFactory>::get());
+    aRet = xConverter->convertTo( aRet, cppu::UnoType<XServiceInfo>::get());
     aRet <<= SAL_CONST_INT64(0x7fffffffffffffff);
-    aRet = xConverter->convertTo( aRet, ::getCppuType( (const sal_uInt64 *)0 ) );
+    aRet = xConverter->convertTo( aRet, cppu::UnoType<sal_uInt64>::get());
     OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0x7fffffffffffffff) );
     aRet <<= SAL_CONST_UINT64(0xffffffffffffffff);
-    aRet = xConverter->convertTo( aRet, ::getCppuType( (const sal_uInt64 *)0 ) );
+    aRet = xConverter->convertTo( aRet, cppu::UnoType<sal_uInt64>::get());
     OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0xffffffffffffffff) );
     aRet <<= SAL_CONST_INT64(-1);
-    aRet = xConverter->convertTo( aRet, ::getCppuType( (const sal_Int8 *)0 ) );
+    aRet = xConverter->convertTo( aRet, cppu::UnoType<sal_Int8>::get());
     OSL_ASSERT( *(const sal_Int8 *)aRet.getValue() == (-1) );
     printf( "test_Conversion(): end.\n" );
 }

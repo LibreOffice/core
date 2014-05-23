@@ -196,7 +196,7 @@ uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nInde
 // XElementAccess
 uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  ) throw (uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(static_cast<  Reference< com::sun::star::awt::XControlModel>* >(NULL));
+    return cppu::UnoType<com::sun::star::awt::XControlModel>::get();
 }
 
 sal_Bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  ) throw (uno::RuntimeException, std::exception)

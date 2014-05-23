@@ -137,7 +137,7 @@ const uno::Reference< container::XIndexContainer >&
                 OSL_ENSURE( xForms.is(), "XForms not available" );
 
                 aTmp.setValue( &xForm,
-                    ::getCppuType((uno::Reference < form::XForm >*)0));
+                    cppu::UnoType<form::XForm>::get());
                 xForms->insertByIndex( xForms->getCount(), aTmp );
 
                 xFormComps = uno::Reference< container::XIndexContainer >

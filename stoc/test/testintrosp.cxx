@@ -209,17 +209,17 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
 
         pAry[0].Name = "Factor";
         pAry[0].Handle = -1;
-        pAry[0].Type = getCppuType( (double*) NULL );
+        pAry[0].Type = cppu::UnoType<double>::get();
         pAry[0].Attributes = BOUND | TRANSIENT;
 
         pAry[1].Name = "MyCount";
         pAry[1].Handle = -1;
-        pAry[1].Type = getCppuType( (sal_Int32*) NULL );
+        pAry[1].Type = cppu::UnoType<sal_Int32>::get();
         pAry[1].Attributes = BOUND | TRANSIENT;
 
         pAry[2].Name = "Info";
         pAry[2].Handle = -1;
-        pAry[2].Type = getCppuType( (OUString*) NULL );
+        pAry[2].Type = cppu::UnoType<OUString>::get();
         pAry[2].Attributes = TRANSIENT;
     }
     // Return information about all three properties
@@ -681,7 +681,7 @@ Any getIntrospectionTestObject( const Reference< XMultiServiceFactory > & xMgr )
 {
     Any aObjAny;
     Reference< XIntroTest > xTestObj = new ImplIntroTest( xMgr );
-    aObjAny.setValue( &xTestObj, ::getCppuType( (const Reference< XIntroTest > *)0 ) );
+    aObjAny.setValue( &xTestObj, cppu::UnoType<XIntroTest>::get());
     return aObjAny;
 }
 
@@ -860,7 +860,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     // check result of introspection
 
     // determine XPropertySet-UIK
-    Type aType = getCppuType( (Reference< XPropertySet >*) NULL );
+    Type aType = cppu::UnoType<XPropertySet>::get();
 
     Reference< XInterface > xPropSetIface = xAccess->queryAdapter( aType );
     Reference< XPropertySet > xPropSet( xPropSetIface, UNO_QUERY );

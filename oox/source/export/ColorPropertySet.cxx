@@ -56,7 +56,7 @@ lcl_ColorPropertySetInfo::lcl_ColorPropertySetInfo( bool bFillColor ) :
         // note: length of FillColor and LineColor is 9
         m_aColorPropName( (bFillColor ? "FillColor" : "LineColor"), 9, RTL_TEXTENCODING_ASCII_US ),
         m_aColorProp( m_aColorPropName, -1,
-                      ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), 0)
+                      cppu::UnoType<sal_Int32>::get(), 0)
 {}
 
 Sequence< Property > SAL_CALL lcl_ColorPropertySetInfo::getProperties()

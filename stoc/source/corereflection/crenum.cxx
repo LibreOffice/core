@@ -100,8 +100,8 @@ Sequence< Type > IdlEnumFieldImpl::getTypes()
         if (! s_pTypes)
         {
             static ::cppu::OTypeCollection s_aTypes(
-                ::getCppuType( (const Reference< XIdlField2 > *)0 ),
-                ::getCppuType( (const Reference< XIdlField > *)0 ),
+                cppu::UnoType<XIdlField2>::get(),
+                cppu::UnoType<XIdlField>::get(),
                 IdlMemberImpl::getTypes() );
             s_pTypes = &s_aTypes;
         }

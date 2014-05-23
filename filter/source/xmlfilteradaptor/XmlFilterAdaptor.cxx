@@ -254,8 +254,8 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star::be
         // create an XProperty set to configure the exporter for pretty printing
          PropertyMapEntry aImportInfoMap[] =
          {
-             { OUString("UsePrettyPrinting"), 0, ::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
-             { OUString("ExportTextNumberElement"), 0, ::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
+             { OUString("UsePrettyPrinting"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
+             { OUString("ExportTextNumberElement"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
              { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
              { OUString(), 0, css::uno::Type(), 0, 0 }
          };

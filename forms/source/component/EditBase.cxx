@@ -108,9 +108,9 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) t
         nAnyMask |= DEFAULT_LONG;
     else if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         nAnyMask |= DEFAULT_DOUBLE;
-    else if (m_aDefault.getValueType() == ::getCppuType((const util::Time*)0))
+    else if (m_aDefault.getValueType() == cppu::UnoType<util::Time>::get())
         nAnyMask |= DEFAULT_TIME;
-    else if (m_aDefault.getValueType() == ::getCppuType((const util::Date*)0))
+    else if (m_aDefault.getValueType() == cppu::UnoType<util::Date>::get())
         nAnyMask |= DEFAULT_DATE;
 
     if (m_bFilterProposal)  // Don't save a value, because it's boolean
@@ -308,13 +308,13 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rO
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefaultText);
             break;
         case PROPERTY_ID_DEFAULT_VALUE:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, ::getCppuType((const double*)0));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, cppu::UnoType<double>::get());
             break;
         case PROPERTY_ID_DEFAULT_DATE:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, ::getCppuType((const util::Date*)0));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, cppu::UnoType<util::Date>::get());
             break;
         case PROPERTY_ID_DEFAULT_TIME:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, ::getCppuType((const util::Time*)0));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefault, cppu::UnoType<util::Time>::get());
             break;
         default:
             bModified = OBoundControlModel::convertFastPropertyValue(

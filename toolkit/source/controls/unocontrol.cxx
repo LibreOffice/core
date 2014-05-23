@@ -1098,7 +1098,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             // kein TopWindow
             if ( !xToolkit.is() )
                 xToolkit = rParentPeer->getToolkit();
-            Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const Reference< XControlContainer>*)0) );
+            Any aAny = OWeakAggObject::queryInterface( cppu::UnoType<XControlContainer>::get());
             Reference< XControlContainer > xC;
             aAny >>= xC;
             if( xC.is() )

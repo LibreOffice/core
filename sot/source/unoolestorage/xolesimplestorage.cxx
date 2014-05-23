@@ -597,7 +597,7 @@ uno::Type SAL_CALL OLESimpleStorage::getElementType()
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    return getCppuType( (const uno::Reference< io::XInputStream >*)NULL );
+    return cppu::UnoType<io::XInputStream>::get();
 }
 
 

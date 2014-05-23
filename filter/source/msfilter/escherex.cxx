@@ -1779,7 +1779,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
     PolyPolygon aRetPolyPoly;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXPropSet;
     ::com::sun::star::uno::Any aAny( rXShape->queryInterface(
-        ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >*) 0 ) ));
+        cppu::UnoType<com::sun::star::beans::XPropertySet>::get()));
 
     OUString sPolyPolygonBezier ( "PolyPolygonBezier" );
     OUString sPolyPolygon       ( "PolyPolygon" );
@@ -1808,7 +1808,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
     Polygon aPolygon;
     PolyPolygon aPolyPolygon;
 
-    if ( rAny.getValueType() == ::getCppuType( ( const ::com::sun::star::drawing::PolyPolygonBezierCoords* ) 0 ) )
+    if ( rAny.getValueType() == cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
     {
         ::com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon
             = (::com::sun::star::drawing::PolyPolygonBezierCoords*)rAny.getValue();
@@ -2329,7 +2329,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
         ::com::sun::star::awt::Point aStartPoint, aEndPoint;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXPropSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > aShapeA, aShapeB;
-        ::com::sun::star::uno::Any aAny( rXShape->queryInterface( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >*) 0 ) ));
+        ::com::sun::star::uno::Any aAny( rXShape->queryInterface( cppu::UnoType<com::sun::star::beans::XPropertySet>::get()));
         if ( aAny >>= aXPropSet )
         {
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeKind, true ) )

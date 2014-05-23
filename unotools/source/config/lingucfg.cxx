@@ -366,19 +366,19 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         case UPH_DEFAULT_LOCALE :
         {
             lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage, false) );
-            aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
+            aRes.setValue( &aLocale, cppu::UnoType<lang::Locale>::get());
             break;
         }
         case UPH_DEFAULT_LOCALE_CJK :
         {
             lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CJK, false) );
-            aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
+            aRes.setValue( &aLocale, cppu::UnoType<lang::Locale>::get());
             break;
         }
         case UPH_DEFAULT_LOCALE_CTL :
         {
             lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CTL, false) );
-            aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
+            aRes.setValue( &aLocale, cppu::UnoType<lang::Locale>::get());
             break;
         }
         case UPH_IS_IGNORE_POST_POSITIONAL_WORD :       pbVal = &rOpt.bIsIgnorePostPositionalWord; break;
@@ -676,8 +676,8 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
 
     bool bRet = false;
     const uno::Type &rBOOL     = ::getBooleanCppuType();
-    const uno::Type &rINT16    = ::getCppuType( (sal_Int16 *) NULL );
-    const uno::Type &rINT32    = ::getCppuType( (sal_Int32 *) NULL );
+    const uno::Type &rINT16    = cppu::UnoType<sal_Int16>::get();
+    const uno::Type &rINT32    = cppu::UnoType<sal_Int32>::get();
 
     sal_Int32 nProps = rProperyNames.getLength();
     uno::Sequence< uno::Any > aValues( nProps );

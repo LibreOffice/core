@@ -108,9 +108,9 @@ Sequence< Type > IdlReflectionServiceImpl::getTypes()
         if (! s_pTypes)
         {
             static OTypeCollection s_aTypes(
-                ::getCppuType( (const Reference< XIdlReflection > *)0 ),
-                ::getCppuType( (const Reference< XHierarchicalNameAccess > *)0 ),
-                ::getCppuType( (const Reference< XServiceInfo > *)0 ),
+                cppu::UnoType<XIdlReflection>::get(),
+                cppu::UnoType<XHierarchicalNameAccess>::get(),
+                cppu::UnoType<XServiceInfo>::get(),
                 OComponentHelper::getTypes() );
             s_pTypes = &s_aTypes;
         }
@@ -263,7 +263,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
         {
             // type retrieved from tdmgr
             OSL_ASSERT( (*(Reference< XInterface > *)aRet.getValue())->queryInterface(
-                ::getCppuType( (const Reference< XTypeDescription > *)0 ) ).hasValue() );
+                cppu::UnoType<XTypeDescription>::get()).hasValue() );
 
             css::uno::Reference< css::reflection::XConstantTypeDescription >
                 ctd;
@@ -288,7 +288,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
                 if (pTD)
                 {
                     Reference< XIdlClass > xIdlClass( constructClass( pTD ) );
-                    aRet.setValue( &xIdlClass, ::getCppuType( (const Reference< XIdlClass > *)0 ) );
+                    aRet.setValue( &xIdlClass, cppu::UnoType<XIdlClass>::get());
                     typelib_typedescription_release( pTD );
                 }
             }

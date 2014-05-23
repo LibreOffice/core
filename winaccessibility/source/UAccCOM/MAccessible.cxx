@@ -2860,7 +2860,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
         }
     case TypeClass_ENUM:
         {
-            if (pAny.getValueType() == getCppuType( (::com::sun::star::awt::FontSlant* )0 ) )
+            if (pAny.getValueType() == cppu::UnoType<com::sun::star::awt::FontSlant>::get())
             {
                 com::sun::star::awt::FontSlant val;
                 pAny >>= val;
@@ -2869,13 +2869,13 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
         }
     case TypeClass_STRUCT:
         {
-            if (pAny.getValueType() == getCppuType( (::com::sun::star::style::LineSpacing* )0 ) )
+            if (pAny.getValueType() == cppu::UnoType<com::sun::star::style::LineSpacing>::get())
             {
                 com::sun::star::style::LineSpacing val;
                 pAny >>= val;
                 swprintf( pChar, L"Mode=%ld,Height=%ld,", val.Mode, val.Height);
             }
-            else if (pAny.getValueType() == getCppuType( (com::sun::star::accessibility::TextSegment *)0 ) )
+            else if (pAny.getValueType() == cppu::UnoType<com::sun::star::accessibility::TextSegment>::get())
             {
                 com::sun::star::accessibility::TextSegment val;
                 pAny >>= val;

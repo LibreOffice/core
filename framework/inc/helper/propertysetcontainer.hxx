@@ -67,7 +67,7 @@ class FWE_DLLPUBLIC PropertySetContainer : public com::sun::star::container::XIn
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
-            return ::getCppuType((com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >*)0);
+            return cppu::UnoType<com::sun::star::beans::XPropertySet>::get();
         }
 
         virtual sal_Bool SAL_CALL hasElements()
