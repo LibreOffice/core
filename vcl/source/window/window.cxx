@@ -675,13 +675,13 @@ WindowImpl::WindowImpl( WindowType nType )
     mbMenuFloatingWindow= false;      // true: MenuFloatingWindow is the base class
     mbToolbarFloatingWindow= false;       // true: ImplPopupFloatWin is the base class, used for subtoolbars
     mbSplitter          = false;      // true: Splitter is the base class
-    mbVisible           = false;        // true: Show( sal_True ) called
+    mbVisible           = false;        // true: Show( true ) called
     mbOverlapVisible    = false;        // true: Hide called for visible window from ImplHideAllOverlapWindow()
-    mbDisabled          = false;        // true: Enable( sal_False ) called
-    mbInputDisabled     = false;        // true: EnableInput( sal_False ) called
+    mbDisabled          = false;        // true: Enable( false ) called
+    mbInputDisabled     = false;        // true: EnableInput( false ) called
     mbDropDisabled      = false;        // true: Drop is enabled
-    mbNoUpdate          = false;        // true: SetUpdateMode( sal_False ) called
-    mbNoParentUpdate    = false;        // true: SetParentUpdateMode( sal_False ) called
+    mbNoUpdate          = false;        // true: SetUpdateMode( false ) called
+    mbNoParentUpdate    = false;        // true: SetParentUpdateMode( false ) called
     mbActive            = false;        // true: Window Active
     mbParentActive      = false;        // true: OverlapActive from Parent
     mbReallyVisible     = false;        // true: this and all parents to an overlapped window are visible
@@ -689,7 +689,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbInInitShow        = false;        // true: we are in InitShow
     mbChildNotify       = false;        // true: ChildNotify
     mbChildPtrOverwrite = false;        // true: PointerStyle overwrites Child-Pointer
-    mbNoPtrVisible      = false;        // true: ShowPointer( sal_False ) called
+    mbNoPtrVisible      = false;        // true: ShowPointer( false ) called
     mbMouseMove         = false;        // true: BaseMouseMove called
     mbPaintFrame        = false;        // true: Paint is visible, but not painted
     mbInPaint           = false;        // true: Inside PaintHdl
