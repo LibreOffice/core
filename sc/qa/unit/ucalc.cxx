@@ -1352,6 +1352,63 @@ void Test::testFormulaDepTracking2()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaDepTrackingDeleteRow()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Values in A1:A3.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 3.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 5.0);
+
+    // SUM(A1:A3) in A5.
+    m_pDoc->SetString(ScAddress(0,4,0), "=SUM(A1:A3)");
+
+    // A6 to reference A5.
+    m_pDoc->SetString(ScAddress(0,5,0), "=A5*10");
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,5,0));
+    CPPUNIT_ASSERT(pFC);
+
+    // A4 should have a broadcaster with A5 listening to it.
+    SvtBroadcaster* pBC = m_pDoc->GetBroadcaster(ScAddress(0,4,0));
+    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   broadcaster at A5 = %p\n", pBC);
+    CPPUNIT_ASSERT(pBC);
+    SvtBroadcaster::ListenersType* pListeners = &pBC->GetAllListeners();
+    CPPUNIT_ASSERT_MESSAGE("A5 should have one listener.", pListeners->size() == 1);
+    SvtListener* pListener = pListeners->at(0);
+    CPPUNIT_ASSERT_MESSAGE("A6 should be listening to A5.", pListener == pFC);
+
+    // Check initial values.
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(90.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   Deleting row 2....\n");
+    // Delete row 2.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
+    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   Done deleting row 2.\n");
+
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,3,0));
+    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   broadcaster at A4 = %p\n", pBC);
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster at A5 should have shifted to A4.", pBC);
+    pListeners = &pBC->GetAllListeners();
+    CPPUNIT_ASSERT_MESSAGE("A3 should have one listener.", pListeners->size() == 1);
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
+    CPPUNIT_ASSERT(pFC);
+    pListener = pListeners->at(0);
+    CPPUNIT_ASSERT_MESSAGE("A5 should be listening to A4.", pFC == pListener);
+
+    // Check values after row deletion.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaMatrixResultUpdate()
 {
     m_pDoc->InsertTab(0, "Test");
