@@ -1328,7 +1328,7 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
         mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = false;
-        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? false : true; // sal_True: try to draw this control with native theme API
+        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? false : true; // true: try to draw this control with native theme API
    }
 
     return mpWindowImpl->mpWinData;
@@ -2822,7 +2822,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
             mpWindowImpl->mbPaintFrame = true;
-            bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
+            bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? true : false;
             mpWindowImpl->mpFrame->Show( true, bNoActivate );
             if( aDogTag.IsDead() )
                 return;
