@@ -72,9 +72,27 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
-    m_fViewAngle(30.0f)
+      m_iWidth(0)
+    , m_iHeight(0)
+    , m_3DUBOBuffer(0)
+    , m_3DActualSizeLight(0)
+    , m_NormalBuffer(0)
+    , m_VertexBuffer(0)
+    , m_CubeVertexBuf(0)
+    , m_CubeElementBuf(0)
+    , m_CubeNormalBuf(0)
+    , m_BoundBox(0)
+    , m_BoundBoxNormal(0)
+    , m_TextTexCoordBuf(0)
+    , m_RoundBarMesh()
+    , m_RenderVertexBuf(0)
+    , m_RenderTexCoordBuf(0)
+    , m_fViewAngle(30.0f)
     , m_fHeightWeight(1.0f)
     , mbPickingMode(false)
+    , mnPickingFbo(0)
+    , mnPickingRboDepth(0)
+    , mnPickingRboColor(0)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
