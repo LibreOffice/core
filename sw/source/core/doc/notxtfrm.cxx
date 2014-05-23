@@ -602,6 +602,10 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         break;
 
     case RES_UPDATE_ATTR:
+        if (GetNode()->GetNodeType() != ND_GRFNODE) {
+            break;
+        }
+        // fall through
     case RES_FMT_CHG:
         CLEARCACHE( (SwGrfNode*) GetNode() )
         break;
