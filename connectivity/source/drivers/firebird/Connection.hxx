@@ -149,9 +149,9 @@ namespace connectivity
              * versions.
              */
             void rebuildIndexes()
-                throw(::com::sun::star::sdbc::SQLException);
+                throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void buildTypeInfo()
-                throw(::com::sun::star::sdbc::SQLException);
+                throw (css::sdbc::SQLException);
 
             /**
              * Creates a new transaction with the desired parameters, if
