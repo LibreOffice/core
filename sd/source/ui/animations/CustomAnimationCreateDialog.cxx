@@ -540,7 +540,7 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     // select current preset if available
     if( !rsPresetId.isEmpty() )
     {
-        for( sal_uInt16 i = ENTRANCE; i <= MOTIONPATH; i++ )
+        for( sal_uInt16 i = ENTRANCE; i <= MISCEFFECTS; i++ )
         {
             if( mpTabPages[i]->select( rsPresetId ) )
             {
