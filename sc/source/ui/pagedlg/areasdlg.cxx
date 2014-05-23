@@ -475,7 +475,6 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
     {
         if ( Impl_CheckRefStrings() )
         {
-            bool            bDataChanged = false;
             OUString        aStr;
             SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, aStr );
             SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
@@ -489,7 +488,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
             bool bEntireSheet = (pLbPrintArea->GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
             SfxBoolItem aEntireSheet( FN_PARAM_4, bEntireSheet );
 
-            bDataChanged = bEntireSheet != pDoc->IsPrintEntireSheet( nCurTab );
+            bool bDataChanged = bEntireSheet != pDoc->IsPrintEntireSheet( nCurTab );
             if( !bEntireSheet )
             {
                 // if new list box selection is not "Entire sheet", get the edit field contents
