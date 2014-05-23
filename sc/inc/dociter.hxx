@@ -60,11 +60,11 @@ class ScValueIterator            // walk through all values in an area
     SCCOL mnCol;
     SCTAB mnTab;
     SCROW           nAttrEndRow;
+    sal_uInt16      mnSubTotalFlags;
     short           nNumFmtType;
-    bool            bNumValid:1;
-    bool            bSubTotal:1;
-    bool            bCalcAsShown:1;
-    bool            bTextAsZero:1;
+    bool            bNumValid;
+    bool            bCalcAsShown;
+    bool            bTextAsZero;
 
     const sc::CellStoreType* mpCells;
     PositionType maCurPos;
@@ -83,7 +83,7 @@ class ScValueIterator            // walk through all values in an area
 public:
 
     ScValueIterator(
-        ScDocument* pDocument, const ScRange& rRange, bool bSTotal = false,
+        ScDocument* pDocument, const ScRange& rRange, sal_uInt16 nSubTotalFlags = 0x00,
         bool bTextAsZero = false );
 
     void GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
@@ -184,8 +184,7 @@ public:
 };
 
 /**
- * Walk through all cells in an area. For SubTotal no hidden and no
- * sub-total lines.
+ * Walk through all cells in an area. For SubTotal and Aggregate depending on mnSubTotalFlags.
  **/
 class ScCellIterator
 {
@@ -197,7 +196,7 @@ class ScCellIterator
     ScAddress maCurPos;
 
     PositionType maCurColPos;
-    bool mbSubTotal;
+    sal_uInt16   mnSubTotalFlags;
 
     ScRefCellValue maCurCell;
 
@@ -211,7 +210,7 @@ class ScCellIterator
     bool getCurrent();
 
 public:
-    ScCellIterator( ScDocument* pDoc, const ScRange& rRange, bool bSTotal = false );
+    ScCellIterator( ScDocument* pDoc, const ScRange& rRange, sal_uInt16 nSubTotalFlags = 0x00 );
 
     const ScAddress& GetPos() const { return maCurPos; }
 
@@ -463,7 +462,6 @@ private:
     SCROW                     nAttrEndRow;
     short                     nNumFmtType;
     bool                      bNumValid;
-    bool                      bSubTotal;
     bool                      bCalcAsShown;
     bool                      bTextAsZero;
 
@@ -471,7 +469,6 @@ public:
 
                     ScHorizontalValueIterator( ScDocument* pDocument,
                                                const ScRange& rRange,
-                                               bool bSTotal = false,
                                                bool bTextAsZero = false );
                     ~ScHorizontalValueIterator();
     /// Does NOT reset rValue if no value found!

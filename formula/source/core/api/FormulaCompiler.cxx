@@ -1089,7 +1089,8 @@ bool FormulaCompiler::GetToken()
         mpToken = new FormulaByteToken( ocStop );
         return false;
     }
-    if( mpToken->GetOpCode() == ocSubTotal )
+    if ( mpToken->GetOpCode() == ocSubTotal ||
+         mpToken->GetOpCode() == ocAggregate )
         glSubTotal = true;
     else if ( mpToken->IsExternalRef() )
     {
