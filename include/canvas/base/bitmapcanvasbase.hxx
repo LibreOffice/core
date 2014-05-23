@@ -83,7 +83,7 @@ namespace canvas
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
-                                                                                                                   sal_Bool                                      beFast ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                                   sal_Bool                                      beFast ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
