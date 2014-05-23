@@ -507,6 +507,29 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
     return NULL;
 }
 
+#if defined(WNT)
+static OString Win_GetShortPathName( const OUString &rLongPathName )
+{
+    OString aRes;
+
+    sal_Unicode aShortBuffer[1024] = {0};
+    sal_Int32   nShortBufSize = SAL_N_ELEMENTS( aShortBuffer );
+
+    // use the version of 'GetShortPathName' that can deal with Unicode...
+    sal_Int32 nShortLen = GetShortPathNameW(
+            reinterpret_cast<LPCWSTR>( rLongPathName.getStr() ),
+            reinterpret_cast<LPWSTR>( aShortBuffer ),
+            nShortBufSize );
+
+    if (nShortLen < nShortBufSize) // conversion successful?
+        aRes = OString( OU2ENC( OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
+    else
+        OSL_FAIL( "Win_GetShortPathName: buffer to short" );
+
+    return aRes;
+}
+#endif //defined(WNT)
+
 Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const OUString& aWord,
         const ::com::sun::star::lang::Locale& aLocale,
         const ::com::sun::star::beans::PropertyValues& aProperties )
