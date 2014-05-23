@@ -191,16 +191,6 @@ template< class MapType >
                                             ::o3tl::select2nd< typename MapType::value_type >()));
 }
 
-/** Functor that deletes the object behind the given pointer by calling the
-    delete operator
- */
-template< typename T >
-    struct DeletePtr : public ::std::unary_function< T *, void >
-{
-    void operator() ( T * pObj )
-    { delete pObj; }
-};
-
 } //  namespace CommonFunctors
 } //  namespace chart
 
