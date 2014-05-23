@@ -3014,13 +3014,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                 (ScMergeAttr*)&rParam.mpPattern->GetItem(ATTR_MERGE);
         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
-        //  Don't clip for text height when printing rows with optimal height,
-        //  except when font size is from conditional formatting.
-        //! Allow clipping when vertically merged?
-        if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+        if (UseNormalClip(rParam.mnCellY, rParam.mpCondSet))
             bClip = true;
         else
             bSimClip = true;
@@ -3055,6 +3049,19 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     }
 
     Rectangle aLogicClip;
+    if (
+         ((nAttrRotate == 9000) || (nAttrRotate == 27000)) &&
+         (!(rParam.meOrient==SVX_ORIENTATION_STANDARD &&
+            !rParam.mbAsianVertical)) &&
+         (!(bClip || bSimClip))
+       )
+    {
+        if (UseNormalClip(rParam.mnCellY, rParam.mpCondSet))
+            bClip = true;
+        else
+            bSimClip = true;
+    }
+
     if (bClip || bSimClip)
     {
         // Clip marks are already handled in GetOutputArea
@@ -4008,13 +4015,8 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
                 (ScMergeAttr*)&rParam.mpPattern->GetItem(ATTR_MERGE);
         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
-        //  Don't clip for text height when printing rows with optimal height,
-        //  except when font size is from conditional formatting.
-        //! Allow clipping when vertically merged?
-        if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+
+        if (UseNormalClip(rParam.mnCellY, rParam.mpCondSet))
             bClip = true;
         else
             bSimClip = true;
@@ -4362,13 +4364,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
                 (ScMergeAttr*)&rParam.mpPattern->GetItem(ATTR_MERGE);
         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
-        //  Don't clip for text height when printing rows with optimal height,
-        //  except when font size is from conditional formatting.
-        //! Allow clipping when vertically merged?
-        if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+        if (UseNormalClip(rParam.mnCellY, rParam.mpCondSet))
             bClip = true;
         else
             bSimClip = true;
@@ -4472,6 +4468,20 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
+}
+
+bool ScOutputData::UseNormalClip(SCROW nCellY, const SfxItemSet* pCondSet)
+{
+    bool bNormalClip = false;
+       //      Don't clip for text height when printing rows with optimal height,
+       //      except when font size is from conditional formatting.
+       //!     Allow clipping when vertically merged?
+       if ( eType != OUTTYPE_PRINTER ||
+               ( mpDoc->GetRowFlags( nCellY, nTab ) & CR_MANUALSIZE ) ||
+               ( pCondSet && SFX_ITEM_SET ==
+                       pCondSet->GetItemState(ATTR_FONT_HEIGHT, sal_True) ) )
+               bNormalClip = true;
+    return bNormalClip;
 }
 
 void ScOutputData::DrawEdit(bool bPixelToLogic)
@@ -5199,11 +5209,21 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     else
                                     {
                                         //  bei gedrehtem Text ist Standard zentriert
+                                        long nDiff = 0;
                                         if (eHorJust==SVX_HOR_JUSTIFY_RIGHT)
-                                            aLogicStart.X() += nAvailWidth - nEngineWidth;
+                                            nDiff = nAvailWidth - nEngineWidth;
                                         else if (eHorJust==SVX_HOR_JUSTIFY_CENTER ||
                                                  eHorJust==SVX_HOR_JUSTIFY_STANDARD)
-                                            aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
+                                            nDiff = (nAvailWidth - nEngineWidth) / 2;
+
+                                        if (nEngineWidth > nAvailWidth)
+                                        {
+                                            if (nAttrRotate == 9000)
+                                               nDiff = 0;
+                                            else if (nAttrRotate == 27000)
+                                               nDiff = nAvailWidth - nEngineWidth;
+                                        }
+                                        aLogicStart.X() += nDiff;
                                     }
                                 }
 

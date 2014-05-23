@@ -304,6 +304,8 @@ public:
     void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
     void    DrawFrame();
 
+    bool    UseNormalClip(SCROW nCellY, const SfxItemSet* pCondSet);
+
                     // with logic MapMode set!
     void    DrawEdit(bool bPixelToLogic);
 
