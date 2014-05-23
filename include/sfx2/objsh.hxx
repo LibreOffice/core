@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_OBJSH_HXX
 #define INCLUDED_SFX2_OBJSH_HXX
 
-#include <config_features.h>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
@@ -256,7 +255,6 @@ public:
     virtual bool                AcceptStateUpdate() const;
     bool                        IsHelpDocument() const;
 
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     bool                        IsDocShared() const;
     OUString                    GetSharedFileURL() const;
     bool                        SwitchToShared( bool bShared, bool bSave );
@@ -265,12 +263,6 @@ public:
     SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
     void                        SetSharedXMLFlag( bool bFlag ) const;
     bool                        HasSharedXMLFlagSet() const;
-#else
-    bool                        IsDocShared() const
-        { return sal_False; };
-    OUString             GetSharedFileURL() const
-        { return OUString(); };
-#endif
 
     SAL_DLLPRIVATE void SetModalMode_Impl(bool bModal=true);
     SAL_DLLPRIVATE void SetMacroMode_Impl(bool bModal=true);

@@ -673,14 +673,22 @@ bool SfxObjectShell::HasSharedXMLFlagSet() const
 
 bool SfxObjectShell::IsDocShared() const
 {
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     return ( !pImp->m_aSharedFileURL.isEmpty() );
+#else
+    return false;
+#endif
 }
 
 
 
 OUString SfxObjectShell::GetSharedFileURL() const
 {
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     return pImp->m_aSharedFileURL;
+#else
+    return OUString();
+#endif
 }
 
 #endif
