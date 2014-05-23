@@ -362,8 +362,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                if ( m_pImages )
-                    m_pImages->pImageItemList->push_back( pItem );
+                m_pImages->pImageItemList->push_back( pItem );
             }
             break;
 
