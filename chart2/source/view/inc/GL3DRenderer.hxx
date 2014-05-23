@@ -317,7 +317,7 @@ private:
 
     std::vector<glm::vec3> m_Normals;
 
-    std::vector<unsigned short> m_Indeices;
+    std::vector<unsigned short> m_Indices;
 
     RoundBarMesh m_RoundBarMesh;
 

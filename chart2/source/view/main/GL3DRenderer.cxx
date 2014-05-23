@@ -308,7 +308,7 @@ void OpenGL3DRenderer::AddNormalData(GLuint normalBuf)
 void OpenGL3DRenderer::AddIndexData(GLuint indexBuf)
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indeices.size() * sizeof(unsigned short), &m_Indeices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned short), &m_Indices[0], GL_STATIC_DRAW);
     CHECK_GL_ERROR();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
@@ -334,20 +334,20 @@ void OpenGL3DRenderer::SetVertex(PackedVertex &packed,
     std::map<PackedVertex,unsigned short> &VertexToOutIndex,
     std::vector<glm::vec3> &vertex,
     std::vector<glm::vec3> &normal,
-    std::vector<unsigned short> &indeices)
+    std::vector<unsigned short> &indices)
 {
     unsigned short index;
     bool found = GetSimilarVertexIndex(packed, VertexToOutIndex, index);
     if ( found )
     { // A similar vertex is already in the VBO, use it instead !
-        indeices.push_back( index );
+        indices.push_back( index );
     }
     else
     { // If not, it needs to be added in the output data.
         vertex.push_back(packed.position);
         normal.push_back(packed.normal);
         size_t newindex = vertex.size() - 1;
-        indeices.push_back( newindex );
+        indices.push_back( newindex );
         VertexToOutIndex[ packed ] = newindex;
     }
 }
@@ -367,7 +367,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     std::map<PackedVertex,unsigned short> VertexToOutIndex;
     glm::vec3 actualVerteices[3];
     glm::vec3 actualNormals[3];
-    std::vector<unsigned short> indeices[5];
+    std::vector<unsigned short> indices[5];
     glm::vec3 externSurNormal;
     glm::mat4 corrctCoord = glm::translate(glm::vec3(width / 2.0f, height / 2.0f, depth / 2.0f - fRadius));
     m_RoundBarMesh.topThreshold = topThreshold;
@@ -375,7 +375,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     m_RoundBarMesh.iMeshStartIndices = m_Vertices.size();
     for (int k = 0; k < 5; k++)
     {
-        m_RoundBarMesh.iElementStartIndices[k] = indeices[k].size();
+        m_RoundBarMesh.iElementStartIndices[k] = indices[k].size();
     }
     for (size_t i = 0; i < vertices.size(); i += 3)
     {
@@ -391,7 +391,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
         {
             {
                 PackedVertex packed = {actualVerteices[k], actualNormals[k]};
-                SetVertex(packed, VertexToOutIndex, m_Vertices, m_Normals, indeices[surfaceIndex]);
+                SetVertex(packed, VertexToOutIndex, m_Vertices, m_Normals, indices[surfaceIndex]);
             }
 
             //add extern
@@ -401,7 +401,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
                 externSurNormal = (surfaceIndex == TOP_SURFACE) ? glm::vec3(0.0, 0.0, 1.0) : glm::vec3(0.0, 0.0, -1.0);
                 int tmpSurfaceIndex = (surfaceIndex == TOP_SURFACE) ? FLAT_TOP_SURFACE : FLAT_BOTTOM_SURFACE;
                 PackedVertex packed = {actualVerteices[k], externSurNormal};
-                SetVertex(packed, VertexToOutIndex, m_Vertices, m_Normals, indeices[tmpSurfaceIndex]);
+                SetVertex(packed, VertexToOutIndex, m_Vertices, m_Normals, indices[tmpSurfaceIndex]);
             }
         }
 
@@ -410,13 +410,13 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     m_RoundBarMesh.iMeshSizes = m_Vertices.size() - m_RoundBarMesh.iMeshStartIndices;
     for (int k = 0; k < 5; k++)
     {
-        m_RoundBarMesh.iElementSizes[k] = indeices[k].size() - m_RoundBarMesh.iElementStartIndices[k];
-        m_RoundBarMesh.iElementStartIndices[k] = m_Indeices.size() * sizeof(unsigned short);
-        for (unsigned int IdxCnt = 0; IdxCnt < indeices[k].size(); IdxCnt++)
+        m_RoundBarMesh.iElementSizes[k] = indices[k].size() - m_RoundBarMesh.iElementStartIndices[k];
+        m_RoundBarMesh.iElementStartIndices[k] = m_Indices.size() * sizeof(unsigned short);
+        for (unsigned int IdxCnt = 0; IdxCnt < indices[k].size(); IdxCnt++)
         {
-            m_Indeices.push_back(indeices[k][IdxCnt]);
+            m_Indices.push_back(indices[k][IdxCnt]);
         }
-        indeices[k].clear();
+        indices[k].clear();
     }
     vertices.clear();
     normals.clear();
@@ -1025,7 +1025,7 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
         }
         m_Vertices.clear();
         m_Normals.clear();
-        m_Indeices.clear();
+        m_Indices.clear();
     }
 }
 
