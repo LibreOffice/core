@@ -98,7 +98,10 @@ CTLayout::CTLayout( const CoreTextStyle* pTextStyle )
 CTLayout::~CTLayout()
 {
     if( mpCTLine )
+    {
+        SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
+    }
     if( mpAttrString )
         CFRelease( mpAttrString );
 }
@@ -113,7 +116,10 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
         CFRelease( mpAttrString );
     mpAttrString = NULL;
     if( mpCTLine )
+    {
+        SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
+    }
     mpCTLine = NULL;
 
     // initialize the new layout
@@ -202,6 +208,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             return;
         }
         // recreate the CoreText line layout without trailing spaces
+        SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
         CFRelease( mpCTLine );
         CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
                                                                   rArgs.mpStr + mnMinCharPos,
