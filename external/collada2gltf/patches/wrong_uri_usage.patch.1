@@ -1,6 +1,6 @@
 diff -ur collada2gltf.org/GLTF/GLTFAsset.cpp collada2gltf/GLTF/GLTFAsset.cpp
---- collada2gltf.org/GLTF/GLTFAsset.cpp	2014-05-22 11:12:21.823216900 +0200
-+++ collada2gltf/GLTF/GLTFAsset.cpp	2014-05-22 14:59:04.963439700 +0200
+--- collada2gltf.org/GLTF/GLTFAsset.cpp	2014-05-23 19:19:39.505246750 +0200
++++ collada2gltf/GLTF/GLTFAsset.cpp	2014-05-23 19:20:05.005245669 +0200
 @@ -191,12 +191,9 @@
      shared_ptr<GLTFOutputStream> GLTFAsset::createOutputStreamIfNeeded(const std::string& streamName) {
  
@@ -31,7 +31,7 @@ diff -ur collada2gltf.org/GLTF/GLTFAsset.cpp collada2gltf/GLTF/GLTFAsset.cpp
          }
          COLLADABU::Utils::createDirectoryIfNeeded(this->_bundleOutputPath.c_str());
      }
-@@ -376,9 +373,9 @@
+@@ -376,10 +373,10 @@
                      COLLADABU::URI outputImagePathURI(inputImagePath.c_str());
                      
                      COLLADABU::URI outputURI(this->getOutputFilePath().c_str());
@@ -39,10 +39,12 @@ diff -ur collada2gltf.org/GLTF/GLTFAsset.cpp collada2gltf/GLTF/GLTFAsset.cpp
 +                    std::string folder = COLLADABU::URI(outputURI.getPathDir()).toNativePath();
                      std::string outputPath = folder + outputImagePathURI.getPathFile();
 -                    
+-                    std::ifstream f1(inputImagePath.c_str(), std::fstream::binary);
 +
-                     std::ifstream f1(inputImagePath.c_str(), std::fstream::binary);
++                    std::ifstream f1(COLLADABU::URI(inputImagePath).toNativePath().c_str(), std::fstream::binary);
                      std::ofstream f2(outputPath.c_str(), std::fstream::binary);
                      
+                     if (this->_converterConfig->boolForKeyPath("verboseLogging")) {
 @@ -397,8 +394,8 @@
          this->_root = shared_ptr <GLTF::JSONObject> (new GLTF::JSONObject());
          this->_root->setString(kProfile, profile->id());
@@ -64,8 +66,8 @@ diff -ur collada2gltf.org/GLTF/GLTFAsset.cpp collada2gltf/GLTF/GLTFAsset.cpp
          obj->write(&resultsWriter);
          
 diff -ur collada2gltf.org/shaders/commonProfileShaders.cpp collada2gltf/shaders/commonProfileShaders.cpp
---- collada2gltf.org/shaders/commonProfileShaders.cpp	2014-05-22 11:12:21.854416900 +0200
-+++ collada2gltf/shaders/commonProfileShaders.cpp	2014-05-22 14:24:57.063126800 +0200
+--- collada2gltf.org/shaders/commonProfileShaders.cpp	2014-05-23 19:19:39.521246749 +0200
++++ collada2gltf/shaders/commonProfileShaders.cpp	2014-05-23 19:20:09.085245497 +0200
 @@ -294,7 +294,7 @@
              //also write the file on disk
              if (shaderString.size() > 0) {
