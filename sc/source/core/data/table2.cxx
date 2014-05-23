@@ -2997,7 +2997,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZ
         return nHeight;
     }
     else
-        return (sal_uLong) ((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight);
+        return (nEndRow - nStartRow + 1) * (sal_uLong)ScGlobal::nStdRowHeight;
 }
 
 
