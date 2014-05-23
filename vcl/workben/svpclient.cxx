@@ -201,6 +201,7 @@ OString MyWin::processCommand( const OString& rCommand )
                 aAnswer.append( buf, nBytes );
             } while( nBytes == sizeof( buf ) );
         }
+        close(nSocket);
     }
     else
         perror( "SvpElementContainer: socket() failed\n" );
