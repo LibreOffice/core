@@ -17,96 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
+#include <vcl/window.hxx>
 
-#include <i18nlangtag/mslangid.hxx>
+#include <sal/types.h>
 
-#include "tools/time.hxx"
-#include "tools/debug.hxx"
-#include "tools/rc.h"
-
-#include "unotools/fontcfg.hxx"
-#include "unotools/confignode.hxx"
-
-#include "vcl/layout.hxx"
-#include "vcl/salgtype.hxx"
-#include "vcl/event.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/help.hxx"
-#include "vcl/cursor.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/window.hxx"
-#include "vcl/syswin.hxx"
-#include "vcl/syschild.hxx"
-#include "vcl/dockwin.hxx"
-#include "vcl/menu.hxx"
-#include "vcl/wrkwin.hxx"
-#include "vcl/wall.hxx"
-#include "vcl/gradient.hxx"
-#include "vcl/button.hxx"
-#include "vcl/taskpanelist.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/unowrap.hxx"
-#include "vcl/gdimtf.hxx"
-#include "vcl/pdfextoutdevdata.hxx"
-#include "vcl/popupmenuwindow.hxx"
-#include "vcl/lazydelete.hxx"
-#include "vcl/virdev.hxx"
-#include "vcl/settings.hxx"
-
-// declare system types in sysdata.hxx
-#include "svsys.h"
-#include "vcl/sysdata.hxx"
-
-#include "salframe.hxx"
-#include "salobj.hxx"
-#include "salinst.hxx"
-#include "salgdi.hxx"
-#include "svdata.hxx"
-#include "dbggui.hxx"
-#include "outfont.hxx"
-#include "window.h"
-#include "toolbox.h"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
-#include "brdwin.hxx"
-#include "helpwin.hxx"
-#include "sallayout.hxx"
-#include "dndlcon.hxx"
-#include "dndevdis.hxx"
-
-#include "com/sun/star/accessibility/XAccessible.hpp"
-#include "com/sun/star/accessibility/AccessibleRole.hpp"
-#include "com/sun/star/awt/XWindowPeer.hpp"
-#include "com/sun/star/awt/XTopWindow.hpp"
-#include "com/sun/star/awt/XWindow.hpp"
-#include "com/sun/star/awt/XDisplayConnection.hpp"
-#include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
-#include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
-#include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
-#include "com/sun/star/datatransfer/clipboard/SystemClipboard.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XServiceName.hpp"
-#include "com/sun/star/rendering/CanvasFactory.hpp"
-#include "com/sun/star/rendering/XCanvas.hpp"
-#include "com/sun/star/rendering/XSpriteCanvas.hpp"
-#include "comphelper/processfactory.hxx"
-
-#include <sal/macros.h>
-#include <rtl/strbuf.hxx>
-
-#include <set>
-#include <typeinfo>
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::datatransfer::clipboard;
-using namespace ::com::sun::star::datatransfer::dnd;
-using namespace ::com::sun::star;
-using namespace com::sun;
-
-using ::com::sun::star::awt::XTopWindow;
+#include <salobj.hxx>
+#include <window.h>
 
 void Window::InitClipRegion()
 {
