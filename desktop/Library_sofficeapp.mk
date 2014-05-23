@@ -54,6 +54,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     ucbhelper \
     utl \
     vcl \
+    vclplug_svp \
 	$(gb_UWINAPI) \
 ))
 
