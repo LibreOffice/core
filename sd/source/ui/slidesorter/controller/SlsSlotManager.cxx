@@ -90,6 +90,7 @@
 #include <vcl/svapp.hxx>
 
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -271,14 +272,14 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 mrSlideSorter.GetContentWindow().get(),
-                pDocument) : 0;
+                pDocument) : 0);
 
             if (pDlg)
             {
                 pDlg->Execute();
-                delete pDlg;
+                pDlg.reset();
             }
             rRequest.Done ();
         }
@@ -917,9 +918,9 @@ void SlotManager::RenameSlide (void)
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
+            boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetContentWindow().get(),
-                aPageName, aDescr);
+                aPageName, aDescr));
             DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
             aNameDlg->SetText( aTitle );
             aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
@@ -939,7 +940,7 @@ void SlotManager::RenameSlide (void)
                     DBG_ASSERT( bResult, "Couldn't rename slide" );
                 }
             }
-            delete aNameDlg;
+            aNameDlg.reset();
 
             // Tell the slide sorter about the name change (necessary for
             // accessibility.)

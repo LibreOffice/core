@@ -171,6 +171,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 
 #include "ViewShellBase.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace {
     const char CustomAnimationPanelId[] = "CustomAnimationPanel";
@@ -448,7 +449,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
-                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr );
+                boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr ));
                 DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
@@ -467,7 +468,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         DBG_ASSERT( bResult, "Couldn't rename slide" );
                     }
                 }
-                delete aNameDlg;
             }
 
             Cancel();
@@ -823,7 +823,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SET_DEFAULT:
         {
-            SfxItemSet* pSet = NULL;
+            boost::scoped_ptr<SfxItemSet> pSet;
 
             if (mpDrawView->IsTextEdit())
             {
@@ -833,7 +833,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     pOutl->RemoveFields(true, (TypeId) SvxURLField::StaticType());
                 }
 
-                pSet = new SfxItemSet( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
+                pSet.reset(new SfxItemSet( GetPool(), EE_ITEMS_START, EE_ITEMS_END ));
                 mpDrawView->SetAttributes( *pSet, true );
             }
             else
@@ -861,7 +861,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                 }
 
-                pSet = new SfxItemSet( GetPool() );
+                pSet.reset(new SfxItemSet( GetPool() ));
                 mpDrawView->SetAttributes( *pSet, true );
 
                 sal_uLong j = 0;
@@ -899,7 +899,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         std::pair<SfxItemSet*,SdrObjUserCall*> &rAttr = aAttrList[j++];
 
-                        SfxItemSet* pNewSet = rAttr.first;
+                        boost::scoped_ptr<SfxItemSet> pNewSet(rAttr.first);
                         SdrObjUserCall* pUserCall = rAttr.second;
 
                         if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SFX_ITEM_ON )
@@ -914,13 +914,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                         if( pUserCall )
                             pObj->SetUserCall( pUserCall );
-
-                        delete pNewSet;
                     }
                 }
             }
 
-            delete pSet;
+            pSet.reset();
             Cancel();
         }
         break;
@@ -1438,7 +1436,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : 0;
+                boost::scoped_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : 0);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
@@ -1465,8 +1463,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                     if( bLoop ) // was canceled
                     {
-                        delete pDlg;
-
+                        pDlg.reset();
                         Cancel();
                         rReq.Ignore ();
                         break;
@@ -1478,8 +1475,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
                         bIsLocked    = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
                         bIsPrintable = ((SdAttrLayerPrintable &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
-
-                        delete pDlg;
                     }
                 }
             }
@@ -1610,7 +1605,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : 0;
+                boost::scoped_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : 0);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
@@ -1644,12 +1639,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             bIsVisible   = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
                             bIsLocked    = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
                             bIsPrintable = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
-
-                            delete pDlg;
                             break;
 
                         default :
-                            delete pDlg;
+                            pDlg.reset();
                             rReq.Ignore ();
                             Cancel ();
                             return;
@@ -1831,47 +1824,47 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_INSERT_FLD_FILE:
         {
             sal_uInt16 nMul = 1;
-            SvxFieldItem* pFieldItem = 0;
+            boost::scoped_ptr<SvxFieldItem> pFieldItem;
 
             switch( nSId )
             {
                 case SID_INSERT_FLD_DATE_FIX:
-                    pFieldItem = new SvxFieldItem(
-                        SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem(
+                        SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_DATE_VAR:
-                    pFieldItem = new SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_TIME_FIX:
-                    pFieldItem = new SvxFieldItem(
-                        SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem(
+                        SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_TIME_VAR:
-                    pFieldItem = new SvxFieldItem( SvxExtTimeField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxExtTimeField(), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_AUTHOR:
                 {
                     SvtUserOptions aUserOptions;
-                    pFieldItem = new SvxFieldItem(
+                    pFieldItem.reset(new SvxFieldItem(
                             SvxAuthorField(
-                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ), EE_FEATURE_FIELD );
+                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ), EE_FEATURE_FIELD ));
                 }
                 break;
 
                 case SID_INSERT_FLD_PAGE:
                 {
-                    pFieldItem = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD ));
                     nMul = 3;
                 }
                 break;
 
                 case SID_INSERT_FLD_PAGES:
                 {
-                    pFieldItem = new SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD ));
                     nMul = 3;
                 }
                 break;
@@ -1881,7 +1874,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     OUString aName;
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
-                    pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD ));
                 }
                 break;
             }
@@ -1942,7 +1935,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pOutl->Init( nOutlMode );
             }
 
-            delete pFieldItem;
+            pFieldItem.reset();
 
             Cancel();
             rReq.Ignore ();
@@ -1964,12 +1957,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     // Dialog...
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                    AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0;
+                    boost::scoped_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0);
                     if( pDlg && pDlg->Execute() == RET_OK )
                     {
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here
-                        SvxFieldData* pField = pDlg->GetField();
+                        boost::scoped_ptr<SvxFieldData> pField(pDlg->GetField());
                         ESelection aSel = pOLV->GetSelection();
                         bool bSelectionWasModified(false);
 
@@ -2009,11 +2002,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 aSel.nEndPos--;
                                 pOLV->SetSelection( aSel );
                             }
-
-                            delete pField;
                         }
                     }
-                    delete pDlg;
                 }
             }
 
@@ -2076,7 +2066,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
+                boost::scoped_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
@@ -2086,8 +2076,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     pDlg->GetName(aName);
                     pSelected->SetName(aName);
                 }
-
-                delete pDlg;
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -2111,7 +2099,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription);
+                boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if(RET_OK == pDlg->Execute())
@@ -2121,8 +2109,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     pSelected->SetTitle(aTitle);
                     pSelected->SetDescription(aDescription);
                 }
-
-                delete pDlg;
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -2348,11 +2334,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     if( pFact )
                     {
-                        VclAbstractDialog* pDlg = pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, nAnz );
+                        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, nAnz ));
                         if( pDlg )
                         {
                             pDlg->Execute();
-                            delete pDlg;
                         }
                     }
                 }
@@ -2898,14 +2883,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
        case SID_PHOTOALBUM:
        {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 GetActiveWindow(),
-                GetDoc()) : 0;
+                GetDoc()) : 0);
 
             if (pDlg)
             {
                 pDlg->Execute();
-                delete pDlg;
+                pDlg.reset();
             }
             Cancel();
             rReq.Ignore ();
