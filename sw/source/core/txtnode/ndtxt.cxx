@@ -4451,7 +4451,7 @@ namespace {
         {
             const SfxBoolItem* pListIsRestartItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
-            if ( pListIsRestartItem->GetValue() != mrTxtNode.IsListRestart() )
+            if (pListIsRestartItem && pListIsRestartItem->GetValue() != mrTxtNode.IsListRestart())
             {
                 mbUpdateListRestart = true;
             }
