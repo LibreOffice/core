@@ -180,6 +180,9 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     // create title text objects
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
+                    assert(pTextObj);
+                    if (!pTextObj)
+                        continue;
 
                     OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
