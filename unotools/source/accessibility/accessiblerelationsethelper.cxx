@@ -235,10 +235,8 @@ uno::Sequence< ::com::sun::star::uno::Type>
 {
     osl::MutexGuard aGuard (maMutex);
     const ::com::sun::star::uno::Type aTypeList[] = {
-        ::getCppuType((const uno::Reference<
-            XAccessibleRelationSet>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XTypeProvider>*)0)
+        cppu::UnoType<XAccessibleRelationSet>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get()
         };
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
         aTypeSequence (aTypeList, 2);

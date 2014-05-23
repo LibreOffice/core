@@ -127,11 +127,11 @@ Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes() throw ( 
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XPropertySet           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XFastPropertySet       >*)NULL ) ,
-                        ::getCppuType(( const Reference< XMultiPropertySet      >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) );
+                        cppu::UnoType<XPropertySet>::get(),
+                        cppu::UnoType<XFastPropertySet>::get(),
+                        cppu::UnoType<XMultiPropertySet>::get(),
+                        cppu::UnoType<XServiceInfo>::get(),
+                        cppu::UnoType<XTypeProvider>::get());
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection;
@@ -252,7 +252,7 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
 {
     const Property pActionTriggerPropertys[] =
     {
-        Property( OUString( "SeparatorType" ), HANDLE_TYPE, ::getCppuType((sal_Int16*)0), PropertyAttribute::TRANSIENT )
+        Property( OUString( "SeparatorType" ), HANDLE_TYPE, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::TRANSIENT )
     };
 
     // Use it to initialize sequence!

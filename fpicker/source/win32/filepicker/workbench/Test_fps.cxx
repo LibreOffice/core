@@ -296,7 +296,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         Any aAny;
         sal_Bool bChkState = sal_False;
 
-        aAny.setValue( &bChkState, getCppuType( (sal_Bool*)0 ) );
+        aAny.setValue( &bChkState, cppu::UnoType<sal_Bool>::get());
         xFPControlAccess->setValue( CHECKBOX_AUTOEXTENSION, 0, aAny );
 
         OUString aVersion( L"Version 1" );

@@ -106,8 +106,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
             typelib_TypeDescription * pTXInterfaceDescr = 0;
             TYPELIB_DANGER_GET(
                 &pTXInterfaceDescr,
-                ::getCppuType( reinterpret_cast< Reference< XInterface >
-                               const * >(0) ).getTypeLibType() );
+                cppu::UnoType<XInterface>::get().getTypeLibType() );
             typelib_TypeDescription * pQITD = 0;
             typelib_typedescriptionreference_getDescription(
                 &pQITD, reinterpret_cast< typelib_InterfaceTypeDescription * >(
@@ -149,9 +148,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     {
         // exception occurred:
         OSL_ENSURE(
-            typelib_typedescriptionreference_isAssignableFrom(
-                ::getCppuType( reinterpret_cast<
-                               RuntimeException const * >(0) ).getTypeLibType(),
+            typelib_typedescriptionreference_isAssignableFrom( cppu::UnoType<RuntimeException>::get() ).getTypeLibType(),
                 exc->pType ),
             "### RuntimeException expected!" );
         Any cpp_exc;

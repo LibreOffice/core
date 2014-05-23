@@ -847,7 +847,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             {
                 aRet.setValue(
                     &((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos],
-                    ::getCppuType( (const OUString *)0 ) );
+                    cppu::UnoType<OUString>::get());
             }
             else
             {

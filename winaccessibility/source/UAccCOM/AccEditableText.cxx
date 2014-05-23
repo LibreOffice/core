@@ -274,14 +274,14 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         // Convert to int.
         // NOTE: CharFontPitch is not implemented in java file.
         sal_Int32 nValue = ouValue.toInt32();
-        rAny.setValue(&nValue, getCppuType((sal_Int32 *)0));
+        rAny.setValue(&nValue, cppu::UnoType<sal_Int32>::get());
     }
     else if(ouName.compareTo(L"CharShadowed") == 0 ||
             ouName.compareTo(L"CharContoured") == 0)
     {
         // Convert to boolean.
         boolean nValue = (boolean)ouValue.toBoolean();
-        rAny.setValue(&nValue, getCppuType((sal_Bool *)sal_False));
+        rAny.setValue(&nValue, cppu::UnoType<sal_Bool>::get() );
     }
     else if(ouName.compareTo(L"CharEscapement") == 0 ||
             ouName.compareTo(L"CharStrikeout") == 0 ||
@@ -290,25 +290,25 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
     {
         // Convert to short.
         short nValue = (short)ouValue.toInt32();
-        rAny.setValue(&nValue, getCppuType((short *)0));
+        rAny.setValue(&nValue, cppu::UnoType<short>::get());
     }
     else if(ouName.compareTo(L"CharHeight") == 0 ||
             ouName.compareTo(L"CharWeight") == 0)
     {
         // Convert to float.
         float fValue = ouValue.toFloat();
-        rAny.setValue(&fValue, getCppuType((float *)0));
+        rAny.setValue(&fValue, cppu::UnoType<float>::get());
     }
     else if(ouName.compareTo(L"CharFontName") == 0)
     {
         // Convert to string.
-        rAny.setValue(&ouValue, getCppuType((::rtl::OUString *)0));
+        rAny.setValue(&ouValue, cppu::UnoType<rtl::OUString>::get());
     }
     else if(ouName.compareTo(L"CharPosture") == 0)
     {
         // Convert to FontSlant.
         ::com::sun::star::awt::FontSlant fontSlant = (::com::sun::star::awt::FontSlant)ouValue.toInt32();
-        rAny.setValue(&fontSlant, getCppuType((::com::sun::star::awt::FontSlant*)0));
+        rAny.setValue(&fontSlant, cppu::UnoType<com::sun::star::awt::FontSlant>::get());
     }
     else if(ouName.compareTo(L"ParaTabStops") == 0)
     {
@@ -461,13 +461,13 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         }
 
         // Convert to Any object.
-        rAny.setValue(&lineSpacing, getCppuType((::com::sun::star::style::LineSpacing* )0));
+        rAny.setValue(&lineSpacing, cppu::UnoType<com::sun::star::style::LineSpacing>::get());
     }
     else
     {
         // Do nothing.
         sal_Int32 nDefault = 0;
-        rAny.setValue(&nDefault, getCppuType((sal_Int32 *)0));
+        rAny.setValue(&nDefault, cppu::UnoType<sal_Int32>::get());
     }
 }
 

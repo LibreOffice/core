@@ -151,29 +151,29 @@ uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
         if ( m_pTypeCollection == NULL )
         {
             ::cppu::OTypeCollection aTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL ) );
+                                    (   cppu::UnoType<lang::XTypeProvider>::get()
+                                    ,   cppu::UnoType<embed::XExtendedStorageStream>::get());
 
             if ( m_xSeekable.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL ),
+                                    (   cppu::UnoType<io::XSeekable>::get(),
                                         aTypeCollection.getTypes() );
             if ( m_xInputStream.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL ),
+                                    (   cppu::UnoType<io::XInputStream>::get(),
                                         aTypeCollection.getTypes() );
 
             if ( m_xOutputStream.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL ),
+                                    (   cppu::UnoType<io::XOutputStream>::get(),
                                         aTypeCollection.getTypes() );
             if ( m_xTruncate.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL ),
+                                    (   cppu::UnoType<io::XTruncate>::get(),
                                         aTypeCollection.getTypes() );
             if ( m_xAsyncOutputMonitor.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< io::XAsyncOutputMonitor >* )NULL ),
+                                    (   cppu::UnoType<io::XAsyncOutputMonitor>::get(),
                                         aTypeCollection.getTypes() );
 
             m_pTypeCollection = new ::cppu::OTypeCollection( aTypeCollection );

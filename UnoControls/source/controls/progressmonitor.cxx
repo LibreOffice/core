@@ -161,9 +161,9 @@ Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException, s
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection ( ::getCppuType(( const css::uno::Reference< XLayoutConstrains >*)NULL )   ,
-                                                     ::getCppuType(( const css::uno::Reference< XButton           >*)NULL )   ,
-                                                     ::getCppuType(( const css::uno::Reference< XProgressMonitor  >*)NULL )   ,
+            static OTypeCollection aTypeCollection ( cppu::UnoType<XLayoutConstrains>::get(),
+                                                     cppu::UnoType<XButton>::get(),
+                                                     cppu::UnoType<XProgressMonitor>::get(),
                                                      BaseContainerControl::getTypes()
                                                    );
             // ... and set his address to static pointer!

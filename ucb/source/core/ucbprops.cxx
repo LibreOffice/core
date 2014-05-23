@@ -140,8 +140,7 @@ static const com::sun::star::uno::Type& Sequence_RecipientInfo_getCppuType()
 
 static const com::sun::star::uno::Type& RuleSet_getCppuType()
 {
-    return getCppuType(
-        static_cast< com::sun::star::ucb::RuleSet * >( 0 ) );
+    return cppu::UnoType<com::sun::star::ucb::RuleSet>::get();
 }
 
 static const com::sun::star::uno::Type& Sequence_SendInfo_getCppuType()

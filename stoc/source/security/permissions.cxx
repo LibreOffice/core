@@ -495,22 +495,22 @@ PermissionCollection::PermissionCollection(
         Type const & perm_type = perm.getValueType();
 
         // supported permission types
-        if (perm_type.equals( ::getCppuType( (io::FilePermission const *)0 ) ))
+        if (perm_type.equals( cppu::UnoType<io::FilePermission>::get()))
         {
             m_head = new FilePermission(
                 *reinterpret_cast< io::FilePermission const * >( perm.pData ), m_head );
         }
-        else if (perm_type.equals( ::getCppuType( (connection::SocketPermission const *)0 ) ))
+        else if (perm_type.equals( cppu::UnoType<connection::SocketPermission>::get()))
         {
             m_head = new SocketPermission(
                 *reinterpret_cast< connection::SocketPermission const * >( perm.pData ), m_head );
         }
-        else if (perm_type.equals( ::getCppuType( (security::RuntimePermission const *)0 ) ))
+        else if (perm_type.equals( cppu::UnoType<security::RuntimePermission>::get()))
         {
             m_head = new RuntimePermission(
                 *reinterpret_cast< security::RuntimePermission const * >( perm.pData ), m_head );
         }
-        else if (perm_type.equals( ::getCppuType( (security::AllPermission const *)0 ) ))
+        else if (perm_type.equals( cppu::UnoType<security::AllPermission>::get()))
         {
             m_head = new AllPermission( m_head );
         }
@@ -584,7 +584,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     // supported permission types
     // stack object of SimpleReferenceObject are ok, as long as they are not
     // assigned to a ::rtl::Reference<> (=> delete this)
-    if (demanded_type.equals( ::getCppuType( (io::FilePermission const *)0 ) ))
+    if (demanded_type.equals( cppu::UnoType<io::FilePermission>::get()))
     {
         FilePermission demanded(
             *reinterpret_cast< io::FilePermission const * >( perm.pData ) );
@@ -597,7 +597,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
         }
         throwAccessControlException( demanded, perm );
     }
-    else if (demanded_type.equals( ::getCppuType( (connection::SocketPermission const *)0 ) ))
+    else if (demanded_type.equals( cppu::UnoType<connection::SocketPermission>::get()))
     {
         SocketPermission demanded(
             *reinterpret_cast< connection::SocketPermission const * >( perm.pData ) );
@@ -610,7 +610,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
         }
         throwAccessControlException( demanded, perm );
     }
-    else if (demanded_type.equals( ::getCppuType( (security::RuntimePermission const *)0 ) ))
+    else if (demanded_type.equals( cppu::UnoType<security::RuntimePermission>::get()))
     {
         RuntimePermission demanded(
             *reinterpret_cast< security::RuntimePermission const * >( perm.pData ) );
@@ -623,7 +623,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
         }
         throwAccessControlException( demanded, perm );
     }
-    else if (demanded_type.equals( ::getCppuType( (security::AllPermission const *)0 ) ))
+    else if (demanded_type.equals( cppu::UnoType<security::AllPermission>::get()))
     {
         AllPermission demanded;
         if (__implies( m_head, demanded ))

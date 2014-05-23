@@ -427,7 +427,7 @@ void  AccObject::SetValue( Any pAny )
     if(NULL == m_pIMAcc)
         return strValue;
 
-    if(pAny.getValueType() == getCppuType( (sal_uInt16 *)0 ) )
+    if(pAny.getValueType() == cppu::UnoType<cppu::UnoUnsignedShortType>::get() )
     {
         sal_uInt16 val;
         if (pAny >>= val)
@@ -436,7 +436,7 @@ void  AccObject::SetValue( Any pAny )
 
         }
     }
-    else if(pAny.getValueType() == getCppuType( (::rtl::OUString *)0 ) )
+    else if(pAny.getValueType() == cppu::UnoType<rtl::OUString>::get())
     {
 
         pAny >>= strValue ;
@@ -457,7 +457,7 @@ void  AccObject::SetValue( Any pAny )
 
         }
     }
-    else if(pAny.getValueType() == getCppuType( (double *)0 ) )
+    else if(pAny.getValueType() == cppu::UnoType<double>::get())
     {
         double val;
         if (pAny >>= val)
@@ -465,7 +465,7 @@ void  AccObject::SetValue( Any pAny )
             strValue=::rtl::OUString::number(val);
         }
     }
-    else if(pAny.getValueType() == getCppuType( (sal_Int32 *)0 ) )
+    else if(pAny.getValueType() == cppu::UnoType<sal_Int32>::get())
     {
         sal_Int32 val;
         if (pAny >>= val)
@@ -473,7 +473,7 @@ void  AccObject::SetValue( Any pAny )
             strValue=::rtl::OUString::number(val);
         }
     }
-    else if (pAny.getValueType() == getCppuType( (com::sun::star::accessibility::TextSegment *)0 ) )
+    else if (pAny.getValueType() == cppu::UnoType<com::sun::star::accessibility::TextSegment>::get())
     {
         com::sun::star::accessibility::TextSegment val;
         if (pAny >>= val)

@@ -1956,7 +1956,7 @@ SRSPropertySetInfo::SRSPropertySetInfo()
 {
     maProps[0].Name = "RowCount";
     maProps[0].Handle = -1;
-    maProps[0].Type = ::getCppuType( (const OUString*) NULL );
+    maProps[0].Type = cppu::UnoType<OUString>::get();
     maProps[0].Attributes = -1;
 
     maProps[1].Name = "IsRowCountFinal";

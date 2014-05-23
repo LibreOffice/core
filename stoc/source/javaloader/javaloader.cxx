@@ -242,7 +242,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             pUno_environment->release(pUno_environment);
             pUno_environment = NULL;
 
-            getCppuType((css::uno::Reference<XImplementationLoader> *) 0).
+            cppu::UnoType<XImplementationLoader>::get().
                 getDescription((typelib_TypeDescription **) & pType_XImplementationLoader);
             if(!pType_XImplementationLoader)
                 throw RuntimeException(

@@ -178,11 +178,11 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
 {
     Any aReturn;
     // some functionality at our aggregate cannot be reasonably fulfilled here.
-    if  (   _rType.equals(::getCppuType(static_cast< Reference< XFormComponent >* >(NULL)))
-        ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
-        ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))
-        ||  _rType.equals(::getCppuType(static_cast< Reference< XPropertyContainer >* >(NULL)))
-        ||  comphelper::isAssignableFrom(::getCppuType(static_cast< Reference< XTextRange >* >(NULL)),_rType)
+    if  (   _rType.equals(cppu::UnoType<XFormComponent>::get())
+        ||  _rType.equals(cppu::UnoType<XServiceInfo>::get())
+        ||  _rType.equals(cppu::UnoType<XBindableValue>::get())
+        ||  _rType.equals(cppu::UnoType<XPropertyContainer>::get())
+        ||  comphelper::isAssignableFrom(cppu::UnoType<XTextRange>::get(),_rType)
         )
         return aReturn;
 
@@ -402,10 +402,10 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aLabel);
             break;
         case PROPERTY_ID_WIDTH:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth, ::getCppuType((const sal_Int32*)NULL));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth, cppu::UnoType<sal_Int32>::get());
             break;
         case PROPERTY_ID_ALIGN:
-            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aAlign, ::getCppuType( (const sal_Int32*)NULL ) );
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aAlign, cppu::UnoType<sal_Int32>::get());
             // strange enough, css.awt.TextAlign is a 32-bit integer, while the Align property (both here for grid controls
             // and for ordinary toolkit controls) is a 16-bit integer. So, allow for 32 bit, but normalize it to 16 bit
             if ( bModified )

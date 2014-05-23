@@ -270,7 +270,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
         return a;
     }
 
-    if( aType  == getCppuType( (Reference<XExactName>*) NULL ) )
+    if( aType  == cppu::UnoType<XExactName>::get())
     {
         // Ivocation does not support XExactName, if direct object supports
         // XInvocation, but not XExactName.
@@ -280,32 +280,32 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
             return makeAny( Reference< XExactName >( (static_cast< XExactName* >(this)) ) );
         }
     }
-    else if ( aType == getCppuType( (Reference<XNameContainer>*) NULL ) )
+    else if ( aType == cppu::UnoType<XNameContainer>::get())
     {
         if( _xNameContainer.is() )
             return makeAny( Reference< XNameContainer >( (static_cast< XNameContainer* >(this)) ) );
     }
-    else if ( aType == getCppuType( (Reference<XNameAccess>*) NULL ) )
+    else if ( aType == cppu::UnoType<XNameAccess>::get())
     {
         if( _xNameAccess.is() )
             return makeAny( Reference< XNameAccess >( (static_cast< XNameAccess* >(this)) ) );
     }
-    else if ( aType == getCppuType( (Reference<XIndexContainer>*) NULL ) )
+    else if ( aType == cppu::UnoType<XIndexContainer>::get())
     {
         if (_xIndexContainer.is())
             return makeAny( Reference< XIndexContainer >( (static_cast< XIndexContainer* >(this)) ) );
     }
-    else if ( aType == getCppuType( (Reference<XIndexAccess>*) NULL ) )
+    else if ( aType == cppu::UnoType<XIndexAccess>::get())
     {
         if (_xIndexAccess.is())
             return makeAny( Reference< XIndexAccess >( (static_cast< XIndexAccess* >(this)) ) );
     }
-    else if ( aType == getCppuType( (Reference<XEnumerationAccess>*) NULL ) )
+    else if ( aType == cppu::UnoType<XEnumerationAccess>::get())
     {
         if (_xEnumerationAccess.is())
             return makeAny( Reference< XEnumerationAccess >( (static_cast< XEnumerationAccess* >(this)) ) );
     }
-    else if ( aType == getCppuType( (Reference<XElementAccess>*) NULL ) )
+    else if ( aType == cppu::UnoType<XElementAccess>::get())
     {
         if (_xElementAccess.is())
         {
@@ -313,7 +313,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
                 (static_cast< XElementAccess* >((static_cast< XNameContainer* >(this))) ) ) );
         }
     }
-    else if ( aType == getCppuType( (Reference<XInvocation2>*) NULL ) )
+    else if ( aType == cppu::UnoType<XInvocation2>::get())
     {
         // Invocation does not support XInvocation2, if direct object supports
         // XInvocation, but not XInvocation2.
@@ -392,31 +392,31 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
 
                 _xElementAccess = Reference<XElementAccess>::query(
                       _xIntrospectionAccess->queryAdapter(
-                                 getCppuType( (Reference<XElementAccess>*) NULL ) ) );
+                                 cppu::UnoType<XElementAccess>::get()) );
 
                 _xEnumerationAccess = Reference<XEnumerationAccess>::query(
                            _xIntrospectionAccess->queryAdapter(
-                                getCppuType( (Reference<XEnumerationAccess>*) NULL )) );
+                                cppu::UnoType<XEnumerationAccess>::get()) );
 
                 _xIndexAccess = Reference<XIndexAccess>::query(
                        _xIntrospectionAccess->queryAdapter(
-                                getCppuType( (Reference<XIndexAccess>*) NULL ) ) );
+                                cppu::UnoType<XIndexAccess>::get()) );
 
                 _xIndexContainer = Reference<XIndexContainer>::query(
                      _xIntrospectionAccess->queryAdapter(
-                                getCppuType( (Reference<XIndexContainer>*) NULL ) ) );
+                                cppu::UnoType<XIndexContainer>::get()) );
 
                 _xNameAccess = Reference<XNameAccess>::query(
                      _xIntrospectionAccess->queryAdapter(
-                                getCppuType( (Reference<XNameAccess>*) NULL ) ) );
+                                cppu::UnoType<XNameAccess>::get()) );
 
                 _xNameContainer = Reference<XNameContainer>::query(
                            _xIntrospectionAccess->queryAdapter(
-                               getCppuType( (Reference<XNameContainer>*) NULL ) ) );
+                               cppu::UnoType<XNameContainer>::get()) );
 
                 _xPropertySet = Reference<XPropertySet>::query(
                            _xIntrospectionAccess->queryAdapter(
-                               getCppuType( (Reference<XPropertySet>*) NULL )) );
+                               cppu::UnoType<XPropertySet>::get()) );
 
                 _xENIntrospection = Reference<XExactName>::query( _xIntrospectionAccess );
                 if (_xNameAccess.is())
@@ -983,48 +983,48 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes(void) throw( RuntimeExceptio
         Type * pTypes = types.getArray();
         sal_Int32 n = 0;
 
-        pTypes[ n++ ] = ::getCppuType( (Reference< XTypeProvider > const *)0 );
-        pTypes[ n++ ] = ::getCppuType( (Reference< XWeak > const *)0 );
-        pTypes[ n++ ] = ::getCppuType( (Reference< XInvocation > const *)0 );
-        pTypes[ n++ ] = ::getCppuType( (Reference< XMaterialHolder > const *)0 );
+        pTypes[ n++ ] = cppu::UnoType<XTypeProvider>::get();
+        pTypes[ n++ ] = cppu::UnoType<XWeak>::get();
+        pTypes[ n++ ] = cppu::UnoType<XInvocation>::get();
+        pTypes[ n++ ] = cppu::UnoType<XMaterialHolder>::get();
 
         // Ivocation does not support XExactName, if direct object supports
         // XInvocation, but not XExactName.
         if ((_xDirect.is() && _xENDirect.is()) ||
             (!_xDirect.is() && (_xENIntrospection.is() || _xENNameAccess.is())))
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XExactName > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XExactName>::get();
         }
         if( _xNameContainer.is() )
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XNameContainer > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XNameContainer>::get();
         }
         if( _xNameAccess.is() )
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XNameAccess > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XNameAccess>::get();
         }
         if (_xIndexContainer.is())
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XIndexContainer > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XIndexContainer>::get();
         }
         if (_xIndexAccess.is())
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XIndexAccess > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XIndexAccess>::get();
         }
         if (_xEnumerationAccess.is())
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XEnumerationAccess > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XEnumerationAccess>::get();
         }
         if (_xElementAccess.is())
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XElementAccess > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XElementAccess>::get();
         }
         // Invocation does not support XInvocation2, if direct object supports
         // XInvocation, but not XInvocation2.
         if ( ( _xDirect.is() && _xDirect2.is()) ||
              (!_xDirect.is() && _xIntrospectionAccess.is() ) )
         {
-            pTypes[ n++ ] = ::getCppuType( (Reference< XInvocation2 > const *)0 );
+            pTypes[ n++ ] = cppu::UnoType<XInvocation2>::get();
         }
 
         types.realloc( n );

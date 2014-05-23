@@ -484,7 +484,7 @@ void MyPersistObject::setPropertyValue(
         aValue >>= m_s;
     }
     else if( aPropertyName.equalsAscii("object") ) {
-        if( aValue.getValueType() == getCppuType( (Reference< XPersistObject> *)0 ) )
+        if( aValue.getValueType() == cppu::UnoType<XPersistObject>::get())
         {
             aValue >>= m_ref;
         }
@@ -858,9 +858,9 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
     Any o1 = r1->getPropertyValue("object");
     Any o2 = r2->getPropertyValue("object");
 
-    if( o1.getValueType() == getCppuType( (Reference<XPersistObject>*)0 ) ) {
+    if( o1.getValueType() == cppu::UnoType<XPersistObject>::get()) {
 
-        if( o2.getValueType() == getCppuType( (Reference<XPersistObject>*)0 ) ) {
+        if( o2.getValueType() == cppu::UnoType<XPersistObject>::get()) {
             Reference < XPersistObject > rPersist1;
             Reference < XPersistObject > rPersist2;
             o1 >>= rPersist1;
@@ -879,7 +879,7 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
         if( ! b ) fprintf( stderr, "compareMyPropertySet: 9\n" );
     }
     else {
-        if( o2.getValueType()  == getCppuType( (Reference<XPersistObject>*)0 ) ) {
+        if( o2.getValueType()  == cppu::UnoType<XPersistObject>::get()) {
             b = sal_False;
         }
         if( ! b ) fprintf( stderr, "compareMyPropertySet: 10\n" );

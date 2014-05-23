@@ -318,10 +318,10 @@ uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
         if ( m_pImpl->m_pTypeCollection == NULL )
         {
             m_pImpl->m_pTypeCollection = new ::cppu::OTypeCollection
-                                (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XHierarchicalStorageAccess >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                (   cppu::UnoType<lang::XTypeProvider>::get()
+                                ,   cppu::UnoType<embed::XStorage>::get()
+                                ,   cppu::UnoType<embed::XHierarchicalStorageAccess>::get()
+                                ,   cppu::UnoType<beans::XPropertySet>::get());
         }
     }
 

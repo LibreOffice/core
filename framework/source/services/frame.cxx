@@ -1699,7 +1699,7 @@ void SAL_CALL Frame::addFrameActionListener( const css::uno::Reference< css::fra
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.addInterface( ::getCppuType( (const css::uno::Reference< css::frame::XFrameActionListener >*)NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<css::frame::XFrameActionListener>::get(), xListener );
 }
 
 void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException, std::exception )
@@ -1713,7 +1713,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( (const css::uno::Reference< css::frame::XFrameActionListener >*)NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<css::frame::XFrameActionListener>::get(), xListener );
 }
 
 /*-****************************************************************************************************
@@ -1750,7 +1750,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
     // internal operations too ...
     // Note: container is threadsafe himself.
     css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
     if (pContainer!=NULL)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -1784,7 +1784,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
         throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
 
     // If closing is allowed ... inform all istener and dispose this frame!
-    pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >*) NULL ) );
+    pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
     if (pContainer!=NULL)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
@@ -1834,7 +1834,7 @@ void SAL_CALL Frame::addCloseListener( const css::uno::Reference< css::util::XCl
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     // We don't need any lock here ...
     // Container lives if we live and is threadsafe by himself.
-    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<css::util::XCloseListener>::get(), xListener );
 }
 
 void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
@@ -1843,7 +1843,7 @@ void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
     // We don't need any lock here ...
     // Container lives if we live and is threadsafe by himself.
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<css::util::XCloseListener>::get(), xListener );
 }
 
 OUString SAL_CALL Frame::getTitle()
@@ -2656,14 +2656,14 @@ void Frame::impl_initializePropInfo()
         css::beans::Property(
             FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER,
             FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER,
-            ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL),
+            cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
             css::beans::PropertyAttribute::TRANSIENT));
 
     impl_addPropertyInfo(
         css::beans::Property(
             FRAME_PROPNAME_INDICATORINTERCEPTION,
             FRAME_PROPHANDLE_INDICATORINTERCEPTION,
-            ::getCppuType((const css::uno::Reference< css::task::XStatusIndicator >*)NULL),
+            cppu::UnoType<css::task::XStatusIndicator>::get(),
             css::beans::PropertyAttribute::TRANSIENT));
 
     impl_addPropertyInfo(
@@ -2677,7 +2677,7 @@ void Frame::impl_initializePropInfo()
         css::beans::Property(
             FRAME_PROPNAME_LAYOUTMANAGER,
             FRAME_PROPHANDLE_LAYOUTMANAGER,
-            ::getCppuType((const css::uno::Reference< ::com::sun::star::frame::XLayoutManager >*)NULL),
+            cppu::UnoType<com::sun::star::frame::XLayoutManager>::get(),
             css::beans::PropertyAttribute::TRANSIENT));
 
     impl_addPropertyInfo(
@@ -2843,7 +2843,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
     // Get container for right listener.
     // FOLLOW LINES ARE THREADSAFE!!!
     // ( OInterfaceContainerHelper is synchronized with m_aListenerContainer! )
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XFrameActionListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XFrameActionListener>::get());
 
     if( pContainer != NULL )
     {

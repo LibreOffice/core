@@ -87,8 +87,8 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XControlModel      >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XControlContainer    >*)NULL )   ,
+            static OTypeCollection aTypeCollection  (   cppu::UnoType<XControlModel>::get(),
+                                                          cppu::UnoType<XControlContainer>::get(),
                                                         BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
@@ -250,7 +250,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
         }
 
         // Send message to all listener
-        OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( ::getCppuType((const Reference< XContainerListener >*)0) );
+        OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
 
         if (pInterfaceContainer)
         {
@@ -300,7 +300,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
                 maControlInfoList.erase(itr);
 
                 // Send message to all other listener
-                OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( ::getCppuType((const Reference< XContainerListener >*)0) );
+                OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
 
                 if (pInterfaceContainer)
                 {

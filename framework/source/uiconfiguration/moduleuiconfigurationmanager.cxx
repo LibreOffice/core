@@ -972,13 +972,13 @@ void SAL_CALL ModuleUIConfigurationManager::addEventListener( const Reference< X
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 void SAL_CALL ModuleUIConfigurationManager::removeEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 // XUIConfiguration
@@ -992,13 +992,13 @@ void SAL_CALL ModuleUIConfigurationManager::addConfigurationListener( const Refe
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< ui::XUIConfigurationListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<ui::XUIConfigurationListener>::get(), xListener );
 }
 
 void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< ui::XUIConfigurationListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<ui::XUIConfigurationListener>::get(), xListener );
 }
 
 // XUIConfigurationManager

@@ -255,7 +255,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
 Type SAL_CALL OFrames::getElementType() throw( RuntimeException, std::exception )
 {
     // This "container" support XFrame-interfaces only!
-    return ::getCppuType( (const css::uno::Reference< XFrame >*)NULL );
+    return cppu::UnoType<XFrame>::get();
 }
 
 //  XElementAccess

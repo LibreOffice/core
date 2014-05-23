@@ -197,7 +197,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
 Type SAL_CALL RootActionTriggerContainer::getElementType()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(( Reference< XPropertySet >*)0);
+    return cppu::UnoType<XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL RootActionTriggerContainer::hasElements()
@@ -261,12 +261,12 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ,
-                        ::getCppuType(( const Reference< XUnoTunnel             >*)NULL ) ,
-                        ::getCppuType(( const Reference< XNamed                 >*)NULL ));
+                        cppu::UnoType<XMultiServiceFactory>::get(),
+                        cppu::UnoType<XIndexContainer>::get(),
+                        cppu::UnoType<XServiceInfo>::get(),
+                        cppu::UnoType<XTypeProvider>::get(),
+                        cppu::UnoType<XUnoTunnel>::get(),
+                        cppu::UnoType<XNamed>::get());
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection;

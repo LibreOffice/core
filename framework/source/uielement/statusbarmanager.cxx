@@ -243,14 +243,12 @@ void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XE
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    m_aListenerContainer.addInterface( ::getCppuType(
-        ( const uno::Reference< lang::XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException, std::exception )
 {
-    m_aListenerContainer.removeInterface( ::getCppuType(
-        ( const uno::Reference< lang::XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
 // XUIConfigurationListener

@@ -67,7 +67,7 @@ InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiSer
 }
 OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
-    ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
+    ,OInterfaceContainer(_rxFactory, m_aMutex, cppu::UnoType<XPropertySet>::get())
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,FontControlModel( false )
     ,m_aSelectListeners(m_aMutex)
@@ -90,7 +90,7 @@ OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFact
 
 OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
-    ,OInterfaceContainer( _rxFactory, m_aMutex, ::getCppuType( static_cast<Reference<XPropertySet>*>( NULL ) ) )
+    ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XPropertySet>::get() )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,FontControlModel( _pOriginal )
     ,m_aSelectListeners( m_aMutex )
@@ -547,17 +547,17 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nBorder);
             break;
         case PROPERTY_ID_BORDERCOLOR:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aBorderColor, ::getCppuType((const sal_Int32*)NULL));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aBorderColor, cppu::UnoType<sal_Int32>::get());
             break;
         case PROPERTY_ID_DEFAULTCONTROL:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefaultControl);
             break;
         case PROPERTY_ID_BACKGROUNDCOLOR:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aBackgroundColor, ::getCppuType((const sal_Int32*)NULL));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aBackgroundColor, cppu::UnoType<sal_Int32>::get());
             break;
         case PROPERTY_ID_ROWHEIGHT:
             {
-                bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aRowHeight, ::getCppuType((const sal_Int32*)NULL));
+                bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aRowHeight, cppu::UnoType<sal_Int32>::get());
                 sal_Int32 nNewVal( 0 );
                 if ( ( rConvertedValue >>= nNewVal ) && ( nNewVal <= 0 ) )
                 {

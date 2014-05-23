@@ -120,8 +120,8 @@ Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException, std::
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  ( ::getCppuType(( const Reference< XControlModel >*) NULL ) ,
-                                                      ::getCppuType(( const Reference< XProgressBar  >*) NULL ) ,
+            static OTypeCollection aTypeCollection  ( cppu::UnoType<XControlModel>::get(),
+                                                      cppu::UnoType<XProgressBar>::get(),
                                                       BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!

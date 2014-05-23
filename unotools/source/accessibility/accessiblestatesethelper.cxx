@@ -247,10 +247,8 @@ uno::Sequence< ::com::sun::star::uno::Type>
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     const ::com::sun::star::uno::Type aTypeList[] = {
-        ::getCppuType((const uno::Reference<
-            XAccessibleStateSet>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XTypeProvider>*)0)
+        cppu::UnoType<XAccessibleStateSet>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get()
         };
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
         aTypeSequence (aTypeList, 2);

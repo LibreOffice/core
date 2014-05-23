@@ -169,8 +169,8 @@ Any StdTabController::queryAggregation( const Type & rType ) throw(RuntimeExcept
 
 // XTypeProvider
 IMPL_XTYPEPROVIDER_START( StdTabController )
-    getCppuType( ( Reference< XTabController>* ) NULL ),
-    getCppuType( ( Reference< XServiceInfo>* ) NULL )
+    cppu::UnoType<XTabController>::get(),
+    cppu::UnoType<XServiceInfo>::get()
 IMPL_XTYPEPROVIDER_END
 
 void StdTabController::setModel( const Reference< XTabControllerModel >& Model ) throw(RuntimeException, std::exception)

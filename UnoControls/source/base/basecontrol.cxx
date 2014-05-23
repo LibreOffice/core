@@ -130,12 +130,12 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException, std::
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection( ::getCppuType(( const Reference< XPaintListener >*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XWindowListener>*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XView          >*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XWindow        >*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XServiceInfo   >*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XControl       >*)NULL ) ,
+            static OTypeCollection aTypeCollection( cppu::UnoType<XPaintListener>::get(),
+                                                    cppu::UnoType<XWindowListener>::get(),
+                                                    cppu::UnoType<XView>::get(),
+                                                    cppu::UnoType<XWindow>::get(),
+                                                    cppu::UnoType<XServiceInfo>::get(),
+                                                    cppu::UnoType<XControl>::get(),
                                                     OComponentHelper::getTypes()
                                                   );
 
@@ -481,84 +481,84 @@ Rectangle SAL_CALL BaseControl::getPosSize() throw( RuntimeException, std::excep
 
 void SAL_CALL BaseControl::addWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XWindowListener >*)0), xListener );
+    impl_getMultiplexer()->advise( cppu::UnoType<XWindowListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XFocusListener >*)0), xListener );
+    impl_getMultiplexer()->advise( cppu::UnoType<XFocusListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XKeyListener >*)0), xListener );
+    impl_getMultiplexer()->advise( cppu::UnoType<XKeyListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XMouseListener >*)0), xListener );
+    impl_getMultiplexer()->advise( cppu::UnoType<XMouseListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XMouseMotionListener >*)0), xListener );
+    impl_getMultiplexer()->advise( cppu::UnoType<XMouseMotionListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addPaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->advise( ::getCppuType(( const Reference< XPaintListener >*)0), xListener );
+    impl_getMultiplexer()->advise( cppu::UnoType<XPaintListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XWindowListener >*)0), xListener );
+    impl_getMultiplexer()->unadvise( cppu::UnoType<XWindowListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XFocusListener >*)0), xListener );
+    impl_getMultiplexer()->unadvise( cppu::UnoType<XFocusListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XKeyListener >*)0), xListener );
+    impl_getMultiplexer()->unadvise( cppu::UnoType<XKeyListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XMouseListener >*)0), xListener );
+    impl_getMultiplexer()->unadvise( cppu::UnoType<XMouseListener>::get(), xListener );
 }
 
 //  XWindow
 
 void  SAL_CALL BaseControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XMouseMotionListener >*)0), xListener );
+    impl_getMultiplexer()->unadvise( cppu::UnoType<XMouseMotionListener>::get(), xListener );
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removePaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    impl_getMultiplexer()->unadvise( ::getCppuType(( const Reference< XPaintListener >*)0), xListener );
+    impl_getMultiplexer()->unadvise( cppu::UnoType<XPaintListener>::get(), xListener );
 }
 
 //  XView

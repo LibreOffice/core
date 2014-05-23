@@ -185,7 +185,7 @@ Any ServiceEnumeration_Impl::nextElement()
     if( nIt == aFactories.getLength() )
         throw NoSuchElementException();
 
-    return Any( &aFactories.getConstArray()[nIt++], ::getCppuType( (const Reference<XInterface > *)0 ) );
+    return Any( &aFactories.getConstArray()[nIt++], cppu::UnoType<XInterface>::get());
 }
 
 
@@ -282,7 +282,7 @@ Any ImplementationEnumeration_Impl::nextElement()
     if( aIt == aImplementationMap.end() )
         throw NoSuchElementException();
 
-    Any ret( &(*aIt), ::getCppuType( (const Reference<XInterface > *)0 ) );
+    Any ret( &(*aIt), cppu::UnoType<XInterface>::get());
     ++aIt;
     return ret;
 }
@@ -350,7 +350,7 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
     {
         try
         {
-            x->remove( Any( &rEvt.Source, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
+            x->remove( Any( &rEvt.Source, cppu::UnoType<XInterface>::get()) );
         }
         catch( const IllegalArgumentException & )
         {
@@ -1144,7 +1144,7 @@ Type OServiceManager::getElementType()
     throw(css::uno::RuntimeException, std::exception)
 {
     check_undisposed();
-    return ::getCppuType( (const Reference< XInterface > *)0 );
+    return cppu::UnoType<XInterface>::get();
 }
 
 // XElementAccess

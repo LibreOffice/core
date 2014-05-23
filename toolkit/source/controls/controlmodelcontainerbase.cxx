@@ -476,7 +476,7 @@ void ControlModelContainerBase::removeContainerListener( const Reference< XConta
 // XElementAcces
 Type ControlModelContainerBase::getElementType() throw(RuntimeException, std::exception)
 {
-    Type aType = getCppuType( ( Reference< XControlModel>* ) NULL );
+    Type aType = cppu::UnoType<XControlModel>::get();
     return aType;
 }
 

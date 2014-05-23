@@ -276,9 +276,7 @@ bool AdapterImpl::coerce_assign(
         {
             OSL_ASSERT(
                 p_exc->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
-            if (typelib_typedescriptionreference_isAssignableFrom(
-                    ::getCppuType(
-                        (RuntimeException const *) 0 ).getTypeLibType(),
+            if (typelib_typedescriptionreference_isAssignableFrom( cppu::UnoType<RuntimeException>::get() ).getTypeLibType(),
                     p_exc->pType ))
             {
                 // is RuntimeException or derived: rethrow
@@ -731,8 +729,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     rShortSeqType.getDescription( &m_pShortSeqTD );
     // script.XInvocation
     typelib_TypeDescription * pTD = 0;
-    const Type & rInvType = ::getCppuType(
-        (const Reference< script::XInvocation > *)0 );
+    const Type & rInvType = cppu::UnoType<script::XInvocation>::get();
     TYPELIB_DANGER_GET( &pTD, rInvType.getTypeLibType() );
     typelib_InterfaceTypeDescription * pITD;
     pITD = reinterpret_cast<typelib_InterfaceTypeDescription*>(pTD);
@@ -746,7 +743,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
         &m_pGetValueTD, pITD->ppMembers[ 3 ] ); // getValue()
     // script.XTypeConverter
     const Type & rTCType =
-        ::getCppuType( (const Reference< script::XTypeConverter > *)0 );
+        cppu::UnoType<script::XTypeConverter>::get();
     TYPELIB_DANGER_GET( &pTD, rTCType.getTypeLibType() );
     pITD = reinterpret_cast<typelib_InterfaceTypeDescription*>(pTD);
     ::typelib_typedescriptionreference_getDescription(

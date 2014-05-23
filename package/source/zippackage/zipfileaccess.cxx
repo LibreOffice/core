@@ -316,7 +316,7 @@ uno::Type SAL_CALL OZipFileAccess::getElementType()
     if ( !m_pZipFile )
         throw io::NotConnectedException(THROW_WHERE );
 
-    return getCppuType( ( const uno::Reference< io::XInputStream >* )NULL );
+    return cppu::UnoType<io::XInputStream>::get();
 }
 
 sal_Bool SAL_CALL OZipFileAccess::hasElements()

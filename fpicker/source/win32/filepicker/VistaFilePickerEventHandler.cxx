@@ -207,14 +207,14 @@ STDMETHODIMP VistaFilePickerEventHandler::OnControlActivating(IFileDialogCustomi
 void SAL_CALL VistaFilePickerEventHandler::addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
     throw( css::uno::RuntimeException )
 {
-    m_lListener.addInterface(::getCppuType( (const css::uno::Reference< css::ui::dialogs::XFilePickerListener >*)NULL ), xListener);
+    m_lListener.addInterface(cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get(), xListener);
 }
 
 
 void SAL_CALL VistaFilePickerEventHandler::removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
     throw( css::uno::RuntimeException )
 {
-    m_lListener.removeInterface(::getCppuType( (const css::uno::Reference< css::ui::dialogs::XFilePickerListener >*)NULL ), xListener);
+    m_lListener.removeInterface(cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get(), xListener);
 }
 
 
@@ -305,7 +305,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
 {
     static AsyncRequests aNotify(RequestHandlerRef(new AsyncPickerEvents()));
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( ::getCppuType( ( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
     if ( ! pContainer)
         return;
 

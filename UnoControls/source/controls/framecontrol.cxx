@@ -122,9 +122,9 @@ Sequence< Type > SAL_CALL FrameControl::getTypes() throw( RuntimeException, std:
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XControlModel              >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XControlContainer            >*)NULL )   ,
-                                                          ::getCppuType(( const Reference< XConnectionPointContainer    >*)NULL )   ,
+            static OTypeCollection aTypeCollection  (   cppu::UnoType<XControlModel>::get(),
+                                                          cppu::UnoType<XControlContainer>::get(),
+                                                          cppu::UnoType<XConnectionPointContainer>::get(),
                                                         BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
@@ -444,8 +444,8 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
 
     // notify the listeners
     sal_Int32   nFrameId = PROPERTYHANDLE_FRAME;
-    Any aNewFrame ( &xNewFrame, ::getCppuType((const Reference< XFrame >*)0) );
-    Any aOldFrame ( &xOldFrame, ::getCppuType((const Reference< XFrame >*)0) );
+    Any aNewFrame ( &xNewFrame, cppu::UnoType<XFrame>::get());
+    Any aOldFrame ( &xOldFrame, cppu::UnoType<XFrame>::get());
 
     fire ( &nFrameId, &aNewFrame, &aOldFrame, 1, sal_False );
 
@@ -471,8 +471,8 @@ void FrameControl::impl_deleteFrame()
 
     // notify the listeners
     sal_Int32 nFrameId = PROPERTYHANDLE_FRAME;
-    Any aNewFrame( &xNullFrame, ::getCppuType((const Reference< XFrame2 >*)0) );
-    Any aOldFrame( &xOldFrame, ::getCppuType((const Reference< XFrame2 >*)0) );
+    Any aNewFrame( &xNullFrame, cppu::UnoType<XFrame2>::get());
+    Any aOldFrame( &xOldFrame, cppu::UnoType<XFrame2>::get());
     fire( &nFrameId, &aNewFrame, &aOldFrame, 1, sal_False );
 
     // dispose the frame
@@ -487,8 +487,8 @@ const Sequence< Property > FrameControl::impl_getStaticPropertyDescriptor()
     // All Properties of this implementation. The array must be sorted!
     static const Property pPropertys[PROPERTY_COUNT] =
     {
-        Property( PROPERTYNAME_COMPONENTURL, PROPERTYHANDLE_COMPONENTURL, ::getCppuType((const OUString*)0), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
-        Property( PROPERTYNAME_FRAME, PROPERTYHANDLE_FRAME, ::getCppuType((const Reference< XFrame >*)0), PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT   ),
+        Property( PROPERTYNAME_COMPONENTURL, PROPERTYHANDLE_COMPONENTURL, cppu::UnoType<OUString>::get(), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
+        Property( PROPERTYNAME_FRAME, PROPERTYHANDLE_FRAME, cppu::UnoType<XFrame>::get(), PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT   ),
         Property( PROPERTYNAME_LOADERARGUMENTS, PROPERTYHANDLE_LOADERARGUMENTS, ::getCppuType((const Sequence< PropertyValue >*)0), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
     };
 

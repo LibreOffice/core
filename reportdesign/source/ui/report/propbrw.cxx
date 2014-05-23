@@ -410,7 +410,7 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(OObjectBase* _pObj
 uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Reference< uno::XInterface>& _xFormComponent
                                                               ,const uno::Reference< uno::XInterface>& _xReportComponent)
 {
-    uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(::getCppuType(static_cast<Reference<XInterface> * >(NULL)));
+    uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(cppu::UnoType<XInterface>::get());
     xNameCont->insertByName(OUString("FormComponent"),uno::makeAny(_xFormComponent));
     xNameCont->insertByName(OUString("ReportComponent"),uno::makeAny(_xReportComponent));
     xNameCont->insertByName(OUString("RowSet")
@@ -525,7 +525,7 @@ void PropBrw::Update( OSectionView* pNewView )
         {
             uno::Reference< uno::XInterface> xTemp(m_pView->getReportSection()->getSection());
             m_xLastSection = xTemp;
-            uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(::getCppuType(static_cast<Reference<XInterface> * >(NULL)));
+            uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(cppu::UnoType<XInterface>::get() );
             xNameCont->insertByName(OUString("ReportComponent"),uno::makeAny(xTemp));
             xTemp = xNameCont;
 

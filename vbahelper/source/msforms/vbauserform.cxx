@@ -218,7 +218,7 @@ ScVbaUserForm::setValue( const OUString& aPropertyName, const uno::Any& aValue )
         uno::Reference< script::XDefaultProperty > xDfltProp( aObject, uno::UNO_QUERY_THROW );
         OUString aDfltPropName = xDfltProp->getDefaultPropertyName();
         uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObject ) );
-        uno::Reference< beans::XPropertySet > xPropSet( xUnoAccess->queryAdapter( ::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xPropSet( xUnoAccess->queryAdapter( cppu::UnoType<beans::XPropertySet>::get()), uno::UNO_QUERY_THROW );
         xPropSet->setPropertyValue( aDfltPropName, aValue );
     }
 }

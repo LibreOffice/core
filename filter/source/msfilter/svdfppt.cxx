@@ -1659,8 +1659,7 @@ bool PPTConvertOCXControls::InsertControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rFormComps =
             GetFormComps();
 
-        ::com::sun::star::uno::Any aTmp( &rFComp, ::getCppuType((const ::com::sun::star::uno::Reference<
-            com::sun::star::form::XFormComponent >*)0) );
+        ::com::sun::star::uno::Any aTmp( &rFComp, cppu::UnoType<com::sun::star::form::XFormComponent>::get() );
 
         rFormComps->insertByIndex( rFormComps->getCount(), aTmp );
 

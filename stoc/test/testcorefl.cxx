@@ -208,7 +208,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     Any aStructAny(&aStructC, ::getCppuType( (const StructC *) 0 ));
 
     sal_Int32 nLong = aConstLong * 2;
-    aAny.setValue( &nLong, ::getCppuType( (const sal_Int32 *)0 ) );
+    aAny.setValue( &nLong, cppu::UnoType<sal_Int32>::get());
 
     OSL_ENSURE(*(sal_Int32*)xRefl->forName("ModuleA.StructA")->getField(OUString( "aLong" ))->get(
         Any(&aStructC, ::getCppuType( (const StructC *)0 ))).getValue() == aConstLong, "test_RegCoreReflection(): error 52");

@@ -140,7 +140,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 {
     Any aReturn;
 
-    if (_rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >(NULL) ) ) )
+    if (_rType.equals( cppu::UnoType<XTypeProvider>::get() ) )
     {   // a XTypeProvider interface needs a working aggregate - we don't want to give the type provider
         // of our base class (OFormattedFieldWrapper_Base) to the caller as it supplies nearly nothing
         ensureAggregate();
@@ -152,7 +152,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
     {
         aReturn = OFormattedFieldWrapper_Base::queryAggregation(_rType);
 
-        if ((_rType.equals( ::getCppuType( static_cast< Reference< XServiceInfo >* >(NULL) ) ) ) && aReturn.hasValue())
+        if ((_rType.equals( cppu::UnoType<XServiceInfo>::get() ) ) && aReturn.hasValue())
         {   // somebody requested an XServiceInfo interface and our base class provided it
             // check our aggregate if it has one, too
             ensureAggregate();
@@ -200,7 +200,7 @@ Sequence< OUString > SAL_CALL OFormattedFieldWrapper::getSupportedServiceNames( 
 {
     DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::getSupportedServiceNames: should never have made it 'til here without an aggregate!");
     Reference< XServiceInfo > xSI;
-    m_xAggregate->queryAggregation(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL))) >>= xSI;
+    m_xAggregate->queryAggregation(cppu::UnoType<XServiceInfo>::get()) >>= xSI;
     return xSI->getSupportedServiceNames();
 }
 

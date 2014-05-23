@@ -135,9 +135,9 @@ Sequence< Type > SAL_CALL OResultSet::getTypes()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::getTypes");
-    OTypeCollection aTypes( ::getCppuType((const  Reference< XMultiPropertySet > *) NULL),
-                                                ::getCppuType((const Reference< XFastPropertySet > *) NULL),
-                                                ::getCppuType((const Reference< XPropertySet > *) NULL));
+    OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
+                                                cppu::UnoType<XFastPropertySet>::get(),
+                                                cppu::UnoType<XPropertySet>::get());
 
     return concatSequences(aTypes.getTypes(), OResultSet_BASE::getTypes());
 }

@@ -82,7 +82,7 @@ throw ( css::uno::RuntimeException, std::exception )
         if ( pTypeCollection == NULL )
         {
             static ::cppu::OTypeCollection aTypeCollection(
-                ::getCppuType( ( const css::uno::Reference< css::beans::XPropertySet >*)NULL )
+                cppu::UnoType<css::beans::XPropertySet>::get()
                 ,OTempFileBase::getTypes() );
             pTypeCollection = &aTypeCollection;
         }

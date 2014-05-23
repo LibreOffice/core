@@ -252,7 +252,7 @@ void MenuBarWrapper::fillPopupControllerCache()
 Type SAL_CALL MenuBarWrapper::getElementType()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return ::getCppuType(( Reference< XDispatchProvider >*)0);
+    return cppu::UnoType<XDispatchProvider>::get();
 }
 
 sal_Bool SAL_CALL MenuBarWrapper::hasElements()

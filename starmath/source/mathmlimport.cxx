@@ -136,7 +136,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
     comphelper::PropertyMapEntry aInfoMap[] =
     {
         { OUString("PrivateData"), 0,
-              ::getCppuType( (Reference<XInterface> *)0 ),
+              cppu::UnoType<XInterface>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("BaseURI"), 0,
               ::cppu::UnoType<OUString>::get(),

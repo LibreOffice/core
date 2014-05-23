@@ -363,14 +363,14 @@ void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener 
     if ( m_bDisposed )
         throw DisposedException();
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 void SAL_CALL MenuBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event )

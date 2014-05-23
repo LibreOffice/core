@@ -234,7 +234,7 @@ uno::Reference< XEnumeration > SAL_CALL ZipPackageFolder::createEnumeration(  )
 uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
         throw(uno::RuntimeException, std::exception)
 {
-    return ::getCppuType ((const uno::Reference< XUnoTunnel > *) 0);
+    return cppu::UnoType<XUnoTunnel>::get();
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
         throw(uno::RuntimeException, std::exception)

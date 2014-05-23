@@ -753,7 +753,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
                 SAL_CONST_INT64(0x123456789abcdef0),
                 SAL_CONST_UINT64(0xfedcba9876543210),
                 (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString("dumdidum"), xI,
-                Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
+                Any( &xI, cppu::UnoType<XInterface>::get()) );
 
         OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
         OSL_ENSURE( !(aData.Any != xI), "### unexpected any!" );
@@ -769,7 +769,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
                 aData.Bool, aData.Char, aData.Byte, aData.Short, aData.UShort,
                 aData.Long, aData.ULong, aData.Hyper, aData.UHyper, aData.Float, aData.Double,
                 aData.Enum, aData.String, xI,
-                Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
+                Any( &xI, cppu::UnoType<XInterface>::get()) );
 
         aSetData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aSetData, 1 );
 
@@ -942,27 +942,27 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Reference< XInvocation > xInvok( new XLB_Invocation( xMgr, xOriginal ) );
     Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
-        xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
+        xInvok, cppu::UnoType<XLanguageBindingTest>::get()), UNO_QUERY );
     Reference< XLanguageBindingTest > xLBT2(
         xAdapFac->createAdapter(
-            xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
+            xInvok, cppu::UnoType<XLanguageBindingTest>::get()), UNO_QUERY );
     if (xLBT != xLBT2)
         return sal_False;
     Reference< XInterface > xLBT3(
         xAdapFac->createAdapter(
-            xInvok, ::getCppuType( (const Reference< XInterface > *)0 ) ), UNO_QUERY );
+            xInvok, cppu::UnoType<XInterface>::get()), UNO_QUERY );
     if (xLBT != xLBT3)
         return sal_False;
     Type ar[ 2 ] = {
-        ::getCppuType( (const Reference< XLBTestBase > *)0 ),
-        ::getCppuType( (const Reference< XInterface > *)0 ) };
+        cppu::UnoType<XLBTestBase>::get(),
+        cppu::UnoType<XInterface>::get()};
     Reference< XInterface > xLBT4(
         xAdapFac2->createAdapter( xInvok, Sequence< Type >( ar, 2 ) ), UNO_QUERY );
     if (xLBT != xLBT4)
         return sal_False;
     Reference< XSimpleRegistry > xInvalidAdapter(
         xAdapFac->createAdapter(
-            xInvok, ::getCppuType( (const Reference< XSimpleRegistry > *)0 ) ), UNO_QUERY );
+            xInvok, cppu::UnoType<XSimpleRegistry>::get()), UNO_QUERY );
     if (xLBT == xInvalidAdapter)
         return sal_False;
 
@@ -991,7 +991,7 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
         xInvocFac->createInstanceWithArguments( Sequence< Any >( &aOriginal, 1 ) ), UNO_QUERY );
 
     Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
-        xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
+        xInvok, cppu::UnoType<XLanguageBindingTest>::get()), UNO_QUERY );
 
     return (performTest( xLBT ) && raiseException( xLBT ));
 }

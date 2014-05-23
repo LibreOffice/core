@@ -205,7 +205,7 @@ namespace xforms
 
     Type SAL_CALL ODataTypeRepository::getElementType(  ) throw (RuntimeException, std::exception)
     {
-        return ::getCppuType( static_cast< Reference< XDataType >* >( NULL ) );
+        return cppu::UnoType<XDataType>::get();
     }
 
 

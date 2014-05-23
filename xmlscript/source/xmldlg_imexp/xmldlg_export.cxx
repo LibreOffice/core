@@ -581,7 +581,7 @@ void ElementDescriptor::readDateAttr( OUString const & rPropName, OUString const
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
     {
         Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_STRUCT && a.getValueType() == ::getCppuType( (util::Date*)0 ))
+        if (a.getValueTypeClass() == TypeClass_STRUCT && a.getValueType() == cppu::UnoType<util::Date>::get())
         {
             util::Date aUDate;
             if (a >>= aUDate)
@@ -602,7 +602,7 @@ void ElementDescriptor::readTimeAttr( OUString const & rPropName, OUString const
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
     {
         Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_STRUCT && a.getValueType() == ::getCppuType( (util::Time*)0 ))
+        if (a.getValueTypeClass() == TypeClass_STRUCT && a.getValueType() == cppu::UnoType<util::Time>::get())
         {
             util::Time aUTime;
             if (a >>= aUTime)
@@ -688,7 +688,7 @@ void ElementDescriptor::readVerticalAlignAttr( OUString const & rPropName, OUStr
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
     {
         Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_ENUM && a.getValueType() == ::getCppuType( (style::VerticalAlignment*)0 ))
+        if (a.getValueTypeClass() == TypeClass_ENUM && a.getValueType() == cppu::UnoType<style::VerticalAlignment>::get())
         {
             style::VerticalAlignment eAlign;
             a >>= eAlign;
@@ -966,7 +966,7 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
     {
         Any aSelectionType ( _xProps->getPropertyValue( rPropName ) );
 
-        if (aSelectionType.getValueTypeClass() == TypeClass_ENUM && aSelectionType.getValueType() == ::getCppuType( (::view::SelectionType*)0 ))
+        if (aSelectionType.getValueTypeClass() == TypeClass_ENUM && aSelectionType.getValueType() == cppu::UnoType<view::SelectionType>::get())
         {
             ::view::SelectionType eSelectionType;
             aSelectionType >>= eSelectionType;

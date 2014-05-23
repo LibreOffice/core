@@ -333,7 +333,7 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
 void SAL_CALL TabWindowService::addTabListener(const css::uno::Reference< css::awt::XTabListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
-    m_lListener.addInterface(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*)NULL), xListener);
+    m_lListener.addInterface(cppu::UnoType<css::awt::XTabListener>::get(), xListener);
 }
 
 //  XSimpleTabController
@@ -341,7 +341,7 @@ void SAL_CALL TabWindowService::addTabListener(const css::uno::Reference< css::a
 void SAL_CALL TabWindowService::removeTabListener(const css::uno::Reference< css::awt::XTabListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
-    m_lListener.removeInterface(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*)NULL), xListener);
+    m_lListener.removeInterface(cppu::UnoType<css::awt::XTabListener>::get(), xListener);
 }
 
 //  XComponent
@@ -445,7 +445,7 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
         return 0;
     }
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*) NULL));
+    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::awt::XTabListener>::get());
     if ( ! pContainer)
         return 0;
 

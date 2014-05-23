@@ -217,7 +217,7 @@ Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (Run
 
     // BUT: _don't_ let it feel responsible for the XTypeProvider interface
     // (as this is implemented by our base class in the proper way)
-    if  (   _rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) )
+    if  (   _rType.equals( cppu::UnoType<XTypeProvider>::get() )
         ||  !aReturn.hasValue()
         )
         aReturn = OBoundControlModel::queryAggregation( _rType );

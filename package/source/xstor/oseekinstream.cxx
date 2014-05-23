@@ -67,7 +67,7 @@ uno::Sequence< uno::Type > SAL_CALL OInputSeekStream::getTypes()
         if ( pTypeCollection == NULL )
         {
             static ::cppu::OTypeCollection aTypeCollection(
-                    ::getCppuType(( const uno::Reference< io::XSeekable >* )NULL ),
+                    cppu::UnoType<io::XSeekable>::get(),
                     OInputCompStream::getTypes() );
 
             pTypeCollection = &aTypeCollection ;

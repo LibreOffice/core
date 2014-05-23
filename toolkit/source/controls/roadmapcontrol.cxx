@@ -332,7 +332,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     Type SAL_CALL UnoControlRoadmapModel::getElementType() throw(RuntimeException, std::exception)
     {
-        Type aType = getCppuType( ( Reference< XPropertySet>* ) NULL );
+        Type aType = cppu::UnoType<XPropertySet>::get();
         return aType;
     }
 
