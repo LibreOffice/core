@@ -196,7 +196,9 @@ namespace svx
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         virtual void
             implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
-            throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+            throw (css::lang::IndexOutOfBoundsException,
+                   css::uno::RuntimeException,
+                   std::exception) SAL_OVERRIDE;
 
         // OCommonAccessibleComponent
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
