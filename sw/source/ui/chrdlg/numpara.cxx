@@ -109,11 +109,14 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
     {
         const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectEntryPos();
         const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
-        SfxUInt16Item* pOutlineLv = (SfxUInt16Item*)pOldOutlineLv->Clone();
-        pOutlineLv->SetValue( aOutlineLv );
-        rSet.Put(*pOutlineLv);
-        delete pOutlineLv;
-        bModified = true;
+        if (pOldOutlineLv)
+        {
+            SfxUInt16Item* pOutlineLv = (SfxUInt16Item*)pOldOutlineLv->Clone();
+            pOutlineLv->SetValue( aOutlineLv );
+            rSet.Put(*pOutlineLv);
+            delete pOutlineLv;
+            bModified = true;
+        }
     }
 
     if( m_pNumberStyleLB->IsValueChangedFromSaved())
@@ -122,7 +125,7 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         if(m_pNumberStyleLB->GetSelectEntryPos())
             aStyle = m_pNumberStyleLB->GetSelectEntry();
         const SfxStringItem* pOldRule = (const SfxStringItem*)GetOldItem( rSet, SID_ATTR_PARA_NUMRULE);
-        SfxStringItem* pRule = (SfxStringItem*)pOldRule->Clone();
+        SfxStringItem* pRule = pOldRule ? (SfxStringItem*)pOldRule->Clone() : NULL;
         if (pRule)
         {
             pRule->SetValue(aStyle);
