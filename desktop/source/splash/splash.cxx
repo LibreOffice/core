@@ -524,7 +524,7 @@ void SplashScreen::determineProgressRatioValues(
         Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
-        nScreenRatio  = sal_Int32( math::round( double( nWidth ) / double( nHeight ), 2 ) * 100 );
+        nScreenRatio  = nHeight ? sal_Int32( math::round( double( nWidth ) / double( nHeight ), 2 ) * 100 ) :  0;
     }
 
     char szFullScreenProgressRatio[] = "FullScreenProgressRatio0";
