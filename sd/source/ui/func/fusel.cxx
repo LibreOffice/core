@@ -305,7 +305,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             // New: double click on selected Group object
                             // enter group
                             if ( ! bSelectionOnly
-                                && pObj
                                 && pObj->GetPage() == pPV->GetPage())
                                 bReturn = pPV->EnterGroup(pObj);
                         }
