@@ -4440,7 +4440,7 @@ namespace {
         {
             const SfxInt16Item* pListLevelItem =
                                 dynamic_cast<const SfxInt16Item*>(pItem);
-            if ( pListLevelItem->GetValue() != mrTxtNode.GetAttrListLevel() )
+            if (pListLevelItem && pListLevelItem->GetValue() != mrTxtNode.GetAttrListLevel())
             {
                 mbUpdateListLevel = true;
             }
