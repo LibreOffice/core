@@ -73,6 +73,7 @@
 
 #include "docpool.hxx"
 #include "appoptio.hxx"
+#include <searchresults.hxx>
 
 // Controls
 
@@ -291,6 +292,7 @@ void ScDLL::Init()
     ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
+    sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
