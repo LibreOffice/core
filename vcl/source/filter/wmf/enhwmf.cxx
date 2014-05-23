@@ -156,6 +156,144 @@ using namespace std;
 namespace
 {
 
+const char *
+record_type_name(sal_uInt32 nRecType)
+{
+#ifndef SAL_LOG_INFO
+    (void) nRecType;
+    return "";
+#else
+    switch( nRecType )
+    {
+    case EMR_HEADER: return "HEADER";
+    case EMR_POLYBEZIER: return "POLYBEZIER";
+    case EMR_POLYGON: return "POLYGON";
+    case EMR_POLYLINE: return "POLYLINE";
+    case EMR_POLYBEZIERTO: return "POLYBEZIERTO";
+    case EMR_POLYLINETO: return "POLYLINETO";
+    case EMR_POLYPOLYLINE: return "POLYPOLYLINE";
+    case EMR_POLYPOLYGON: return "POLYPOLYGON";
+    case EMR_SETWINDOWEXTEX: return "SETWINDOWEXTEX";
+    case EMR_SETWINDOWORGEX: return "SETWINDOWORGEX";
+    case EMR_SETVIEWPORTEXTEX: return "SETVIEWPORTEXTEX";
+    case EMR_SETVIEWPORTORGEX: return "SETVIEWPORTORGEX";
+    case EMR_SETBRUSHORGEX: return "SETBRUSHORGEX";
+    case EMR_EOF: return "EOF";
+    case EMR_SETPIXELV: return "SETPIXELV";
+    case EMR_SETMAPPERFLAGS: return "SETMAPPERFLAGS";
+    case EMR_SETMAPMODE: return "SETMAPMODE";
+    case EMR_SETBKMODE: return "SETBKMODE";
+    case EMR_SETPOLYFILLMODE: return "SETPOLYFILLMODE";
+    case EMR_SETROP2: return "SETROP2";
+    case EMR_SETSTRETCHBLTMODE: return "SETSTRETCHBLTMODE";
+    case EMR_SETTEXTALIGN: return "SETTEXTALIGN";
+    case EMR_SETCOLORADJUSTMENT: return "SETCOLORADJUSTMENT";
+    case EMR_SETTEXTCOLOR: return "SETTEXTCOLOR";
+    case EMR_SETBKCOLOR: return "SETBKCOLOR";
+    case EMR_OFFSETCLIPRGN: return "OFFSETCLIPRGN";
+    case EMR_MOVETOEX: return "MOVETOEX";
+    case EMR_SETMETARGN: return "SETMETARGN";
+    case EMR_EXCLUDECLIPRECT: return "EXCLUDECLIPRECT";
+    case EMR_INTERSECTCLIPRECT: return "INTERSECTCLIPRECT";
+    case EMR_SCALEVIEWPORTEXTEX: return "SCALEVIEWPORTEXTEX";
+    case EMR_SCALEWINDOWEXTEX: return "SCALEWINDOWEXTEX";
+    case EMR_SAVEDC: return "SAVEDC";
+    case EMR_RESTOREDC: return "RESTOREDC";
+    case EMR_SETWORLDTRANSFORM: return "SETWORLDTRANSFORM";
+    case EMR_MODIFYWORLDTRANSFORM: return "MODIFYWORLDTRANSFORM";
+    case EMR_SELECTOBJECT: return "SELECTOBJECT";
+    case EMR_CREATEPEN: return "CREATEPEN";
+    case EMR_CREATEBRUSHINDIRECT: return "CREATEBRUSHINDIRECT";
+    case EMR_DELETEOBJECT: return "DELETEOBJECT";
+    case EMR_ANGLEARC: return "ANGLEARC";
+    case EMR_ELLIPSE: return "ELLIPSE";
+    case EMR_RECTANGLE: return "RECTANGLE";
+    case EMR_ROUNDRECT: return "ROUNDRECT";
+    case EMR_ARC: return "ARC";
+    case EMR_CHORD: return "CHORD";
+    case EMR_PIE: return "PIE";
+    case EMR_SELECTPALETTE: return "SELECTPALETTE";
+    case EMR_CREATEPALETTE: return "CREATEPALETTE";
+    case EMR_SETPALETTEENTRIES: return "SETPALETTEENTRIES";
+    case EMR_RESIZEPALETTE: return "RESIZEPALETTE";
+    case EMR_REALIZEPALETTE: return "REALIZEPALETTE";
+    case EMR_EXTFLOODFILL: return "EXTFLOODFILL";
+    case EMR_LINETO: return "LINETO";
+    case EMR_ARCTO: return "ARCTO";
+    case EMR_POLYDRAW: return "POLYDRAW";
+    case EMR_SETARCDIRECTION: return "SETARCDIRECTION";
+    case EMR_SETMITERLIMIT: return "SETMITERLIMIT";
+    case EMR_BEGINPATH: return "BEGINPATH";
+    case EMR_ENDPATH: return "ENDPATH";
+    case EMR_CLOSEFIGURE: return "CLOSEFIGURE";
+    case EMR_FILLPATH: return "FILLPATH";
+    case EMR_STROKEANDFILLPATH: return "STROKEANDFILLPATH";
+    case EMR_STROKEPATH: return "STROKEPATH";
+    case EMR_FLATTENPATH: return "FLATTENPATH";
+    case EMR_WIDENPATH: return "WIDENPATH";
+    case EMR_SELECTCLIPPATH: return "SELECTCLIPPATH";
+    case EMR_ABORTPATH: return "ABORTPATH";
+    case EMR_GDICOMMENT: return "GDICOMMENT";
+    case EMR_FILLRGN: return "FILLRGN";
+    case EMR_FRAMERGN: return "FRAMERGN";
+    case EMR_INVERTRGN: return "INVERTRGN";
+    case EMR_PAINTRGN: return "PAINTRGN";
+    case EMR_EXTSELECTCLIPRGN: return "EXTSELECTCLIPRGN";
+    case EMR_BITBLT: return "BITBLT";
+    case EMR_STRETCHBLT: return "STRETCHBLT";
+    case EMR_MASKBLT: return "MASKBLT";
+    case EMR_PLGBLT: return "PLGBLT";
+    case EMR_SETDIBITSTODEVICE: return "SETDIBITSTODEVICE";
+    case EMR_STRETCHDIBITS: return "STRETCHDIBITS";
+    case EMR_EXTCREATEFONTINDIRECTW: return "EXTCREATEFONTINDIRECTW";
+    case EMR_EXTTEXTOUTA: return "EXTTEXTOUTA";
+    case EMR_EXTTEXTOUTW: return "EXTTEXTOUTW";
+    case EMR_POLYBEZIER16: return "POLYBEZIER16";
+    case EMR_POLYGON16: return "POLYGON16";
+    case EMR_POLYLINE16: return "POLYLINE16";
+    case EMR_POLYBEZIERTO16: return "POLYBEZIERTO16";
+    case EMR_POLYLINETO16: return "POLYLINETO16";
+    case EMR_POLYPOLYLINE16: return "POLYPOLYLINE16";
+    case EMR_POLYPOLYGON16: return "POLYPOLYGON16";
+    case EMR_POLYDRAW16: return "POLYDRAW16";
+    case EMR_CREATEMONOBRUSH: return "CREATEMONOBRUSH";
+    case EMR_CREATEDIBPATTERNBRUSHPT: return "CREATEDIBPATTERNBRUSHPT";
+    case EMR_EXTCREATEPEN: return "EXTCREATEPEN";
+    case EMR_POLYTEXTOUTA: return "POLYTEXTOUTA";
+    case EMR_POLYTEXTOUTW: return "POLYTEXTOUTW";
+    case EMR_SETICMMODE: return "SETICMMODE";
+    case EMR_CREATECOLORSPACE: return "CREATECOLORSPACE";
+    case EMR_SETCOLORSPACE: return "SETCOLORSPACE";
+    case EMR_DELETECOLORSPACE: return "DELETECOLORSPACE";
+    case EMR_GLSRECORD: return "GLSRECORD";
+    case EMR_GLSBOUNDEDRECORD: return "GLSBOUNDEDRECORD";
+    case EMR_PIXELFORMAT: return "PIXELFORMAT";
+    case EMR_DRAWESCAPE: return "DRAWESCAPE";
+    case EMR_EXTESCAPE: return "EXTESCAPE";
+    case EMR_STARTDOC: return "STARTDOC";
+    case EMR_SMALLTEXTOUT: return "SMALLTEXTOUT";
+    case EMR_FORCEUFIMAPPING: return "FORCEUFIMAPPING";
+    case EMR_NAMEDESCAPE: return "NAMEDESCAPE";
+    case EMR_COLORCORRECTPALETTE: return "COLORCORRECTPALETTE";
+    case EMR_SETICMPROFILEA: return "SETICMPROFILEA";
+    case EMR_SETICMPROFILEW: return "SETICMPROFILEW";
+    case EMR_ALPHABLEND: return "ALPHABLEND";
+    case EMR_ALPHADIBBLEND: return "ALPHADIBBLEND";
+    case EMR_TRANSPARENTBLT: return "TRANSPARENTBLT";
+    case EMR_TRANSPARENTDIB: return "TRANSPARENTDIB";
+    case EMR_GRADIENTFILL: return "GRADIENTFILL";
+    case EMR_SETLINKEDUFIS: return "SETLINKEDUFIS";
+    case EMR_SETTEXTJUSTIFICATION: return "SETTEXTJUSTIFICATION";
+    default:
+        // Yes, return a pointer to a static buffer. This is a very
+        // local debugging output function, so no big deal.
+        static char buffer[11];
+        sprintf(buffer, "0x%08" SAL_PRIxUINT32, nRecType);
+        return buffer;
+    }
+#endif
+}
+
 #ifdef OSL_BIGENDIAN
 // little endian <-> big endian switch
 static float GetSwapFloat(SvStream& rStream)
@@ -516,7 +654,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
         bFlag = false;
 
-        SAL_INFO ("vcl.emf", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " record type: " << std::dec << nRecType << " size: " <<  nRecSize << std::dec);
+        SAL_INFO ("vcl.emf", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " " << record_type_name(nRecType) << " size: " <<  nRecSize << std::dec);
 
         if( bEnableEMFPlus && nRecType == EMR_GDICOMMENT ) {
             sal_uInt32 length;
