@@ -190,7 +190,6 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
     }
 }
 
-
 Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
 {
 
@@ -458,24 +457,6 @@ bool Window::ImplSysObjClip( const Region* pOldRegion )
                     }
 
                     mpWindowImpl->mpSysObj->EndSetClipRegion();
-
-                    //long                nX;
-                    //long                nY;
-                    //long                nWidth;
-                    //long                nHeight;
-                    //sal_uLong               nRectCount;
-                    //ImplRegionInfo      aInfo;
-                    //sal_Bool                bRegionRect;
-
-                    //nRectCount = aRegion.GetRectCount();
-                    //mpWindowImpl->mpSysObj->BeginSetClipRegion( nRectCount );
-                    //bRegionRect = aRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-                    //while ( bRegionRect )
-                    //{
-                    //    mpWindowImpl->mpSysObj->UnionClipRegion( nX, nY, nWidth, nHeight );
-                    //    bRegionRect = aRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-                    //}
-                    //mpWindowImpl->mpSysObj->EndSetClipRegion();
                 }
             }
             else
@@ -808,6 +789,5 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
