@@ -545,10 +545,11 @@ void ScTabViewShell::AddOpenGLChartWindows()
         OpenGLWindow* pOpenGLWindow = new OpenGLWindow(pParentWindow);
         pOpenGLWindow->Show(false);
         Size aSize = itr->second.GetSize();
+        Size aWindowSize = pOpenGLWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
 
-        pOpenGLWindow->SetSizePixel(aSize);
+        pOpenGLWindow->SetSizePixel(aWindowSize);
         Point aPos = itr->second.TopLeft();
-        pOpenGLWindow->SetPosPixel(aPos);
+        pOpenGLWindow->SetPosPixel(pOpenGLWindow->LogicToPixel(aPos, MapMode(MAP_100TH_MM)));
         pParentWindow->AddChildWindow(pOpenGLWindow);
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( itr->first, uno::UNO_QUERY_THROW );
         sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pOpenGLWindow);
