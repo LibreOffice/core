@@ -66,8 +66,7 @@ HWPInfo::HWPInfo()
 
 HWPInfo::~HWPInfo(void)
 {
-    if (info_block)
-        delete[]info_block;
+    delete[] info_block;
     info_block = 0;
 }
 

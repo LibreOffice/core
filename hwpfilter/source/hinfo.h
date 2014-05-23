@@ -33,7 +33,7 @@ class CHTMLOut;
 /**
  * Information of page (phisical)
  */
-typedef struct
+struct PaperInfo
 {
     unsigned char paper_kind;
     unsigned char paper_direction;
@@ -46,7 +46,21 @@ typedef struct
     hunit     header_length;
     hunit     footer_length;
     hunit     gutter_length;
-} PaperInfo;
+    PaperInfo()
+        : paper_kind(0)
+        , paper_direction(0)
+        , paper_height(0)
+        , paper_width(0)
+        , top_margin(0)
+        , bottom_margin(0)
+        , left_margin(0)
+        , right_margin(0)
+        , header_length(0)
+        , footer_length(0)
+        , gutter_length(0)
+    {
+    }
+};
 
 /* ?????? ??????, ???????? ???? */
 struct PaperBackInfo
@@ -146,7 +160,7 @@ class DLLEXPORT HWPInfo
  */
         PaperInfo paper;
 
-          PaperBackInfo back_info;
+        PaperBackInfo back_info;
 /**
  * Sets the attribute of read-only or read/write.
  */
