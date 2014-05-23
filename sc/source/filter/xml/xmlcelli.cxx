@@ -1066,7 +1066,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
 
             if(!aCellString.isEmpty())
             {
-                if (bDoIncrement && !IsPossibleErrorString())
+                if (bDoIncrement && !IsPossibleErrorString() && pFCell)
                 {
                     ScDocument* pDoc = rXMLImport.GetDocument();
                     pFCell->SetHybridString(pDoc->GetSharedStringPool().intern(aCellString));
@@ -1075,7 +1075,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 else
                 {
                     ScAddress aTopLeftMatrixCell;
-                    if(pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
+                    if (pFCell && pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
                     {
                         ScFormulaCell* pMatrixCell = rXMLImport.GetDocument()->GetFormulaCell(aTopLeftMatrixCell);
                         if (pMatrixCell)
