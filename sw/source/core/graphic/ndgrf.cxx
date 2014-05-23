@@ -239,7 +239,7 @@ sal_Bool SwGrfNode::ReRead(
     else if( pGraphic && !rGrfName.Len() )
     {
         // MIB 27.02.2001: Old stream must be deleted before the new one is set.
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
             DelStreamName();
 
         maGrfObj.SetGraphic( *pGraphic );
@@ -249,7 +249,7 @@ sal_Bool SwGrfNode::ReRead(
     else if( pGrfObj && !rGrfName.Len() )
     {
         // MIB 27.02.2001: Old stream must be deleted before the new one is set.
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
             DelStreamName();
 
         maGrfObj = *pGrfObj;
@@ -265,7 +265,7 @@ sal_Bool SwGrfNode::ReRead(
 
     else
     {
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
             DelStreamName();
 
         // einen neuen Grafik-Link anlegen
@@ -546,21 +546,16 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         else
             nRet = 1;
     }
-    else if( maGrfObj.IsSwappedOut() )
+    else if ( maGrfObj.IsSwappedOut() )
     {
         // Die Grafik ist im Storage oder im TempFile drin
-        if( !HasStreamName() )
-            nRet = (short)maGrfObj.SwapIn();
+        if ( !HasEmbeddedStreamName() )
+            nRet = (short) maGrfObj.SwapIn();
         else
         {
 
-            // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
             {
-                // --> OD, MAV 2005-08-17 #i53025# - needed correction of new
-                // method <_GetStreamForEmbedGrf(..)>
-//                bool bGraphic(false);
-//                SvStream* pStrm = _GetStreamForEmbedGrf( bGraphic );
                 String aStrmName, aPicStgName;
                 _GetStreamStorageNames( aStrmName, aPicStgName );
                 uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
@@ -571,18 +566,14 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
                         nRet = 1;
                     delete pStrm;
                 }
-                // <--
             }
             catch ( uno::Exception& )
             {
-                // --> OD 2005-04-25 #i48434#
                 ASSERT( false, "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
-                // <--
             }
-            // <--
         }
 
-        if( 1 == nRet )
+        if ( 1 == nRet )
         {
             SwMsgPoolItem aMsg( RES_GRAPHIC_SWAPIN );
             ModifyNotification( &aMsg, &aMsg );
@@ -592,9 +583,9 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         nRet = 1;
     DBG_ASSERTWARNING( nRet, "Grafik kann nicht eingeswapt werden" );
 
-    if( nRet )
+    if ( nRet )
     {
-        if( !nGrfSize.Width() && !nGrfSize.Height() )
+        if ( !nGrfSize.Width() && !nGrfSize.Height() )
             SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
     }
     bInSwapIn = sal_False;
@@ -614,7 +605,7 @@ short SwGrfNode::SwapOut()
             // Die Grafik wird in eine TempFile geschrieben, wenn
             // sie frisch eingefuegt war, d.h. wenn es noch keinen
             // Streamnamen im Storage gibt.
-            if( !HasStreamName() )
+            if( !HasEmbeddedStreamName() )
                 if( !maGrfObj.SwapOut() )
                     return 0;
         }
@@ -665,7 +656,7 @@ sal_Bool SwGrfNode::SavePersistentData()
     }
 
     // Erst mal reinswappen, falls sie im Storage ist
-    if( HasStreamName() && !SwapIn() )
+    if( HasEmbeddedStreamName() && !SwapIn() )
         return sal_False;
 
     // --> OD 2005-04-19 #i44367#
@@ -866,7 +857,7 @@ void SwGrfNode::ScaleImageMap()
 
 void SwGrfNode::DelStreamName()
 {
-    if( HasStreamName() )
+    if( HasEmbeddedStreamName() )
     {
         // Dann die Grafik im Storage loeschen
         uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
@@ -1026,7 +1017,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     Graphic aTmpGrf;
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
-    if( !pLink && HasStreamName() )
+    if( !pLink && HasEmbeddedStreamName() )
     {
         // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
         try
@@ -1114,7 +1105,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     {
         pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
 
-        if( HasStreamName() )
+        if( HasEmbeddedStreamName() )
         {
             // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
