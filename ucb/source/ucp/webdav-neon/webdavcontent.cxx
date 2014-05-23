@@ -1939,7 +1939,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 uno::Any Content::open(
                 const ucb::OpenCommandArgument3 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw (uno::Exception, std::exception)
 {
     uno::Any aRet;
 

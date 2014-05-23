@@ -154,7 +154,7 @@ private:
                 const com::sun::star::ucb::OpenCommandArgument3 & rArg,
                 const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception );
+        throw (css::uno::Exception, std::exception);
 
     // Command "post"
     void post( const com::sun::star::ucb::PostCommandArgument2 & rArg,
