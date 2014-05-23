@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_6548802e",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-05-23T06:16:52Z",
+      "side": 1,
+      "message": "You\u0027re adding a new property to the public, stable API here, but:\n\n1) Only setting the property is implemented.\n\n2) It\u0027s not documented.\n\n3) The ODF filter is not updated to preserve the new property.\n\nWouldn\u0027t it be far easier if you would use a grab-bag property for your purpose? That would solve all 3 problems.",
+      "revId": "f58fafe2b91189324540e2070b2f6acf660da82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
