@@ -72,6 +72,7 @@
 
 #include "docpool.hxx"
 #include "appoptio.hxx"
+#include <searchresults.hxx>
 
 // Controls
 
@@ -285,6 +286,7 @@ void ScDLL::Init()
     ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
+    sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
 
     // EditEngine Field; insofar not already defined in OfficeApplication::Init
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();

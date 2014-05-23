@@ -3231,6 +3231,29 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
 
 SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
 ()

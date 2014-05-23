@@ -84,6 +84,7 @@
 #include <tokenarray.hxx>
 #include <formulacell.hxx>
 #include <gridwin.hxx>
+#include <searchresults.hxx>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -998,6 +999,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_SEARCH_RESULTS_DIALOG:
+        {
+            const SfxPoolItem* pItem = NULL;
+            if (pReqArgs->HasItem(SID_SEARCH_RESULTS_DIALOG, &pItem))
+            {
+                bool bVisible = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                // The window ID should equal the slot ID, but not a biggie if it wasn't.
+                sal_uInt16 nId = sc::SearchResultsDlgWrapper::GetChildWindowId();
+                pViewFrm->SetChildWindow(nId, bVisible, false);
+            }
+            rReq.Done();
+        }
+        break;
 
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)

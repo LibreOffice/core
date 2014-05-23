@@ -11,20 +11,44 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SEARCHRESULTS_HXX
 
 #include <vcl/dialog.hxx>
+#include <sfx2/childwin.hxx>
+
 class ScDocument;
 class ScRangeList;
 class SvSimpleTable;
 
-class SearchResults : public ModelessDialog
+namespace sc {
+
+class SearchResultsDlg : public ModelessDialog
 {
-    ScDocument *mpDoc;
     SvSimpleTable *mpList;
+    SfxBindings* mpBindings;
+    sal_uInt16 mnId;
+
+    ScDocument* mpDoc;
+
     DECL_LINK( ListSelectHdl, void * );
 public:
-    SearchResults(ScDocument *);
-    virtual ~SearchResults();
-    void Show(const ScRangeList &);
+    SearchResultsDlg( SfxBindings* _pBindings, Window* pParent, sal_uInt16 nId );
+    virtual ~SearchResultsDlg();
+
+    void FillResults( ScDocument* pDoc, const ScRangeList& rMatchedRanges );
+
+    virtual bool Close() SAL_OVERRIDE;
 };
+
+class SearchResultsDlgWrapper : public SfxChildWindow
+{
+public:
+    SearchResultsDlgWrapper(
+        Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo );
+
+    virtual ~SearchResultsDlgWrapper();
+
+    SFX_DECL_CHILDWINDOW_WITHID(SearchResultsDlgWrapper);
+};
+
+}
 
 #endif
 

@@ -1580,8 +1580,18 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
             {
-                SearchResults aSearchResults(pDoc);
-                aSearchResults.Show(aMatchedRanges);
+                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                if (pViewFrm)
+                {
+                    pViewFrm->ShowChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId(), true);
+                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
+                    if (pWnd)
+                    {
+                        sc::SearchResultsDlg* pDlg = static_cast<sc::SearchResultsDlg*>(pWnd->GetWindow());
+                        if (pDlg)
+                            pDlg->FillResults(pDoc, aMatchedRanges);
+                    }
+                }
 
                 rMark.ResetMark();
                 for (size_t i = 0, n = aMatchedRanges.size(); i < n; ++i)
