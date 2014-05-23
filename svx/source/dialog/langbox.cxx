@@ -707,6 +707,7 @@ sal_Int32 SvxLanguageComboBox::ImplGetSavedValue() const
 
 IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
 {
+    EditedAndValid eOldState = meEditedAndValid;
     OUString aStr( vcl::I18nHelper::filterFormattingChars( GetText()));
     if (aStr.isEmpty())
         meEditedAndValid = EDITED_INVALID;
@@ -742,6 +743,24 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
                 SetText( aCanonicalized);
                 SetSelection( Selection( aCanonicalized.getLength()));
             }
+        }
+    }
+    if (eOldState != meEditedAndValid)
+    {
+        if (meEditedAndValid == EDITED_INVALID)
+        {
+#if 0
+            //! Gives white on white!?! instead of white on reddish.
+            SetControlBackground( ::Color( RGB_COLORDATA( 0xff, 0x65, 0x63)));
+            SetControlForeground( ::Color( COL_WHITE));
+#else
+            SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
+#endif
+        }
+        else
+        {
+            SetControlForeground();
+            SetControlBackground();
         }
     }
     return 0;
