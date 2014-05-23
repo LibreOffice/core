@@ -5348,10 +5348,9 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         EditView aTempView(pEngine.get(), this);
         aTempView.SetOutputArea( aLogicEdit );
 
-        bool bRet = false;
         MapMode aOld = GetMapMode();
         SetMapMode(aEditMode);                  // kein return mehr
-        bRet = extractURLInfo(aTempView.GetFieldUnderMousePointer(), pName, pUrl, pTarget);
+        bool bRet = extractURLInfo(aTempView.GetFieldUnderMousePointer(), pName, pUrl, pTarget);
         SetMapMode(aOld);
 
         return bRet;
