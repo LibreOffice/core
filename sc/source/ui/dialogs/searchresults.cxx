@@ -47,16 +47,20 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
 {
     mpList->Clear();
     mpList->SetUpdateMode(false);
+    std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
+    SCTAB nTabCount = aTabNames.size();
     for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
     {
         ScCellIterator aIter(pDoc, *rMatchedRanges[i]);
         for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
         {
-            ScAddress aAddress = aIter.GetPos();
-            OUString sAddress;
-            ScRangeStringConverter::GetStringFromAddress(sAddress, aAddress,
-                    pDoc, formula::FormulaGrammar::CONV_OOO);
-            mpList->InsertEntry(sAddress.replace('.', '\t') + "\t" + pDoc->GetString(aAddress));
+            ScAddress aPos = aIter.GetPos();
+            if (aPos.Tab() >= nTabCount)
+                // Out-of-bound sheet index.
+                continue;
+
+            OUString aPosStr = aPos.Format(SCA_ABS, NULL, pDoc->GetAddressConvention());
+            mpList->InsertEntry(aTabNames[aPos.Tab()] + "\t" + aPosStr + "\t" + pDoc->GetString(aPos));
         }
     }
     mpList->SetUpdateMode(true);
@@ -86,15 +90,25 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl )
         return 0;
 
     SvTreeListEntry *pEntry = mpList->FirstSelected();
-    ScAddress aAddress;
-    sal_Int32 nOffset = 0;
-    OUString sAddress = mpList->GetEntryText(pEntry).replaceFirst("\t", ".");
-    ScRangeStringConverter::GetAddressFromString(aAddress, sAddress,
-            mpDoc, formula::FormulaGrammar::CONV_OOO, nOffset, '\t');
+    OUString aTabStr = mpList->GetEntryText(pEntry, 0);
+    OUString aPosStr = mpList->GetEntryText(pEntry, 1);
+
+    SCTAB nTab = -1;
+    if (!mpDoc->GetTable(aTabStr, nTab))
+        // No sheet with specified name.
+        return 0;
+
+    ScAddress aPos;
+    sal_uInt16 nRes = aPos.Parse(aPosStr, mpDoc, mpDoc->GetAddressConvention());
+    if (!(nRes & SCA_VALID))
+        // Invalid address string.
+        return 0;
+
+    // Jump to the cell.
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
-    pScViewShell->SetTabNo(aAddress.Tab());
-    pScViewShell->SetCursor(aAddress.Col(), aAddress.Row());
-    pScViewShell->AlignToCursor(aAddress.Col(), aAddress.Row(), SC_FOLLOW_JUMP);
+    pScViewShell->SetTabNo(nTab);
+    pScViewShell->SetCursor(aPos.Col(), aPos.Row());
+    pScViewShell->AlignToCursor(aPos.Col(), aPos.Row(), SC_FOLLOW_JUMP);
 
     return 0;
 }
