@@ -249,11 +249,29 @@ private:
         GLint m_RenderVertexID;
         GLint m_RenderTexCoordID;
 
-        ShaderResources():
-            m_3DProID(0),
-            m_TextProID(0),
-            m_CommonProID(0),
-            m_RenderProID(0) {}
+        ShaderResources()
+            : m_3DProID(0)
+            , m_3DProjectionID(0)
+            , m_3DViewID(0)
+            , m_3DModelID(0)
+            , m_3DNormalMatrixID(0)
+            , m_3DVertexID(0)
+            , m_3DNormalID(0)
+            , m_TextProID(0)
+            , m_TextMatrixID(0)
+            , m_TextVertexID(0)
+            , m_TextTexCoordID(0)
+            , m_TextTexID(0)
+            , m_CommonProID(0)
+            , m_2DVertexID(0)
+            , m_2DColorID(0)
+            , m_MatrixID(0)
+            , m_RenderProID(0)
+            , m_RenderTexID(0)
+            , m_RenderVertexID(0)
+            , m_RenderTexCoordID(0)
+        {
+        }
 
         ~ShaderResources()
         {
