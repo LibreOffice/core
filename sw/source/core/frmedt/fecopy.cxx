@@ -942,9 +942,12 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                         SwPosition* pPos = PCURCRSR->GetPoint();
                         // allow shapes (no controls) in header/footer
                         if( RES_DRAWFRMFMT == rCpyFmt.Which() &&
-                            GetDoc()->IsInHeaderFooter( pPos->nNode ) &&
-                            CheckControlLayer( rCpyFmt.FindSdrObject() ) )
-                            continue;
+                            GetDoc()->IsInHeaderFooter( pPos->nNode ) )
+                        {
+                            const SdrObject *pCpyObj = rCpyFmt.FindSdrObject();
+                            if (pCpyObj && CheckControlLayer(pCpyObj))
+                                continue;
+                        }
 
                         aAnchor.SetAnchor( pPos );
                     }
