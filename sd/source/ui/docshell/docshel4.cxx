@@ -823,7 +823,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             }
         }
 
-        SfxBindings& rBindings = (pDrawViewShell->GetViewFrame()!=NULL
+        SfxBindings& rBindings = ((pDrawViewShell && pDrawViewShell->GetViewFrame()!=NULL)
             ? pDrawViewShell->GetViewFrame()
             : SfxViewFrame::Current() )->GetBindings();
 
