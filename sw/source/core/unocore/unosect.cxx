@@ -250,7 +250,7 @@ SwXTextSection::getChildSections() throw (uno::RuntimeException, std::exception)
     rSectionFmt.GetChildSections(aChildren, SORTSECT_NOT, false);
     uno::Sequence<uno::Reference<text::XTextSection> > aSeq(aChildren.size());
     uno::Reference< text::XTextSection > * pArray = aSeq.getArray();
-    for (sal_uInt16 i = 0; i < aChildren.size(); i++)
+    for (size_t i = 0; i < aChildren.size(); ++i)
     {
         SwSectionFmt *const pChild = aChildren[i]->GetFmt();
         pArray[i] = CreateXTextSection(pChild);
@@ -318,9 +318,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 GetChildSections(aSectionsArr);
 
             // and search for current header section
-            const sal_uInt16 nCount = aSectionsArr.size();
+            const size_t nCount = aSectionsArr.size();
             bool bHeaderPresent = false;
-            for(sal_uInt16 i = 0; i < nCount; i++)
+            for(size_t i = 0; i < nCount; ++i)
             {
                 if (aSectionsArr[i]->GetType() == TOX_HEADER_SECTION)
                     bHeaderPresent = true;
@@ -520,7 +520,7 @@ lcl_UpdateSection(SwSectionFmt *const pFmt,
         SwDoc *const pDoc = pFmt->GetDoc();
         SwSectionFmts const& rFmts = pDoc->GetSections();
         UnoActionContext aContext(pDoc);
-        for (sal_uInt16 i = 0; i < rFmts.size(); i++)
+        for (size_t i = 0; i < rFmts.size(); ++i)
         {
             if (rFmts[i]->GetSection()->GetSectionName()
                     == rSection.GetSectionName())
@@ -1152,7 +1152,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 const SwRedlineTbl& rRedTbl =
                     pFmt->GetDoc()->GetRedlineTbl();
-                for (sal_uInt16 nRed = 0; nRed < rRedTbl.size(); nRed++)
+                for (size_t nRed = 0; nRed < rRedTbl.size(); ++nRed)
                 {
                     const SwRangeRedline* pRedline = rRedTbl[nRed];
                     SwNode const*const pRedPointNode = pRedline->GetNode(true);
@@ -1712,7 +1712,7 @@ throw (uno::RuntimeException, std::exception)
 
         const SwSectionFmts& rFmts = pFmt->GetDoc()->GetSections();
         sal_uInt16 nApplyPos = USHRT_MAX;
-        for( sal_uInt16 i = 0; i < rFmts.size(); i++ )
+        for( size_t i = 0; i < rFmts.size(); ++i )
         {
             if(rFmts[i]->GetSection() == pSect)
             {
