@@ -819,164 +819,6 @@ void Window::ReleaseGraphics( bool bRelease )
     mpNextGraphics  = NULL;
 }
 
-void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
-{
-    if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
-        return;
-
-    if (nFlags & COPYAREA_WINDOWINVALIDATE)
-    {
-        const Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
-                Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
-
-        ImplMoveAllInvalidateRegions(aSrcRect,
-                aPosAry.mnDestX-aPosAry.mnSrcX,
-                aPosAry.mnDestY-aPosAry.mnSrcY,
-                false);
-
-        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
-                aPosAry.mnSrcX, aPosAry.mnSrcY,
-                aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                SAL_COPYAREA_WINDOWINVALIDATE, this);
-
-        return;
-    }
-
-    OutputDevice::CopyDeviceArea(aPosAry, nFlags);
-}
-
-void Window::ImplInitAppFontData( Window* pWindow )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    long nTextHeight = pWindow->GetTextHeight();
-    long nTextWidth = pWindow->approximate_char_width() * 8;
-    long nSymHeight = nTextHeight*4;
-    // Make the basis wider if the font is too narrow
-    // such that the dialog looks symmetrical and does not become too narrow.
-    // Add some extra space when the dialog has the same width,
-    // as a little more space is better.
-    if ( nSymHeight > nTextWidth )
-        nTextWidth = nSymHeight;
-    else if ( nSymHeight+5 > nTextWidth )
-        nTextWidth = nSymHeight+5;
-    pSVData->maGDIData.mnAppFontX = nTextWidth * 10 / 8;
-    pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
-
-    // FIXME: this is currently only on OS X, check with other
-    // platforms
-    if( pSVData->maNWFData.mbNoFocusRects )
-    {
-        // try to find out whether there is a large correction
-        // of control sizes, if yes, make app font scalings larger
-        // so dialog positioning is not completely off
-        ImplControlValue aControlValue;
-        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
-        Rectangle aBoundingRgn( aCtrlRegion );
-        Rectangle aContentRgn( aCtrlRegion );
-        if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                             CTRL_STATE_ENABLED, aControlValue, OUString(),
-                                             aBoundingRgn, aContentRgn ) )
-        {
-            // comment: the magical +6 is for the extra border in bordered
-            // (which is the standard) edit fields
-            if( aContentRgn.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
-                pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
-        }
-    }
-
-    pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
-    if ( pSVData->maAppData.mnDialogScaleX )
-        pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
-}
-
-bool Window::ImplCheckUIFont( const Font& rFont )
-{
-    if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
-        return true;
-
-    // create a text string using the localized text of important buttons
-    OUString aTestText;
-    static const StandardButtonType aTestButtons[] =
-    {
-        BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
-        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_IGNORE,
-        BUTTON_RETRY, BUTTON_HELP
-    };
-
-    const int nTestButtonCount = SAL_N_ELEMENTS(aTestButtons);
-    for( int n = 0; n < nTestButtonCount; ++n )
-    {
-        OUString aButtonStr = Button::GetStandardText( aTestButtons[n] );
-        // #i115432# ignore mnemonic+accelerator part of each string
-        // TODO: use a string filtering method when it becomes available
-        const sal_Int32 nLen = aButtonStr.getLength();
-        bool bInside = false;
-        for( int i = 0; i < nLen; ++i ) {
-            const sal_Unicode c = aButtonStr[ i ];
-            if( (c == '('))
-                bInside = true;
-            if( (c == ')'))
-                bInside = false;
-            if( (c == '~')
-            ||  (c == '(') || (c == ')')
-            || ((c >= 'A') && (c <= 'Z') && bInside) )
-                aButtonStr = aButtonStr.replaceAt( i, 1, " " );
-        }
-        // append sanitized button text to test string
-        aTestText += aButtonStr;
-    }
-
-    const bool bUIFontOk = ( HasGlyphs( rFont, aTestText ) == -1 );
-    return bUIFontOk;
-}
-
-void Window::ImplInitWindowData( WindowType nType )
-{
-    // We will eventually being removing the inheritance of OutputDevice from Window.
-    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
-    // it will not *be* an OutputDevice
-    mpOutputDevice = (OutputDevice*)this;
-
-    mpWindowImpl = new WindowImpl( nType );
-
-    meOutDevType        = OUTDEV_WINDOW;
-
-    mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
-}
-
-static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
-{
-    sal_Int32 nResult = 1;
-
-#ifndef MACOSX
-    // Setting of HiDPI is unfortunately all only a heuristic; and to add
-    // insult to an injury, the system is constantly lying to us about
-    // the DPI and whatnot
-    // eg. fdo#77059 - set the value from which we do consider the
-    // screen hi-dpi to greater than 168
-    if (nDPI > 168)
-        nResult = std::max(sal_Int32(1), (nDPI + 48) / 96);
-#else
-    (void)nDPI;
-#endif
-
-    return nResult;
-}
-
-bool ImplDoTiledRendering()
-{
-#if !HAVE_FEATURE_DESKTOP
-    // We do tiled rendering only for iOS at the moment, actually, but
-    // let's see what happens if we assume it for Android, too.
-    return true;
-#else
-    // We need some way to know globally if this process will use
-    // tiled rendering or not. Or should this be a per-window setting?
-    // Or what?
-    return false;
-#endif
-}
-
 void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
@@ -1259,6 +1101,164 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 
     if ( GetAccessibleParentWindow()  && GetParent() != Application::GetDefDialogParent() )
         GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
+}
+
+void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
+{
+    if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
+        return;
+
+    if (nFlags & COPYAREA_WINDOWINVALIDATE)
+    {
+        const Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
+                Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
+
+        ImplMoveAllInvalidateRegions(aSrcRect,
+                aPosAry.mnDestX-aPosAry.mnSrcX,
+                aPosAry.mnDestY-aPosAry.mnSrcY,
+                false);
+
+        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
+                aPosAry.mnSrcX, aPosAry.mnSrcY,
+                aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
+                SAL_COPYAREA_WINDOWINVALIDATE, this);
+
+        return;
+    }
+
+    OutputDevice::CopyDeviceArea(aPosAry, nFlags);
+}
+
+void Window::ImplInitAppFontData( Window* pWindow )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    long nTextHeight = pWindow->GetTextHeight();
+    long nTextWidth = pWindow->approximate_char_width() * 8;
+    long nSymHeight = nTextHeight*4;
+    // Make the basis wider if the font is too narrow
+    // such that the dialog looks symmetrical and does not become too narrow.
+    // Add some extra space when the dialog has the same width,
+    // as a little more space is better.
+    if ( nSymHeight > nTextWidth )
+        nTextWidth = nSymHeight;
+    else if ( nSymHeight+5 > nTextWidth )
+        nTextWidth = nSymHeight+5;
+    pSVData->maGDIData.mnAppFontX = nTextWidth * 10 / 8;
+    pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
+
+    // FIXME: this is currently only on OS X, check with other
+    // platforms
+    if( pSVData->maNWFData.mbNoFocusRects )
+    {
+        // try to find out whether there is a large correction
+        // of control sizes, if yes, make app font scalings larger
+        // so dialog positioning is not completely off
+        ImplControlValue aControlValue;
+        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
+        Rectangle aBoundingRgn( aCtrlRegion );
+        Rectangle aContentRgn( aCtrlRegion );
+        if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                             CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                             aBoundingRgn, aContentRgn ) )
+        {
+            // comment: the magical +6 is for the extra border in bordered
+            // (which is the standard) edit fields
+            if( aContentRgn.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
+                pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
+        }
+    }
+
+    pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
+    if ( pSVData->maAppData.mnDialogScaleX )
+        pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
+}
+
+bool Window::ImplCheckUIFont( const Font& rFont )
+{
+    if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
+        return true;
+
+    // create a text string using the localized text of important buttons
+    OUString aTestText;
+    static const StandardButtonType aTestButtons[] =
+    {
+        BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
+        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_IGNORE,
+        BUTTON_RETRY, BUTTON_HELP
+    };
+
+    const int nTestButtonCount = SAL_N_ELEMENTS(aTestButtons);
+    for( int n = 0; n < nTestButtonCount; ++n )
+    {
+        OUString aButtonStr = Button::GetStandardText( aTestButtons[n] );
+        // #i115432# ignore mnemonic+accelerator part of each string
+        // TODO: use a string filtering method when it becomes available
+        const sal_Int32 nLen = aButtonStr.getLength();
+        bool bInside = false;
+        for( int i = 0; i < nLen; ++i ) {
+            const sal_Unicode c = aButtonStr[ i ];
+            if( (c == '('))
+                bInside = true;
+            if( (c == ')'))
+                bInside = false;
+            if( (c == '~')
+            ||  (c == '(') || (c == ')')
+            || ((c >= 'A') && (c <= 'Z') && bInside) )
+                aButtonStr = aButtonStr.replaceAt( i, 1, " " );
+        }
+        // append sanitized button text to test string
+        aTestText += aButtonStr;
+    }
+
+    const bool bUIFontOk = ( HasGlyphs( rFont, aTestText ) == -1 );
+    return bUIFontOk;
+}
+
+void Window::ImplInitWindowData( WindowType nType )
+{
+    // We will eventually being removing the inheritance of OutputDevice from Window.
+    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
+    // it will not *be* an OutputDevice
+    mpOutputDevice = (OutputDevice*)this;
+
+    mpWindowImpl = new WindowImpl( nType );
+
+    meOutDevType        = OUTDEV_WINDOW;
+
+    mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
+}
+
+static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
+{
+    sal_Int32 nResult = 1;
+
+#ifndef MACOSX
+    // Setting of HiDPI is unfortunately all only a heuristic; and to add
+    // insult to an injury, the system is constantly lying to us about
+    // the DPI and whatnot
+    // eg. fdo#77059 - set the value from which we do consider the
+    // screen hi-dpi to greater than 168
+    if (nDPI > 168)
+        nResult = std::max(sal_Int32(1), (nDPI + 48) / 96);
+#else
+    (void)nDPI;
+#endif
+
+    return nResult;
+}
+
+bool ImplDoTiledRendering()
+{
+#if !HAVE_FEATURE_DESKTOP
+    // We do tiled rendering only for iOS at the moment, actually, but
+    // let's see what happens if we assume it for Android, too.
+    return true;
+#else
+    // We need some way to know globally if this process will use
+    // tiled rendering or not. Or should this be a per-window setting?
+    // Or what?
+    return false;
+#endif
 }
 
 void Window::ImplSetFrameParent( const Window* pParent )
