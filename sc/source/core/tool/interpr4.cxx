@@ -3837,7 +3837,7 @@ StackVar ScInterpreter::Interpret()
     nFuncFmtIndex = nCurFmtIndex = nRetFmtIndex = 0;
     xResult = NULL;
     pJumpMatrix = NULL;
-    glSubTotal = false;
+    mnSubTotalFlags = 0x00;
     ScTokenMatrixMap::const_iterator aTokenMatrixMapIter;
 
     // Once upon a time we used to have FP exceptions on, and there was a

@@ -501,7 +501,8 @@ void ScFormulaCellGroup::compileCode(
     else
     {
         mpCode->Reset();
-        mbSubTotal = mpCode->GetNextOpCodeRPN(ocSubTotal) != NULL;
+        mbSubTotal = ( mpCode->GetNextOpCodeRPN( ocSubTotal ) != NULL &&
+                       mpCode->GetNextOpCodeRPN( ocAggregate ) != NULL );
     }
 }
 
@@ -614,7 +615,8 @@ ScFormulaCell::ScFormulaCell(
     else
     {
         pCode->Reset();
-        if (pCode->GetNextOpCodeRPN(ocSubTotal))
+        if ( pCode->GetNextOpCodeRPN( ocSubTotal ) ||
+             pCode->GetNextOpCodeRPN( ocAggregate ) )
             bSubTotal = true;
     }
 
@@ -661,7 +663,8 @@ ScFormulaCell::ScFormulaCell(
     else
     {
         pCode->Reset();
-        if ( pCode->GetNextOpCodeRPN( ocSubTotal ) )
+        if ( pCode->GetNextOpCodeRPN( ocSubTotal ) ||
+             pCode->GetNextOpCodeRPN( ocAggregate ) )
             bSubTotal = true;
     }
 

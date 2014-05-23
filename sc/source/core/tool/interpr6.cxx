@@ -417,7 +417,8 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     ScAddress aAdr;
     ScRange aRange;
     size_t nRefInList = 0;
-    if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
+    if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+         ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
         nGlobalError = 0;
     while (nParamCount-- > 0)
     {
@@ -489,10 +490,11 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 ScExternalRefCache::TokenRef pToken;
                 ScExternalRefCache::CellFormat aFmt;
                 PopExternalSingleRef(pToken, &aFmt);
-                if (nGlobalError && (eFunc == ifCOUNT2 || eFunc == ifCOUNT))
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
                 {
                     nGlobalError = 0;
-                    if ( eFunc == ifCOUNT2 )
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
                         ++nCount;
                     break;
                 }
@@ -503,7 +505,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 StackVar eType = pToken->GetType();
                 if (eFunc == ifCOUNT2)
                 {
-                    if (eType != formula::svEmptyCell)
+                    if ( eType != formula::svEmptyCell &&
+                         ( ( pToken->GetOpCode() != ocSubTotal &&
+                             pToken->GetOpCode() != ocAggregate ) ||
+                           ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) ) )
                         nCount++;
                     if (nGlobalError)
                         nGlobalError = 0;
@@ -552,14 +557,16 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
                 {
                     nGlobalError = 0;
-                    if ( eFunc == ifCOUNT2 )
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
                         ++nCount;
                     break;
                 }
-                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
+                if ( ( mnSubTotalFlags & SUBTOTAL_IGN_FILTERED ) &&
+                     pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) )
                 {
                     break;
                 }
@@ -617,16 +624,17 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             case svRefList :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
+                if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
+                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
                 {
                     nGlobalError = 0;
-                    if ( eFunc == ifCOUNT2 )
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
                         ++nCount;
                     break;
                 }
                 if( eFunc == ifCOUNT2 )
                 {
-                    ScCellIterator aIter( pDok, aRange, glSubTotal );
+                    ScCellIterator aIter( pDok, aRange, mnSubTotalFlags );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if (!aIter.hasEmptyData())
@@ -638,7 +646,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 else
                 {
-                    ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
+                    ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
                     sal_uInt16 nErr = 0;
                     if (aValIter.GetFirst(fVal, nErr))
                     {
@@ -718,7 +726,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 {
                     nGlobalError = 0;
                 }
-                else if ( eFunc == ifCOUNT2 )
+                else if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
                 {
                     nCount++;
                     nGlobalError = 0;
@@ -756,138 +764,7 @@ void ScInterpreter::ScSumSQ()
 
 void ScInterpreter::ScSum()
 {
-    short nParamCount = GetByte();
-    double fRes = 0.0;
-    double fVal = 0.0;
-    ScAddress aAdr;
-    ScRange aRange;
-    size_t nRefInList = 0;
-    while (nParamCount-- > 0)
-    {
-        switch (GetStackType())
-        {
-            case svString:
-            {
-                while (nParamCount-- > 0)
-                    Pop();
-                SetError( errNoValue );
-            }
-            break;
-            case svDouble    :
-                fVal = GetDouble();
-                fRes += fVal;
-                nFuncFmtType = NUMBERFORMAT_NUMBER;
-                break;
-            case svExternalSingleRef:
-            {
-                ScExternalRefCache::TokenRef pToken;
-                ScExternalRefCache::CellFormat aFmt;
-                PopExternalSingleRef(pToken, &aFmt);
-
-                if (!pToken)
-                    break;
-
-                StackVar eType = pToken->GetType();
-                if (eType == formula::svDouble)
-                {
-                    fVal = pToken->GetDouble();
-                    if (aFmt.mbIsSet)
-                    {
-                        nFuncFmtType = aFmt.mnType;
-                        nFuncFmtIndex = aFmt.mnIndex;
-                    }
-
-                    fRes += fVal;
-                }
-            }
-            break;
-            case svSingleRef :
-            {
-                PopSingleRef( aAdr );
-
-                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
-                {
-                    break;
-                }
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
-                if (!aCell.isEmpty())
-                {
-                    if (aCell.hasNumeric())
-                    {
-                        fVal = GetCellValue(aAdr, aCell);
-                        CurFmtToFuncFmt();
-                        fRes += fVal;
-                    }
-                }
-            }
-            break;
-            case svDoubleRef :
-            case svRefList :
-            {
-                PopDoubleRef( aRange, nParamCount, nRefInList);
-
-                sc::ColumnSpanSet aSet(false);
-                aSet.set(aRange, true);
-                if (glSubTotal)
-                    // Skip all filtered rows and subtotal formula cells.
-                    pDok->MarkSubTotalCells(aSet, aRange, false);
-
-                FuncSum aAction;
-                aSet.executeColumnAction(*pDok, aAction);
-                sal_uInt16 nErr = aAction.getError();
-                if (nErr)
-                {
-                    SetError(nErr);
-                    return;
-                }
-                fRes += aAction.getSum();
-
-                // Get the number format of the last iterated cell.
-                nFuncFmtIndex = aAction.getNumberFormat();
-                nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
-            }
-            break;
-            case svExternalDoubleRef:
-            {
-                ScMatrixRef pMat;
-                PopExternalDoubleRef(pMat);
-                if (nGlobalError)
-                    break;
-
-                sal_uLong nCount = 0;
-                double fMem = 0.0;
-                bool bNull = true;
-                IterateMatrix(pMat, ifSUM, false, nCount, nFuncFmtType, fRes, fMem, bNull);
-                fRes += fMem;
-            }
-            break;
-            case svMatrix :
-            {
-                ScMatrixRef pMat = PopMatrix();
-                sal_uLong nCount = 0;
-                double fMem = 0.0;
-                bool bNull = true;
-                IterateMatrix(pMat, ifSUM, false, nCount, nFuncFmtType, fRes, fMem, bNull);
-                fRes += fMem;
-            }
-            break;
-            case svError:
-            {
-                PopError();
-            }
-            break;
-            default :
-                while (nParamCount-- > 0)
-                    PopError();
-                SetError(errIllegalParameter);
-        }
-    }
-
-    if (nFuncFmtType == NUMBERFORMAT_LOGICAL)
-        nFuncFmtType = NUMBERFORMAT_NUMBER;
-
-    PushDouble(fRes);
+    PushDouble( IterateParameters( ifSUM ) );
 }
 
 
@@ -904,154 +781,7 @@ void ScInterpreter::ScAverage( bool bTextAsZero )
 
 void ScInterpreter::ScCount()
 {
-    short nParamCount = GetByte();
-    double fVal = 0.0;
-    sal_uLong nCount = 0;
-    ScAddress aAdr;
-    ScRange aRange;
-    size_t nRefInList = 0;
-    if (nGlobalError)
-        nGlobalError = 0;
-
-    while (nParamCount-- > 0)
-    {
-        switch (GetRawStackType())
-        {
-            case svString:
-            {
-                OUString aStr = PopString().getString();
-                sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
-                if (pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
-                    nCount++;
-            }
-            break;
-            case svDouble    :
-                GetDouble();
-                nCount++;
-                nFuncFmtType = NUMBERFORMAT_NUMBER;
-                break;
-            case svExternalSingleRef:
-            {
-                ScExternalRefCache::TokenRef pToken;
-                ScExternalRefCache::CellFormat aFmt;
-                PopExternalSingleRef(pToken, &aFmt);
-                if (nGlobalError)
-                {
-                    nGlobalError = 0;
-                    break;
-                }
-
-                if (!pToken)
-                    break;
-
-                StackVar eType = pToken->GetType();
-                if (eType == formula::svDouble)
-                {
-                    nCount++;
-                    if (aFmt.mbIsSet)
-                    {
-                        nFuncFmtType = aFmt.mnType;
-                        nFuncFmtIndex = aFmt.mnIndex;
-                    }
-
-                    if (nGlobalError)
-                    {
-                        nGlobalError = 0;
-                        nCount--;
-                    }
-                }
-            }
-            break;
-            case svSingleRef :
-            {
-                PopSingleRef( aAdr );
-                if (nGlobalError)
-                {
-                    nGlobalError = 0;
-                    break;
-                }
-                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
-                {
-                    break;
-                }
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
-                if (!aCell.isEmpty())
-                {
-                    if (aCell.hasNumeric())
-                    {
-                        nCount++;
-                        CurFmtToFuncFmt();
-                        if (nGlobalError)
-                        {
-                            nGlobalError = 0;
-                            nCount--;
-                        }
-                    }
-                }
-            }
-            break;
-            case svDoubleRef :
-            case svRefList :
-            {
-                PopDoubleRef( aRange, nParamCount, nRefInList);
-                if (nGlobalError)
-                {
-                    nGlobalError = 0;
-                    break;
-                }
-
-                sc::ColumnSpanSet aSet(false);
-                aSet.set(aRange, true);
-                if (glSubTotal)
-                    // Skip all filtered rows and subtotal formula cells.
-                    pDok->MarkSubTotalCells(aSet, aRange, false);
-
-                FuncCount aAction;
-                aSet.executeColumnAction(*pDok, aAction);
-                nCount += aAction.getCount();
-
-                // Get the number format of the last iterated cell.
-                nFuncFmtIndex = aAction.getNumberFormat();
-                nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
-            }
-            break;
-            case svExternalDoubleRef:
-            {
-                ScMatrixRef pMat;
-                PopExternalDoubleRef(pMat);
-                if (nGlobalError)
-                    break;
-
-                double fMem = 0.0, fRes = 0.0;
-                bool bNull = true;
-                IterateMatrix(pMat, ifCOUNT, false, nCount, nFuncFmtType, fRes, fMem, bNull);
-            }
-            break;
-            case svMatrix :
-            {
-                ScMatrixRef pMat = PopMatrix();
-                double fMem = 0.0, fRes = 0.0;
-                bool bNull = true;
-                IterateMatrix(pMat, ifCOUNT, false, nCount, nFuncFmtType, fRes, fMem, bNull);
-            }
-            break;
-            case svError:
-            {
-                PopError();
-                nGlobalError = 0;
-            }
-            break;
-            default :
-                while (nParamCount-- > 0)
-                    PopError();
-                SetError(errIllegalParameter);
-        }
-    }
-
-    nFuncFmtType = NUMBERFORMAT_NUMBER;
-
-    PushDouble(nCount);
+    PushDouble( IterateParameters( ifCOUNT ) );
 }
 
 

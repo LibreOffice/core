@@ -234,9 +234,10 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define SC_SCENARIO_VALUE       32
 #define SC_SCENARIO_PROTECT     64
 
-#define AGGR_IGN_NESTED_ST_AG  0x04
-#define AGGR_IGN_ERR_VAL       0x02
-#define AGGR_IGN_HID_ROW       0x01
+#define SUBTOTAL_IGN_NESTED_ST_AG  0x08
+#define SUBTOTAL_IGN_ERR_VAL       0x04
+#define SUBTOTAL_IGN_HIDDEN        0x02
+#define SUBTOTAL_IGN_FILTERED      0x01
 
 /** Default cell clone flags: do not start listening, do not adjust 3D refs to
     old position, clone note captions of cell notes. */
