@@ -90,6 +90,13 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
     case OOX_TOKEN( doc, sdt ):
     case OOX_TOKEN( doc, sdtContent ):
         return this;
+    case OOX_TOKEN( doc, del ):
+        break;
+    case OOX_TOKEN( doc, ins ):
+        return this;
+        break;
+    default:
+        SAL_WARN("oox", "TextParagraphContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }
 
     return 0;
