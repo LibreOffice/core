@@ -1361,9 +1361,13 @@ OGLTransitionerImpl::OGLTransitionerImpl()
 #endif
     , maSlideBitmapLayout()
     , maSlideSize()
+    , mbBrokenTexturesATI(false)
+    , mnGLVersion(0)
 #ifdef UNX
     , mnGLXVersion(0.0)
 #endif
+    , mbGLXPresent(false)
+    , mbMesa(false)
     , mbTextureFromPixmap(false)
     , mbGenerateMipmap(false)
     , mbHasTFPVisual(false)
