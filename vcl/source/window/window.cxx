@@ -115,6 +115,468 @@ using ::com::sun::star::awt::XTopWindow;
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
+Window::Window( WindowType nType )
+{
+    ImplInitWindowData( nType );
+}
+
+Window::Window( Window* pParent, WinBits nStyle )
+{
+
+    ImplInitWindowData( WINDOW_WINDOW );
+    ImplInit( pParent, nStyle, NULL );
+}
+
+Window::Window( Window* pParent, const ResId& rResId )
+    : mpWindowImpl(NULL)
+{
+    rResId.SetRT( RSC_WINDOW );
+    WinBits nStyle = ImplInitRes( rResId );
+    ImplInitWindowData( WINDOW_WINDOW );
+    ImplInit( pParent, nStyle, NULL );
+    ImplLoadRes( rResId );
+
+    if ( !(nStyle & WB_HIDE) )
+        Show();
+}
+
+Window::~Window()
+{
+    vcl::LazyDeletor<Window>::Undelete( this );
+
+    DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
+
+    // remove Key and Mouse events issued by Application::PostKey/MouseEvent
+    Application::RemoveMouseAndKeyEvents( this );
+
+    // Dispose of the canvas implementation (which, currently, has an
+    // own wrapper window as a child to this one.
+    uno::Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
+    if( xCanvas.is() )
+    {
+        uno::Reference < lang::XComponent > xCanvasComponent( xCanvas,
+                                                              uno::UNO_QUERY );
+        if( xCanvasComponent.is() )
+            xCanvasComponent->dispose();
+    }
+
+    mpWindowImpl->mbInDtor = true;
+
+    ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+
+    // do not send child events for frames that were registered as native frames
+    if( !ImplIsAccessibleNativeFrame() && mpWindowImpl->mbReallyVisible )
+        if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
+            GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
+
+    // remove associated data structures from dockingmanager
+    ImplGetDockingManager()->RemoveWindow( this );
+
+    // remove ownerdraw decorated windows from list in the top-most frame window
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+    {
+        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( rList.begin(), rList.end(), this );
+        if( p != rList.end() )
+            rList.erase( p );
+    }
+
+    // shutdown drag and drop
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xDnDComponent( mpWindowImpl->mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
+
+    if( xDnDComponent.is() )
+        xDnDComponent->dispose();
+
+    if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
+    {
+        try
+        {
+            // deregister drop target listener
+            if( mpWindowImpl->mpFrameData->mxDropTargetListener.is() )
+            {
+                uno::Reference< XDragGestureRecognizer > xDragGestureRecognizer =
+                    uno::Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
+                if( xDragGestureRecognizer.is() )
+                {
+                    xDragGestureRecognizer->removeDragGestureListener(
+                        uno::Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
+                }
+
+                mpWindowImpl->mpFrameData->mxDropTarget->removeDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );
+                mpWindowImpl->mpFrameData->mxDropTargetListener.clear();
+            }
+
+            // shutdown drag and drop for this frame window
+            uno::Reference< XComponent > xComponent( mpWindowImpl->mpFrameData->mxDropTarget, UNO_QUERY );
+
+            // DNDEventDispatcher does not hold a reference of the DropTarget,
+            // so it's ok if it does not support XComponent
+            if( xComponent.is() )
+                xComponent->dispose();
+        }
+        catch (const Exception&)
+        {
+            // can be safely ignored here.
+        }
+    }
+
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
+    if ( pWrapper )
+        pWrapper->WindowDestroyed( this );
+
+    // MT: Must be called after WindowDestroyed!
+    // Otherwise, if the accessible is a VCLXWindow, it will try to destroy this window again!
+    // But accessibility implementations from applications need this dispose.
+    if ( mpWindowImpl->mxAccessible.is() )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xC( mpWindowImpl->mxAccessible, ::com::sun::star::uno::UNO_QUERY );
+        if ( xC.is() )
+            xC->dispose();
+    }
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
+        ImplDestroyHelpWindow( true );
+
+    DBG_ASSERT( pSVData->maWinData.mpTrackWin != this,
+                "Window::~Window(): Window is in TrackingMode" );
+    DBG_ASSERT( pSVData->maWinData.mpCaptureWin != this,
+                "Window::~Window(): Window has the mouse captured" );
+    // #103442# DefModalDialogParent is now determined on-the-fly, so this pointer is unimportant now
+    //DBG_ASSERT( pSVData->maWinData.mpDefDialogParent != this,
+    //            "Window::~Window(): Window is DefModalDialogParent" );
+
+    // due to old compatibility
+    if ( pSVData->maWinData.mpTrackWin == this )
+        EndTracking();
+    if ( pSVData->maWinData.mpCaptureWin == this )
+        ReleaseMouse();
+    if ( pSVData->maWinData.mpDefDialogParent == this )
+        pSVData->maWinData.mpDefDialogParent = NULL;
+
+#if OSL_DEBUG_LEVEL > 0
+    if ( true ) // always perform these tests in non-pro versions
+    {
+        OStringBuffer aErrorStr;
+        bool        bError = false;
+        Window*     pTempWin;
+        if (mpWindowImpl->mpFrameData != 0)
+        {
+            pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
+            while ( pTempWin )
+            {
+                if ( ImplIsRealParentPath( pTempWin ) )
+                {
+                    bError = true;
+                    aErrorStr.append(lcl_createWindowInfo(*pTempWin));
+                }
+                pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
+            }
+            if ( bError )
+            {
+                OStringBuffer aTempStr;
+                aTempStr.append("Window (");
+                aTempStr.append(OUStringToOString(GetText(),
+                                                       RTL_TEXTENCODING_UTF8));
+                aTempStr.append(") with live SystemWindows destroyed: ");
+                aTempStr.append(aErrorStr.toString());
+                OSL_FAIL(aTempStr.getStr());
+                // abort in non-pro version, this must be fixed!
+                GetpApp()->Abort(OStringToOUString(
+                                     aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+            }
+        }
+
+        bError = false;
+        pTempWin = pSVData->maWinData.mpFirstFrame;
+        while ( pTempWin )
+        {
+            if ( ImplIsRealParentPath( pTempWin ) )
+            {
+                bError = true;
+                aErrorStr.append(lcl_createWindowInfo(*pTempWin));
+            }
+            pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
+        }
+        if ( bError )
+        {
+            OStringBuffer aTempStr( "Window (" );
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") with live SystemWindows destroyed: ");
+            aTempStr.append(aErrorStr.toString());
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+        }
+
+        if ( mpWindowImpl->mpFirstChild )
+        {
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") with live children destroyed: ");
+            pTempWin = mpWindowImpl->mpFirstChild;
+            while ( pTempWin )
+            {
+                aTempStr.append(lcl_createWindowInfo(*pTempWin));
+                pTempWin = pTempWin->mpWindowImpl->mpNext;
+            }
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+        }
+
+        if ( mpWindowImpl->mpFirstOverlap )
+        {
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") with live SystemWindows destroyed: ");
+            pTempWin = mpWindowImpl->mpFirstOverlap;
+            while ( pTempWin )
+            {
+                aTempStr.append(lcl_createWindowInfo(*pTempWin));
+                pTempWin = pTempWin->mpWindowImpl->mpNext;
+            }
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+        }
+
+        Window* pMyParent = this;
+        SystemWindow* pMySysWin = NULL;
+
+        while ( pMyParent )
+        {
+            if ( pMyParent->IsSystemWindow() )
+                pMySysWin = (SystemWindow*)pMyParent;
+            pMyParent = pMyParent->GetParent();
+        }
+        if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
+        {
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") still in TaskPanelList!");
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+        }
+    }
+#endif
+
+    if( mpWindowImpl->mbIsInTaskPaneList )
+    {
+        Window* pMyParent = this;
+        SystemWindow* pMySysWin = NULL;
+
+        while ( pMyParent )
+        {
+            if ( pMyParent->IsSystemWindow() )
+                pMySysWin = (SystemWindow*)pMyParent;
+            pMyParent = pMyParent->GetParent();
+        }
+        if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
+        {
+            pMySysWin->GetTaskPaneList()->RemoveWindow( this );
+        }
+        else
+        {
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") not found in TaskPanelList!");
+            OSL_FAIL( aTempStr.getStr() );
+        }
+    }
+
+    // remove from size-group if necessary
+    remove_from_all_size_groups();
+
+    // clear mnemonic labels
+    std::vector<FixedText*> aMnemonicLabels(list_mnemonic_labels());
+    for (std::vector<FixedText*>::iterator aI = aMnemonicLabels.begin();
+        aI != aMnemonicLabels.end(); ++aI)
+    {
+        remove_mnemonic_label(*aI);
+    }
+
+    // hide window in order to trigger the Paint-Handling
+    Hide();
+
+    // announce the window is to be destroyed
+    {
+        NotifyEvent aNEvt( EVENT_DESTROY, this );
+        Notify( aNEvt );
+    }
+
+    // EndExtTextInputMode
+    if ( pSVData->maWinData.mpExtTextInputWin == this )
+    {
+        EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+        if ( pSVData->maWinData.mpExtTextInputWin == this )
+            pSVData->maWinData.mpExtTextInputWin = NULL;
+    }
+
+    // check if the focus window is our child
+    bool bHasFocussedChild = false;
+    if( pSVData->maWinData.mpFocusWin && ImplIsRealParentPath( pSVData->maWinData.mpFocusWin ) )
+    {
+        // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
+        bHasFocussedChild = true;
+#if OSL_DEBUG_LEVEL > 0
+        OStringBuffer aTempStr("Window (");
+        aTempStr.append(OUStringToOString(GetText(),
+            RTL_TEXTENCODING_UTF8)).
+                append(") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !");
+        OSL_FAIL( aTempStr.getStr() );
+        GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in non-pro version, this must be fixed!
+#endif
+    }
+
+    // if we get focus pass focus to another window
+    Window* pOverlapWindow = ImplGetFirstOverlapWindow();
+    if ( pSVData->maWinData.mpFocusWin == this
+        || bHasFocussedChild )  // #122232#, see above, try some cleanup
+    {
+        if ( mpWindowImpl->mbFrame )
+        {
+            pSVData->maWinData.mpFocusWin = NULL;
+            pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+            GetpApp()->FocusChanged();
+        }
+        else
+        {
+            Window* pParent = GetParent();
+            Window* pBorderWindow = mpWindowImpl->mpBorderWindow;
+        // when windows overlap, give focus to the parent
+        // of the next FrameWindow
+            if ( pBorderWindow )
+            {
+                if ( pBorderWindow->ImplIsOverlapWindow() )
+                    pParent = pBorderWindow->mpWindowImpl->mpOverlapWindow;
+            }
+            else if ( ImplIsOverlapWindow() )
+                pParent = mpWindowImpl->mpOverlapWindow;
+
+            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() && ! pParent->IsInModalMode() )
+                pParent->GrabFocus();
+            else
+                mpWindowImpl->mpFrameWindow->GrabFocus();
+
+            // If the focus was set back to 'this' set it to nothing
+            if ( pSVData->maWinData.mpFocusWin == this )
+            {
+                pSVData->maWinData.mpFocusWin = NULL;
+                pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+                GetpApp()->FocusChanged();
+            }
+        }
+    }
+
+    if ( pOverlapWindow != 0 &&
+         pOverlapWindow->mpWindowImpl->mpLastFocusWindow == this )
+        pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+
+    // reset hint for DefModalDialogParent
+    if( pSVData->maWinData.mpActiveApplicationFrame == this )
+        pSVData->maWinData.mpActiveApplicationFrame = NULL;
+
+    // reset marked windows
+    if ( mpWindowImpl->mpFrameData != 0 )
+    {
+        if ( mpWindowImpl->mpFrameData->mpFocusWin == this )
+            mpWindowImpl->mpFrameData->mpFocusWin = NULL;
+        if ( mpWindowImpl->mpFrameData->mpMouseMoveWin == this )
+            mpWindowImpl->mpFrameData->mpMouseMoveWin = NULL;
+        if ( mpWindowImpl->mpFrameData->mpMouseDownWin == this )
+            mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
+    }
+
+    // reset Deactivate-Window
+    if ( pSVData->maWinData.mpLastDeacWin == this )
+        pSVData->maWinData.mpLastDeacWin = NULL;
+
+    if ( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
+    {
+        if ( mpWindowImpl->mpFrameData->mnFocusId )
+            Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnFocusId );
+        if ( mpWindowImpl->mpFrameData->mnMouseMoveId )
+            Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnMouseMoveId );
+    }
+
+    // release SalGraphics
+    OutputDevice *pOutDev = GetOutDev();
+    pOutDev->ReleaseGraphics();
+
+    // notify ImplDelData subscribers of this window about the window deletion
+    ImplDelData* pDelData = mpWindowImpl->mpFirstDel;
+    while ( pDelData )
+    {
+        pDelData->mbDel = true;
+        pDelData->mpWindow = NULL;  // #112873# pDel is not associated with a Window anymore
+        pDelData = pDelData->mpNext;
+    }
+
+    // remove window from the lists
+    ImplRemoveWindow( true );
+
+    // de-register as "top window child" at our parent, if necessary
+    if ( mpWindowImpl->mbFrame )
+    {
+        bool bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
+        if ( mpWindowImpl->mpRealParent && bIsTopWindow )
+        {
+            ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
+
+            ::std::list< Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
+                pParentWinData->maTopWindowChildren.end(), this );
+            DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
+            if ( myPos != pParentWinData->maTopWindowChildren.end() )
+                pParentWinData->maTopWindowChildren.erase( myPos );
+        }
+    }
+
+    // cleanup Extra Window Data, TODO: add and use ImplWinData destructor
+    if ( mpWindowImpl->mpWinData )
+    {
+        if ( mpWindowImpl->mpWinData->mpExtOldText )
+            delete mpWindowImpl->mpWinData->mpExtOldText;
+        if ( mpWindowImpl->mpWinData->mpExtOldAttrAry )
+            delete mpWindowImpl->mpWinData->mpExtOldAttrAry;
+        if ( mpWindowImpl->mpWinData->mpCursorRect )
+            delete mpWindowImpl->mpWinData->mpCursorRect;
+        if ( mpWindowImpl->mpWinData->mpCompositionCharRects)
+            delete[] mpWindowImpl->mpWinData->mpCompositionCharRects;
+        if ( mpWindowImpl->mpWinData->mpFocusRect )
+            delete mpWindowImpl->mpWinData->mpFocusRect;
+        if ( mpWindowImpl->mpWinData->mpTrackRect )
+            delete mpWindowImpl->mpWinData->mpTrackRect;
+
+        delete mpWindowImpl->mpWinData;
+    }
+
+    // cleanup overlap related window data
+    if ( mpWindowImpl->mpOverlapData )
+        delete mpWindowImpl->mpOverlapData;
+
+    // remove BorderWindow or Frame window data
+    if ( mpWindowImpl->mpBorderWindow )
+        delete mpWindowImpl->mpBorderWindow;
+    else if ( mpWindowImpl->mbFrame )
+    {
+        if ( pSVData->maWinData.mpFirstFrame == this )
+            pSVData->maWinData.mpFirstFrame = mpWindowImpl->mpFrameData->mpNextFrame;
+        else
+        {
+            Window* pSysWin = pSVData->maWinData.mpFirstFrame;
+            while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame != this )
+                pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
+            pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
+        }
+        mpWindowImpl->mpFrame->SetCallback( NULL, NULL );
+        pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
+        delete mpWindowImpl->mpFrameData;
+    }
+
+    // should be the last statements
+    delete mpWindowImpl; mpWindowImpl = NULL;
+}
+
 WindowImpl::WindowImpl( WindowType nType )
 {
     maZoom              = Fraction( 1, 1 );
@@ -271,31 +733,6 @@ WindowImpl::~WindowImpl()
     delete mpChildClipRegion;
     delete mpAccessibleInfos;
     delete mpControlFont;
-}
-
-Window::Window( WindowType nType )
-{
-    ImplInitWindowData( nType );
-}
-
-Window::Window( Window* pParent, WinBits nStyle )
-{
-
-    ImplInitWindowData( WINDOW_WINDOW );
-    ImplInit( pParent, nStyle, NULL );
-}
-
-Window::Window( Window* pParent, const ResId& rResId )
-    : mpWindowImpl(NULL)
-{
-    rResId.SetRT( RSC_WINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitWindowData( WINDOW_WINDOW );
-    ImplInit( pParent, nStyle, NULL );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
 }
 
 bool Window::AcquireGraphics() const
@@ -2968,443 +3405,6 @@ namespace
     }
 }
 #endif
-
-Window::~Window()
-{
-    vcl::LazyDeletor<Window>::Undelete( this );
-
-    DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
-
-    // remove Key and Mouse events issued by Application::PostKey/MouseEvent
-    Application::RemoveMouseAndKeyEvents( this );
-
-    // Dispose of the canvas implementation (which, currently, has an
-    // own wrapper window as a child to this one.
-    uno::Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
-    if( xCanvas.is() )
-    {
-        uno::Reference < lang::XComponent > xCanvasComponent( xCanvas,
-                                                              uno::UNO_QUERY );
-        if( xCanvasComponent.is() )
-            xCanvasComponent->dispose();
-    }
-
-    mpWindowImpl->mbInDtor = true;
-
-    ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
-
-    // do not send child events for frames that were registered as native frames
-    if( !ImplIsAccessibleNativeFrame() && mpWindowImpl->mbReallyVisible )
-        if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
-            GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
-
-    // remove associated data structures from dockingmanager
-    ImplGetDockingManager()->RemoveWindow( this );
-
-    // remove ownerdraw decorated windows from list in the top-most frame window
-    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
-    {
-        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
-        ::std::vector< Window* >::iterator p;
-        p = ::std::find( rList.begin(), rList.end(), this );
-        if( p != rList.end() )
-            rList.erase( p );
-    }
-
-    // shutdown drag and drop
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xDnDComponent( mpWindowImpl->mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
-
-    if( xDnDComponent.is() )
-        xDnDComponent->dispose();
-
-    if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
-    {
-        try
-        {
-            // deregister drop target listener
-            if( mpWindowImpl->mpFrameData->mxDropTargetListener.is() )
-            {
-                uno::Reference< XDragGestureRecognizer > xDragGestureRecognizer =
-                    uno::Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
-                if( xDragGestureRecognizer.is() )
-                {
-                    xDragGestureRecognizer->removeDragGestureListener(
-                        uno::Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
-                }
-
-                mpWindowImpl->mpFrameData->mxDropTarget->removeDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );
-                mpWindowImpl->mpFrameData->mxDropTargetListener.clear();
-            }
-
-            // shutdown drag and drop for this frame window
-            uno::Reference< XComponent > xComponent( mpWindowImpl->mpFrameData->mxDropTarget, UNO_QUERY );
-
-            // DNDEventDispatcher does not hold a reference of the DropTarget,
-            // so it's ok if it does not support XComponent
-            if( xComponent.is() )
-                xComponent->dispose();
-        }
-        catch (const Exception&)
-        {
-            // can be safely ignored here.
-        }
-    }
-
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
-    if ( pWrapper )
-        pWrapper->WindowDestroyed( this );
-
-    // MT: Must be called after WindowDestroyed!
-    // Otherwise, if the accessible is a VCLXWindow, it will try to destroy this window again!
-    // But accessibility implementations from applications need this dispose.
-    if ( mpWindowImpl->mxAccessible.is() )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xC( mpWindowImpl->mxAccessible, ::com::sun::star::uno::UNO_QUERY );
-        if ( xC.is() )
-            xC->dispose();
-    }
-
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
-        ImplDestroyHelpWindow( true );
-
-    DBG_ASSERT( pSVData->maWinData.mpTrackWin != this,
-                "Window::~Window(): Window is in TrackingMode" );
-    DBG_ASSERT( pSVData->maWinData.mpCaptureWin != this,
-                "Window::~Window(): Window has the mouse captured" );
-    // #103442# DefModalDialogParent is now determined on-the-fly, so this pointer is unimportant now
-    //DBG_ASSERT( pSVData->maWinData.mpDefDialogParent != this,
-    //            "Window::~Window(): Window is DefModalDialogParent" );
-
-    // due to old compatibility
-    if ( pSVData->maWinData.mpTrackWin == this )
-        EndTracking();
-    if ( pSVData->maWinData.mpCaptureWin == this )
-        ReleaseMouse();
-    if ( pSVData->maWinData.mpDefDialogParent == this )
-        pSVData->maWinData.mpDefDialogParent = NULL;
-
-#if OSL_DEBUG_LEVEL > 0
-    if ( true ) // always perform these tests in non-pro versions
-    {
-        OStringBuffer aErrorStr;
-        bool        bError = false;
-        Window*     pTempWin;
-        if (mpWindowImpl->mpFrameData != 0)
-        {
-            pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
-            while ( pTempWin )
-            {
-                if ( ImplIsRealParentPath( pTempWin ) )
-                {
-                    bError = true;
-                    aErrorStr.append(lcl_createWindowInfo(*pTempWin));
-                }
-                pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
-            }
-            if ( bError )
-            {
-                OStringBuffer aTempStr;
-                aTempStr.append("Window (");
-                aTempStr.append(OUStringToOString(GetText(),
-                                                       RTL_TEXTENCODING_UTF8));
-                aTempStr.append(") with live SystemWindows destroyed: ");
-                aTempStr.append(aErrorStr.toString());
-                OSL_FAIL(aTempStr.getStr());
-                // abort in non-pro version, this must be fixed!
-                GetpApp()->Abort(OStringToOUString(
-                                     aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
-            }
-        }
-
-        bError = false;
-        pTempWin = pSVData->maWinData.mpFirstFrame;
-        while ( pTempWin )
-        {
-            if ( ImplIsRealParentPath( pTempWin ) )
-            {
-                bError = true;
-                aErrorStr.append(lcl_createWindowInfo(*pTempWin));
-            }
-            pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
-        }
-        if ( bError )
-        {
-            OStringBuffer aTempStr( "Window (" );
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") with live SystemWindows destroyed: ");
-            aTempStr.append(aErrorStr.toString());
-            OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
-        }
-
-        if ( mpWindowImpl->mpFirstChild )
-        {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") with live children destroyed: ");
-            pTempWin = mpWindowImpl->mpFirstChild;
-            while ( pTempWin )
-            {
-                aTempStr.append(lcl_createWindowInfo(*pTempWin));
-                pTempWin = pTempWin->mpWindowImpl->mpNext;
-            }
-            OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
-        }
-
-        if ( mpWindowImpl->mpFirstOverlap )
-        {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") with live SystemWindows destroyed: ");
-            pTempWin = mpWindowImpl->mpFirstOverlap;
-            while ( pTempWin )
-            {
-                aTempStr.append(lcl_createWindowInfo(*pTempWin));
-                pTempWin = pTempWin->mpWindowImpl->mpNext;
-            }
-            OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
-        }
-
-        Window* pMyParent = this;
-        SystemWindow* pMySysWin = NULL;
-
-        while ( pMyParent )
-        {
-            if ( pMyParent->IsSystemWindow() )
-                pMySysWin = (SystemWindow*)pMyParent;
-            pMyParent = pMyParent->GetParent();
-        }
-        if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
-        {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") still in TaskPanelList!");
-            OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
-        }
-    }
-#endif
-
-    if( mpWindowImpl->mbIsInTaskPaneList )
-    {
-        Window* pMyParent = this;
-        SystemWindow* pMySysWin = NULL;
-
-        while ( pMyParent )
-        {
-            if ( pMyParent->IsSystemWindow() )
-                pMySysWin = (SystemWindow*)pMyParent;
-            pMyParent = pMyParent->GetParent();
-        }
-        if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
-        {
-            pMySysWin->GetTaskPaneList()->RemoveWindow( this );
-        }
-        else
-        {
-            OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") not found in TaskPanelList!");
-            OSL_FAIL( aTempStr.getStr() );
-        }
-    }
-
-    // remove from size-group if necessary
-    remove_from_all_size_groups();
-
-    // clear mnemonic labels
-    std::vector<FixedText*> aMnemonicLabels(list_mnemonic_labels());
-    for (std::vector<FixedText*>::iterator aI = aMnemonicLabels.begin();
-        aI != aMnemonicLabels.end(); ++aI)
-    {
-        remove_mnemonic_label(*aI);
-    }
-
-    // hide window in order to trigger the Paint-Handling
-    Hide();
-
-    // announce the window is to be destroyed
-    {
-        NotifyEvent aNEvt( EVENT_DESTROY, this );
-        Notify( aNEvt );
-    }
-
-    // EndExtTextInputMode
-    if ( pSVData->maWinData.mpExtTextInputWin == this )
-    {
-        EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
-        if ( pSVData->maWinData.mpExtTextInputWin == this )
-            pSVData->maWinData.mpExtTextInputWin = NULL;
-    }
-
-    // check if the focus window is our child
-    bool bHasFocussedChild = false;
-    if( pSVData->maWinData.mpFocusWin && ImplIsRealParentPath( pSVData->maWinData.mpFocusWin ) )
-    {
-        // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
-        bHasFocussedChild = true;
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aTempStr("Window (");
-        aTempStr.append(OUStringToOString(GetText(),
-            RTL_TEXTENCODING_UTF8)).
-                append(") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !");
-        OSL_FAIL( aTempStr.getStr() );
-        GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in non-pro version, this must be fixed!
-#endif
-    }
-
-    // if we get focus pass focus to another window
-    Window* pOverlapWindow = ImplGetFirstOverlapWindow();
-    if ( pSVData->maWinData.mpFocusWin == this
-        || bHasFocussedChild )  // #122232#, see above, try some cleanup
-    {
-        if ( mpWindowImpl->mbFrame )
-        {
-            pSVData->maWinData.mpFocusWin = NULL;
-            pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
-            GetpApp()->FocusChanged();
-        }
-        else
-        {
-            Window* pParent = GetParent();
-            Window* pBorderWindow = mpWindowImpl->mpBorderWindow;
-        // when windows overlap, give focus to the parent
-        // of the next FrameWindow
-            if ( pBorderWindow )
-            {
-                if ( pBorderWindow->ImplIsOverlapWindow() )
-                    pParent = pBorderWindow->mpWindowImpl->mpOverlapWindow;
-            }
-            else if ( ImplIsOverlapWindow() )
-                pParent = mpWindowImpl->mpOverlapWindow;
-
-            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() && ! pParent->IsInModalMode() )
-                pParent->GrabFocus();
-            else
-                mpWindowImpl->mpFrameWindow->GrabFocus();
-
-            // If the focus was set back to 'this' set it to nothing
-            if ( pSVData->maWinData.mpFocusWin == this )
-            {
-                pSVData->maWinData.mpFocusWin = NULL;
-                pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
-                GetpApp()->FocusChanged();
-            }
-        }
-    }
-
-    if ( pOverlapWindow != 0 &&
-         pOverlapWindow->mpWindowImpl->mpLastFocusWindow == this )
-        pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
-
-    // reset hint for DefModalDialogParent
-    if( pSVData->maWinData.mpActiveApplicationFrame == this )
-        pSVData->maWinData.mpActiveApplicationFrame = NULL;
-
-    // reset marked windows
-    if ( mpWindowImpl->mpFrameData != 0 )
-    {
-        if ( mpWindowImpl->mpFrameData->mpFocusWin == this )
-            mpWindowImpl->mpFrameData->mpFocusWin = NULL;
-        if ( mpWindowImpl->mpFrameData->mpMouseMoveWin == this )
-            mpWindowImpl->mpFrameData->mpMouseMoveWin = NULL;
-        if ( mpWindowImpl->mpFrameData->mpMouseDownWin == this )
-            mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
-    }
-
-    // reset Deactivate-Window
-    if ( pSVData->maWinData.mpLastDeacWin == this )
-        pSVData->maWinData.mpLastDeacWin = NULL;
-
-    if ( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
-    {
-        if ( mpWindowImpl->mpFrameData->mnFocusId )
-            Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnFocusId );
-        if ( mpWindowImpl->mpFrameData->mnMouseMoveId )
-            Application::RemoveUserEvent( mpWindowImpl->mpFrameData->mnMouseMoveId );
-    }
-
-    // release SalGraphics
-    OutputDevice *pOutDev = GetOutDev();
-    pOutDev->ReleaseGraphics();
-
-    // notify ImplDelData subscribers of this window about the window deletion
-    ImplDelData* pDelData = mpWindowImpl->mpFirstDel;
-    while ( pDelData )
-    {
-        pDelData->mbDel = true;
-        pDelData->mpWindow = NULL;  // #112873# pDel is not associated with a Window anymore
-        pDelData = pDelData->mpNext;
-    }
-
-    // remove window from the lists
-    ImplRemoveWindow( true );
-
-    // de-register as "top window child" at our parent, if necessary
-    if ( mpWindowImpl->mbFrame )
-    {
-        bool bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
-        if ( mpWindowImpl->mpRealParent && bIsTopWindow )
-        {
-            ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
-
-            ::std::list< Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
-                pParentWinData->maTopWindowChildren.end(), this );
-            DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
-            if ( myPos != pParentWinData->maTopWindowChildren.end() )
-                pParentWinData->maTopWindowChildren.erase( myPos );
-        }
-    }
-
-    // cleanup Extra Window Data, TODO: add and use ImplWinData destructor
-    if ( mpWindowImpl->mpWinData )
-    {
-        if ( mpWindowImpl->mpWinData->mpExtOldText )
-            delete mpWindowImpl->mpWinData->mpExtOldText;
-        if ( mpWindowImpl->mpWinData->mpExtOldAttrAry )
-            delete mpWindowImpl->mpWinData->mpExtOldAttrAry;
-        if ( mpWindowImpl->mpWinData->mpCursorRect )
-            delete mpWindowImpl->mpWinData->mpCursorRect;
-        if ( mpWindowImpl->mpWinData->mpCompositionCharRects)
-            delete[] mpWindowImpl->mpWinData->mpCompositionCharRects;
-        if ( mpWindowImpl->mpWinData->mpFocusRect )
-            delete mpWindowImpl->mpWinData->mpFocusRect;
-        if ( mpWindowImpl->mpWinData->mpTrackRect )
-            delete mpWindowImpl->mpWinData->mpTrackRect;
-
-        delete mpWindowImpl->mpWinData;
-    }
-
-    // cleanup overlap related window data
-    if ( mpWindowImpl->mpOverlapData )
-        delete mpWindowImpl->mpOverlapData;
-
-    // remove BorderWindow or Frame window data
-    if ( mpWindowImpl->mpBorderWindow )
-        delete mpWindowImpl->mpBorderWindow;
-    else if ( mpWindowImpl->mbFrame )
-    {
-        if ( pSVData->maWinData.mpFirstFrame == this )
-            pSVData->maWinData.mpFirstFrame = mpWindowImpl->mpFrameData->mpNextFrame;
-        else
-        {
-            Window* pSysWin = pSVData->maWinData.mpFirstFrame;
-            while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame != this )
-                pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
-            pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
-        }
-        mpWindowImpl->mpFrame->SetCallback( NULL, NULL );
-        pSVData->mpDefInst->DestroyFrame( mpWindowImpl->mpFrame );
-        delete mpWindowImpl->mpFrameData;
-    }
-
-    // should be the last statements
-    delete mpWindowImpl; mpWindowImpl = NULL;
-}
 
 void Window::doLazyDelete()
 {
