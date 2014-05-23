@@ -51,9 +51,13 @@ bool drawCallback(GtkWidget* /* The eventbox */, void* /* cairo_t* cr */, gpoint
                                                    0, 0, // origin
                                                    nWidth, nHeight );
 
+    for (int i = 3; i < nRowStride*nRenderHeight; i += 4)
+    {
+        pBuffer[i] = 0xFF;
+    }
 
     GdkPixbuf* pBixBuf = gdk_pixbuf_new_from_data( pBuffer, GDK_COLORSPACE_RGB,
-                                                   false, 8,
+                                                   true, 8,
                                                    nRenderWidth, nRenderHeight,
                                                    nRowStride,
                                                    0, 0 );
