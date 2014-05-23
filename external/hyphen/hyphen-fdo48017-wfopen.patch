@@ -13,7 +13,7 @@ diff -u hyphen/hyphen.c build/hyphen/hyphen.c
  #define noVERBOSE
  
  /* calculate hyphenmin values with long ligature length (2 or 3 characters
-@@ -371,6 +376,21 @@
+@@ -371,6 +376,22 @@
  	    }
  }
  
@@ -23,8 +23,9 @@ diff -u hyphen/hyphen.c build/hyphen/hyphen.c
 +    if (strncmp(path, WIN32_LONG_PATH_PREFIX, 4) == 0) {
 +        int len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
 +        wchar_t *buff = (wchar_t *) malloc(len * sizeof(wchar_t));
++        FILE * f;
 +        MultiByteToWideChar(CP_UTF8, 0, path, -1, buff, len);
-+        FILE * f = _wfopen(buff, (strcmp(mode, "r") == 0) ? L"r" : L"rb");
++        f = _wfopen(buff, (strcmp(mode, "r") == 0) ? L"r" : L"rb");
 +        free(buff);
 +        return f;
 +    }
@@ -35,7 +36,7 @@ diff -u hyphen/hyphen.c build/hyphen/hyphen.c
  HyphenDict *
  hnj_hyphen_load (const char *fn)
  {
-@@ -383,7 +403,7 @@
+@@ -383,7 +404,7 @@
    HashEntry *e;
    int state_num = 0;
  
