@@ -20,6 +20,7 @@
 #ifndef IOS
 
 #include "headless/svpbmp.hxx"
+#include "headless/svpinst.hxx"
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2ibox.hxx>
@@ -40,25 +41,12 @@ bool SvpSalBitmap::Create( const Size& rSize,
                            sal_uInt16 nBitCount,
                            const BitmapPalette& rPalette )
 {
-    basebmp::Format nFormat = SVP_DEFAULT_BITMAP_FORMAT;
     SAL_INFO( "vcl.headless", "SvpSalBitmap::Create(" << rSize.Width() << "," << rSize.Height() << "," << nBitCount << ")" );
-    switch( nBitCount )
-    {
-        case 1: nFormat = FORMAT_ONE_BIT_MSB_PAL; break;
-        case 4: nFormat = FORMAT_FOUR_BIT_MSB_PAL; break;
-        case 8: nFormat = FORMAT_EIGHT_BIT_PAL; break;
-#ifdef OSL_BIGENDIAN
-        case 16: nFormat = FORMAT_SIXTEEN_BIT_MSB_TC_MASK; break;
-#else
-        case 16: nFormat = FORMAT_SIXTEEN_BIT_LSB_TC_MASK; break;
-#endif
-        case 24: nFormat = FORMAT_TWENTYFOUR_BIT_TC_MASK; break;
-#ifdef ANDROID
-        case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA; break;
-#else
-        case 32: nFormat = FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA; break;
-#endif
-    }
+
+    SvpSalInstance* pInst = SvpSalInstance::s_pDefaultInstance;
+    assert( pInst );
+    basebmp::Format nFormat = pInst->getFormatForBitCount( nBitCount );
+
     B2IVector aSize( rSize.Width(), rSize.Height() );
     if( aSize.getX() == 0 )
         aSize.setX( 1 );

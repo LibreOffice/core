@@ -45,6 +45,8 @@
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
 
+using namespace basebmp;
+
 bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 {
     for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
@@ -405,4 +407,47 @@ void SvpSalTimer::Start( sal_uLong nMS )
     m_pInstance->StartTimer( nMS );
 }
 
+void SvpSalInstance::setBitCountFormatMapping( sal_uInt16 nBitCount,
+                                            Format aFormat )
+{
+    m_aBitCountFormatMap[nBitCount] = aFormat;
+}
+
+Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
+{
+    BitCountFormatMap::iterator aIt;
+    if ( (aIt = m_aBitCountFormatMap.find( nBitCount )) != m_aBitCountFormatMap.end() )
+    {
+        return aIt->second;
+    }
+
+    switch( nBitCount )
+    {
+        case 1:
+            return FORMAT_ONE_BIT_MSB_PAL;
+        case 4:
+            return FORMAT_FOUR_BIT_MSB_PAL;
+        case 8:
+            return FORMAT_EIGHT_BIT_PAL;
+        case 16:
+#ifdef OSL_BIGENDIAN
+            return FORMAT_SIXTEEN_BIT_MSB_TC_MASK;
+#else
+            return FORMAT_SIXTEEN_BIT_LSB_TC_MASK;
+#endif
+        case 24:
+            return FORMAT_TWENTYFOUR_BIT_TC_MASK;
+        case 32:
+            return FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA;
+        case 0:
+#ifdef ANDROID
+            return FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA;
+#else
+            return FORMAT_TWENTYFOUR_BIT_TC_MASK;
+#endif
+        default:
+            return SVP_DEFAULT_BITMAP_FORMAT;
+     }
+
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
