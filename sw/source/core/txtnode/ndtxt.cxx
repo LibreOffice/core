@@ -4462,8 +4462,8 @@ namespace {
         {
             const SfxInt16Item* pListRestartValueItem =
                                 dynamic_cast<const SfxInt16Item*>(pItem);
-            if ( !mrTxtNode.HasAttrListRestartValue() ||
-                 pListRestartValueItem->GetValue() != mrTxtNode.GetAttrListRestartValue() )
+            if ( !mrTxtNode.HasAttrListRestartValue() || (pListRestartValueItem &&
+                 pListRestartValueItem->GetValue() != mrTxtNode.GetAttrListRestartValue()) )
             {
                 mbUpdateListRestart = true;
             }
