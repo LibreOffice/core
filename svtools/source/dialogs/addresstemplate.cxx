@@ -494,6 +494,8 @@ void AssignmentPersistentData::Commit()
             ,bWorkingPersistent( false )
             ,pConfigData( new AssigmentTransientData( m_xTransientDataSource, _rDataSourceName, _rTableName, _rFields ) )
         {
+            memset(pFieldLabels, 0, sizeof(pFieldLabels));
+            memset(pFields, 0, sizeof(pFields));
         }
 
         ~AddressBookSourceDialogData()
