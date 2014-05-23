@@ -34,6 +34,68 @@ class DocumentSettingManager :
     SwFldUpdateFlags    meFldUpdMode;//< Automatically Update Mode for fields/charts.
     SwCharCompressType meChrCmprType;//< for ASIAN: compress punctuation/kana
 
+    sal_uInt32  mn32DummyCompatabilityOptions1;
+    sal_uInt32  mn32DummyCompatabilityOptions2;
+
+    // COMPATIBILITY FLAGS START
+    //
+    //
+    // HISTORY OF THE COMPATIBILITY FLAGS:
+    //
+    // SO5:
+    // mbParaSpaceMax                        def = sal_False, sal_True since SO8
+    // mbParaSpaceMaxAtPages                 def = sal_False, sal_True since SO8
+    //
+    // SO6:
+    // mbTabCompat                           def = sal_False, sal_True since SO8
+    //
+    // SO7:
+    // mbUseVirtualDevice                    def = sal_True
+    // mbAddFlyOffsets                       def = sal_False, hidden
+    //
+    // SO7pp1:
+    // bOldNumbering                        def = sal_False, hidden
+    //
+    // SO8:
+    // mbAddExternalLeading                  def = sal_True
+    // mbUseHiResolutionVirtualDevice        def = sal_True, hidden
+    // mbOldLineSpacing                      def = sal_False
+    // mbAddParaSpacingToTableCells          def = sal_True
+    // mbUseFormerObjectPos                  def = sal_False
+    // mbUseFormerTextWrapping               def = sal_False
+    // mbConsiderWrapOnObjPos                def = sal_False
+    //
+    // SO8pp1:
+    // mbIgnoreFirstLineIndentInNumbering    def = sal_False, hidden
+    // mbDoNotJustifyLinesWithManualBreak    def = sal_False, hidden
+    // mbDoNotResetParaAttrsForNumFont       def = sal_False, hidden
+    //
+    // SO8pp3
+    // mbDoNotCaptureDrawObjsOnPage         def = sal_False, hidden
+    // - Relevant for drawing objects, which don't follow the text flow, but
+    //   whose position is outside the page area:
+    //   sal_False: Such drawing objects are captured on the page area of its anchor.
+    //   sal_True: Such drawing objects can leave the page area, they aren't captured.
+    // mbTableRowKeep                            def = sal_False, hidden
+    // mbIgnoreTabsAndBlanksForLineCalculation   def = sal_False, hidden
+    // mbClipAsCharacterAnchoredWriterFlyFrame   def = sal_False, hidden
+    // - Introduced in order to re-activate clipping of as-character anchored
+    //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
+    //   which are created with version prior SO8/OOo 2.0
+    //
+    // SO8pp4
+    // mbUnixForceZeroExtLeading                def = sal_False, hidden
+    //
+    // SO8pu8
+    //
+    // SO9
+    // #i24363# tab stops relative to indent
+    // mbTabRelativeToIndent                    def = sal_True, hidden
+    // #i89181# suppress tab stop at left indent for paragraphs in lists, whose
+    // list level position and space mode equals LABEL_ALIGNMENT and whose list
+    // label is followed by a tab character.
+    // mbTabAtLeftIndentForParagraphsInList     def = sal_False, hidden
+
     bool mbHTMLMode              : 1;    //< TRUE: Document is in HTMLMode.
     bool mbIsGlobalDoc           : 1;    //< TRUE: It's a global document.
     bool mbGlblDocSaveLinks      : 1;    //< TRUE: Save sections linked in global document.
@@ -111,6 +173,11 @@ public:
 
 // Replace all compatability options with those from rSource.
     void ReplaceCompatabilityOptions(const DocumentSettingManager& rSource);
+
+    sal_uInt32 Getn32DummyCompatabilityOptions1() const;
+    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 );
+    sal_uInt32 Getn32DummyCompatabilityOptions2() const;
+    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 );
 
 };
 

@@ -83,6 +83,7 @@
 #include <swtable.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
+#include <DocumentSettingManager.hxx>
 
 #include <fltini.hxx>
 
@@ -1843,8 +1844,8 @@ void SwWW8ImplReader::ImportDop()
 
     // #i78951# - remember the unknown compatibility options
     // so as to export them out
-    rDoc.Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
-    rDoc.Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());
+    rDoc.GetDocumentSettingManager().Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
+    rDoc.GetDocumentSettingManager().Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());
 
     // The distance between two paragraphs is the sum of the bottom distance of
     // the first paragraph and the top distance of the second one

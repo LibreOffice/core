@@ -276,14 +276,6 @@ SwDoc::SwDoc()
 #endif
     mbContainsAtPageObjWithContentAnchor(false), //#i119292#, fdo#37024
 
-    // COMPATIBILITY FLAGS START
-
-    mbOldPrinterMetrics(false),
-    mn32DummyCompatabilityOptions1(0),
-    mn32DummyCompatabilityOptions2(0),
-
-    // COMPATIBILITY FLAGS END
-
     mbStartIdleTimer(false),
     mbReadOnly(false),
     meDocType(DOCTYPE_NATIVE)
@@ -1017,10 +1009,6 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 
 void SwDoc::ReplaceCompatabilityOptions(const SwDoc& rSource)
 {
-    mn32DummyCompatabilityOptions1 = rSource.mn32DummyCompatabilityOptions1;
-    mn32DummyCompatabilityOptions2 = rSource.mn32DummyCompatabilityOptions2;
-    mbOldPrinterMetrics = rSource.mbOldPrinterMetrics;
-
     m_pDocumentSettingManager->ReplaceCompatabilityOptions(rSource.GetDocumentSettingManager());
 }
 
