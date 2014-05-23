@@ -2815,7 +2815,13 @@ namespace osl_File
         sal_uInt64 nCount_write, nCount_read;
 
         public:
-        write() :nError1(FileBase::E_None) {}
+        write()
+            : nError1(FileBase::E_None)
+            , nCount_write(0)
+            , nCount_read(0)
+        {
+        }
+
         // initialization
         void setUp() SAL_OVERRIDE
         {
