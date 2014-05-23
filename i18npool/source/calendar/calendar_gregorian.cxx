@@ -284,21 +284,20 @@ Calendar_gregorian::getUniqueID() throw(RuntimeException, std::exception)
 void SAL_CALL
 Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException, std::exception)
 {
-    // ICU handles dates in milliseconds as double values and uses floor()
-    // to obtain integer values, which may yield a date decremented by one
-    // for odd (historical) timezone values where the computed value due to
-    // rounding errors has a fractional part in milliseconds. Ensure we
-    // pass a value without fraction here. If not, that may lead to
-    // fdo#44286 or fdo#52619 and the like, e.g. when passing
-    // -2136315212000.000244 instead of -2136315212000.000000
-    double fM = timeInDays * U_MILLIS_PER_DAY;
-    double fR = rtl::math::round( fM );
-    SAL_INFO_IF( fM != fR, "i18npool",
-            "Calendar_gregorian::setDateTime: " << std::fixed << fM << " rounded to " << fR);
     UErrorCode status;
-    body->setTime( fR, status = U_ZERO_ERROR);
+    body->setTime( timeInDays * U_MILLIS_PER_DAY, status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
     getValue();
+}
+
+void SAL_CALL
+Calendar_gregorian::setLocalDateTime( double timeInDays ) throw(RuntimeException, std::exception)
+{
+    UErrorCode status;
+    sal_Int32 nZoneOffset, nDSTOffset;
+    body->getTimeZone().getOffset( nTimeInDays * U_MILLIS_PER_DAY, 1, nZoneOffset, nDstOffset, status );
+    if ( !U_SUCCESS(status) ) throw ERROR;
+    setDateTime( timeInDays - (double)(nZoneOffset + nDstOffset) / U_MILLIS_PER_DAY );
 }
 
 double SAL_CALL

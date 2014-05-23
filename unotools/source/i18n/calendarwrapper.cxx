@@ -165,44 +165,7 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
     try
     {
         if ( xC.is() )
-        {
-            // First set a nearby value to obtain the timezone and DST offset.
-            // This is necessary to let ICU choose the corresponding
-            // OlsonTimeZone transitions. Since ICU incorporates also
-            // historical data even the timezone may differ for different
-            // dates! (Which was the cause for #i76623# when the timezone of a
-            // previously set date was used.) Timezone may also include
-            // seconds, so use milliseconds field as well.
-            xC->setDateTime( nTimeInDays );
-            sal_Int32 nZone1 = getZoneOffsetInMillis();
-            sal_Int32 nDST1  = getDSTOffsetInMillis();
-            double nLoc = nTimeInDays - (double)(nZone1 + nDST1) / MILLISECONDS_PER_DAY;
-            xC->setDateTime( nLoc );
-            sal_Int32 nZone2 = getZoneOffsetInMillis();
-            sal_Int32 nDST2  = getDSTOffsetInMillis();
-            // If DSTs differ after calculation, we crossed boundaries. Do it
-            // again, this time using the DST corrected initial value for the
-            // real local time.
-            // See also localtime/gmtime conversion pitfalls at
-            // http://www.erack.de/download/timetest.c
-            if ( nDST1 != nDST2 )
-            {
-                nLoc = nTimeInDays - (double)(nZone2 + nDST2) / MILLISECONDS_PER_DAY;
-                xC->setDateTime( nLoc );
-                // #i17222# If the DST onset rule says to switch from 00:00 to
-                // 01:00 and we tried to set onsetDay 00:00 with DST, the
-                // result was onsetDay-1 23:00 and no DST, which is not what we
-                // want. So once again without DST, resulting in onsetDay
-                // 01:00 and DST. Yes, this seems to be weird, but logically
-                // correct.
-                sal_Int32 nDST3 = getDSTOffsetInMillis();
-                if ( nDST2 != nDST3 && !nDST3 )
-                {
-                    nLoc = nTimeInDays - (double)(nZone2 + nDST3) / MILLISECONDS_PER_DAY;
-                    xC->setDateTime( nLoc );
-                }
-            }
-        }
+            xC->setLocalDateTime( nTimeInDays );
     }
     catch (const Exception& e)
     {
