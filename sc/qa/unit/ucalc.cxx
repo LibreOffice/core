@@ -5072,6 +5072,8 @@ void Test::testSortWithCellFormats()
                 return false;
             }
 
+            CPPUNIT_ASSERT(pItem);
+
             if (static_cast<const SvxWeightItem*>(pItem)->GetEnumValue() != WEIGHT_BOLD)
             {
                 cerr << "Font weight should be bold." << endl;
@@ -5095,6 +5097,8 @@ void Test::testSortWithCellFormats()
                 cerr << "Pattern does not have a font posture item, but it should." << endl;
                 return false;
             }
+
+            CPPUNIT_ASSERT(pItem);
 
             if (static_cast<const SvxPostureItem*>(pItem)->GetEnumValue() != ITALIC_NORMAL)
             {
