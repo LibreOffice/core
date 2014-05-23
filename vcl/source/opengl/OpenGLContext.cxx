@@ -19,6 +19,13 @@
 
 using namespace com::sun::star;
 
+GLWindow::~GLWindow()
+{
+#if defined( UNX )
+    XFree(vi);
+#endif
+}
+
 OpenGLContext::OpenGLContext():
     mpWindow(NULL),
     m_pChildWindow(NULL),
