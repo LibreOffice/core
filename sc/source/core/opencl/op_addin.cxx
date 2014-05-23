@@ -221,9 +221,9 @@ void OpGestep::GenSlidingWindowFunction(
         if (pCur->GetType() == formula::svSingleVectorRef)
         {
 #ifdef  ISNAN
-            const formula::SingleVectorRefToken* pSVR =
-            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+            const formula::SingleVectorRefToken& rSVR =
+            dynamic_cast< const formula::SingleVectorRefToken& >(*pCur);
+            ss << "    if (gid0 < " << rSVR.GetArrayLength() << ")\n";
             ss << "    {\n";
 #endif
         }
