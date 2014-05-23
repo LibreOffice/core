@@ -3727,18 +3727,31 @@ void ScInterpreter::ScTTT()
 
 
 ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
-        const ScAddress& rPos, ScTokenArray& r ) :
-    aCode( r ),
-    aPos( rPos ),
-    rArr( r ),
-    pDok( pDoc ),
-    mrStrPool(pDoc->GetSharedStringPool()),
-    pTokenMatrixMap( NULL ),
-    pMyFormulaCell( pCell ),
-    pFormatter( pDoc->GetFormatTable() ),
-    mnStringNoValueError( errNoValue),
-    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
-    meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
+        const ScAddress& rPos, ScTokenArray& r )
+    : aCode(r)
+    , aPos(rPos)
+    , rArr(r)
+    , pDok(pDoc)
+    , mrStrPool(pDoc->GetSharedStringPool())
+    , pJumpMatrix(NULL)
+    , pTokenMatrixMap(NULL)
+    , pMyFormulaCell(pCell)
+    , pFormatter(pDoc->GetFormatTable())
+    , pCur(NULL)
+    , nGlobalError(0)
+    , sp(0)
+    , maxsp(0)
+    , nFuncFmtIndex(0)
+    , nCurFmtIndex(0)
+    , nRetFmtIndex(0)
+    , nFuncFmtType(0)
+    , nCurFmtType(0)
+    , nRetFmtType(0)
+    , mnStringNoValueError(errNoValue)
+    , glSubTotal(false)
+    , cPar(0)
+    , bCalcAsShown(pDoc->GetDocOptions().IsCalcAsShown())
+    , meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     MergeCalcConfig();
 
