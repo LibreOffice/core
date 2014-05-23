@@ -703,7 +703,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         long nWishedHeight = pDrop->GetDropHeight();
 
         // find out biggest font size for initial scaling factor
-        long nMaxFontHeight = 0;
+        long nMaxFontHeight = 1;
         while ( pCurrPart )
         {
             const SwFont& rFnt = pCurrPart->GetFont();
