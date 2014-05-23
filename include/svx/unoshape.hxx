@@ -827,7 +827,7 @@ protected:
 public:
     SvxCustomShape( SdrObject* pObj ) throw ();
     // overide these for special property handling in subcasses. Return true if property is handled
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     virtual ~SvxCustomShape() throw ();
