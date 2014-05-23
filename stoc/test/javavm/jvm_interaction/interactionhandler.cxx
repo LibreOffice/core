@@ -178,8 +178,7 @@ SAL_IMPLEMENT_MAIN()
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
     Reference<XMultiServiceFactory> xMgr( fac, UNO_QUERY);
 
-    sal_Bool bSucc = sal_False;
-    bSucc= test1(xMgr);
+    sal_Bool bSucc = test1(xMgr);
     Reference< XComponent > xCompContext( context, UNO_QUERY );
     xCompContext->dispose();
     return (bSucc ? 0 : -1);
