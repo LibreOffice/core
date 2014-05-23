@@ -330,26 +330,29 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     uno::Reference<frame::XModel> xModel = mrDocShell.GetModel();
 
     /** property map for export info set */
-    comphelper::PropertyMapEntry const aImportInfoMap[] =
+    comphelper::PropertyMapEntry aImportInfoMap[] =
     {
-        { OUString("ProgressRange"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressMax"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("ProgressCurrent"), 0, ::cppu::UnoType<sal_Int32>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("NumberStyles"), 0, cppu::UnoType<container::XNameAccess>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("PrivateData"), 0, cppu::UnoType<uno::XInterface>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("VBACompatibilityMode"), 0, ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("ScriptConfiguration"), 0, cppu::UnoType<container::XNameAccess>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("OrganizerMode"), 0, ::getBooleanCppuType(),
+        { MAP_LEN( "ProgressRange" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressMax" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "NumberStyles" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "PrivateData" ), 0, &::getCppuType( (uno::Reference<uno::XInterface> *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BaseURI" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "VBACompatibilityMode" ), 0, &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "OrganizerMode" ), 0, &::getBooleanCppuType(),
             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(SC_UNO_ODS_LOCK_SOLAR_MUTEX), 0, getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(SC_UNO_ODS_IMPORT_STYLES), 0, getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { MAP_LEN( "SourceStorage" ), 0, &embed::XStorage::static_type(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+
+        { MAP_LEN(SC_UNO_ODS_LOCK_SOLAR_MUTEX), 0, &getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN(SC_UNO_ODS_IMPORT_STYLES), 0, &getBooleanCppuType(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+
+        { NULL, 0, 0, NULL, 0, 0 }
     };
+
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 
     // No need to lock solar mutex when calling from the wrapper.

@@ -2257,7 +2257,7 @@ ScXMLImport::~ScXMLImport() throw()
 }
 
 void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
+        throw (css::uno::Exception, css::uno::RuntimeException)
 {
     SvXMLImport::initialize(aArguments);
 
