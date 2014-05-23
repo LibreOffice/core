@@ -2433,8 +2433,9 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     bool bBevelTPresent = false, bBevelBPresent = false;
     Sequence< PropertyValue > aExtrusionColorProps, aContourColorProps;
     sax_fastparser::FastAttributeList *aBevelTAttrList = mpFS->createAttrList();
+    sax_fastparser::XFastAttributeListRef xBevelTAttrList( aBevelTAttrList );
     sax_fastparser::FastAttributeList *aBevelBAttrList = mpFS->createAttrList();
-    sax_fastparser::XFastAttributeListRef xBevelAttrList( aBevelBAttrList );
+    sax_fastparser::XFastAttributeListRef xBevelBAttrList( aBevelBAttrList );
     sax_fastparser::FastAttributeList *aShape3DAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aShape3DProps.getLength(); ++i )
     {
@@ -2509,12 +2510,11 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     mpFS->startElementNS( XML_a, XML_sp3d, xAttrList );
     if( bBevelTPresent )
     {
-        sax_fastparser::XFastAttributeListRef xBevelAttrList( aBevelTAttrList );
-        mpFS->singleElementNS( XML_a, XML_bevelT, xBevelAttrList );
+        mpFS->singleElementNS( XML_a, XML_bevelT, xBevelTAttrList );
     }
     if( bBevelBPresent )
     {
-        mpFS->singleElementNS( XML_a, XML_bevelB, xBevelAttrList );
+        mpFS->singleElementNS( XML_a, XML_bevelB, xBevelBAttrList );
     }
     if( aExtrusionColorProps.getLength() > 0 )
     {
