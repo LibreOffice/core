@@ -140,41 +140,6 @@ void ScColumn::FreeAll()
 
 namespace {
 
-/**
- * Collect all formula cells for later mass-unregistration. Also tag row
- * positions of all non-empty cells in the range.
- */
-class DeleteRowsHandler
-{
-    ScDocument& mrDoc;
-    std::vector<SCROW> maRows;
-    std::vector<ScFormulaCell*> maFormulaCells;
-public:
-    DeleteRowsHandler(ScDocument& rDoc) : mrDoc(rDoc) {}
-
-    void operator() (size_t nRow, ScFormulaCell* pCell)
-    {
-        maFormulaCells.push_back(pCell);
-        maRows.push_back(nRow);
-    }
-
-    void operator() (mdds::mtv::element_t nType, size_t nTopRow, size_t nDataSize)
-    {
-        if (nType == sc::element_type_empty)
-            // Ignore empty cells.
-            return;
-
-        for (size_t i = 0; i < nDataSize; ++i)
-            // Tag all non-empty cells.
-            maRows.push_back(i + nTopRow);
-    }
-
-    const std::vector<SCROW>& getNonEmptyRows() const
-    {
-        return maRows;
-    }
-};
-
 class ShiftFormulaPosHandler
 {
 public:
@@ -182,25 +147,6 @@ public:
     void operator() (size_t nRow, ScFormulaCell* pCell)
     {
         pCell->aPos.SetRow(nRow);
-    }
-};
-
-class RangeBroadcaster
-{
-    ScDocument& mrDoc;
-    ScHint maHint;
-public:
-    RangeBroadcaster(ScDocument& rDoc, SCTAB nTab, SCCOL nCol) :
-        mrDoc(rDoc),
-        maHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab)) {}
-
-    void operator() (const sc::RowSpan& rSpan)
-    {
-        SCROW nRow1 = rSpan.mnRow1, nRow2 = rSpan.mnRow2;
-        maHint.GetAddress().SetRow(nRow1);
-        ScRange aRange(maHint.GetAddress());
-        aRange.aEnd.SetRow(nRow2);
-        mrDoc.AreaBroadcastInRange(aRange, maHint);
     }
 };
 
