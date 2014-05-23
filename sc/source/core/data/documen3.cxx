@@ -1269,78 +1269,79 @@ bool ScDocument::SearchAndReplace(
 {
     //!     getrennte Markierungen pro Tabelle verwalten !!!!!!!!!!!!!
 
-    bool bFound = false;
     if (rTab >= static_cast<SCTAB>(maTabs.size()))
         OSL_FAIL("table out of range");
-    if (ValidTab(rTab))
-    {
-        SCCOL nCol;
-        SCROW nRow;
-        SCTAB nTab;
-        sal_uInt16 nCommand = rSearchItem.GetCommand();
-        if ( nCommand == SVX_SEARCHCMD_FIND_ALL ||
-             nCommand == SVX_SEARCHCMD_REPLACE_ALL )
-        {
-            SCTAB nMax = maTabs.size();
-            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd && *itr < nMax; ++itr)
-                if (maTabs[*itr])
-                {
-                    nCol = 0;
-                    nRow = 0;
-                    bFound |= maTabs[*itr]->SearchAndReplace(
-                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-                }
 
-            //  Markierung wird innen schon komplett gesetzt
-        }
-        else
-        {
-            nCol = rCol;
-            nRow = rRow;
-            if (rSearchItem.GetBackward())
+    if (!ValidTab(rTab))
+        return false;
+
+    bool bFound = false;
+
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
+    sal_uInt16 nCommand = rSearchItem.GetCommand();
+    if ( nCommand == SVX_SEARCHCMD_FIND_ALL ||
+         nCommand == SVX_SEARCHCMD_REPLACE_ALL )
+    {
+        SCTAB nMax = maTabs.size();
+        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if (maTabs[*itr])
             {
-                for (nTab = rTab; ((SCsTAB)nTab >= 0) && !bFound; nTab--)
-                    if (maTabs[nTab])
-                    {
-                        if (rMark.GetTableSelect(nTab))
-                        {
-                            bFound = maTabs[nTab]->SearchAndReplace(
-                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-                            if (bFound)
-                            {
-                                rCol = nCol;
-                                rRow = nRow;
-                                rTab = nTab;
-                            }
-                            else
-                                ScDocument::GetSearchAndReplaceStart(
-                                    rSearchItem, nCol, nRow );
-                        }
-                    }
+                nCol = 0;
+                nRow = 0;
+                bFound |= maTabs[*itr]->SearchAndReplace(
+                    rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
             }
-            else
+
+        //  Markierung wird innen schon komplett gesetzt
+        return bFound;
+    }
+
+    nCol = rCol;
+    nRow = rRow;
+    if (rSearchItem.GetBackward())
+    {
+        for (nTab = rTab; ((SCsTAB)nTab >= 0) && !bFound; nTab--)
+            if (maTabs[nTab])
             {
-                for (nTab = rTab; (nTab < static_cast<SCTAB>(maTabs.size())) && !bFound; nTab++)
-                    if (maTabs[nTab])
+                if (rMark.GetTableSelect(nTab))
+                {
+                    bFound = maTabs[nTab]->SearchAndReplace(
+                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                    if (bFound)
                     {
-                        if (rMark.GetTableSelect(nTab))
-                        {
-                            bFound = maTabs[nTab]->SearchAndReplace(
-                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-                            if (bFound)
-                            {
-                                rCol = nCol;
-                                rRow = nRow;
-                                rTab = nTab;
-                            }
-                            else
-                                ScDocument::GetSearchAndReplaceStart(
-                                    rSearchItem, nCol, nRow );
-                        }
+                        rCol = nCol;
+                        rRow = nRow;
+                        rTab = nTab;
                     }
+                    else
+                        ScDocument::GetSearchAndReplaceStart(
+                            rSearchItem, nCol, nRow );
+                }
             }
-        }
+    }
+    else
+    {
+        for (nTab = rTab; (nTab < static_cast<SCTAB>(maTabs.size())) && !bFound; nTab++)
+            if (maTabs[nTab])
+            {
+                if (rMark.GetTableSelect(nTab))
+                {
+                    bFound = maTabs[nTab]->SearchAndReplace(
+                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                    if (bFound)
+                    {
+                        rCol = nCol;
+                        rRow = nRow;
+                        rTab = nTab;
+                    }
+                    else
+                        ScDocument::GetSearchAndReplaceStart(
+                            rSearchItem, nCol, nRow );
+                }
+            }
     }
     return bFound;
 }
