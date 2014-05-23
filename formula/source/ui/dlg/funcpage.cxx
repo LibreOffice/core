@@ -57,10 +57,6 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-
-
-
-
 inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 {
     // Category 0 == LRU, otherwise Categories == LbPos-1
@@ -69,8 +65,6 @@ inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 
     return nLbPos;
 }
-
-
 
 FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_FUNCTION)),
@@ -108,7 +102,7 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
         TFunctionDesc pDesc(_pCategory->getFunction(i));
         aLbFunction.SetEntryData(
             aLbFunction.InsertEntry(pDesc->getFunctionName() ),(void*)pDesc );
-    } // for(sal_uInt32 i = 0 ; i < nCount; ++i)
+    }
 }
 
 void FuncPage::UpdateFunctionList()
@@ -194,10 +188,12 @@ void FuncPage::SetCategory(sal_Int32 nCat)
     aLbCategory.SelectEntryPos(nCat);
     UpdateFunctionList();
 }
+
 sal_Int32 FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
 {
     return aLbFunction.GetEntryPos(_pDesc);
 }
+
 void FuncPage::SetFunction(sal_Int32 nFunc)
 {
     aLbFunction.SelectEntryPos(nFunc);
@@ -227,6 +223,7 @@ OUString FuncPage::GetSelFunctionName() const
 {
     return aLbFunction.GetSelectEntry();
 }
+
 const IFunctionDescription* FuncPage::GetFuncDesc( sal_Int32 nPos ) const
 {
     // not pretty, but hopefully rare
