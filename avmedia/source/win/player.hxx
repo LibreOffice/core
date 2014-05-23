@@ -72,7 +72,6 @@ public:
     virtual double SAL_CALL getDuration(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMediaTime( double fTime ) throw (::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getMediaTime(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual double SAL_CALL getRate(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isPlaybackLoop(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMute( sal_Bool bSet ) throw (::com::sun::star::uno::RuntimeException);

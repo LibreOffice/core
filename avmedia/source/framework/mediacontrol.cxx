@@ -40,7 +40,6 @@
 #define AVMEDIA_PAGEINCREMENT       10.0
 
 #define AVMEDIA_TOOLBOXITEM_PLAY    0x0001
-#define AVMEDIA_TOOLBOXITEM_PLAYFFW 0x0002
 #define AVMEDIA_TOOLBOXITEM_PAUSE   0x0004
 #define AVMEDIA_TOOLBOXITEM_STOP    0x0008
 #define AVMEDIA_TOOLBOXITEM_MUTE    0x0010
@@ -290,7 +289,6 @@ void MediaControl::implUpdateToolboxes()
 
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_INSERT, bValidURL );
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_PLAY, bValidURL );
-    maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_PLAYFFW, bValidURL );
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_PAUSE, bValidURL );
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_STOP, bValidURL );
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_LOOP, bValidURL );
@@ -310,24 +308,21 @@ void MediaControl::implUpdateToolboxes()
         maPlayToolBox.Enable();
         maMuteToolBox.Enable();
 
-        if( MEDIASTATE_PLAY == maItem.getState() || MEDIASTATE_PLAYFFW == maItem.getState() )
+        if( MEDIASTATE_PLAY == maItem.getState() )
         {
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, true );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAYFFW, MEDIASTATE_PLAYFFW == maItem.getState() );
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
         }
         else if( maItem.getTime() > 0.0 && ( maItem.getTime() < maItem.getDuration() ) )
         {
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAYFFW, false );
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, true );
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
         }
         else
         {
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
-            maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PLAYFFW, false );
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
             maPlayToolBox.CheckItem( AVMEDIA_TOOLBOXITEM_STOP, true );
         }
@@ -516,9 +511,8 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
             break;
 
             case( AVMEDIA_TOOLBOXITEM_PLAY ):
-            case( AVMEDIA_TOOLBOXITEM_PLAYFFW ):
             {
-                aExecItem.setState( ( AVMEDIA_TOOLBOXITEM_PLAYFFW == p->GetCurItemId() ) ? MEDIASTATE_PLAYFFW : MEDIASTATE_PLAY );
+                aExecItem.setState( MEDIASTATE_PLAY );
 
                 if( maItem.getTime() == maItem.getDuration() )
                     aExecItem.setTime( 0.0 );

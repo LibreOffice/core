@@ -97,12 +97,6 @@ double SAL_CALL VLCPlayer::getMediaTime() throw ( ::com::sun::star::uno::Runtime
     return static_cast<double>( mPlayer.getTime() ) / MS_IN_SEC;
 }
 
-double SAL_CALL VLCPlayer::getRate() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return mPlayer.getRate();
-}
-
 void VLCPlayer::replay()
 {
     setPlaybackLoop( false );

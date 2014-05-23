@@ -150,13 +150,6 @@ double SAL_CALL OGLPlayer::getMediaTime() throw ( ::com::sun::star::uno::Runtime
     return 0.0; //gltf_animation_get_time(m_pHandle);
 }
 
-double SAL_CALL OGLPlayer::getRate() throw ( uno::RuntimeException, std::exception )
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    // Seems unused
-    return 1.0;
-}
-
 void SAL_CALL OGLPlayer::setPlaybackLoop( sal_Bool bSet ) throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
