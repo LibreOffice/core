@@ -1466,9 +1466,6 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
             (const SvxBoxItem&)_pSet->Get(GetWhich(SID_ATTR_BORDER_OUTER))));
     }
 
-    long nH  = static_cast<long>(m_pPaperHeightEdit->Denormalize(m_pPaperHeightEdit->GetValue(FUNIT_TWIP)));
-    long nW  = static_cast<long>(m_pPaperWidthEdit->Denormalize(m_pPaperWidthEdit->GetValue(FUNIT_TWIP)));
-
     // limits paper
     // maximum is 54 cm
 
@@ -1479,9 +1476,8 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     nMin = MINBODY + nBL + nBR + aBorder.Width();
     m_pPaperWidthEdit->SetMin(m_pPaperWidthEdit->Normalize(nMin), FUNIT_TWIP);
 
-    // if the paper size has been changed
-    nH = static_cast<long>(m_pPaperHeightEdit->Denormalize(m_pPaperHeightEdit->GetValue(FUNIT_TWIP)));
-    nW = static_cast<long>(m_pPaperWidthEdit->Denormalize(m_pPaperWidthEdit->GetValue(FUNIT_TWIP)));
+    long nH = static_cast<long>(m_pPaperHeightEdit->Denormalize(m_pPaperHeightEdit->GetValue(FUNIT_TWIP)));
+    long nW = static_cast<long>(m_pPaperWidthEdit->Denormalize(m_pPaperWidthEdit->GetValue(FUNIT_TWIP)));
 
     // Top
     long nMax = nH - nBB - aBorder.Height() - MINBODY -
