@@ -411,11 +411,16 @@ unsigned char * codeSnippet( unsigned char * code,
 
     // movq $<nOffsetAndIndex>, %r10
     *reinterpret_cast<sal_uInt16 *>( code ) = 0xba49;
-    *reinterpret_cast<sal_uInt64 *>( code + 2 ) = nOffsetAndIndex;
+    *reinterpret_cast<sal_uInt16 *>( code + 2 ) = nOffsetAndIndex & 0xFFFF;
+    *reinterpret_cast<sal_uInt32 *>( code + 4 ) = nOffsetAndIndex >> 16;
+    *reinterpret_cast<sal_uInt16 *>( code + 8 ) = nOffsetAndIndex >> 48;
 
     // movq $<address of the privateSnippetExecutor>, %r11
     *reinterpret_cast<sal_uInt16 *>( code + 10 ) = 0xbb49;
-    *reinterpret_cast<sal_uInt64 *>( code + 12 ) = reinterpret_cast<sal_uInt64>( privateSnippetExecutor );
+    *reinterpret_cast<sal_uInt32 *>( code + 12 )
+        = reinterpret_cast<sal_uInt64>(privateSnippetExecutor);
+    *reinterpret_cast<sal_uInt32 *>( code + 16 )
+        = reinterpret_cast<sal_uInt64>(privateSnippetExecutor) >> 32;
 
     // jmpq *%r11
     *reinterpret_cast<sal_uInt32 *>( code + 20 ) = 0x00e3ff49;
