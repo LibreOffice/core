@@ -2174,9 +2174,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
                     pNd = rNds.GoPrevSection( &aIdx, true, false );
 
                 pPos = pCur->GetPoint();
-                if( pNd != &pPos->nNode.GetNode() )
+                if (pNd && pNd != &pPos->nNode.GetNode())
                     pPos->nNode = *pNd;
-                pPos->nContent.Assign( (SwCntntNode*)pNd, ((SwCntntNode*)pNd)->Len() );
+                pPos->nContent.Assign((SwCntntNode*)pNd, pNd ? ((SwCntntNode*)pNd)->Len() : 0);
 
                 aTmp.erase( aTmp.begin() + nPos );
             }
