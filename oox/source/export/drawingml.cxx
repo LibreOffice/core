@@ -2324,6 +2324,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     sax_fastparser::FastAttributeList *aCameraAttrList = mpFS->createAttrList();
     sax_fastparser::XFastAttributeListRef xCameraAttrList( aCameraAttrList );
     sax_fastparser::FastAttributeList *aCameraRotationAttrList = mpFS->createAttrList();
+    sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
         if( aEffectProps[i].Name == "prst" )
@@ -2403,7 +2404,6 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         mpFS->startElementNS( XML_a, XML_camera, xCameraAttrList );
         if( bCameraRotationPresent )
         {
-            sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
             mpFS->singleElementNS( XML_a, XML_rot, xRotAttrList );
         }
         mpFS->endElementNS( XML_a, XML_camera );
