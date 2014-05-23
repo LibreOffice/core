@@ -21,6 +21,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "tools/debug.hxx"
 
+#include "quartz/utils.h"
+
 #include "ctfonts.hxx"
 #include "CTRunData.hxx"
 
@@ -128,6 +130,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     // CFAttributedStringCreate copies the attribues parameter
     mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
+    SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(\"" << GetOUString(aCFText) << "\") = " << mpCTLine );
     CFRelease( aCFText);
 
     mnTrailingSpaceCount = 0;
@@ -206,6 +209,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                                                                    aCFText,
                                                                    mpTextStyle->GetStyleDict() );
         mpCTLine = CTLineCreateWithAttributedString( pAttrStr );
+        SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(\"" << GetOUString(aCFText) << "\") = " << mpCTLine );
         CFRelease( pAttrStr );
         CFRelease( aCFText );
 #endif
@@ -222,6 +226,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth - mfTrailingSpaceWidth );
 #else
     CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth);
+    SAL_INFO( "vcl.ct", "CTLineCreateJustifiedLine(" << mpCTLine << ",1.0," << nPixelWidth << ") = " << pNewCTLine );
 #endif
     if( !pNewCTLine )
     {
@@ -233,6 +238,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // - changing the CTM matrix
         return;
     }
+    SAL_INFO( "vcl.ct", "CFRelease(" << mpCTLine << ")" );
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
@@ -306,10 +312,12 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
                 CFAttributedStringGetString(mpAttrString),
                 styledict);
         CTLineRef pCTLine = CTLineCreateWithAttributedString( pAttrStr );
+        SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(" << pAttrStr << ") = " << pCTLine );
         CFRelease( pAttrStr );
 
         /* draw the text in 'outline' */
         drawCTLine(rAquaGraphics, pCTLine, mpTextStyle);
+        SAL_INFO( "vcl.ct", "CFRelease(" << pCTLine << ")" );
         CFRelease(pCTLine);
         return true;
     }
@@ -324,7 +332,9 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     // the view is vertically flipped => flipped glyphs
     // so apply a temporary transformation that it flips back
     // also compensate if the font was size limited
+    SAL_INFO( "vcl.ct", "CGContextSaveGState(" << rAquaGraphics.mrContext << ")" );
     CGContextSaveGState( rAquaGraphics.mrContext );
+    SAL_INFO( "vcl.ct", "CGContextScaleCTM(" << rAquaGraphics.mrContext << ",1.0,-1.0)" );
     CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
     CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
@@ -334,13 +344,16 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     if( pStyle->mfFontRotation != 0.0 )
     {
         const CGFloat fRadians = pStyle->mfFontRotation;
+        SAL_INFO( "vcl.ct", "CGContextRotateCTM(" << rAquaGraphics.mrContext << "," << +fRadians << ")" );
         CGContextRotateCTM( rAquaGraphics.mrContext, +fRadians );
 
         const CGAffineTransform aInvMatrix = CGAffineTransformMakeRotation( -fRadians );
         aTextPos = CGPointApplyAffineTransform( aTextPos, aInvMatrix );
     }
 
+    SAL_INFO( "vcl.ct", "CGContextSetTextPosition(" << rAquaGraphics.mrContext << "," << aTextPos << ")" );
     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
+    SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << rAquaGraphics.mrContext << ")" );
     CTLineDraw( ctline, rAquaGraphics.mrContext );
 #ifndef IOS
     // request an update of the changed window area
@@ -352,6 +365,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     }
 #endif
     // restore the original graphic context transformations
+    SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << rAquaGraphics.mrContext << ")" );
     CGContextRestoreGState( rAquaGraphics.mrContext );
 }
 

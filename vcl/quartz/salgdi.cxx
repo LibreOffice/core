@@ -467,7 +467,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     mpTextStyle = mpFontData->CreateTextStyle( *pReqFont );
     mpTextStyle->SetTextColor( maTextColor );
 
-    SAL_INFO("vcl.coretext",
+    SAL_INFO("vcl.ct",
             "SetFont"
             << " to "     << mpFontData->GetFamilyName()
             << ", "       << mpFontData->GetStyleName()
