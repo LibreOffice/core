@@ -20,6 +20,7 @@
 #include "scitems.hxx"
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
+#include <svx/srchdlg.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/objface.hxx>
@@ -39,6 +40,7 @@
 #include "dwfunctr.hxx"
 #include "sc.hrc"
 #include "spelldialog.hxx"
+#include <searchresults.hxx>
 
 #define ScTabViewShell
 #include "scslots.hxx"
@@ -79,11 +81,12 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScHighlightChgDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSimpleRefDlgWrapper::GetChildWindowId());
-    GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
+    GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SID_HYPERLINK_DIALOG);
     GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSpellDialogChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScValidityRefChildWin::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
 
     GetStaticInterface()->RegisterChildWindow(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSamplingDialogWrapper::GetChildWindowId());
