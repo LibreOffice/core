@@ -2682,7 +2682,7 @@ private:
 
     bool dumpBaseMembers(
         FileStream & out, OUString const & base, bool withType,
-        bool withDefaults, bool parentsHadDirectMember);
+        bool eligibleForDefaults);
 
     sal_uInt32 getTotalMemberCount(OUString const & base) const;
 
@@ -2732,7 +2732,7 @@ void ExceptionType::dumpHxxFile(
     out << "}\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline " << id_ << "::" << id_ << "(";
-        first = !dumpBaseMembers(out, base, true, false, false);
+        first = !dumpBaseMembers(out, base, true, false);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
@@ -2750,7 +2750,7 @@ void ExceptionType::dumpHxxFile(
         if (!base.isEmpty()) {
             out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
                 << "(";
-            dumpBaseMembers(out, base, false, false, false);
+            dumpBaseMembers(out, base, false, false);
             out << ")\n";
             first = false;
         }
@@ -2986,9 +2986,8 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
         << "() SAL_THROW(());\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(";
-        bool withDefaults = true;
-        bool parentsHadDirectMembers = !entity_->getDirectMembers().empty();
-        bool first = !dumpBaseMembers(out, base, true, withDefaults, parentsHadDirectMembers);
+        bool eligibleForDefaults = entity_->getDirectMembers().empty();
+        bool first = !dumpBaseMembers(out, base, true, eligibleForDefaults);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
@@ -3027,7 +3026,7 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
 }
 
 bool ExceptionType::dumpBaseMembers(
-    FileStream & out, OUString const & base, bool withType, bool withDefaults, bool parentsHadDirectMember)
+    FileStream & out, OUString const & base, bool withType, bool eligibleForDefaults)
 {
     bool hasMember = false;
     if (!base.isEmpty()) {
@@ -3041,7 +3040,7 @@ bool ExceptionType::dumpBaseMembers(
             dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
         assert(ent2.is());
         hasMember = dumpBaseMembers( out, ent2->getDirectBase(), withType,
-                        withDefaults, parentsHadDirectMember || !ent2->getDirectMembers().empty() );
+                        eligibleForDefaults && ent2->getDirectMembers().empty() );
         int memberCount = 0;
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(ent2->getDirectMembers().begin());
@@ -3058,8 +3057,7 @@ bool ExceptionType::dumpBaseMembers(
             // We want to provide a default parameter value for uno::Exception subtype
             // constructors, since most of the time we don't pass a Context object in to the exception
             // throw sites.
-            if (withDefaults
-                  && !parentsHadDirectMember
+            if (eligibleForDefaults
                   && base == "com.sun.star.uno.Exception"
                   && memberCount == 1
                   && i->name == "Context"
