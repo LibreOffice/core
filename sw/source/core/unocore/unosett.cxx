@@ -453,12 +453,12 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
             {
                 case WID_PREFIX:
                 {
-                    aRet <<= OUString(rFtnInfo.GetPrefix());
+                    aRet <<= rFtnInfo.GetPrefix();
                 }
                 break;
                 case WID_SUFFIX:
                 {
-                    aRet <<= OUString(rFtnInfo.GetSuffix());
+                    aRet <<= rFtnInfo.GetSuffix();
                 }
                 break;
                 case  WID_NUMBERING_TYPE :
@@ -544,10 +544,10 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case  WID_END_NOTICE         :
-                    aRet <<= OUString(rFtnInfo.aQuoVadis);
+                    aRet <<= rFtnInfo.aQuoVadis;
                 break;
                 case  WID_BEGIN_NOTICE       :
-                    aRet <<= OUString(rFtnInfo.aErgoSum);
+                    aRet <<= rFtnInfo.aErgoSum;
                 break;
             }
         }
@@ -1575,7 +1575,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
 static PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
 {
-    OUString sCmp = OUString::createFromAscii(cName);
+    const OUString sCmp = OUString::createFromAscii(cName);
     for(size_t i = 0; i < rPropertyValues.size(); ++i)
     {
         PropValData* pTemp = rPropertyValues[i];
@@ -1959,7 +1959,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     {
                         aFmt.SetBulletChar(aChar.toChar());
                     }
-                    else if(aChar.getLength() == 0)
+                    else if(aChar.isEmpty())
                     {
                         // If w:lvlText's value is null - set bullet char to zero
                         aFmt.SetBulletChar(sal_Unicode(0x0));
@@ -2224,7 +2224,7 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else if(rPropertyName == UNO_NAME_NAME)
-        aRet <<= OUString(pRule->GetName());
+        aRet <<= pRule->GetName();
     else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
     {
         sal_Bool bVal = pRule->IsAbsSpaces();
@@ -2272,15 +2272,16 @@ void SwXNumberingRules::removeVetoableChangeListener(
 
 OUString SwXNumberingRules::getName() throw( RuntimeException, std::exception )
 {
-    OUString aString;
     if(pNumRule)
     {
+        OUString aString;
         SwStyleNameMapper::FillProgName(pNumRule->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, true );
         return aString;
     }
     // consider chapter numbering <SwXNumberingRules>
     if ( pDocShell )
     {
+        OUString aString;
         SwStyleNameMapper::FillProgName( pDocShell->GetDoc()->GetOutlineNumRule()->GetName(),
                                          aString, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, true );
         return aString;
