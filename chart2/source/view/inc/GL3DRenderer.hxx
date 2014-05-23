@@ -274,8 +274,13 @@ private:
         GLint m_2DColorID;
         GLint m_MatrixID;
 
-        PickingShaderResources():
-            m_CommonProID(0) {}
+        PickingShaderResources()
+            : m_CommonProID(0)
+            , m_2DVertexID(0)
+            , m_2DColorID(0)
+            , m_MatrixID(0)
+        {
+        }
 
         ~PickingShaderResources()
         {
