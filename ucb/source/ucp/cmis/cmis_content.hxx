@@ -96,7 +96,7 @@ private:
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
         bool bReplaceExisting, const OUString & rMimeType,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
-            throw( com::sun::star::uno::Exception );
+            throw (css::uno::Exception, std::exception);
 
     OUString checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
