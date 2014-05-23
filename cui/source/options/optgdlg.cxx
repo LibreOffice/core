@@ -1298,7 +1298,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     // Configured date acceptance patterns, for example Y-M-D;M-D or empty for
     // locale default.
-    if (m_pDatePatternsED->IsValueChangedFromSaved())
+    if (m_bDatePatternsValid && m_pDatePatternsED->IsValueChangedFromSaved())
         pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( m_pDatePatternsED->GetText());
 
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
@@ -1463,6 +1463,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
         aDatePatternsString = lcl_getDatePatternsConfigString( rLocaleWrapper);
     }
+    // Let's assume patterns are valid at this point.
+    m_bDatePatternsValid = true;
     m_pDatePatternsED->SetText( aDatePatternsString);
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_DATEPATTERNS);
     m_pDatePatternsED->Enable(!bReadonly);
@@ -1659,6 +1661,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 
     // update the date acceptance patterns
     OUString aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
+    m_bDatePatternsValid = true;
     m_pDatePatternsED->SetText( aDatePatternsString);
 
     return 0;
@@ -1770,6 +1773,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
         pEd->SetControlForeground( ::Color( RGB_COLORDATA( 0xf0, 0, 0)));
 #endif
     }
+    m_bDatePatternsValid = bValid;
     return 0;
 }
 
