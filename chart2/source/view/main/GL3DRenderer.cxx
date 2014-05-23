@@ -21,7 +21,7 @@
 #include "glm/gtc/matrix_inverse.hpp"
 #include <boost/checked_delete.hpp>
 
-#define DEBUG_FBO 1
+#define DEBUG_FBO 0
 
 #define GL_PI 3.14159f
 
