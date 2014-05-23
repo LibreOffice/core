@@ -1352,9 +1352,11 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     {
                         pFilterData = new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 );
 
-                        com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
-                        bool bAllowPartialStreamRead = true;
-                        bool bCreateNativeLink = false;
+                        const com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
+                        const bool bAllowPartialStreamRead = true;
+                        // create <GfxLink> instance also for previews in order to avoid that its corresponding
+                        // data is cleared in the graphic cache entry in case that the preview data equals the complete graphic data
+                        const bool bCreateNativeLink = true;
                         (*pFilterData)[ 0 ].Name = "PreviewSizeHint";
                         (*pFilterData)[ 0 ].Value <<= aPreviewSizeHint;
                         (*pFilterData)[ 1 ].Name = "AllowPartialStreamRead";
