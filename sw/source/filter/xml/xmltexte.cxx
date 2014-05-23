@@ -197,7 +197,16 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
     if (pGrfNd && !pGrfNd->IsGrfLink())
     {
-        pGrfNd->ApplyNewEmbeddedStreamName("vnd.sun.star.Package:" + rURL);
+        // Apply new embedded stream name, only if graphic node already has one.
+        // - The saving of recovery information triggers this method, but for a newly created
+        //   document the new embedded stream name shall not be applied.
+        // - The saving of a newly created document to own format (ODF) triggers this method,
+        //   but the embedded stream name is not needed as its original inserted data is still in use.
+        if (pGrfNd->HasEmbeddedStreamName())
+        {
+            pGrfNd->ApplyNewEmbeddedStreamName("vnd.sun.star.Package:" + rURL);
+        }
+
         // #i15411# save-as will swap all graphics in; we need to swap
         // them out again, to prevent excessive memory use
         pGrfNd->SwapOut();
