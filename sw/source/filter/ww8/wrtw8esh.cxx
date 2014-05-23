@@ -58,8 +58,6 @@
 #include <fmtfollowtextflow.hxx>
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
-#include <flyfrm.hxx>
-#include <pagefrm.hxx>
 #include <frmatr.hxx>
 #include <fmtcntnt.hxx>
 #include <ndindex.hxx>
@@ -1893,31 +1891,6 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
     }
 }
 
-static bool lcl_isInHeader(const SwFrmFmt& rFmt)
-{
-    const SwFlyFrmFmt* pFlyFrmFmt = dynamic_cast<const SwFlyFrmFmt*>(&rFmt);
-    if (!pFlyFrmFmt)
-        return false;
-    SwFlyFrm* pFlyFrm = const_cast<SwFlyFrm*>(pFlyFrmFmt->GetFrm());
-    if (!pFlyFrm) // fdo#54648: "hidden" drawing object has no layout frame
-    {
-        return false;
-    }
-    SwPageFrm* pPageFrm = pFlyFrm->FindPageFrmOfAnchor();
-    SwFrm* pHeader = pPageFrm->Lower();
-    if (pHeader->GetType() == FRM_HEADER)
-    {
-        const SwFrm* pFrm = pFlyFrm->GetAnchorFrm();
-        while (pFrm)
-        {
-            if (pFrm == pHeader)
-                return true;
-            pFrm = pFrm->GetUpper();
-        }
-    }
-    return false;
-}
-
 sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
     MSO_SPT eShapeType, EscherPropertyContainer& rPropOpt)
 {
@@ -2061,7 +2034,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
 
     // SwWW8ImplReader::Read_GrafLayer() imports these as opaque
     // unconditionally, so if both are true, don't export the property.
-    bool bIsInHeader = lcl_isInHeader(rFmt);
+    bool bIsInHeader = IsFlyFrmFmtInHeader(rFmt);
     bool bIsThrought = rFmt.GetSurround().GetValue() == SURROUND_THROUGHT;
 
     if (bIsInHeader)

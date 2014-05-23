@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_custom_headers,msword,\
 $(eval $(call gb_Library_set_precompiled_header,msword,$(SRCDIR)/sw/inc/pch/precompiled_msword))
 
 $(eval $(call gb_Library_set_include,msword,\
-    -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \

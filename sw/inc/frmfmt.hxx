@@ -295,6 +295,8 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
 };
 
+SW_DLLPUBLIC bool IsFlyFrmFmtInHeader(const SwFrmFmt& rFmt);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
