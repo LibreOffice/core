@@ -19,6 +19,7 @@
 
 #include <StaticGeometry.h>
 #include "glm/gtc/matrix_inverse.hpp"
+#include <boost/checked_delete.hpp>
 
 #define DEBUG_FBO 1
 
@@ -840,19 +841,6 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     glUseProgram(0);
 }
 
-namespace {
-
-template< typename T >
-struct DeletePointer
-{
-    void operator()(T* p)
-    {
-        delete p;
-    }
-};
-
-}
-
 void OpenGL3DRenderer::RenderPolygon3DObject()
 {
     glDepthMask(GL_FALSE);
@@ -870,9 +858,9 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
             RenderPolygon3D(polygon);
         }
         std::for_each(polygon.verticesList.begin(),
-                polygon.verticesList.end(), DeletePointer<Vertices3D>());
+                      polygon.verticesList.end(), boost::checked_deleter<Vertices3D>());
         std::for_each(polygon.normalsList.begin(),
-                polygon.normalsList.end(), DeletePointer<Normals3D>());
+                      polygon.normalsList.end(), boost::checked_deleter<Normals3D>());
         delete polygon.vertices;
         delete polygon.normals;
         m_Polygon3DInfoList.pop_front();
