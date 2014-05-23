@@ -2435,6 +2435,8 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushFieldContext()
 {
+    if(m_bDiscardHeaderFooter)
+        return;
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->element("pushFieldContext");
 #endif
@@ -3239,6 +3241,8 @@ void DomainMapper_Impl::handleIndex
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::CloseFieldCommand()
 {
+    if(m_bDiscardHeaderFooter)
+        return;
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->element("closeFieldCommand");
 #endif
@@ -4060,6 +4064,8 @@ void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopFieldContext()
 {
+    if(m_bDiscardHeaderFooter)
+        return;
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->element("popFieldContext");
 #endif
@@ -4424,7 +4430,7 @@ void DomainMapper_Impl::RegisterFrameConversion(
 bool DomainMapper_Impl::ExecuteFrameConversion()
 {
     bool bRet = false;
-    if( m_xFrameStartRange.is() && m_xFrameEndRange.is() )
+    if( m_xFrameStartRange.is() && m_xFrameEndRange.is() && !m_bDiscardHeaderFooter )
     {
         bRet = true;
         try
@@ -4440,10 +4446,10 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
             SAL_WARN( "writerfilter", "Exception caught when converting to frame: " + rEx.Message );
             bRet = false;
         }
-        m_xFrameStartRange = 0;
-        m_xFrameEndRange = 0;
-        m_aFrameProperties.realloc( 0 );
     }
+    m_xFrameStartRange = 0;
+    m_xFrameEndRange = 0;
+    m_aFrameProperties.realloc( 0 );
     return bRet;
 }
 
