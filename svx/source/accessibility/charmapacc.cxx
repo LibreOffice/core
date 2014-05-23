@@ -324,7 +324,8 @@ bool SvxShowCharSetAcc::implIsSelected( sal_Int32 nAccessibleChildIndex ) throw 
 }
 
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
-void SvxShowCharSetAcc::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect ) throw (IndexOutOfBoundsException, RuntimeException)
+void SvxShowCharSetAcc::implSelect(sal_Int32 nAccessibleChildIndex, sal_Bool bSelect)
+    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     if ( m_pParent )
     {
