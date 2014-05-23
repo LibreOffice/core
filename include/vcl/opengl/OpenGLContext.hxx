@@ -96,7 +96,7 @@ struct GLWindow
     Display*           dpy;
     int                     screen;
     XLIB_Window             win;
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
     GLXFBConfig        fbc;
 #endif
     XVisualInfo*       vi;
@@ -123,7 +123,7 @@ struct GLWindow
         dpy(NULL),
         screen(0),
         win(0),
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+#if defined( GLX_EXT_texture_from_pixmap )
         fbc(0),
 #endif
         vi(NULL),
