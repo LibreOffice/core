@@ -714,7 +714,7 @@ void ScOpenclTest::testSharedFormulaXLSGroundWater()
     {
         double fLibre = pDoc->GetValue(ScAddress(11,i,1));
         double fExcel = pDocRes->GetValue(ScAddress(11,i,1));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
     xDocSh->DoClose();
     xDocShRes->DoClose();
@@ -740,14 +740,14 @@ void ScOpenclTest::testSharedFormulaXLS()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
     // AMLOEXT-6
     for (SCROW i = 6; i < 14; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     // AMLOEXT-8
@@ -755,7 +755,7 @@ void ScOpenclTest::testSharedFormulaXLS()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     // AMLOEXT-10
@@ -763,7 +763,7 @@ void ScOpenclTest::testSharedFormulaXLS()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     // AMLOEXT-9
@@ -772,7 +772,7 @@ void ScOpenclTest::testSharedFormulaXLS()
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         //double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
         // There seems to be a bug in LibreOffice beta
-        CPPUNIT_ASSERT_EQUAL(/*fExcel*/ 60.0, fLibre);
+        ASSERT_DOUBLES_EQUAL(/*fExcel*/ 60.0, fLibre);
     }
 
     // AMLOEXT-9
@@ -780,25 +780,25 @@ void ScOpenclTest::testSharedFormulaXLS()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
     // AMLOEXT-11
     for (SCROW i = 28; i < 35; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
     // AMLOEXT-11; workaround for a Calc beta bug
-    CPPUNIT_ASSERT_EQUAL(25.0, pDoc->GetValue(ScAddress(2, 35, 0)));
-    CPPUNIT_ASSERT_EQUAL(24.0, pDoc->GetValue(ScAddress(2, 36, 0)));
+    ASSERT_DOUBLES_EQUAL(25.0, pDoc->GetValue(ScAddress(2, 35, 0)));
+    ASSERT_DOUBLES_EQUAL(24.0, pDoc->GetValue(ScAddress(2, 36, 0)));
 
     // AMLOEXT-12
     for (SCROW i = 38; i < 43; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     // AMLOEXT-14
@@ -806,7 +806,7 @@ void ScOpenclTest::testSharedFormulaXLS()
     {
         double fLibre = pDoc->GetValue(ScAddress(5, i, 1));
         double fExcel = pDocRes->GetValue(ScAddress(5, i, 1));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     // AMLOEXT-15, AMLOEXT-16, and AMLOEXT-17
@@ -1193,7 +1193,6 @@ void ScOpenclTest::testFinacialFvscheduleFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1265,7 +1264,6 @@ void ScOpenclTest::testFinacialIRRFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1383,7 +1381,6 @@ void ScOpenclTest::testFinacialSLNFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1406,7 +1403,6 @@ void ScOpenclTest::testFinacialMIRRFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1452,7 +1448,6 @@ void ScOpenclTest::testFinacialDollardeFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1518,7 +1513,6 @@ void ScOpenclTest::testFinacialRateFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1719,7 +1713,6 @@ void ScOpenclTest::testFinacialPriceFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(7, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(7, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1742,7 +1735,6 @@ void ScOpenclTest::testFinacialDollarfrFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1831,7 +1823,6 @@ void ScOpenclTest::testFinacialDISCFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -1876,7 +1867,6 @@ void ScOpenclTest::testFinacialINTRATEFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -2734,7 +2724,6 @@ void ScOpenclTest::testFinacialEFFECT_ADDFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
