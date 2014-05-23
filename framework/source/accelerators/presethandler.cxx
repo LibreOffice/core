@@ -349,8 +349,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         if (!xDocumentRoot.is())
             throw css::uno::RuntimeException(
-                    OUString("There is valid root storage, where the UI configuration can work on."),
-                    css::uno::Reference< css::uno::XInterface >());
+                    "There is valid root storage, where the UI configuration can work on.");
         m_lDocumentStorages.setRootStorage(xDocumentRoot);
         xShare = xDocumentRoot;
         xUser  = xDocumentRoot;

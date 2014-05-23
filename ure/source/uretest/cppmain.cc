@@ -212,9 +212,7 @@ css::uno::Reference< css::uno::XInterface > create(
     try {
         return static_cast< ::cppu::OWeakObject * >(new Service(context));
     } catch (::std::bad_alloc &) {
-        throw css::uno::RuntimeException(
-            ::rtl::OUString("std::bad_alloc"),
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("std::bad_alloc");
     }
 }
 

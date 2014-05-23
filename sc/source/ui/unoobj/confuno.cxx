@@ -275,8 +275,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 
                 if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
                     throw beans::PropertyVetoException(
-                        OUString( "The hash is not allowed to be changed now!" ),
-                        uno::Reference< uno::XInterface >() );
+                        "The hash is not allowed to be changed now!" );
             }
             else if ( aPropertyName.equalsAscii( SC_UNO_EMBED_FONTS ) )
             {

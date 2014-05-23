@@ -106,7 +106,7 @@ SwVbaAutoTextEntries::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration >
 SwVbaAutoTextEntries::createEnumeration() throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented" );
 }
 
 uno::Any

@@ -91,7 +91,7 @@ ScVbaLineFormat::convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadSt
         case office::MsoArrowheadStyle::msoArrowheadTriangle:
             return OUString("Arrow");
         default:
-            throw uno::RuntimeException( "Invalid Arrow Style!" , uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Invalid Arrow Style!" );
     }
 }
 
@@ -128,7 +128,7 @@ ScVbaLineFormat::getBeginArrowheadLength() throw (uno::RuntimeException, std::ex
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 void SAL_CALL
@@ -136,7 +136,7 @@ ScVbaLineFormat::setBeginArrowheadLength( sal_Int32 /*_beginarrowheadlength*/ ) 
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 sal_Int32 SAL_CALL
@@ -144,7 +144,7 @@ ScVbaLineFormat::getBeginArrowheadWidth() throw (uno::RuntimeException, std::exc
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 void SAL_CALL
@@ -152,7 +152,7 @@ ScVbaLineFormat::setBeginArrowheadWidth( sal_Int32 /*_beginarrowheadwidth*/ ) th
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 sal_Int32 SAL_CALL
@@ -173,28 +173,28 @@ ScVbaLineFormat::getEndArrowheadLength() throw (uno::RuntimeException, std::exce
 {
     // #STUB
     // force error
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 void SAL_CALL
 ScVbaLineFormat::setEndArrowheadLength( sal_Int32 /*_endarrowheadlength*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 sal_Int32 SAL_CALL
 ScVbaLineFormat::getEndArrowheadWidth() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 void SAL_CALL
 ScVbaLineFormat::setEndArrowheadWidth( sal_Int32 /*_endarrowheadwidth*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
-    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Property 'EndArrowheadWidth' is not supported." );
 }
 
 double SAL_CALL
@@ -210,7 +210,7 @@ void SAL_CALL
 ScVbaLineFormat::setWeight( double _weight ) throw (uno::RuntimeException, std::exception)
 {
     if( _weight < 0 )
-        throw uno::RuntimeException( "Parameter: Must be positive." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Parameter: Must be positive." );
     if( _weight == 0 )
         _weight = 0.5;
     m_nLineWeight = _weight;
@@ -405,7 +405,7 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle ) throw (uno::RuntimeExcepti
             pLineDash.Distance = nPixel;
             break;
         default:
-            throw uno::RuntimeException( "this MsoLineDashStyle is not supported." , uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "this MsoLineDashStyle is not supported." );
         }
         m_xPropertySet->setPropertyValue( "LineDash" , uno::makeAny( pLineDash ) );
     }

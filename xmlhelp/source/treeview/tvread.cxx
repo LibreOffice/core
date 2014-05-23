@@ -885,9 +885,7 @@ void ExtensionIteratorBase::init()
     m_xContext = ::comphelper::getProcessComponentContext();
     if( !m_xContext.is() )
     {
-        throw RuntimeException(
-            OUString( "ExtensionIteratorBase::init(), no XComponentContext" ),
-            Reference< XInterface >() );
+        throw RuntimeException( "ExtensionIteratorBase::init(), no XComponentContext" );
     }
 
     m_xSFA = ucb::SimpleFileAccess::create(m_xContext);

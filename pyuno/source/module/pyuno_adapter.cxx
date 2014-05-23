@@ -123,8 +123,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             if( !introspection.is() )
             {
                 throw RuntimeException(
-                    OUString( "pyuno bridge: Couldn't inspect uno adapter ( the python class must implement com.sun.star.lang.XTypeProvider !)" ),
-                    Reference< XInterface > () );
+                    "pyuno bridge: Couldn't inspect uno adapter ( the python class must implement com.sun.star.lang.XTypeProvider !)" );
             }
 
             Reference< XIdlMethod > method = introspection->getMethod(
@@ -132,8 +131,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             if( ! method.is( ) )
             {
                 throw RuntimeException(
-                    "pyuno bridge: Couldn't get reflection for method " + functionName,
-                    Reference< XInterface > () );
+                    "pyuno bridge: Couldn't get reflection for method " + functionName );
             }
 
             Sequence< ParamInfo > seqInfo = method->getParameterInfos();
@@ -263,8 +261,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                     if( ! ( ret >>= seq ) )
                     {
                         throw RuntimeException(
-                            "pyuno bridge: Couldn't extract out parameters for method " + aFunctionName,
-                            Reference< XInterface > () );
+                            "pyuno bridge: Couldn't extract out parameters for method " + aFunctionName );
                     }
 
                     if( aOutParamIndex.getLength() +1 != seq.getLength() )
@@ -352,7 +349,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
         OUStringBuffer buf;
         buf.appendAscii( "pyuno::Adapater: Property " ).append( aPropertyName );
         buf.appendAscii( " is unknown." );
-        throw UnknownPropertyException( buf.makeStringAndClear(), Reference< XInterface > () );
+        throw UnknownPropertyException( buf.makeStringAndClear() );
     }
 
     PyThreadAttach guard( mInterpreter );
@@ -389,7 +386,7 @@ Any Adapter::getValue( const OUString & aPropertyName )
             OUStringBuffer buf;
             buf.appendAscii( "pyuno::Adapater: Property " ).append( aPropertyName );
             buf.appendAscii( " is unknown." );
-            throw UnknownPropertyException( buf.makeStringAndClear(), Reference< XInterface > () );
+            throw UnknownPropertyException( buf.makeStringAndClear() );
         }
         ret = runtime.pyObject2Any( pyRef );
     }

@@ -92,15 +92,13 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
     catch ( const RuntimeException & re )
     {
         OUString temp = "ScriptImpl::invoke RuntimeException : ";
-        throw RuntimeException( temp.concat( re.Message ),
-                                Reference< XInterface > () );
+        throw RuntimeException( temp.concat( re.Message ) );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
         throw RuntimeException(
-            "ScriptImpl::invoke Unknown Exception caught - RuntimeException rethrown",
-            Reference< XInterface > () );
+            "ScriptImpl::invoke Unknown Exception caught - RuntimeException rethrown" );
     }
 #endif
     return result;

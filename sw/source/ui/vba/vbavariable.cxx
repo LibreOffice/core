@@ -44,7 +44,7 @@ SwVbaVariable::getName() throw ( css::uno::RuntimeException, std::exception )
 void SAL_CALL
 SwVbaVariable::setName( const OUString& ) throw ( css::uno::RuntimeException, std::exception )
 {
-    throw uno::RuntimeException(" Fail to set name", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException(" Fail to set name" );
 }
 
 uno::Any SAL_CALL

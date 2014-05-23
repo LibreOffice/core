@@ -332,7 +332,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
                 buf.append( "Attribute " );
                 buf.append( attrName );
                 buf.append( " unknown" );
-                throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
+                throw RuntimeException( buf.makeStringAndClear() );
             }
             callable = PyUNO_callable_new (
                 me->members->xInvocation,
@@ -748,9 +748,7 @@ PyObject* PyUNO_new_UNCHECKED (
         tmp_interface = ssf->createInstanceWithArguments(arguments);
         tmp_invocation.set(tmp_interface, UNO_QUERY);
         if (!tmp_invocation.is() && tmp_interface.is()) {
-            throw RuntimeException(
-                "XInvocation2 not implemented, cannot interact with object",
-                Reference<XInterface>());
+            throw RuntimeException("XInvocation2 not implemented, cannot interact with object");
         }
     }
     if (!tmp_interface.is())

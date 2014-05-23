@@ -1158,8 +1158,7 @@ Any RegistryEnumueration::nextElement(  )
     }
     else
     {
-        throw NoSuchElementException( OUString(
-            "NestedRegistry: no nextElement() !" ),Reference< XInterface > () );
+        throw NoSuchElementException( "NestedRegistry: no nextElement() !" );
     }
     return a;
 }
@@ -1242,8 +1241,7 @@ void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
     throw(InvalidRegistryException, RuntimeException, std::exception)
 {
     throw InvalidRegistryException(
-            OUString("the 'open' method is not specified for a nested registry"),
-            Reference< XInterface >() );
+            "the 'open' method is not specified for a nested registry" );
 }
 
 
@@ -1283,8 +1281,7 @@ void SAL_CALL NestedRegistryImpl::destroy(  )
     throw(InvalidRegistryException, RuntimeException, std::exception)
 {
     throw InvalidRegistryException(
-            OUString("the 'destroy' method is not specified for a nested registry"),
-            Reference< XInterface >() );
+            "the 'destroy' method is not specified for a nested registry" );
 }
 
 

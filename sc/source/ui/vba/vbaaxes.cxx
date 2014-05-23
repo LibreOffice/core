@@ -64,7 +64,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
 {
     ScVbaChart* pChart = static_cast< ScVbaChart* >( xChart.get() );
     if ( !pChart )
-        throw uno::RuntimeException("Object failure, can't access chart implementation", uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException("Object failure, can't access chart implementation"  );
 
     uno::Reference< beans::XPropertySet > xAxisPropertySet;
     if (((nType == xlCategory) || (nType == xlSeriesAxis) || (nType == xlValue)))
@@ -160,7 +160,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) 
     sal_Int32 nAxisGroup = xlPrimary;
     sal_Int32 nType = -1;
     if ( !_nType.hasValue() || ( ( _nType >>= nType ) == false )  )
-        throw uno::RuntimeException("Axes::Item Failed to extract type", uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException("Axes::Item Failed to extract type"  );
 
     if ( _oAxisGroup.hasValue() )
         _oAxisGroup >>= nAxisGroup ;

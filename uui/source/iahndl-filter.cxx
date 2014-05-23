@@ -73,9 +73,7 @@ executeFilterDialog(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(
-            OUString("out of memory"),
-            uno::Reference< uno::XInterface >());
+        throw uno::RuntimeException("out of memory");
     }
 }
 

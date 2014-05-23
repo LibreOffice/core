@@ -611,10 +611,8 @@ Reference< ucb::XSimpleFileAccess3 > BackendImpl::getFileAccess( void )
         if( !m_xSFA.is() )
         {
             throw RuntimeException(
-                OUString(
                 "dp_registry::backend::help::BackendImpl::getFileAccess(), "
-                "could not instatiate SimpleFileAccess." ),
-                Reference< XInterface >() );
+                "could not instatiate SimpleFileAccess."  );
         }
     }
     return m_xSFA;

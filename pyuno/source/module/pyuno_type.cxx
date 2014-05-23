@@ -132,15 +132,13 @@ sal_Unicode PyChar2Unicode( PyObject *obj ) throw ( RuntimeException )
     if( ! PyUnicode_Check( value.get() ) )
     {
         throw RuntimeException(
-            "attribute value of uno.Char is not a unicode string",
-            Reference< XInterface > () );
+            "attribute value of uno.Char is not a unicode string" );
     }
 
     if( PyUnicode_GetSize( value.get() ) < 1 )
     {
         throw RuntimeException(
-            "uno.Char contains an empty unicode string",
-            Reference< XInterface > () );
+            "uno.Char contains an empty unicode string");
     }
 
     sal_Unicode c = (sal_Unicode)PyUnicode_AsUnicode( value.get() )[0];
@@ -155,8 +153,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
     if( !PyStr_Check( typeName.get() ) || ! PyStr_Check( value.get() ) )
     {
         throw RuntimeException(
-            "attributes typeName and/or value of uno.Enum are not strings",
-            Reference< XInterface > () );
+            "attributes typeName and/or value of uno.Enum are not strings" );
     }
 
     OUString strTypeName( OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
@@ -172,7 +169,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
             buf.appendAscii(
                 typeClassToString( (com::sun::star::uno::TypeClass) desc.get()->eTypeClass));
             buf.appendAscii( ", expected ENUM" );
-            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface>  () );
+            throw RuntimeException( buf.makeStringAndClear() );
         }
 
         desc.makeComplete();
@@ -191,7 +188,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
             OUStringBuffer buf;
             buf.appendAscii( "value " ).appendAscii( stringValue ).appendAscii( "is unknown in enum " );
             buf.appendAscii( PyStr_AsString( typeName.get() ) );
-            throw RuntimeException( buf.makeStringAndClear(), Reference<XInterface> () );
+            throw RuntimeException( buf.makeStringAndClear() );
         }
         ret = Any( &pEnumDesc->pEnumValues[i], desc.get()->pWeakRef );
     }
@@ -199,7 +196,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
     {
         OUStringBuffer buf;
         buf.appendAscii( "enum " ).appendAscii( PyStr_AsString(typeName.get()) ).appendAscii( " is unknown" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface>  () );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
     return ret;
 }
@@ -211,8 +208,7 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
     if( !PyStr_Check( pyName.get() ) )
     {
         throw RuntimeException(
-            "type object does not have typeName property",
-            Reference< XInterface > () );
+            "type object does not have typeName property" );
     }
 
     PyRef pyTC( PyObject_GetAttrString( o, "typeClass" ), SAL_NO_ACQUIRE );
@@ -224,8 +220,7 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
     {
         OUStringBuffer buf;
         buf.appendAscii( "type " ).append(name).appendAscii( " is unknown" );
-        throw RuntimeException(
-            buf.makeStringAndClear(), Reference< XInterface > () );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
     if( desc.get()->eTypeClass != (typelib_TypeClass) *(sal_Int32*)enumValue.getValue() )
     {
@@ -234,8 +229,7 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
         buf.appendAscii( typeClassToString( (TypeClass) desc.get()->eTypeClass) );
         buf.appendAscii( ", but type got construct with typeclass " );
         buf.appendAscii( typeClassToString( (TypeClass) *(sal_Int32*)enumValue.getValue() ) );
-        throw RuntimeException(
-            buf.makeStringAndClear(), Reference< XInterface > () );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
     return desc.get()->pWeakRef;
 }

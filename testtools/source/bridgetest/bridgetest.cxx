@@ -1112,9 +1112,7 @@ inline bool makeSurrogate(
     Mapping uno2cpp( aUnoEnv_ano.get(), aCppEnv_ano.get() );
     if (!cpp2uno.is() || !uno2cpp.is())
     {
-        throw RuntimeException(
-            "cannot get C++-UNO mappings!",
-            Reference< XInterface >() );
+        throw RuntimeException("cannot get C++-UNO mappings!" );
     }
     cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &unoI.m_pUnoI ),
@@ -1122,8 +1120,7 @@ inline bool makeSurrogate(
     if (! unoI.is())
     {
         throw RuntimeException(
-            "mapping C++ to binary UNO failed!",
-            Reference< XInterface >() );
+            "mapping C++ to binary UNO failed!" );
     }
     uno2cpp.mapInterface(
         reinterpret_cast< void ** >( &rOut ),
@@ -1131,8 +1128,7 @@ inline bool makeSurrogate(
     if (! rOut.is())
     {
         throw RuntimeException(
-            "mapping binary UNO to C++ failed!",
-            Reference< XInterface >() );
+            "mapping binary UNO to C++ failed!" );
     }
 
     return rOut.is();
@@ -1147,10 +1143,8 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     {
         if (! rArgs.getLength())
         {
-            throw RuntimeException( OUString(
-                                                  "no test object specified!\n"
-                                                  "usage : ServiceName of test object | -u unourl of test object\n" ),
-                                    Reference< XInterface >() );
+            throw RuntimeException( "no test object specified!\n"
+                                    "usage : ServiceName of test object | -u unourl of test object" );
         }
 
         Reference< XInterface > xOriginal;
@@ -1195,17 +1189,12 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 
         if (! xOriginal.is())
         {
-            throw RuntimeException(
-                OUString(
-                              "cannot get test object!"),
-                Reference< XInterface >() );
+            throw RuntimeException( "cannot get test object!" );
         }
         Reference< XBridgeTest > xTest( xOriginal, UNO_QUERY );
         if (! xTest.is())
         {
-            throw RuntimeException(
-                OUString("test object does not implement XBridgeTest!"),
-                Reference< XInterface >() );
+            throw RuntimeException( "test object does not implement XBridgeTest!" );
         }
 
         Reference<XBridgeTest > xLBT;
@@ -1218,9 +1207,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
                       "oneway exception test" ) && bRet;
         if (! bRet)
         {
-            throw RuntimeException(
-                OUString("error: test failed!"),
-                Reference< XInterface >() );
+            throw RuntimeException( "error: test failed!" );
         }
     }
     catch (const Exception & exc)

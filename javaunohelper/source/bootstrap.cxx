@@ -80,8 +80,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                 if (JNI_FALSE != jni_env->ExceptionCheck())
                 {
                     jni_env->ExceptionClear();
-                    throw RuntimeException(
-                        "index out of bounds?!", Reference< XInterface >() );
+                    throw RuntimeException( "index out of bounds?!" );
                 }
                 if (0 != jstr)
                 {
@@ -91,8 +90,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                     if (JNI_FALSE != jni_env->ExceptionCheck())
                     {
                         jni_env->ExceptionClear();
-                        throw RuntimeException(
-                            "index out of bounds?!", Reference< XInterface >() );
+                        throw RuntimeException( "index out of bounds?!" );
                     }
                     if (0 != jstr)
                     {
@@ -138,9 +136,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
             if (xComp.is())
                 xComp->dispose();
-            throw RuntimeException(
-                "cannot get mapping C++ <-> Java!",
-                Reference< XInterface >() );
+            throw RuntimeException("cannot get mapping C++ <-> Java!" );
         }
 
         jobject jret = (jobject)mapping.mapInterface( xContext.get(), ::getCppuType( &xContext ) );

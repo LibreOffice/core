@@ -105,9 +105,7 @@ namespace javaunohelper {
                 vm, JNI_VERSION_1_2, false, jni_env ),
             loader );
     } catch ( ::jvmaccess::UnoVirtualMachine::CreationException & ) {
-        throw css::uno::RuntimeException(
-            OUString("jmvaccess::UnoVirtualMachine::CreationException occurred" ),
-            css::uno::Reference< css::uno::XInterface >() );
+        throw css::uno::RuntimeException( "jvmaccess::UnoVirtualMachine::CreationException occurred" );
     }
 }
 

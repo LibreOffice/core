@@ -134,22 +134,21 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
     PyThreadState * state = PyThreadState_Get();
     if( ! state )
     {
-        throw RuntimeException( OUString( "python global interpreter must be held (thread must be attached)" ),
-                                Reference< XInterface > () );
+        throw RuntimeException( "python global interpreter must be held (thread must be attached)" );
     }
 
     PyObject* pModule = PyImport_AddModule("__main__");
 
     if (!pModule)
     {
-        throw RuntimeException("can't import __main__ module", Reference< XInterface > ());
+        throw RuntimeException("can't import __main__ module");
     }
 
     globalDict = PyRef( PyModule_GetDict(pModule));
 
     if( ! globalDict.is() ) // FATAL !
     {
-        throw RuntimeException("can't find __main__ module", Reference< XInterface > ());
+        throw RuntimeException("can't find __main__ module");
     }
     runtimeImpl = PyDict_GetItemString( globalDict.get() , "pyuno_runtime" );
 }
@@ -173,7 +172,7 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
         buf.appendAscii( PyStr_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
         buf.appendAscii( PyStr_AsString( str.get() ) );
         buf.appendAscii( ")" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
     PyRef dict( PyModule_GetDict( module.get() ) );
     return dict;
@@ -254,9 +253,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
 {
     RuntimeImpl *me = PyObject_New (RuntimeImpl, &RuntimeImpl_Type);
     if( ! me )
-        throw RuntimeException(
-            OUString(  "cannot instantiate pyuno::RuntimeImpl"  ),
-            Reference< XInterface > () );
+        throw RuntimeException( "cannot instantiate pyuno::RuntimeImpl" );
     me->cargo = 0;
     // must use a different struct here, as the PyObject_New
     // makes C++ unusable
@@ -272,15 +269,11 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
             ctx ),
         UNO_QUERY );
     if( ! c->xInvocation.is() )
-        throw RuntimeException(
-            OUString(  "pyuno: couldn't instantiate invocation service"  ),
-            Reference< XInterface > () );
+        throw RuntimeException( "pyuno: couldn't instantiate invocation service" );
 
     c->xTypeConverter = Converter::create(ctx);
     if( ! c->xTypeConverter.is() )
-        throw RuntimeException(
-            OUString(  "pyuno: couldn't instantiate typeconverter service" ),
-            Reference< XInterface > () );
+        throw RuntimeException( "pyuno: couldn't instantiate typeconverter service" );
 
     c->xCoreReflection = theCoreReflection::get(ctx);
 
@@ -291,9 +284,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
     Any a = ctx->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
     a >>= c->xTdMgr;
     if( ! c->xTdMgr.is() )
-        throw RuntimeException(
-            OUString(  "pyuno: couldn't retrieve typedescriptionmanager" ),
-            Reference< XInterface > () );
+        throw RuntimeException( "pyuno: couldn't retrieve typedescriptionmanager" );
 
     me->cargo =c;
     return PyRef( reinterpret_cast< PyObject * > ( me ), SAL_NO_ACQUIRE );
@@ -318,8 +309,7 @@ void Runtime::initialize( const Reference< XComponentContext > & ctx )
 
     if( runtime.is() && impl->cargo->valid )
     {
-        throw RuntimeException("pyuno runtime has already been initialized before",
-                                Reference< XInterface > () );
+        throw RuntimeException("pyuno runtime has already been initialized before" );
     }
     PyRef keep( RuntimeImpl::create( ctx ) );
     PyDict_SetItemString( globalDict.get(), "pyuno_runtime" , keep.get() );
@@ -343,9 +333,8 @@ Runtime::Runtime() throw(  RuntimeException )
     if( ! runtime.is() )
     {
         throw RuntimeException(
-            OUString( "pyuno runtime is not initialized, "
-                                                  "(the pyuno.bootstrap needs to be called before using any uno classes)"),
-            Reference< XInterface > () );
+            "pyuno runtime is not initialized, "
+            "(the pyuno.bootstrap needs to be called before using any uno classes)" );
     }
     impl = reinterpret_cast< RuntimeImpl * > (runtime.get());
     Py_XINCREF( runtime.get() );
@@ -378,8 +367,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
 {
     if( ! impl->cargo->valid )
     {
-        throw RuntimeException("pyuno runtime must be initialized before calling any2PyObject",
-                                Reference< XInterface > () );
+        throw RuntimeException("pyuno runtime must be initialized before calling any2PyObject" );
     }
 
     switch (a.getValueTypeClass ())
@@ -486,7 +474,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         buf.appendAscii( "Any carries enum " );
         buf.append( a.getValueType().getTypeName());
         buf.appendAscii( " with invalid value " ).append( l );
-        throw RuntimeException( buf.makeStringAndClear() , Reference< XInterface > ()  );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
     case typelib_TypeClass_EXCEPTION:
     case typelib_TypeClass_STRUCT:
@@ -501,7 +489,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             OUStringBuffer buf;
             buf.appendAscii( "Couldn't instantiate python representation of structered UNO type " );
             buf.append( a.getValueType().getTypeName() );
-            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
+            throw RuntimeException( buf.makeStringAndClear() );
         }
 
         if( com::sun::star::uno::TypeClass_EXCEPTION == a.getValueTypeClass() )
@@ -578,7 +566,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         OUStringBuffer buf;
         buf.appendAscii( "Unknown UNO type class " );
         buf.append( (sal_Int32 ) a.getValueTypeClass() );
-        throw RuntimeException(buf.makeStringAndClear( ), Reference< XInterface > () );
+        throw RuntimeException(buf.makeStringAndClear( ) );
     }
     }
 }
@@ -631,8 +619,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
 {
     if( ! impl->cargo->valid )
     {
-        throw RuntimeException("pyuno runtime must be initialized before calling any2PyObject",
-                                Reference< XInterface > () );
+        throw RuntimeException("pyuno runtime must be initialized before calling any2PyObject" );
     }
 
     Any a;
@@ -770,8 +757,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             else
             {
                 throw RuntimeException(
-                    "struct or exception wrapper does not support XMaterialHolder",
-                    Reference< XInterface > () );
+                    "struct or exception wrapper does not support XMaterialHolder" );
             }
         }
         else if( PyObject_IsInstance( o, getPyUnoClass().get() ) )
@@ -788,8 +774,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                 if (!my_mh.is ())
                 {
                     throw RuntimeException(
-                        "struct wrapper does not support XMaterialHolder",
-                        Reference< XInterface > () );
+                        "struct wrapper does not support XMaterialHolder" );
                 }
                 else
                     a = my_mh->getMaterial ();
@@ -825,9 +810,8 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             else
             {
                 throw RuntimeException(
-                    OUString( "uno.Any instance not accepted during method call, "
-                                  "use uno.invoke instead"  ),
-                    Reference< XInterface > () );
+                    "uno.Any instance not accepted during method call, "
+                    "use uno.invoke instead" );
             }
         }
         else
@@ -883,7 +867,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             else
             {
                 OUString const msg(lcl_ExceptionMessage(o, 0));
-                throw RuntimeException(msg, Reference<XInterface>());
+                throw RuntimeException(msg);
             }
         }
     }
@@ -1017,9 +1001,7 @@ PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
 {
     tstate = PyThreadState_New( interp );
     if( !tstate  )
-        throw RuntimeException(
-            OUString( "Couldn't create a pythreadstate"  ),
-            Reference< XInterface > () );
+        throw RuntimeException( "Couldn't create a pythreadstate" );
     PyEval_AcquireThread( tstate);
     // set LC_NUMERIC to "C"
     const char * oldLocale =

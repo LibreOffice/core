@@ -471,18 +471,18 @@ public:
 
     virtual void SAL_CALL insertByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
-        throw RuntimeException("ReadOnly container", Reference< XInterface >() );
+        throw RuntimeException("ReadOnly container" );
 
     }
     virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
-        throw RuntimeException("ReadOnly container", Reference< XInterface >() );
+        throw RuntimeException("ReadOnly container" );
     }
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
-        throw RuntimeException("ReadOnly container", Reference< XInterface >() );
+        throw RuntimeException("ReadOnly container" );
 
     }
 

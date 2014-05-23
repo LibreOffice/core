@@ -108,7 +108,7 @@ namespace io_acceptor
                   {
                       OUString sMessage( "AlreadyAcceptingException :" );
                       sMessage += sConnectionDescription;
-                      throw AlreadyAcceptingException( sMessage , Reference< XInterface > () );
+                      throw AlreadyAcceptingException( sMessage );
                   }
                   *m_pFlag = true;
             }
@@ -138,7 +138,7 @@ namespace io_acceptor
         {
             // instantiate another acceptor for different ports
             OUString sMessage = "acceptor::accept called multiple times with different conncetion strings\n";
-            throw ConnectionSetupException( sMessage, Reference< XInterface > () );
+            throw ConnectionSetupException( sMessage );
         }
 
         if( m_sLastDescription.isEmpty() )
@@ -219,7 +219,7 @@ namespace io_acceptor
                         OUString message("Acceptor: unknown delegatee ");
                         message += delegatee;
 
-                        throw ConnectionSetupException(message, Reference<XInterface>());
+                        throw ConnectionSetupException(message);
                     }
                 }
             }

@@ -96,7 +96,7 @@ public:
         , nPosConsumed (0)
     {
         if ( ! used )
-            throw RuntimeException("pyuno._createUnoStructHelper failed to create new dictionary", Reference< XInterface > ());
+            throw RuntimeException("pyuno._createUnoStructHelper failed to create new dictionary");
     }
     ~fillStructState()
     {
@@ -120,7 +120,7 @@ public:
                 buf.append(pos);
             }
             buf.appendAscii( " initialised multiple times.");
-            throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
+            throw RuntimeException(buf.makeStringAndClear());
         }
         initialised[key] = true;
         if ( pos >= 0 )
@@ -191,7 +191,7 @@ static void fillStruct(
             buf.appendAscii( "' of struct type '");
             buf.append(pCompType->aBase.pTypeName);
             buf.appendAscii( "' not given a value.");
-            throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
+            throw RuntimeException(buf.makeStringAndClear());
         }
     }
 }
@@ -425,7 +425,7 @@ static PyObject *createUnoStructHelper(
                             buf.append( state.getCntConsumed() );
                             buf.appendAscii( ", got " );
                             buf.append( (sal_Int32) PyTuple_Size(initializer) );
-                            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > ());
+                            throw RuntimeException( buf.makeStringAndClear());
                         }
                         ret = PyRef( PyTuple_Pack(2, returnCandidate.get(), state.getUsed()), SAL_NO_ACQUIRE);
                     }
@@ -524,7 +524,7 @@ static PyObject *getConstantByName(
                 OUStringBuffer buf;
                 buf.appendAscii( "pyuno.getConstantByName: " ).append( typeName );
                 buf.appendAscii( "is not a constant" );
-                throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > () );
+                throw RuntimeException(buf.makeStringAndClear() );
             }
             PyRef constant = runtime.any2PyObject( td->getConstantValue() );
             ret = constant.getAcquired();
@@ -534,7 +534,7 @@ static PyObject *getConstantByName(
     {
         // to the python programmer, this is a runtime exception,
         // do not support tweakings with the type system
-        RuntimeException runExc( e.Message, Reference< XInterface > () );
+        RuntimeException runExc( e.Message );
         raisePyExceptionWithAny( makeAny( runExc ) );
     }
     catch(const com::sun::star::script::CannotConvertException & e)
@@ -674,7 +674,7 @@ static PyObject *systemPathToFileUrl(
         buf.append( (sal_Int32) e );
         buf.appendAscii( ")" );
         raisePyExceptionWithAny(
-            makeAny( RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () )));
+            makeAny( RuntimeException( buf.makeStringAndClear() )));
         return NULL;
     }
     return ustring2PyUnicode( url ).getAcquired();
@@ -700,7 +700,7 @@ static PyObject * fileUrlToSystemPath(
         buf.append( (sal_Int32) e );
         buf.appendAscii( ")" );
         raisePyExceptionWithAny(
-            makeAny( RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () )));
+            makeAny( RuntimeException( buf.makeStringAndClear() )));
         return NULL;
     }
     return ustring2PyUnicode( sysPath ).getAcquired();

@@ -222,9 +222,7 @@ void OTextOutputStream::checkOutputStream()
     throw(IOException)
 {
     if (! mxStream.is() )
-        throw IOException(
-            OUString("output stream is not initialized, you have to use setOutputStream first"),
-            Reference<XInterface>());
+        throw IOException("output stream is not initialized, you have to use setOutputStream first");
 }
 
 

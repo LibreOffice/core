@@ -98,8 +98,7 @@ executeErrorDialog(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException("out of memory",
-            uno::Reference< uno::XInterface >());
+        throw uno::RuntimeException("out of memory");
     }
 
     sal_uInt16 aResult = xBox->Execute();

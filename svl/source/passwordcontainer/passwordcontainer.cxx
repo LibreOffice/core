@@ -487,7 +487,7 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
 
     // problems with decoding
     OSL_FAIL( "Problem with decoding\n" );
-    throw RuntimeException("Can't decode!", Reference< XInterface >() );
+    throw RuntimeException("Can't decode!" );
 }
 
 
@@ -566,7 +566,7 @@ OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUS
 
     // problems with encoding
     OSL_FAIL( "Problem with encoding\n" );
-    throw RuntimeException("Can't encode!", Reference< XInterface >() );
+    throw RuntimeException("Can't encode!" );
 }
 
 

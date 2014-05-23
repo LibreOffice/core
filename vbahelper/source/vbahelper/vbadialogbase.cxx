@@ -29,9 +29,7 @@ void SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException, std::exceptio
     {
         aURL = mapIndexToName( mnIndex );
         if( aURL.isEmpty() )
-            throw uno::RuntimeException(
-                " Unable to open the specified dialog ",
-                uno::Reference< XInterface > () );
+            throw uno::RuntimeException( "Unable to open the specified dialog" );
 
         uno::Sequence< beans::PropertyValue > dispatchProps(0);
         dispatchRequests( m_xModel, aURL, dispatchProps );

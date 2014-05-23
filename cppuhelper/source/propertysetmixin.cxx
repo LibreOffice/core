@@ -231,8 +231,7 @@ void Data::initProperties(
                             getTypeArguments());
                     if (args.getLength() != 1) {
                         throw css::uno::RuntimeException(
-                            "inconsistent UNO type registry",
-                            css::uno::Reference< css::uno::XInterface >());
+                            "inconsistent UNO type registry");
                     }
                     t = args[0];
                 }
@@ -240,8 +239,7 @@ void Data::initProperties(
                     = handleNames->size();
                 if (handles > SAL_MAX_INT32) {
                     throw css::uno::RuntimeException(
-                        "interface type has too many attributes",
-                        css::uno::Reference< css::uno::XInterface >());
+                        "interface type has too many attributes");
                 }
                 rtl::OUString name(members[i]->getMemberName());
                 if (!properties.insert(
@@ -258,8 +256,7 @@ void Data::initProperties(
                     second)
                 {
                     throw css::uno::RuntimeException(
-                        "inconsistent UNO type registry",
-                        css::uno::Reference< css::uno::XInterface >());
+                        "inconsistent UNO type registry");
                 }
                 handleNames->push_back(name);
             }
@@ -448,9 +445,8 @@ PropertySetMixinImpl::Impl::Impl(
             css::uno::UNO_QUERY_THROW);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
-            ("unexpected com.sun.star.container.NoSuchElementException: "
-             + e.Message),
-            css::uno::Reference< css::uno::XInterface >());
+            "unexpected com.sun.star.container.NoSuchElementException: "
+             + e.Message);
     }
     std::vector< rtl::OUString > handleNames;
     initProperties(ifc, m_absentOptional, &handleNames);

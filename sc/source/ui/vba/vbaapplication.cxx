@@ -251,9 +251,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException, std::exception)
 
     if (!aSelection.is())
     {
-        throw uno::RuntimeException(
-            OUString("failed to obtain current selection"),
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "failed to obtain current selection" );
     }
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( aSelection, uno::UNO_QUERY_THROW );
@@ -292,8 +290,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException, std::exception)
     }
     else
     {
-        throw uno::RuntimeException( sImplementationName + OUString(
-              " not supported"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( sImplementationName + OUString(" not supported" ) );
     }
 }
 
@@ -304,10 +301,10 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException, std::exception )
     uno::Reference< table::XCellRange > xRange( xView->getActiveSheet(), ::uno::UNO_QUERY_THROW);
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell(mxContext);
     if ( !pViewShell )
-        throw uno::RuntimeException("No ViewShell available", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No ViewShell available" );
     ScViewData* pTabView = pViewShell->GetViewData();
     if ( !pTabView )
-        throw uno::RuntimeException("No ViewData available", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No ViewData available" );
 
     sal_Int32 nCursorX = pTabView->GetCurX();
     sal_Int32 nCursorY = pTabView->GetCurY();
@@ -426,8 +423,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
         }
     }
     else
-        throw uno::RuntimeException("Invalid prarameter. It should be a string or False",
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Invalid prarameter. It should be a string or False" );
 }
 
 ::sal_Int32 SAL_CALL
@@ -527,8 +523,7 @@ ScVbaApplication::getActiveSheet() throw (uno::RuntimeException, std::exception)
     if ( !result.is() )
     {
         // Fixme - check if this is reasonable/desired behavior
-        throw uno::RuntimeException("No activeSheet available",
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No activeSheet available" );
     }
     return result;
 
@@ -559,8 +554,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
             bScroll = aScroll;
         }
         else
-            throw uno::RuntimeException("second parameter should be boolean",
-                    uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("second parameter should be boolean" );
     }
 
     OUString sRangeName;
@@ -605,8 +599,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
             //and the createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) to get a root browse::XBrowseNode.
             //for query XInvocation interface.
             //but how to directly get the XInvocation?
-            throw uno::RuntimeException("invalid reference for range name, it should be procedure name",
-                    uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("invalid reference for range name, it should be procedure name" );
         }
         return;
     }
@@ -640,8 +633,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         }
         return;
     }
-    throw uno::RuntimeException("invalid reference or name",
-            uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("invalid reference or name" );
 }
 
 sal_Int32 SAL_CALL
@@ -693,7 +685,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, s
                 break;
             }
             default:
-                throw uno::RuntimeException("Unknown value for Cursor pointer", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Unknown value for Cursor pointer" );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
         }

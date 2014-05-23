@@ -269,7 +269,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
     {
         if ( !m_BasicInfo.get() )
             // shouln't get here
-            throw RuntimeException("No information to create dialog", Reference< XInterface >() );
+            throw RuntimeException("No information to create dialog" );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
         OUString aURL("" );
@@ -617,9 +617,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
             if ( !m_xModel.is() )
             {
-                throw RuntimeException(
-                    OUString( "DialogProviderImpl::initialize: invalid argument format!"  ),
-                    Reference< XInterface >() );
+                throw RuntimeException( "DialogProviderImpl::initialize: invalid argument format!" );
             }
         }
         else if ( aArguments.getLength() == 4 )
@@ -639,9 +637,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
         else if ( aArguments.getLength() > 4 )
         {
-            throw RuntimeException(
-                OUString( "DialogProviderImpl::initialize: invalid number of arguments!"  ),
-                Reference< XInterface >() );
+            throw RuntimeException( "DialogProviderImpl::initialize: invalid number of arguments!" );
         }
     }
 

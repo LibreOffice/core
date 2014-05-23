@@ -212,8 +212,7 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
         if( !xAccess.is() )
         {
             throw DeploymentException(
-                    OUString("/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessible"),
-                Reference< XInterface >() );
+                    "/singletons/com.sun.star.reflection.theTypeDescriptionManager singleton not accessible" );
         }
     }
     return xAccess;
@@ -236,8 +235,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
         if( !xTypeConverter.is() )
         {
             throw DeploymentException(
-                OUString("com.sun.star.script.Converter service not accessible"),
-                Reference< XInterface >() );
+                "com.sun.star.script.Converter service not accessible" );
         }
     }
     return xTypeConverter;

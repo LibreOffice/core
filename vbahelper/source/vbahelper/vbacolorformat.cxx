@@ -75,7 +75,7 @@ ScVbaColorFormat::getRGB() throw (uno::RuntimeException, std::exception)
         nRGB = m_nFillFormatBackColor;
         break;
     default:
-        throw uno::RuntimeException( "Second parameter of ColorFormat is wrong." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Second parameter of ColorFormat is wrong." );
     }
     nRGB = OORGBToXLRGB( nRGB );
     return nRGB;
@@ -108,7 +108,7 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException, std::ex
         }
         break;
     default:
-        throw uno::RuntimeException( "Second parameter of ColorFormat is wrong." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Second parameter of ColorFormat is wrong." );
     }
 }
 

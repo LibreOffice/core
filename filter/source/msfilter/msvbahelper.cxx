@@ -759,7 +759,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
         }
         MacroResolvedInfo aMacroInfo = resolveVBAMacro( pShell, aMacroName );
         if( !aMacroInfo.mbFound )
-            throw uno::RuntimeException( "The procedure doesn't exist", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "The procedure doesn't exist" );
        MacroName = aMacroInfo.msResolvedMacro;
     }
     uno::Reference< ui::XUIConfigurationManagerSupplier > xCfgSupplier(rxModel, uno::UNO_QUERY_THROW);

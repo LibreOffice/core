@@ -86,7 +86,7 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
 
 void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented" );
 }
 
 OUString

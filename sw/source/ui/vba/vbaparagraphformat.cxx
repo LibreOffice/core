@@ -296,7 +296,7 @@ uno::Any SAL_CALL SwVbaParagraphFormat::getTabStops() throw (uno::RuntimeExcepti
 
 void SAL_CALL SwVbaParagraphFormat::setTabStops( const uno::Any& /*_tabstops*/ ) throw (uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented" );
 }
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getWidowControl() throw (uno::RuntimeException, std::exception)

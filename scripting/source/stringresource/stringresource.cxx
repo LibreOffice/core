@@ -195,7 +195,7 @@ OUString StringResourceImpl::implResolveString
     {
         OUString errorMsg("StringResourceImpl: No entry for ResourceID: ");
         errorMsg = errorMsg.concat( ResourceID );
-        throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
+        throw ::com::sun::star::resource::MissingResourceException( errorMsg );
     }
     return aRetStr;
 }
@@ -330,7 +330,7 @@ void StringResourceImpl::implCheckReadOnly( const sal_Char* pExceptionMsg )
     if( m_bReadOnly )
     {
         OUString errorMsg = OUString::createFromAscii( pExceptionMsg );
-        throw NoSupportException( errorMsg, Reference< XInterface >() );
+        throw NoSupportException( errorMsg );
     }
 }
 
@@ -443,7 +443,7 @@ void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* p
         {
             OUString errorMsg("StringResourceImpl: No entries for ResourceID: ");
             errorMsg = errorMsg.concat( ResourceID );
-            throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
+            throw ::com::sun::star::resource::MissingResourceException( errorMsg );
         }
         rHashMap.erase( it );
         pLocaleItem->m_bModified = true;
@@ -477,7 +477,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
     if( getItemForLocale( locale, false ) != NULL )
     {
         OUString errorMsg("StringResourceImpl: locale already exists");
-        throw ElementExistException( errorMsg, Reference< XInterface >() );
+        throw ElementExistException( errorMsg );
     }
 
     // TODO?: Check if locale is valid? How?
@@ -632,7 +632,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
     if( m_nNextUniqueNumericId < UNIQUE_NUMBER_NEEDS_INITIALISATION )
     {
         OUString errorMsg("getUniqueNumericId: Extended sal_Int32 range");
-        throw NoSupportException( errorMsg, Reference< XInterface >() );
+        throw NoSupportException( errorMsg );
     }
     return m_nNextUniqueNumericId;
 }
@@ -746,8 +746,7 @@ Reference< XMultiComponentFactory > StringResourceImpl::getMultiComponentFactory
         if( !xSMgr.is() )
         {
             throw RuntimeException(
-                OUString( "StringResourceImpl::getMultiComponentFactory: Couldn't instantiate MultiComponentFactory"  ),
-                    Reference< XInterface >() );
+                "StringResourceImpl::getMultiComponentFactory: Couldn't instantiate MultiComponentFactory" );
         }
         m_xMCF = xSMgr;
     }
@@ -2329,8 +2328,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
     if ( aArguments.getLength() != 5 )
     {
         throw RuntimeException(
-            OUString( "StringResourceWithStorageImpl::initialize: invalid number of arguments!"  ),
-            Reference< XInterface >() );
+            "StringResourceWithStorageImpl::initialize: invalid number of arguments!" );
     }
 
     bool bOk = (aArguments[0] >>= m_xStorage);
@@ -2656,8 +2654,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     if ( aArguments.getLength() != 6 )
     {
         throw RuntimeException(
-            OUString( "XInitialization::initialize: invalid number of arguments!" ),
-            Reference< XInterface >() );
+            "XInitialization::initialize: invalid number of arguments!" );
     }
 
     bool bOk = (aArguments[0] >>= m_aLocation);

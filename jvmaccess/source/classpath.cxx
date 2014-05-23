@@ -68,10 +68,8 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                     url = expUrl->expand( expander );
                 } catch (const css::lang::IllegalArgumentException & e) {
                     throw css::uno::RuntimeException(
-                        (OUString(
-                                "com.sun.star.lang.IllegalArgumentException: ")
-                         + e.Message),
-                        css::uno::Reference< css::uno::XInterface >());
+                        OUString("com.sun.star.lang.IllegalArgumentException: ")
+                         + e.Message);
                 }
             }
             jvalue arg;

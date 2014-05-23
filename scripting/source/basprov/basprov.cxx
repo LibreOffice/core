@@ -274,8 +274,7 @@ namespace basprov
             {
                 /*
                 throw RuntimeException(
-                    OUString( "BasicProviderImpl::initialize: no scripting context!"  ),
-                    Reference< XInterface >() );
+                    "BasicProviderImpl::initialize: no scripting context!" );
                 */
             }
         }

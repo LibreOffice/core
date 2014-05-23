@@ -93,9 +93,7 @@ Reference<XInterface> initResourceIndexAccess(ResourceIndexAccess* pResourceInde
         // xResult does not help the client to analyse the problem
         // and will crash on getByIndex calls, better just give back an empty Reference
         // so that such ResourceStringIndexAccess instances are never release into the wild
-        throw RuntimeException(
-            OUString("resource manager could not get initialized"),
-            /* xResult */ Reference<XInterface>());
+        throw RuntimeException("resource manager could not get initialized");
     return xResult;
 }
 
@@ -145,17 +143,13 @@ Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
         throw IndexOutOfBoundsException();
     SolarMutexGuard aGuard;
     if(!m_pResMgr.get())
-        throw RuntimeException(
-            OUString("resource manager not available"),
-            Reference<XInterface>());
+        throw RuntimeException("resource manager not available");
 
     const ResId aId(static_cast<sal_uInt16>(nIdx), *m_pResMgr);
     aId.SetRT(RSC_STRING);
 
     if(!m_pResMgr->IsAvailable(aId))
-        throw RuntimeException(
-            OUString("string resource for id not available"),
-            Reference<XInterface>());
+        throw RuntimeException("string resource for id not available");
 
     return makeAny(aId.toString());
 }
@@ -168,16 +162,12 @@ Any SAL_CALL ResourceStringListIndexAccess::getByIndex(sal_Int32 nIdx)
     SolarMutexGuard aGuard;
 
     if(!m_pResMgr.get())
-        throw RuntimeException(
-            OUString("resource manager not available"),
-            Reference<XInterface>());
+        throw RuntimeException("resource manager not available");
 
     const ResId aId(static_cast<sal_uInt16>(nIdx), *m_pResMgr);
     aId.SetRT(RSC_STRINGARRAY);
     if(!m_pResMgr->IsAvailable(aId))
-        throw RuntimeException(
-            OUString("string list resource for id not available"),
-            Reference<XInterface>());
+        throw RuntimeException("string list resource for id not available");
     const ResStringArray aStringList(aId);
     Sequence<PropertyValue> aPropList(aStringList.Count());
     for(sal_Int32 nCount = 0; nCount != aPropList.getLength(); ++nCount)

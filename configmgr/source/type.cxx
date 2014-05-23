@@ -60,9 +60,7 @@ Type elementType(Type type) {
         return TYPE_HEXBINARY;
     default:
         assert(false);
-        throw css::uno::RuntimeException(
-            "this cannot happen",
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("this cannot happen");
     }
 }
 
@@ -101,9 +99,7 @@ css::uno::Type mapType(Type type) {
             css::uno::Sequence< css::uno::Sequence< sal_Int8 > > >::get();
     default:
         assert(false);
-        throw css::uno::RuntimeException(
-            "this cannot happen",
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("this cannot happen");
     }
 }
 

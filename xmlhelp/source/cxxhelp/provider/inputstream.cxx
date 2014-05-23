@@ -128,8 +128,7 @@ XInputStream_impl::skipBytes(
 {
     if (m_aFile.setPos(osl_Pos_Current, sal_uInt64(nBytesToSkip)) != osl::FileBase::E_None)
     {
-        throw io::IOException(OUString(
-            "XInputStream_impl::skipBytes failed seek"), uno::Reference< uno::XInterface >());
+        throw io::IOException("XInputStream_impl::skipBytes failed seek");
     }
 }
 

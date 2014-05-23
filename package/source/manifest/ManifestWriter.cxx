@@ -66,7 +66,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
     }
     catch( SAXException& )
     {
-        throw RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw RuntimeException( THROW_WHERE );
     }
 }
 

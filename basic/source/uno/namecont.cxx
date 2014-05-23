@@ -242,7 +242,7 @@ void NameContainer::removeByName( const OUString& aName )
     if( aIt == mHashMap.end() )
     {
         OUString sMessage = "\"" + aName + "\" not found";
-        throw NoSuchElementException(sMessage, uno::Reference< uno::XInterface >());
+        throw NoSuchElementException(sMessage);
     }
 
     sal_Int32 iHashResult = (*aIt).second;

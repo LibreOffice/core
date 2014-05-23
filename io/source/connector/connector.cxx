@@ -105,7 +105,7 @@ namespace stoc_connector
                     sMessage += OUString::number(  pConn->m_pipe.getError() );
                     sMessage += ")";
                     delete pConn;
-                    throw NoConnectException( sMessage ,Reference< XInterface > () );
+                    throw NoConnectException( sMessage );
                 }
             }
             else if ( aDesc.getName() == "socket" )
@@ -131,7 +131,7 @@ namespace stoc_connector
                     sMessage += sError;
                     sMessage += ")";
                     delete pConn;
-                    throw NoConnectException( sMessage, Reference < XInterface > () );
+                    throw NoConnectException( sMessage );
                 }
                 if( bTcpNoDelay )
                 {
@@ -159,7 +159,7 @@ namespace stoc_connector
                     OUString message("Connector: unknown delegatee ");
                     message += delegatee;
 
-                    throw ConnectionSetupException(message, Reference<XInterface>());
+                    throw ConnectionSetupException(message);
                 }
 
                 sal_Int32 index = sConnectionDescription.indexOf((sal_Unicode) ',');
@@ -170,8 +170,7 @@ namespace stoc_connector
         }
         catch (const rtl::MalformedUriException & rEx)
         {
-            throw ConnectionSetupException(rEx.getMessage(),
-                                           Reference< XInterface > ());
+            throw ConnectionSetupException(rEx.getMessage());
         }
     }
 

@@ -980,8 +980,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
         else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
             aValue <<= m_aNewRelInfo;
         else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
-            throw io::IOException( "Wrong relinfo stream!",
-                                    uno::Reference< uno::XInterface >() );
+            throw io::IOException( "Wrong relinfo stream!" );
 
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
             if ( aResult[nInd].Name == "RelationsInfo" )
@@ -1152,8 +1151,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRel
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
         return m_aNewRelInfo;
     else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
-            throw io::IOException( "Wrong relinfo stream!",
-                                    uno::Reference< uno::XInterface >() );
+            throw io::IOException( "Wrong relinfo stream!" );
 }
 
 void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream >& xDestStream )

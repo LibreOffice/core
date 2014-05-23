@@ -319,7 +319,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, true ) )
-        throw IOException("Unexpected character is used in file name.", uno::Reference< XInterface >() );
+        throw IOException("Unexpected character is used in file name." );
 
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
@@ -359,8 +359,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
         // FIXME64: need to append a ZIP64 header instead of throwing
         // We're about to silently lose people's data - which they are
         // unlikely to appreciate so fail instead:
-        throw IOException( "File contains streams that are too large.",
-                           uno::Reference< XInterface >() );
+        throw IOException( "File contains streams that are too large." );
     }
 
     Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
@@ -381,8 +380,7 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
         // FIXME64: need to append a ZIP64 header instead of throwing
         // We're about to silently lose people's data - which they are
         // unlikely to appreciate so fail instead:
-        throw IOException( "File contains streams that are too large.",
-                           uno::Reference< XInterface >() );
+        throw IOException( "File contains streams that are too large." );
     }
 }
 
@@ -390,7 +388,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, true ) )
-        throw IOException("Unexpected character is used in file name.", uno::Reference< XInterface >() );
+        throw IOException("Unexpected character is used in file name." );
 
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
@@ -435,8 +433,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
         // FIXME64: need to append a ZIP64 header instead of throwing
         // We're about to silently lose people's data - which they are
         // unlikely to appreciate so fail instead:
-        throw IOException( "File contains streams that are too large.",
-                           uno::Reference< XInterface >() );
+        throw IOException( "File contains streams that are too large." );
     }
 
     Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );

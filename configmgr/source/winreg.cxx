@@ -212,8 +212,7 @@ bool dumpWindowsRegistry(OUString* pFileURL)
         return false;
     default:
         throw css::uno::RuntimeException(
-            "cannot create temporary file",
-            css::uno::Reference< css::uno::XInterface >());
+            "cannot create temporary file");
     }
     writeData(
         aFileHandle,

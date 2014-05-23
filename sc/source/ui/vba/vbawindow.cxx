@@ -103,13 +103,13 @@ public:
     {
         ScModelObj* pModel = static_cast< ScModelObj* >( m_xModel.get() );
         if ( !pModel )
-            throw uno::RuntimeException("Cannot obtain current document", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Cannot obtain current document" );
         ScDocShell* pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
         if ( !pDocShell )
-            throw uno::RuntimeException("Cannot obtain docshell", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Cannot obtain docshell" );
         ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
         if ( !pViewShell )
-            throw uno::RuntimeException("Cannot obtain view shell", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Cannot obtain view shell" );
 
         SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
         SCTAB nIndex = 0;
@@ -289,7 +289,7 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 /*
     sal_Int32 nSheets = 0;
     sal_Int32 nPosition = 0;
-    throw uno::RuntimeException("No Implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("No Implemented" );
     sal_Bool bSheets = ( Sheets >>= nSheets );
     sal_Bool bPosition = ( Position >>= nPosition );
     if ( bSheets || bPosition ) // at least one param specified
@@ -443,7 +443,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
         else if (nwindowState == xlNormal)
             pWork -> Restore();
         else
-            throw uno::RuntimeException("Invalid Parameter", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Invalid Parameter" );
     }
 }
 

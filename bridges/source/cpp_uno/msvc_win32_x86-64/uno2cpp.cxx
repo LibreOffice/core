@@ -411,9 +411,7 @@ void unoInterfaceProxyDispatch(
                      ((typelib_InterfaceMethodTypeDescription *)pMemberTD)->pParams,
                      pReturn, pArgs, ppException ) )
             {
-                RuntimeException aExc(
-                    OUString("Too many parameters!"),
-                    Reference< XInterface >() );
+                RuntimeException aExc( "Too many parameters!" );
 
                 Type const & rExcType = ::getCppuType( &aExc );
                 ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
@@ -423,9 +421,7 @@ void unoInterfaceProxyDispatch(
     }
     default:
     {
-        RuntimeException aExc(
-            OUString("Illegal member type description!"),
-            Reference< XInterface >() );
+        RuntimeException aExc( "Illegal member type description!" );
 
         Type const & rExcType = ::getCppuType( &aExc );
         // Binary identical null reference (whatever that comment means...)

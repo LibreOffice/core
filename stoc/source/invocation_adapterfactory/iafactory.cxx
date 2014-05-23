@@ -224,7 +224,7 @@ inline void AdapterImpl::release()
 static inline void constructRuntimeException(
     uno_Any * pExc, const OUString & rMsg )
 {
-    RuntimeException exc( rMsg, Reference< XInterface >() );
+    RuntimeException exc( rMsg );
     // no conversion needed due to binary compatibility + no convertible type
     ::uno_type_any_construct(
         pExc, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
@@ -677,8 +677,7 @@ AdapterImpl::AdapterImpl(
             }
             delete [] m_pInterfaces;
             throw RuntimeException(
-                "cannot retrieve all interface type infos!",
-                Reference< XInterface >() );
+                "cannot retrieve all interface type infos!" );
         }
     }
 
@@ -688,8 +687,7 @@ AdapterImpl::AdapterImpl(
     OSL_ASSERT( 0 != m_pReceiver );
     if (! m_pReceiver)
     {
-        throw RuntimeException(
-            "cannot map receiver!", Reference< XInterface >() );
+        throw RuntimeException( "cannot map receiver!" );
     }
 
     m_pFactory->acquire();
@@ -759,8 +757,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
         !m_pConvertToTD ||
         !m_pAnySeqTD || !m_pShortSeqTD)
     {
-        throw RuntimeException(
-            "missing type descriptions!", Reference< XInterface >() );
+        throw RuntimeException( "missing type descriptions!" );
     }
 }
 
@@ -881,9 +878,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         OSL_ASSERT( xRet.is() );
         if (! xRet.is())
         {
-            throw RuntimeException(
-                "mapping UNO to C++ failed!",
-                Reference< XInterface >() );
+            throw RuntimeException( "mapping UNO to C++ failed!" );
         }
     }
     return xRet;

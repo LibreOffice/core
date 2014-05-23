@@ -151,7 +151,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     }
 
     if( !aRet.hasValue() )
-        throw uno::RuntimeException( "Toolbar do not exist" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Toolbar do not exist" );
 
     return aRet;
 }
@@ -172,7 +172,7 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
     {
         sResourceUrl = m_pCBarHelper->findToolbarByName( m_xNameAccess, sName );
         if( !sResourceUrl.isEmpty() )
-            throw uno::RuntimeException( "Toolbar exists" , uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Toolbar exists" );
     }
     else
     {

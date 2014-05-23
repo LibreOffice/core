@@ -46,8 +46,7 @@ rtl::OUString get_this_libpath() {
         sal_Int32 i = uri.lastIndexOf('/');
         if (i == -1) {
             throw css::uno::DeploymentException(
-                "URI " + uri + " is expected to contain a slash",
-                css::uno::Reference< css::uno::XInterface >());
+                "URI " + uri + " is expected to contain a slash");
         }
         uri = uri.copy(0, i);
         osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
@@ -100,16 +99,14 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
             return false;
         default:
             throw css::uno::DeploymentException(
-                "Cannot iterate directory",
-                css::uno::Reference< css::uno::XInterface >());
+                "Cannot iterate directory");
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
             osl_FileStatus_Mask_FileURL);
         if (i.getFileStatus(stat) != osl::FileBase::E_None) {
             throw css::uno::DeploymentException(
-                "Cannot stat in directory",
-                css::uno::Reference< css::uno::XInterface >());
+                "Cannot stat in directory");
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
             // Ignore backup files:

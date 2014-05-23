@@ -134,7 +134,7 @@ VbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeException,
 uno::Any SAL_CALL
 VbaTextFrame::Characters() throw (uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Not implemented" );
 }
 
 OUString

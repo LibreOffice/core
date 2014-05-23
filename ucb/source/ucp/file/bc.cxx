@@ -598,7 +598,7 @@ BaseContent::removeProperty(
 {
 
     if( m_nState & Deleted )
-        throw beans::UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( THROW_WHERE );
 
     m_pMyShell->deassociate( m_aUncPath, Name );
 }
@@ -744,7 +744,7 @@ BaseContent::setParent(
     throw( lang::NoSupportException,
            RuntimeException, std::exception)
 {
-    throw lang::NoSupportException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+    throw lang::NoSupportException( THROW_WHERE );
 }
 
 
@@ -925,7 +925,7 @@ BaseContent::setPropertyValues(
             OUString NewTitle;
             if( !( Values[i].Value >>= NewTitle ) )
             {
-                ret[i] <<= beans::IllegalTypeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+                ret[i] <<= beans::IllegalTypeException( THROW_WHERE );
                 break;
             }
             else if( NewTitle.isEmpty() )

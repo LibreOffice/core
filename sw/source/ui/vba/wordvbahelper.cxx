@@ -156,7 +156,7 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     }
 
     if( !xText.is() )
-        throw  uno::RuntimeException("no text selection", uno::Reference< uno::XInterface >() );
+        throw  uno::RuntimeException("no text selection" );
 
     return xText;
 }

@@ -680,7 +680,7 @@ BrowseNodeFactoryImpl::createView( sal_Int16 viewType )
         case browse::BrowseNodeFactoryViewTypes::MACROORGANIZER:
             return getOrganizerHierarchy();
         default:
-            throw RuntimeException( "Unknown view type", Reference< XInterface >() );
+            throw RuntimeException( "Unknown view type" );
     }
 }
 

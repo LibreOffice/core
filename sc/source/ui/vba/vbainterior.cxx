@@ -310,7 +310,7 @@ ScVbaInterior::setPattern( const uno::Any& _pattern ) throw (uno::RuntimeExcepti
         SetMixedColor();
     }
     else
-        throw uno::RuntimeException("Invalid Pattern index", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Invalid Pattern index" );
 }
 Color
 ScVbaInterior::GetBackColor()
@@ -358,7 +358,7 @@ ScVbaInterior::setPatternColor( const uno::Any& _patterncolor ) throw (uno::Runt
         SetMixedColor();
     }
     else
-        throw uno::RuntimeException("Invalid Pattern Color", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Invalid Pattern Color" );
 }
 uno::Any SAL_CALL
 ScVbaInterior::getPatternColorIndex() throw (uno::RuntimeException, std::exception)
@@ -381,7 +381,7 @@ ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex ) throw 
         setPatternColor( uno::makeAny( OORGBToXLRGB( nPattColor ) ) );
     }
     else
-        throw uno::RuntimeException("Invalid Pattern Color", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Invalid Pattern Color" );
 }
 
 OUString

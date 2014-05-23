@@ -445,7 +445,7 @@ void DocumentHandlerImpl::initialize(
     }
     else
     {
-        throw RuntimeException( "missing root instance!", Reference< XInterface >() );
+        throw RuntimeException( "missing root instance!" );
     }
 }
 

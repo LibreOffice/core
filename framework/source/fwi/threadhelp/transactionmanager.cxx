@@ -266,13 +266,13 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
                                         {
                                             // Help programmer to find out, why this exception is thrown!
                                             SAL_WARN( "fwk", "TransactionManager...: Owner instance stand in close method. Call was rejected!" );
-                                            throw css::lang::DisposedException( "TransactionManager...\nOwner instance stand in close method. Call was rejected!\n", css::uno::Reference< css::uno::XInterface >() );
+                                            throw css::lang::DisposedException( "TransactionManager...\nOwner instance stand in close method. Call was rejected!" );
                                         }
                                         break;
             case E_CLOSED           :   {
                                             // Help programmer to find out, why this exception is thrown!
                                             SAL_WARN( "fwk", "TransactionManager...: Owner instance already closed. Call was rejected!" );
-                                            throw css::lang::DisposedException( "TransactionManager...\nOwner instance already closed. Call was rejected!\n", css::uno::Reference< css::uno::XInterface >() );
+                                            throw css::lang::DisposedException( "TransactionManager...\nOwner instance already closed. Call was rejected!" );
                                         }
             case E_NOREASON         :   {
                                             // Help programmer to find out

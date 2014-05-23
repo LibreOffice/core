@@ -90,8 +90,7 @@ static inline ::System::Object ^ to_cli_constant( Any const & value )
     default:
         throw RuntimeException(
             "unexpected constant type " +
-            value.getValueType().getTypeName(),
-            Reference< XInterface >() );
+            value.getValueType().getTypeName() );
     }
 }
 
@@ -1265,8 +1264,7 @@ Assembly ^ TypeEmitter::type_resolve(
             else
             {
                 throw RuntimeException(
-                    "unexpected member type in " + entry->m_xType->getName(),
-                    Reference< XInterface >() );
+                    "unexpected member type in " + entry->m_xType->getName() );
             }
         }
         else
@@ -2153,8 +2151,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
         return nullptr;
     default:
         throw RuntimeException(
-            "unexpected type " + xType->getName(),
-            Reference< XInterface >() );
+            "unexpected type " + xType->getName() );
     }
 }
 
