@@ -187,9 +187,10 @@ namespace
             // copying additional attributes for bookmarks or fieldmarks
             ::sw::mark::IBookmark* const pNewBookmark =
                 dynamic_cast< ::sw::mark::IBookmark* const >(pNewMark);
-            if(pNewBookmark)
+            const ::sw::mark::IBookmark* const pOldBookmark =
+                dynamic_cast< const ::sw::mark::IBookmark* >(pMark);
+            if (pNewBookmark && pOldBookmark)
             {
-                const ::sw::mark::IBookmark* const pOldBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(pMark);
                 pNewBookmark->SetKeyCode(pOldBookmark->GetKeyCode());
                 pNewBookmark->SetShortName(pOldBookmark->GetShortName());
             }
