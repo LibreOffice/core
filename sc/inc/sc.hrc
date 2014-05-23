@@ -270,6 +270,7 @@
 #define SID_MOVING_AVERAGE_DIALOG           (SC_MESSAGE_START + 77)
 #define SID_TTEST_DIALOG                    (SC_MESSAGE_START + 78)
 #define SID_FTEST_DIALOG                    (SC_MESSAGE_START + 79)
+#define SID_SEARCH_RESULTS_DIALOG           (SC_MESSAGE_START + 80)
 
 // functions
 
