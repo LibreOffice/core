@@ -2985,7 +2985,7 @@ void Window::Enable( bool bEnable, bool bChild )
 
 void Window::SetCallHandlersOnInputDisabled( bool bCall )
 {
-    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? sal_True : sal_False;
+    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? true : false;
 
     Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
