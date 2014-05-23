@@ -1373,7 +1373,6 @@ void Test::testFormulaDepTrackingDeleteRow()
 
     // A4 should have a broadcaster with A5 listening to it.
     SvtBroadcaster* pBC = m_pDoc->GetBroadcaster(ScAddress(0,4,0));
-    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   broadcaster at A5 = %p\n", pBC);
     CPPUNIT_ASSERT(pBC);
     SvtBroadcaster::ListenersType* pListeners = &pBC->GetAllListeners();
     CPPUNIT_ASSERT_MESSAGE("A5 should have one listener.", pListeners->size() == 1);
@@ -1384,16 +1383,13 @@ void Test::testFormulaDepTrackingDeleteRow()
     CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
     CPPUNIT_ASSERT_EQUAL(90.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
-    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   Deleting row 2....\n");
     // Delete row 2.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
-    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   Done deleting row 2.\n");
 
     pBC = m_pDoc->GetBroadcaster(ScAddress(0,3,0));
-    fprintf(stdout, "Test::testFormulaDepTrackingDeleteRow:   broadcaster at A4 = %p\n", pBC);
     CPPUNIT_ASSERT_MESSAGE("Broadcaster at A5 should have shifted to A4.", pBC);
     pListeners = &pBC->GetAllListeners();
     CPPUNIT_ASSERT_MESSAGE("A3 should have one listener.", pListeners->size() == 1);
