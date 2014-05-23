@@ -701,7 +701,7 @@ bool Window::IsTopWindow() const
         uno::Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
         pThisWin->mpWindowImpl->mpWinData->mnIsTopWindow = xTopWindow.is() ? 1 : 0;
     }
-    return mpWindowImpl->mpWinData->mnIsTopWindow == 1 ? sal_True : sal_False;
+    return mpWindowImpl->mpWinData->mnIsTopWindow == 1 ? true : false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
