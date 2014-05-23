@@ -53,7 +53,10 @@
 #include <unotxdoc.hxx>
 #include <viewsh.hxx>
 
-// And let's also grab the SvpSalVirtualDevice
+#include <salinst.hxx>
+
+// And let's also grab the SvpSalInstance and SvpSalVirtualDevice
+#include <headless/svpinst.hxx>
 #include <headless/svpvd.hxx>
 
 #include <basebmp/bitmapdevice.hxx>
@@ -430,7 +433,11 @@ static unsigned char* doc_paintTile (LibreOfficeKitDocument* pThis,
         SwDoc* pDoc = pDocShell->GetDoc();
         SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
 
-        VirtualDevice aDevice(0, (sal_uInt16)0);
+        ImplSVData* pSVData = ImplGetSVData();
+        SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
+        pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
+
+        VirtualDevice aDevice(0, (sal_uInt16)32);
 
         pViewShell->PaintTile(aDevice, nCanvasWidth, nCanvasHeight,
                                 nTilePosX, nTilePosY, nTileWidth, nTileHeight);
