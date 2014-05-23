@@ -140,6 +140,29 @@ Window::Window( Window* pParent, const ResId& rResId )
         Show();
 }
 
+#if OSL_DEBUG_LEVEL > 0
+namespace
+{
+    OString lcl_createWindowInfo(const Window& i_rWindow)
+    {
+        // skip border windows, they don't carry information which helps diagnosing the problem
+        const Window* pWindow( &i_rWindow );
+        while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
+            pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        if ( !pWindow )
+            pWindow = &i_rWindow;
+
+        OStringBuffer aErrorString;
+        aErrorString.append(' ');
+        aErrorString.append(typeid( *pWindow ).name());
+        aErrorString.append(" (");
+        aErrorString.append(OUStringToOString(pWindow->GetText(), RTL_TEXTENCODING_UTF8));
+        aErrorString.append(")");
+        return aErrorString.makeStringAndClear();
+    }
+}
+#endif
+
 Window::~Window()
 {
     vcl::LazyDeletor<Window>::Undelete( this );
@@ -1401,43 +1424,6 @@ sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
     return nHitTest;
 }
 
-bool Window::ImplIsRealParentPath( const Window* pWindow ) const
-{
-    pWindow = pWindow->GetParent();
-    while ( pWindow )
-    {
-        if ( pWindow == this )
-            return true;
-        pWindow = pWindow->GetParent();
-    }
-
-    return false;
-}
-
-bool Window::ImplIsChild( const Window* pWindow, bool bSystemWindow ) const
-{
-    do
-    {
-        if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
-            break;
-
-        pWindow = pWindow->ImplGetParent();
-
-        if ( pWindow == this )
-            return true;
-    }
-    while ( pWindow );
-
-    return false;
-}
-
-bool Window::ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow ) const
-{
-    if ( this == pWindow )
-        return true;
-    return ImplIsChild( pWindow, bSystemWindow );
-}
-
 int Window::ImplTestMousePointerSet()
 {
     // as soon as mouse is captured, switch mouse-pointer
@@ -1492,6 +1478,43 @@ PointerStyle Window::ImplGetMousePointer() const
     while ( pWindow );
 
     return ePointerStyle;
+}
+
+bool Window::ImplIsRealParentPath( const Window* pWindow ) const
+{
+    pWindow = pWindow->GetParent();
+    while ( pWindow )
+    {
+        if ( pWindow == this )
+            return true;
+        pWindow = pWindow->GetParent();
+    }
+
+    return false;
+}
+
+bool Window::ImplIsChild( const Window* pWindow, bool bSystemWindow ) const
+{
+    do
+    {
+        if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
+            break;
+
+        pWindow = pWindow->ImplGetParent();
+
+        if ( pWindow == this )
+            return true;
+    }
+    while ( pWindow );
+
+    return false;
+}
+
+bool Window::ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow ) const
+{
+    if ( this == pWindow )
+        return true;
+    return ImplIsChild( pWindow, bSystemWindow );
 }
 
 void Window::ImplResetReallyVisible()
@@ -3382,29 +3405,6 @@ void Window::ImplNewInputContext()
     if ( pFontEntry )
         pFocusWin->mpFontCache->Release( pFontEntry );
 }
-
-#if OSL_DEBUG_LEVEL > 0
-namespace
-{
-    OString lcl_createWindowInfo(const Window& i_rWindow)
-    {
-        // skip border windows, they don't carry information which helps diagnosing the problem
-        const Window* pWindow( &i_rWindow );
-        while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
-            pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
-        if ( !pWindow )
-            pWindow = &i_rWindow;
-
-        OStringBuffer aErrorString;
-        aErrorString.append(' ');
-        aErrorString.append(typeid( *pWindow ).name());
-        aErrorString.append(" (");
-        aErrorString.append(OUStringToOString(pWindow->GetText(), RTL_TEXTENCODING_UTF8));
-        aErrorString.append(")");
-        return aErrorString.makeStringAndClear();
-    }
-}
-#endif
 
 void Window::doLazyDelete()
 {
