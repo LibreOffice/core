@@ -2117,6 +2117,7 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
     sal_Int32 nAlpha = MAX_PERCENT;
     Sequence< PropertyValue > aTransformations;
     sax_fastparser::FastAttributeList *aOuterShdwAttrList = mpFS->createAttrList();
+    sax_fastparser::XFastAttributeListRef xOuterShdwAttrList( aOuterShdwAttrList );
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
         if( aEffectProps[i].Name == "Attribs" )
@@ -2247,8 +2248,7 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
 
     if( nEffectToken > 0 )
     {
-        sax_fastparser::XFastAttributeListRef xAttrList( aOuterShdwAttrList );
-        mpFS->startElement( nEffectToken, xAttrList );
+        mpFS->startElement( nEffectToken, xOuterShdwAttrList );
 
         if( bContainsColor )
         {
