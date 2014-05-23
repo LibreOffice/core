@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
 
@@ -413,6 +414,9 @@ void SAL_CALL NewToolbarController::statusChanged( const css::frame::FeatureStat
             setItemImage( aState );
         }
         catch (const css::ucb::CommandFailedException&)
+        {
+        }
+        catch (const css::ucb::ContentCreationException&)
         {
         }
     }
