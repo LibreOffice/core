@@ -2472,7 +2472,12 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
-        getPos() :nError1(FileBase::E_None) {}
+        getPos()
+            : nError1(FileBase::E_None)
+            , nCount_write(0)
+        {
+        }
+
         // initialization
         void setUp() SAL_OVERRIDE
         {
