@@ -2267,7 +2267,9 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
     switch( nCmd )
     {
         case FN_ITEM_DOWN:
-        case FN_ITEM_UP:   nMove = true;
+        case FN_ITEM_UP:
+            nMove = true;
+            //fall-through
         case FN_ITEM_LEFT:
         case FN_ITEM_RIGHT:
         if( !GetWrtShell()->GetView().GetDocShell()->IsReadOnly() &&
