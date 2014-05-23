@@ -258,9 +258,11 @@ void SwFldTypes::dumpAsXml( xmlTextWriterPtr w )
             }
             writer.startElement(name);
             writer.writeFormatAttribute("ptr", "%p", pCurFldFmt->GetField());
+            const SwPostItField* pField = NULL;
             if (pCurFldFmt->GetField()->GetTyp()->Which() == RES_POSTITFLD)
+                pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetField());
+            if (pField)
             {
-                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetField());
                 OString txt8 = OUStringToOString(pField->GetName(), RTL_TEXTENCODING_UTF8);
                 writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
             }
