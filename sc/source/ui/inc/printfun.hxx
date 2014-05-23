@@ -83,6 +83,21 @@ struct ScPrintState                         //  Save Variables from ScPrintFunc
     long    nTotalPages;
     long    nPageStart;
     long    nDocPages;
+    ScPrintState()
+        : nPrintTab(0)
+        , nStartCol(0)
+        , nStartRow(0)
+        , nEndCol(0)
+        , nEndRow(0)
+        , nZoom(0)
+        , nPagesX(0)
+        , nPagesY(0)
+        , nTabPages(0)
+        , nTotalPages(0)
+        , nPageStart(0)
+        , nDocPages(0)
+    {
+    }
 };
 
 class ScPageRowEntry
