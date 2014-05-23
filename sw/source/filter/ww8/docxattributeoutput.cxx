@@ -4197,11 +4197,17 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
             aObjectsInteropList[i].Value >>= sProgID;
             break;
         }
-    if( sProgID.startsWith("Excel.Sheet") )
+    if( sProgID == "Excel.Sheet.12" )
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
         sFileExtension = "xlsx";
+    }
+    else if( sProgID.startsWith("Excel.Sheet") )
+    {
+        sMediaType = "application/vnd.ms-excel";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        sFileExtension = "xls";
     }
     else if( sProgID.startsWith("PowerPoint.Show") )
     {
