@@ -433,7 +433,7 @@ SAL_IMPLEMENT_MAIN()
         }
 
         if (!(aImplName.isEmpty() || aServiceName.isEmpty()))
-            throw RuntimeException("give component exOR service name!", Reference< XInterface >() );
+            throw RuntimeException("give component exOR service name!" );
         if (aImplName.isEmpty() && aServiceName.isEmpty())
         {
             if (! aUnoUrl.endsWithIgnoreAsciiCase( ";uno.ComponentContext" ))

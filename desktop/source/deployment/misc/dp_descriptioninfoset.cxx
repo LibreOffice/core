@@ -97,8 +97,7 @@ OUString getNodeValue(
         return node->getNodeValue();
     } catch (const css::xml::dom::DOMException & e) {
         throw css::uno::RuntimeException(
-            "com.sun.star.xml.dom.DOMException: " + e.Message,
-            css::uno::Reference< css::uno::XInterface >());
+            "com.sun.star.xml.dom.DOMException: " + e.Message);
     }
 }
 

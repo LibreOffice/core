@@ -300,7 +300,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
             _aElements.setValue( rName, aRet );
         else
         {
-            throw container::NoSuchElementException( rName, Reference< XInterface >() );
+            throw container::NoSuchElementException( rName );
         }
     }
     return aRet;

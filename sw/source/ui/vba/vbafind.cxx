@@ -192,7 +192,7 @@ uno::Any SAL_CALL SwVbaFind::getReplacement() throw (uno::RuntimeException, std:
 
 void SAL_CALL SwVbaFind::setReplacement( const uno::Any& /*_replacement */ ) throw (uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented" );
 }
 
 sal_Bool SAL_CALL SwVbaFind::getForward() throw (uno::RuntimeException, std::exception)
@@ -297,12 +297,12 @@ void SAL_CALL SwVbaFind::setMatchAllWordForms( sal_Bool _matchallwordforms ) thr
 
 uno::Any SAL_CALL SwVbaFind::getStyle() throw (uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented" );
 }
 
 void SAL_CALL SwVbaFind::setStyle( const uno::Any& /*_style */ ) throw (uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented" );
 }
 
 sal_Bool SAL_CALL

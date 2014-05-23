@@ -243,7 +243,7 @@ public:
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented" );
     }
 };
 
@@ -343,7 +343,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                 else
                 {
                     OSL_TRACE("SwVbaStyles::Item: the builtin style type is not implemented");
-                    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Not implemented" );
                 }
             }
         }

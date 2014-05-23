@@ -200,7 +200,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
             xAnnoText->insertString( xRange, sText, bOverwrite );
             return xAnnoText->getString();
         }
-        throw uno::RuntimeException("ScVbaComment::Text - bad Start value ", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("ScVbaComment::Text - bad Start value " );
     }
     else if ( aText.hasValue() )
     {

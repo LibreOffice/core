@@ -138,7 +138,7 @@ void SAL_CALL SIDEModel::storeToURL( const OUString&,
 
 void  SIDEModel::notImplemented() throw ( io::IOException )
 {
-    throw io::IOException("Can't store IDE model", uno::Reference< uno::XInterface >() );
+    throw io::IOException("Can't store IDE model" );
 }
 
 } // namespace basctl

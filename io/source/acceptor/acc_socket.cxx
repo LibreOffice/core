@@ -335,16 +335,14 @@ namespace io_acceptor {
             OUStringBuffer message( 128 );
             message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - invalid tcp/ip port " );
             message.append( (sal_Int32) m_nPort );
-            throw ConnectionSetupException(
-                message.makeStringAndClear() , Reference< XInterface> () );
+            throw ConnectionSetupException( message.makeStringAndClear() );
         }
         if( ! m_addr.setHostname( m_sSocketName.pData ) )
         {
             OUStringBuffer message( 128 );
             message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - invalid host " );
             message.append( m_sSocketName );
-            throw ConnectionSetupException(
-                message.makeStringAndClear(), Reference< XInterface > () );
+            throw ConnectionSetupException( message.makeStringAndClear() );
         }
         m_socket.setOption( osl_Socket_OptionReuseAddr, 1);
 
@@ -353,9 +351,7 @@ namespace io_acceptor {
             OUStringBuffer message( 128 );
             message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - couldn't bind on " );
             message.append( m_sSocketName ).appendAscii( ":" ).append((sal_Int32)m_nPort);
-            throw ConnectionSetupException(
-                message.makeStringAndClear(),
-                Reference<XInterface>());
+            throw ConnectionSetupException( message.makeStringAndClear() );
         }
 
         if(! m_socket.listen() )
@@ -363,7 +359,7 @@ namespace io_acceptor {
             OUStringBuffer message( 128 );
             message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - can't listen on " );
             message.append( m_sSocketName ).appendAscii( ":" ).append( (sal_Int32) m_nPort);
-            throw ConnectionSetupException( message.makeStringAndClear(),Reference<XInterface>() );
+            throw ConnectionSetupException( message.makeStringAndClear() );
         }
     }
 

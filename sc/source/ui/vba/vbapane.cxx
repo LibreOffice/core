@@ -48,8 +48,7 @@ ScVbaPane::setScrollColumn( sal_Int32 _scrollcolumn ) throw (uno::RuntimeExcepti
 {
     if( _scrollcolumn < 1 )
     {
-        throw uno::RuntimeException("Column number should not less than 1",
-                uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Column number should not less than 1" );
     }
     m_xViewPane->setFirstVisibleColumn( _scrollcolumn - 1 );
 }
@@ -65,8 +64,7 @@ ScVbaPane::setScrollRow( sal_Int32 _scrollrow ) throw (uno::RuntimeException, st
 {
     if( _scrollrow < 1 )
     {
-        throw uno::RuntimeException("Row number should not less than 1",
-                uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Row number should not less than 1" );
     }
     m_xViewPane->setFirstVisibleRow( _scrollrow - 1 );
 }
@@ -126,7 +124,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
             messageBuffer += OUString( "Error getting parameter: ToLeft\n" );
     }
     if( !messageBuffer.isEmpty() )
-        throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
+        throw uno::RuntimeException( messageBuffer );
 
     sal_Int32 newStartRow = visibleRange.StartRow + downRows;
     if( newStartRow < 0 )
@@ -181,7 +179,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
             messageBuffer += OUString( "Error getting parameter: ToLeft\n" );
     }
     if( !messageBuffer.isEmpty() )
-        throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
+        throw uno::RuntimeException( messageBuffer );
 
     sal_Int32 newStartRow = visibleRange.StartRow + (downPages * vertPageSize );
     if( newStartRow < 0 )

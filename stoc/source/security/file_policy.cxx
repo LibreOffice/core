@@ -371,7 +371,7 @@ void PolicyReader::error( OUString const & msg )
     buf.append( m_pos );
     buf.append( "] " );
     buf.append( msg );
-    throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+    throw RuntimeException( buf.makeStringAndClear() );
 }
 
 PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
@@ -388,7 +388,7 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
         buf.append( "cannot open file \"" );
         buf.append( m_fileName );
         buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 }
 

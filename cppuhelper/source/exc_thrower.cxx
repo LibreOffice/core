@@ -120,8 +120,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
     default:
     {
         OSL_ASSERT( false );
-        RuntimeException exc(
-            "not implemented!", Reference< XInterface >() );
+        RuntimeException exc( "not implemented!" );
         uno_type_any_construct(
             *ppException, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
         break;
@@ -190,16 +189,14 @@ void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
     {
         throw RuntimeException(
             "no UNO exception given "
-            "(must be derived from com::sun::star::uno::Exception)!",
-            Reference< XInterface >() );
+            "(must be derived from com::sun::star::uno::Exception)!" );
     }
 
     Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
     if (! uno2cpp.is())
     {
         throw RuntimeException(
-            "cannot get binary UNO to C++ mapping!",
-            Reference< XInterface >() );
+            "cannot get binary UNO to C++ mapping!" );
     }
 
     Reference< XExceptionThrower > xThrower;
@@ -218,15 +215,13 @@ Any SAL_CALL getCaughtException()
     if (! cpp2uno.is())
     {
         throw RuntimeException(
-            "cannot get C++ to binary UNO mapping!",
-            Reference< XInterface >() );
+            "cannot get C++ to binary UNO mapping!" );
     }
     Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
     if (! uno2cpp.is())
     {
         throw RuntimeException(
-            "cannot get binary UNO to C++ mapping!",
-            Reference< XInterface >() );
+            "cannot get binary UNO to C++ mapping!" );
     }
 
     typelib_TypeDescription * pTD = 0;
@@ -254,9 +249,7 @@ Any SAL_CALL getCaughtException()
 
     if (exc == 0)
     {
-        throw RuntimeException(
-            "rethrowing C++ exception failed!",
-            Reference< XInterface >() );
+        throw RuntimeException( "rethrowing C++ exception failed!" );
     }
 
     Any ret;

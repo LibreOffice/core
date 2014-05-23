@@ -248,7 +248,7 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
     else if( meDocType == EXCEL_DOCUMENT )
         sURL = "private:factory/scalc";
     else
-        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" );
 
     // prepare the media descriptor
     utl::MediaDescriptor aMediaDesc;

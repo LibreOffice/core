@@ -45,7 +45,7 @@ ListPropListener::ListPropListener( const uno::Reference< beans::XPropertySet >&
 void ListPropListener::setValueEvent( const uno::Any& value )
 {
     if( m_pvargIndex.hasValue() || m_pvarColumn.hasValue() )
-        throw uno::RuntimeException( "Bad argument" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Bad argument" );
 
     m_xProps->setPropertyValue( "StringItemList", value );
 }
@@ -61,11 +61,11 @@ uno::Any ListPropListener::getValueEvent()
         sal_Int16 nIndex = -1;
         m_pvargIndex >>= nIndex;
         if( nIndex < 0 || nIndex >= nLength )
-            throw uno::RuntimeException( "Bad row Index" , uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Bad row Index" );
         aRet <<= sList[ nIndex ];
     }
     else if ( m_pvarColumn.hasValue() ) // pvarColumn on its own would be bad
-            throw uno::RuntimeException( "Bad column Index" , uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Bad column Index" );
     else // List() ( e.g. no args )
     {
         uno::Sequence< uno::Sequence< OUString > > sReturnArray( nLength );

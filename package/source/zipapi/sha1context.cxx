@@ -30,8 +30,7 @@ uno::Reference< xml::crypto::XDigestContext > SHA1DigestContext::Create()
     ::rtl::Reference< SHA1DigestContext > xResult = new SHA1DigestContext();
     xResult->m_pDigest = rtl_digest_createSHA1();
     if ( !xResult->m_pDigest )
-        throw uno::RuntimeException("Can not create cipher!",
-                                     uno::Reference< XInterface >() );
+        throw uno::RuntimeException("Can not create cipher!" );
 
     return uno::Reference< xml::crypto::XDigestContext >( xResult.get() );
 }

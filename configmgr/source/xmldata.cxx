@@ -143,8 +143,7 @@ Type parseType(
         }
     }
     throw css::uno::RuntimeException(
-        "invalid type " + text.convertFromUtf8(),
-        css::uno::Reference< css::uno::XInterface >());
+        "invalid type " + text.convertFromUtf8());
 }
 
 bool parseBoolean(xmlreader::Span const & text) {
@@ -156,8 +155,7 @@ bool parseBoolean(xmlreader::Span const & text) {
         return false;
     }
     throw css::uno::RuntimeException(
-        "invalid boolean " + text.convertFromUtf8(),
-        css::uno::Reference< css::uno::XInterface >());
+        "invalid boolean " + text.convertFromUtf8());
 }
 
 OUString parseTemplateReference(
@@ -169,8 +167,7 @@ OUString parseTemplateReference(
             return *defaultTemplateName;
         }
         throw css::uno::RuntimeException(
-            "missing node-type attribute",
-            css::uno::Reference< css::uno::XInterface >());
+            "missing node-type attribute");
     }
     return Data::fullTemplateName(component, nodeType);
 }

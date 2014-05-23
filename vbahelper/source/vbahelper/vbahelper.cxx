@@ -218,7 +218,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
         if ( !( aModel >>= xModel ) || !xModel.is() )
         {
             throw uno::RuntimeException(
-                "Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)" , uno::Reference< uno::XInterface >() );
+                "Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)" );
         }
         else
         {
@@ -228,9 +228,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
     else
     {
         SAL_INFO("vbahelper", "Failed to get " << sKey);
-        throw uno::RuntimeException(
-            "Can't determine the currently selected document" ,
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Can't determine the currently selected document" );
     }
     return xModel;
 }
@@ -810,7 +808,7 @@ UserFormGeometryHelper::UserFormGeometryHelper(
     mbDialog( uno::Reference< awt::XDialog >( xControl, uno::UNO_QUERY ).is() )
 {
     if ( !xControl.is() )
-        throw uno::RuntimeException( "No control is provided!", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "No control is provided!" );
 
     mxWindow.set( xControl->getPeer(), uno::UNO_QUERY_THROW );
     mxModelProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
@@ -1009,7 +1007,7 @@ ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xS
     : xShape( _xShape )
 {
     if( !xShape.is() )
-        throw css::uno::RuntimeException( "No valid shape for helper" , css::uno::Reference< css::uno::XInterface >() );
+        throw css::uno::RuntimeException( "No valid shape for helper" );
 }
 
 double ShapeHelper::getHeight() const

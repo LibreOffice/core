@@ -79,7 +79,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
         if ( readCEN() == -1 )
         {
             aEntries.clear();
-            throw ZipException( "stream data looks to be broken", uno::Reference < XInterface > () );
+            throw ZipException( "stream data looks to be broken" );
         }
     }
 }
@@ -103,7 +103,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
         else if ( readCEN() == -1 )
         {
             aEntries.clear();
-            throw ZipException("stream data looks to be broken", uno::Reference < XInterface > () );
+            throw ZipException("stream data looks to be broken" );
         }
     }
 }
@@ -149,8 +149,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
     {
         if (xEncryptionData->m_nDerivedKeySize < 0)
         {
-            throw ZipIOException("Invalid derived key length!",
-                                  uno::Reference< XInterface >() );
+            throw ZipIOException("Invalid derived key length!" );
         }
 
         uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
@@ -162,8 +161,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
                             xEncryptionData->m_aSalt.getLength(),
                             xEncryptionData->m_nIterationCount ) )
         {
-            throw ZipIOException("Can not create derived key!",
-                                  uno::Reference< XInterface >() );
+            throw ZipIOException("Can not create derived key!" );
         }
 
         if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING )
@@ -182,8 +180,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
         }
         else
         {
-            throw ZipIOException("Unknown cipher algorithm is requested!",
-                                  uno::Reference< XInterface >() );
+            throw ZipIOException("Unknown cipher algorithm is requested!" );
         }
     }
     catch( ... )
@@ -384,16 +381,14 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
     if ( !rData.is() )
-        throw ZipIOException("Encrypted stream without encryption data!\n",
-                            uno::Reference< XInterface >() );
+        throw ZipIOException("Encrypted stream without encryption data!\n" );
 
     if ( !rData->m_aKey.getLength() )
-        throw packages::WrongPasswordException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw packages::WrongPasswordException(THROW_WHERE );
 
     uno::Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException("The stream must be seekable!\n",
-                            uno::Reference< XInterface >() );
+        throw ZipIOException("The stream must be seekable!\n" );
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
@@ -414,7 +409,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
         xStream->readBytes( aReadBuffer, nSize );
 
         if ( !StaticHasValidPassword( rxContext, aReadBuffer, rData ) )
-            throw packages::WrongPasswordException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw packages::WrongPasswordException(THROW_WHERE );
     }
 
     return new XUnbufferedStream( rxContext, xStream, rData );
@@ -580,14 +575,13 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
         // in case no digest is provided there is no way
         // to detect password correctness
         if ( !rData.is() )
-            throw ZipException("Encrypted stream without encryption data!\n",
-                                uno::Reference< XInterface >() );
+            throw ZipException("Encrypted stream without encryption data!" );
 
         // if we have a digest, then this file is an encrypted one and we should
         // check if we can decrypt it or not
         OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
         if ( rData->m_aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
-                throw packages::WrongPasswordException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+                throw packages::WrongPasswordException(THROW_WHERE );
     }
     else
         bNeedRawStream = ( rEntry.nMethod == STORED );
@@ -626,7 +620,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( !rData.is() )
-        throw packages::NoEncryptionException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw packages::NoEncryptionException(THROW_WHERE );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
@@ -647,7 +641,7 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nTestSig;
 
     if (nTestSig != LOCSIG)
-        throw ZipIOException("Invalid LOC header (bad signature)", uno::Reference < XInterface > () );
+        throw ZipIOException("Invalid LOC header (bad signature)" );
     aGrabber >> nVersion;
     aGrabber >> nFlag;
     aGrabber >> nHow;
@@ -701,8 +695,7 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
     }
 
     if ( bBroken && !bRecoveryMode )
-        throw ZipIOException("The stream seems to be broken!",
-                            uno::Reference< XInterface >() );
+        throw ZipIOException("The stream seems to be broken!" );
 
     return true;
 }
@@ -736,17 +729,17 @@ sal_Int32 ZipFile::findEND( )
     }
     catch ( IllegalArgumentException& )
     {
-        throw ZipException("Zip END signature not found!", uno::Reference < XInterface > () );
+        throw ZipException("Zip END signature not found!" );
     }
     catch ( NotConnectedException& )
     {
-        throw ZipException("Zip END signature not found!", uno::Reference < XInterface > () );
+        throw ZipException("Zip END signature not found!" );
     }
     catch ( BufferSizeExceededException& )
     {
-        throw ZipException("Zip END signature not found!", uno::Reference < XInterface > () );
+        throw ZipException("Zip END signature not found!" );
     }
-    throw ZipException("Zip END signature not found!", uno::Reference < XInterface > () );
+    throw ZipException("Zip END signature not found!" );
 }
 
 sal_Int32 ZipFile::readCEN()
@@ -767,25 +760,25 @@ sal_Int32 ZipFile::readCEN()
         aGrabber >> nCenOff;
 
         if ( nTotal * CENHDR > nCenLen )
-            throw ZipException("invalid END header (bad entry count)", uno::Reference < XInterface > () );
+            throw ZipException("invalid END header (bad entry count)" );
 
         if ( nTotal > ZIP_MAXENTRIES )
-            throw ZipException("too many entries in ZIP File", uno::Reference < XInterface > () );
+            throw ZipException("too many entries in ZIP File" );
 
         if ( nCenLen < 0 || nCenLen > nEndPos )
-            throw ZipException("Invalid END header (bad central directory size)", uno::Reference < XInterface > () );
+            throw ZipException("Invalid END header (bad central directory size)" );
 
         nCenPos = nEndPos - nCenLen;
 
         if ( nCenOff < 0 || nCenOff > nCenPos )
-            throw ZipException("Invalid END header (bad central directory size)", uno::Reference < XInterface > () );
+            throw ZipException("Invalid END header (bad central directory size)" );
 
         nLocPos = nCenPos - nCenOff;
         aGrabber.seek( nCenPos );
         Sequence < sal_Int8 > aCENBuffer ( nCenLen );
         sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer, nCenLen );
         if ( static_cast < sal_Int64 > ( nCenLen ) != nRead )
-            throw ZipException ("Error reading CEN into memory buffer!", uno::Reference < XInterface > () );
+            throw ZipException ("Error reading CEN into memory buffer!" );
 
         MemoryByteGrabber aMemGrabber ( aCENBuffer );
 
@@ -797,19 +790,19 @@ sal_Int32 ZipFile::readCEN()
         {
             aMemGrabber >> nTestSig;
             if ( nTestSig != CENSIG )
-                throw ZipException("Invalid CEN header (bad signature)", uno::Reference < XInterface > () );
+                throw ZipException("Invalid CEN header (bad signature)" );
 
             aMemGrabber.skipBytes ( 2 );
             aMemGrabber >> aEntry.nVersion;
 
             if ( ( aEntry.nVersion & 1 ) == 1 )
-                throw ZipException("Invalid CEN header (encrypted entry)", uno::Reference < XInterface > () );
+                throw ZipException("Invalid CEN header (encrypted entry)" );
 
             aMemGrabber >> aEntry.nFlag;
             aMemGrabber >> aEntry.nMethod;
 
             if ( aEntry.nMethod != STORED && aEntry.nMethod != DEFLATED)
-                throw ZipException("Invalid CEN header (bad compression method)", uno::Reference < XInterface > () );
+                throw ZipException("Invalid CEN header (bad compression method)" );
 
             aMemGrabber >> aEntry.nTime;
             aMemGrabber >> aEntry.nCrc;
@@ -828,7 +821,7 @@ sal_Int32 ZipFile::readCEN()
             if ( nSize == 0xffffffff ||
                  nOffset == 0xffffffff ||
                  nCompressedSize == 0xffffffff ) {
-                throw ZipException("PK64 zip file entry", uno::Reference < XInterface > () );
+                throw ZipException("PK64 zip file entry" );
             } else {
                 aEntry.nCompressedSize = nCompressedSize;
                 aEntry.nSize = nSize;
@@ -839,13 +832,13 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nOffset *= -1;
 
             if ( aEntry.nPathLen < 0 )
-                throw ZipException("unexpected name length", uno::Reference < XInterface > () );
+                throw ZipException("unexpected name length" );
 
             if ( nCommentLen < 0 )
-                throw ZipException("unexpected comment length", uno::Reference < XInterface > () );
+                throw ZipException("unexpected comment length" );
 
             if ( aEntry.nExtraLen < 0 )
-                throw ZipException("unexpected extra header info length", uno::Reference < XInterface > () );
+                throw ZipException("unexpected extra header info length" );
 
             // read always in UTF8, some tools seem not to set UTF8 bit
             aEntry.sPath = OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
@@ -853,14 +846,14 @@ sal_Int32 ZipFile::readCEN()
                                                    RTL_TEXTENCODING_UTF8 );
 
             if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, true ) )
-                throw ZipException("Zip entry has an invalid name.", uno::Reference < XInterface > () );
+                throw ZipException("Zip entry has an invalid name." );
 
             aMemGrabber.skipBytes( aEntry.nPathLen + aEntry.nExtraLen + nCommentLen );
             aEntries[aEntry.sPath] = aEntry;
         }
 
         if (nCount != nTotal)
-            throw ZipException("Count != Total", uno::Reference < XInterface > () );
+            throw ZipException("Count != Total" );
     }
     catch ( IllegalArgumentException & )
     {
@@ -924,7 +917,7 @@ sal_Int32 ZipFile::recover()
                             // FIXME64: need to read the 64bit header instead
                             if ( nSize == 0xffffffff ||
                                  nCompressedSize == 0xffffffff ) {
-                                throw ZipException("PK64 zip file entry", uno::Reference < XInterface > () );
+                                throw ZipException("PK64 zip file entry" );
                             } else {
                                 aEntry.nCompressedSize = nCompressedSize;
                                 aEntry.nSize = nSize;
@@ -1040,15 +1033,15 @@ sal_Int32 ZipFile::recover()
     }
     catch ( IllegalArgumentException& )
     {
-        throw ZipException("Zip END signature not found!", uno::Reference < XInterface > () );
+        throw ZipException("Zip END signature not found!" );
     }
     catch ( NotConnectedException& )
     {
-        throw ZipException("Zip END signature not found!", uno::Reference < XInterface > () );
+        throw ZipException("Zip END signature not found!" );
     }
     catch ( BufferSizeExceededException& )
     {
-        throw ZipException("Zip END signature not found!", uno::Reference < XInterface > () );
+        throw ZipException("Zip END signature not found!" );
     }
 }
 

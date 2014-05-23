@@ -88,7 +88,7 @@ ScVbaControl::getWindowPeer() throw (uno::RuntimeException)
     }
     catch(const uno::Exception&)
     {
-        throw uno::RuntimeException( "The Control does not exsit" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "The Control does not exist" );
     }
     return xWinPeer;
 }
@@ -642,7 +642,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         case form::FormComponentType::SCROLLBAR:
             return new ScVbaScrollBar( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
     }
-    throw uno::RuntimeException( "Unsupported control." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Unsupported control." );
 }
 
 /*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createUserformControl(
@@ -700,7 +700,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
     if( xVBAControl.is() )
         return xVBAControl;
-    throw uno::RuntimeException( "Unsupported control." , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Unsupported control." );
 }
 
 OUString

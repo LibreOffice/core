@@ -92,7 +92,7 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange() throw ( un
     }
     else
     {
-        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented" );
     }
     return xTextRange;
 }
@@ -154,7 +154,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
         }
         default:
         {
-            throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Not implemented" );
         }
     }
 }
@@ -189,7 +189,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
         }
         default:
         {
-            throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Not implemented" );
         }
     }
 }
@@ -215,7 +215,7 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( 
             }
             default:
             {
-                throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Not implemented" );
             }
         }
     }
@@ -258,7 +258,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         {
             if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
             {
-                throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Not implemented" );
             }
             uno::Reference< view::XViewCursor > xViewCursor( mxTextViewCursor, uno::UNO_QUERY_THROW );
             if( eDirection == word::MOVE_UP )
@@ -271,7 +271,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         {
             if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
             {
-                throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Not implemented" );
             }
             if( word::gotoSelectedObjectAnchor( mxModel ) )
             {
@@ -311,7 +311,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
             {
                 if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
                 {
-                    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Not implemented" );
                 }
                 uno::Reference< text::XParagraphCursor > xParagraphCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
@@ -326,7 +326,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
             {
                 if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
                 {
-                    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Not implemented" );
                 }
                 uno::Reference< text::XWordCursor > xWordCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
@@ -343,7 +343,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         }
         default:
         {
-            throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Not implemented" );
         }
     }
 }
@@ -649,11 +649,11 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
             if( nPage != 0 )
                 xPageCursor->jumpToPage( ( sal_Int16 )( nPage ) );
             else
-                throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Not implemented" );
             break;
         }
         default:
-            throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Not implemented" );
     }
     return getRange();
 }
@@ -765,7 +765,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
             break;
         }
         default:
-            throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Not implemented" );
     }
     return result;
 }

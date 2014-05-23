@@ -508,8 +508,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     if( ! tc.is() )
     {
         throw RuntimeException(
-            OUString("pq_driver: Couldn't instantiate converter service" ),
-            Reference< XInterface > () );
+            "pq_driver: Couldn't instantiate converter service" );
     }
     if( aArguments.getLength() != 2 )
     {
@@ -583,8 +582,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         m_settings.pConnection = PQconnectdbParams( keywords.c_array(), values.c_array(), 0 );
     }
     if( ! m_settings.pConnection )
-        throw RuntimeException("pq_driver: out of memory",
-                                Reference< XInterface > () );
+        throw RuntimeException("pq_driver: out of memory" );
     if( PQstatus( m_settings.pConnection ) == CONNECTION_BAD )
     {
         OUStringBuffer buf( 128 );

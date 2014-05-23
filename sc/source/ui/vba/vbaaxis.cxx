@@ -38,7 +38,7 @@ ScVbaAxis::getChartPtr() throw( uno::RuntimeException )
 {
     ScVbaChart* pChart = static_cast< ScVbaChart* >( moChartParent.get() );
     if ( !pChart )
-        throw uno::RuntimeException("Can't access parent chart impl", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can't access parent chart impl" );
     return pChart;
 }
 

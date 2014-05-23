@@ -340,8 +340,7 @@ void BackendImpl::PackageImpl::processPackage_(
     if ( !m_xNameCntrPkgHandler.is() )
     {
         dp_misc::TRACE("no package handler!!!!\n");
-        throw RuntimeException( "No package Handler ",
-            Reference< XInterface >() );
+        throw RuntimeException( "No package Handler " );
     }
 
     if (doRegisterPackage)

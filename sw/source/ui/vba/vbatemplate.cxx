@@ -103,7 +103,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     }
     else
     {
-        throw uno::RuntimeException("Auto Text Entry doesn't exist", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Auto Text Entry doesn't exist" );
     }
 
     uno::Reference< XCollection > xCol( new SwVbaAutoTextEntries( this, mxContext, xGroup ) );

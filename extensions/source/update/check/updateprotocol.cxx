@@ -117,8 +117,7 @@ checkForUpdates(
     const OUString &rInstallSetID )
 {
     if( !rxContext.is() )
-        throw uno::RuntimeException(
-            "checkForUpdates: empty component context", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "checkForUpdates: empty component context" );
 
     OSL_ASSERT( rxContext->getServiceManager().is() );
 

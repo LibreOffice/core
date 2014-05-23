@@ -33,8 +33,7 @@ SwVbaCheckBox::SwVbaCheckBox( const uno::Reference< ooo::vba::XHelperInterface >
     OUString sType = mxFormField->getFieldType();
     if( !sType.equalsIgnoreAsciiCaseAscii( ECMA_FORMCHECKBOX ) )
     {
-        throw uno::RuntimeException( OUString(
-            "It is not a CheckBox"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "It is not a CheckBox" );
     }
 }
 

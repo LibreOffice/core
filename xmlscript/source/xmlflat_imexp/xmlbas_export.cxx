@@ -132,12 +132,12 @@ namespace xmlscript
 
             if ( !m_xHandler.is() )
             {
-                throw RuntimeException( "XMLBasicExporterBase::initialize: invalid argument format!", Reference< XInterface >() );
+                throw RuntimeException( "XMLBasicExporterBase::initialize: invalid argument format!" );
             }
         }
         else
         {
-            throw RuntimeException( "XMLBasicExporterBase::initialize: invalid number of arguments!", Reference< XInterface >() );
+            throw RuntimeException( "XMLBasicExporterBase::initialize: invalid number of arguments!" );
         }
     }
 

@@ -212,7 +212,7 @@ OUString makeAbsoluteFileUrl(
         else if (throw_exc)
         {
             throw RuntimeException("cannot get file url from system path: " +
-                sys_path, Reference< XInterface >() );
+                sys_path );
         }
     }
 
@@ -227,8 +227,7 @@ OUString makeAbsoluteFileUrl(
             buf.appendAscii( "\" (base-url) and \"" );
             buf.append( file_url );
             buf.appendAscii( "\" (file-url)!" );
-            throw RuntimeException(
-                buf.makeStringAndClear(), Reference< XInterface >() );
+            throw RuntimeException( buf.makeStringAndClear() );
         }
         return OUString();
     }

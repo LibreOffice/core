@@ -126,10 +126,10 @@ void SAL_CALL XStream_impl::truncate(void)
     throw( io::IOException, uno::RuntimeException, std::exception )
 {
     if (osl::FileBase::E_None != m_aFile.setSize(0))
-        throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException( THROW_WHERE );
 
     if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolut,sal_uInt64(0)))
-        throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException( THROW_WHERE );
 }
 
 
@@ -148,7 +148,7 @@ XStream_impl::readBytes(
            uno::RuntimeException, std::exception)
 {
     if( ! m_nIsOpen )
-        throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException( THROW_WHERE );
 
     sal_Int8 * buffer;
     try
@@ -158,7 +158,7 @@ XStream_impl::readBytes(
     catch (const std::bad_alloc&)
     {
         if( m_nIsOpen ) m_aFile.close();
-        throw io::BufferSizeExceededException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::BufferSizeExceededException( THROW_WHERE );
     }
 
     sal_uInt64 nrc(0);
@@ -166,7 +166,7 @@ XStream_impl::readBytes(
        != osl::FileBase::E_None)
     {
         delete[] buffer;
-        throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException( THROW_WHERE );
     }
     aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
     delete[] buffer;
@@ -224,7 +224,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
         const sal_Int8* p = aData.getConstArray();
         if(osl::FileBase::E_None != m_aFile.write(((void*)(p)),sal_uInt64(length),nWrittenBytes) ||
            nWrittenBytes != length )
-            throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw io::IOException( THROW_WHERE );
     }
 }
 
@@ -290,7 +290,7 @@ XStream_impl::seek(
     if( location < 0 )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
     if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
-        throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException( THROW_WHERE );
 }
 
 
@@ -302,7 +302,7 @@ XStream_impl::getPosition(
 {
     sal_uInt64 uPos;
     if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
-        throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException( THROW_WHERE );
     return sal_Int64( uPos );
 }
 
@@ -314,7 +314,7 @@ XStream_impl::getLength(
 {
         sal_uInt64 uEndPos;
         if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
-                throw io::IOException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+                throw io::IOException( THROW_WHERE );
         else
                 return sal_Int64( uEndPos );
 }

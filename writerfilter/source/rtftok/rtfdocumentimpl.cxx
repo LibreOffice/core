@@ -685,15 +685,15 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
         break;
     case ERROR_GROUP_OVER:
         SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unmatched '{'");
-        throw io::WrongFormatException(m_pTokenizer->getPosition(), uno::Reference< uno::XInterface >());
+        throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
     case ERROR_EOF:
         SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unexpected end of file");
-        throw io::WrongFormatException(m_pTokenizer->getPosition(), uno::Reference< uno::XInterface >());
+        throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
     case ERROR_HEX_INVALID:
         SAL_INFO("writerfilter", OSL_THIS_FUNC << ": invalid hex char");
-        throw io::WrongFormatException(m_pTokenizer->getPosition(), uno::Reference< uno::XInterface >());
+        throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
     case ERROR_CHAR_OVER:
         SAL_INFO("writerfilter", OSL_THIS_FUNC << ": characters after last '}'");

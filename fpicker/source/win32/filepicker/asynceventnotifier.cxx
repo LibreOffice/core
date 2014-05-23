@@ -78,14 +78,10 @@ void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                 
                                                const uno::Reference< uno::XInterface >& xListener)
 {
     if ( m_rBroadcastHelper.bDisposed )
-        throw lang::DisposedException(
-            OUString( "FilePicker is already disposed" ),
-            uno::Reference< uno::XInterface >() );
+        throw lang::DisposedException( "FilePicker is already disposed" );
 
     if ( m_rBroadcastHelper.bInDispose )
-        throw lang::DisposedException(
-            OUString( "FilePicker will be disposed now." ),
-            uno::Reference< uno::XInterface >() );
+        throw lang::DisposedException( "FilePicker will be disposed now." );
 
     m_rBroadcastHelper.aLC.addInterface( aType, xListener );
 }
@@ -98,9 +94,7 @@ void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&              
                                                   const uno::Reference< uno::XInterface >& xListener)
 {
     if ( m_rBroadcastHelper.bDisposed )
-        throw lang::DisposedException(
-            OUString( "FilePicker is already disposed." ),
-            uno::Reference< uno::XInterface >() );
+        throw lang::DisposedException( "FilePicker is already disposed." );
 
     m_rBroadcastHelper.aLC.removeInterface( aType, xListener );
 }

@@ -446,9 +446,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                         {
                             // document opened, but not readable.
                             throw embed::InvalidStorageException(
-                                OUString(
-                                    "Storage is open, but not readable!" ),
-                                uno::Reference< uno::XInterface >() );
+                                    "Storage is open, but not readable!" );
                         }
                         // storage okay
                         break;
@@ -459,9 +457,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                         {
                             // document opened, but not writable.
                             throw embed::InvalidStorageException(
-                                OUString(
-                                    "Storage is open, but not writable!" ),
-                                uno::Reference< uno::XInterface >() );
+                                    "Storage is open, but not writable!" );
                         }
                         // storage okay
                         break;
@@ -473,9 +469,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     "Bug! Value of property OpenMode has wrong type!" );
 
                 throw uno::RuntimeException(
-                    OUString(
-                        "Bug! Value of property OpenMode has wrong type!" ),
-                    uno::Reference< uno::XInterface >() );
+                        "Bug! Value of property OpenMode has wrong type!" );
             }
         }
         catch ( beans::UnknownPropertyException const & e )

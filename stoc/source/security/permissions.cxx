@@ -519,8 +519,7 @@ PermissionCollection::PermissionCollection(
             OUStringBuffer buf( 48 );
             buf.append( "checking for unsupported permission type: " );
             buf.append( perm_type.getTypeName() );
-            throw RuntimeException(
-                buf.makeStringAndClear(), Reference< XInterface >() );
+            throw RuntimeException( buf.makeStringAndClear() );
         }
     }
 }
@@ -641,8 +640,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
         OUStringBuffer buf( 48 );
         buf.append( "checking for unsupported permission type: " );
         buf.append( demanded_type.getTypeName() );
-        throw RuntimeException(
-            buf.makeStringAndClear(), Reference< XInterface >() );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 }
 

@@ -97,7 +97,7 @@ public:
     void Start( const ::rtl::Reference< VbaApplicationBase > xBase, const OUString& aFunction, double nFrom, double nTo )
     {
         if ( !xBase.is() || aFunction.isEmpty() )
-            throw uno::RuntimeException( "Unexpected arguments!" , uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( "Unexpected arguments!" );
 
         m_xBase = xBase;
         m_aTimerInfo = VbaTimerInfo( aFunction, ::std::pair< double, double >( nFrom, nTo ) );
@@ -348,7 +348,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
     }
     else
     {
-        throw uno::RuntimeException( "The macro doesn't exist" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "The macro doesn't exist" );
     }
 }
 
@@ -356,13 +356,13 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
     throw ( uno::RuntimeException, std::exception )
 {
     if ( aFunction.isEmpty() )
-        throw uno::RuntimeException( "Unexpected function name!" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Unexpected function name!" );
 
     double nEarliestTime = 0;
     double nLatestTime = 0;
     if ( !( aEarliestTime >>= nEarliestTime )
       || ( aLatestTime.hasValue() && !( aLatestTime >>= nLatestTime ) ) )
-        throw uno::RuntimeException( "Only double is supported as time for now!" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Only double is supported as time for now!" );
 
     bool bSetTimer = true;
     aSchedule >>= bSetTimer;

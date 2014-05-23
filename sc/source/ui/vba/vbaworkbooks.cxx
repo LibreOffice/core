@@ -248,7 +248,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
             Format >>= nFormat; // val of nFormat overwritten if extracted
             // validate param
             if ( nFormat < 1 || nFormat > 6 )
-                throw uno::RuntimeException("Illegal value for Format", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Illegal value for Format" );
         }
 
         sal_Int16 nDelim = getCurrentDelim();
@@ -261,13 +261,13 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         {
             // Need to check Delimiter param
             if ( !Delimiter.hasValue() )
-                throw uno::RuntimeException("Expected value for Delimiter", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Expected value for Delimiter" );
             OUString sStr;
             Delimiter >>= sStr;
             if ( !sStr.isEmpty() )
                 nDelim = sStr[0];
             else
-                throw uno::RuntimeException("Incorrect value for Delimiter", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Incorrect value for Delimiter" );
         }
 
         getCurrentDelim() = nDelim; //set new current
@@ -282,7 +282,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         sProps[ nIndex ].Value <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
     }
     else if ( !isSpreadSheetFile( sType ) )
-        throw uno::RuntimeException("Bad Format", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Bad Format" );
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );

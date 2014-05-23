@@ -89,7 +89,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         OUStringBuffer buf;
         buf.appendAscii( "pyuno.getClass: uno exception " );
         buf.append(name).appendAscii( " is unknown" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 
     bool isStruct = desc.get()->eTypeClass == typelib_TypeClass_STRUCT;
@@ -102,7 +102,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         buf.appendAscii(
             typeClassToString( (com::sun::star::uno::TypeClass) desc.get()->eTypeClass));
         buf.appendAscii( ", expected EXCEPTION, STRUCT or INTERFACE" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface>() );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 
     // retrieve base class

@@ -74,10 +74,9 @@ void IncomingRequest::execute() const {
                 isExc = !execute_throw(&ret, &outArgs);
             } catch (const std::exception & e) {
                 throw css::uno::RuntimeException(
-                    ("caught C++ exception: " +
-                     OStringToOUString(
-                         OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
-                    css::uno::Reference< css::uno::XInterface >());
+                    "caught C++ exception: " +
+                    OStringToOUString(
+                         OString(e.what()), RTL_TEXTENCODING_ASCII_US));
                     // best-effort string conversion
             }
         } catch (const css::uno::RuntimeException &) {

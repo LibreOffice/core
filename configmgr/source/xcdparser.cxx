@@ -96,14 +96,12 @@ bool XcdParser::startElement(
                 }
                 if (!attrFile.is()) {
                     throw css::uno::RuntimeException(
-                        "no dependency file attribute in " + reader.getUrl(),
-                        css::uno::Reference< css::uno::XInterface >());
+                        "no dependency file attribute in " + reader.getUrl());
                 }
                 dependencyFile_ = attrFile.convertFromUtf8();
                 if (dependencyFile_.isEmpty()) {
                     throw css::uno::RuntimeException(
-                        "bad dependency file attribute in " + reader.getUrl(),
-                        css::uno::Reference< css::uno::XInterface >());
+                        "bad dependency file attribute in " + reader.getUrl());
                 }
             }
             if ((processedDependencies_.find(dependencyFile_) ==
@@ -143,8 +141,7 @@ bool XcdParser::startElement(
         break;
     }
     throw css::uno::RuntimeException(
-        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl(),
-        css::uno::Reference< css::uno::XInterface >());
+        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
 }
 
 void XcdParser::endElement(xmlreader::XmlReader const & reader) {

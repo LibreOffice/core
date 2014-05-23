@@ -148,7 +148,7 @@ SwVbaSections::PageSetup( ) throw (uno::RuntimeException, std::exception)
         uno::Reference< word::XSection > xSection( m_xIndexAccess->getByIndex( 0 ), uno::UNO_QUERY_THROW );
         return xSection->PageSetup();
     }
-    throw uno::RuntimeException("There is no section", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("There is no section" );
 }
 
 // XEnumerationAccess

@@ -189,7 +189,7 @@ void KeyColumns::refresh()
 // //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
 // //         buf.append( " to table " );
 // //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
-// //         throw SQLException( buf.makeStringAndClear(), Reference< XInterface > () );
+// //         throw SQLException( buf.makeStringAndClear() );
 // //     }
 
 // //     OUString tableName = extractStringProperty( past, st.TABLE_NAME );
@@ -217,8 +217,7 @@ void KeyColumns::refresh()
 //         if( pastTypeName != futureTypeName )
 //         {
 //             throw RuntimeException(
-//                 "Can't modify column types, drop the column and create a new one",
-//                 Reference< XInterface > () );
+//                 "Can't modify column types, drop the column and create a new one" );
 //         }
 
 //         if( pastColumnName != futureColumnName )

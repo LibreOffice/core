@@ -106,8 +106,7 @@ throw ( Exception, RuntimeException, std::exception )
     if ( len > 1  )
     {
         throw RuntimeException(
-            "MasterScriptProvider::initialize: invalid number of arguments",
-            Reference< XInterface >() );
+            "MasterScriptProvider::initialize: invalid number of arguments" );
     }
 
     Sequence< Any > invokeArgs( len );
@@ -498,15 +497,13 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
             if ( !xCont.is() )
             {
                 throw RuntimeException(
-                    "PackageMasterScriptProvider doesn't implement XNameContainer",
-                    Reference< XInterface >() );
+                    "PackageMasterScriptProvider doesn't implement XNameContainer" );
             }
             xCont->insertByName( aName, aElement );
         }
         else
         {
-            throw RuntimeException( "PackageMasterScriptProvider is unitialised",
-                                        Reference< XInterface >() );
+            throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
         }
 
     }
@@ -530,8 +527,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
         {
             throw RuntimeException(
                 "insertByName cannot instantiate "
-                "child script providers.",
-                Reference< XInterface >() );
+                "child script providers." );
         }
         Sequence < Reference< provider::XScriptProvider > > xSProviders =
             providerCache()->getAllProviders();
@@ -578,15 +574,13 @@ MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::No
             if ( !xCont.is() )
             {
                 throw RuntimeException(
-                    "PackageMasterScriptProvider doesn't implement XNameContainer",
-                    Reference< XInterface >() );
+                    "PackageMasterScriptProvider doesn't implement XNameContainer" );
             }
             xCont->removeByName( Name );
         }
         else
         {
-            throw RuntimeException( "PackageMasterScriptProvider is unitialised",
-                                        Reference< XInterface >() );
+            throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
         }
 
    }
@@ -605,8 +599,7 @@ MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::No
         {
             throw RuntimeException(
                 "removeByName() cannot instantiate "
-                "child script providers.",
-                Reference< XInterface >() );
+                "child script providers." );
         }
         Sequence < Reference< provider::XScriptProvider > > xSProviders =
             providerCache()->getAllProviders();
@@ -650,8 +643,7 @@ MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement 
     // TODO needs implementing
     if ( true )
     {
-        throw RuntimeException(  "replaceByName not implemented!!!!" ,
-                Reference< XInterface >() );
+        throw RuntimeException( "replaceByName not implemented!!!!" );
     }
 }
 
@@ -664,8 +656,7 @@ MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSu
     Any result;
     if ( true )
     {
-        throw RuntimeException(  "getByName not implemented!!!!" ,
-                Reference< XInterface >() );
+        throw RuntimeException( "getByName not implemented!!!!" );
     }
     return result;
 }
@@ -682,8 +673,7 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
             if ( !xCont.is() )
             {
                 throw RuntimeException(
-                    "PackageMasterScriptProvider doesn't implement XNameContainer",
-                    Reference< XInterface >() );
+                    "PackageMasterScriptProvider doesn't implement XNameContainer" );
             }
 
             result = xCont->hasByName( aName );
@@ -692,8 +682,7 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
         // have a PackageProvider
         else if (!m_xModel.is())
         {
-            throw RuntimeException( "PackageMasterScriptProvider is unitialised",
-                                        Reference< XInterface >() );
+            throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
         }
 
    }
@@ -713,8 +702,7 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
         {
             throw RuntimeException(
                 "removeByName() cannot instantiate "
-                "child script providers.",
-                Reference< XInterface >() );
+                "child script providers." );
         }
         Sequence < Reference< provider::XScriptProvider > > xSProviders =
             providerCache()->getAllProviders();
@@ -750,8 +738,7 @@ MasterScriptProvider::getElementNames(  ) throw ( RuntimeException, std::excepti
     Sequence< OUString >  names;
     if ( true )
     {
-        throw RuntimeException(  "getElementNames not implemented!!!!" ,
-                Reference< XInterface >() );
+        throw RuntimeException( "getElementNames not implemented!!!!" );
     }
     return names;
 }
@@ -769,8 +756,7 @@ sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException
     // TODO needs implementing
     if ( true )
     {
-        throw RuntimeException(  "hasElements not implemented!!!!" ,
-                Reference< XInterface >() );
+        throw RuntimeException( "hasElements not implemented!!!!" );
     }
     return false;
 }
@@ -787,8 +773,7 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
     {
         OUString errorMsg(
             "MasterScriptProvider::getAllProviders, cache not initialised");
-        throw RuntimeException( errorMsg.concat( errorMsg ),
-            Reference< XInterface >() );
+        throw RuntimeException( errorMsg.concat( errorMsg ) );
     }
 }
 

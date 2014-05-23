@@ -104,11 +104,11 @@ uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*
     {
         if( nIndex <= 0 || nIndex > getCount() )
         {
-            throw  lang::IndexOutOfBoundsException("Index out of bounds", uno::Reference< uno::XInterface >() );
+            throw  lang::IndexOutOfBoundsException("Index out of bounds" );
         }
         return uno::makeAny( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
-    throw  uno::RuntimeException("Index out of bounds", uno::Reference< uno::XInterface >() );
+    throw  uno::RuntimeException("Index out of bounds" );
 }
 
 // XEnumerationAccess

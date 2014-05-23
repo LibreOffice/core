@@ -112,9 +112,7 @@ namespace slideshow
 
             if( !mxPlayer.is() )
                 throw lang::NoSupportException(
-                    OUString(
-                                       "No sound support for ") + rSoundURL,
-                    uno::Reference<uno::XInterface>() );
+                    OUString("No sound support for ") + rSoundURL );
         }
 
         SoundPlayer::~SoundPlayer()

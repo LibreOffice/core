@@ -72,7 +72,7 @@ void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, c
 
     mxTextCursor = SwVbaRangeHelper::initCursor( rStart, mxText );
     if( !mxTextCursor.is() )
-        throw uno::RuntimeException("Fails to create text cursor", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Fails to create text cursor" );
     mxTextCursor->collapseToStart();
 
     if( rEnd.is() )
@@ -252,7 +252,7 @@ SwVbaRange::getParagraphFormat() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL
 SwVbaRange::setParagraphFormat( const uno::Reference< word::XParagraphFormat >& /*rParagraphFormat*/ ) throw ( uno::RuntimeException, std::exception )
 {
-    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Not implemented" );
 }
 
 void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType ) throw ( uno::RuntimeException )

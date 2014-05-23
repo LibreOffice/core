@@ -108,7 +108,7 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * func )
         OUStringBuffer buf;
         buf.appendAscii( "couldn't find core function " );
         buf.appendAscii( func );
-        throw RuntimeException(buf.makeStringAndClear(),Reference< XInterface >());
+        throw RuntimeException(buf.makeStringAndClear());
     }
     return object;
 }

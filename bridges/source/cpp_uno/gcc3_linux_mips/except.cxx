@@ -227,8 +227,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
         throw RuntimeException(
             OUString("cannot get typedescription for type ") +
-            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-            Reference< XInterface >() );
+            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
     }
 
     pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
@@ -258,8 +257,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
         throw RuntimeException(
             OUString("no rtti for type ") +
-            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-            Reference< XInterface >() );
+            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
     }
     }
 
@@ -270,9 +268,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 {
     if (! header)
     {
-        RuntimeException aRE(
-            OUString("no exception header!"),
-            Reference< XInterface >() );
+        RuntimeException aRE( "no exception header!" );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if defined _DEBUG
@@ -291,9 +287,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (0 == pExcTypeDescr)
     {
-        RuntimeException aRE(
-            OUString("exception type not found: ") + unoName,
-            Reference< XInterface >() );
+        RuntimeException aRE( OUString("exception type not found: ") + unoName );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if defined _DEBUG

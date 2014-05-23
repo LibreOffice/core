@@ -918,8 +918,7 @@ UUIInteractionHelper::handleRequest_impl(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException("out of memory",
-            uno::Reference< uno::XInterface >());
+        throw uno::RuntimeException("out of memory");
     }
     catch( const uno::RuntimeException& )
     {
@@ -957,15 +956,13 @@ UUIInteractionHelper::getInteractionHandlerList(
                     "com.sun.star.configuration.ConfigurationAccess" , aArguments ) );
 
         if ( !xInterface.is() )
-            throw uno::RuntimeException("unable to instanciate config access",
-                uno::Reference< uno::XInterface >());
+            throw uno::RuntimeException("unable to instanciate config access");
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xInterface, uno::UNO_QUERY );
         if ( !xNameAccess.is() )
-            throw uno::RuntimeException(OUString(
-                    "config access does not implement XNameAccess"),
-                uno::Reference< uno::XInterface >());
+            throw uno::RuntimeException(
+                    "config access does not implement XNameAccess");
 
         uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
         const OUString* pElems = aElems.getConstArray();
@@ -977,9 +974,8 @@ UUIInteractionHelper::getInteractionHandlerList(
                                 xHierNameAccess( xInterface, uno::UNO_QUERY );
 
             if ( !xHierNameAccess.is() )
-                throw uno::RuntimeException(OUString(
-                    "config access does not implement XHierarchicalNameAccess"),
-                    uno::Reference< uno::XInterface >());
+                throw uno::RuntimeException(
+                    "config access does not implement XHierarchicalNameAccess");
 
             // Iterate over children.
             for ( sal_Int32 n = 0; n < nCount; ++n )

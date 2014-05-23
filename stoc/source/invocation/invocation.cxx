@@ -524,8 +524,7 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
     }
 
     throw UnknownPropertyException(
-        OUString("cannot get value ") + PropertyName,
-        Reference< XInterface >() );
+        OUString("cannot get value ") + PropertyName );
 }
 
 
@@ -552,9 +551,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                     _xPropertySet->setPropertyValue(
                         PropertyName, xTypeConverter->convertTo( Value, aProp.Type ) );
                 else
-                    throw RuntimeException(
-                        OUString("no type converter service!"),
-                        Reference< XInterface >() );
+                    throw RuntimeException( "no type converter service!" );
             }
             // NameContainer
             else if( _xNameContainer.is() )
@@ -567,9 +564,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                 else if( xTypeConverter.is() )
                     aConv = xTypeConverter->convertTo( Value, _xNameContainer->getElementType() );
                 else
-                    throw RuntimeException(
-                        OUString("no type converter service!"),
-                        Reference< XInterface >() );
+                    throw RuntimeException( "no type converter service!" );
 
                 // bei Vorhandensein ersetzen, ansonsten einfuegen
                 if (_xNameContainer->hasByName( PropertyName ))
@@ -578,9 +573,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                     _xNameContainer->insertByName( PropertyName, aConv );
             }
             else
-                throw UnknownPropertyException(
-                    OUString("no introspection nor name container!"),
-                    Reference< XInterface >() );
+                throw UnknownPropertyException( "no introspection nor name container!" );
         }
         catch (UnknownPropertyException &)
         {

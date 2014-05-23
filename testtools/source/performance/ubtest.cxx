@@ -375,7 +375,7 @@ static void createInstance( Reference< T > & rxOut,
         buf.append( "cannot get service instance \"" );
         buf.append( rServiceName );
         buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 
     rxOut = Reference< T >::query( x );
@@ -388,7 +388,7 @@ static void createInstance( Reference< T > & rxOut,
         const Type & rType = ::getCppuType( (const Reference< T > *)0 );
         buf.append( rType.getTypeName() );
         buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 }
 
@@ -473,7 +473,7 @@ Reference< XInterface > TestImpl::getDirect()
                 OUString("com.sun.star.comp.performance.PerformanceTestObject"),
                 _xSMgr, Reference< XRegistryKey >() ) );
             if (! xFac.is())
-                throw RuntimeException("no test object available!", Reference< XInterface >() );
+                throw RuntimeException("no test object available!" );
             _xDirect = xFac->createInstance();
         }
     }
@@ -496,7 +496,7 @@ Reference< XInterface > TestImpl::resolveObject( const OUString & rUnoUrl )
         buf.append( "cannot resolve object \"" );
         buf.append( rUnoUrl );
         buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 
     return xResolvedObject;
@@ -560,7 +560,7 @@ static void benchmark(
 {
     Reference< XPerformanceTest > xBench( xInstance, UNO_QUERY );
     if (! xBench.is())
-        throw RuntimeException("illegal test object!", Reference< XInterface >() );
+        throw RuntimeException("illegal test object!" );
 
     sal_Int64 i;
     sal_uInt32 tStart, tEnd;
@@ -997,7 +997,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                     buf.append( "cannot open file for writing: \"" );
                     buf.append( aLogStr );
                     buf.append( "\"!" );
-                    throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+                    throw RuntimeException( buf.makeStringAndClear() );
                 }
             }
         }
@@ -1054,14 +1054,14 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             // pseudo mapping uno<->uno: does nothing!
             Mapping aMapping( aCppEnv.get(), aAnoCppEnv.get(), OUString("pseudo") );
             if (! aMapping.is())
-                throw RuntimeException("no pseudo mapping available!", Reference< XInterface >() );
+                throw RuntimeException("no pseudo mapping available!" );
 
             Reference< XInterface > xMapped;
             Reference< XInterface > xDirect( getDirect() );
             aMapping.mapInterface( reinterpret_cast< void ** >( &xMapped ), xDirect.get(),
                                    ::getCppuType( &xDirect ) );
             if (! xMapped.is())
-                throw RuntimeException("mapping object failed!", Reference< XInterface >() );
+                throw RuntimeException("mapping object failed!" );
 
             sal_uInt32 nStart = getSystemTicks();
             benchmark( aSheets[ "mapped in process" ], xMapped, nLoop / 100 );
@@ -1076,7 +1076,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             // start server process
             oslSecurity hSecurity = osl_getCurrentSecurity();
             if (! hSecurity)
-                throw RuntimeException("cannot get current security handle!", Reference< XInterface >() );
+                throw RuntimeException("cannot get current security handle!" );
 
             OUString aArgs[] = {
                 OUString("-c"),
@@ -1123,7 +1123,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 
             osl_freeSecurityHandle( hSecurity );
             if (! hProcess)
-                throw RuntimeException("cannot start server process!", Reference< XInterface >() );
+                throw RuntimeException("cannot start server process!" );
             osl_freeProcessHandle( hProcess );
 
             // wait three seconds
@@ -1144,7 +1144,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             // remote
             OUString aUnoUrl( extractParam( rArgs, OUString("url") ) );
             if (! aUnoUrl.getLength())
-                throw RuntimeException( OUString( "performance test r(emote) needs additional uno url!" ), Reference< XInterface >() );
+                throw RuntimeException( "performance test r(emote) needs additional uno url!" );
 
             // connect and resolve outer process object
             Reference< XInterface > xResolvedObject( resolveObject( aUnoUrl ) );

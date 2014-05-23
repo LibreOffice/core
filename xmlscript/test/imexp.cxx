@@ -105,7 +105,7 @@ Reference< container::XNameContainer > importFile(
     }
     else
     {
-        throw Exception( "### Cannot read file!", Reference< XInterface >() );
+        throw Exception( "### Cannot read file!" );
     }
 }
 

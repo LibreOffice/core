@@ -238,13 +238,9 @@ static void cpp_call(
             appendCString(buf, typeid(e).name());
             buf.append(": ");
             appendCString(buf, e.what());
-            throw RuntimeException(
-                buf.makeStringAndClear(), Reference< XInterface >());
+            throw RuntimeException(buf.makeStringAndClear());
         } catch (...) {
-            throw RuntimeException(
-                OUString(
-                        "C++ code threw unknown exception"),
-                Reference< XInterface >());
+            throw RuntimeException("C++ code threw unknown exception");
         }
 
         *ppUnoExc = 0;

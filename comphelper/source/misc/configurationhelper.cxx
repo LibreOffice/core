@@ -91,8 +91,7 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
         sMsg.appendAscii("\" does not exists."  );
 
         throw css::container::NoSuchElementException(
-                    sMsg.makeStringAndClear(),
-                    css::uno::Reference< css::uno::XInterface >());
+                    sMsg.makeStringAndClear());
     }
     return xProps->getPropertyValue(sKey);
 }
@@ -115,8 +114,7 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
         sMsg.appendAscii("\" does not exists."  );
 
         throw css::container::NoSuchElementException(
-                    sMsg.makeStringAndClear(),
-                    css::uno::Reference< css::uno::XInterface >());
+                    sMsg.makeStringAndClear());
     }
     xProps->setPropertyValue(sKey, aValue);
 }
@@ -137,8 +135,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
         sMsg.appendAscii("\" does not exists."  );
 
         throw css::container::NoSuchElementException(
-                    sMsg.makeStringAndClear(),
-                    css::uno::Reference< css::uno::XInterface >());
+                    sMsg.makeStringAndClear());
     }
 
     css::uno::Reference< css::uno::XInterface > xNode;

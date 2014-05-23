@@ -61,8 +61,7 @@ Reference< XMultiServiceFactory > getProcessServiceFactory()
     xReturn = localProcessFactory( xReturn, false );
     if ( !xReturn.is() )
     {
-        throw DeploymentException(
-            "null process service factory", Reference< XInterface >() );
+        throw DeploymentException( "null process service factory" );
     }
     return xReturn;
 }

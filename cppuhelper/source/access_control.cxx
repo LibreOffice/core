@@ -47,8 +47,7 @@ AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
 {
     if (! (xContext->getValueByName( str_ac_singleton() ) >>= m_xController))
     {
-        throw SecurityException(
-            "no access controller!", Reference< XInterface >() );
+        throw SecurityException( "no access controller!" );
     }
 }
 
@@ -59,8 +58,7 @@ AccessControl::AccessControl(
 {
     if (! m_xController.is())
     {
-        throw SecurityException(
-            "no access controller!", Reference< XInterface >() );
+        throw SecurityException( "no access controller!" );
     }
 }
 
@@ -70,8 +68,7 @@ AccessControl::AccessControl( AccessControl const & ac )
 {
     if (! m_xController.is())
     {
-        throw SecurityException(
-            "no access controller!", Reference< XInterface >() );
+        throw SecurityException( "no access controller!" );
     }
 }
 

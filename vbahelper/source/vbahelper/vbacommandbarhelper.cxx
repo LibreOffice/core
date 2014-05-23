@@ -107,7 +107,7 @@ void VbaCommandBarHelper::Init( ) throw (css::uno::RuntimeException)
 
     if( maModuleId.isEmpty() )
     {
-        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" );
     }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(

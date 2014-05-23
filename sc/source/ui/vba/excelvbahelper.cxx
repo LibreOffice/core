@@ -81,7 +81,7 @@ ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRang
     ScCellRangesBase* pScCellRangesBase = ScCellRangesBase::getImplementation( xRange );
     if ( !pScCellRangesBase )
     {
-        throw uno::RuntimeException("Failed to access underlying doc shell uno range object", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Failed to access underlying doc shell uno range object" );
     }
     return pScCellRangesBase->GetDocShell();
 }

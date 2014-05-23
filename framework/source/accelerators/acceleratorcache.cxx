@@ -107,8 +107,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sC
     SolarMutexGuard g;
     TCommand2Keys::const_iterator pCommand = m_lCommand2Keys.find(sCommand);
     if (pCommand == m_lCommand2Keys.end())
-        throw css::container::NoSuchElementException(
-                OUString(), css::uno::Reference< css::uno::XInterface >());
+        throw css::container::NoSuchElementException();
     return pCommand->second;
 }
 
@@ -117,8 +116,7 @@ OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
     SolarMutexGuard g;
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
     if (pKey == m_lKey2Commands.end())
-        throw css::container::NoSuchElementException(
-                OUString(), css::uno::Reference< css::uno::XInterface >());
+        throw css::container::NoSuchElementException();
     return pKey->second;
 }
 

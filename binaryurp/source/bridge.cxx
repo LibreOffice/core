@@ -194,14 +194,10 @@ Bridge::Bridge(
 {
     assert(factory.is() && connection.is());
     if (!binaryUno_.is()) {
-        throw css::uno::RuntimeException(
-            "URP: no binary UNO environment",
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("URP: no binary UNO environment");
     }
     if (!(cppToBinaryMapping_.is() && binaryToCppMapping_.is())) {
-        throw css::uno::RuntimeException(
-            "URP: no C++ UNO mapping",
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("URP: no C++ UNO mapping");
     }
     passive_.set();
 }
@@ -464,8 +460,7 @@ OUString Bridge::registerOutgoingInterface(
             assert(stub != &newStub);
             if (j->second.references == SAL_MAX_UINT32) {
                 throw css::uno::RuntimeException(
-                    "URP: stub reference count overflow",
-                    css::uno::Reference< css::uno::XInterface >());
+                    "URP: stub reference count overflow");
             }
             ++j->second.references;
         }
@@ -505,15 +500,11 @@ void Bridge::releaseStub(
         osl::MutexGuard g(mutex_);
         Stubs::iterator i(stubs_.find(oid));
         if (i == stubs_.end()) {
-            throw css::uno::RuntimeException(
-                "URP: release unknown stub",
-                css::uno::Reference< css::uno::XInterface >());
+            throw css::uno::RuntimeException("URP: release unknown stub");
         }
         Stub::iterator j(i->second.find(type));
         if (j == i->second.end()) {
-            throw css::uno::RuntimeException(
-                "URP: release unknown stub",
-                css::uno::Reference< css::uno::XInterface >());
+            throw css::uno::RuntimeException("URP: release unknown stub");
         }
         assert(j->second.references > 0);
         --j->second.references;
@@ -880,9 +871,8 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     for (sal_Int32 i = 0; i != sInstanceName.getLength(); ++i) {
         if (sInstanceName[i] > 0x7F) {
             throw css::uno::RuntimeException(
-                ("XBridge::getInstance sInstanceName contains non-ASCII"
-                 " character"),
-                css::uno::Reference< css::uno::XInterface >());
+                "XBridge::getInstance sInstanceName contains non-ASCII"
+                " character");
         }
     }
     css::uno::TypeDescription ifc(

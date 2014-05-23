@@ -149,7 +149,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     else if( sShapeType == "com.sun.star.drawing.TextShape" )
         return office::MsoShapeType::msoTextBox;
     else
-        throw uno::RuntimeException("the shape type do not be supported: " + sShapeType, uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("the shape type do not be supported: " + sShapeType );
 }
 
 // Attributes
@@ -395,9 +395,9 @@ ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException, std::exc
     // below two commands use with Writer for text and image object.
     case office::MsoZOrderCmd::msoBringInFrontOfText:
     case office::MsoZOrderCmd::msoSendBehindText:
-        throw uno::RuntimeException( "This ZOrderCmd is not implemented, it is use with writer." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "This ZOrderCmd is not implemented, it is use with writer." );
     default:
-        throw uno::RuntimeException( "Invalid Parameter." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Invalid Parameter." );
     }
 }
 
@@ -450,7 +450,7 @@ ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal
     }
     else
     {
-        throw uno::RuntimeException( "ScaleHeight.Scale wrong value is given." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "ScaleHeight.Scale wrong value is given." );
     }
 }
 
@@ -479,7 +479,7 @@ ScVbaShape::ScaleWidth( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_
     }
     else
     {
-        throw uno::RuntimeException( "ScaleHeight.Scale wrong value is given." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "ScaleHeight.Scale wrong value is given." );
     }
 }
 
@@ -569,7 +569,7 @@ ScVbaShape::getRelativeHorizontalPosition() throw (uno::RuntimeException, std::e
         }
         default:
         {
-            throw  uno::RuntimeException( "Shape::RelativeHorizontalPosition: not implemented" , uno::Reference< uno::XInterface >() );
+            throw  uno::RuntimeException( "Shape::RelativeHorizontalPosition: not implemented" );
         }
     }
     return nRelativeHorizontalPosition;
@@ -641,7 +641,7 @@ ScVbaShape::getRelativeVerticalPosition() throw (uno::RuntimeException, std::exc
         }
         default:
         {
-            throw  uno::RuntimeException( "Shape::RelativeVerticalPosition: not implemented" , uno::Reference< uno::XInterface >() );
+            throw  uno::RuntimeException( "Shape::RelativeVerticalPosition: not implemented" );
         }
     }
     return nRelativeVerticalPosition;
@@ -695,7 +695,7 @@ ScVbaShape::WrapFormat() throw (uno::RuntimeException, std::exception)
         uno::Reference< uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "ooo.vba.word.WrapFormat" , aArgs, xContext );
         return uno::makeAny( xWrapFormat );
     }
-    throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Not implemented" );
 }
 
 OUString

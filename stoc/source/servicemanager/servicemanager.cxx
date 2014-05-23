@@ -223,7 +223,7 @@ beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
             return p[ nPos ];
     }
     throw beans::UnknownPropertyException(
-        "unknown property: " + name, Reference< XInterface >() );
+        "unknown property: " + name );
 }
 
 sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
@@ -519,8 +519,7 @@ class OServiceManagerWrapper : public OServiceManagerMutex, public t_OServiceMan
         if (! m_root.is())
         {
             throw lang::DisposedException(
-                "service manager instance has already been disposed!",
-                Reference< XInterface >() );
+                "service manager instance has already been disposed!" );
         }
         return m_root;
     }
@@ -674,8 +673,7 @@ OServiceManagerWrapper::OServiceManagerWrapper(
     if (! m_root.is())
     {
         throw RuntimeException(
-            OUString("no service manager to wrap"),
-            Reference< XInterface >() );
+            "no service manager to wrap" );
     }
 }
 
@@ -1199,9 +1197,7 @@ void OServiceManager::insert( const Any & Element )
     HashSet_Ref::iterator aIt = m_ImplementationMap.find( xEle );
     if( aIt != m_ImplementationMap.end() )
     {
-        throw ElementExistException(
-            OUString("element already exists!"),
-            Reference< XInterface >() );
+        throw ElementExistException( "element already exists!" );
     }
 
     // put into the implementation hashmap

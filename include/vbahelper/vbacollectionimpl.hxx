@@ -240,7 +240,7 @@ protected:
     virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xNameAccess.is() )
-            throw css::uno::RuntimeException("ScVbaCollectionBase string index access not supported by this object", css::uno::Reference< css::uno::XInterface >() );
+            throw css::uno::RuntimeException("ScVbaCollectionBase string index access not supported by this object" );
 
         if( mbIgnoreCase )
         {
@@ -260,12 +260,11 @@ protected:
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xIndexAccess.is() )
-            throw css::uno::RuntimeException("ScVbaCollectionBase numeric index access not supported by this object", css::uno::Reference< css::uno::XInterface >() );
+            throw css::uno::RuntimeException("ScVbaCollectionBase numeric index access not supported by this object" );
         if ( nIndex <= 0 )
         {
-            throw  css::lang::IndexOutOfBoundsException(
-                OUString( "index is 0 or negative"  ),
-                css::uno::Reference< css::uno::XInterface >() );
+            throw css::lang::IndexOutOfBoundsException(
+                "index is 0 or negative" );
         }
         // need to adjust for vba index ( for which first element is 1 )
         return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );
@@ -294,10 +293,7 @@ public:
 
             if ( !( Index1 >>= nIndex ) )
             {
-                OUString message;
-                message = OUString( "Couldn't convert index to Int32");
-                throw  css::lang::IndexOutOfBoundsException( message,
-                    css::uno::Reference< css::uno::XInterface >() );
+                throw  css::lang::IndexOutOfBoundsException( "Couldn't convert index to Int32" );
             }
             return  getItemByIntIndex( nIndex );
         }

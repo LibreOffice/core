@@ -37,8 +37,7 @@ rtl::OUString getBootstrapVariable(
     rtl::OUString v;
     if (!bootstrap.getFrom(name, v)) {
         throw css::uno::DeploymentException(
-            "Cannot obtain " + name + " from uno ini",
-            css::uno::Reference< css::uno::XInterface >());
+            "Cannot obtain " + name + " from uno ini");
     }
     return v;
 }
@@ -52,8 +51,7 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
     rtl::Bootstrap bs(iniUri);
     if (bs.getHandle() == 0) {
         throw css::uno::DeploymentException(
-            "Cannot open uno ini " + iniUri,
-            css::uno::Reference< css::uno::XInterface >());
+            "Cannot open uno ini " + iniUri);
     }
     rtl::Reference< cppuhelper::ServiceManager > smgr(
         new cppuhelper::ServiceManager);

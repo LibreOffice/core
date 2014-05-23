@@ -84,7 +84,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     if ( aArguments.getLength() && !( aArguments[ 0 ] >>= m_xFrame ) )
     {
         OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
-        throw RuntimeException( temp, Reference< XInterface >() );
+        throw RuntimeException( temp );
     }
 
     ENSURE_OR_THROW( m_xContext.is(), "ScriptProtocolHandler::initialize: No Service Manager available" );
@@ -430,12 +430,12 @@ void ScriptProtocolHandler::createScriptProvider()
     catch ( const RuntimeException & e )
     {
         OUString temp = "ScriptProtocolHandler::createScriptProvider(),  ";
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+        throw RuntimeException( temp.concat( e.Message ) );
     }
     catch ( const Exception & e )
     {
         OUString temp = "ScriptProtocolHandler::createScriptProvider: ";
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+        throw RuntimeException( temp.concat( e.Message ) );
     }
 }
 

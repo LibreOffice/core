@@ -742,8 +742,7 @@ SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties( const uno::Refer
 uno::Reference< XDocumentProperty > SAL_CALL
 SwVbaBuiltinDocumentProperties::Add( const OUString& /*Name*/, sal_Bool /*LinkToContent*/, ::sal_Int8 /*Type*/, const uno::Any& /*value*/, const uno::Any& /*LinkSource*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException(
-        OUString("not supported for Builtin properties"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "not supported for Builtin properties" );
 }
 
 // XEnumerationAccess

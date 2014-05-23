@@ -87,8 +87,7 @@ ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException, std::exception)
         return xWorkbook;
     }
 // FIXME check if this is correct/desired behavior
-    throw uno::RuntimeException( OUString(
-        "No activeWorkbook available" ), Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "No activeWorkbook available" );
 }
 
 

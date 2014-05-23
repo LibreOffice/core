@@ -177,7 +177,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyN
         {
             OUString msg("[automation bridge]Property \"" + aPropertyName +
                 "\" is not supported");
-            throw UnknownPropertyException(msg, Reference<XInterface>());
+            throw UnknownPropertyException(msg);
         }
         aResult = invokeWithDispIdComTlb( aDescGet, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
@@ -185,7 +185,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyN
     {
        throw RuntimeException("[automation bridge] unexpected exception in "
                "IUnknownWrapper_Impl::invokeGetProperty ! Message : \n" +
-                e.Message, Reference<XInterface>());
+                e.Message);
     }
     return aResult;
 }
@@ -205,7 +205,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyN
         {
             OUString msg("[automation bridge]Property \"" + aPropertyName +
                 "\" is not supported");
-            throw UnknownPropertyException(msg, Reference<XInterface>());
+            throw UnknownPropertyException(msg);
         }
         aResult = invokeWithDispIdComTlb( aDescPut, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
@@ -213,7 +213,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyN
     {
        throw RuntimeException("[automation bridge] unexpected exception in "
                "IUnknownWrapper_Impl::invokePutProperty ! Message : \n" +
-                e.Message, Reference<XInterface>());
+                e.Message);
     }
     return aResult;
 }
@@ -228,8 +228,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface",
-            Reference<XInterface>());
+            "[automation bridge] The object does not have an IDispatch interface");
     }
 
     Any ret;
@@ -265,19 +264,19 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
     }
     catch (const BridgeRuntimeError & e)
     {
-         throw RuntimeException(e.message, Reference<XInterface>());
+         throw RuntimeException(e.message);
     }
     catch (const Exception & e)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
                                      "IUnknownWrapper_Impl::invoke ! Message : \n" +
-                               e.Message, Reference<XInterface>());
+                               e.Message);
 
     }
     catch(...)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
-                  "IUnknownWrapper_Impl::Invoke !", Reference<XInterface>());
+                  "IUnknownWrapper_Impl::Invoke !");
     }
     return ret;
 }
@@ -290,8 +289,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface",
-            Reference<XInterface>());
+            "[automation bridge] The object does not have an IDispatch interface");
     }
     try
     {
@@ -307,7 +305,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
         {
             OUString msg("[automation bridge]Property \"" + aPropertyName +
                          "\" is not supported");
-            throw UnknownPropertyException(msg, Reference<XInterface>());
+            throw UnknownPropertyException(msg);
         }
 
         if ( (! aDescPut && aDescGet) || aVarDesc
@@ -438,21 +436,20 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
     }
     catch (const BridgeRuntimeError& e)
     {
-        throw RuntimeException(
-            e.message, Reference<XInterface>());
+        throw RuntimeException(e.message);
     }
     catch (const Exception & e)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
                                "IUnknownWrapper_Impl::setValue ! Message : \n" +
-                               e.Message, Reference<XInterface>());
+                               e.Message);
 
     }
     catch (...)
     {
         throw RuntimeException(
             "[automation bridge] unexpected exception in "
-            "IUnknownWrapper_Impl::setValue !", Reference<XInterface>());
+            "IUnknownWrapper_Impl::setValue !");
     }
 }
 
@@ -462,8 +459,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface",
-            Reference<XInterface>());
+            "[automation bridge] The object does not have an IDispatch interface");
     }
     Any ret;
     try
@@ -519,7 +515,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
             //property not found
             OUString msg("[automation bridge]Property \"" + aPropertyName +
                          "\" is not supported");
-            throw UnknownPropertyException(msg, Reference<XInterface>());
+            throw UnknownPropertyException(msg);
         }
         // write-only should not be possible
         OSL_ASSERT(  aDescGet  || ! aDescPut);
@@ -565,52 +561,15 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         case S_OK:
             break;
         case DISP_E_BADPARAMCOUNT:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
         case DISP_E_BADVARTYPE:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
         case DISP_E_EXCEPTION:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)));
             break;
         case DISP_E_MEMBERNOTFOUND:
-            throw UnknownPropertyException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
-        case DISP_E_NONAMEDARGS:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
-        case DISP_E_OVERFLOW:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
-        case DISP_E_PARAMNOTFOUND:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
-        case DISP_E_TYPEMISMATCH:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
-        case DISP_E_UNKNOWNINTERFACE:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
-        case DISP_E_UNKNOWNLCID:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
-            break;
-        case DISP_E_PARAMNOTOPTIONAL:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
+            throw UnknownPropertyException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)));
             break;
         default:
-            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
-                                   Reference<XInterface>());
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)));
             break;
         }
     }
@@ -620,20 +579,19 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
     }
     catch (const BridgeRuntimeError& e)
     {
-        throw RuntimeException(
-            e.message, Reference<XInterface>());
+        throw RuntimeException(e.message);
     }
     catch (const Exception & e)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
                                "IUnknownWrapper_Impl::getValue ! Message : \n" +
-                               e.Message, Reference<XInterface>());
+                               e.Message);
     }
     catch (...)
     {
         throw RuntimeException(
             "[automation bridge] unexpected exception in "
-            "IUnknownWrapper_Impl::getValue !", Reference<XInterface>());
+            "IUnknownWrapper_Impl::getValue !");
     }
     return ret;
 }
@@ -644,8 +602,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface",
-            Reference<XInterface>());
+            "[automation bridge] The object does not have an IDispatch interface");
     }
     sal_Bool ret = sal_False;
 
@@ -672,18 +629,18 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
     }
     catch (const BridgeRuntimeError& e)
     {
-        throw RuntimeException(e.message, Reference<XInterface>());
+        throw RuntimeException(e.message);
     }
     catch (const Exception & e)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
                                "IUnknownWrapper_Impl::hasMethod ! Message : \n" +
-                               e.Message, Reference<XInterface>());
+                               e.Message);
     }
     catch (...)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
-            "IUnknownWrapper_Impl::hasMethod !", Reference<XInterface>());
+            "IUnknownWrapper_Impl::hasMethod !");
     }
     return ret;
 }
@@ -694,7 +651,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
     if ( ! m_spDispatch )
     {
         throw RuntimeException("[automation bridge] The object does not have an "
-            "IDispatch interface", Reference<XInterface>());
+            "IDispatch interface");
     }
     sal_Bool ret = sal_False;
     try
@@ -722,19 +679,19 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
     }
     catch (const BridgeRuntimeError& e)
     {
-        throw RuntimeException(e.message, Reference<XInterface>());
+        throw RuntimeException(e.message);
     }
     catch (const Exception & e)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
                                "IUnknownWrapper_Impl::hasProperty ! Message : \n" +
-                               e.Message, Reference<XInterface>());
+                               e.Message);
 
     }
     catch (...)
     {
         throw RuntimeException("[automation bridge] unexpected exception in "
-            "IUnknownWrapper_Impl::hasProperty !", Reference<XInterface>());
+            "IUnknownWrapper_Impl::hasProperty !");
     }
     return ret;
 }
@@ -1298,13 +1255,12 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
         }
         catch ( const BridgeRuntimeError & e )
         {
-            throw RuntimeException( e.message, Reference<XInterface>() );
+            throw RuntimeException( e.message );
         }
         catch( const Exception& e )
         {
             throw RuntimeException(
-                    "[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialiase() error message: \n" + e.Message,
-                    Reference<XInterface>() );
+                    "[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialiase() error message: \n" + e.Message );
         }
     }
 }
@@ -1319,8 +1275,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
     if ( !m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface",
-            Reference<XInterface>());
+            "[automation bridge] The object does not have an IDispatch interface");
     }
 
     o2u_attachCurrentThread();
@@ -1566,8 +1521,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMember( const OUString& aName )
     if ( ! m_spDispatch )
     {
         throw RuntimeException(
-            "[automation bridge] The object does not have an IDispatch interface",
-            Reference<XInterface>());
+            "[automation bridge] The object does not have an IDispatch interface");
     }
 
     o2u_attachCurrentThread();

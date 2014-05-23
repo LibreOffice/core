@@ -51,7 +51,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
     UrlComponents aUrlComp;
     OUString aTextToDisplay;
     if( !(rAddress >>= aUrlComp.first) || aUrlComp.first.isEmpty() )
-        throw uno::RuntimeException("Cannot get address", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Cannot get address" );
     rSubAddress >>= aUrlComp.second;
     rScreenTip >>= maScreenTip;
     rTextToDisplay >>= aTextToDisplay;

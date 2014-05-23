@@ -73,8 +73,7 @@ Sequence< Any > make_seq_out_of_struct(
     {
         throw RuntimeException(
             type.getTypeName() +
-            OUString( "is no struct or exception!" ),
-            Reference< XInterface >() );
+            OUString( "is no struct or exception!" ) );
     }
     typelib_TypeDescription * pTD = 0;
     TYPELIB_DANGER_GET( &pTD, type.getTypeLibType() );
@@ -83,8 +82,7 @@ Sequence< Any > make_seq_out_of_struct(
     {
         throw RuntimeException(
             OUString( "cannot get type descr of type " ) +
-            type.getTypeName(),
-            Reference< XInterface >() );
+            type.getTypeName() );
     }
 
     ::std::vector< Any > vec;
@@ -398,11 +396,8 @@ sal_Int32 SAL_CALL DispatchRecorder::getCount() throw (::com::sun::star::uno::Ru
 com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if (idx >= (sal_Int32)m_aStatements.size()) {
-        throw com::sun::star::lang::IndexOutOfBoundsException(
-            OUString( "Dispatch recorder out of bounds" ),
-                    Reference< XInterface >() );
-
-    }
+        throw com::sun::star::lang::IndexOutOfBoundsException( "Dispatch recorder out of bounds"  );
+   }
 
     Any element(&m_aStatements[idx],
         cppu::UnoType<com::sun::star::frame::DispatchStatement>::get());
@@ -421,8 +416,7 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::st
 
     if (idx >= (sal_Int32)m_aStatements.size()) {
                 throw com::sun::star::lang::IndexOutOfBoundsException(
-                        OUString( "Dispatch recorder out of bounds" ),
-                        Reference< XInterface >() );
+                        "Dispatch recorder out of bounds"  );
 
         }
 

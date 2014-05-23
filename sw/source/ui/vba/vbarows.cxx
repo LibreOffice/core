@@ -260,9 +260,8 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     if ((nNewWidth <= 0) || (nWidth <= 0))
     {
         throw uno::RuntimeException(
-            OUString("Pb with width, in SwVbaRows::setIndentWithAdjustProportional "
-                     "(nNewWidth <= 0) || (nWidth <= 0)"),
-            uno::Reference< uno::XInterface >()
+            "Pb with width, in SwVbaRows::setIndentWithAdjustProportional "
+            "(nNewWidth <= 0) || (nWidth <= 0)"
         );
     }
     double propFactor = (double)nNewWidth/(double)nWidth;
@@ -323,11 +322,11 @@ uno::Any SAL_CALL SwVbaRows::Item( const uno::Any& Index1, const uno::Any& /*not
     {
         if( nIndex <= 0 || nIndex > getCount() )
         {
-            throw  lang::IndexOutOfBoundsException("Index out of bounds", uno::Reference< uno::XInterface >() );
+            throw  lang::IndexOutOfBoundsException("Index out of bounds" );
         }
         return uno::makeAny( uno::Reference< word::XRow >( new SwVbaRow( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
-    throw  uno::RuntimeException("Index out of bounds", uno::Reference< uno::XInterface >() );
+    throw  uno::RuntimeException("Index out of bounds" );
 }
 
 // XEnumerationAccess

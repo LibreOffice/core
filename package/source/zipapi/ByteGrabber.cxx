@@ -77,7 +77,7 @@ sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
         return location;
     }
     else
-        throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException(THROW_WHERE );
 }
 
 sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
@@ -87,7 +87,7 @@ sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
     if (xSeek.is() )
         return xSeek->getPosition();
     else
-        throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException(THROW_WHERE );
 }
 
 sal_Int64 SAL_CALL ByteGrabber::getLength(  )
@@ -97,7 +97,7 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
     if (xSeek.is() )
         return xSeek->getLength();
     else
-        throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException(THROW_WHERE );
 }
 
 ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)

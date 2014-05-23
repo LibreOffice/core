@@ -230,8 +230,7 @@ namespace CPPU_CURRENT_NAMESPACE
         {
             throw RuntimeException(
                 OUString("cannot get typedescription for type ") +
-                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-                Reference< XInterface >() );
+                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
         }
 
         pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
@@ -261,8 +260,7 @@ namespace CPPU_CURRENT_NAMESPACE
         {
             throw RuntimeException(
                 OUString("no rtti for type ") +
-                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-                Reference< XInterface >() );
+                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
         }
         }
 
@@ -279,9 +277,7 @@ namespace CPPU_CURRENT_NAMESPACE
     {
         if (! header)
         {
-            RuntimeException aRE(
-                OUString("no exception header!"),
-                Reference< XInterface >() );
+            RuntimeException aRE( "no exception header!" );
             Type const & rType = ::getCppuType( &aRE );
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
@@ -300,9 +296,7 @@ namespace CPPU_CURRENT_NAMESPACE
         typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
         if (0 == pExcTypeDescr)
         {
-            RuntimeException aRE(
-                OUString("exception type not found: ") + unoName,
-                Reference< XInterface >() );
+            RuntimeException aRE( OUString("exception type not found: ") + unoName );
             Type const & rType = ::getCppuType( &aRE );
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0

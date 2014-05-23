@@ -482,7 +482,7 @@ shell::associate( const OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( newProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::PropertyExistException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw beans::PropertyExistException( THROW_WHERE );
 
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -495,7 +495,7 @@ shell::associate( const OUString& aUnqPath,
         PropertySet& properties = *(it->second.properties);
         it1 = properties.find( newProperty );
         if( it1 != properties.end() )
-            throw beans::PropertyExistException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw beans::PropertyExistException(THROW_WHERE );
 
         // Property does not exist
         properties.insert( newProperty );
@@ -518,7 +518,7 @@ shell::deassociate( const OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( oldProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::NotRemoveableException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw beans::NotRemoveableException( THROW_WHERE );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -530,7 +530,7 @@ shell::deassociate( const OUString& aUnqPath,
 
     it1 = properties.find( oldProperty );
     if( it1 == properties.end() )
-        throw beans::UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( THROW_WHERE );
 
     properties.erase( it1 );
 
@@ -826,7 +826,7 @@ shell::setv( const OUString& aUnqPath,
         it1 = properties.find( toset );
         if( it1 == properties.end() )
         {
-            ret[i] <<= beans::UnknownPropertyException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+            ret[i] <<= beans::UnknownPropertyException( THROW_WHERE );
             continue;
         }
 
@@ -836,7 +836,7 @@ shell::setv( const OUString& aUnqPath,
 
         if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
         {
-            ret[i] <<= lang::IllegalAccessException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+            ret[i] <<= lang::IllegalAccessException( THROW_WHERE );
             continue;
         }
 
@@ -907,7 +907,7 @@ shell::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( THROW_WHERE );
             }
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
@@ -1015,7 +1015,7 @@ shell::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( THROW_WHERE );
             }
         }
     }   // end for

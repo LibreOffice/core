@@ -293,8 +293,7 @@ namespace basprov
         (void)aValue;
 
         throw UnknownPropertyException(
-            OUString( "BasicMethodNodeImpl::setValue: property name is unknown!"  ),
-            Reference< XInterface >() );
+            "BasicMethodNodeImpl::setValue: property name is unknown!" );
     }
 
 
@@ -304,8 +303,7 @@ namespace basprov
         (void)aPropertyName;
 
         throw UnknownPropertyException(
-            OUString( "BasicMethodNodeImpl::getValue: property name is unknown!"  ),
-            Reference< XInterface >() );
+            "BasicMethodNodeImpl::getValue: property name is unknown!" );
     }
 
 

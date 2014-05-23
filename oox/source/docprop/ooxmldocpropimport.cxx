@@ -151,7 +151,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     if( aCoreStreams.hasElements() || aExtStreams.hasElements() || aCustomStreams.hasElements() )
     {
         if( aCoreStreams.getLength() > 1 )
-            throw IOException( "Unexpected core properties stream!", Reference< XInterface >() );
+            throw IOException( "Unexpected core properties stream!" );
 
         ::oox::core::FastParser aParser( mxContext );
         aParser.registerNamespace( NMSP_packageMetaCorePr );

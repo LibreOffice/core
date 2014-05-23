@@ -238,9 +238,7 @@ void Writer::sendRequest(
     }
     OSL_ASSERT(functionId >= 0);
     if (functionId > SAL_MAX_UINT16) {
-        throw css::uno::RuntimeException(
-            "function ID too large for URP",
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("function ID too large for URP");
     }
     std::vector< unsigned char > buf;
     bool newType = !(lastType_.is() && t.equals(lastType_));
@@ -406,8 +404,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     std::vector< unsigned char > header;
     if (buffer.size() > SAL_MAX_UINT32) {
         throw css::uno::RuntimeException(
-            "message too large for URP",
-            css::uno::Reference< css::uno::XInterface >());
+            "message too large for URP");
     }
     Marshal::write32(&header, static_cast< sal_uInt32 >(buffer.size()));
     Marshal::write32(&header, 1);

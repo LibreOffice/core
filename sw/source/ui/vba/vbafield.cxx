@@ -336,7 +336,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     }
     else
     {
-        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented" );
     }
 
     SwVbaRange* pVbaRange = dynamic_cast< SwVbaRange* >( Range.get() );
@@ -462,7 +462,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     }
     else if( sFieldService.isEmpty() )
     {
-        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented" );
     }
 
     uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( sFieldService ), uno::UNO_QUERY_THROW );

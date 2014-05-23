@@ -272,7 +272,7 @@ getCurrentDocument() throw (uno::RuntimeException)
             if ( !xModel.is() )
             {
                 throw uno::RuntimeException(
-                    "Can't extract model from basic ( its obviously not set yet  therefore don't know the currently selected document)", uno::Reference< uno::XInterface >() );
+                    "Can't extract model from basic ( its obviously not set yet  therefore don't know the currently selected document)" );
             }
             return xModel;
         }
@@ -286,9 +286,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     else
     {
         OSL_TRACE("Failed to get ThisComponent");
-        throw uno::RuntimeException(
-            OUString( "Can't determine the currently selected document" ),
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Can't determine the currently selected document" );
     }
     return xModel;
 }
@@ -517,7 +515,7 @@ OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeExcepti
                 break;
             }
         default:
-                   throw uno::RuntimeException("Invalid type, can't convert", uno::Reference< uno::XInterface >() );
+                   throw uno::RuntimeException("Invalid type, can't convert" );
     }
     return sString;
 }

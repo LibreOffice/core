@@ -283,8 +283,7 @@ Image UpdateCheckUI::GetBubbleImage( OUString &rURL )
 
         if( !xContext.is() )
             throw uno::RuntimeException(
-                "UpdateCheckUI: unable to obtain service manager from component context",
-                    uno::Reference< uno::XInterface >() );
+                "UpdateCheckUI: unable to obtain service manager from component context" );
 
         try
         {

@@ -1197,9 +1197,8 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
 
     if ( !bSuccess )
     {
-        throw uno::RuntimeException( OUString(
-            "ScDDELinkObj::getResults: failed to get results!" ),
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException(
+            "ScDDELinkObj::getResults: failed to get results!" );
     }
 
     return aReturn;
@@ -1229,9 +1228,8 @@ void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >&
 
     if ( !bSuccess )
     {
-        throw uno::RuntimeException( OUString(
-            "ScDDELinkObj::setResults: failed to set results!" ),
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException(
+            "ScDDELinkObj::setResults: failed to set results!" );
     }
 }
 
@@ -1446,9 +1444,8 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
 
     if ( !xLink.is() )
     {
-        throw uno::RuntimeException( OUString(
-            "ScDDELinksObj::addDDELink: cannot add DDE link!" ),
-            uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException(
+            "ScDDELinksObj::addDDELink: cannot add DDE link!" );
     }
 
     return xLink;

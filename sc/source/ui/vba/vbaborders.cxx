@@ -167,7 +167,7 @@ public:
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
             return uno::makeAny( OORGBToXLRGB( aBorderLine.Color ) );
-        throw uno::RuntimeException("No Implementation available", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No Implementation available" );
     }
     void SAL_CALL setColor( const uno::Any& _color ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
@@ -180,7 +180,7 @@ public:
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException("No Implementation available", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("No Implementation available" );
     }
 
     uno::Any SAL_CALL getColorIndex() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -231,7 +231,7 @@ public:
                     break;
             }
         }
-        throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Method failed" );
     }
     void SAL_CALL setWeight( const uno::Any& _weight ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
@@ -255,12 +255,12 @@ public:
                     aBorderLine.OuterLineWidth = OOLineHairline;
                     break;
                 default:
-                    throw uno::RuntimeException("Bad param", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Bad param" );
             }
             setBorderLine( aBorderLine );
         }
         else
-                    throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Method failed" );
     }
 
     uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -289,12 +289,12 @@ public:
                 case XlLineStyle::xlSlantDashDot:
                     break;
                 default:
-                    throw uno::RuntimeException("Bad param", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Bad param" );
             }
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Method failed" );
     }
 };
 

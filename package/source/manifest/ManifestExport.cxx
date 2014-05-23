@@ -263,7 +263,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
                 sChecksumType = sSHA1_1k_Name;
             else
-                throw uno::RuntimeException( THROW_WHERE "Unexpected digest algorithm is provided!", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( THROW_WHERE "Unexpected digest algorithm is provided!" );
 
             pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
             *pDigest >>= aSequence;
@@ -286,7 +286,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             {
                 OSL_ENSURE( nDerivedKeySize, "Unexpected key size is provided!" );
                 if ( nDerivedKeySize != 32 )
-                    throw uno::RuntimeException( THROW_WHERE "Unexpected key size is provided!", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( THROW_WHERE "Unexpected key size is provided!" );
 
                 sEncAlgName = sAES256_URL;
             }
@@ -295,7 +295,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                 sEncAlgName = sBlowfish_Name;
             }
             else
-                throw uno::RuntimeException( THROW_WHERE "Unexpected encryption algorithm is provided!", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( THROW_WHERE "Unexpected encryption algorithm is provided!" );
 
             pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
 
@@ -359,7 +359,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else
-                    throw uno::RuntimeException( THROW_WHERE "Unexpected start key algorithm is provided!", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( THROW_WHERE "Unexpected start key algorithm is provided!" );
 
                 pNewAttrList->AddAttribute ( sStartKeyGenerationNameAttribute, sCdataAttribute, sStartKeyAlg );
                 pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sStartKeySize );

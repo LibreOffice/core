@@ -1238,7 +1238,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     // this code was executed. Maybe it is a security feature. However, all attempts to debug the
                     // SandboxSecurity class (maybe the VM invokes checkPackageAccess)  failed.
 //                  jclass jcSandboxSec= pJNIEnv->FindClass("com.sun.star.lib.sandbox.SandboxSecurity");
-//                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity", Reference<XInterface>());
+//                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity");
 //                  jboolean bIsSand= pJNIEnv->IsInstanceOf( joSecur, jcSandboxSec);
                     // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
                     jclass jcSec= pJNIEnv->GetObjectClass( joSecur);

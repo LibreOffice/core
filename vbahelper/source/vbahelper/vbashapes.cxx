@@ -358,7 +358,7 @@ ScVbaShapes::AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _n
     {
         return AddTextboxInWriter( _nOrientation, _nLeft, _nTop, _nWidth, _nHeight );
     }
-    throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "Not implemented" );
 }
 
 uno::Any

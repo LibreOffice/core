@@ -108,7 +108,7 @@ void SAL_CALL UnoBinaryInputStream::closeInput() throw (NotConnectedException, I
 void UnoBinaryInputStream::ensureConnected() const throw (NotConnectedException)
 {
     if( !mpInStrm )
-        throw NotConnectedException( "Stream closed", Reference< XInterface >() );
+        throw NotConnectedException( "Stream closed" );
 }
 
 } // namespace

@@ -89,16 +89,12 @@ throw ( uno::Exception, uno::RuntimeException, std::exception )
          args[0].getValueType() != ::cppu::UnoType<OUString>::get() ||
          args[1].getValueType() != ::cppu::UnoType<OUString>::get() )
     {
-        throw uno::RuntimeException( OUString(
-            "ScriptingFrameworkURIHelper got invalid argument list" ),
-                uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "ScriptingFrameworkURIHelper got invalid argument list" );
     }
 
     if ( !(args[0] >>= m_sLanguage) || !(args[1] >>= m_sLocation) )
     {
-        throw uno::RuntimeException( OUString(
-            "ScriptingFrameworkURIHelper error parsing args" ),
-                uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "ScriptingFrameworkURIHelper error parsing args" );
     }
 
     SCRIPTS_PART = "/Scripts/";
@@ -106,9 +102,7 @@ throw ( uno::Exception, uno::RuntimeException, std::exception )
 
     if ( !initBaseURI() )
     {
-        throw uno::RuntimeException( OUString(
-            "ScriptingFrameworkURIHelper cannot find script directory"),
-                uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "ScriptingFrameworkURIHelper cannot find script directory" );
     }
 }
 

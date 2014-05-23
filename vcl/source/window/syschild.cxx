@@ -183,7 +183,7 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
                 pJavaEnv->ReleaseStringChars(jsMessage, jcMessage);
             }
 
-            throw uno::RuntimeException(ouMessage, uno::Reference<uno::XInterface>());
+            throw uno::RuntimeException(ouMessage);
     }
 #else
     (void)pEnv;

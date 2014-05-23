@@ -949,9 +949,7 @@ static void insert_singletons(
                         xContext->getValueByName( the_tdmgr ) >>= xTDMgr;
                         if (! xTDMgr.is())
                         {
-                            throw RuntimeException(
-                                "cannot get singleton " + the_tdmgr,
-                                Reference< XInterface >() );
+                            throw RuntimeException( "cannot get singleton " + the_tdmgr );
                         }
                         try
                         {
@@ -959,9 +957,7 @@ static void insert_singletons(
                             xTDMgr->getByHierarchicalName( existing_name ) >>= xExistingService_td;
                             if (! xExistingService_td.is())
                             {
-                                throw RuntimeException(
-                                    "cannot get service type description: " + existing_name,
-                                    Reference< XInterface >() );
+                                throw RuntimeException( "cannot get service type description: " + existing_name );
                             }
 
                             // everything's fine if existing service entry supports the one
@@ -976,14 +972,13 @@ static void insert_singletons(
                                 buf.append( ") does not support given one: " );
                                 buf.append( service_name );
                                 throw registry::CannotRegisterImplementationException(
-                                    buf.makeStringAndClear(), Reference< XInterface >() );
+                                    buf.makeStringAndClear() );
                             }
                         }
                         catch (const container::NoSuchElementException & exc)
                         {
                             throw RuntimeException(
-                                "cannot get service type description: " + exc.Message,
-                                Reference< XInterface >() );
+                                "cannot get service type description: " + exc.Message );
                         }
                     }
                 }
@@ -1052,8 +1047,7 @@ static void prepareRegistry(
     if (!subKeys.getLength())
     {
         throw InvalidRegistryException(
-            OUString( "prepareRegistry(): source registry is empty" ),
-            Reference< XInterface > () );
+            "prepareRegistry(): source registry is empty" );
     }
 
     const StringPool & pool = spool();
@@ -1497,7 +1491,7 @@ void ImplementationRegistration::prepareRegister(
                 buf.append( activatorName );
                 buf.appendAscii( " cannot be instantiated\n" );
                 throw CannotRegisterImplementationException(
-                    buf.makeStringAndClear(), Reference< XInterface > () );
+                    buf.makeStringAndClear() );
             }
         }
         catch( CannotRegisterImplementationException & )
@@ -1512,7 +1506,7 @@ void ImplementationRegistration::prepareRegister(
             buf.append( e.Message );
             buf.append( ")" );
             throw CannotRegisterImplementationException(
-                buf.makeStringAndClear(), Reference< XInterface > () );
+                buf.makeStringAndClear() );
         }
         catch( const MergeConflictException & e )
         {
@@ -1522,16 +1516,14 @@ void ImplementationRegistration::prepareRegister(
             buf.append( e.Message );
             buf.append( ")" );
             throw CannotRegisterImplementationException(
-                buf.makeStringAndClear(), Reference< XInterface > () );
+                buf.makeStringAndClear() );
         }
     }
     else
     {
         throw CannotRegisterImplementationException(
-            OUString(
                 "ImplementationRegistration::registerImplementation() "
-                "no componentcontext available to instantiate loader"),
-            Reference< XInterface > () );
+                "no componentcontext available to instantiate loader" );
     }
 }
 
@@ -1780,8 +1772,7 @@ void ImplementationRegistration::doRegister(
             else
             {
                 throw CannotRegisterImplementationException(
-                    OUString( "ImplementationRegistration::doRegistration() component registration signaled failure" ),
-                    Reference< XInterface > () );
+                    "ImplementationRegistration::doRegistration() component registration signaled failure" );
             }
 
             // Cleanup Source registry.

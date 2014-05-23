@@ -30,8 +30,7 @@ namespace canvas
         {
             throw beans::UnknownPropertyException(
                 "PropertySetHelper: property " +
-                aPropertyName + " not found.",
-                uno::Reference< uno::XInterface >()
+                aPropertyName + " not found."
                 );
         }
 
@@ -39,8 +38,7 @@ namespace canvas
         {
             throw beans::PropertyVetoException(
                 "PropertySetHelper: property " +
-                aPropertyName + " access was vetoed.",
-                uno::Reference< uno::XInterface >() );
+                aPropertyName + " access was vetoed." );
         }
 
         struct EntryComparator

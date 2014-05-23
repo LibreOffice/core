@@ -170,8 +170,7 @@ template< typename T > css::uno::Any parseSingleValue(
 {
     T val;
     if (!parseValue(text, &val)) {
-        throw css::uno::RuntimeException(
-            "invalid value", css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("invalid value");
     }
     return css::uno::makeAny(val);
 }
@@ -194,9 +193,7 @@ template< typename T > css::uno::Any parseListValue(
             if (!parseValue(
                     xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
             {
-                throw css::uno::RuntimeException(
-                    "invalid value",
-                    css::uno::Reference< css::uno::XInterface >());
+                throw css::uno::RuntimeException("invalid value");
             }
             seq.push_back(val);
             if (i < 0) {
@@ -214,9 +211,7 @@ css::uno::Any parseValue(
 {
     switch (type) {
     case TYPE_ANY:
-        throw css::uno::RuntimeException(
-            "invalid value of type any",
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("invalid value of type any");
     case TYPE_BOOLEAN:
         return parseSingleValue< sal_Bool >(text);
     case TYPE_SHORT:
@@ -248,9 +243,7 @@ css::uno::Any parseValue(
             separator, text);
     default:
         assert(false);
-        throw css::uno::RuntimeException(
-            "this cannot happen",
-            css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::RuntimeException("this cannot happen");
     }
 }
 
@@ -332,8 +325,7 @@ bool ValueParser::startElement(
                 pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
             } else {
                 throw css::uno::RuntimeException(
-                    "bad unicode scalar attribute in " + reader.getUrl(),
-                    css::uno::Reference< css::uno::XInterface >());
+                    "bad unicode scalar attribute in " + reader.getUrl());
             }
             state_ = State(state_ + 1);
             return true;
@@ -343,8 +335,7 @@ bool ValueParser::startElement(
         break;
     }
     throw css::uno::RuntimeException(
-        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl(),
-        css::uno::Reference< css::uno::XInterface >());
+        "bad member <" + name.convertFromUtf8() + "> in " + reader.getUrl());
 }
 
 bool ValueParser::endElement() {

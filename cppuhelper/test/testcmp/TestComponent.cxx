@@ -99,8 +99,7 @@ uno::Reference<uno::XInterface> SAL_CALL TestComponent::create(
     }
     catch (std::bad_alloc &)
     {
-        throw uno::RuntimeException(rtl::OUString("std::bad_alloc"),
-                                     uno::Reference<uno::XInterface>());
+        throw uno::RuntimeException("std::bad_alloc");
     }
 }
 

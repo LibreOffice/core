@@ -181,11 +181,11 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     if( nType != office::MsoControlType::msoControlButton &&
         nType != office::MsoControlType::msoControlPopup )
-        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" );
 
     if( Id.hasValue() || Parameter.hasValue( ) )
     {
-        throw uno::RuntimeException( "Not implemented" , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Not implemented" );
     }
 
     if( Before.hasValue() )

@@ -62,7 +62,7 @@ ScVbaListBox::getValue() throw (uno::RuntimeException, std::exception)
     m_xProps->getPropertyValue( "SelectedItems" ) >>= sSelection;
     m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
     if( getMultiSelect() )
-        throw uno::RuntimeException( "Attribute use invalid." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Attribute use invalid." );
     uno::Any aRet;
     if ( sSelection.getLength() )
         aRet = uno::makeAny( sItems[ sSelection[ 0 ] ] );
@@ -74,7 +74,7 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException, s
 {
     if( getMultiSelect() )
     {
-        throw uno::RuntimeException( "Attribute use invalid." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Attribute use invalid." );
     }
     OUString sValue = getAnyAsString( _value );
     uno::Sequence< OUString > sList;
@@ -91,7 +91,7 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException, s
         }
     }
     if( nValue == -1 )
-        throw uno::RuntimeException( "Attribute use invalid." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Attribute use invalid." );
 
     uno::Sequence< sal_Int16 > nSelectedIndices(1);
     uno::Sequence< sal_Int16 > nOldSelectedIndices;
@@ -156,7 +156,7 @@ ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException, std
     // the indices are but sal_Int16
     sal_Int16 nIndex = static_cast< sal_Int16 >( index );
     if( nIndex < 0 || nIndex >= nLength )
-        throw uno::RuntimeException( "Error Number." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Error Number." );
     m_nIndex = nIndex;
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
@@ -189,7 +189,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
 {
     bool bValue = false;
     if( !(value >>= bValue) )
-        throw uno::RuntimeException( "Invalid type\n. need boolean." , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( "Invalid type. need boolean." );
     uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( "SelectedItems" ) >>= nList;
     sal_Int16 nLength = static_cast<sal_Int16>( nList.getLength() );

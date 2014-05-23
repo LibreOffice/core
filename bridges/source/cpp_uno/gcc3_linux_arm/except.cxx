@@ -254,40 +254,38 @@ namespace CPPU_CURRENT_NAMESPACE
             {
                 throw RuntimeException(
                     OUString("cannot get typedescription for type ") +
-                    *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-                    Reference< XInterface >() );
+                    *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
             }
 
             pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
             ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
-        // destruct uno exception
-        ::uno_any_destruct( pUnoExc, 0 );
-        // avoiding locked counts
-        static RTTI * s_rtti = 0;
-        if (! s_rtti)
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if (! s_rtti)
-            {
+            // destruct uno exception
+           ::uno_any_destruct( pUnoExc, 0 );
+           // avoiding locked counts
+           static RTTI * s_rtti = 0;
+           if (! s_rtti)
+           {
+               MutexGuard guard( Mutex::getGlobalMutex() );
+               if (! s_rtti)
+               {
 #ifdef LEAK_STATIC_DATA
-                s_rtti = new RTTI();
+                   s_rtti = new RTTI();
 #else
-                static RTTI rtti_data;
-                s_rtti = &rtti_data;
+                   static RTTI rtti_data;
+                   s_rtti = &rtti_data;
 #endif
-            }
-        }
-        rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
-        TYPELIB_DANGER_RELEASE( pTypeDescr );
-        OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
-        if (! rtti)
-        {
-            throw RuntimeException(
-                OUString("no rtti for type ") +
-                *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
-                Reference< XInterface >() );
-        }
+               }
+           }
+           rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+           TYPELIB_DANGER_RELEASE( pTypeDescr );
+           OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
+           if (! rtti)
+           {
+               throw RuntimeException(
+                   OUString("no rtti for type ") +
+                   *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
+           }
         }
 
         __cxa_throw( pCppExc, rtti, deleteException );
@@ -309,9 +307,7 @@ namespace CPPU_CURRENT_NAMESPACE
     {
         if (! header)
         {
-            RuntimeException aRE(
-                OUString("no exception header!"),
-                Reference< XInterface >() );
+            RuntimeException aRE( "no exception header!" );
             Type const & rType = ::getCppuType( &aRE );
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
@@ -330,9 +326,7 @@ namespace CPPU_CURRENT_NAMESPACE
         typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
         if (0 == pExcTypeDescr)
         {
-            RuntimeException aRE(
-                OUString("exception type not found: ") + unoName,
-                Reference< XInterface >() );
+            RuntimeException aRE( OUString("exception type not found: ") + unoName );
             Type const & rType = ::getCppuType( &aRE );
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0

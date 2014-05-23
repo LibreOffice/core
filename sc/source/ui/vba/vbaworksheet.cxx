@@ -360,8 +360,7 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException, std::exceptio
         return excel::XlEnableSelection::xlNoSelection;
     }
     else
-        throw uno::RuntimeException("Sheet Name does not exist. ",
-                                uno::Reference< XInterface >() );
+        throw uno::RuntimeException("Sheet Name does not exist." );
 }
 
 
@@ -401,8 +400,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         }
     }
     else
-        throw uno::RuntimeException("Sheet Name does not exist. ",
-                                uno::Reference< XInterface >() );
+        throw uno::RuntimeException("Sheet Name does not exist." );
 
 }
 

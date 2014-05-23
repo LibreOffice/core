@@ -539,8 +539,7 @@ int msci_filterCppException(
                     buf.append( "\", RTTI-name=\"" );
                     buf.append( aRTTIname );
                     buf.append( "\"!" );
-                    RuntimeException exc(
-                        buf.makeStringAndClear(), Reference< XInterface >() );
+                    RuntimeException exc( buf.makeStringAndClear() );
                     uno_type_any_constructAndConvert(
                         pUnoExc, &exc,
                         ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
@@ -565,10 +564,8 @@ int msci_filterCppException(
     }
     // though this unknown exception leaks now, no user-defined exception
     // is ever thrown thru the binary C-UNO dispatcher call stack.
-    RuntimeException exc(
-        OUString( "[msci_uno bridge error] unexpected "
-                  "C++ exception occurred!" ),
-        Reference< XInterface >() );
+    RuntimeException exc( "[msci_uno bridge error] unexpected "
+                  "C++ exception occurred!" );
     uno_type_any_constructAndConvert(
         pUnoExc, &exc, ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
     return EXCEPTION_EXECUTE_HANDLER;

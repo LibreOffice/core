@@ -69,8 +69,7 @@ OString convertToUtf8(
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            "cannot convert to UTF-8",
-            css::uno::Reference< css::uno::XInterface >());
+            "cannot convert to UTF-8");
     }
     return s;
 }
@@ -110,7 +109,7 @@ void writeData_(oslFileHandle handle, char const * begin, sal_Int32 length) {
         n != static_cast< sal_uInt32 >(length))
     {
         throw css::uno::RuntimeException(
-            "write failure", css::uno::Reference< css::uno::XInterface >());
+            "write failure");
     }
 }
 
@@ -537,8 +536,7 @@ void writeModFile(
         return;
     default:
         throw css::uno::RuntimeException(
-            "cannot create directory " + dir,
-            css::uno::Reference< css::uno::XInterface >());
+            "cannot create directory " + dir);
     }
     TempFile tmp;
     switch (osl::FileBase::createTempFile(&dir, &tmp.handle, &tmp.url)) {
@@ -552,8 +550,7 @@ void writeModFile(
         return;
     default:
         throw css::uno::RuntimeException(
-            "cannot create temporary file in " + dir,
-            css::uno::Reference< css::uno::XInterface >());
+            "cannot create temporary file in " + dir);
     }
     writeData_(
         tmp.handle,
@@ -579,13 +576,11 @@ void writeModFile(
     tmp.closed = true;
     if (e != osl_File_E_None) {
         throw css::uno::RuntimeException(
-            "cannot close " + tmp.url,
-            css::uno::Reference< css::uno::XInterface >());
+            "cannot close " + tmp.url);
     }
     if (osl::File::move(tmp.url, url) != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
-            "cannot move " + tmp.url,
-            css::uno::Reference< css::uno::XInterface >());
+            "cannot move " + tmp.url);
     }
     tmp.handle = 0;
 }

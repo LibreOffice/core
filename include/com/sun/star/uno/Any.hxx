@@ -599,8 +599,7 @@ T Any::get() const
                 cppu_Any_extraction_failure_msg(
                     this,
                     ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),
-                SAL_NO_ACQUIRE ),
-            Reference<XInterface>() );
+                SAL_NO_ACQUIRE ) );
     }
     return value;
 }

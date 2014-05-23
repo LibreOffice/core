@@ -148,8 +148,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
         xStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xStream, m_xContext );
         uno::Reference< io::XSeekable > xSeek( xStream, UNO_QUERY );
         if ( !xSeek.is() )
-            throw RuntimeException( THROW_WHERE "The stream must support XSeekable!",
-                                    uno::Reference< XInterface >() );
+            throw RuntimeException( THROW_WHERE "The stream must support XSeekable!" );
 
         m_bHasSeekable = true;
     }
@@ -160,16 +159,14 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
 uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCopy()
 {
     if ( m_nStreamMode != PACKAGE_STREAM_RAW || !GetOwnSeekStream().is() )
-        throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw io::IOException(THROW_WHERE );
 
     if ( m_xBaseEncryptionData.is() )
-        throw ZipIOException(THROW_WHERE "Encrypted stream without encryption data!\n",
-                            uno::Reference< XInterface >() );
+        throw ZipIOException(THROW_WHERE "Encrypted stream without encryption data!" );
 
     uno::Reference< io::XSeekable > xSeek( GetOwnSeekStream(), UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException(THROW_WHERE "The stream must be seekable!\n",
-                            uno::Reference< XInterface >() );
+        throw ZipIOException(THROW_WHERE "The stream must be seekable!" );
 
     // skip header
     xSeek->seek( n_ConstHeaderSize + getInitialisationVector().getLength() +
@@ -230,7 +227,7 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
             aNameToFind = bUseWinEncoding ? PACKAGE_ENCRYPTIONDATA_SHA1MS1252 : PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
         }
         else
-            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
 
         for ( sal_Int32 nInd = 0; nInd < m_aStorageEncryptionKeys.getLength(); nInd++ )
             if ( m_aStorageEncryptionKeys[nInd].Name.equals( aNameToFind ) )
@@ -239,7 +236,7 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
         if ( !aResult.getLength() )
-            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
     }
     else
         aResult = m_aEncryptionKey;
@@ -260,7 +257,7 @@ sal_Int32 ZipPackageStream::GetStartKeyGenID()
 uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( bool bAddHeaderForEncr )
 {
     if ( m_nStreamMode != PACKAGE_STREAM_DATA || !GetOwnSeekStream().is() || ( bAddHeaderForEncr && !bToBeEncrypted ) )
-        throw packages::NoEncryptionException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw packages::NoEncryptionException(THROW_WHERE );
 
     Sequence< sal_Int8 > aKey;
 
@@ -268,7 +265,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
         aKey = GetEncryptionKey();
         if ( !aKey.getLength() )
-            throw packages::NoEncryptionException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw packages::NoEncryptionException(THROW_WHERE );
     }
 
     try
@@ -282,7 +279,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         ZipPackage* pPackage = new ZipPackage( m_xContext );
         uno::Reference< XSingleServiceFactory > xPackageAsFactory( static_cast< XSingleServiceFactory* >( pPackage ) );
         if ( !xPackageAsFactory.is() )
-            throw RuntimeException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw RuntimeException(THROW_WHERE );
 
         Sequence< Any > aArgs( 1 );
         aArgs[0] <<= xTempStream;
@@ -291,14 +288,14 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         // create a new package stream
         uno::Reference< XDataSinkEncrSupport > xNewPackStream( xPackageAsFactory->createInstance(), UNO_QUERY );
         if ( !xNewPackStream.is() )
-            throw RuntimeException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw RuntimeException(THROW_WHERE );
 
         xNewPackStream->setDataStream( static_cast< io::XInputStream* >(
                                                     new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() ) ) );
 
         uno::Reference< XPropertySet > xNewPSProps( xNewPackStream, UNO_QUERY );
         if ( !xNewPSProps.is() )
-            throw RuntimeException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw RuntimeException(THROW_WHERE );
 
         // copy all the properties of this stream to the new stream
         xNewPSProps->setPropertyValue("MediaType", makeAny( sMediaType ) );
@@ -315,7 +312,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         aRoot >>= xTunnel;
         uno::Reference< container::XNameContainer > xRootNameContainer( xTunnel, UNO_QUERY );
         if ( !xRootNameContainer.is() )
-            throw RuntimeException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw RuntimeException(THROW_WHERE );
 
         uno::Reference< XUnoTunnel > xNPSTunnel( xNewPackStream, UNO_QUERY );
         xRootNameContainer->insertByName("dummy", makeAny( xNPSTunnel ) );
@@ -361,7 +358,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
     }
 
-    throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+    throw io::IOException(THROW_WHERE );
 }
 
 bool ZipPackageStream::ParsePackageRawStream()
@@ -529,7 +526,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
 
     // this method can not be used together with old approach
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
-        throw packages::zip::ZipIOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw packages::zip::ZipIOException(THROW_WHERE );
 
     if ( IsPackageMember() )
     {
@@ -596,12 +593,12 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
 
     // this method can not be used together with old approach
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
-        throw packages::zip::ZipIOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw packages::zip::ZipIOException(THROW_WHERE );
 
     if ( IsPackageMember() )
     {
         if ( !bIsEncrypted || !GetEncryptionData().is() )
-            throw packages::NoEncryptionException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw packages::NoEncryptionException(THROW_WHERE );
 
         return rZipPackage.getZipFile().getWrappedRawStream( aEntry, GetEncryptionData(), sMediaType, rZipPackage.GetSharedMutexRef() );
     }
@@ -615,7 +612,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
             return TryToGetRawFromDataStream( true );
     }
 
-    throw packages::NoEncryptionException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+    throw packages::NoEncryptionException(THROW_WHERE );
 }
 
 void SAL_CALL ZipPackageStream::setDataStream( const uno::Reference< io::XInputStream >& aStream )
@@ -636,8 +633,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
     uno::Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, m_xContext );
     uno::Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY );
     if ( !xSeek.is() )
-        throw RuntimeException(THROW_WHERE "The stream must support XSeekable!",
-                                    uno::Reference< XInterface >() );
+        throw RuntimeException(THROW_WHERE "The stream must support XSeekable!" );
 
     xSeek->seek( 0 );
     uno::Reference< io::XInputStream > xOldStream = xStream;
@@ -645,7 +641,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
     if ( !ParsePackageRawStream() )
     {
         xStream = xOldStream;
-        throw packages::NoRawFormatException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw packages::NoRawFormatException(THROW_WHERE );
     }
 
     // the raw stream MUST have seekable access
@@ -666,7 +662,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream(
 
     // this method can not be used together with old approach
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
-        throw packages::zip::ZipIOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw packages::zip::ZipIOException(THROW_WHERE );
 
     if ( IsPackageMember() )
     {
@@ -705,7 +701,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     if ( aPropertyName == "MediaType" )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE && rZipPackage.getFormat() != embed::StorageFormats::OFOPXML )
-            throw beans::PropertyVetoException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw beans::PropertyVetoException(THROW_WHERE );
 
         if ( aValue >>= sMediaType )
         {
@@ -734,7 +730,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == "Encrypted" )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
-            throw beans::PropertyVetoException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw beans::PropertyVetoException(THROW_WHERE );
 
         bool bEnc = false;
         if ( aValue >>= bEnc )
@@ -758,7 +754,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
-            throw beans::PropertyVetoException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw beans::PropertyVetoException(THROW_WHERE );
 
         uno::Sequence< sal_Int8 > aNewKey;
 
@@ -803,7 +799,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
         if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
-            throw beans::PropertyVetoException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+            throw beans::PropertyVetoException(THROW_WHERE );
 
         uno::Sequence< beans::NamedValue > aKeys;
         if ( !( aValue >>= aKeys ) )
@@ -854,7 +850,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                                             2 );
     }
     else
-        throw beans::UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException(THROW_WHERE );
 }
 
 Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
@@ -897,7 +893,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
         return aAny;
     }
     else
-        throw beans::UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException(THROW_WHERE );
 }
 
 void ZipPackageStream::setSize ( const sal_Int64 nNewSize )

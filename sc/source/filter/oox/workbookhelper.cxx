@@ -548,7 +548,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     }
 
     if (!mpDoc)
-        throw RuntimeException("Workbookhelper::getScDocument(): Failed to access ScDocument from model", Reference<XInterface>());
+        throw RuntimeException("Workbookhelper::getScDocument(): Failed to access ScDocument from model");
 
     mxDocImport.reset(new ScDocumentImport(*mpDoc));
 

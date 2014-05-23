@@ -260,7 +260,7 @@ ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ ) throw( uno::Runtime
 //XXX #TODO# #FIXME#
     //mxFont->setPropertyValue("CharSize", ( uno::Any )fValue );
     throw uno::RuntimeException(
-        OUString("setStandardFontSize not supported"), uno::Reference< uno::XInterface >() );
+        "setStandardFontSize not supported" );
 }
 
 
@@ -268,8 +268,7 @@ uno::Any SAL_CALL
 ScVbaFont::getStandardFontSize() throw ( uno::RuntimeException, std::exception )
 {
 //XXX #TODO# #FIXME#
-    throw uno::RuntimeException(
-        OUString("getStandardFontSize not supported"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( "getStandardFontSize not supported" );
     // return uno::Any();
 }
 
@@ -278,8 +277,7 @@ void  SAL_CALL
 ScVbaFont::setStandardFont( const uno::Any& /*aValue*/ ) throw( uno::RuntimeException, std::exception )
 {
 //XXX #TODO# #FIXME#
-    throw uno::RuntimeException(
-        OUString("setStandardFont not supported"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("setStandardFont not supported" );
 }
 
 
@@ -287,8 +285,7 @@ uno::Any SAL_CALL
 ScVbaFont::getStandardFont() throw ( uno::RuntimeException, std::exception )
 {
 //XXX #TODO# #FIXME#
-    throw uno::RuntimeException(
-        OUString("getStandardFont not supported"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("getStandardFont not supported");
     // return uno::Any();
 }
 
@@ -379,7 +376,7 @@ ScVbaFont::setUnderline( const uno::Any& aValue ) throw ( uno::RuntimeException,
             nValue = awt::FontUnderline::DOUBLE;
             break;
         default:
-            throw uno::RuntimeException("Unknown value for Underline", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Unknown value for Underline" );
     }
 
     mxFont->setPropertyValue("CharUnderline", ( uno::Any )nValue );
@@ -407,7 +404,7 @@ ScVbaFont::getUnderline() throw ( uno::RuntimeException, std::exception )
             nValue = excel::XlUnderlineStyle::xlUnderlineStyleNone;
             break;
         default:
-            throw uno::RuntimeException("Unknown value retrieved for Underline", uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Unknown value retrieved for Underline" );
 
     }
     return uno::makeAny( nValue );

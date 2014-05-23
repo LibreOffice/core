@@ -796,7 +796,7 @@ void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException, std::exception)
         }
         catch (const Exception & exc)
         {
-            throw RuntimeException( "unexpected UNO exception caught: "  +  exc.Message, Reference< XInterface >() );
+            throw RuntimeException( "unexpected UNO exception caught: " + exc.Message );
         }
     }
 }

@@ -35,7 +35,7 @@ bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRan
 {
     const ScRangeList& rScInner = ScVbaRange::getScRangeList( rxInner );
     if( rScInner.empty() || rScOuter.empty() )
-        throw uno::RuntimeException("Empty range objects", uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Empty range objects" );
 
     for( size_t nIndex = 0, nCount = rScInner.size(); nIndex < nCount; ++nIndex )
         if( !rScOuter.In( *rScInner[ nIndex ] ) )

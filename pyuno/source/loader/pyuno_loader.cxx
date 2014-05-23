@@ -72,7 +72,7 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
         buf.appendAscii( "python-loader:" );
         if( a.hasValue() )
             buf.append( ((com::sun::star::uno::Exception *)a.getValue())->Message );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface> () );
+        throw RuntimeException( buf.makeStringAndClear() );
     }
 }
 
@@ -84,9 +84,7 @@ static PyRef getLoaderModule() throw( RuntimeException )
     raiseRuntimeExceptionWhenNeeded();
     if( !module.is() )
     {
-        throw RuntimeException(
-            OUString( "pythonloader: Couldn't load pythonloader module" ),
-            Reference< XInterface > () );
+        throw RuntimeException( "pythonloader: Couldn't load pythonloader module" );
     }
     return PyRef( PyModule_GetDict( module.get() ));
 }
@@ -100,7 +98,7 @@ static PyRef getObjectFromLoaderModule( const char * func )
         OUStringBuffer buf;
         buf.appendAscii( "pythonloader: couldn't find core element pythonloader." );
         buf.appendAscii( func );
-        throw RuntimeException(buf.makeStringAndClear(),Reference< XInterface >());
+        throw RuntimeException(buf.makeStringAndClear());
     }
     return object;
 }

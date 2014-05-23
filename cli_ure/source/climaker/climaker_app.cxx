@@ -240,15 +240,13 @@ static OUString path_make_absolute_file_url( OUString const & path )
         else
         {
             throw RuntimeException(
-                "cannot make absolute: " + file_url,
-                css::uno::Reference< XInterface >() );
+                "cannot make absolute: " + file_url );
         }
     }
     else
     {
         throw RuntimeException(
-            "cannot get file url from system path: " + path,
-            css::uno::Reference< XInterface >() );
+            "cannot get file url from system path: " + path );
     }
 }
 
@@ -381,8 +379,7 @@ SAL_IMPLEMENT_MAIN()
                             buf.append( cmd_arg );
                             buf.append( "!  Use climaker --help to print all options." );
                             throw RuntimeException(
-                                buf.makeStringAndClear(),
-                                css::uno::Reference< XInterface >() );
+                                buf.makeStringAndClear() );
                         }
                         else
                         {
@@ -457,8 +454,7 @@ SAL_IMPLEMENT_MAIN()
         {
             throw RuntimeException(
                 "cannot get system path from file url " +
-                output.copy( 0, slash ),
-                css::uno::Reference< XInterface >() );
+                output.copy( 0, slash ) );
         }
         OUString filename( output.copy( slash +1 ) );
         sal_Int32 dot = filename.lastIndexOf( '.' );

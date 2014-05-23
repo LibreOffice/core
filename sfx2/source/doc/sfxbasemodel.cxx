@@ -465,17 +465,14 @@ SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel 
     , m_pFramesLock(0     )
 {
     if ( m_pData->m_bClosed )
-        throw lang::DisposedException(
-                OUString("Object already disposed."),
-                Reference< XInterface >());
+        throw lang::DisposedException("Object already disposed.");
 
     if (
         bRejectConcurrentSaveRequest &&
         m_pData->m_bSaving
        )
         throw io::IOException(
-                OUString("Concurrent save requests on the same document are not possible."),
-                Reference< XInterface >());
+                "Concurrent save requests on the same document are not possible.");
 
     m_pData->m_bSaving = true;
     m_pFramesLock = new SfxOwnFramesLocker(m_pData->m_pObjectShell);
@@ -2427,7 +2424,7 @@ void SAL_CALL SfxBaseModel::removeDocumentEventListener( const Reference< docume
 void SAL_CALL SfxBaseModel::notifyDocumentEvent( const OUString&, const Reference< frame::XController2 >&, const Any& )
     throw ( lang::IllegalArgumentException, lang::NoSupportException, RuntimeException, std::exception )
 {
-    throw lang::NoSupportException("SfxBaseModel controls all the sent notifications itself!", Reference< XInterface >() );
+    throw lang::NoSupportException("SfxBaseModel controls all the sent notifications itself!" );
 }
 
 Sequence< document::CmisProperty > SAL_CALL SfxBaseModel::getCmisProperties()
@@ -3013,8 +3010,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             m_pData->m_pObjectShell->StoreLog();
 
             throw frame::IllegalArgumentIOException(
-                    OUString( "CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!"),
-                    Reference< XInterface >() );
+                    "CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!" );
         }
 
         sal_uInt32 nModifyPasswordHash = 0;

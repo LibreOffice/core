@@ -451,8 +451,7 @@ Reference<XInterface> resolveUnoURL(
     for (int i = 0; i <= 20; ++i) // 10 seconds
     {
         if (abortChannel != 0 && abortChannel->isAborted()) {
-            throw ucb::CommandAbortedException(
-                "abort!", Reference<XInterface>() );
+            throw ucb::CommandAbortedException( "abort!" );
         }
         try {
             return xUnoUrlResolver->resolve( connectString );

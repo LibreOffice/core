@@ -30,8 +30,7 @@ uno::Reference< xml::crypto::XCipherContext > BlowfishCFB8CipherContext::Create(
     ::rtl::Reference< BlowfishCFB8CipherContext > xResult = new BlowfishCFB8CipherContext();
     xResult->m_pCipher = rtl_cipher_create( rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream );
     if ( !xResult->m_pCipher )
-        throw uno::RuntimeException("Can not create cipher!",
-                                     uno::Reference< XInterface >() );
+        throw uno::RuntimeException("Can not create cipher!" );
 
     if ( rtl_Cipher_E_None != rtl_cipher_init(
                                 xResult->m_pCipher,
@@ -41,8 +40,7 @@ uno::Reference< xml::crypto::XCipherContext > BlowfishCFB8CipherContext::Create(
                                 reinterpret_cast< const sal_uInt8* >( aInitVector.getConstArray() ),
                                 aInitVector.getLength() ) )
     {
-        throw uno::RuntimeException("Can not initialize cipher!",
-                                     uno::Reference< XInterface >() );
+        throw uno::RuntimeException("Can not initialize cipher!" );
     }
 
     xResult->m_bEncrypt = bEncrypt;
@@ -88,8 +86,7 @@ uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherC
 
     if ( rtl_Cipher_E_None != nError )
     {
-        throw uno::RuntimeException("Can not decrypt/encrypt with cipher!",
-                                     uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can not decrypt/encrypt with cipher!" );
     }
 
     return aResult;

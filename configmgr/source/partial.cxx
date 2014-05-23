@@ -54,8 +54,7 @@ bool parseSegment(
             return *index == path.getLength();
         }
     }
-    throw css::uno::RuntimeException(
-        "bad path " + path, css::uno::Reference< css::uno::XInterface >());
+    throw css::uno::RuntimeException("bad path " + path);
 }
 
 }

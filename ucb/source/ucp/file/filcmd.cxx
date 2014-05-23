@@ -91,7 +91,7 @@ XCommandInfo_impl::getCommandInfoByName(
         if( m_pMyShell->m_sCommandInfo[i].Name == aName )
             return m_pMyShell->m_sCommandInfo[i];
 
-    throw UnsupportedCommandException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+    throw UnsupportedCommandException( THROW_WHERE );
 }
 
 
@@ -105,7 +105,7 @@ XCommandInfo_impl::getCommandInfoByHandle(
         if( m_pMyShell->m_sCommandInfo[i].Handle == Handle )
             return m_pMyShell->m_sCommandInfo[i];
 
-    throw UnsupportedCommandException( THROW_WHERE, uno::Reference< uno::XInterface >() );
+    throw UnsupportedCommandException( THROW_WHERE );
 }
 
 

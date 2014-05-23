@@ -252,7 +252,7 @@ namespace fileaccess {
 
         if( errorCode ==  TASKHANDLER_UNSUPPORTED_COMMAND )
         {
-            aAny <<= UnsupportedCommandException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            aAny <<= UnsupportedCommandException( OSL_LOG_PREFIX );
             cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT ||

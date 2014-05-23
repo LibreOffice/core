@@ -160,7 +160,7 @@ namespace io_acceptor
         if( ! m_pipe.is() )
         {
             OUString error = "io.acceptor: Couldn't setup pipe " + m_sPipeName;
-            throw ConnectionSetupException( error, Reference< XInterface > () );
+            throw ConnectionSetupException( error );
         }
     }
 
@@ -174,7 +174,7 @@ namespace io_acceptor
         if( ! pipe.is() )
         {
             OUString error = "io.acceptor: pipe already closed" + m_sPipeName;
-            throw ConnectionSetupException( error, Reference< XInterface > () );
+            throw ConnectionSetupException( error );
         }
         PipeConnection *pConn = new PipeConnection( m_sConnectionDescription );
 
@@ -193,7 +193,7 @@ namespace io_acceptor
         else
         {
             OUString error = "io.acceptor: Couldn't setup pipe " + m_sPipeName;
-            throw ConnectionSetupException( error, Reference< XInterface > ());
+            throw ConnectionSetupException( error );
         }
     }
 

@@ -176,7 +176,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
         OUString temp =
             "ProviderCache::populateCache: couldn't obtain XSingleComponentFactory for "
             + serviceName;
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+        throw RuntimeException( temp.concat( e.Message ) );
     }
 }
 
@@ -191,7 +191,7 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
     catch ( const Exception& e )
     {
         OUString temp("ProviderCache::createProvider() Error creating provider from factory!!!\n");
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+        throw RuntimeException( temp.concat( e.Message ) );
     }
 
     return details.provider;

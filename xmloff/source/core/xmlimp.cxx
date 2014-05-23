@@ -649,8 +649,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                 throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
                         uno::Reference< uno::XInterface >(),
                         uno::makeAny(
-                            packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!",
-                                Reference< XInterface >() ) ) );
+                            packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
             }
         }
         else if( ( rAttrName.getLength() >= 5 ) &&
