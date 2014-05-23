@@ -170,9 +170,9 @@ public:
     sal_uInt8           GetOutlineLevel()const {return nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
-    bool            Expand( SvTreeListEntry* pParent );
+    virtual bool    Expand( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
-    bool            Collapse( SvTreeListEntry* pParent );
+    virtual bool    Collapse( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
     void            ExecCommand(sal_uInt16 nCmd, bool bModifier);
 
