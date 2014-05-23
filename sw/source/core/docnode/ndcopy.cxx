@@ -195,9 +195,10 @@ namespace
             }
             ::sw::mark::IFieldmark* const pNewFieldmark =
                 dynamic_cast< ::sw::mark::IFieldmark* const >(pNewMark);
-            if(pNewFieldmark)
+            const ::sw::mark::IFieldmark* const pOldFieldmark =
+                dynamic_cast< const ::sw::mark::IFieldmark* >(pMark);
+            if (pNewFieldmark && pOldFieldmark)
             {
-                const ::sw::mark::IFieldmark* const pOldFieldmark = dynamic_cast< const ::sw::mark::IFieldmark* >(pMark);
                 pNewFieldmark->SetFieldname(pOldFieldmark->GetFieldname());
                 pNewFieldmark->SetFieldHelptext(pOldFieldmark->GetFieldHelptext());
                 ::sw::mark::IFieldmark::parameter_map_t* pNewParams = pNewFieldmark->GetParameters();
