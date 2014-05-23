@@ -2987,7 +2987,12 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
-        copy() :nError1(FileBase::E_None) {}
+        copy()
+            : nError1(FileBase::E_None)
+            , nCount_write(0)
+        {
+        }
+
         // initialization
         void setUp() SAL_OVERRIDE
         {
