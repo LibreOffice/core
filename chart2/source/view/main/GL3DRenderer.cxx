@@ -939,7 +939,7 @@ void OpenGL3DRenderer::AddPolygon3DObjectNormalPoint(float x, float y, float z)
         {
             m_Polygon3DInfo.normals = new Normals3D;
         }
-        m_Polygon3DInfo.normals->push_back(glm::vec3(x, -y, z));
+        m_Polygon3DInfo.normals->push_back(glm::vec3(x, y, z));
     }
 }
 
