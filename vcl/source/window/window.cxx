@@ -1328,7 +1328,7 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
         mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = false;
-        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? sal_False : sal_True; // sal_True: try to draw this control with native theme API
+        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? false : true; // sal_True: try to draw this control with native theme API
    }
 
     return mpWindowImpl->mpWinData;
