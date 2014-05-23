@@ -2434,6 +2434,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     Sequence< PropertyValue > aExtrusionColorProps, aContourColorProps;
     sax_fastparser::FastAttributeList *aBevelTAttrList = mpFS->createAttrList();
     sax_fastparser::FastAttributeList *aBevelBAttrList = mpFS->createAttrList();
+    sax_fastparser::XFastAttributeListRef xBevelAttrList( aBevelBAttrList );
     sax_fastparser::FastAttributeList *aShape3DAttrList = mpFS->createAttrList();
     for( sal_Int32 i=0; i < aShape3DProps.getLength(); ++i )
     {
@@ -2513,7 +2514,6 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     }
     if( bBevelBPresent )
     {
-        sax_fastparser::XFastAttributeListRef xBevelAttrList( aBevelBAttrList );
         mpFS->singleElementNS( XML_a, XML_bevelB, xBevelAttrList );
     }
     if( aExtrusionColorProps.getLength() > 0 )
