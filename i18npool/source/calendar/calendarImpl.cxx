@@ -146,11 +146,29 @@ CalendarImpl::setDateTime( double timeInDays ) throw(RuntimeException, std::exce
         throw ERROR ;
 }
 
+void SAL_CALL
+CalendarImpl::setLocalDateTime( double timeInDays ) throw(RuntimeException)
+{
+    if (xCalendar.is())
+        xCalendar->setLocalDateTime( timeInDays );
+    else
+        throw ERROR ;
+}
+
 double SAL_CALL
 CalendarImpl::getDateTime() throw(RuntimeException, std::exception)
 {
     if (xCalendar.is())
         return xCalendar->getDateTime();
+    else
+        throw ERROR ;
+}
+
+double SAL_CALL
+CalendarImpl::getLocalDateTime() throw(RuntimeException)
+{
+    if (xCalendar.is())
+        return xCalendar->getLocalDateTime();
     else
         throw ERROR ;
 }

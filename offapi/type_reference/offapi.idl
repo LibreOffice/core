@@ -8221,6 +8221,8 @@ module com {
      sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths2();
      sequence< ::com::sun::star::i18n::CalendarItem2 > getGenitiveMonths2();
      sequence< ::com::sun::star::i18n::CalendarItem2 > getPartitiveMonths2();
+     void setLocalDateTime([in] double nTimeInDays);
+     double getLocalDateTime();
     };
     published service LocaleCalendar: ::com::sun::star::i18n::XCalendar3;
     published struct LocaleDataItem {
