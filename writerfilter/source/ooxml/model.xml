@@ -24756,7 +24756,7 @@
       <value tokenid="ooxml:Value_ST_PTabLeader_underscore">underscore</value>
       <value tokenid="ooxml:Value_ST_PTabLeader_middleDot">middleDot</value>
     </resource>
-    <resource name="CT_PTab" resource="Stream" tag="paragraph">
+    <resource name="CT_PTab" resource="Properties" tag="paragraph">
       <attribute name="alignment" tokenid="ooxml:CT_PTab_alignment"/>
       <attribute name="relativeTo" tokenid="ooxml:CT_PTab_relativeTo"/>
       <attribute name="leader" tokenid="ooxml:CT_PTab_leader"/>
