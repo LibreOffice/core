@@ -1522,7 +1522,7 @@ SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
         // Advance to next sibling.
         SvTreeListEntry* pNext;
         sal_uInt16 nDepth (0);
-        while (pEntry != NULL)
+        do
         {
             pNext = dynamic_cast<SvTreeListEntry*>(NextVisible(pEntry, &nDepth));
             if (pNext != NULL && nDepth > 0 && nDepth!=0xffff)
@@ -1530,6 +1530,7 @@ SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
             else
                 break;
         }
+        while (pEntry != NULL);
     }
 
     return pEntry;
