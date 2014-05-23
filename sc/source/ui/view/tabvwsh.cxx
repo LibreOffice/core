@@ -20,6 +20,7 @@
 #include "scitems.hxx"
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
+#include <svx/srchdlg.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/objface.hxx>
@@ -37,6 +38,7 @@
 #include "sc.hrc"
 #include "drawattr.hxx"
 #include "spelldialog.hxx"
+#include <searchresults.hxx>
 
 
 #define ScTabViewShell
@@ -80,16 +82,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
-
-    SFX_CHILDWINDOW_REGISTRATION(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScSamplingDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScDescriptiveStatisticsDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScAnalysisOfVarianceDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScCorrelationDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScCovarianceDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScExponentialSmoothingDialogWrapper::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION(ScMovingAverageDialogWrapper::GetChildWindowId());
-
+    SFX_CHILDWINDOW_REGISTRATION(sc::SearchResultsDlgWrapper::GetChildWindowId());
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )
