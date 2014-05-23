@@ -1,0 +1,19 @@
+--- configure
++++ configure
+@@ -11821,6 +11821,7 @@
+         break;
+       }
+     }
++    freeaddrinfo(aitop);
+   }
+ 
+   if (!(inet4 == 0 || inet4 == 2))
+@@ -11828,8 +11829,6 @@
+   if (!(inet6 == 0 || inet6 == 2))
+     goto bad;
+ 
+-  if (aitop)
+-    freeaddrinfo(aitop);
+   return 0;
+ 
+  bad:
