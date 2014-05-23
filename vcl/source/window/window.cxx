@@ -4381,7 +4381,7 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
     else
         aArg[ 2 ] = makeAny( ::com::sun::star::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
 
-    aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? sal_True : sal_False );
+    aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? true : false );
     aArg[ 4 ] = makeAny( uno::Reference< awt::XWindow >(
                              const_cast<Window*>(this)->GetComponentInterface(),
                              uno::UNO_QUERY ));
