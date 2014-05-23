@@ -48,8 +48,7 @@ IconThemeScannerTest::AddedThemeIsFoundById()
     OUString theme("file:://images_katze.zip");
     scanner.AddIconThemeByPath(theme);
     OUString id = vcl::IconThemeInfo::FileNameToThemeId("images_katze.zip");
-    bool found = false;
-    found = scanner.IconThemeIsInstalled(id);
+    bool found = scanner.IconThemeIsInstalled(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("icon theme could be added by url", true, found);
 }
 
