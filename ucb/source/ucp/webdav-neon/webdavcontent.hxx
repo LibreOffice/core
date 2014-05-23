@@ -211,7 +211,8 @@ private:
     throw( com::sun::star::beans::PropertyExistException,
            com::sun::star::beans::IllegalTypeException,
            com::sun::star::lang::IllegalArgumentException,
-           com::sun::star::uno::RuntimeException );
+           com::sun::star::uno::RuntimeException,
+           std::exception );
 
     void removeProperty( const OUString& Name,
                          const com::sun::star::uno::Reference<

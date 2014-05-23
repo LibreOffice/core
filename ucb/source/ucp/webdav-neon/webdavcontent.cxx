@@ -762,7 +762,8 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
     throw( beans::PropertyExistException,
            beans::IllegalTypeException,
            lang::IllegalArgumentException,
-           uno::RuntimeException )
+           uno::RuntimeException,
+           std::exception )
 {
 //    if ( m_bTransient )
 //   @@@ ???
