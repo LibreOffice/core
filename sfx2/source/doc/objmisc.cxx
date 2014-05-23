@@ -669,7 +669,7 @@ bool SfxObjectShell::HasSharedXMLFlagSet() const
     return pImp->m_bSharedXMLFlag;
 }
 
-
+#endif
 
 bool SfxObjectShell::IsDocShared() const
 {
@@ -690,10 +690,6 @@ OUString SfxObjectShell::GetSharedFileURL() const
     return OUString();
 #endif
 }
-
-#endif
-
-
 
 Size SfxObjectShell::GetFirstPageSize()
 {
