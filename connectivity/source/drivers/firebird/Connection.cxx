@@ -788,7 +788,7 @@ uno::Reference< XTablesSupplier > Connection::createCatalog()
 
 }
 
-void Connection::rebuildIndexes() throw(SQLException)
+void Connection::rebuildIndexes() throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
