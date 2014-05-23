@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 #define INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 
+#include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -36,7 +37,7 @@ namespace ole {
 
 
 /** Contains generic information about an OLE object. */
-struct OleObjectInfo
+struct OOX_DLLPUBLIC OleObjectInfo
 {
     StreamDataSequence  maEmbeddedData;     ///< Data of an embedded OLE object.
     OUString     maTargetLink;       ///< Path to external data for linked OLE object.
