@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/python-3.3.3-py17797.patch.1 \
 	external/python3/python-3.3.3-msvc2012-winxp.patch.1 \
 	external/python3/python-3.3.5-pyexpat-symbols.patch.1 \
+	external/python3/python-lsan.patch.0 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
