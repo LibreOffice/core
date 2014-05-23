@@ -2531,7 +2531,7 @@ void ScInterpreter::ScZTest()
                 ScRange aRange;
                 sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter(pDok, aRange, glSubTotal);
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
@@ -2956,7 +2956,7 @@ void ScInterpreter::ScHarMean()
                 sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter(pDok, aRange, glSubTotal);
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal > 0.0)
@@ -3079,7 +3079,7 @@ void ScInterpreter::ScGeoMean()
                 sal_uInt16 nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter(pDok, aRange, glSubTotal);
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal > 0.0)
@@ -3212,7 +3212,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 sal_uInt16 nErr = 0;
-                ScValueIterator aValIter(pDok, aRange);
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
@@ -3691,7 +3691,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 
                 sal_uInt16 nErr = 0;
                 double fCellVal;
-                ScValueIterator aValIter(pDok, aRange);
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst( fCellVal, nErr))
                 {
                     rArray.push_back( fCellVal);
@@ -3932,7 +3932,7 @@ void ScInterpreter::ScAveDev()
                 sal_uInt16 nErr = 0;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter(pDok, aRange);
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     rVal += nCellVal;
@@ -4012,7 +4012,7 @@ void ScInterpreter::ScAveDev()
                 sal_uInt16 nErr = 0;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter(pDok, aRange);
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     rVal += (fabs(nCellVal - nMiddle));
