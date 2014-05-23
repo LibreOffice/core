@@ -16,6 +16,24 @@
       "revId": "f58fafe2b91189324540e2070b2f6acf660da82c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_e56250ad",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-05-23T07:08:23Z",
+      "side": 1,
+      "message": "I tried Grabbag in Para_grab_bag, But I am not able to get this grabbag value @ export from http://opengrok.libreoffice.org/xref/core/sw/source/filter/ww8/docxattributeoutput.cxx#7236\n\nI already So I just found this new way to do it.",
+      "parentUuid": "fa963961_6548802e",
+      "revId": "f58fafe2b91189324540e2070b2f6acf660da82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
