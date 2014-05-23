@@ -80,7 +80,8 @@ Text::Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId):
     aDevice.Erase();
     aDevice.GetTextBoundRect(aRect, rStr);
     Size aSize = aRect.GetSize();
-    aSize.Height() *= 2;
+    aSize.Width() += 5;
+    aSize.Height() *= 1.6;
     aDevice.SetOutputSizePixel(aSize);
     aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice.DrawText(Point(0,0), rStr);
