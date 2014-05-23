@@ -157,7 +157,7 @@ private:
 
 protected:
     virtual void    RequestingChildren( SvTreeListEntry *pEntry) SAL_OVERRIDE;
-    virtual bool    Expand( SvTreeListEntry* pParent );
+    virtual bool    Expand( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
 public:
     SvxConfigGroupListBox(Window* pParent, WinBits nStyle);

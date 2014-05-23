@@ -160,7 +160,7 @@ class SfxConfigGroupListBox : public SvTreeListBox
 
 protected:
     virtual void        RequestingChildren( SvTreeListEntry *pEntry) SAL_OVERRIDE;
-    virtual bool        Expand( SvTreeListEntry* pParent );
+    virtual bool        Expand( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
 public:
     SfxConfigGroupListBox(Window* pParent, WinBits nStyle);
