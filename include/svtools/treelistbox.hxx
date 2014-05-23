@@ -712,8 +712,8 @@ public:
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
 
-    sal_Bool Expand( SvTreeListEntry* pParent );
-    sal_Bool Collapse( SvTreeListEntry* pParent );
+    virtual sal_Bool Expand( SvTreeListEntry* pParent );
+    virtual sal_Bool Collapse( SvTreeListEntry* pParent );
     virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
     sal_uLong SelectChildren( SvTreeListEntry* pParent, sal_Bool bSelect );
     virtual void SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
