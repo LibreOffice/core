@@ -1045,8 +1045,8 @@ void SwDocTest::testMarkMove()
     // join paragraph 2 and 3 and check
     {
         SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -2);
-        SwTxtNode* pParaNode2 = dynamic_cast<SwTxtNode*>(&aIdx.GetNode());
-        pParaNode2->JoinNext();
+        SwTxtNode& rParaNode2 = dynamic_cast<SwTxtNode&>(aIdx.GetNode());
+        rParaNode2.JoinNext();
     }
     ::sw::mark::IMark* pBM1 = pMarksAccess->findMark("Para1")->get();
     ::sw::mark::IMark* pBM2 = pMarksAccess->findMark("Para2")->get();
