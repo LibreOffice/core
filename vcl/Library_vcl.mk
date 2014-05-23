@@ -134,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/menu \
     vcl/source/window/mnemonic \
     vcl/source/window/mnemonicengine \
+    vcl/source/window/mouse \
     vcl/source/window/mouseevent \
     vcl/source/window/event \
     vcl/source/window/msgbox \
