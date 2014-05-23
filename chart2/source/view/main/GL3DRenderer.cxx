@@ -41,12 +41,10 @@ int static checkGLError(const char *file, int line)
     while (glErr != GL_NO_ERROR)
     {
         const char* sError = OpenGLHelper::GLErrorString(glErr);
-
         if (sError)
             SAL_WARN("chart2.opengl", "GL Error #" << glErr << "(" << sError << ") " << " in File " << file << " at line: " << line);
         else
             SAL_WARN("chart2.opengl", "GL Error #" << glErr << " (no message available)" << " in File " << file << " at line: " << line);
-
         retCode = -1;
         return retCode;
     }
@@ -111,6 +109,7 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_RenderVertexBuf);
     glDeleteBuffers(1, &m_3DUBOBuffer);
     glDeleteBuffers(1, &m_VertexBuffer);
+    glDeleteBuffers(1, &m_NormalBuffer);
 
     glDeleteFramebuffers(1, &mnPickingFbo);
     glDeleteRenderbuffers(1, &mnPickingRboDepth);
@@ -223,6 +222,7 @@ void OpenGL3DRenderer::init()
     glGenBuffers(1, &m_CubeNormalBuf);
     glGenBuffers(1, &m_CubeElementBuf);
     glGenBuffers(1, &m_VertexBuffer);
+    glGenBuffers(1, &m_NormalBuffer);
     glGenBuffers(1, &m_BoundBox);
     glBindBuffer(GL_ARRAY_BUFFER, m_BoundBox);
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBox), boundBox, GL_STATIC_DRAW);
@@ -734,6 +734,7 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         glDrawArrays(GL_LINE_STRIP, 0, pointList->size());
         glDisableVertexAttribArray(maResources.m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        pointList->clear();
         delete pointList;
         polygon.verticesList.pop_front();
     }
@@ -755,7 +756,6 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &polygon.material);
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
     if(mbPickingMode)
     {
         glUseProgram(maPickingResources.m_CommonProID);
@@ -766,7 +766,6 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
         glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
     }
-
     for (size_t i = 0; i < verticesNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
@@ -783,6 +782,7 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, pointList->size() * sizeof(glm::vec3), &pointList[0][0], GL_STATIC_DRAW);
+        CHECK_GL_ERROR();
 
         if(!mbPickingMode)
         {
@@ -798,9 +798,7 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
             glUniformMatrix4fv(maPickingResources.m_MatrixID, 1, GL_FALSE, &aMVP[0][0]);
             glUniform4fv(maResources.m_2DColorID, 1, &polygon.id[0]);
         }
-
         GLint maVertexID = mbPickingMode ? maPickingResources.m_2DVertexID : maResources.m_3DVertexID;
-
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(maVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
@@ -811,7 +809,6 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
                                 0,                  // stride
                                 (void*)0            // array buffer offset
                                 );
-
         if(!mbPickingMode)
         {
             // 2nd attribute buffer : normals
@@ -825,14 +822,14 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
                     (void*)0            // array buffer offset
                     );
         }
-
         glDrawArrays(GL_POLYGON, 0, pointList->size());
-
         glDisableVertexAttribArray(maVertexID);
         if(!mbPickingMode)
             glDisableVertexAttribArray(maResources.m_3DNormalID);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        pointList->clear();
+        normalList->clear();
         delete pointList;
         delete normalList;
         polygon.verticesList.pop_front();
@@ -1362,6 +1359,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
             RenderExtrudeSurface(extrude3DInfo);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
         else
         {
