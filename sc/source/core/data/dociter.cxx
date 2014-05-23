@@ -114,7 +114,7 @@ void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rp
 }
 
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
-            bool bSTotal, bool bTextZero )
+            sal_uInt16 nSubTotalFlags, bool bTextZero )
     : pDoc(pDocument)
     , pAttrArray(NULL)
     , nNumFormat(0) // Initialized in GetNumberFormat
@@ -124,9 +124,9 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     , mnCol(0)
     , mnTab(0)
     , nAttrEndRow(0)
+    , mnSubTotalFlags(nSubTotalFlags)
     , nNumFmtType(NUMBERFORMAT_UNDEFINED)
     , bNumValid(false)
-    , bSubTotal(bSTotal)
     , bCalcAsShown(pDocument->GetDocOptions().IsCalcAsShown())
     , bTextAsZero(bTextZero)
     , mpCells(NULL)
@@ -207,9 +207,12 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
 
         SCROW nCurRow = GetRow();
         SCROW nLastRow;
-        if (bSubTotal && pDoc->maTabs[mnTab]->RowFiltered(nCurRow, NULL, &nLastRow))
+        // Skip all filtered or hidden rows, depending on mnSubTotalFlags
+        if ( ( ( mnSubTotalFlags & SUBTOTAL_IGN_FILTERED ) &&
+               pDoc->RowFiltered( nCurRow, mnTab, NULL, &nLastRow ) ) ||
+             ( ( mnSubTotalFlags & SUBTOTAL_IGN_HIDDEN ) &&
+               pDoc->RowHidden( nCurRow, mnTab, NULL, &nLastRow ) ) )
         {
-            // Skip all filtered rows for subtotal mode.
             SetPos(nLastRow+1);
             continue;
         }
@@ -233,7 +236,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
             case sc::element_type_formula:
             {
                 ScFormulaCell& rCell = *sc::formula_block::at(*maCurPos.first->data, maCurPos.second);
-                if (bSubTotal && rCell.IsSubTotal())
+                if ( ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) && rCell.IsSubTotal() )
                 {
                     // Skip subtotal formula cells.
                     IncPos();
@@ -242,6 +245,11 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
 
                 if (rCell.GetErrorOrValue(rErr, rValue))
                 {
+                    if ( rErr && ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                    {
+                        IncPos();
+                        break;
+                    }
                     bNumValid = false;
                     return true; // Found it!
                 }
@@ -793,11 +801,11 @@ bool ScDBQueryDataIterator::GetNext(Value& rValue)
     return mpData->getNext(rValue);
 }
 
-ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, bool bSTotal ) :
+ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, sal_uInt16 nSubTotalFlags ) :
     mpDoc(pDoc),
     maStartPos(rRange.aStart),
     maEndPos(rRange.aEnd),
-    mbSubTotal(bSTotal)
+    mnSubTotalFlags(nSubTotalFlags)
 {
     init();
 }
@@ -907,21 +915,28 @@ bool ScCellIterator::getCurrent()
         }
 
         SCROW nLastRow;
-        if (mbSubTotal && pCol->GetDoc().maTabs[maCurPos.Tab()]->RowFiltered(maCurPos.Row(), NULL, &nLastRow))
+        // Skip all filtered or hidden rows, depending on mSubTotalFlags
+        if ( ( ( mnSubTotalFlags & SUBTOTAL_IGN_FILTERED ) &&
+               pCol->GetDoc().RowFiltered(maCurPos.Row(), maCurPos.Tab(), NULL, &nLastRow) ) ||
+             ( ( mnSubTotalFlags & SUBTOTAL_IGN_HIDDEN ) &&
+               pCol->GetDoc().RowHidden(maCurPos.Row(), maCurPos.Tab(), NULL, &nLastRow) ) )
         {
-            // Skip all filtered rows for subtotal mode.
             setPos(nLastRow+1);
             continue;
         }
 
         if (maCurColPos.first->type == sc::element_type_formula)
         {
-            const ScFormulaCell* pCell = sc::formula_block::at(*maCurColPos.first->data, maCurColPos.second);
-            if (pCell->IsSubTotal())
+            if ( mnSubTotalFlags )
             {
-                // Skip subtotal formula cells.
-                incPos();
-                continue;
+                ScFormulaCell* pCell = sc::formula_block::at(*maCurColPos.first->data, maCurColPos.second);
+                // Skip formula cells with Subtotal formulae or errors, depending on mnSubTotalFlags
+                if ( ( ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) && pCell->IsSubTotal() ) ||
+                     ( ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) && pCell->GetErrCode() ) )
+                {
+                    incPos();
+                    continue;
+                }
             }
         }
 
@@ -2133,13 +2148,12 @@ void ScHorizontalCellIterator::SkipInvalid()
 }
 
 ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
-        const ScRange& rRange, bool bSTotal, bool bTextZero ) :
+        const ScRange& rRange, bool bTextZero ) :
     pDoc( pDocument ),
     nNumFmtIndex(0),
     nEndTab( rRange.aEnd.Tab() ),
     nNumFmtType( NUMBERFORMAT_UNDEFINED ),
     bNumValid( false ),
-    bSubTotal( bSTotal ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
     bTextAsZero( bTextZero )
 {
@@ -2192,61 +2206,55 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
             else
                 return false;
         }
-        if ( !bSubTotal || !pDoc->maTabs[nCurTab]->RowFiltered( nCurRow ) )
+        switch (pCell->meType)
         {
-            switch (pCell->meType)
-            {
-                case CELLTYPE_VALUE:
+            case CELLTYPE_VALUE:
+                {
+                    bNumValid = false;
+                    rValue = pCell->mfValue;
+                    rErr = 0;
+                    if ( bCalcAsShown )
                     {
+                        ScColumn* pCol = &pDoc->maTabs[nCurTab]->aCol[nCurCol];
+                        ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
+                                nAttrEndRow, pCol->pAttrArray, nCurRow, pDoc );
+                        rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
+                    }
+                    bFound = true;
+                }
+                break;
+            case CELLTYPE_FORMULA:
+                {
+                    rErr = pCell->mpFormula->GetErrCode();
+                    if (rErr || pCell->mpFormula->IsValue())
+                    {
+                        rValue = pCell->mpFormula->GetValue();
                         bNumValid = false;
-                        rValue = pCell->mfValue;
-                        rErr = 0;
-                        if ( bCalcAsShown )
-                        {
-                            ScColumn* pCol = &pDoc->maTabs[nCurTab]->aCol[nCurCol];
-                            ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
-                                    nAttrEndRow, pCol->pAttrArray, nCurRow, pDoc );
-                            rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
-                        }
                         bFound = true;
                     }
-                    break;
-                case CELLTYPE_FORMULA:
+                    else if ( bTextAsZero )
                     {
-                        if (!bSubTotal || !pCell->mpFormula->IsSubTotal())
-                        {
-                            rErr = pCell->mpFormula->GetErrCode();
-                            if (rErr || pCell->mpFormula->IsValue())
-                            {
-                                rValue = pCell->mpFormula->GetValue();
-                                bNumValid = false;
-                                bFound = true;
-                            }
-                            else if ( bTextAsZero )
-                            {
-                                rValue = 0.0;
-                                bNumValid = false;
-                                bFound = true;
-                            }
-                        }
+                        rValue = 0.0;
+                        bNumValid = false;
+                        bFound = true;
                     }
-                    break;
-                case CELLTYPE_STRING :
-                case CELLTYPE_EDIT :
+                }
+                break;
+            case CELLTYPE_STRING :
+            case CELLTYPE_EDIT :
+                {
+                    if ( bTextAsZero )
                     {
-                        if ( bTextAsZero )
-                        {
-                            rErr = 0;
-                            rValue = 0.0;
-                            nNumFmtType = NUMBERFORMAT_NUMBER;
-                            nNumFmtIndex = 0;
-                            bNumValid = true;
-                            bFound = true;
-                        }
+                        rErr = 0;
+                        rValue = 0.0;
+                        nNumFmtType = NUMBERFORMAT_NUMBER;
+                        nNumFmtIndex = 0;
+                        bNumValid = true;
+                        bFound = true;
                     }
-                    break;
-                default: ;   // nothing
-            }
+                }
+                break;
+            default: ;   // nothing
         }
     }
     return bFound;

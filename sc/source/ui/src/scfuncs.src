@@ -4220,7 +4220,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         ExtraData =
         {
-            1;
+            0;
             ID_FUNCTION_GRP_MATH;
             U2S( HID_FUNC_AGGREGATE );
             VAR_ARGS+3;  0;  0;  0; 1;
