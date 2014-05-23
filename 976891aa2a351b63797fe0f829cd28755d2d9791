@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_651d200f",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-05-23T13:34:16Z",
+      "side": 1,
+      "message": "ScHorizontalValueIterator is not used by any SUBTOTAL or AGGREGATE function. Therefore I removed glSubTotal as unused code.",
+      "revId": "976891aa2a351b63797fe0f829cd28755d2d9791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_451a1c19",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-05-23T13:34:16Z",
+      "side": 1,
+      "message": "ifSUM was already in IterateParameters(); this saves a lot of duplicate code.",
+      "revId": "976891aa2a351b63797fe0f829cd28755d2d9791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa963961_05d3f439",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-05-23T13:34:16Z",
+      "side": 1,
+      "message": "ifCOUNT was already in IterateParameters(); this saves a lot of duplicate code.",
+      "revId": "976891aa2a351b63797fe0f829cd28755d2d9791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
