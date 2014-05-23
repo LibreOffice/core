@@ -463,73 +463,6 @@ private:
     //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
     bool mbContainsAtPageObjWithContentAnchor : 1;
 
-    // COMPATIBILITY FLAGS START
-    //
-    //
-    // HISTORY OF THE COMPATIBILITY FLAGS:
-    //
-    // SO5:
-    // mbParaSpaceMax                        def = sal_False, sal_True since SO8
-    // mbParaSpaceMaxAtPages                 def = sal_False, sal_True since SO8
-    //
-    // SO6:
-    // mbTabCompat                           def = sal_False, sal_True since SO8
-    //
-    // SO7:
-    // mbUseVirtualDevice                    def = sal_True
-    // mbAddFlyOffsets                       def = sal_False, hidden
-    //
-    // SO7pp1:
-    // bOldNumbering                        def = sal_False, hidden
-    //
-    // SO8:
-    // mbAddExternalLeading                  def = sal_True
-    // mbUseHiResolutionVirtualDevice        def = sal_True, hidden
-    // mbOldLineSpacing                      def = sal_False
-    // mbAddParaSpacingToTableCells          def = sal_True
-    // mbUseFormerObjectPos                  def = sal_False
-    // mbUseFormerTextWrapping               def = sal_False
-    // mbConsiderWrapOnObjPos                def = sal_False
-    //
-    // SO8pp1:
-    // mbIgnoreFirstLineIndentInNumbering    def = sal_False, hidden
-    // mbDoNotJustifyLinesWithManualBreak    def = sal_False, hidden
-    // mbDoNotResetParaAttrsForNumFont       def = sal_False, hidden
-    //
-    // SO8pp3
-    // mbDoNotCaptureDrawObjsOnPage         def = sal_False, hidden
-    // - Relevant for drawing objects, which don't follow the text flow, but
-    //   whose position is outside the page area:
-    //   sal_False: Such drawing objects are captured on the page area of its anchor.
-    //   sal_True: Such drawing objects can leave the page area, they aren't captured.
-    // mbTableRowKeep                            def = sal_False, hidden
-    // mbIgnoreTabsAndBlanksForLineCalculation   def = sal_False, hidden
-    // mbClipAsCharacterAnchoredWriterFlyFrame   def = sal_False, hidden
-    // - Introduced in order to re-activate clipping of as-character anchored
-    //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
-    //   which are created with version prior SO8/OOo 2.0
-    //
-    // SO8pp4
-    // mbUnixForceZeroExtLeading                def = sal_False, hidden
-    //
-    // SO8pu8
-    // mbOldPrinterMetrics                      def = sal_False, hidden
-    //
-    // SO9
-    // #i24363# tab stops relative to indent
-    // mbTabRelativeToIndent                    def = sal_True, hidden
-    // #i89181# suppress tab stop at left indent for paragraphs in lists, whose
-    // list level position and space mode equals LABEL_ALIGNMENT and whose list
-    // label is followed by a tab character.
-    // mbTabAtLeftIndentForParagraphsInList     def = sal_False, hidden
-
-    // non-ui-compatibility flags:
-    bool mbOldPrinterMetrics                        : 1;
-
-    sal_uInt32  mn32DummyCompatabilityOptions1;
-    sal_uInt32  mn32DummyCompatabilityOptions2;
-    // COMPATIBILITY FLAGS END
-
     bool mbStartIdleTimer;                    //< idle timer mode start/stop
 
     static SwAutoCompleteWord *mpACmpltWords;  //< List of all words for AutoComplete
@@ -1989,22 +1922,6 @@ public:
     void SetDefaultPageMode(bool bSquaredPageMode);
     bool IsSquaredPageMode() const;
 
-    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
-    {
-        mn32DummyCompatabilityOptions1 = CompatabilityOptions1;
-    }
-    sal_uInt32 Getn32DummyCompatabilityOptions1()
-    {
-        return mn32DummyCompatabilityOptions1;
-    }
-    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
-    {
-        mn32DummyCompatabilityOptions2 = CompatabilityOptions2;
-    }
-    sal_uInt32 Getn32DummyCompatabilityOptions2()
-    {
-        return mn32DummyCompatabilityOptions2;
-    }
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
     void SetVBATemplateToProjectCache( com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
         com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };

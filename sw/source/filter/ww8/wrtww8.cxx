@@ -58,6 +58,7 @@
 #include <fmtrowsplt.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <viewopt.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -323,8 +324,8 @@ static void WriteDop( WW8Export& rWrt )
     WW8Dop& rDop = *rWrt.pDop;
 
     // i#78951#, store the value of unknown compatability options
-    rDop.SetCompatabilityOptions( rWrt.pDoc->Getn32DummyCompatabilityOptions1());
-    rDop.SetCompatabilityOptions2( rWrt.pDoc->Getn32DummyCompatabilityOptions2());
+    rDop.SetCompatabilityOptions( rWrt.pDoc->GetDocumentSettingManager().Getn32DummyCompatabilityOptions1());
+    rDop.SetCompatabilityOptions2( rWrt.pDoc->GetDocumentSettingManager().Getn32DummyCompatabilityOptions2());
 
     rDop.fNoLeading = !rWrt.pDoc->get(IDocumentSettingAccess::ADD_EXT_LEADING);
     rDop.fUsePrinterMetrics = !rWrt.pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);

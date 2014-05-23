@@ -33,11 +33,12 @@
 /* IDocumentSettingAccess */
 
 sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
-    :m_rDoc(rDoc)
-    ,
+    :m_rDoc(rDoc),
     mnLinkUpdMode( GLOBALSETTING ),
     meFldUpdMode( AUTOUPD_GLOBALSETTING ),
     meChrCmprType( CHARCOMPRESS_NONE ),
+    mn32DummyCompatabilityOptions1(0),
+    mn32DummyCompatabilityOptions2(0),
     mbHTMLMode(false),
     mbIsGlobalDoc(false),
     mbGlblDocSaveLinks(false),
@@ -480,6 +481,9 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
 
 void sw::DocumentSettingManager::ReplaceCompatabilityOptions(const DocumentSettingManager& rSource)
 {
+    Setn32DummyCompatabilityOptions1( rSource.Getn32DummyCompatabilityOptions1() );
+    Setn32DummyCompatabilityOptions2( rSource.Getn32DummyCompatabilityOptions2() );
+
     mbParaSpaceMax = rSource.mbParaSpaceMax;
     mbParaSpaceMaxAtPages = rSource.mbParaSpaceMaxAtPages;
     mbTabCompat = rSource.mbTabCompat;
@@ -506,4 +510,23 @@ void sw::DocumentSettingManager::ReplaceCompatabilityOptions(const DocumentSetti
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
 }
 
+sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatabilityOptions1() const
+{
+    return mn32DummyCompatabilityOptions1;
+}
+
+void sw::DocumentSettingManager::Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
+{
+    mn32DummyCompatabilityOptions1 = CompatabilityOptions1;
+}
+
+sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatabilityOptions2() const
+{
+    return mn32DummyCompatabilityOptions2;
+}
+
+void sw::DocumentSettingManager::Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
+{
+    mn32DummyCompatabilityOptions2 = CompatabilityOptions2;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
