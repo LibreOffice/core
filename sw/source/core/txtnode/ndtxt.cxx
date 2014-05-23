@@ -4474,8 +4474,8 @@ namespace {
         {
             const SfxBoolItem* pIsCountedInListItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
-            if ( pIsCountedInListItem && pIsCountedInListItem->GetValue() !=
-                                mrTxtNode.IsCountedInList() )
+            if (pIsCountedInListItem && pIsCountedInListItem->GetValue() !=
+                mrTxtNode.IsCountedInList())
             {
                 mbUpdateListCount = true;
             }
@@ -4487,7 +4487,8 @@ namespace {
         {
             const SfxUInt16Item* pOutlineLevelItem =
                                 dynamic_cast<const SfxUInt16Item*>(pItem);
-            if ( pOutlineLevelItem->GetValue() != mrTxtNode.GetAttrOutlineLevel() )
+            if (pOutlineLevelItem && pOutlineLevelItem->GetValue() !=
+                mrTxtNode.GetAttrOutlineLevel())
             {
                 mbOutlineLevelSet = true;
             }
