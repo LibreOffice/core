@@ -3534,7 +3534,7 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     return mxGroup;
 }
 
-ScFormulaCellGroupRef ScFormulaCell::GetCellGroup()
+ScFormulaCellGroupRef ScFormulaCell::GetCellGroup() const
 {
     return mxGroup;
 }
