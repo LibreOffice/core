@@ -125,6 +125,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("This cell should have been emptied.", m_pDoc->GetCellType(aPos) == CELLTYPE_NONE);
     aPos.SetRow(12); // B13
     pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT(pFC);
     // B13:B18 should be shared.
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedLength());
@@ -146,6 +147,7 @@ void Test::testSharedFormulas()
     // B15:B18 should be shared.
     aPos.SetRow(14); // B15
     pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(14), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
     CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
@@ -155,6 +157,7 @@ void Test::testSharedFormulas()
     m_pDoc->SetValue(aPos, 1.2);
     aPos.SetRow(15);
     pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT(pFC);
     // B16:B18 should be shared.
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
