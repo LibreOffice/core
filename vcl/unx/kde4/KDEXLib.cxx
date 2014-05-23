@@ -349,6 +349,16 @@ void KDEXLib::StopTimer()
 
 void KDEXLib::timeoutActivated()
 {
+    // HACK? Always process posted events before timer timeouts.
+    // There are places that may watch both both (for example, there's a posted
+    // event about change of the current active window and there's a timeout
+    // event informing that a document has finished loading). This is of course
+    // racy, but both generic and gtk event loops manage to deliver posted events
+    // first, so it's at least consistent, and it probably kind of makes at least
+    // some sense (timeouts should be more ok to wait and be triggered somewhen).
+    while( SalKDEDisplay::self()->HasUserEvents() )
+        SalKDEDisplay::self()->DispatchInternalEvent();
+
     X11SalData *pData = (X11SalData*)ImplGetSVData()->mpSalData;
     pData->Timeout();
     // QTimer is not single shot, so will be restarted immediatelly
