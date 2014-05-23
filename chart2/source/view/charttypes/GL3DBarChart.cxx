@@ -99,15 +99,18 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             DataSeriesHelper::getDataSeriesLabel(
                 rDataSeries.getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
 
-        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
-        opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
-        glm::vec3 aTopLeft, aTopRight, aBottomRight;
-        aTopLeft.x = calculateTextWidth(aSeriesName) * -1.0;
-        aTopLeft.y = nYPos;
-        aTopRight.y = nYPos;
-        aBottomRight = aTopRight;
-        aBottomRight.y += TEXT_HEIGHT;
-        p->setPosition(aTopLeft, aTopRight, aBottomRight);
+        if(!aSeriesName.isEmpty())
+        {
+            maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
+            opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
+            glm::vec3 aTopLeft, aTopRight, aBottomRight;
+            aTopLeft.x = calculateTextWidth(aSeriesName) * -1.0;
+            aTopLeft.y = nYPos;
+            aTopRight.y = nYPos;
+            aBottomRight = aTopRight;
+            aBottomRight.y += TEXT_HEIGHT;
+            p->setPosition(aTopLeft, aTopRight, aBottomRight);
+        }
 
         sal_Int32 nColor = aSeriesColor[nSeriesIndex % SAL_N_ELEMENTS(aSeriesColor)].GetColor();
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
@@ -172,6 +175,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     uno::Sequence<OUString> aCats = rCatProvider.getSimpleCategories();
     for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
     {
+        if(aCats[i].isEmpty())
+            continue;
+
         float nXPos = i * (nBarSizeX + nBarDistanceX);
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
