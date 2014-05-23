@@ -1018,10 +1018,10 @@ void SetErrorBarStyleProperties( const OUString& rStyleName, uno::Reference< bea
     const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(rImportHelper.GetChartFamilyID(),
             rStyleName);
 
-    XMLPropStyleContext * pSeriesStyleContext =
-        const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
+    XMLPropStyleContext &rSeriesStyleContext =
+        const_cast< XMLPropStyleContext& >( dynamic_cast< const XMLPropStyleContext& >( *pStyle ));
 
-    pSeriesStyleContext->FillPropertySet( xBarProp );
+    rSeriesStyleContext.FillPropertySet( xBarProp );
 }
 
 void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Reference< beans::XPropertySet> xBarProp,
