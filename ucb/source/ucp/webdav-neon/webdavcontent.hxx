@@ -218,7 +218,8 @@ private:
                          com::sun::star::ucb::XCommandEnvironment >& Environment )
     throw( com::sun::star::beans::UnknownPropertyException,
            com::sun::star::beans::NotRemoveableException,
-           com::sun::star::uno::RuntimeException );
+           com::sun::star::uno::RuntimeException,
+           std::exception );
 
 public:
     Content( const ::com::sun::star::uno::Reference<

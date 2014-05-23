@@ -900,7 +900,8 @@ void Content::removeProperty( const OUString& Name,
                               const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( beans::UnknownPropertyException,
            beans::NotRemoveableException,
-           uno::RuntimeException )
+           uno::RuntimeException,
+           std::exception )
 {
 
     // Try to remove property from server.
