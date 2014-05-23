@@ -2363,6 +2363,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     bool bLightRigRotationPresent = false;
     sax_fastparser::FastAttributeList *aLightRigAttrList = mpFS->createAttrList();
     sax_fastparser::FastAttributeList *aLightRigRotationAttrList = mpFS->createAttrList();
+    sax_fastparser::XFastAttributeListRef xLightRotAttrList( aLightRigRotationAttrList );
     for( sal_Int32 i=0; i < aLightRigProps.getLength(); ++i )
     {
         if( aLightRigProps[i].Name == "rig" || aLightRigProps[i].Name == "dir" )
@@ -2416,8 +2417,7 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         mpFS->startElementNS( XML_a, XML_lightRig, xAttrList );
         if( bLightRigRotationPresent )
         {
-            sax_fastparser::XFastAttributeListRef xRotAttrList( aLightRigRotationAttrList );
-            mpFS->singleElementNS( XML_a, XML_rot, xRotAttrList );
+            mpFS->singleElementNS( XML_a, XML_rot, xLightRotAttrList );
         }
         mpFS->endElementNS( XML_a, XML_lightRig );
     }
