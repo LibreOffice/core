@@ -68,7 +68,6 @@ public:
     double SAL_CALL getDuration() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     void SAL_CALL setMediaTime( double fTime ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     double SAL_CALL getMediaTime() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    double SAL_CALL getRate() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     sal_Bool SAL_CALL isPlaybackLoop() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     void SAL_CALL setVolumeDB( ::sal_Int16 nDB ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

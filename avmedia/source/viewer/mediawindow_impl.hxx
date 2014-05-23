@@ -147,8 +147,6 @@ namespace avmedia
             void    setMediaTime( double fTime );
             double  getMediaTime() const;
 
-            double  getRate() const;
-
             void    setPlaybackLoop( bool bSet );
             bool    isPlaybackLoop() const;
 

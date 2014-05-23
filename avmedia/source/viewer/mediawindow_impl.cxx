@@ -343,7 +343,7 @@ bool MediaWindowImpl::start()
 void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
 {
     if( isPlaying() )
-        rItem.setState( ( getRate() > 1.0 ) ? MEDIASTATE_PLAYFFW : MEDIASTATE_PLAY );
+        rItem.setState( MEDIASTATE_PLAY );
     else
         rItem.setState( ( 0.0 == getMediaTime() ) ? MEDIASTATE_STOP : MEDIASTATE_PAUSE );
 
@@ -389,7 +389,6 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
         switch( rItem.getState() )
         {
             case( MEDIASTATE_PLAY ):
-            case( MEDIASTATE_PLAYFFW ):
             {
 
                 if( !isPlaying() )
@@ -453,11 +452,6 @@ void MediaWindowImpl::setMediaTime( double fTime )
 double MediaWindowImpl::getMediaTime() const
 {
     return( mxPlayer.is() ? mxPlayer->getMediaTime() : 0.0 );
-}
-
-double MediaWindowImpl::getRate() const
-{
-    return( mxPlayer.is() ? mxPlayer->getRate() : 0.0 );
 }
 
 void MediaWindowImpl::setPlaybackLoop( bool bSet )

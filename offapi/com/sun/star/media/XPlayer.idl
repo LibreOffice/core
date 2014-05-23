@@ -68,14 +68,6 @@ interface XPlayer
      */
     double getMediaTime();
 
-    /** gets the speed of the stream reading relatively to the normal
-        reading.
-
-        @returns
-            the relative speed. <code>1.0</code> is the normal speed.
-     */
-    double getRate();
-
     /** sets whether the stream reading should restart at the stream
         start after the end of the stream.
 

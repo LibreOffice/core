@@ -201,26 +201,6 @@ double SAL_CALL Player::getMediaTime(  )
   return position;
 }
 
-
-
-double SAL_CALL Player::getRate(  )
-    throw (uno::RuntimeException)
-{
-    // Quicktime: 0 = stop, 1 = normal speed, 2 = double speed, -1 = normal speed backwards
-    double rate = 1.0;
-
-    OSL_TRACE ("Player::getRate");
-
-    if ( mpMovie )
-    {
-        rate = (double) [mpMovie rate];
-    }
-
-    return rate;
-}
-
-
-
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
 {

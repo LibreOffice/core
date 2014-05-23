@@ -349,19 +349,6 @@ double SAL_CALL Player::getMediaTime(  )
     return aRefTime;
 }
 
-double SAL_CALL Player::getRate(  )
-    throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    double fRet( 0.0 );
-
-    if( mpMP  )
-        mpMP->get_Rate( &fRet );
-
-    return fRet;
-}
-
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
 {

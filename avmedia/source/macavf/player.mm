@@ -268,30 +268,6 @@ double SAL_CALL Player::getStopTime()
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setRate( double fRate )
-    throw (uno::RuntimeException)
-{
-    OSL_TRACE ("Player::setRate( %.3f)", fRate);
-    if( !mpPlayer )
-        return;
-
-    // playback rate: 0 = stop, 1 = normal speed, 2 = double speed, -1 = normal speed backwards
-    [mpPlayer setRate: fRate];
-}
-
-// ------------------------------------------------------------------------------
-
-double SAL_CALL Player::getRate()
-    throw (uno::RuntimeException)
-{
-    // macavf: 0 = stop, 1 = normal speed, 2 = double speed, -1 = normal speed backwards
-    const double fRate = mpPlayer ? (double)[mpPlayer rate] : 1.0;
-    OSL_TRACE ("Player::getRate() = %.3f", fRate);
-    return fRate;
-}
-
-// ------------------------------------------------------------------------------
-
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
 {

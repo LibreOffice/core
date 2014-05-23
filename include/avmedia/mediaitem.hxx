@@ -54,8 +54,7 @@ enum MediaState
 {
     MEDIASTATE_STOP = 0,
     MEDIASTATE_PLAY = 1,
-    MEDIASTATE_PLAYFFW = 2,
-    MEDIASTATE_PAUSE = 3
+    MEDIASTATE_PAUSE = 2
 };
 
 

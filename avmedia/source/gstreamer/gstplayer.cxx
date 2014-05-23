@@ -502,23 +502,6 @@ double SAL_CALL Player::getMediaTime()
     return position;
 }
 
-
-
-double SAL_CALL Player::getRate()
-    throw (uno::RuntimeException, std::exception)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    double rate = 1.0;
-
-    // TODO get the window rate - but no need since
-    // higher levels never set rate > 1
-
-    return rate;
-}
-
-
-
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException, std::exception)
 {
