@@ -137,6 +137,8 @@ struct GLWindow
         bMultiSampleSupported(false)
     {
     }
+
+    ~GLWindow();
 };
 
 class VCLOPENGL_DLLPUBLIC OpenGLContext
