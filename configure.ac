@@ -7663,6 +7663,11 @@ fi
 AC_SUBST([ENABLE_EOT])
 
 dnl ===================================================================
+dnl Check for system librevenge
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0])
+
+dnl ===================================================================
 dnl Check for system libe-book
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.0 >= 0.0.2],["-I${WORKDIR}/UnpackedTarball/libebook/inc"],["-L${WORKDIR}/UnpackedTarball/libebook/src/lib/.libs -le-book-0.0"])

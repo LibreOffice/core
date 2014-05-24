@@ -1761,6 +1761,59 @@ endif
 endif # SYSTEM_ODFGEN
 
 
+ifneq ($(SYSTEM_REVENGE),)
+
+define gb_LinkTarget__use_revenge
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(REVENGE_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(REVENGE_LIBS))
+
+endef
+
+else # !SYSTEM_REVENGE
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	revenge \
+))
+
+define gb_LinkTarget__use_revenge
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,librevenge)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),\
+	revenge \
+)
+
+endef
+
+else # !MSC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	librevenge \
+))
+
+define gb_LinkTarget__use_revenge
+$(call gb_LinkTarget_use_package,$(1),librevenge)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,librevenge)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,librevenge)/src/lib/.libs -lrevenge-0.0 \
+)
+endef
+
+endif # MSC
+
+endif # SYSTEM_REVENGE
+
+
 ifneq ($(SYSTEM_ABW),)
 
 define gb_LinkTarget__use_abw
