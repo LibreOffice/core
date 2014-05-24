@@ -4168,14 +4168,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         aObjData.aChildAnchor = Rectangle( l, o, r, u );
         if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
         {
-            double fl = l;
-            double fo = o;
             double fWidth = r - l;
             double fHeight= u - o;
             double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
             double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
-            fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
-            fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
+            double fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
+            double fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
             fWidth *= fXScale;
             fHeight *= fYScale;
             aObjData.aChildAnchor = Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
@@ -4857,14 +4855,12 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                     {
                         if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
                         {
-                            double fl = l;
-                            double fo = o;
                             double fWidth = r - l;
                             double fHeight= u - o;
                             double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
                             double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
-                            fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
-                            fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
+                            double fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
+                            double fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
                             fWidth *= fXScale;
                             fHeight *= fYScale;
                             rGroupClientAnchor = Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
