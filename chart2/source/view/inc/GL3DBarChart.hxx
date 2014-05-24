@@ -26,6 +26,7 @@ namespace opengl3D {
 
 class Renderable3DObject;
 class OpenGL3DRenderer;
+class TextCache;
 class Camera;
 
 }
@@ -58,6 +59,8 @@ private:
 
     opengl3D::Camera* mpCamera;
     bool mbValidContext;
+
+    boost::scoped_ptr<opengl3D::TextCache> mpTextCache;
 };
 
 }

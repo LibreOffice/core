@@ -68,10 +68,12 @@ void Line::setLineColor(const Color& rColor)
     maLineColor = rColor;
 }
 
-Text::Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId):
-    Renderable3DObject(pRenderer, nId)
+const BitmapEx& TextCache::getText(OUString rText)
 {
-    // Convert OUString to BitmapEx.
+    TextCacheType::const_iterator itr = maTextCache.find(rText);
+    if(itr != maTextCache.end())
+        return *itr->second;
+
     VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
     Font aFont = aDevice.GetFont();
     aFont.SetSize(Size(0, 96));
@@ -79,27 +81,35 @@ Text::Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId):
     ::Rectangle aRect;
     aDevice.SetFont(aFont);
     aDevice.Erase();
-    aDevice.GetTextBoundRect(aRect, rStr);
+    aDevice.GetTextBoundRect(aRect, rText);
     Size aSize = aRect.GetSize();
     aSize.Width() += 5;
     aSize.Height() *= 1.6;
     aDevice.SetOutputSizePixel(aSize);
     aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
-    aDevice.DrawText(Point(0,0), rStr);
+    aDevice.DrawText(Point(0,0), rText);
 
-    maText = BitmapEx(aDevice.GetBitmapEx(Point(0,0), aSize));
+    BitmapEx* pText = new BitmapEx(aDevice.GetBitmapEx(Point(0,0), aSize));
+    maTextCache.insert(rText, pText);
+    return *pText;
+}
+
+Text::Text(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId):
+    Renderable3DObject(pRenderer, nId),
+    mrText(rTextCache.getText(rStr))
+{
 }
 
 void Text::render()
 {
     glm::vec3 dir2 = maTopRight - maTopLeft;
     glm::vec3 bottomLeft = maBottomRight - dir2;
-    mpRenderer->CreateTextTexture(maText, maTopLeft, maTopRight, maBottomRight, bottomLeft, mnUniqueId);
+    mpRenderer->CreateTextTexture(mrText, maTopLeft, maTopRight, maBottomRight, bottomLeft, mnUniqueId);
 }
 
 Size Text::getSize() const
 {
-    return maText.GetSizePixel();
+    return mrText.GetSizePixel();
 }
 
 void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight)
