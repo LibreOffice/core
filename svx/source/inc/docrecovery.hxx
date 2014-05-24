@@ -428,28 +428,17 @@ class TabDialog4Recovery : public TabDialog
 };
 
 
-class SaveDialog : public IExtendedTabPage
+class SaveDialog : public Dialog
 {
-
     // member
     private:
-
-        FixedText       m_aTitleFT;
-        Window          m_aTitleWin;
-        FixedLine       m_aTitleFL;
-        FixedText       m_aDescrFT;
-        FixedText       m_aFileListFT;
-        ListBox         m_aFileListLB;
-        FixedLine       m_aBottomFL;
-        OKButton        m_aOkBtn;
-
+        FixedText*      m_pTitleFT;
+        ListBox*        m_pFileListLB;
+        OKButton*       m_pOkBtn;
         RecoveryCore*   m_pCore;
-
 
     // interface
     public:
-
-
         /** @short  create all child controls of this dialog.
 
             @descr  The dialog isn't shown nor it starts any
@@ -465,24 +454,10 @@ class SaveDialog : public IExtendedTabPage
                     and the current list of open documents,
                     which should be shown inside this dialog.
          */
-        SaveDialog(Window*       pParent,
-                   RecoveryCore* pCore  );
-
-
-        /** @short  free all controls and used memory. */
-        virtual ~SaveDialog();
-
-
-        /** @short  TODO*/
-        virtual short   execute() SAL_OVERRIDE;
-
-
-        /** @short  TODO*/
-        virtual void    setDefButton() SAL_OVERRIDE;
+        SaveDialog(Window* pParent, RecoveryCore* pCore);
 
         DECL_LINK(OKButtonHdl, void*);
 };
-
 
 class SaveProgressDialog : public ModalDialog
                          , public IRecoveryUpdateListener

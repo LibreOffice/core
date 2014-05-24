@@ -274,28 +274,20 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
     return m_eJob;
 }
 
-
 bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
     svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xContext, true);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
-    // create all needed dialogs for this operation
-    // and bind it to the used core service
-    svxdr::TabDialog4Recovery* pWizard = new svxdr::TabDialog4Recovery(m_pParentWindow);
-    svxdr::IExtendedTabPage*   pPage1  = new svxdr::SaveDialog        (pWizard, pCore );
-    pWizard->addTabPage(pPage1);
+    // create dialog for this operation and bind it to the used core service
+    Dialog* pDialog = new svxdr::SaveDialog(m_pParentWindow, pCore);
 
-    // start the wizard
-    short nRet = pWizard->Execute();
-
-    delete pPage1 ;
-    delete pWizard;
-
+    // start the dialog
+    short nRet = pDialog->Execute();
+    delete pDialog;
     return (nRet==DLG_RET_OK_AUTOLUNCH);
 }
-
 
 void RecoveryUI::impl_doRecovery()
 {

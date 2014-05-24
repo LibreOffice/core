@@ -30,17 +30,6 @@
 #define TABDLG_WIDTH                290
 #define TABDLG_HEIGHT               238
 
-// TabPage CrashSave
-
-#define WIN_SAVE_TITLE              1
-#define FT_SAVE_TITLE               2
-#define FL_SAVE_TITLE               3
-#define FT_SAVE_DESCR               4
-#define FT_SAVE_FILELIST            5
-#define LB_SAVE_FILELIST            6
-#define FL_SAVE_BOTTOM              8
-#define BT_SAVE_OK                  9
-
 #define SAVE_WIDTH                  290
 #define SAVE_HEIGHT                 238
 #define SAVE_TITLEWINHEIGHT         36

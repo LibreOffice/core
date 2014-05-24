@@ -1008,7 +1008,6 @@
 
 #define RID_SVX_TABDLG_DOCRECOVERY          ( RID_SVX_START +   0 )
 
-#define RID_SVXPAGE_DOCRECOVERY_SAVE        ( RID_SVX_START +   8 )
 #define RID_SVXPAGE_DOCRECOVERY_RECOVER     ( RID_SVX_START +   9 )
 
 // !!!! double defined ID's (see below) !!!

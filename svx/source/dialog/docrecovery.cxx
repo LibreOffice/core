@@ -678,20 +678,15 @@ void SAL_CALL PluginProgress::reset()
 }
 
 
-SaveDialog::SaveDialog(Window*       pParent,
-                       RecoveryCore* pCore  )
-    : IExtendedTabPage( pParent, SVX_RES( RID_SVXPAGE_DOCRECOVERY_SAVE ) )
-    , m_aTitleFT     ( this   , SVX_RES  ( FT_SAVE_TITLE               ) )
-    , m_aTitleWin    ( this   , SVX_RES  ( WIN_SAVE_TITLE              ) )
-    , m_aTitleFL     ( this   , SVX_RES  ( FL_SAVE_TITLE               ) )
-    , m_aDescrFT     ( this   , SVX_RES  ( FT_SAVE_DESCR               ) )
-    , m_aFileListFT  ( this   , SVX_RES  ( FT_SAVE_FILELIST            ) )
-    , m_aFileListLB  ( this   , SVX_RES  ( LB_SAVE_FILELIST            ) )
-    , m_aBottomFL    ( this   , SVX_RES  ( FL_SAVE_BOTTOM              ) )
-    , m_aOkBtn       ( this   , SVX_RES  ( BT_SAVE_OK                  ) )
-    , m_pCore        ( pCore                                           )
+SaveDialog::SaveDialog(Window* pParent, RecoveryCore* pCore)
+    : Dialog(pParent, "DocRecoverySaveDialog", "svx/ui/docrecoverysavedialog.ui")
+    , m_pCore(pCore)
 {
-    FreeResource();
+    get(m_pTitleFT, "title");
+    get(m_pFileListLB, "filelist");
+    m_pFileListLB->set_height_request(m_pFileListLB->GetTextHeight() * 10);
+    m_pFileListLB->set_width_request(m_pFileListLB->approximate_char_width() * 72);
+    get(m_pOkBtn, "ok");
 
     // Prepare the office for the following crash save step.
     // E.g. hide all open widows so the user can't influence our
@@ -699,19 +694,14 @@ SaveDialog::SaveDialog(Window*       pParent,
     m_pCore->doEmergencySavePrepare();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    Wallpaper aBackground(rStyleSettings.GetWindowColor());
-    m_aTitleWin.SetBackground(aBackground);
-    m_aTitleFT.SetBackground (aBackground);
+    m_pTitleFT->SetBackground(rStyleSettings.GetWindowColor());
+    m_pTitleFT->set_height_request(m_pTitleFT->get_preferred_size().Height() + 48);
 
-    Font aFont(m_aTitleFT.GetFont());
-    aFont.SetWeight(WEIGHT_BOLD);
-    m_aTitleFT.SetFont(aFont);
-
-    m_aOkBtn.SetClickHdl( LINK( this, SaveDialog, OKButtonHdl ) );
-    m_aFileListLB.SetControlBackground( rStyleSettings.GetDialogColor() );
+    m_pOkBtn->SetClickHdl( LINK( this, SaveDialog, OKButtonHdl ) );
+    m_pFileListLB->SetControlBackground( rStyleSettings.GetDialogColor() );
 
     // fill listbox with current open documents
-    m_aFileListLB.Clear();
+    m_pFileListLB->Clear();
 
     TURLList*                pURLs = m_pCore->getURLListAccess();
     TURLList::const_iterator pIt;
@@ -721,53 +711,25 @@ SaveDialog::SaveDialog(Window*       pParent,
          ++pIt                  )
     {
         const TURLInfo& rInfo = *pIt;
-        m_aFileListLB.InsertEntry( rInfo.DisplayName, rInfo.StandardImage );
+        m_pFileListLB->InsertEntry( rInfo.DisplayName, rInfo.StandardImage );
     }
 }
-
-
-SaveDialog::~SaveDialog()
-{
-}
-
 
 IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
 {
-    m_nResult = DLG_RET_OK;
-    return 0;
-}
-
-
-short SaveDialog::execute()
-{
-    ::SolarMutexGuard aLock;
-
-    // wait for user input "OK"
-    m_nResult = DLG_RET_UNKNOWN;
-    while(m_nResult == DLG_RET_UNKNOWN)
-        Application::Yield();
-
     // start crash-save with progress
-    if (m_nResult == DLG_RET_OK)
-    {
-        SaveProgressDialog* pProgress = new SaveProgressDialog(this, m_pCore);
-        m_nResult = pProgress->Execute();
-        delete pProgress;
-    }
+    SaveProgressDialog* pProgress = new SaveProgressDialog(this, m_pCore);
+    short nResult = pProgress->Execute();
+    delete pProgress;
+
     // if "CANCEL" => return "CANCEL"
     // if "OK"     => "AUTOLUNCH" always !
-    if (m_nResult == DLG_RET_OK)
-        m_nResult = DLG_RET_OK_AUTOLUNCH;
+    if (nResult == DLG_RET_OK)
+        nResult = DLG_RET_OK_AUTOLUNCH;
 
-    return m_nResult;
+    EndDialog(nResult);
+    return 0;
 }
-
-
-void SaveDialog::setDefButton()
-{
-    m_aOkBtn.GrabFocus();
-}
-
 
 SaveProgressDialog::SaveProgressDialog(Window*       pParent,
                                        RecoveryCore* pCore  )
