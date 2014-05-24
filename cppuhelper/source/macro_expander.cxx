@@ -134,7 +134,7 @@ public:
 
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
-        throw (lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -174,7 +174,7 @@ Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()
 // XMacroExpander impl
 
 OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
-    throw (lang::IllegalArgumentException, std::exception)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     return cppuhelper::detail::expandMacros( exp );
 }
