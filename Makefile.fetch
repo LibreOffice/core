@@ -195,6 +195,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,REDLAND,RAPTOR_TARBALL) \
 		$(call fetch_Optional,REDLAND,RASQAL_TARBALL) \
 		$(call fetch_Optional,REDLAND,REDLAND_TARBALL) \
+		$(call fetch_Optional,REVENGE,REVENGE_TARBALL) \
 		$(call fetch_Optional,RHINO,RHINO_TARBALL) \
 		$(call fetch_Optional,RHINO,SWING_TARBALL) \
 		$(call fetch_Optional,SERF,SERF_TARBALL) \
