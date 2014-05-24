@@ -112,14 +112,32 @@ DirectoryStream::~DirectoryStream()
     delete m_pImpl;
 }
 
-bool DirectoryStream::isOLEStream()
+bool DirectoryStream::isStructured()
 {
     return true;
 }
 
-WPXInputStream *DirectoryStream::getDocumentOLEStream(const char *const pName)
+unsigned DirectoryStream::subStreamCount()
 {
-    WPXInputStream *input = 0;
+    // TODO: implement me
+    return 0;
+}
+
+const char * DirectoryStream::subStreamName(unsigned /* id */)
+{
+    // TODO: implement me
+    return 0;
+}
+
+bool DirectoryStream::existsSubStream(const char * /* name */)
+{
+    // TODO: implement me
+    return false;
+}
+
+librevenge::RVNGInputStream *DirectoryStream::getSubStreamByName(const char *const pName)
+{
+    librevenge::RVNGInputStream *input = 0;
 
     ucbhelper::Content aContent(m_pImpl->xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
     const uno::Reference<io::XInputStream> xInputStream(findStream(aContent, rtl::OUString::createFromAscii(pName)));
@@ -129,13 +147,19 @@ WPXInputStream *DirectoryStream::getDocumentOLEStream(const char *const pName)
     return input;
 }
 
+librevenge::RVNGInputStream *DirectoryStream::getSubStreamById(unsigned /* id */)
+{
+    // TODO: implement me
+    return 0;
+}
+
 const unsigned char *DirectoryStream::read(unsigned long, unsigned long &nNumBytesRead)
 {
     nNumBytesRead = 0;
     return 0;
 }
 
-int DirectoryStream::seek(long, WPX_SEEK_TYPE)
+int DirectoryStream::seek(long, librevenge::RVNG_SEEK_TYPE)
 {
     return -1;
 }
@@ -145,7 +169,7 @@ long DirectoryStream::tell()
     return 0;
 }
 
-bool DirectoryStream::atEOS()
+bool DirectoryStream::isEnd()
 {
     return true;
 }

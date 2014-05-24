@@ -33,8 +33,8 @@ public:
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    virtual bool doDetectFormat( WPXInputStream &rInput, OUString &rTypeName ) SAL_OVERRIDE;
-    virtual bool doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator ) SAL_OVERRIDE;
+    virtual bool doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName ) SAL_OVERRIDE;
+    virtual bool doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator ) SAL_OVERRIDE;
 };
 
 OUString CMXImportFilter_getImplementationName()

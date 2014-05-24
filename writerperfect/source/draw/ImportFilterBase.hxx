@@ -8,9 +8,9 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_IMPORTFILTERBASE_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_DRAW_IMPORTFILTERBASE_HXX
 
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge/librevenge.h>
 
-#include <libwpg/libwpg.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -78,8 +78,8 @@ public:
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    virtual bool doDetectFormat( WPXInputStream &rInput, OUString &rTypeName ) = 0;
-    virtual bool doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator ) = 0;
+    virtual bool doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName ) = 0;
+    virtual bool doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator ) = 0;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;

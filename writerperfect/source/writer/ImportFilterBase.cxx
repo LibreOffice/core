@@ -93,7 +93,8 @@ throw (RuntimeException, std::exception)
 
     WPXSvInputStream input( xInputStream );
 
-    OdtGenerator exporter(&xHandler, ODF_FLAT_XML);
+    OdtGenerator exporter;
+    exporter.addDocumentHandler(&xHandler, ODF_FLAT_XML);
 
     doRegisterHandlers(exporter);
 

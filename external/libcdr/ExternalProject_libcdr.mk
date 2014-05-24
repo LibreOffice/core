@@ -19,8 +19,7 @@ $(eval $(call gb_ExternalProject_use_externals,libcdr,\
 	boost_headers \
 	icu \
 	lcms2 \
-	wpd \
-	wpg \
+	revenge \
 	zlib \
 ))
 
@@ -32,14 +31,14 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
+			--disable-tools \
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
+			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
-		    $(if $(VERBOSE)$(verbose),V=1) \
-		    $(MAKE)) \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
