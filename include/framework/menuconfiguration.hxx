@@ -98,7 +98,7 @@ class FWE_DLLPUBLIC MenuConfiguration
 
         void StoreMenuBarConfigurationToXML( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rMenuBarConfiguration,
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream )
-            throw ( ::com::sun::star::lang::WrappedTargetException );
+            throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         void StoreToolBox( ToolBox* pToolBox,
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream )
