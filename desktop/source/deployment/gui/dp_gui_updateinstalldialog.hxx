@@ -106,15 +106,13 @@ private:
     OUString m_sNoInstall;
     OUString m_sThisErrorOccurred;
 
-    FixedText m_ft_action;
-    ProgressBar m_statusbar;
-    FixedText m_ft_extension_name;
-    FixedText m_ft_results;
-    AutoScrollEdit m_mle_info;
-    FixedLine m_line;
-    HelpButton m_help;
-    OKButton m_ok;
-    CancelButton m_cancel;
+    FixedText *m_pFt_action;
+    ProgressBar *m_pStatusbar;
+    FixedText *m_pFt_extension_name;
+    AutoScrollEdit *m_pMle_info;
+    HelpButton *m_pHelp;
+    OKButton *m_pOk;
+    CancelButton *m_pCancel;
 };
 
 

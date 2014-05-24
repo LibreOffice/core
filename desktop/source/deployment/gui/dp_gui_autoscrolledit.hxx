@@ -31,7 +31,7 @@ namespace dp_gui {
 class AutoScrollEdit : public ExtMultiLineEdit, public SfxListener
 {
 public:
-    AutoScrollEdit( Window* pParent, const ResId& rResId );
+    AutoScrollEdit( Window* pParent, WinBits nWinStyle);
     virtual ~AutoScrollEdit();
 
     using ExtMultiLineEdit::Notify;
