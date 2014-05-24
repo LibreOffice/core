@@ -581,7 +581,9 @@ SwXViewSettings::~SwXViewSettings()
 }
 
 void SwXViewSettings::_preSetValues ()
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException)
 {
     const SwViewOption* pVOpt = 0;
     if(pView)
