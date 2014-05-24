@@ -50,6 +50,7 @@ public:
     virtual void update() SAL_OVERRIDE;
 
     virtual void clickedAt(const Point& rPos) SAL_OVERRIDE;
+    virtual void mouseDragMove(const Point& rPos, sal_uInt16 nButtons) SAL_OVERRIDE;
     virtual void contextDestroyed() SAL_OVERRIDE;
 
 private:

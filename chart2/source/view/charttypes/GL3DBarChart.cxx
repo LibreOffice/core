@@ -289,6 +289,11 @@ void GL3DBarChart::clickedAt(const Point& rPos)
         mpCamera->zoom(nId);
 }
 
+void GL3DBarChart::mouseDragMove(const Point& rPos, sal_uInt16 nButtons)
+{
+//    fprintf(stderr, "drag move %ld %ld (0x%x)\n", rPos.X(), rPos.Y(), nButtons);
+}
+
 void GL3DBarChart::contextDestroyed()
 {
     mbValidContext = false;
