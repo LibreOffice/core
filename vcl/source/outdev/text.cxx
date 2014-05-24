@@ -281,12 +281,13 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
 bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
                                                                     bool bTextLines,
-                                                                    bool bTextBkg,
                                                                     sal_uInt32 flags )
 {
     if( mpFontEntry->mnOwnOrientation )
         if( ImplDrawRotateText( rSalLayout ) )
             return true;
+
+
 
 
     long nOldX = rSalLayout.DrawBase().X();
@@ -427,7 +428,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( maFont.IsOutline() )
         {
-            if(! ImplDrawTextDirect( rSalLayout, mbTextLines, false, DRAWTEXT_F_OUTLINE))
+            if(! ImplDrawTextDirect( rSalLayout, mbTextLines, DRAWTEXT_F_OUTLINE))
             {
                 rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
                 ImplDrawTextDirect( rSalLayout, mbTextLines );
@@ -472,13 +473,24 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
     rSalLayout.DrawBase() += Point( mnTextOffX, mnTextOffY );
 
+    /*
+     if the text has some background get it (XXX: now getting fixed color)
+     and the set it as the new filling color
+    */
+    if (mbTextBackground) {
+        // set right background
+        Color aColor = COL_PINK;
+        // SetBackground does not work
+        SetFillColor(aColor);
+    }
+
     if( IsTextFillColor() )
         ImplDrawTextBackground( rSalLayout );
 
     if( mbTextSpecial )
         ImplDrawSpecialText( rSalLayout );
     else
-        ImplDrawTextDirect( rSalLayout, mbTextLines, mbTextBackground );
+        ImplDrawTextDirect( rSalLayout, mbTextLines );
 }
 
 long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
@@ -835,6 +847,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     {
         nLen = rStr.getLength() - nIndex;
     }
+
 
     if( mpOutDevData && mpOutDevData->mpRecordLayout )
     {
