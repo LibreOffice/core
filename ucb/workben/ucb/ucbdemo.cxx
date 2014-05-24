@@ -352,8 +352,6 @@ private:
     OUString m_aConfigurationKey2;
     sal_Bool m_bInited : 1;
 
-    static OUString getUnoURL();
-
 public:
     Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
          OUString const & rConfigurationKey1,
@@ -375,20 +373,6 @@ public:
 
 // static
 OUString Ucb::m_aProtocol;
-
-
-// static
-OUString Ucb::getUnoURL()
-{
-    OUString aUnoURL(
-                         "uno:socket,host=localhost,port=8121;");
-    if (m_aProtocol.getLength() == 0)
-        aUnoURL += "urp";
-    else
-        aUnoURL += m_aProtocol;
-    aUnoURL += ";UCB.Factory";
-    return aUnoURL;
-}
 
 
 Ucb::Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
