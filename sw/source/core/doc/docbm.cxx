@@ -573,6 +573,8 @@ namespace sw { namespace mark
             ++ppMark)
         {
             ::sw::mark::MarkBase* pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
+            if (!pMark)
+                continue;
             // is on position ??
             bool bChangedPos = false;
             if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
