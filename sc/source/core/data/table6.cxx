@@ -671,19 +671,39 @@ bool ScTable::ReplaceAllStyle(
     return bRet;
 }
 
+namespace {
+
+bool isValidSearchPos( SCCOL nCol, SCROW nRow, sal_uInt16 nCmd )
+{
+    if (ValidColRow(nCol, nRow))
+        // Always continue when both column and row positions are valid.
+        return true;
+
+    if (nCmd == SVX_SEARCHCMD_FIND || nCmd == SVX_SEARCHCMD_REPLACE)
+    {
+        // For a single item search...
+
+        if (ValidRow(nRow) && (nCol == MAXCOLCOUNT || nCol == -1))
+            // Out of bound column but the row position is still valid.
+            return true;
+
+        if (ValidCol(nCol) && (nRow == MAXROWCOUNT || nRow == -1))
+            // Out of bound row but the column position is still valid.
+            return true;
+    }
+
+    return false;
+}
+
+}
+
 bool ScTable::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
     ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     sal_uInt16 nCommand = rSearchItem.GetCommand();
     bool bFound = false;
-    if ( ValidColRow(rCol, rRow) ||
-         ((nCommand == SVX_SEARCHCMD_FIND || nCommand == SVX_SEARCHCMD_REPLACE) &&
-           (((rCol == MAXCOLCOUNT || rCol == -1) && ValidRow(rRow)) ||
-            ((rRow == MAXROWCOUNT || rRow == -1) && ValidCol(rCol))
-           )
-         )
-       )
+    if (isValidSearchPos(rCol, rRow, nCommand))
     {
         bool bStyles = rSearchItem.GetPattern();
         if (bStyles)
