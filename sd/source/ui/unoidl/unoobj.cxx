@@ -983,7 +983,7 @@ OUString SdXShape::GetPlaceholderText() const
 /** sets/reset the empty status of a presentation object
 */
 void SdXShape::SetEmptyPresObj(bool bEmpty)
-    throw (std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // only possible if this actually *is* a presentation object
     if( !IsPresObj() )
