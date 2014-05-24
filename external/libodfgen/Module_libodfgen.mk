@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,libodfgen))
 
 $(eval $(call gb_Module_add_targets,libodfgen,\
+	ExternalPackage_libodfgen \
 	ExternalProject_libodfgen \
 	UnpackedTarball_libodfgen \
 ))
