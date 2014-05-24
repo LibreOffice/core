@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
 
 #include <sfx2/viewfrm.hxx>
 #include <editeng/adjustitem.hxx>
@@ -441,7 +439,6 @@ void ScViewData::InitData( ScDocument* pDocument )
     pDoc = pDocument;
     *pOptions = pDoc->GetViewOptions();
 }
-
 
 ScDocument* ScViewData::GetDocument() const
 {
@@ -1611,10 +1608,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     return Point( nScrPosX, nScrPosY );
 }
 
-
 //      Number of cells on a screen
-
-
 SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
 {
     OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
@@ -1714,7 +1708,6 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
 {
     return CellsAtY( GetPosY( eWhichY ), -1, eWhichY, SC_SIZE_NONE );
 }
-
 
 bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const
 {
@@ -3089,7 +3082,6 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
         --nRow;
     rPosY = nRow;
 }
-
 
 void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
         SCROW & rPosY, SCROW nStartRow, double nPPTY, const ScDocument * pDoc,
