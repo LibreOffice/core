@@ -451,7 +451,7 @@ public:
 private:
     // convert
     void convertToEventReturn( Any & rRet, const Type& rRetType )
-            throw( CannotConvertException );
+            throw (CannotConvertException, RuntimeException);
 
     EventAttacherImpl *         m_pEA;
     Reference< XInterface >     m_xEAHold;
@@ -477,10 +477,9 @@ void SAL_CALL FilterAllListenerImpl::firing(const AllEventObject& Event)
         m_AllListener->firing( Event );
 }
 
-
 // Convert to the standard event return
 void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetType )
-    throw( CannotConvertException )
+    throw (CannotConvertException, RuntimeException)
 {
     // no return value? Set to the specified values
     if( rRet.getValueType().getTypeClass() == TypeClass_VOID )
