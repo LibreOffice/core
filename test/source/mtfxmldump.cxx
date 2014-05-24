@@ -162,8 +162,6 @@ void MetafileXmlDump::filterNoneActionTypes()
 
 void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
 {
-    std::vector<bool> usedIds(512, false);
-
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, &mrStream, NULL);
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
@@ -177,8 +175,6 @@ void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
         const sal_uInt16 nActionType = pAction->GetType();
         if (maFilter[nActionType])
             continue;
-
-        usedIds[nActionType] = true;
 
         switch (nActionType)
         {
