@@ -267,7 +267,8 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw(std::exc
 
 
 sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
-                                                  const Reference< com::sun::star::lang::XEventListener >& listener ) throw( ScannerException, std::exception )
+                                                  const Reference< com::sun::star::lang::XEventListener >& listener )
+    throw (ScannerException, RuntimeException, std::exception)
 {
     bool bRet;
     bool bScan;

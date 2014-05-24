@@ -872,7 +872,7 @@ uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners() 
 }
 
 sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rContext, const uno::Reference< lang::XEventListener >& )
-    throw( ScannerException )
+    throw (ScannerException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
