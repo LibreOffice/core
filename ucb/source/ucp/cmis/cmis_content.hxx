@@ -87,7 +87,7 @@ private:
 
     com::sun::star::uno::Any open(const com::sun::star::ucb::OpenCommandArgument2 & rArg,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception );
+            throw( com::sun::star::uno::Exception, libcmis::Exception );
 
     void transfer( const com::sun::star::ucb::TransferInfo& rTransferInfo,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )

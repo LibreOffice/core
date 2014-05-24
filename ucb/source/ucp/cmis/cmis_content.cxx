@@ -839,7 +839,7 @@ namespace cmis
 
     uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception )
+            throw( uno::Exception, libcmis::Exception )
     {
         bool bIsFolder = isFolder( xEnv );
 
