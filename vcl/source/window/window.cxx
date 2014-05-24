@@ -68,6 +68,11 @@
 #include <set>
 #include <typeinfo>
 
+#ifdef WNT // see #140456#
+#include <win/salframe.h>
+#endif
+
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
@@ -3713,10 +3718,6 @@ bool Window::IsNativeWidgetEnabled() const
 {
     return ImplGetWinData()->mbEnableNativeWidget;
 }
-
-#ifdef WNT // see #140456#
-#include <win/salframe.h>
-#endif
 
 uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,
                                                        bool        bFullscreen,
