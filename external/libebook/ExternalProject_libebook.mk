@@ -19,10 +19,11 @@ $(eval $(call gb_ExternalProject_use_externals,libebook,\
 	boost_headers \
 	icu \
 	libxml2 \
-	wpd \
+	revenge \
 	zlib \
 ))
 
+# TODO: remove the generators/stream empty vars on libe-book update
 $(call gb_ExternalProject_get_state_target,libebook,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
@@ -31,15 +32,18 @@ $(call gb_ExternalProject_get_state_target,libebook,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
+			--without-tools \
+			--disable-tests \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
+			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
 			--disable-weffc \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			XML_CFLAGS="$(if $(SYSTEM_LIBXML),$(LIBXML_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
+			REVENGE_GENERATORS_CFLAGS=' ' REVENGE_GENERATORS_LIBS=' ' REVENGE_STREAM_CFLAGS=' ' REVENGE_STREAM_LIBS=' ' \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& cd src/lib \
-		&& $(MAKE) $(if $(VERBOSE)$(verbose),V=1) \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:

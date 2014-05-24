@@ -24,12 +24,12 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool AbiWordImportFilter::doImportDocument( WPXInputStream &rInput, const rtl::OUString &, WPXDocumentInterface &rGenerator )
+bool AbiWordImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
 {
     return libabw::AbiDocument::parse(&rInput, &rGenerator);
 }
 
-bool AbiWordImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool AbiWordImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     if (libabw::AbiDocument::isFileFormatSupported(&rInput))
     {

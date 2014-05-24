@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
 #define INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
 
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -23,7 +23,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
 namespace writerperfect
 {
 
-class WRITERPERFECT_DLLPUBLIC DirectoryStream : public WPXInputStream
+class WRITERPERFECT_DLLPUBLIC DirectoryStream : public librevenge::RVNGInputStream
 {
     struct Impl;
 
@@ -31,13 +31,17 @@ public:
     explicit DirectoryStream(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
     virtual ~DirectoryStream();
 
-    virtual bool isOLEStream() SAL_OVERRIDE;
-    virtual WPXInputStream *getDocumentOLEStream(const char *pName) SAL_OVERRIDE;
+    virtual bool isStructured() SAL_OVERRIDE;
+    virtual unsigned subStreamCount() SAL_OVERRIDE;
+    virtual const char *subStreamName(unsigned id) SAL_OVERRIDE;
+    virtual bool existsSubStream(const char *name) SAL_OVERRIDE;
+    virtual librevenge::RVNGInputStream *getSubStreamByName(const char *name) SAL_OVERRIDE;
+    virtual librevenge::RVNGInputStream *getSubStreamById(unsigned id) SAL_OVERRIDE;
 
-    virtual const unsigned char *read(unsigned long nNumBytes, unsigned long &nNumBytesRead) SAL_OVERRIDE;
-    virtual int seek(long nOffset, WPX_SEEK_TYPE eSeekType) SAL_OVERRIDE;
+    virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead) SAL_OVERRIDE;
+    virtual int seek(long offset, librevenge::RVNG_SEEK_TYPE seekType) SAL_OVERRIDE;
     virtual long tell() SAL_OVERRIDE;
-    virtual bool atEOS() SAL_OVERRIDE;
+    virtual bool isEnd() SAL_OVERRIDE;
 
 private:
     Impl *m_pImpl;

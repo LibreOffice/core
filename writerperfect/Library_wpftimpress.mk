@@ -41,8 +41,7 @@ $(eval $(call gb_Library_use_externals,wpftimpress,\
 	boost_headers \
 	etonyek \
 	odfgen \
-	wpd \
-	wpg \
+	revenge \
 	zlib \
 	libxml2 \
 ))
