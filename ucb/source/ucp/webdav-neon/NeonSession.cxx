@@ -625,7 +625,7 @@ void NeonSession::Init( const DAVRequestEnvironment & rEnv )
 }
 
 void NeonSession::Init()
-    throw ( std::exception )
+    throw (css::uno::RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
