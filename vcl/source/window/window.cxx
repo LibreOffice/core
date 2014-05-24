@@ -3362,12 +3362,12 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
                          "com.sun.star.datatransfer.clipboard.SystemClipboard",
                          args, xContext)),
                     css::uno::UNO_QUERY_THROW);
-#       else
+#else
                 static uno::Reference< XClipboard > s_xSelection(
                     xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
 
                 mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
-#       endif
+#endif
             }
             catch (css::uno::RuntimeException & e)
             {
