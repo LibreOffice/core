@@ -1,0 +1,54 @@
+From ead2223f2d3d4742df84f37c6cea9c73b71257c5 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sun, 25 May 2014 16:07:21 +0200
+Subject: [PATCH] librevenge-stream is optional: don't depend on it
+
+---
+ src/lib/MWAWInputStream.cxx | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib/MWAWInputStream.cxx b/src/lib/MWAWInputStream.cxx
+index 91b713b..0d60f67 100644
+--- a/src/lib/MWAWInputStream.cxx
++++ b/src/lib/MWAWInputStream.cxx
+@@ -43,6 +43,7 @@
+ #include "MWAWDebug.hxx"
+ 
+ #include "MWAWInputStream.hxx"
++#include "MWAWStringStream.hxx"
+ 
+ MWAWInputStream::MWAWInputStream(shared_ptr<librevenge::RVNGInputStream> inp, bool inverted)
+   : m_stream(inp), m_streamSize(0), m_inverseRead(inverted), m_readLimit(-1), m_prevLimits(),
+@@ -517,7 +518,7 @@ bool MWAWInputStream::unBinHex()
+       MWAW_DEBUG_MSG(("MWAWInputStream::unBinHex: can not read the resource fork\n"));
+     }
+     else {
+-      shared_ptr<librevenge::RVNGInputStream> rsrc(new librevenge::RVNGStringStream(data, (unsigned int)numBytesRead));
++      shared_ptr<librevenge::RVNGInputStream> rsrc(new MWAWStringStream(data, (unsigned int)numBytesRead));
+       m_resourceFork.reset(new MWAWInputStream(rsrc,false));
+     }
+   }
+@@ -532,7 +533,7 @@ bool MWAWInputStream::unBinHex()
+       MWAW_DEBUG_MSG(("MWAWInputStream::unBinHex: can not read the data fork\n"));
+       return false;
+     }
+-    m_stream.reset(new librevenge::RVNGStringStream(data, (unsigned int)numBytesRead));
++    m_stream.reset(new MWAWStringStream(data, (unsigned int)numBytesRead));
+   }
+ 
+   return true;
+@@ -692,9 +693,9 @@ bool MWAWInputStream::unMacMIME(MWAWInputStream *inp,
+         return false;
+       }
+       if (wh==1)
+-        dataInput.reset(new librevenge::RVNGStringStream(data, (unsigned int)numBytesRead));
++        dataInput.reset(new MWAWStringStream(data, (unsigned int)numBytesRead));
+       else if (wh==2)
+-        rsrcInput.reset(new librevenge::RVNGStringStream(data, (unsigned int)numBytesRead));
++        rsrcInput.reset(new MWAWStringStream(data, (unsigned int)numBytesRead));
+       else { // the finder info
+         if (entrySize < 8) {
+           MWAW_DEBUG_MSG(("MWAWInputStream::unMacMIME: finder info size is odd\n"));
+-- 
+1.9.0
+

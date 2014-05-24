@@ -22,8 +22,6 @@
 
 #include <libodfgen/libodfgen.hxx>
 
-#include <libwpd/libwpd.h>
-
 #include <com/sun/star/uno/Reference.h>
 
 #include <writerperfect/writerperfectdllapi.h>
@@ -41,9 +39,9 @@ public:
     DocumentHandler(com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > &xHandler);
     void startDocument() SAL_OVERRIDE;
     void endDocument() SAL_OVERRIDE;
-    void startElement(const char *psName, const WPXPropertyList &xPropList) SAL_OVERRIDE;
+    void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList) SAL_OVERRIDE;
     void endElement(const char *psName) SAL_OVERRIDE;
-    void characters(const WPXString &sCharacters) SAL_OVERRIDE;
+    void characters(const librevenge::RVNGString &sCharacters) SAL_OVERRIDE;
 
 private:
     com::sun::star::uno::Reference < com::sun::star::xml::sax::XDocumentHandler > mxHandler;

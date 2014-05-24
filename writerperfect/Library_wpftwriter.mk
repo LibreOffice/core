@@ -43,15 +43,15 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	abw \
 	boost_headers \
 	ebook \
-	etonyek \
 	icui18n \
 	icuuc \
 	libxml2 \
 	mwaw \
 	odfgen \
-	wps \
-	wpg \
+	revenge \
 	wpd \
+	wpg \
+	wps \
 	zlib \
 ))
 

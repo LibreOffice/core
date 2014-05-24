@@ -25,12 +25,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool MSPUBImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
+bool MSPUBImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
 {
     return libmspub::MSPUBDocument::parse(&rInput, &rGenerator);
 }
 
-bool MSPUBImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool MSPUBImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     if (libmspub::MSPUBDocument::isSupported(&rInput))
     {

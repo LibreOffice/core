@@ -24,40 +24,58 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 
-bool EBookImportFilter::doImportDocument( WPXInputStream &rInput, const rtl::OUString &rFilterName, WPXDocumentInterface &rGenerator )
+using libebook::EBOOKDocument;
+
+bool EBookImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator )
 {
     if (rFilterName == "FictionBook 2")
-        return libebook::FB2Document::parse(&rInput, &rGenerator);
+        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_FICTIONBOOK2);
     else if (rFilterName == "PalmDoc")
-        return libebook::PDBDocument::parse(&rInput, &rGenerator);
+        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_PALMDOC);
     else if (rFilterName == "Plucker eBook")
-        return libebook::PLKRDocument::parse(&rInput, &rGenerator);
+        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_PLUCKER);
     else if (rFilterName == "eReader eBook")
-        return libebook::PMLDocument::parse(&rInput, &rGenerator);
+        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_PEANUTPRESS);
     else if (rFilterName == "TealDoc")
-        return libebook::TDDocument::parse(&rInput, &rGenerator);
+        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_TEALDOC);
     else if (rFilterName == "zTXT")
-        return libebook::ZTXTDocument::parse(&rInput, &rGenerator);
+        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_ZTXT);
 
     return false;
 }
 
-bool EBookImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool EBookImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     rTypeName = "";
 
-    if (libebook::FB2Document::isSupported(&rInput))
-        rTypeName = "writer_FictionBook_2";
-    else if (libebook::PDBDocument::isSupported(&rInput))
-        rTypeName = "writer_PalmDoc";
-    else if (libebook::PLKRDocument::isSupported(&rInput))
-        rTypeName = "writer_Plucker_eBook";
-    else if (libebook::PMLDocument::isSupported(&rInput))
-        rTypeName = "writer_eReader_eBook";
-    else if (libebook::TDDocument::isSupported(&rInput))
-        rTypeName = "writer_TealDoc";
-    else if (libebook::ZTXTDocument::isSupported(&rInput))
-        rTypeName = "writer_zTXT";
+    EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
+
+    if (EBOOKDocument::CONFIDENCE_EXCELLENT == EBOOKDocument::isSupported(&rInput, &type))
+    {
+        switch (type)
+        {
+            case EBOOKDocument::TYPE_FICTIONBOOK2 :
+                rTypeName = "writer_FictionBook_2";
+                break;
+            case EBOOKDocument::TYPE_PALMDOC :
+                rTypeName = "writer_PalmDoc";
+                break;
+            case EBOOKDocument::TYPE_PLUCKER :
+                rTypeName = "writer_Plucker_eBook";
+                break;
+            case EBOOKDocument::TYPE_PEANUTPRESS :
+                rTypeName = "writer_eReader_eBook";
+                break;
+            case EBOOKDocument::TYPE_TEALDOC :
+                rTypeName = "writer_TealDoc";
+                break;
+            case EBOOKDocument::TYPE_ZTXT :
+                rTypeName = "writer_zTXT";
+                break;
+            default :
+                SAL_WARN_IF(type != EBOOKDocument::TYPE_UNKNOWN, "writerperfect", "EBookImportFilter::doDetectFormat: document type " << type << " detected, but ignored");
+        }
+    }
 
     return !rTypeName.isEmpty();
 }

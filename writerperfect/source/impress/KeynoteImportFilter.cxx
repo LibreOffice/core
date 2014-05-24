@@ -144,14 +144,15 @@ throw (RuntimeException, std::exception)
     // writes to in-memory target doc
     DocumentHandler xHandler(xInternalHandler);
 
-    shared_ptr< WPXInputStream > input;
+    shared_ptr< librevenge::RVNGInputStream > input;
     if ( bIsPackage )
         input.reset( new writerperfect::DirectoryStream( xContent ) );
     else
         input.reset( new WPXSvInputStream( xInputStream ) );
 
-    OdpGenerator exporter(&xHandler, ODF_FLAT_XML);
-    bool tmpParseResult = libetonyek::KEYDocument::parse(input.get(), &exporter);
+    OdpGenerator exporter;
+    exporter.addDocumentHandler(&xHandler, ODF_FLAT_XML);
+    bool tmpParseResult = libetonyek::EtonyekDocument::parse(input.get(), &exporter);
     return tmpParseResult;
 }
 
@@ -216,7 +217,7 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
     if (!xInputStream.is())
         return OUString();
 
-    shared_ptr< WPXInputStream > input( new WPXSvInputStream( xInputStream ) );
+    shared_ptr< librevenge::RVNGInputStream > input( new WPXSvInputStream( xInputStream ) );
 
     /* Apple Keynote documents come in two variants:
      * * actual files (zip), only produced by Keynote 5 (at least with
@@ -247,11 +248,12 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
             return OUString();
         }
 
-        libetonyek::KEYDocumentType type = libetonyek::KEY_DOCUMENT_TYPE_UNKNOWN;
-        if ( !libetonyek::KEYDocument::isSupported( input.get(), &type ) )
+        libetonyek::EtonyekDocument::Type type = libetonyek::EtonyekDocument::TYPE_UNKNOWN;
+        const libetonyek::EtonyekDocument::Confidence confidence = libetonyek::EtonyekDocument::isSupported( input.get(), &type );
+        if ((libetonyek::EtonyekDocument::CONFIDENCE_NONE == confidence) || (libetonyek::EtonyekDocument::TYPE_KEYNOTE != type))
             return OUString();
 
-        if ( type == libetonyek::KEY_DOCUMENT_TYPE_APXL_FILE )
+        if ( confidence == libetonyek::EtonyekDocument::CONFIDENCE_SUPPORTED_PART )
         {
             assert( !bIsPackage );
 
@@ -262,7 +264,7 @@ throw( com::sun::star::uno::RuntimeException, std::exception )
                 if ( xPackageContent.is() )
                 {
                     input.reset( new writerperfect::DirectoryStream( xPackageContent ) );
-                    if ( libetonyek::KEYDocument::isSupported( input.get() ) )
+                    if ( libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported( input.get() ) )
                     {
                         xContent = xPackageContent;
                         bUCBContentChanged = true;

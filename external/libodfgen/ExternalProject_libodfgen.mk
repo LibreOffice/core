@@ -17,9 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,libodfgen,\
 
 $(eval $(call gb_ExternalProject_use_externals,libodfgen,\
 	boost_headers \
-	etonyek \
-	wpd \
-	wpg \
+	revenge \
 ))
 
 $(call gb_ExternalProject_get_state_target,libodfgen,build) :
