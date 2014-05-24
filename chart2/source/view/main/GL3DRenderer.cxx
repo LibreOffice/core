@@ -734,7 +734,6 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         glDrawArrays(GL_LINE_STRIP, 0, pointList->size());
         glDisableVertexAttribArray(maResources.m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        pointList->clear();
         delete pointList;
         polygon.verticesList.pop_front();
     }
@@ -828,8 +827,6 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
             glDisableVertexAttribArray(maResources.m_3DNormalID);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        pointList->clear();
-        normalList->clear();
         delete pointList;
         delete normalList;
         polygon.verticesList.pop_front();
