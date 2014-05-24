@@ -3064,7 +3064,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_GROW_FONT_SIZE:
         {
             const SvxFontListItem* pFonts = dynamic_cast<const SvxFontListItem*>(GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
-            const FontList* pFontList = pFonts->GetFontList();
+            const FontList* pFontList = pFonts ? pFonts->GetFontList() : NULL;
             if( pFontList )
             {
                 FuText::ChangeFontSize( nSId == SID_GROW_FONT_SIZE, NULL, pFontList, mpView );
