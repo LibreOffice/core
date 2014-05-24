@@ -1,0 +1,149 @@
+From 431087afd938b0d9cea2f5c4b88da0746e3758a8 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sat, 24 May 2014 20:19:17 +0200
+Subject: [PATCH] properly export API symbols
+
+---
+ inc/libodfgen/Makefile.am            |  1 +
+ inc/libodfgen/OdfDocumentHandler.hxx |  4 +++-
+ inc/libodfgen/OdgGenerator.hxx       |  3 ++-
+ inc/libodfgen/OdpGenerator.hxx       |  3 ++-
+ inc/libodfgen/OdsGenerator.hxx       |  3 ++-
+ inc/libodfgen/OdtGenerator.hxx       |  3 ++-
+ inc/libodfgen/libodfgen-api.hxx      | 38 ++++++++++++++++++++++++++++++++++++
+ src/Makefile.am                      |  5 +++--
+ 8 files changed, 53 insertions(+), 7 deletions(-)
+ create mode 100644 inc/libodfgen/libodfgen-api.hxx
+
+diff --git a/inc/libodfgen/OdfDocumentHandler.hxx b/inc/libodfgen/OdfDocumentHandler.hxx
+index 79c387b..19e04e3 100644
+--- a/inc/libodfgen/OdfDocumentHandler.hxx
++++ b/inc/libodfgen/OdfDocumentHandler.hxx
+@@ -26,6 +26,8 @@
+ #define _ODFDOCUMENTHANDLER_HXX_
+ #include <libwpd/libwpd.h>
+ 
++#include "libodfgen-api.hxx"
++
+ /** Type of ODF content a generator should produce.
+   *
+   * @sa OdgGenerator, OdpGenerator, OdtGenerator
+@@ -57,7 +59,7 @@ typedef bool (*OdfEmbeddedImage)(const WPXBinaryData &input, librev
+   * saved to a file, printed to the standard output, saved to a file
+   * inside a package, or whatever else.
+   */
+-class OdfDocumentHandler
++class ODFGENAPI OdfDocumentHandler
+ {
+ public:
+ 	virtual ~OdfDocumentHandler() {}
+diff --git a/inc/libodfgen/OdgGenerator.hxx b/inc/libodfgen/OdgGenerator.hxx
+index f818e3e..24455d8 100644
+--- a/inc/libodfgen/OdgGenerator.hxx
++++ b/inc/libodfgen/OdgGenerator.hxx
+@@ -27,6 +27,7 @@
+ #include <libwpd/libwpd.h>
+ #include <libwpg/libwpg.h>
+ 
++#include "libodfgen-api.hxx"
+ #include "OdfDocumentHandler.hxx"
+ 
+ class OdgGeneratorPrivate;
+@@ -37,7 +38,7 @@ class OdgGeneratorPrivate;
+   * See @c libwpg library for documentation of the
+   * libwpg::WPGPaintInterface interface.
+   */
+-class OdgGenerator : public libwpg::WPGPaintInterface
++class ODFGENAPI OdgGenerator : public libwpg::WPGPaintInterface
+ {
+ public:
+ 	OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+diff --git a/inc/libodfgen/OdpGenerator.hxx b/inc/libodfgen/OdpGenerator.hxx
+index 71f2562..c61f5ad 100644
+--- a/inc/libodfgen/OdpGenerator.hxx
++++ b/inc/libodfgen/OdpGenerator.hxx
+@@ -27,6 +27,7 @@
+ 
+ #include <libetonyek/libetonyek.h>
+ 
++#include "libodfgen-api.hxx"
+ #include "OdfDocumentHandler.hxx"
+ 
+ class OdpGeneratorPrivate;
+@@ -37,7 +38,7 @@ class OdpGeneratorPrivate;
+   * See @c libetonyek library for documentation of the
+   * libetonyek::KEYPresentationInterface interface.
+   */
+-class OdpGenerator : public libetonyek::KEYPresentationInterface
++class ODFGENAPI OdpGenerator : public libetonyek::KEYPresentationInterface
+ {
+ public:
+ 	OdpGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+diff --git a/inc/libodfgen/OdtGenerator.hxx b/inc/libodfgen/OdtGenerator.hxx
+index 9c3ff88..e11778c 100644
+--- a/inc/libodfgen/OdtGenerator.hxx
++++ b/inc/libodfgen/OdtGenerator.hxx
+@@ -29,6 +29,7 @@
+ 
+ #include <libwpd/libwpd.h>
+ 
++#include "libodfgen-api.hxx"
+ #include "OdfDocumentHandler.hxx"
+ 
+ /** Handler for embedded objects.
+@@ -39,7 +40,7 @@ class OdfGenerator;
+   * See @c libwpd library for documentation of the ::WPXDocumentInterface
+   * interface.
+   */
+-class OdtGenerator : public WPXDocumentInterface
++class ODFGENAPI OdtGenerator : public WPXDocumentInterface
+ {
+ public:
+ 	OdtGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+diff --git a/inc/libodfgen/libodfgen-api.hxx b/inc/libodfgen/libodfgen-api.hxx
+new file mode 100644
+index 0000000..39ffd05
+--- /dev/null
++++ b/inc/libodfgen/libodfgen-api.hxx
+@@ -0,0 +1,38 @@
++/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
++/* libodfgen
++ * Version: MPL 2.0 / LGPLv2.1+
++ *
++ * This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
++ *
++ * Major Contributor(s):
++ * Copyright (C) 2013 Fridrich Strba <fridrich.strba@bluewin.ch>
++ * Copyright (C) 2011 Eilidh McAdam <tibbylickle@gmail.com>
++ *
++ * For minor contributions see the git repository.
++ *
++ * Alternatively, the contents of this file may be used under the terms
++ * of the GNU Lesser General Public License Version 2.1 or later
++ * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
++ * applicable instead of those above.
++ *
++ * For further information visit http://libwpd.sourceforge.net
++ */
++
++#ifndef INCLUDED_LIBODFGEN_LIBODFGEN_API_HXX
++#define INCLUDED_LIBODFGEN_LIBODFGEN_API_HXX
++
++#ifdef DLL_EXPORT
++#ifdef LIBODFGEN_BUILD
++#define ODFGENAPI __declspec(dllexport)
++#else
++#define ODFGENAPI __declspec(dllimport)
++#endif
++#else
++#define ODFGENAPI
++#endif
++
++#endif // INCLUDED_LIBODFGEN_LIBODFGEN_API_HXX
++
++/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
+-- 
+1.9.0
+
