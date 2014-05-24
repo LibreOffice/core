@@ -827,7 +827,7 @@ void SwXViewSettings::_preGetValues ()
 }
 
 void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
-    throw(UnknownPropertyException, WrappedTargetException )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     bool bBool = true;
     sal_Bool bBoolVal;
