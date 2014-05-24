@@ -994,8 +994,6 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         Display();
     if ( bDeleteContentCopy )
         delete pContCopy;
-    else
-        bDeleteContentCopy = true;
 }
 
 IMPL_LINK_NOARG(SwGlobalTree, Timeout)
