@@ -474,7 +474,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
 }
 
 SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xShape)
-    throw (css::uno::Exception, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     sal_uInt16 nType = 0;
     sal_uInt32 nInventor = 0;
