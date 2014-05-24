@@ -104,8 +104,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
             opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
             glm::vec3 aTopLeft, aTopRight, aBottomRight;
-            aTopLeft.x = calculateTextWidth(aSeriesName) * -1.0;
+            aTopLeft.x = 0.0f;
             aTopLeft.y = nYPos;
+            aTopRight.x = calculateTextWidth(aSeriesName) * -1.0;
             aTopRight.y = nYPos;
             aBottomRight = aTopRight;
             aBottomRight.y += TEXT_HEIGHT;
@@ -182,12 +183,12 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
-        aTopLeft.x = nXPos;
-        aTopLeft.y = nYPos;
+        aTopLeft.x = nXPos + TEXT_HEIGHT;
+        aTopLeft.y = nYPos + calculateTextWidth(aCats[i]);
         aTopRight = aTopLeft;
-        aTopRight.x += calculateTextWidth(aCats[i]);
-        aBottomRight = aTopRight;
-        aBottomRight.y += TEXT_HEIGHT;
+        aTopRight.y = nYPos;
+        aBottomRight.x = nXPos;
+        aBottomRight.y = nYPos;
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
 }
