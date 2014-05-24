@@ -12,6 +12,7 @@
 
 #include "address.hxx"
 #include "columnspanset.hxx"
+#include <columnblockcontext.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -25,23 +26,16 @@ namespace sc {
 struct ColumnBlockPosition;
 class ColumnBlockPositionSet;
 
-class StartListeningContext : boost::noncopyable
+class StartListeningContext : public ColumnBlockContext
 {
-    ScDocument& mrDoc;
-    boost::shared_ptr<ColumnBlockPositionSet> mpSet;
 public:
     StartListeningContext(ScDocument& rDoc);
     StartListeningContext(ScDocument& rDoc, const boost::shared_ptr<ColumnBlockPositionSet>& pSet);
-    ScDocument& getDoc();
-
-    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
 
-class EndListeningContext : boost::noncopyable
+class EndListeningContext : public ColumnBlockContext
 {
-    ScDocument& mrDoc;
     ColumnSpanSet maSet;
-    boost::shared_ptr<ColumnBlockPositionSet> mpPosSet;
     ScTokenArray* mpOldCode;
     ScAddress maPosDelta; // Add this to get the old position prior to the move.
 
@@ -51,11 +45,8 @@ public:
 
     void setPositionDelta( const ScAddress& rDelta );
 
-    ScDocument& getDoc();
     ScTokenArray* getOldCode();
     ScAddress getOldPosition( const ScAddress& rPos ) const;
-
-    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 
     void addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow);
     void purgeEmptyBroadcasters();

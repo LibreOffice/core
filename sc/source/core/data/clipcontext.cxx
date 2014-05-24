@@ -17,20 +17,10 @@
 
 namespace sc {
 
-ClipContextBase::ClipContextBase(ScDocument& rDoc) :
-    mpSet(new ColumnBlockPositionSet(rDoc)) {}
-
-ClipContextBase::~ClipContextBase() {}
-
-ColumnBlockPosition* ClipContextBase::getBlockPosition(SCTAB nTab, SCCOL nCol)
-{
-    return mpSet->getBlockPosition(nTab, nCol);
-}
-
 CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
     bool bAsLink, bool bSkipAttrForEmptyCells) :
-    ClipContextBase(rDoc),
+    ColumnBlockContext(rDoc),
     mnDestCol1(-1), mnDestCol2(-1),
     mnDestRow1(-1), mnDestRow2(-1),
     mnTabStart(-1), mnTabEnd(-1),
@@ -175,7 +165,7 @@ bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
 
 CopyToClipContext::CopyToClipContext(
     ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes) :
-    ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags), mbCloneNotes(bCloneNotes) {}
+    ColumnBlockContext(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags), mbCloneNotes(bCloneNotes) {}
 
 CopyToClipContext::~CopyToClipContext() {}
 
@@ -189,10 +179,10 @@ bool CopyToClipContext::isCloneNotes() const
     return mbCloneNotes;
 }
 
-CopyToDocContext::CopyToDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
+CopyToDocContext::CopyToDocContext(ScDocument& rDoc) : ColumnBlockContext(rDoc) {}
 CopyToDocContext::~CopyToDocContext() {}
 
-MixDocContext::MixDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
+MixDocContext::MixDocContext(ScDocument& rDoc) : ColumnBlockContext(rDoc) {}
 MixDocContext::~MixDocContext() {}
 
 }

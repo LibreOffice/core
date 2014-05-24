@@ -14,39 +14,24 @@
 namespace sc {
 
 StartListeningContext::StartListeningContext(ScDocument& rDoc) :
-    mrDoc(rDoc), mpSet(new ColumnBlockPositionSet(rDoc)) {}
+    ColumnBlockContext(rDoc) {}
 
 StartListeningContext::StartListeningContext(
     ScDocument& rDoc, const boost::shared_ptr<ColumnBlockPositionSet>& pSet) :
-    mrDoc(rDoc), mpSet(pSet) {}
-
-ScDocument& StartListeningContext::getDoc()
-{
-    return mrDoc;
-}
-
-ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
-{
-    return mpSet->getBlockPosition(nTab, nCol);
-}
+    ColumnBlockContext(rDoc, pSet) {}
 
 EndListeningContext::EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode) :
-    mrDoc(rDoc), maSet(false), mpPosSet(new ColumnBlockPositionSet(rDoc)),
-    mpOldCode(pOldCode), maPosDelta(0,0,0) {}
+    ColumnBlockContext(rDoc),
+    maSet(false), mpOldCode(pOldCode), maPosDelta(0,0,0) {}
 
 EndListeningContext::EndListeningContext(
     ScDocument& rDoc, const boost::shared_ptr<ColumnBlockPositionSet>& pSet, ScTokenArray* pOldCode) :
-    mrDoc(rDoc), maSet(false), mpPosSet(pSet),
-    mpOldCode(pOldCode), maPosDelta(0,0,0) {}
+    ColumnBlockContext(rDoc, pSet),
+    maSet(false), mpOldCode(pOldCode), maPosDelta(0,0,0) {}
 
 void EndListeningContext::setPositionDelta( const ScAddress& rDelta )
 {
     maPosDelta = rDelta;
-}
-
-ScDocument& EndListeningContext::getDoc()
-{
-    return mrDoc;
 }
 
 ScTokenArray* EndListeningContext::getOldCode()
@@ -63,11 +48,6 @@ ScAddress EndListeningContext::getOldPosition( const ScAddress& rPos ) const
     return aOldPos;
 }
 
-ColumnBlockPosition* EndListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
-{
-    return mpPosSet->getBlockPosition(nTab, nCol);
-}
-
 void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow)
 {
     maSet.set(nTab, nCol, nRow, true);
@@ -75,7 +55,7 @@ void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SC
 
 void EndListeningContext::purgeEmptyBroadcasters()
 {
-    PurgeListenerAction aAction(mrDoc);
+    PurgeListenerAction aAction(getDoc());
     maSet.executeAction(aAction);
 }
 

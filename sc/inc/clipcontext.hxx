@@ -12,6 +12,7 @@
 
 #include "address.hxx"
 #include "cellvalue.hxx"
+#include <columnblockcontext.hxx>
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -26,23 +27,7 @@ class ScConditionalFormatList;
 
 namespace sc {
 
-struct ColumnBlockPosition;
-class ColumnBlockPositionSet;
-
-class ClipContextBase : boost::noncopyable
-{
-    boost::scoped_ptr<ColumnBlockPositionSet> mpSet;
-
-    ClipContextBase(); // disabled
-
-public:
-    ClipContextBase(ScDocument& rDoc);
-    virtual ~ClipContextBase();
-
-    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
-};
-
-class CopyFromClipContext : public ClipContextBase
+class CopyFromClipContext : public ColumnBlockContext
 {
     SCCOL mnDestCol1;
     SCCOL mnDestCol2;
@@ -116,7 +101,7 @@ public:
     bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
 };
 
-class CopyToClipContext : public ClipContextBase
+class CopyToClipContext : public ColumnBlockContext
 {
     bool mbKeepScenarioFlags:1;
     bool mbCloneNotes:1;
@@ -131,14 +116,14 @@ public:
     bool isCloneNotes() const;
 };
 
-class CopyToDocContext : public ClipContextBase
+class CopyToDocContext : public ColumnBlockContext
 {
 public:
     CopyToDocContext(ScDocument& rDoc);
     virtual ~CopyToDocContext();
 };
 
-class MixDocContext : public ClipContextBase
+class MixDocContext : public ColumnBlockContext
 {
 public:
     MixDocContext(ScDocument& rDoc);
