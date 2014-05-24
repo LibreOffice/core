@@ -61,7 +61,9 @@ public:
     FontAlign           GetAlign() const;
 
     // XXX: now font has background iff it is (single-y) underlined
+    // also forces non transparency
     bool                HasBackgroundColor() const {
+
                 return GetUnderline() == UNDERLINE_SINGLE;
     }
 

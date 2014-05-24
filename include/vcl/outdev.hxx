@@ -1040,7 +1040,7 @@ public:
     void                        SetTextFillColor();
     void                        SetTextFillColor( const Color& rColor );
     Color                       GetTextFillColor() const;
-    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
+    bool                        IsTextFillColor() const {  return maFont.GetUnderline() == UNDERLINE_SINGLE; /*return !maFont.IsTransparent();*/ }
 
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
@@ -1097,7 +1097,7 @@ private:
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
 
 
-    SAL_DLLPRIVATE bool         ImplDrawTextDirect( SalLayout&, bool bTextLines, bool bTextBkg = false, sal_uInt32 flags = 0 );
+    SAL_DLLPRIVATE bool         ImplDrawTextDirect( SalLayout&, bool bTextLines, sal_uInt32 flags = 0 );
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 

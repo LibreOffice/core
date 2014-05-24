@@ -459,14 +459,11 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
     fprintf(stderr, "About to print %s\n", rTxt.getStr());
 
+
+
     // Font has to be selected in OutputDevice...
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
     {
-    // set right background
-    if ( HasBackgroundColor() ) {
-        Color aColor = COL_RED;
-        pOut->SetTextFillColor(aColor);
-    }
         pOut->DrawTextArray( rPos, rTxt, pDXArray, nIdx, nLen );
         return;
     }
