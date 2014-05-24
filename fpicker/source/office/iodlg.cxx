@@ -1195,9 +1195,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
             if ( INET_PROT_FILE == aFileObj.GetProtocol( ) )
             {
-                bool bExists = false;
-                bExists = pThis->m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
-
+                bool bExists = pThis->m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 if ( !bExists )
                 {
