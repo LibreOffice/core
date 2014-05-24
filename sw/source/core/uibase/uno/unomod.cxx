@@ -816,7 +816,9 @@ void SwXViewSettings::_postSetValues ()
 }
 
 void SwXViewSettings::_preGetValues ()
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException)
 {
     if(pView)
     {
