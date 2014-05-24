@@ -289,4 +289,8 @@ gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
 gb_Helper_set_ld_path := PATH="$$PATH:$(shell cygpath -u $(INSTDIR)/$(LIBO_URE_LIB_FOLDER)):$(shell cygpath -u $(INSTDIR)/$(LIBO_BIN_FOLDER))"
 
+define gb_Helper_prepend_ld_path
+PATH="$(shell cygpath -u $(INSTDIR)/$(LIBO_URE_LIB_FOLDER)):$(shell cygpath -u $(INSTDIR)/$(LIBO_BIN_FOLDER)):$(1):$$PATH"
+endef
+
 # vim: set noet sw=4:
