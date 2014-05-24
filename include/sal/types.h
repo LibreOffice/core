@@ -644,6 +644,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
     #ifndef SAL_COLD
     #   define SAL_COLD __attribute__((cold))
     #endif
+
 #elif
     #define SAL_LIKELY
     #define SAL_UNLIKELY
