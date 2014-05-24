@@ -25,10 +25,8 @@ $(eval $(call gb_Library_add_defs,writerperfect,\
 
 $(eval $(call gb_Library_use_externals,writerperfect,\
 	boost_headers \
-	etonyek \
 	odfgen \
-	wpd \
-	wpg \
+	revenge \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,writerperfect))

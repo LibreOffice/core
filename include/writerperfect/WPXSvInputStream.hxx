@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERPERFECT_WPXSVINPUTSTREAM_HXX
 #define INCLUDED_WRITERPERFECT_WPXSVINPUTSTREAM_HXX
 
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -26,27 +26,23 @@ namespace writerperfect
 
 class WPXSvInputStreamImpl;
 
-class WRITERPERFECT_DLLPUBLIC WPXSvInputStream : public WPXInputStream
+class WRITERPERFECT_DLLPUBLIC WPXSvInputStream : public librevenge::RVNGInputStream
 {
 public:
     WPXSvInputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream );
     virtual ~WPXSvInputStream();
 
-    virtual bool isStructured();
-    virtual unsigned subStreamCount();
-    virtual const char * subStreamName(unsigned id);
-    virtual bool existsSubStream(const char *name);
-    virtual WPXInputStream * getSubStreamByName(const char *name);
-    virtual WPXInputStream * getSubStreamById(unsigned id);
+    virtual bool isStructured() SAL_OVERRIDE;
+    virtual unsigned subStreamCount() SAL_OVERRIDE;
+    virtual const char * subStreamName(unsigned id) SAL_OVERRIDE;
+    virtual bool existsSubStream(const char *name) SAL_OVERRIDE;
+    virtual librevenge::RVNGInputStream * getSubStreamByName(const char *name) SAL_OVERRIDE;
+    virtual librevenge::RVNGInputStream * getSubStreamById(unsigned id) SAL_OVERRIDE;
 
     virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead) SAL_OVERRIDE;
-    virtual int seek(long offset, WPX_SEEK_TYPE seekType) SAL_OVERRIDE;
+    virtual int seek(long offset, librevenge::RVNG_SEEK_TYPE seekType) SAL_OVERRIDE;
     virtual long tell() SAL_OVERRIDE;
-    virtual bool isEnd();
-
-    virtual bool isOLEStream() SAL_OVERRIDE;
-    virtual WPXInputStream * getDocumentOLEStream(const char *name) SAL_OVERRIDE;
-    virtual bool atEOS() SAL_OVERRIDE;
+    virtual bool isEnd() SAL_OVERRIDE;
 
 private:
     WPXSvInputStreamImpl *mpImpl;

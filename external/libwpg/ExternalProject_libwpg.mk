@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libwpg,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libwpg,\
+	revenge \
 	wpd \
 ))
 
@@ -27,12 +28,12 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
+			--disable-tools \
 			--disable-debug \
 			--disable-werror \
+			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
-		    $(if $(VERBOSE)$(verbose),V=1) \
-		    $(MAKE)) \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
