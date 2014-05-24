@@ -608,6 +608,10 @@ public:
     virtual void setRsid( sal_uInt32 nVal );
     virtual sal_uInt32 getRsidRoot() const;
     virtual void setRsidRoot( sal_uInt32 nVal );
+    virtual sal_uInt32 Getn32DummyCompatabilityOptions1() const SAL_OVERRIDE;
+    virtual void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 ) SAL_OVERRIDE;
+    virtual sal_uInt32 Getn32DummyCompatabilityOptions2() const SAL_OVERRIDE;
+    virtual void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 ) SAL_OVERRIDE;
 
     // IDocumentDeviceAccess
     IDocumentDeviceAccess const & getIDocumentDeviceAccess() const;

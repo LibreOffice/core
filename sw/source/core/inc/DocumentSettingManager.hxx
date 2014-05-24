@@ -174,10 +174,10 @@ public:
 // Replace all compatability options with those from rSource.
     void ReplaceCompatabilityOptions(const DocumentSettingManager& rSource);
 
-    sal_uInt32 Getn32DummyCompatabilityOptions1() const;
-    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 );
-    sal_uInt32 Getn32DummyCompatabilityOptions2() const;
-    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 );
+    sal_uInt32 Getn32DummyCompatabilityOptions1() const SAL_OVERRIDE;
+    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 ) SAL_OVERRIDE;
+    sal_uInt32 Getn32DummyCompatabilityOptions2() const SAL_OVERRIDE;
+    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 ) SAL_OVERRIDE;
 
 };
 

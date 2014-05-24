@@ -243,6 +243,26 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
     m_pDocumentSettingManager->setCharacterCompressionType(n);
 }
 
+sal_uInt32 SwDoc::Getn32DummyCompatabilityOptions1() const
+{
+    return GetDocumentSettingManager().Getn32DummyCompatabilityOptions1();
+}
+
+void SwDoc::Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
+{
+    GetDocumentSettingManager().Setn32DummyCompatabilityOptions1( CompatabilityOptions1 );
+}
+
+sal_uInt32 SwDoc::Getn32DummyCompatabilityOptions2() const
+{
+     return GetDocumentSettingManager().Getn32DummyCompatabilityOptions2();
+}
+
+void SwDoc::Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
+{
+    GetDocumentSettingManager().Setn32DummyCompatabilityOptions2( CompatabilityOptions2 );
+}
+
 // IDocumentDeviceAccess
 IDocumentDeviceAccess const & SwDoc::getIDocumentDeviceAccess() const
 {
