@@ -95,7 +95,7 @@ namespace dbaui
             { ODatabaseAdministrationDialog::removePropertyChangeListener(p1, p2); }
         virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::addVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::removeVetoableChangeListener(p1, p2); }
         virtual void SAL_CALL setTitle(const OUString& p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::setTitle(p1); }
