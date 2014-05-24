@@ -1,0 +1,293 @@
+From 7b7cf183a7ad454706aa0f1657c851c578ec476e Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sun, 25 May 2014 15:51:54 +0200
+Subject: [PATCH] librevenge-stream is optional: don't depend on it
+
+---
+ src/lib/MWAWStringStream.cxx | 153 +++++++++++++++++++++++++++++++++++++++++++
+ src/lib/MWAWStringStream.hxx |  50 ++++++++++++++
+ src/lib/Makefile.am          |   2 +
+ src/lib/WingzParser.cxx      |   3 +-
+ 4 files changed, 207 insertions(+), 1 deletion(-)
+ create mode 100644 src/lib/MWAWStringStream.cxx
+ create mode 100644 src/lib/MWAWStringStream.hxx
+
+diff --git a/src/lib/MWAWStringStream.cxx b/src/lib/MWAWStringStream.cxx
+new file mode 100644
+index 0000000..efea071
+--- /dev/null
++++ b/src/lib/MWAWStringStream.cxx
+@@ -0,0 +1,153 @@
++/* -*- Mode: C++; c-default-style: "k&r"; indent-tabs-mode: nil; tab-width: 2; c-basic-offset: 2 -*- */
++
++/* libmwaw
++* Version: MPL 2.0 / LGPLv2+
++*
++* The contents of this file are subject to the Mozilla Public License Version
++* 2.0 (the "License"); you may not use this file except in compliance with
++* the License or as specified alternatively below. You may obtain a copy of
++* the License at http://www.mozilla.org/MPL/
++*
++* Software distributed under the License is distributed on an "AS IS" basis,
++* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
++* for the specific language governing rights and limitations under the
++* License.
++*
++* Alternatively, the contents of this file may be used under the terms of
++* the GNU Lesser General Public License Version 2 or later (the "LGPLv2+"),
++* in which case the provisions of the LGPLv2+ are applicable
++* instead of those above.
++*/
++
++#include <cstring>
++#include <vector>
++
++#include <librevenge-stream/librevenge-stream.h>
++
++#include "MWAWStringStream.hxx"
++
++class MWAWStringStreamPrivate
++{
++public:
++  MWAWStringStreamPrivate(const unsigned char *data, unsigned dataSize);
++  ~MWAWStringStreamPrivate();
++  std::vector<unsigned char> buffer;
++  long offset;
++private:
++  MWAWStringStreamPrivate(const MWAWStringStreamPrivate &);
++  MWAWStringStreamPrivate &operator=(const MWAWStringStreamPrivate &);
++};
++
++MWAWStringStreamPrivate::MWAWStringStreamPrivate(const unsigned char *data, unsigned dataSize) :
++  buffer(dataSize),
++  offset(0)
++{
++  std::memcpy(&buffer[0], data, dataSize);
++}
++
++MWAWStringStreamPrivate::~MWAWStringStreamPrivate()
++{
++}
++
++MWAWStringStream::MWAWStringStream(const unsigned char *data, const unsigned int dataSize) :
++  librevenge::RVNGInputStream(),
++  d(new MWAWStringStreamPrivate(data, dataSize))
++{
++}
++
++MWAWStringStream::~MWAWStringStream()
++{
++  delete d;
++}
++
++const unsigned char *MWAWStringStream::read(unsigned long numBytes, unsigned long &numBytesRead)
++{
++  numBytesRead = 0;
++
++  if (numBytes == 0)
++    return 0;
++
++  long numBytesToRead;
++
++  if ((unsigned long)d->offset+numBytes < d->buffer.size())
++    numBytesToRead = (long) numBytes;
++  else
++    numBytesToRead = (long) d->buffer.size() - d->offset;
++
++  numBytesRead = (unsigned long) numBytesToRead; // about as paranoid as we can be..
++
++  if (numBytesToRead == 0)
++    return 0;
++
++  long oldOffset = d->offset;
++  d->offset += numBytesToRead;
++
++  return &d->buffer[size_t(oldOffset)];
++
++}
++
++long MWAWStringStream::tell()
++{
++  return d->offset;
++}
++
++int MWAWStringStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
++{
++  if (seekType == librevenge::RVNG_SEEK_CUR)
++    d->offset += offset;
++  else if (seekType == librevenge::RVNG_SEEK_SET)
++    d->offset = offset;
++  else if (seekType == librevenge::RVNG_SEEK_END)
++    d->offset += d->buffer.size();
++
++  if (d->offset < 0) {
++    d->offset = 0;
++    return 1;
++  }
++  if ((long)d->offset > (long)d->buffer.size()) {
++    d->offset = (long) d->buffer.size();
++    return 1;
++  }
++
++  return 0;
++}
++
++bool MWAWStringStream::isEnd()
++{
++  if ((long)d->offset >= (long)d->buffer.size())
++    return true;
++
++  return false;
++}
++
++bool MWAWStringStream::isStructured()
++{
++  return false;
++}
++
++unsigned MWAWStringStream::subStreamCount()
++{
++  return 0;
++}
++
++const char *MWAWStringStream::subStreamName(unsigned)
++{
++  return 0;
++}
++
++bool MWAWStringStream::existsSubStream(const char *)
++{
++  return false;
++}
++
++librevenge::RVNGInputStream *MWAWStringStream::getSubStreamById(unsigned)
++{
++  return 0;
++}
++
++librevenge::RVNGInputStream *MWAWStringStream::getSubStreamByName(const char *)
++{
++  return 0;
++}
++
++// vim: set filetype=cpp tabstop=2 shiftwidth=2 cindent autoindent smartindent noexpandtab:
+diff --git a/src/lib/MWAWStringStream.hxx b/src/lib/MWAWStringStream.hxx
+new file mode 100644
+index 0000000..9a6aa02
+--- /dev/null
++++ b/src/lib/MWAWStringStream.hxx
+@@ -0,0 +1,50 @@
++/* -*- Mode: C++; c-default-style: "k&r"; indent-tabs-mode: nil; tab-width: 2; c-basic-offset: 2 -*- */
++
++/* libmwaw
++* Version: MPL 2.0 / LGPLv2+
++*
++* The contents of this file are subject to the Mozilla Public License Version
++* 2.0 (the "License"); you may not use this file except in compliance with
++* the License or as specified alternatively below. You may obtain a copy of
++* the License at http://www.mozilla.org/MPL/
++*
++* Software distributed under the License is distributed on an "AS IS" basis,
++* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
++* for the specific language governing rights and limitations under the
++* License.
++*
++* Alternatively, the contents of this file may be used under the terms of
++* the GNU Lesser General Public License Version 2 or later (the "LGPLv2+"),
++* in which case the provisions of the LGPLv2+ are applicable
++* instead of those above.
++*/
++
++#include <librevenge-stream/librevenge-stream.h>
++
++class MWAWStringStreamPrivate;
++
++class MWAWStringStream: public librevenge::RVNGInputStream
++{
++public:
++  MWAWStringStream(const unsigned char *data, const unsigned int dataSize);
++  ~MWAWStringStream();
++
++  const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
++  long tell();
++  int seek(long offset, librevenge::RVNG_SEEK_TYPE seekType);
++  bool isEnd();
++
++  bool isStructured();
++  unsigned subStreamCount();
++  const char *subStreamName(unsigned);
++  bool existsSubStream(const char *name);
++  librevenge::RVNGInputStream *getSubStreamByName(const char *name);
++  librevenge::RVNGInputStream *getSubStreamById(unsigned);
++
++private:
++  MWAWStringStreamPrivate *d;
++  MWAWStringStream(const MWAWStringStream &); // copy is not allowed
++  MWAWStringStream &operator=(const MWAWStringStream &); // assignment is not allowed
++};
++
++// vim: set filetype=cpp tabstop=2 shiftwidth=2 cindent autoindent smartindent noexpandtab:
+diff --git a/src/lib/Makefile.in b/src/lib/Makefile.in
+index eb17bad..f7934b4 100644
+--- a/src/lib/Makefile.in
++++ b/src/lib/Makefile.in
+@@ -162,12 +162,12 @@ am_libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MI
+ 	MWAWPrinter.lo MWAWPropertyHandler.lo MWAWRSRCParser.lo \
+ 	MWAWSection.lo MWAWSpreadsheetDecoder.lo \
+ 	MWAWSpreadsheetEncoder.lo MWAWSpreadsheetListener.lo \
+-	MWAWSubDocument.lo MWAWTable.lo MWAWTextListener.lo \
+-	NisusWrtGraph.lo NisusWrtParser.lo NisusWrtStruct.lo \
+-	NisusWrtText.lo RagTimeParser.lo RagTimeSpreadsheet.lo \
+-	RagTimeText.lo SuperPaintParser.lo TeachTxtParser.lo \
+-	WingzParser.lo WriteNowParser.lo WriteNowText.lo \
+-	WriterPlsParser.lo ZWrtParser.lo ZWrtText.lo
++	MWAWStringStream.lo MWAWSubDocument.lo MWAWTable.lo \
++	MWAWTextListener.lo NisusWrtGraph.lo NisusWrtParser.lo \
++	NisusWrtStruct.lo NisusWrtText.lo RagTimeParser.lo \
++	RagTimeSpreadsheet.lo RagTimeText.lo SuperPaintParser.lo \
++	TeachTxtParser.lo WingzParser.lo WriteNowParser.lo \
++	WriteNowText.lo WriterPlsParser.lo ZWrtParser.lo ZWrtText.lo
+ libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_OBJECTS = $(am_libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR_VERSION@_la_OBJECTS)
+ AM_V_lt = $(am__v_lt_@AM_V@)
+ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+@@ -610,6 +610,8 @@ libmwaw_@MWAW_MAJOR_VERSION@_@MWAW_MINOR
+ 	MWAWSpreadsheetEncoder.hxx	\
+ 	MWAWSpreadsheetListener.cxx	\
+ 	MWAWSpreadsheetListener.hxx	\
++	MWAWStringStream.cxx		\
++	MWAWStringStream.hxx		\
+ 	MWAWSubDocument.cxx		\
+ 	MWAWSubDocument.hxx		\
+ 	MWAWTable.cxx			\
+@@ -812,6 +814,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MWAWSpreadsheetDecoder.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MWAWSpreadsheetEncoder.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MWAWSpreadsheetListener.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MWAWStringStream.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MWAWSubDocument.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MWAWTable.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MWAWTextListener.Plo@am__quote@
+diff --git a/src/lib/WingzParser.cxx b/src/lib/WingzParser.cxx
+index 4813816..93dde7d 100644
+--- a/src/lib/WingzParser.cxx
++++ b/src/lib/WingzParser.cxx
+@@ -49,6 +49,7 @@
+ #include "MWAWPictMac.hxx"
+ #include "MWAWPrinter.hxx"
+ #include "MWAWSpreadsheetListener.hxx"
++#include "MWAWStringStream.hxx"
+ #include "MWAWSubDocument.hxx"
+ 
+ #include "WingzParser.hxx"
+@@ -2496,7 +2497,7 @@ bool WingzParser::decodeEncrypted()
+ 
+   // finally replace the actual input with a new input
+   shared_ptr<librevenge::RVNGInputStream> newInput
+-  (new librevenge::RVNGStringStream(buffer, (unsigned int)length));
++  (new MWAWStringStream(buffer, (unsigned int)length));
+   delete [] buffer;
+   getParserState()->m_input.reset(new MWAWInputStream(newInput, false));
+   return true;
+-- 
+1.9.0
+

@@ -24,16 +24,17 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 
-bool MSWorksImportFilter::doImportDocument( WPXInputStream &rInput, const rtl::OUString &, WPXDocumentInterface &rGenerator )
+bool MSWorksImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
 {
-    return WPS_OK == WPSDocument::parse(&rInput, &rGenerator);
+    return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator);
 }
 
-bool MSWorksImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool MSWorksImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
-    const WPSConfidence confidence = WPSDocument::isFileFormatSupported(&rInput);
+    libwps::WPSKind kind = libwps::WPS_TEXT;
+    const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind);
 
-    if ((confidence == WPS_CONFIDENCE_EXCELLENT) || (confidence == WPS_CONFIDENCE_GOOD))
+    if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT))
     {
         rTypeName = "writer_MS_Works_Document";
         return true;

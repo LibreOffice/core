@@ -391,10 +391,10 @@ public :
 
     bool isStructured();
     unsigned subStreamCount();
-    const char * subStreamName(unsigned id);
+    const char *subStreamName(unsigned id);
     bool existsSubStream(const char *name);
-    WPXInputStream * getSubStreamByName(const char *name);
-    WPXInputStream * getSubStreamById(unsigned id);
+    librevenge::RVNGInputStream *getSubStreamByName(const char *name);
+    librevenge::RVNGInputStream *getSubStreamById(unsigned id);
 
     const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
     int seek(long offset);
@@ -410,8 +410,8 @@ private:
     bool isZip();
     void ensureZipIsInitialized();
 
-    WPXInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
-    WPXInputStream *createWPXStream(const Reference<XInputStream> &rxStream);
+    librevenge::RVNGInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
+    librevenge::RVNGInputStream *createWPXStream(const Reference<XInputStream> &rxStream);
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxStream;
@@ -627,7 +627,7 @@ bool WPXSvInputStreamImpl::existsSubStream(const char *const name)
     return false;
 }
 
-WPXInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char *const name)
+librevenge::RVNGInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char *const name)
 {
     if (!name)
         return 0;
@@ -665,7 +665,7 @@ WPXInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char *const name)
     return 0;
 }
 
-WPXInputStream *WPXSvInputStreamImpl::getSubStreamById(const unsigned id)
+librevenge::RVNGInputStream *WPXSvInputStreamImpl::getSubStreamById(const unsigned id)
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return 0;
@@ -715,7 +715,7 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
     }
 }
 
-WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStorageStreamRef &rxStorage)
+librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStorageStreamRef &rxStorage)
 {
     if (rxStorage.Is())
     {
@@ -725,7 +725,7 @@ WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStorageStreamRef 
     return 0;
 }
 
-WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const Reference<XInputStream> &rxStream)
+librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const Reference<XInputStream> &rxStream)
 {
     if (rxStream.is())
         return new WPXSvInputStream( rxStream );
@@ -867,12 +867,12 @@ long WPXSvInputStream::tell()
     return retVal - (long)mpImpl->mnReadBufferLength + (long)mpImpl->mnReadBufferPos;
 }
 
-int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
+int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
 {
     sal_Int64 tmpOffset = offset;
-    if (seekType == WPX_SEEK_CUR)
+    if (seekType == librevenge::RVNG_SEEK_CUR)
         tmpOffset += tell();
-    if (seekType == WPX_SEEK_END)
+    if (seekType == librevenge::RVNG_SEEK_END)
         tmpOffset += mpImpl->mnLength;
 
     int retVal = 0;
@@ -929,31 +929,16 @@ bool WPXSvInputStream::existsSubStream(const char *const name)
     return mpImpl->existsSubStream(name);
 }
 
-WPXInputStream *WPXSvInputStream::getSubStreamByName(const char *name)
+librevenge::RVNGInputStream *WPXSvInputStream::getSubStreamByName(const char *name)
 {
     mpImpl->invalidateReadBuffer();
     return mpImpl->getSubStreamByName(name);
 }
 
-WPXInputStream *WPXSvInputStream::getSubStreamById(const unsigned id)
+librevenge::RVNGInputStream *WPXSvInputStream::getSubStreamById(const unsigned id)
 {
     mpImpl->invalidateReadBuffer();
     return mpImpl->getSubStreamById(id);
-}
-
-bool WPXSvInputStream::atEOS()
-{
-    return isEnd();
-}
-
-bool WPXSvInputStream::isOLEStream()
-{
-    return isStructured();
-}
-
-WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
-{
-    return getSubStreamByName(name);
 }
 
 }

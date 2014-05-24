@@ -10,8 +10,8 @@
 
 #include <libodfgen/libodfgen.hxx>
 
-#include <libwpd/libwpd.h>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -79,8 +79,8 @@ public:
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    virtual bool doDetectFormat( WPXInputStream &rInput, OUString &rTypeName ) = 0;
-    virtual bool doImportDocument( WPXInputStream &rInput, const rtl::OUString &rFilterName, WPXDocumentInterface &rGenerator ) = 0;
+    virtual bool doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName ) = 0;
+    virtual bool doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator ) = 0;
     virtual void doRegisterHandlers( OdtGenerator &rGenerator );
 
 private:

@@ -38,10 +38,10 @@ $(eval $(call gb_Library_use_libraries,wpftdraw,\
 
 $(eval $(call gb_Library_use_externals,wpftdraw,\
 	cdr \
-	etonyek \
 	freehand \
 	mspub \
 	odfgen \
+	revenge \
 	visio \
 	wpg \
 	wpd \
