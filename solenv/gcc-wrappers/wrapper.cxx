@@ -115,6 +115,8 @@ string processccargs(vector<string> rawargs) {
         }
         else if(*i == "-g")
             args.append("-Zi");
+        else if(*i == "-shared")
+            args.append("-dll");
         else if(!(*i).compare(0,2,"-D")) {
             // need to re-escape strings for preprocessor
             for(size_t pos=(*i).find("\"",0); pos!=string::npos; pos=(*i).find("\"",pos)) {
