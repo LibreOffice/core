@@ -77,25 +77,25 @@ bool OGLPlayer::create( const OUString& rURL )
     // Load external resources
     for( size_t i = 0; i < m_pHandle->size; ++i )
     {
-        glTFFile* pFile = m_pHandle->files[i];
-        if( pFile && pFile->filename )
+        glTFFile& rFile = m_pHandle->files[i];
+        if( rFile.filename )
         {
             const OUString sFilesURL =
-                INetURLObject::GetAbsURL(m_sURL,OStringToOUString(OString(pFile->filename),RTL_TEXTENCODING_UTF8));
-            if( pFile->type == GLTF_IMAGE )
+                INetURLObject::GetAbsURL(m_sURL,OStringToOUString(OString(rFile.filename),RTL_TEXTENCODING_UTF8));
+            if( rFile.type == GLTF_IMAGE )
             {
                 // Load images as bitmaps
                 GraphicFilter aFilter;
                 Graphic aGraphic;
                 aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL));
                 const BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
-                pFile->buffer = (char*)OpenGLHelper::ConvertBitmapExToRGBABuffer(aBitmapEx);
-                pFile->imagewidth = aBitmapEx.GetSizePixel().Width();
-                pFile->imageheight = aBitmapEx.GetSizePixel().Height();
+                rFile.buffer = (char*)OpenGLHelper::ConvertBitmapExToRGBABuffer(aBitmapEx);
+                rFile.imagewidth = aBitmapEx.GetSizePixel().Width();
+                rFile.imageheight = aBitmapEx.GetSizePixel().Height();
             }
-            else if( pFile->type == GLTF_BINARY || pFile->type == GLTF_GLSL )
+            else if( rFile.type == GLTF_BINARY || rFile.type == GLTF_GLSL )
             {
-                if( !lcl_LoadFile(pFile, sFilesURL) )
+                if( !lcl_LoadFile(&rFile, sFilesURL) )
                 {
                     SAL_WARN("avmedia.opengl", "Can't load glTF file: " + sFilesURL);
                     return false;
