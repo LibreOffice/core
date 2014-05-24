@@ -54,6 +54,23 @@ float calculateTextWidth(const OUString& rText)
     return rText.getLength() * 10;
 }
 
+double findMaxValue(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer)
+{
+    double nMax = 0.0;
+    for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
+            itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
+    {
+        const VDataSeries& rDataSeries = *itr;
+        sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
+        for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
+        {
+            double nVal = rDataSeries.getYValue(nIndex);
+            nMax = std::max(nMax, nVal);
+        }
+    }
+    return nMax;
+}
+
 }
 
 void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
@@ -85,6 +102,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     mpCamera = static_cast<opengl3D::Camera*>(&maShapes.back());
 
     sal_Int32 nSeriesIndex = 0;
+    sal_Int32 nMaxPointCount = 0;
+    double nMaxVal = findMaxValue(rDataSeriesContainer)/100;
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
             itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
     {
@@ -92,6 +111,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         const VDataSeries& rDataSeries = *itr;
         sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
+        nMaxPointCount = std::max(nMaxPointCount, nPointCount);
 
         bool bMappedFillProperty = rDataSeries.hasPropertyMapping("FillColor");
 
@@ -126,8 +146,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             float nVal = rDataSeries.getYValue(nIndex);
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX) + nBarDistanceX;
 
-
-            glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, nVal);
+            glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, float(nVal/nMaxVal));
             glm::mat4 aTranslationMatrix = glm::translate(nXPos, nYPos, 0.0f);
             glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
 
@@ -207,6 +226,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         aBottomRight.y = -calculateTextWidth(aCats[i]) - 0.5 * nBarDistanceY;
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
+
+    maCameraPosition = glm::vec3(-30, -30, 200);
+    mpCamera->setPosition(maCameraPosition);
+    mpCamera->setDirection(glm::vec3(nMaxPointCount*(nBarSizeX+ nBarDistanceX), nSeriesIndex*(nBarSizeY+nBarDistanceY), 0));
 }
 
 void GL3DBarChart::render()
