@@ -2157,7 +2157,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     if ( !pElement->m_bIsInserted )
                     {
                         // first remove all open stream handles
-                        if( !pElement->m_xStream.Is() || pElement->m_xStream->Clear() )
+                        if (pContent && (!pElement->m_xStream.Is() || pElement->m_xStream->Clear()))
                         {
                             pContent->executeCommand( OUString("delete"), makeAny( true ) );
                             nRet = COMMIT_RESULT_SUCCESS;
@@ -2199,7 +2199,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         pContent = pElement->GetContent();
                     }
 
-                    if ( pElement->m_aName != pElement->m_aOriginalName )
+                    if (pContent && pElement->m_aName != pElement->m_aOriginalName)
                     {
                         // name ( title ) of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
@@ -2208,7 +2208,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         pContent->setPropertyValue("Title", aAny );
                     }
 
-                    if ( pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType() )
+                    if (pContent && pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType())
                     {
                         // mediatype of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
