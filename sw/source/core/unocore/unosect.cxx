@@ -710,7 +710,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         pSectionData->SetType(FILE_LINK_SECTION);
                     }
                     OUString sSectLink(pSectionData->GetLinkFileName());
-                    while (3 < comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeparator))
+                    for (sal_Int32 i = comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeparator);
+                         i < 3; ++i)
                     {
                         sSectLink += OUString(sfx2::cTokenSeparator);
                     }
