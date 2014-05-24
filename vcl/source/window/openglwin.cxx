@@ -57,24 +57,42 @@ void OpenGLWindow::Paint(const Rectangle&)
 
 void OpenGLWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    maStartPoint = rMEvt.GetPosPixel();
+}
+
+void OpenGLWindow::MouseButtonUp( const MouseEvent& rMEvt )
+{
     Point aPoint = rMEvt.GetPosPixel();
-
-    Color aColor = GetPixel(aPoint);
-    SAL_WARN("vcl.opengl", aColor.GetColor());
-    if(mpRenderer)
-        mpRenderer->clickedAt(aPoint);
-}
-
-void OpenGLWindow::MouseButtonUp( const MouseEvent& /* rMEvt */ )
-{
-    // in case we need to track button state ourselves.
-}
-
-void OpenGLWindow::MouseMove( const MouseEvent& rMEvt )
-{
-    if(rMEvt.GetButtons())
-        mpRenderer->mouseDragMove(rMEvt.GetPosPixel(),
+    if(aPoint == maStartPoint)
+    {
+        Color aColor = GetPixel(aPoint);
+        SAL_WARN("vcl.opengl", aColor.GetColor());
+        if(mpRenderer)
+            mpRenderer->clickedAt(aPoint);
+    }
+    else
+    {
+        mpRenderer->mouseDragMove(maStartPoint, aPoint,
                                   rMEvt.GetButtons());
+    }
+}
+
+void OpenGLWindow::Command( const CommandEvent& rCEvt )
+{
+    if(rCEvt.GetCommand() == COMMAND_WHEEL)
+    {
+        const CommandWheelData* pData = rCEvt.GetWheelData();
+        if(pData->GetMode() == COMMAND_WHEEL_SCROLL)
+        {
+            long nDelta = pData->GetDelta();
+            if(mpRenderer)
+                mpRenderer->scroll(nDelta);
+        }
+    }
+}
+
+void OpenGLWindow::MouseMove( const MouseEvent& /*rMEvt*/ )
+{
 }
 
 void OpenGLWindow::setRenderer(IRenderer* pRenderer)
