@@ -356,9 +356,6 @@ namespace dbaui
             }
         }
 
-        bValid = bValid && m_xCurrentConnection.is();
-        bReadonly = bReadonly || !bValid;
-
         // get the current table filter
         SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, true);
         Sequence< OUString > aTableFilter;
