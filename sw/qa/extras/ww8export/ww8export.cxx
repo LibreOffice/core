@@ -17,6 +17,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -147,6 +148,29 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
+    }
+}
+
+DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
+{
+    {
+        // check negative crops round-trip
+        text::GraphicCrop const crop =
+            getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32( -439), crop.Left);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-7040), crop.Right);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32( -220), crop.Top);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-7040), crop.Bottom);
+    }
+
+    {
+        // check positive crops round-trip
+        text::GraphicCrop const crop =
+            getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(  326), crop.Left);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32( 1208), crop.Right);
+        CPPUNIT_ASSERT(abs(sal_Int32(1635) -  crop.Top) <= 2);
+        CPPUNIT_ASSERT(abs(sal_Int32(  95) - crop.Bottom) <= 2);
     }
 }
 
