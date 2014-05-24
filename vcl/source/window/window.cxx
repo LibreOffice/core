@@ -3273,7 +3273,6 @@ const OUString& Window::GetHelpText() const
 void Window::SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer, VCLXWindow* pVCLXWindow  )
 {
     // be safe against re-entrance: first clear the old ref, then assign the new one
-    // #133706# / 2006-03-30 / frank.schoenheit@sun.com
     mpWindowImpl->mxWindowPeer.clear();
     mpWindowImpl->mxWindowPeer = xPeer;
 
