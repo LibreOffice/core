@@ -226,13 +226,10 @@ protected:
 
     void UpdateState (const sal_Int16 aState, const bool bValue);
 
-    bool IsDisposed (void) const;
+    bool IsDisposed() const;
 
-    void ThrowIfDisposed (void) const
+    void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
-
-    enum ExceptionType { ET_Runtime, ET_Disposed, ET_IndexOutOfBounds };
-    void ThrowException (const sal_Char* pMessage, const ExceptionType eExceptionType) const;
 };
 
 //===== AccessibleStateSet ====================================================
@@ -899,7 +896,7 @@ Reference<XAccessible> SAL_CALL
     ThrowIfDisposed();
 
     if (nIndex<0 || nIndex>=sal_Int32(maChildren.size()))
-        ThrowException("invalid child index", ET_IndexOutOfBounds);
+        throw lang::IndexOutOfBoundsException("invalid child index", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
 
     return Reference<XAccessible>(maChildren[nIndex].get());
 }
@@ -1300,13 +1297,13 @@ void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
         {
             (*iListener)->notifyEvent(aEventObject);
         }
-        catch(lang::DisposedException&)
+        catch (const lang::DisposedException&)
         {
             // Listener has been disposed and should have been removed
             // already.
             removeAccessibleEventListener(*iListener);
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
             // Ignore all other exceptions and assume that they are
             // caused by a temporary problem.
@@ -1314,7 +1311,7 @@ void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
     }
 }
 
-awt::Point PresenterAccessible::AccessibleObject::GetRelativeLocation (void)
+awt::Point PresenterAccessible::AccessibleObject::GetRelativeLocation()
 {
     awt::Point aLocation;
     if (mxContentWindow.is())
@@ -1332,7 +1329,7 @@ awt::Point PresenterAccessible::AccessibleObject::GetRelativeLocation (void)
     return aLocation;
 }
 
-awt::Size PresenterAccessible::AccessibleObject::GetSize (void)
+awt::Size PresenterAccessible::AccessibleObject::GetSize()
 {
     if (mxContentWindow.is())
     {
@@ -1343,7 +1340,7 @@ awt::Size PresenterAccessible::AccessibleObject::GetSize (void)
         return awt::Size();
 }
 
-awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation (void)
+awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation()
 {
     Reference<XAccessibleComponent> xParentComponent;
     if (mxParentAccessible.is())
@@ -1355,35 +1352,16 @@ awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation (voi
         return awt::Point();
 }
 
-bool PresenterAccessible::AccessibleObject::IsDisposed (void) const
+bool PresenterAccessible::AccessibleObject::IsDisposed() const
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
-void PresenterAccessible::AccessibleObject::ThrowIfDisposed (void) const
+void PresenterAccessible::AccessibleObject::ThrowIfDisposed() const
     throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
-        ThrowException("object has already been disposed", ET_Disposed);
-}
-
-void PresenterAccessible::AccessibleObject::ThrowException (
-    const sal_Char* pMessage,
-    const ExceptionType eExceptionType) const
-{
-    const OUString sMessage ("PresenterAccessible: " + OUString::createFromAscii(pMessage));
-    const Reference<XInterface> xObject (
-        const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    switch (eExceptionType)
-    {
-        default:
-        case ET_Runtime:
-            throw RuntimeException(sMessage, xObject);
-        case ET_Disposed:
-            throw lang::DisposedException(sMessage, xObject);
-        case ET_IndexOutOfBounds:
-            throw lang::IndexOutOfBoundsException(sMessage, xObject);
-    }
+        throw lang::DisposedException("object has already been disposed", uno::Reference<uno::XInterface>((uno::XWeak*)(this)));
 }
 
 //===== AccessibleStateSet ====================================================
@@ -1591,7 +1569,7 @@ sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal
     ThrowIfDisposed();
 
     if (!mpParagraph)
-        ThrowException("no text support in current mode", ET_IndexOutOfBounds);
+        throw lang::IndexOutOfBoundsException("no text support in current mode", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
     return mpParagraph->GetCharacter(nIndex);
 }
 
@@ -1631,7 +1609,7 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBo
     awt::Rectangle aCharacterBox;
     if (nIndex < 0)
     {
-        ThrowException("invalid text index", ET_IndexOutOfBounds);
+        throw lang::IndexOutOfBoundsException("invalid text index", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
     }
     else if (mpParagraph)
     {
@@ -1644,7 +1622,7 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBo
     }
     else
     {
-        ThrowException("no text support in current mode", ET_IndexOutOfBounds);
+        throw lang::IndexOutOfBoundsException("no text support in current mode", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
     }
 
     return aCharacterBox;
