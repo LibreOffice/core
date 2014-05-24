@@ -634,14 +634,6 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             }
         }
     }
-    else
-    {
-        for ( i = 0; i < nItems; i++ )
-        {
-            if ( !(pItems[i].mnBits & SWIB_INVISIBLE) )
-                nCurSize += pItems[i].mnPixSize;
-        }
-    }
 
     // calculate maximum size
     if ( bRows )
