@@ -1660,8 +1660,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                                mnOutHeight-mpWindowImpl->mpClientWindow->mpWindowImpl->mnTopBorder-mpWindowImpl->mpClientWindow->mpWindowImpl->mnBottomBorder,
                                                WINDOW_POSSIZE_X | WINDOW_POSSIZE_Y |
                                                WINDOW_POSSIZE_WIDTH | WINDOW_POSSIZE_HEIGHT );
-            // Wenn wir ein ClientWindow haben, dann hat dieses fuer die
-            // Applikation auch die Position des FloatingWindows
+            // If we have a client window, then this is the position
+            // of the Application's floating windows
             mpWindowImpl->mpClientWindow->mpWindowImpl->maPos = mpWindowImpl->maPos;
             if ( bNewPos )
             {
