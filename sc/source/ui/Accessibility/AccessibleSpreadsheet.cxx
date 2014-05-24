@@ -1002,7 +1002,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
             try{
             xAccessible = getAccessibleCellAt(nY, nX);
             }
-            catch( ::com::sun::star::lang::IndexOutOfBoundsException e)
+            catch(const ::com::sun::star::lang::IndexOutOfBoundsException &)
             {
                 return NULL;
             }
