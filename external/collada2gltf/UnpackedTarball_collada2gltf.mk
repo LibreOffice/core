@@ -15,8 +15,16 @@ $(eval $(call gb_UnpackedTarball_add_file,collada2gltf,.,external/collada2gltf/G
 
 $(eval $(call gb_UnpackedTarball_add_patches,collada2gltf,\
 	external/collada2gltf/patches/add-unzip-kmz-files-to-collada-files-module.patch.3 \
-	external/collada2gltf/patches/write-only-.dae-file-which-we-need.patch.0 \
 	external/collada2gltf/patches/wrong_uri_usage.patch.1 \
 ))
+
+ifneq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,collada2gltf,\
+	external/collada2gltf/patches/write-only-.dae-file-which-we-need.patch.0 \
+))
+
+endif
+
+
 
 # vim: set noet sw=4 ts=4:
