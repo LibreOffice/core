@@ -214,7 +214,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     if( nSlotId == SID_ATTR_CHAR_FONTHEIGHT )
                     {
-                        SvxFontHeightItem aFontItem = *(dynamic_cast<const SvxFontHeightItem *>(pI));
+                        SvxFontHeightItem aFontItem = dynamic_cast<const SvxFontHeightItem&>(*pI);
                         aFontItem.SetHeight(aFontItem.GetHeight(), stretchX, aFontItem.GetPropUnit());
                         aAttrSet.Put( aFontItem, nWhich );
                     }
