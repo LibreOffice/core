@@ -13,9 +13,7 @@ $(eval $(call gb_Library_use_unpacked,odfgen,libodfgen))
 
 $(eval $(call gb_Library_use_externals,odfgen,\
     boost_headers \
-	etonyek \
-	wpd \
-	wpg \
+	revenge \
 ))
 
 $(eval $(call gb_Library_set_warnings_not_errors,odfgen))
@@ -34,15 +32,21 @@ $(eval $(call gb_Library_add_defs,odfgen,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,odfgen,\
     UnpackedTarball/libodfgen/src/DocumentElement \
+    UnpackedTarball/libodfgen/src/FilterInternal \
     UnpackedTarball/libodfgen/src/FontStyle \
     UnpackedTarball/libodfgen/src/GraphicFunctions \
+    UnpackedTarball/libodfgen/src/GraphicStyle \
     UnpackedTarball/libodfgen/src/InternalHandler \
     UnpackedTarball/libodfgen/src/ListStyle \
+    UnpackedTarball/libodfgen/src/OdcGenerator \
+    UnpackedTarball/libodfgen/src/OdfGenerator \
     UnpackedTarball/libodfgen/src/OdgGenerator \
     UnpackedTarball/libodfgen/src/OdpGenerator \
+    UnpackedTarball/libodfgen/src/OdsGenerator \
     UnpackedTarball/libodfgen/src/OdtGenerator \
     UnpackedTarball/libodfgen/src/PageSpan \
     UnpackedTarball/libodfgen/src/SectionStyle \
+    UnpackedTarball/libodfgen/src/SheetStyle \
     UnpackedTarball/libodfgen/src/TableStyle \
     UnpackedTarball/libodfgen/src/TextRunStyle \
 ))

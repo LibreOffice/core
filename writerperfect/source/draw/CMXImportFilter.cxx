@@ -27,12 +27,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool CMXImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
+bool CMXImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
 {
     return libcdr::CMXDocument::parse(&rInput, &rGenerator);
 }
 
-bool CMXImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool CMXImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     if (libcdr::CMXDocument::isSupported(&rInput))
     {

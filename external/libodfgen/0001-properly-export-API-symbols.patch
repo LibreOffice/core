@@ -21,14 +21,14 @@ index 79c387b..19e04e3 100644
 +++ b/inc/libodfgen/OdfDocumentHandler.hxx
 @@ -26,6 +26,8 @@
  #define _ODFDOCUMENTHANDLER_HXX_
- #include <libwpd/libwpd.h>
+ #include <librevenge/librevenge.h>
  
 +#include "libodfgen-api.hxx"
 +
  /** Type of ODF content a generator should produce.
    *
    * @sa OdgGenerator, OdpGenerator, OdtGenerator
-@@ -57,7 +59,7 @@ typedef bool (*OdfEmbeddedImage)(const WPXBinaryData &input, librev
+@@ -57,7 +59,7 @@ typedef bool (*OdfEmbeddedImage)(const librevenge::RVNGBinaryData &input, librev
    * saved to a file, printed to the standard output, saved to a file
    * inside a package, or whatever else.
    */
@@ -42,64 +42,85 @@ index f818e3e..24455d8 100644
 --- a/inc/libodfgen/OdgGenerator.hxx
 +++ b/inc/libodfgen/OdgGenerator.hxx
 @@ -27,6 +27,7 @@
- #include <libwpd/libwpd.h>
- #include <libwpg/libwpg.h>
+ 
+ #include <librevenge/librevenge.h>
  
 +#include "libodfgen-api.hxx"
  #include "OdfDocumentHandler.hxx"
  
- class OdgGeneratorPrivate;
+ class OdfGenerator;
 @@ -37,7 +38,7 @@ class OdgGeneratorPrivate;
-   * See @c libwpg library for documentation of the
-   * libwpg::WPGPaintInterface interface.
+   * See @c librevenge library for documentation of the
+   * librevenge::WPGPaintInterface interface.
    */
--class OdgGenerator : public libwpg::WPGPaintInterface
-+class ODFGENAPI OdgGenerator : public libwpg::WPGPaintInterface
+-class OdgGenerator : public librevenge::RVNGDrawingInterface
++class ODFGENAPI OdgGenerator : public librevenge::RVNGDrawingInterface
  {
  public:
- 	OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+ 	OdgGenerator();
 diff --git a/inc/libodfgen/OdpGenerator.hxx b/inc/libodfgen/OdpGenerator.hxx
 index 71f2562..c61f5ad 100644
 --- a/inc/libodfgen/OdpGenerator.hxx
 +++ b/inc/libodfgen/OdpGenerator.hxx
 @@ -27,6 +27,7 @@
  
- #include <libetonyek/libetonyek.h>
+ #include <librevenge/librevenge.h>
  
 +#include "libodfgen-api.hxx"
  #include "OdfDocumentHandler.hxx"
  
- class OdpGeneratorPrivate;
+ class OdfGenerator;
 @@ -37,7 +38,7 @@ class OdpGeneratorPrivate;
-   * See @c libetonyek library for documentation of the
-   * libetonyek::KEYPresentationInterface interface.
+   * See @c librevenge library for documentation of the
+   * librevenge::KEYPresentationInterface interface.
    */
--class OdpGenerator : public libetonyek::KEYPresentationInterface
-+class ODFGENAPI OdpGenerator : public libetonyek::KEYPresentationInterface
+-class OdpGenerator : public librevenge::RVNGPresentationInterface
++class ODFGENAPI OdpGenerator : public librevenge::RVNGPresentationInterface
  {
  public:
- 	OdpGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+ 	OdpGenerator();
+diff --git a/inc/libodfgen/OdsGenerator.hxx b/inc/libodfgen/OdsGenerator.hxx
+index f88c207..09e1b18 100644
+--- a/inc/libodfgen/OdsGenerator.hxx
++++ b/inc/libodfgen/OdsGenerator.hxx
+@@ -29,6 +29,7 @@
+ 
+ #include <librevenge/librevenge.h>
+ 
++#include "libodfgen-api.hxx"
+ #include "OdfDocumentHandler.hxx"
+ 
+ class OdfGenerator;
+@@ -39,7 +40,7 @@ class OdsGeneratorPrivate;
+   * See @c libdocumentinterface library for documentation of the librevenge::RVNGSpreadsheetInterface
+   * interface.
+   */
+-class OdsGenerator : public librevenge::RVNGSpreadsheetInterface
++class ODFGENAPI OdsGenerator : public librevenge::RVNGSpreadsheetInterface
+ {
+ public:
+ 	OdsGenerator();
 diff --git a/inc/libodfgen/OdtGenerator.hxx b/inc/libodfgen/OdtGenerator.hxx
 index 9c3ff88..e11778c 100644
 --- a/inc/libodfgen/OdtGenerator.hxx
 +++ b/inc/libodfgen/OdtGenerator.hxx
 @@ -29,6 +29,7 @@
  
- #include <libwpd/libwpd.h>
+ #include <librevenge/librevenge.h>
  
 +#include "libodfgen-api.hxx"
  #include "OdfDocumentHandler.hxx"
  
- /** Handler for embedded objects.
+ class OdtGeneratorPrivate;
 @@ -39,7 +40,7 @@ class OdfGenerator;
-   * See @c libwpd library for documentation of the ::WPXDocumentInterface
+   * See @c librevenge library for documentation of the ::librevenge::RVNGTextInterface
    * interface.
    */
--class OdtGenerator : public WPXDocumentInterface
-+class ODFGENAPI OdtGenerator : public WPXDocumentInterface
+-class OdtGenerator : public librevenge::RVNGTextInterface
++class ODFGENAPI OdtGenerator : public librevenge::RVNGTextInterface
  {
  public:
- 	OdtGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
+ 	OdtGenerator();
 diff --git a/inc/libodfgen/libodfgen-api.hxx b/inc/libodfgen/libodfgen-api.hxx
 new file mode 100644
 index 0000000..39ffd05

@@ -31,7 +31,7 @@ WpftImpressFilterTest::WpftImpressFilterTest()
 
 void WpftImpressFilterTest::test()
 {
-    doTest("org.libreoffice.comp.Impress.KeynoteImportFilter", "/writerperfect/qa/unit/data/libetonyek/");
+    // doTest("org.libreoffice.comp.Impress.KeynoteImportFilter", "/writerperfect/qa/unit/data/libetonyek/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftImpressFilterTest);

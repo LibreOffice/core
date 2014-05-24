@@ -1594,7 +1594,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libcdr)/src/lib/.libs/libcdr-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libcdr)/src/lib/.libs/libcdr-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libcdr)
 endef
@@ -1619,11 +1619,11 @@ else # !SYSTEM_EBOOK
 
 define gb_LinkTarget__use_ebook
 $(call gb_LinkTarget_set_include,$(1),\
-	$(EBOOK_CFLAGS) \
+	-I${WORKDIR}/UnpackedTarball/libebook/inc \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libebook)/src/lib/.libs/libe-book-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libebook)/src/lib/.libs/libe-book-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libebook)
 
@@ -1654,11 +1654,11 @@ else # !SYSTEM_ETONYEK
 
 define gb_LinkTarget__use_etonyek
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ETONYEK_CFLAGS) \
+	-I${WORKDIR}/UnpackedTarball/libetonyek/inc \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib/.libs/libetonyek-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib/.libs/libetonyek-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libetonyek)
 
@@ -1689,11 +1689,11 @@ else # !SYSTEM_FREEHAND
 
 define gb_LinkTarget__use_freehand
 $(call gb_LinkTarget_set_include,$(1),\
-	$(FREEHAND_CFLAGS) \
+	-I${WORKDIR}/UnpackedTarball/libfreehand/inc \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libfreehand)/src/lib/.libs/libfreehand-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libfreehand)/src/lib/.libs/libfreehand-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libfreehand)
 
@@ -1751,7 +1751,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libodfgen)/src/.libs -lodfgen-0.0 \
+	-L$(call gb_UnpackedTarball_get_dir,libodfgen)/src/.libs -lodfgen-0.1 \
 )
 
 endef
@@ -1846,7 +1846,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libabw)/src/lib/.libs/libabw-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libabw)/src/lib/.libs/libabw-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libabw)
 
@@ -1878,7 +1878,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libmspub)/src/lib/.libs/libmspub-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libmspub)/src/lib/.libs/libmspub-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libmspub)
 
@@ -1906,7 +1906,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libvisio)/src/lib/.libs/libvisio-0.0$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libvisio)/src/lib/.libs/libvisio-0.1$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libvisio)
 
@@ -1935,7 +1935,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libwpd)/src/lib/.libs/libwpd-0.9$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libwpd)/src/lib/.libs/libwpd-0.10$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libwpd)
 
@@ -1968,7 +1968,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libwpg)/src/lib/.libs/libwpg-0.2$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libwpg)/src/lib/.libs/libwpg-0.3$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libwpg)
 
@@ -2001,7 +2001,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs/libwps-0.2$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs/libwps-0.3$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libwps)
 
@@ -2033,7 +2033,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libmwaw)/src/lib/.libs/libmwaw-0.2$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libmwaw)/src/lib/.libs/libmwaw-0.3$(gb_StaticLibrary_PLAINEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libmwaw)
 
