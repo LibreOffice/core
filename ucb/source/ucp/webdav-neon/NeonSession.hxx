@@ -233,7 +233,7 @@ private:
     friend class NeonLockStore;
 
     void Init( void )
-        throw ( std::exception );
+        throw (css::uno::RuntimeException, std::exception);
 
     void Init( const DAVRequestEnvironment & rEnv )
         throw ( std::exception );
