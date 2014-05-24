@@ -27,12 +27,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool CDRImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
+bool CDRImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
 {
     return libcdr::CDRDocument::parse(&rInput, &rGenerator);
 }
 
-bool CDRImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool CDRImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     if (libcdr::CDRDocument::isSupported(&rInput))
     {

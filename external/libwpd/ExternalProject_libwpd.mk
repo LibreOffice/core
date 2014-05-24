@@ -15,20 +15,25 @@ $(eval $(call gb_ExternalProject_register_targets,libwpd,\
 	build \
 ))
 
+$(eval $(call gb_ExternalProject_use_externals,libwpd,\
+	revenge \
+))
+
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)") \
-		./configure \
+		export PKG_CONFIG="" \
+		&& ./configure \
 			--with-pic \
 			--enable-static \
 			--disable-shared \
-			--without-stream \
 			--without-docs \
+			--disable-tools \
 			--disable-debug \
 			$(if $(filter MACOSX,$(OS)),--disable-werror) \
+			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)") \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(if $(VERBOSE)$(verbose),V=1) \
-		   $(MAKE) \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:

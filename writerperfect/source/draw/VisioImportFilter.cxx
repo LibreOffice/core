@@ -23,12 +23,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool VisioImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
+bool VisioImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
 {
     return libvisio::VisioDocument::parse(&rInput, &rGenerator);
 }
 
-bool VisioImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool VisioImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     if (libvisio::VisioDocument::isSupported(&rInput))
     {

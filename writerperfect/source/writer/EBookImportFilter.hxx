@@ -33,8 +33,8 @@ public:
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    virtual bool doDetectFormat( WPXInputStream &rInput, OUString &rTypeName ) SAL_OVERRIDE;
-    virtual bool doImportDocument( WPXInputStream &rInput, const rtl::OUString &rFilterName, WPXDocumentInterface &rGenerator ) SAL_OVERRIDE;
+    virtual bool doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName ) SAL_OVERRIDE;
+    virtual bool doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator ) SAL_OVERRIDE;
 };
 
 OUString EBookImportFilter_getImplementationName()

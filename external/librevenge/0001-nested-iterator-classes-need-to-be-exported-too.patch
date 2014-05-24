@@ -1,0 +1,53 @@
+From 03c0fe096ae6e71237d36b88f5f0aa0f62eb09d6 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Mon, 26 May 2014 14:47:57 +0200
+Subject: [PATCH] nested iterator classes need to be exported too
+
+---
+ inc/librevenge/RVNGPropertyList.h       | 2 +-
+ inc/librevenge/RVNGPropertyListVector.h | 2 +-
+ inc/librevenge/RVNGString.h             | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/inc/librevenge/RVNGPropertyList.h b/inc/librevenge/RVNGPropertyList.h
+index c00af07..ac9c10d 100644
+--- a/inc/librevenge/RVNGPropertyList.h
++++ b/inc/librevenge/RVNGPropertyList.h
+@@ -60,7 +60,7 @@ public:
+ 
+ 	RVNGString getPropString() const;
+ 
+-	class Iter
++	class REVENGE_API Iter
+ 	{
+ 	public:
+ 		Iter(const RVNGPropertyList &propList);
+diff --git a/inc/librevenge/RVNGPropertyListVector.h b/inc/librevenge/RVNGPropertyListVector.h
+index 850326e..d56f583 100644
+--- a/inc/librevenge/RVNGPropertyListVector.h
++++ b/inc/librevenge/RVNGPropertyListVector.h
+@@ -55,7 +55,7 @@ public:
+ 
+ 	RVNGString getPropString() const;
+ 
+-	class Iter
++	class REVENGE_API Iter
+ 	{
+ 	public:
+ 		Iter(const RVNGPropertyListVector &vect);
+diff --git a/inc/librevenge/RVNGString.h b/inc/librevenge/RVNGString.h
+index cbea3bc..429170a 100644
+--- a/inc/librevenge/RVNGString.h
++++ b/inc/librevenge/RVNGString.h
+@@ -118,7 +118,7 @@ public:
+ 		return !operator<=(str);
+ 	}
+ 
+-	class Iter
++	class REVENGE_API Iter
+ 	{
+ 	public:
+ 		Iter(const RVNGString &str);
+-- 
+1.9.0
+

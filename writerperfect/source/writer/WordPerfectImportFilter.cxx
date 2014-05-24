@@ -28,8 +28,9 @@
 #include <sfx2/passwd.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <libwpd/libwpd.h>
 #include <libodfgen/libodfgen.hxx>
+#include <libwpd/libwpd.h>
+#include <libwpg/libwpg.h>
 
 #include "WordPerfectImportFilter.hxx"
 
@@ -57,31 +58,36 @@ using com::sun::star::xml::sax::XParser;
 using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
 
-static bool handleEmbeddedWPGObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedWPGObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
-    OdgGenerator exporter(pHandler, streamType);
+    OdgGenerator exporter;
+    exporter.addDocumentHandler(pHandler, streamType);
 
     libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-    if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(data.getDataStream())))
+    if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(data.getDataStream())))
         fileFormat = libwpg::WPG_WPG1;
 
-    return libwpg::WPGraphics::parse(const_cast<WPXInputStream *>(data.getDataStream()), &exporter, fileFormat);
+    return libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter, fileFormat);
 }
 
-static bool handleEmbeddedWPGImage(const WPXBinaryData &input, WPXBinaryData &output)
+static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, librevenge::RVNGBinaryData &output)
 {
-    WPXString svgOutput;
     libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-    if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(input.getDataStream())))
+    if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(input.getDataStream())))
         fileFormat = libwpg::WPG_WPG1;
 
-    if (!libwpg::WPGraphics::generateSVG(const_cast<WPXInputStream *>(input.getDataStream()), svgOutput, fileFormat))
+    librevenge::RVNGStringVector svgOutput;
+    librevenge::RVNGSVGDrawingGenerator aSVGGenerator(svgOutput, "");
+
+    if (!libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(input.getDataStream()), &aSVGGenerator, fileFormat))
         return false;
 
+    assert(1 == svgOutput.size());
+
     output.clear();
-    output.append((unsigned char *)svgOutput.cstr(), strlen(svgOutput.cstr()));
+    output.append(reinterpret_cast<const unsigned char *>(svgOutput[0].cstr()), svgOutput[0].size());
     return true;
 }
 
@@ -106,9 +112,9 @@ bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::s
 
     OString aUtf8Passwd;
 
-    WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
+    libwpd::WPDConfidence confidence = libwpd::WPDocument::isFileFormatSupported(&input);
 
-    if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
+    if (libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
     {
         int unsuccessfulAttempts = 0;
         while (true )
@@ -119,7 +125,7 @@ bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::s
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
-            if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
+            if (libwpd::WPD_PASSWORD_MATCH_OK == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;
             else
                 unsuccessfulAttempts++;
@@ -142,10 +148,11 @@ bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::s
     // writes to in-memory target doc
     DocumentHandler xHandler(xInternalHandler);
 
-    OdtGenerator collector(&xHandler, ODF_FLAT_XML);
+    OdtGenerator collector;
+    collector.addDocumentHandler(&xHandler, ODF_FLAT_XML);
 	collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
 	collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
-    if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? 0 : aUtf8Passwd.getStr()))
+    if (libwpd::WPD_OK == libwpd::WPDocument::parse(&input, &collector, aUtf8Passwd.isEmpty() ? 0 : aUtf8Passwd.getStr()))
         return true;
     return false;
 }
@@ -171,7 +178,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::
 OUString SAL_CALL WordPerfectImportFilter::detect( Sequence< PropertyValue >& Descriptor )
 throw( RuntimeException, std::exception )
 {
-    WPDConfidence confidence = WPD_CONFIDENCE_NONE;
+    libwpd::WPDConfidence confidence = libwpd::WPD_CONFIDENCE_NONE;
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
@@ -190,9 +197,9 @@ throw( RuntimeException, std::exception )
 
     WPXSvInputStream input( xInputStream );
 
-    confidence = WPDocument::isFileFormatSupported(&input);
+    confidence = libwpd::WPDocument::isFileFormatSupported(&input);
 
-    if (confidence == WPD_CONFIDENCE_EXCELLENT || confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
+    if (confidence == libwpd::WPD_CONFIDENCE_EXCELLENT || confidence == libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
         sTypeName = "writer_WordPerfect_Document";
 
     if (!sTypeName.isEmpty())
@@ -289,9 +296,9 @@ throw (RuntimeException, std::exception)
 
     OString aUtf8Passwd;
 
-    WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
+    libwpd::WPDConfidence confidence = libwpd::WPDocument::isFileFormatSupported(&input);
 
-    if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
+    if (libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
     {
         int unsuccessfulAttempts = 0;
         while (true )
@@ -302,7 +309,7 @@ throw (RuntimeException, std::exception)
                 return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
             msPassword = aPasswdDlg.GetPassword().getStr();
             aUtf8Passwd = OUStringToOString(msPassword, RTL_TEXTENCODING_UTF8);
-            if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
+            if (libwpd::WPD_PASSWORD_MATCH_OK == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;
             else
                 unsuccessfulAttempts++;
