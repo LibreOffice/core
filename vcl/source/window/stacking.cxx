@@ -1196,7 +1196,6 @@ Window* Window::GetWindow( sal_uInt16 nType ) const
 
 bool Window::IsChild( const Window* pWindow, bool bSystemWindow ) const
 {
-
     do
     {
         if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
@@ -1237,6 +1236,5 @@ const SystemEnvData* Window::GetSystemData() const
     }
     return aRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
