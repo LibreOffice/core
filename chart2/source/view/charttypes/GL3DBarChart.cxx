@@ -229,7 +229,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
     maCameraPosition = glm::vec3(-30, -30, 200);
     mpCamera->setPosition(maCameraPosition);
-    mpCamera->setDirection(glm::vec3(nMaxPointCount*(nBarSizeX+ nBarDistanceX), nSeriesIndex*(nBarSizeY+nBarDistanceY), 0));
+    maCameraDirection = glm::vec3(0, 0, 0);
+    mpCamera->setDirection(maCameraDirection);
 }
 
 void GL3DBarChart::render()
@@ -289,9 +290,17 @@ void GL3DBarChart::clickedAt(const Point& rPos)
         mpCamera->zoom(nId);
 }
 
-void GL3DBarChart::mouseDragMove(const Point& /*rPos*/, sal_uInt16 /*nButtons*/)
+void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons)
 {
-//    fprintf(stderr, "drag move %ld %ld (0x%x)\n", rPos.X(), rPos.Y(), nButtons);
+    SAL_WARN("chart2.opengl", "Dragging: " << rStartPos << " to : " << rEndPos << " Buttons: " << nButtons);
+}
+
+void GL3DBarChart::scroll(long nDelta)
+{
+    glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
+    maCameraPosition += (float((nDelta/10)) * maDir);
+    mpCamera->setPosition(maCameraPosition);
+    render();
 }
 
 void GL3DBarChart::contextDestroyed()

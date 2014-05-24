@@ -25,7 +25,8 @@ public:
     virtual ~IRenderer() {}
     virtual void update() = 0;
     virtual void clickedAt(const Point& rPos) = 0;
-    virtual void mouseDragMove(const Point& rPos, sal_uInt16 nButtons) = 0;
+    virtual void mouseDragMove(const Point& rPosBegin, const Point& rPosEnd, sal_uInt16 nButtons) = 0;
+    virtual void scroll(long nDelta) = 0;
 
     virtual void contextDestroyed() = 0;
 };
@@ -45,10 +46,13 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
 private:
     boost::scoped_ptr<OpenGLWindowImpl> mpImpl;
     IRenderer* mpRenderer;
+
+    Point maStartPoint;
 };
 
 #endif
