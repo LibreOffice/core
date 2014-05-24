@@ -1187,9 +1187,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
 
     bool bSkipCompile = false;
 
-    static bool bNewPath = getenv ("FASTFORMULA");
-
-    if ( bNewPath && !mxGroup && aFormulaNmsp.isEmpty() ) // optimization
+    if ( !mxGroup && aFormulaNmsp.isEmpty() ) // optimization
     {
         ScAddress aPreviousCell( aPos );
         aPreviousCell.IncRow( -1 );
