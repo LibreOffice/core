@@ -1972,6 +1972,13 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
     }
 }
 
+static sal_Int32 lcl_ConvertCrop(sal_uInt32 const nCrop, sal_Int32 const nSize)
+{
+    // cast to sal_Int32 to handle negative crop properly
+    return ((static_cast<sal_Int32>(nCrop) >> 16) * nSize)
+              + (((nCrop & 0xffff) * nSize) >> 16) ;
+}
+
 void
 SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
     SwFrmFmt *pFlyFmt, WW8_FSPA *pF )
@@ -1994,23 +2001,23 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
             pRecord->nCropFromLeft || pRecord->nCropFromRight )
         {
             SwCropGrf aCrop;            // Cropping is stored in 'fixed floats'
-                                        // 16.16 (it est fraction times total
+                                        // 16.16 (fraction times total
             if( pRecord->nCropFromTop ) //        image width or height resp.)
-                aCrop.SetTop( static_cast< sal_Int32 >(
-                (   ( (pRecord->nCropFromTop    >> 16   ) * rHeight )
-                  + (((pRecord->nCropFromTop    & 0xffff) * rHeight ) >> 16) )));
+            {
+                aCrop.SetTop(lcl_ConvertCrop(pRecord->nCropFromTop, rHeight));
+            }
             if( pRecord->nCropFromBottom )
-                aCrop.SetBottom( static_cast< sal_Int32 >(
-                (   ( (pRecord->nCropFromBottom >> 16   ) * rHeight )
-                  + (((pRecord->nCropFromBottom & 0xffff) * rHeight ) >> 16) )));
+            {
+                aCrop.SetBottom(lcl_ConvertCrop(pRecord->nCropFromBottom, rHeight));
+            }
             if( pRecord->nCropFromLeft )
-                aCrop.SetLeft( static_cast< sal_Int32 >(
-                (   ( (pRecord->nCropFromLeft   >> 16   ) * rWidth  )
-                  + (((pRecord->nCropFromLeft   & 0xffff) * rWidth  ) >> 16) )));
+            {
+                aCrop.SetLeft(lcl_ConvertCrop(pRecord->nCropFromLeft, rWidth));
+            }
             if( pRecord->nCropFromRight )
-                aCrop.SetRight( static_cast< sal_Int32 >(
-                (   ( (pRecord->nCropFromRight  >> 16   ) * rWidth  )
-                  + (((pRecord->nCropFromRight  & 0xffff) * rWidth  ) >> 16) )));
+            {
+                aCrop.SetRight(lcl_ConvertCrop(pRecord->nCropFromRight,rWidth));
+            }
 
             pGrfNd->SetAttr( aCrop );
         }
