@@ -1173,13 +1173,11 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
     if (pLb == m_pLbFormat)
     {
         sal_uLong nSelPos = m_pLbFormat->GetSelectEntryPos();
-        OUString  aFormat = m_pLbFormat->GetSelectEntry();
-        OUString  aComment;
-
         short nFmtLbSelPos = static_cast<short>(nSelPos);
 
-        aFormat=pNumFmtShell->GetFormat4Entry(nFmtLbSelPos);
-        aComment=pNumFmtShell->GetComment4Entry(nFmtLbSelPos);
+        OUString aFormat = pNumFmtShell->GetFormat4Entry(nFmtLbSelPos);
+        OUString aComment = pNumFmtShell->GetComment4Entry(nFmtLbSelPos);
+
         if(pNumFmtShell->GetUserDefined4Entry(nFmtLbSelPos))
         {
             if(aComment.isEmpty())
