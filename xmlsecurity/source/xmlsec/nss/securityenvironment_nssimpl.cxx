@@ -278,7 +278,7 @@ PK11SymKey* SecurityEnvironment_NssImpl :: getSymKey( unsigned int position ) th
     unsigned int pos ;
 
     symkey = NULL ;
-    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; pos ++ , keyIt ++ ) ;
+    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; pos ++ , ++keyIt ) ;
 
     if( pos == position && keyIt != m_tSymKeyList.end() )
         symkey = *keyIt ;
@@ -332,7 +332,7 @@ SECKEYPublicKey* SecurityEnvironment_NssImpl :: getPubKey( unsigned int position
     unsigned int pos ;
 
     pubkey = NULL ;
-    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; pos ++ , keyIt ++ ) ;
+    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; pos ++ , ++keyIt ) ;
 
     if( pos == position && keyIt != m_tPubKeyList.end() )
         pubkey = *keyIt ;
@@ -386,7 +386,7 @@ SECKEYPrivateKey* SecurityEnvironment_NssImpl :: getPriKey( unsigned int positio
     unsigned int pos ;
 
     prikey = NULL ;
-    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; pos ++ , keyIt ++ ) ;
+    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; pos ++ , ++keyIt ) ;
 
     if( pos == position && keyIt != m_tPriKeyList.end() )
         prikey = *keyIt ;

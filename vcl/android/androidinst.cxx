@@ -110,7 +110,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow_Buffer *pBuffer)
     {
         int i = 0;
         std::list< SalFrame* >::const_iterator it;
-        for ( it = getFrames().begin(); it != getFrames().end(); i++, it++ )
+        for ( it = getFrames().begin(); it != getFrames().end(); i++, ++it )
         {
             SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
 
