@@ -60,7 +60,7 @@ public:
     // XScannerManager
     virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw(std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw (ScannerException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
     virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
     virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
