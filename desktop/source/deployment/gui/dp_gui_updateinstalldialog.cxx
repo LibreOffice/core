@@ -205,7 +205,7 @@ UpdateInstallDialog::UpdateInstallDialog(
     cssu::Reference< cssu::XComponentContext > const & xCtx):
     ModalDialog(
         parent,
-        DpGuiResId(RID_DLG_UPDATEINSTALL)),
+        "UpdateInstallDialog","desktop/ui/updateinstalldialog.ui"),
 
         m_thread(new Thread(xCtx, *this, aVecUpdateData)),
         m_xComponentContext(xCtx),
@@ -219,25 +219,22 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_sErrorInstallation(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION)),
         m_sErrorLicenseDeclined(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED)),
         m_sNoInstall(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL)),
-        m_sThisErrorOccurred(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED)),
-        m_ft_action(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_DOWNLOADING)),
-        m_statusbar(this,DpGuiResId(RID_DLG_UPDATE_INSTALL_STATUSBAR)),
-        m_ft_extension_name(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NAME)),
-        m_ft_results(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_RESULTS)),
-        m_mle_info(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_INFO)),
-        m_line(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_LINE)),
-        m_help(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_HELP)),
-        m_ok(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_OK)),
-        m_cancel(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_ABORT))
+        m_sThisErrorOccurred(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
 {
-    FreeResource();
+    get(m_pFt_action, "DOWNLOADING");
+    get(m_pStatusbar, "STATUSBAR");
+    get(m_pFt_extension_name, "EXTENSION_NAME");
+    get(m_pMle_info, "INFO");
+    get(m_pHelp, "HELP");
+    get(m_pOk, "OK");
+    get(m_pCancel, "CANCEL");
 
     m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
 
-    m_cancel.SetClickHdl(LINK(this, UpdateInstallDialog, cancelHandler));
-    m_mle_info.EnableCursor(false);
+    m_pCancel->SetClickHdl(LINK(this, UpdateInstallDialog, cancelHandler));
+    m_pMle_info->EnableCursor(false);
     if ( ! dp_misc::office_is_running())
-        m_help.Disable();
+        m_pHelp->Disable();
 }
 
 UpdateInstallDialog::~UpdateInstallDialog() {}
@@ -258,10 +255,10 @@ short UpdateInstallDialog::Execute()
 void UpdateInstallDialog::updateDone()
 {
     if (!m_bError)
-        m_mle_info.InsertText(m_sNoErrors);
-    m_ok.Enable();
-    m_ok.GrabFocus();
-    m_cancel.Disable();
+        m_pMle_info->InsertText(m_sNoErrors);
+    m_pOk->Enable();
+    m_pOk->GrabFocus();
+    m_pCancel->Disable();
 }
 // make sure the solar mutex is locked before calling
 //sets an error message in the text area
@@ -293,20 +290,20 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
     if (m_bNoEntry)
         m_bNoEntry = false;
     else
-        m_mle_info.InsertText(OUString("\n"));
-    m_mle_info.InsertText(sError);
+        m_pMle_info->InsertText(OUString("\n"));
+    m_pMle_info->InsertText(sError);
     //Insert more information about the error
     if (!exceptionMessage.isEmpty())
-        m_mle_info.InsertText(m_sThisErrorOccurred + exceptionMessage + "\n");
+        m_pMle_info->InsertText(m_sThisErrorOccurred + exceptionMessage + "\n");
 
-    m_mle_info.InsertText(m_sNoInstall);
-    m_mle_info.InsertText(OUString("\n"));
+    m_pMle_info->InsertText(m_sNoInstall);
+    m_pMle_info->InsertText(OUString("\n"));
 }
 
 void UpdateInstallDialog::setError(OUString const & exceptionMessage)
 {
     m_bError = true;
-    m_mle_info.InsertText(exceptionMessage + "\n");
+    m_pMle_info->InsertText(exceptionMessage + "\n");
 }
 
 IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
@@ -363,10 +360,10 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 if (m_stop) {
                     return;
                 }
-                m_dialog.m_ft_extension_name.SetText(curData.aInstalledPackage->getDisplayName());
+                m_dialog.m_pFt_extension_name->SetText(curData.aInstalledPackage->getDisplayName());
                 sal_uInt16 prog = (sal::static_int_cast<sal_uInt16>(100) * ++count) /
                     sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size());
-                m_dialog.m_statusbar.SetValue(prog);
+                m_dialog.m_pStatusbar->SetValue(prog);
             }
             dp_misc::DescriptionInfoset info(m_xComponentContext, curData.aUpdateInfo);
             //remember occurring exceptions in case we need to print out error information
@@ -436,8 +433,8 @@ void UpdateInstallDialog::Thread::installExtensions()
         if (m_stop) {
             return;
         }
-        m_dialog.m_ft_action.SetText(m_dialog.m_sInstalling);
-        m_dialog.m_statusbar.SetValue(0);
+        m_dialog.m_pFt_action->SetText(m_dialog.m_sInstalling);
+        m_dialog.m_pStatusbar->SetValue(0);
     }
 
     sal_uInt16 count = 0;
@@ -452,11 +449,11 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             //we only show progress after an extension has been installed.
             if (count > 0) {
-                m_dialog.m_statusbar.SetValue(
+                m_dialog.m_pStatusbar->SetValue(
                 (sal::static_int_cast<sal_uInt16>(100) * count) /
                 sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size()));
              }
-            m_dialog.m_ft_extension_name.SetText(i->aInstalledPackage->getDisplayName());
+            m_dialog.m_pFt_extension_name->SetText(i->aInstalledPackage->getDisplayName());
         }
         bool bError = false;
         bool bLicenseDeclined = false;
@@ -546,9 +543,9 @@ void UpdateInstallDialog::Thread::installExtensions()
         if (m_stop) {
             return;
         }
-        m_dialog.m_statusbar.SetValue(100);
-        m_dialog.m_ft_extension_name.SetText(OUString());
-        m_dialog.m_ft_action.SetText(m_dialog.m_sFinished);
+        m_dialog.m_pStatusbar->SetValue(100);
+        m_dialog.m_pFt_extension_name->SetText(OUString());
+        m_dialog.m_pFt_action->SetText(m_dialog.m_sFinished);
     }
 }
 
