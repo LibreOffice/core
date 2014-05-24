@@ -10,8 +10,22 @@
 $(eval $(call gb_Module_Module,libodfgen))
 
 $(eval $(call gb_Module_add_targets,libodfgen,\
-	ExternalProject_libodfgen \
 	UnpackedTarball_libodfgen \
 ))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,libodfgen,\
+	Library_odfgen \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,libodfgen,\
+	ExternalPackage_libodfgen \
+	ExternalProject_libodfgen \
+))
+
+endif
 
 # vim: set noet sw=4 ts=4:
