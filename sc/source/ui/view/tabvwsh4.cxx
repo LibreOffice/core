@@ -93,6 +93,10 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
 
 extern SfxViewShell* pScActiveViewShell;            // global.cxx
 
@@ -532,6 +536,41 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
     //! if ViewData has more tables than document, remove tables in ViewData
 }
 
+namespace {
+
+bool isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram )
+{
+    uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
+
+    if (!xCooSysContainer.is())
+        return false;
+
+    uno::Sequence< uno::Reference<chart2::XCoordinateSystem> > aCooSysList = xCooSysContainer->getCoordinateSystems();
+    for (sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS)
+    {
+        uno::Reference<chart2::XCoordinateSystem> xCooSys = aCooSysList[nCS];
+
+        //iterate through all chart types in the current coordinate system
+        uno::Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCooSys, uno::UNO_QUERY);
+        OSL_ASSERT( xChartTypeContainer.is());
+        if( !xChartTypeContainer.is() )
+            continue;
+
+        uno::Sequence< uno::Reference<chart2::XChartType> > aChartTypeList = xChartTypeContainer->getChartTypes();
+        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        {
+            uno::Reference<chart2::XChartType> xChartType = aChartTypeList[nT];
+            OUString aChartType = xChartType->getChartType();
+            if( aChartType == "com.sun.star.chart2.GL3DBarChartType" )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+}
+
 void ScTabViewShell::AddOpenGLChartWindows()
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -554,6 +593,11 @@ void ScTabViewShell::AddOpenGLChartWindows()
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider( itr->first, uno::UNO_QUERY_THROW );
         sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(pOpenGLWindow);
         x3DWindowProvider->setWindow(nWindowPtr);
+
+        if(isGL3DDiagram(itr->first->getFirstDiagram()))
+        {
+            x3DWindowProvider->update();
+        }
     }
 }
 
