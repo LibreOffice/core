@@ -358,7 +358,7 @@ bool Window::ImplSysObjClip( const Region* pOldRegion )
                     if ( !(nClipFlags & SAL_OBJECT_CLIP_ABSOLUTE) )
                         aRegion.Move( -mnOutOffX, -mnOutOffY );
 
-                    // ClipRegion setzen/updaten
+                    // set/update clip region
                     RectangleVector aRectangles;
                     aRegion.GetRegionRectangles(aRectangles);
                     mpWindowImpl->mpSysObj->BeginSetClipRegion(aRectangles.size());
@@ -379,7 +379,7 @@ bool Window::ImplSysObjClip( const Region* pOldRegion )
                 bVisibleState = false;
         }
 
-        // Visible-Status updaten
+        // update visible status
         mpWindowImpl->mpSysObj->Show( bVisibleState );
     }
 
