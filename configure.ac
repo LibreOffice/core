@@ -7667,49 +7667,49 @@ dnl Check for system librevenge
 dnl ===================================================================
 AS_IF([test "$COM" = "MSC"],
       [librevenge_libdir="${WORKDIR}/LinkTarget/Library"],
-      [librevenge_libdir="${WORKDIR}/UnpackedTarball/lirevenge/src/lib/.libs"]
+      [librevenge_libdir="${WORKDIR}/UnpackedTarball/librevenge/src/lib/.libs"]
 )
 libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["-L${librevenge_libdir} -lrevenge-0.0"]),
 
 dnl ===================================================================
 dnl Check for system libe-book
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.0 >= 0.0.2],["-I${WORKDIR}/UnpackedTarball/libebook/inc"],["-L${WORKDIR}/UnpackedTarball/libebook/src/lib/.libs -le-book-0.0"])
+libo_CHECK_SYSTEM_MODULE([libebook],[EBOOK],[libe-book-0.1])
 
 dnl ===================================================================
 dnl Check for system libetonyek
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.0],["-I${WORKDIR}/UnpackedTarball/libetonyek/inc"],["-L${WORKDIR}/UnpackedTarball/libetonyek/src/lib/.libs -letonyek-0.0"])
+libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.1])
 
 dnl ===================================================================
 dnl Check for system libfreehand
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libfreehand],[FREEHAND],[libfreehand-0.0],["-I${WORKDIR}/UnpackedTarball/libfreehand/inc"],["-L${WORKDIR}/UnpackedTarball/libfreehand/src/lib/.libs -lfreehand-0.0"])
+libo_CHECK_SYSTEM_MODULE([libfreehand],[FREEHAND],[libfreehand-0.1])
 
 dnl ===================================================================
 dnl Check for system libodfgen
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.0 >= 0.0.3])
+libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.1])
 
 dnl ===================================================================
 dnl Check for system libcdr
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.0 >= 0.0.5])
+libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.1])
 
 dnl ===================================================================
 dnl Check for system libmspub
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.0])
+libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.1])
 
 dnl ===================================================================
 dnl Check for system libmwaw
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.2])
+libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.3 >= 0.3.1])
 
 dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
+libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.1])
 
 dnl ===================================================================
 dnl Check for system libcmis
@@ -7726,7 +7726,7 @@ AC_SUBST(ENABLE_CMIS)
 dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 >= 0.9.5 libwpd-stream-0.9 >= 0.9.5],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs -lwpd-0.9"])
+libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10 libwpd-stream-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs -lwpd-0.10"])
 
 dnl ===================================================================
 dnl Check for system lcms2
@@ -7781,17 +7781,17 @@ AC_SUBST([SYSTEM_FREETYPE])
 dnl ===================================================================
 dnl Check for system libabw
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libabw],[ABW],[libabw-0.0],["-I${WORKDIR}/UnpackedTarball/libabw/inc"],["-L${WORKDIR}/UnpackedTarball/libabw/src/lib/.libs -labw-0.0"])
+libo_CHECK_SYSTEM_MODULE([libabw],[ABW],[libabw-0.1])
 
 dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${WORKDIR}/UnpackedTarball/libwps/inc"],["-L${WORKDIR}/UnpackedTarball/libwps/src/lib/.libs -lwps-0.2"])
+libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.3])
 
 dnl ===================================================================
 dnl Check for system libwpg
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${WORKDIR}/UnpackedTarball/libwpg/inc"],["-L${WORKDIR}/UnpackedTarball/libwpg/src/lib/.libs -lwpg-0.2"])
+libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.3])
 
 # ===================================================================
 # Check for system libxslt

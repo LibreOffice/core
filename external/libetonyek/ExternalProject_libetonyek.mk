@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,libetonyek,\
 $(eval $(call gb_ExternalProject_use_externals,libetonyek,\
 	boost_headers \
 	libxml2 \
-	wpd \
+	revenge \
 	zlib \
 ))
 
@@ -34,11 +34,12 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			--disable-werror \
 			--disable-weffc \
 			--without-tools \
+			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			XML_CFLAGS="$(if $(SYSTEM_LIBXML),$(LIBXML_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(MAKE) $(if $(VERBOSE)$(verbose),V=1) \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
