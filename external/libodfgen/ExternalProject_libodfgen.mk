@@ -27,16 +27,17 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 		export PKG_CONFIG="" \
 		&& ./configure \
 			--with-pic \
-			--enable-static \
-			--disable-shared \
+			--enable-shared \
+			--disable-static \
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
+			--without-docs \
+			$(if $(VERBOSE)$(verbose),--enable-silent-rules) \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& (cd $(EXTERNAL_WORKDIR)/src && \
-			$(if $(VERBOSE)$(verbose),V=1) \
-			$(MAKE)) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
