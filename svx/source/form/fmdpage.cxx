@@ -69,7 +69,7 @@ Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type&
 }
 
 SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xDescr )
-    throw (std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString aShapeType( xDescr->getShapeType() );
 

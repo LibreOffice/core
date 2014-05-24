@@ -386,7 +386,7 @@ SdXImpressDocument* SdGenericDrawPage::GetModel() const
 
 // this is called whenever a SdrObject must be created for a empty api shape wrapper
 SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShape >& xShape )
-    throw (std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( NULL == SvxFmDrawPage::mpPage || !xShape.is() )
         return NULL;
