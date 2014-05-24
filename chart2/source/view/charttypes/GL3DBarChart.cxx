@@ -87,7 +87,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
             itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
     {
-        nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY);
+        nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY) + nBarDistanceY;
 
         const VDataSeries& rDataSeries = *itr;
         sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
@@ -104,10 +104,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
             opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
             glm::vec3 aTopLeft, aTopRight, aBottomRight;
-            aTopLeft.x = 0.0f;
-            aTopLeft.y = nYPos;
-            aTopRight.x = calculateTextWidth(aSeriesName) * -1.0;
-            aTopRight.y = nYPos;
+            aTopLeft.x = -nBarDistanceY;
+            aTopLeft.y = nYPos + 0.25 * nBarSizeY;
+            aTopRight.x = calculateTextWidth(aSeriesName) * -1.0 - nBarDistanceY;
+            aTopRight.y = nYPos + 0.25 * nBarSizeY;
             aBottomRight = aTopRight;
             aBottomRight.y += TEXT_HEIGHT;
             p->setPosition(aTopLeft, aTopRight, aBottomRight);
@@ -122,7 +122,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             }
 
             float nVal = rDataSeries.getYValue(nIndex);
-            float nXPos = nIndex * (nBarSizeX + nBarDistanceX);
+            float nXPos = nIndex * (nBarSizeX + nBarDistanceX) + nBarDistanceX;
 
 
             glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, nVal);
@@ -165,7 +165,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
     glm::vec3 aTopLeft;
     glm::vec3 aTopRight = aTopLeft;
-    aTopRight.x = nXEnd;
+    aTopRight.x = nXEnd + 2 * nBarDistanceX;
     glm::vec3 aBottomRight = aTopRight;
     aBottomRight.y = nYPos;
     pRect->setPosition(aTopLeft, aTopRight, aBottomRight);
@@ -184,11 +184,11 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT;
-        aTopLeft.y = nYPos + calculateTextWidth(aCats[i]);
+        aTopLeft.y = nYPos + calculateTextWidth(aCats[i]) + 0.5 * nBarDistanceY;
         aTopRight = aTopLeft;
-        aTopRight.y = nYPos;
+        aTopRight.y = nYPos + 0.5* nBarDistanceY;
         aBottomRight.x = nXPos;
-        aBottomRight.y = nYPos;
+        aBottomRight.y = nYPos + 0.5 * nBarDistanceY;
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
 }
