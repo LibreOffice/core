@@ -276,7 +276,9 @@ SwXPrintSettings::~SwXPrintSettings()
 }
 
 void SwXPrintSettings::_preSetValues ()
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException)
 {
     switch (meType)
     {
