@@ -30,7 +30,8 @@ GL3DBarChart::GL3DBarChart(
     mpRenderer(new opengl3D::OpenGL3DRenderer()),
     mrWindow(rWindow),
     mpCamera(NULL),
-    mbValidContext(true)
+    mbValidContext(true),
+    mpTextCache(new opengl3D::TextCache())
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -101,7 +102,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         if(!aSeriesName.isEmpty())
         {
-            maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aSeriesName, nId++));
+            maShapes.push_back(new opengl3D::Text(mpRenderer.get(),
+                        *mpTextCache, aSeriesName, nId++));
             opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
             glm::vec3 aTopLeft, aTopRight, aBottomRight;
             aTopLeft.x = -nBarDistanceY;
@@ -181,7 +183,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         float nXPos = i * (nBarSizeX + nBarDistanceX);
 
-        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
+        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
+                    aCats[i], nId++));
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT;
         aTopLeft.y = nYPos + calculateTextWidth(aCats[i]) + 0.5 * nBarDistanceY;
@@ -193,7 +196,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         // create shapes on other side as well
 
-        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), aCats[i], nId++));
+        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
+                    aCats[i], nId++));
         p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT;
         aTopLeft.y =  - 0.5 * nBarDistanceY;

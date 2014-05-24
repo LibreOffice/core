@@ -14,9 +14,21 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include "GL3DRenderer.hxx"
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 namespace chart {
 
 namespace opengl3D {
+
+class TextCache
+{
+public:
+    const BitmapEx& getText(OUString rText);
+private:
+    typedef boost::ptr_map<OUString, BitmapEx> TextCacheType;
+
+    TextCacheType maTextCache;
+};
 
 class Renderable3DObject
 {
@@ -65,7 +77,7 @@ private:
 class Text : public Renderable3DObject
 {
 public:
-    Text(OpenGL3DRenderer* pRenderer, const OUString& rStr, sal_uInt32 nId);
+    Text(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId);
     virtual void render() SAL_OVERRIDE;
 
     Size getSize() const;
@@ -73,7 +85,7 @@ public:
     void setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight);
 
 private:
-    BitmapEx maText;
+    const BitmapEx& mrText;
     glm::vec3 maTopLeft;
     glm::vec3 maTopRight;
     glm::vec3 maBottomRight;
