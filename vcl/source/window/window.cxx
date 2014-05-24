@@ -2472,29 +2472,6 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
     if( aDogTag.IsDead() )
         return;
 
-    // #107575#, if a floating windows is shown that grabs the focus, we have to notify the toolkit about it
-    // ImplGrabFocus() is not called in this case
-    // Because this might lead to problems the task will be shifted to 6.y
-    // Note: top-level context menus are registered at the access bridge after being shown,
-    // so this will probably not help here....
-    /*
-    if( mpWindowImpl->mbFloatWin && ((FloatingWindow*) this )->GrabsFocus() )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        if( !mpWindowImpl->mbVisible )
-        {
-            ImplCallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
-            if( pSVData->maWinData.mpFocusWin )
-                pSVData->maWinData.mpFocusWin->ImplCallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
-        }
-        else
-        {
-            if( pSVData->maWinData.mpFocusWin )
-                pSVData->maWinData.mpFocusWin->ImplCallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
-            ImplCallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
-        }
-    }
-    */
 }
 
 Size Window::GetSizePixel() const
