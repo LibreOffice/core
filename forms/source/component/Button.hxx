@@ -40,10 +40,6 @@ struct ImplSVEvent;
 namespace frm
 {
 
-
-
-// OButtonModel
-
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::form::XReset
                             >   OButtonModel_Base;
 class OButtonModel  :public OClickableImageBaseModel

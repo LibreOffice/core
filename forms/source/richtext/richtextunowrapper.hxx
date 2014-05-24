@@ -27,10 +27,6 @@
 namespace frm
 {
 
-
-
-    //= IEngineTextChangeListener
-
     class IEngineTextChangeListener
     {
     public:
@@ -39,9 +35,6 @@ namespace frm
     protected:
         ~IEngineTextChangeListener() {}
     };
-
-
-    //= ORichTextUnoWrapper
 
     class ORichTextUnoWrapper : public SvxUnoText
     {
@@ -57,9 +50,6 @@ namespace frm
         ORichTextUnoWrapper( const ORichTextUnoWrapper& );              // never implemented
         ORichTextUnoWrapper& operator=( const ORichTextUnoWrapper& );   // never implemented
     };
-
-
-    //= RichTextEditSource
 
     class RichTextEditSource : public SvxEditSource
     {

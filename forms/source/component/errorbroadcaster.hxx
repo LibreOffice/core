@@ -30,10 +30,6 @@
 namespace frm
 {
 
-
-
-    //= OErrorBroadcaster
-
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::sdb::XSQLErrorBroadcaster
                                 >   OErrorBroadcaster_BASE;
 

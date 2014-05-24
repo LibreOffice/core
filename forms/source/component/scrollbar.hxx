@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-    //= OScrollBarModel
-
     class OScrollBarModel   :public OBoundControlModel
     {
     private:

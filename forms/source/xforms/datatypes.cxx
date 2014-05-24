@@ -56,10 +56,6 @@ namespace xforms
     using namespace ::frm;
     U_NAMESPACE_USE
 
-
-    //= OXSDDataType
-
-
     OXSDDataType::OXSDDataType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
         ,m_bIsBasic( true )
@@ -329,9 +325,6 @@ namespace xforms
         OXSDDataType_PBase::removeVetoableChangeListener( PropertyName, aListener );
     }
 
-
-    //= OValueLimitedType_Base
-
     OValueLimitedType_Base::OValueLimitedType_Base( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType( _rName, _nTypeClass )
         ,m_fCachedMaxInclusive( 0 )
@@ -497,10 +490,6 @@ namespace xforms
         return sInfo.makeStringAndClear();
     }
 
-
-    //= OStringType
-
-
     OStringType::OStringType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OStringType_Base( _rName, _nTypeClass )
     {
@@ -613,10 +602,6 @@ namespace xforms
         return sInfo.makeStringAndClear();
     }
 
-
-    //= OBooleanType
-
-
     OBooleanType::OBooleanType( const OUString& _rName )
         :OBooleanType_Base( _rName, DataTypeClass::BOOLEAN )
     {
@@ -646,10 +631,6 @@ namespace xforms
     {
         return ( nReason == 0 ) ? OUString() : getName();
     }
-
-
-    //= ODecimalType
-
 
     ODecimalType::ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass )
         :ODecimalType_Base( _rName, _nTypeClass )
@@ -920,10 +901,6 @@ namespace xforms
         OSL_VERIFY( _rValue >>= aValue );
         _rDoubleValue = lcl_normalizeDateTime( aValue );
     }
-
-
-    //= OShortIntegerType
-
 
     OShortIntegerType::OShortIntegerType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OShortIntegerType_Base( _rName, _nTypeClass )

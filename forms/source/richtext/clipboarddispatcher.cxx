@@ -57,10 +57,6 @@ namespace frm
         }
     }
 
-
-    //= OClipboardDispatcher
-
-
     OClipboardDispatcher::OClipboardDispatcher( EditView& _rView, ClipboardFunc _eFunc )
         :ORichTextFeatureDispatcher( _rView, createClipboardURL( _eFunc ) )
         ,m_eFunc( _eFunc )
@@ -131,10 +127,6 @@ namespace frm
             break;
         }
     }
-
-
-    //= OPasteClipboardDispatcher
-
 
     OPasteClipboardDispatcher::OPasteClipboardDispatcher( EditView& _rView )
         :OClipboardDispatcher( _rView, ePaste )

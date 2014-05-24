@@ -41,9 +41,6 @@
 namespace frm
 {
 
-
-// OComboBoxModel
-
 class OComboBoxModel
             :public OBoundControlModel
             ,public OEntryListHelper
@@ -143,10 +140,6 @@ protected:
 
     DECLARE_XCLONEABLE();
 };
-
-
-// OComboBoxControl
-
 
 class OComboBoxControl : public OBoundControl
 {

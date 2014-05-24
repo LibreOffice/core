@@ -24,11 +24,6 @@
 namespace frm
 {
 
-
-
-    //= RichTextViewPort
-
-
     RichTextViewPort::RichTextViewPort( Window* _pParent )
         :Control ( _pParent )
         ,m_pView(NULL)

@@ -41,10 +41,6 @@ using namespace comphelper;
 namespace frm
 {
 
-
-
-// OGridColumn
-
 typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::comphelper::OBaseMutex

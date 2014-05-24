@@ -26,9 +26,6 @@
 namespace frm
 {
 
-
-// ORadioButtonModel
-
 class ORadioButtonModel     :public OReferenceValueComponent
 {
 public:
@@ -79,9 +76,6 @@ private:
 
     void setControlSource();
 };
-
-
-// ORadioButtonControl
 
 class ORadioButtonControl: public OBoundControl
 {

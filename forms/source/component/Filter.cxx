@@ -90,10 +90,6 @@ namespace frm
 
     using namespace ::connectivity;
 
-
-    // OFilterControl
-
-
     OFilterControl::OFilterControl( const Reference< XComponentContext >& _rxORB )
         :UnoControl()
         ,m_aTextListeners( *this )

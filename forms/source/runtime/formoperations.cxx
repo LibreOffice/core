@@ -123,10 +123,6 @@ namespace frm
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
 
-
-    //= FormOperations
-
-
     FormOperations::FormOperations( const Reference< XComponentContext >& _rxContext )
         :FormOperations_Base( m_aMutex )
         ,m_xContext( _rxContext )

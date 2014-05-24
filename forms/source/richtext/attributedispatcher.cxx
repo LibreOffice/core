@@ -32,10 +32,6 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-
-    //= OAttributeDispatcher
-
-
     OAttributeDispatcher::OAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL,
             IMultiAttributeDispatcher* _pMasterDispatcher )
         :ORichTextFeatureDispatcher( _rView, _rURL )

@@ -35,10 +35,6 @@
 namespace frm
 {
 
-
-
-    // ONavigationBarControl
-
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProviderInterception
                                 >   ONavigationBarControl_Base;
 
@@ -83,9 +79,6 @@ namespace frm
         virtual void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
-
-
-    // ONavigationBarPeer
 
     class ONavigationBarPeer
                         :public VCLXWindow

@@ -95,9 +95,6 @@ namespace frm
         }
     }
 
-
-    //= ImplNavToolBar
-
     class ImplNavToolBar : public ToolBox
     {
     protected:
@@ -134,10 +131,6 @@ namespace frm
             m_pDispatcher->dispatch( GetCurItemId() );
         }
     }
-
-
-    //= NavigationToolBar
-
 
     NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
             const PCommandDescriptionProvider& _pDescriptionProvider )
@@ -650,10 +643,6 @@ namespace frm
     {
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
     }
-
-
-    //= RecordPositionInput
-
 
     RecordPositionInput::RecordPositionInput( Window* _pParent )
         :NumericField( _pParent, WB_BORDER | WB_VCENTER )

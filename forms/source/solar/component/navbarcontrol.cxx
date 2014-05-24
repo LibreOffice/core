@@ -65,10 +65,6 @@ namespace frm
         xTypedPeer->method( param1 );  \
     }
 
-
-    // ONavigationBarControl
-
-
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
         :UnoControl(), m_xContext(_rxORB)
     {

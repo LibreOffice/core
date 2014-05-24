@@ -59,10 +59,6 @@ namespace frm
     {
     }
 
-
-    //= AttributeHandler
-
-
     AttributeHandler::AttributeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :m_nAttribute( _nAttributeId )
         ,m_nWhich    ( _nWhichId     )
@@ -199,10 +195,6 @@ namespace frm
         return pReturn;
     }
 
-
-    //= ParaAlignmentHandler
-
-
     ParaAlignmentHandler::ParaAlignmentHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_JUST )
         ,m_eAdjust( SVX_ADJUST_CENTER )
@@ -234,10 +226,6 @@ namespace frm
         (void)_pAdditionalArg;
         _rNewAttribs.Put( SvxAdjustItem( m_eAdjust, getWhich() ) );
     }
-
-
-    //= LineSpacingHandler
-
 
     LineSpacingHandler::LineSpacingHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_SBL )
@@ -278,10 +266,6 @@ namespace frm
         _rNewAttribs.Put( aLineSpacing );
     }
 
-
-    //= EscapementHandler
-
-
     EscapementHandler::EscapementHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_CHAR_ESCAPEMENT )
         ,m_eEscapement( SVX_ESCAPEMENT_OFF )
@@ -314,10 +298,6 @@ namespace frm
         bool bIsChecked = getCheckState( _rCurrentAttribs ) == eChecked;
         _rNewAttribs.Put( SvxEscapementItem( bIsChecked ? SVX_ESCAPEMENT_OFF : m_eEscapement, getWhich() ) );
     }
-
-
-    //= SlotHandler
-
 
     SlotHandler::SlotHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
@@ -357,10 +337,6 @@ namespace frm
         else
             OSL_FAIL( "SlotHandler::executeAttribute: need attributes to do something!" );
     }
-
-
-    //= FontSizeHandler
-
 
     FontSizeHandler::FontSizeHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )
@@ -429,10 +405,6 @@ namespace frm
         }
     }
 
-
-    //= ParagraphDirectionHandler
-
-
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR )
         ,m_eParagraphDirection( FRMDIR_HORI_LEFT_TOP )
@@ -476,10 +448,6 @@ namespace frm
         if ( eCurrentAdjustment == m_eOppositeDefaultAdjustment )
             _rNewAttribs.Put( SvxAdjustItem( m_eDefaultAdjustment, EE_PARA_JUST ) );
     }
-
-
-    //= BooleanHandler
-
 
     BooleanHandler::BooleanHandler( AttributeId _nAttributeId, WhichId _nWhichId )
         :AttributeHandler( _nAttributeId, _nWhichId )

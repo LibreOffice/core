@@ -272,10 +272,7 @@ private:
     void    impl_resetStateGuard_nothrow();
 };
 
-
-//= OBoundControl
-//= a form control implementing the XBoundControl interface
-
+// a form control implementing the XBoundControl interface
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::form::XBoundControl
                             >  OBoundControl_BASE;
 class OBoundControl :public OControl

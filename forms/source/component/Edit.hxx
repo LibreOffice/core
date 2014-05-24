@@ -31,9 +31,6 @@ struct ImplSVEvent;
 namespace frm
 {
 
-
-//= OEditModel
-
 class OEditModel
                 :public OEditBaseModel
 {

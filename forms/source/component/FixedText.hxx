@@ -26,9 +26,6 @@
 namespace frm
 {
 
-
-// OFixedTextModel
-
 class OFixedTextModel
         :public OControlModel
 {

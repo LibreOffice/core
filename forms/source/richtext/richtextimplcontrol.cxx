@@ -41,10 +41,6 @@
 namespace frm
 {
 
-
-    //= RichTextControlImpl
-
-
     RichTextControlImpl::RichTextControlImpl( Control* _pAntiImpl, RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttrListener, ITextSelectionListener* _pSelectionListener )
         :m_pAntiImpl            ( _pAntiImpl          )
         ,m_pViewport            ( NULL                )

@@ -39,10 +39,6 @@ namespace frm
     using namespace ::com::sun::star::frame;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-
-    //= OFormNavigationHelper
-
-
     OFormNavigationHelper::OFormNavigationHelper( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_nConnectedFeatures( 0 )
@@ -371,10 +367,6 @@ namespace frm
         FeatureMap aEmpty;
         m_aSupportedFeatures.swap( aEmpty );
     }
-
-
-    //= OFormNavigationMapper
-
 
     OFormNavigationMapper::OFormNavigationMapper( const Reference< XComponentContext >& _rxORB )
     {

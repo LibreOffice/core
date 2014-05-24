@@ -55,7 +55,6 @@ namespace
     }
 }
 
-// class OGroupCompAcc
 OGroupCompAcc::OGroupCompAcc(const Reference<XPropertySet>& rxElement, const OGroupComp& _rGroupComp )
                :m_xComponent( rxElement )
                ,m_aGroupComp( _rGroupComp )
@@ -78,7 +77,6 @@ public:
     }
 };
 
-// class OGroupComp
 OGroupComp::OGroupComp()
     :m_nPos( -1 )
     ,m_nTabIndex( 0 )
@@ -131,7 +129,6 @@ public:
     }
 };
 
-// class OGroup
 OGroup::OGroup( const OUString& rGroupName )
         :m_aGroupName( rGroupName )
         ,m_nInsertPos(0)

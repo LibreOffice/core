@@ -49,9 +49,6 @@
 namespace frm
 {
 
-
-//= OEditBaseModel
-
 class OEditBaseModel :  public OBoundControlModel
 {
     sal_Int16                   m_nLastReadVersion;

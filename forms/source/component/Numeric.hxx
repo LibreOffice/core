@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-//= ONumericModel
-
 class ONumericModel
                 :public OEditBaseModel
 {
@@ -66,9 +62,6 @@ protected:
 protected:
     DECLARE_XCLONEABLE();
 };
-
-
-//= ONumericControl
 
 class ONumericControl: public OBoundControl
 {

@@ -36,10 +36,6 @@
 namespace frm
 {
 
-
-
-    // ONavigationBarModel
-
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XControlModel
                                 > ONavigationBarModel_BASE;
 

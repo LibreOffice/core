@@ -27,10 +27,6 @@
 namespace frm
 {
 
-
-
-// OImageButtonModel
-
 class OImageButtonModel
         :public OClickableImageBaseModel
 {
@@ -54,9 +50,6 @@ public:
 protected:
     DECLARE_XCLONEABLE();
 };
-
-
-// OImageButtonControl
 
 typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XMouseListener> OImageButtonControl_BASE;
 class OImageButtonControl : public OClickableImageBaseControl,

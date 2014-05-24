@@ -35,10 +35,6 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::container::XChild;
 
-
-    //= TypeBag
-
-
     TypeBag::TypeBag( const TypeSequence& _rTypes1 )
     {
         addTypes( _rTypes1 );

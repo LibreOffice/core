@@ -52,9 +52,6 @@ namespace frm
         ~IPropertyBagHelperContext() {}
     };
 
-
-    //= class PropertyBagHelper
-
     class PropertyBagHelper : public ::boost::noncopyable
     {
     private:

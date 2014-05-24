@@ -26,10 +26,6 @@ struct ESelection;
 namespace frm
 {
 
-
-
-    //= ITextAttributeListener
-
     class ITextAttributeListener
     {
     public:

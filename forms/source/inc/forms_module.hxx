@@ -49,9 +49,6 @@ namespace FORMS_MODULE_NAMESPACE
             rtl_ModuleCount*
         );
 
-
-    //= OFormsModule
-
     class OFormsModule
     {
     private:
@@ -115,9 +112,6 @@ namespace FORMS_MODULE_NAMESPACE
         static void ensureImpl();
     };
 
-
-    //= OMultiInstanceAutoRegistration
-
     template <class TYPE>
     class OMultiInstanceAutoRegistration
     {
@@ -157,9 +151,6 @@ namespace FORMS_MODULE_NAMESPACE
     {
         OFormsModule::revokeComponent(TYPE::getImplementationName_Static());
     }
-
-
-    //= OOneInstanceAutoRegistration
 
     template <class TYPE>
     class OOneInstanceAutoRegistration

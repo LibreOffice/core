@@ -26,10 +26,6 @@ class EditView;
 namespace frm
 {
 
-
-
-    //= RichTextViewPort
-
     class RichTextViewPort : public Control
     {
     private:

@@ -27,10 +27,6 @@
 namespace frm
 {
 
-
-
-    //= OAttributeDispatcher
-
     class OAttributeDispatcher  :public ORichTextFeatureDispatcher
                                 ,public ITextAttributeListener
     {
