@@ -481,7 +481,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
         // set right background
         Color aColor = COL_BLUE;
         // SetBackground does not work
-        SetFillColor(aColor);
+        SetTextFillColor(aColor);
     }
 
     if( IsTextFillColor() )
