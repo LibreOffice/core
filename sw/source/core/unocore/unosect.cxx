@@ -138,8 +138,7 @@ public:
     SwSectionFmt & GetSectionFmtOrThrow() const {
         SwSectionFmt *const pFmt( GetSectionFmt() );
         if (!pFmt) {
-            throw uno::RuntimeException(OUString(
-                    "SwXTextSection: disposed or invalid"), 0);
+            throw uno::RuntimeException("SwXTextSection: disposed or invalid", 0);
         }
         return *pFmt;
     }
@@ -334,12 +333,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&m_pImpl->m_sName));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
-    OUStringBuffer sLinkNameBuf(m_pImpl->m_pProps->m_sLinkFileName);
-    sLinkNameBuf.append(sfx2::cTokenSeparator);
-    sLinkNameBuf.append(m_pImpl->m_pProps->m_sSectionFilter);
-    sLinkNameBuf.append(sfx2::cTokenSeparator);
-    sLinkNameBuf.append(m_pImpl->m_pProps->m_sSectionRegion);
-    aSect.SetLinkFileName(sLinkNameBuf.makeStringAndClear());
+    aSect.SetLinkFileName(m_pImpl->m_pProps->m_sLinkFileName +
+        OUString(sfx2::cTokenSeparator) +
+        m_pImpl->m_pProps->m_sSectionFilter +
+        OUString(sfx2::cTokenSeparator) +
+        m_pImpl->m_pProps->m_sSectionRegion);
 
     aSect.SetHidden(m_pImpl->m_pProps->m_bHidden);
     aSect.SetProtectFlag(m_pImpl->m_pProps->m_bProtect);
@@ -582,15 +580,13 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString("Unknown property: ")
-                    + pPropertyNames[nProperty],
+                "Unknown property: " + pPropertyNames[nProperty],
                 static_cast<cppu::OWeakObject *>(& m_rThis));
         }
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
         {
             throw beans::PropertyVetoException(
-                OUString("Property is read-only: ")
-                    + pPropertyNames[nProperty],
+                "Property is read-only: " + pPropertyNames[nProperty],
                 static_cast<cppu::OWeakObject *>(& m_rThis));
         }
         switch (pEntry->nWID)
@@ -619,16 +615,13 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 {
                     if (!m_pProps->m_bDDE)
                     {
-                        OUStringBuffer buf;
-                        buf.append(sfx2::cTokenSeparator);
-                        buf.append(sfx2::cTokenSeparator);
-                        m_pProps->m_sLinkFileName = buf.makeStringAndClear();
+                        m_pProps->m_sLinkFileName =
+                            OUString(sfx2::cTokenSeparator) + OUString(sfx2::cTokenSeparator);
                         m_pProps->m_bDDE = true;
                     }
-                    OUString sLinkFileName(m_pProps->m_sLinkFileName);
-                    sLinkFileName = comphelper::string::setToken(sLinkFileName,
+                    m_pProps->m_sLinkFileName = comphelper::string::setToken(
+                        m_pProps->m_sLinkFileName,
                         pEntry->nWID - WID_SECT_DDE_TYPE, sfx2::cTokenSeparator, sTmp);
-                    m_pProps->m_sLinkFileName = sLinkFileName;
                 }
                 else
                 {
@@ -683,22 +676,15 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     {
                         pSectionData->SetType(FILE_LINK_SECTION);
                     }
-                    OUStringBuffer sFileNameBuf;
-                    if (!aLink.FileURL.isEmpty())
-                    {
-                        sFileNameBuf.append( URIHelper::SmartRel2Abs(
-                            pFmt->GetDoc()->GetDocShell()->GetMedium()
-                                ->GetURLObject(),
-                            aLink.FileURL, URIHelper::GetMaybeFileHdl()));
-                    }
-                    sFileNameBuf.append(sfx2::cTokenSeparator);
-                    sFileNameBuf.append(aLink.FilterName);
-                    sFileNameBuf.append(sfx2::cTokenSeparator);
-                    sFileNameBuf.append(
-                        pSectionData->GetLinkFileName().getToken(2,
-                            sfx2::cTokenSeparator));
+                    const OUString sTmp(!aLink.FileURL.isEmpty()
+                        ? URIHelper::SmartRel2Abs(
+                            pFmt->GetDoc()->GetDocShell()->GetMedium()->GetURLObject(),
+                            aLink.FileURL, URIHelper::GetMaybeFileHdl())
+                        : OUString());
                     const OUString sFileName(
-                            sFileNameBuf.makeStringAndClear());
+                        sTmp + OUString(sfx2::cTokenSeparator) +
+                        aLink.FilterName + OUString(sfx2::cTokenSeparator) +
+                        pSectionData->GetLinkFileName().getToken(2, sfx2::cTokenSeparator));
                     pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
                     {
@@ -984,17 +970,16 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString("Unknown property: ")
-                    + pPropertyNames[nProperty],
+                "Unknown property: " + pPropertyNames[nProperty],
                 static_cast<cppu::OWeakObject *>(& m_rThis));
         }
         switch(pEntry->nWID)
         {
             case WID_SECT_CONDITION:
             {
-                OUString uTmp( (m_bIsDescriptor)
+                const OUString uTmp( (m_bIsDescriptor)
                     ? m_pProps->m_sCondition
-                    : OUString(pSect->GetCondition()));
+                    : pSect->GetCondition());
                 pRet[nProperty] <<= uTmp;
             }
             break;
@@ -1014,10 +999,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 {
                     sRet = pSect->GetLinkFileName();
                 }
-                sal_Int32 nDummy(0);
-                sRet = sRet.getToken(pEntry->nWID - WID_SECT_DDE_TYPE,
-                            sfx2::cTokenSeparator, nDummy);
-                pRet[nProperty] <<= sRet;
+                pRet[nProperty] <<= sRet.getToken(pEntry->nWID - WID_SECT_DDE_TYPE,
+                    sfx2::cTokenSeparator);
             }
             break;
             case WID_SECT_DDE_AUTOUPDATE:
@@ -1044,7 +1027,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 else if (FILE_LINK_SECTION == pSect->GetType())
                 {
-                    OUString sRet( pSect->GetLinkFileName() );
+                    const OUString sRet( pSect->GetLinkFileName() );
                     sal_Int32 nIndex(0);
                     aLink.FileURL =
                         sRet.getToken(0, sfx2::cTokenSeparator, nIndex);
@@ -1101,8 +1084,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
                 if (pFmt)
                 {
-                    pRet[nProperty] <<=
-                        OUString(pFmt->GetSection()->GetSectionName());
+                    pRet[nProperty] <<= pFmt->GetSection()->GetSectionName();
                 }
             }
             break;
@@ -1408,8 +1390,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString("Unknown property: ")
-                    + pNames[i], static_cast< cppu::OWeakObject* >(this));
+                "Unknown property: " + pNames[i],
+                static_cast< cppu::OWeakObject* >(this));
         }
         switch (pEntry->nWID)
         {
@@ -1484,14 +1466,13 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName, static_cast< cppu::OWeakObject* >(this));
+            "Unknown property: " + rPropertyName,
+            static_cast< cppu::OWeakObject* >(this));
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
-        throw uno::RuntimeException(OUString(
-                    "setPropertyToDefault: property is read-only: ")
-                + rPropertyName,
+        throw uno::RuntimeException(
+            "Property is read-only: " + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
 
@@ -1627,8 +1608,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName,
+            "Unknown property: " + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
 
@@ -1707,8 +1687,7 @@ throw (uno::RuntimeException, std::exception)
     {
         SwSection *const pSect = pFmt->GetSection();
         SwSectionData aSection(*pSect);
-        OUString sNewName(rName);
-        aSection.SetSectionName(sNewName);
+        aSection.SetSectionName(rName);
 
         const SwSectionFmts& rFmts = pFmt->GetDoc()->GetSections();
         sal_uInt16 nApplyPos = USHRT_MAX;
@@ -1718,7 +1697,7 @@ throw (uno::RuntimeException, std::exception)
             {
                 nApplyPos = i;
             }
-            else if (sNewName == rFmts[i]->GetSection()->GetSectionName())
+            else if (rName == rFmts[i]->GetSection()->GetSectionName())
             {
                 throw uno::RuntimeException();
             }
