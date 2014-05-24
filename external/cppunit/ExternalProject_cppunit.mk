@@ -13,15 +13,13 @@ $(eval $(call gb_ExternalProject_register_targets,cppunit,\
 	build \
 ))
 
-
 ifeq ($(OS)$(COM),WNTMSC)
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_ExternalProject_run,build,\
-		msbuild.exe cppunit_dll.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110_xp /p:VisualStudioVersion=11.0) \
+	    PROFILEFLAGS="$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) $(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110_xp /p:VisualStudioVersion=11.0)" \
+		&& msbuild.exe cppunit_dll.vcxproj /p:Configuration=$${PROFILEFLAGS}  \
 		&& cd ../DllPlugInTester \
-		&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110_xp /p:VisualStudioVersion=11.0) \
+		&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=$${PROFILEFLAGS} \
 	,src/cppunit)
 else
 
