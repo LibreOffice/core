@@ -88,11 +88,9 @@ void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
 
 bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 {
-    bool bReturn = false;
     Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
-    bReturn =( xServiceName.is() && (xServiceName->getServiceName()).equals(
-              "com.sun.star.chart2.LogarithmicScaling"));
-    return bReturn;
+    return xServiceName.is() && (xServiceName->getServiceName()).equals(
+              "com.sun.star.chart2.LogarithmicScaling");
 }
 
 chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, ChartModel& rModel )
