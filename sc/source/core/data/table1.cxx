@@ -246,7 +246,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     nTableAreaY( 0 ),
     nTab( nNewTab ),
     pDocument( pDoc ),
-    pSearchText ( NULL ),
     pSortCollator( NULL ),
     pRepeatColRange( NULL ),
     pRepeatRowRange( NULL ),
@@ -333,7 +332,6 @@ ScTable::~ScTable()
     delete pRowFlags;
     delete pSheetEvents;
     delete pOutlineTable;
-    delete pSearchText;
     delete pRepeatColRange;
     delete pRepeatRowRange;
     delete pScenarioRanges;

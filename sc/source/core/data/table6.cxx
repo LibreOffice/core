@@ -101,18 +101,18 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     sal_Int32 nStart = 0;
     sal_Int32 nEnd = aString.getLength();
     ::com::sun::star::util::SearchResult aSearchResult;
-    if (pSearchText)
+    if (mpSearchText)
     {
         if ( bDoBack )
         {
            sal_Int32 nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-            bFound = pSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
+            bFound = mpSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
             // change results to definition before 614:
             --nEnd;
         }
         else
         {
-            bFound = pSearchText->SearchForward(aString, &nStart, &nEnd, &aSearchResult);
+            bFound = mpSearchText->SearchForward(aString, &nStart, &nEnd, &aSearchResult);
             // change results to definition before 614:
             --nEnd;
         }
@@ -156,7 +156,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             OUString sReplStr = rSearchItem.GetReplaceString();
             if (rSearchItem.GetRegExp())
             {
-                pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
+                mpSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
                 OUStringBuffer aStrBuffer(aString);
                 aStrBuffer.remove(nStart, nEnd-nStart+1);
                 aStrBuffer.insert(nStart, sReplStr);
@@ -190,13 +190,13 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 else if (bDoBack)
                 {
                     sal_Int32 nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                    bRepeat = pSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
+                    bRepeat = mpSearchText->SearchBackward(aString, &nStart, &nEnd, &aSearchResult);
                     // change results to definition before 614:
                     --nEnd;
                 }
                 else
                 {
-                    bRepeat = pSearchText->SearchForward(aString, &nStart, &nEnd, &aSearchResult);
+                    bRepeat = mpSearchText->SearchForward(aString, &nStart, &nEnd, &aSearchResult);
                     // change results to definition before 614:
                     --nEnd;
                 }
@@ -743,7 +743,7 @@ bool ScTable::SearchAndReplace(
             ( com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
               com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
 
-    pSearchText = new utl::TextSearch( aSearchOptions );
+    mpSearchText.reset(new utl::TextSearch(aSearchOptions));
 
     bool bFound = false;
     if (nCommand == SVX_SEARCHCMD_FIND)
@@ -755,8 +755,8 @@ bool ScTable::SearchAndReplace(
     else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
         bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
 
-    delete pSearchText;
-    pSearchText = NULL;
+    mpSearchText.reset();
+
     return bFound;
 }
 

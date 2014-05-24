@@ -163,7 +163,7 @@ private:
 
     SCTAB           nTab;
     ScDocument*     pDocument;
-    utl::TextSearch*    pSearchText;
+    boost::scoped_ptr<utl::TextSearch> mpSearchText;
 
     mutable OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
 
