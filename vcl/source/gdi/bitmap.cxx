@@ -724,8 +724,6 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                     long                nY;
                     long                nRotX;
                     long                nRotY;
-                    long                nSinY;
-                    long                nCosY;
                     boost::scoped_array<long> pCosX(new long[ nNewWidth ]);
                     boost::scoped_array<long> pSinX(new long[ nNewWidth ]);
                     boost::scoped_array<long> pCosY(new long[ nNewHeight ]);
@@ -749,8 +747,8 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
 
                     for( nY = 0L; nY < nNewHeight; nY++ )
                     {
-                        nSinY = pSinY[ nY ];
-                        nCosY = pCosY[ nY ];
+                        long nSinY = pSinY[ nY ];
+                        long nCosY = pCosY[ nY ];
 
                         for( nX = 0L; nX < nNewWidth; nX++ )
                         {
@@ -869,13 +867,12 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                     {
                         const long      nSrcCount = pDstAcc->GetPaletteEntryCount();
                         const long      nDstCount = 1 << nDstBitCount;
-                        bool            bFound;
 
                         for( long i = 0L; ( i < nSrcCount ) && ( nNextIndex < nSrcCount ); i++ )
                         {
                             const BitmapColor& rSrcCol = pSrcAcc->GetPaletteColor( (sal_uInt16) i );
 
-                            bFound = false;
+                            bool bFound = false;
 
                             for( long j = 0L; j < nDstCount; j++ )
                             {
