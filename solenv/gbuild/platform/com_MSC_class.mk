@@ -364,7 +364,7 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_DEFS := -D_DLL
-gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(shell cygpath -u $(gb_Library_DLLDIR)):$(shell cygpath -u $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll,ReleaseDll))"
+gb_CppunitTest_CPPTESTPRECOMMAND := $(call gb_Helper_prepend_ld_path,$(shell cygpath -u $(gb_Library_DLLDIR)):$(shell cygpath -u $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll,ReleaseDll)))
 
 gb_CppunitTest_get_filename = test_$(1).dll
 gb_CppunitTest_get_ilibfilename = itest_$(1).lib
