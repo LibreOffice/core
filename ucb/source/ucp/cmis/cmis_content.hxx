@@ -205,7 +205,7 @@ public:
 
     virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) SAL_OVERRIDE;
 
-    libcmis::ObjectPtr getObject( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw ( libcmis::Exception );
+    libcmis::ObjectPtr getObject( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, libcmis::Exception);
 };
 
 }
