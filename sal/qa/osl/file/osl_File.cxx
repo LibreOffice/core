@@ -415,7 +415,8 @@ inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
     if ( isURL( filepath ) )
         ::osl::FileBase::getSystemPathFromFileURL( filepath, aUStr );
     aString = ::rtl::OUStringToOString( aUStr, RTL_TEXTENCODING_ASCII_US );
-    chmod( aString.getStr(), mode );
+    int ret = chmod( aString.getStr(), mode );
+    CPPUNIT_ASSERT(ret == 0);
 }
 #else                                          //Windows version
 inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
