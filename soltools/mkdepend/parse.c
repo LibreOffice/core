@@ -292,6 +292,7 @@ int deftype (line, filep, file_red, file, parse_it, symbols)
     case IFNDEF:
         debug(0,("%s, line %d: #%s %s\n",
             file->i_file, filep->f_line, directives[ret], p));
+        //fall-through
     case UNDEF:
         /*
          * separate the name of a single symbol.
