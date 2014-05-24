@@ -29,10 +29,6 @@ class TransferableDataHelper;
 namespace frm
 {
 
-
-
-    //= OClipboardDispatcher
-
     class OClipboardDispatcher : public ORichTextFeatureDispatcher
     {
     public:
@@ -65,9 +61,6 @@ namespace frm
         */
         virtual bool implIsEnabled( ) const;
     };
-
-
-    //= OPasteClipboardDispatcher
 
     class OPasteClipboardDispatcher : public OClipboardDispatcher
     {

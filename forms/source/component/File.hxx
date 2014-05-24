@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-// OFileControlModel
-
 class OFileControlModel
                 :public OControlModel
                 ,public ::com::sun::star::form::XReset

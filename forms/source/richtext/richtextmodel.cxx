@@ -55,10 +55,6 @@ namespace frm
 
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-
-    //= ORichTextModel
-
-
     ORichTextModel::ORichTextModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _rxFactory, OUString() )
         ,FontControlModel    ( true                          )

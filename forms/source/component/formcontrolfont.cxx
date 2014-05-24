@@ -119,10 +119,6 @@ namespace frm
         }
     }
 
-
-    //= FontControlModel
-
-
     FontControlModel::FontControlModel( bool _bToolkitCompatibleDefaults )
         :m_nFontRelief( css::awt::FontRelief::NONE )
         ,m_nFontEmphasis( FontEmphasisMark::NONE )

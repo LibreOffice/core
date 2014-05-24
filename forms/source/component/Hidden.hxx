@@ -26,9 +26,6 @@
 namespace frm
 {
 
-
-// OHiddenModel
-
 class OHiddenModel
         :public OControlModel
 {

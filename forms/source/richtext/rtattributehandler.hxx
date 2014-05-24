@@ -32,10 +32,6 @@ class SfxItemPool;
 namespace frm
 {
 
-
-
-    //= ReferenceBase
-
     class ReferenceBase : public ::rtl::IReference
     {
     protected:
@@ -50,9 +46,6 @@ namespace frm
         virtual ~ReferenceBase();
     };
 
-
-    //= IAttributeHandler
-
     class IAttributeHandler : public ::rtl::IReference
     {
     public:
@@ -63,9 +56,6 @@ namespace frm
     protected:
         ~IAttributeHandler() {}
     };
-
-
-    //= AttributeHandler
 
     class AttributeHandler  :public ReferenceBase
                             ,public IAttributeHandler
@@ -104,9 +94,6 @@ namespace frm
         virtual ~AttributeHandler();
     };
 
-
-    //= AttributeHandlerFactory
-
     class AttributeHandlerFactory
     {
     public:
@@ -118,9 +105,6 @@ namespace frm
         AttributeHandlerFactory& operator=( const AttributeHandlerFactory& );   // never implemented
         ~AttributeHandlerFactory();                                             // never implemented
     };
-
-
-    //= ParaAlignmentHandler
 
     class ParaAlignmentHandler : public AttributeHandler
     {
@@ -135,9 +119,6 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
-
-    //= LineSpacingHandler
-
     class LineSpacingHandler : public AttributeHandler
     {
     private:
@@ -150,9 +131,6 @@ namespace frm
         virtual     AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
-
-
-    //= EscapementHandler
 
     class EscapementHandler : public AttributeHandler
     {
@@ -167,9 +145,6 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
-
-    //= SlotHandler
-
     class SlotHandler : public AttributeHandler
     {
     private:
@@ -183,9 +158,6 @@ namespace frm
         virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
-
-    //= BooleanHandler
-
     class BooleanHandler : public AttributeHandler
     {
     public:
@@ -196,9 +168,6 @@ namespace frm
         virtual     void                executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
 
-
-    //= FontSizeHandler
-
     class FontSizeHandler : public AttributeHandler
     {
     public:
@@ -208,9 +177,6 @@ namespace frm
         virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const SAL_OVERRIDE;
         virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const SAL_OVERRIDE;
     };
-
-
-    //= ParagraphDirectionHandler
 
     class ParagraphDirectionHandler : public AttributeHandler
     {

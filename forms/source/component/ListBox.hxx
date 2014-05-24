@@ -94,9 +94,6 @@
 namespace frm
 {
 
-
-//= OListBoxModel
-
 typedef ::std::vector< ::connectivity::ORowSetValue >   ValueList;
 
 class OListBoxModel :public OBoundControlModel

@@ -36,9 +36,6 @@ namespace frm
 
     class ImplNavToolBar;
 
-
-    //= NavigationToolBar
-
     class NavigationToolBar : public Window
     {
     public:
@@ -153,9 +150,6 @@ namespace frm
         void adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const;
         void enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
     };
-
-
-    //= RecordPositionInput
 
     class RecordPositionInput : public NumericField
     {

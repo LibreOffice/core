@@ -35,32 +35,26 @@
 
 using namespace comphelper;
 
-/*========================================================================
-Funktionsweise GroupManager:
-
-Der GroupManager horcht an der starform, ob FormComponents eingefuegt oder entfernt
-werden. Zusaetzlich horcht er bei den FormComponents an den Properties
-"Name" und "TabIndex". Mit diesen Infos aktualisiert er seine Gruppen.
-
-Der GroupManager verwaltet eine Gruppe, in der alle Controls nach TabIndex
-geordnet sind, und ein Array von Gruppen, in dem jede FormComponent noch
-einmal einer Gruppe dem Namen nach zugeordnet wird.
-Die einzelnen Gruppen werden ueber eine Map aktiviert, wenn sie mehr als
-ein Element besitzen.
-
-Die Gruppen verwalten intern die FormComponents in zwei Arrays. In dem
-GroupCompArray werden die Components nach TabIndex und Einfuegepostion
-sortiert. Da auf dieses Array ueber die FormComponent zugegriffen
-wird, gibt es noch das GroupCompAccessArray, in dem die FormComponents
-nach ihrer Speicheradresse sortiert sind. Jedes Element des
-GroupCompAccessArrays ist mit einem Element des GroupCompArrays verpointert.
-
-========================================================================*/
-
-
+/*
+ * Der GroupManager horcht an der starform, ob FormComponents eingefuegt oder entfernt
+ * werden. Zusaetzlich horcht er bei den FormComponents an den Properties
+ * "Name" und "TabIndex". Mit diesen Infos aktualisiert er seine Gruppen.
+ *
+ * Der GroupManager verwaltet eine Gruppe, in der alle Controls nach TabIndex
+ * geordnet sind, und ein Array von Gruppen, in dem jede FormComponent noch
+ * einmal einer Gruppe dem Namen nach zugeordnet wird.
+ * Die einzelnen Gruppen werden ueber eine Map aktiviert, wenn sie mehr als
+ * ein Element besitzen.
+ *
+ * Die Gruppen verwalten intern die FormComponents in zwei Arrays. In dem
+ * GroupCompArray werden die Components nach TabIndex und Einfuegepostion
+ * sortiert. Da auf dieses Array ueber die FormComponent zugegriffen
+ * wird, gibt es noch das GroupCompAccessArray, in dem die FormComponents
+ * nach ihrer Speicheradresse sortiert sind. Jedes Element des
+ * GroupCompAccessArrays ist mit einem Element des GroupCompArrays verpointert.
+ */
 namespace frm
 {
-
 
 
     template <class ELEMENT, class LESS_COMPARE>

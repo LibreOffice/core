@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-    //= OCloneableAggregation
-
     class OCloneableAggregation
     {
     protected:

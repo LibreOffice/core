@@ -176,9 +176,6 @@ namespace frm
         void    initializeSupportedFeatures();
     };
 
-
-    //= OFormNavigationMapper
-
     /** helper class mapping between feature ids and feature URLs
     */
     class OFormNavigationMapper

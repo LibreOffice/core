@@ -27,10 +27,6 @@
 namespace frm
 {
 
-
-
-//= ODateModel
-
 class ODateModel
                 :public OEditBaseModel
                 ,public OLimitedFormats
@@ -99,9 +95,6 @@ private:
     void                    impl_translateControlValueToUNODate(
                                 ::com::sun::star::uno::Any& _rUNOValue ) const;
 };
-
-
-//= ODateControl
 
 class ODateControl: public OBoundControl
 {

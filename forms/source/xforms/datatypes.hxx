@@ -169,9 +169,6 @@ namespace xforms
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, ::com::sun::star::beans::PropertyAttribute::BOUND | ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, \
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
-
-    //= OValueLimitedType_Base
-
     class OValueLimitedType_Base : public OXSDDataType
     {
     protected:
@@ -225,9 +222,6 @@ namespace xforms
         virtual void normalizeValue( const ::com::sun::star::uno::Any& _rValue, double& _rDoubleValue ) const = 0;
     };
 
-
-    //= OValueLimitedType
-
     template < typename VALUE_TYPE >
     class OValueLimitedType : public OValueLimitedType_Base
     {
@@ -242,9 +236,6 @@ namespace xforms
         // OXSDDataType overridables
         virtual void            registerProperties() SAL_OVERRIDE;
     };
-
-
-    //= ODerivedDataType
 
     /** helper class for implementing interfaces derived from XDataType
     */
@@ -267,9 +258,6 @@ namespace xforms
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     };
 
-
-    //= OBooleanType
-
     class OBooleanType;
     typedef ODerivedDataType< OBooleanType > OBooleanType_Base;
     class OBooleanType : public OBooleanType_Base
@@ -284,9 +272,6 @@ namespace xforms
         virtual sal_uInt16      _validate( const OUString& value ) SAL_OVERRIDE;
         virtual OUString _explainInvalid( sal_uInt16 nReason ) SAL_OVERRIDE;
     };
-
-
-    //= OStringType
 
     class OStringType;
     typedef ODerivedDataType< OStringType > OStringType_Base;
@@ -311,9 +296,6 @@ namespace xforms
         virtual bool            checkPropertySanity( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, OUString& _rErrorMessage ) SAL_OVERRIDE;
         virtual void            registerProperties() SAL_OVERRIDE;
     };
-
-
-    //= ODecimalType
 
     class ODecimalType;
     typedef ODerivedDataType< ODecimalType, OValueLimitedType< double > > ODecimalType_Base;
@@ -382,9 +364,6 @@ namespace xforms
     //= ODateTimeType
 
     DEFAULT_DECLARE_SUBTYPE( ODateTimeType, ::com::sun::star::util::DateTime )
-
-
-    //= OShortIntegerType
 
     class OShortIntegerType;
     typedef ODerivedDataType< OShortIntegerType, OValueLimitedType< sal_Int16 > > OShortIntegerType_Base;

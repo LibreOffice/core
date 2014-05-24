@@ -44,9 +44,6 @@ namespace frm
         }
     };
 
-
-    //= TypeBag
-
     /** a helper class which merges sequences of <type scope="com::sun::star::uno">Type</type>s,
         so that the resulting sequence contains every type at most once
     */

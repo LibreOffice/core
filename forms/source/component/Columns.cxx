@@ -111,8 +111,6 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
     return nTypeId;
 }
 
-/*************************************************************************/
-
 namespace
 {
     class theOGridColumnImplementationId : public rtl::Static< UnoTunnelIdInit, theOGridColumnImplementationId > {};

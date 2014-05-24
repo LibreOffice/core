@@ -50,11 +50,6 @@ namespace frm
         const OUString& _rMinValueName, const OUString& _rMaxValueName );
     Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue );
 
-
-    //= OSpinButtonModel
-
-
-
     OSpinButtonModel::OSpinButtonModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, true, true, false )
         ,m_nDefaultSpinValue( 0 )

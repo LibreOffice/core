@@ -26,11 +26,8 @@
 
 #include <algorithm>
 
-//... namespace frm .......................................................
 namespace frm
 {
-
-
 
 //= PropertyInfoService
 

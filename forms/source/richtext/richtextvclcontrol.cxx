@@ -38,10 +38,8 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 
-
 namespace frm
 {
-    //= RichTextControl
 
     RichTextControl::RichTextControl( RichTextEngine* _pEngine, Window* _pParent, WinBits _nStyle,
         ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )

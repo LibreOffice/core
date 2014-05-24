@@ -143,9 +143,6 @@ protected:
     DECL_LINK( OnImageImportDone, ::Graphic* );
 };
 
-
-//= OImageControlControl
-
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XMouseListener
                             ,   ::com::sun::star::util::XModifyBroadcaster
                             >   OImageControlControl_Base;

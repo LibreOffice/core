@@ -32,10 +32,6 @@ namespace frm
     using namespace ::com::sun::star::sdb;
     using namespace ::dbtools;
 
-
-    //= OErrorBroadcaster
-
-
     OErrorBroadcaster::OErrorBroadcaster( ::cppu::OBroadcastHelper& _rBHelper )
         :m_rBHelper( _rBHelper )
         ,m_aErrorListeners( _rBHelper.rMutex )

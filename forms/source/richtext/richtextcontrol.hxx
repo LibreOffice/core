@@ -37,11 +37,7 @@
 namespace frm
 {
 
-
     class ORichTextFeatureDispatcher;
-
-
-    // ORichTextControl
 
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProvider
                                 >   ORichTextControl_Base;
@@ -82,9 +78,6 @@ namespace frm
         // UnoControl
         virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const SAL_OVERRIDE;
     };
-
-
-    // ORichTextPeer
 
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XDispatchProvider
                                 >   ORichTextPeer_Base;

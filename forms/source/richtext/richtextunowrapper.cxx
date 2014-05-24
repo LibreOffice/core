@@ -58,10 +58,6 @@ namespace frm
         }
     }
 
-
-    //= ORichTextUnoWrapper
-
-
     ORichTextUnoWrapper::ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :SvxUnoText( getTextEnginePropertySet() )
     {
@@ -72,10 +68,6 @@ namespace frm
     ORichTextUnoWrapper::~ORichTextUnoWrapper() throw()
     {
     }
-
-
-    //= RichTextEditSource
-
 
     RichTextEditSource::RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :m_rEngine              ( _rEngine                               )

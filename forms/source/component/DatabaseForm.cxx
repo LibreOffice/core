@@ -128,10 +128,6 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseForm()
 namespace frm
 {
 
-
-
-//= DocumentModifyGuard
-
 class DocumentModifyGuard
 {
 public:
@@ -163,13 +159,7 @@ private:
     Reference< XModifiable2 >   m_xDocumentModify;
 };
 
-
-//= OFormSubmitResetThread
-//=-----------------------------------------------------------------
-//= submitting and resetting html-forms asynchronously
-
-
-
+// submitting and resetting html-forms asynchronously
 class OFormSubmitResetThread: public OComponentEventThread
 {
 protected:

@@ -53,10 +53,6 @@ namespace frm
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID, \
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
-
-    // ONavigationBarModel
-
-
     ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
         ,FontControlModel( true )

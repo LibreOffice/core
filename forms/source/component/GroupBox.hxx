@@ -26,9 +26,6 @@
 namespace frm
 {
 
-
-// OGroupBoxModel
-
 class OGroupBoxModel
         :public OControlModel
 {

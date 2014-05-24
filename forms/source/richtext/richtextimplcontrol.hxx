@@ -40,8 +40,6 @@ namespace frm
     class ITextSelectionListener;
     class RichTextViewPort;
 
-    //= RichTextControlImpl
-
     class RichTextControlImpl : public IEngineStatusListener
     {
         typedef ::std::map< AttributeId, AttributeState >                           StateCache;

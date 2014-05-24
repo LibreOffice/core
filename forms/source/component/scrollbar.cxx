@@ -94,11 +94,6 @@ namespace frm
         return aExternalDoubleValue;
     }
 
-
-    //= OScrollBarModel
-
-
-
     OScrollBarModel::OScrollBarModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SCROLLBAR, VCL_CONTROL_SCROLLBAR, true, true, false )
         ,m_nDefaultScrollValue( 0 )

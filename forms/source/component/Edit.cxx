@@ -271,8 +271,6 @@ void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, 
     OBoundControl::createPeer(_rxToolkit, _rxParent);
 }
 
-/*************************************************************************/
-
 InterfaceRef SAL_CALL OEditModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OEditModel( comphelper::getComponentContext(_rxFactory) ));

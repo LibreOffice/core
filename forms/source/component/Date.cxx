@@ -74,8 +74,6 @@ StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw(std::exce
     return aSupported;
 }
 
-/*************************************************************************/
-
 InterfaceRef SAL_CALL ODateModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new ODateModel( comphelper::getComponentContext(_rxFactory) ));

@@ -32,10 +32,6 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
 
-
-    //= UrlTransformer
-
-
     UrlTransformer::UrlTransformer( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_bTriedToCreateTransformer( false )

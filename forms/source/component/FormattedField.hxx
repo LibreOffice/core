@@ -142,7 +142,6 @@ class OFormattedModel
         void    updateFormatterNullDate();
     };
 
-    // OFormattedControl
     typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XKeyListener> OFormattedControl_BASE;
     class OFormattedControl :    public OBoundControl
                                 ,public OFormattedControl_BASE

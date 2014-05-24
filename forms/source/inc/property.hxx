@@ -35,15 +35,10 @@
 
 using namespace comphelper;
 
-
 //= property helper classes
 
-
-//... namespace frm .......................................................
 namespace frm
 {
-
-
 
 //= assigment property handle <-> property name
 //= used by the PropertySetAggregationHelper

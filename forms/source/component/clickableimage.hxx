@@ -145,9 +145,6 @@ namespace frm
         void implInitializeImageURL( );
     };
 
-
-    // ImageModelMethodGuard
-
     class ImageModelMethodGuard : public ::osl::MutexGuard
     {
     private:
@@ -247,9 +244,6 @@ namespace frm
             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
         ) SAL_THROW((com::sun::star::util::VetoException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException));
     };
-
-
-    // OImageProducerThread_Impl
 
     class OImageProducerThread_Impl: public OComponentEventThread
     {

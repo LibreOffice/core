@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-    //= OSpinButtonModel
-
     class OSpinButtonModel   :public OBoundControlModel
     {
     private:

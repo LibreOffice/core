@@ -166,9 +166,6 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
 }
 
-//= ElementDescription
-
-
 ElementDescription::ElementDescription( )
 {
 }
@@ -177,10 +174,6 @@ ElementDescription::ElementDescription( )
 ElementDescription::~ElementDescription()
 {
 }
-
-
-//= OInterfaceContainer
-
 
 OInterfaceContainer::OInterfaceContainer(
                 const Reference<XComponentContext>& _rxContext,

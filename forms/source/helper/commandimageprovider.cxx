@@ -57,9 +57,6 @@ namespace frm
 
     namespace ImageType = ::com::sun::star::ui::ImageType;
 
-
-    //= DocumentCommandImageProvider
-
     class DocumentCommandImageProvider : public ICommandImageProvider
     {
     public:
