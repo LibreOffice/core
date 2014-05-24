@@ -704,4 +704,539 @@ bool Window::IsTopWindow() const
     return mpWindowImpl->mpWinData->mnIsTopWindow == 1 ? true : false;
 }
 
+Window* Window::FindWindow( const Point& rPos ) const
+{
+
+    Point aPos = OutputToScreenPixel( rPos );
+    return ((Window*)this)->ImplFindWindow( aPos );
+}
+
+Window* Window::ImplFindWindow( const Point& rFramePos )
+{
+    Window* pTempWindow;
+    Window* pFindWindow;
+
+    // first check all overlapping windows
+    pTempWindow = mpWindowImpl->mpFirstOverlap;
+    while ( pTempWindow )
+    {
+        pFindWindow = pTempWindow->ImplFindWindow( rFramePos );
+        if ( pFindWindow )
+            return pFindWindow;
+        pTempWindow = pTempWindow->mpWindowImpl->mpNext;
+    }
+
+    // then we check our window
+    if ( !mpWindowImpl->mbVisible )
+        return NULL;
+
+    sal_uInt16 nHitTest = ImplHitTest( rFramePos );
+    if ( nHitTest & WINDOW_HITTEST_INSIDE )
+    {
+        // and then we check all child windows
+        pTempWindow = mpWindowImpl->mpFirstChild;
+        while ( pTempWindow )
+        {
+            pFindWindow = pTempWindow->ImplFindWindow( rFramePos );
+            if ( pFindWindow )
+                return pFindWindow;
+            pTempWindow = pTempWindow->mpWindowImpl->mpNext;
+        }
+
+        if ( nHitTest & WINDOW_HITTEST_TRANSPARENT )
+            return NULL;
+        else
+            return this;
+    }
+
+    return NULL;
+}
+
+bool Window::ImplIsRealParentPath( const Window* pWindow ) const
+{
+    pWindow = pWindow->GetParent();
+    while ( pWindow )
+    {
+        if ( pWindow == this )
+            return true;
+        pWindow = pWindow->GetParent();
+    }
+
+    return false;
+}
+
+bool Window::ImplIsChild( const Window* pWindow, bool bSystemWindow ) const
+{
+    do
+    {
+        if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
+            break;
+
+        pWindow = pWindow->ImplGetParent();
+
+        if ( pWindow == this )
+            return true;
+    }
+    while ( pWindow );
+
+    return false;
+}
+
+bool Window::ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow ) const
+{
+    if ( this == pWindow )
+        return true;
+    return ImplIsChild( pWindow, bSystemWindow );
+}
+
+void Window::ImplResetReallyVisible()
+{
+    bool bBecameReallyInvisible = mpWindowImpl->mbReallyVisible;
+
+    mbDevOutput     = false;
+    mpWindowImpl->mbReallyVisible = false;
+    mpWindowImpl->mbReallyShown   = false;
+
+    // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
+    // For this, the data member of the event must not be NULL.
+    // Previously, we did this in Window::Show, but there some events got lost in certain situations.
+    if( bBecameReallyInvisible && ImplIsAccessibleCandidate() )
+        ImplCallEventListeners( VCLEVENT_WINDOW_HIDE, this );
+        // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_HIDE. Normally, we should
+        // introduce another event which explicitly triggers the Accessibility implementations.
+
+    Window* pWindow = mpWindowImpl->mpFirstOverlap;
+    while ( pWindow )
+    {
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+            pWindow->ImplResetReallyVisible();
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+
+    pWindow = mpWindowImpl->mpFirstChild;
+    while ( pWindow )
+    {
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+            pWindow->ImplResetReallyVisible();
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+}
+
+void Window::ImplUpdateWindowPtr( Window* pWindow )
+{
+    if ( mpWindowImpl->mpFrameWindow != pWindow->mpWindowImpl->mpFrameWindow )
+    {
+        // release graphic
+        OutputDevice *pOutDev = GetOutDev();
+        pOutDev->ReleaseGraphics();
+    }
+
+    mpWindowImpl->mpFrameData     = pWindow->mpWindowImpl->mpFrameData;
+    mpWindowImpl->mpFrame         = pWindow->mpWindowImpl->mpFrame;
+    mpWindowImpl->mpFrameWindow   = pWindow->mpWindowImpl->mpFrameWindow;
+    if ( pWindow->ImplIsOverlapWindow() )
+        mpWindowImpl->mpOverlapWindow = pWindow;
+    else
+        mpWindowImpl->mpOverlapWindow = pWindow->mpWindowImpl->mpOverlapWindow;
+
+    Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
+    {
+        pChild->ImplUpdateWindowPtr( pWindow );
+        pChild = pChild->mpWindowImpl->mpNext;
+    }
+}
+
+void Window::ImplUpdateWindowPtr()
+{
+    Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
+    {
+        pChild->ImplUpdateWindowPtr( this );
+        pChild = pChild->mpWindowImpl->mpNext;
+    }
+}
+
+void Window::ImplUpdateOverlapWindowPtr( bool bNewFrame )
+{
+    bool bVisible = IsVisible();
+    Show( false );
+    ImplRemoveWindow( bNewFrame );
+    Window* pRealParent = mpWindowImpl->mpRealParent;
+    ImplInsertWindow( ImplGetParent() );
+    mpWindowImpl->mpRealParent = pRealParent;
+    ImplUpdateWindowPtr();
+    if ( ImplUpdatePos() )
+        ImplUpdateSysObjPos();
+
+    if ( bNewFrame )
+    {
+        Window* pOverlapWindow = mpWindowImpl->mpFirstOverlap;
+        while ( pOverlapWindow )
+        {
+            Window* pNextOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
+            pOverlapWindow->ImplUpdateOverlapWindowPtr( bNewFrame );
+            pOverlapWindow = pNextOverlapWindow;
+        }
+    }
+
+    if ( bVisible )
+        Show( true );
+}
+
+SystemWindow* Window::GetSystemWindow() const
+{
+
+    const Window* pWin = this;
+    while ( pWin && !pWin->IsSystemWindow() )
+        pWin  = pWin->GetParent();
+    return (SystemWindow*)pWin;
+}
+
+static SystemWindow *ImplGetLastSystemWindow( Window *pWin )
+{
+    // get the most top-level system window, the one that contains the taskpanelist
+    SystemWindow *pSysWin = NULL;
+    if( !pWin )
+        return pSysWin;
+    Window *pMyParent = pWin;
+    while ( pMyParent )
+    {
+        if ( pMyParent->IsSystemWindow() )
+            pSysWin = (SystemWindow*)pMyParent;
+        pMyParent = pMyParent->GetParent();
+    }
+    return pSysWin;
+}
+
+void Window::SetParent( Window* pNewParent )
+{
+    DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
+    DBG_ASSERT( pNewParent != this, "someone tried to reparent a window to itself" );
+
+    if( pNewParent == this )
+        return;
+
+    // check if the taskpanelist would change and move the window pointer accordingly
+    SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
+    SystemWindow *pNewSysWin = NULL;
+    bool bChangeTaskPaneList = false;
+    if( pSysWin && pSysWin->ImplIsInTaskPaneList( this ) )
+    {
+        pNewSysWin = ImplGetLastSystemWindow( pNewParent );
+        if( pNewSysWin && pNewSysWin != pSysWin )
+        {
+            bChangeTaskPaneList = true;
+            pSysWin->GetTaskPaneList()->RemoveWindow( this );
+        }
+    }
+    // remove ownerdraw decorated windows from list in the top-most frame window
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+    {
+        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( rList.begin(), rList.end(), this );
+        if( p != rList.end() )
+            rList.erase( p );
+    }
+
+    ImplSetFrameParent( pNewParent );
+
+    if ( mpWindowImpl->mpBorderWindow )
+    {
+        mpWindowImpl->mpRealParent = pNewParent;
+        mpWindowImpl->mpBorderWindow->SetParent( pNewParent );
+        return;
+    }
+
+    if ( mpWindowImpl->mpParent == pNewParent )
+        return;
+
+    if ( mpWindowImpl->mbFrame )
+        mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
+
+    bool bVisible = IsVisible();
+    Show( false, SHOW_NOFOCUSCHANGE );
+
+    // check if the overlap window changes
+    Window* pOldOverlapWindow;
+    Window* pNewOverlapWindow = NULL;
+    if ( ImplIsOverlapWindow() )
+        pOldOverlapWindow = NULL;
+    else
+    {
+        pNewOverlapWindow = pNewParent->ImplGetFirstOverlapWindow();
+        if ( mpWindowImpl->mpOverlapWindow != pNewOverlapWindow )
+            pOldOverlapWindow = mpWindowImpl->mpOverlapWindow;
+        else
+            pOldOverlapWindow = NULL;
+    }
+
+    // convert windows in the hierarchy
+    bool bFocusOverlapWin = HasChildPathFocus( true );
+    bool bFocusWin = HasChildPathFocus();
+    bool bNewFrame = pNewParent->mpWindowImpl->mpFrameWindow != mpWindowImpl->mpFrameWindow;
+    if ( bNewFrame )
+    {
+        if ( mpWindowImpl->mpFrameData->mpFocusWin )
+        {
+            if ( IsWindowOrChild( mpWindowImpl->mpFrameData->mpFocusWin ) )
+                mpWindowImpl->mpFrameData->mpFocusWin = NULL;
+        }
+        if ( mpWindowImpl->mpFrameData->mpMouseMoveWin )
+        {
+            if ( IsWindowOrChild( mpWindowImpl->mpFrameData->mpMouseMoveWin ) )
+                mpWindowImpl->mpFrameData->mpMouseMoveWin = NULL;
+        }
+        if ( mpWindowImpl->mpFrameData->mpMouseDownWin )
+        {
+            if ( IsWindowOrChild( mpWindowImpl->mpFrameData->mpMouseDownWin ) )
+                mpWindowImpl->mpFrameData->mpMouseDownWin = NULL;
+        }
+    }
+    ImplRemoveWindow( bNewFrame );
+    ImplInsertWindow( pNewParent );
+    if ( mpWindowImpl->mnParentClipMode & PARENTCLIPMODE_CLIP )
+        pNewParent->mpWindowImpl->mbClipChildren = true;
+    ImplUpdateWindowPtr();
+    if ( ImplUpdatePos() )
+        ImplUpdateSysObjPos();
+
+    // If the Overlap-Window has changed, we need to test whether
+    // OverlapWindows that had the Child window as their parent
+    // need to be put into the window hierarchy.
+    if ( ImplIsOverlapWindow() )
+    {
+        if ( bNewFrame )
+        {
+            Window* pOverlapWindow = mpWindowImpl->mpFirstOverlap;
+            while ( pOverlapWindow )
+            {
+                Window* pNextOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
+                pOverlapWindow->ImplUpdateOverlapWindowPtr( bNewFrame );
+                pOverlapWindow = pNextOverlapWindow;
+            }
+        }
+    }
+    else if ( pOldOverlapWindow )
+    {
+        // reset Focus-Save
+        if ( bFocusWin ||
+             (pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow &&
+              IsWindowOrChild( pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow )) )
+            pOldOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
+
+        Window* pOverlapWindow = pOldOverlapWindow->mpWindowImpl->mpFirstOverlap;
+        while ( pOverlapWindow )
+        {
+            Window* pNextOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
+            if ( ImplIsRealParentPath( pOverlapWindow->ImplGetWindow() ) )
+                pOverlapWindow->ImplUpdateOverlapWindowPtr( bNewFrame );
+            pOverlapWindow = pNextOverlapWindow;
+        }
+
+        // update activate-status at next overlap window
+        if ( HasChildPathFocus( true ) )
+            ImplCallFocusChangeActivate( pNewOverlapWindow, pOldOverlapWindow );
+    }
+
+    // also convert Activate-Status
+    if ( bNewFrame )
+    {
+        if ( (GetType() == WINDOW_BORDERWINDOW) &&
+             (ImplGetWindow()->GetType() == WINDOW_FLOATINGWINDOW) )
+            ((ImplBorderWindow*)this)->SetDisplayActive( mpWindowImpl->mpFrameData->mbHasFocus );
+    }
+
+    // when required give focus to new frame if
+    // FocusWindow is changed with SetParent()
+    if ( bFocusOverlapWin )
+    {
+        mpWindowImpl->mpFrameData->mpFocusWin = Application::GetFocusWindow();
+        if ( !mpWindowImpl->mpFrameData->mbHasFocus )
+        {
+            mpWindowImpl->mpFrame->ToTop( 0 );
+        }
+    }
+
+    // Assure DragSource and DropTarget members are created
+    if ( bNewFrame )
+    {
+            GetDropTarget();
+    }
+
+    if( bChangeTaskPaneList )
+        pNewSysWin->GetTaskPaneList()->AddWindow( this );
+
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+        ImplGetOwnerDrawList().push_back( this );
+
+    if ( bVisible )
+        Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+}
+
+sal_uInt16 Window::GetChildCount() const
+{
+
+    sal_uInt16  nChildCount = 0;
+    Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
+    {
+        nChildCount++;
+        pChild = pChild->mpWindowImpl->mpNext;
+    }
+
+    return nChildCount;
+}
+
+Window* Window::GetChild( sal_uInt16 nChild ) const
+{
+
+    sal_uInt16  nChildCount = 0;
+    Window* pChild = mpWindowImpl->mpFirstChild;
+    while ( pChild )
+    {
+        if ( nChild == nChildCount )
+            return pChild;
+        pChild = pChild->mpWindowImpl->mpNext;
+        nChildCount++;
+    }
+
+    return NULL;
+}
+
+Window* Window::GetWindow( sal_uInt16 nType ) const
+{
+
+    switch ( nType )
+    {
+        case WINDOW_PARENT:
+            return mpWindowImpl->mpRealParent;
+
+        case WINDOW_FIRSTCHILD:
+            return mpWindowImpl->mpFirstChild;
+
+        case WINDOW_LASTCHILD:
+            return mpWindowImpl->mpLastChild;
+
+        case WINDOW_PREV:
+            return mpWindowImpl->mpPrev;
+
+        case WINDOW_NEXT:
+            return mpWindowImpl->mpNext;
+
+        case WINDOW_FIRSTOVERLAP:
+            return mpWindowImpl->mpFirstOverlap;
+
+        case WINDOW_LASTOVERLAP:
+            return mpWindowImpl->mpLastOverlap;
+
+        case WINDOW_OVERLAP:
+            if ( ImplIsOverlapWindow() )
+                return (Window*)this;
+            else
+                return mpWindowImpl->mpOverlapWindow;
+
+        case WINDOW_PARENTOVERLAP:
+            if ( ImplIsOverlapWindow() )
+                return mpWindowImpl->mpOverlapWindow;
+            else
+                return mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpOverlapWindow;
+
+        case WINDOW_CLIENT:
+            return ((Window*)this)->ImplGetWindow();
+
+        case WINDOW_REALPARENT:
+            return ImplGetParent();
+
+        case WINDOW_FRAME:
+            return mpWindowImpl->mpFrameWindow;
+
+        case WINDOW_BORDER:
+            if ( mpWindowImpl->mpBorderWindow )
+                return mpWindowImpl->mpBorderWindow->GetWindow( WINDOW_BORDER );
+            return (Window*)this;
+
+        case WINDOW_FIRSTTOPWINDOWCHILD:
+            return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : *ImplGetWinData()->maTopWindowChildren.begin();
+
+        case WINDOW_LASTTOPWINDOWCHILD:
+            return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : *ImplGetWinData()->maTopWindowChildren.rbegin();
+
+        case WINDOW_PREVTOPWINDOWSIBLING:
+        {
+            if ( !mpWindowImpl->mpRealParent )
+                return NULL;
+            const ::std::list< Window* >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
+            ::std::list< Window* >::const_iterator myPos =
+                ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
+            if ( myPos == rTopWindows.end() )
+                return NULL;
+            if ( myPos == rTopWindows.begin() )
+                return NULL;
+            return *--myPos;
+        }
+
+        case WINDOW_NEXTTOPWINDOWSIBLING:
+        {
+            if ( !mpWindowImpl->mpRealParent )
+                return NULL;
+            const ::std::list< Window* >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
+            ::std::list< Window* >::const_iterator myPos =
+                ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
+            if ( ( myPos == rTopWindows.end() ) || ( ++myPos == rTopWindows.end() ) )
+                return NULL;
+            return *myPos;
+        }
+
+    }
+
+    return NULL;
+}
+
+bool Window::IsChild( const Window* pWindow, bool bSystemWindow ) const
+{
+
+    do
+    {
+        if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
+            break;
+
+        pWindow = pWindow->ImplGetParent();
+
+        if ( pWindow == this )
+            return true;
+    }
+    while ( pWindow );
+
+    return false;
+}
+
+bool Window::IsWindowOrChild( const Window* pWindow, bool bSystemWindow ) const
+{
+
+    if ( this == pWindow )
+        return true;
+    return ImplIsChild( pWindow, bSystemWindow );
+}
+
+const SystemEnvData* Window::GetSystemData() const
+{
+
+    return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : NULL;
+}
+
+::com::sun::star::uno::Any Window::GetSystemDataAny() const
+{
+    ::com::sun::star::uno::Any aRet;
+    const SystemEnvData* pSysData = GetSystemData();
+    if( pSysData )
+    {
+        ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)pSysData, pSysData->nSize );
+        aRet <<= aSeq;
+    }
+    return aRet;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
