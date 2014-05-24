@@ -479,7 +479,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     */
     if (mbTextBackground) {
         // set right background
-        Color aColor = COL_PINK;
+        Color aColor = COL_BLUE;
         // SetBackground does not work
         SetFillColor(aColor);
     }
