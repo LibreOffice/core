@@ -182,7 +182,7 @@ public:
               com::sun::star::io::XOutputStream > & rOutputStream,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment >& xEnv )
-        throw ( DAVException );
+        throw (css::uno::RuntimeException, DAVException);
 
     void
     MKCOL( const com::sun::star::uno::Reference<
