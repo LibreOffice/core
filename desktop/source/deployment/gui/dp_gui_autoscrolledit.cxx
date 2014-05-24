@@ -21,6 +21,7 @@
 #include "svl/lstner.hxx"
 #include "vcl/xtextedt.hxx"
 #include "vcl/scrbar.hxx"
+#include "vcl/builder.hxx"
 
 #include "dp_gui_autoscrolledit.hxx"
 
@@ -28,8 +29,8 @@
 namespace dp_gui {
 
 
-AutoScrollEdit::AutoScrollEdit( Window* pParent, const ResId& rResId )
-    : ExtMultiLineEdit( pParent, rResId )
+AutoScrollEdit::AutoScrollEdit( Window* pParent, WinBits nWinStyle )
+    : ExtMultiLineEdit( pParent, nWinStyle )
 {
     ScrollBar*  pScroll = GetVScrollBar();
     if (pScroll)
@@ -58,5 +59,10 @@ void AutoScrollEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 
 } // namespace dp_gui
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAutoScrollEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    return new dp_gui::AutoScrollEdit(pParent, WB_BORDER);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
