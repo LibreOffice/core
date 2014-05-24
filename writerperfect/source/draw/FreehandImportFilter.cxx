@@ -23,12 +23,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool FreehandImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
+bool FreehandImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
 {
     return libfreehand::FreeHandDocument::parse(&rInput, &rGenerator);
 }
 
-bool FreehandImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool FreehandImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     if (libfreehand::FreeHandDocument::isSupported(&rInput))
     {

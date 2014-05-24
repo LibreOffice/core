@@ -1,0 +1,87 @@
+From e9362c25b772c2cfb657b1234d8b636669a1b01b Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Mon, 26 May 2014 16:33:00 +0200
+Subject: [PATCH] blind attempt to workaround MSVC bug
+
+http://msdn.microsoft.com/en-us/library/27zksbks.aspx
+---
+ src/lib/EBOOKDocument.cpp | 49 ++++++++++++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 20 deletions(-)
+
+diff --git a/src/lib/EBOOKDocument.cpp b/src/lib/EBOOKDocument.cpp
+index ea1a223..5b8e7ec 100644
+--- a/src/lib/EBOOKDocument.cpp
++++ b/src/lib/EBOOKDocument.cpp
+@@ -173,6 +173,15 @@ catch (...)
+   return EBOOKDocument::TYPE_UNKNOWN;
+ }
+ 
++extern "C"
++{
++
++  void detectInternalSubset(void *const ctx, const xmlChar *const name, const xmlChar *, const xmlChar *);
++  void detectExternalSubset(void *const ctx, const xmlChar *const name, const xmlChar *, const xmlChar *);
++  void detectStartElement(void *const ctx, const xmlChar *const name, const xmlChar **);
++
++}
++
+ struct HTMLContext
+ {
+   xmlSAXHandler handler;
+@@ -196,26 +205,6 @@ void detectHTMLContent(void *const ctx, const xmlChar *const name)
+   context->html = EBOOKHTMLToken::html == getHTMLTokenId(char_cast(name));
+ }
+ 
+-extern "C"
+-{
+-
+-  void detectInternalSubset(void *const ctx, const xmlChar *const name, const xmlChar *, const xmlChar *)
+-  {
+-    detectHTMLContent(ctx, name);
+-  }
+-
+-  void detectExternalSubset(void *const ctx, const xmlChar *const name, const xmlChar *, const xmlChar *)
+-  {
+-    detectHTMLContent(ctx, name);
+-  }
+-
+-  void detectStartElement(void *const ctx, const xmlChar *const name, const xmlChar **)
+-  {
+-    detectHTMLContent(ctx, name);
+-  }
+-
+-}
+-
+ HTMLContext::HTMLContext()
+   : handler()
+   , detected(false)
+@@ -250,6 +239,26 @@ catch (...)
+   return false;
+ }
+ 
++extern "C"
++{
++
++  void detectInternalSubset(void *const ctx, const xmlChar *const name, const xmlChar *, const xmlChar *)
++  {
++    detectHTMLContent(ctx, name);
++  }
++
++  void detectExternalSubset(void *const ctx, const xmlChar *const name, const xmlChar *, const xmlChar *)
++  {
++    detectHTMLContent(ctx, name);
++  }
++
++  void detectStartElement(void *const ctx, const xmlChar *const name, const xmlChar **)
++  {
++    detectHTMLContent(ctx, name);
++  }
++
++}
++
+ template<class Parser>
+ bool probe(const RVNGInputStreamPtr_t &input, const EBOOKDocument::Type type, EBOOKDocument::Type *const typeOut, EBOOKDocument::Confidence &confidence) try
+ {
+-- 
+1.9.0
+

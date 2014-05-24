@@ -39,11 +39,11 @@ void DocumentHandler::endDocument()
     mxHandler->endDocument();
 }
 
-void DocumentHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
+void DocumentHandler::startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList)
 {
     SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
     Reference < XAttributeList > xAttrList(pAttrList);
-    WPXPropertyList::Iter i(xPropList);
+    librevenge::RVNGPropertyList::Iter i(xPropList);
     for (i.rewind(); i.next(); )
     {
         // filter out libwpd elements
@@ -65,7 +65,7 @@ void DocumentHandler::endElement(const char *psName)
     mxHandler->endElement(sElementName);
 }
 
-void DocumentHandler::characters(const WPXString &sCharacters)
+void DocumentHandler::characters(const librevenge::RVNGString &sCharacters)
 {
     OUString sCharU16(sCharacters.cstr(), strlen(sCharacters.cstr()), RTL_TEXTENCODING_UTF8);
     mxHandler->characters(sCharU16);
