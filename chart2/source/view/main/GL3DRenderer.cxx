@@ -23,8 +23,6 @@
 
 #define DEBUG_FBO 0
 
-#define GL_PI 3.14159f
-
 using namespace com::sun::star;
 
 namespace chart {
@@ -88,12 +86,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
 
     GetFreq();
     m_RoundBarMesh.iMeshSizes = 0;
-    m_SenceBox.maxXCoord = -1.0 * FLT_MAX;
-    m_SenceBox.minXCoord = FLT_MAX;
-    m_SenceBox.maxYCoord =  -1.0 * FLT_MAX;
-    m_SenceBox.minYCoord = FLT_MAX;
-    m_SenceBox.maxZCoord =  -1.0 * FLT_MAX;
-    m_SenceBox.minZCoord = FLT_MAX;
 }
 
 OpenGL3DRenderer::~OpenGL3DRenderer()
@@ -958,12 +950,6 @@ void OpenGL3DRenderer::AddPolygon3DObjectPoint(float x, float y, float z)
     float actualY = y;
     float actualZ = z;
     m_Polygon3DInfo.vertices->push_back(glm::vec3(actualX, actualY, actualZ));
-    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, actualX);
-    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, actualX);
-    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, actualY);
-    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, actualY);
-    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, actualZ);
-    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, actualZ);
 }
 
 void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
@@ -1017,12 +1003,6 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
         m_Normals.clear();
         m_Indeices.clear();
     }
-    m_SenceBox.maxXCoord = std::max(m_SenceBox.maxXCoord, m_Extrude3DInfo.xTransform + m_Extrude3DInfo.xScale);
-    m_SenceBox.minXCoord = std::min(m_SenceBox.minXCoord, m_Extrude3DInfo.xTransform);
-    m_SenceBox.maxYCoord = std::max(m_SenceBox.maxYCoord, m_Extrude3DInfo.yTransform + m_Extrude3DInfo.yScale);
-    m_SenceBox.minYCoord = std::min(m_SenceBox.minYCoord, m_Extrude3DInfo.yTransform );
-    m_SenceBox.maxZCoord = std::max(m_SenceBox.maxZCoord, m_Extrude3DInfo.zTransform + m_Extrude3DInfo.zScale);
-    m_SenceBox.minZCoord = std::min(m_SenceBox.minZCoord, m_Extrude3DInfo.zTransform);
 }
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
@@ -1531,38 +1511,16 @@ void OpenGL3DRenderer::RenderClickPos(Point aMPos)
 
 void OpenGL3DRenderer::CreateSceneBoxView()
 {
-//original code start
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos,
                m_CameraInfo.cameraOrg,
                m_CameraInfo.cameraUp);
-//original code end
-    float senceBoxWidth = m_SenceBox.maxXCoord - m_SenceBox.minXCoord;
-    float senceBoxHeight = m_SenceBox.maxZCoord - m_SenceBox.minZCoord;
-    float senceBoxDepth = m_SenceBox.maxYCoord - m_SenceBox.minYCoord;
-    float distanceY = m_SenceBox.maxYCoord + senceBoxWidth / 2 / tan(m_fViewAngle / 2 * GL_PI / 180.0f);
-    float veriticalAngle = atan((float)m_iHeight / (float)m_iWidth);
-    float distance = distanceY / cos(veriticalAngle);
-    float horizontalAngle = 0;
-    m_fHeightWeight = senceBoxWidth * (float)m_iHeight / (float)m_iWidth / senceBoxHeight;
-    m_SenceBox.maxZCoord *= m_fHeightWeight;
-    m_SenceBox.minZCoord *= m_fHeightWeight;
-    m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
-                                       m_SenceBox.minYCoord + senceBoxDepth / 2,
-                                       m_SenceBox.minZCoord + senceBoxHeight * m_fHeightWeight/ 2);    //update the camera position and org
-    m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
-    m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * cos(veriticalAngle) * cos(horizontalAngle);
-    m_CameraInfo.cameraPos.z = m_CameraInfo.cameraOrg.z + distance * sin(veriticalAngle);
-    m_3DView = glm::lookAt(m_CameraInfo.cameraPos,
-                            m_CameraInfo.cameraOrg,
-                            m_CameraInfo.cameraUp
-                            );
 }
 
 void OpenGL3DRenderer::ProcessUnrenderedShape()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
     glClearDepth(1.0f);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(1.0, 0.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CreateSceneBoxView();
     //Polygon
