@@ -3111,19 +3111,6 @@ void Window::GrabFocus()
 
 bool Window::HasFocus() const
 {
-
-    // #107575# the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
-    //  task was shifted to 6.y, so its commented out
-    /*
-    Window* pFocusWin = ImplGetSVData()->maWinData.mpFirstFloat;
-    if( pFocusWin && pFocusWin->mpWindowImpl->mbFloatWin && ((FloatingWindow *)pFocusWin)->GrabsFocus() )
-        pFocusWin = pFocusWin->GetPreferredKeyInputWindow();
-    else
-        pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
-
-    return (this == pFocusWin);
-    */
-
     return (this == ImplGetSVData()->maWinData.mpFocusWin);
 }
 
