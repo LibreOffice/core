@@ -33,63 +33,6 @@ TabDialog RID_SVX_TABDLG_DOCRECOVERY
     Text = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
-TabPage RID_SVXPAGE_DOCRECOVERY_SAVE
-{
-    Size = MAP_APPFONT( SAVE_WIDTH, SAVE_HEIGHT );
-    HelpId = HID_SVX_TP_DOCRECOVERY_SAVE;
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Hide = TRUE;
-    Window WIN_SAVE_TITLE
-    {
-        Pos = MAP_APPFONT( 0 , 0 );
-        Size = MAP_APPFONT( SAVE_WIDTH, SAVE_ROW1 );
-    };
-    FixedText FT_SAVE_TITLE
-    {
-        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW0 );
-        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text[ en-US ] = "%PRODUCTNAME Document Recovery";
-    };
-    FixedLine FL_SAVE_TITLE
-    {
-        Pos = MAP_APPFONT( 0 , SAVE_ROW1 );
-        Size = MAP_APPFONT( SAVE_WIDTH, 2 );
-    };
-    FixedText FT_SAVE_DESCR
-    {
-        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW2 );
-        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, (SAVE_ROW3-SAVE_ROW2-RSC_SP_CTRL_DESC_Y) );
-        WordBreak = TRUE;
-        Text[ en-US ] = "Due to an unexpected error, %PRODUCTNAME crashed. All the files you were working on will now be saved. The next time %PRODUCTNAME is launched, your files will be recovered automatically.";
-    };
-    FixedText FT_SAVE_FILELIST
-    {
-        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW3 );
-        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text[ en-US ] = "The following files will be recovered:";
-    };
-    ListBox LB_SAVE_FILELIST
-    {
-        HelpID = "svx:ListBox:RID_SVXPAGE_DOCRECOVERY_SAVE:LB_SAVE_FILELIST";
-        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW4 );
-        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, SAVE_FILELISTHEIGHT );
-        Border = TRUE;
-        TabStop = TRUE;
-    };
-    FixedLine FL_SAVE_BOTTOM
-    {
-        Pos = MAP_APPFONT( 0 , SAVE_ROW7 );
-        Size = MAP_APPFONT( SAVE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-    };
-    OKButton BT_SAVE_OK
-    {
-        Pos = MAP_APPFONT( SAVE_COL1 , SAVE_ROW8 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        DefButton = TRUE;
-    };
-};
-
 ModalDialog RID_SVX_MDLG_DOCRECOVERY_PROGR
 {
     Size = MAP_APPFONT( SAVEPROGR_WIDTH, SAVEPROGR_HEIGHT );
