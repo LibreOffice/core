@@ -638,7 +638,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     const OUString & rReferer,
     const uno::Reference< io::XInputStream > & rInputStream,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-  throw ( DAVException )
+  throw (css::uno::RuntimeException, DAVException)
 {
     initialize();
 
