@@ -237,19 +237,19 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_uInt32      *pYRelTo;
     sal_uInt32      nLayoutInTableCell;
     sal_uInt32      nFlags;
-    long            nTextRotationAngle;
-    long            nDxTextLeft;    ///< distance of text box from surrounding shape
-    long            nDyTextTop;
-    long            nDxTextRight;
-    long            nDyTextBottom;
-    long            nDxWrapDistLeft;
-    long            nDyWrapDistTop;
-    long            nDxWrapDistRight;
-    long            nDyWrapDistBottom;
-    long            nCropFromTop;
-    long            nCropFromBottom;
-    long            nCropFromLeft;
-    long            nCropFromRight;
+    sal_Int32       nTextRotationAngle;
+    sal_Int32       nDxTextLeft;    ///< distance of text box from surrounding shape
+    sal_Int32       nDyTextTop;
+    sal_Int32       nDxTextRight;
+    sal_Int32       nDyTextBottom;
+    sal_Int32       nDxWrapDistLeft;
+    sal_Int32       nDyWrapDistTop;
+    sal_Int32       nDxWrapDistRight;
+    sal_Int32       nDyWrapDistBottom;
+    sal_Int32       nCropFromTop;
+    sal_Int32       nCropFromBottom;
+    sal_Int32       nCropFromLeft;
+    sal_Int32       nCropFromRight;
     MSDffTxId       aTextId;        ///< identifier for text boxes
     sal_uLong       nNextShapeId;   ///< for linked text boxes
     sal_uLong       nShapeId;
