@@ -115,7 +115,7 @@ PopupMenu* MenuConfiguration::CreateBookmarkMenu(css::uno::Reference<css::frame:
 void MenuConfiguration::StoreMenuBarConfigurationToXML(
     Reference< XIndexAccess >& rMenuBarConfiguration,
     Reference< XOutputStream >& rOutputStream )
-throw ( WrappedTargetException )
+    throw (WrappedTargetException, RuntimeException)
 {
     Reference< XWriter > xWriter = Writer::create(m_xContext);
     xWriter->setOutputStream( rOutputStream );
