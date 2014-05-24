@@ -19,6 +19,8 @@
 
 #include <libodfgen/libodfgen.hxx>
 
+#include <libwpg/libwpg.h>
+
 #include "WPGImportFilter.hxx"
 
 using com::sun::star::uno::Reference;
@@ -28,12 +30,12 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool WPGImportFilter::doImportDocument( WPXInputStream &rInput, libwpg::WPGPaintInterface &rGenerator )
+bool WPGImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator )
 {
     return libwpg::WPGraphics::parse(&rInput, &rGenerator);
 }
 
-bool WPGImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool WPGImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     if (libwpg::WPGraphics::isSupported(&rInput))
     {

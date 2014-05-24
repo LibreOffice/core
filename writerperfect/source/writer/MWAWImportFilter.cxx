@@ -24,18 +24,19 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 
-static bool handleEmbeddedMWAWObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedMWAWObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
-    OdgGenerator exporter(pHandler, streamType);
+    OdgGenerator exporter;
+    exporter.addDocumentHandler(pHandler, streamType);
     return MWAWDocument::decodeGraphic(data, &exporter);
 }
 
-bool MWAWImportFilter::doImportDocument( WPXInputStream &rInput, const rtl::OUString &, WPXDocumentInterface &rGenerator )
+bool MWAWImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
 {
     return MWAWDocument::MWAW_R_OK == MWAWDocument::parse(&rInput, &rGenerator);
 }
 
-bool MWAWImportFilter::doDetectFormat( WPXInputStream &rInput, OUString &rTypeName )
+bool MWAWImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName )
 {
     rTypeName = "";
 
