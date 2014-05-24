@@ -107,9 +107,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
             vector< OUString > currentQuery;
             OUString tmp(query.copy( 0,idx ));
-            rtl:: OUString toliterate = tmp;
             Sequence<sal_Int32> aSeq;
-            toliterate = xTrans->transliterate(
+            OUString toliterate = xTrans->transliterate(
                 tmp,0,tmp.getLength(),aSeq);
 
             currentQuery.push_back( toliterate );
