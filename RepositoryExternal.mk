@@ -1720,15 +1720,20 @@ endef
 
 else # !SYSTEM_ODFGEN
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	libodfgen \
+))
+
 define gb_LinkTarget__use_odfgen
+$(call gb_LinkTarget_use_package,$(1),libodfgen)
+
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libodfgen)/inc \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libodfgen)/src/.libs/libodfgen-0.0$(gb_StaticLibrary_PLAINEXT) \
+	-L$(call gb_UnpackedTarball_get_dir,libodfgen)/src/.libs -lodfgen-0.0 \
 )
-$(call gb_LinkTarget_use_external_project,$(1),libodfgen)
 
 endef
 
