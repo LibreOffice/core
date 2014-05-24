@@ -702,56 +702,61 @@ bool ScTable::SearchAndReplace(
     ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     sal_uInt16 nCommand = rSearchItem.GetCommand();
-    bool bFound = false;
-    if (isValidSearchPos(rCol, rRow, nCommand))
+
+    if (!isValidSearchPos(rCol, rRow, nCommand))
+        return false;
+
+    if (rSearchItem.GetPattern())
     {
-        bool bStyles = rSearchItem.GetPattern();
-        if (bStyles)
+        // Search and replace by styles.
+        switch (nCommand)
         {
-            if (nCommand == SVX_SEARCHCMD_FIND)
-                bFound = SearchStyle(rSearchItem, rCol, rRow, rMark);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE)
-                bFound = ReplaceStyle(rSearchItem, rCol, rRow, rMark, false);
-            else if (nCommand == SVX_SEARCHCMD_FIND_ALL)
-                bFound = SearchAllStyle(rSearchItem, rMark, rMatchedRanges);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
-                bFound = ReplaceAllStyle(rSearchItem, rMark, rMatchedRanges, pUndoDoc);
+            case SVX_SEARCHCMD_FIND:
+                return SearchStyle(rSearchItem, rCol, rRow, rMark);
+            case SVX_SEARCHCMD_REPLACE:
+                return ReplaceStyle(rSearchItem, rCol, rRow, rMark, false);
+            case SVX_SEARCHCMD_FIND_ALL:
+                return SearchAllStyle(rSearchItem, rMark, rMatchedRanges);
+            case SVX_SEARCHCMD_REPLACE_ALL:
+                return ReplaceAllStyle(rSearchItem, rMark, rMatchedRanges, pUndoDoc);
+            default:
+                ;
         }
-        else
-        {
-            //  SearchParam no longer needed - SearchOptions contains all settings
-            com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
-            aSearchOptions.Locale = *ScGlobal::GetLocale();
-
-            if (aSearchOptions.searchString.isEmpty())
-            {
-                // Search for empty cells.
-                return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-            }
-
-            //  reflect UseAsianOptions flag in SearchOptions
-            //  (use only ignore case and width if asian options are disabled).
-            //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
-            if ( !rSearchItem.IsUseAsianOptions() )
-                aSearchOptions.transliterateFlags &=
-                    ( com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
-                      com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
-
-            pSearchText = new utl::TextSearch( aSearchOptions );
-
-            if (nCommand == SVX_SEARCHCMD_FIND)
-                bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
-            else if (nCommand == SVX_SEARCHCMD_FIND_ALL)
-                bFound = SearchAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE)
-                bFound = Replace(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
-                bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-
-            delete pSearchText;
-            pSearchText = NULL;
-        }
+        return false;
     }
+
+    //  SearchParam no longer needed - SearchOptions contains all settings
+    com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
+    aSearchOptions.Locale = *ScGlobal::GetLocale();
+
+    if (aSearchOptions.searchString.isEmpty())
+    {
+        // Search for empty cells.
+        return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+    }
+
+    //  reflect UseAsianOptions flag in SearchOptions
+    //  (use only ignore case and width if asian options are disabled).
+    //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
+    if ( !rSearchItem.IsUseAsianOptions() )
+        aSearchOptions.transliterateFlags &=
+            ( com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
+              com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+
+    pSearchText = new utl::TextSearch( aSearchOptions );
+
+    bool bFound = false;
+    if (nCommand == SVX_SEARCHCMD_FIND)
+        bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
+    else if (nCommand == SVX_SEARCHCMD_FIND_ALL)
+        bFound = SearchAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+    else if (nCommand == SVX_SEARCHCMD_REPLACE)
+        bFound = Replace(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
+    else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+        bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+
+    delete pSearchText;
+    pSearchText = NULL;
     return bFound;
 }
 
