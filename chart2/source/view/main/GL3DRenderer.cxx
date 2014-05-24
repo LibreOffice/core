@@ -1547,7 +1547,7 @@ void OpenGL3DRenderer::CreateSceneBoxView()
     m_SenceBox.maxZCoord *= m_fHeightWeight;
     m_SenceBox.minZCoord *= m_fHeightWeight;
     m_CameraInfo.cameraOrg = glm::vec3(m_SenceBox.minXCoord + senceBoxWidth / 2,
-                                       m_SenceBox.minYCoord + senceBoxDepth * 2,
+                                       m_SenceBox.minYCoord + senceBoxDepth / 2,
                                        m_SenceBox.minZCoord + senceBoxHeight * m_fHeightWeight/ 2);    //update the camera position and org
     m_CameraInfo.cameraPos.x = m_CameraInfo.cameraOrg.x + distance * cos(veriticalAngle) * sin(horizontalAngle);
     m_CameraInfo.cameraPos.y = m_CameraInfo.cameraOrg.y + distance * cos(veriticalAngle) * cos(horizontalAngle);
