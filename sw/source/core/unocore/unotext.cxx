@@ -1362,7 +1362,8 @@ SwXText::insertTextPortion(
         const uno::Sequence< beans::PropertyValue > &
             rCharacterAndParagraphProperties,
         const uno::Reference<text::XTextRange>& xInsertPosition)
-throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+    throw (lang::IllegalArgumentException, beans::UnknownPropertyException,
+           uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
