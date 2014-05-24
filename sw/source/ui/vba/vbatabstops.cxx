@@ -110,7 +110,7 @@ SwVbaTabStops::SwVbaTabStops( const uno::Reference< XHelperInterface >& xParent,
 {
 }
 
-uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, const uno::Any& Alignment, const uno::Any& Leader ) throw (uno::RuntimeException, std::exception)
+uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, const uno::Any& Alignment, const uno::Any& Leader ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nPosition = Millimeter::getInHundredthsOfOneMillimeter( Position );
 
