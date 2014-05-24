@@ -1385,21 +1385,21 @@ void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vT
 
     TextInfo aTextInfo;
     aTextInfo.id = getColorAsVector(nUniqueId);
-    aTextInfo.vertex[0] = vBottomRight.x;
-    aTextInfo.vertex[1] = vBottomRight.y;
-    aTextInfo.vertex[2] = vBottomRight.z * m_fHeightWeight;
+    aTextInfo.vertex[0] = vTopLeft.x;
+    aTextInfo.vertex[1] = vTopLeft.y;
+    aTextInfo.vertex[2] = vTopLeft.z * m_fHeightWeight;
 
     aTextInfo.vertex[3] = vTopRight.x;
     aTextInfo.vertex[4] = vTopRight.y;
-    aTextInfo.vertex[5] = aTextInfo.vertex[2] + (vTopRight.z - vBottomRight.z);
+    aTextInfo.vertex[5] = vTopRight.z * m_fHeightWeight;
 
     aTextInfo.vertex[9] = vBottomLeft.x;
     aTextInfo.vertex[10] = vBottomLeft.y;
     aTextInfo.vertex[11] = vBottomLeft.z * m_fHeightWeight;
 
-    aTextInfo.vertex[6] = vTopLeft.x;
-    aTextInfo.vertex[7] = vTopLeft.y;
-    aTextInfo.vertex[8] = aTextInfo.vertex[11] + (vTopLeft.z - vBottomLeft.z);
+    aTextInfo.vertex[6] = vBottomRight.x;
+    aTextInfo.vertex[7] = vBottomRight.y;
+    aTextInfo.vertex[8] = vBottomRight.z * m_fHeightWeight;
 
     CHECK_GL_ERROR();
     glGenTextures(1, &aTextInfo.texture);
