@@ -280,9 +280,6 @@ private:
     void    impl_createEventAttacher_nothrow();
 };
 
-
-//= OFormComponents
-
 typedef ::cppu::ImplHelper1< ::com::sun::star::form::XFormComponent> OFormComponents_BASE;
 typedef ::cppu::OComponentHelper FormComponentsBase;
     // else MSVC kills itself on some statements

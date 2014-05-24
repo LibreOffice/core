@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-//= OCurrencyModel
-
 class OCurrencyModel
                 :public OEditBaseModel
 {
@@ -69,9 +65,6 @@ protected:
 
     void implConstruct();
 };
-
-
-//= OCurrencyControl
 
 class OCurrencyControl: public OBoundControl
 {

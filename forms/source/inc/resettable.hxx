@@ -33,10 +33,6 @@ namespace cppu
 namespace frm
 {
 
-
-
-    //= ResetHelper
-
     class ResetHelper
     {
     public:

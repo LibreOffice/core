@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "frm_resource.hxx"
 #include <tools/simplerm.hxx>
 
-// ---- needed as long as we have no contexts for components ---
+// needed as long as we have no contexts for components
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
 
 #include <svl/solar.hrc>
 

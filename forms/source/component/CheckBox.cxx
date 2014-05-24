@@ -41,11 +41,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-
-//= OCheckBoxControl
-
-
-
 OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CHECKBOX)
 {

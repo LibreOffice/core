@@ -30,10 +30,7 @@
 namespace xforms
 {
 
-
     class OXSDDataType;
-
-    //= ODataTypeRepository
 
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::xforms::XDataTypeRepository
                                     >   ODataTypeRepository_Base;

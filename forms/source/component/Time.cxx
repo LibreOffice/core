@@ -47,11 +47,6 @@ using namespace ::com::sun::star::lang;
 
 //=
 
-
-
-//= OTimeControl
-
-
 OTimeControl::OTimeControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_TIMEFIELD)
 {

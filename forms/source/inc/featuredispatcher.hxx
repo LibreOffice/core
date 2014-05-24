@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-    //= IFeatureDispatcher
-
     class IFeatureDispatcher
     {
     public:

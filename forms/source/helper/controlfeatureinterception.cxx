@@ -30,10 +30,6 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
 
-
-    //= ControlFeatureInterception
-
-
     ControlFeatureInterception::ControlFeatureInterception( const Reference< XComponentContext >& _rxORB )
         :m_pUrlTransformer( new UrlTransformer( _rxORB ) )
     {

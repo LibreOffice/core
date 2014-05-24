@@ -75,10 +75,6 @@ namespace frm
     }   \
     return aReturn;
 
-
-    // ORichTextControl
-
-
     ORichTextControl::ORichTextControl()
         :UnoEditControl()
     {

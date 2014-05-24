@@ -33,10 +33,6 @@ namespace cppu {
 namespace frm
 {
 
-
-
-    //= FontControlModel
-
     class FontControlModel
     {
     private:

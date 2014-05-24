@@ -40,10 +40,6 @@ namespace frm
 
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
-
-// OPatternControl
-
-
 OPatternControl::OPatternControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_PATTERNFIELD)
 {

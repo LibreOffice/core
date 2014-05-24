@@ -30,10 +30,6 @@
 namespace frm
 {
 
-
-
-//= OPatternModel
-
 class OPatternModel
                 :public OEditBaseModel
 {
@@ -75,9 +71,6 @@ protected:
 protected:
     DECLARE_XCLONEABLE();
 };
-
-
-//= OPatternControl
 
 class OPatternControl: public OBoundControl
 {

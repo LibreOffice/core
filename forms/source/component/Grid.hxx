@@ -35,12 +35,7 @@
 namespace frm
 {
 
-
 class OGridColumn;
-
-
-// ColumnDescription
-
 
     struct ColumnDescription : public ElementDescription
     {

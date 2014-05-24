@@ -29,10 +29,6 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
 
-
-    //= ORichTextFeatureDispatcher
-
-
     ORichTextFeatureDispatcher::ORichTextFeatureDispatcher( EditView& _rView, const URL&  _rURL )
         :m_aFeatureURL( _rURL )
         ,m_aStatusListeners( m_aMutex )

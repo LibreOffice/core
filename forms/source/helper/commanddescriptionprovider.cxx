@@ -52,9 +52,6 @@ namespace frm
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::frame::theUICommandDescription;
 
-
-    //= DefaultCommandDescriptionProvider
-
     class DefaultCommandDescriptionProvider : public ICommandDescriptionProvider
     {
     public:

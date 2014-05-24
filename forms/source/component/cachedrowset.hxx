@@ -31,10 +31,7 @@
 namespace frm
 {
 
-
     struct CachedRowSet_Data;
-
-    //= CachedRowSet
 
     /** caches a result set obtained from a SQL statement
     */

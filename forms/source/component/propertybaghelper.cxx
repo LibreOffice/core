@@ -70,10 +70,6 @@ namespace frm
         }
     }
 
-
-    //= PropertyBagHelper
-
-
     PropertyBagHelper::PropertyBagHelper( IPropertyBagHelperContext& _rContext )
         :m_rContext( _rContext )
         ,m_pPropertyArrayHelper( NULL )

@@ -27,10 +27,6 @@
 namespace frm
 {
 
-
-
-//= OTimeModel
-
 class OTimeModel
                 :public OEditBaseModel
                 ,public OLimitedFormats
@@ -99,9 +95,6 @@ private:
     void                    impl_translateControlValueToUNOTime(
                                 ::com::sun::star::uno::Any& _rUNOValue ) const;
 };
-
-
-//= OTimeControl
 
 class OTimeControl: public OBoundControl
 {

@@ -26,9 +26,6 @@
 namespace frm
 {
 
-
-//= OCheckBoxModel
-
 class OCheckBoxModel    :public OReferenceValueComponent
 {
 protected:
@@ -62,9 +59,6 @@ protected:
                             translateDbColumnToControlValue( ) SAL_OVERRIDE;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 };
-
-
-//= OCheckBoxControl
 
 class OCheckBoxControl : public OBoundControl
 {

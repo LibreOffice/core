@@ -74,12 +74,6 @@ protected:
     }
 };
 
-
-
-
-// SubmissionCollection
-
-
 class SubmissionCollection : public NamedCollection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >
 {
     Model* mpModel;
@@ -107,11 +101,6 @@ protected:
         Submission::getSubmission( t )->setModel( com::sun::star::uno::Reference<com::sun::star::xforms::XModel>( ) );
     }
 };
-
-
-
-// InstanceCollection
-
 
 class InstanceCollection : public Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >
 {

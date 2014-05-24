@@ -27,10 +27,6 @@ class SfxPoolItem;
 namespace frm
 {
 
-
-
-    //= OParametrizedAttributeDispatcher
-
     class OParametrizedAttributeDispatcher  :public OAttributeDispatcher
     {
     public:

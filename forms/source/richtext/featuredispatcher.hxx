@@ -31,10 +31,6 @@ class EditView;
 namespace frm
 {
 
-
-
-    //= ORichTextFeatureDispatcher
-
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XDispatch
                                     >   ORichTextFeatureDispatcher_Base;
 

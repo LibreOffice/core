@@ -28,10 +28,6 @@
 namespace frm
 {
 
-
-
-    //= EventListeners
-
     template < class LISTENER >
     class EventListeners : public ::comphelper::OListenerContainerBase< LISTENER, ::com::sun::star::lang::EventObject >
     {
@@ -76,9 +72,6 @@ namespace frm
         using EventListeners_Base::notify;
         using EventListeners_Base::disposing;
     };
-
-
-    //= ResetListeners
 
     typedef EventListeners  <   ::com::sun::star::form::XResetListener
                             >   ResetListeners_Base;

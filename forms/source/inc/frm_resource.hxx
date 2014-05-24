@@ -29,14 +29,10 @@ namespace frm
 
 #define FRM_RES_STRING(id) ResourceManager::loadString(id)
 
-
-    //= ResourceManager
-    //= handling resources within the FormLayer library
-
+    // handling resources within the FormLayer library
     class ResourceManager
     {
         static SimpleResMgr*    m_pImpl;
-
     private:
         // no instantiation allowed
         ResourceManager() { }

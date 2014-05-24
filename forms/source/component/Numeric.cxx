@@ -38,11 +38,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-
-// ONumericControl
-
-
-
 ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_NUMERICFIELD)
 {

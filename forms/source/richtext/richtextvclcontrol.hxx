@@ -34,11 +34,8 @@ class SfxItemSet;
 namespace frm
 {
 
-
     class RichTextControlImpl;
     class RichTextEngine;
-
-    //= RichTextControl
 
     class RichTextControl : public Control, public IMultiAttributeDispatcher
     {

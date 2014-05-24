@@ -26,10 +26,6 @@
 namespace frm
 {
 
-
-
-    //= OSelectAllDispatcher
-
     class OSelectAllDispatcher : public ORichTextFeatureDispatcher
     {
     public:
@@ -47,9 +43,6 @@ namespace frm
         virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
-
-    //= OParagraphDirectionDispatcher
-
     class OParagraphDirectionDispatcher : public OAttributeDispatcher
     {
     public:
@@ -65,9 +58,6 @@ namespace frm
         virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
-
-    //= OTextDirectionDispatcher
-
     class OTextDirectionDispatcher : public ORichTextFeatureDispatcher
     {
     public:
@@ -80,9 +70,6 @@ namespace frm
         // ORichTextFeatureDispatcher
         virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
-
-
-    //= OAsianFontLayoutDispatcher
 
     class OAsianFontLayoutDispatcher : public OParametrizedAttributeDispatcher
     {

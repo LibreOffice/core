@@ -41,9 +41,6 @@ namespace frm
 {
 
 
-// ***************************************************************************************************
-// ***************************************************************************************************
-
 typedef ::osl::Thread   OComponentEventThread_TBASE;
 class OComponentEventThread
             :public OComponentEventThread_TBASE

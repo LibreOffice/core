@@ -30,10 +30,6 @@ class EditStatus;
 namespace frm
 {
 
-
-
-    //= IEngineStatusListener
-
     class IEngineStatusListener
     {
     public:
@@ -42,9 +38,6 @@ namespace frm
     protected:
         ~IEngineStatusListener() {}
     };
-
-
-    //= RichTextEngine
 
     class RichTextEngine : public EditEngine
     {

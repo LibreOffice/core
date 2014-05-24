@@ -334,7 +334,6 @@ sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException, std::excep
     return m_xControl.is() ? m_xControl->isTransparent() : sal_True;
 }
 
-// OBoundControl
 OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
             const OUString& _rAggregateService, const bool _bSetDelegator )
     :OControl( _rxContext, _rAggregateService, _bSetDelegator )

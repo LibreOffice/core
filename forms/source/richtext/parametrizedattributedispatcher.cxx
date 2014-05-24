@@ -38,10 +38,6 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-
-    //= OParametrizedAttributeDispatcher
-
-
     OParametrizedAttributeDispatcher::OParametrizedAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL, IMultiAttributeDispatcher* _pMasterDispatcher )
         :OAttributeDispatcher( _rView, _nAttributeId, _rURL, _pMasterDispatcher )
     {
