@@ -1,0 +1,3 @@
+From [http://sourceforge.net/p/libwpd/wiki/librevenge/]. A base library
+for writing document import filters. It has interfaces for text documents,
+vector graphics, spreadsheets and presentations.
