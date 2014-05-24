@@ -1,0 +1,12 @@
+--- libgltf/src/RenderScene.h
++++ libgltf/src/RenderScene.h
+@@ -16,7 +16,8 @@
+ #include "FPSCounter.h"
+ #include "Timer.h"
+ 
+-#define OPENMPENABLE   1
++// Needs a configure / etc. detection to see if omp.h is on the system ...
++#define OPENMPENABLE   0
+ #if OPENMPENABLE
+ #include <omp.h>
+ #define WAVESIZE 4
