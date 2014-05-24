@@ -22,6 +22,7 @@
 
 #include <vcl/sysdata.hxx>
 #include <salframe.hxx>
+#include <svsys.h>
 
 class WinSalGraphics;
 
