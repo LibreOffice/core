@@ -35,7 +35,7 @@ protected:
     // Creating a SdrObject based on a Description. Cann be used by derived classes to
     // support own ::com::sun::star::drawing::Shapes (for example Controls)
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )
-        throw (std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // The following method is called when a SvxShape object should be created.
     // Derived classes can create a derivation or an object aggregating SvxShape.
