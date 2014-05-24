@@ -65,6 +65,18 @@ void OpenGLWindow::MouseButtonDown( const MouseEvent& rMEvt )
         mpRenderer->clickedAt(aPoint);
 }
 
+void OpenGLWindow::MouseButtonUp( const MouseEvent& /* rMEvt */ )
+{
+    // in case we need to track button state ourselves.
+}
+
+void OpenGLWindow::MouseMove( const MouseEvent& rMEvt )
+{
+    if(rMEvt.GetButtons())
+        mpRenderer->mouseDragMove(rMEvt.GetPosPixel(),
+                                  rMEvt.GetButtons());
+}
+
 void OpenGLWindow::setRenderer(IRenderer* pRenderer)
 {
     mpRenderer = pRenderer;
