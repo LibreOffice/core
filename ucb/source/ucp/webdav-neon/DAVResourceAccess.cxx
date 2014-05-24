@@ -589,7 +589,7 @@ namespace {
 void DAVResourceAccess::PUT(
     const uno::Reference< io::XInputStream > & rStream,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
+  throw (css::uno::RuntimeException, DAVException)
 {
     initialize();
 

@@ -162,7 +162,7 @@ public:
              com::sun::star::io::XInputStream > & rStream,
          const com::sun::star::uno::Reference<
              com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw ( DAVException );
+        throw (css::uno::RuntimeException, DAVException);
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
     POST( const OUString & rContentType,
