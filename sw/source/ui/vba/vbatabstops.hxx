@@ -38,7 +38,10 @@ public:
     virtual ~SwVbaTabStops() {}
 
     // Methods
-    virtual css::uno::Reference< ::ooo::vba::word::XTabStop > SAL_CALL Add( float Position, const css::uno::Any& Alignment, const css::uno::Any& Leader ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< ::ooo::vba::word::XTabStop > SAL_CALL Add( float Position, const css::uno::Any& Alignment, const css::uno::Any& Leader )
+        throw (css::script::BasicErrorException,
+               css::uno::RuntimeException,
+               std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL ClearAll(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEnumerationAccess
