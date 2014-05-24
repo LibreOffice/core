@@ -266,6 +266,8 @@ InputStream::InputStream( const Reference< XComponentContext >& rxContext, const
     maClosingCData( CREATE_OSTRING( "]]>" ) ),
     mnBufferPos( 0 )
 {
+    if (!mxTextStrm.is())
+        throw IOException();
     maOpeningBracket[ 0 ] = '<';
     maClosingBracket[ 0 ] = '>';
 }
