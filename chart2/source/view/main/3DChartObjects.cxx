@@ -186,6 +186,16 @@ void Camera::render()
     mpRenderer->SetCameraInfo(maPos, maDirection, maUp);
 }
 
+void Camera::setPosition(const glm::vec3& rPos)
+{
+    maPos = rPos;
+}
+
+void Camera::setDirection(const glm::vec3& rDir)
+{
+    maDirection = rDir;
+}
+
 void Camera::zoom(sal_uInt32 /*nId*/)
 {
     // TODO here

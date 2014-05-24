@@ -115,6 +115,9 @@ public:
     Camera(OpenGL3DRenderer* pRenderer);
     virtual void render() SAL_OVERRIDE;
 
+    void setPosition(const glm::vec3& rPos);
+    void setDirection(const glm::vec3& rPos);
+
     /// Zooms the camera towards the bar with Unique Id nId.
     void zoom(sal_uInt32 nId);
 

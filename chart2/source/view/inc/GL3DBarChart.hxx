@@ -16,6 +16,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "VDataSeries.hxx"
 
+#include <glm/glm.hpp>
+
 #include <vcl/openglwin.hxx>
 
 namespace chart {
@@ -61,6 +63,8 @@ private:
     bool mbValidContext;
 
     boost::scoped_ptr<opengl3D::TextCache> mpTextCache;
+
+    glm::vec3 maCameraPosition;
 };
 
 }
