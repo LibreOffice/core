@@ -461,7 +461,6 @@ bool PBMReader::ImplReadBody()
                     mpAcc->SetPixel( nHeight, nWidth++, BitmapColor( static_cast< sal_uInt8 >( ( nRGB[ 0 ] * 255 ) / mnMaxVal ),
                                                                      static_cast< sal_uInt8 >( ( nRGB[ 1 ] * 255 ) / mnMaxVal ),
                                                                      static_cast< sal_uInt8 >( ( nRGB[ 2 ] * 255 ) / mnMaxVal ) ) );
-                    nCount = 0;
                     nRGB[ 0 ] = nRGB[ 1 ] = nRGB[ 2 ] = 0;
                     if ( nWidth == mnWidth )
                     {
