@@ -828,7 +828,7 @@ namespace sw { namespace mark
         { }
         virtual ~LazyFieldmarkDeleter()
         {
-            dynamic_cast<Fieldmark *>(m_pFieldmark.get())->ReleaseDoc(m_pDoc);
+            dynamic_cast<Fieldmark&>(*m_pFieldmark.get()).ReleaseDoc(m_pDoc);
         }
     };
 
