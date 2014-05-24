@@ -1420,6 +1420,19 @@ void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     mpOpenGLWindow = pWindow;
 }
 
+void ChartModel::update()
+    throw (uno::RuntimeException, std::exception)
+{
+    if(!mpChartView)
+    {
+        mpChartView = new ChartView( m_xContext, *this);
+        xChartView = static_cast< ::cppu::OWeakObject* >( mpChartView );
+    }
+
+    mpChartView->setViewDirty();
+    mpChartView->update();
+}
+
 OpenGLWindow* ChartModel::getOpenGLWindow()
 {
     return mpOpenGLWindow;

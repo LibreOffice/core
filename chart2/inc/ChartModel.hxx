@@ -580,6 +580,9 @@ public:
     virtual void SAL_CALL setWindow( const sal_uInt64 nWindowPtr )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    virtual void SAL_CALL update()
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     // XDumper
     virtual OUString SAL_CALL dump()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
