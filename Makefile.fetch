@@ -94,6 +94,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \
 		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
+		$(call fetch_Optional,REVENGE,REVENGE_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
 		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
