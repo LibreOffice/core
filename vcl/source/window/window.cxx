@@ -3140,15 +3140,6 @@ void Window::SetFakeFocus( bool bFocus )
 bool Window::HasChildPathFocus( bool bSystemWindow ) const
 {
 
-    // #107575#, the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
-    //  task was shifted to 6.y, so its commented out
-    /*
-    Window* pFocusWin = ImplGetSVData()->maWinData.mpFirstFloat;
-    if( pFocusWin && pFocusWin->mpWindowImpl->mbFloatWin && ((FloatingWindow *)pFocusWin)->GrabsFocus() )
-        pFocusWin = pFocusWin->GetPreferredKeyInputWindow();
-    else
-        pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
-    */
     Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
     if ( pFocusWin )
         return ImplIsWindowOrChild( pFocusWin, bSystemWindow );
