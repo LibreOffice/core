@@ -2652,7 +2652,7 @@ void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
     EnableInput( bEnable, bChild );
     if ( bSysWin )
     {
-        // pExculeWindow is the first Overlap-Frame --> if this
+        // pExcuteWindow is the first Overlap-Frame --> if this
         // shouldn't be the case, than this must be changed in dialog.cxx
         if( pExcludeWindow )
             pExcludeWindow = pExcludeWindow->ImplGetFirstOverlapWindow();
