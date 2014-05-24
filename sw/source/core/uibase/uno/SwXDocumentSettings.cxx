@@ -832,7 +832,8 @@ void SwXDocumentSettings::_preGetValues ()
 }
 
 void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException )
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+               uno::RuntimeException)
 {
     switch( rInfo.mnHandle )
     {
