@@ -107,6 +107,43 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteRenderbuffers(1, &mnPickingRboColor);
 }
 
+OpenGL3DRenderer::ShaderResources::ShaderResources()
+    : m_3DProID(0)
+    , m_3DProjectionID(0)
+    , m_3DViewID(0)
+    , m_3DModelID(0)
+    , m_3DNormalMatrixID(0)
+    , m_3DVertexID(0)
+    , m_3DNormalID(0)
+    , m_TextProID(0)
+    , m_TextMatrixID(0)
+    , m_TextVertexID(0)
+    , m_TextTexCoordID(0)
+    , m_TextTexID(0)
+    , m_ScreenTextProID(0)
+    , m_ScreenTextVertexID(0)
+    , m_ScreenTextTexCoordID(0)
+    , m_ScreenTextTexID(0)
+    , m_CommonProID(0)
+    , m_2DVertexID(0)
+    , m_2DColorID(0)
+    , m_MatrixID(0)
+    , m_RenderProID(0)
+    , m_RenderTexID(0)
+    , m_RenderVertexID(0)
+    , m_RenderTexCoordID(0)
+{
+}
+
+OpenGL3DRenderer::ShaderResources::~ShaderResources()
+{
+    glDeleteProgram(m_CommonProID);
+    glDeleteProgram(m_RenderProID);
+    glDeleteProgram(m_TextProID);
+    glDeleteProgram(m_ScreenTextProID);
+    glDeleteProgram(m_3DProID);
+}
+
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
 {
     m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShader", "shape3DFragmentShader");
@@ -138,6 +175,19 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
     m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
     m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
     CHECK_GL_ERROR();
+}
+
+OpenGL3DRenderer::PickingShaderResources::PickingShaderResources()
+    : m_CommonProID(0)
+    , m_2DVertexID(0)
+    , m_2DColorID(0)
+    , m_MatrixID(0)
+{
+}
+
+OpenGL3DRenderer::PickingShaderResources::~PickingShaderResources()
+{
+    glDeleteProgram(m_CommonProID);
 }
 
 void OpenGL3DRenderer::PickingShaderResources::LoadShaders()
