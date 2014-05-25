@@ -67,7 +67,6 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
             ((nColor & 0x0000FF00) >> 8) / 255.0f,
             (nColor & 0x000000FF) / 255.0f,
             (0xFF - (nColor & 0xFF000000)/255.0));
-
 }
 
 }
@@ -87,7 +86,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
 
     m_Extrude3DInfo.twoSidesLighting = false;
 
-    GetFreq();
     m_RoundBarMesh.iMeshSizes = 0;
 }
 
@@ -667,25 +665,6 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
     }
     iFacesAdded += 2;
     return iFacesAdded;
-}
-
-void OpenGL3DRenderer::GetFreq()
-{
-#if 0
-    LARGE_INTEGER litmpold;
-    QueryPerformanceFrequency(&litmpold);
-    m_dFreq= litmpold.QuadPart;
-#endif
-}
-
-double OpenGL3DRenderer::GetTime()
-{
-#if 0
-    LARGE_INTEGER litmpold;
-    QueryPerformanceCounter(&litmpold);
-    return litmpold.QuadPart*1000000 / m_dFreq;
-#endif
-    return 0;
 }
 
 void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
@@ -1485,54 +1464,6 @@ void OpenGL3DRenderer::RenderTextShape()
         glUseProgram(0);
     }
     CHECK_GL_ERROR();
-}
-
-void OpenGL3DRenderer::RenderText(const ::rtl::OUString& , awt::Point )
-{
-    //TODO: moggi: disabled for now
-    /*
-    Font aFont("Arial", Size(0, 100));
-    Rectangle aRect;
-    VirtualDevice aDevice;
-    aDevice.GetTextBoundRect(aRect, string);
-    int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
-    int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
-    int textHeight = OPENGL_SCALE_VALUE * m_iHeight / 20;
-    int textWidth = (float)textHeight * ((float)screenWidth / (float)screenHeight);
-    textWidth = (textWidth + 3) & ~3;
-    awt::Size aSize(textWidth, textHeight);
-    //clear text info
-    size_t listNum = m_TextInfoList.size();
-    for (size_t i = 0; i < listNum; i++)
-    {
-        TextInfo &textInfo = m_TextInfoList.front();
-        glDeleteTextures(1, &textInfo.texture);
-        m_TextInfoList.pop_front();
-    }
-    //create text texture
-    CreateTextTexture(string, aFont, 0xFF0000, aPos, aSize, 0);
-    RenderTextShape();
-    */
-}
-
-void OpenGL3DRenderer::RenderFPS(float fps)
-{
-    //use width and height to get the position
-    ::rtl::OUString stringFps = ::rtl::OUString("fps ") + ::rtl::OUString::number(fps);
-    awt::Point aPos(0,0);
-    RenderText(stringFps, aPos);
-}
-
-void OpenGL3DRenderer::RenderClickPos(Point aMPos)
-{
-    //use width and height to get the position
-    ::rtl::OUString stringPos = ::rtl::OUString("(") +
-                                ::rtl::OUString::number(aMPos.X()) +
-                                ::rtl::OUString(",") +
-                                ::rtl::OUString::number(aMPos.Y()) +
-                                ::rtl::OUString(")");
-    awt::Point aPos(aMPos.X(), aMPos.Y());
-    RenderText(stringPos, aPos);
 }
 
 void OpenGL3DRenderer::CreateSceneBoxView()
