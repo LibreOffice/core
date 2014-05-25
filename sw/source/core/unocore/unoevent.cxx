@@ -120,9 +120,9 @@ OUString SwHyperlinkEventDescriptor::getImplementationName(void)
 void SwHyperlinkEventDescriptor::copyMacrosFromINetFmt(
     const SwFmtINetFmt& aFmt)
 {
-    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
+    for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; ++i)
     {
-        sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
+        const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         const SvxMacro* aMacro = aFmt.GetMacro(nEvent);
         if (NULL != aMacro)
             replaceByName(nEvent, *aMacro);
@@ -132,9 +132,9 @@ void SwHyperlinkEventDescriptor::copyMacrosFromINetFmt(
 void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
     SwFmtINetFmt& aFmt)
 {
-    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
+    for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; ++i)
     {
-        sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
+        const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasByName(nEvent))
         {
             SvxMacro aMacro(sEmpty, sEmpty);
