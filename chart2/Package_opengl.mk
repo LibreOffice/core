@@ -22,6 +22,8 @@ $(eval $(call gb_Package_add_files,chart2_opengl_shader,$(LIBO_BIN_FOLDER)/openg
 	symbolVertexShader.glsl \
 	textFragmentShader.glsl \
 	textVertexShader.glsl \
+	screenTextFragmentShader.glsl \
+	screenTextVertexShader.glsl \
 	shape3DFragmentShader.glsl \
 	shape3DVertexShader.glsl \
 	renderTextureVertexShader.glsl \

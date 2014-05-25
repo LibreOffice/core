@@ -87,6 +87,15 @@ private:
      * numbering counter clockwise
      */
     sal_Int8 mnCornerId;
+
+    struct BarInformation
+    {
+        double nVal;
+        OUString aSeriesName;
+    };
+
+
+    std::map<sal_uInt32, BarInformation> maBarMap;
 };
 
 }

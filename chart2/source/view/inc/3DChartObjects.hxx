@@ -91,6 +91,20 @@ private:
     glm::vec3 maBottomRight;
 };
 
+class ScreenText : public Renderable3DObject
+{
+public:
+    ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId);
+
+    virtual void render() SAL_OVERRIDE;
+    void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight);
+
+private:
+    const BitmapEx& mrText;
+    glm::vec2 maTopLeft;
+    glm::vec2 maBottomRight;
+};
+
 class Rectangle : public Renderable3DObject
 {
 public:
