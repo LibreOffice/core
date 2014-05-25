@@ -162,6 +162,7 @@ public:
     void SetSize(const Size& rSize);
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
     void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft, sal_uInt32 nUniqueId);
+    void CreateScreenTextTexture(const BitmapEx& rBitmapEx, glm::vec2 vTopLeft, glm::vec2 vBottomRight, sal_uInt32 nUniqueId);
     void ProcessUnrenderedShape();
 
     void SetPickingMode(bool bPickingMode);
@@ -178,6 +179,7 @@ private:
     void RenderExtrude3DObject();
     //add for text
     void RenderTextShape();
+    void RenderScreenTextShape();
     void RenderExtrudeSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D);
@@ -206,6 +208,7 @@ private:
     void ReleasePolygonShapes();
     void ReleaseExtrude3DShapes();
     void ReleaseTextShapes();
+    void ReleaseScreenTextShapes();
 private:
 
     struct ShaderResources
@@ -225,6 +228,12 @@ private:
         GLint m_TextVertexID;
         GLint m_TextTexCoordID;
         GLint m_TextTexID;
+
+        // ScreenTextProID
+        GLint m_ScreenTextProID;
+        GLint m_ScreenTextVertexID;
+        GLint m_ScreenTextTexCoordID;
+        GLint m_ScreenTextTexID;
 
         // CommonProID
         GLint m_CommonProID;
@@ -251,6 +260,10 @@ private:
             , m_TextVertexID(0)
             , m_TextTexCoordID(0)
             , m_TextTexID(0)
+            , m_ScreenTextProID(0)
+            , m_ScreenTextVertexID(0)
+            , m_ScreenTextTexCoordID(0)
+            , m_ScreenTextTexID(0)
             , m_CommonProID(0)
             , m_2DVertexID(0)
             , m_2DColorID(0)
@@ -267,6 +280,7 @@ private:
             glDeleteProgram(m_CommonProID);
             glDeleteProgram(m_RenderProID);
             glDeleteProgram(m_TextProID);
+            glDeleteProgram(m_ScreenTextProID);
             glDeleteProgram(m_3DProID);
         }
 
@@ -353,6 +367,7 @@ private:
     GLuint m_BoundBoxNormal;
      // add for text
     std::vector <TextInfo> m_TextInfoList;
+    std::vector <TextInfo> m_ScreenTextInfoList;
     GLuint m_TextTexCoordBuf;
 
     std::vector<glm::vec3> m_Vertices;

@@ -186,6 +186,12 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     pAxis->setPosition(aBegin, aEnd);
     pAxis->setLineColor(COL_BLUE);
 
+    // test for information
+    maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
+                "I'm really nice text", 0));
+    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
+    pScreenText->setPosition(glm::vec2(-1.0f, 0.9f), glm::vec2(-0.6f, 0.75f));
+
     // Chart background.
     maShapes.push_back(new opengl3D::Rectangle(mpRenderer.get(), nId++));
     opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());

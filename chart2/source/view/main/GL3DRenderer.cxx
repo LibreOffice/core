@@ -123,6 +123,11 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
     m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
     m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
 
+    m_ScreenTextProID = OpenGLHelper::LoadShaders("screenTextVertexShader", "screenTextFragmentShader");
+    m_ScreenTextVertexID = glGetAttribLocation(m_ScreenTextProID, "vPosition");
+    m_ScreenTextTexCoordID = glGetAttribLocation(m_ScreenTextProID, "texCoord");
+    m_ScreenTextTexID = glGetUniformLocation(m_ScreenTextProID, "TextTex");
+
     m_CommonProID = OpenGLHelper::LoadShaders("commonVertexShader", "commonFragmentShader");
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
@@ -1349,6 +1354,50 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     glDisable(GL_CULL_FACE);
 }
 
+void OpenGL3DRenderer::CreateScreenTextTexture(const BitmapEx& rBitmapEx, glm::vec2 vTopLeft, glm::vec2 vBottomRight, sal_uInt32 nUniqueId)
+{
+    long bmpWidth = rBitmapEx.GetSizePixel().Width();
+    long bmpHeight = rBitmapEx.GetSizePixel().Height();
+    boost::scoped_array<sal_uInt8> bitmapBuf(OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx));
+
+    TextInfo aTextInfo;
+    aTextInfo.id = getColorAsVector(nUniqueId);
+    aTextInfo.vertex[0] = vTopLeft.x;
+    aTextInfo.vertex[1] = vTopLeft.y;
+    aTextInfo.vertex[2] = 0;
+
+    aTextInfo.vertex[3] = vBottomRight.x;
+    aTextInfo.vertex[4] = vTopLeft.y;
+    aTextInfo.vertex[5] = 0;
+
+    aTextInfo.vertex[9] = vTopLeft.x;
+    aTextInfo.vertex[10] = vBottomRight.y;
+    aTextInfo.vertex[11] = 0;
+
+    aTextInfo.vertex[6] = vBottomRight.x;
+    aTextInfo.vertex[7] = vBottomRight.y;
+    aTextInfo.vertex[8] = 0;
+
+    CHECK_GL_ERROR();
+    glGenTextures(1, &aTextInfo.texture);
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, aTextInfo.texture);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    CHECK_GL_ERROR();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapBuf.get());
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    CHECK_GL_ERROR();
+    m_ScreenTextInfoList.push_back(aTextInfo);
+}
+
 void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft, sal_uInt32 nUniqueId)
 {
     long bmpWidth = rBitmapEx.GetSizePixel().Width();
@@ -1401,6 +1450,72 @@ void OpenGL3DRenderer::ReleaseTextShapes()
         glDeleteTextures(1, &textInfo.texture);
     }
     m_TextInfoList.clear();
+}
+
+void OpenGL3DRenderer::ReleaseScreenTextShapes()
+{
+    for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
+    {
+        TextInfo &textInfo = m_ScreenTextInfoList[i];
+        glDeleteTextures(1, &textInfo.texture);
+    }
+    m_ScreenTextInfoList.clear();
+}
+
+void OpenGL3DRenderer::RenderScreenTextShape()
+{
+    CHECK_GL_ERROR();
+    for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
+    {
+        TextInfo &textInfo = m_ScreenTextInfoList[i];
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
+        glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
+        CHECK_GL_ERROR();
+        glUseProgram(maResources.m_ScreenTextProID);
+
+        CHECK_GL_ERROR();
+
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(maResources.m_ScreenTextVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            maResources.m_ScreenTextVertexID,
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        //tex coord
+        CHECK_GL_ERROR();
+        glEnableVertexAttribArray(maResources.m_ScreenTextTexCoordID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
+        glVertexAttribPointer(
+            maResources.m_ScreenTextTexCoordID,
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        //texture
+        CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, textInfo.texture);
+        CHECK_GL_ERROR();
+        glUniform1i(maResources.m_ScreenTextTexID, 0);
+        CHECK_GL_ERROR();
+        //TODO: moggi: get rid fo GL_QUADS
+        glDrawArrays(GL_QUADS, 0, 4);
+        CHECK_GL_ERROR();
+        glDisableVertexAttribArray(maResources.m_ScreenTextTexCoordID);
+        CHECK_GL_ERROR();
+        glDisableVertexAttribArray(maResources.m_ScreenTextVertexID);
+        CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glUseProgram(0);
+    }
+    CHECK_GL_ERROR();
 }
 
 void OpenGL3DRenderer::RenderTextShape()
@@ -1484,6 +1599,8 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderExtrude3DObject();
     //render text
     RenderTextShape();
+    // render screen text
+    RenderScreenTextShape();
     ReleaseShapes();
 #if DEBUG_FBO
     OUString aFileName = OUString("D://shaderout_") + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
@@ -1525,6 +1642,7 @@ void OpenGL3DRenderer::ReleaseShapes()
     ReleasePolygonShapes();
     ReleaseExtrude3DShapes();
     ReleaseTextShapes();
+    ReleaseScreenTextShapes();
 }
 
 }
