@@ -276,7 +276,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        for ( sal_uInt16 i = 0; i < aAttributes.getLength(); ++i )
+        for ( sal_Int32 i = 0; i < aAttributes.getLength(); ++i )
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
@@ -306,7 +306,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        for ( sal_uInt16 i = 0; i < aAttributes.getLength(); ++i )
+        for ( sal_Int32 i = 0; i < aAttributes.getLength(); ++i )
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 

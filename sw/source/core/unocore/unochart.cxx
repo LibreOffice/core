@@ -125,7 +125,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
         return;
 
     const SwFrmFmts& rTblFmts = *pDoc->GetTblFrmFmts();
-    for( sal_uInt16 n = 0; n < rTblFmts.size(); ++n )
+    for( size_t n = 0; n < rTblFmts.size(); ++n )
     {
         SwTable* pTmpTbl;
         const SwTableNode* pTblNd;
@@ -352,7 +352,7 @@ static void GetTableByName( const SwDoc &rDoc, const OUString &rTableName,
 
     // find frame format of table
     //! see SwXTextTables::getByName
-    sal_uInt16 nCount = rDoc.GetTblFrmFmtCount(true);
+    const sal_uInt16 nCount = rDoc.GetTblFrmFmtCount(true);
     for (sal_uInt16 i = 0; i < nCount && !pTblFmt; ++i)
     {
         SwFrmFmt& rTblFmt = rDoc.GetTblFrmFmt(i, true);
@@ -1753,7 +1753,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
     // "Table1.A1:A4;Table1.C2:C5" the same table must be used in all ranges!
     sal_Int32 nNumRanges = comphelper::string::getTokenCount(aRangeRepresentation, ';');
     SwTable* pFirstFoundTable = 0;  // to check that only one table will be used
-    for (sal_uInt16 i = 0;  i < nNumRanges;  ++i)
+    for (sal_Int32 i = 0;  i < nNumRanges;  ++i)
     {
         OUString aRange( aRangeRepresentation.getToken(i, ';') );
         SwFrmFmt    *pTblFmt  = 0;      // pointer to table format
@@ -1821,7 +1821,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
     sal_Int32 nNumRanges = comphelper::string::getTokenCount(aXMLRange, ' ');
     OUString aFirstFoundTable; // to check that only one table will be used
-    for (sal_uInt16 i = 0;  i < nNumRanges;  ++i)
+    for (sal_Int32 i = 0;  i < nNumRanges;  ++i)
     {
         OUString aRange( aXMLRange.getToken(i, ' ') );
 
