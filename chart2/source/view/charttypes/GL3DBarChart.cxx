@@ -31,12 +31,16 @@ GL3DBarChart::GL3DBarChart(
     mrWindow(rWindow),
     mpCamera(NULL),
     mbValidContext(true),
-    mpTextCache(new opengl3D::TextCache())
+    mpTextCache(new opengl3D::TextCache()),
+    mnStep(0),
+    mnStepsTotal(0),
+    mnCornerId(0)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
     mrWindow.setRenderer(this);
     mpRenderer->init();
+    maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveCamera));
 }
 
 GL3DBarChart::~GL3DBarChart()
@@ -48,6 +52,7 @@ GL3DBarChart::~GL3DBarChart()
 namespace {
 
 const float TEXT_HEIGHT = 15.0f;
+const sal_uLong TIMEOUT = 5;
 
 float calculateTextWidth(const OUString& rText)
 {
@@ -227,6 +232,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
 
+    mnMaxX = nMaxPointCount * (nBarSizeX + nBarDistanceX) + 40;
+    mnMaxY = nSeriesIndex * (nBarSizeY + nBarDistanceY) + 40;
+
     maCameraPosition = glm::vec3(-30, -30, 200);
     mpCamera->setPosition(maCameraPosition);
     maCameraDirection = glm::vec3(0, 0, 0);
@@ -293,12 +301,83 @@ void GL3DBarChart::clickedAt(const Point& rPos)
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons)
 {
     SAL_WARN("chart2.opengl", "Dragging: " << rStartPos << " to : " << rEndPos << " Buttons: " << nButtons);
+    if(nButtons == MOUSE_RIGHT)
+    {
+        mnCornerId = (mnCornerId + 1) % 4;
+        moveToCorner();
+    }
+    else if(nButtons == MOUSE_LEFT)
+    {
+        mnCornerId = mnCornerId - 1;
+        if(mnCornerId < 0)
+            mnCornerId = 3;
+        moveToCorner();
+    }
+}
+
+glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
+{
+    switch(nId)
+    {
+        case 0:
+        {
+            return glm::vec3(-30, -30, 200);
+        }
+        break;
+        case 1:
+        {
+            return glm::vec3(mnMaxX, -30, 200);
+        }
+        break;
+        case 2:
+        {
+            return glm::vec3(mnMaxX, mnMaxY, 200);
+        }
+        break;
+        case 3:
+        {
+            return glm::vec3(-30, mnMaxY, 200);
+        }
+        break;
+        default:
+            assert(false);
+    }
+
+    return glm::vec3(-30, -30, 200);
+}
+
+void GL3DBarChart::moveToCorner()
+{
+    mnStepsTotal = 100;
+    maStep = (getCornerPosition(mnCornerId) - maCameraPosition) / float(mnStepsTotal);
+    maTimer.SetTimeout(TIMEOUT);
+    maTimer.Start();
+}
+
+IMPL_LINK_NOARG(GL3DBarChart, MoveCamera)
+{
+    maTimer.Stop();
+    if(mnStep < mnStepsTotal)
+    {
+        ++mnStep;
+        maCameraPosition += maStep;
+        mpCamera->setPosition(maCameraPosition);
+        render();
+        maTimer.SetTimeout(TIMEOUT);
+        maTimer.Start();
+    }
+    else
+    {
+        mnStep = 0;
+    }
+
+    return 0;
 }
 
 void GL3DBarChart::scroll(long nDelta)
 {
     glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
-    maCameraPosition += (float((nDelta/10)) * maDir);
+    maCameraPosition -= (float((nDelta/10)) * maDir);
     mpCamera->setPosition(maCameraPosition);
     render();
 }
