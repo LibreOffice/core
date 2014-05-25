@@ -83,7 +83,6 @@ class Lwp9Reader
         void ParseDocument();
         void WriteDocHeader();
         void WriteDocEnd();
-        void ReadOleObjects();
     public:
         void Read();
 };

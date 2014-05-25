@@ -112,7 +112,6 @@ inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
 inline SalData *GetSalData() { return ImplGetSVData()->mpSalData; }
 
 bool ImplSalYieldMutexTryToAcquire();
-void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 
 #endif // INCLUDED_VCL_INC_OSX_SALDATA_HXX

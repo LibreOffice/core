@@ -206,15 +206,6 @@ void Player::setNotifyWnd( int nNotifyWnd )
         mpME->SetNotifyWindow( (OAHWND) nNotifyWnd, WM_GRAPHNOTIFY, reinterpret_cast< LONG_PTR>( this ) );
 }
 
-void Player::setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurface )
-{
-    if( mpEV && pDDraw && pDDrawSurface )
-    {
-        mpEV->SetDDrawObject( pDDraw );
-        mpEV->SetDDrawSurface( pDDrawSurface );
-    }
-}
-
 long Player::processEvent()
 {
     long nCode;

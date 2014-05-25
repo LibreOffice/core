@@ -60,7 +60,6 @@ public:
     bool                create( const OUString& rURL );
 
     void                setNotifyWnd( int nNotifyWnd );
-    void                setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurface );
     long                processEvent();
 
     const IVideoWindow* getVideoWindow() const;

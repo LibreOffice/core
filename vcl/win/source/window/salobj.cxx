@@ -364,15 +364,6 @@ LRESULT CALLBACK SalSysObjWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
     return nRet;
 }
 
-LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
-{
-    int bDef = TRUE;
-    LRESULT nRet = SalSysObjWndProc( hWnd, nMsg, wParam, lParam, bDef );
-    if ( bDef )
-        nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
-    return nRet;
-}
-
 LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
@@ -441,15 +432,6 @@ LRESULT CALLBACK SalSysObjChildWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LP
     LRESULT nRet = SalSysObjChildWndProc( hWnd, nMsg, wParam, lParam, bDef );
     if ( bDef )
         nRet = DefWindowProcA( hWnd, nMsg, wParam, lParam );
-    return nRet;
-}
-
-LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
-{
-    int bDef = TRUE;
-    LRESULT nRet = SalSysObjChildWndProc( hWnd, nMsg, wParam, lParam, bDef );
-    if ( bDef )
-        nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
     return nRet;
 }
 

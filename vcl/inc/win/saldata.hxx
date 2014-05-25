@@ -173,7 +173,6 @@ void ImplFreeSalGDI();
 
 void ImplSalYieldMutexAcquireWithWait();
 bool ImplSalYieldMutexTryToAcquire();
-void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 sal_uLong ImplSalReleaseYieldMutex();
 void ImplSalAcquireYieldMutex( sal_uLong nCount );

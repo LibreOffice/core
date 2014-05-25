@@ -116,7 +116,6 @@ public:
                         WinLayout( HDC, const ImplWinFontData&, ImplWinFontEntry& );
     virtual void        InitFont() const;
     void                SetFontScale( float f ) { mfFontScale = f; }
-    float               GetFontScale() const    { return mfFontScale; }
     HFONT               DisableFontScaling( void) const;
 
     SCRIPT_CACHE&       GetScriptCache() const
