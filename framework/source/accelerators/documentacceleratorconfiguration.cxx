@@ -98,14 +98,14 @@ public:
     virtual sal_Bool SAL_CALL hasStorage()
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-private:
-
     /** read all data into the cache. */
-    void impl_ts_fillCache();
+    void fillCache();
+
+private:
 
     /** forget all currently cached data AND(!)
         forget all currently used storages. */
-    void impl_ts_clearCache();
+    void clearCache();
 };
 
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
@@ -128,8 +128,6 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
                 css::uno::Reference< css::embed::XStorage >());
         }
     }
-
-    impl_ts_fillCache();
 }
 
 DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
@@ -150,10 +148,10 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
     }
 
     if (bForgetOldStorages)
-        impl_ts_clearCache();
+        clearCache();
 
     if (xStorage.is())
-        impl_ts_fillCache();
+        fillCache();
 }
 
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
@@ -163,7 +161,7 @@ sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     return m_xDocumentRoot.is();
 }
 
-void DocumentAcceleratorConfiguration::impl_ts_fillCache()
+void DocumentAcceleratorConfiguration::fillCache()
 {
     css::uno::Reference< css::embed::XStorage > xDocumentRoot;
     {
@@ -203,7 +201,7 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
     {}
 }
 
-void DocumentAcceleratorConfiguration::impl_ts_clearCache()
+void DocumentAcceleratorConfiguration::clearCache()
 {
     m_aPresetHandler.forgetCachedStorages();
 }
@@ -215,7 +213,12 @@ com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    return cppu::acquire(new DocumentAcceleratorConfiguration(context, arguments));
+    DocumentAcceleratorConfiguration *inst = new DocumentAcceleratorConfiguration(context, arguments);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
+
+    inst->fillCache();
+
+    return acquired_inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
