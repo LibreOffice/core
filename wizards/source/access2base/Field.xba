@@ -199,6 +199,15 @@ Exit_Function:
 End Function		&apos;	ReadAllText
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional pvValue As Variant) As Boolean
+&apos;	Return True if property setting OK
+Const cstThisSub = &quot;Field.setProperty&quot;
+	Utils._SetCalledSub(cstThisSub)
+	setProperty = _PropertySet(psProperty, pvValue)
+	Utils._ResetCalledSub(cstThisSub)
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function WriteAllBytes(ByVal Optional pvFile As Variant) As Boolean
 &apos;	Write the whole content of a Long Binary Field object to a file
 

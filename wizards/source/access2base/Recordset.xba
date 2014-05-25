@@ -727,6 +727,15 @@ Exit_Function:
 End Function	&apos;	Properties
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional pvValue As Variant) As Boolean
+&apos;	Return True if property setting OK
+Const cstThisSub = &quot;Recordset.setProperty&quot;
+	Utils._SetCalledSub(cstThisSub)
+	setProperty = _PropertySet(psProperty, pvValue)
+	Utils._ResetCalledSub(cstThisSub)
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Update() As Boolean
 &apos;	Finalize the updates of the current record
 
