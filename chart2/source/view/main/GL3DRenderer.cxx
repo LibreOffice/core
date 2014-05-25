@@ -686,9 +686,7 @@ double OpenGL3DRenderer::GetTime()
 
 void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 {
-    size_t listNum = polygon.verticesList.size();
     glUseProgram(maResources.m_CommonProID);
-
     PosVecf3 trans = {0.0f, 0, 0.0};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 scale = {1.0f, 1.0f, m_fHeightWeight};
@@ -696,10 +694,10 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
 
     m_3DMVP = m_3DProjection * m_3DView * m_Model;
 
-    for (size_t i = 0; i < listNum; i++)
+    for (size_t i = 0; i < polygon.verticesList.size(); i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
-        Vertices3D *pointList = polygon.verticesList.front();
+        Vertices3D *pointList = polygon.verticesList[i];
         //if line only, using the common shader to render
 
         //fill vertex buffer
@@ -726,8 +724,6 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
         glDrawArrays(GL_LINE_STRIP, 0, pointList->size());
         glDisableVertexAttribArray(maResources.m_2DVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        delete pointList;
-        polygon.verticesList.pop_front();
     }
     glUseProgram(0);
 }
@@ -760,8 +756,8 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
     for (size_t i = 0; i < verticesNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
-        Vertices3D *pointList = polygon.verticesList.front();
-        Normals3D *normalList = polygon.normalsList.front();
+        Vertices3D *pointList = polygon.verticesList[i];
+        Normals3D *normalList = polygon.normalsList[i];
         PosVecf3 trans = {0.0f, 0.0f, 0.0};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {1.0f, 1.0f, m_fHeightWeight};
@@ -819,21 +815,44 @@ void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
             glDisableVertexAttribArray(maResources.m_3DNormalID);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        delete pointList;
-        delete normalList;
-        polygon.verticesList.pop_front();
-        polygon.normalsList.pop_front();
     }
     glUseProgram(0);
+}
+
+namespace {
+
+template< typename T >
+struct DeletePointer
+{
+    void operator()(T* p)
+    {
+        delete p;
+    }
+};
+
+}
+
+void OpenGL3DRenderer::ReleasePolygonShapes()
+{
+    for (size_t i = 0; i < m_Polygon3DInfoList.size(); i++)
+    {
+        Polygon3DInfo &polygon = m_Polygon3DInfoList[i];
+        std::for_each(polygon.verticesList.begin(),
+                polygon.verticesList.end(), DeletePointer<Vertices3D>());
+        std::for_each(polygon.normalsList.begin(),
+                polygon.normalsList.end(), DeletePointer<Normals3D>());
+        delete polygon.vertices;
+        delete polygon.normals;
+    }
+    m_Polygon3DInfoList.clear();
 }
 
 void OpenGL3DRenderer::RenderPolygon3DObject()
 {
     glDepthMask(GL_FALSE);
-    size_t polygonNum = m_Polygon3DInfoList.size();
-    for (size_t i = 0; i < polygonNum; i++)
+    for (size_t i = 0; i < m_Polygon3DInfoList.size(); i++)
     {
-        Polygon3DInfo &polygon = m_Polygon3DInfoList.front();
+        Polygon3DInfo &polygon = m_Polygon3DInfoList[i];
         if (polygon.lineOnly || (!polygon.fillStyle))
         {
             //just use the common shader is ok for lines
@@ -843,13 +862,6 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
         {
             RenderPolygon3D(polygon);
         }
-        std::for_each(polygon.verticesList.begin(),
-                      polygon.verticesList.end(), boost::checked_deleter<Vertices3D>());
-        std::for_each(polygon.normalsList.begin(),
-                      polygon.normalsList.end(), boost::checked_deleter<Normals3D>());
-        delete polygon.vertices;
-        delete polygon.normals;
-        m_Polygon3DInfoList.pop_front();
     }
     glDepthMask(GL_TRUE);
     return;
@@ -1269,6 +1281,10 @@ void OpenGL3DRenderer::RenderExtrudeSurface(const Extrude3DInfo& extrude3D)
         RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
     }
 }
+void OpenGL3DRenderer::ReleaseExtrude3DShapes()
+{
+    m_Extrude3DList.clear();
+}
 
 void OpenGL3DRenderer::RenderExtrude3DObject()
 {
@@ -1346,7 +1362,6 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         if(!mbPickingMode)
             glDisableVertexAttribArray(maResources.m_3DNormalID);
     }
-    m_Extrude3DList.clear();
     glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glDisable(GL_CULL_FACE);
@@ -1396,13 +1411,22 @@ void OpenGL3DRenderer::CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vT
     m_TextInfoList.push_back(aTextInfo);
 }
 
+void OpenGL3DRenderer::ReleaseTextShapes()
+{
+    for (size_t i = 0; i < m_TextInfoList.size(); i++)
+    {
+        TextInfo &textInfo = m_TextInfoList[i];
+        glDeleteTextures(1, &textInfo.texture);
+    }
+    m_TextInfoList.clear();
+}
+
 void OpenGL3DRenderer::RenderTextShape()
 {
     CHECK_GL_ERROR();
-    size_t listNum = m_TextInfoList.size();
-    for (size_t i = 0; i < listNum; i++)
+    for (size_t i = 0; i < m_TextInfoList.size(); i++)
     {
-        TextInfo &textInfo = m_TextInfoList.front();
+        TextInfo &textInfo = m_TextInfoList[i];
         PosVecf3 trans = {0, 0, 0};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
@@ -1454,9 +1478,6 @@ void OpenGL3DRenderer::RenderTextShape()
         CHECK_GL_ERROR();
         glBindTexture(GL_TEXTURE_2D, 0);
         glUseProgram(0);
-        glDeleteTextures(1, &textInfo.texture);
-        CHECK_GL_ERROR();
-        m_TextInfoList.pop_front();
     }
     CHECK_GL_ERROR();
 }
@@ -1529,6 +1550,7 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderExtrude3DObject();
     //render text
     RenderTextShape();
+    ReleaseShapes();
 #if DEBUG_FBO
     OUString aFileName = OUString("D://shaderout_") + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
     OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
@@ -1562,6 +1584,13 @@ sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
     glReadPixels(nX, nY, 1, 1, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
     Color aColor(buf[3], buf[2], buf[1], buf[0]);
     return aColor.GetColor();
+}
+
+void OpenGL3DRenderer::ReleaseShapes()
+{
+    ReleasePolygonShapes();
+    ReleaseExtrude3DShapes();
+    ReleaseTextShapes();
 }
 
 }
