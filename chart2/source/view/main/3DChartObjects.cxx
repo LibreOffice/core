@@ -68,7 +68,7 @@ void Line::setLineColor(const Color& rColor)
     maLineColor = rColor;
 }
 
-const BitmapEx& TextCache::getText(OUString rText)
+const BitmapEx& TextCache::getText(OUString const & rText)
 {
     TextCacheType::const_iterator itr = maTextCache.find(rText);
     if(itr != maTextCache.end())
