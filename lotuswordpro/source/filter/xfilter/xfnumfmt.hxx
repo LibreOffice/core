@@ -106,11 +106,11 @@ public:
                     or if you set the format to 'a', then the output would be:
                         a item1
                         b item2
-                    some sepecial, if you set the format to a sequence,ie. "Ò»,¶þ,Èý,..."
+                    some sepecial, if you set the format to a sequence,ie. "ä¸€,äºŒ,ä¸‰,..."
                     the output would be:
-                        Ò» item1
-                        ¶þ item2
-                        Èý item3
+                        ä¸€ item1
+                        äºŒ item2
+                        ä¸‰ item3
 
                     Of cource, for unordered-list, you can also set the format to
                     be a bullet char,ie:
