@@ -20,7 +20,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -132,9 +131,9 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
         // no content node outside of a table could be found, and therefore we
         // except.
         uno::RuntimeException aExcept;
-        aExcept.Message = OUString(
+        aExcept.Message =
             "No content node found that is inside this change section "
-            "but outside of a table" );
+            "but outside of a table";
         throw aExcept;
     }
 
@@ -226,11 +225,11 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
         pValues[0].Name = UNO_NAME_REDLINE_AUTHOR;
         // GetAuthorString(n) walks the SwRedlineData* chain;
         // here we always need element 1
-        pValues[0].Value <<= OUString(rRedline.GetAuthorString(1));
+        pValues[0].Value <<= rRedline.GetAuthorString(1);
         pValues[1].Name = UNO_NAME_REDLINE_DATE_TIME;
         pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
         pValues[2].Name = UNO_NAME_REDLINE_COMMENT;
-        pValues[2].Value <<= OUString(pNext->GetComment());
+        pValues[2].Value <<= pNext->GetComment();
         pValues[3].Name = UNO_NAME_REDLINE_TYPE;
         pValues[3].Value <<= lcl_RedlineTypeToOUString(pNext->GetType());
     }
@@ -293,13 +292,13 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
 {
     uno::Any aRet;
     if(rPropertyName == UNO_NAME_REDLINE_AUTHOR)
-        aRet <<= OUString(rRedline.GetAuthorString());
+        aRet <<= rRedline.GetAuthorString();
     else if(rPropertyName == UNO_NAME_REDLINE_DATE_TIME)
     {
         aRet <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
     }
     else if(rPropertyName == UNO_NAME_REDLINE_COMMENT)
-        aRet <<= OUString(rRedline.GetComment());
+        aRet <<= rRedline.GetComment();
     else if(rPropertyName == UNO_NAME_REDLINE_TYPE)
     {
         aRet <<= lcl_RedlineTypeToOUString(rRedline.GetType());
@@ -311,9 +310,8 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if (rPropertyName == UNO_NAME_REDLINE_IDENTIFIER)
     {
-        OUStringBuffer sBuf;
-        sBuf.append( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
-        aRet <<= sBuf.makeStringAndClear();
+        aRet <<= OUString::number(
+            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
     }
     else if (rPropertyName == UNO_NAME_IS_IN_HEADER_FOOTER)
     {
@@ -336,20 +334,18 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     beans::PropertyValue* pRet = aRet.getArray();
 
-    OUStringBuffer sRedlineIdBuf;
-    sRedlineIdBuf.append( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
-
     sal_Int32 nPropIdx  = 0;
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_AUTHOR;
-    pRet[nPropIdx++].Value <<= OUString(rRedline.GetAuthorString());
+    pRet[nPropIdx++].Value <<= rRedline.GetAuthorString();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_DATE_TIME;
     pRet[nPropIdx++].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_COMMENT;
-    pRet[nPropIdx++].Value <<= OUString(rRedline.GetComment());
+    pRet[nPropIdx++].Value <<= rRedline.GetComment();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_TYPE;
     pRet[nPropIdx++].Value <<= lcl_RedlineTypeToOUString(rRedline.GetType());
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_IDENTIFIER;
-    pRet[nPropIdx++].Value <<= sRedlineIdBuf.makeStringAndClear();
+    pRet[nPropIdx++].Value <<= OUString::number(
+        sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
     pRet[nPropIdx].Name = UNO_NAME_IS_COLLAPSED;
     sal_Bool bTmp = !rRedline.HasMark();
     pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
