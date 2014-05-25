@@ -16,7 +16,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,opencollada,\
 	external/opencollada/patches/0002-Expose-sid-for-textures-in-extras.patch.1 \
 	external/opencollada/patches/opencollada.clang.patch.0 \
 	external/opencollada/patches/opencollada.libxml.patch.0 \
-	external/opencollada/patches/generatedsaxparser_utils_touri_fix.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
