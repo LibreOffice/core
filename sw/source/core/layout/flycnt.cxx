@@ -22,6 +22,7 @@
 #include "txtfrm.hxx"
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include "frmtool.hxx"
 #include "dflyobj.hxx"
 #include "hints.hxx"

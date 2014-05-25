@@ -62,6 +62,7 @@
 #include <fmtcntnt.hxx>
 #include <ndindex.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <swrect.hxx>

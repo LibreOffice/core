@@ -40,6 +40,7 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>

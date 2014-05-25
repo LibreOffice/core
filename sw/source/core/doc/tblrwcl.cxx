@@ -29,6 +29,7 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>

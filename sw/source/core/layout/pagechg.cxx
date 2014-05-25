@@ -44,6 +44,7 @@
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
 #include "doc.hxx"
+#include <IDocumentSettingAccess.hxx>
 #include "fesh.hxx"
 #include "dview.hxx"
 #include "dflyobj.hxx"

@@ -51,6 +51,7 @@
 #include "reffld.hxx"
 #include "flddat.hxx"
 #include "fmtautofmt.hxx"
+#include <IDocumentSettingAccess.hxx>
 
 static bool lcl_IsInBody( SwFrm *pFrm )
 {

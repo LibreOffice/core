@@ -38,6 +38,7 @@
 #include <environmentofanchoredobject.hxx>
 #include <sortedobjs.hxx>
 #include <viewimp.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 
