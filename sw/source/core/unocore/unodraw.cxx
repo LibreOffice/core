@@ -1539,7 +1539,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::Transformation>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( OUString("Transformation") );
+                    aRet = _getPropAtAggrObj( "Transformation" );
                 }
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
                 {
@@ -1550,13 +1550,13 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::StartPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( OUString("StartPosition") );
+                    aRet = _getPropAtAggrObj( "StartPosition" );
                 }
                 else if ( FN_SHAPE_ENDPOSITION_IN_HORI_L2R == pEntry->nWID )
                 {
                     // get property <::drawing::Shape::EndPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( OUString("EndPosition") );
+                    aRet = _getPropAtAggrObj( "EndPosition" );
                 }
                 else if (pEntry->nWID == RES_FRM_SIZE &&
                          (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT ||
@@ -1648,7 +1648,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::Transformation>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( OUString("Transformation") );
+                        aRet = _getPropAtAggrObj( "Transformation" );
                     }
                     break;
                     case FN_SHAPE_POSITION_LAYOUT_DIR:
@@ -1661,14 +1661,14 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( OUString("StartPosition") );
+                        aRet = _getPropAtAggrObj( "StartPosition" );
                     }
                     break;
                     case FN_SHAPE_ENDPOSITION_IN_HORI_L2R:
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( OUString("EndPosition") );
+                        aRet = _getPropAtAggrObj( "EndPosition" );
                     }
                     break;
                 }
@@ -2364,12 +2364,11 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
 // implementation of virtual methods from drawing::XShapeDescriptor
 OUString SAL_CALL SwXShape::getShapeType() throw ( uno::RuntimeException, std::exception )
 {
-    OUString aType;
     if ( mxShape.is() )
     {
-        aType = mxShape->getShapeType();
+        return mxShape->getShapeType();
     }
-    return aType;
+    return OUString();
 }
 /** method to determine top group object
     #i31698#
@@ -2427,8 +2426,7 @@ awt::Point SwXShape::_GetAttrPosition()
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        OUString sAnchorType( "AnchorType" );
-        uno::Any aAny = getPropertyValue( sAnchorType );
+        uno::Any aAny = getPropertyValue( "AnchorType" );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType == text::TextContentAnchorType_AS_CHARACTER )
@@ -2556,14 +2554,13 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        OUString sAnchorType( "AnchorType" );
-        uno::Any aAny = getPropertyValue( sAnchorType );
+        uno::Any aAny = getPropertyValue( "AnchorType" );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     {
         // determine current x-position
-        OUString aHoriPosPropStr("HoriOrientPosition");
+        const OUString aHoriPosPropStr("HoriOrientPosition");
         uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
         sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
@@ -2572,7 +2569,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         {
             // adjust x-position orientation to text::HoriOrientation::NONE, if needed
             // Note: has to be done before setting x-position attribute
-            OUString aHoriOrientPropStr("HoriOrient");
+            const OUString aHoriOrientPropStr("HoriOrient");
             uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
             sal_Int16 eHoriOrient;
             if (aHoriOrient >>= eHoriOrient) // may be void
@@ -2593,7 +2590,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     // handle y-position
     {
         // determine current y-position
-        OUString aVertPosPropStr("VertOrientPosition");
+        const OUString aVertPosPropStr("VertOrientPosition");
         uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
         sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
@@ -2602,7 +2599,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         {
             // adjust y-position orientation to text::VertOrientation::NONE, if needed
             // Note: has to be done before setting y-position attribute
-            OUString aVertOrientPropStr("VertOrient");
+            const OUString aVertOrientPropStr("VertOrient");
             uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
             sal_Int16 eVertOrient;
             if (aVertOrient >>= eVertOrient) // may be void
