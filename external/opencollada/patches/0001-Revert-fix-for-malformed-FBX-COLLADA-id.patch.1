@@ -1,0 +1,51 @@
+From a54360e9d2a67350f27eec8dfbe1103778b2711c Mon Sep 17 00:00:00 2001
+From: Fabrice Robinet <fabricerobinet@me.com>
+Date: Tue, 13 May 2014 16:31:40 -0700
+Subject: [PATCH 1/2] Revert fix for malformed FBX-COLLADA id
+
+---
+ GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp b/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
+index 404306a..1f9a3ee 100644
+--- a/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
++++ b/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
+@@ -868,11 +868,13 @@ namespace GeneratedSaxParser
+             failed = false;
+             return COLLADABU::URI(0);
+         }
++        const ParserString& string = toStringListItem(buffer, bufferEnd, failed);
++        return COLLADABU::URI(string.str, string.length);
++        
++        //FIXME: Testing fails on windows but pass on OSX with this fix.
+         //Just get the string as it is for ids, so that we are able to read FBX-COLLADA
+         //Otherwise, calling toStringItem would result in a truncated string when an id contains spaces
+-        //const ParserString& string = toStringListItem(buffer, bufferEnd, failed);
+-        //return COLLADABU::URI(string.str, string.length);
+-        return COLLADABU::URI((const char*)*buffer, bufferEnd - *buffer);
++        //return COLLADABU::URI((const char*)*buffer, bufferEnd - *buffer);
+     }
+ 
+     //--------------------------------------------------------------------
+@@ -883,11 +885,14 @@ namespace GeneratedSaxParser
+             failed = false;
+             return COLLADABU::URI(0);
+         }
++        
++        const ParserString& string = toStringListItem(buffer, failed);
++        return COLLADABU::URI(string.str, string.length);
++        
++        //FIXME: Testing fails on windows but pass on OSX with this fix.
+         //Just get the string as it is for ids, so that we are able to read FBX-COLLADA
+         //Otherwise, calling toStringItem would result in a truncated string when an id contains spaces
+-        //const ParserString& string = toStringListItem(buffer, failed);
+-        //return COLLADABU::URI(string.str, string.length);
+-        return COLLADABU::URI((const char*)*buffer);
++        //return COLLADABU::URI((const char*)*buffer);
+     }
+ 
+ 
+-- 
+1.8.1.4
+

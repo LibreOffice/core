@@ -45,11 +45,10 @@ diff -ur collada2gltf.org/GLTF/GLTFAsset.cpp collada2gltf/GLTF/GLTFAsset.cpp
                      std::ofstream f2(outputPath.c_str(), std::fstream::binary);
                      
                      if (this->_converterConfig->boolForKeyPath("verboseLogging")) {
-@@ -397,8 +394,8 @@
+@@ -397,7 +394,8 @@
          this->_root = shared_ptr <GLTF::JSONObject> (new GLTF::JSONObject());
-         this->_root->setString(kProfile, profile->id());
          this->_root->createObjectIfNeeded(kNodes);
--        
+         
 -        this->_writer.initWithPath(this->getOutputFilePath().c_str());
 +        COLLADABU::URI outputURI(this->getOutputFilePath().c_str());
 +        this->_writer.initWithPath(outputURI.toNativePath().c_str());

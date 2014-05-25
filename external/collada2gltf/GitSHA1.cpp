@@ -1,2 +1,2 @@
-#define GIT_SHA1 "6258611a6a4b4b94b963db5f1fe41c5290be1f87"
+#define GIT_SHA1 "cb1d97788a38d2928afb4622f6a25d012f0f8a54"
 char g_GIT_SHA1[] = GIT_SHA1;
