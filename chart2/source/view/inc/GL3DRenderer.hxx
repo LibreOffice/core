@@ -263,10 +263,6 @@ private:
     ShaderResources maResources;
     PickingShaderResources maPickingResources;
 
-    // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-    glm::mat4 m_Projection;
-    // Camera matrix
-    glm::mat4 m_View;
     // Model matrix : an identity matrix (model will be at the origin
     glm::mat4 m_Model;
 
@@ -281,8 +277,6 @@ private:
     Polygon3DInfo m_Polygon3DInfo;
 
     std::vector <Polygon3DInfo> m_Polygon3DInfoList;
-
-    glm::mat4 m_D3DTrasform;
 
     glm::mat4 m_3DProjection;
 
