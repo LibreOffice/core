@@ -18,6 +18,7 @@
 
 #include <glm/glm.hpp>
 
+#include <vcl/timer.hxx>
 #include <vcl/openglwin.hxx>
 
 namespace chart {
@@ -55,6 +56,12 @@ public:
     virtual void contextDestroyed() SAL_OVERRIDE;
 
 private:
+
+    void moveToCorner();
+    glm::vec3 getCornerPosition(sal_Int8 nCornerId);
+
+    DECL_LINK(MoveCamera, void*);
+
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -68,6 +75,18 @@ private:
 
     glm::vec3 maCameraPosition;
     glm::vec3 maCameraDirection;
+
+    Timer maTimer;
+    glm::vec3 maStep;
+    size_t mnStep;
+    size_t mnStepsTotal;
+    float mnMaxX;
+    float mnMaxY;
+    /**
+     * 0 = corner at (0,0,0);
+     * numbering counter clockwise
+     */
+    sal_Int8 mnCornerId;
 };
 
 }
