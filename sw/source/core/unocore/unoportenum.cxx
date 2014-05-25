@@ -1032,14 +1032,14 @@ static void lcl_FillRedlineArray(
     SwXRedlinePortion_ImplList& rRedArr )
 {
     const SwRedlineTbl& rRedTbl = rDoc.GetRedlineTbl();
-    sal_uInt16 nRedTblCount = rRedTbl.size();
+    const size_t nRedTblCount = rRedTbl.size();
 
     if ( nRedTblCount > 0 )
     {
         const SwPosition* pStart = rUnoCrsr.GetPoint();
         const SwNodeIndex nOwnNode = pStart->nNode;
 
-        for(sal_uInt16 nRed = 0; nRed < nRedTblCount; nRed++)
+        for(size_t nRed = 0; nRed < nRedTblCount; ++nRed)
         {
             const SwRangeRedline* pRedline = rRedTbl[nRed];
             const SwPosition* pRedStart = pRedline->Start();
