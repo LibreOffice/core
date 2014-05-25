@@ -172,7 +172,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
 #endif
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
-    SwReaderWriter::GetWriter( OUString(FILTER_TEXT_DLG), OUString(), xWrt );
+    SwReaderWriter::GetWriter( FILTER_TEXT_DLG, OUString(), xWrt );
     if( xWrt.Is() )
     {
         SwWriter aWriter( aStream, rPam );
@@ -701,8 +701,7 @@ public:
     SwUnoCrsr & GetCursorOrThrow() {
         SwUnoCrsr *const pUnoCursor( GetCursor() );
         if (!pUnoCursor) {
-            throw uno::RuntimeException(OUString(
-                        "SwXTextCursor: disposed or invalid"), 0);
+            throw uno::RuntimeException("SwXTextCursor: disposed or invalid", 0);
         }
         return *pUnoCursor;
     }
@@ -1216,8 +1215,8 @@ throw (uno::RuntimeException, std::exception)
         if (!bNotForced)
         {
             throw uno::RuntimeException(
-                OUString("gotoRange: parameter range not contained in nesting"
-                    " text content for which this cursor was created"),
+                "gotoRange: parameter range not contained in nesting"
+                    " text content for which this cursor was created",
                 static_cast<text::XWordCursor*>(this));
         }
     }
@@ -1800,8 +1799,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName, static_cast<cppu::OWeakObject *>(0));
+            "Unknown property: " + rPropertyName,
+            static_cast<cppu::OWeakObject *>(0));
     }
 
     beans::PropertyState eTemp;
@@ -1967,8 +1966,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             else
             {
                 throw beans::UnknownPropertyException(
-                    OUString("Unknown property: ")
-                        + pNames[i],
+                    "Unknown property: " + pNames[i],
                     static_cast<cppu::OWeakObject *>(0));
             }
         }
@@ -2091,14 +2089,14 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName, static_cast<cppu::OWeakObject *>(0));
+            "Unknown property: " + rPropertyName,
+            static_cast<cppu::OWeakObject *>(0));
     }
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
-        throw uno::RuntimeException(OUString(
-                "setPropertyToDefault: property is read-only: ")
+        throw uno::RuntimeException(
+                "setPropertyToDefault: property is read-only: "
                 + rPropertyName, 0);
     }
 
@@ -2132,8 +2130,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName, static_cast<cppu::OWeakObject *>(0));
+            "Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject *>(0));
     }
 
     uno::Any aRet;
@@ -2472,16 +2469,13 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
                     continue;
                 }
                 throw beans::UnknownPropertyException(
-                    OUString("Unknown property: ")
-                        + pNames[i],
+                    "Unknown property: " + pNames[i],
                     static_cast<cppu::OWeakObject *>(this));
             }
             if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
             {
                 throw uno::RuntimeException(
-                    OUString(
-                            "setPropertiesToDefault: property is read-only: ")
-                        + pNames[i],
+                    "setPropertiesToDefault: property is read-only: " + pNames[i],
                     static_cast<cppu::OWeakObject *>(this));
             }
 
@@ -2542,8 +2536,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     continue;
                 }
                 throw beans::UnknownPropertyException(
-                    OUString("Unknown property: ")
-                        + pNames[i],
+                    "Unknown property: " + pNames[i],
                     static_cast<cppu::OWeakObject *>(0));
             }
             if (pEntry->nWID < RES_FRMATR_END)
