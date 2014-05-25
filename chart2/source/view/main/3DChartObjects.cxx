@@ -78,18 +78,14 @@ const BitmapEx& TextCache::getText(OUString rText)
     Font aFont = aDevice.GetFont();
     aFont.SetSize(Size(0, 96));
     aFont.SetColor(COL_BLACK);
-    ::Rectangle aRect;
     aDevice.SetFont(aFont);
     aDevice.Erase();
-    aDevice.GetTextBoundRect(aRect, rText);
-    Size aSize = aRect.GetSize();
-    aSize.Width() += 5;
-    aSize.Height() *= 1.6;
-    aDevice.SetOutputSizePixel(aSize);
+
+    aDevice.SetOutputSize(Size(aDevice.GetTextWidth(rText), aDevice.GetTextHeight()));
     aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice.DrawText(Point(0,0), rText);
 
-    BitmapEx* pText = new BitmapEx(aDevice.GetBitmapEx(Point(0,0), aSize));
+    BitmapEx* pText = new BitmapEx(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSize()));
     maTextCache.insert(rText, pText);
     return *pText;
 }
