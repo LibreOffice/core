@@ -510,8 +510,7 @@ void MediaWindowImpl::onURLChanged()
     if( !mpChildWindow )
         return;
     mpChildWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
-    mpEvents.reset(new MediaEventListenersImpl( *mpChildWindow.get() ) );
-    mxEventsIf.set( static_cast< ::cppu::OWeakObject* >( mpEvents.get() ) );
+    mxEventsIf.set( static_cast< ::cppu::OWeakObject* >( mpEvents = new MediaEventListenersImpl( *mpChildWindow.get() ) ) );
 
     if( mxPlayer.is() )
     {
