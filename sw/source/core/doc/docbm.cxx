@@ -616,6 +616,8 @@ namespace sw { namespace mark
             // is on position ??
             bool bChangedPos = false, bChangedOPos = false;
             ::sw::mark::MarkBase* const pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
+            if (!pMark)
+                continue;
             if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
