@@ -128,17 +128,12 @@ OpenGL3DRenderer::ShaderResources::ShaderResources()
     , m_2DVertexID(0)
     , m_2DColorID(0)
     , m_MatrixID(0)
-    , m_RenderProID(0)
-    , m_RenderTexID(0)
-    , m_RenderVertexID(0)
-    , m_RenderTexCoordID(0)
 {
 }
 
 OpenGL3DRenderer::ShaderResources::~ShaderResources()
 {
     glDeleteProgram(m_CommonProID);
-    glDeleteProgram(m_RenderProID);
     glDeleteProgram(m_TextProID);
     glDeleteProgram(m_ScreenTextProID);
     glDeleteProgram(m_3DProID);
@@ -170,10 +165,6 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
 
-    m_RenderProID = OpenGLHelper::LoadShaders("renderTextureVertexShader", "renderTextureFragmentShader");
-    m_RenderVertexID = glGetAttribLocation(m_RenderProID, "vPosition");
-    m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
-    m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
     CHECK_GL_ERROR();
 }
 
@@ -203,41 +194,6 @@ void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::ve
     m_CameraInfo.cameraPos = pos;
     m_CameraInfo.cameraOrg = direction;
     m_CameraInfo.cameraUp = up;
-}
-
-void OpenGL3DRenderer::RenderTexture(GLuint TexID)
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glUseProgram(maResources.m_RenderProID);
-
-    glEnableVertexAttribArray(maResources.m_RenderVertexID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_RenderVertexBuf);
-    glVertexAttribPointer(
-        maResources.m_RenderVertexID, // attribute
-        3,                  // size
-        GL_FLOAT,           // type
-        GL_FALSE,           // normalized?
-        0,                  // stride
-        (void*)0            // array buffer offset
-        );
-    glEnableVertexAttribArray(maResources.m_RenderTexCoordID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_RenderTexCoordBuf);
-    glVertexAttribPointer(
-        maResources.m_RenderTexCoordID, // attribute.
-        2,                  // size
-        GL_FLOAT,           // type
-        GL_FALSE,           // normalized?
-        0,                  // stride
-        (void*)0            // array buffer offset
-        );
-    glBindTexture(GL_TEXTURE_2D, TexID);
-    glUniform1i(maResources.m_RenderTexID, 0);
-    glDrawArrays(GL_QUADS, 0, 4);
-    glDisableVertexAttribArray(maResources.m_RenderTexCoordID);
-    glDisableVertexAttribArray(maResources.m_RenderVertexID);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glUseProgram(0);
 }
 
 void OpenGL3DRenderer::init()
