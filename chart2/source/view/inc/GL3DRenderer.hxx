@@ -81,7 +81,6 @@ struct Polygon3DInfo
     glm::vec4 polygonColor;
     glm::vec4 id;
     Vertices3D *vertices;
-    UVs3D *uvs;
     Normals3D *normals;
     std::vector <Vertices3D *> verticesList;
     std::vector <Normals3D *> normalsList;

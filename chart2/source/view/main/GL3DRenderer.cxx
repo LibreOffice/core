@@ -80,7 +80,6 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
     m_Polygon3DInfo.vertices = NULL;
-    m_Polygon3DInfo.uvs = NULL;
     m_Polygon3DInfo.normals = NULL;
     m_Polygon3DInfo.lineWidth = 0.001f;
 
