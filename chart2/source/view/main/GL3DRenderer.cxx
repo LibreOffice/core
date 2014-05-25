@@ -72,8 +72,7 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
 }
 
 OpenGL3DRenderer::OpenGL3DRenderer():
-    m_uiSelectFrameCounter(0)
-    , m_fViewAngle(30.0f)
+    m_fViewAngle(30.0f)
     , m_fHeightWeight(1.0f)
     , mbPickingMode(false)
 {
