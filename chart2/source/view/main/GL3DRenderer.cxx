@@ -31,6 +31,9 @@ namespace opengl3D {
 
 namespace {
 
+const int CORNER_DIVION_Y = 10;
+const int CORNER_DIVION_Z = 10;
+
 int static checkGLError(const char *file, int line)
 {
     GLenum glErr;
@@ -398,7 +401,8 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
 int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, float fRadius, int iSubDivY, int iSubDivZ, float width, float height, float depth)
 {
     //float fAddAngleY = 360.0f/float(iSubDivY), fAddAngleZ = 180.0f/float(iSubDivZ);
-    float fAddAngleY = 360.0f/float(iSubDivY), fAddAngleZ = 180.0f/float(iSubDivZ);
+    float fAddAngleY = 360.0f/float(iSubDivY);
+    float fAddAngleZ = 180.0f/float(iSubDivZ);
     float fCurAngleY = 0.0f;
     int iStepsY = 1;
 
@@ -1003,7 +1007,8 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     if (m_Extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
     {
         float radius = 0.2f;
-        CreateActualRoundedCube(radius, 10, 10, 1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1 + 2 * radius);
+        CreateActualRoundedCube(radius, CORNER_DIVION_Y, CORNER_DIVION_Z,
+                1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1 + 2 * radius);
         AddVertexData(m_CubeVertexBuf);
         AddNormalData(m_CubeNormalBuf);
         AddIndexData(m_CubeElementBuf);
