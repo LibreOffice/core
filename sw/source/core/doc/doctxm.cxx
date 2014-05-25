@@ -36,6 +36,7 @@
 #include <pagedesc.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentSettingManager.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -1704,7 +1705,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     else
                         nRightMargin = aNdRect.Width();
                     //#i24363# tab stops relative to indent
-                    if( pDoc->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+                    if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
                     {
                         // left margin of paragraph style
                         const SvxLRSpaceItem& rLRSpace = pTOXNd->GetTxtColl()->GetLRSpace();

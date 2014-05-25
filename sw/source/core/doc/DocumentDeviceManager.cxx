@@ -21,6 +21,7 @@
 
 #include <IDocumentDeviceAccess.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
@@ -76,14 +77,14 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
              mpPrt->SetMapMode( aMapMode );
         }
 
-        if ( m_rSwdoc.GetDrawModel() && !m_rSwdoc.get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+        if ( m_rSwdoc.GetDrawModel() && !m_rSwdoc.GetDocumentSettingManager().get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
             m_rSwdoc.GetDrawModel()->SetRefDevice( mpPrt );
     }
 
     if ( bCallPrtDataChanged &&
          // #i41075# Do not call PrtDataChanged() if we do not
          // use the printer for formatting:
-         !m_rSwdoc.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+         !m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
         PrtDataChanged();
 }
 
@@ -106,7 +107,7 @@ void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*
             delete mpVirDev;
         mpVirDev = pVd;
 
-        if ( m_rSwdoc.GetDrawModel() && m_rSwdoc.get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+        if ( m_rSwdoc.GetDrawModel() && m_rSwdoc.GetDocumentSettingManager().get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
             m_rSwdoc.GetDrawModel()->SetRefDevice( mpVirDev );
     }
 }
@@ -114,7 +115,7 @@ void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*
 OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) const
 {
     OutputDevice* pRet = 0;
-    if ( !m_rSwdoc.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+    if ( !m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
     {
         pRet = getPrinter( bCreate );
 
@@ -133,8 +134,8 @@ OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) 
 
 void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes )
 {
-    if ( m_rSwdoc.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual ||
-         m_rSwdoc.get(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE) != bNewHiRes )
+    if ( m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual ||
+         m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE) != bNewHiRes )
     {
         if ( bNewVirtual )
         {
@@ -160,8 +161,8 @@ void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*
                 m_rSwdoc.GetDrawModel()->SetRefDevice( pPrinter );
         }
 
-        m_rSwdoc.set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
-        m_rSwdoc.set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
+        m_rSwdoc.GetDocumentSettingManager().set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
+        m_rSwdoc.GetDocumentSettingManager().set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
         PrtDataChanged();
         m_rSwdoc.SetModified();
     }
@@ -209,7 +210,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
             bDataChanged = true;
         }
     }
-    if ( bDataChanged && !m_rSwdoc.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+    if ( bDataChanged && !m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
         PrtDataChanged();
 }
 
@@ -257,7 +258,7 @@ VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 
     // #i60945# External leading compatibility for unix systems.
-    if ( m_rSwdoc.get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
+    if ( m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
         pNewVir->Compat_ZeroExtleadBug();
 
     MapMode aMapMode( pNewVir->GetMapMode() );
@@ -321,7 +322,7 @@ void DocumentDeviceManager::PrtDataChanged()
             bDraw = false;
             if( m_rSwdoc.GetDrawModel() )
             {
-                m_rSwdoc.GetDrawModel()->SetAddExtLeading( m_rSwdoc.get(IDocumentSettingAccess::ADD_EXT_LEADING) );
+                m_rSwdoc.GetDrawModel()->SetAddExtLeading( m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::ADD_EXT_LEADING) );
                 m_rSwdoc.GetDrawModel()->SetRefDevice( getReferenceDevice( false ) );
             }
 
@@ -340,7 +341,7 @@ void DocumentDeviceManager::PrtDataChanged()
     }
     if ( bDraw && m_rSwdoc.GetDrawModel() )
     {
-        const bool bTmpAddExtLeading = m_rSwdoc.get(IDocumentSettingAccess::ADD_EXT_LEADING);
+        const bool bTmpAddExtLeading = m_rSwdoc.GetDocumentSettingManager().get(IDocumentSettingAccess::ADD_EXT_LEADING);
         if ( bTmpAddExtLeading != m_rSwdoc.GetDrawModel()->IsAddExtLeading() )
             m_rSwdoc.GetDrawModel()->SetAddExtLeading( bTmpAddExtLeading );
 

@@ -94,6 +94,7 @@
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
@@ -3838,7 +3839,7 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( Run
 }
 
 SwXDocumentPropertyHelper::SwXDocumentPropertyHelper(SwDoc& rDoc) :
-SvxUnoForbiddenCharsTable ( rDoc.getForbiddenCharacterTable() )
+SvxUnoForbiddenCharsTable ( rDoc.GetDocumentSettingManager().getForbiddenCharacterTable() )
 ,m_pDoc(&rDoc)
 {
 }

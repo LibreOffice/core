@@ -60,6 +60,7 @@
 #include <rootfrm.hxx>
 #include <istyleaccess.hxx>
 #include <IDocumentListItems.hxx>
+#include <DocumentSettingManager.hxx>
 #include <switerator.hxx>
 #include "ndole.hxx"
 
@@ -1912,7 +1913,7 @@ SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnly
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return GetDoc(); }
+const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return &GetDoc()->GetDocumentSettingManager(); }
 const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return &GetDoc()->getIDocumentDeviceAccess(); }
 const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return GetDoc(); }
 const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }

@@ -248,7 +248,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 // Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
-    public IDocumentSettingAccess,
     public IDocumentRedlineAccess,
     public IDocumentLinksAdministration,
     public IDocumentFieldsAccess,
@@ -592,26 +591,10 @@ public:
     virtual sal_Int32 getReferenceCount() const SAL_OVERRIDE;
 
     // IDocumentSettingAccess
-    virtual bool get(/*[in]*/ DocumentSettingId id) const SAL_OVERRIDE;
-    virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value) SAL_OVERRIDE;
-    virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const SAL_OVERRIDE;
-    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) SAL_OVERRIDE;
-    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() SAL_OVERRIDE;
-    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const SAL_OVERRIDE;
-    virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
-    virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) SAL_OVERRIDE;
-    virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
-    virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode ) SAL_OVERRIDE;
-    virtual SwCharCompressType getCharacterCompressionType() const SAL_OVERRIDE;
-    virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) SAL_OVERRIDE;
     virtual sal_uInt32 getRsid() const;
     virtual void setRsid( sal_uInt32 nVal );
     virtual sal_uInt32 getRsidRoot() const;
     virtual void setRsidRoot( sal_uInt32 nVal );
-    virtual sal_uInt32 Getn32DummyCompatabilityOptions1() const SAL_OVERRIDE;
-    virtual void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 ) SAL_OVERRIDE;
-    virtual sal_uInt32 Getn32DummyCompatabilityOptions2() const SAL_OVERRIDE;
-    virtual void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 ) SAL_OVERRIDE;
 
     // IDocumentDeviceAccess
     IDocumentDeviceAccess const & getIDocumentDeviceAccess() const;

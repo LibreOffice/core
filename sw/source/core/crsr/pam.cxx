@@ -38,6 +38,7 @@
 #include <ndtxt.hxx>
 
 #include <IMark.hxx>
+#include <DocumentSettingManager.hxx>
 #include <hints.hxx>
 #include <xmloff/odffields.hxx>
 
@@ -701,7 +702,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();
             bool bAtStartB = pB != NULL && pB->GetMarkStart() == *GetMark();
             bRet = ( pA != pB ) || bAtStartA || bAtStartB;
-            bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+            bool bProtectForm = pDoc->GetDocumentSettingManager().get( IDocumentSettingAccess::PROTECT_FORM );
             if ( bProtectForm )
                 bRet |= ( pA == NULL || pB == NULL );
         }

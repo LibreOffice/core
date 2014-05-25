@@ -82,6 +82,7 @@
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <wrtsh.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/request.hxx>
@@ -514,7 +515,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
     // --> #i972#
-    if ( bStarMath && mpDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
+    if ( bStarMath && mpDoc->GetDocumentSettingManager().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
         AlignFormulaToBaseline( xRef.GetObject() );
 
     if (pFlyFrmFmt)

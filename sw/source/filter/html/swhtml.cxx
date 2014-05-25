@@ -78,6 +78,7 @@
 #include <docstat.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentSettingManager.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
@@ -192,7 +193,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
 
         // Die HTML-Seitenvorlage setzen, wenn des kein HTML-Dokument ist,
         // sonst ist sie schon gesetzt.
-        if( !rDoc.get(IDocumentSettingAccess::HTML_MODE) )
+        if( !rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) )
         {
             rDoc.InsertPoolItem( rPam, SwFmtPageDesc(
                 rDoc.GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
@@ -331,8 +332,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die
     // richrigen Vorlagen angelegt werden
-    bOldIsHTMLMode = pDoc->get(IDocumentSettingAccess::HTML_MODE);
-    pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
+    bOldIsHTMLMode = pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE);
+    pDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, true);
 
     pCSS1Parser = new SwCSS1Parser( pDoc, aFontHeights, sBaseURL, IsNewDoc() );
     pCSS1Parser->SetIgnoreFontFamily( rHtmlOptions.IsIgnoreFontFamily() );
@@ -411,7 +412,7 @@ SwHTMLParser::~SwHTMLParser()
 #endif
     bool bAsync = pDoc->IsInLoadAsynchron();
     pDoc->SetInLoadAsynchron( false );
-    pDoc->set(IDocumentSettingAccess::HTML_MODE, bOldIsHTMLMode);
+    pDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, bOldIsHTMLMode);
 
     if( pDoc->GetDocShell() && nEventId )
         Application::RemoveUserEvent( nEventId );
@@ -421,7 +422,7 @@ SwHTMLParser::~SwHTMLParser()
     if( pDoc->GetDocShell() )
     {
         // Gelinkte Bereiche updaten
-        sal_uInt16 nLinkMode = pDoc->getLinkUpdateMode( true );
+        sal_uInt16 nLinkMode = pDoc->GetDocumentSettingManager().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
             SFX_CREATE_MODE_INTERNAL!=pDoc->GetDocShell()->GetCreateMode() )
             pDoc->GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL,

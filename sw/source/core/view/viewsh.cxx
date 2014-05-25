@@ -65,6 +65,7 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <wrtsh.hxx>
+#include <DocumentSettingManager.hxx>
 
 #include "../../uibase/inc/view.hxx"
 #include <PostItMgr.hxx>
@@ -2169,7 +2170,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     *mpOpt = rOpt;   // First the options are taken.
     mpOpt->SetUIOptions(rOpt);
 
-    mpDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(mpDoc->GetDocShell()));
+    mpDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(mpDoc->GetDocShell()));
 
     if( bBrowseModeChanged )
     {
@@ -2506,8 +2507,8 @@ SwPostItMgr* SwViewShell::GetPostItMgr()
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() const { return mpDoc; }
-IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() { return mpDoc; }
+const IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() const { return &mpDoc->GetDocumentSettingManager(); }
+IDocumentSettingAccess* SwViewShell::getIDocumentSettingAccess() { return &mpDoc->GetDocumentSettingManager(); }
 const IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() const { return &mpDoc->getIDocumentDeviceAccess(); }
 IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() { return &mpDoc->getIDocumentDeviceAccess(); }
 const IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() const { return mpDoc->getIDocumentMarkAccess(); }

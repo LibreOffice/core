@@ -36,6 +36,7 @@
 #include <hints.hxx>
 #include <switerator.hxx>
 #include <fieldhint.hxx>
+#include <DocumentSettingManager.hxx>
 
 /// count field types with a ResId, if 0 count all
 sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
@@ -412,7 +413,7 @@ SwFldUpdateFlags SwEditShell::GetFldUpdateFlags(bool bDocSettings) const
 
 void SwEditShell::SetLabelDoc( bool bFlag )
 {
-    GetDoc()->set(IDocumentSettingAccess::LABEL_DOCUMENT, bFlag );
+    GetDoc()->GetDocumentSettingManager().set(IDocumentSettingAccess::LABEL_DOCUMENT, bFlag );
 }
 
 bool SwEditShell::IsLabelDoc() const

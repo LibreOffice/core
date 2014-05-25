@@ -41,6 +41,8 @@
 #include <layouter.hxx>
 #include <flyfrms.hxx>
 
+#include <DocumentSettingManager.hxx>
+
 // Move methods
 
 /// Return value tells whether the Frm should be moved.
@@ -853,7 +855,7 @@ void SwLayoutFrm::MakeAll()
 
 bool SwTxtNode::IsCollapse() const
 {
-    if (GetDoc()->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA )
+    if (GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA )
         &&  GetTxt().isEmpty())
     {
         sal_uLong nIdx=GetIndex();

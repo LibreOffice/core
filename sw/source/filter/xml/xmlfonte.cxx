@@ -25,6 +25,7 @@
 #include <doc.hxx>
 #include <xmlexp.hxx>
 #include <xmlimp.hxx>
+#include <DocumentSettingManager.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -78,14 +79,15 @@ XMLFontAutoStylePool* SwXMLExport::CreateFontAutoStylePool()
     // the embedding only in one of them.
     if(( getExportFlags() & EXPORT_CONTENT ) == 0 )
         blockFontEmbedding = true;
-    if( !getDoc()->get( IDocumentSettingAccess::EMBED_FONTS ))
+    if( !getDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::EMBED_FONTS ))
         blockFontEmbedding = true;
     return new SwXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
 }
 
 void SwXMLImport::NotifyEmbeddedFontRead()
 {
-    getDoc()->set( IDocumentSettingAccess::EMBED_FONTS, true );
+    getDoc()->GetDocumentSettingManager().set( IDocumentSettingAccess::EMBED_FONTS, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

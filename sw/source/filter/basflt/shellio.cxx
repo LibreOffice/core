@@ -37,6 +37,7 @@
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentSettingManager.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <undobj.hxx>
@@ -96,7 +97,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // For Web documents the default template was set already by InitNew,
         // unless the filter is not HTML,
         // or a SetTemplateName was called in ConvertFrom.
-        if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) || ReadHTML != po || !po->pTemplate  )
+        if( !pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) || ReadHTML != po || !po->pTemplate  )
             po->SetTemplate( *pDoc );
     }
 
@@ -496,7 +497,7 @@ SwDoc* Reader::GetTemplateDoc()
                         pTemplate->SetOle2Link( Link() );
                         // always FALSE
                         pTemplate->GetIDocumentUndoRedo().DoUndo( false );
-                        pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
+                        pTemplate->GetDocumentSettingManager().set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
                         pTemplate->RemoveAllFmtLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( true );
@@ -557,7 +558,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     ClearTemplate();
     pTemplate = new SwDoc;
     pTemplate->acquire();
-    pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
+    pTemplate->GetDocumentSettingManager().set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
     pTemplate->getIDocumentDeviceAccess().getPrinter( true );
     pTemplate->RemoveAllFmtLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
@@ -846,8 +847,8 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         pESh->StartAllAction();
     }
 
-    bool bWasPurgeOle = pOutDoc->get(IDocumentSettingAccess::PURGE_OLE);
-    pOutDoc->set(IDocumentSettingAccess::PURGE_OLE, false);
+    bool bWasPurgeOle = pOutDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PURGE_OLE);
+    pOutDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::PURGE_OLE, false);
 
     sal_uLong nError = 0;
     if( pMedium )
@@ -859,7 +860,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     else if( xStg.is() )
         nError = rxWriter->Write( *pPam, xStg, pRealFileName );
 
-    pOutDoc->set(IDocumentSettingAccess::PURGE_OLE, bWasPurgeOle );
+    pOutDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::PURGE_OLE, bWasPurgeOle );
 
     if( pESh )
     {

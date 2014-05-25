@@ -20,6 +20,7 @@
 #include <sfx2/printer.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentSettingManager.hxx>
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
@@ -69,7 +70,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     }
 
     SwDocShell* pDShell = mpDoc->GetDocShell();
-    mpDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
+    mpDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
     // JP 02.02.99: Bug 61335 - set readonly flag at ViewOptions before creating layout. Otherwise,
     //                          one would have to reformat again.
 

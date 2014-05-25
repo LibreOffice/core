@@ -68,6 +68,7 @@
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <DocumentSettingManager.hxx>
 
 #include <ndole.hxx>
 #include <svx/charthelper.hxx>
@@ -3292,7 +3293,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     pLines->LockLines( false );
                 }
 
-                if ( pSh->GetDoc()->get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS ) )
+                if ( pSh->GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS ) )
                     pPage->PaintBaBo( aPaintRect, pPage, true, /*bOnlyTxtBackground=*/true );
 
                 if( pSh->GetWin() )

@@ -37,6 +37,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <DocumentSettingManager.hxx>
 #include <cmdid.h>
 #include <poolfmt.hrc>
 #include <frmfmt.hxx>
@@ -2280,7 +2281,7 @@ sal_uInt8 SwFEShell::IsSelObjProtected( sal_uInt16 eType ) const
                             // set FLYPROTECT_POS if it is a Math object anchored 'as char' and baseline alignment is activated
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
                                     && FLY_AS_CHAR == pFly->GetFmt()->GetAnchor().GetAnchorId()
-                                    && mpDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+                                    && mpDoc->GetDocumentSettingManager().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
                             if ((FLYPROTECT_POS & eType) && bProtectMathPos)
                                 nChk |= FLYPROTECT_POS;
                         }

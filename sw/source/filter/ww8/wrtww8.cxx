@@ -327,8 +327,8 @@ static void WriteDop( WW8Export& rWrt )
     rDop.SetCompatabilityOptions( rWrt.pDoc->GetDocumentSettingManager().Getn32DummyCompatabilityOptions1());
     rDop.SetCompatabilityOptions2( rWrt.pDoc->GetDocumentSettingManager().Getn32DummyCompatabilityOptions2());
 
-    rDop.fNoLeading = !rWrt.pDoc->get(IDocumentSettingAccess::ADD_EXT_LEADING);
-    rDop.fUsePrinterMetrics = !rWrt.pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
+    rDop.fNoLeading = !rWrt.pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::ADD_EXT_LEADING);
+    rDop.fUsePrinterMetrics = !rWrt.pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
 
     // write default TabStop
     const SvxTabStopItem& rTabStop =
@@ -408,9 +408,9 @@ static void WriteDop( WW8Export& rWrt )
     rDop.cParasFtnEdn   = rDStat.nPara;
     rDop.cLinesFtnEdn   = rDStat.nPara;
 
-    rDop.fDontUseHTMLAutoSpacing = rWrt.pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX);
+    rDop.fDontUseHTMLAutoSpacing = rWrt.pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PARA_SPACE_MAX);
 
-    rDop.fExpShRtn = !rWrt.pDoc->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
+    rDop.fExpShRtn = !rWrt.pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
 
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
@@ -564,7 +564,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
 
     for (rTypo.reserved1=8;rTypo.reserved1>0;rTypo.reserved1-=2)
     {
-        if (0 != (pForbidden = pDoc->getForbiddenCharacters(rTypo.GetConvertedLang(),
+        if (0 != (pForbidden = pDoc->GetDocumentSettingManager().getForbiddenCharacters(rTypo.GetConvertedLang(),
             false)))
         {
             int nIdx = (rTypo.reserved1-2)/2;
@@ -633,7 +633,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
     const IDocumentSettingAccess* pIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
 
     rTypo.fKerningPunct = sal_uInt16(pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION));
-    rTypo.iJustification = pDoc->getCharacterCompressionType();
+    rTypo.iJustification = pDoc->GetDocumentSettingManager().getCharacterCompressionType();
 }
 
 // It can only be found something with this method, if it is used within

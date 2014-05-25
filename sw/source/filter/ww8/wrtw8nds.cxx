@@ -62,6 +62,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
@@ -2375,13 +2376,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
                 SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
                 // #i25901#- consider compatibility option
-                if (!pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES))
+                if (!pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES))
                 {
                     if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
                         aUL.SetUpper( 0 );
                 }
                 // #i25901# - consider compatibility option
-                if (!pDoc->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS))
+                if (!pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS))
                 {
                     if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
                         aUL.SetLower( 0 );

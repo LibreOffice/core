@@ -76,6 +76,7 @@
 #include <fmtftn.hxx>
 // FOOTNOTES
 #include "doc.hxx"
+#include <DocumentSettingManager.hxx>
 #include "swerror.h"
 #include "charatr.hxx"
 #include "paratr.hxx"
@@ -2245,8 +2246,8 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         // The background color is normally only used in Browse-Mode.
         // We always use it for a HTML document, but for a text document
         // only if viewed in Browse-Mode.
-        if( pDoc->get(IDocumentSettingAccess::HTML_MODE) ||
-            pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
+        if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) ||
+            pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::BROWSE_MODE))
         {
             SwViewShell *pVSh = 0;
             pDoc->GetEditShell( &pVSh );

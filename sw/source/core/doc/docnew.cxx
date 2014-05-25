@@ -314,7 +314,7 @@ SwDoc::SwDoc()
                                   OUTLINE_RULE );
     AddNumRule(mpOutlineRule);
     // Counting of phantoms depends on <IsOldNumbering()>
-    mpOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
+    mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(IDocumentSettingAccess::OLD_NUMBERING) );
 
     new SwTxtNode(
             SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
@@ -760,7 +760,7 @@ void SwDoc::ClearDoc()
                                   OUTLINE_RULE );
     AddNumRule(mpOutlineRule);
     // Counting of phantoms depends on <IsOldNumbering()>
-    mpOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
+    mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(IDocumentSettingAccess::OLD_NUMBERING) );
 
     // remove the dummy pagedec from the array and delete all the old ones
     maPageDescs.erase( maPageDescs.begin() + nDummyPgDsc );
@@ -861,7 +861,7 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
 void SwDoc::UpdateLinks( bool bUI )
 {
     SfxObjectCreateMode eMode;
-    sal_uInt16 nLinkMode = getLinkUpdateMode( true );
+    sal_uInt16 nLinkMode = GetDocumentSettingManager().getLinkUpdateMode( true );
     if ( GetDocShell()) {
         sal_uInt16 nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
         if( (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
