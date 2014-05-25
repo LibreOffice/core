@@ -45,7 +45,10 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
 
     virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
-    virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer ) SAL_OVERRIDE;
+    virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
+                                            const basebmp::RawMemorySharedArray &pBuffer,
+                                            const bool bTopDown
+                                          ) SAL_OVERRIDE;
     virtual void            GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
 
     basebmp::BitmapDeviceSharedPtr getBitmapDevice() { return m_aDevice; }
