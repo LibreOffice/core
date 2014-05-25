@@ -231,6 +231,14 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
     return xRet;
 }
 
+void ShapeToolbarController::execute( sal_Int16 KeyModifier ) throw (uno::RuntimeException, std::exception)
+{
+    uno::Sequence< beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name = "KeyModifier";
+    aArgs[0].Value <<= KeyModifier;
+    dispatchCommand( m_aCommandURL, aArgs );
+}
+
 // ::com::sun::star::frame::XSubToolbarController
 sal_Bool ShapeToolbarController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
