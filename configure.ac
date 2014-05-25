@@ -7665,7 +7665,11 @@ AC_SUBST([ENABLE_EOT])
 dnl ===================================================================
 dnl Check for system librevenge
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0])
+AS_IF([test "$COM" = "MSC"],
+      [librevenge_libdir="${WORKDIR}/LinkTarget/Library"],
+      [librevenge_libdir="${WORKDIR}/UnpackedTarball/lirevenge/src/lib/.libs"]
+)
+libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["-L${librevenge_libdir} -lrevenge-0.0"]),
 
 dnl ===================================================================
 dnl Check for system libe-book

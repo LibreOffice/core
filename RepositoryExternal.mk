@@ -1784,7 +1784,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
 
 define gb_LinkTarget__use_revenge
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,librevenge)/inc \
+	$(REVENGE_CFLAGS) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -1808,11 +1808,11 @@ define gb_LinkTarget__use_revenge
 $(call gb_LinkTarget_use_package,$(1),librevenge)
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,librevenge)/inc \
+	$(REVENGE_CFLAGS) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,librevenge)/src/lib/.libs -lrevenge-0.0 \
+	$(REVENGE_LIBS) \
 )
 endef
 
