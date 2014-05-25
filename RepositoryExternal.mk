@@ -1546,6 +1546,8 @@ $(call gb_LinkTarget_add_libs,$(1),$(REVENGE_LIBS))
 
 endef
 
+gb_ExternalProject__use_revenge :=
+
 else # !SYSTEM_REVENGE
 
 ifeq ($(COM),MSC)
@@ -1565,6 +1567,11 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
+define gb_ExternalProject__use_revenge
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Library_get_target,revenge)
+
+endef
+
 else # !MSC
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo, \
@@ -1581,6 +1588,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,librevenge)/src/lib/.libs -lrevenge-0.0 \
 )
+endef
+
+define gb_ExternalProject__use_revenge
+$(call gb_ExternalProject_use_package,$(1),librevenge)
+
 endef
 
 endif # MSC
