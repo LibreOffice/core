@@ -372,6 +372,7 @@ void SearchAndParseThread::execute()
     m_pPersonaDialog->SetImages( vImageList );
     sProgress = "";
     m_pPersonaDialog->SetProgress( sProgress );
+    m_pPersonaDialog->setOptimalLayoutSize();
 }
 
 // TODO: Think of some way to retrieve only the preview image and skip the rest!
