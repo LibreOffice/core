@@ -46,6 +46,7 @@
 #include <viewopt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentSettingManager.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -187,7 +188,7 @@ static void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 {
     SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
     SvxFontHeightItem aHItem(240, 100, RES_CHRATR_FONTSIZE);
-    const bool bHTMLMode = pDoc->get(IDocumentSettingAccess::HTML_MODE);
+    const bool bHTMLMode = pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE);
     if( bHTMLMode )
         aHItem.SetHeight( aHeadlineSizes[ MAXLEVEL + nLevel ] );
     else
@@ -356,7 +357,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         mpTxtFmtCollTbl->push_back( pNewColl );
     }
 
-    bool bNoDefault = get( IDocumentSettingAccess::STYLES_NODEFAULT );
+    bool bNoDefault = GetDocumentSettingManager().get( IDocumentSettingAccess::STYLES_NODEFAULT );
     if ( !bNoDefault )
     {
         switch( nId )
@@ -387,7 +388,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                                         RES_PARATR_LINESPACING );
                 SvxULSpaceItem aUL( 0, PT_7, RES_UL_SPACE );
                 aLSpc.SetPropLineSpace( (const sal_uInt8) 120 );
-                if( get(IDocumentSettingAccess::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
+                if( GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
                 aSet.Put( aUL );
                 aSet.Put( aLSpc );
             }
@@ -466,7 +467,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
                 SvxFontHeightItem aFntSize( PT_14, 100, RES_CHRATR_FONTSIZE );
                 SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
-                if( get(IDocumentSettingAccess::HTML_MODE) )
+                if( GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) )
                     aUL.SetLower( HTML_PARSPACE );
                 aSet.Put( SvxFmtKeepItem( true, RES_KEEP ));
 
@@ -639,7 +640,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
         case RES_POOLCOLL_SENDADRESS:           // Sender address
             {
-                if( get(IDocumentSettingAccess::HTML_MODE) )
+                if( GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) )
                     SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE) );
                 else
                 {
@@ -1290,7 +1291,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
 
     case RES_POOLFRM_FRAME:
         {
-            if ( get(IDocumentSettingAccess::HTML_MODE) )
+            if ( GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) )
             {
                 aSet.Put( SwFmtAnchor( FLY_AS_CHAR ));
                 aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );

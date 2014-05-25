@@ -49,6 +49,7 @@
 #include <swerror.h>
 #include <fltini.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>
 #include <unotextrange.hxx>
@@ -956,9 +957,9 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     rDoc.PropagateOutlineRule();
 
     // #i62875#
-    if ( rDoc.get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) && !docfunc::ExistsDrawObjs( rDoc ) )
+    if ( rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) && !docfunc::ExistsDrawObjs( rDoc ) )
     {
-        rDoc.set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
+        rDoc.GetDocumentSettingManager().set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
     // Convert all instances of <SdrOle2Obj> into <SdrGrafObj>, because the

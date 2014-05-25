@@ -60,6 +60,7 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <switerator.hxx>
+#include <DocumentSettingManager.hxx>
 
 // ftnfrm.cxx:
 void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes );
@@ -135,7 +136,7 @@ SwFrmNotify::~SwFrmNotify()
                         if ( !bInvalidPrePos && pPre->IsTabFrm() )
                         {
                             SwTabFrm* pPreTab = static_cast<SwTabFrm*>(pPre);
-                            if ( pPreTab->GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
+                            if ( pPreTab->GetFmt()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
                             {
                                 SwRowFrm* pLastRow = static_cast<SwRowFrm*>(pPreTab->GetLastLower());
                                 if ( pLastRow && pLastRow->ShouldRowKeepWithNext() )
@@ -1819,7 +1820,7 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
 {
     long nRight=0;
 
-    if (!pCaller->IsTxtFrm() || !((SwTxtFrm*)pCaller)->GetTxtNode()->GetDoc()->get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTxtFrm() || !((SwTxtFrm*)pCaller)->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
@@ -1867,7 +1868,7 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
     long nLeft=0;
 
-    if (!pCaller->IsTxtFrm() || !((SwTxtFrm*)pCaller)->GetTxtNode()->GetDoc()->get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTxtFrm() || !((SwTxtFrm*)pCaller)->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
@@ -1885,7 +1886,7 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
         if (pCaller->IsTxtFrm())
         {
             const SwTxtFrm* pTxtFrm = (const SwTxtFrm*)pCaller;
-            if (pTxtFrm->GetTxtNode()->GetDoc()->get(IDocumentSettingAccess::FLOATTABLE_NOMARGINS))
+            if (pTxtFrm->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::FLOATTABLE_NOMARGINS))
             {
                 // If this is explicitly requested, ignore the margins next to the floating table.
                 if (lcl_hasTabFrm(pTxtFrm))

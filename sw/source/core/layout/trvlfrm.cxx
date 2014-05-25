@@ -41,6 +41,7 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <viscrs.hxx>
 #include <frmfmt.hxx>
 #include <swtable.hxx>
@@ -1645,7 +1646,7 @@ bool SwFrm::IsProtected() const
     if (this->IsCntntFrm() && ((SwCntntFrm*)this)->GetNode())
     {
         const SwDoc *pDoc=((SwCntntFrm*)this)->GetNode()->GetDoc();
-        bool isFormProtected=pDoc->get(IDocumentSettingAccess::PROTECT_FORM );
+        bool isFormProtected=pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PROTECT_FORM );
         if (isFormProtected)
         {
             return false; // TODO a hack for now, well deal with it later, I we return true here we have a "double" locking

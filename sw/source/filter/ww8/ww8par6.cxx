@@ -72,6 +72,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <pagedesc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
@@ -257,7 +258,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     // seem to not add external leading in word, or the character would run across
     // two line in some cases.
     if (eType != GRID_NONE)
-        rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
+        rDoc.GetDocumentSettingManager().set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
 
     //force to set document as standard page mode
     bool bSquaredMode = false;

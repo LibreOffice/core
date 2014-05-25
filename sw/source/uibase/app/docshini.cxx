@@ -59,6 +59,7 @@
 #include <wdocsh.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <docfac.hxx>
 #include <docstyle.hxx>
 #include <shellio.hxx>
@@ -102,7 +103,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         if ( bWeb )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
         else if( ISA( SwGlobalDocShell ) )
-            GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
+            GetDoc()->GetDocumentSettingManager().set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
         if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
             SwTransferable::InitOle( this, *pDoc );
@@ -118,12 +119,12 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 ForbiddenCharacters aForbidden;
                 aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
                 LanguageType  eLang = LanguageTag::convertToLanguageType(pLocales[i]);
-                pDoc->setForbiddenCharacters( eLang, aForbidden);
+                pDoc->GetDocumentSettingManager().setForbiddenCharacters( eLang, aForbidden);
             }
         }
-        pDoc->set(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION,
+        pDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION,
                   !aAsian.IsKerningWesternTextOnly());
-        pDoc->setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
+        pDoc->GetDocumentSettingManager().setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
         pDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
 
         SubInitNew();
@@ -286,7 +287,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         // the default for documents created via 'File/New' should be 'on'
         // (old documents, where this property was not yet implemented, will get the
         // value 'false' in the SwDoc c-tor)
-        pDoc->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+        pDoc->GetDocumentSettingManager().set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
                 SW_MOD()->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
     }
 
@@ -399,7 +400,7 @@ void SwDocShell::AddLink()
         SwDocFac aFactory;
         pDoc = aFactory.GetDoc();
         pDoc->acquire();
-        pDoc->set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell) );
+        pDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell) );
     }
     else
         pDoc->acquire();
@@ -529,13 +530,13 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                         // by this formats.
                         if( ISA( SwWebDocShell ) )
                         {
-                            if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) )
-                                pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
+                            if( !pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) )
+                                pDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, true);
                         }
                         if( ISA( SwGlobalDocShell ) )
                         {
-                            if( !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-                                pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
+                            if( !pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+                                pDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
                         }
                     }
                 }
@@ -614,8 +615,8 @@ void SwDocShell::SubInitNew()
     UpdateFontList();
     InitDraw();
 
-    pDoc->setLinkUpdateMode( GLOBALSETTING );
-    pDoc->setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );
+    pDoc->GetDocumentSettingManager().setLinkUpdateMode( GLOBALSETTING );
+    pDoc->GetDocumentSettingManager().setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );
 
     bool bWeb = ISA(SwWebDocShell);
 
@@ -677,7 +678,7 @@ void SwDocShell::SubInitNew()
  * Document Interface Access
  */
 IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return &pDoc->getIDocumentDeviceAccess(); }
-const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
+const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return &pDoc->GetDocumentSettingManager(); }
 IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

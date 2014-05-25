@@ -47,6 +47,7 @@
 #include <cntfrm.hxx>
 #include <frmatr.hxx>
 #include <ndole.hxx>
+#include <DocumentSettingManager.hxx>
 
 #include <comphelper/classids.hxx>
 #include <vcl/graph.hxx>
@@ -847,7 +848,7 @@ bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, cons
         SfxObjectShell* p = pDoc->GetPersist();
         if( p )
         {
-            if( pDoc->get(IDocumentSettingAccess::PURGE_OLE) )
+            if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PURGE_OLE) )
             {
                 try
                 {

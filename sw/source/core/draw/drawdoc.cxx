@@ -36,6 +36,7 @@
 #include <shellio.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <DocumentSettingManager.hxx>
 
 using namespace com::sun::star;
 
@@ -110,9 +111,9 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
                 }
     }
 
-    SetForbiddenCharsTable( pD->getForbiddenCharacterTable() );
+    SetForbiddenCharsTable( pD->GetDocumentSettingManager().getForbiddenCharacterTable() );
     // Implementation for asian compression
-    SetCharCompressType( static_cast<sal_uInt16>(pD->getCharacterCompressionType() ));
+    SetCharCompressType( static_cast<sal_uInt16>(pD->GetDocumentSettingManager().getCharacterCompressionType() ));
 }
 
 // Destructor

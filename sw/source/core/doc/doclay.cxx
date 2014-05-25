@@ -62,6 +62,7 @@
 #include <ndole.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentSettingManager.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -710,7 +711,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
         sal_uInt16 nCollId = static_cast<sal_uInt16>(
-            get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
+            GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
 
         /* If there is no adjust item in the paragraph style for the content node of the new fly section
            propagate an existing adjust item at the anchor to the new content node. */
@@ -1842,7 +1843,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             }
         }
 
-        SwFldUpdateFlags nFldUpdFlag = getFieldUpdateFlags(true);
+        SwFldUpdateFlags nFldUpdFlag = GetDocumentSettingManager().getFieldUpdateFlags(true);
         if( ( AUTOUPD_FIELD_ONLY == nFldUpdFlag
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
                 GetUpdtFlds().IsFieldsDirty()

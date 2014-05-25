@@ -77,6 +77,7 @@
 #include <statstr.hrc>
 #include <swerror.h>
 #include <rtl/strbuf.hxx>
+#include <DocumentSettingManager.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -205,7 +206,7 @@ sal_uLong SwHTMLWriter::WriteStream()
             nHTMLMode |= HTMLMODE_NO_BR_AT_PAREND;
     }
 
-    eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->get(IDocumentSettingAccess::HTML_MODE) );
+    eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) );
 
     bool bWriteUTF8 = bWriteClipboardDoc;
     eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding();
@@ -229,8 +230,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( pTemplate )
     {
         pTemplate->acquire();
-        bOldHTMLMode = pTemplate->get(IDocumentSettingAccess::HTML_MODE);
-        pTemplate->set(IDocumentSettingAccess::HTML_MODE, true);
+        bOldHTMLMode = pTemplate->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE);
+        pTemplate->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, true);
 
         nOldTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->size();
         nOldCharFmtCnt = pTemplate->GetCharFmts()->size();
@@ -357,8 +358,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     const SfxPoolItem *pItem;
     const SfxItemSet& rPageItemSet = pCurrPageDesc->GetMaster().GetAttrSet();
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
-         (!pDoc->get(IDocumentSettingAccess::HTML_MODE) &&
-          !pDoc->get(IDocumentSettingAccess::BROWSE_MODE)) &&
+         (!pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) &&
+          !pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::BROWSE_MODE)) &&
         SFX_ITEM_SET == rPageItemSet.GetItemState( RES_HEADER, true, &pItem) )
     {
         const SwFrmFmt *pHeaderFmt =
@@ -378,7 +379,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         OutFootEndNotes();
 
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
-        (!pDoc->get(IDocumentSettingAccess::HTML_MODE) && !pDoc->get(IDocumentSettingAccess::BROWSE_MODE))  &&
+        (!pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) && !pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::BROWSE_MODE))  &&
         SFX_ITEM_SET == rPageItemSet.GetItemState( RES_FOOTER, true, &pItem) )
     {
         const SwFrmFmt *pFooterFmt =
@@ -466,7 +467,7 @@ sal_uLong SwHTMLWriter::WriteStream()
                 "falsche Anzahl CharFmts geloescht" );
 
         // HTML-Modus wieder restaurieren
-        pTemplate->set(IDocumentSettingAccess::HTML_MODE, bOldHTMLMode);
+        pTemplate->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, bOldHTMLMode);
 
         if( 0 == pTemplate->release() )
             delete pTemplate;

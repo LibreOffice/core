@@ -40,6 +40,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <UndoManager.hxx>
+#include <DocumentSettingManager.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
@@ -4099,7 +4100,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
 
             // TL_CHART2: update charts (when cursor leaves cell and
             // automatic update is enabled)
-            if (AUTOUPD_FIELD_AND_CHARTS == getFieldUpdateFlags(true))
+            if (AUTOUPD_FIELD_AND_CHARTS == GetDocumentSettingManager().getFieldUpdateFlags(true))
                 pTblNd->GetTable().UpdateCharts();
         }
         SetModified();

@@ -45,6 +45,7 @@
 #include <fmtanchr.hxx>
 #include "shellres.hxx"
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentSettingManager.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>
 
@@ -843,7 +844,7 @@ void SwDrawView::CheckPossibilities()
                             SwDoc* pDoc = Imp().GetShell()->GetDoc();
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
                                     && FLY_AS_CHAR == pFly->GetFmt()->GetAnchor().GetAnchorId()
-                                    && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+                                    && pDoc->GetDocumentSettingManager().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
                             if (bProtectMathPos)
                                 bMoveProtect = true;
                         }

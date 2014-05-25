@@ -63,6 +63,7 @@
 #include <swwait.hxx>
 #include <docstat.hxx>
 #include <IDocumentStatistics.hxx>
+#include <DocumentSettingManager.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
@@ -482,7 +483,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
                 aSet.Put( SfxBoolItem( FN_MATH_BASELINE_ALIGNMENT,
-                        rSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) ) );
+                        rSh.GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) ) );
                 const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
                 aSet.Put( SfxBoolItem( FN_OLE_IS_MATH, xObj.is() && SotExchange::IsMath( xObj->getClassID() ) ) );
 

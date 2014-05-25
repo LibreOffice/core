@@ -149,48 +149,6 @@ sal_Int32 SwDoc::getReferenceCount() const
 }
 
 /* IDocumentSettingAccess */
-bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
-{
-    return m_pDocumentSettingManager->get(id);
-}
-
-void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
-{
-    m_pDocumentSettingManager->set(id,value);
-}
-
-const i18n::ForbiddenCharacters*
-    SwDoc::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
-{
-    return m_pDocumentSettingManager->getForbiddenCharacters(nLang,bLocaleData);
-}
-
-void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
-                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
-{
-    m_pDocumentSettingManager->setForbiddenCharacters(nLang,rFChars);
-}
-
-rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
-{
-    return m_pDocumentSettingManager->getForbiddenCharacterTable();
-}
-
-const rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
-{
-    return m_pDocumentSettingManager->getForbiddenCharacterTable();
-}
-
-sal_uInt16 SwDoc::getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const
-{
-    return m_pDocumentSettingManager->getLinkUpdateMode(bGlobalSettings);
-}
-
-void SwDoc::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
-{
-    m_pDocumentSettingManager->setLinkUpdateMode(eMode);
-}
-
 sal_uInt32 SwDoc::getRsid() const
 {
     return mnRsid;
@@ -223,45 +181,6 @@ void SwDoc::setRsidRoot( sal_uInt32 nVal )
     mnRsidRoot = nVal;
 }
 
-SwFldUpdateFlags SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
-{
-    return m_pDocumentSettingManager->getFieldUpdateFlags(bGlobalSettings);
-}
-
-void SwDoc::setFieldUpdateFlags(/*[in]*/SwFldUpdateFlags eMode )
-{
-    m_pDocumentSettingManager->setFieldUpdateFlags(eMode);
-}
-
-SwCharCompressType SwDoc::getCharacterCompressionType() const
-{
-    return m_pDocumentSettingManager->getCharacterCompressionType();
-}
-
-void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
-{
-    m_pDocumentSettingManager->setCharacterCompressionType(n);
-}
-
-sal_uInt32 SwDoc::Getn32DummyCompatabilityOptions1() const
-{
-    return GetDocumentSettingManager().Getn32DummyCompatabilityOptions1();
-}
-
-void SwDoc::Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
-{
-    GetDocumentSettingManager().Setn32DummyCompatabilityOptions1( CompatabilityOptions1 );
-}
-
-sal_uInt32 SwDoc::Getn32DummyCompatabilityOptions2() const
-{
-     return GetDocumentSettingManager().Getn32DummyCompatabilityOptions2();
-}
-
-void SwDoc::Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
-{
-    GetDocumentSettingManager().Setn32DummyCompatabilityOptions2( CompatabilityOptions2 );
-}
 
 // IDocumentDeviceAccess
 IDocumentDeviceAccess const & SwDoc::getIDocumentDeviceAccess() const
@@ -2113,17 +2032,17 @@ bool SwDoc::EmbedAllLinks()
 
 bool SwDoc::IsInsTblFormatNum() const
 {
-    return SW_MOD()->IsInsTblFormatNum(get(IDocumentSettingAccess::HTML_MODE));
+    return SW_MOD()->IsInsTblFormatNum(GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE));
 }
 
 bool SwDoc::IsInsTblChangeNumFormat() const
 {
-    return SW_MOD()->IsInsTblChangeNumFormat(get(IDocumentSettingAccess::HTML_MODE));
+    return SW_MOD()->IsInsTblChangeNumFormat(GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE));
 }
 
 bool SwDoc::IsInsTblAlignNum() const
 {
-    return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
+    return SW_MOD()->IsInsTblAlignNum(GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE));
 }
 
 /// Set up the InsertDB as Undo table

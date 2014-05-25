@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx> //For SwFmt::getIDocumentSettingAccess()
 #include <fmtcolfunc.hxx>
 #include <frame.hxx>
 #include <format.hxx>
@@ -753,7 +754,7 @@ bool SwFmt::IsShadowTransparent() const
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess* SwFmt::getIDocumentSettingAccess() const { return GetDoc(); }
+const IDocumentSettingAccess* SwFmt::getIDocumentSettingAccess() const { return & GetDoc()->GetDocumentSettingManager(); }
 const IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() const { return GetDoc(); }
 IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() { return GetDoc(); }
 const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return GetDoc(); }

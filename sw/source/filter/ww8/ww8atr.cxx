@@ -91,6 +91,7 @@
 #include <txtftn.hxx>
 #include <poolfmt.hxx>
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
@@ -4739,7 +4740,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                 OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
                 if ( pSet )
                 {
-                    nSpace = nSpace + (short)( AttrSetToLineHeight( *GetExport().pDoc,
+                    nSpace = nSpace + (short)( AttrSetToLineHeight( GetExport().pDoc->GetDocumentSettingManager(),
                         *pSet, *Application::GetDefaultDevice(), nScript ) );
                 }
             }
@@ -5167,7 +5168,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
 
 void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
 {
-    const bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
+    const bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
 
     long nCurrentLeft = 0;
     if ( bTabsRelativeToIndex )

@@ -64,6 +64,7 @@
 #include <objectformatter.hxx>
 #include <layouter.hxx>
 #include <switerator.hxx>
+#include <DocumentSettingManager.hxx>
 
 extern void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage );
@@ -1774,7 +1775,7 @@ void SwTabFrm::MakeAll()
     // #131283#
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
-    const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP);
+    const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::TABLE_ROW_KEEP);
 
     // The Magic Move: Used for the table row keep feature.
     // If only the last row of the table wants to keep (implicitly by setting
@@ -5241,7 +5242,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
     // Calculate the height of the keeping lines
     // (headlines + following keeping lines):
     SwTwips nKeepHeight = nRepeatHeight;
-    if ( GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
+    if ( GetFmt()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
     {
         sal_uInt16 nKeepRows = nRepeat;
 
