@@ -618,7 +618,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, uno::DeploymentExc
 SwFmtColl *
 SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
 {
-    static const sal_uInt16 nMaxLookup = 1000;
+    static const sal_uLong nMaxLookup = 1000;
     SwFmtColl *pFmt = 0;
 
 //  if ( GetCrsrCnt() > nMaxLookup )
@@ -2412,8 +2412,8 @@ lcl_EnumerateIds(sal_uInt16 const* pIdRange, std::set<sal_uInt16> &rWhichIds)
 {
     while (*pIdRange)
     {
-        const sal_uInt16 nStart = sal::static_int_cast<sal_uInt16>(*pIdRange++);
-        const sal_uInt16 nEnd   = sal::static_int_cast<sal_uInt16>(*pIdRange++);
+        const sal_uInt16 nStart = *pIdRange++;
+        const sal_uInt16 nEnd   = *pIdRange++;
         for (sal_uInt16 nId = nStart + 1;  nId <= nEnd;  ++nId)
         {
             rWhichIds.insert( rWhichIds.end(), nId );
