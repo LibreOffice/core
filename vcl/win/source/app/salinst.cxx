@@ -99,7 +99,6 @@ void SalAbort( const OUString& rErrorText, bool )
     }
 }
 
-LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
 class SalYieldMutex : public comphelper::SolarMutex
@@ -248,13 +247,6 @@ bool ImplSalYieldMutexTryToAcquire()
         return pInst->mpSalYieldMutex->tryToAcquire();
     else
         return FALSE;
-}
-
-void ImplSalYieldMutexAcquire()
-{
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
-    if ( pInst )
-        pInst->mpSalYieldMutex->acquire();
 }
 
 void ImplSalYieldMutexRelease()
@@ -748,37 +740,6 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             break;
     }
 
-    return nRet;
-}
-
-LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
-{
-    int bDef = TRUE;
-    LRESULT nRet = 0;
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
-    __try
-    {
-#endif
-        nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
-    }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#else
-    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
-    {
-    }
-#endif
-    if ( bDef )
-    {
-        if ( !ImplHandleGlobalMsg( hWnd, nMsg, wParam, lParam, nRet ) )
-            nRet = DefWindowProcA( hWnd, nMsg, wParam, lParam );
-    }
     return nRet;
 }
 

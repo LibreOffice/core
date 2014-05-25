@@ -99,12 +99,6 @@ void Lwp9Reader::Read()
 }
 
 /**
- * @descr   Read the OLE objects.
- */
-void Lwp9Reader::ReadOleObjects()
-{
-}
-/**
  * @descr   Read the LWP7 object.
  */
 void Lwp9Reader::ReadFileHeader()

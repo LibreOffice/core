@@ -300,13 +300,6 @@ bool ImplSalYieldMutexTryToAcquire()
         return FALSE;
 }
 
-void ImplSalYieldMutexAcquire()
-{
-    AquaSalInstance* pInst = (AquaSalInstance*) GetSalData()->mpFirstInstance;
-    if ( pInst )
-        pInst->mpSalYieldMutex->acquire();
-}
-
 void ImplSalYieldMutexRelease()
 {
     AquaSalInstance* pInst = (AquaSalInstance*) GetSalData()->mpFirstInstance;
