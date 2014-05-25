@@ -1003,7 +1003,7 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     if (m_Extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
     {
         float radius = 0.2f;
-        CreateActualRoundedCube(radius, 30, 30, 1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1 + 2 * radius);
+        CreateActualRoundedCube(radius, 10, 10, 1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1 + 2 * radius);
         AddVertexData(m_CubeVertexBuf);
         AddNormalData(m_CubeNormalBuf);
         AddIndexData(m_CubeElementBuf);
