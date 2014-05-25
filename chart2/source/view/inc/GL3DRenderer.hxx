@@ -160,9 +160,6 @@ public:
     void EndAddPolygon3DObjectPoint();
     void AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 color, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId);
     void EndAddShape3DExtrudeObject();
-    double GetTime();
-    void SetFPS(float fps);
-    void RenderClickPos(Point aMPos);
     void SetSize(const Size& rSize);
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
     void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft, sal_uInt32 nUniqueId);
@@ -174,17 +171,14 @@ public:
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
-    void GetFreq();
     void RenderPolygon3DObject();
     void RenderLine3D(Polygon3DInfo &polygon);
     void RenderPolygon3D(Polygon3DInfo &polygon);
     void Init3DUniformBlock();
     void Update3DUniformBlock();
     void RenderExtrude3DObject();
-    void RenderFPS(float fps);
     //add for text
     void RenderTextShape();
-    void RenderText(const ::rtl::OUString& string, com::sun::star::awt::Point aPos);
     void RenderExtrudeSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D);
     void RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D);
