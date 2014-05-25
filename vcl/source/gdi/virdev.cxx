@@ -267,7 +267,9 @@ VirtualDevice::~VirtualDevice()
         pSVData->maGDIData.mpLastVirDev = mpPrev;
 }
 
-bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
+bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
+                                                 const basebmp::RawMemorySharedArray &pBuffer,
+                                                 const bool bTopDown )
 {
     SAL_INFO( "vcl.gdi",
               "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
@@ -296,7 +298,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     if ( bErase )
     {
         if ( pBuffer )
-            bRet = mpVirDev->SetSizeUsingBuffer( nNewWidth, nNewHeight, pBuffer );
+            bRet = mpVirDev->SetSizeUsingBuffer( nNewWidth, nNewHeight, pBuffer, bTopDown );
         else
             bRet = mpVirDev->SetSize( nNewWidth, nNewHeight );
 
@@ -381,9 +383,11 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
     Pop();
 }
 
-bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
+bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
+                                            const basebmp::RawMemorySharedArray &pBuffer,
+                                            const bool bTopDown )
 {
-    if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
+    if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer, bTopDown) )
     {
         if( mnAlphaDepth != -1 )
         {
@@ -397,7 +401,9 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, c
             if( !mpAlphaVDev )
             {
                 mpAlphaVDev = new VirtualDevice( *this, mnAlphaDepth );
-                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, basebmp::RawMemorySharedArray() );
+                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase,
+                                                         basebmp::RawMemorySharedArray(),
+                                                         bTopDown );
             }
 
             // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
@@ -430,10 +436,12 @@ void VirtualDevice::EnableRTL( bool bEnable )
 
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
 {
-    return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray() );
+    return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray(), false );
 }
 
-bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer )
+bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
+    const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset,
+    const basebmp::RawMemorySharedArray &pBuffer, const bool bTopDown )
 {
     if (pBuffer) {
         MapMode mm = GetMapMode();
@@ -442,7 +450,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize
         mm.SetScaleY( rScale );
         SetMapMode( mm );
     }
-    return ImplSetOutputSizePixel( rNewSize, true, pBuffer);
+    return ImplSetOutputSizePixel( rNewSize, true, pBuffer, bTopDown );
 }
 
 void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )

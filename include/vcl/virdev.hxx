@@ -43,8 +43,12 @@ private:
     sal_uInt8           meRefDevMode;
 
     SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
-    SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
-    SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
+    SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
+                                                     const basebmp::RawMemorySharedArray &pBuffer,
+                                                     const bool bTopDown );
+    SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
+                                                const basebmp::RawMemorySharedArray &pBuffer,
+                                                const bool bTopDown );
 
     // Copy assignment is forbidden and not implemented.
     VirtualDevice (const VirtualDevice &);
@@ -119,7 +123,11 @@ public:
     virtual void        EnableRTL( bool bEnable = true ) SAL_OVERRIDE;
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
-    bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer );
+    bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize,
+                                                                const Fraction& rScale,
+                                                                const Point& rNewOffset,
+                                                                const basebmp::RawMemorySharedArray &pBuffer,
+                                                                const bool bTopDown = false );
     bool                SetOutputSize( const Size& rNewSize, bool bErase = true )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
 
