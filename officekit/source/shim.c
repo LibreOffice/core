@@ -14,7 +14,7 @@
 
 #include <osl/module.h>
 #include <sal/types.h>
-#include <liblibreoffice.h>
+#include <officekit/officekit.h>
 
 #include <dlfcn.h>
 #ifdef AIX

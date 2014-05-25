@@ -7,26 +7,25 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,libreoffice))
+$(eval $(call gb_StaticLibrary_StaticLibrary,officekit))
 
-$(eval $(call gb_StaticLibrary_set_include,libreoffice,\
+$(eval $(call gb_StaticLibrary_set_include,officekit,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/desktop/inc \
 ))
 
-$(eval $(call gb_StaticLibrary_add_libs,libreoffice,\
+$(eval $(call gb_StaticLibrary_add_libs,officekit,\
 	$(if $(filter $(OS),LINUX), \
 		-ldl \
         -lpthread \
 	) \
 ))
 
-$(eval $(call gb_StaticLibrary_use_libraries,libreoffice,\
+$(eval $(call gb_StaticLibrary_use_libraries,officekit,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_cobjects,libreoffice,\
-    desktop/source/lib/shim \
+$(eval $(call gb_StaticLibrary_add_cobjects,officekit,\
+    officekit/source/shim \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -79,6 +79,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,ODK,odk) \
 	offapi \
 	officecfg \
+	officekit \
 	oovbaapi \
 	oox \
 	package \
