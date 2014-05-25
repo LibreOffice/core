@@ -330,7 +330,7 @@ void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int 
     {
         return;
     }
-    float topThreshold = height - 2 * fRadius;
+    float topThreshold = depth - 2 * fRadius;
     float bottomThreshold = fRadius;
 
     std::vector<glm::vec3> vertices;
@@ -990,7 +990,8 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     m_Extrude3DInfo.rounded = roundedCorner;
     if (m_Extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
     {
-        CreateActualRoundedCube(0.1f, 30, 30, 1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1.2f);
+        float radius = 0.2f;
+        CreateActualRoundedCube(radius, 30, 30, 1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1 + 2 * radius);
         AddVertexData(m_CubeVertexBuf);
         AddNormalData(m_CubeNormalBuf);
         AddIndexData(m_CubeElementBuf);
@@ -1185,7 +1186,6 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
     PosVecf3 trans = {extrude3D.xTransform,
                       extrude3D.yTransform,
                       extrude3D.zTransform};
-
     if (actualZTrans < 0.0f)
     {
         // the height of rounded corner is higher than the cube than use the org scale matrix
