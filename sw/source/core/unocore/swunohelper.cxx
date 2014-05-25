@@ -62,7 +62,7 @@ bool UCB_DeleteFile( const OUString& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
-        aTempContent.executeCommand(OUString("delete"),
+        aTempContent.executeCommand("delete",
                         ::com::sun::star::uno::makeAny( sal_True ) );
         bRemoved = true;
     }
@@ -80,9 +80,9 @@ bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, bool bCopyIsMo
     try
     {
         INetURLObject aURL( rNewURL );
-        OUString sName( aURL.GetName() );
+        const OUString sName( aURL.GetName() );
         aURL.removeSegment();
-        OUString sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
+        const OUString sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
 
         ucbhelper::Content aTempContent( sMainURL,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
@@ -95,8 +95,7 @@ bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, bool bCopyIsMo
         aInfo.SourceURL = rURL;
         aInfo.MoveData = bCopyIsMove;
         aAny <<= aInfo;
-        aTempContent.executeCommand( OUString("transfer"),
-                                     aAny );
+        aTempContent.executeCommand( "transfer", aAny );
     }
     catch( ::com::sun::star::uno::Exception& )
     {
@@ -140,8 +139,7 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
     try
     {
         ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue(
-            OUString("IsReadOnly"));
+        ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue("IsReadOnly");
         if(aAny.hasValue())
             bIsReadOnly = *(sal_Bool*)aAny.getValue();
     }
