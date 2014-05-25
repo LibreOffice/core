@@ -24,6 +24,7 @@
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
 #include <dflyobj.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pSib, pAnch )

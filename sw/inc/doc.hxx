@@ -21,7 +21,6 @@
 
 // SwDoc interfaces
 #include <IInterface.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentDeviceAccess.hxx> //from this class's persective this isnt even necessary anymore but I encountered at least
                                      //one different class that relies on this being included here. What to do?

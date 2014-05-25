@@ -49,6 +49,7 @@
 #include <layouter.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <switerator.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 bool SwFlowFrm::m_bMoveBwdJump = false;
 

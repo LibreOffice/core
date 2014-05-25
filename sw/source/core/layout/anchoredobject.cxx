@@ -20,6 +20,7 @@
 #include <txtfrm.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <fmtsrnd.hxx>
 #include <dcontact.hxx>
 #include <editeng/ulspitem.hxx>

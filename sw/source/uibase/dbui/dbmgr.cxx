@@ -77,6 +77,7 @@
 #include <dbui.hxx>
 #include <dbmgr.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
 #include <dbui.hrc>

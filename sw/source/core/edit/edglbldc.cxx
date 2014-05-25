@@ -19,6 +19,7 @@
 
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>

@@ -55,6 +55,7 @@
 #include <pormulti.hxx>
 #include <unotools/charclass.hxx>
 #include <xmloff/odffields.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #include <vector>
 

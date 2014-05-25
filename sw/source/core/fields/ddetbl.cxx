@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <index.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>

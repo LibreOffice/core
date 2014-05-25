@@ -39,6 +39,7 @@
 #include <swrect.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <frmtool.hxx>

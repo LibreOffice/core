@@ -34,6 +34,7 @@
 #include <hints.hxx>
 #include <viewopt.hxx>
 #include <set>
+#include <IDocumentSettingAccess.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
 bool           SwRootFrm::bInPaint = false;

@@ -27,6 +27,7 @@
 #include "section.hxx"
 #include "frmtool.hxx"
 #include "doc.hxx"
+#include <IDocumentSettingAccess.hxx>
 #include "cntfrm.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"

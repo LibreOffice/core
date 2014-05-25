@@ -51,6 +51,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <fldbas.hxx>

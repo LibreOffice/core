@@ -31,6 +31,7 @@
 #include <charfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>

@@ -79,6 +79,7 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <basesh.hxx>

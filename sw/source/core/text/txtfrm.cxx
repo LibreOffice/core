@@ -31,6 +31,7 @@
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include "rootfrm.hxx"
 #include <pagefrm.hxx>
 #include <viewsh.hxx>

@@ -34,6 +34,7 @@
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
 #include <docary.hxx>

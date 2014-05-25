@@ -36,6 +36,7 @@
 #include <viewimp.hxx>
 #include "viewopt.hxx"
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <fesh.hxx>
 #include <docsh.hxx>
 #include <flyfrm.hxx>
