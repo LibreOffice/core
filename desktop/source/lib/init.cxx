@@ -403,29 +403,12 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
     (void) nPart;
 }
 
-// TODO: Not 100% sure about the bitmap buffer format yet -- it appears
-// to just be RGB, 8 bits per sample, and vertically mirrored compared
-// to what gtk expects.
-// The BitmapDevice actually supports various formats, as detailed in
-// basebmp/scanlineformat.hxx -- for svp SVP_DEFAULT_BITMAP_FORMAT is seemingly used
-// (see creation in svpvd.cxx) -- which is simply FORMAT_TWENTYFOUR_BIT_TC_MASK
-// for now -- we could probably adjust this as necessary to get whatever
-// format is presumably most useful, or maybe even allow that as a parameter.
-//
-// It's actually possible to set the depth in the creation of a VirtualDevice,
-// however that only allows 0, 1 or 8 -- and we can't select the full range of formats
-// as above, so we'd need to add a way of setting the format entirely from scratch
-// should that be deemed necessary.
-//
-// We probably also want to use getScanlineStride() -- I'm guessing that
-// this is where we are actually just returning a sub-portion of a larger buffer
-// which /shouldn't/ apply in our case, but better to be safe here.
 void doc_paintTile (LibreOfficeKitDocument* pThis,
                     unsigned char* pBuffer,
-                           const int nCanvasWidth, const int nCanvasHeight,
-                           int* pRowStride,
-                           const int nTilePosX, const int nTilePosY,
-                           const int nTileWidth, const int nTileHeight)
+                    const int nCanvasWidth, const int nCanvasHeight,
+                    int* pRowStride,
+                    const int nTilePosX, const int nTilePosY,
+                    const int nTileWidth, const int nTileHeight)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
