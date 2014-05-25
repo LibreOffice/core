@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Sun May 25 15:43:37 2014 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkImage" id="calc_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">res/ods_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="database_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odb_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="draw_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odg_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="impress_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odp_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="math_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odf_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="open_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/folder_32.png</property>
+  </object>
+  <object class="GtkImage" id="templates_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/templates_32.png</property>
+  </object>
+  <object class="GtkImage" id="writer_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odt_32_8.png</property>
   </object>
   <object class="GtkBox" id="StartCenter">
     <property name="can_focus">False</property>
@@ -347,14 +383,41 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-RecentDocsView" id="all_recent">
+          <object class="GtkBox" id="box2">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="sfxlo-RecentDocsView" id="all_recent">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sfxlo-TemplateLocalView" id="local_view">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
@@ -366,40 +429,5 @@
         <property name="position">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="open_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_32.png</property>
-  </object>
-  <object class="GtkImage" id="templates_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_32.png</property>
-  </object>
-  <object class="GtkImage" id="database_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odb_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="draw_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odg_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="impress_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odp_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="math_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odf_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="writer_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odt_32_8.png</property>
   </object>
 </interface>

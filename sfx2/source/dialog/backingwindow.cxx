@@ -117,6 +117,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpExtensionsBox, "extensions_box");
 
     get(mpAllRecentThumbnails, "all_recent");
+    get(mpLocalView, "local_view");
 
     maDndWindows.push_back(mpAllRecentThumbnails);
 
@@ -227,6 +228,18 @@ void BackingWindow::initControls()
     mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;
     mpAllRecentThumbnails->Reload();
     mpAllRecentThumbnails->ShowTooltips( true );
+
+    //initialize Template views
+    mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
+    mpLocalView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                        TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                        TEMPLATE_ITEM_PADDING);
+    mpLocalView->Populate();
+    mpLocalView->showRootRegion();
+    mpLocalView->Hide();
+
+    /*FIXME: Add other things for Local View
+     *Filter and the bars*/
 
     setupButton( mpOpenButton );
     setupButton( mpTemplateButton );
@@ -488,7 +501,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     }
     else if( pButton == mpTemplateButton )
     {
-        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+/*        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
@@ -496,6 +509,9 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         pArg[0].Value <<= OUString("private:user");
 
         dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
+*/
+        mpAllRecentThumbnails->Hide();
+        mpLocalView->Show();
     }
     return 0;
 }
