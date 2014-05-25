@@ -514,6 +514,7 @@ void MediaWindowImpl::onURLChanged()
 
     if( mxPlayer.is() )
     {
+        Resize();
         uno::Sequence< uno::Any >              aArgs( 3 );
         uno::Reference< media::XPlayerWindow > xPlayerWindow;
         const Point                            aPoint;
