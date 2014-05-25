@@ -419,6 +419,15 @@ Exit_Function:
 	Exit Function
 End Function	&apos;	Properties
 
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setProperty(ByVal Optional psProperty As String, ByVal Optional pvValue As Variant) As Boolean
+&apos;	Return True if property setting OK
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.getProperty&quot;
+	Utils._SetCalledSub(cstThisSub)
+	setProperty = _PropertySet(psProperty, pvValue)
+	Utils._ResetCalledSub(cstThisSub)
+End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
