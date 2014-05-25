@@ -758,7 +758,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
             if ( rMarkList.GetMarkCount() > 1 )
             {
                 bool bFlyInCnt = false;
-                for ( sal_uInt16 i = 0; !bFlyInCnt && i < rMarkList.GetMarkCount(); ++i )
+                for ( sal_uLong i = 0; !bFlyInCnt && i < rMarkList.GetMarkCount(); ++i )
                 {
                     const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                     if (FLY_AS_CHAR == ::FindFrmFmt(const_cast<SdrObject*>(

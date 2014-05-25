@@ -196,7 +196,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
         ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
 
-        sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;
+        const sal_Int32 nSeqSize = pDateTimeList ? 2 : 1;
         ::com::sun::star::uno::Sequence < OUString > aProps( nSeqSize );
         OUString* pProps = aProps.getArray();
         pProps[ 0 ] = "Title";
