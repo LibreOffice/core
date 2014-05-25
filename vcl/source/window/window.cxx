@@ -850,7 +850,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pRealParent = pParent;
 
-    // 3D-Look vererben
+    // inherit 3D look
     if ( !mpWindowImpl->mbOverlapWin && pParent && (pParent->GetStyle() & WB_3DLOOK) )
         nStyle |= WB_3DLOOK;
 
