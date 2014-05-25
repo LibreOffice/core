@@ -172,7 +172,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     // search all borders, images, and OLEs that are connected to the paragraph
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    sal_uInt16 nChkType = static_cast< sal_uInt16 >((_bAtCharAnchoredObjs)
+    const sal_uInt16 nChkType = static_cast< sal_uInt16 >((_bAtCharAnchoredObjs)
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
@@ -184,7 +184,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
         if( pObjs )
         {
             std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
-            for( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+            for( sal_uInt32 i = 0; i < pObjs->Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
@@ -212,8 +212,8 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     else
     {
         const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-        sal_uInt16 nSize = rFmts.size();
-        for ( sal_uInt16 i = 0; i < nSize; i++)
+        const size_t nSize = rFmts.size();
+        for ( size_t i = 0; i < nSize; i++)
         {
             const SwFrmFmt* pFmt = rFmts[ i ];
             const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
@@ -346,7 +346,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
 void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
         SfxItemSet & rSet, const bool bOnlyTxtAttr, const bool bGetFromChrFmt)
 {
-    static const sal_uInt16 nMaxLookup = 1000;
+    static const sal_uLong nMaxLookup = 1000;
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet *pSet = &rSet;
     SwPaM *pCurrent = & rPam;
@@ -1224,9 +1224,9 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         break;
         case SwFootnoteStartNode:
         {
-            const sal_uInt16 nFtnCnt = rDoc.GetFtnIdxs().size();
+            const size_t nFtnCnt = rDoc.GetFtnIdxs().size();
             uno::Reference< text::XFootnote >  xRef;
-            for (sal_uInt16 n = 0; n < nFtnCnt; ++n )
+            for (size_t n = 0; n < nFtnCnt; ++n )
             {
                 const SwTxtFtn* pTxtFtn = rDoc.GetFtnIdxs()[ n ];
                 const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
