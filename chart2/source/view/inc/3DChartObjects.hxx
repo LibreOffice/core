@@ -23,9 +23,9 @@ namespace opengl3D {
 class TextCache
 {
 public:
-    const BitmapEx& getText(OUString rText);
+    const BitmapEx& getText(OUString const & rText);
 private:
-    typedef boost::ptr_map<OUString, BitmapEx> TextCacheType;
+    typedef boost::ptr_map<OUString const, BitmapEx> TextCacheType;
 
     TextCacheType maTextCache;
 };
