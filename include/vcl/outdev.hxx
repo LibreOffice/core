@@ -941,6 +941,55 @@ public:
                                              TextRectInfo* pInfo = NULL,
                                              const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
 
+    /** Return the exact bounding rectangle of rStr.
+
+        The text is then drawn exactly from rRect.TopLeft() to
+        rRect.BottomRight(), don't assume that rRect.TopLeft() is [0, 0].
+
+        Please note that you don't always want to use GetTextBoundRect(); in
+        many cases you actually want to use GetTextHeight(), because
+        GetTextBoundRect() gives you the exact bounding rectangle regardless
+        what is the baseline of the text.
+
+        Code snippet to get just exactly the text (no filling around that) as
+        a bitmap via a VirtualDevice (regardless what is the baseline):
+
+        <code>
+        VirtualDevice aDevice;
+        Font aFont = aDevice.GetFont();
+        aFont.SetSize(Size(0, 96));
+        aFont.SetColor(COL_BLACK);
+        aDevice.SetFont(aFont);
+        aDevice.Erase();
+
+        ::Rectangle aRect;
+        aDevice.GetTextBoundRect(aRect, aText);
+        aDevice.SetOutputSize(Size(aRect.BottomRight().X() + 1, aRect.BottomRight().Y() + 1));
+        aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+        aDevice.DrawText(Point(0,0), aText);
+
+        // exactly only the text, regardless of the baseline
+        Bitmap aBitmap(aDevice.GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+        </code>
+
+        Code snippet to get the text as a bitmap via a Virtual device that
+        contains even the filling so that the baseline is always preserved
+        (ie. the text will not jump up and down according to whether it
+        contains 'y' or not etc.)
+
+        <code>
+        VirtualDevice aDevice;
+        // + the appropriate font / device setup, see above
+
+        aDevice.SetOutputSize(Size(aDevice.GetTextWidth(aText), aDevice.GetTextHeight()));
+        aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+        aDevice.DrawText(Point(0,0), aText);
+
+        // bitmap that contains even the space around the text,
+        // that means, preserves the baseline etc.
+        Bitmap aBitmap(aDevice.GetBitmap(Point(0, 0), aDevice.GetOutputSize()));
+        </code>
+    */
     bool                        GetTextBoundRect( Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
@@ -1009,8 +1058,16 @@ public:
     void                        SetTextAlign( TextAlign eAlign );
     TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
 
+    /** Width of the text.
+
+        See also GetTextBoundRect() for more explanation + code examples.
+    */
     long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
-    /// Height where any character of the current font fits; in logic coordinates.
+
+    /** Height where any character of the current font fits; in logic coordinates.
+
+        See also GetTextBoundRect() for more explanation + code examples.
+    */
     long                        GetTextHeight() const;
     float                       approximate_char_width() const;
 
