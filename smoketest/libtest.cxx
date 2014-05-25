@@ -14,7 +14,7 @@
 #include <math.h>
 #include <sys/time.h>
 
-#include <officekit/officekit.hxx>
+#include <OfficeKit/OfficeKit.hxx>
 
 long getTimeMS()
 {

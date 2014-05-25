@@ -10,7 +10,7 @@
 #ifndef INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
 #define INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
 
-#include <officekit/officekit.h>
+#include <OfficeKit/OfficeKit.h>
 
 /*
  * The reasons this C++ code is not as pretty as it could be are:

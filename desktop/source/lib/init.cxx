@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <officekit/officekit.h>
+#include <OfficeKit/OfficeKit.h>
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
