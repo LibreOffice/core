@@ -1,0 +1,66 @@
+From 3f68b25b9085c577c2cc2db81d9a9f743de077b7 Mon Sep 17 00:00:00 2001
+From: Fabrice Robinet <fabricerobinet@me.com>
+Date: Thu, 22 May 2014 15:15:40 -0700
+Subject: [PATCH 2/2] Expose sid for textures in extras.
+
+---
+ COLLADAFramework/include/COLLADAFWSampler.h                       | 8 +++++++-
+ .../src/COLLADASaxFWLLibraryEffectsLoader.cpp                     | 4 +++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/COLLADAFramework/include/COLLADAFWSampler.h b/COLLADAFramework/include/COLLADAFWSampler.h
+index 44936a8..562e47a 100644
+--- a/COLLADAFramework/include/COLLADAFWSampler.h
++++ b/COLLADAFramework/include/COLLADAFWSampler.h
+@@ -129,6 +129,9 @@ namespace COLLADAFW
+ 		that is used by the sampler to evaluate the MIPmap chain. */
+ 		float mMipmapBias;
+ 
++        /* sampler Sid, required to be able to retrieve a sampler from extras */
++        std::string mSid;
++        
+ 	public:
+ 
+         /** Constructor. */
+@@ -203,8 +206,11 @@ namespace COLLADAFW
+ 		/** Returns the mipmap Bias.*/
+ 		void setMipmapBias ( float mipmapBias ) { mMipmapBias = mipmapBias; }
+ 
+-		Sampler* clone() { return FW_NEW Sampler(*this); }
++        void setSid( const std::string &sid) { mSid = sid; }
++
++        const std::string& getSid() { return mSid; }
+ 
++		Sampler* clone() { return FW_NEW Sampler(*this); }
+ 	};
+ 
+     /** 
+diff --git a/COLLADASaxFrameworkLoader/src/COLLADASaxFWLLibraryEffectsLoader.cpp b/COLLADASaxFrameworkLoader/src/COLLADASaxFWLLibraryEffectsLoader.cpp
+index 36f9c58..5ac99a4 100644
+--- a/COLLADASaxFrameworkLoader/src/COLLADASaxFWLLibraryEffectsLoader.cpp
++++ b/COLLADASaxFrameworkLoader/src/COLLADASaxFWLLibraryEffectsLoader.cpp
+@@ -1003,18 +1003,20 @@ namespace COLLADASaxFWL
+ 
+             bool validSampler =  false;
+             SidSamplerInfoMap::iterator samplerIt = mEffectProfileSidSamplerInfoMap.find ( samplerSid );
++            
+             if ( samplerIt == mEffectProfileSidSamplerInfoMap.end () )
+             {
+                 samplerIt = mEffectSidSamplerInfoMap.find ( samplerSid );
+                 if ( samplerIt != mEffectSidSamplerInfoMap.end () ) validSampler = true;
+             }
+             else validSampler = true;
+-
++            
+             if ( validSampler )
+             {
+                 SamplerInfo& samplerInfo = samplerIt->second;
+                 samplerInfo.id = samplerArray.getCount();
+                 COLLADAFW::Sampler* sampler = samplerInfo.sampler;
++                sampler->setSid(samplerSid);
+                 if ( !sampler->getSourceImage().isValid() )
+                 {
+                     bool validSurface = false;
+-- 
+1.8.1.4
+
