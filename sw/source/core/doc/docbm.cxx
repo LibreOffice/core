@@ -1736,8 +1736,8 @@ void _RestoreCntntIdx(SwDoc* pDoc,
         switch( aSave.GetType() )
         {
             case 0x8000:
+            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get()))
             {
-                MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get());
                 SwPosition aNewPos(pMark->GetMarkPos());
                 aNewPos.nNode = *pCNd;
                 aNewPos.nContent.Assign(pCNd, aSave.GetContent() + nOffset);
@@ -1745,8 +1745,8 @@ void _RestoreCntntIdx(SwDoc* pDoc,
             }
             break;
             case 0x8001:
+            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get()))
             {
-                MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get());
                 SwPosition aNewPos(pMark->GetOtherMarkPos());
                 aNewPos.nNode = *pCNd;
                 aNewPos.nContent.Assign(pCNd, aSave.GetContent() + nOffset);
