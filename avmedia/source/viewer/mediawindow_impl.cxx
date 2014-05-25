@@ -178,7 +178,8 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
 
 MediaWindowImpl::~MediaWindowImpl()
 {
-    mpEvents->cleanUp();
+    if( mpEvents )
+        mpEvents->cleanUp();
 
     if( mxPlayerWindow.is() )
     {
