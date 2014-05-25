@@ -355,8 +355,6 @@ private:
     std::vector <TextInfo> m_TextInfoList;
     GLuint m_TextTexCoordBuf;
 
-    int m_uiSelectFrameCounter;
-
     std::vector<glm::vec3> m_Vertices;
 
     std::vector<glm::vec3> m_Normals;
