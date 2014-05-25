@@ -144,18 +144,18 @@ static OUString getAbsoluteURL(const char* pURL)
 extern "C"
 {
 
-static void doc_destroy(LibreOfficeDocument* pThis);
-static int  doc_saveAs(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat);
-static int  doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static void doc_destroy(OfficeKitDocument* pThis);
+static int  doc_saveAs(OfficeKitDocument* pThis, const char* pUrl, const char* pFormat);
+static int  doc_saveAsWithOptions(OfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 
-struct LibLODocument_Impl : public _LibreOfficeDocument
+struct LibLODocument_Impl : public _OfficeKitDocument
 {
     uno::Reference<css::lang::XComponent> mxComponent;
 
     LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
         mxComponent( xComponent )
     {
-        nSize = sizeof(LibreOffice);
+        nSize = sizeof(OfficeKit);
 
         destroy = doc_destroy;
         saveAs = doc_saveAs;
@@ -163,24 +163,24 @@ struct LibLODocument_Impl : public _LibreOfficeDocument
     }
 };
 
-static void doc_destroy(LibreOfficeDocument *pThis)
+static void doc_destroy(OfficeKitDocument *pThis)
 {
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
     delete pDocument;
 }
 
-static void                 lo_destroy       (LibreOffice* pThis);
-static int                  lo_initialize    (LibreOffice* pThis, const char* pInstallPath);
-static LibreOfficeDocument* lo_documentLoad  (LibreOffice* pThis, const char* pURL);
-static char *               lo_getError      (LibreOffice* pThis);
+static void                 lo_destroy       (OfficeKit* pThis);
+static int                  lo_initialize    (OfficeKit* pThis, const char* pInstallPath);
+static OfficeKitDocument*   lo_documentLoad  (OfficeKit* pThis, const char* pURL);
+static char *               lo_getError      (OfficeKit* pThis);
 
-struct LibLibreOffice_Impl : public _LibreOffice
+struct LibLibreOffice_Impl : public _OfficeKit
 {
     OUString maLastExceptionMsg;
 
     LibLibreOffice_Impl()
     {
-        nSize = sizeof(LibreOfficeDocument);
+        nSize = sizeof(OfficeKitDocument);
 
         destroy = lo_destroy;
         initialize = lo_initialize;
@@ -194,7 +194,7 @@ static uno::Reference<css::uno::XComponentContext> xContext;
 static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
 static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
-static LibreOfficeDocument* lo_documentLoad(LibreOffice* pThis, const char* pURL)
+static OfficeKitDocument* lo_documentLoad(OfficeKit* pThis, const char* pURL)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
@@ -225,12 +225,12 @@ static LibreOfficeDocument* lo_documentLoad(LibreOffice* pThis, const char* pURL
     return NULL;
 }
 
-static int doc_saveAs(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat)
+static int doc_saveAs(OfficeKitDocument* pThis, const char* sUrl, const char* pFormat)
 {
     return doc_saveAsWithOptions(pThis, sUrl, pFormat, NULL);
 }
 
-static int doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
+static int doc_saveAsWithOptions(OfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -316,7 +316,7 @@ static int doc_saveAsWithOptions(LibreOfficeDocument* pThis, const char* sUrl, c
     return false;
 }
 
-static char* lo_getError (LibreOffice *pThis)
+static char* lo_getError (OfficeKit *pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     OString aString = OUStringToOString(pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8);
@@ -371,7 +371,7 @@ static void initialize_uno(const OUString &aAppURL)
     // configmgr setup ?
 }
 
-static int lo_initialize(LibreOffice* pThis, const char* pAppPath)
+static int lo_initialize(OfficeKit* pThis, const char* pAppPath)
 {
     (void) pThis;
 
@@ -411,17 +411,17 @@ static int lo_initialize(LibreOffice* pThis, const char* pAppPath)
     return bInitialized;
 }
 
-SAL_DLLPUBLIC_EXPORT LibreOffice *liblibreoffice_hook(void)
+SAL_DLLPUBLIC_EXPORT OfficeKit *liblibreoffice_hook(void)
 {
     if (!gImpl)
     {
         fprintf(stderr, "create libreoffice object\n");
         gImpl = new LibLibreOffice_Impl();
     }
-    return static_cast<LibreOffice*>(gImpl);
+    return static_cast<OfficeKit*>(gImpl);
 }
 
-static void lo_destroy(LibreOffice *pThis)
+static void lo_destroy(OfficeKit *pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     delete pLib;

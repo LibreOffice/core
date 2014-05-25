@@ -15,34 +15,34 @@ extern "C"
 {
 #endif
 
-typedef struct _LibreOffice LibreOffice;
-typedef struct _LibreOfficeDocument LibreOfficeDocument;
+typedef struct _OfficeKit OfficeKit;
+typedef struct _OfficeKitDocument OfficeKitDocument;
 
-struct _LibreOffice
+struct _OfficeKit
 {
   int  nSize;
 
-  void                 (*destroy)       (LibreOffice *pThis);
-  int                  (*initialize)    (LibreOffice *pThis, const char *pInstallPath);
-  LibreOfficeDocument* (*documentLoad)  (LibreOffice *pThis, const char *pURL);
-  char*                (*getError)      (LibreOffice *pThis);
+  void                 (*destroy)       (OfficeKit *pThis);
+  int                  (*initialize)    (OfficeKit *pThis, const char *pInstallPath);
+  OfficeKitDocument*   (*documentLoad)  (OfficeKit *pThis, const char *pURL);
+  char*                (*getError)      (OfficeKit *pThis);
 };
 
-struct _LibreOfficeDocument
+struct _OfficeKitDocument
 {
   int  nSize;
 
-  void (*destroy)   (LibreOfficeDocument* pThis);
-  int (*saveAs)     (LibreOfficeDocument* pThis,
+  void (*destroy)   (OfficeKitDocument* pThis);
+  int (*saveAs)     (OfficeKitDocument* pThis,
                      const char *pUrl,
                      const char *pFormat);
-  int (*saveAsWithOptions) (LibreOfficeDocument* pThis,
+  int (*saveAsWithOptions) (OfficeKitDocument* pThis,
                             const char *pUrl,
                             const char *pFormat,
                             const char *pFilterOptions);
 };
 
-LibreOffice* lo_init (const char* pInstallPath);
+OfficeKit* officekit_init (const char* pInstallPath);
 
 #ifdef __cplusplus
 }

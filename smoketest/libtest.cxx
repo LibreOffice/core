@@ -45,7 +45,7 @@ int main (int argc, char **argv)
         return 1;
     }
 
-    LibLibreOffice *pOffice = lo_cpp_init( argv[1] );
+    LibOfficeKit *pOffice = officekit_cpp_init( argv[1] );
     if( !pOffice )
     {
         fprintf( stderr, "Failed to initialize\n" );
@@ -64,7 +64,7 @@ int main (int argc, char **argv)
     start = end;
 
     fprintf( stderr, "start to load document '%s'\n", argv[2] );
-    LODocument *pDocument = pOffice->documentLoad( argv[2] );
+    LibOfficeKitDocument *pDocument = pOffice->documentLoad( argv[2] );
     if( !pDocument )
     {
         char *pError = pOffice->getError();

@@ -19,17 +19,17 @@
  *  c) avoid C++ types as part of the API.
  */
 
-class LODocument
+class LibOfficeKitDocument
 {
 private:
-    LibreOfficeDocument* mpDoc;
+    OfficeKitDocument* mpDoc;
 
 public:
-    inline LODocument(LibreOfficeDocument* pDoc) :
+    inline LibOfficeKitDocument(OfficeKitDocument* pDoc) :
         mpDoc(pDoc)
     {}
 
-    inline ~LODocument()
+    inline ~LibOfficeKitDocument()
     {
         mpDoc->destroy(mpDoc);
     }
@@ -50,17 +50,17 @@ public:
     }
 };
 
-class LibLibreOffice
+class LibOfficeKit
 {
 private:
-    LibreOffice* mpThis;
+    OfficeKit* mpThis;
 
 public:
-    inline LibLibreOffice(LibreOffice* pThis) :
+    inline LibOfficeKit(OfficeKit* pThis) :
         mpThis(pThis)
     {}
 
-    inline ~LibLibreOffice()
+    inline ~LibOfficeKit()
     {
         mpThis->destroy(mpThis);
     }
@@ -70,12 +70,12 @@ public:
         return mpThis->initialize(mpThis, pInstallPath);
     }
 
-    inline LODocument* documentLoad(const char* pUrl)
+    inline LibOfficeKitDocument* documentLoad(const char* pUrl)
     {
-        LibreOfficeDocument* pDoc = mpThis->documentLoad(mpThis, pUrl);
+        OfficeKitDocument* pDoc = mpThis->documentLoad(mpThis, pUrl);
         if (pDoc == NULL)
             return NULL;
-        return new LODocument(pDoc);
+        return new LibOfficeKitDocument(pDoc);
     }
 
     // return the last error as a string, free me.
@@ -85,12 +85,12 @@ public:
     }
 };
 
-inline LibLibreOffice* lo_cpp_init(const char* pInstallPath)
+inline LibOfficeKit* officekit_cpp_init(const char* pInstallPath)
 {
-    LibreOffice* pThis = lo_init(pInstallPath);
+    OfficeKit* pThis = officekit_init(pInstallPath);
     if (pThis == NULL || pThis->nSize == 0)
         return NULL;
-    return new LibLibreOffice(pThis);
+    return new LibOfficeKit(pThis);
 }
 
 #endif
