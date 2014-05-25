@@ -260,8 +260,8 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     if (!pTxtAttr)
     {
-        throw uno::RuntimeException(OUString(
-            "SwXReferenceMark::InsertRefMark(): cannot insert attribute"), 0);
+        throw uno::RuntimeException(
+            "SwXReferenceMark::InsertRefMark(): cannot insert attribute", 0);
     }
 
     m_pMarkFmt = &pTxtAttr->GetRefMark();
@@ -980,16 +980,16 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-            OUString("SwXMeta::attach(): already attached"),
-                static_cast< ::cppu::OWeakObject* >(this));
+            "SwXMeta::attach(): already attached",
+            static_cast< ::cppu::OWeakObject* >(this));
     }
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel(i_xTextRange, uno::UNO_QUERY);
     if (!xRangeTunnel.is())
     {
         throw lang::IllegalArgumentException(
-            OUString("SwXMeta::attach(): argument is no XUnoTunnel"),
-                static_cast< ::cppu::OWeakObject* >(this), 0);
+            "SwXMeta::attach(): argument is no XUnoTunnel",
+            static_cast< ::cppu::OWeakObject* >(this), 0);
     }
     SwXTextRange *const pRange(
             ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel));
@@ -998,8 +998,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(
-            OUString("SwXMeta::attach(): argument not supported type"),
-                static_cast< ::cppu::OWeakObject* >(this), 0);
+            "SwXMeta::attach(): argument not supported type",
+            static_cast< ::cppu::OWeakObject* >(this), 0);
     }
 
     SwDoc * const pDoc(
@@ -1007,8 +1007,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!pDoc)
     {
         throw lang::IllegalArgumentException(
-            OUString("SwXMeta::attach(): argument has no SwDoc"),
-                static_cast< ::cppu::OWeakObject* >(this), 0);
+            "SwXMeta::attach(): argument has no SwDoc",
+            static_cast< ::cppu::OWeakObject* >(this), 0);
     }
 
     SwUnoInternalPaM aPam(*pDoc);
@@ -1034,15 +1034,15 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!bSuccess)
     {
         throw lang::IllegalArgumentException(
-            OUString("SwXMeta::attach(): cannot create meta: range invalid?"),
-                static_cast< ::cppu::OWeakObject* >(this), 1);
+            "SwXMeta::attach(): cannot create meta: range invalid?",
+            static_cast< ::cppu::OWeakObject* >(this), 1);
     }
     if (!pTxtAttr)
     {
         OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
-            OUString("SwXMeta::attach(): cannot create meta"),
-                static_cast< ::cppu::OWeakObject* >(this));
+            "SwXMeta::attach(): cannot create meta",
+            static_cast< ::cppu::OWeakObject* >(this));
     }
 
     pMeta->Add(m_pImpl.get());
@@ -1073,7 +1073,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException, std::exception)
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                OUString("SwXMeta::getAnchor(): not inserted"),
+                "SwXMeta::getAnchor(): not inserted",
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1085,7 +1085,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException, std::exception)
     if (!bSuccess)
     {
         throw lang::DisposedException(
-                OUString("SwXMeta::getAnchor(): not attached"),
+                "SwXMeta::getAnchor(): not attached",
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1240,7 +1240,7 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException, std::exception)
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                OUString("createEnumeration(): not inserted"),
+                "createEnumeration(): not inserted",
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1567,7 +1567,7 @@ getPrefixAndSuffix(
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            OUString("getPrefixAndSuffix: exception"),
+            "getPrefixAndSuffix: exception",
             0, uno::makeAny(e));
     }
 }
