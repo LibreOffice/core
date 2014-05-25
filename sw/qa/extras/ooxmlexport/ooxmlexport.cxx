@@ -3348,7 +3348,7 @@ DECLARE_OOXMLEXPORT_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
     if (!pXmlDoc)
         return;
 
-    sal_Int32 IntMax = 2147483647;
+    sal_Int32 IntMax = SAL_MAX_INT32;
 
     xmlNodeSetPtr pXmlNodes[6];
     pXmlNodes[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
@@ -3519,7 +3519,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78957, "fdo78957.docx")
     if(!pXmlHeader)
         return;
 
-    const sal_Int64 IntMax = 2147483647;
+    const sal_Int64 IntMax = SAL_MAX_INT32;
     sal_Int64 cx = 0, cy = 0;
     cx = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cx").toInt64();
     cy = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cy").toInt64();

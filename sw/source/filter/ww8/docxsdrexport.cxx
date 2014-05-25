@@ -437,8 +437,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         * climits header defines constants with the limits of integral types for the specific system and compiler implemetation used.
         * Use of this might cause platform dependent problem like posOffset exceed the limit.
         **/
-        const sal_Int64 MAX_INTEGER_VALUE = 2147483647;
-        const sal_Int64 MIN_INTEGER_VALUE = -2147483648;
+        const sal_Int64 MAX_INTEGER_VALUE = SAL_MAX_INT32;
+        const sal_Int64 MIN_INTEGER_VALUE = SAL_MIN_INT32;
         if (alignH != NULL)
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align, FSEND);
@@ -535,7 +535,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     **/
     sal_uInt64 cx = 0 ;
     sal_uInt64 cy = 0 ;
-    const sal_Int64 MAX_INTEGER_VALUE = 2147483647;
+    const sal_Int64 MAX_INTEGER_VALUE = SAL_MAX_INT32;
 
     // the 'Size' type uses 'long' for width and height, so on
     // platforms where 'long' is 32 bits they can obviously never be
