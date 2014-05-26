@@ -23,8 +23,12 @@
 
 class SwFrmFmt;
 class SwTxtFlyCnt;
-// ATT_FLYCNT
 
+/**
+ * Format of a fly content.
+ *
+ * A pool item that is attached to the placeholder character of an as-character frame. (TextFrame, etc.)
+ */
 class SwFmtFlyCnt : public SfxPoolItem
 {
     friend class SwTxtFlyCnt;
