@@ -61,40 +61,7 @@ protected:
 
 };
 
-// class SvxColorBox -----------------------------------------------------
-
-class SvxColorBox : public ColorLB
-{
-    using Window::Update;
-
-    sal_uInt16      nCurPos;
-    Timer           aDelayTimer;
-    Size            aLogicalSize;
-    bool            bRelease;
-    OUString maCommand;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
-
-    void            ReleaseFocus_Impl();
-
-public:
-    SvxColorBox( Window* pParent,
-                 const OUString& rCommand,
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                 WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    virtual ~SvxColorBox();
-
-    void            Update( const XLineColorItem* pItem );
-
-protected:
-    virtual void    Select() SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-
-};
-
 // class SvxMetricField --------------------------------------------------
-
 class SVX_DLLPUBLIC SvxMetricField : public MetricField
 {
     using Window::Update;
