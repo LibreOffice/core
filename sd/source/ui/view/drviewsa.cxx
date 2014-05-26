@@ -69,6 +69,7 @@
 #include "DrawController.hxx"
 
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -598,13 +599,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
         else
         {
-            SvxZoomItem* pZoomItem;
+            boost::scoped_ptr<SvxZoomItem> pZoomItem;
             sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
             if( mbZoomOnPage )
-                pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nZoom );
+                pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nZoom ));
             else
-                pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
+                pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom ));
 
             // constrain area
             sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
@@ -618,7 +619,6 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
             pZoomItem->SetValueSet( nZoomValues );
             rSet.Put( *pZoomItem );
-            delete pZoomItem;
         }
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )

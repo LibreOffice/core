@@ -64,6 +64,7 @@
 #include "FormShellManager.hxx"
 #include "LayerDialogContent.hxx"
 #include "DrawController.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -619,12 +620,11 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
             // Tell the draw view and the tab control of the new active layer.
             mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((sal_uInt16)nIndex)));
             pBar->SetCurPageId (pBar->GetPageId ((sal_uInt16)nIndex));
-            SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
+            boost::scoped_ptr<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
                 *this,
-                *GetView());
+                *GetView()));
             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
             GetViewShellBase().GetDrawController().fireChangeLayer( &rLayer );
-            delete pUnoDrawView;
         }
     }
 }

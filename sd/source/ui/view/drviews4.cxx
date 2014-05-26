@@ -65,6 +65,8 @@
 #include <svx/svditer.hxx>
 
 #include <navigatr.hxx>
+#include <boost/scoped_ptr.hpp>
+
 namespace sd {
 
 #define PIPETTE_RANGE 0
@@ -558,7 +560,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     aMPos = Point( 20, 20 );
                 aFieldPopup.Execute( pWin, aMPos );
 
-                SvxFieldData* pField = aFieldPopup.GetField();
+                boost::scoped_ptr<SvxFieldData> pField(aFieldPopup.GetField());
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
@@ -578,8 +580,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     if( !bSel )
                         aSel.nEndPos--;
                     pOLV->SetSelection( aSel );
-
-                    delete pField;
                 }
             }
             else
