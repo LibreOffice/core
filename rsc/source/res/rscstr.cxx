@@ -61,7 +61,7 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
             sal_uInt32  nLen = strlen( pStr ) +1;
             pTmp = (char *)rtl_allocateMemory( nLen );
             memcpy( pTmp, pStr, nLen );
-        };
+        }
 
         ((RscStringInst *)rInst.pData)->pStr = pTmp;
     }
@@ -291,8 +291,8 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
             }
             else
                 rMem.PutUTF8( ((RscStringInst *)rInst.pData)->pStr );
-        };
-    };
+        }
+    }
     return aError;
 }
 

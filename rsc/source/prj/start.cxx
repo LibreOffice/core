@@ -179,7 +179,7 @@ static bool CallRsc2( RscStrList * pInputList,
         {
             aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
         }
-    };
+    }
 
     aNewCmdL.Append( rsc_strdup( rSrsName.getStr() ) );
 
@@ -187,7 +187,7 @@ static bool CallRsc2( RscStrList * pInputList,
     {
         pString = (*pInputList)[ i ];
         aNewCmdL.Append( rsc_strdup( pString->getStr() ) );
-    };
+    }
 
     if ( eVerbosity >= RscVerbosityVerbose )
     {

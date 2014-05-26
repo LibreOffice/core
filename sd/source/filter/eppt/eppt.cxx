@@ -486,7 +486,7 @@ bool PPTWriter::ImplCreateCurrentUserStream()
     for ( sal_uInt32 i = 0x15 + nLenOfUserName; i < nSizeOfRecord; i++ )
     {
         mpCurUserStrm->WriteUChar( (sal_uInt8)0 );                 // pad bytes
-    };
+    }
     mpCurUserStrm->Seek( nEditPos );
     return true;
 };

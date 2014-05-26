@@ -485,7 +485,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             {
                 if(!GetSearchItem())
                     rSet.DisableItem(nWhich);
-            };
+            }
             break;
             case SID_UNDO:
             case SID_REDO:

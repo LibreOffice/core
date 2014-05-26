@@ -2593,7 +2593,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         const bool bOldLock = pActionViewShell->IsViewLocked();
         pActionViewShell->LockView( true );
         const bool bOldEndActionByVirDev = pActionViewShell->IsEndActionByVirDev();
-        pActionViewShell->SetEndActionByVirDev( true );;
+        pActionViewShell->SetEndActionByVirDev( true );
         ((SwEditShell*)pActionViewShell)->EndAction();
         pActionViewShell->SetEndActionByVirDev( bOldEndActionByVirDev );
         pActionViewShell->LockView( bOldLock );

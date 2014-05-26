@@ -1212,8 +1212,8 @@ void LwpRubyLayout::Read()
 {
     LwpFrameLayout::Read();
     m_nPlacement = m_pObjStrm->QuickReaduInt8();
-    m_nAlignment = m_pObjStrm->QuickReaduInt8();;
-    m_nStateFlag = m_pObjStrm->QuickReaduInt16();;
+    m_nAlignment = m_pObjStrm->QuickReaduInt8();
+    m_nStateFlag = m_pObjStrm->QuickReaduInt16();
     m_nXOffset = m_pObjStrm->QuickReadInt32();
     m_nYOffset = m_pObjStrm->QuickReadInt32();
     m_objRubyMarker.ReadIndexed(m_pObjStrm);

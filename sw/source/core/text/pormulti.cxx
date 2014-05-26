@@ -520,7 +520,7 @@ bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
 // cancels the manipulation from SwDoubleLinePortion::ChangeSpaceAdd(..)
 void SwDoubleLinePortion::ResetSpaceAdd( SwLineLayout* pCurr )
 {
-    pCurr->RemoveFirstLLSpaceAdd();;
+    pCurr->RemoveFirstLLSpaceAdd();
     if( !pCurr->GetLLSpaceAddCount() )
         pCurr->FinishSpaceAdd();
 }

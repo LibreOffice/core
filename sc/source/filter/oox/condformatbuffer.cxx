@@ -1164,7 +1164,7 @@ void ExtCfRule::finalizeImport()
         case UNKNOWN: // nothing to do
         default:
             break;
-    };
+    }
 }
 
 void ExtCfRule::importDataBar( const AttributeList& rAttribs )

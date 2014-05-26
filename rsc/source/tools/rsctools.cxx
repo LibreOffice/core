@@ -179,13 +179,13 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
                     ppCmd->Append( rsc_strdup( szBuffer ) );
                 }
                 nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
-            };
+            }
 
             fclose( fFile );
         }
         else
             ppCmd->Append( rsc_strdup( *(ppArgv +i) ) );
-    };
+    }
     ppCmd->Append( (void *)0 );
     return NULL;
 }

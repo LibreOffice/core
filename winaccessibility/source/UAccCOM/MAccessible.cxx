@@ -1011,7 +1011,7 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
             break;
         default:
             break;
-        };
+        }
         return ret;
 
         LEAVE_PROTECTED_BLOCK

@@ -829,7 +829,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
             return aData.m_nPDFDevice > 0 ? 1 : 0;
         }
         default: break;
-    };
+    }
     return 0;
 }
 

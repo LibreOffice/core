@@ -296,7 +296,7 @@ sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i
         case PRINTER_CAPABILITIES_USEPULLMODEL:
             return 1;
         default: break;
-    };
+    }
     return 0;
 }
 

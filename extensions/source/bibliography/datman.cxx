@@ -1308,7 +1308,7 @@ OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
-            aResStr="NumericField";   ;
+            aResStr="NumericField";
             break;
         case DataType::REAL:
         case DataType::DOUBLE:

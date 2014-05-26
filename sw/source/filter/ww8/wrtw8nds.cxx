@@ -1321,7 +1321,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
                     break;
                 default:
                     break;
-            };
+            }
             pCurRedline = 0;
             ++nCurRedlinePos;
         }
@@ -1357,7 +1357,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
                                     break;
                                 default:
                                     break;
-                            };
+                            }
                     }
                     break;
                 }

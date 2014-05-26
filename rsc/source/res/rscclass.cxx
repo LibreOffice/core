@@ -52,8 +52,8 @@ void RscClass::Pre_dtor()
                                   pVarTypeList[ i ].pDefault ) );
             rtl_freeMemory( pVarTypeList[ i ].pDefault );
             pVarTypeList[ i ].pDefault = NULL;
-        };
-    };
+        }
+    }
 }
 
 RscClass::~RscClass()
@@ -106,7 +106,7 @@ RSCINST RscClass::GetInstData
         }
         else
             aInst.pData = pData + pVarTypeList[ nEle ].nOffset;
-    };
+    }
     return aInst;
 }
 
@@ -186,13 +186,13 @@ RSCINST RscClass::Create( RSCINST * pInst,
             {
                 aMemInst = pVarTypeList[ i ].pClass->Create( NULL, aDfltI );
                 *ppData = aMemInst.pData;
-            };
+            }
         }
         else
         {
             aMemInst = GetInstData( aInst.pData, i, true );
             aMemInst = aMemInst.pClass->Create( &aMemInst, aDfltI );
-        };
+        }
     }
 
     return aInst;
@@ -219,10 +219,10 @@ void RscClass::Destroy( const RSCINST & rInst )
                 {
                     // Speicher freigeben
                     rtl_freeMemory( aTmpI.pData );
-                };
-            };
+                }
+            }
         }
-    };
+    }
 }
 
 ERRTYPE RscClass::SetVariable( Atom nVarName,
@@ -274,7 +274,7 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
     {
         // Bereich fuer Default zu klein
         RscExit( 16 );
-    };
+    }
     return ERR_OK;
 }
 
@@ -351,11 +351,11 @@ RSCINST RscClass::GetVariable( const RSCINST & rInst,
                     *ppData = aTmpI.pData;
                 }
             }
-        };
+        }
         // auf nicht Default setzen
         SetVarDflt( rInst.pData, i, false );
         return aTmpI;
-    };
+    }
 
     return RscTop::GetVariable( rInst, nVarName, rInitInst,
                                 bInitDflt, pCreateClass );
@@ -387,9 +387,9 @@ RSCINST RscClass::GetCopyVar( const RSCINST & rInst, Atom nVarName)
             else
                 aVarI = GetInstData( rInst.pData, i, true );
 
-        };
+        }
         return aVarI ;
-    };
+    }
 
     return RscTop::GetCopyVar( rInst, nVarName );
 }
@@ -412,7 +412,7 @@ bool RscClass::IsConsistent( const RSCINST & rInst )
                 if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
                     bRet = false;
         }
-    };
+    }
 
     return bRet;
 }
@@ -453,7 +453,7 @@ bool RscClass::IsDefault( const RSCINST & rInst )
         if( !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
             if( !IsDflt( rInst.pData, i ) )
                 return false;
-    };
+    }
 
     return RscTop::IsDefault( rInst );
 }
@@ -473,7 +473,7 @@ RSCINST RscClass::GetDefault( Atom nVarId )
         aTmpI.pClass = pVarTypeList[ i ].pClass;
         aTmpI.pData  = GetDfltData( i );
         return aTmpI;
-    };
+    }
 
     return RscTop::GetDefault( nVarId );
 }
@@ -632,9 +632,9 @@ void RscClass::WriteSrc( const RSCINST & rInst,
                               aTmpI, fOutput, pTC, nTab, RscId(), pName );
                     fprintf( fOutput, ";\n" );
                 }
-            };
-        };
-    };
+            }
+        }
+    }
 
     return;
 }
@@ -683,7 +683,7 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
             rMem.Put( sal_uInt32(0) );
             break;
         }
-    };
+    }
 
     for( i = 0; i < nEntries && aError.IsOk(); i++ )
     {
@@ -862,8 +862,8 @@ void RscTupel::WriteSrc( const RSCINST & rInst, FILE * fOutput,
             else
                 fprintf( fOutput, "Default" );
             fprintf( fOutput, "; " );
-        };
-    };
+        }
+    }
     fprintf( fOutput, ">" );
 
     return;

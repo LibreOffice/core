@@ -106,7 +106,7 @@ bool LngParser::CreatePO( const OString &rPOFile )
             ReadLine( sLine , Text );
             sID = sGroup;
             sLine = *(*pLines)[ nPos++ ];
-        };
+        }
         if( bStart ) {
             bStart = false;
             sID = sGroup;

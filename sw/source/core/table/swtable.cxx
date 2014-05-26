@@ -1278,7 +1278,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
                     rParm.nOldWish, nOldWidth, true );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
                 bGoOn = !aRowSpanPos.empty() && j > 0;
-            };
+            }
             aRowSpanPos.clear();
         }
         if( nCurr+1 < (sal_uInt16)rLines.size() )
@@ -1302,7 +1302,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
                     rParm.nOldWish, nOldWidth, false );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
                 bGoOn = !aRowSpanPos.empty() && j+1 < (sal_uInt16)rLines.size();
-            };
+            }
         }
         ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, COLFUZZY );
     }

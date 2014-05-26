@@ -1106,7 +1106,7 @@ Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize )
                 break;
             default:
                 break;
-        };
+        }
     }
     return aPos;
 }

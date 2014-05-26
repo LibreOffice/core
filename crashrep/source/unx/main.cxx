@@ -441,7 +441,7 @@ static void WriteSOAPRequest( FILE *fp )
         fcopy( fp, fpin );
         fprintf( fp, "]]></value></item>\n" );
         fclose( fpin );
-    };
+    }
 
     fpin = fopen( g_szStackFile, "r" );
     if ( fpin )
@@ -453,7 +453,7 @@ static void WriteSOAPRequest( FILE *fp )
         fcopy( fp, fpin );
         fprintf( fp, "]]></value></item>\n" );
         fclose( fpin );
-    };
+    }
 
     fprintf( fp,
         "</hash>\n"

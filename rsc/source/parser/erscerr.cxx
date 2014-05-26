@@ -133,7 +133,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
                 sprintf( buf, "%d.%d\n\n",
                          RSCVERSION_ID / 100, RSCVERSION_ID % 100 );
                 StdLstOut( buf );
-            };
+            }
 
             StdLstOut( "Command line: rsc [Switches] <Source File(s)>\n" );
             StdLstOut( "Command line: rsc @<Command File>\n" );
@@ -382,7 +382,7 @@ void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
         ErrorFormat( rError, pClass, aId );
         WriteError( rError, pMessage );
         StdLstErr( "\n" );
-    };
+    }
 }
 
 void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,

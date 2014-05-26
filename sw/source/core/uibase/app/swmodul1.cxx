@@ -421,7 +421,7 @@ OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
     while(!(nPos < pAuthorNames->size()))
     {
         InsertRedlineAuthor("nn");
-    };
+    }
     return (*pAuthorNames)[nPos];
 }
 

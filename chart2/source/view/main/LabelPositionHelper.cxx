@@ -333,7 +333,7 @@ void lcl_correctRotation_Left_Bottom( double& rfXCorrection, double& rfYCorrecti
     {
         double beta = fAnglePi-F_PI/2.0;
         rfXCorrection = -aSize.Width*rtl::math::sin( beta )
-                        -aSize.Height*rtl::math::cos( beta );;
+                        -aSize.Height*rtl::math::cos( beta );
         rfYCorrection = aSize.Height*rtl::math::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )

@@ -390,7 +390,7 @@ static const hwpeq *lookup_eqn(char *str)
     m = (l + r) / 2;
     k = strcmp(eq_tbl[m].key, str);
     if( k == 0 ) {
-      result = eq_tbl + m;;
+      result = eq_tbl + m;
       break;
     }
     else if( k < 0 )

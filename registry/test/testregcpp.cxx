@@ -399,7 +399,7 @@ void test_registry_CppApi()
     // Link Test
 
 
-    REG_ENSURE(!rootKey.createKey(OUString("/myFourthKey/X"), key7), "test_registry_CppApi error 7c)");;
+    REG_ENSURE(!rootKey.createKey(OUString("/myFourthKey/X"), key7), "test_registry_CppApi error 7c)");
     REG_ENSURE(!key6.createLink(OUString("myFirstLink"), OUString("/myFourthKey/X")), "test_registry_CppApi error 7d");
     REG_ENSURE(!key6.createKey(OUString("mySixthSubKey"), key7), "test_registry_CppApi error 7e");
 
