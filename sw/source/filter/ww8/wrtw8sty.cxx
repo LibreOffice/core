@@ -65,7 +65,7 @@
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
-#include "../inc/wwstyles.hxx"
+#include <wwstyles.hxx>
 #include "ww8par.hxx"
 #include "ww8attributeoutput.hxx"
 #include "docxattributeoutput.hxx"

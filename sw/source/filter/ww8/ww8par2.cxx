@@ -63,7 +63,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <numrule.hxx>
 #include <sprmids.hxx>
-#include "../inc/wwstyles.hxx"
+#include <wwstyles.hxx>
 #include "writerhelper.hxx"
 #include "ww8struc.hxx"
 #include "ww8par.hxx"
