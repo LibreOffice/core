@@ -102,9 +102,9 @@ public:
     {
         Py_DECREF(used);
     }
-    void setUsed(PyObject *key)
+    int setUsed(PyObject *key)
     {
-        PyDict_SetItem(used, key, Py_True);
+        return PyDict_SetItem(used, key, Py_True);
     }
     void setInitialised(const OUString& key, sal_Int32 pos = -1)
     {
