@@ -301,6 +301,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     {
     case FUNIT_100TH_MM:
         OSL_ENSURE( FUNIT_MM == eUnit, "Measuring unit not supported" );
+        //fall-through
     case FUNIT_MM:
         // 0.01mm = 0.57twip
         nMul = 25400;   // 25.4 * 1000
