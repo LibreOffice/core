@@ -4472,18 +4472,17 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
             case SC_CAT_DELETE_ROWS:
             case SC_CAT_DELETE_TABS:
                 {
-                    const ScChangeActionDel* pDelete = dynamic_cast< const ScChangeActionDel* >( pAction );
-                    OSL_ENSURE( pDelete, "ScChangeTrack::Clone: pDelete is null!" );
+                    const ScChangeActionDel& rDelete = dynamic_cast<const ScChangeActionDel&>(*pAction);
 
                     SCsCOLROW nD = 0;
                     ScChangeActionType eType = pAction->GetType();
                     if ( eType == SC_CAT_DELETE_COLS )
                     {
-                        nD = static_cast< SCsCOLROW >( pDelete->GetDx() );
+                        nD = static_cast< SCsCOLROW >( rDelete.GetDx() );
                     }
                     else if ( eType == SC_CAT_DELETE_ROWS )
                     {
-                        nD = static_cast< SCsCOLROW >( pDelete->GetDy() );
+                        nD = static_cast< SCsCOLROW >( rDelete.GetDy() );
                     }
 
                     pClonedAction = new ScChangeActionDel(
