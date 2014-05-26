@@ -1466,7 +1466,7 @@ private:
 
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
         const WW8_TablePos *pTabPos);
-    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
+    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos, SvxULSpaceItem* pULSpaceItem = 0);
     void StopApo();
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
@@ -1516,7 +1516,7 @@ private:
 
     void ReadDocVars();
 
-    bool StartTable(WW8_CP nStartCp);
+    bool StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem = 0);
     bool InEqualApo(int nLvl) const;
     bool InLocalApo() const { return InEqualApo(nInTable); }
     bool InEqualOrHigherApo(int nLvl) const;

@@ -396,6 +396,17 @@ DECLARE_WW8IMPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
     CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b4]));
 }
 
+DECLARE_WW8IMPORT_TEST(testBnc863018, "bnc863018.doc")
+{
+    // The problem was that there should be some whitespace above the table,
+    // but there wasn't.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // This was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5002), getProperty<sal_Int32>(xTable, "TopMargin"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
