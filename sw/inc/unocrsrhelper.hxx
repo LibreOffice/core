@@ -223,7 +223,7 @@ namespace SwUnoCursorHelper
             SfxItemPropertySimpleEntry const& rEntry,
             ::com::sun::star::uno::Any const& rValue,
             SwPaM & rPam, SfxItemSet & rItemSet)
-        throw (::com::sun::star::lang::IllegalArgumentException);
+        throw (::com::sun::star::lang::IllegalArgumentException, css::uno::RuntimeException, css::uno::DeploymentException);
 
     /// try to get something that can be selected out of the XInterface
     /// at most one of the out parameters gets assigned a non-null value
