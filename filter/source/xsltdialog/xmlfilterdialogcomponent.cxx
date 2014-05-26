@@ -295,8 +295,8 @@ void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* 
     {
         mpDialog->ToTop();
         throw TerminationVetoException(
-            OUString("The office cannot be closed while the XMLFilterDialog is running"),
-            Reference<XInterface>(static_cast<XTerminateListener*>(this), UNO_QUERY));
+            "The office cannot be closed while the XMLFilterDialog is running",
+            static_cast<XTerminateListener*>(this));
     }
     else
         mpDialog->Close();

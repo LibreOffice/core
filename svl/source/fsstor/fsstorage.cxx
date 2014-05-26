@@ -1018,8 +1018,7 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetException( "Can not open element!",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 
@@ -1067,10 +1066,9 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
             OSL_FAIL( "The folder does not exist!\n" );
         else
         {
-               uno::Any aCaught( ::cppu::getCaughtException() );
+            uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( "Can not open storage!",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
         }
     }
@@ -1080,10 +1078,9 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     }
     catch ( uno::Exception& )
     {
-           uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( "Can not open storage!",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 
@@ -1113,10 +1110,9 @@ sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
     }
     catch ( uno::Exception& )
     {
-           uno::Any aCaught( ::cppu::getCaughtException() );
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( "Can not open storage!",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 
@@ -1178,7 +1174,7 @@ void SAL_CALL FSStorage::dispose()
 
     if ( m_pImpl->m_pListenersContainer )
     {
-           lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
         m_pImpl->m_pListenersContainer->disposeAndClear( aSource );
     }
 

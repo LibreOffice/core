@@ -1359,7 +1359,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
         return;
 
     Reference< XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-    lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
+    lang::EventObject       aSource  ( static_cast< ::cppu::OWeakObject* >(this) );
     ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
     if (pContainer!=NULL)
     {
@@ -1382,7 +1382,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
         if (bDeliverOwnership)
             m_pData->m_bSuicide = true;
         throw util::CloseVetoException(
-                OUString("Cant close while saving."),
+                "Cant close while saving.",
                 static_cast< util::XCloseable* >(this));
     }
 

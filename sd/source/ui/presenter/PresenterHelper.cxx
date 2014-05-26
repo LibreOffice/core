@@ -166,8 +166,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
         || ! rxSharedWindow.is()
         || ! rxWindow.is())
     {
-        throw RuntimeException("illegal argument",
-            Reference<XInterface>(static_cast<XWeak*>(this)));
+        throw RuntimeException("illegal argument", static_cast<XWeak*>(this));
     }
 
     if (rxWindow == rxSharedWindow)

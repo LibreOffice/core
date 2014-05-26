@@ -384,7 +384,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     {
         // the object is still not running
         throw uno::RuntimeException( "The object is not loaded!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
     }
 
 #if defined WNT

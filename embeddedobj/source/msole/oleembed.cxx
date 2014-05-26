@@ -459,7 +459,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 
     // in case the object is already in requested state
     if ( m_nObjectState == nNewState )
@@ -613,7 +613,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 
 #ifdef WNT
     if ( m_pOleComponent )
@@ -655,7 +655,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO: Shouldn't we ask object? ( I guess no )
     return m_nObjectState;
@@ -771,7 +771,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 
 #ifdef WNT
     if ( m_pOleComponent )
@@ -904,7 +904,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 #ifdef WNT
     if ( m_pOleComponent )
     {
@@ -949,7 +949,7 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
         if ( m_nObjectState != embed::EmbedStates::LOADED && m_nObjectState != embed::EmbedStates::RUNNING )
             throw embed::WrongStateException(
                                     "The client site can not be set currently!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
         m_xClientSite = xClient;
     }
@@ -975,7 +975,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 
     return m_xClientSite;
 }
@@ -1002,7 +1002,7 @@ void SAL_CALL OleEmbeddedObject::update()
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nUpdateMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE )
     {
@@ -1036,7 +1036,7 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                       static_cast< ::cppu::OWeakObject* >(this) );
 
     OSL_ENSURE( nMode == embed::EmbedUpdateModes::ALWAYS_UPDATE
                     || nMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE,
@@ -1066,7 +1066,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object must be in running state!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     sal_Int64 nResult = 0;
 

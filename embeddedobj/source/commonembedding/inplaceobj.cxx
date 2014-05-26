@@ -47,7 +47,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
     if ( m_nObjectState != embed::EmbedStates::INPLACE_ACTIVE
       && m_nObjectState != embed::EmbedStates::UI_ACTIVE )
         throw embed::WrongStateException( "The object is not activated inplace!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                          static_cast< ::cppu::OWeakObject* >(this) );
 
     awt::Rectangle aNewRectToShow = GetRectangleInterception( aPosRect, aClipRect );
     awt::Rectangle aOldRectToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );

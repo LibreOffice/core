@@ -63,8 +63,8 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 {
     if (aArguments.getLength() > 2)
         throw css::lang::IllegalArgumentException(
-        "DocumentDigitalSignatures::initialize requires zero, one, or two arguments",
-        Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 0);
+          "DocumentDigitalSignatures::initialize requires zero, one, or two arguments",
+          static_cast<XInitialization*>(this), 0);
 
     m_nArgumentsCount = aArguments.getLength();
 
@@ -73,13 +73,13 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
         if (!(aArguments[0] >>= m_sODFVersion))
             throw css::lang::IllegalArgumentException(
                 "DocumentDigitalSignatures::initialize: the first arguments must be a string",
-                Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 0);
+                static_cast<XInitialization*>(this), 0);
 
         if (aArguments.getLength() == 2
             && !(aArguments[1] >>= m_bHasDocumentSignature))
             throw css::lang::IllegalArgumentException(
                 "DocumentDigitalSignatures::initialize: the second arguments must be a bool",
-                Reference<XInterface>(static_cast<XInitialization*>(this), UNO_QUERY), 1);
+                static_cast<XInitialization*>(this), 1);
 
         //the Version is supported as of ODF1.2, so for and 1.1 document or older we will receive the
         //an empty string. In this case we set it to ODFVER_010_TEXT. Then we can later check easily

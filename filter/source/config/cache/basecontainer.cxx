@@ -291,7 +291,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
 {
     if (sItem.isEmpty())
         throw css::container::NoSuchElementException( "An empty item can't be part of this cache!",
-                css::uno::Reference< css::uno::XInterface >(static_cast< css::container::XNameAccess* >(this), css::uno::UNO_QUERY));
+                static_cast< css::container::XNameAccess* >(this));
 
     css::uno::Any aValue;
 

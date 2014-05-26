@@ -108,13 +108,13 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
     // TODO: if object is in loaded state it should switch itself to the running state
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( "The own object has no model!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO: return for the aspect of the document
     embed::VisualRepresentation aVisualRepresentation;
@@ -135,7 +135,7 @@ void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, cons
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     maSize = aSize;
 }
@@ -154,11 +154,11 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect 
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The own object has no model!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     awt::Size aResult;
     return maSize;
@@ -176,7 +176,7 @@ sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
@@ -205,7 +205,7 @@ void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object has no persistence!",
-                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                        static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( nVerbID == -7 )
     {
