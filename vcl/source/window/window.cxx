@@ -1127,32 +1127,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
 }
 
-void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
-{
-    if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
-        return;
-
-    if (nFlags & COPYAREA_WINDOWINVALIDATE)
-    {
-        const Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
-                Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
-
-        ImplMoveAllInvalidateRegions(aSrcRect,
-                aPosAry.mnDestX-aPosAry.mnSrcX,
-                aPosAry.mnDestY-aPosAry.mnSrcY,
-                false);
-
-        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
-                aPosAry.mnSrcX, aPosAry.mnSrcY,
-                aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                SAL_COPYAREA_WINDOWINVALIDATE, this);
-
-        return;
-    }
-
-    OutputDevice::CopyDeviceArea(aPosAry, nFlags);
-}
-
 void Window::ImplInitAppFontData( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1197,6 +1171,46 @@ void Window::ImplInitAppFontData( Window* pWindow )
         pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
 }
 
+void Window::ImplInitWindowData( WindowType nType )
+{
+    // We will eventually being removing the inheritance of OutputDevice from Window.
+    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
+    // it will not *be* an OutputDevice
+    mpOutputDevice = (OutputDevice*)this;
+
+    mpWindowImpl = new WindowImpl( nType );
+
+    meOutDevType        = OUTDEV_WINDOW;
+
+    mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
+}
+
+void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
+{
+    if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
+        return;
+
+    if (nFlags & COPYAREA_WINDOWINVALIDATE)
+    {
+        const Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
+                Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
+
+        ImplMoveAllInvalidateRegions(aSrcRect,
+                aPosAry.mnDestX-aPosAry.mnSrcX,
+                aPosAry.mnDestY-aPosAry.mnSrcY,
+                false);
+
+        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
+                aPosAry.mnSrcX, aPosAry.mnSrcY,
+                aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
+                SAL_COPYAREA_WINDOWINVALIDATE, this);
+
+        return;
+    }
+
+    OutputDevice::CopyDeviceArea(aPosAry, nFlags);
+}
+
 bool Window::ImplCheckUIFont( const Font& rFont )
 {
     if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
@@ -1238,20 +1252,6 @@ bool Window::ImplCheckUIFont( const Font& rFont )
     return bUIFontOk;
 }
 
-void Window::ImplInitWindowData( WindowType nType )
-{
-    // We will eventually being removing the inheritance of OutputDevice from Window.
-    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
-    // it will not *be* an OutputDevice
-    mpOutputDevice = (OutputDevice*)this;
-
-    mpWindowImpl = new WindowImpl( nType );
-
-    meOutDevType        = OUTDEV_WINDOW;
-
-    mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
-}
-
 bool ImplDoTiledRendering()
 {
 #if !HAVE_FEATURE_DESKTOP
@@ -1264,24 +1264,6 @@ bool ImplDoTiledRendering()
     // Or what?
     return false;
 #endif
-}
-
-void Window::ImplSetFrameParent( const Window* pParent )
-{
-    Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
-    while( pFrameWindow )
-    {
-        // search all frames that are children of this window
-        // and reparent them
-        if( ImplIsRealParentPath( pFrameWindow ) )
-        {
-            DBG_ASSERT( mpWindowImpl->mpFrame != pFrameWindow->mpWindowImpl->mpFrame, "SetFrameParent to own" );
-            DBG_ASSERT( mpWindowImpl->mpFrame, "no frame" );
-            SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : NULL;
-            pFrameWindow->mpWindowImpl->mpFrame->SetParent( pParentFrame );
-        }
-        pFrameWindow = pFrameWindow->mpWindowImpl->mpFrameData->mpNextFrame;
-    }
 }
 
 ImplWinData* Window::ImplGetWinData() const

@@ -1156,6 +1156,24 @@ bool Window::IsWindowOrChild( const Window* pWindow, bool bSystemWindow ) const
     return ImplIsChild( pWindow, bSystemWindow );
 }
 
+void Window::ImplSetFrameParent( const Window* pParent )
+{
+    Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    while( pFrameWindow )
+    {
+        // search all frames that are children of this window
+        // and reparent them
+        if( ImplIsRealParentPath( pFrameWindow ) )
+        {
+            DBG_ASSERT( mpWindowImpl->mpFrame != pFrameWindow->mpWindowImpl->mpFrame, "SetFrameParent to own" );
+            DBG_ASSERT( mpWindowImpl->mpFrame, "no frame" );
+            SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : NULL;
+            pFrameWindow->mpWindowImpl->mpFrame->SetParent( pParentFrame );
+        }
+        pFrameWindow = pFrameWindow->mpWindowImpl->mpFrameData->mpNextFrame;
+    }
+}
+
 const SystemEnvData* Window::GetSystemData() const
 {
 
