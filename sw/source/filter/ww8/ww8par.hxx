@@ -40,7 +40,7 @@
 #include "ww8scan.hxx"
 #include "ww8glsy.hxx"
 #include "wrtww8.hxx"
-#include "../inc/msfilter.hxx"
+#include <msfilter.hxx>
 #include <xmloff/odffields.hxx>
 #include <IMark.hxx>
 

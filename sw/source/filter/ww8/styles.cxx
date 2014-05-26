@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "../inc/wwstyles.hxx"
+#include <wwstyles.hxx>
 
 #include <functional>
 #include <algorithm>
