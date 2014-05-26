@@ -1,8 +1,8 @@
 --- libgltf/src/RenderScene.h
 +++ libgltf/src/RenderScene.h
 @@ -16,7 +16,8 @@
- #include "FPSCounter.h"
- #include "Timer.h"
+ #define TRACE_TIME 
+ #endif
  
 -#define OPENMPENABLE   1
 +// Needs a configure / etc. detection to see if omp.h is on the system ...
