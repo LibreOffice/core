@@ -731,15 +731,13 @@ struct ConventionOOO_A1 : public Convention_A1
     ConventionOOO_A1() : Convention_A1 (FormulaGrammar::CONV_OOO) { }
     ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
 
-    static OUString MakeTabStr( const std::vector<OUString>& rTabNames, SCTAB nTab )
+    static void MakeTabStr( OUStringBuffer &rBuf, const std::vector<OUString>& rTabNames, SCTAB nTab )
     {
-        OUString aString;
         if (static_cast<size_t>(nTab) >= rTabNames.size())
-            aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
+            rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
         else
-            aString = rTabNames[nTab];
-        aString += ".";
-        return aString;
+            rBuf.append(rTabNames[nTab]);
+        rBuf.append('.');
     }
 
     void MakeOneRefStrImpl(
@@ -759,10 +757,9 @@ struct ConventionOOO_A1 : public Convention_A1
             }
             else
             {
-                OUString aRefStr(MakeTabStr(rTabNames, rAbsRef.Tab()));
                 if (!rRef.IsTabRel())
                     rBuffer.append('$');
-                rBuffer.append(aRefStr);
+                MakeTabStr(rBuffer, rTabNames, rAbsRef.Tab());
             }
         }
         else if (bODF)
