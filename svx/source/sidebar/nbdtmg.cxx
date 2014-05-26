@@ -1351,42 +1351,7 @@ void NumberingTypeMgr::Init()
             pNumEntry->nIndex = i + 1;
             pNumEntry->nIndexDefault = i;
             pNumEntry->pNumSetting = pNew;
-            //SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
-            {
-                OUString sText;
-                //const OUString sValue(C2U("Value"));
-                Reference<XNumberingFormatter> xFormatter(xDefNum, UNO_QUERY);
-                if(xFormatter.is() && aNumberings.getLength() > i)
-                {
-
-                    for (sal_uInt16 j=0;j<3;j++)
-                    {
-                        Sequence<PropertyValue> aLevel = aNumberings.getConstArray()[i];
-                        try
-                        {
-                            aLevel.realloc(aLevel.getLength() + 1);
-                            PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
-                            rValue.Name = "Value";
-                            rValue.Value <<= (sal_Int32)(j + 1);
-
-                            if (j!=0)
-                                sText += " ";
-
-                            sText += xFormatter->makeNumberingString( aLevel, aLocale );
-                        }
-                        catch (const Exception&)
-                        {
-                            OSL_ENSURE(false, "Exception in DefaultNumberingProvider::makeNumberingString");
-                        }
-                    }
-                }
-                OUString aStrFromRES(SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS));
-                aStrFromRES = aStrFromRES.replaceFirst("%NUMBERINGSAMPLE",sText);
-                pNumEntry->sDescription = aStrFromRES;
-            }
-    //End modification
-
-            //pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTION_0 + i );
+            pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
             pNumberSettingsArr->push_back(boost::shared_ptr<NumberSettings_Impl>(pNumEntry));
         }
     }
