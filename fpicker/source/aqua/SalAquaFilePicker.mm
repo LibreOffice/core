@@ -229,7 +229,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 
         default:
             throw uno::RuntimeException(
-                      rtl::OUString("The dialog returned with an unknown result!"), 
+                      "The dialog returned with an unknown result!", 
                       static_cast<XFilePicker*>( static_cast<XFilePicker3*>( this ) ));
             break;
     }
@@ -526,14 +526,14 @@ throw( uno::Exception, uno::RuntimeException )
     // parameter checking
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
-        throw lang::IllegalArgumentException(rtl::OUString("no arguments"),
+        throw lang::IllegalArgumentException("no arguments",
                                              static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
 
     aAny = aArguments[0];
 
     if( ( aAny.getValueType() != ::cppu::UnoType<sal_Int16>::get() ) &&
         (aAny.getValueType() != ::cppu::UnoType<sal_Int8>::get() ) )
-        throw lang::IllegalArgumentException(rtl::OUString( "invalid argument type" ),
+        throw lang::IllegalArgumentException("invalid argument type",
                                              static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ), 1 );
 
     sal_Int16 templateId = -1;
@@ -586,7 +586,7 @@ throw( uno::Exception, uno::RuntimeException )
             OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION" );
             break;
         default:
-            throw lang::IllegalArgumentException(rtl::OUString("Unknown template"),
+            throw lang::IllegalArgumentException("Unknown template",
                                                  static_cast<XFilePicker*>( static_cast<XFilePicker3*>(this) ),
                                                  1 );
     }

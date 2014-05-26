@@ -543,7 +543,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         else if (rName == UNO_NAME_OUT_SERVER_PASSWORD)
             bOK = rValue >>= sOutServerPassword;
         else
-            throw UnknownPropertyException( OUString( "Property is unknown: " ) + rName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException( "Property is unknown: " + rName, static_cast < cppu::OWeakObject * > ( this ) );
 
         if (!bOK)
             throw IllegalArgumentException("Property type mismatch or property not set: " + rName, static_cast < cppu::OWeakObject * > ( this ), 0 );
@@ -586,7 +586,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         if ( !bValid )
         {
             throw IllegalArgumentException(
-                OUString( "The current 'Selection' does not describe a valid array of bookmarks, relative to the current 'ResultSet'." ),
+                "The current 'Selection' does not describe a valid array of bookmarks, relative to the current 'ResultSet'.",
                 static_cast < cppu::OWeakObject * > ( this ),
                 0
             );

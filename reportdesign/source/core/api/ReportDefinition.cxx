@@ -2097,7 +2097,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw 
     uno::Sequence< OUString > aList = getAvailableMimeTypes();
     const OUString* pEnd = aList.getConstArray()+aList.getLength();
     if ( ::std::find(aList.getConstArray(),pEnd,_mimetype) == pEnd )
-        throwIllegallArgumentException(OUString("getAvailableMimeTypes()")
+        throwIllegallArgumentException("getAvailableMimeTypes()"
                         ,*this
                         ,1
                         ,m_aProps->m_xContext);

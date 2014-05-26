@@ -516,7 +516,7 @@ SAL_IMPLEMENT_MAIN()
                 {
                     Reference< XComponent > xComp( xBridge, UNO_QUERY );
                     if (! xComp.is())
-                        throw RuntimeException( OUString( "bridge factory does not export interface \"com.sun.star.lang.XComponent\"!" ) );
+                        throw RuntimeException( "bridge factory does not export interface \"com.sun.star.lang.XComponent\"!" );
                     ODisposingListener::waitFor( xComp );
                     xComp->dispose();
                         // explicitly dispose the remote bridge so that it joins
@@ -545,7 +545,7 @@ SAL_IMPLEMENT_MAIN()
                 Reference< XComponent > xComp( xInstance, UNO_QUERY );
                 if (xComp.is())
                     xComp->dispose();
-                throw RuntimeException( OUString( "component does not export interface interface \"com.sun.star.lang.XMain\"!" ) );
+                throw RuntimeException( "component does not export interface interface \"com.sun.star.lang.XMain\"!" );
             }
         }
     }

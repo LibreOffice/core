@@ -140,7 +140,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
     } catch( const uno::Exception& e )
     {
         throw embed::StorageWrappedTargetException(
-                    OUString( "Can't copy storage!" ),
+                    "Can't copy storage!",
                     uno::Reference< uno::XInterface >(),
                     uno::makeAny( e ) );
     }
@@ -910,12 +910,12 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         throw lang::DisposedException(); // TODO
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -930,7 +930,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         // it can switch persistent representation only without initialization
 
         throw embed::WrongStateException(
-                    OUString( "Can't change persistent representation of activated object!\n" ),
+                    "Can't change persistent representation of activated object!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -954,7 +954,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         }
         else
             throw embed::WrongStateException(
-                        OUString( "The object waits for saveCompleted() call!\n" ),
+                        "The object waits for saveCompleted() call!",
                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1111,7 +1111,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             //TODO:
         //}
         else
-            throw lang::IllegalArgumentException( OUString( "Wrong connection mode is provided!\n" ),
+            throw lang::IllegalArgumentException( "Wrong connection mode is provided!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
     }
@@ -1135,13 +1135,13 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( OUString( "Can't store object without persistence!\n" ),
+        throw embed::WrongStateException( "Can't store object without persistence!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
@@ -1267,13 +1267,13 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( OUString( "Can't store object without persistence!\n" ),
+        throw embed::WrongStateException( "Can't store object without persistence!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
@@ -1406,7 +1406,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( OUString( "Can't store object without persistence!\n" ),
+        throw embed::WrongStateException( "Can't store object without persistence!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1485,7 +1485,7 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_xObjectStorage.is() )
@@ -1506,13 +1506,13 @@ OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( OUString( "The object persistence is not initialized!\n" ),
+        throw embed::WrongStateException( "The object persistence is not initialized!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aEntryName;
@@ -1536,13 +1536,13 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( OUString( "Can't store object without persistence!\n" ),
+        throw embed::WrongStateException( "Can't store object without persistence!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_bReadOnly )
@@ -1622,13 +1622,13 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( OUString( "The object persistence is not initialized!\n" ),
+        throw embed::WrongStateException( "The object persistence is not initialized!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_bReadOnly;
@@ -1654,7 +1654,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( OUString( "The object persistence is not initialized!\n" ),
+        throw embed::WrongStateException( "The object persistence is not initialized!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1662,13 +1662,13 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     {
         // the object is still not loaded
         throw embed::WrongStateException(
-                                OUString( "The object must be in loaded state to be reloaded!\n" ),
+                                "The object must be in loaded state to be reloaded!",
                                 uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_bIsLink )
@@ -1776,7 +1776,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     {
         // it must be a linked initialized object
         throw embed::WrongStateException(
-                    OUString( "The object is not a valid linked object!\n" ),
+                    "The object is not a valid linked object!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
     else
@@ -1786,12 +1786,12 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     }
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -1799,13 +1799,13 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     {
         // it must be a linked initialized object
         throw embed::WrongStateException(
-                    OUString( "The object is not a valid linked object!\n" ),
+                    "The object is not a valid linked object!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString( "The object waits for saveCompleted() call!\n" ),
+                    "The object waits for saveCompleted() call!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
@@ -1877,7 +1877,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getLinkURL()
 
     if ( !m_bIsLink )
         throw embed::WrongStateException(
-                    OUString( "The object is not a link object!\n" ),
+                    "The object is not a link object!",
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aLinkURL;

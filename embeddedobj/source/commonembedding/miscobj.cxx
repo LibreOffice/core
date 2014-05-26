@@ -491,7 +491,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw uno::RuntimeException( OUString( "Can't store object without persistence!\n" ),
+        throw uno::RuntimeException( "Can't store object without persistence!",
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 

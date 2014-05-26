@@ -432,7 +432,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
                 GetPropertyValue( pValues[nProp], *pEntry, pUnoCrsr, pSet );
             }
             else
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
         delete pSet;
     }
@@ -468,7 +468,7 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
         {
             const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if (!pEntry)
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException ("Property is read-only: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -668,7 +668,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
             {
                 const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
                 if (!pEntry)
-                    throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pProp[i], static_cast < cppu::OWeakObject * > ( this ) );
+                    throw beans::UnknownPropertyException( "Unknown property: " + pProp[i], static_cast < cppu::OWeakObject * > ( this ) );
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
