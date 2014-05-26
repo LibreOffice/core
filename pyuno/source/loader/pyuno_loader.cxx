@@ -47,6 +47,7 @@
 
 
 using pyuno::PyRef;
+using pyuno::NOT_NULL;
 using pyuno::Runtime;
 using pyuno::PyThreadAttach;
 
@@ -241,7 +242,7 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
             com::sun::star::uno::makeAny( ctx ) );
 
         PyRef clazz = getObjectFromLoaderModule( "Loader" );
-        PyRef args ( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
+        PyRef args ( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
         PyTuple_SetItem( args.get(), 0 , pyCtx.getAcquired() );
         PyRef pyInstance( PyObject_CallObject( clazz.get() , args.get() ), SAL_NO_ACQUIRE );
         runtime.pyObject2Any( pyInstance ) >>= ret;
