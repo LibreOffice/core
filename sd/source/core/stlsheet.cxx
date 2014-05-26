@@ -1359,7 +1359,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
 
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUString& rPropertyName ) const throw()
+const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUString& rPropertyName ) const throw (css::uno::RuntimeException)
 {
     return GetStylePropertySet().getPropertyMapEntry(rPropertyName);
 }
