@@ -210,8 +210,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
             throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
     }
     else
-        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
-                                        (OWeakObject *)this, 2 );
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, (OWeakObject *)this, 2 );
 }
 
 void SAL_CALL RootItemContainer::removeByIndex( sal_Int32 nIndex )
@@ -239,8 +238,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
             throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
     }
     else
-        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
-                                        (OWeakObject *)this, 2 );
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, (OWeakObject *)this, 2 );
 }
 
 Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& )

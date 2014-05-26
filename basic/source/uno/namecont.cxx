@@ -3120,7 +3120,7 @@ void SfxLibrary::impl_checkReadOnly()
     if( mbReadOnly || (mbLink && mbReadOnlyLink) )
     {
         throw IllegalArgumentException(
-            OUString("Library is readonly."),
+            "Library is readonly.",
             // TODO: resource
             *this, 0
         );

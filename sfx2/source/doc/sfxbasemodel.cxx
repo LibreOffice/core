@@ -4332,8 +4332,7 @@ SfxBaseModel::getRDFRepository() throw (RuntimeException, std::exception)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->getRDFRepository();
@@ -4347,8 +4346,7 @@ SfxBaseModel::getStringValue() throw (RuntimeException, std::exception)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->getStringValue();
@@ -4362,8 +4360,7 @@ SfxBaseModel::getNamespace() throw (RuntimeException, std::exception)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->getNamespace();
@@ -4376,8 +4373,7 @@ SfxBaseModel::getLocalName() throw (RuntimeException, std::exception)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->getLocalName();
@@ -4393,8 +4389,7 @@ throw (RuntimeException, std::exception)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->getElementByMetadataReference(i_rReference);
@@ -4408,8 +4403,7 @@ throw (RuntimeException, lang::IllegalArgumentException, std::exception)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->getElementByURI(i_xURI);
@@ -4424,8 +4418,7 @@ throw (RuntimeException, lang::IllegalArgumentException, std::exception)
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->getMetadataGraphsWithType(i_xType);
@@ -4441,8 +4434,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->addMetadataFile(i_rFileName, i_rTypes);
@@ -4462,8 +4454,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->importMetadataFile(i_Format,
@@ -4480,8 +4471,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->removeMetadataFile(i_xGraphName);
@@ -4496,8 +4486,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->addContentOrStylesFile(i_rFileName);
@@ -4512,8 +4501,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->removeContentOrStylesFile(i_rFileName);
@@ -4532,8 +4520,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
     const Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     try {
@@ -4559,8 +4546,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->storeMetadataToStorage(i_xStorage);
@@ -4577,8 +4563,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
     const Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     try {
@@ -4603,8 +4588,7 @@ throw (RuntimeException, lang::IllegalArgumentException,
 
     const Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw RuntimeException( OUString(
-            "model has no document metadata"), *this );
+        throw RuntimeException( "model has no document metadata", *this );
     }
 
     return xDMA->storeMetadataToMedium(i_rMedium);

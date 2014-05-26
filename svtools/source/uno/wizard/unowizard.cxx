@@ -206,7 +206,7 @@ namespace {
             {
                 if ( i_rPaths[i][0] != nFirstPageId )
                     throw IllegalArgumentException(
-                        OUString( "All paths must start with the same page id." ),
+                        "All paths must start with the same page id.",
                         i_rContext, 2 );
             }
         }

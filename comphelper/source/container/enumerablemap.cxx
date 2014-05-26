@@ -509,7 +509,7 @@ namespace comphelper
             if ( _keyOrValue >>= nValue )
                 if ( ::rtl::math::isNan( nValue ) )
                     throw IllegalArgumentException(
-                        OUString( "NaN (not-a-number) not supported by this implementation." ),
+                        "NaN (not-a-number) not supported by this implementation.",
                         *const_cast< EnumerableMap* >( this ), 0 );
             // (note that the case of _key not containing a float/double value is handled in the
             // respective IKeyPredicateLess implementation, so there's no need to handle this here.)
@@ -521,7 +521,7 @@ namespace comphelper
     {
         if ( !_key.hasValue() )
             throw IllegalArgumentException(
-                OUString( "NULL keys not supported by this implementation." ),
+                "NULL keys not supported by this implementation.",
                 *const_cast< EnumerableMap* >( this ), 0 );
 
         impl_checkNaN_throw( _key, m_aData.m_aKeyType );
@@ -532,7 +532,7 @@ namespace comphelper
     {
         if ( !m_aData.m_bMutable )
             throw NoSupportException(
-                    OUString( "The map is immutable." ),
+                    "The map is immutable.",
                     *const_cast< EnumerableMap* >( this ) );
     }
 
