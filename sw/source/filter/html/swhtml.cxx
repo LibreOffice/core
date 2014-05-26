@@ -2043,6 +2043,7 @@ static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
     {
     case RES_CHRATR_FONT:
         rFont = true;
+        //fall-through
     case RES_CHRATR_FONTSIZE:
     case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_POSTURE:
@@ -2052,6 +2053,7 @@ static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
         break;
     case RES_CHRATR_CJK_FONT:
         rFont = true;
+        //fall-through
     case RES_CHRATR_CJK_FONTSIZE:
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CJK_POSTURE:
@@ -2061,6 +2063,7 @@ static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
         break;
     case RES_CHRATR_CTL_FONT:
         rFont = true;
+        //fall-through
     case RES_CHRATR_CTL_FONTSIZE:
     case RES_CHRATR_CTL_LANGUAGE:
     case RES_CHRATR_CTL_POSTURE:
