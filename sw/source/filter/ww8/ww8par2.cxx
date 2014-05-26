@@ -33,6 +33,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -178,7 +179,7 @@ public:
 
     WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp );
     bool Ok() const { return bOk; }
-    void CreateSwTable();
+    void CreateSwTable(SvxULSpaceItem* pULSpaceItem = 0);
     void UseSwTable();
     void SetSizePosition(SwFrmFmt* pFrmFmt);
     void TableCellEnd();
@@ -2276,7 +2277,7 @@ void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
         maSegments.back().maStart = SwNodeIndex(rNode);
 }
 
-void WW8TabDesc::CreateSwTable()
+void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
 {
     ::SetProgressState(pIo->nProgress, pIo->mpDocShell);   // Update
 
@@ -2331,6 +2332,9 @@ void WW8TabDesc::CreateSwTable()
     OSL_ENSURE(pTable && pTable->GetFrmFmt(), "insert table failed");
     if (!pTable || !pTable->GetFrmFmt())
         return;
+
+    if (pULSpaceItem && pULSpaceItem->GetUpper() != 0)
+        aItemSet.Put(*pULSpaceItem);
 
     SwTableNode* pTableNode = pTable->GetTableNode();
     OSL_ENSURE(pTableNode, "no table node!");
@@ -3264,7 +3268,7 @@ void WW8TabDesc::SetNumRuleName( const OUString& rName )
     aNumRuleNames[nCol] = rName;
 }
 
-bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
+bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
 {
     // Entering a table so make sure the FirstPara flag gets set
     bFirstPara = true;
@@ -3340,7 +3344,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                    "Not the anchor type requested!" );
             MoveInsideFly(pTableDesc->pFlyFmt);
         }
-        pTableDesc->CreateSwTable();
+        pTableDesc->CreateSwTable(pULSpaceItem);
         if (pTableDesc->pFlyFmt)
         {
             pTableDesc->SetSizePosition(pTableDesc->pFlyFmt);
