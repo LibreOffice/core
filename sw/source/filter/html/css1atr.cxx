@@ -324,6 +324,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 
     case FUNIT_TWIP:
         OSL_ENSURE( FUNIT_POINT == eUnit, "Measuring unit not supported" );
+        //fall-through
     case FUNIT_POINT:
         // 0.1pt = 2.0twip (not exact, but the UI is also not exact)
         nMul = 100;
