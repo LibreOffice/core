@@ -626,7 +626,7 @@ sal_Int32 OPropertySetAggregationHelper::getOriginalHandle(sal_Int32 nHandle) co
 {
     OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper();
     sal_Int32 nOriginalHandle = -1;
-    rPH.fillAggregatePropertyInfoByHandle(NULL, &nOriginalHandle, nHandle);
+    (void)rPH.fillAggregatePropertyInfoByHandle(NULL, &nOriginalHandle, nHandle);
     return nOriginalHandle;
 }
 
