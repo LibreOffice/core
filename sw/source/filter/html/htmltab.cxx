@@ -3687,6 +3687,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         break;
                     case SVX_ADJUST_LEFT:
                         eSurround = SURROUND_RIGHT;
+                        //fall-through
                     default:
                         eHori = text::HoriOrientation::LEFT;
                         break;
