@@ -237,6 +237,7 @@ void BackingWindow::initControls()
     mpLocalView->Populate();
     mpLocalView->showRootRegion();
     mpLocalView->Hide();
+    mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 
     /*FIXME: Add other things for Local View
      *Filter and the bars*/
