@@ -42,11 +42,11 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( "Illegal call!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
+        throw embed::WrongStateException( "The own object has no persistence!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     m_bHasClonedSize = false;
@@ -80,7 +80,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
+        throw embed::WrongStateException( "The own object has no persistence!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
@@ -120,11 +120,11 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( "Illegal call!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
+        throw embed::WrongStateException( "The own object has no persistence!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_bHasClonedSize )
@@ -161,14 +161,14 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
+        throw embed::WrongStateException( "The own object has no persistence!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( "Illegal call!",
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     bool bBackToLoaded = false;

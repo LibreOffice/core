@@ -68,12 +68,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::RuntimeException, std::exception)
 {
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -138,12 +138,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::RuntimeException, std::exception)
 {
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -178,12 +178,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::RuntimeException, std::exception)
 {
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
@@ -217,13 +217,13 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                 uno::RuntimeException, std::exception )
 {
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >(
                                                 static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             uno::Reference< uno::XInterface >(
                                                 static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -262,12 +262,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 {
     // the initialization is completelly controlled by user
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 

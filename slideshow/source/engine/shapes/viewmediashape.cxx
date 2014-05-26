@@ -430,7 +430,7 @@ namespace slideshow
                 }
                 catch( const uno::Exception& )
                 {
-                    throw lang::NoSupportException( OUString( "No video support for " ) + rMediaURL );
+                    throw lang::NoSupportException( "No video support for " + rMediaURL );
                 }
             }
 #endif

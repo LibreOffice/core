@@ -738,7 +738,7 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (U
     }
     else
     {
-        throw UnknownPropertyException( OUString("unknown property: ") + PropertyName, static_cast<OWeakObject *>(this) );
+        throw UnknownPropertyException( "unknown property: " + PropertyName, static_cast<OWeakObject *>(this) );
     }
 }
 

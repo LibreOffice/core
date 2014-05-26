@@ -1339,7 +1339,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
     const :: SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     //UUUU
     const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
@@ -1934,7 +1934,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     //UUUU
     const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
@@ -2490,7 +2490,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     {
         const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if (!pEntry)
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw uno::RuntimeException("setPropertyToDefault: property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -2611,7 +2611,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
             }
         }
         else
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else if(!IsDescriptor())
         throw uno::RuntimeException();

@@ -2109,7 +2109,7 @@ void SvxPropertyValuesToItemSet(
                 pPropSet->setPropertyValue( pProps[i].Name, pProps[i].Value, rItemSet );
         }
         else
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
     }
 }
 

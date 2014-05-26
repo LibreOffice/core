@@ -304,11 +304,11 @@ LinePropertyPanel* LinePropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw lang::IllegalArgumentException(OUString("no parent Window given to LinePropertyPanel::Create"), NULL, 0);
+        throw lang::IllegalArgumentException("no parent Window given to LinePropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException(OUString("no XFrame given to LinePropertyPanel::Create"), NULL, 1);
+        throw lang::IllegalArgumentException("no XFrame given to LinePropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw lang::IllegalArgumentException(OUString("no SfxBindings given to LinePropertyPanel::Create"), NULL, 2);
+        throw lang::IllegalArgumentException("no SfxBindings given to LinePropertyPanel::Create", NULL, 2);
 
     return new LinePropertyPanel(
         pParent,

@@ -595,7 +595,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             else
             {
                 throw beans::UnknownPropertyException(
-                    OUString( "Unknown property: " ) + rPropertyName,
+                    "Unknown property: " + rPropertyName,
                     static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -751,7 +751,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             }
             break;
         default:
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
 }
@@ -929,7 +929,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 break;
             default:
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             }
         }
     }
@@ -2119,9 +2119,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-        throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::PropertyVetoException( "Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     if(pField)
     {
@@ -2276,7 +2276,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         pEntry = _pParaPropSet->getPropertyMap().getByName(rPropertyName);
     }
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     switch( pEntry->nWID )
     {

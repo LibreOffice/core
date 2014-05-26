@@ -1017,7 +1017,7 @@ uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
     catch ( uno::Exception& )
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetException( OUString("Can not open element!\n"),
+        throw lang::WrappedTargetException( "Can not open element!",
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
@@ -1068,7 +1068,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
         else
         {
                uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetRuntimeException( OUString("Can not open storage!\n"),
+            throw lang::WrappedTargetRuntimeException( "Can not open storage!",
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
@@ -1081,7 +1081,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     catch ( uno::Exception& )
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( OUString("Can not open storage!\n"),
+        throw lang::WrappedTargetRuntimeException( "Can not open storage!",
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
@@ -1114,7 +1114,7 @@ sal_Bool SAL_CALL FSStorage::hasByName( const OUString& aName )
     catch ( uno::Exception& )
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( OUString("Can not open storage!\n"),
+        throw lang::WrappedTargetRuntimeException( "Can not open storage!",
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
