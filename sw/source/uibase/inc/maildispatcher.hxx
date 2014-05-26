@@ -28,6 +28,8 @@
 
 #include <list>
 
+#include <swdllapi.h>
+
 class IMailDispatcherListener;
 
 /**
@@ -37,7 +39,9 @@ class IMailDispatcherListener;
     must not be shared among different client threads. Instead each client
     thread should create an own instance of this class.
 */
-class MailDispatcher : public ::salhelper::ReferenceObject, private ::osl::Thread
+class SW_DLLPUBLIC MailDispatcher
+    : public ::salhelper::ReferenceObject
+    , private ::osl::Thread
 {
 public:
     // bringing operator new/delete into scope

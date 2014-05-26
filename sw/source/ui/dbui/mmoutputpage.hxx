@@ -30,7 +30,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
-#include "swdllapi.h"
 #include "mailmergehelper.hxx"
 
 class SwMailMergeWizard;
@@ -140,7 +139,7 @@ struct SwMailDescriptor
 };
 struct SwSendMailDialog_Impl;
 class SwMailMergeConfigItem;
-class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
+class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 {
     FixedLine               m_aStatusFL;
     FixedText               m_aStatusFT;
