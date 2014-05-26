@@ -5580,6 +5580,17 @@ int RTFDocumentImpl::popState()
                 m_aStates.top().pCurrentBuffer->push_back(
                     Buf_t(BUFFER_ENDSHAPE));
         }
+
+        // It's allowed to declare these inside the the shape text, and they
+        // are expected to have an effect for the whole shape.
+        if (aState.aDrawingObject.nLeft)
+            m_aStates.top().aDrawingObject.nLeft = aState.aDrawingObject.nLeft;
+        if (aState.aDrawingObject.nTop)
+            m_aStates.top().aDrawingObject.nTop = aState.aDrawingObject.nTop;
+        if (aState.aDrawingObject.nRight)
+            m_aStates.top().aDrawingObject.nRight = aState.aDrawingObject.nRight;
+        if (aState.aDrawingObject.nBottom)
+            m_aStates.top().aDrawingObject.nBottom = aState.aDrawingObject.nBottom;
         break;
     default:
     {
