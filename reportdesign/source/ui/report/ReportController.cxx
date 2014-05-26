@@ -1462,6 +1462,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_ATTR_CHAR_COLOR:
         case SID_ATTR_CHAR_COLOR2:
+        case SID_ATTR_CHAR_COLOR_EXT:
             {
                 const SequenceAsHashMap aMap(aArgs);
                 const util::Color aColor = aMap.getUnpackedValueOrDefault(PROPERTY_FONTCOLOR,util::Color());
@@ -1857,6 +1858,7 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:Underline",                 SID_ATTR_CHAR_UNDERLINE,        CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:BackColor",                 SID_ATTR_CHAR_COLOR_BACKGROUND, CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:BackgroundColor",           SID_BACKGROUND_COLOR,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:CharColorExt",              SID_ATTR_CHAR_COLOR_EXT);
     implDescribeSupportedFeature( ".uno:Color",                     SID_ATTR_CHAR_COLOR);
     implDescribeSupportedFeature( ".uno:FontColor",                 SID_ATTR_CHAR_COLOR2,           CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:FontDialog",                SID_CHAR_DLG,                   CommandGroup::FORMAT );
