@@ -393,6 +393,11 @@ private:
     void            AttachToWindow( const Window* );
 };
 
+struct ImplFocusDelData : public ImplDelData
+{
+    Window*         mpFocusWin;
+};
+
 struct ImplSVEvent
 {
     void*               mpData;

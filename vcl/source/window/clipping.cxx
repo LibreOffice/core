@@ -706,4 +706,90 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
     }
 }
 
+bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
+{
+    // check for overlapping window
+    pTestWindow = pTestWindow->ImplGetFirstOverlapWindow();
+    const Window* pTempWindow = pTestWindow;
+    const Window* pThisWindow = ImplGetFirstOverlapWindow();
+    if ( pTempWindow == pThisWindow )
+        return false;
+    do
+    {
+        if ( pTempWindow == pThisWindow )
+            return true;
+        if ( pTempWindow->mpWindowImpl->mbFrame )
+            break;
+        pTempWindow = pTempWindow->mpWindowImpl->mpOverlapWindow;
+    }
+    while ( pTempWindow );
+    pTempWindow = pThisWindow;
+    do
+    {
+        if ( pTempWindow == pTestWindow )
+            return false;
+        if ( pTempWindow->mpWindowImpl->mbFrame )
+            break;
+        pTempWindow = pTempWindow->mpWindowImpl->mpOverlapWindow;
+    }
+    while ( pTempWindow );
+
+    // move window to same level
+    if ( pThisWindow->mpWindowImpl->mpOverlapWindow != pTestWindow->mpWindowImpl->mpOverlapWindow )
+    {
+        sal_uInt16 nThisLevel = 0;
+        sal_uInt16 nTestLevel = 0;
+        pTempWindow = pThisWindow;
+        do
+        {
+            nThisLevel++;
+            pTempWindow = pTempWindow->mpWindowImpl->mpOverlapWindow;
+        }
+        while ( !pTempWindow->mpWindowImpl->mbFrame );
+        pTempWindow = pTestWindow;
+        do
+        {
+            nTestLevel++;
+            pTempWindow = pTempWindow->mpWindowImpl->mpOverlapWindow;
+        }
+        while ( !pTempWindow->mpWindowImpl->mbFrame );
+
+        if ( nThisLevel < nTestLevel )
+        {
+            do
+            {
+                if ( pTestWindow->mpWindowImpl->mpOverlapWindow == pThisWindow->mpWindowImpl->mpOverlapWindow )
+                    break;
+                if ( pTestWindow->mpWindowImpl->mbFrame )
+                    break;
+                pTestWindow = pTestWindow->mpWindowImpl->mpOverlapWindow;
+            }
+            while ( pTestWindow );
+        }
+        else
+        {
+            do
+            {
+                if ( pThisWindow->mpWindowImpl->mpOverlapWindow == pTempWindow->mpWindowImpl->mpOverlapWindow )
+                    break;
+                if ( pThisWindow->mpWindowImpl->mbFrame )
+                    break;
+                pThisWindow = pThisWindow->mpWindowImpl->mpOverlapWindow;
+            }
+            while ( pThisWindow );
+        }
+    }
+
+    // if TestWindow is before ThisWindow, it is in front
+    pTempWindow = pTestWindow;
+    while ( pTempWindow )
+    {
+        if ( pTempWindow == pThisWindow )
+            return true;
+        pTempWindow = pTempWindow->mpWindowImpl->mpNext;
+    }
+
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
