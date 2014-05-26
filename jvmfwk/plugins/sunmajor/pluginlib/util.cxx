@@ -250,6 +250,7 @@ FileHandleReader::readLine(OString * pLine)
             {
             case osl_File_E_PIPE: //HACK! for windows
                 nRead = 0;
+                //fall-through
             case osl_File_E_None:
                 if (nRead == 0)
                 {
