@@ -900,7 +900,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
 
             if( PyCallable_Check(extractTraceback.get()) )
             {
-                PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE );
+                PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE, NOT_NULL );
                 PyTuple_SetItem( args.get(), 0, excTraceback.getAcquired() );
                 PyRef pyStr( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
                 str = OUString::createFromAscii( PyStr_AsString(pyStr.get()) );
