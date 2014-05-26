@@ -206,7 +206,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         }
 
         sal_Int32 size = aParams.getLength();
-        PyRef argsTuple(PyTuple_New( size ), SAL_NO_ACQUIRE );
+        PyRef argsTuple(PyTuple_New( size ), SAL_NO_ACQUIRE, NOT_NULL );
         int i;
         // fill tuple with default values in case of exceptions
         for(  i = 0 ;i < size ; i ++ )
