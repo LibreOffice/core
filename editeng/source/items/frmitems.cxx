@@ -1937,6 +1937,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         case BOTTOM_BORDER_DISTANCE:
             bDistMember = true;
+            //fall-through
         case BOTTOM_BORDER:
         case MID_BOTTOM_BORDER:
             nLine = BOX_LINE_BOTTOM;
