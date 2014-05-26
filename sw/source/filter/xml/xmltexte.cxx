@@ -296,7 +296,7 @@ static void lcl_addFrameProperties(
     aAny = xSet->getPropertyValue("FrameName");
     aAny >>= aName;
 
-    bool bIsAutoScroll = false, bIsScrollingMode;
+    bool bIsAutoScroll = false, bIsScrollingMode = false;
     aAny = xSet->getPropertyValue("FrameIsAutoScroll");
     aAny >>= bIsAutoScroll;
     if ( !bIsAutoScroll )
@@ -305,7 +305,7 @@ static void lcl_addFrameProperties(
         aAny >>= bIsScrollingMode;
     }
 
-    bool bIsBorderSet, bIsAutoBorder = false;
+    bool bIsBorderSet = false, bIsAutoBorder = false;
     aAny = xSet->getPropertyValue("FrameIsAutoBorder");
     aAny >>= bIsAutoBorder;
     if ( !bIsAutoBorder )
