@@ -1924,6 +1924,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         case LEFT_BORDER_DISTANCE:
             bDistMember = true;
+            //fall-through
         case LEFT_BORDER:
         case MID_LEFT_BORDER:
             nLine = BOX_LINE_LEFT;
