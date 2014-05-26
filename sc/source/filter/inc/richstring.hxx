@@ -80,6 +80,7 @@ private:
     OUString     maText;         /// Portion text.
     FontRef             mxFont;         /// Embedded portion font, may be empty.
     sal_Int32           mnFontId;       /// Link to global font list.
+    bool                mbConverted;    /// Without repeatly convert
 };
 
 typedef ::boost::shared_ptr< RichStringPortion > RichStringPortionRef;
