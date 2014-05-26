@@ -65,10 +65,7 @@ IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, ClickHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, ClickHdl)
 
-/*------------------------------------------------------------------------
- Description:   Handler for Change Page Number
-------------------------------------------------------------------------*/
-
+// Handler for Change Page Number
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 {
     if(pBox->IsChecked())
@@ -79,10 +76,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 }
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 
-/*------------------------------------------------------------------------
- Description:   By changing the Page number the checkbox is checked.
-------------------------------------------------------------------------*/
-
+// By changing the Page number the checkbox is checked.
 IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, PageNumModifyHdl)
 {
     m_pPageNumBox->Check();
@@ -90,13 +84,11 @@ IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, PageNumModifyHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, PageNumModifyHdl)
 
-/*------------------------------------------------------------------------
- Description:   Ok-Handler;
-                checks whether pagenumber nPage is a legal pagenumber
-                (left pages with even numbers etc. for a page template
-                with alternating pages)
-------------------------------------------------------------------------*/
-
+/*
+ * Ok-Handler;
+ * checks whether pagenumber nPage is a legal pagenumber (left pages with even
+ * numbers etc. for a page template with alternating pages)
+ */
 IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
 {
     if(m_pPageNumBox->IsChecked()) {

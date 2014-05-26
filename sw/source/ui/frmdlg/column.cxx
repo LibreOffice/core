@@ -72,10 +72,7 @@ using namespace ::com::sun::star;
 
 #define FRAME_FORMAT_WIDTH 1000
 
-/*--------------------------------------------------------------------
-    Description:  static data
- --------------------------------------------------------------------*/
-
+// static data
 static const sal_uInt16 nVisCols = 3;
 
 inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
@@ -395,9 +392,7 @@ void SwColumnPage::ResetColWidth()
 
 }
 
-/*--------------------------------------------------------------------
-    Description:    Now as TabPage
- --------------------------------------------------------------------*/
+// Now as TabPage
 SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "ColumnPage", "modules/swriter/ui/columnpage.ui", rSet)
     , pColMgr(0)
@@ -626,17 +621,12 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     ActivatePage( rSet );
 }
 
-/*--------------------------------------------------------------------
-    Description:    create TabPage
- --------------------------------------------------------------------*/
+// create TabPage
 SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwColumnPage(pParent, rSet);
 }
-
-/*--------------------------------------------------------------------
-    Description:    stuff attributes into the Set when OK
- --------------------------------------------------------------------*/
+// stuff attributes into the Set when OK
 bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
 {
     if(m_pCLNrEdt->HasChildPathFocus())
@@ -666,9 +656,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description:    update ColumnManager
- --------------------------------------------------------------------*/
+// update ColumnManager
 IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 {
     long nGutterWidth = pColMgr->GetGutterWidth();
@@ -773,9 +761,6 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   Initialisation
-------------------------------------------------------------------------*/
 void SwColumnPage::Init()
 {
     m_pCLNrEdt->SetValue(nCols);
@@ -845,15 +830,13 @@ bool SwColumnPage::isLineNotNone() const
     return nPos != LISTBOX_ENTRY_NOTFOUND && nPos != 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   The number of columns has changed -- here the controls for
-                editing of the columns are en- or disabled according to the
-                column number.
-                In case there are more than nVisCols (=3) all Edit are being
-                enabled and the buttons for scrolling too.
-                Otherwise Edits are being enabled according to the column
-                numbers; one column can not be edited.
-------------------------------------------------------------------------*/
+/*
+ * The number of columns has changed -- here the controls for editing of the
+ * columns are en- or disabled according to the column number. In case there are
+ * more than nVisCols (=3) all Edit are being enabled and the buttons for
+ * scrolling too. Otherwise Edits are being enabled according to the column
+ * numbers; one column can not be edited.
+ */
 void SwColumnPage::UpdateCols()
 {
     bool bEnableBtns= false;
@@ -938,11 +921,11 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
         sDist.replaceFirst("%1", sLbl2).replaceFirst("%2", sLbl3));
 }
 
-/*------------------------------------------------------------------------
- Description:   Handler that is called at alteration of the column number.
-                An alteration of the column number overwrites potential
-                user's width settings; all columns are equally wide.
-------------------------------------------------------------------------*/
+/*
+ * Handler that is called at alteration of the column number. An alteration of
+ * the column number overwrites potential user's width settings; all columns
+ * are equally wide.
+ */
 IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 {
     nCols = (sal_uInt16)m_pCLNrEdt->GetValue();
@@ -969,14 +952,12 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   Modify handler for an alteration of the column width or
-                the column gap.
-                These changes take effect time-displaced. With an
-                alteration of the column width the automatic calculation
-                of the column width is overruled; only an alteration
-                of the column number leads back to that default.
-------------------------------------------------------------------------*/
+/*
+ * Modify handler for an alteration of the column width or the column gap.
+ * These changes take effect time-displaced. With an alteration of the column
+ * width the automatic calculation of the column width is overruled; only an
+ * alteration of the column number leads back to that default.
+ */
 IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
 {
     if (nCols < 2)
@@ -1053,11 +1034,8 @@ IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricFld )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   Handler behind the Checkbox for automatic width.
-                When the box is checked no expicit values for the column
-                width can be entered.
-------------------------------------------------------------------------*/
+// Handler behind the Checkbox for automatic width. When the box is checked
+// no expicit values for the column width can be entered.
 IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 {
     long nDist = static_cast< long >(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
@@ -1075,9 +1053,7 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   scroll up the contents of the edits
-------------------------------------------------------------------------*/
+// scroll up the contents of the edits
 IMPL_LINK_NOARG(SwColumnPage, Up)
 {
     if( nFirstVis )
@@ -1089,9 +1065,7 @@ IMPL_LINK_NOARG(SwColumnPage, Up)
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   scroll down the contents of the edits.
-------------------------------------------------------------------------*/
+// scroll down the contents of the edits.
 IMPL_LINK_NOARG(SwColumnPage, Down)
 {
     if( nFirstVis + nVisCols < nCols )
@@ -1103,11 +1077,8 @@ IMPL_LINK_NOARG(SwColumnPage, Down)
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   relict from ancient times - now directly without time
-                handler; triggered by an alteration of the column width
-                or the column gap.
-------------------------------------------------------------------------*/
+// relict from ancient times - now directly without time handler; triggered by
+// an alteration of the column width or the column gap.
 void SwColumnPage::Timeout()
 {
     if(pModifiedField)
@@ -1149,9 +1120,7 @@ void SwColumnPage::Timeout()
     Update();
 }
 
-/*------------------------------------------------------------------------
- Description:   Update the view
-------------------------------------------------------------------------*/
+// Update the view
 void SwColumnPage::Update()
 {
     m_pBalanceColsCB->Enable(nCols > 1);
@@ -1182,9 +1151,7 @@ void SwColumnPage::Update()
     UpdateColMgr(0);
 }
 
-/*--------------------------------------------------------------------
-    Description:    Update Bsp
- --------------------------------------------------------------------*/
+// Update Bsp
 void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 {
     if(!bFrm)

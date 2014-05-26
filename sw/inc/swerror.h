@@ -66,8 +66,6 @@
 #define ERR_TBLINSCOL_ERROR             (ERROR_SW_BASE|ERRCODE_CLASS_NONE| 57 )
 #define ERR_TBLDDECHG_ERROR             (ERROR_SW_BASE|ERRCODE_CLASS_NONE| 58 )
 
-// ----- Warnings ---------------------------
-
 // Import - Warnings
 #define WARN_SWG_NO_DRAWINGS            (WARN_SW_READ_BASE | 70 )
 #define WARN_WW6_FASTSAVE_ERR           (WARN_SW_READ_BASE | 71 )

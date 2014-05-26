@@ -21,8 +21,6 @@
 
 #include <tools/link.hxx>
 
-// class SwObjectFactory
-
 class SdrObjFactory;
 
 class SwObjectFactory

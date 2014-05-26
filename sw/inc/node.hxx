@@ -524,8 +524,6 @@ private:
     SwTableNode & operator= ( const SwTableNode & rNode );
 };
 
-// SwSectionNode
-
 class SwSectionNode
     : public SwStartNode
     , private ::boost::noncopyable
@@ -571,8 +569,6 @@ public:
     bool IsCntntHidden() const;
 
 };
-
-// SwDummySectionNode
 
 /** This class is internal. And quite frankly I don't know what ND_SECTIONDUMMY is for,
    the class has been merely created to replace "SwNode( ND_SECTIONDUMMY )", the only case

@@ -32,8 +32,6 @@
 namespace ww8
 {
 
-// WW8TableNodeInfoInner
-
 WW8TableNodeInfoInner::WW8TableNodeInfoInner(WW8TableNodeInfo * pParent)
 : mpParent(pParent)
 , mnDepth(0)
@@ -631,8 +629,6 @@ const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getInnerForDepth(sal_uI
 
     return pResult;
 }
-
-// WW8TableInfo
 
 WW8TableInfo::WW8TableInfo()
 {

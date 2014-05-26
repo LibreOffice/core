@@ -24,8 +24,6 @@
 #include <vcl/msgbox.hxx>
 class SwLabFmtPage;
 
-// class SwLabPreview -------------------------------------------------------
-
 class SwLabPreview : public Window
 {
     Color aGrayColor;
@@ -67,8 +65,6 @@ public:
 
     void UpdateItem(const SwLabItem& rItem);
 };
-
-// class SwLabFmtPage -------------------------------------------------------
 
 class SwLabFmtPage : public SfxTabPage
 {

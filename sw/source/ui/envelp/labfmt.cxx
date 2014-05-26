@@ -227,12 +227,10 @@ void SwLabPreview::Paint(const Rectangle &)
     }
 }
 
-// Arror or interval character --------------------------------------------
-
+// Arrow or interval character
 void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
 {
     DrawLine(rP1, rP2);
-
     if (bArrow)
     {
         Point aArr[3];
@@ -377,7 +375,7 @@ IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, PreviewHdl)
 
-// LoseFocus-Handler: Update on change --------------------------
+// LoseFocus-Handler: Update on change
 IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 {
     if (((Edit*) pControl)->IsModified())

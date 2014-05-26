@@ -136,9 +136,7 @@ void  SwMailMergePrepareMergePage::ActivatePage()
     MoveHdl_Impl(m_pRecordED);
 }
 
-/*-------------------------------------------------------------------------
-    merge the data into a new file
-  -----------------------------------------------------------------------*/
+// merge the data into a new file
 bool SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();

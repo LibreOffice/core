@@ -709,8 +709,7 @@ static const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl =
     return pNd ? pNd->FindOutlineNodeOfLevel( nLvl ) : 0;
 }
 
-// Table of contents class ------------------------------------------
-
+// Table of contents class
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
     : SwTOXBase( rBase )
     , SwSection( TOX_CONTENT_SECTION, OUString(), rFmt )

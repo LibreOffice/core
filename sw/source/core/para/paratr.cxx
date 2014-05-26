@@ -206,18 +206,11 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-/**
- * SwRegisterItem
- */
-
 SfxPoolItem* SwRegisterItem::Clone( SfxItemPool * ) const
 {
     return new SwRegisterItem( *this );
 }
 
-/**
- * SwNumRuleItem
- */
 SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 {
     return new SwNumRuleItem( *this );

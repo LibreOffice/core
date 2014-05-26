@@ -25,10 +25,7 @@
 
 class SwDoc;
 
-/*--------------------------------------------------------------------
-    FieldType for DDE
- --------------------------------------------------------------------*/
-
+// FieldType for DDE
 class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 {
     OUString aName;
@@ -83,10 +80,7 @@ public:
     void SetCRLFDelFlag( bool bFlag = true )    { bCRLFFlag = bFlag; }
 };
 
-/*--------------------------------------------------------------------
-    DDE-field
- --------------------------------------------------------------------*/
-
+// DDE-field
 class SwDDEField : public SwField
 {
 private:

@@ -21,7 +21,6 @@
 
 #include <sfx2/stbitem.hxx>
 
-// class SwViewLayoutControl ----------------------------------------------
 class SwViewLayoutControl : public SfxStatusBarControl
 {
 private:

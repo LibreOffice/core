@@ -526,9 +526,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryBox(Window* pParent
     return pCategoryBox;
 }
 
-/*-------------------------------------------------------------------------
-    //#i61007# order of captions
-  -----------------------------------------------------------------------*/
+// #i61007# order of captions
 void SwCaptionDialog::ApplyCaptionOrder()
 {
     m_pNumberingSeparatorFT->Enable(bOrderNumberingFirst);

@@ -42,10 +42,7 @@ class SwDoc;
 
 class SwTOXMarks : public std::vector<SwTOXMark*> {};
 
-/*--------------------------------------------------------------------
-     Description:  Entry of content index, alphabetical index or user defined index
- --------------------------------------------------------------------*/
-
+// Entry of content index, alphabetical index or user defined index
 class SW_DLLPUBLIC SwTOXMark
     : public SfxPoolItem
     , public SwModify
@@ -148,10 +145,7 @@ public:
     static void InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType );
 };
 
-/*--------------------------------------------------------------------
-     Description:  index types
- --------------------------------------------------------------------*/
-
+// index types
 class SwTOXType : public SwModify
 {
 public:
@@ -171,10 +165,7 @@ private:
     SwTOXType & operator= (const SwTOXType &);
 };
 
-/*--------------------------------------------------------------------
-     Description:  Structure of the index lines
- --------------------------------------------------------------------*/
-
+// Structure of the index lines
 #define FORM_TITLE              0
 #define FORM_ALPHA_DELIMITTER   1
 #define FORM_PRIMARY_KEY        2
@@ -341,10 +332,7 @@ public:
     static OUString GetFormAuth();
 };
 
-/*--------------------------------------------------------------------
-     Description: Content to create indexes of
- --------------------------------------------------------------------*/
-
+// Content to create indexes of
 typedef sal_uInt16 SwTOXElement;
 namespace nsSwTOXElement
 {
@@ -396,10 +384,7 @@ namespace nsSwTOOElements
 
 #define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)
 
-/*--------------------------------------------------------------------
-     Description:  Class for all indexes
- --------------------------------------------------------------------*/
-
+// Class for all indexes
 class SW_DLLPUBLIC SwTOXBase : public SwClient
 {
     SwForm      aForm;              // description of the lines
@@ -544,10 +529,6 @@ public:
     SwTOXBase& operator=(const SwTOXBase& rSource);
     void RegisterToTOXType( SwTOXType& rMark );
 };
-
-/*--------------------------------------------------------------------
-     Description:  Inlines
- --------------------------------------------------------------------*/
 
 //SwTOXMark
 

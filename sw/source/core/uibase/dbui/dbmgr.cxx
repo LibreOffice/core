@@ -309,9 +309,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam,
     return true;
 };
 
-/*--------------------------------------------------------------------
-    Description: import data
- --------------------------------------------------------------------*/
+// import data
 bool SwDBManager::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
     OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
@@ -444,9 +442,7 @@ bool SwDBManager::MergeNew(const SwMergeDescriptor& rMergeDesc )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description: import data
- --------------------------------------------------------------------*/
+// import data
 bool SwDBManager::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
@@ -592,9 +588,7 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: fill Listbox with tablelist
- --------------------------------------------------------------------*/
+// fill Listbox with tablelist
 bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 {
     bool bRet = false;
@@ -643,9 +637,7 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description: fill Listbox with column names of a database
- --------------------------------------------------------------------*/
+// fill Listbox with column names of a database
 void SwDBManager::GetColumnNames(ListBox* pListBox,
                              const OUString& rDBName, const OUString& rTableName, bool bAppend)
 {
@@ -698,9 +690,6 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: CTOR
- --------------------------------------------------------------------*/
 SwDBManager::SwDBManager()
     : bCancel(false)
     , bInitDBFields(false)
@@ -735,9 +724,7 @@ SwDBManager::~SwDBManager()
     delete pImpl;
 }
 
-/*--------------------------------------------------------------------
-    Description:    save bulk letters as single documents
- --------------------------------------------------------------------*/
+// save bulk letters as single documents
 static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rStartingPageDesc, sal_uLong nDocNo )
 {
     do
@@ -1367,10 +1354,8 @@ IMPL_LINK_INLINE_START( SwDBManager, PrtCancelHdl, Button *, pButton )
 }
 IMPL_LINK_INLINE_END( SwDBManager, PrtCancelHdl, Button *, pButton )
 
-/*--------------------------------------------------------------------
-    Description: determine the column's Numberformat and transfer
-                    to the forwarded Formatter, if applicable.
-  --------------------------------------------------------------------*/
+// determine the column's Numberformat and transfer to the forwarded Formatter,
+// if applicable.
 sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
                                 const OUString& rTableName,
                                 const OUString& rColNm,
@@ -1901,11 +1886,9 @@ bool SwDBManager::ToNextRecord(SwDSParam* pParam)
     return bRet;
 }
 
-/* ------------------------------------------------------------------------
-    synchronized labels contain a next record field at their end
-    to assure that the next page can be created in mail merge
-    the cursor position must be validated
- ---------------------------------------------------------------------------*/
+// synchronized labels contain a next record field at their end
+// to assure that the next page can be created in mail merge
+// the cursor position must be validated
 bool SwDBManager::ExistsNextRecord() const
 {
     return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;

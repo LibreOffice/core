@@ -101,13 +101,13 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     RadioButton*    m_pRbDbFmtFromUsr;
     NumFormatListBox* m_pLbDbFmtFromUsr;
 
-    /* ----- Page Text/Field ------- */
+    // Page Text/Field
     PushButton*     m_pIbDbcolToEdit;
     VclMultiLineEdit* m_pEdDbText;
     FixedText*      m_pFtDbParaColl;
     ListBox*        m_pLbDbParaColl;
 
-    /* ----- Page Table ------------ */
+    // Page Table
     PushButton*     m_pIbDbcolAllTo;
     PushButton*     m_pIbDbcolOneTo;
     PushButton*     m_pIbDbcolOneFrom;

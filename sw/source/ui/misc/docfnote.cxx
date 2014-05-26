@@ -228,11 +228,8 @@ SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet
     return new SwEndNoteOptionPage( pParent, true, rSet );
 }
 
-/*------------------------------------------------------------------------
- Description:  Different kinds of numbering; because the Listbox has
-               varying numbers of entries, here are functions to
-               set and query the intended kind of numbering.
-------------------------------------------------------------------------*/
+// Different kinds of numbering; because the Listbox has varying numbers of
+// entries, here are functions to set and query the intended kind of numbering.
 void SwEndNoteOptionPage::SelectNumbering(int eNum)
 {
     OUString sSelect;
@@ -275,11 +272,8 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
                         pSh->GetView().GetDocShell());
 }
 
-/*------------------------------------------------------------------------
- Description:  Handler behind the button to collect the footnote at the
-               page. In this case all kinds of numbering can be used.
-------------------------------------------------------------------------*/
-
+// Handler behind the button to collect the footnote at the page. In this case
+// all kinds of numbering can be used.
 IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl)
 {
     const SwFtnNum eNum = (const SwFtnNum)GetNumbering();
@@ -309,12 +303,8 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl)
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:  Handler behind the button to collect the footnote at the
-               chapter or end of the document. In this case no pagewise
-               numbering can be used.
-------------------------------------------------------------------------*/
-
+// Handler behind the button to collect the footnote at the chapter or end of
+// the document. In this case no pagewise numbering can be used.
 IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
 {
     if ( !bPosDoc )

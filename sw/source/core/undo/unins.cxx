@@ -479,8 +479,6 @@ SwRewriter SwUndoInsert::GetRewriter() const
     return aResult;
 }
 
-// SwUndoReplace
-
 class SwUndoReplace::Impl
     : private SwUndoSaveCntnt
 {
@@ -781,8 +779,6 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
     m_nEndNd = m_nOffset + pEnd->nNode.GetIndex();
     m_nEndCnt = pEnd->nContent.GetIndex();
 }
-
-// SwUndoReRead
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
     : SwUndo( UNDO_REREAD ), nPos( rPam.GetPoint()->nNode.GetIndex() )

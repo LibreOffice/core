@@ -23,10 +23,8 @@
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 
-// MakeSender -----------------------------------------------------------------
 SW_DLLPUBLIC OUString MakeSender();
 
-// enum -----------------------------------------------------------------------
 enum SwEnvAlign
 {
     ENV_HOR_LEFT = 0,
@@ -37,7 +35,6 @@ enum SwEnvAlign
     ENV_VER_RGHT
 };
 
-// class SwEnvItem ------------------------------------------------------------
 class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
@@ -70,7 +67,6 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };
 
-// class SwEnvCfgItem -------------------------------------------------------
 class SwEnvCfgItem : public utl::ConfigItem
 {
     SwEnvItem aEnvItem;

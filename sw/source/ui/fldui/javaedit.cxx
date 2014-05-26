@@ -38,10 +38,6 @@
 
 using namespace ::com::sun::star;
 
-// static ----------------------------------------------------------------
-
-// class SwJavaEditDialog ------------------------------------------------
-
 SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     SvxStandardDialog(pParent, "InsertScriptDialog", "modules/swriter/ui/insertscript.ui"),
 

@@ -31,8 +31,6 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbaglobalbase.hxx>
 
-// class SwVbaGlobals
-
 typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::word::XGlobals > SwVbaGlobals_BASE;
 
 class SwVbaGlobals : public SwVbaGlobals_BASE

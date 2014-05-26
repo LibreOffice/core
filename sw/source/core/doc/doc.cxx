@@ -1618,14 +1618,15 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
     return true;
 }
 
-/** Re-trigger spelling in the idle handler.
+/**
+ * Re-trigger spelling in the idle handler.
  *
  * @param bInvalid if <true>, the WrongLists in all nodes are invalidated
  *                 and the SpellInvalid flag is set on all pages.
  * @param bOnlyWrong controls whether only the areas with wrong words are
  *                   checked or the whole area.
  * @param bSmartTags ???
- ************************************************************************/
+ */
 void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
     std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();

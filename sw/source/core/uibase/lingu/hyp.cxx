@@ -41,10 +41,7 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-     Description: interactive separation
- --------------------------------------------------------------------*/
-
+// interactive separation
 SwHyphWrapper::SwHyphWrapper( SwView* pVw,
             uno::Reference< linguistic2::XHyphenator >  &rxHyph,
             bool bStart, bool bOther, bool bSelect ) :

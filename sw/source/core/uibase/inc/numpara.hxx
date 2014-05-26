@@ -25,16 +25,12 @@
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
 
-/* --- class SwParagraphNumTabPage ----------------------------------------
-    with this TabPage numbering settings at the paragraph / paragraph style
-    are performed.
-
- ---------------------------------------------------------------------------*/
+// with this TabPage numbering settings at the paragraph / paragraph style
+// are performed.
 class SwParagraphNumTabPage : public SfxTabPage
 {
     VclHBox*                 m_pOutlineStartBX;
     ListBox*                 m_pOutlineLvLB;
-
     VclHBox*                 m_pNumberStyleBX;
     ListBox*                 m_pNumberStyleLB;
 

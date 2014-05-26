@@ -1564,7 +1564,7 @@ void SwCntntFrm::MakeAll()
                     bFitPromise = true;
                     continue;
                 }
-                /* --------------------------------------------------
+                /*
                  * In earlier days, we never tried to fit TextFrms in
                  * frames and sections using bMoveOrFit by ignoring
                  * its attributes (Widows, Keep).
@@ -1572,7 +1572,7 @@ void SwCntntFrm::MakeAll()
                  * as it must be tried anyway with linked frames and sections.
                  * Exception: If we sit in FormatWidthCols, we must not ignore
                  * the attributes.
-                 * --------------------------------------------------*/
+                 */
                 else if ( !bFtn && bMoveable &&
                       ( !bFly || !FindFlyFrm()->IsColLocked() ) &&
                       ( !bSct || !FindSctFrm()->IsColLocked() ) )

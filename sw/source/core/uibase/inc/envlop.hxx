@@ -40,7 +40,6 @@ class SwEnvFmtPage;
 class SwWrtShell;
 class Printer;
 
-// class SwEnvPreview ---------------------------------------------------------
 class SwEnvPreview : public Window
 {
     void Paint(const Rectangle&) SAL_OVERRIDE;
@@ -54,7 +53,6 @@ protected:
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
-// class SwEnvDlg -----------------------------------------------------------
 class SwEnvDlg : public SfxTabDialog
 {
 friend class SwEnvPage;
@@ -77,7 +75,6 @@ public:
     virtual ~SwEnvDlg();
 };
 
-// class SwEnvPage ----------------------------------------------------------
 class SwEnvPage : public SfxTabPage
 {
     VclMultiLineEdit* m_pAddrEdit;

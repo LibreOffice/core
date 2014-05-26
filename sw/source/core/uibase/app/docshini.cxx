@@ -392,7 +392,6 @@ void  SwDocShell::Init_Impl()
     SetMapUnit( MAP_TWIP );
 }
 
-// AddLink
 void SwDocShell::AddLink()
 {
     if( !pDoc )
@@ -431,7 +430,6 @@ void SwDocShell::UpdateFontList()
     }
 }
 
-// RemoveLink
 void SwDocShell::RemoveLink()
 {
     // disconnect Uno-Object

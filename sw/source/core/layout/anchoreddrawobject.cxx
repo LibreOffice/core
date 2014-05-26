@@ -186,8 +186,6 @@ bool SwObjPosOscillationControl::OscillationDetected()
     return bOscillationDetected;
 }
 
-// class <SwAnchoredDrawObject>
-
 TYPEINIT1(SwAnchoredDrawObject,SwAnchoredObject);
 
 SwAnchoredDrawObject::SwAnchoredDrawObject() :

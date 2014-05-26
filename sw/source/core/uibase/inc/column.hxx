@@ -85,9 +85,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Description:    column dialog now as TabPage
- --------------------------------------------------------------------*/
+// column dialog now as TabPage
 class SwColumnPage : public SfxTabPage
 {
     NumericField*   m_pCLNrEdt;

@@ -351,8 +351,6 @@ public:
 
 };
 
-// -------------- inlines ---------------------------------
-
 inline SwSection* SwSection::GetParent() const
 {
     SwSectionFmt* pFmt = GetFmt();

@@ -28,7 +28,6 @@ class SvxMacro;
 class SwGlossaries;
 class SfxViewFrame;
 
-// CLASS -----------------------------------------------------------------
 class SW_DLLPUBLIC SwGlossaryHdl
 {
 

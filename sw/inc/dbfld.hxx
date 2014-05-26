@@ -27,10 +27,7 @@ class SwDoc;
 class SwTxtFld;
 class SwFrm;
 
-/*--------------------------------------------------------------------
-    Database field.
- --------------------------------------------------------------------*/
-
+// Database field.
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 {
     SwDBData    aDBData;
@@ -56,11 +53,8 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Classes derived from SwFields. They overlay the expand-function.
-    Content is formated according to the format (if available).
- --------------------------------------------------------------------*/
-
+// Classes derived from SwFields. They overlay the expand-function.
+// Content is formated according to the format (if available).
 class SW_DLLPUBLIC SwDBField : public SwValueField
 {
     OUString aContent;
@@ -124,10 +118,7 @@ inline  void SwDBField::SetExpansion(const OUString& rStr)
 inline void SwDBField::ChgBodyTxtFlag( bool bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
-/*--------------------------------------------------------------------
-    Base class for all other database fields.
- --------------------------------------------------------------------*/
-
+// Base class for all other database fields.
 class SW_DLLPUBLIC SwDBNameInfField : public SwField
 {
     SwDBData    aDBData;
@@ -154,10 +145,7 @@ public:
     virtual void            SetSubType(sal_uInt16 nType) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Database field next record.
- --------------------------------------------------------------------*/
-
+// Database field next record.
 class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
 {
 public:
@@ -166,10 +154,7 @@ public:
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Next data record with condition.
- --------------------------------------------------------------------*/
-
+// Next data record with condition.
 class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 {
     OUString  aCond;
@@ -199,10 +184,7 @@ inline bool SwDBNextSetField::IsCondValid() const
 inline void SwDBNextSetField::SetCondValid(bool bCond)
     { bCondValid = bCond; }
 
-/*--------------------------------------------------------------------
-    Database field next record.
- --------------------------------------------------------------------*/
-
+// Database field next record.
 class SwDBNumSetFieldType : public SwFieldType
 {
 public:
@@ -211,11 +193,8 @@ public:
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Data record with number xxx.
-    Number is in nFormat (bit of a misuse!)
- --------------------------------------------------------------------*/
-
+// Data record with number xxx.
+// Number is in nFormat (bit of a misuse!)
 class SwDBNumSetField : public SwDBNameInfField
 {
     OUString  aCond;
@@ -251,10 +230,7 @@ inline bool SwDBNumSetField::IsCondValid() const
 inline void SwDBNumSetField::SetCondValid(bool bCond)
     { bCondValid = bCond; }
 
-/*--------------------------------------------------------------------
-    Database name.
- --------------------------------------------------------------------*/
-
+// Database name.
 class SwDBNameFieldType : public SwFieldType
 {
         SwDoc *pDoc;
@@ -265,10 +241,7 @@ public:
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Database field.
- --------------------------------------------------------------------*/
-
+// Database field.
 class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 {
 public:
@@ -280,10 +253,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Number of data record.
- --------------------------------------------------------------------*/
-
+// Number of data record.
 class SW_DLLPUBLIC SwDBSetNumberFieldType : public SwFieldType
 {
 public:
@@ -292,14 +262,10 @@ public:
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Database field.
- --------------------------------------------------------------------*/
-
+// Database field.
 class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 {
     long    nNumber;
-
 public:
     SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
 

@@ -254,8 +254,8 @@ void lclAppendString32(OUString& rString, SvMemoryStream& rStrm, bool b16Bit)
 
 void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr)
 {
-    // (0x01B8) HLINK -------------------------------------------------------------
-    //const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
+    // (0x01B8) HLINK
+    // const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
     const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
     const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
     const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
@@ -4093,9 +4093,6 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
     return bJoined;
 }
 
-/**
- * class SwWW8ImplReader
- */
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc)
     : mpDocShell(rD.GetDocShell())

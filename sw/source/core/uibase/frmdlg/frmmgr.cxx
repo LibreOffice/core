@@ -55,9 +55,7 @@ static sal_uInt16 aFrmMgrRange[] = {
                             FN_SET_FRM_NAME, FN_SET_FRM_NAME,
                             0};
 
-/*--------------------------------------------------------------------
-     Description: determine frame attributes via Shell
- --------------------------------------------------------------------*/
+// determine frame attributes via Shell
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
     m_aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
     m_pOwnSh( pSh ),
@@ -105,9 +103,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, const SfxItemSet &
     }
 }
 
-/*--------------------------------------------------------------------
-     Description:   Initialise
- --------------------------------------------------------------------*/
+// Initialise
 void SwFlyFrmAttrMgr::UpdateAttrMgr()
 {
     if ( !m_bNewFrm && m_pOwnSh->IsFrmSelected() )
@@ -131,9 +127,7 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: change existing Fly-Frame
- --------------------------------------------------------------------*/
+// change existing Fly-Frame
 void SwFlyFrmAttrMgr::UpdateFlyFrm()
 {
     OSL_ENSURE( m_pOwnSh->IsFrmSelected(),
@@ -164,9 +158,7 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
     }
 }
 
-/*--------------------------------------------------------------------
-     Description:   insert frame
- --------------------------------------------------------------------*/
+// insert frame
 bool SwFlyFrmAttrMgr::InsertFlyFrm()
 {
     m_pOwnSh->StartAllAction();
@@ -184,11 +176,8 @@ bool SwFlyFrmAttrMgr::InsertFlyFrm()
     return bRet;
 }
 
-/*------------------------------------------------------------------------
- Description:   Insert frames of type eAnchorType. Position and size are
-                being set explicitly.
-                Not-allowed values of the enumeration type get corrected.
-------------------------------------------------------------------------*/
+// Insert frames of type eAnchorType. Position and size are being set explicitly.
+// Not-allowed values of the enumeration type get corrected.
 void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
                                    const Point  &rPos,
                                    const Size   &rSize,
@@ -210,9 +199,7 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
     InsertFlyFrm();
 }
 
-/*--------------------------------------------------------------------
-     Description:   set anchor
- --------------------------------------------------------------------*/
+// set anchor
 void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 {
     sal_uInt16 nPhyPageNum, nVirtPageNum;
@@ -231,22 +218,17 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
     }
 }
 
-/*------------------------------------------------------------------------
- Description:   set the attribute for columns
-------------------------------------------------------------------------*/
+// set the attribute for columns
 void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
 {
     m_aSet.Put( rCol );
 }
 
-/*--------------------------------------------------------------------
-     Description:   set absolute position
- --------------------------------------------------------------------*/
+//  set absolute position
 void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 {
     m_bAbsPos = true;
     m_aAbsPos = rPoint;
-
     SwFmtVertOrient aVertOrient( GetVertOrient() );
     SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
     aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE );
@@ -255,9 +237,7 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
     m_aSet.Put( aHoriOrient );
 }
 
-/*--------------------------------------------------------------------
-    Description: check metrics for correctness
- --------------------------------------------------------------------*/
+// check metrics for correctness
 void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         const SwPosition* pToCharCntntPos,
         bool bOnlyPercentRefValue )
@@ -498,9 +478,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nHeight = rVal.nMaxHeight;
 }
 
-/*--------------------------------------------------------------------
-    Description: correction for border
- --------------------------------------------------------------------*/
+// correction for border
 SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
@@ -529,9 +507,7 @@ SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
     return rShadow.CalcShadowSpace(SHADOW_RIGHT) + rBox.CalcLineSpace(BOX_LINE_RIGHT);
 }
 
-/*--------------------------------------------------------------------
-    Description: erase attribute from the set
- --------------------------------------------------------------------*/
+// erase attribute from the set
 void SwFlyFrmAttrMgr::DelAttr( sal_uInt16 nId )
 {
     m_aSet.ClearItem( nId );

@@ -99,8 +99,6 @@ public:
     void setDummyFlag( bool bDummy ) { mbDummyFlag = bDummy; }
 };
 
-// ----------- Inlines -----------------------------
-
 inline const Color* SwTableBox::GetSaveUserColor() const
 {
     return pImpl ? pImpl->GetSaveUserColor() : 0;

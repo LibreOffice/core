@@ -25,9 +25,7 @@
 #include <vcl/fixed.hxx>
 #include <svtools/ctrlbox.hxx>
 
-/*--------------------------------------------------------------------
-    Description:   TabPage Format/(Styles/)Page/Text grid
- --------------------------------------------------------------------*/
+// TabPage Format/(Styles/)Page/Text grid
 class SwTextGridPage: public SfxTabPage
 {
     RadioButton*     m_pNoGridRB;

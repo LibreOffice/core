@@ -40,9 +40,6 @@
 
 using namespace ::com::sun::star;
 
-/*
- * SwXTextMarkup
- */
 SwXTextMarkup::SwXTextMarkup(
         SwTxtNode *const pTxtNode, const ModelToViewHelper& rMap)
     : mpTxtNode(pTxtNode)
@@ -463,9 +460,6 @@ void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pN
     mpTxtNode = 0;
 }
 
-/*
- * SwXStringKeyMap
- */
 SwXStringKeyMap::SwXStringKeyMap()
 {
 }

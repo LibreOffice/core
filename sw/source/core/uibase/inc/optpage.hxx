@@ -37,10 +37,8 @@ class SwStdFontConfig;
 class SwWrtShell;
 class FontList;
 
-/*--------------------------------------------------------
- Tools->Options->Writer->View
- Tools->Options->Writer/Web->View
---------------------------------------------------------- */
+// Tools->Options->Writer->View
+// Tools->Options->Writer/Web->View
 class SwContentOptPage : public SfxTabPage
 {
     CheckBox*   m_pCrossCB;
@@ -81,9 +79,7 @@ public:
 
 };
 
-/*--------------------------------------------------------
- TabPage printer settings additions
---------------------------------------------------------- */
+// TabPage printer settings additions
 class SwAddPrinterTabPage : public SfxTabPage
 {
     CheckBox*       m_pGrfCB;
@@ -248,9 +244,7 @@ public:
 
 };
 
-/*--------------------------------------------------
- TabPage for ShadowCrsr
---------------------------------------------------*/
+// TabPage for ShadowCrsr
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
     //nonprinting characters
@@ -293,9 +287,7 @@ public:
     virtual void        PageCreated( const SfxAllItemSet& aSet ) SAL_OVERRIDE;
 };
 
-/*-----------------------------------------------------------------------
-    Description: mark preview
- -----------------------------------------------------------------------*/
+// mark preview
 class SwMarkPreview : public Window
 {
     Size            m_aInitialSize;
@@ -333,9 +325,7 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
-/*-----------------------------------------------------------------------
-    Description: redlining options
- -----------------------------------------------------------------------*/
+// redlining options
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
     ListBox*             pInsertLB;
@@ -374,9 +364,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
-/*-------------------------------------------------------
- TabPage test settings for SW
---------------------------------------------------------- */
+// TabPage test settings for SW
 
 #ifdef DBG_UTIL
 

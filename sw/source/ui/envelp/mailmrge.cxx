@@ -84,9 +84,6 @@ struct SwMailMergeDlg_Impl
     uno::Reference<XSelectionSupplier> xSelSupp;
 };
 
-/* --------------------------------------------------------------------------
-    helper classes
-----------------------------------------------------------------------------*/
 class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper1
 <
     view::XSelectionChangeListener

@@ -60,9 +60,7 @@
 #define FN_UNO_RANGE_BEGIN      FN_FORMAT2
 #define FN_UNO_RANGE_END        (FN_PARAM2 + 199)
 
-/*--------------------------------------------------------------------
-    Region: File
- --------------------------------------------------------------------*/
+// Region: File
 #define FN_NEW_GLOBAL_DOC       (FN_FILE + 4 )    /* Create Global Document */
 #define FN_OPEN_FILE            (FN_FILE + 7 )    /* Open */
 
@@ -71,9 +69,7 @@
 
 #define FN_NEW_HTML_DOC         (FN_FILE + 40 ) /* Create HTML document */
 
-/*--------------------------------------------------------------------
-    Region: Edit
- --------------------------------------------------------------------*/
+// Region: Edit
 #define FN_EDIT_FIELD           (FN_EDIT + 4 )    /* Edit field */
 #define FN_EDIT_LINK_DLG        (FN_EDIT + 9 )    /* Edit link dialog */
 
@@ -84,9 +80,7 @@
 #define FN_EDIT_FORMULA         (FN_EDIT + 28)    /* Edit formula in RibbonBar */
 #define FN_CALC_TABLE           (FN_EDIT + 29)
 
-/*--------------------------------------------------------------------
-    Region: Bullets
- --------------------------------------------------------------------*/
+// Region: Bullets
 #define FN_NUM_BULLET_DOWN      (FN_EDIT + 30)  /* Bullet down */
 #define FN_NUM_BULLET_UP        (FN_EDIT + 31)  /* Bullet up */
 #define FN_NUM_BULLET_PREV      (FN_EDIT + 32)  /* to previous bullet */
@@ -164,14 +158,10 @@
 #define FN_REDLINE_NEXT_CHANGE       (FN_EDIT2 + 41)    /* Go to the next change */
 #define FN_REDLINE_PREV_CHANGE       (FN_EDIT2 + 42)    /* Go to the previous change */
 
-/*--------------------------------------------------------------------
-    Region: Edit
- --------------------------------------------------------------------*/
-
+// Region: Edit
 #define FN_REFRESH_VIEW         (FN_VIEW + 1)   /* Refresh/Redraw */
 
 #define FN_DRAW_WRAP_DLG        (FN_VIEW + 3)   /* Draw Umlauf-Dlg */
-
 #define FN_RULER                (FN_VIEW + 11)  /* Horizontal ruler */
 
 #define FN_VIEW_GRAPHIC         (FN_VIEW + 13)  /* View graphic */
@@ -221,10 +211,7 @@
 #define FN_SCROLL_PREV          (FN_VIEW + 57)  /* uno:ScrollToPrevious */
 #define FN_SCROLL_NEXT          (FN_VIEW + 58)  /* uno:ScrollToNext */
 
-/*--------------------------------------------------------------------
-    Region: Insert
- --------------------------------------------------------------------*/
-
+// Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */
 
 #define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Break */
@@ -285,10 +272,7 @@
 #define FN_INSERT_FLD_AUTHOR    (FN_INSERT + 98)
 #define FN_INSERT_FOOTNOTE      (FN_INSERT + 99)
 
-/*--------------------------------------------------------------------
-    Region: Paste (Part 2)
- --------------------------------------------------------------------*/
-
+// Region: Paste (Part 2)
 #define FN_MAILMERGE_SENDMAIL_CHILDWINDOW (FN_INSERT2 + 5)  /* child window provided by mailmerge */
 
 #define FN_SBA_BRW_UPDATE       (FN_INSERT2 + 7)    /* insert records into fields */
@@ -306,10 +290,7 @@
 #define FN_INSERT_MULTI_TOX         (FN_INSERT2 + 20)   /* insert any TOX */
 #define FN_INSERT_AUTH_ENTRY_DLG    (FN_INSERT2 + 21)   /* insert entry for table of authorities*/
 
-/*--------------------------------------------------------------------
-    Region: Format
- --------------------------------------------------------------------*/
-
+// Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */
 #define FN_AUTOFORMAT_AUTO      (FN_FORMAT + 2 ) /* apply autoformat during user input */
 #define FN_GROW_FONT_SIZE       (FN_FORMAT + 3 ) /* size */
@@ -380,9 +361,7 @@
 #define FN_CONVERT_TABLE_TO_TEXT    (FN_FORMAT + 132)  /* convert a table to text */
 #define FN_TABLE_SORT_DIALOG        (FN_FORMAT + 133)  /* sorting in tables*/
 
-/*--------------------------------------------------------------------
-    Region: Page Template
- --------------------------------------------------------------------*/
+// Region: Page Template
 #define FN_PAGE_STYLE_SET_LR_MARGIN (FN_FORMAT + 130) /* left / right margin */
 #define FN_PAGE_STYLE_SET_UL_MARGIN (FN_FORMAT + 131) /* upper / lower margin */
 #define FN_PAGE_STYLE_SET_PAPER_SIZE (FN_FORMAT + 135) /* */
@@ -400,14 +379,10 @@
 
 #define FN_TABLE_HEADLINE_COUNT     (FN_FORMAT + 147) /* number of repeated headlines of tables */
 
-/*--------------------------------------------------------------------
-    Region: Ribbon
- --------------------------------------------------------------------*/
-
+// Region: Ribbon
 #define FN_FORMULA_CALC             (FN_FORMAT + 156)  /* select formula */
 #define FN_FORMULA_CANCEL           (FN_FORMAT + 157)  /* don't apply formula */
 #define FN_FORMULA_APPLY            (FN_FORMAT + 158)  /* apply formula */
-
 #define FN_TABLE_UNSET_READ_ONLY    (FN_FORMAT + 159)  /* undo cell protection for table */
 
 #define FN_FRAME_WRAP_IDEAL         (FN_FORMAT + 163)  /* frame ideal wrapping */
@@ -492,10 +467,7 @@
 #define FN_REMOVE_DIRECT_CHAR_FORMATS       (FN_FORMAT2 + 159)
 //free (160)
 
-/*--------------------------------------------------------------------
-    Region: Extras
- --------------------------------------------------------------------*/
-
+// Region: Extras
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* */
 #define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* */
 #define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* learn words */
@@ -655,12 +627,8 @@
 #define FN_UNO_HIDDEN                       (FN_EXTRA2 + 122)
 #define FN_UNO_STYLE_INTEROP_GRAB_BAG       (FN_EXTRA2 + 123)
 
-/*------------------------------------------------ --------------------
-    Area: Help
- -------------------------------------------------- ------------------*/
-/*------------------------------------------------ --------------------
-    Region: Traveling & Selection
- -------------------------------------------------- ------------------*/
+// Area: Help
+// Region: Traveling & Selection
 #define FN_CHAR_LEFT                (FN_SELECTION + 1 ) /* */
 #define FN_CHAR_RIGHT               (FN_SELECTION + 2 ) /* */
 #define FN_LINE_UP                  (FN_SELECTION + 3 ) /* */
@@ -747,14 +715,10 @@
 #define FN_SELECTION_MODE_DEFAULT   (FN_SELECTION + 90)   /* use default selection mode - not block mode */
 #define FN_SELECTION_MODE_BLOCK     (FN_SELECTION + 91)   /* switch on block selection */
 
-/*--------------------------------------------------------------------
-    QUERY-Block
- --------------------------------------------------------------------*/
-
+// QUERY-Block
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribut */
 
 #define FN_GET_PRINT_AREA           (FN_QUERY +32)      /* Get attribute for printable area of page */
-
 #define FN_DB_CONNECTION_ANY            (FN_QUERY2 + 3)
 #define FN_DB_COLUMN_ANY                (FN_QUERY2 + 4)
 #define FN_DB_DATA_SOURCE_ANY           (FN_QUERY2 + 5)
@@ -764,10 +728,7 @@
 #define FN_DB_DATA_SELECTION_ANY        (FN_QUERY2 + 9)
 #define FN_DB_DATA_CURSOR_ANY           (FN_QUERY2 + 10)
 
-/*--------------------------------------------------------------------
-    Region: Envelope
- --------------------------------------------------------------------*/
-
+// Region: Envelope
 #define FN_ENVELOP                  (FN_ENVELP    )
 
 #define FN_DELETE_NOTE_AUTHOR       (FN_NOTES+1)
@@ -787,10 +748,7 @@
 #define FN_PAGEBREAK_EDIT           (FN_PAGEBREAK+1)
 #define FN_PAGEBREAK_DELETE         (FN_PAGEBREAK+2)
 
-/*--------------------------------------------------------------------
-    Region: Parameter
- --------------------------------------------------------------------*/
-
+// Region: Parameter
 #define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
 #define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
 
@@ -856,10 +814,7 @@
 #define FN_SHAPE_ENDPOSITION_IN_HORI_L2R   (FN_PARAM2+26)
 #define FN_PARAM_PAM                    (FN_PARAM2+27) /* Point and Mark */
 
-/*--------------------------------------------------------------------
-    Description: Status: not more than 19!
- --------------------------------------------------------------------*/
-
+// Status: not more than 19!
 #define FN_STAT_PAGE                (FN_STAT + 1)
 #define FN_STAT_TEMPLATE            (FN_STAT + 2)
 #define FN_STAT_ZOOM                (FN_STAT + 3)
@@ -867,10 +822,7 @@
 #define FN_STAT_BOOKMARK            (FN_STAT + 8)  /* For Popup Bookmarks*/
 #define FN_STAT_WORDCOUNT           (FN_STAT + 9)
 
-/*--------------------------------------------------------------------
-    Region: Page preview
- --------------------------------------------------------------------*/
-
+// Region: Page preview
 #define FN_SHOW_TWO_PAGES           (FN_PGPREVIEW + 1)
 #ifndef FN_SHOW_MULTIPLE_PAGES
 #define FN_SHOW_MULTIPLE_PAGES      (FN_PGPREVIEW + 2)
@@ -879,10 +831,7 @@
 #define FN_CLOSE_PAGEPREVIEW        (FN_PGPREVIEW + 4)
 #define FN_SHOW_BOOKVIEW            (FN_PGPREVIEW + 5)
 
-/*--------------------------------------------------------------------
-    Region: Setting Attributes
- --------------------------------------------------------------------*/
-
+// Region: Setting Attributes
 #define FN_OPAQUE                       (FN_FRAME + 1)
 #define FN_SET_PROTECT                  (FN_FRAME + 2)
 #define FN_SURROUND                     (FN_FRAME + 3)

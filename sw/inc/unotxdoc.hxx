@@ -583,17 +583,15 @@ public:
     virtual void onChange() SAL_OVERRIDE;
 };
 
-/*  The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
-    the current SwViewShell so that fields are not printed as commands and
-    hidden characters are always invisible. Hidden text and place holders
-    should be printed according to the current print options.
-    After printing the view options are restored
-  -----------------------------------------------------------------------*/
+// The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
+// the current SwViewShell so that fields are not printed as commands and
+// hidden characters are always invisible. Hidden text and place holders
+// should be printed according to the current print options.
+// After printing the view options are restored
 class SwViewOptionAdjust_Impl
 {
     SwViewShell *     m_pShell;
     SwViewOption    m_aOldViewOptions;
-
 public:
     SwViewOptionAdjust_Impl( SwViewShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();

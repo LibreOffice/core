@@ -43,9 +43,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 
-/*--------------------------------------------------------------------
-    Description:    the dialog's carrier
- --------------------------------------------------------------------*/
+// the dialog's carrier
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,

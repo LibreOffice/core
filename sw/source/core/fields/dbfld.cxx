@@ -632,8 +632,6 @@ SwFieldType* SwDBNumSetFieldType::Copy() const
     return pTmp;
 }
 
-// SwDBNumSetField
-
 SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
                                  const OUString& rCond,
                                  const OUString& rDBNum,
@@ -732,8 +730,6 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
-// SwDBNameFieldType
-
 SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
     : SwFieldType( RES_DBNAMEFLD )
 {
@@ -783,8 +779,6 @@ bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
-
-// SwDBSetNumberFieldType
 
 SwDBSetNumberFieldType::SwDBSetNumberFieldType()
     : SwFieldType( RES_DBSETNUMBERFLD )

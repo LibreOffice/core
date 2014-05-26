@@ -41,8 +41,6 @@ using namespace ::com::sun::star;
 // the undo array should never grow beyond this limit:
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
 
-// UndoManager
-
 namespace sw {
 
 UndoManager::UndoManager(boost::shared_ptr<SwNodes> xUndoNodes,

@@ -47,10 +47,8 @@ extern bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-/*--------------------------------------------------------------------
-  Initialize strings
- --------------------------------------------------------------------*/
 
+// Initialize strings
 sal_uInt16 SwTOXSortTabBase::nOpt = 0;
 
 SwTOXInternational::SwTOXInternational( LanguageType nLang, sal_uInt16 nOpt,
@@ -129,10 +127,7 @@ OUString SwTOXInternational::GetFollowingText( bool bMorePages ) const
     return pIndexWrapper->GetFollowingText( bMorePages );
 }
 
-/*--------------------------------------------------------------------
-  SortElement for TOX entries
- --------------------------------------------------------------------*/
-
+// SortElement for TOX entries
 SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                                     const SwTxtTOXMark* pMark,
                                     const SwTOXInternational* pInter,
@@ -268,10 +263,7 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
     return false;
 }
 
-/*--------------------------------------------------------------------
-   Sorted keyword entry
- --------------------------------------------------------------------*/
-
+// Sorted keyword entry
 SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
                         const SwTxtTOXMark* pMark, sal_uInt16 nOptions,
                         sal_uInt8 nKyLevel,
@@ -408,10 +400,7 @@ sal_uInt16 SwTOXIndex::GetLevel() const
     return nForm;
 }
 
-/*--------------------------------------------------------------------
-  Key and separator
- --------------------------------------------------------------------*/
-
+// Key and separator
 SwTOXCustom::SwTOXCustom(const TextAndReading& rKey,
                          sal_uInt16 nLevel,
                          const SwTOXInternational& rIntl,
@@ -445,10 +434,7 @@ TextAndReading SwTOXCustom::GetText_Impl() const
     return m_aKey;
 }
 
-/*--------------------------------------------------------------------
-   Sorts the TOX entries
- --------------------------------------------------------------------*/
-
+// Sorts the TOX entries
 SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
                         const SwTOXInternational& rIntl)
     : SwTOXSortTabBase( TOX_SORT_CONTENT, &rNd, pMark, &rIntl )
@@ -492,12 +478,9 @@ sal_uInt16 SwTOXContent::GetLevel() const
     return pTxtMark->GetTOXMark().GetLevel();
 }
 
-/*--------------------------------------------------------------------
-   TOX assembled from paragraphs
-   Watch out for OLE/graphics when sorting!
-   The position must not come from the document, but from the "anchor"!
- --------------------------------------------------------------------*/
-
+// TOX assembled from paragraphs
+// Watch out for OLE/graphics when sorting!
+// The position must not come from the document, but from the "anchor"!
 SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName )
     : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, 0, 0 ),
     eType( eT ),
@@ -628,10 +611,7 @@ OUString SwTOXPara::GetURL() const
     return aTxt;
 }
 
-/*--------------------------------------------------------------------
-  Table
- --------------------------------------------------------------------*/
-
+// Table
 SwTOXTable::SwTOXTable( const SwCntntNode& rNd )
     : SwTOXSortTabBase( TOX_SORT_TABLE, &rNd, 0, 0 ),
     nLevel(FORM_ALPHA_DELIMITTER)

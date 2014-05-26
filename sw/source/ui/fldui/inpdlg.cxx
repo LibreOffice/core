@@ -30,10 +30,7 @@
 
 #include <fldui.hrc>
 
-/*--------------------------------------------------------------------
-    Description: edit field-insert
- --------------------------------------------------------------------*/
-
+// edit field-insert
 SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
                               SwField* pField, bool bNextButton )
     : SvxStandardDialog( pParent, "InputFieldDialog",
@@ -116,14 +113,10 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
     SvxStandardDialog::StateChanged( nType );
 }
 
-/*--------------------------------------------------------------------
-     Description:   Close
- --------------------------------------------------------------------*/
-
+// Close
 void SwFldInputDlg::Apply()
 {
     OUString aTmp(comphelper::string::remove(m_pEditED->GetText(), '\r'));
-
     rSh.StartAllAction();
     bool bModified = false;
     if(pInpFld)

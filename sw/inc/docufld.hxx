@@ -43,10 +43,7 @@ enum SwAuthorFormat
     AF_FIXED = 0x8000
 };
 
-/*--------------------------------------------------------------------
-    Subtype of document statistics.
- --------------------------------------------------------------------*/
-
+// Subtype of document statistics.
 enum SwDocStatSubType
 {
     DS_BEGIN,
@@ -132,10 +129,6 @@ enum SwJumpEditFormat
     JE_FMT_OLE
 };
 
-/*--------------------------------------------------------------------
-    Page number.
- --------------------------------------------------------------------*/
-
 class SwPageNumberFieldType : public SwFieldType
 {
     sal_Int16   nNumberingType;
@@ -151,10 +144,7 @@ public:
     virtual SwFieldType* Copy() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Page numbering.
- --------------------------------------------------------------------*/
-
+// Page numbering.
 class SW_DLLPUBLIC SwPageNumberField : public SwField
 {
     OUString sUserStr;
@@ -187,10 +177,6 @@ public:
     void SetUserString( const OUString& rS )  { sUserStr = rS; }
 };
 
-/*--------------------------------------------------------------------
-    Authors.
- --------------------------------------------------------------------*/
-
 class SwAuthorFieldType : public SwFieldType
 {
 public:
@@ -199,10 +185,6 @@ public:
     OUString                Expand(sal_uLong) const;
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
-
-/*--------------------------------------------------------------------
-    Author field.
- --------------------------------------------------------------------*/
 
 class SwAuthorField : public SwField
 {
@@ -221,10 +203,6 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Filename
- --------------------------------------------------------------------*/
-
 class SwFileNameFieldType : public SwFieldType
 {
     SwDoc *pDoc;
@@ -234,10 +212,6 @@ public:
     OUString                Expand(sal_uLong) const;
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
-
-/*--------------------------------------------------------------------
-    FileNameField
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwFileNameField : public SwField
 {
@@ -256,10 +230,6 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    TemplName
- --------------------------------------------------------------------*/
-
 class SwTemplNameFieldType : public SwFieldType
 {
     SwDoc *pDoc;
@@ -269,10 +239,6 @@ public:
     OUString                Expand(sal_uLong) const;
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
-
-/*--------------------------------------------------------------------
-    TemplNameField
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwTemplNameField : public SwField
 {
@@ -285,10 +251,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Document statistics
- --------------------------------------------------------------------*/
-
+// Document statistics
 class SwDocStatFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
@@ -301,10 +264,6 @@ public:
 
     inline void             SetNumFormat( sal_Int16 eFmt )  { nNumberingType = eFmt; }
 };
-
-/*--------------------------------------------------------------------
-    DocStatField
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDocStatField : public SwField
 {
@@ -325,10 +284,6 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Hidden text.
- --------------------------------------------------------------------*/
-
 class SwHiddenTxtFieldType : public SwFieldType
 {
     bool bHidden;
@@ -340,10 +295,6 @@ public:
     void                    SetHiddenFlag( bool bSetHidden = true );
     inline bool             GetHiddenFlag() const { return bHidden; }
 };
-
-/*--------------------------------------------------------------------
-    HiddenTxtField
- --------------------------------------------------------------------*/
 
 class SwHiddenTxtField : public SwField
 {
@@ -397,10 +348,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Field that expands to an empty line (without height).
- --------------------------------------------------------------------*/
-
+// Field that expands to an empty line (without height).
 class SwHiddenParaFieldType : public SwFieldType
 {
 public:
@@ -408,10 +356,6 @@ public:
 
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
-
-/*--------------------------------------------------------------------
-    Hidded paragraph.
- --------------------------------------------------------------------*/
 
 class SwHiddenParaField : public SwField
 {
@@ -434,10 +378,6 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Run Macro.
- --------------------------------------------------------------------*/
-
 class SwMacroFieldType : public SwFieldType
 {
     SwDoc* pDoc;
@@ -447,10 +387,6 @@ public:
 
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
-
-/*--------------------------------------------------------------------
-    MacroField.
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwMacroField : public SwField
 {
@@ -490,10 +426,6 @@ public:
     static bool isScriptURL( const OUString& str );
 };
 
-/*--------------------------------------------------------------------
-    PostIts
- --------------------------------------------------------------------*/
-
 class SwPostItFieldType : public SwFieldType
 {
 private:
@@ -508,10 +440,6 @@ public:
         return mpDoc;
     };
 };
-
-/*--------------------------------------------------------------------
-    PostItField
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwPostItField : public SwField
 {
@@ -561,10 +489,6 @@ public:
     virtual OUString    GetDescription() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    DocumentInfo
- --------------------------------------------------------------------*/
-
 class SwDocInfoFieldType : public SwValueFieldType
 {
 public:
@@ -598,10 +522,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Extended User settings.
- --------------------------------------------------------------------*/
-
+// Extended User settings.
 class SwExtUserFieldType : public SwFieldType
 {
     OUString aData;
@@ -634,10 +555,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Relative page numbers - field.
- --------------------------------------------------------------------*/
-
+// Relative page numbers - field.
 class SwRefPageSetFieldType : public SwFieldType
 {
 public:
@@ -650,10 +568,7 @@ protected:
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Relative page numbering.
- --------------------------------------------------------------------*/
-
+// Relative page numbering.
 class SwRefPageSetField : public SwField
 {
     short   nOffset;
@@ -677,10 +592,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Relative page numbers - query field.
- --------------------------------------------------------------------*/
-
+// Relative page numbers - query field.
 class SwRefPageGetFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
@@ -697,10 +609,7 @@ public:
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 
-/*--------------------------------------------------------------------
-    Query relative page numbering.
- --------------------------------------------------------------------*/
-
+// Query relative page numbering.
 class SwRefPageGetField : public SwField
 {
     OUString sTxt;
@@ -717,10 +626,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Field to jump to and edit.
- --------------------------------------------------------------------*/
-
+// Field to jump to and edit.
 class SwJumpEditFieldType : public SwFieldType
 {
     SwDoc* pDoc;
@@ -757,10 +663,6 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Script Fieldtype.
- --------------------------------------------------------------------*/
-
 class SwScriptFieldType : public SwFieldType
 {
     SwDoc* pDoc;
@@ -769,10 +671,6 @@ public:
 
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
-
-/*--------------------------------------------------------------------
-    ScriptField.
- --------------------------------------------------------------------*/
 
 class SwScriptField : public SwField
 {
@@ -804,10 +702,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Combined Character Fieldtype
- --------------------------------------------------------------------*/
-
+// Combined Character Fieldtype
 class SwCombinedCharFieldType : public SwFieldType
 {
 public:
@@ -816,10 +711,7 @@ public:
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    ScriptField
- --------------------------------------------------------------------*/
-
+// ScriptField
 #define MAX_COMBINED_CHARACTERS     6
 
 class SW_DLLPUBLIC SwCombinedCharField : public SwField

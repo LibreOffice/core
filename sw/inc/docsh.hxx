@@ -104,9 +104,9 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     /// Methods for StyleSheets
 
-    // @param nSlot
-    // Only used for nFamily == SFX_STYLE_FAMILY_PAGE. Identifies optional Slot by which the edit is triggered.
-    // Used to activate certain dialog pane
+    /// @param nSlot
+    /// Only used for nFamily == SFX_STYLE_FAMILY_PAGE. Identifies optional Slot by which the edit is triggered.
+    /// Used to activate certain dialog pane
     SAL_DLLPRIVATE sal_uInt16 Edit(
         const OUString &rName,
         const OUString& rParent,
@@ -242,9 +242,9 @@ public:
 
     void _LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocument );
 
-    // Show page style format dialog
-    // @param nSlot
-    // Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
+    /// Show page style format dialog
+    /// @param nSlot
+    /// Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
     void FormatPage(
         const OUString& rPage,
         const OString& rPageId,

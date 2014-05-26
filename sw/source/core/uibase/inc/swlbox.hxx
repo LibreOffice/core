@@ -29,9 +29,6 @@ class Window;
 
 typedef boost::ptr_vector<SwBoxEntry> SwEntryLst;
 
-/*--------------------------------------------------------------------
-     Description: SwBoxEntry
- --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
@@ -50,10 +47,7 @@ public:
     const OUString& GetName() const { return aName;}
 };
 
-/*--------------------------------------------------------------------
-     Description: for combo boxes
- --------------------------------------------------------------------*/
-
+// for combo boxes
 class SW_DLLPUBLIC SwComboBox : public ComboBox
 {
     SwEntryLst              aEntryLst;

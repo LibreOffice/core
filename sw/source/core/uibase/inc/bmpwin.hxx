@@ -24,9 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/window.hxx>
 
-/*--------------------------------------------------------------------
-    Description:    extended page for graphics
- --------------------------------------------------------------------*/
+// extended page for graphics
 class BmpWindow : public Window
 {
 private:

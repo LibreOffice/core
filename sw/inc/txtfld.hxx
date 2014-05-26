@@ -24,8 +24,6 @@
 
 class SwTxtNode;
 
-// ATT_FLD ***********************************
-
 class SwTxtFld : public SwTxtAttr
 {
     mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTxtFld()>

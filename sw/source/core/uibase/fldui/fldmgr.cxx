@@ -89,9 +89,7 @@ using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-/*--------------------------------------------------------------------
-    Description: groups of fields
- --------------------------------------------------------------------*/
+// groups of fields
 enum
 {
     GRP_DOC_BEGIN   =  0,
@@ -138,9 +136,7 @@ static const sal_uInt16 VF_COUNT = 1; // { 0 }
 static const sal_uInt16 VF_USR_COUNT = 2; // { 0, nsSwExtendedSubType::SUB_CMD }
 static const sal_uInt16 VF_DB_COUNT = 1; // { nsSwExtendedSubType::SUB_OWN_FMT }
 
-/*--------------------------------------------------------------------
-    Description: field types and subtypes
- --------------------------------------------------------------------*/
+// field types and subtypes
 struct SwFldPack
 {
     sal_uInt16  nTypeId;
@@ -152,9 +148,7 @@ struct SwFldPack
     sal_uLong   nFmtEnd;
 };
 
-/*--------------------------------------------------------------------
-    Description: strings and formats
- --------------------------------------------------------------------*/
+// strings and formats
 static const SwFldPack aSwFlds[] =
 {
     // Document
@@ -208,10 +202,7 @@ static const SwFldPack aSwFlds[] =
     { TYP_USERFLD,          0,                  0,              FMT_USERVAR_BEGIN,  FMT_USERVAR_END }
 };
 
-/*--------------------------------------------------------------------
-    Description: access to the shell
- --------------------------------------------------------------------*/
-
+// access to the shell
 static SwWrtShell* lcl_GetShell()
 {
     SwView* pView;
@@ -223,10 +214,7 @@ static SwWrtShell* lcl_GetShell()
 
 inline sal_uInt16 GetPackCount() {  return sizeof(aSwFlds) / sizeof(SwFldPack); }
 
-/*--------------------------------------------------------------------
-    Description: FieldManager controls inserting and updating of fields
- --------------------------------------------------------------------*/
-
+// FieldManager controls inserting and updating of fields
 SwFldMgr::SwFldMgr(SwWrtShell* pSh ) :
     pModule(0),
     pMacroItem(0),
@@ -241,10 +229,7 @@ SwFldMgr::~SwFldMgr()
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: organise RefMark by names
- --------------------------------------------------------------------*/
-
+// organise RefMark by names
 bool  SwFldMgr::CanInsertRefMark( const OUString& rStr )
 {
     bool bRet = false;
@@ -263,10 +248,7 @@ bool  SwFldMgr::CanInsertRefMark( const OUString& rStr )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description: access over ResIds
- --------------------------------------------------------------------*/
-
+// access over ResIds
 void SwFldMgr::RemoveFldType(sal_uInt16 nResId, const OUString& rName )
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
@@ -296,9 +278,7 @@ SwFieldType* SwFldMgr::GetFldType(sal_uInt16 nResId, const OUString& rName) cons
     return pSh ? pSh->GetFldType(nResId, rName) : 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: determine current field
- --------------------------------------------------------------------*/
+// determine current field
 SwField* SwFldMgr::GetCurFld()
 {
     SwWrtShell *pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
@@ -337,10 +317,7 @@ SwField* SwFldMgr::GetCurFld()
     return pCurFld;
 }
 
-/*--------------------------------------------------------------------
-    Description: provide group range
- --------------------------------------------------------------------*/
-
+// provide group range
 const SwFldGroupRgn& SwFldMgr::GetGroupRange(bool bHtmlMode, sal_uInt16 nGrpId) const
 {
 static SwFldGroupRgn const aRanges[] =
@@ -368,10 +345,7 @@ static SwFldGroupRgn const aWebRanges[] =
         return aRanges[(sal_uInt16)nGrpId];
 }
 
-/*--------------------------------------------------------------------
-    Description: determine GroupId
- --------------------------------------------------------------------*/
-
+// determine GroupId
 sal_uInt16 SwFldMgr::GetGroup(bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType) const
 {
     if (nTypeId == TYP_SETINPFLD)
@@ -398,11 +372,8 @@ sal_uInt16 SwFldMgr::GetGroup(bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSu
     return USHRT_MAX;
 }
 
-/*--------------------------------------------------------------------
-    Description: determine names to TypeId
-                  ACCESS over TYP_....
- --------------------------------------------------------------------*/
-
+// determine names to TypeId
+//  ACCESS over TYP_....
 sal_uInt16 SwFldMgr::GetTypeId(sal_uInt16 nPos)
 {
     OSL_ENSURE(nPos < ::GetPackCount(), "forbidden Pos");
@@ -430,10 +401,7 @@ OUString SwFldMgr::GetTypeStr(sal_uInt16 nPos)
     return SwFieldType::GetTypeStr( nFldWh );
 }
 
-/*--------------------------------------------------------------------
-    Description: determine Pos in the list
- --------------------------------------------------------------------*/
-
+// determine Pos in the list
 sal_uInt16 SwFldMgr::GetPos(sal_uInt16 nTypeId)
 {
     switch( nTypeId )
@@ -451,10 +419,7 @@ sal_uInt16 SwFldMgr::GetPos(sal_uInt16 nTypeId)
     return USHRT_MAX;
 }
 
-/*--------------------------------------------------------------------
-    Description: localise subtypes of a field
- --------------------------------------------------------------------*/
-
+// localise subtypes of a field
 bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
 {
     bool bRet = false;
@@ -559,15 +524,11 @@ bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description: determine format
-                  ACCESS over TYP_....
- --------------------------------------------------------------------*/
-
+// determine format
+//  ACCESS over TYP_....
 sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHtmlMode) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
-
     {
         const sal_uInt16 nPos = GetPos(nTypeId);
 
@@ -616,14 +577,10 @@ sal_uInt16 SwFldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bIsText, bool bHtml
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    determine FormatString to a type
- --------------------------------------------------------------------*/
-
+// determine FormatString to a type
 OUString SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
-
     const sal_uInt16 nPos = GetPos(nTypeId);
 
     if(nPos == USHRT_MAX)
@@ -678,14 +635,10 @@ OUString SwFldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     return aRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    determine FormatId from Pseudo-ID
- --------------------------------------------------------------------*/
-
+// determine FormatId from Pseudo-ID
 sal_uInt16 SwFldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const
 {
     sal_uInt16 nId = (sal_uInt16)nFormatId;
-
     switch( nTypeId )
     {
     case TYP_DOCINFOFLD:
@@ -758,10 +711,7 @@ sal_uInt16 SwFldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const
 
 }
 
-/*--------------------------------------------------------------------
-    Description: Traveling
- --------------------------------------------------------------------*/
-
+// Traveling
 bool SwFldMgr::GoNextPrev( bool bNext, SwFieldType* pTyp )
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
@@ -788,10 +738,7 @@ bool SwFldMgr::GoNextPrev( bool bNext, SwFieldType* pTyp )
            : sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Description: insert field types
- --------------------------------------------------------------------*/
-
+// insert field types
 void SwFldMgr::InsertFldType(SwFieldType& rType)
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
@@ -800,19 +747,13 @@ void SwFldMgr::InsertFldType(SwFieldType& rType)
         pSh->InsertFldType(rType);
 }
 
-/*--------------------------------------------------------------------
-    Description: determine current TypeId
- --------------------------------------------------------------------*/
-
+// determine current TypeId
 sal_uInt16 SwFldMgr::GetCurTypeId() const
 {
     return pCurFld ? pCurFld->GetTypeId() : USHRT_MAX;
 }
 
-/*--------------------------------------------------------------------
-    Description: Over string  insert field or update
- --------------------------------------------------------------------*/
-
+// Over string  insert field or update
 bool SwFldMgr::InsertFld(
     const SwInsertFld_Data& rData)
 {
@@ -1417,10 +1358,7 @@ bool SwFldMgr::InsertFld(
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description: fields update
- --------------------------------------------------------------------*/
-
+// fields update
 void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
                             const OUString& rPar1,
                             const OUString& rPar2,
@@ -1597,9 +1535,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
     pSh->EndAllAction();
 }
 
-/*--------------------------------------------------------------------
-    Description: explicitly evaluate ExpressionFields
- --------------------------------------------------------------------*/
+// explicitly evaluate ExpressionFields
 void SwFldMgr::EvalExpFlds(SwWrtShell* pSh)
 {
     if (pSh == NULL)

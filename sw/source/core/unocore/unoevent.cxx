@@ -101,8 +101,6 @@ const struct SvEventDescription aFrameStyleEvents[] =
     { 0, NULL }
 };
 
-// SwHyperlinkEventDescriptor
-
 SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
     SvDetachedEventDescriptor(aHyperlinkEvents),
     sImplName("SwHyperlinkEventDescriptor")
@@ -165,8 +163,6 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
     }
 }
 
-// SwFrameEventDescriptor
-
 // use double cast in superclass constructor to avoid ambigous cast
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
@@ -214,8 +210,6 @@ OUString SwFrameEventDescriptor::getImplementationName()
 {
     return sSwFrameEventDescriptor;
 }
-
-// SwFrameStyleEventDescriptor
 
 SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
     SwXFrameStyle& rStyleRef ) :

@@ -60,10 +60,7 @@ SwFldPage::~SwFldPage()
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: initialise TabPage
- --------------------------------------------------------------------*/
-
+// initialise TabPage
 void SwFldPage::Init()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
@@ -98,19 +95,13 @@ void SwFldPage::Init()
     }
 }
 
-/*--------------------------------------------------------------------
-     Description: newly initialise page
- --------------------------------------------------------------------*/
-
+// newly initialise page
 void SwFldPage::ActivatePage()
 {
     EnableInsert(m_bInsert);
 }
 
-/*--------------------------------------------------------------------
-     Description: complete reset; edit new field
- --------------------------------------------------------------------*/
-
+// complete reset; edit new field
 void SwFldPage::EditNewField( bool bOnlyActivate )
 {
     if( !bOnlyActivate )
@@ -123,10 +114,7 @@ void SwFldPage::EditNewField( bool bOnlyActivate )
     m_bRefresh = false;
 }
 
-/*--------------------------------------------------------------------
-     Description: insert field
- --------------------------------------------------------------------*/
-
+// insert field
 bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
                             const OUString& rPar2, sal_uLong nFormatId,
                             sal_Unicode cSeparator, bool bIsAutomaticLanguage)
@@ -318,14 +306,10 @@ void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
             (*ppLB)->SelectEntryPos( nPos );
 }
 
-/*--------------------------------------------------------------------
-     Description: Insert new fields
- --------------------------------------------------------------------*/
-
+// Insert new fields
 IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
 {
     SwFldDlg *pDlg = (SwFldDlg*)GetTabDialog();
-
     if (pDlg)
     {
         pDlg->InsertHdl();
@@ -342,14 +326,10 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: enable/disable "Insert"-Button
- --------------------------------------------------------------------*/
-
+// enable/disable "Insert"-Button
 void SwFldPage::EnableInsert(bool bEnable)
 {
     SwFldDlg *pDlg = (SwFldDlg*)GetTabDialog();
-
     if (pDlg)
     {
         if (pDlg->GetCurTabPage() == this)

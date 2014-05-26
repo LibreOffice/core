@@ -1110,7 +1110,7 @@ public:
     WW8_FC fcMin;           // 0x18 file offset of first character of text
     WW8_FC fcMac;           // 0x1c file offset of last character of text + 1
 
-    // Einschub fuer WW8 *****************************************************
+    // Einschub fuer WW8
     sal_uInt16 csw;             // Count of fields in the array of "shorts"
 
     // Marke: "rgsw" Beginning of the array of shorts
@@ -1125,7 +1125,7 @@ public:
                       // of Word (i.e. FIB.fFarEast is on)
     sal_uInt16 clw; // Number of fields in the array of longs
 
-    // Ende des Einschubs fuer WW8 *******************************************
+    // Ende des Einschubs fuer WW8
 
     // Marke: "rglw" Beginning of the array of longs
     WW8_FC cbMac;           // 0x20 file offset of last byte written to file + 1.
@@ -1140,7 +1140,7 @@ public:
     WW8_CP ccpTxbx;         // 0x4c length of textbox subdocument text stream
     WW8_CP ccpHdrTxbx;      // 0x50 length of header textbox subdocument text stream
 
-    // Einschub fuer WW8 *****************************************************
+    // Einschub fuer WW8
     sal_Int32  pnFbpChpFirst; // when there was insufficient memory for Word to expand
                               // the PLCFbte at save time, the PLCFbte is written
                               // to the file in a linked list of 512-byte pieces
@@ -1163,7 +1163,7 @@ public:
     sal_Int32  fcIslandLim;     // ?
     sal_uInt16 cfclcb; // Number of fields in the array of FC/LCB pairs.
 
-    // Ende des Einschubs fuer WW8 *******************************************
+    // Ende des Einschubs fuer WW8
 
     // Marke: "rgfclcb" Beginning of array of FC/LCB pairs.
     WW8_FC fcStshfOrig;     // file offset of original allocation for STSH in table
@@ -1292,7 +1292,7 @@ public:
     WW8_FC fcSttbfAtnbkmk;  // 0x180 file offset of the sttbf that records names of bookmarks in the annotation subdocument
     sal_Int32 lcbSttbfAtnbkmk;  // 0x184 length in bytes of the sttbf that records names of bookmarks in the annotation subdocument
 
-    // Ende des Einschubs fuer WW67 ******************************************
+    // Ende des Einschubs fuer WW67
 
     WW8_FC fcPlcfdoaMom;    // 0x192 file offset of the  FDOA (drawn object) PLCF for main document.
                         //  ==0 if document has no drawn objects. The length of the FDOA is 6 bytes.

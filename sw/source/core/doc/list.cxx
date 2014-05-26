@@ -219,7 +219,6 @@ void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
     }
 }
 
-// SwList ---------------------------------------------------------------------
 SwList::SwList( const OUString& sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes )

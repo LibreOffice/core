@@ -403,7 +403,6 @@ SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
 {
 }
 
-// Reset
 void  SwDocStyleSheet::Reset()
 {
     aName = "";

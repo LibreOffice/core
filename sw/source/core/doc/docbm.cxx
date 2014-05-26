@@ -1303,8 +1303,6 @@ IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess()
 const IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess() const
     { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 
-// SaveBookmark methods
-
 SaveBookmark::SaveBookmark(
     bool bSavePos,
     bool bSaveOtherPos,
