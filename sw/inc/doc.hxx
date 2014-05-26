@@ -588,6 +588,10 @@ public:
     virtual sal_Int32 getReferenceCount() const SAL_OVERRIDE;
 
     // IDocumentSettingAccess
+    IDocumentSettingAccess const & getIDocumentSettingAccess() const; //The IDocumentSettingAccess interface
+    IDocumentSettingAccess & getIDocumentSettingAccess();
+    ::sw::DocumentSettingManager      & GetDocumentSettingManager(); //The implementation of the interface with some additional methods
+    ::sw::DocumentSettingManager const& GetDocumentSettingManager() const;
     virtual sal_uInt32 getRsid() const;
     virtual void setRsid( sal_uInt32 nVal );
     virtual sal_uInt32 getRsidRoot() const;
@@ -1913,8 +1917,6 @@ public:
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
-    ::sw::DocumentSettingManager      & GetDocumentSettingManager();
-    ::sw::DocumentSettingManager const& GetDocumentSettingManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 
     /**

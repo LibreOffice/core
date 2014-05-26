@@ -109,6 +109,7 @@
 #include <attrhint.hxx>
 #include <view.hxx>
 #include <DocumentDeviceManager.hxx>
+#include <DocumentSettingManager.hxx>
 
 #include <wdocsh.hxx>
 #include <prtopt.hxx>
@@ -149,6 +150,16 @@ sal_Int32 SwDoc::getReferenceCount() const
 }
 
 /* IDocumentSettingAccess */
+IDocumentSettingAccess const & SwDoc::getIDocumentSettingAccess() const
+{
+    return GetDocumentSettingManager();
+}
+
+IDocumentSettingAccess & SwDoc::getIDocumentSettingAccess()
+{
+    return GetDocumentSettingManager();
+}
+
 sal_uInt32 SwDoc::getRsid() const
 {
     return mnRsid;
