@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=Win32 \
 			$(if $(filter 100,$(VCVER)),/p:PlatformToolset=v100 /p:VisualStudioVersion=10.0) \
-			$(if $(filter 110,$(VCVER)),/p:PlatformToolset=v110_xp /p:VisualStudioVersion=11.0) \
+			$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) /p:VisualStudioVersion=11.0) \
 	,CoinMP/MSVisualStudio/v9)
 
 else
