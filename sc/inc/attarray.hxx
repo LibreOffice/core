@@ -206,6 +206,7 @@ class ScAttrIterator
 public:
     inline              ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd );
     inline const ScPatternAttr* Next( SCROW& rTop, SCROW& rBottom );
+    inline const ScPatternAttr* Resync( SCROW nRow, SCROW& rTop, SCROW& rBottom );
     SCROW               GetNextRow() const { return nRow; }
 };
 
@@ -234,6 +235,26 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
     else
         pRet = NULL;
     return pRet;
+}
+
+inline const ScPatternAttr* ScAttrIterator::Resync( SCROW nRowP, SCROW& rTop, SCROW& rBottom )
+{
+    nRow = nRowP;
+    // Chances are high that the pattern changed on nRowP introduced a span
+    // starting right there. Assume that Next() was called so nPos already
+    // advanced. Another high chance is that the change extended a previous or
+    // next pattern. In all these cases we don't need to search.
+    if (3 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-3].nRow < nRowP &&
+            nRowP <= pArray->pData[nPos-2].nRow)
+        nPos -= 2;
+    else if (2 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-2].nRow < nRowP &&
+            nRowP <= pArray->pData[nPos-1].nRow)
+        --nPos;
+    else if (pArray->nCount > 0 && nRowP <= pArray->pData[0].nRow)
+        nPos = 0;
+    else
+        pArray->Search( nRowP, nPos );
+    return Next( rTop, rBottom);
 }
 
 #endif

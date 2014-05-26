@@ -86,7 +86,8 @@ inline bool IsAmbiguousScript( sal_uInt8 nScript )
 long ScColumn::GetNeededSize(
     SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
     const Fraction& rZoomX, const Fraction& rZoomY,
-    bool bWidth, const ScNeededSizeOptions& rOptions ) const
+    bool bWidth, const ScNeededSizeOptions& rOptions,
+    const ScPatternAttr** ppPatternChange ) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
@@ -148,9 +149,32 @@ long ScColumn::GetNeededSize(
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
     // #i111387# disable automatic line breaks only for "General" number format
-    if (bBreak && aCell.hasNumeric() && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+    if (bBreak && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
     {
-        bBreak = false;
+        // If a formula cell needs to be interpreted during aCell.hasNumeric()
+        // to determine the type, the pattern may get invalidated because the
+        // result may set a number format. In which case there's also the
+        // General format not set anymore..
+        bool bMayInvalidatePattern = (aCell.meType == CELLTYPE_FORMULA);
+        const ScPatternAttr* pOldPattern = pPattern;
+        bool bNumeric = aCell.hasNumeric();
+        if (bMayInvalidatePattern)
+        {
+            pPattern = pAttrArray->GetPattern( nRow );
+            if (ppPatternChange)
+                *ppPatternChange = pPattern;    // XXX caller may have to check for change!
+        }
+        if (bNumeric)
+        {
+            if (!bMayInvalidatePattern || pPattern == pOldPattern)
+                bBreak = false;
+            else
+            {
+                nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+                if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                    bBreak = false;
+            }
+        }
     }
 
     //  get other attributes from pattern and conditional formatting
@@ -689,9 +713,9 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                     const ScPatternAttr* pPattern = GetPattern(nRow);
                     aOptions.pPattern = pPattern;
                     aOptions.bGetFont = (pPattern != pOldPattern || nScript != nOldScript);
-                    sal_uInt16 nThis = (sal_uInt16) GetNeededSize(
-                        nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions);
                     pOldPattern = pPattern;
+                    sal_uInt16 nThis = (sal_uInt16) GetNeededSize(
+                        nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern);
                     if (nThis)
                     {
                         if (nThis > nWidth || !bFound)
@@ -763,7 +787,6 @@ void ScColumn::GetOptimalHeight(
     //  with conditional formatting, always consider the individual cells
 
     const ScPatternAttr* pPattern = aIter.Next(nStart,nEnd);
-    ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
     while ( pPattern )
     {
         const ScMergeAttr*      pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
@@ -902,11 +925,19 @@ void ScColumn::GetOptimalHeight(
                         if (rCxt.isForceAutoSize() || !(pDocument->GetRowFlags(nRow, nTab) & CR_MANUALSIZE) )
                         {
                             aOptions.pPattern = pPattern;
+                            const ScPatternAttr* pOldPattern = pPattern;
                             sal_uInt16 nHeight = (sal_uInt16)
                                     ( GetNeededSize( nRow, rCxt.getOutputDevice(), rCxt.getPPTX(), rCxt.getPPTY(),
-                                                        rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions ) / rCxt.getPPTY() );
+                                                        rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions,
+                                                        &pPattern) / rCxt.getPPTY() );
                             if (nHeight > pHeight[nRow-nStartRow])
                                 pHeight[nRow-nStartRow] = nHeight;
+                            // Pattern changed due to calculation? => sync.
+                            if (pPattern != pOldPattern)
+                            {
+                                pPattern = aIter.Resync( nRow, nStart, nEnd);
+                                nNextEnd = 0;
+                            }
                         }
                     }
                 }
