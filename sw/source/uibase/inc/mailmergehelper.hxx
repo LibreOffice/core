@@ -200,7 +200,7 @@ public:
         throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class SwMailTransferable :
+class SW_DLLPUBLIC SwMailTransferable :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper2
         <
@@ -239,7 +239,7 @@ class SwMailTransferable :
 
 };
 
-class SwMailMessage :
+class SW_DLLPUBLIC SwMailMessage :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XMailMessage >
 {
