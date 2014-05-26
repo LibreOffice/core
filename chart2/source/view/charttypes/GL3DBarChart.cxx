@@ -347,13 +347,13 @@ void GL3DBarChart::clickedAt(const Point& /*rPos*/)
 
 }
 
-void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons)
+void GL3DBarChart::mouseDragMove(const Point& , const Point& , sal_uInt16 nButtons)
 {
     if(mbBlockUserInput)
         return;
 
     mbBlockUserInput = true;
-    SAL_WARN("chart2.opengl", "Dragging: " << rStartPos << " to : " << rEndPos << " Buttons: " << nButtons);
+
     if(nButtons == MOUSE_RIGHT)
     {
         mnCornerId = (mnCornerId + 1) % 4;
