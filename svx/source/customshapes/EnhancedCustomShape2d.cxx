@@ -2108,6 +2108,7 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
         case mso_sptAccentCallout3 :
         case mso_sptAccentBorderCallout3 :
             bAccent = false;
+            //fall-through
         case mso_sptCallout3 :
         case mso_sptBorderCallout3 :
         {
