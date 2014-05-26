@@ -197,8 +197,6 @@ const OUString& SalGetDesktopEnvironment()
 
 SalData::SalData() :
     m_pInstance( 0 ),
-    m_pPlugin( 0 ),
-    m_pPIManager(0 ),
     mpFontList( 0 ),
     mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),
     mxGraySpace( CGColorSpaceCreateDeviceGray() )
