@@ -1182,6 +1182,31 @@ void Window::ImplInitWindowData( WindowType nType )
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
 
+ImplWinData* Window::ImplGetWinData() const
+{
+    if ( !mpWindowImpl->mpWinData )
+    {
+        static const char* pNoNWF = getenv( "SAL_NO_NWF" );
+
+        ((Window*)this)->mpWindowImpl->mpWinData = new ImplWinData;
+        mpWindowImpl->mpWinData->mpExtOldText     = NULL;
+        mpWindowImpl->mpWinData->mpExtOldAttrAry  = NULL;
+        mpWindowImpl->mpWinData->mpCursorRect     = NULL;
+        mpWindowImpl->mpWinData->mnCursorExtWidth = 0;
+        mpWindowImpl->mpWinData->mpCompositionCharRects = NULL;
+        mpWindowImpl->mpWinData->mnCompositionCharRects = 0;
+        mpWindowImpl->mpWinData->mpFocusRect      = NULL;
+        mpWindowImpl->mpWinData->mpTrackRect      = NULL;
+        mpWindowImpl->mpWinData->mnTrackFlags     = 0;
+        mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
+        mpWindowImpl->mpWinData->mbMouseOver      = false;
+        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? false : true; // true: try to draw this control with native theme API
+    }
+
+    return mpWindowImpl->mpWinData;
+}
+
+
 void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
@@ -1261,30 +1286,6 @@ bool ImplDoTiledRendering()
     // Or what?
     return false;
 #endif
-}
-
-ImplWinData* Window::ImplGetWinData() const
-{
-    if ( !mpWindowImpl->mpWinData )
-    {
-        static const char* pNoNWF = getenv( "SAL_NO_NWF" );
-
-        ((Window*)this)->mpWindowImpl->mpWinData = new ImplWinData;
-        mpWindowImpl->mpWinData->mpExtOldText     = NULL;
-        mpWindowImpl->mpWinData->mpExtOldAttrAry  = NULL;
-        mpWindowImpl->mpWinData->mpCursorRect     = NULL;
-        mpWindowImpl->mpWinData->mnCursorExtWidth = 0;
-        mpWindowImpl->mpWinData->mpCompositionCharRects = NULL;
-        mpWindowImpl->mpWinData->mnCompositionCharRects = 0;
-        mpWindowImpl->mpWinData->mpFocusRect      = NULL;
-        mpWindowImpl->mpWinData->mpTrackRect      = NULL;
-        mpWindowImpl->mpWinData->mnTrackFlags     = 0;
-        mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
-        mpWindowImpl->mpWinData->mbMouseOver      = false;
-        mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? false : true; // true: try to draw this control with native theme API
-   }
-
-    return mpWindowImpl->mpWinData;
 }
 
 SalGraphics* Window::ImplGetFrameGraphics() const
