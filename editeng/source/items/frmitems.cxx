@@ -1943,6 +1943,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         case TOP_BORDER_DISTANCE:
             bDistMember = true;
+            //fall-through
         case TOP_BORDER:
         case MID_TOP_BORDER:
             nLine = BOX_LINE_TOP;
