@@ -254,7 +254,7 @@ static PyObject* callCtor( const Runtime &r , const char * clazz, const PyRef & 
 
 PyObject *PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r )
 {
-    PyRef args( PyTuple_New( 2 ), SAL_NO_ACQUIRE );
+    PyRef args( PyTuple_New( 2 ), SAL_NO_ACQUIRE, NOT_NULL );
     PyTuple_SetItem( args.get() , 0 , PyStr_FromString( enumBase ) );
     PyTuple_SetItem( args.get() , 1 , PyStr_FromString( enumValue ) );
 
