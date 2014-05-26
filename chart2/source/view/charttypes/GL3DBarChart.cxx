@@ -312,7 +312,6 @@ void GL3DBarChart::clickedAt(const Point& /*rPos*/, sal_uInt16 nButtons)
     const BarInformation& rBarInfo = itr->second;
     mnStepsTotal = 100;
     mnStep = 0;
-    maOldCameraDirection = maCameraDirection;
     maCameraDirection = rBarInfo.maPos;
     render();
 
