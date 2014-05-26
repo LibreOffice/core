@@ -144,7 +144,8 @@ private:
                     const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::ucb::CommandFailedException,
-                ::com::sun::star::task::DocumentPasswordRequest );
+                ::com::sun::star::task::DocumentPasswordRequest,
+                css::uno::RuntimeException );
     bool renameData( const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XContentIdentifier >& xOldId,
                      const com::sun::star::uno::Reference<
