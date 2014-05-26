@@ -40,6 +40,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <frmtool.hxx>

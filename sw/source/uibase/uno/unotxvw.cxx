@@ -25,6 +25,7 @@
 #include <docsh.hxx>
 #include <rubylist.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <unotxvw.hxx>
 #include <unodispatch.hxx>
 #include <unomap.hxx>

@@ -36,6 +36,7 @@
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 
 #include <dialog.hrc>
 

@@ -54,6 +54,7 @@
 #include <wview.hxx>
 #include <doc.hxx>
 #include <fldbas.hxx>
+#include <IDocumentDeviceAccess.hxx>
 
 #include <globals.hrc>
 #include <view.hrc>

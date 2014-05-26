@@ -30,6 +30,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <editeng/langitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>

@@ -40,6 +40,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <poolfmt.hxx>

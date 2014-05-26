@@ -31,6 +31,7 @@
 #include <swmodule.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>

@@ -28,6 +28,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>

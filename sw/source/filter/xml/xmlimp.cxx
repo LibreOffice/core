@@ -35,6 +35,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <unofreg.hxx>
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
