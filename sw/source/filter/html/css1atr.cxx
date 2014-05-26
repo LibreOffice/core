@@ -313,6 +313,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     case FUNIT_M:
     case FUNIT_KM:
         OSL_ENSURE( FUNIT_CM == eUnit, "Measuring unit not supported" );
+        //fall-through
     case FUNIT_CM:
         // 0.01cm = 5.7twip (not exact, but the UI is also not exact)
         nMul = 2540;    // 2.54 * 1000
