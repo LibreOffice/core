@@ -66,7 +66,7 @@
 #include <anchoredobject.hxx>
 #include <wrtsh.hxx>
 
-#include "../uibase/inc/view.hxx"
+#include "../../uibase/inc/view.hxx"
 #include <PostItMgr.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
