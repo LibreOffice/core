@@ -929,7 +929,7 @@ OUString CppuType::resolveAllTypedefs(OUString const & name) const {
         sal_Int32 k2;
         n = b2u(
             codemaker::UnoType::decompose(
-                u2b(dynamic_cast< unoidl::TypedefEntity * >(ent.get())->
+                u2b(dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).
                     getType()),
                 &k2));
         k1 += k2; //TODO: overflow
