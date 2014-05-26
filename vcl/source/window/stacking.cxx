@@ -1174,22 +1174,4 @@ void Window::ImplSetFrameParent( const Window* pParent )
     }
 }
 
-const SystemEnvData* Window::GetSystemData() const
-{
-
-    return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : NULL;
-}
-
-::com::sun::star::uno::Any Window::GetSystemDataAny() const
-{
-    ::com::sun::star::uno::Any aRet;
-    const SystemEnvData* pSysData = GetSystemData();
-    if( pSysData )
-    {
-        ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)pSysData, pSysData->nSize );
-        aRet <<= aSeq;
-    }
-    return aRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
