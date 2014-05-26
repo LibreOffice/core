@@ -1906,19 +1906,25 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
             case 0x8000:
             {
                 MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get());
-                SwPosition aNewPos(pMark->GetMarkPos());
-                aNewPos.nNode = rNd;
-                aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
-                pMark->SetMarkPos(aNewPos);
+                if (pMark)
+                {
+                    SwPosition aNewPos(pMark->GetMarkPos());
+                    aNewPos.nNode = rNd;
+                    aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
+                    pMark->SetMarkPos(aNewPos);
+                }
             }
             break;
             case 0x8001:
             {
                 MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get());
-                SwPosition aNewPos(pMark->GetOtherMarkPos());
-                aNewPos.nNode = rNd;
-                aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
-                pMark->SetOtherMarkPos(aNewPos);
+                if (pMark)
+                {
+                    SwPosition aNewPos(pMark->GetOtherMarkPos());
+                    aNewPos.nNode = rNd;
+                    aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
+                    pMark->SetOtherMarkPos(aNewPos);
+                }
             }
             break;
             case 0x1001:
