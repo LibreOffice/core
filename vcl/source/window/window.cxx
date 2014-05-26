@@ -3866,4 +3866,22 @@ void Window::DrawGradientWallpaper( long nX, long nY,
     mpMetaFile = pOldMetaFile;
 }
 
+const SystemEnvData* Window::GetSystemData() const
+{
+
+    return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : NULL;
+}
+
+css::uno::Any Window::GetSystemDataAny() const
+{
+    css::uno::Any aRet;
+    const SystemEnvData* pSysData = GetSystemData();
+    if( pSysData )
+    {
+        css::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)pSysData, pSysData->nSize );
+        aRet <<= aSeq;
+    }
+    return aRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
