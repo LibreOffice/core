@@ -429,8 +429,10 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     maCachedScript      = rLanguageTagImpl.maCachedScript;
     maCachedCountry     = rLanguageTagImpl.maCachedCountry;
     maCachedVariants    = rLanguageTagImpl.maCachedVariants;
+    lt_tag_t * oldTag = mpImplLangtag;
     mpImplLangtag       = rLanguageTagImpl.mpImplLangtag ?
                             lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : NULL;
+    lt_tag_unref(oldTag);
     mnLangID            = rLanguageTagImpl.mnLangID;
     meIsValid           = rLanguageTagImpl.meIsValid;
     meIsIsoLocale       = rLanguageTagImpl.meIsIsoLocale;
@@ -444,8 +446,10 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     mbCachedScript      = rLanguageTagImpl.mbCachedScript;
     mbCachedCountry     = rLanguageTagImpl.mbCachedCountry;
     mbCachedVariants    = rLanguageTagImpl.mbCachedVariants;
-    if (mpImplLangtag)
+    if (mpImplLangtag && !oldTag)
         theDataRef::get().incRef();
+    else if (!mpImplLangtag && oldTag)
+        theDataRef::get().decRef();
     return *this;
 }
 
