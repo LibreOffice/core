@@ -88,7 +88,9 @@ void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRa
     }
 }
 
-uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Reference< text::XTextRange >& rTextRange, const uno::Reference< text::XText >& rText ) throw ( uno::RuntimeException )
+uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Reference< text::XTextRange >& rTextRange,
+                                                                  const uno::Reference< text::XText >& rText )
+    throw ( uno::RuntimeException, script::BasicErrorException )
 {
     uno::Reference< text::XTextCursor > xTextCursor;
     bool bGotTextCursor = false;
