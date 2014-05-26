@@ -389,7 +389,7 @@ void SvxSpellWrapper::SpellDocument( )
         }
         bDialog = false;
         pWin = pOld;
-    };
+    }
 }
 
 

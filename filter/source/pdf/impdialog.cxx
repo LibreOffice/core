@@ -915,7 +915,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     case 3:
         mpRbPgLyContinueFacing->Check();
         break;
-    };
+    }
 
     switch( paParent->mnInitialView )
     {
@@ -929,7 +929,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     case 2:
         mpRbOpnThumbs->Check();
         break;
-    };
+    }
 
     switch( paParent->mnMagnification )
     {
@@ -954,7 +954,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
         mpRbMagnZoom->Check();
         mpNumZoom->Enable( true );
         break;
-    };
+    }
 
     mpNumZoom->SetValue( paParent->mnZoom );
     mpNumInitialPage->SetValue( paParent->mnInitialPage );
@@ -1163,7 +1163,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
     case 2:
         mpRbPrintHighRes->Check();
         break;
-    };
+    }
 
     switch( paParent->mnChangesAllowed )
     {
@@ -1183,7 +1183,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
     case 4:
         mpRbChangesAnyNoCopy->Check();
         break;
-    };
+    }
 
     mpCbEnableCopy->Check( paParent->mbCanCopyOrExtract );
     mpCbEnableAccessibility->Check( paParent->mbCanExtractForAccessibility );

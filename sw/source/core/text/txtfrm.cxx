@@ -1378,7 +1378,7 @@ static bool lcl_ErgoVadis( SwTxtFrm* pFrm, sal_Int32 &rPos, const PrepareHint eP
     if( ePrep == PREP_ERGOSUM )
     {
         if( rFtnInfo.aErgoSum.isEmpty() )
-            return false;;
+            return false;
         rPos = pFrm->GetOfst();
     }
     else

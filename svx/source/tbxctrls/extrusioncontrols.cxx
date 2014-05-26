@@ -382,7 +382,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
     {
         OUString aStr( SVX_RESSTR( nResource + i ) );
         setEntryText( i, aStr );
-    };
+    }
 }
 
 

@@ -2839,7 +2839,7 @@ getPasteFlags (sal_Int32 Paste)
         case excel::XlPasteType::xlPasteAllExceptBorders:
     default:
         nFlags = IDF_ALL;break;
-    };
+    }
 return nFlags;
 }
 
@@ -2861,7 +2861,7 @@ getPasteFormulaBits( sal_Int32 Operation)
     case excel::XlPasteSpecialOperation::xlPasteSpecialOperationNone:
     default:
         nFormulaBits = PASTE_NOFUNC; break;
-    };
+    }
 
 return nFormulaBits;
 }

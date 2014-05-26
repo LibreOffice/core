@@ -176,7 +176,7 @@ sal_Size IsciiDevanagariToUnicode::convert(
                     bNormal = true;
                     bDouble = false;
                     break;
-            };
+            }
         }
 
         if (bNormal)

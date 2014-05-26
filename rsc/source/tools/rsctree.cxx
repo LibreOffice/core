@@ -187,7 +187,7 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
             if( ((NameNode *)Left())->Compare( pSearch ) == EQUAL )
                 return (NameNode *)this;
             return ((NameNode *)Left())->SearchParent( pSearch );
-        };
+        }
     }
     else if( nCmp == LESS )
     {

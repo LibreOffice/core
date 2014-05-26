@@ -392,7 +392,7 @@ void SAL_CALL ORowSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             break;
         default:
             ORowSetBase::getFastPropertyValue(rValue,nHandle);
-        };
+        }
     }
     else
     {

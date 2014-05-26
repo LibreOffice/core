@@ -198,7 +198,7 @@ void OComponentEventThread::run()
                 if( xComp.is() )
                     processEvent( pCompImpl, pEvt.get(), xControl, bFlag );
             }
-        };
+        }
 
         // After a Dispose, we do not know the Control anymore.
         // Thus, we must not wait either.

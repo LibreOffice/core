@@ -61,7 +61,7 @@ RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass )
     {
         RscMgrInst * pDfltData = (RscMgrInst *)(rDflt.pData + RscClass::Size());
         *pClassData = *pDfltData;
-    };
+    }
 
     return aInst;
 }
@@ -222,7 +222,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             {
                 // RscClass wird uebersprungen
                 aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
-            };
+            }
 
             /*
             // Definition der Struktur, aus denen die Resource aufgebaut ist
@@ -238,8 +238,8 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             rMem.PutAt( nOldSize +4, (sal_uInt32)rInst.pClass->GetTypId() );
             rMem.PutAt( nOldSize +8, (sal_uInt32)(rMem.Size() - nOldSize) );
             rMem.PutAt( nOldSize +12, (sal_uInt32)(nLocalSize - nOldSize) );
-        };
-    };
+        }
+    }
 
     return aError;
 }

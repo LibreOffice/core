@@ -371,7 +371,7 @@ EIconChoicePos IconChoiceDialog::SetCtrlPos( const EIconChoicePos& rPos )
             aWinBits &= ~WB_ALIGN_LEFT & ~WB_NOHSCROLL;
             aWinBits |= WB_ALIGN_TOP | WB_NOVSCROLL;
             break;
-    };
+    }
     maIconCtrl.SetStyle ( aWinBits );
 
     SetPosSizeCtrls();
@@ -487,7 +487,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
             aNewIconCtrlSize = Size ( aOutSize.Width()-(2*aCtrlOffset.X()),
                                       nDefaultHeight );
             break;
-    };
+    }
     maIconCtrl.SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
     maIconCtrl.ArrangeIcons();
 
@@ -530,7 +530,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
                                       aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
                                       aNewIconCtrlSize.Height() - (4*aCtrlOffset.X()) );
                 break;
-        };
+        }
 
         if ( pData->pPage )
             pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
@@ -619,7 +619,7 @@ void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
                                       aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
                                       maIconCtrl.GetSizePixel().Height() - (4*aCtrlOffset.X()) );
                 break;
-        };
+        }
 
         pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
     }

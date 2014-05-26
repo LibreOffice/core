@@ -2340,7 +2340,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     if ( !pFileData->maFilterName.isEmpty() )
         rFilter = pFileData->maFilterName;      // don't overwrite stored filter with guessed filter
     else
-        ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);;
+        ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
     ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName(rFilter);
 

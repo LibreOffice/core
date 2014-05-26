@@ -153,7 +153,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         }
                     }
                     break;
-                };
+                }
                 double nX = rDesc.mnR.X - rDesc.mnQ.X;
                 double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
 

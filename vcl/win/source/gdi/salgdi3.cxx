@@ -613,7 +613,7 @@ static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
             default:
                 eTextEncoding = rtl_getTextEncodingFromWindowsCodePage(nCP);
                 break;
-        };
+        }
     }
     else
     {

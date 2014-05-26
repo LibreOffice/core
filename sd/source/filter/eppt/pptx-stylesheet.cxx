@@ -455,7 +455,7 @@ bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, 
         case CharAttr_Escapement : return ( rChar.mnEscapement != nValue );
         default:
             break;
-    };
+    }
     if ( nFlag )
     {
         if ( rChar.mnFlags & nFlag )

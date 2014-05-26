@@ -47,7 +47,7 @@ ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
     {
         nMax = nMaximum;
         nMin = nMinimum;
-    };
+    }
 
     return ERR_OK;
 }
@@ -161,7 +161,7 @@ ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
     {
         nMax = nMaximum;
         nMin = nMinimum;
-    };
+    }
 
     return ERR_OK;
 }

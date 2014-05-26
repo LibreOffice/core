@@ -772,7 +772,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
             default:
                 sRedlineType = "UNKNOWN";
                 break;
-        };
+        }
         writer.writeFormatAttribute( "id", "%s", BAD_CAST(aId.getStr()) );
         writer.writeFormatAttribute( "author", "%s", BAD_CAST(aAuthor.getStr()) );
         writer.writeFormatAttribute( "date", "%s", BAD_CAST(aDate.getStr()) );

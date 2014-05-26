@@ -147,7 +147,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
             break;
         default:
             OPropertyStateContainer::getFastPropertyValue(rValue,nHandle);
-        };
+        }
     }
     else
         OPropertyStateContainer::getFastPropertyValue(rValue,nHandle);

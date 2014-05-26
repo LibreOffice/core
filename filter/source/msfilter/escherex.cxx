@@ -4176,7 +4176,7 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
         break;
         default:
             rSt.WriteUChar( (sal_uInt8)meBlibType );
-    };
+    }
 
     rSt.Write( &mnIdentifier[ 0 ], 16 );
     rSt.WriteUInt16( (sal_uInt16)0 )

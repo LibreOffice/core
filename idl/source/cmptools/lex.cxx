@@ -185,7 +185,7 @@ sal_uLong SvTokenStream::GetNumber()
             nLog = 16;
             c = GetFastNextChar();
         }
-    };
+    }
 
     if( nLog == 16 )
     {

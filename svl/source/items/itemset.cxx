@@ -1499,7 +1499,7 @@ SvStream &SfxItemSet::Store
                  _pPool->StoreItem( rStream, *pItem, bDirect ) )
                 // Item wurde in 'rStream' gestreamt
                 ++nWrittenCount;
-        };
+        }
 
         // weniger geschrieben als enthalten (z.B. altes Format)
         if ( nWrittenCount != _nCount )

@@ -32,7 +32,7 @@ void ENTRY_STRUCT::Destroy()
     {
         aInst.pClass->Destroy( aInst );
         rtl_freeMemory( aInst.pData );
-    };
+    }
 }
 
 RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
@@ -63,11 +63,11 @@ void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
         for (sal_uInt32 i = 0; i < pClassData->nEntries; i++ )
         {
             pClassData->pEntries[ i ].Destroy();
-        };
+        }
         rtl_freeMemory( pClassData->pEntries );
         pClassData->pEntries = NULL;
         pClassData->nEntries = 0;
-    };
+    }
 }
 
 RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
@@ -115,8 +115,8 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
                 aDfltI = pDfltClassData->pEntries[ i ].aInst;
                 pClassData->pEntries[ i ].aInst =
                                     aDfltI.pClass->Create( NULL, aDfltI );
-            };
-        };
+            }
+        }
     }
 
     return aInst;
@@ -149,9 +149,9 @@ RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName
                 pClassData->pEntries[ i ].aInst.pClass == pClass )
             {
                 return( pClassData->pEntries[ i ].aInst );
-            };
-        };
-    };
+            }
+        }
+    }
     return RSCINST();
 }
 
@@ -188,8 +188,8 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
             else
             {
                 return ERR_CONT_INVALIDTYPE;
-            };
-        };
+            }
+        }
     }
     else
         pCreateClass = pTypeClass;
@@ -206,7 +206,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
         {
             aTmpI.pClass->Destroy( aTmpI );
             aTmpI.pClass->Create( &aTmpI, rCreateInst );
-        };
+        }
     }
     else
     {
@@ -221,7 +221,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
             pClassData->pEntries =
                 (ENTRY_STRUCT *)rtl_allocateMemory( sizeof( ENTRY_STRUCT )
                                                 * (pClassData->nEntries +1) );
-        };
+        }
 
         pClassData->pEntries[ pClassData->nEntries ].Create();
         pClassData->pEntries[ pClassData->nEntries ].aName = rEleName;
@@ -236,7 +236,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
         {
             pClassData->pEntries[ pClassData->nEntries ].aInst =
                 pCreateClass->Create( NULL, RSCINST() );
-        };
+        }
 
         pClassData->nEntries++;
         aTmpI = pClassData->pEntries[ pClassData->nEntries -1 ].aInst;
@@ -545,14 +545,14 @@ bool RscBaseCont::IsConsistent( const RSCINST & rInst )
                                    pClassData->pEntries[ i ].aInst.pClass, i +1 ).IsInst() )
             {
                  bRet = false;
-            };
+            }
         }
         if( ! pClassData->pEntries[ i ].aInst.pClass->
             IsConsistent( pClassData->pEntries[ i ].aInst ) )
         {
             bRet = false;
         }
-    };
+    }
 
     return bRet;
 }
@@ -568,7 +568,7 @@ void RscBaseCont::SetToDefault( const RSCINST & rInst )
     {
         pClassData->pEntries[ i ].aInst.pClass->
                   SetToDefault( pClassData->pEntries[ i ].aInst );
-    };
+    }
 
     RscTop::SetToDefault( rInst );
 }
@@ -589,8 +589,8 @@ bool RscBaseCont::IsDefault( const RSCINST & rInst )
             IsDefault( pClassData->pEntries[ i ].aInst ) )
         {
             return( false );
-        };
-    };
+        }
+    }
 
     return RscTop::IsDefault( rInst );
 }
@@ -628,9 +628,9 @@ void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
             {
                 DeletePos( rInst, i );
                 return;
-            };
-        };
-    };
+            }
+        }
+    }
 
 }
 
@@ -652,8 +652,8 @@ void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos )
             for (sal_uInt32 i = nPos; i < pClassData->nEntries; i++ )
                 pClassData->pEntries[ i ] = pClassData->pEntries[ i + 1 ];
 
-        };
-    };
+        }
+    }
 }
 
 void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -675,7 +675,7 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
                                   fOutput, pTC, nTab,
                                   pClassData->pEntries[ i ].aName, pVarName );
         fprintf( fOutput, ";\n" );
-    };
+    }
 }
 
 ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,

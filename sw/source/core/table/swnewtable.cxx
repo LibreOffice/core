@@ -1078,7 +1078,7 @@ static void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, Sw
         pBox = lcl_LeftBorder2Box( nLeftBorder, rTable.GetTabLines()[nLine] );
         if( pBox )
             rBoxes.insert( pBox );
-    };
+    }
 }
 
 /** lcl_UnMerge(..) manipulates the row span attribute of a given master cell

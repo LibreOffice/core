@@ -661,7 +661,7 @@ bool OpenGLContext::initWindow()
     {
         Visual* pVisual = (Visual*)pChildSysData->pVisual;
         XVisualInfo aTemplate;
-        aTemplate.visualid = XVisualIDFromVisual( pVisual );;
+        aTemplate.visualid = XVisualIDFromVisual( pVisual );
         int nVisuals = 0;
         XVisualInfo* pInfos = XGetVisualInfo( m_aGLWin.dpy, VisualIDMask, &aTemplate, &nVisuals );
         if( nVisuals != 1 )

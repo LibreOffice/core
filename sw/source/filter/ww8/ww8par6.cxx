@@ -4178,7 +4178,7 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             break;
         default:
             return;
-    };
+    }
 
     NewAttr( aUL );
 }

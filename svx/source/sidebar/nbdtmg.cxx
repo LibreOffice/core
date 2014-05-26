@@ -757,7 +757,7 @@ OUString GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefa
         if ( pEntry )
         {
             sRet = pEntry->sDescription;
-        };
+        }
     }
     return sRet;
 }
@@ -777,7 +777,7 @@ bool GraphyicBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
         if ( pEntry )
         {
             bRet = pEntry->bIsCustomized;
-        };
+        }
     }
 
     return bRet;
@@ -1901,7 +1901,7 @@ OUString OutlineTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)
         if ( pItemArr )
         {
             sRet = pItemArr->sDescription;
-        };
+        }
     }
     return sRet;
 }
@@ -1921,7 +1921,7 @@ bool OutlineTypeMgr::IsCustomized(sal_uInt16 nIndex)
         if ( pItemArr )
         {
             bRet = pItemArr->bIsCustomized;
-        };
+        }
     }
 
     return bRet;

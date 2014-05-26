@@ -77,7 +77,7 @@ sal_uInt32 GetNumber()
             nLog = 16;
             c = pFI->GetFastChar();
         }
-    };
+    }
 
     if( nLog == 16 )
     {
@@ -147,7 +147,7 @@ int MakeToken( YYSTYPE * pTokenVal )
         }
         else
             break;
-    };
+    }
 
     // FIXME: wtf is this supposed to do?
     if( (c != 0) == pFI->IsEof() )
@@ -166,11 +166,11 @@ int MakeToken( YYSTYPE * pTokenVal )
             {
                 aBuf.append( sal_Char(c) );
                 c = pFI->GetFastChar();
-            };
+            }
             c = pFI->GetFastChar();
             pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
             return( INCLUDE_STRING );
-        };
+        }
     }
 
     if( c == '"' )
@@ -256,7 +256,7 @@ int MakeToken( YYSTYPE * pTokenVal )
                     bLastInclude = true;
                 default:
                     pTokenVal->value = aKey.yylval;
-                };
+                }
 
                 return aKey.nTyp;
             }
@@ -393,11 +393,11 @@ void IncludeParser( RscFileInst * pFileInst )
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          OString() );
                     pFName->InsertDependFile( lKey, ULONG_MAX );
-                };
-            };
-        };
+                }
+            }
+        }
         nToken = MakeToken( &aYYSType );
-    };
+    }
 
     EndParser();
 }

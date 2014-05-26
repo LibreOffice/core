@@ -666,7 +666,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             {
                 pLast->mpUpper = pBehind->GetUpper();
                 pLast = pLast->GetNext();
-            };
+            }
         }
         else
         {

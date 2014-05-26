@@ -3089,7 +3089,7 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
                             FSEND );
                 }
                 break;
-            };
+            }
         }
     }
 }
@@ -3135,7 +3135,7 @@ void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_
                             FSEND );
                 }
                 break;
-            };
+            }
         }
     }
 }
