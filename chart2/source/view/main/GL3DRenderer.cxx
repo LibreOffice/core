@@ -991,7 +991,7 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     m_Extrude3DInfo.yScale = glm::length(DirY);
     m_Extrude3DInfo.zScale = glm::length(DirZ);
     glm::mat4 transformMatrixInverse = glm::inverse(glm::translate(glm::vec3(tranform)));
-    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(m_Extrude3DInfo.xScale, m_Extrude3DInfo.yScale, m_Extrude3DInfo.zScale));
+    glm::mat4 scaleMatrixInverse = glm::inverse(glm::scale(glm::vec3(m_Extrude3DInfo.xScale, m_Extrude3DInfo.yScale, m_Extrude3DInfo.zScale)));
     m_Extrude3DInfo.rotation = transformMatrixInverse * modelMatrix * scaleMatrixInverse;
 
     //color
@@ -1094,7 +1094,7 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
                       extrude3D.yTransform,
                       extrude3D.zTransform};
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-    glm::mat4 flatScale = glm::scale(xyScale, xyScale, xyScale);
+    glm::mat4 flatScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
     m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
     if(!mbPickingMode)
     {
@@ -1135,7 +1135,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
     else
     {
         glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, actualZTrans));
-        glm::mat4 topScale = glm::scale(xyScale, xyScale, xyScale);
+        glm::mat4 topScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale;
     }
@@ -1174,7 +1174,7 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
     }
     else
     {
-        glm::mat4 scale = glm::scale(xyScale, xyScale,actualZScale);
+        glm::mat4 scale = glm::scale(glm::vec3(xyScale, xyScale,actualZScale));
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * scale;
     }
@@ -1215,7 +1215,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         //yScale /= (float)(1 + BOTTOM_THRESHOLD);
         zScale /= (float)(m_RoundBarMesh.bottomThreshold);
         glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, 0.0, -1.0));
-        glm::mat4 scale = glm::scale(xyScale, xyScale, zScale);
+        glm::mat4 scale = glm::scale(glm::vec3(xyScale, xyScale, zScale));
         //MoveModelf(trans, angle, scale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * scale * orgTrans;
@@ -1225,7 +1225,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         // use different matrices for different parts
         glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, actualZTrans));
-        glm::mat4 topScale = glm::scale(xyScale, xyScale, xyScale);
+        glm::mat4 topScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
@@ -1253,7 +1253,7 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
     float yScale = extrude3D.yScale;
     float zScale = extrude3D.zScale;
     glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3D.xTransform, extrude3D.yTransform, extrude3D.zTransform));
-    glm::mat4 scaleMatrix = glm::scale(xScale, yScale, zScale);
+    glm::mat4 scaleMatrix = glm::scale(glm::vec3(xScale, yScale, zScale));
     m_Model = transformMatrix * extrude3D.rotation * scaleMatrix;
     if (extrude3D.reverse)
     {
