@@ -279,7 +279,7 @@ PyObject* PyUNO_Type_new (const char *typeName , TypeClass t , const Runtime &r 
 PyObject* PyUNO_char_new ( sal_Unicode val , const Runtime &r )
 {
     // retrieve type object
-    PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
+    PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
 
     Py_UNICODE u[2];
     u[0] = val;
