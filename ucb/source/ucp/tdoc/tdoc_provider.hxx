@@ -134,7 +134,8 @@ public:
     queryStream( const OUString & rUri,
                  const OUString & rPassword,
                  bool bTruncate ) const
-        throw ( com::sun::star::packages::WrongPasswordException );
+        throw ( com::sun::star::packages::WrongPasswordException,
+                css::uno::RuntimeException );
 
     bool queryNamesOfChildren(
         const OUString & rUri,

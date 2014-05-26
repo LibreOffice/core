@@ -486,7 +486,7 @@ uno::Reference< io::XStream >
 ContentProvider::queryStream( const OUString & rUri,
                               const OUString & rPassword,
                               bool bTruncate ) const
-    throw ( packages::WrongPasswordException )
+    throw ( packages::WrongPasswordException, uno::RuntimeException )
 {
     if ( m_xStgElemFac.is() )
     {
