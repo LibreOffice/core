@@ -446,8 +446,8 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     {
         ToTop( TOTOP_RESTOREWHENMIN );
         throw frame::TerminationVetoException(
-            OUString("The office cannot be closed while the Extension Manager is running"),
-            uno::Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), uno::UNO_QUERY));
+            "The office cannot be closed while the Extension Manager is running",
+            static_cast<frame::XTerminateListener*>(this));
     }
     else
     {

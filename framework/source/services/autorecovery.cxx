@@ -1939,7 +1939,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     if (rInfo.AppModule.isEmpty())
     {
         throw css::uno::RuntimeException(
-                OUString("Cant find out the default filter and its extension, if no application module is known!"),
+                "Cant find out the default filter and its extension, if no application module is known!",
                 static_cast< css::frame::XDispatch* >(this));
     }
 

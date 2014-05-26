@@ -896,7 +896,7 @@ Reference<XAccessible> SAL_CALL
     ThrowIfDisposed();
 
     if (nIndex<0 || nIndex>=sal_Int32(maChildren.size()))
-        throw lang::IndexOutOfBoundsException("invalid child index", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
+        throw lang::IndexOutOfBoundsException("invalid child index", static_cast<uno::XWeak*>(this));
 
     return Reference<XAccessible>(maChildren[nIndex].get());
 }
@@ -1569,7 +1569,7 @@ sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal
     ThrowIfDisposed();
 
     if (!mpParagraph)
-        throw lang::IndexOutOfBoundsException("no text support in current mode", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
+        throw lang::IndexOutOfBoundsException("no text support in current mode", static_cast<uno::XWeak*>(this));
     return mpParagraph->GetCharacter(nIndex);
 }
 
@@ -1609,7 +1609,7 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBo
     awt::Rectangle aCharacterBox;
     if (nIndex < 0)
     {
-        throw lang::IndexOutOfBoundsException("invalid text index", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
+        throw lang::IndexOutOfBoundsException("invalid text index", static_cast<uno::XWeak*>(this));
     }
     else if (mpParagraph)
     {
@@ -1622,7 +1622,7 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBo
     }
     else
     {
-        throw lang::IndexOutOfBoundsException("no text support in current mode", uno::Reference<uno::XInterface>(static_cast<uno::XWeak*>(this)));
+        throw lang::IndexOutOfBoundsException("no text support in current mode", static_cast<uno::XWeak*>(this));
     }
 
     return aCharacterBox;

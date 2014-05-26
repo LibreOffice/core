@@ -100,11 +100,11 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object is not loaded!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
 #ifdef WNT
     // RECOMPOSE_ON_RESIZE misc flag means that the object has to be switched to running state on resize.
@@ -178,11 +178,11 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object is not loaded!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     awt::Size aResult;
 
@@ -216,7 +216,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     {
                         throw embed::NoVisualAreaSizeException(
                                 "No size available!",
-                                uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                static_cast< ::cppu::OWeakObject* >(this) );
                     }
                 }
 
@@ -259,7 +259,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 if ( !bSuccess )
                     throw embed::NoVisualAreaSizeException(
                                     "No size available!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
                 aGuard.reset();
 
@@ -278,7 +278,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         {
             throw embed::NoVisualAreaSizeException(
                             "No size available!",
-                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                            static_cast< ::cppu::OWeakObject* >(this) );
         }
     }
     else
@@ -294,7 +294,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         {
             throw embed::NoVisualAreaSizeException(
                             "No size available!",
-                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                            static_cast< ::cppu::OWeakObject* >(this) );
         }
     }
 
@@ -324,13 +324,13 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     // TODO: if the object has cached representation then it should be returned
     // TODO: if the object has no cached representation and is in loaded state it should switch itself to the running state
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object is not loaded!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     embed::VisualRepresentation aVisualRepr;
 
@@ -390,7 +390,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     {
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
     }
 
     return GetVisualRepresentationInNativeFormat_Impl( m_xCachedVisualRepresentation );
@@ -417,11 +417,11 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( "Illegal call!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( "The object is not loaded!",
-                                    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
+                                    static_cast< ::cppu::OWeakObject* >(this) );
 
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }

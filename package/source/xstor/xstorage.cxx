@@ -1967,7 +1967,7 @@ void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
 
     // the source object is also a kind of locker for the current object
     // since the listeners could dispose the object while being notified
-       lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
     m_pImpl->m_nModifiedListenerCount = 0;
 
@@ -4005,7 +4005,7 @@ void SAL_CALL OStorage::commit()
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Problems on commit!",
-                                  uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
+                                  static_cast< ::cppu::OWeakObject* >( this ),
                                   aCaught );
     }
 
@@ -4076,7 +4076,7 @@ void SAL_CALL OStorage::revert()
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Problems on revert!",
-                                  uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
+                                  static_cast< ::cppu::OWeakObject* >( this ),
                                   aCaught );
     }
 
@@ -4249,13 +4249,12 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
     }
     catch( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( rException.Message );
-           m_pImpl->AddLog( THROW_WHERE "Rethrow" );
+        m_pImpl->AddLog( rException.Message );
+        m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
-           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetException( THROW_WHERE "Can not open storage!\n",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetException( THROW_WHERE "Can not open storage!",
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 
@@ -4285,13 +4284,12 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
     }
     catch ( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( rException.Message );
-           m_pImpl->AddLog( THROW_WHERE "Rethrow" );
+        m_pImpl->AddLog( rException.Message );
+        m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
-           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!\n",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 }
@@ -4326,13 +4324,12 @@ sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
     }
     catch ( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( rException.Message );
-           m_pImpl->AddLog( THROW_WHERE "Rethrow" );
+        m_pImpl->AddLog( rException.Message );
+        m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
-           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!\n",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 
@@ -4377,13 +4374,12 @@ sal_Bool SAL_CALL OStorage::hasElements()
     }
     catch( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( rException.Message );
-           m_pImpl->AddLog( THROW_WHERE "Rethrow" );
+        m_pImpl->AddLog( rException.Message );
+        m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
-           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!\n",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 }
@@ -4412,13 +4408,12 @@ void SAL_CALL OStorage::dispose()
     }
     catch( const uno::Exception& rException )
     {
-           m_pImpl->AddLog( rException.Message );
-           m_pImpl->AddLog( THROW_WHERE "Rethrow" );
+        m_pImpl->AddLog( rException.Message );
+        m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
-           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!\n",
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
+                                            static_cast< OWeakObject* >( this ),
                                             aCaught );
     }
 }
@@ -4497,9 +4492,8 @@ void SAL_CALL OStorage::removeEncryption()
             m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!\n",
-                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                    uno::UNO_QUERY ),
+            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                                static_cast< OWeakObject* >( this ),
                                                 aCaught );
         }
 
@@ -4572,8 +4566,8 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
             m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!\n",
-                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ), uno::UNO_QUERY ),
+            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                static_cast< OWeakObject* >( this ),
                                 aCaught );
         }
 
@@ -4642,9 +4636,8 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
             m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetException( THROW_WHERE "Can not open package!\n",
-                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                    uno::UNO_QUERY ),
+            throw lang::WrappedTargetException( THROW_WHERE "Can not open package!",
+                                                static_cast< OWeakObject* >( this ),
                                                 aCaught );
         }
 
@@ -4703,9 +4696,8 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
             m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetException( THROW_WHERE "Can not open package!\n",
-                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                    uno::UNO_QUERY ),
+            throw lang::WrappedTargetException( THROW_WHERE "Can not open package!",
+                                                static_cast< OWeakObject* >( this ),
                                                 aCaught );
         }
 
@@ -4890,7 +4882,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetException(
                                         "Can't read contents!",
-                                        uno::Reference< XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ),
+                                        static_cast< OWeakObject* >( this ),
                                         aCaught );
         }
 
@@ -4950,9 +4942,8 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
                 m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
                 uno::Any aCaught( ::cppu::getCaughtException() );
-                throw lang::WrappedTargetException( THROW_WHERE "Can not open package!\n",
-                                                    uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                        uno::UNO_QUERY ),
+                throw lang::WrappedTargetException( THROW_WHERE "Can not open package!",
+                                                    static_cast< OWeakObject* >( this ),
                                                     aCaught );
             }
         }

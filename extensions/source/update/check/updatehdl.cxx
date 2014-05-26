@@ -482,7 +482,7 @@ void SAL_CALL UpdateHandler::queryTermination( const lang::EventObject& )
 
         throw frame::TerminationVetoException(
             "The office cannot be closed while displaying a warning!",
-            uno::Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), uno::UNO_QUERY));
+            static_cast<frame::XTerminateListener*>(this));
     }
     else
         setVisible( false );

@@ -216,7 +216,7 @@ void OInterfaceContainer::clonedFrom( const OInterfaceContainer& _cloneSource )
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            OUString( "Could not clone the given interface hierarchy." ),
+            "Could not clone the given interface hierarchy.",
             static_cast< XIndexContainer* >( const_cast< OInterfaceContainer* >( &_cloneSource ) ),
             ::cppu::getCaughtException()
         );

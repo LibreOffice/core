@@ -2470,9 +2470,8 @@ void SAL_CALL OWriteStream::dispose()
                 m_pImpl->AddLog( "Rethrow" );
 
                 uno::Any aCaught( ::cppu::getCaughtException() );
-                throw lang::WrappedTargetRuntimeException("Can not commit/revert the storage!\n",
-                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                    uno::UNO_QUERY ),
+                throw lang::WrappedTargetRuntimeException("Can not commit/revert the storage!",
+                                                static_cast< OWeakObject* >( this ),
                                                 aCaught );
             }
         }
@@ -3328,7 +3327,7 @@ void SAL_CALL OWriteStream::commit()
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( "Problems on commit!",
-                                  uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
+                                  static_cast< ::cppu::OWeakObject* >( this ),
                                   aCaught );
     }
 
@@ -3391,7 +3390,7 @@ void SAL_CALL OWriteStream::revert()
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( "Problems on revert!",
-                                  uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
+                                  static_cast< ::cppu::OWeakObject* >( this ),
                                   aCaught );
     }
 

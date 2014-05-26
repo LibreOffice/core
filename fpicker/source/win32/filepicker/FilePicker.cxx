@@ -94,7 +94,7 @@ void SAL_CALL CFilePicker::addFilePickerListener(const uno::Reference<XFilePicke
 {
     if ( rBHelper.bDisposed )
         throw lang::DisposedException(
-            OUString( "object is already disposed" ),
+            "object is already disposed",
             static_cast< XFilePicker2* >( this ) );
 
     if ( !rBHelper.bInDispose && !rBHelper.bDisposed )
@@ -110,7 +110,7 @@ void SAL_CALL CFilePicker::removeFilePickerListener(const uno::Reference<XFilePi
 {
     if ( rBHelper.bDisposed )
         throw lang::DisposedException(
-            OUString( "object is already disposed" ),
+            "object is already disposed",
             static_cast< XFilePicker2* >( this ) );
 
     rBHelper.aLC.removeInterface( getCppuType( &xListener ), xListener );
@@ -433,7 +433,7 @@ sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
         OSL_FAIL("Could not start event notifier thread!");
 
         throw uno::RuntimeException(
-            OUString("Error executing dialog"),
+            "Error executing dialog",
             static_cast<XFilePicker2*>(this));
     }
 
@@ -601,7 +601,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     uno::Any aAny;
     if ( 0 == aArguments.getLength( ) )
         throw lang::IllegalArgumentException(
-            OUString( "no arguments" ),
+            "no arguments",
             static_cast<XFilePicker2*>(this), 1);
 
     aAny = aArguments[0];
@@ -609,7 +609,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     if ( (aAny.getValueType() != ::cppu::UnoType<sal_Int16>::get()) &&
          (aAny.getValueType() != ::cppu::UnoType<sal_Int8>::get()) )
          throw lang::IllegalArgumentException(
-            OUString("invalid argument type"),
+            "invalid argument type",
             static_cast<XFilePicker2*>(this), 1);
 
     sal_Int16 templateId = -1;
@@ -671,7 +671,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
 
     default:
         throw lang::IllegalArgumentException(
-            OUString( "Unknown template" ),
+            "Unknown template",
             static_cast< XFilePicker2* >( this ),
             1 );
     }

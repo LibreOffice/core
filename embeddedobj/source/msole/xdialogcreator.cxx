@@ -144,12 +144,12 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( !sEntName.getLength() )
         throw lang::IllegalArgumentException( "Empty element name is provided!",
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
     InitializedOleGuard aGuard;
@@ -296,12 +296,12 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 #ifdef WNT
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
     if ( !sEntryName.getLength() )
         throw lang::IllegalArgumentException( "Empty element name is provided!",
-                                            uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
+                                            static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
     uno::Reference< embed::XEmbeddedObject > xResult(

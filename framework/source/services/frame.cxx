@@ -798,7 +798,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     if (!xWindow.is())
         throw css::uno::RuntimeException(
-                    OUString("Frame::initialize() called without a valid container window reference."),
+                    "Frame::initialize() called without a valid container window reference.",
                     static_cast< css::frame::XFrame* >(this));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -806,7 +806,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                OUString("Frame::initialized() is called more then once, which isnt useful nor allowed."),
+                "Frame::initialized() is called more then once, which isnt useful nor allowed.",
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!
