@@ -787,7 +787,7 @@ void ScConflictsDlg::UpdateView()
                     // only display own top content entries
                     if ( pAction->GetType() == SC_CAT_CONTENT )
                     {
-                        ScChangeActionContent* pNextContent = ( dynamic_cast< ScChangeActionContent* >( pAction ) )->GetNextContent();
+                        ScChangeActionContent* pNextContent = ( dynamic_cast<ScChangeActionContent&>(*pAction) ).GetNextContent();
                         if ( pNextContent && aItr->HasOwnAction( pNextContent->GetActionNumber() ) )
                         {
                             continue;
