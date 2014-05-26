@@ -146,12 +146,12 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                         *mpTextCache, aSeriesName, nId++));
             opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
             glm::vec3 aTopLeft, aTopRight, aBottomRight;
-            aTopLeft.x = -nBarDistanceY;
-            aTopLeft.y = nYPos + 0.25 * nBarSizeY;
-            aTopRight.x = calculateTextWidth(aSeriesName) * -1.0 - nBarDistanceY;
+            aTopRight.x = -nBarDistanceY;
             aTopRight.y = nYPos + 0.25 * nBarSizeY;
+            aTopLeft.x = calculateTextWidth(aSeriesName) * -1.0 - nBarDistanceY;
+            aTopLeft.y = nYPos + 0.25 * nBarSizeY;
             aBottomRight = aTopRight;
-            aBottomRight.y += TEXT_HEIGHT;
+            aBottomRight.y -= TEXT_HEIGHT;
             p->setPosition(aTopLeft, aTopRight, aBottomRight);
         }
 
