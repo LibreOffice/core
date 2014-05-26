@@ -440,7 +440,7 @@ void ControlConverter::convertToAxBorder( PropertySet& rPropSet,
         case API_BORDER_NONE:
         default:
             break;
-    };
+    }
     convertToMSColor( rPropSet, PROP_BorderColor, nBorderColor );
 }
 

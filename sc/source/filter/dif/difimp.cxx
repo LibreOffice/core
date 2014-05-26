@@ -590,7 +590,7 @@ DATASET DifParser::GetNextDataset( void )
                                     }
                                 }
                             }
-                        };
+                        }
                     }
                 }
             }

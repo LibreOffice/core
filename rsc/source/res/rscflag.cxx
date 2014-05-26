@@ -47,7 +47,7 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
         ((RscFlagInst *)rInst.pData)[ i ].nFlags     &= ~nFlag;
         ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
         return ERR_OK;
-    };
+    }
 
     return ERR_RSCFLAG;
 }
@@ -64,7 +64,7 @@ ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
         ((RscFlagInst *)rInst.pData)[ i ].nFlags     |= nFlag;
         ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
         return ERR_OK;
-    };
+    }
 
     return ERR_RSCFLAG;
 }
@@ -100,7 +100,7 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass 
             ((RscFlagInst *)aInst.pData)[ i ].nFlags = 0;
             ((RscFlagInst *)aInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
         }
-    };
+    }
 
     return aInst;
 }
@@ -168,7 +168,7 @@ bool RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
             return true ;
         else
             return false;
-    };
+    }
     return true;
 }
 
@@ -190,7 +190,7 @@ bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
                 return true;
             }
         }
-    };
+    }
 
     return false;
 }
@@ -214,7 +214,7 @@ bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
             Flag <<= 1;
             if( !Flag )
                 Flag = 1;
-        };
+        }
     }
     else
         return false;
@@ -235,7 +235,7 @@ bool RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
             return true;
         else
             return false;
-    };
+    }
     return true;
 }
 
@@ -266,7 +266,7 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         Flag <<= 1;
         if( !Flag )
             Flag = 1;
-    };
+    }
 }
 
 ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
@@ -286,7 +286,7 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
         Flag <<= 1;
         if( !Flag )
             Flag = 1;
-    };
+    }
 
     aMem.Put( (sal_Int32)lVal );
     return ERR_OK;

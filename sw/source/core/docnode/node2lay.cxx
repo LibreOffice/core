@@ -330,7 +330,7 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                 return pUpper;
             }
         }
-    };
+    }
     if( !bMaster )
         rpFrm = rpFrm->GetNext();
     return pUpper;

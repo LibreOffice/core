@@ -330,13 +330,13 @@ ERRTYPE RscCompiler::Start()
                     aError = IncludeParser( aIndex );
                     // Currentzeiger richtig setzen
                     aIndex = pTC->aFileTab.GetIndexOf( pFName );
-                };
+                }
                 aIndex = pTC->aFileTab.NextIndex( aIndex );
-            };
+            }
 
             pTC->pEH->SetListFile( fListing );
         }
-    };
+    }
 
     if ( pTC->pEH->GetVerbosity() >= RscVerbosityVerbose )
     {
@@ -348,7 +348,7 @@ ERRTYPE RscCompiler::Start()
             pTC->pEH->StdOut( pFName->aFileName.getStr() );
             pTC->pEH->StdOut( " " );
             aIndex = pTC->aFileTab.NextIndex( aIndex );
-        };
+        }
         pTC->pEH->StdOut( "\n" );
     }
 
@@ -393,11 +393,11 @@ void RscCompiler::EndCompile()
                         pTC->WriteSrc( foutput, NOFILE_INDEX, false );
                         break; // ?T 281091MM nur eine Src-Datei
                     }
-                };
+                }
 
                 fclose( foutput );
-            };
-        };
+            }
+        }
     }
 }
 

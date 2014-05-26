@@ -771,7 +771,7 @@ void Binding::distributeMIP( const XNode_t & rxNode ) {
         target->dispatchEvent(xEvent);
 
         xNode = xNode->getNextSibling();
-    };
+    }
 }
 
 void Binding::bindingModified()

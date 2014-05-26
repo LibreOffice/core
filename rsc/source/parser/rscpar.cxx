@@ -133,8 +133,8 @@ void RscFileInst::GetNewLine()
                     }
                 }
             }
-        };
-    };
+        }
+    }
 
     // Abbruch ueber EOF
     pLine[ nLen ] = '\0';
@@ -158,7 +158,7 @@ void RscFileInst::SetError( ERRTYPE aError )
         aFirstError = aError;
         nErrorLine  = GetLineNo();
         nErrorPos   = GetScanPos() -1;
-    };
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -758,7 +758,7 @@ static void unzipToBuffer( const char* pBegin, unsigned int nLen,
     if( err == Z_STREAM_END )
     {
         if( aZStr.avail_out > 0 )
-            *pOutLen -= aZStr.avail_out;;
+            *pOutLen -= aZStr.avail_out;
     }
     inflateEnd(&aZStr);
     if( err < Z_OK )

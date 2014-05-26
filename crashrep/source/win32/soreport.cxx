@@ -2440,7 +2440,7 @@ static void WriteSOAPRequest( FILE *fp )
         fcopy( fpin, fp );
         fprintf( fp, "]]></value></item>\n" );
         fclose( fpin );
-    };
+    }
 
 
     fpin = fopen( g_szDumpFileNameA, "rb" );

@@ -399,7 +399,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     }
     OUString str =   getAttr().getValueByName("unoid");
     of.writeAsciiString("\n\n");
-    of.writeParameter("LC_CTYPE_Unoid", str);;
+    of.writeParameter("LC_CTYPE_Unoid", str);
 
     aDateSep =
         writeParameterCheckLen( of, "DateSeparator", "dateSeparator", 1, 1);
@@ -1808,7 +1808,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     for(i = 0; i < nbOfCalendars - 1; i++) {
         of.writeInt(nbOfDays[i]);
         of.writeAsciiString(", ");
-    };
+    }
     of.writeInt(nbOfDays[i]);
     of.writeAsciiString("};\n");
 
@@ -1816,7 +1816,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     for(i = 0; i < nbOfCalendars - 1; i++) {
         of.writeInt(nbOfMonths[i]);
         of.writeAsciiString(", ");
-    };
+    }
     of.writeInt(nbOfMonths[i]);
     of.writeAsciiString("};\n");
 
@@ -1824,7 +1824,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     for(i = 0; i < nbOfCalendars - 1; i++) {
         of.writeInt(nbOfGenitiveMonths[i]);
         of.writeAsciiString(", ");
-    };
+    }
     of.writeInt(nbOfGenitiveMonths[i]);
     of.writeAsciiString("};\n");
 
@@ -1832,7 +1832,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     for(i = 0; i < nbOfCalendars - 1; i++) {
         of.writeInt(nbOfPartitiveMonths[i]);
         of.writeAsciiString(", ");
-    };
+    }
     of.writeInt(nbOfPartitiveMonths[i]);
     of.writeAsciiString("};\n");
 
@@ -1840,7 +1840,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     for(i = 0; i < nbOfCalendars - 1; i++) {
         of.writeInt(nbOfEras[i]);
         of.writeAsciiString(", ");
-    };
+    }
     of.writeInt(nbOfEras[i]);
     of.writeAsciiString("};\n");
 

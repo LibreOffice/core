@@ -119,7 +119,7 @@ bool ObjNode::IsConsistent()
             {
                 bRet = false;
             }
-        };
+        }
         if( Right() )
         {
             if( ((ObjNode *)Right())->aRscId <= aRscId )
@@ -130,8 +130,8 @@ bool ObjNode::IsConsistent()
             {
                 bRet = false;
             }
-        };
-    };
+        }
+    }
 
     return bRet;
 }

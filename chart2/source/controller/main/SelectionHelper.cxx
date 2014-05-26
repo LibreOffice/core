@@ -345,7 +345,7 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
     {
         SdrObjList* pObjList = pObj->GetObjList();
         if( !pObjList )
-            return false;;
+            return false;
         SdrObject* pOwner = pObjList->GetOwnerObj();
         if( !pOwner )
             return false;

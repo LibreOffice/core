@@ -241,7 +241,7 @@ void LwpEnSuperTableLayout::RegisterStyle()
     if (pTableLayout != NULL)
     {
         pTableLayout->SetFoundry(m_pFoundry);
-        pTableLayout->RegisterStyle();;
+        pTableLayout->RegisterStyle();
     }
 }
 

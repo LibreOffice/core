@@ -66,7 +66,7 @@ void RscNameTable::SetSort( bool bSorted )
         // Schluesselwort Feld sortieren
         qsort( (void *)pTable, nEntries,
                sizeof( KEY_STRUCT ), KeyCompare );
-    };
+    }
 };
 
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue )
@@ -134,15 +134,15 @@ bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )
             if( pTable[ i ].nName == nName )
                 pKey = &pTable[ i ];
             i++;
-        };
-    };
+        }
+    }
 
     if( pKey )
     {
         // Schluesselwort gefunden
         *pEle = *pKey;
         return true;
-    };
+    }
     return false;
 };
 

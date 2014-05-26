@@ -694,7 +694,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
             break;
-        };
+        }
 
         // and again, for the still missing ends
         switch (nSlotId)

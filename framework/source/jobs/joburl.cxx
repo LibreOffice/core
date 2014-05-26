@@ -376,7 +376,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                     (aURL.getEventArgs(sEventArgs)                   ) &&
                     (sEventArgs.equalsAscii(pExpectedEventArgs))
                   );
-        };
+        }
     }
 
     // check if URL has no event part
@@ -412,7 +412,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                     (aURL.getAliasArgs(sAliasArgs)                   ) &&
                     (sAliasArgs.equalsAscii(pExpectedAliasArgs))
                   );
-        };
+        }
     }
 
     // check if URL has the no alias part
@@ -448,7 +448,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                     (aURL.getServiceArgs(sServiceArgs)                   ) &&
                     (sServiceArgs.equalsAscii(pExpectedServiceArgs))
                   );
-        };
+        }
     }
 
     // check if URL has the no service part

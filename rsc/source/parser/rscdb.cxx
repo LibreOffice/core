@@ -137,7 +137,7 @@ void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode )
             rtl_freeMemory( pObjNode->GetRscObj() );
         }
         delete pObjNode;
-    };
+    }
 }
 
 void DestroySubTrees( RscTop * pRscTop )
@@ -147,7 +147,7 @@ void DestroySubTrees( RscTop * pRscTop )
         DestroySubTrees( (RscTop*)pRscTop->Left() );
         DestroyNode( pRscTop, pRscTop->GetObjNode() );
         DestroySubTrees( (RscTop*)pRscTop->Right() );
-    };
+    }
 }
 
 void DestroyTree( RscTop * pRscTop )
@@ -158,7 +158,7 @@ void DestroyTree( RscTop * pRscTop )
         DestroyTree( (RscTop*)pRscTop->Right() );
 
         delete pRscTop;
-    };
+    }
 }
 
 void Pre_dtorTree( RscTop * pRscTop )
@@ -169,7 +169,7 @@ void Pre_dtorTree( RscTop * pRscTop )
         Pre_dtorTree( (RscTop*)pRscTop->Right() );
 
         pRscTop->Pre_dtor();
-    };
+    }
 }
 
 RscTypCont :: ~RscTypCont()
@@ -625,7 +625,7 @@ bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
 
         if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop ) )
             bRet = false;
-    };
+    }
 
     return bRet;
 }
@@ -653,7 +653,7 @@ bool MakeConsistent( RscTop * pRscTop )
 
         if( ! ::MakeConsistent( (RscTop*)pRscTop->Right() ) )
             bRet = false;
-    };
+    }
 
     return bRet;
 }

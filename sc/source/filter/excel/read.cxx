@@ -124,7 +124,7 @@ FltError ImportExcel::Read( void )
                     Eof();
                 break;
                 default:;
-            };
+            }
             eAkt = Z_Ende;
             break;
         }

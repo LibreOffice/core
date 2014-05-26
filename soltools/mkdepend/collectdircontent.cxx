@@ -26,7 +26,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
         // Invalid File Handle - no need to try it anymore
         allIncludes.insert(EntriesPair(dirPath, DirContent()));
         return;
-    };
+    }
     do {
         string winFileName(FindFileData.cFileName);
         transform(winFileName.begin(), winFileName.end(), winFileName.begin(), ::tolower);
@@ -43,7 +43,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
     }
     while ((pent = readdir(pdir))) {
         dirContent.insert(pent->d_name);
-    };
+    }
     closedir(pdir);
 #endif // defined( WNT )
     allIncludes.insert(EntriesPair(dirPath, dirContent));
@@ -60,7 +60,7 @@ bool IncludesCollection::exists(string filePath) {
     if (mapIter == allIncludes.end()) {
         add_to_collection(dirPath);
         mapIter = allIncludes.find(dirPath);
-    };
+    }
     DirContent dirContent = (*mapIter).second;
     DirContent::iterator dirIter = dirContent.find(fileName);
     if (dirIter == dirContent.end()) {

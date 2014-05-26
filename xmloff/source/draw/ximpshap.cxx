@@ -803,7 +803,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         }
         else if( IsXMLToken( rLocalName, XML_ID ) )
         {
-            if (!mbHaveXmlId) { maShapeId = rValue; };
+            if (!mbHaveXmlId) { maShapeId = rValue; }
         }
         else if( IsXMLToken( rLocalName, XML_NAME ) )
         {

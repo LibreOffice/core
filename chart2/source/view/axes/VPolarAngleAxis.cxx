@@ -185,7 +185,7 @@ void VPolarAngleAxis::createLabels()
                         , fLogicRadius, fLogicZ
                         ) )
         {
-        };
+        }
 
         //no staggering for polar angle axis
     }

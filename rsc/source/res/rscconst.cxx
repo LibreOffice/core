@@ -123,7 +123,7 @@ ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
         ((RscEnumInst *)rInst.pData)->nValue = i;
         ((RscEnumInst *)rInst.pData)->bDflt = false;
         return ERR_OK;
-    };
+    }
 
     return ERR_RSCENUM;
 }
@@ -136,7 +136,7 @@ ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
     {
         if( (sal_Int32)pVarArray[ i ].lValue == lValue )
             return SetConst( rInst, pVarArray[ i ].nId, lValue );
-    };
+    }
 
     return ERR_RSCENUM;
 }

@@ -2727,7 +2727,7 @@ void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         default:
             VCLXContainer::ProcessWindowEvent( rVclWindowEvent );
             break;
-    };
+    }
 }
 
 

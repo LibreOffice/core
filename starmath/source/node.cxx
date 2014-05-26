@@ -2944,7 +2944,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         if (bItalic)
             Attributes() |= ATTR_ITALIC;
         else
-            Attributes() &= ~ATTR_ITALIC;;
+            Attributes() &= ~ATTR_ITALIC;
     }
 };
 

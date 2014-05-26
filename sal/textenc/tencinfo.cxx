@@ -190,7 +190,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinC
         case 238:   eTextEncoding = RTL_TEXTENCODING_MS_1250; break;    /* EASTEUROPE_CHARSET */
         case 255:   eTextEncoding = RTL_TEXTENCODING_IBM_850; break;    /* OEM_CHARSET */
         default:    eTextEncoding = RTL_TEXTENCODING_DONTKNOW; break;
-    };
+    }
 
     return eTextEncoding;
 }

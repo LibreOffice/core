@@ -426,7 +426,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrm& _rLayoutFrm )
         pLowerFrm->InvalidateObjs( true, false );
 
         pLowerFrm = pLowerFrm->GetNext();
-    };
+    }
 }
 
 SwLayNotify::~SwLayNotify()

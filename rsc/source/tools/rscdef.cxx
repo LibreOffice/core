@@ -243,7 +243,7 @@ void RscDefineList::WriteAll( FILE * fOutput )
                  pDefEle->GetName().getStr(),
                  pDefEle->GetMacro().getStr()
         );
-    };
+    }
 }
 
 bool RscExpType::Evaluate( sal_Int32 * plValue ) const
@@ -326,7 +326,7 @@ bool RscExpression::Evaluate( sal_Int32 * plValue )
             if( 0L == lRight )
                 return false;
             *plValue = lLeft / lRight;
-        };
+        }
         return true;
     }
     return false;
@@ -485,7 +485,7 @@ bool RscDefTree::Evaluate( RscDefine * pDef )
             return false;
         if( !Evaluate( (RscDefine *)pDef->Right() ) )
             return false;
-    };
+    }
     return true;
 }
 
@@ -538,9 +538,9 @@ bool RscFileTab::Depend( sal_uLong lDepend, sal_uLong lFree )
         {
             if( !pFile->Depend( lDepend, lFree ) )
                 return false;
-        };
+        }
         aIndex = NextIndex(aIndex);
-    };
+    }
 
     return true;
 }

@@ -1055,7 +1055,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
             if ( pBind->GetStateCache( nId ) )
                 return pBind->Execute_Impl( nId, ppItems, nModi, nCallMode, ppInternalArgs, bGlobalOnly );
             pBind = pBind->pImp->pSubBindings;
-        };
+        }
     }
 
     SfxDispatcher &rDispatcher = *pDispatcher;
