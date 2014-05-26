@@ -512,19 +512,19 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                 mpCurrAnchoredObj != pTmpAnchoredObj )
             {
                 // #i68520#
-                const SwFlyFrm* pFly = dynamic_cast<const SwFlyFrm*>(pTmpAnchoredObj);
-                if( aRegion.GetOrigin().IsOver( pFly->Frm() ) )
+                const SwFlyFrm& rFly = dynamic_cast<const SwFlyFrm&>(*pTmpAnchoredObj);
+                if( aRegion.GetOrigin().IsOver( rFly.Frm() ) )
                 {
-                    const SwFrmFmt *pFmt = pFly->GetFmt();
+                    const SwFrmFmt *pFmt = rFly.GetFmt();
                     const SwFmtSurround &rSur = pFmt->GetSurround();
                     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                     // Only the ones who are opaque and more to the top
-                    if( !( pFly->IsBackgroundTransparent()
-                           || pFly->IsShadowTransparent() ) &&
+                    if( !( rFly.IsBackgroundTransparent()
+                           || rFly.IsShadowTransparent() ) &&
                         SURROUND_THROUGHT == rSur.GetSurround() &&
                         ( !rSur.IsAnchorOnly() ||
                           // #i68520#
-                          GetMaster() == pFly->GetAnchorFrm() ||
+                          GetMaster() == rFly.GetAnchorFrm() ||
                           ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
                            (FLY_AT_CHAR != rAnchor.GetAnchorId())
                           )
@@ -536,14 +536,14 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     {
                         // Except for the content is transparent
                         const SwNoTxtFrm *pNoTxt =
-                                pFly->Lower() && pFly->Lower()->IsNoTxtFrm()
-                                                   ? (SwNoTxtFrm*)pFly->Lower()
+                                rFly.Lower() && rFly.Lower()->IsNoTxtFrm()
+                                                   ? (SwNoTxtFrm*)rFly.Lower()
                                                    : 0;
                         if ( !pNoTxt ||
                              (!pNoTxt->IsTransparent() && !rSur.IsContour()) )
                         {
                             bOpaque = true;
-                            aRegion -= pFly->Frm();
+                            aRegion -= rFly.Frm();
                         }
                     }
                 }
