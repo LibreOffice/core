@@ -62,6 +62,7 @@ namespace {
 
 const float TEXT_HEIGHT = 15.0f;
 const sal_uLong TIMEOUT = 5;
+const float DEFAULT_CAMERA_HEIGHT = 200.0f;
 
 float calculateTextWidth(const OUString& rText)
 {
@@ -255,7 +256,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     mnMaxX = nMaxPointCount * (nBarSizeX + nBarDistanceX) + 40;
     mnMaxY = nSeriesIndex * (nBarSizeY + nBarDistanceY) + 40;
 
-    maCameraPosition = glm::vec3(-30, -30, 200);
+    maCameraPosition = glm::vec3(-30, -30, DEFAULT_CAMERA_HEIGHT);
     mpCamera->setPosition(maCameraPosition);
     maCameraDirection = glm::vec3(mnMaxX/2, mnMaxY/2, 0);
     mpCamera->setDirection(maCameraDirection);
@@ -355,29 +356,29 @@ glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
     {
         case 0:
         {
-            return glm::vec3(-30, -30, 200);
+            return glm::vec3(-30, -30, DEFAULT_CAMERA_HEIGHT);
         }
         break;
         case 1:
         {
-            return glm::vec3(mnMaxX, -30, 200);
+            return glm::vec3(mnMaxX, -30, DEFAULT_CAMERA_HEIGHT);
         }
         break;
         case 2:
         {
-            return glm::vec3(mnMaxX, mnMaxY, 200);
+            return glm::vec3(mnMaxX, mnMaxY, DEFAULT_CAMERA_HEIGHT);
         }
         break;
         case 3:
         {
-            return glm::vec3(-30, mnMaxY, 200);
+            return glm::vec3(-30, mnMaxY, DEFAULT_CAMERA_HEIGHT);
         }
         break;
         default:
             assert(false);
     }
 
-    return glm::vec3(-30, -30, 200);
+    return glm::vec3(-30, -30, DEFAULT_CAMERA_HEIGHT);
 }
 
 void GL3DBarChart::moveToCorner()
