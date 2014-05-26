@@ -1184,49 +1184,9 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     // pCode may not deleted for queries, but must be empty
     if ( pCode )
         pCode->Clear();
-
-    bool bSkipCompile = false;
-
-    if ( !mxGroup && aFormulaNmsp.isEmpty() ) // optimization
-    {
-        ScAddress aPreviousCell( aPos );
-        aPreviousCell.IncRow( -1 );
-        ScFormulaCell *pPreviousCell = pDocument->GetFormulaCell( aPreviousCell );
-        if( pPreviousCell )
-        {
-            // Now try to convert to a string quickly ...
-            ScCompiler aBackComp( rCxt, aPos, *(pPreviousCell->pCode) );
-            OUStringBuffer aShouldBeBuf;
-            aBackComp.CreateStringFromTokenArray( aShouldBeBuf );
-
-            assert( aFormula[0] == '=' );
-            OUString aShouldBe = aShouldBeBuf.makeStringAndClear();
-            if( aFormula.getLength() == aShouldBe.getLength() + 1 &&
-                aFormula.match( aShouldBe, 1 ) ) // initial '='
-            {
-                // Put them in the same formula group.
-                ScFormulaCellGroupRef xGroup = pPreviousCell->GetCellGroup();
-                if (!xGroup) // Last cell is not grouped yet. Start a new group.
-                    xGroup = pPreviousCell->CreateCellGroup(1, false);
-                ++xGroup->mnLength;
-                SetCellGroup( xGroup );
-
-                bSkipCompile = true;
-
-                SAL_INFO( "sc", "merged '" << aFormula << "' == "
-                          "'" << aShouldBe << "'" <<
-                          " extend group to " << xGroup->mnLength );
-            }
-        }
-    }
-
-    if (!bSkipCompile)
-    {
-        ScTokenArray* pCodeOld = pCode;
-        pCode = aComp.CompileString( aFormula, aFormulaNmsp );
-        delete pCodeOld;
-    }
-
+    ScTokenArray* pCodeOld = pCode;
+    pCode = aComp.CompileString( aFormula, aFormulaNmsp );
+    delete pCodeOld;
     if( !pCode->GetCodeError() )
     {
         if ( !pCode->GetLen() )
