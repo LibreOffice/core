@@ -593,7 +593,7 @@ off_t       size = -1;
 }
 
 #if !ENABLE_RUNTIME_OPTIMIZATIONS
-static void * file_load_buffers[100];
+static void * file_load_buffers[100000];
 static size_t file_load_buffer_count = 0;
 #endif
 
@@ -620,7 +620,7 @@ int fd;
 #if !ENABLE_RUNTIME_OPTIMIZATIONS
             if (buffer != NULL)
             {
-                if (file_load_buffer_count == 100)
+                if (file_load_buffer_count == 100000)
                 {
                     free(buffer);
                     buffer = NULL;
