@@ -343,7 +343,7 @@ void GL3DBarChart::clickedAt(const Point& /*rPos*/)
     maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
                 OUString("Value: ") + OUString::number(rBarInfo.mnVal), 0));
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
-    pScreenText->setPosition(glm::vec2(-1.0f, 0.9f), glm::vec2(-0.6f, 0.75f));
+    pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f));
 
 }
 
