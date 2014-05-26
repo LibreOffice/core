@@ -47,14 +47,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxCheckListBox(Window *pPa
     return new SvxCheckListBox(pParent, nWinStyle);
 }
 
-SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId,
-                                  const Image& rNormalStaticImage )
-    : SvTreeListBox( pParent, rResId )
-{
-    Init_Impl();
-    SetNormalStaticImage(rNormalStaticImage);
-}
-
 void SvxCheckListBox::SetNormalStaticImage(const Image& rNormalStaticImage)
 {
     pCheckButton->aBmps[SV_BMP_STATICIMAGE] = rNormalStaticImage;

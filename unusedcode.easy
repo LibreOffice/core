@@ -1,11 +1,8 @@
 (anonymous namespace)::flagToString(unsigned short)
 BigInt::BigInt(unsigned int)
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
-ComboBox::GetEntryPos(void const*) const
 DocumentHandler::DocumentHandler(com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>&)
 EditEngine::IsIdleFormatterActive() const
-Font::LoadSystemFont(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, int)
-Font::deleteFont()
 GDriveDocument::GDriveDocument(GDriveSession*)
 GDriveFolder::GDriveFolder(GDriveSession*)
 GDriveProperty::GDriveProperty()
@@ -18,7 +15,6 @@ MenuBar::GetMenuBarButtonRectPixel(unsigned short)
 MenuBar::RemoveMenuBarButton(unsigned short)
 MenuBar::SetMenuBarButtonHighlightHdl(unsigned short, Link const&)
 MetafileXmlDump::filterNoneActionTypes()
-OpenGLContext::getOpenGLWindow()
 OpenGLContext::renderToFile()
 OpenGLRender::CreateTextTexture(rtl::OUString const&, Font, long, com::sun::star::awt::Point, com::sun::star::awt::Size, long)
 OutputDevice::GetCanvas() const
@@ -28,10 +24,16 @@ OutputDevice::LogicToPixel(Region const&, MapMode const&) const
 OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
 OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(Region const&, MapMode const&) const
+RenderPrimitive::bindSortedIndicesBuf()
+RenderPrimitive::copyIndiceBufferData(char const*, unsigned int)
+RenderPrimitive::copyVertexBufferData(char const*, unsigned int)
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
+ScDocument::AreaBroadcastInRange(ScRange const&, ScHint const&)
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
 ScFormulaCellGroup::scheduleCompilation()
+ScRawToken::Clone() const
+ScRawToken::Delete()
 ScTabView::DrawMarkRect(Rectangle const&)
 ScTabViewShell::SetChartArea(tools::SvRef<ScRangeList> const&, Rectangle const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
@@ -50,12 +52,12 @@ StyleSettings::SetTitleHeight(long)
 StyleSettings::SetUseFlatBorders(bool)
 StyleSettings::SetUseFlatMenus(bool)
 SvpSalInstance::PostedEventsInQueue()
-SvtLanguageTable::AddLanguageTag(LanguageTag const&, rtl::OUString const&)
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxDummyShapeContainer::SvxDummyShapeContainer(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>)
+SvxFontListBox::GetSelectEntry() const
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
 TextDoc::IsValidPaM(TextPaM const&)
-Texture::greateEmptyTexture(int, int, unsigned int)
+Texture::setSamplerParameter(unsigned int, unsigned int)
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)
 VCLXGraphics::getFillColor()
 VCLXGraphics::getFont()
@@ -183,6 +185,7 @@ chart::opengl3D::OpenGL3DRenderer::GetTime()
 chart::opengl3D::OpenGL3DRenderer::RenderClickPos(Point)
 chart::opengl3D::OpenGL3DRenderer::RenderFPS(float)
 chart::opengl3D::OpenGL3DRenderer::RenderTexture(unsigned int)
+chart::opengl3D::Text::getSize() const
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
