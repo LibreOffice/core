@@ -284,7 +284,7 @@
               <object class="GtkLabel" id="empty_str_as_zero_desc">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">This option determines whether an empty string is to be treated as having a value of zero when used in arithmetic or generates an error. It is disabled if conversion from text to number is set to always generate an error or always treat text as zero and then follows that value.</property>
+                <property name="label" translatable="yes">This option determines how an empty string is treated when used in arithmetic operations. If you have set "Conversion from text to number" to either "Generate #VALUE! error" or "Treat as zero", you cannot choose (here) if conversion of an empty string to a number will generate an error or if it will treat empty strings as zero. Otherwise this option determines how empty strings are treated.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">56</property>
               </object>
