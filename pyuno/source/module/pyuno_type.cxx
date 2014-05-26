@@ -265,7 +265,7 @@ PyObject *PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Run
 PyObject* PyUNO_Type_new (const char *typeName , TypeClass t , const Runtime &r )
 {
     // retrieve type object
-    PyRef args( PyTuple_New( 2 ), SAL_NO_ACQUIRE );
+    PyRef args(PyTuple_New( 2 ), SAL_NO_ACQUIRE, NOT_NULL);
 
     PyTuple_SetItem( args.get() , 0 , PyStr_FromString( typeName ) );
     PyObject *typeClass = PyUNO_Enum_new( "com.sun.star.uno.TypeClass" , typeClassToString(t), r );
