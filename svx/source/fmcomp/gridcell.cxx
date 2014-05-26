@@ -156,7 +156,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case DataType::TIME:
             case DataType::TIMESTAMP:
                 m_bDateTime = true;
-
+                //fall-through
             case DataType::BIT:
             case DataType::BOOLEAN:
             case DataType::TINYINT:
