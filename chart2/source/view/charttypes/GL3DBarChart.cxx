@@ -306,9 +306,12 @@ public:
 
 }
 
-void GL3DBarChart::clickedAt(const Point& /*rPos*/)
+void GL3DBarChart::clickedAt(const Point& /*rPos*/, sal_uInt16 nButtons)
 {
     if(mbBlockUserInput)
+        return;
+
+    if(nButtons != MOUSE_LEFT)
         return;
 
     mbBlockUserInput = true;

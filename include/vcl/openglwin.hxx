@@ -24,7 +24,7 @@ class VCLOPENGL_DLLPUBLIC IRenderer
 public:
     virtual ~IRenderer() {}
     virtual void update() = 0;
-    virtual void clickedAt(const Point& rPos) = 0;
+    virtual void clickedAt(const Point& rPos, sal_uInt16 nButtons) = 0;
     virtual void mouseDragMove(const Point& rPosBegin, const Point& rPosEnd, sal_uInt16 nButtons) = 0;
     virtual void scroll(long nDelta) = 0;
 
