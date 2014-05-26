@@ -68,6 +68,13 @@ extern "C" LO_DLLPUBLIC_PYUNO
 namespace pyuno
 {
 
+enum __NotNull
+{
+    /** definition of a no acquire enum for ctors
+     */
+    NOT_NULL
+};
+
 /** Helper class for keeping references to python objects.
     BEWARE: Look up every python function you use to check
     whether you get an acquired or not acquired object pointer
@@ -87,6 +94,12 @@ public:
     PyRef( PyObject * p ) : m( p ) { Py_XINCREF( m ); }
 
     PyRef( PyObject * p, __sal_NoAcquire ) : m( p ) {}
+
+    PyRef( PyObject * p, __sal_NoAcquire, __NotNull ) : m( p )
+    {
+        if (!m)
+            throw std::bad_alloc();
+    }
 
     PyRef( const PyRef &r ) : m( r.get() ) { Py_XINCREF( m ); }
 
