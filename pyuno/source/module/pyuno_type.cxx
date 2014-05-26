@@ -295,7 +295,7 @@ PyObject *PyUNO_ByteSequence_new(
     PyRef str(
         PyStrBytes_FromStringAndSize( (char*)byteSequence.getConstArray(), byteSequence.getLength()),
         SAL_NO_ACQUIRE );
-    PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
+    PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
     PyTuple_SetItem( args.get() , 0 , str.getAcquired() );
     return callCtor( r, "ByteSequence" , args );
 
