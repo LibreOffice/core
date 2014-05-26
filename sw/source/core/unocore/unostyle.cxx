@@ -37,6 +37,7 @@
 #include <pagedesc.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <cmdid.h>

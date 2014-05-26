@@ -54,6 +54,7 @@
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <pview.hxx>
 #include <view.hxx>
 #include <textsh.hxx>

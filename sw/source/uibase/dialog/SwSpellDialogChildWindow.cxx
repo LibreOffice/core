@@ -37,6 +37,7 @@
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <frmfmt.hxx>

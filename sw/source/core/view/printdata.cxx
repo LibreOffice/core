@@ -21,6 +21,7 @@
 
 #include <globals.hrc>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <unotxdoc.hxx>
 #include <wdocsh.hxx>
 #include <viewsh.hxx>

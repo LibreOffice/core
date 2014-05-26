@@ -69,6 +69,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDeviceAccess.hxx>
 
 #include <ndole.hxx>
 #include <svx/charthelper.hxx>

@@ -58,6 +58,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include "swstyle.h"
 #include "frmfmt.hxx"
 #include "charfmt.hxx"

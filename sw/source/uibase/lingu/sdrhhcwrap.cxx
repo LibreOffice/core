@@ -39,6 +39,7 @@
 #include <view.hxx>
 #include <dcontact.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <docary.hxx>
 #include <edtwin.hxx>
 

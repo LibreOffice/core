@@ -46,6 +46,7 @@
 #include <cntfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>

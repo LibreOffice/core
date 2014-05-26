@@ -33,6 +33,7 @@
 #include <editeng/lspcitem.hxx>
 #include <pormulti.hxx>
 #include <doc.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <sortedobjs.hxx>
 
 #include <unicode/ubidi.h>

@@ -60,6 +60,7 @@
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <docfac.hxx>
 #include <docstyle.hxx>
 #include <shellio.hxx>

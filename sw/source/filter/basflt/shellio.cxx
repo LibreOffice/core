@@ -38,6 +38,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <undobj.hxx>

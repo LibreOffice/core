@@ -27,6 +27,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDeviceAccess.hxx>
 #include <docsh.hxx>
 #include <fldupde.hxx>
 #include <linkenum.hxx>
