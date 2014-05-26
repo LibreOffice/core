@@ -129,7 +129,8 @@ public:
     queryOutputStream( const OUString & rUri,
                        const OUString & rPassword,
                        bool bTruncate ) const
-        throw ( com::sun::star::packages::WrongPasswordException );
+        throw ( com::sun::star::packages::WrongPasswordException,
+                css::uno::RuntimeException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XStream >
     queryStream( const OUString & rUri,
