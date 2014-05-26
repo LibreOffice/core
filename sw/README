@@ -24,7 +24,8 @@ comments show that Writer core dates back until at least November
    * ww1
    * ww8: DOC import, DOC/DOCX/RTF export
    * xml: ODF import/export, subclassed from xmloff (where most of the work is done)
- * ui: user interface
+ * uibase: user interface (those parts that are linked into sw & always loaded)
+ * ui: user interface (optional parts that are loaded on demand (swui))
 
 == Core ==
 
