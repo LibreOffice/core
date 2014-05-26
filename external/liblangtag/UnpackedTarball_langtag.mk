@@ -15,6 +15,8 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,langtag,\
 	$(GNUTAR) -x -j -f $(gb_UnpackedTarget_TARFILE_LOCATION)/$(LANGTAGREG_TARBALL) \
 ))
 
+# external/liblangtag/liblangtag-leak.patch.0 upstream:
+#  <https://bitbucket.org/tagoh/liblangtag/pull-request/8/fix-memory-leak/diff>
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	external/liblangtag/liblangtag-0.5.1-msvc-warning.patch \
 	external/liblangtag/liblangtag-0.5.1-vsnprintf.patch \
@@ -27,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	external/liblangtag/liblangtag-0.5.1-windows-do-not-prepend-dir-separator.patch \
 	external/liblangtag/liblangtag-0.5.1-unistd.patch \
 	external/liblangtag/liblangtag-0.5.1-include-last-record-in-language-subtag-registry.patch \
+	external/liblangtag/liblangtag-leak.patch.0 \
 ))
 
 ifeq ($(OS),WNT)
