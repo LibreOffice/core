@@ -155,7 +155,7 @@ public:
 
     void dump(CppuOptions const & options);
 
-    void dumpFile(
+    bool dumpFile(
         OUString const & uri, OUString const & name, bool hpp,
         CppuOptions const & options);
 
@@ -388,7 +388,7 @@ void CppuType::dump(CppuOptions const & options) {
         options.isValid("-O") ? b2u(options.getOption("-O")) : "", options);
 }
 
-void CppuType::dumpFile(
+bool CppuType::dumpFile(
     OUString const & uri, OUString const & name, bool hpp,
     CppuOptions const & options)
 {
@@ -400,7 +400,7 @@ void CppuType::dumpFile(
     }
     bool exists = fileExists(u2b(fileUri));
     if (exists && options.isValid("-G")) {
-        return;
+        return false;
     }
     FileStream out;
     out.createTempFile(getTempDir(u2b(fileUri)));
@@ -427,7 +427,7 @@ void CppuType::dumpFile(
         throw;
     }
     out.close();
-    makeValidTypeFile(
+    return makeValidTypeFile(
         u2b(fileUri), u2b(tmpUri), exists && options.isValid("-Gc"));
 }
 
