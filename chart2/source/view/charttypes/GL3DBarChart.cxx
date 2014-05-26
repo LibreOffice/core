@@ -34,7 +34,8 @@ GL3DBarChart::GL3DBarChart(
     mpTextCache(new opengl3D::TextCache()),
     mnStep(0),
     mnStepsTotal(0),
-    mnCornerId(0)
+    mnCornerId(0),
+    mbBlockUserInput(false)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -307,6 +308,10 @@ public:
 
 void GL3DBarChart::clickedAt(const Point& /*rPos*/)
 {
+    if(mbBlockUserInput)
+        return;
+
+    mbBlockUserInput = true;
     sal_uInt32 nId = 5;
     /*
     {
@@ -344,6 +349,10 @@ void GL3DBarChart::clickedAt(const Point& /*rPos*/)
 
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons)
 {
+    if(mbBlockUserInput)
+        return;
+
+    mbBlockUserInput = true;
     SAL_WARN("chart2.opengl", "Dragging: " << rStartPos << " to : " << rEndPos << " Buttons: " << nButtons);
     if(nButtons == MOUSE_RIGHT)
     {
@@ -413,6 +422,7 @@ IMPL_LINK_NOARG(GL3DBarChart, MoveCamera)
     }
     else
     {
+        mbBlockUserInput = false;
         mnStep = 0;
     }
 
@@ -434,6 +444,7 @@ IMPL_LINK_NOARG(GL3DBarChart, MoveToBar)
     else
     {
         maShapes.pop_back();
+        mbBlockUserInput = false;
         mnStep = 0;
     }
 
@@ -442,6 +453,9 @@ IMPL_LINK_NOARG(GL3DBarChart, MoveToBar)
 
 void GL3DBarChart::scroll(long nDelta)
 {
+    if(mbBlockUserInput)
+        return;
+
     glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
     maCameraPosition -= (float((nDelta/10)) * maDir);
     mpCamera->setPosition(maCameraPosition);
