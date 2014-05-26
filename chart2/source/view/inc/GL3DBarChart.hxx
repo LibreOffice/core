@@ -77,9 +77,6 @@ private:
     glm::vec3 maCameraPosition;
     glm::vec3 maCameraDirection;
 
-    glm::vec3 maOldCameraPosition;
-    glm::vec3 maOldCameraDirection;
-
     Timer maTimer;
     glm::vec3 maStep;
     size_t mnStep;
