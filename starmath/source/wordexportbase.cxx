@@ -171,8 +171,8 @@ void SmWordExportBase::HandleMath(const SmNode* pNode, int nLevel)
     {
     case TDIVIDEBY:
     case TACUTE:
-        // these are handled elsewhere, e.g. when handling BINHOR
         OSL_ASSERT(false);
+        // the above are handled elsewhere, e.g. when handling BINHOR
     default:
         HandleText(pNode, nLevel);
         break;
