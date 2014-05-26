@@ -52,6 +52,14 @@ struct ImplCalcToTopData
     Region*             mpInvalidateRegion;
 };
 
+Window* Window::ImplGetTopmostFrameWindow()
+{
+    Window *pTopmostParent = this;
+    while( pTopmostParent->ImplGetParent() )
+        pTopmostParent = pTopmostParent->ImplGetParent();
+    return pTopmostParent->mpWindowImpl->mpFrameWindow;
+}
+
 void Window::ImplInsertWindow( Window* pParent )
 {
     mpWindowImpl->mpParent            = pParent;
