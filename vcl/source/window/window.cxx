@@ -77,8 +77,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
-using namespace ::com::sun::star;
-using namespace com::sun;
 
 using ::com::sun::star::awt::XTopWindow;
 
@@ -141,11 +139,10 @@ Window::~Window()
 
     // Dispose of the canvas implementation (which, currently, has an
     // own wrapper window as a child to this one.
-    uno::Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
+    Reference< css::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
     if( xCanvas.is() )
     {
-        uno::Reference < lang::XComponent > xCanvasComponent( xCanvas,
-                                                              uno::UNO_QUERY );
+        Reference < XComponent > xCanvasComponent( xCanvas, UNO_QUERY );
         if( xCanvasComponent.is() )
             xCanvasComponent->dispose();
     }
@@ -173,7 +170,7 @@ Window::~Window()
     }
 
     // shutdown drag and drop
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xDnDComponent( mpWindowImpl->mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
+    Reference < XComponent > xDnDComponent( mpWindowImpl->mxDNDListenerContainer, UNO_QUERY );
 
     if( xDnDComponent.is() )
         xDnDComponent->dispose();
@@ -185,12 +182,12 @@ Window::~Window()
             // deregister drop target listener
             if( mpWindowImpl->mpFrameData->mxDropTargetListener.is() )
             {
-                uno::Reference< XDragGestureRecognizer > xDragGestureRecognizer =
-                    uno::Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
+                Reference< XDragGestureRecognizer > xDragGestureRecognizer =
+                    Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
                 if( xDragGestureRecognizer.is() )
                 {
                     xDragGestureRecognizer->removeDragGestureListener(
-                        uno::Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
+                        Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
                 }
 
                 mpWindowImpl->mpFrameData->mxDropTarget->removeDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );
@@ -198,7 +195,7 @@ Window::~Window()
             }
 
             // shutdown drag and drop for this frame window
-            uno::Reference< XComponent > xComponent( mpWindowImpl->mpFrameData->mxDropTarget, UNO_QUERY );
+            Reference< XComponent > xComponent( mpWindowImpl->mpFrameData->mxDropTarget, UNO_QUERY );
 
             // DNDEventDispatcher does not hold a reference of the DropTarget,
             // so it's ok if it does not support XComponent
@@ -220,7 +217,7 @@ Window::~Window()
     // But accessibility implementations from applications need this dispose.
     if ( mpWindowImpl->mxAccessible.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xC( mpWindowImpl->mxAccessible, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XComponent> xC( mpWindowImpl->mxAccessible, UNO_QUERY );
         if ( xC.is() )
             xC->dispose();
     }
@@ -967,9 +964,9 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         if ( !pFrame )
         {
             // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
-            throw ::com::sun::star::uno::RuntimeException(
+            throw RuntimeException(
                 OUString( "Could not create system window!"  ),
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+                Reference< XInterface >() );
         }
 
         pFrame->SetCallback( this, ImplWindowFrameProc );
@@ -3235,7 +3232,7 @@ const OUString& Window::GetHelpText() const
     return mpWindowImpl->maHelpText;
 }
 
-void Window::SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer, VCLXWindow* pVCLXWindow  )
+void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > xPeer, VCLXWindow* pVCLXWindow  )
 {
     // be safe against re-entrance: first clear the old ref, then assign the new one
     mpWindowImpl->mxWindowPeer.clear();
@@ -3244,7 +3241,7 @@ void Window::SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::
     mpWindowImpl->mpVCLXWindow = pVCLXWindow;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > Window::GetComponentInterface( sal_Bool bCreate )
+Reference< css::awt::XWindowPeer > Window::GetComponentInterface( sal_Bool bCreate )
 {
     if ( !mpWindowImpl->mxWindowPeer.is() && bCreate )
     {
@@ -3255,7 +3252,7 @@ void Window::SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::
     return mpWindowImpl->mxWindowPeer;
 }
 
-void Window::SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace )
+void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > xIFace )
 {
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     DBG_ASSERT( pWrapper, "SetComponentInterface: No Wrapper!" );
@@ -3300,7 +3297,7 @@ void Window::ImplCallActivateListeners( Window *pOld )
     }
 }
 
-uno::Reference< XClipboard > Window::GetClipboard()
+Reference< XClipboard > Window::GetClipboard()
 {
 
     if( mpWindowImpl->mpFrameData )
@@ -3313,7 +3310,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
                     = css::datatransfer::clipboard::SystemClipboard::create(
                         comphelper::getProcessComponentContext());
             }
-            catch (css::uno::DeploymentException & e)
+            catch (DeploymentException & e)
             {
                 SAL_WARN(
                     "vcl.window",
@@ -3327,7 +3324,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
     return static_cast < XClipboard * > (0);
 }
 
-uno::Reference< XClipboard > Window::GetPrimarySelection()
+Reference< XClipboard > Window::GetPrimarySelection()
 {
 
     if( mpWindowImpl->mpFrameData )
@@ -3336,27 +3333,27 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
         {
             try
             {
-                uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+                Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
 #if HAVE_FEATURE_X11
                 // A hack, making the primary selection available as an instance
                 // of the SystemClipboard service on X11:
-                css::uno::Sequence<css::uno::Any> args(1);
+                Sequence< Any > args(1);
                 args[0] <<= OUString("PRIMARY");
                 mpWindowImpl->mpFrameData->mxSelection.set(
                     (xContext->getServiceManager()->
                      createInstanceWithArgumentsAndContext(
                          "com.sun.star.datatransfer.clipboard.SystemClipboard",
                          args, xContext)),
-                    css::uno::UNO_QUERY_THROW);
+                    UNO_QUERY_THROW);
 #else
-                static uno::Reference< XClipboard > s_xSelection(
+                static Reference< XClipboard > s_xSelection(
                     xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
 
                 mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #endif
             }
-            catch (css::uno::RuntimeException & e)
+            catch (RuntimeException & e)
             {
                 SAL_WARN(
                     "vcl.window",
@@ -3701,12 +3698,12 @@ bool Window::IsNativeWidgetEnabled() const
     return ImplGetWinData()->mbEnableNativeWidget;
 }
 
-uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,
+Reference< css::rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,
                                                        bool        bFullscreen,
                                                        bool        bSpriteCanvas ) const
 {
     // try to retrieve hard reference from weak member
-    uno::Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
+    Reference< css::rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
 
     // canvas still valid? Then we're done.
     if( xCanvas.is() )
@@ -3737,24 +3734,24 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
     }
 
     if( bFullscreen )
-        aArg[ 2 ] = makeAny( ::com::sun::star::awt::Rectangle( 0, 0,
-                                                               rFullscreenSize.Width(),
-                                                               rFullscreenSize.Height() ) );
+        aArg[ 2 ] = makeAny( css::awt::Rectangle( 0, 0,
+                                    rFullscreenSize.Width(),
+                                    rFullscreenSize.Height() ) );
     else
-        aArg[ 2 ] = makeAny( ::com::sun::star::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
+        aArg[ 2 ] = makeAny( css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
 
     aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? true : false );
-    aArg[ 4 ] = makeAny( uno::Reference< awt::XWindow >(
+    aArg[ 4 ] = makeAny( Reference< css::awt::XWindow >(
                              const_cast<Window*>(this)->GetComponentInterface(),
-                             uno::UNO_QUERY ));
+                             UNO_QUERY ));
 
-    uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // Create canvas instance with window handle
 
-    static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiComponentFactory> xStaticCanvasFactory(
-        rendering::CanvasFactory::create( xContext ) );
-    uno::Reference<lang::XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
+    static ::vcl::DeleteUnoReferenceOnDeinit<XMultiComponentFactory> xStaticCanvasFactory(
+        css::rendering::CanvasFactory::create( xContext ) );
+    Reference<XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
 
     if(xCanvasFactory.is())
     {
@@ -3797,15 +3794,15 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
     return xCanvas;
 }
 
-uno::Reference< rendering::XCanvas > Window::GetCanvas() const
+Reference< css::rendering::XCanvas > Window::GetCanvas() const
 {
     return ImplGetCanvas( Size(), false, false );
 }
 
-uno::Reference< rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
+Reference< css::rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
 {
-    uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas(
-        ImplGetCanvas( Size(), false, true ), uno::UNO_QUERY );
+    Reference< css::rendering::XSpriteCanvas > xSpriteCanvas(
+        ImplGetCanvas( Size(), false, true ), UNO_QUERY );
     return xSpriteCanvas;
 }
 
@@ -3872,13 +3869,13 @@ const SystemEnvData* Window::GetSystemData() const
     return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : NULL;
 }
 
-css::uno::Any Window::GetSystemDataAny() const
+Any Window::GetSystemDataAny() const
 {
-    css::uno::Any aRet;
+    Any aRet;
     const SystemEnvData* pSysData = GetSystemData();
     if( pSysData )
     {
-        css::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)pSysData, pSysData->nSize );
+        Sequence< sal_Int8 > aSeq( (sal_Int8*)pSysData, pSysData->nSize );
         aRet <<= aSeq;
     }
     return aRet;
