@@ -1523,9 +1523,110 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76101, "fdo76101.docx")
     CPPUNIT_ASSERT(4091 >= xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtAndShapeOverlapping,"ShapeOverlappingWithSdt.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+     if (!pXmlDoc)
+         return;
+      assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent");
+      assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]/w:t[1]");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testLockedCanvas, "fdo78658.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Checking for lockedCanvas tag
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/lc:lockedCanvas[1]", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(fdo78474, "fdo78474.docx")
+{
+    xmlDocPtr pXmlDoc1 = parseExport("word/document.xml");
+    if (!pXmlDoc1) return;
+    //docx file after RT is getting corrupted.
+    assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "rId2");
+
+    xmlDocPtr pXmlDoc2 = parseExport("word/_rels/document.xml.rels");
+    if (!pXmlDoc2) return;
+    assertXPath(pXmlDoc2,"/rels:Relationships/rels:Relationship[2]","Id","rId2");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    sal_Int32 IntMax = SAL_MAX_INT32;
+
+    xmlNodeSetPtr pXmlNodes[6];
+    pXmlNodes[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlNodes[1] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+
+    pXmlNodes[2] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlNodes[3] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+
+    pXmlNodes[4] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlNodes[5] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+
+    for(sal_Int32 index = 0; index<6; ++index)
+    {
+        CPPUNIT_ASSERT(pXmlNodes[index] != 0);
+        xmlNodePtr pXmlNode = pXmlNodes[index]->nodeTab[0];
+        OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+        CPPUNIT_ASSERT( contents.toInt64() <= IntMax );
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo78300,"fdo78300.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r[1]/w:drawing[1]",
+                0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWordArtWithinDraingtool, "testWordArtWithinDraingtool.docx")
+{
+/*   * Within a file, there is a 2007 wordArt enclosed in a drawing tool
+     * LO was exporting it as below:
+     * Sample XML as in Original file:
+     * <p> <r> <ac> <drawing> <txbx> <txbxContent> ..  <pict> </pict> </txbxContent></txbx> </drawing> </ac> </r> </p>
+     *  After RT :
+     * <p> <r> <ac> <drawing> <txbx> <txbxContent> ..  <drawing> <txbx> <txbxContent> ..  </txbxContent></txbx> </drawing> .. </txbxContent></txbx> </drawing> </ac> </r> </p>
+     *  Expected : As there is nesting of a 2007 Word Art within a draing tool, then can be separated in two different runs.
+     * */
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]",1);
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]/v:textbox[1]/w:txbxContent[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]",1);
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]",1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo78957, "fdo78957.docx")
+{
+    xmlDocPtr pXmlHeader = parseExport("word/header2.xml");
+
+    if(!pXmlHeader)
+        return;
+
+    const sal_Int64 IntMax = SAL_MAX_INT32;
+    sal_Int64 cx = 0, cy = 0;
+    cx = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cx").toInt64();
+    cy = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cy").toInt64();
+    //  Here we check the values of extent width & height
+    CPPUNIT_ASSERT(cx <= IntMax );
+    CPPUNIT_ASSERT(cy >= 0 );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
