@@ -34,8 +34,8 @@ class DocumentSettingManager :
     SwFldUpdateFlags    meFldUpdMode;//< Automatically Update Mode for fields/charts.
     SwCharCompressType meChrCmprType;//< for ASIAN: compress punctuation/kana
 
-    sal_uInt32  mn32DummyCompatabilityOptions1;
-    sal_uInt32  mn32DummyCompatabilityOptions2;
+    sal_uInt32  mn32DummyCompatibilityOptions1;
+    sal_uInt32  mn32DummyCompatibilityOptions2;
 
     // COMPATIBILITY FLAGS START
     //
@@ -172,12 +172,12 @@ public:
 
 
 // Replace all compatability options with those from rSource.
-    void ReplaceCompatabilityOptions(const DocumentSettingManager& rSource);
+    void ReplaceCompatibilityOptions(const DocumentSettingManager& rSource);
 
-    sal_uInt32 Getn32DummyCompatabilityOptions1() const SAL_OVERRIDE;
-    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 ) SAL_OVERRIDE;
-    sal_uInt32 Getn32DummyCompatabilityOptions2() const SAL_OVERRIDE;
-    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 ) SAL_OVERRIDE;
+    sal_uInt32 Getn32DummyCompatibilityOptions1() const SAL_OVERRIDE;
+    void Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 ) SAL_OVERRIDE;
+    sal_uInt32 Getn32DummyCompatibilityOptions2() const SAL_OVERRIDE;
+    void Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 ) SAL_OVERRIDE;
 
 };
 
