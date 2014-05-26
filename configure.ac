@@ -6836,6 +6836,21 @@ if test "$ENABLE_JAVA" != ""; then
         else
             AC_MSG_RESULT([no])
         fi
+    else # ? not sure if it's valid for all OS, and all JVMs?
+        case $CPUNAME in
+            AXP|X86_64|HPPA|IA64|POWERPC64|S390X|SPARC64)
+                if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
+                    AC_MSG_WARN([You are building 64-bit binaries but the JDK $JAVAINTERPRETER is 32-bit])
+                    AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
+                fi
+                ;;
+            *) # assumption: everything else 32-bit
+                if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" != ""  >/dev/null; then
+                    AC_MSG_WARN([You are building 32-bit binaries but the JDK $howfound is 64-bit])
+                    AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a (32-bit) JDK])
+                fi
+                ;;
+        esac
     fi
 fi
 
