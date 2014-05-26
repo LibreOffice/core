@@ -61,6 +61,7 @@ private:
     glm::vec3 getCornerPosition(sal_Int8 nCornerId);
 
     DECL_LINK(MoveCamera, void*);
+    DECL_LINK(MoveToBar, void*);
 
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
@@ -76,6 +77,9 @@ private:
     glm::vec3 maCameraPosition;
     glm::vec3 maCameraDirection;
 
+    glm::vec3 maOldCameraPosition;
+    glm::vec3 maOldCameraDirection;
+
     Timer maTimer;
     glm::vec3 maStep;
     size_t mnStep;
@@ -88,14 +92,21 @@ private:
      */
     sal_Int8 mnCornerId;
 
+    std::vector<OUString> maCategories;
+    std::vector<OUString> maSeriesNames;
     struct BarInformation
     {
-        double nVal;
-        OUString aSeriesName;
+        glm::vec3 maPos;
+        float mnVal;
+        sal_Int32 mnIndex;
+        sal_Int32 mnSeriesIndex;
+
+        BarInformation(const glm::vec3& rPos, float nVal,
+                sal_Int32 nIndex, sal_Int32 nSeriesIndex);
     };
 
 
-    std::map<sal_uInt32, BarInformation> maBarMap;
+    std::map<sal_uInt32, const BarInformation> maBarMap;
 };
 
 }
