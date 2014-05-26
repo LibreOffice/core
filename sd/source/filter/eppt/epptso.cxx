@@ -1937,12 +1937,16 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
     {
         case ::com::sun::star::presentation::ClickAction_STOPPRESENTATION :
             nJump += 2;
+            //fall-through
         case ::com::sun::star::presentation::ClickAction_LASTPAGE :
             nJump++;
+            //fall-through
         case ::com::sun::star::presentation::ClickAction_FIRSTPAGE :
             nJump++;
+            //fall-through
         case ::com::sun::star::presentation::ClickAction_PREVPAGE :
             nJump++;
+            //fall-through
         case ::com::sun::star::presentation::ClickAction_NEXTPAGE :
         {
             nJump++;
