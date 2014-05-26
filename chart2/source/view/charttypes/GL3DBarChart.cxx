@@ -257,7 +257,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
     maCameraPosition = glm::vec3(-30, -30, 200);
     mpCamera->setPosition(maCameraPosition);
-    maCameraDirection = glm::vec3(0, 0, 0);
+    maCameraDirection = glm::vec3(mnMaxX/2, mnMaxY/2, 0);
     mpCamera->setDirection(maCameraDirection);
 }
 
