@@ -165,8 +165,8 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             reinterpret_cast< jvmaccess::UnoVirtualMachine * >(nPointer));
         if (!xVirtualMachine.is())
         {
-            //throw RuntimeException(OUString(
-            //   "javaloader error - JavaVirtualMachine service could not provide a VM"),
+            //throw RuntimeException(
+            //   "javaloader error - JavaVirtualMachine service could not provide a VM",
             //   css::uno::Reference<XInterface>());
             // We must not throw a RuntimeException, because this might end the applications.
             // It is ok if java components
@@ -333,8 +333,7 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     if (loader.is())
         return loader->writeRegistryInfo(xKey, blabla, rLibName);
     else
-        throw CannotRegisterImplementationException(
-            OUString("Could not create Java implementation loader"), NULL);
+        throw CannotRegisterImplementationException("Could not create Java implementation loader");
 }
 
 
@@ -347,8 +346,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     if (loader.is())
         return loader->activate(rImplName, blabla, rLibName, xKey);
     else
-        throw CannotActivateFactoryException(
-            OUString("Could not create Java implementation loader"), NULL);
+        throw CannotActivateFactoryException("Could not create Java implementation loader");
 }
 
 static Mutex & getInitMutex()

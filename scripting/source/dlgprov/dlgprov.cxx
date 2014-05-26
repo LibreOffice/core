@@ -425,21 +425,21 @@ static OUString aResourceResolverPropName("ResourceResolver");
                     if ( !xISP.is() )
                     {
                         throw IllegalArgumentException(
-                            OUString( "DialogProviderImpl::getDialogModel: dialog not found!"  ),
+                            "DialogProviderImpl::getDialogModel: dialog not found!",
                             Reference< XInterface >(), 1 );
                     }
                 }
                 else
                 {
                     throw IllegalArgumentException(
-                        OUString( "DialogProviderImpl::getDialogModel: library not found!"  ),
+                        "DialogProviderImpl::getDialogModel: library not found!",
                         Reference< XInterface >(), 1 );
                 }
             }
             else
             {
                 throw IllegalArgumentException(
-                    OUString( "DialogProviderImpl::getDialog: library container not found!"  ),
+                    "DialogProviderImpl::getDialog: library container not found!",
                     Reference< XInterface >(), 1 );
             }
 
@@ -733,7 +733,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         if( !xHandler.is() )
         {
             throw IllegalArgumentException(
-                OUString( "DialogProviderImpl::createDialogWithHandler: Invalid xHandler!"  ),
+                "DialogProviderImpl::createDialogWithHandler: Invalid xHandler!",
                 Reference< XInterface >(), 1 );
         }
         Reference< XWindowPeer > xDummyPeer;
@@ -776,7 +776,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         if( !xParent.is() )
         {
             throw IllegalArgumentException(
-                OUString( "DialogProviderImpl::createContainerWindow: Invalid xParent!"  ),
+                "DialogProviderImpl::createContainerWindow: Invalid xParent!",
                 Reference< XInterface >(), 1 );
         }
         Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParent, false );

@@ -395,7 +395,7 @@ namespace framework
     {
         if ( !i_action.is() )
             throw IllegalArgumentException(
-                OUString( "illegal undo action object" ),
+                "illegal undo action object",
                 getXUndoManager(),
                 1
             );
@@ -545,7 +545,7 @@ namespace framework
 
         if ( i_hidden && ( rUndoManager.GetUndoActionCount( IUndoManager::CurrentLevel ) == 0 ) )
             throw EmptyUndoStackException(
-                OUString( "can't enter a hidden context without a previous Undo action" ),
+                "can't enter a hidden context without a previous Undo action",
                 m_rUndoManagerImplementation.getThis()
             );
 
@@ -576,7 +576,7 @@ namespace framework
 
         if ( !rUndoManager.IsInListAction() )
             throw InvalidStateException(
-                OUString( "no active undo context" ),
+                "no active undo context",
                 getXUndoManager()
             );
 

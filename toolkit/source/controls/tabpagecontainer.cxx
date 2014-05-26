@@ -166,8 +166,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
         maContainerListeners.elementInserted( aEvent );
     }
     else
-        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
-            (OWeakObject *)this, 2 );
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, (OWeakObject *)this, 2 );
 }
 
 void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)

@@ -81,7 +81,7 @@ namespace comphelper
         {
             if ( !_allowEmpty && _name.isEmpty() )
                 throw IllegalArgumentException(
-                        OUString( "The property name must not be empty." ),
+                        "The property name must not be empty.",
                         // TODO: resource
                         NULL,
                         1
@@ -92,7 +92,7 @@ namespace comphelper
         {
             if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
                 throw PropertyExistException(
-                    OUString( "Property name or handle already used." ),
+                    "Property name or handle already used.",
                     // TODO: resource
                     NULL );
 
@@ -104,7 +104,7 @@ namespace comphelper
     {
         if ( _rType.getTypeClass() == TypeClass_VOID )
             throw IllegalArgumentException(
-                    OUString( "Illegal property type: VOID" ),
+                    "Illegal property type: VOID",
                         // TODO: resource
                     NULL,
                     1
@@ -129,7 +129,7 @@ namespace comphelper
         Type aPropertyType = _rInitialValue.getValueType();
         if ( aPropertyType.getTypeClass() == TypeClass_VOID )
             throw IllegalTypeException(
-                OUString( "The initial value must be non-NULL to determine the property type." ),
+                "The initial value must be non-NULL to determine the property type.",
                 // TODO: resource
                 NULL );
 
