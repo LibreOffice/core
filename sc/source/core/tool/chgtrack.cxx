@@ -4432,15 +4432,14 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
     {
         pGenerated = aGeneratedStack.top();
         aGeneratedStack.pop();
-        const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pGenerated );
-        OSL_ENSURE( pContent, "ScChangeTrack::Clone: pContent is null!" );
-        const ScCellValue& rNewCell = pContent->GetNewCell();
+        const ScChangeActionContent& rContent = dynamic_cast<const ScChangeActionContent&>(*pGenerated);
+        const ScCellValue& rNewCell = rContent.GetNewCell();
         if (!rNewCell.isEmpty())
         {
             ScCellValue aClonedNewCell;
             aClonedNewCell.assign(rNewCell, *pDocument);
             OUString aNewValue;
-            pContent->GetNewString( aNewValue, pDocument );
+            rContent.GetNewString( aNewValue, pDocument );
             pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
             pClonedTrack->AddLoadedGenerated(aClonedNewCell, pGenerated->GetBigRange(), aNewValue);
         }
@@ -4519,13 +4518,12 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                 break;
             case SC_CAT_CONTENT:
                 {
-                    const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pAction );
-                    OSL_ENSURE( pContent, "ScChangeTrack::Clone: pContent is null!" );
-                    const ScCellValue& rOldCell = pContent->GetOldCell();
+                    const ScChangeActionContent& rContent = dynamic_cast<const ScChangeActionContent&>(*pAction);
+                    const ScCellValue& rOldCell = rContent.GetOldCell();
                     ScCellValue aClonedOldCell;
                     aClonedOldCell.assign(rOldCell, *pDocument);
                     OUString aOldValue;
-                    pContent->GetOldString( aOldValue, pDocument );
+                    rContent.GetOldString( aOldValue, pDocument );
 
                     ScChangeActionContent* pClonedContent = new ScChangeActionContent(
                         pAction->GetActionNumber(),
@@ -4539,7 +4537,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                         pDocument,
                         aOldValue );
 
-                    const ScCellValue& rNewCell = pContent->GetNewCell();
+                    const ScCellValue& rNewCell = rContent.GetNewCell();
                     if (!rNewCell.isEmpty())
                     {
                         ScCellValue aClonedNewCell;
