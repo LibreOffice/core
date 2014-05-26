@@ -167,8 +167,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             float nVal = rDataSeries.getYValue(nIndex);
             float nXPos = nIndex * (nBarSizeX + nBarDistanceX) + nBarDistanceX;
 
-            glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, float(nVal/nMaxVal));
-            glm::mat4 aTranslationMatrix = glm::translate(nXPos, nYPos, 0.0f);
+            glm::mat4 aScaleMatrix = glm::scale(glm::vec3(nBarSizeX, nBarSizeY, float(nVal/nMaxVal)));
+            glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(nXPos, nYPos, 0.0f));
             glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
 
             maBarMap.insert(std::pair<sal_uInt32, BarInformation>(nId,
