@@ -31,7 +31,7 @@ SwVbaWrapFormat::SwVbaWrapFormat( uno::Sequence< uno::Any > const& aArgs, uno::R
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );
 }
 
-void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
+void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException, script::BasicErrorException)
 {
     text::WrapTextMode eTextMode = text::WrapTextMode_NONE;
     if( mnSide == word::WdWrapSideType::wdWrapLeft )
