@@ -133,7 +133,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
                 base = PyRef(PyExc_Exception);
         }
     }
-    PyRef args( PyTuple_New( 3 ), SAL_NO_ACQUIRE );
+    PyRef args( PyTuple_New( 3 ), SAL_NO_ACQUIRE, NOT_NULL );
 
     PyRef pyTypeName = ustring2PyString( name /*.replace( '.', '_' )*/ );
 
