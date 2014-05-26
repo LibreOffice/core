@@ -2350,7 +2350,8 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
                          const uno::Reference<
                             ucb::XCommandEnvironment >& xEnv )
     throw ( ucb::CommandFailedException,
-            task::DocumentPasswordRequest )
+            task::DocumentPasswordRequest,
+            css::uno::RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
