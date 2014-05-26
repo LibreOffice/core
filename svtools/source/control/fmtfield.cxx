@@ -330,7 +330,7 @@ FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatte
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFormattedField(Window *pParent, VclBuilder::stringmap &)
 {
-    WinBits nWinBits = WB_BORDER;
+    WinBits nWinBits = WB_BORDER | WB_SPIN;
     return new FormattedField(pParent, nWinBits);
 }
 
