@@ -276,6 +276,12 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
     return xRet;
 }
 
+void SAL_CALL OToolboxController::execute( sal_Int16 KeyModifier ) throw (uno::RuntimeException, std::exception)
+{
+    if ( m_pToolbarController.is() )
+        m_pToolbarController.getRef()->execute( KeyModifier );
+}
+
 sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
     return ( m_nSlotId == SID_DRAWTBX_CS_BASIC ||

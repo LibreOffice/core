@@ -128,11 +128,13 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 
 
 
-void SvxTbxCtlCustomShapes::Select(sal_uInt16 /*nSelectModifier*/)
+void SvxTbxCtlCustomShapes::Select(sal_uInt16 nSelectModifier)
 {
      if ( !m_aCommand.isEmpty() )
     {
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aParamSeq( 0 );
+        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aParamSeq( 1 );
+        aParamSeq[0].Name = "KeyModifier";
+        aParamSeq[0].Value <<= static_cast< sal_Int16 >( nSelectModifier );
         Dispatch( m_aCommand, aParamSeq );
     }
 }
